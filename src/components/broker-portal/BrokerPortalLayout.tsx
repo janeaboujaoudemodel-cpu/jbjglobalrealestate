@@ -4,6 +4,7 @@ import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } f
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
+import { DelayedLoader } from "@/components/PageLoader";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -83,7 +84,10 @@ export default function BrokerPortalLayout() {
         aria-live="polite"
         aria-busy="true"
       >
-        <BrandedLoader text="Loading Broker Workspace…" />
+        {/* Delay so the loader never flashes on fast auth/role resolves */}
+        <DelayedLoader delay={650}>
+          <BrandedLoader />
+        </DelayedLoader>
         <span className="sr-only">Loading Broker Workspace…</span>
       </div>
     );
