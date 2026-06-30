@@ -22266,3 +22266,60 @@ html body [data-mode-card="true"][data-mode-row="active"] :is(p, span, svg, [cla
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 143 — BACKEND SIDEBAR + ICON CONTRAST RESTORE
+   The regression came from broad light-surface and sidebar SVG rules later in
+   the cascade forcing champagne icons to emerald/20px. Backend emerald tiles
+   now win last: tile sizes are premium and glyphs are pure white. */
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar])
+  :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-emerald-icon-surface], [data-icon-tile], .jj-icon-tile-emerald) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -12px rgba(4,44,28,0.86), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar])
+  :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-emerald-icon-surface], [data-icon-tile], .jj-icon-tile-emerald)
+  :is(*, span, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-sidebar-icon-tile] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 10px !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  stroke-width: 2.15 !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]),
+html body #root [data-chrome="sidebar"] [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
