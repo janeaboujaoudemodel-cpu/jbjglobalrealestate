@@ -299,10 +299,12 @@ export default function BrokerLearning() {
                 <h3 className="text-[#1A1A1A] text-xl md:text-2xl font-bold">Golden Rules for Market Conversations</h3>
               </div>
               <div className="relative grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-7 h-px bg-gradient-to-r from-transparent via-[#B89555]/75 to-transparent" />
+                {/* Connector + traveling sparkle ride at the VERTICAL CENTER
+                    of the number circles (card p-5 = 20px + circle 56px → 48px center). */}
+                <div className="hidden md:block pointer-events-none absolute left-[16.5%] right-[16.5%] top-[48px] -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-[#B89555]/75 to-transparent" />
                 <motion.div
                   aria-hidden
-                  className="hidden md:block pointer-events-none absolute top-[18px] left-[15%] h-5 w-16 rounded-full blur-[1px]"
+                  className="hidden md:block pointer-events-none absolute top-[48px] -translate-y-1/2 left-[15%] h-5 w-16 rounded-full blur-[1px]"
                   style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.95), rgba(184,149,85,.9), transparent)" }}
                   animate={{ left: ["15%", "48%", "81%", "48%", "15%"], opacity: [0, 1, 1, 1, 0] }}
                   transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
@@ -310,7 +312,7 @@ export default function BrokerLearning() {
                 <motion.div
                   aria-hidden
                   data-no-contrast-guard
-                  className="hidden md:grid pointer-events-none absolute top-[11px] left-[17%] h-8 w-8 place-items-center rounded-full bg-[#FDFBF7] text-[#B89555] shadow-[0_0_22px_rgba(255,255,255,.95),0_0_28px_rgba(184,149,85,.42)]"
+                  className="hidden md:grid pointer-events-none absolute top-[48px] -translate-y-1/2 left-[17%] h-8 w-8 place-items-center rounded-full bg-[#FDFBF7] text-[#B89555] shadow-[0_0_22px_rgba(255,255,255,.95),0_0_28px_rgba(184,149,85,.42)]"
                   animate={{ left: ["17%", "50%", "83%", "50%", "17%"], scale: [0.72, 1.08, 1.08, 1.08, 0.72], opacity: [0, 1, 1, 1, 0] }}
                   transition={{ duration: 6.2, times: [0, 0.25, 0.5, 0.75, 1], repeat: Infinity, ease: "easeInOut" }}
                 >
