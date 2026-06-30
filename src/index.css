@@ -17531,7 +17531,7 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
 }
 
 /* Buttons / CTAs: one height, one radius, one icon rhythm; no cropped labels. */
-:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])) {
+:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([role="checkbox"]):not([role="radio"]):not([role="switch"]):not([data-radix-collection-item])) {
   min-height: var(--jbj-control-h) !important;
   min-width: 0;
   border-radius: var(--jbj-radius-md);
@@ -17565,7 +17565,7 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
 }
-:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([data-radix-collection-item])):not([data-icon-only]):not(.aspect-square) {
+:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-cta-dark, .jj-navy-cta, .jj-cta-outline, .jj-cta-champagne, .jj-emerald-action, [data-emerald-action], [data-cta="primary"], [data-cta="dark"], [data-cta="outline"], a[role="button"], button:not([role="tab"]):not([role="checkbox"]):not([role="radio"]):not([role="switch"]):not([data-radix-collection-item])):not([data-icon-only]):not(.aspect-square) {
   padding-inline: var(--jbj-control-x);
   padding-block: 0.55rem;
 }
@@ -18090,7 +18090,7 @@ body [data-careers-job-card] :where(svg,[class*="lucide"],[data-lucide],path,cir
 }
 
 /* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact. */
-body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [data-radix-collection-item])) {
+body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [role="checkbox"], [role="radio"], [role="switch"], [data-radix-collection-item])) {
   min-height: 44px !important;
   min-width: max-content;
   width: auto;
