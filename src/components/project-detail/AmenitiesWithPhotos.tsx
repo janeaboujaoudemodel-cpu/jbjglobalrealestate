@@ -79,7 +79,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                       alt={amenity}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
-                      onError={(e) = decoding="async"> {
+                      onError={(e) => {
                         // If real photo fails to load, hide image and show icon
                         (e.target as HTMLImageElement).style.display = 'none';
                         const fallback = (e.target as HTMLImageElement).nextElementSibling;

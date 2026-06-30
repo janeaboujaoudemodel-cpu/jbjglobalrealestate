@@ -373,7 +373,7 @@ const AreaGuides = () => {
                               alt={area.name}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading={index < 8 ? "eager" : "lazy"}
-                              onError={(e) = decoding="async"> {
+                              onError={(e) => {
                                 // Fall back to raw URL if optimization endpoint fails
                                 const rawUrl = area.hero_image_url || area.image_url;
                                 if (rawUrl && e.currentTarget.src !== rawUrl) {

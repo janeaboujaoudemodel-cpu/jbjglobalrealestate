@@ -107,7 +107,7 @@ export function DeveloperLogo({
           src={src as string}
           alt={alt}
           loading={loading}
-          onError={() = decoding="async"> {
+          onError={() => {
             setError(true);
             onError?.();
           }}
@@ -141,7 +141,7 @@ export function DeveloperLogo({
           src={src as string}
           alt={alt}
           loading={loading}
-          onError={() = decoding="async"> {
+          onError={() => {
             setError(true);
             onError?.();
           }}
@@ -169,7 +169,7 @@ export function DeveloperLogo({
         src={src as string}
         alt={alt}
         loading={loading}
-        onError={() = decoding="async"> {
+        onError={() => {
           setError(true);
           onError?.();
         }}

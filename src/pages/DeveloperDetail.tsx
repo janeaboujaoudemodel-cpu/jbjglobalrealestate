@@ -228,7 +228,7 @@ const DeveloperDetail = () => {
             alt={`${developer.name} featured project`}
             className="w-full h-full object-cover"
             loading="eager"
-            onError={(e) = decoding="async"> {
+            onError={(e) => {
               // Fallback to original URL if high-res fails
               const img = e.currentTarget;
               if (img.src !== developer.feature_image_url) {
