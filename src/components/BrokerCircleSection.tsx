@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import CombinedContactNewsletter from '@/components/CombinedContactNewsletter';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -212,44 +213,18 @@ const BrokerCircleSection = () => {
           </div>
         </motion.div>
 
-        {/* CTA Section */}
+        {/* CTA Card — unified to homepage "Ready to Get Started" */}
         <motion.div
-          className="text-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/broker-toolkit">
-              <Button className="gap-2 px-8 py-6 text-lg jj-pill-emerald-metallic">
-                <Award className="h-5 w-5 text-white" />
-                <span className="text-white">Join Broker Circle — It's Free</span>
-                <ArrowUpRight className="h-5 w-5 text-white" />
-              </Button>
-            </Link>
-            <Link to="/ai-hub">
-              <Button
-                variant="outline"
-                className="gap-2 px-8 py-6 text-lg bg-transparent border-[#B89555]/50 text-white hover:bg-white/5 hover:border-[#B89555]"
-              >
-                <Brain className="h-5 w-5 text-[#D4B26A]" />
-                <span className="text-white">Explore Free Tools</span>
-              </Button>
-            </Link>
-          </div>
-
-          {/* Contact Info */}
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/80 flex-wrap">
-            <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-[#D4B26A] transition-colors">
-              <Mail className="h-4 w-4" />
-              CONTACT@JBJ.AE
-            </a>
-            <a href="tel:+971547167107" className="flex items-center gap-2 hover:text-[#D4B26A] transition-colors">
-              <Phone className="h-4 w-4" />
-              +971 54 716 7107
-            </a>
-          </div>
+          <CombinedContactNewsletter
+            id="broker-circle-cta"
+            title="Ready to Join the JBJ Broker Circle?"
+            subtitle="Talk to our team and unlock free training, AI tools, and full back-office support."
+          />
         </motion.div>
       </div>
     </section>
