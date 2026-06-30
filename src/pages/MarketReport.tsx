@@ -292,7 +292,7 @@ const MarketReport = () => {
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
                       >
-                        <Icon className="w-[18px] h-[18px]" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                        <Icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                       </div>
                       <span className="text-[#1A1A1A] text-sm font-semibold">{item.text}</span>
                     </div>
