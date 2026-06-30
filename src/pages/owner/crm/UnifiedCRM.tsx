@@ -59,13 +59,15 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
   };
 
   return (
-    <div className="relative border-t border-[#B89555]/15">
+    <div className="relative min-w-0 max-w-full overflow-hidden border-t border-[#B89555]/15">
       {canL && (
         <button
           type="button"
           aria-label="Scroll left"
           onClick={() => scrollBy(-1)}
-          className="absolute left-0 top-0 bottom-0 z-10 px-1.5 flex items-center bg-gradient-to-r from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent text-[#1A1A1A] hover:text-[#B89555]"
+          data-surface="emerald"
+          data-emerald-ok="button"
+          className="jj-surface-emerald absolute left-1 top-1 bottom-1 z-10 w-9 rounded-xl flex items-center justify-center shadow-lg"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -75,7 +77,9 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
           type="button"
           aria-label="Scroll right"
           onClick={() => scrollBy(1)}
-          className="absolute right-0 top-0 bottom-0 z-10 px-1.5 flex items-center bg-gradient-to-l from-[#FDFBF7] via-[#FDFBF7]/95 to-transparent text-[#1A1A1A] hover:text-[#B89555]"
+          data-surface="emerald"
+          data-emerald-ok="button"
+          className="jj-surface-emerald absolute right-1 top-1 bottom-1 z-10 w-9 rounded-xl flex items-center justify-center shadow-lg"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -84,7 +88,7 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
         ref={ref}
         role="tablist"
         aria-label={ariaLabel}
-        className="px-2 flex gap-1 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
+        className="px-2 pr-12 flex gap-1 overflow-x-auto whitespace-nowrap jj-scrollbar-gold max-w-full min-w-0"
       >
         {children}
       </nav>
