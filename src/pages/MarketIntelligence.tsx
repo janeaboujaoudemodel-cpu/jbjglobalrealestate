@@ -214,20 +214,18 @@ const MarketIntelligence = () => {
       {/* Compliance Disclaimer */}
       <section className="surface-light py-12 bg-[#FDFBF7]" data-surface="light">
         <div className="container mx-auto px-4">
-          <div className="mi-premium-corner-shell max-w-5xl mx-auto p-3">
-            <div className="mi-gold-frame rounded-2xl p-10 text-center">
-              <div className="mx-auto mb-4 flex justify-center">
-                <div className="mi-icon-tile mi-icon-tile-lg">
-                  <Info className="w-5 h-5" />
-                </div>
+          <div className="mi-gold-frame mi-gold-frame-corners max-w-5xl mx-auto p-10 text-center rounded-2xl">
+            <div className="mx-auto mb-4 flex justify-center">
+              <div className="mi-icon-tile mi-icon-tile-lg">
+                <Info className="w-5 h-5" />
               </div>
-              <h3 className={`${MI_CARD_TITLE} mb-4`}>
-                Compliance & Transparency
-              </h3>
-              <p className={`${MI_BODY_MUTED} whitespace-pre-line`}>
-                {MARKET_DISCLAIMER}
-              </p>
             </div>
+            <h3 className={`${MI_CARD_TITLE} mb-4`}>
+              Compliance & Transparency
+            </h3>
+            <p className={`${MI_BODY_MUTED} whitespace-pre-line`}>
+              {MARKET_DISCLAIMER}
+            </p>
           </div>
         </div>
       </section>
