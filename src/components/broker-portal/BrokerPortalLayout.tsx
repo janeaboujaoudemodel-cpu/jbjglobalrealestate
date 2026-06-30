@@ -3,6 +3,7 @@ import { Suspense, useEffect, useState } from "react";
 import { Crown, ArrowLeft, Menu, X, Shield, Home, User, Briefcase, Building2 } from "lucide-react";
 import BrokerPortalSidebar from "./BrokerPortalSidebar";
 import PageLoader from "@/components/PageLoader";
+import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useAuth } from "@/contexts/AuthContext";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
