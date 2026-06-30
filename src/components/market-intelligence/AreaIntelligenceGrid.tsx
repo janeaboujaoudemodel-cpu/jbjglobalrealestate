@@ -52,7 +52,8 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
   return (
     <motion.div variants={fadeInUp}>
       <Card className="mi-gold-frame group h-full rounded-2xl transition-shadow hover:shadow-[0_16px_38px_rgba(26,26,26,0.10)]">
-        <CardContent className="p-6">
+        <CardContent className="p-6 flex h-full flex-col">
+
           {/* Header */}
           <div className="flex items-start justify-between mb-4 gap-3">
             <div className="flex items-center gap-3 min-w-0">
@@ -135,7 +136,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <Link
             to={`/area/${slugify(area.area)}`}
             data-no-contrast-guard
-            className="mi-cta-emerald w-full py-2 text-sm rounded-lg"
+            className="mi-cta-emerald w-full py-2 text-sm rounded-lg mt-auto"
           >
             <span>View Area Details</span>
             <ArrowUpRight className="w-4 h-4" />
@@ -173,7 +174,7 @@ export const AreaIntelligenceGrid = () => {
           </motion.div>
 
           {/* Grid */}
-          <div className="mi-area-grid grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="mi-area-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {DUBAI_AREAS_MARKET_DATA.map((area) => (
               <AreaCard key={area.area} area={area} />
             ))}

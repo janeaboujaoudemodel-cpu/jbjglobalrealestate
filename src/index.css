@@ -21450,13 +21450,26 @@ html body .jj-text-emerald * {
 }
 .mi-hero-orbit {
   position: absolute;
-  border: 1px solid rgba(184,149,85,.48);
+  border: 1px solid rgba(255,255,255,.35);
   border-radius: 9999px;
   transform: rotate(-12deg);
-  box-shadow: inset 0 0 45px rgba(184,149,85,.08), 0 0 55px rgba(6,78,59,.18);
+  box-shadow: inset 0 0 60px rgba(255,255,255,.06), 0 0 80px rgba(255,255,255,.08);
+  animation: mi-hero-orbit-spin 42s linear infinite;
 }
-.mi-hero-orbit-one { width: min(64vw, 820px); height: min(64vw, 820px); right: -12vw; top: 12vh; }
-.mi-hero-orbit-two { width: min(44vw, 560px); height: min(44vw, 560px); right: 16vw; bottom: -18vh; opacity: .72; }
+.mi-hero-orbit::before, .mi-hero-orbit::after {
+  content: "";
+  position: absolute;
+  width: 10px; height: 10px; border-radius: 9999px;
+  background: #FFFFFF;
+  box-shadow: 0 0 18px rgba(255,255,255,.85), 0 0 38px rgba(255,255,255,.45);
+}
+.mi-hero-orbit::before { top: -5px; left: 50%; }
+.mi-hero-orbit::after { bottom: -5px; left: 32%; opacity: .7; }
+.mi-hero-orbit-one { width: min(64vw, 820px); height: min(64vw, 820px); right: -12vw; top: 12vh; animation-duration: 48s; }
+.mi-hero-orbit-two { width: min(44vw, 560px); height: min(44vw, 560px); right: 16vw; bottom: -18vh; opacity: .72; animation-duration: 32s; animation-direction: reverse; }
+@keyframes mi-hero-orbit-spin {
+  to { transform: rotate(348deg); }
+}
 .mi-hero-data-stack {
   position: absolute;
   right: clamp(18px, 6vw, 96px);
@@ -21466,11 +21479,14 @@ html body .jj-text-emerald * {
   width: min(34vw, 420px);
 }
 .mi-hero-data-stack span {
-  display: block;
-  border: 1px solid rgba(184,149,85,.46);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,.32);
   border-radius: 14px;
   padding: 14px 18px;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.06);
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   font-size: 11px;
@@ -21478,11 +21494,31 @@ html body .jj-text-emerald * {
   letter-spacing: .22em;
   text-align: right;
   backdrop-filter: blur(18px);
+  animation: mi-hero-pulse 3.4s ease-in-out infinite;
+}
+.mi-hero-data-stack span:nth-child(2) { animation-delay: .4s; }
+.mi-hero-data-stack span:nth-child(3) { animation-delay: .8s; }
+.mi-hero-data-stack span:nth-child(4) { animation-delay: 1.2s; }
+.mi-hero-data-stack span::before {
+  content: "";
+  display: inline-block;
+  width: 8px; height: 8px; border-radius: 9999px;
+  background: #34D399;
+  box-shadow: 0 0 12px rgba(52,211,153,.85);
+  animation: mi-hero-blink 1.6s ease-in-out infinite;
+}
+@keyframes mi-hero-pulse {
+  0%, 100% { border-color: rgba(255,255,255,.32); }
+  50% { border-color: rgba(255,255,255,.6); box-shadow: 0 0 22px rgba(255,255,255,.12); }
+}
+@keyframes mi-hero-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
 }
 .mi-hero-kicker {
   display: inline-flex;
   margin-bottom: 18px;
-  border: 1px solid rgba(184,149,85,.65);
+  border: 1px solid rgba(255,255,255,.45);
   border-radius: 9999px;
   padding: 8px 14px;
   background: rgba(255,255,255,.08);
@@ -21494,6 +21530,7 @@ html body .jj-text-emerald * {
   text-transform: uppercase;
   backdrop-filter: blur(16px);
 }
+
 
 /* Emerald icon tile (white glyph) used across MI sections */
 .mi-icon-tile {
@@ -21570,8 +21607,9 @@ html body .jj-text-emerald * {
 }
 .mi-chip-gold *, .mi-chip-gold svg { color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important; }
 
-/* Emerald CTA button — white text, gold ring */
+/* Emerald CTA button — white text, gold ring, metallic sheen sweep */
 .mi-cta-emerald {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -21586,9 +21624,28 @@ html body .jj-text-emerald * {
   letter-spacing: 0.02em;
   transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
   cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+}
+.mi-cta-emerald::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.38) 50%, transparent 65%);
+  transform: translateX(-130%);
+  pointer-events: none;
+  z-index: 0;
+  animation: mi-cta-sweep 4.5s ease-in-out infinite;
+}
+.mi-cta-emerald > * { position: relative; z-index: 1; }
+@keyframes mi-cta-sweep {
+  0% { transform: translateX(-130%); }
+  55% { transform: translateX(130%); }
+  100% { transform: translateX(130%); }
 }
 .mi-cta-emerald:hover { transform: translateY(-1px); filter: brightness(1.08); background: var(--jj-emerald-ombre-hover) !important; }
 .mi-cta-emerald, .mi-cta-emerald *, .mi-cta-emerald > *, .mi-cta-emerald svg { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; stroke: #ffffff !important; }
+
 
 /* Card hover → emerald fill; all children white on hover */
 .mi-card-hover-emerald {
@@ -21616,6 +21673,7 @@ html body .jj-text-emerald * {
 
 /* Premium gold-bordered surface (matches "Compare Your Property" card) */
 .mi-gold-frame {
+  position: relative;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
   box-shadow:
     0 0 0 1px rgba(184, 149, 85, 0.15),
@@ -21624,6 +21682,20 @@ html body .jj-text-emerald * {
   background: #FDFBF7 !important;
   border-radius: 1rem;
 }
+
+/* Gold corner accents applied directly on the gold-frame card */
+.mi-gold-frame-corners { position: relative; }
+.mi-gold-frame-corners::before,
+.mi-gold-frame-corners::after {
+  content: "";
+  position: absolute;
+  width: 34px; height: 34px;
+  border-color: #B89555;
+  pointer-events: none;
+  z-index: 2;
+}
+.mi-gold-frame-corners::before { left: 10px; top: 10px; border-left: 2px solid #B89555; border-top: 2px solid #B89555; border-radius: 12px 0 0 0; }
+.mi-gold-frame-corners::after  { right: 10px; bottom: 10px; border-right: 2px solid #B89555; border-bottom: 2px solid #B89555; border-radius: 0 0 12px 0; }
 
 .mi-premium-corner-shell {
   position: relative;
@@ -21670,6 +21742,7 @@ html body .jj-text-emerald * {
 }
 .mi-emerald-panel *, .mi-emerald-panel svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
 
+/* Tabs: inactive = emerald w/ white. Active = champagne gold w/ black ink (selected feedback) */
 .mi-tab-emerald {
   background: var(--jj-emerald-ombre) !important;
   border: 1px solid rgba(184,149,85,.56) !important;
@@ -21678,18 +21751,33 @@ html body .jj-text-emerald * {
   box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
   min-height: 42px;
   padding: .6rem 1rem !important;
-}
-.mi-tab-emerald[data-state="active"] {
-  background: var(--jj-emerald-ombre-hover) !important;
-  box-shadow: 0 8px 20px rgba(3,48,38,.28), inset 0 1px 0 rgba(255,255,255,.18) !important;
+  flex: 1;
+  transition: background .25s ease, color .25s ease, box-shadow .25s ease;
 }
 .mi-tab-emerald *, .mi-tab-emerald svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
+html body #root .mi-tab-emerald[data-state="active"],
+html body #root .mi-tab-emerald[aria-selected="true"] {
+  background: linear-gradient(135deg, #F5E6B8 0%, #E8D08A 50%, #D4B66A 100%) !important;
+  border: 1px solid #B89555 !important;
+  box-shadow: 0 10px 24px rgba(184,149,85,.35), inset 0 1px 0 rgba(255,255,255,.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root .mi-tab-emerald[data-state="active"] *,
+html body #root .mi-tab-emerald[aria-selected="true"] *,
+html body #root .mi-tab-emerald[data-state="active"] svg,
+html body #root .mi-tab-emerald[aria-selected="true"] svg {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
 
-html body #root :is(.mi-icon-tile, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel, .mi-tab-emerald) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse) {
+html body #root :is(.mi-icon-tile, .mi-chip-emerald, .mi-cta-emerald, .mi-kicker-emerald, .mi-emerald-panel) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
 
 @media (max-width: 768px) {
   .mi-hero-data-stack { display: none; }
