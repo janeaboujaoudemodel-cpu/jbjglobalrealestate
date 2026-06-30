@@ -480,28 +480,28 @@ export default function OwnerDashboardOverview() {
         <KPICard
           title="Total Leads"
           value={totalLeads ?? '—'}
-          icon={<Users className="h-6 w-6 text-[#064E3B]" />}
+          icon={<Users className="allow-white h-6 w-6 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
           loading={loadingLeads}
           onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="New This Week"
           value={newLeadsThisWeek ?? '—'}
-          icon={<UserPlus className="h-6 w-6 text-[#064E3B]" />}
+          icon={<UserPlus className="allow-white h-6 w-6 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
           loading={loadingNewLeads}
           onClick={() => setActiveTab('leads')}
         />
         <KPICard
           title="Pending Tasks"
           value={pendingTasks ?? '—'}
-          icon={<CheckSquare className="h-6 w-6 text-[#064E3B]" />}
+          icon={<CheckSquare className="allow-white h-6 w-6 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
           loading={loadingTasks}
           onClick={() => navigate('/owner/crm/tasks')}
         />
         <KPICard
           title="Active Chats"
           value={activeConversations ?? '—'}
-          icon={<MessageSquare className="h-6 w-6 text-[#064E3B]" />}
+          icon={<MessageSquare className="allow-white h-6 w-6 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
           loading={loadingConversations}
           onClick={() => navigate('/owner/inbox')}
         />

@@ -14922,8 +14922,8 @@ html body #root .jj-developer-logo-metallic img {
   }
 
   body.jj-vertical-nav-active {
-    --jj-shell-sidebar-w: 200px;
-    --jj-shell-main-w: calc(100vw - 200px);
+    --jj-shell-sidebar-w: 240px;
+    --jj-shell-main-w: calc(100vw - 240px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
