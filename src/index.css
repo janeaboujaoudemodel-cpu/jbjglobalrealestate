@@ -21873,3 +21873,88 @@ html body #root#root#root#root#root#root#root#root#root#root [data-dld-white-ico
   fill: none !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+   PASS 141 — MARKET INTELLIGENCE VISUAL ROOT FIX
+   ============================================================ */
+html body #root [data-mi-page] {
+  width: 100% !important;
+  max-width: none !important;
+  overflow-x: clip !important;
+}
+
+html body #root [data-mi-page] [data-mi-hero],
+html body #root [data-insights-page] [data-mi-page] [data-mi-hero],
+html body #root main.jj-main-shell [data-mi-page] [data-mi-hero] {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-mi-page] [data-mi-hero] > .relative.z-10 {
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+html body #root [data-dld-emerald-tile],
+html body #root [data-dld-rank-badge] {
+  background: linear-gradient(135deg, #0B6B4F 0%, #064E3B 58%, #022C22 100%) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+
+html body #root [data-dld-emerald-tile] :where(svg, path, circle, line, polyline, rect),
+html body #root [data-dld-rank-badge] :where(*),
+html body #root [data-dld-white-icon],
+html body #root [data-dld-white-icon] :where(path, circle, line, polyline, rect) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-dld-rank-badge] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+
+html body #root [data-dld-emerald-fill],
+html body #root .dld-emerald-fill {
+  background: linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%) !important;
+  background-color: #064E3B !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+html body #root [data-mi-source-grid] > *,
+html body #root [data-mi-source-card] {
+  height: 100% !important;
+}
+
+html body [data-radix-popper-content-wrapper],
+html body [data-radix-portal] {
+  z-index: 120000 !important;
+}
+
+html body [data-radix-popper-content-wrapper] *,
+html body [data-radix-select-content],
+html body [data-radix-dropdown-menu-content],
+html body [data-radix-popover-content] {
+  animation-duration: 0ms !important;
+  transition-duration: 0ms !important;
+  animation-delay: 0ms !important;
+  transition-delay: 0ms !important;
+}
