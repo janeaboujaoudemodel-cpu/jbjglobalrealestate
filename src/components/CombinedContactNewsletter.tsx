@@ -13,12 +13,14 @@ interface CombinedContactNewsletterProps {
   title?: string;
   subtitle?: string;
   className?: string;
+  id?: string;
 }
 
 const CombinedContactNewsletter = ({
   title = "Ready to Get Started?",
   subtitle = "Connect with our expert team for personalized guidance.",
   className = "",
+  id = "ready-to-get-started",
 }: CombinedContactNewsletterProps) => {
   const contactCards = [
     {
@@ -43,7 +45,7 @@ const CombinedContactNewsletter = ({
 
   return (
     <section
-      id="ready-to-get-started"
+      id={id}
       className={`w-full py-12 md:py-20 ${className}`}
     >
       <ContentTrack>
