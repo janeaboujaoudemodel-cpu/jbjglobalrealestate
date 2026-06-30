@@ -16786,11 +16786,15 @@ html body :is([data-hero-dark], [data-on-dark]) :where(svg, [class*="lucide"]) {
   stroke: #FFFFFF !important;
 }
 
-/* Bright-background contract — white text on champagne/pearl/page is banned. */
-[data-surface="champagne"]:not([data-no-contrast-guard]) > .text-white,
-[data-surface="champagne"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-jbj-chat-open] *),
-[data-surface="page"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]),
-[data-surface="pearl"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]) {
+/* Bright-background contract — white text on champagne/pearl/page is banned.
+   Exception: descendants of any opted-out dark wrapper ([data-hero-dark],
+   [data-on-dark], [data-surface="dark"|"ink"|"emerald"], .allow-white,
+   [data-no-contrast-guard]) keep their white ink so dark heroes / featured
+   cards inside light page surfaces render correctly. */
+[data-surface="champagne"]:not([data-no-contrast-guard]) > .text-white:not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *),
+[data-surface="champagne"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-jbj-chat-open] *):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *),
+[data-surface="page"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *),
+[data-surface="pearl"]:not([data-no-contrast-guard]) .text-white:not([data-on-dark]):not([data-emerald-ok]):not([data-hero-dark] *):not([data-on-dark] *):not([data-surface="dark"] *):not([data-surface="ink"] *):not([data-surface="emerald"] *):not(.allow-white *):not([data-no-contrast-guard] *) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
