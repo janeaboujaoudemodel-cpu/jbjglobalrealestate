@@ -986,8 +986,12 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           // Sheets render edge-to-edge; preview overrides the var to 18px for visible separators.
           gap: `var(${PAGE_SEP_VAR}, 0px)`,
           background: "transparent",
-          color: T.ink,
-          WebkitTextFillColor: T.ink,
+          // Intentionally NO inline `color` here: an ink color on this
+          // [data-no-contrast-guard] root triggers the global
+          // "ink-honour" rule (`[data-no-contrast-guard][style*="#1A1A1A"] :where(span,...)`),
+          // which then forces ALL descendant text to ink — including the
+          // emerald cover-page "Report scope" labels. Each page sheet sets
+          // its own ink color, so this root stays color-neutral.
         }}
       >
         <style>{`

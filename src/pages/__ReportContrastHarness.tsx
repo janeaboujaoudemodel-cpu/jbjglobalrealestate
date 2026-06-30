@@ -176,7 +176,7 @@ export default function ReportContrastHarness() {
           projects={FIXTURE_PROJECTS}
           clientName="Test Client"
           clientRequirements={{ goal: "Investment" }}
-          pageIdPrefix="harness"
+          pageIdPrefix="preview"
         />
       </div>
     </div>
