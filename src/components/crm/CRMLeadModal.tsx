@@ -137,7 +137,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     });
   };
 
-  const handleClose = () => {
+  const resetState = () => {
     setFormData(initial);
     setActiveTab("contact");
     setNationalityOpen(false);
@@ -147,8 +147,28 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
     setCityOpen(false);
     setTagDraft("");
     setLoading(false);
+  };
+
+  const handleClose = () => {
     onClose();
   };
+
+  // Reset form whenever the dialog is closed externally and unlock body
+  // pointer-events as a safety net against any stuck Radix overlay state.
+  useEffect(() => {
+    if (!open) {
+      resetState();
+      // Defensive: if Radix left the body locked (rare race with portals),
+      // restore interactivity after the close animation finishes.
+      const t = window.setTimeout(() => {
+        if (document.body.style.pointerEvents === "none") {
+          document.body.style.pointerEvents = "";
+        }
+      }, 250);
+      return () => window.clearTimeout(t);
+    }
+  }, [open]);
+
 
   const cities = useMemo(
     () => getCitiesForCountry(formData.current_location_country),
