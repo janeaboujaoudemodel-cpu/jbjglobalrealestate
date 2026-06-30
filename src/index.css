@@ -21303,43 +21303,42 @@ html body #root [data-insights-page] section :is(.bg-white, [class~="bg-[#FFFFFF
   background-color: #FDFBF7 !important;
 }
 
-/* Repaint legacy navy / glass tiles that live inside framed Insights
- * sections so they read as soft champagne sub-cards (matching the
- * homepage "Compare Your Property" panel). Excludes anything that is
- * intentionally dark (hero, video, emerald CTA, neon page shells). */
-html body #root [data-insights-page] section :is(
-  [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-neutral-9"],
-  [class*="bg-zinc-9"], [class*="bg-gray-9"], [class*="bg-[#0"], [class*="bg-[#1"],
-  [class*="bg-black"]
-):not([data-hero-dark]):not(.jj-pill-emerald-metallic):not(.jj-cta-emerald):not([data-keep-dark]):not([class*="bg-emerald"]) {
-  background-color: #FDFBF7 !important;
-  background-image: none !important;
-  border: 1px solid rgba(184, 149, 85, 0.22) !important;
+/* ----------------------------------------------------------------
+ * Repaint legacy navy / glass tiles inside Insights sections so they
+ * read as soft champagne sub-cards (matching the homepage "Compare
+ * Your Property" panel).
+ *
+ * SCOPE LOCK — explicit, class-based opt-ins ONLY. The earlier
+ * version used wildcard attribute selectors like [class*="bg-[#0"]
+ * and [class*="bg-[linear-gradient"] which collateral-damaged:
+ *   - hero overlay gradient divs → wiped the [data-hero-dark] art
+ *   - TOC active button (bg-[#1A1A1A]) → cream-on-cream + black text
+ *   - .jj-pill-emerald-metallic CTA gradients
+ *   - any Tailwind arbitrary value starting bg-[#0…] or bg-[#1…]
+ * That broke "Area Intelligence" / "Buyer Guide" hero rendering and
+ * caused style-recalc thrash that slowed Radix dropdowns.
+ *
+ * The whitelisted classes below are the legacy "neon" tile primitives
+ * the user actually wants repainted. Heroes / CTAs / portals stay
+ * untouched.
+ * ---------------------------------------------------------------- */
+html body #root [data-insights-page] section:not(.jj-hero-fullscreen):not([data-hero-dark])
+  :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card)
+  :where(:not(.jj-pill-emerald-metallic):not(.jj-cta-emerald):not([data-keep-dark]):not([data-hero-dark])) {
+  /* purely a descendant rule — handled below */
 }
 
-/* Force text inside those repainted sub-tiles back to ink so the
- * white labels that were designed for navy don't disappear on cream. */
-html body #root [data-insights-page] section :is(
-  [class*="bg-slate-9"], [class*="bg-slate-8"], [class*="bg-neutral-9"],
-  [class*="bg-zinc-9"], [class*="bg-gray-9"], [class*="bg-[#0"], [class*="bg-[#1"],
-  [class*="bg-black"]
-):not([data-hero-dark]):not(.jj-pill-emerald-metallic):not(.jj-cta-emerald):not([data-keep-dark]):not([class*="bg-emerald"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,div) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-/* Neutralise the legacy ".jj-box-active" navy gradient tiles and any
- * inline linear-gradient(rgba(...dark...)) within insights — these
- * predate the champagne contract and were unreadable on the new sheet.
- * Repaint them as soft cream Compare-card sub-tiles with gold hairline. */
-html body #root [data-insights-page] section :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card, [class*="bg-[linear-gradient"]):not([data-keep-dark]):not([data-hero-dark]) {
+html body #root [data-insights-page] section:not(.jj-hero-fullscreen):not([data-hero-dark])
+  :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card):not([data-keep-dark]) {
   background-color: #FDFBF7 !important;
   background-image: none !important;
   border: 1px solid rgba(184, 149, 85, 0.28) !important;
   box-shadow: 0 4px 14px rgba(26, 26, 26, 0.04) !important;
 }
 
-html body #root [data-insights-page] section :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card, [class*="bg-[linear-gradient"]):not([data-keep-dark]):not([data-hero-dark]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,div) {
+html body #root [data-insights-page] section:not(.jj-hero-fullscreen):not([data-hero-dark])
+  :is(.jj-box-active, .jj-box-inactive, .jj-neon-tile, .jj-guide-card):not([data-keep-dark])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, li) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
@@ -21354,5 +21353,6 @@ html body #root [data-insights-page] section [data-icon-tone="emerald"] svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
 
 
