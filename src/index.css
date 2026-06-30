@@ -22228,3 +22228,13 @@ html body [data-filter-price-mode][data-filter-price-mode][data-filter-price-mod
   stroke: #FFFFFF !important;
   fill: #FFFFFF !important;
 }
+
+html body [data-account-menu-content] [data-account-menu-row][data-account-menu-row][data-account-menu-row]:is(:hover, :focus, [data-highlighted], [data-state="open"], [data-jbj-dropdown-selected="true"]):not(#jj-account-white-1):not(#jj-account-white-2):not(#jj-account-white-3):not(#jj-account-white-4):not(#jj-account-white-5):not(#jj-account-white-6):not(#jj-account-white-7):not(#jj-account-white-8),
+html body [data-account-menu-content] [data-account-menu-row][data-account-menu-row][data-account-menu-row]:is(:hover, :focus, [data-highlighted], [data-state="open"], [data-jbj-dropdown-selected="true"]):not(#jj-account-white-1):not(#jj-account-white-2):not(#jj-account-white-3):not(#jj-account-white-4):not(#jj-account-white-5):not(#jj-account-white-6):not(#jj-account-white-7):not(#jj-account-white-8) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
