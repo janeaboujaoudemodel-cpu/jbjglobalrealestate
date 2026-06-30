@@ -124,8 +124,17 @@ const MarketReport = () => {
 
       {/* ============== HERO ============== */}
       <section
-        className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-white"
-        style={{ marginTop: "calc(var(--shell-header-h, 88px) + 120px)" }}
+        data-no-compare-frame
+        data-market-report-hero
+        className="relative bg-white rounded-none"
+        style={{
+          marginTop: 0,
+          marginLeft: "calc(clamp(12px, 3vw, 32px) * -1)",
+          marginRight: "calc(clamp(12px, 3vw, 32px) * -1)",
+          width: "calc(100% + (clamp(12px, 3vw, 32px) * 2))",
+          paddingTop: "calc(var(--shell-header-h, 88px) + 96px)",
+          paddingBottom: "clamp(56px, 6vw, 96px)",
+        }}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1240px]">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -304,7 +313,7 @@ const MarketReport = () => {
                 initial={{ opacity: 0, scale: 0.85 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="jj-surface-emerald jj-pill-emerald-metallic absolute -bottom-2 right-2 md:right-8 px-3.5 py-1.5 rounded-full shadow-[0_6px_18px_rgba(6,78,59,0.35)]"
+                className="jj-surface-emerald jj-pill-emerald-metallic absolute -bottom-2 right-2 md:right-8 inline-flex h-8 min-w-[124px] items-center justify-center rounded-full px-4 py-0 text-center shadow-[0_6px_18px_rgba(6,78,59,0.35)]"
                 style={{
                   backgroundImage: "var(--jj-emerald-ombre)",
                   color: "#FFFFFF",
@@ -317,7 +326,7 @@ const MarketReport = () => {
                 <span
                   data-no-contrast-guard
                   data-jbj-white-glyph
-                  className="allow-white text-white text-[10px] font-bold uppercase tracking-wider"
+                  className="allow-white block w-full text-center text-[10px] font-bold uppercase leading-none tracking-wider text-white"
                   style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                 >
                   Free Download
