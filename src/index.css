@@ -22406,3 +22406,35 @@ html body #root .owner-dashboard-shell :is([role="tab"][data-state="active"], [d
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 145 — OWNER ADMIN ACTIVE TAB PROOF LOCK
+   Screenshot regression: the active Overview tab was emerald but its label/icon
+   were still black because older tab and champagne-surface rules beat the local
+   data-state utilities. Owner admin active controls are explicitly emerald with
+   pure white descendants. */
+html body #root [data-backend-portal="owner-admin"] [data-admin-tab-trigger][data-owner-admin-tab-active="true"],
+html body #root [data-backend-portal="owner-admin"] [data-admin-tab-trigger][data-state="active"],
+html body #root [data-backend-portal="owner-admin"] [role="tab"][data-state="active"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root [data-backend-portal="owner-admin"] [data-admin-tab-trigger][data-owner-admin-tab-active="true"] :is(*,span,div,p,strong,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g),
+html body #root [data-backend-portal="owner-admin"] [data-admin-tab-trigger][data-state="active"] :is(*,span,div,p,strong,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g),
+html body #root [data-backend-portal="owner-admin"] [role="tab"][data-state="active"] :is(*,span,div,p,strong,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
