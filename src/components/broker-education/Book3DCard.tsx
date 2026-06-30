@@ -75,11 +75,8 @@ export function Book3DCard({
           {statusBadge && (
             <div className="absolute top-2 right-2 z-20">{statusBadge}</div>
           )}
-          {effectivelyLocked && (
-            <div className="absolute inset-0 grid place-items-center pointer-events-none">
-              <PremiumLockBadge size="md" title="Access required" />
-            </div>
-          )}
+          {/* Center lock removed — corner foil lock badge lives on the cover (PremiumBook3D) */}
+
         </div>
 
         {/* CTA below the book (title/subtitle live on the cover itself) */}

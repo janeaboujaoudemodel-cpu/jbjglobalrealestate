@@ -1,5 +1,7 @@
 import { useMemo } from "react";
+import { Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+
 
 /**
  * PremiumBook3D — true 3D book: spine + front + back + page edges.
@@ -155,25 +157,11 @@ export function PremiumBook3D({
             style={{ border: `1px solid ${palette.foil}44` }}
           />
 
-          {/* Subtitle only — brand wordmark and underline removed for readability. */}
-          {!compact && (
-            <>
-              {subtitle && (
-                <div
-                  className="absolute inset-x-[12%] bottom-[14%] rounded-full px-2 py-1 text-center text-[8.5px] font-semibold uppercase tracking-[0.12em]"
-                  style={{ color: palette.foil }}
-                >
-                  {subtitle}
-                </div>
-              )}
-            </>
-          )}
-
           {/* Title — slimmer, balanced, premium */}
           <div
             className={cn(
               "absolute inset-x-[14%] grid place-items-center",
-              compact ? "top-[18%] bottom-[18%]" : "top-[20%] bottom-[28%]"
+              compact ? "top-[18%] bottom-[18%]" : "top-[20%] bottom-[22%]"
             )}
           >
             <div
@@ -194,8 +182,8 @@ export function PremiumBook3D({
             </div>
           </div>
 
-          {/* Classic foil corner badge — ONLY non-compact */}
-          {!compact && typeof bookNumber === "number" && (
+          {/* Foil corner lock badge — ONLY non-compact */}
+          {!compact && (
             <div
               className="absolute top-[6%] right-[6%] w-[28px] h-[28px] rounded-full flex items-center justify-center"
               style={{
@@ -203,16 +191,9 @@ export function PremiumBook3D({
                 boxShadow:
                   "inset 0 0 0 1px rgba(255,244,210,.55), 0 2px 4px rgba(0,0,0,.45)",
               }}
+              aria-label="Restricted access"
             >
-              <span
-                className="text-[9px] font-bold tracking-[0.04em]"
-                style={{
-                  color: "#3a2a08",
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
-                }}
-              >
-                {String(bookNumber).padStart(2, "0")}
-              </span>
+              <Lock size={12} strokeWidth={2.5} style={{ color: "#3a2a08" }} />
             </div>
           )}
         </div>
@@ -220,3 +201,4 @@ export function PremiumBook3D({
     </div>
   );
 }
+
