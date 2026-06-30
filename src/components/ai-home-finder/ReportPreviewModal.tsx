@@ -165,6 +165,35 @@ export default function ReportPreviewModal({
     setBranding((prev) => ({ ...prev, ...stored, ...defaults, role: activeRole }));
   }, [open, defaults, activeRole]);
 
+  // Imperative white-ink enforcement: CSS specificity wars lose to global guards
+  // with massive :not() chains. Walk the modal DOM and force inline !important
+  // styles on every emerald/dark element. Runs on every render while open.
+  useEffect(() => {
+    if (!open) return;
+    const tick = () => {
+      const root = document.getElementById("jbj-aihf-preview-root");
+      if (!root) return;
+      const whiteSel = [
+        "[data-aihf-darkband]","[data-aihf-darkband] *",
+        "[data-aihf-role-chip]","[data-aihf-role-chip] *",
+        '[data-aihf-include-btn][data-active="true"]','[data-aihf-include-btn][data-active="true"] *',
+        "[data-on-dark]","[data-on-dark] *",
+        '[data-surface="emerald"]','[data-surface="emerald"] *',
+        "[data-aihf-scope-row]","[data-aihf-scope-row] *","[data-aihf-scope-text]",
+      ].join(",");
+      root.querySelectorAll<HTMLElement>(whiteSel).forEach((el) => {
+        el.style.setProperty("color", "#FFFFFF", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+      });
+      root.querySelectorAll<HTMLElement>("[data-aihf-scope-dot]").forEach((el) => {
+        el.style.setProperty("background-color", "#FFFFFF", "important");
+      });
+    };
+    tick();
+    const id = window.setInterval(tick, 250);
+    return () => window.clearInterval(id);
+  }, [open]);
+
   const update = (patch: Partial<ReportBranding>) => {
     setBranding((prev) => {
       const next = { ...prev, ...patch, role: activeRole };
@@ -226,82 +255,55 @@ export default function ReportPreviewModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        id="jbj-aihf-preview-root"
         data-no-contrast-guard
         data-aihf-preview
         className="sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
-        style={{ background: C.page, color: C.ink }}
+        style={{ background: C.page }}
       >
-        {/* Scoped override — beats the global contrast guard inside the preview card only.
-            Selectors prefixed with html body + multiple attributes to win specificity over
-            the global champagne/gold text-color rules. */}
+        {/* ID-anchored overrides — (1,*,*) specificity always beats the global
+            champagne/gold contrast guards (which are class/attr-only). */}
         <style>{`
-          html body [data-aihf-preview] [data-aihf-darkband],
-          html body [data-aihf-preview] [data-aihf-darkband] *,
-          html body [data-aihf-preview] [data-aihf-darkband] :is(p,span,h1,h2,h3,h4,a,div) {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
+          #jbj-aihf-preview-root [data-aihf-darkband],
+          #jbj-aihf-preview-root [data-aihf-darkband] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
           }
-          html body [data-aihf-preview] [data-aihf-darkband] [data-tagline] {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
+          #jbj-aihf-preview-root [data-aihf-prepared-by] { color: #064E3B !important; -webkit-text-fill-color: #064E3B !important; }
+          #jbj-aihf-preview-root [data-aihf-website]     { color: #064E3B !important; -webkit-text-fill-color: #064E3B !important; }
+          #jbj-aihf-preview-root [data-aihf-price]       { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
+          #jbj-aihf-preview-root [data-aihf-rank]        { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
+          /* Role chip — pure white inside emerald pill */
+          #jbj-aihf-preview-root [data-aihf-role-chip],
+          #jbj-aihf-preview-root [data-aihf-role-chip] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
-          html body [data-aihf-preview] [data-aihf-prepared-by] {
-            color: #064E3B !important;
-            -webkit-text-fill-color: #064E3B !important;
+          /* Include-in-report toggle */
+          #jbj-aihf-preview-root [data-aihf-include-btn][data-active="true"],
+          #jbj-aihf-preview-root [data-aihf-include-btn][data-active="true"] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
-          html body [data-aihf-preview] [data-aihf-website] {
-            color: #064E3B !important;
-            -webkit-text-fill-color: #064E3B !important;
+          #jbj-aihf-preview-root [data-aihf-include-btn][data-active="false"],
+          #jbj-aihf-preview-root [data-aihf-include-btn][data-active="false"] * {
+            color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important;
           }
-          html body [data-aihf-preview] [data-aihf-price] {
-            color: #B89555 !important;
-            -webkit-text-fill-color: #B89555 !important;
+          #jbj-aihf-preview-root [data-aihf-include-btn][data-active="false"]:hover,
+          #jbj-aihf-preview-root [data-aihf-include-btn][data-active="false"]:hover * {
+            color: #064E3B !important; -webkit-text-fill-color: #064E3B !important; border-color: #064E3B !important;
           }
-          html body [data-aihf-preview] [data-aihf-rank] {
-            color: #B89555 !important;
-            -webkit-text-fill-color: #B89555 !important;
+          /* Live preview engine — pure white on every emerald/dark surface */
+          #jbj-aihf-preview-root [data-on-dark],
+          #jbj-aihf-preview-root [data-on-dark] *,
+          #jbj-aihf-preview-root [data-surface="emerald"],
+          #jbj-aihf-preview-root [data-surface="emerald"] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
-          html body [data-aihf-preview] [data-aihf-role-chip],
-          html body [data-aihf-preview] [data-aihf-role-chip] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
+          #jbj-aihf-preview-root [data-aihf-scope-dot] {
+            background: #FFFFFF !important; background-color: #FFFFFF !important;
           }
-          html body [data-aihf-preview] [data-aihf-primary-btn],
-          html body [data-aihf-preview] [data-aihf-primary-btn] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            stroke: #FFFFFF !important;
-          }
-          /* Include-in-report toggle group — lock contrast at every state */
-          html body [data-aihf-preview] [data-aihf-include-btn][data-active="true"],
-          html body [data-aihf-preview] [data-aihf-include-btn][data-active="true"] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            stroke: #FFFFFF !important;
-          }
-          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"],
-          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"] * {
-            color: #1A1A1A !important;
-            -webkit-text-fill-color: #1A1A1A !important;
-          }
-          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover {
-            border-color: #064E3B !important;
-            color: #064E3B !important;
-          }
-          html body [data-aihf-preview] [data-aihf-include-btn][data-active="false"]:hover * {
-            color: #064E3B !important;
-            -webkit-text-fill-color: #064E3B !important;
-          }
-          /* LIVE PREVIEW — lock pure white on any emerald/dark surface inside the engine */
-          html body [data-aihf-preview] [data-on-dark],
-          html body [data-aihf-preview] [data-on-dark] *,
-          html body [data-aihf-preview] [data-surface="emerald"],
-          html body [data-aihf-preview] [data-surface="emerald"] * {
-            color: #FFFFFF !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-          }
-          html body [data-aihf-preview] [data-aihf-scope-dot] {
-            background: #FFFFFF !important;
+          #jbj-aihf-preview-root [data-aihf-scope-row],
+          #jbj-aihf-preview-root [data-aihf-scope-row] *,
+          #jbj-aihf-preview-root [data-aihf-scope-text] {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
           }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
