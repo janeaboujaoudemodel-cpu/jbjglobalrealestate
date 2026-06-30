@@ -82,15 +82,9 @@ export function Book3DCard({
           )}
         </div>
 
-        {/* Title + CTA below the book */}
-        <div className="flex min-h-[110px] flex-1 flex-col gap-2 px-1">
-          <h3 className="text-[#1A1A1A] font-semibold text-sm leading-snug line-clamp-2">
-            {book.title}
-          </h3>
-          <div className="inline-flex max-w-full items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] text-[10px] uppercase tracking-[0.14em] self-start">
-            <Sparkles className="w-2.5 h-2.5" />
-            <span className="truncate">{book.learning_path}</span>
-          </div>
+        {/* CTA below the book (title/subtitle live on the cover itself) */}
+        <div className="flex flex-1 flex-col gap-2 px-1">
+
 
           <div className="pt-2 mt-auto">
             <Button
