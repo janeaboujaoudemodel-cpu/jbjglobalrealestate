@@ -571,7 +571,7 @@ export default function UnifiedCRM() {
           <nav
             role="tablist"
             aria-label="CRM sub-sections"
-            className="px-2 md:px-4 flex flex-wrap items-center gap-1.5 py-2 overflow-x-auto whitespace-nowrap jj-scrollbar-gold"
+            className="px-2 md:px-4 flex flex-wrap items-center gap-1.5 py-2 overflow-x-hidden whitespace-normal jj-scrollbar-gold min-w-0 max-w-full"
           >
             {(() => {
               const out: React.ReactNode[] = [];
@@ -593,7 +593,7 @@ export default function UnifiedCRM() {
                     data-state={active ? "active" : "inactive"}
                     onClick={() => setView(t.id)}
                     className={[
-                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border",
+                      "shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors border max-w-full",
                       active
                         ? "jj-surface-emerald border-transparent"
                         : "bg-transparent text-[#1A1A1A]/70 border-transparent hover:bg-[#EFE6D6]/70 hover:text-[#1A1A1A]",
@@ -624,9 +624,9 @@ export default function UnifiedCRM() {
       )}
 
       {/* Body */}
-      <div className="px-3 md:px-6 py-5">
-        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden">
-          <div className="p-3 md:p-5">
+      <div className="px-3 md:px-6 py-5 min-w-0 overflow-x-hidden">
+        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] shadow-sm overflow-hidden min-w-0 max-w-full">
+          <div className="p-3 md:p-5 min-w-0 overflow-x-hidden">
             <CRMBodyErrorBoundary><Suspense fallback={<Fallback />}>{Body}</Suspense></CRMBodyErrorBoundary>
           </div>
         </div>
