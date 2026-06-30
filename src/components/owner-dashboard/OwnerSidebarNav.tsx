@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -34,6 +34,8 @@ import {
   Briefcase,
   UserCheck,
   Phone,
+  ImageOff,
+  RefreshCw,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +58,6 @@ const NAV_SECTIONS: NavSection[] = [
     label: "CORE",
     items: [
       { label: "Owner Panel", icon: Crown, path: "/owner/admin" },
-      { label: "Developer Portal", icon: Building2, path: "/admin/developers" },
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
       { label: "Document Studio", icon: FileText, path: "/owner/documents/forms" },
       {
@@ -67,12 +68,23 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    label: "DEVELOPERS",
+    items: [
+      { label: "Developers Directory", icon: Building2, path: "/owner/developers" },
+      { label: "Sales Reps", icon: Users, path: "/owner/developers/reps" },
+      { label: "Projects", icon: ClipboardList, path: "/owner/developers/projects" },
+      { label: "Calendar", icon: Calendar, path: "/owner/developers/calendar" },
+      { label: "Access Requests", icon: Shield, path: "/owner/developers/access-requests" },
+      { label: "Profile Rebuild", icon: RefreshCw, path: "/owner/developers/profile-rebuild" },
+      { label: "Missing Logos", icon: ImageOff, path: "/owner/developers/missing-logos" },
+    ],
+  },
+  {
     label: "PROPERTIES",
     items: [
       { label: "Properties", icon: Building2, path: "/owner/properties" },
       { label: "Property Map", icon: Map, path: "/owner/map" },
       { label: "Listings Admin", icon: ClipboardList, path: "/owner/listing-admin" },
-      { label: "Developer Hub", icon: Building2, path: "/developer-portal" },
     ],
   },
   {
@@ -147,7 +159,19 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   const location = useLocation();
   const activeRef = useRef<HTMLButtonElement | null>(null);
 
-  const isActivePath = (path: string) => {
+  const allNavItems = useMemo(() => {
+    const list: NavItem[] = [];
+    const walk = (items: NavItem[]) => {
+      for (const item of items) {
+        list.push(item);
+        if (item.children?.length) walk(item.children);
+      }
+    };
+    NAV_SECTIONS.forEach((section) => walk(section.items));
+    return list;
+  }, []);
+
+  const matchesNavPath = useCallback((path: string) => {
     const [pathOnly, query] = path.split("?");
     if (pathOnly === "/owner") {
       return (location.pathname === "/owner" || location.pathname === "/owner/") && !location.search;
@@ -167,7 +191,20 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
       return location.pathname.startsWith("/owner/crm");
     }
     return location.pathname.startsWith(pathOnly);
-  };
+  }, [location.pathname, location.search]);
+
+  const activePath = useMemo(() => {
+    const score = (path: string) => {
+      const [pathOnly, query] = path.split("?");
+      const queryBoost = query ? 10000 + Array.from(new URLSearchParams(query).keys()).length * 100 : 0;
+      return pathOnly.length + queryBoost;
+    };
+    return allNavItems
+      .filter((item) => matchesNavPath(item.path))
+      .sort((a, b) => score(b.path) - score(a.path))[0]?.path ?? null;
+  }, [allNavItems, matchesNavPath]);
+
+  const isActivePath = useCallback((path: string) => activePath === path, [activePath]);
 
   // Scroll the active nav item into view on route change without disturbing the page
   useEffect(() => {

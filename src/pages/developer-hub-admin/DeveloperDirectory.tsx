@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2 } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
@@ -20,6 +20,35 @@ interface Row {
   website_url: string | null;
   description: string | null;
   last_enriched_at: string | null;
+  ceo_name: string | null;
+  founded_year: number | null;
+  headquarters: string | null;
+  completed_projects: number | null;
+  offplan_projects: number | null;
+  total_units_delivered: number | null;
+  upcoming_units: number | null;
+  logo_status: string | null;
+  project_count: number;
+  projects_for_sale: number;
+  total_project_units: number;
+  avg_price_from: number | null;
+  coverage: string[];
+}
+
+interface ProjectStatRow {
+  id: string;
+  developer_id: string | null;
+  emirate: string | null;
+  location: string | null;
+  is_published: boolean | null;
+  is_sold_out: boolean | null;
+  sale_status: string | null;
+  availability_status: string | null;
+  status: string | null;
+  price_from: number | null;
+  price_to: number | null;
+  total_units: number | null;
+  available_units: number | null;
 }
 
 const PAGE_SIZE = 60;
@@ -54,6 +83,7 @@ export default function DeveloperDirectory() {
   const [page, setPage] = useState(0);
   const [accumulated, setAccumulated] = useState<Row[]>([]);
   const [visOpen, setVisOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
 
   // Reset pagination when filters change
   useEffect(() => { setPage(0); setAccumulated([]); }, [search, onlyBroken]);
@@ -65,7 +95,7 @@ export default function DeveloperDirectory() {
       const to = from + PAGE_SIZE - 1;
       let q = supabase
         .from("developers")
-        .select("id, name, slug, logo_url, website_url, description, last_enriched_at", { count: "exact" })
+        .select("id, name, slug, logo_url, website_url, description, last_enriched_at, ceo_name, founded_year, headquarters, completed_projects, offplan_projects, total_units_delivered, upcoming_units, logo_status", { count: "exact" })
         .eq("is_hidden", false)
         .order("name")
         .range(from, to);
@@ -73,7 +103,17 @@ export default function DeveloperDirectory() {
       if (onlyBroken) q = q.or("logo_url.is.null,logo_url.eq.,description.is.null");
       const { data, error, count } = await q;
       if (error) throw error;
-      return { rows: data as Row[], total: count ?? 0 };
+      return {
+        rows: (data ?? []).map((row: any) => ({
+          ...row,
+          project_count: 0,
+          projects_for_sale: 0,
+          total_project_units: 0,
+          avg_price_from: null,
+          coverage: [],
+        })) as Row[],
+        total: count ?? 0,
+      };
     },
   });
 
@@ -86,7 +126,7 @@ export default function DeveloperDirectory() {
     });
   }, [data, page]);
 
-  const rows = useMemo(() => {
+  const dedupedRows = useMemo(() => {
     const map = new Map<string, Row>();
     for (const row of accumulated) {
       const key = normalizeDeveloperKey(row) || row.id;
@@ -94,6 +134,60 @@ export default function DeveloperDirectory() {
     }
     return Array.from(map.values());
   }, [accumulated]);
+
+  const developerIds = useMemo(() => dedupedRows.map((r) => r.id), [dedupedRows]);
+
+  const { data: projectStats } = useQuery({
+    queryKey: ["dev-directory-project-stats", developerIds],
+    enabled: developerIds.length > 0,
+    staleTime: 2 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, developer_id, emirate, location, is_published, is_sold_out, sale_status, availability_status, status, price_from, price_to, total_units, available_units")
+        .in("developer_id", developerIds)
+        .is("deleted_at", null)
+        .limit(5000);
+      if (error) throw error;
+
+      const map = new Map<string, {
+        project_count: number;
+        projects_for_sale: number;
+        total_project_units: number;
+        avg_price_from: number | null;
+        coverage: string[];
+      }>();
+
+      for (const project of ((data ?? []) as ProjectStatRow[])) {
+        if (!project.developer_id) continue;
+        const stat = map.get(project.developer_id) ?? {
+          project_count: 0,
+          projects_for_sale: 0,
+          total_project_units: 0,
+          avg_price_from: null,
+          coverage: [],
+        };
+        stat.project_count += 1;
+        stat.total_project_units += Number(project.total_units ?? project.available_units ?? 0);
+        const statusText = `${project.sale_status ?? ""} ${project.availability_status ?? ""} ${project.status ?? ""}`.toLowerCase();
+        const isForSale = project.is_published !== false && !project.is_sold_out && !/sold\s*out|unavailable|inactive|archived/.test(statusText);
+        if (isForSale) stat.projects_for_sale += 1;
+        if (project.price_from && project.price_from > 0) {
+          const previousTotal = (stat.avg_price_from ?? 0) * Math.max(stat.project_count - 1, 0);
+          stat.avg_price_from = Math.round((previousTotal + project.price_from) / stat.project_count);
+        }
+        const place = (project.emirate || project.location || "").trim();
+        if (place && !stat.coverage.includes(place)) stat.coverage.push(place);
+        map.set(project.developer_id, stat);
+      }
+      return map;
+    },
+  });
+
+  const rows = useMemo(() => dedupedRows.map((row) => ({
+    ...row,
+    ...(projectStats?.get(row.id) ?? {}),
+  })), [dedupedRows, projectStats]);
   const total = data?.total ?? rows.length;
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
 
@@ -127,7 +221,7 @@ export default function DeveloperDirectory() {
     },
     onSuccess: (r) => {
       toast.success(`Staged ${r.count} for review`, {
-        action: { label: "Open queue", onClick: () => navigate("/developers-portal/enrichment") },
+        action: { label: "Open queue", onClick: () => navigate("/owner/developers/profile-rebuild") },
       });
       clearSelection();
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
@@ -138,11 +232,96 @@ export default function DeveloperDirectory() {
   const selectedList = useMemo(() => Array.from(selected), [selected]);
   const canLoadMore = rows.length < total;
 
+  const exportRows = useMemo(() => rows.map((d) => ({
+    "Developer Name": d.name,
+    "Founded Date": d.founded_year ?? "",
+    "Owner / Founder / CEO": d.ceo_name ?? "",
+    "Headquarters": d.headquarters ?? "",
+    "Countries / Emirates": d.coverage?.length ? d.coverage.join(", ") : "Dubai / UAE",
+    "Units Delivered": d.total_units_delivered ?? "",
+    "Total Projects": d.project_count || d.completed_projects || 0,
+    "Projects For Sale": d.projects_for_sale || d.offplan_projects || 0,
+    "Completed Projects": d.completed_projects ?? "",
+    "Upcoming Units": d.upcoming_units ?? "",
+    "Total Project Units": d.total_project_units || "",
+    "Average Starting Price": d.avg_price_from ?? "",
+    "Logo Status": d.logo_url ? "Logo available" : (d.logo_status ?? "missing"),
+    "Website": d.website_url ?? "",
+    "Profile Slug": d.slug,
+    "Last Enriched Dubai Time": d.last_enriched_at ? new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dubai", dateStyle: "medium", timeStyle: "short" }).format(new Date(d.last_enriched_at)) : "",
+  })), [rows]);
+
+  const exportFileStem = () => {
+    const stamp = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dubai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    return `JBJ-developer-registry-${stamp}`;
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportCsv = () => {
+    if (!exportRows.length) return;
+    const headers = Object.keys(exportRows[0]);
+    const escape = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    const csv = [headers.map(escape).join(","), ...exportRows.map((row) => headers.map((h) => escape((row as Record<string, unknown>)[h])).join(","))].join("\n");
+    downloadBlob(new Blob([`\ufeff${csv}`], { type: "text/csv;charset=utf-8" }), `${exportFileStem()}.csv`);
+    toast.success("Developer CSV downloaded");
+  };
+
+  const exportExcel = async () => {
+    if (!exportRows.length) return;
+    const XLSX = await import("xlsx");
+    const worksheet = XLSX.utils.json_to_sheet(exportRows);
+    worksheet["!cols"] = Object.keys(exportRows[0]).map((key) => ({ wch: Math.max(16, key.length + 4) }));
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Developers");
+    const array = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    downloadBlob(new Blob([array], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), `${exportFileStem()}.xlsx`);
+    toast.success("Developer Excel downloaded");
+  };
+
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 max-w-full overflow-hidden">
+      <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+          <div className="flex items-start gap-4 min-w-0">
+            <span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center shadow-[0_16px_34px_-20px_rgba(6,78,59,0.9)]">
+              <Building2 className="size-5 text-white" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Developers</p>
+              <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Developer Registry</h1>
+              <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">One owner-console section for developer profiles, logos, project counts, reps, rebuild approvals and exports. Developer-mode users keep their separate limited portal.</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant={viewMode === "cards" ? "gold" : "outline"} onClick={() => setViewMode("cards")}>
+              <LayoutGrid className="size-4 mr-1" /> Cards
+            </Button>
+            <Button size="sm" variant={viewMode === "excel" ? "gold" : "outline"} onClick={() => setViewMode("excel")}>
+              <Table2 className="size-4 mr-1" /> Excel View
+            </Button>
+            <Button size="sm" variant="outline" onClick={exportCsv} disabled={!rows.length}>
+              <Download className="size-4 mr-1" /> CSV
+            </Button>
+            <Button size="sm" variant="gold" onClick={exportExcel} disabled={!rows.length}>
+              <FileSpreadsheet className="size-4 mr-1" /> Download Excel
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <p className="text-sm text-[#1A1A1A]/80">
-          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developers-portal/enrichment" className="underline">Site Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
+          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live owner-side developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/owner/developers/profile-rebuild" className="underline">Profile Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 
@@ -195,6 +374,69 @@ export default function DeveloperDirectory() {
 
       {isLoading && page === 0 && <p className="text-sm text-[#1A1A1A]/70">Loading…</p>}
 
+      {viewMode === "excel" ? (
+        <Card className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)]">
+          <div className="overflow-x-auto jj-scrollbar-gold">
+            <table className="w-full min-w-[1320px] text-sm">
+              <thead className="bg-[#EFE6D6] border-b border-[#B89555]/35">
+                <tr className="text-left text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/70">
+                  <th className="px-4 py-3 font-black">Developer</th>
+                  <th className="px-4 py-3 font-black">Founded</th>
+                  <th className="px-4 py-3 font-black">Owner / Founder</th>
+                  <th className="px-4 py-3 font-black">Units Delivered</th>
+                  <th className="px-4 py-3 font-black">For Sale</th>
+                  <th className="px-4 py-3 font-black">Total Projects</th>
+                  <th className="px-4 py-3 font-black">Coverage</th>
+                  <th className="px-4 py-3 font-black">Avg. Price</th>
+                  <th className="px-4 py-3 font-black">Logo</th>
+                  <th className="px-4 py-3 font-black">Website</th>
+                  <th className="px-4 py-3 font-black">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((d) => (
+                  <tr key={d.id} className="border-b border-[#B89555]/15 align-middle hover:bg-[#FDFBF7]">
+                    <td className="px-4 py-3 min-w-[260px]">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Checkbox checked={selected.has(d.id)} onCheckedChange={() => toggleOne(d.id)} aria-label={`Select ${d.name}`} />
+                        <DeveloperLogo
+                          src={!brokenImgs.has(d.id) ? d.logo_url : null}
+                          alt={`${d.name} logo`}
+                          name={d.name}
+                          variant="tile"
+                          renderFallback
+                          className="size-10 rounded-xl border-[#B89555]/40 bg-[#FDFBF7]"
+                          onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
+                        />
+                        <div className="min-w-0">
+                          <p className="font-black text-[#1A1A1A] truncate">{d.name}</p>
+                          <p className="text-xs text-[#1A1A1A]/55 truncate">{d.slug}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-[#1A1A1A]">{d.founded_year ?? "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] max-w-[170px] truncate">{d.ceo_name ?? "—"}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.total_units_delivered ?? 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
+                    <td className="px-4 py-3"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 max-w-[170px] truncate">
+                      {d.website_url ? <a href={d.website_url} target="_blank" rel="noreferrer" className="text-[#1A1A1A] underline decoration-[#B89555]/50">Website</a> : <span className="text-[#1A1A1A]/45">—</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Button asChild size="sm" variant="gold">
+                        <Link to={`/owner/developers/${d.slug}`}>Open</Link>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {rows.map((d) => {
           const isSel = selected.has(d.id);
@@ -230,12 +472,26 @@ export default function DeveloperDirectory() {
                   )}
                 </div>
               </div>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">For Sale</p>
+                  <p className="text-[#1A1A1A] font-black">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</p>
+                </div>
+                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Projects</p>
+                  <p className="text-[#1A1A1A] font-black">{(d.project_count || d.completed_projects || 0).toLocaleString()}</p>
+                </div>
+                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Units</p>
+                  <p className="text-[#1A1A1A] font-black">{(d.total_units_delivered ?? 0).toLocaleString()}</p>
+                </div>
+              </div>
               <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
               <div className="mt-3 flex gap-2 flex-wrap">
                 <Button asChild size="sm" variant="gold">
-                  <Link to={`/developers-portal/developers/${d.slug}`}>
+                  <Link to={`/owner/developers/${d.slug}`}>
                     <ExternalLink className="size-3 mr-1" /> Open profile
                   </Link>
                 </Button>
@@ -252,6 +508,7 @@ export default function DeveloperDirectory() {
           );
         })}
       </div>
+      )}
 
       {canLoadMore && (
         <div className="flex justify-center py-4">
