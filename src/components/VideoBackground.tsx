@@ -72,7 +72,7 @@ const VideoBackground = ({ src, poster, className = "", opacity = 1, eager = fal
         style={{ opacity }}
         loading="eager"
         {...({ fetchpriority: "high" } as any)}
-      />
+       decoding="async" />
 
       {/* Video — fades in over poster when ready */}
       {isVisible && (

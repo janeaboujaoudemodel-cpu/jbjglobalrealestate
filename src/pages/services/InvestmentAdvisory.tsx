@@ -170,12 +170,7 @@ const InvestmentAdvisory = () => {
             className="text-center max-w-4xl mx-auto"
           >
             {/* Label */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
-                Investment Advisory
-              </span>
-            </div>
+                        <SectionEyebrow icon={TrendingUp} className="mb-6">Investment Advisory</SectionEyebrow>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
               Strategic Investment Advisory

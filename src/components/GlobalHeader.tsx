@@ -826,7 +826,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))' 
                     : 'drop-shadow(0 2px 6px rgba(0,0,0,0.2))'
                 }}
-              />
+               loading="lazy" decoding="async" />
             </div>
             {/* Premium Typography */}
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
@@ -1284,7 +1284,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         <span className="text-[#1A1A1A]/70 text-xl">×</span>
                       </button>
                       <div className="flex justify-center mb-4">
-                        <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
+                        <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain"  loading="lazy" decoding="async" />
                       </div>
                       <h3 className="text-[#1A1A1A] font-bold text-xl text-center mb-3">
                         Welcome to JBJ Global Real Estate

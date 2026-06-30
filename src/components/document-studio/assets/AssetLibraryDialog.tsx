@@ -120,7 +120,7 @@ function AssetGrid({
             title={onPick ? "Insert into document" : a.label}
           >
             {a.signedUrl ? (
-              <img src={a.signedUrl} alt={a.label} className="max-h-full max-w-full object-contain" />
+              <img src={a.signedUrl} alt={a.label} className="max-h-full max-w-full object-contain"  loading="lazy" decoding="async" />
             ) : (
               <div className="text-[10px] text-[#1A1A1A]/40">loading…</div>
             )}

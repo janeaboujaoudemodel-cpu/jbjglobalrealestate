@@ -359,7 +359,7 @@ const CropPanel: React.FC<{ title: string; b64?: string }> = ({ title, b64 }) =>
         src={`data:image/png;base64,${b64}`}
         alt={title}
         className="rounded border border-border max-h-48 bg-muted/30"
-      />
+       loading="lazy" decoding="async" />
     ) : (
       <div className="rounded border border-dashed border-border h-24 flex items-center justify-center text-xs text-muted-foreground">
         no crop

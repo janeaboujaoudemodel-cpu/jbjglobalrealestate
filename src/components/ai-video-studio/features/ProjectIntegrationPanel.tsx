@@ -593,7 +593,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
                           alt={proj.name}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           loading="lazy"
-                        />
+                         decoding="async" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />
@@ -687,7 +687,7 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
               <div className="aspect-video relative overflow-hidden">
                 {wizardCoverImage ? (
                   <img src={wizardCoverImage} alt={wizardName}
-                    className="w-full h-full object-cover" />
+                    className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A]">
                     <Building2 className="w-8 h-8 text-[#1A1A1A]/70" />

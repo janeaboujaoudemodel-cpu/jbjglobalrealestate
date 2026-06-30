@@ -682,7 +682,7 @@ const BusinessCardCamera = ({
                 className="relative flex-shrink-0 w-24 h-16 rounded-md overflow-hidden"
                 style={{ border: `1px solid ${ACCENT_BORDER}` }}
               >
-                <img src={img} alt={`Card ${i + 1}`} className="w-full h-full object-cover" />
+                <img src={img} alt={`Card ${i + 1}`} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
               </div>
             ))}
           </div>

@@ -39,7 +39,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
           src={jbjMonogramLightBg}
           alt="JBJ Global Real Estate"
           className="h-20 w-auto mx-auto object-contain"
-        />
+         loading="lazy" decoding="async" />
       </div>
 
       {/* Header - centered */}

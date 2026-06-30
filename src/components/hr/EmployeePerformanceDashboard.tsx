@@ -331,7 +331,7 @@ export function EmployeePerformanceDashboard() {
                       <Checkbox checked={isSelected} onCheckedChange={() => toggleOne(emp.user_id)} className="mt-2" />
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F1E6] flex items-center justify-center border border-[#B89555]/40 shrink-0">
                         {emp.photo_url ? (
-                          <img src={emp.photo_url} alt="" className="w-full h-full rounded-full object-cover" />
+                          <img src={emp.photo_url} alt="" className="w-full h-full rounded-full object-cover"  loading="lazy" decoding="async" />
                         ) : (
                           <span className="font-bold text-[#1A1A1A]">{(emp.display_name ?? "?").charAt(0)}</span>
                         )}

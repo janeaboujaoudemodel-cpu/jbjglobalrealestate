@@ -239,7 +239,7 @@ const JBJDesignStudio: React.FC = () => {
         <table cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; color: #1A1A1A;">
           <tr>
             <td style="padding-right: 15px; border-right: 2px solid #D4AF37;">
-              ${signatureData.photoUrl ? `<img src="${signatureData.photoUrl}" alt="${signatureData.name}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: center 15%;">` : '<div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #D4AF37, #B8960C); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">' + signatureData.name.charAt(0) + '</div>'}
+              ${signatureData.photoUrl ? `<img src="${signatureData.photoUrl}" alt="${signatureData.name}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: center 15%;" loading="lazy" decoding="async">` : '<div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #D4AF37, #B8960C); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">' + signatureData.name.charAt(0) + '</div>'}
             </td>
             <td style="padding-left: 15px;">
               <p style="margin: 0; font-size: 16px; font-weight: bold; color: #000;">${signatureData.name}</p>

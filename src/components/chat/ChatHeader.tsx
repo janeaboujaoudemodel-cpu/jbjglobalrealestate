@@ -67,7 +67,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
               src={agent.photo} 
               alt={agent.name}
               className="w-full h-full object-cover"
-            />
+             loading="lazy" decoding="async" />
           </div>
         ) : (
           <div className="w-10 h-10 rounded-full bg-[#FDFBF7] border-2 border-[#B89555] flex items-center justify-center shadow-lg shadow-gold/20">

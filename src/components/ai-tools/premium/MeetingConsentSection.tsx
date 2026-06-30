@@ -264,7 +264,7 @@ const MeetingConsentSection = ({
           </Label>
           {idPhotoPreview ? (
             <div className="relative inline-block">
-              <img src={idPhotoPreview} alt="ID" className="h-20 rounded-lg border border-[#B89555]/30 object-cover" />
+              <img src={idPhotoPreview} alt="ID" className="h-20 rounded-lg border border-[#B89555]/30 object-cover"  loading="lazy" decoding="async" />
               <button
                 onClick={() => { setIdPhotoFile(null); setIdPhotoPreview(null); }}
                 className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center"

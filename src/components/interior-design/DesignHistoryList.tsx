@@ -118,7 +118,7 @@ const DesignHistoryList = ({
                             src={item.imageUrl}
                             alt={item.projectName}
                             className="w-full h-full object-cover"
-                          />
+                           loading="lazy" decoding="async" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Palette className="w-6 h-6 text-[#1A1A1A]/70" />

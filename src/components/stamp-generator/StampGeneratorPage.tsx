@@ -1191,10 +1191,10 @@ export default function StampGeneratorPage() {
                 </div>
               ) : uploadedStampUrl ? (
                 <div className="relative">
-                  <img src={uploadedStampUrl} alt="Uploaded stamp" style={{ maxWidth: stampSize, maxHeight: stampSize }} className="object-contain" />
+                  <img src={uploadedStampUrl} alt="Uploaded stamp" style={{ maxWidth: stampSize, maxHeight: stampSize }} className="object-contain"  loading="lazy" decoding="async" />
                   {uploadedSignatureUrl && (
                     <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
-                      style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }} />
+                      style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}  loading="lazy" decoding="async" />
                   )}
                 </div>
               ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
@@ -1252,7 +1252,7 @@ export default function StampGeneratorPage() {
                   />
                   {uploadedSignatureUrl && (
                     <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
-                      style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }} />
+                      style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}  loading="lazy" decoding="async" />
                   )}
                 </div>
               ) : (

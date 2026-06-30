@@ -10,7 +10,7 @@ import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
 // digits.
 installWhatsAppGuard();
 
-// Site-wide guard: every broken <img> is recovered with a high-res retry then
+// Site-wide guard: every broken <img loading="lazy" decoding="async"> is recovered with a high-res retry then
 // a branded champagne-initials fallback. Opt out per-image via `data-no-fallback`.
 installImageRecoveryGuard();
 

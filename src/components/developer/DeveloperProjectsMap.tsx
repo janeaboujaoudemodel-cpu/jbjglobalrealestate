@@ -77,7 +77,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const createPopupContent = useCallback((project: DeveloperProject) => {
     const imageHtml = project.cover_image_url 
       ? `<div style="height: 128px; overflow: hidden;">
-           <img src="${project.cover_image_url}" alt="${project.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+           <img src="${project.cover_image_url}" alt="${project.name}" style="width: 100%; height: 100%; object-fit: cover; display: block;"  loading="lazy" decoding="async" />
          </div>`
       : '';
     

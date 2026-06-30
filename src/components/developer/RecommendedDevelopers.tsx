@@ -122,7 +122,7 @@ export default function RecommendedDevelopers({
                             ? "invert(1) brightness(1)"
                             : "contrast(1.08) saturate(1.1)",
                         }}
-                      />
+                       decoding="async" />
                     ) : (
                       <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
                         {dev.name}

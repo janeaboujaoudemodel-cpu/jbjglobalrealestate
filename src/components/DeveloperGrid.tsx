@@ -109,7 +109,7 @@ const DeveloperGrid = () => {
                       src={developer.logo_url as string}
                       alt={`${developer.name} logo`}
                       className="block max-h-full max-w-full w-auto h-auto object-contain"
-                    />
+                     loading="lazy" decoding="async" />
                   ) : (
                     <h2 className="text-[#1A1A1A] font-bold text-xl md:text-2xl text-center line-clamp-2">
                       {developer.name}
@@ -177,7 +177,7 @@ const DeveloperGrid = () => {
                         src={project.images[0].image_url}
                         alt={project.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-b from-champagne-light/50 to-champagne/30">
                         <Building2 className="w-8 h-8 text-[#1A1A1A]" />

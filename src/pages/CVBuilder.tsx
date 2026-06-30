@@ -375,7 +375,7 @@ export default function CVBuilder() {
                   onClick={() => photoInputRef.current?.click()}
                 >
                   {data.photoUrl ? (
-                    <img src={data.photoUrl} alt="CV" className="w-full h-full object-cover" />
+                    <img src={data.photoUrl} alt="CV" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                   ) : (
                     <UserIcon className="w-6 h-6 text-[#1A1A1A]/40" />
                   )}
@@ -580,7 +580,7 @@ export default function CVBuilder() {
                     alt={data.fullName || "Photo"}
                     crossOrigin="anonymous"
                     style={{ width: 84, height: 84, borderRadius: "50%", objectFit: "cover", border: `2px solid ${data.accent}` }}
-                  />
+                   loading="lazy" decoding="async" />
                 )}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <h2 style={{ fontSize: 28, fontWeight: 700, margin: 0, letterSpacing: "-0.01em", color: data.accent }}>

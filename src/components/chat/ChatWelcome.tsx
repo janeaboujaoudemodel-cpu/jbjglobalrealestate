@@ -18,7 +18,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           src={jbjMonogramLightBg}
           alt="JBJ Global Real Estate"
           className="h-20 w-auto mx-auto object-contain"
-        />
+         loading="lazy" decoding="async" />
       </div>
 
       {/* Welcome text */}

@@ -607,7 +607,7 @@ const TicketHub = () => {
                             {attachments.map((att) => (
                               <div key={att.id} className="relative group rounded-lg border-2 border-[#B89555]/20 bg-[#FDFBF7] overflow-hidden">
                                 {att.preview ? (
-                                  <img src={att.preview} alt={att.file.name} className="w-full h-20 object-cover" />
+                                  <img src={att.preview} alt={att.file.name} className="w-full h-20 object-cover"  loading="lazy" decoding="async" />
                                 ) : (
                                   <div className="w-full h-20 flex items-center justify-center bg-[#EFE6D6]/5">
                                     {att.file.type.startsWith('video/') ? (

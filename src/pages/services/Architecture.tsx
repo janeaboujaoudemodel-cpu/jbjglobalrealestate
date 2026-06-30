@@ -100,7 +100,7 @@ const Architecture = () => {
             src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80" 
             alt="Architecture"
             className="w-full h-full object-cover opacity-30"
-          />
+           loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
         
@@ -166,9 +166,7 @@ const Architecture = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Our Services
-              </span>
+              <SectionEyebrow className="mb-4">Our Services</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Architectural Excellence" />
               </h2>
@@ -222,9 +220,7 @@ const Architecture = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Portfolio
-              </span>
+              <SectionEyebrow className="mb-4">Portfolio</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Featured Projects" />
               </h2>
@@ -239,7 +235,7 @@ const Architecture = () => {
                         src={project.image} 
                         alt={project.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                       loading="lazy" decoding="async" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     </div>
                     <CardContent className="p-4">

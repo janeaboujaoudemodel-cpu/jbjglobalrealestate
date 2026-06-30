@@ -288,7 +288,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                             src={project.thumbnail_url} 
                             alt={project.name}
                             className="w-full h-full object-cover"
-                          />
+                           loading="lazy" decoding="async" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <FolderOpen className="w-8 h-8 text-[#1A1A1A]/70" />
@@ -336,7 +336,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                             src={project.thumbnail_url} 
                             alt={project.name}
                             className="w-full h-full object-cover"
-                          />
+                           loading="lazy" decoding="async" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <FolderOpen className="w-5 h-5 text-[#1A1A1A]/70" />

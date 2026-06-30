@@ -512,7 +512,7 @@ export default function BlankLetterStudio() {
                       return (
                         <div key={s.id} onClick={() => setActiveSigId(s.id)}
                           className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
-                          <img src={s.image_url} alt={s.label || "Signature"} className="h-10 w-full object-contain" />
+                          <img src={s.image_url} alt={s.label || "Signature"} className="h-10 w-full object-contain"  loading="lazy" decoding="async" />
                           <div className="absolute top-0.5 right-0.5 flex gap-0.5">
                             <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("signature", s.id); }} title="Set as default"
                               className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>
@@ -546,7 +546,7 @@ export default function BlankLetterStudio() {
                       return (
                         <div key={s.id} onClick={() => setActiveStampId(s.id)}
                           className={`relative cursor-pointer border-2 rounded p-1 bg-[#F7F2EA] ${isActive ? "border-[#B89555]" : "border-transparent hover:border-[#B89555]/40"}`}>
-                          <img src={s.image_url} alt={s.label || "Stamp"} className="h-10 w-full object-contain" />
+                          <img src={s.image_url} alt={s.label || "Stamp"} className="h-10 w-full object-contain"  loading="lazy" decoding="async" />
                           <div className="absolute top-0.5 right-0.5 flex gap-0.5">
                             <button onClick={(e) => { e.stopPropagation(); setDefaultAsset("stamp", s.id); }} title="Set as default"
                               className={`w-4 h-4 rounded-full flex items-center justify-center ${s.is_default ? "bg-[#B89555] text-white" : "bg-white/80 text-[#1A1A1A]/60"}`}>

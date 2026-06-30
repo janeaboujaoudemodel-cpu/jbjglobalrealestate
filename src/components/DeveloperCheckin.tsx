@@ -337,7 +337,7 @@ const DeveloperCheckin = ({ developer, salesReps, activeCheckin, onCheckinComple
                     onClick={() => fileInputRef.current?.click()}
                   >
                     {photoPreview ? (
-                      <img src={photoPreview} alt="Preview" className="h-full object-cover rounded" />
+                      <img src={photoPreview} alt="Preview" className="h-full object-cover rounded"  loading="lazy" decoding="async" />
                     ) : (
                       <div className="flex flex-col items-center">
                         <Camera className="h-8 w-8 mb-2 text-muted-foreground" />

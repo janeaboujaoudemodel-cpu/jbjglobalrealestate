@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 
 const FAQS = [
   {
@@ -36,15 +37,7 @@ export function CareersFAQ() {
     <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#F7F2EA] via-[#FDFBF7] to-[#EFE6D6]">
       <div className="max-w-3xl mx-auto" data-surface="champagne">
         <div className="text-center mb-12">
-          <div
-            data-surface="emerald"
-            data-allow-dark-cta
-            data-no-contrast-guard
-            className="jj-cta-emerald jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 rounded-full border border-[#B89555]/70 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-white"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <HelpCircle className="h-3 w-3 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Frequently Asked
-          </div>
+          <SectionEyebrow icon={HelpCircle}>Frequently Asked</SectionEyebrow>
           <h2 className="mt-5 text-3xl md:text-4xl font-semibold text-[#1A1A1A] tracking-tight">
             Questions, answered
           </h2>

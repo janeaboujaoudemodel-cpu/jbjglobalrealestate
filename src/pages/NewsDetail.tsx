@@ -182,7 +182,7 @@ const NewsDetail = () => {
             alt={article.title}
             className="w-full h-full object-cover"
             loading="eager"
-          />
+           decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
 
           <div className="absolute top-6 left-6 z-10">

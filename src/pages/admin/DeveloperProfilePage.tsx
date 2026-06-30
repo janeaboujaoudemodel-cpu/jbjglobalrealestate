@@ -356,7 +356,7 @@ export default function DeveloperProfilePage() {
               title={canEdit ? "Click to upload logo" : "Logo"}
             >
               {developer.logo_url ? (
-                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-2" />
+                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-2"  loading="lazy" decoding="async" />
               ) : (
                 <div className="text-center text-xs text-[#1A1A1A]/60">
                   <Building2 className="w-8 h-8 mx-auto mb-1" />
@@ -587,7 +587,7 @@ export default function DeveloperProfilePage() {
                   >
                     <div className="flex items-center gap-3">
                       {p.cover_image_url ? (
-                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover" />
+                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover"  loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-14 h-14 rounded bg-[#EFE6D6] flex items-center justify-center">
                           <Building2 className="w-6 h-6 text-[#1A1A1A]/60" />
@@ -770,7 +770,7 @@ function MediaSection({
             {items.map((m) => (
               <div key={m.id} className="relative group border border-[#B89555]/20 rounded-lg overflow-hidden bg-[#FDFBF7]">
                 {kind === "photo" || kind === "floorplan" || kind === "map" ? (
-                  <img src={m.url} alt={m.caption || ""} className="w-full h-28 object-cover" />
+                  <img src={m.url} alt={m.caption || ""} className="w-full h-28 object-cover"  loading="lazy" decoding="async" />
                 ) : kind === "video" ? (
                   <video src={m.url} className="w-full h-28 object-cover" />
                 ) : (

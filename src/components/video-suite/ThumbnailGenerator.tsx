@@ -190,7 +190,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
 
               {baseImage ? (
                 <div className="relative rounded-lg overflow-hidden border" style={{ borderColor: 'rgba(184,149,85,0.2)' }}>
-                  <img src={baseImage} alt="Base" className="w-full h-32 object-cover" />
+                  <img src={baseImage} alt="Base" className="w-full h-32 object-cover"  loading="lazy" decoding="async" />
                   <button
                     onClick={() => setBaseImage(null)}
                     className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs"
@@ -257,7 +257,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
                 }}
               >
                 {generatedThumbnail ? (
-                  <img src={generatedThumbnail} alt="Generated thumbnail" className="w-full h-full object-cover" />
+                  <img src={generatedThumbnail} alt="Generated thumbnail" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 ) : (
                   <div className="flex flex-col items-center gap-3 py-12 px-6 text-center">
                     <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'rgba(184,149,85,0.1)' }}>

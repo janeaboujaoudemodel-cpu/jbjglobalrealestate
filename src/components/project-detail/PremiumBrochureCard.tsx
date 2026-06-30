@@ -211,7 +211,7 @@ const PremiumBrochureCard = ({
                   alt="JBJ"
                   className="w-full h-full object-cover"
                   style={{ transform: "scale(1.18)" }}
-                />
+                 loading="lazy" decoding="async" />
               </div>
               <p
                 data-no-contrast-guard

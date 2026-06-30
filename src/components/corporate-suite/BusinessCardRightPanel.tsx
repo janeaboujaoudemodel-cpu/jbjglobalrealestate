@@ -790,7 +790,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                         alt="QR Preview"
                         className="rounded"
                         style={{ width: 56, height: 56 }}
-                      />
+                       loading="lazy" decoding="async" />
                       <div>
                         <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">QR Preview</p>
                         <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">

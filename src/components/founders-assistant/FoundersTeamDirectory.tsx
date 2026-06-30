@@ -202,7 +202,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                         alt={member.name} 
                                         className="w-full h-full"
                                         style={{ objectFit: "cover", objectPosition: "center 15%" }}
-                                      />
+                                       loading="lazy" decoding="async" />
                                     </div>
                                     {/* Star indicator - visible only to founder/admin for AI personas */}
                                     {isFounderOrAdmin && member.isAI && (

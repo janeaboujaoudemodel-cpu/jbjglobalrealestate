@@ -60,7 +60,7 @@ export function BrandMonogram({
         height={cfg.height}
         className="object-contain"
         style={{ width: cfg.width, height: cfg.height }}
-      />
+       loading="lazy" decoding="async" />
 
       {/* Wordmark */}
       {showWordmark && (
@@ -103,7 +103,7 @@ export function BrandMonogramHeader({ className = "" }: { className?: string }) 
         width={48}
         height={48}
         className="object-contain w-12 h-12 md:w-10 md:h-10"
-      />
+       loading="lazy" decoding="async" />
       <span className="text-white font-semibold text-base md:text-base tracking-[0.12em] uppercase">
         Global Real Estate
       </span>

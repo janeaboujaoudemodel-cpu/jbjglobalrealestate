@@ -277,7 +277,7 @@ const DeveloperDetail = () => {
                 alt={`${developer.name} logo`}
                 className="w-full h-full object-contain"
                 loading="eager"
-              />
+               decoding="async" />
             ) : (
               <Building2 className="w-10 h-10 text-[#1A1A1A]/70" />
             )}

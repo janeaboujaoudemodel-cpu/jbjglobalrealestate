@@ -128,7 +128,7 @@ export default function EmployeeProfile() {
         <CardContent className="pt-6 flex flex-wrap items-start gap-6">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F1E6] flex items-center justify-center border border-[#B89555]/40">
             {profile.photo_url ? (
-              <img src={profile.photo_url} alt="" className="w-full h-full rounded-full object-cover" />
+              <img src={profile.photo_url} alt="" className="w-full h-full rounded-full object-cover"  loading="lazy" decoding="async" />
             ) : (
               <span className="text-2xl font-bold text-[#1A1A1A]">{(profile.display_name ?? "?").charAt(0)}</span>
             )}

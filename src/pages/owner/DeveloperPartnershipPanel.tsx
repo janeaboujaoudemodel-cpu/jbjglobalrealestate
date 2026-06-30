@@ -70,7 +70,7 @@ const DeveloperLogo = ({ dev }: { dev?: Developer | null }) => {
   return (
     <div className="w-10 h-10 rounded-md bg-[#FDFBF7] border border-[#B89555]/30 flex items-center justify-center overflow-hidden shrink-0">
       {src ? (
-        <img src={src} alt={dev?.name || "developer"} className="max-w-full max-h-full object-contain p-1" />
+        <img src={src} alt={dev?.name || "developer"} className="max-w-full max-h-full object-contain p-1"  loading="lazy" decoding="async" />
       ) : (
         <Building2 className="w-5 h-5 text-[#1A1A1A]/40" />
       )}

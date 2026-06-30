@@ -673,7 +673,7 @@ export default function CreateEnvelope() {
                                   src={URL.createObjectURL(file)}
                                   alt={file.name}
                                   className="w-10 h-10 rounded object-cover flex-shrink-0"
-                                />
+                                 loading="lazy" decoding="async" />
                               ) : (
                                 <FileText className="w-8 h-8 text-[#1A1A1A] flex-shrink-0" />
                               )}

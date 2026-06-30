@@ -17,6 +17,7 @@ import aboutHeroVideoAsset from "@/assets/videos/dubai-landmarks-hero.mp4.asset.
 const aboutHeroVideo = aboutHeroVideoAsset.url;
 import { FounderPhotoEditOverlay } from "@/components/founder/FounderPhotoEditOverlay";
 import { useFounderPhoto } from "@/hooks/useFounderPhoto";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
@@ -541,12 +542,8 @@ const About = () => {
                   variants={staggerContainer}
                 >
                   {/* Badge */}
-                  <motion.div 
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-[#B89555]/50 rounded-full text-[#1A1A1A] text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
-                    variants={fadeInUp}
-                  >
-                    <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#1A1A1A]" />
-                    Begin Your Journey
+                  <motion.div variants={fadeInUp} className="mb-4 sm:mb-6">
+                    <SectionEyebrow icon={Sparkles}>Begin Your Journey</SectionEyebrow>
                   </motion.div>
 
                   {/* Title */}

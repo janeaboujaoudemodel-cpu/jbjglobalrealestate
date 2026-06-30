@@ -1102,7 +1102,7 @@ export function ReellyImportPanel() {
                       </div>
                       {enrichTestResult.project?.cover_image_url && (
                         <button onClick={() => navigate(`/project/${enrichTestResult.project?.slug}`)} className="w-full">
-                          <img src={enrichTestResult.project.cover_image_url} alt="" className="w-full h-32 object-cover hover:opacity-80 transition-opacity cursor-pointer" />
+                          <img src={enrichTestResult.project.cover_image_url} alt="" className="w-full h-32 object-cover hover:opacity-80 transition-opacity cursor-pointer"  loading="lazy" decoding="async" />
                         </button>
                       )}
                       <div className="p-3 space-y-1">
@@ -1142,7 +1142,7 @@ export function ReellyImportPanel() {
                             <p className="text-[9px] text-[#1A1A1A]/70 mb-1">Gallery Preview:</p>
                             <div className="grid grid-cols-4 gap-1">
                               {data.gallery_preview.map((url, i) => (
-                                <img key={i} src={url} alt={`Preview ${i+1}`} className="w-full h-10 object-cover rounded" />
+                                <img key={i} src={url} alt={`Preview ${i+1}`} className="w-full h-10 object-cover rounded"  loading="lazy" decoding="async" />
                               ))}
                             </div>
                           </div>

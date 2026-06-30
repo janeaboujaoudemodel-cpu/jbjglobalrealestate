@@ -105,7 +105,7 @@ const ScanSignDocuments = () => {
                 {h.savedSignature && (
                   <div className="mt-4 p-3 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-lg">
                     <p className="text-xs text-emerald-400 mb-2">✓ Saved Signature:</p>
-                    <img src={h.savedSignature} alt="Signature" className="h-12 object-contain bg-[#FDFBF7] rounded p-1" />
+                    <img src={h.savedSignature} alt="Signature" className="h-12 object-contain bg-[#FDFBF7] rounded p-1"  loading="lazy" decoding="async" />
                   </div>
                 )}
               </CardContent>
@@ -210,11 +210,11 @@ const ScanSignDocuments = () => {
               <CardContent>
                 {h.currentDoc ? (
                   <div className="relative bg-[#F7F2EA] rounded-lg overflow-hidden min-h-[600px]">
-                    <img src={h.currentDoc.imageUrl} alt={h.currentDoc.name} className="w-full h-auto" style={{ transform: `rotate(${h.rotation}deg)` }} />
+                    <img src={h.currentDoc.imageUrl} alt={h.currentDoc.name} className="w-full h-auto" style={{ transform: `rotate(${h.rotation}deg)` }}  loading="lazy" decoding="async" />
                     {h.signatureFields.map(field => (
                       <div key={field.id} className="absolute border-2 border-dashed border-[color:var(--emerald-1)]/30/50 rounded cursor-move group" style={{ left: field.x, top: field.y, width: field.width, height: field.height }}>
                         {field.type === 'signature' && h.savedSignature ? (
-                          <img src={h.savedSignature} alt="Signature" className="w-full h-full object-contain" />
+                          <img src={h.savedSignature} alt="Signature" className="w-full h-full object-contain"  loading="lazy" decoding="async" />
                         ) : field.type === 'checkbox' ? (
                           <div className="w-full h-full flex items-center justify-center"><Check className="w-4 h-4 text-emerald-400" /></div>
                         ) : (

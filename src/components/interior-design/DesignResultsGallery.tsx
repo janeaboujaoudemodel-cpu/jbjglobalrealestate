@@ -333,7 +333,7 @@ const DesignResultsGallery = ({
             src={selectedImage}
             alt="Full size design"
             className="max-w-full max-h-full object-contain"
-          />
+           loading="lazy" decoding="async" />
         </motion.div>
       )}
     </div>

@@ -163,7 +163,7 @@ export default function AISignatureGenerator({
                 src={generatedSignature}
                 alt="Generated Signature"
                 className="max-h-24 max-w-full object-contain"
-              />
+               loading="lazy" decoding="async" />
             </div>
 
             {/* Variants */}
@@ -185,7 +185,7 @@ export default function AISignatureGenerator({
                         src={variant}
                         alt={`Variant ${index + 1}`}
                         className="max-h-12 w-full object-contain"
-                      />
+                       loading="lazy" decoding="async" />
                     </button>
                   ))}
                 </div>

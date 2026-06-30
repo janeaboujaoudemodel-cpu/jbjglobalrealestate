@@ -157,7 +157,7 @@ const TeamMemberDetailDialog = ({
                     alt={reportsToMember.name}
                     className="w-10 h-10 rounded-full border border-[#B89555]/30"
                     style={{ objectFit: "cover", objectPosition: "center 15%" }}
-                  />
+                   loading="lazy" decoding="async" />
                   <div>
                     <p className="text-[#1A1A1A] font-medium text-sm">{reportsToMember.name}</p>
                     <p className="text-[#1A1A1A] text-xs">{reportsToMember.role}</p>
@@ -183,7 +183,7 @@ const TeamMemberDetailDialog = ({
                         alt={report.name}
                         className="w-6 h-6 rounded-full border border-[#B89555]/30"
                         style={{ objectFit: "cover", objectPosition: "center 15%" }}
-                      />
+                       loading="lazy" decoding="async" />
                       <span className="text-[#1A1A1A] text-xs">{report.name.split(' ')[0]}</span>
                     </div>
                   ))}

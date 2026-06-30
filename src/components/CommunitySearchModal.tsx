@@ -76,7 +76,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
                         src={community.image_url}
                         alt={community.name}
                         className="w-full h-full object-cover"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                     )}

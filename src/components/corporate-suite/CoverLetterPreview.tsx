@@ -85,7 +85,7 @@ export default function LetterPreview({
             )}
           </div>
           {logoUrl && (
-            <img src={logoUrl} alt="Logo" style={{ height: sp(logoSize * 0.45), maxWidth: sp(90), objectFit: "contain", borderRadius: sp(4) }} />
+            <img src={logoUrl} alt="Logo" style={{ height: sp(logoSize * 0.45), maxWidth: sp(90), objectFit: "contain", borderRadius: sp(4) }}  loading="lazy" decoding="async" />
           )}
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function LetterPreview({
               <img src={stampData.signatureUrl} alt="Signature" style={{
                 height: sp(44), maxWidth: sp(180), objectFit: "contain", display: "block",
                 margin: `${sp(6)}px 0 ${sp(4)}px`, filter: "contrast(1.2)",
-              }} />
+              }}  loading="lazy" decoding="async" />
             ) : (
               <div style={{ marginTop: sp(10), borderTop: `1px solid ${cfg.dividerColor}`, width: sp(140) }} />
             )}
@@ -148,7 +148,7 @@ export default function LetterPreview({
             {stampData.stampUrl && (
               <img src={stampData.stampUrl} alt="Stamp" style={{
                 height: sp(60), objectFit: "contain", display: "block", marginTop: sp(8), opacity: 0.85,
-              }} />
+              }}  loading="lazy" decoding="async" />
             )}
           </div>
         )}

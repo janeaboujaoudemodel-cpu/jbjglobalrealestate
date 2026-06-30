@@ -3931,7 +3931,7 @@ function StudioShell({
                                         filter:
                                           "saturate(115%) contrast(110%) drop-shadow(0 1px 0 rgba(255,253,247,0.55))",
                                       }}
-                                    />
+                                     loading="lazy" decoding="async" />
                                   </div>
                                   {/* Export-safe visibility pass for pages with opaque tables.
                                       Blend is normal and the pre-tinted PNG has transparency,
@@ -3962,7 +3962,7 @@ function StudioShell({
                                         filter:
                                           "saturate(125%) contrast(115%) drop-shadow(0 1px 0 rgba(255,253,247,0.6))",
                                       }}
-                                    />
+                                     loading="lazy" decoding="async" />
 
                                   </div>
                                 </>
@@ -4102,7 +4102,7 @@ function StudioShell({
                                     ariaLabel="Authorised signature"
                                     hint="Click to change · Drag to move"
                                   >
-                                    <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none" />
+                                    <img src={marks.signature.url} alt="Signature" style={{ width: marks.signature.width, maxWidth: 240 }} className="block pointer-events-none"  loading="lazy" decoding="async" />
                                   </DraggableMark>
                                 )}
                                 {isLast && marks.stamp && (
@@ -4122,7 +4122,7 @@ function StudioShell({
                                     locked={!!marks.stampLocked}
                                     onToggleLock={() => setMarks((m) => ({ ...m, stampLocked: !m.stampLocked }))}
                                   >
-                                    <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: "rotate(0deg)", background: "transparent", mixBlendMode: "multiply" }} className="block pointer-events-none" />
+                                    <img src={marks.stamp.url} alt="Stamp" style={{ width: marks.stamp.width, maxWidth: 180, transform: "rotate(0deg)", background: "transparent", mixBlendMode: "multiply" }} className="block pointer-events-none"  loading="lazy" decoding="async" />
                                   </DraggableMark>
                                 )}
                               </div>

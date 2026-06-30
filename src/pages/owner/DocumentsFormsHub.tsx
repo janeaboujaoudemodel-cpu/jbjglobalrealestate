@@ -955,7 +955,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                               <DropdownMenuItem onClick={() => deleteAsset(s.id)} className="text-red-600 focus:text-red-700"><Trash2 className="w-3.5 h-3.5 mr-2" /> Delete</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
-                          <img src={s.image_url} alt={s.label || title} className="h-16 w-full object-contain" />
+                          <img src={s.image_url} alt={s.label || title} className="h-16 w-full object-contain"  loading="lazy" decoding="async" />
                           {s.is_default && <div className="text-[9px] text-center mt-1 text-[#1A1A1A]/70">DEFAULT</div>}
                           {s.label && <div className="text-[10px] text-center mt-0.5 text-[#1A1A1A]/60 truncate">{s.label}</div>}
                         </div>
@@ -1135,7 +1135,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
             <div className="space-y-2 mt-3">
               {(manageKind === "signature" ? signatures : manageKind === "stamp" ? stamps : []).map((s: any) => (
                 <div key={s.id} className="flex items-center gap-3 p-2 rounded border border-[#B89555]/30 bg-white">
-                  <img src={s.image_url} alt={s.label || ""} className="h-12 w-20 object-contain bg-[#FDFBF7] rounded" />
+                  <img src={s.image_url} alt={s.label || ""} className="h-12 w-20 object-contain bg-[#FDFBF7] rounded"  loading="lazy" decoding="async" />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm text-[#1A1A1A] truncate">{s.label || "Untitled"}</div>
                     {s.is_default && <div className="text-[10px] text-[#1A1A1A]/60">DEFAULT</div>}

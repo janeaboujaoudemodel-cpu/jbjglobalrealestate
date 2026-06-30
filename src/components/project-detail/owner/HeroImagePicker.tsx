@@ -201,7 +201,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
                           alt={img.alt_text ?? ""}
                           className="w-full h-full object-cover"
                           loading="lazy"
-                        />
+                         decoding="async" />
 
                         {/* Active badges */}
                         <div className="absolute top-1.5 left-1.5 flex flex-col gap-1">

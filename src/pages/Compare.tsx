@@ -872,7 +872,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                                 src={project.images?.[0]?.image_url || "/placeholder.svg"}
                                 alt={project.name}
                                 className="w-full h-full object-cover"
-                              />
+                               loading="lazy" decoding="async" />
                             </div>
                             <h3 className="text-white font-semibold">{project.name}</h3>
                             <p data-developer-name className="text-white/90 text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer?.name}</p>

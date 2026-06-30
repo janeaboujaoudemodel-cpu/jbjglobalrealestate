@@ -290,7 +290,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                         src={message.imageUrl} 
                         alt="Generated design"
                         className="mt-2 rounded-lg max-w-full"
-                      />
+                       loading="lazy" decoding="async" />
                     )}
                   </div>
                   <p className="text-[#1A1A1A]/70 text-[10px] mt-1">
@@ -324,7 +324,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
       {uploadedImage && (
         <div className="px-4 py-2 border-t border-[#1A1A1A]">
           <div className="relative inline-block">
-            <img src={uploadedImage} alt="Reference" className="h-16 rounded-lg" />
+            <img src={uploadedImage} alt="Reference" className="h-16 rounded-lg"  loading="lazy" decoding="async" />
             <button
               onClick={() => onImageUploaded('')}
               className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center"

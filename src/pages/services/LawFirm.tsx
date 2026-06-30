@@ -103,7 +103,7 @@ const LawFirm = () => {
             src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80" 
             alt="Legal services"
             className="w-full h-full object-cover opacity-30"
-          />
+           loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/80 to-black" />
         </div>
         
@@ -169,9 +169,7 @@ const LawFirm = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Expertise
-              </span>
+              <SectionEyebrow className="mb-4">Expertise</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Practice Areas" />
               </h2>
@@ -225,9 +223,7 @@ const LawFirm = () => {
             variants={staggerContainer}
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
-                Our Advantage
-              </span>
+              <SectionEyebrow className="mb-4">Our Advantage</SectionEyebrow>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Why Choose Us" />
               </h2>

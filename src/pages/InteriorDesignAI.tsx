@@ -361,7 +361,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </div>
               ) : uploadedPhoto ? (
                 <div className="relative">
-                  <img src={uploadedPhoto} alt="Uploaded" className="w-full h-auto max-h-[500px] object-contain" />
+                  <img src={uploadedPhoto} alt="Uploaded" className="w-full h-auto max-h-[500px] object-contain"  loading="lazy" decoding="async" />
                   <button
                     onClick={() => { setUploadedPhoto(null); setUploadedFile(null); }}
                     className="absolute top-3 right-3 p-2 bg-red-500/80 rounded-full text-[#1A1A1A] hover:bg-red-600"
@@ -559,7 +559,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       msg.role === 'user' ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' : 'bg-[#F7F2EA]/80 text-gray-200'
                     }`}>
                       {msg.image && (
-                        <img src={msg.image} alt="Design" className="rounded-lg mb-2 max-h-[200px] w-auto" />
+                        <img src={msg.image} alt="Design" className="rounded-lg mb-2 max-h-[200px] w-auto"  loading="lazy" decoding="async" />
                       )}
                       <div className="text-xs whitespace-pre-wrap">{msg.content}</div>
                     </div>

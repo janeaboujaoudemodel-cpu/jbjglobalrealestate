@@ -145,7 +145,7 @@ export default function BrandAssetsDashboard() {
       return <StampSVGRenderer svgSource={asset.svg_content} tintColor="#1B3A8C" size={80} />;
     }
     if (asset.file_url || asset.thumbnail_url) {
-      return <img src={asset.file_url || asset.thumbnail_url || ""} alt={asset.name} className="max-h-[80px] object-contain" />;
+      return <img src={asset.file_url || asset.thumbnail_url || ""} alt={asset.name} className="max-h-[80px] object-contain"  loading="lazy" decoding="async" />;
     }
     return <Package size={28} className="text-[hsl(var(--muted-foreground))] opacity-30" />;
   };

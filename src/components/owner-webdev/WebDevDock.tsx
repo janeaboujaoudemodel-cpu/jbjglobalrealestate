@@ -460,7 +460,7 @@ export default function WebDevDock() {
                       src={screenshot}
                       alt="capture"
                       className="h-12 w-20 object-cover rounded border border-[#B89555]/40"
-                    />
+                     loading="lazy" decoding="async" />
                     <button
                       onClick={() => setScreenshot(null)}
                       className="absolute -top-1 -right-1 bg-[#1A1A1A] text-white rounded-full p-0.5 allow-white"

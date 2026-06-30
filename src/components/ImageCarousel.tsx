@@ -292,7 +292,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             alt={images[pageIndex].alt_text || "Project image"}
             className="w-full h-full object-cover"
             loading="eager"
-          />
+           decoding="async" />
 
           {/* Top-right controls */}
           <div className="absolute top-4 right-4 flex gap-2">
@@ -383,7 +383,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                       alt={image.alt_text || `Thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"
                       loading="lazy"
-                    />
+                     decoding="async" />
                     {isOverflowTile && (
                       <div className="absolute inset-0 bg-[#1A1A1A]/70 backdrop-blur-sm flex items-center justify-center">
                         <span className="text-white font-semibold text-lg">+{total - 6}</span>
@@ -450,7 +450,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                 alt={images[fsIndex].alt_text || `Photo ${fsIndex + 1}`}
                 className="max-w-full max-h-full w-auto h-auto object-contain"
                 draggable={false}
-              />
+               loading="lazy" decoding="async" />
 
               {hasMultiple && (
                 <>
@@ -493,7 +493,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                         alt={img.alt_text || `Thumbnail ${i + 1}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
-                      />
+                       decoding="async" />
                     </button>
                   ))}
                 </div>

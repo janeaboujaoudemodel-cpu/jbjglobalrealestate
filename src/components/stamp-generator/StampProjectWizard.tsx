@@ -1310,7 +1310,7 @@ export default function StampProjectWizard() {
                       {logoPreview || form.uploaded_logo_url ? (
                         <div className="relative inline-block">
                           <div className="w-24 h-24 rounded-2xl border-2 border-[hsl(var(--gold)/0.5)] overflow-hidden bg-[hsl(var(--pearl-1))] flex items-center justify-center">
-                            <img src={logoPreview || form.uploaded_logo_url} alt="Logo" className="w-full h-full object-contain p-1"/>
+                            <img src={logoPreview || form.uploaded_logo_url} alt="Logo" className="w-full h-full object-contain p-1" loading="lazy" decoding="async" />
                           </div>
                           <button type="button" onClick={() => { setLogoPreview(''); set('uploaded_logo_url', ''); }}
                             className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-destructive text-white flex items-center justify-center"><X size={9}/></button>

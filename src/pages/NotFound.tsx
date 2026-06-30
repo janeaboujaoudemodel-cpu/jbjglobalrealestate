@@ -77,7 +77,7 @@ const NotFound = () => {
             src={jbjMonogramLightBg}
             alt="JBJ GLOBAL REAL ESTATE"
             className="w-20 h-20 sm:w-24 sm:h-24 mx-auto object-contain"
-          />
+           loading="lazy" decoding="async" />
         </motion.div>
 
         {/* 404 number */}

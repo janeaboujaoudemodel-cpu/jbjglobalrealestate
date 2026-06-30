@@ -176,7 +176,7 @@ export default function PAAListingDraftCard({ envelopeId, category }: Props) {
             <div className="grid grid-cols-4 gap-1.5">
               {images.slice(0, 8).map((img) => (
                 <div key={img.id} className="aspect-square rounded border border-[#B89555]/30 overflow-hidden bg-white">
-                  <img src={img.image_url} alt="" className="w-full h-full object-cover" />
+                  <img src={img.image_url} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 </div>
               ))}
             </div>

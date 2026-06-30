@@ -283,7 +283,7 @@ export default function StampManagerDialog({ open, onOpenChange, onUse }: StampM
                         src={s.thumbnail_url}
                         alt={s.name}
                         className="max-w-full max-h-full object-contain"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <StampIcon className="w-8 h-8 text-[#1A1A1A]/30" />
                     )}

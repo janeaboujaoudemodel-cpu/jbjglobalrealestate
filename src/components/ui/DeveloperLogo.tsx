@@ -20,7 +20,7 @@ interface DeveloperLogoProps {
 // maximum size without ever being cropped (object-contain enforced).
 // Square-ish, ~35% smaller than the previous h-14 w-24 plate so cards feel
 // closer to the Reelly reference. Padding stays minimal + object-contain
-// is enforced on the <img/> so wide wordmarks AND square marks render at
+// is enforced on the <img loading="lazy" decoding="async" /> so wide wordmarks AND square marks render at
 // their largest fitting size and are NEVER cropped.
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +

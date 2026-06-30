@@ -158,12 +158,7 @@ const SignatureCollection = () => {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-              <PenTool className="w-4 h-4 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
-                Services
-              </span>
-            </div>
+                        <SectionEyebrow icon={PenTool} className="mb-6">Services</SectionEyebrow>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-[-0.02em]">
               Signature Collection (JBJ)

@@ -101,7 +101,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
         src={agent.photo}
         alt={agent.name}
         className="w-10 h-10 rounded-full object-cover border-2 border-[#B89555]/40 shrink-0"
-      />
+       loading="lazy" decoding="async" />
       <div className="bg-[#FDFBF7] rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-[#B89555]/20 max-w-[85%]">
         <p className="text-[#1A1A1A] text-sm">{message}</p>
       </div>
@@ -122,7 +122,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
         src={agent.photo}
         alt={agent.name}
         className="w-10 h-10 rounded-full object-cover border-2 border-[#B89555]/40 shrink-0"
-      />
+       loading="lazy" decoding="async" />
       <div className="bg-[#FDFBF7] rounded-2xl rounded-tl-none px-4 py-3 shadow-sm border border-[#B89555]/20">
         <div className="flex gap-1">
           <span className="w-2 h-2 bg-[#EFE6D6]/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />

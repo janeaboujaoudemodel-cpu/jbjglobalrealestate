@@ -138,7 +138,7 @@ export default function FieldContentRenderer({
             alt="Signature"
             className={`max-w-full max-h-full object-contain ${!field.value?.startsWith("data:") ? "opacity-80" : ""}`}
             draggable={false}
-          />
+           loading="lazy" decoding="async" />
         </div>
       );
     }

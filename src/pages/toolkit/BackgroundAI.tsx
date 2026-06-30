@@ -986,7 +986,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: C.mutedText }}>Original</span>
                 </div>
                 <div className="aspect-square flex items-center justify-center p-2" style={{ background: checkerboard }}>
-                  {imagePreview && <img src={imagePreview} alt="Original" className="max-w-full max-h-full object-contain rounded-lg" />}
+                  {imagePreview && <img src={imagePreview} alt="Original" className="max-w-full max-h-full object-contain rounded-lg"  loading="lazy" decoding="async" />}
                 </div>
               </div>
 
@@ -1004,7 +1004,7 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
                 </div>
                 <div className="aspect-square flex items-center justify-center p-2" style={{ background: checkerboard }}>
                   {result ? (
-                    <img src={result} alt="Result" className="max-w-full max-h-full object-contain rounded-lg" />
+                    <img src={result} alt="Result" className="max-w-full max-h-full object-contain rounded-lg"  loading="lazy" decoding="async" />
                   ) : isLoading ? (
                     <div className="text-center">
                       <Loader2 className="h-10 w-10 mx-auto mb-3 animate-spin" style={{ color: C.accentText }} />

@@ -176,7 +176,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
                 <div className="grid grid-cols-3 gap-2 mt-3">
                   {images.map(img => (
                     <div key={img.id} className="relative group aspect-square rounded-lg overflow-hidden border border-[hsl(var(--border))]">
-                      <img src={img.src} alt={img.name} className="w-full h-full object-cover" />
+                      <img src={img.src} alt={img.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                       <button onClick={() => removeImage(img.id)}
                         className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <Trash2 className="w-3 h-3" />
@@ -246,7 +246,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
                         aspectRatio: i === 0 ? "1" : undefined,
                       }}>
                         {images[i] ? (
-                          <img src={images[i].src} alt="" className="w-full h-full object-cover" />
+                          <img src={images[i].src} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         ) : (
                           <div className="w-full h-full bg-[hsl(var(--muted))] flex items-center justify-center">
                             <Plus className="w-6 h-6 text-[hsl(var(--muted-foreground))] opacity-40" />
@@ -264,7 +264,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
                     {Array.from({ length: totalSlots }).map((_, i) => (
                       <div key={i} className="overflow-hidden aspect-square" style={{ borderRadius: `${borderRadius}px` }}>
                         {images[i] ? (
-                          <img src={images[i].src} alt="" className="w-full h-full object-cover" />
+                          <img src={images[i].src} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         ) : (
                           <div className="w-full h-full bg-[hsl(var(--muted))] flex items-center justify-center">
                             <Plus className="w-6 h-6 text-[hsl(var(--muted-foreground))] opacity-40" />

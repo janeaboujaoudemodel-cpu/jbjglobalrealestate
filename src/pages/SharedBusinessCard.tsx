@@ -479,7 +479,7 @@ export default function SharedBusinessCard() {
               src={snapshot.logoUrl}
               alt="Logo"
               className="h-10 object-contain rounded"
-            />
+             loading="lazy" decoding="async" />
           </div>
         )}
       </div>

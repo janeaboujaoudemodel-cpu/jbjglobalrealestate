@@ -43,7 +43,7 @@ export const JJLogoImage = ({
         height={config.height}
         className="object-contain"
         style={{ width: config.width, height: config.height }}
-      />
+       loading="lazy" decoding="async" />
       {showText && (
         <div 
           className="flex flex-col items-center justify-center text-current mt-1"
@@ -86,7 +86,7 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
         height={config.imgSize}
         className="object-contain"
         style={{ width: config.imgSize, height: config.imgSize }}
-      />
+       loading="lazy" decoding="async" />
     </div>
   );
 };
@@ -108,7 +108,7 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
         height: 44,
         imageRendering: 'auto'
       }}
-    />
+     loading="lazy" decoding="async" />
     {/* Text block */}
     <div className="flex flex-col justify-center leading-tight">
       <span className="text-white font-semibold text-sm md:text-base tracking-[0.12em] uppercase">

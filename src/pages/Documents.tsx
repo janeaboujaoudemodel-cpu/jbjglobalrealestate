@@ -567,7 +567,7 @@ const Documents = () => {
                   <div className="space-y-3">
                     <div><Label>URL or Text</Label><Input value={qrText} onChange={e => setQrText(e.target.value)} /></div>
                     <div className="flex gap-3"><div className="flex-1"><Label>Size</Label><Input type="number" value={qrSize} onChange={e => setQrSize(Number(e.target.value))} min={50} max={500} /></div><div><Label>Color</Label><input type="color" value={qrColor} onChange={e => setQrColor(e.target.value)} className="w-8 h-8 rounded border cursor-pointer" /></div></div>
-                    {qrText && <div className="flex justify-center p-3 bg-[#FDFBF7] rounded border"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrText)}&color=${qrColor.replace('#','')}&bgcolor=ffffff&margin=2`} alt="QR" className="max-w-[150px]" /></div>}
+                    {qrText && <div className="flex justify-center p-3 bg-[#FDFBF7] rounded border"><img src={`https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(qrText)}&color=${qrColor.replace('#','')}&bgcolor=ffffff&margin=2`} alt="QR" className="max-w-[150px]"  loading="lazy" decoding="async" /></div>}
                   </div>
                   <DialogFooter><Button onClick={insertQrCode} disabled={!qrText}>Insert</Button></DialogFooter>
                 </DialogContent>

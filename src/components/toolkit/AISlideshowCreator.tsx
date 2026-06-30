@@ -176,7 +176,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
                   {slides.map((s, i) => (
                     <div key={s.id} onClick={() => { setCurrentIndex(i); setIsPlaying(false); }}
                       className={`relative shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${i === currentIndex ? "border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.3)]" : "border-[hsl(var(--border))]"}`}>
-                      <img src={s.src} alt="" className="w-full h-full object-cover" />
+                      <img src={s.src} alt="" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                       <button onClick={e => { e.stopPropagation(); removeSlide(s.id); }}
                         className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[8px] opacity-0 hover:opacity-100 transition-opacity">
                         <Trash2 className="w-2.5 h-2.5" />
@@ -244,7 +244,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
               </div>
             ) : (
               <>
-                <img key={currentSlide?.id} src={currentSlide?.src} alt="" className={`absolute inset-0 w-full h-full object-cover ${getTransitionClass()}`} />
+                <img key={currentSlide?.id} src={currentSlide?.src} alt="" className={`absolute inset-0 w-full h-full object-cover ${getTransitionClass()}`}  loading="lazy" decoding="async" />
                 {/* Caption overlay */}
                 {(currentSlide?.caption || overlayText) && (
                   <div className="absolute bottom-0 left-0 right-0 px-6 py-4" style={{ background: overlayBg }}>

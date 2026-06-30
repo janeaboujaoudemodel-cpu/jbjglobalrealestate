@@ -139,7 +139,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
             src={imagePreview} 
             alt={filename}
             className="max-w-full max-h-32 object-cover"
-          />
+           loading="lazy" decoding="async" />
         </div>
       )}
       <div className="flex gap-1">

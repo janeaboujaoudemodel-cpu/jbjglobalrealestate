@@ -211,7 +211,7 @@ export default function BrokerDeveloperVisits() {
           {picked ? (
             <div className="flex items-center gap-3 px-3 h-12 rounded-md bg-[#FDFBF7] border border-[#B89555]/40">
               {picked.logo_url ? (
-                <img src={picked.logo_url} alt={picked.name} className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5" />
+                <img src={picked.logo_url} alt={picked.name} className="h-8 w-8 object-contain rounded bg-[#EFE6D6] p-0.5"  loading="lazy" decoding="async" />
               ) : (
                 <div data-surface="emerald" data-allow-dark-cta className="allow-white h-8 w-8 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 grid place-items-center text-[10px] font-bold text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
                   {picked.name.slice(0, 2).toUpperCase()}
@@ -256,7 +256,7 @@ export default function BrokerDeveloperVisits() {
                       className="w-full flex items-start gap-3 px-3 py-2 text-left hover:bg-[#EFE6D6]/70 border-b last:border-b-0 border-[#B89555]/15 overflow-visible"
                     >
                       {d.logo_url ? (
-                        <img src={d.logo_url} alt={d.name} className="h-7 w-7 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
+                        <img src={d.logo_url} alt={d.name} className="h-7 w-7 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0"  loading="lazy" decoding="async" />
                       ) : (
                         <div data-surface="emerald" data-allow-dark-cta className="allow-white h-8 w-8 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 grid place-items-center text-[10px] font-bold text-white flex-shrink-0 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
                           {d.name.slice(0, 2).toUpperCase()}
@@ -422,7 +422,7 @@ export default function BrokerDeveloperVisits() {
             {(visits.data ?? []).map((v) => (
               <div key={v.id} className="px-5 py-4 flex items-start gap-3">
                 {v.developer?.logo_url ? (
-                  <img src={v.developer.logo_url} alt="" className="h-9 w-9 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0" />
+                  <img src={v.developer.logo_url} alt="" className="h-9 w-9 object-contain rounded bg-[#EFE6D6] p-0.5 flex-shrink-0"  loading="lazy" decoding="async" />
                 ) : (
                   <div data-surface="emerald" data-allow-dark-cta className="allow-white h-9 w-9 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 grid place-items-center text-[10px] font-bold text-white flex-shrink-0 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75)]">
                     {(v.developer?.name ?? "?").slice(0, 2).toUpperCase()}

@@ -286,7 +286,7 @@ export const ProjectAIAnalyzer = ({
                     animation: "jbj-breathe 2s ease-in-out infinite",
                     mixBlendMode: "multiply",
                   }}
-                />
+                 loading="lazy" decoding="async" />
                 <div className="text-center space-y-2">
                   <p className="text-sm font-medium text-[#1A1A1A]/80">
                     JBJ AI is analyzing <span className="text-[#1A1A1A] font-semibold">{projectName}</span>

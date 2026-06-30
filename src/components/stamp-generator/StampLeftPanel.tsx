@@ -414,7 +414,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 )}
                 {props.localLogoUrl && props.localIconStyle === 'UPLOADED_LOGO' && (
                   <div className="flex items-center gap-2">
-                    <img src={props.localLogoUrl} alt="Logo" className="w-10 h-10 rounded object-contain border border-[hsl(var(--border))] bg-[hsl(var(--muted))]" />
+                    <img src={props.localLogoUrl} alt="Logo" className="w-10 h-10 rounded object-contain border border-[hsl(var(--border))] bg-[hsl(var(--muted))]"  loading="lazy" decoding="async" />
                     <button onClick={() => props.onSetLocalLogoUrl('')} className="text-[9px] text-destructive underline">Remove</button>
                   </div>
                 )}
@@ -459,7 +459,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 </label>
                 {props.uploadedStampUrl && (
                   <div className="flex items-center gap-2">
-                    <img src={props.uploadedStampUrl} alt="Uploaded stamp" className="w-12 h-12 rounded object-contain border border-[hsl(var(--border))]" />
+                    <img src={props.uploadedStampUrl} alt="Uploaded stamp" className="w-12 h-12 rounded object-contain border border-[hsl(var(--border))]"  loading="lazy" decoding="async" />
                     <button onClick={() => props.onSetUploadedStampUrl('')} className="text-[9px] text-destructive underline">Remove</button>
                   </div>
                 )}
@@ -488,7 +488,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 {props.uploadedSignatureUrl && (
                   <>
                     <div className="flex items-center gap-2">
-                      <img src={props.uploadedSignatureUrl} alt="Signature" className="h-8 object-contain border border-[hsl(var(--border))] rounded" />
+                      <img src={props.uploadedSignatureUrl} alt="Signature" className="h-8 object-contain border border-[hsl(var(--border))] rounded"  loading="lazy" decoding="async" />
                       <button onClick={() => props.onSetUploadedSignatureUrl('')} className="text-[9px] text-destructive underline">Remove</button>
                     </div>
                     <div className="space-y-1">

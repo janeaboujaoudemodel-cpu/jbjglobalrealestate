@@ -177,7 +177,7 @@ What would you like to create today?`,
                     src={message.image} 
                     alt="Design" 
                     className="rounded-lg mb-3 max-h-[300px] w-auto"
-                  />
+                   loading="lazy" decoding="async" />
                 )}
                 <div className="text-sm whitespace-pre-wrap">{message.content}</div>
               </div>
@@ -212,7 +212,7 @@ What would you like to create today?`,
                 src={photos[0]} 
                 alt="Upload preview" 
                 className="h-20 w-auto rounded-lg border border-[#1A1A1A]"
-              />
+               loading="lazy" decoding="async" />
               <button
                 onClick={() => setPhotos([])}
                 className="absolute -top-2 -right-2 p-1 bg-red-500 rounded-full"

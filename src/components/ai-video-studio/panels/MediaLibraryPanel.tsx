@@ -395,7 +395,7 @@ export function MediaLibraryPanel({
               <audio src={previewAsset.url} controls className="w-full" />
             )}
             {previewAsset.type === 'image' && (
-              <img src={previewAsset.url} alt={previewAsset.name} className="w-full rounded" />
+              <img src={previewAsset.url} alt={previewAsset.name} className="w-full rounded"  loading="lazy" decoding="async" />
             )}
             <div className="mt-4 flex justify-end gap-2">
               <Button variant="ghost" onClick={() => setPreviewAsset(null)}>
@@ -453,7 +453,7 @@ function AssetCard({ asset, onAdd, onDelete, onPreview, isStock }: AssetCardProp
         onClick={onPreview}
       >
         {asset.thumbnailUrl ? (
-          <img src={asset.thumbnailUrl} alt={asset.name} className="w-full h-full object-cover" />
+          <img src={asset.thumbnailUrl} alt={asset.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
         ) : (
           <div className="flex flex-col items-center gap-1">
             {icon}

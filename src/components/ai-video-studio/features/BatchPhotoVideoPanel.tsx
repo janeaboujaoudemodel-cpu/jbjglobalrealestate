@@ -241,7 +241,7 @@ export function BatchPhotoVideoPanel({ onBuildTimeline }: BatchPhotoVideoPanelPr
                 <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0 cursor-pointer"
                   onClick={() => setPreviewIdx(previewIdx === idx ? null : idx)}
                   style={{ border: `1px solid ${C.borderSubtle}` }}>
-                  <img src={photo.url} alt={photo.name} className="w-full h-full object-cover" />
+                  <img src={photo.url} alt={photo.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -302,7 +302,7 @@ export function BatchPhotoVideoPanel({ onBuildTimeline }: BatchPhotoVideoPanelPr
                       style={{
                         animation: `kb-${photo.kenBurns} ${photo.duration}s ease-in-out infinite alternate`,
                       }}
-                    />
+                     loading="lazy" decoding="async" />
                     <div className="absolute bottom-1 right-1">
                       <Badge variant="outline" className="text-[10px]" style={{ background: 'rgba(0,0,0,0.7)', borderColor: C.borderAccent, color: C.accent }}>
                         Ken Burns Preview

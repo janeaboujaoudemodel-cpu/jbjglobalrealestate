@@ -595,7 +595,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   <div className="flex flex-wrap gap-4">
                     {property.propertyPhotos.map((photo, i) => (
                       <div key={i} className="relative w-28 h-28 rounded-lg overflow-hidden group border border-[#B89555]/45">
-                        <img src={photo} alt={`Property ${i + 1}`} className="w-full h-full object-cover" />
+                        <img src={photo} alt={`Property ${i + 1}`} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                         <button onClick={() => removePhoto(i, 'property')} className="absolute inset-0 bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <span className="text-[#1A1A1A] text-xs font-medium">Remove</span>
                         </button>
@@ -761,7 +761,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                         <div className="flex flex-wrap gap-4">
                           {property.renovationPhotos.map((photo, i) => (
                             <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden group border border-[#B89555]/45">
-                              <img src={photo} alt={`Renovation ${i + 1}`} className="w-full h-full object-cover" />
+                              <img src={photo} alt={`Renovation ${i + 1}`} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                               <button onClick={() => removePhoto(i, 'renovation')} className="absolute inset-0 bg-red-500/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <span className="text-[#1A1A1A] text-xs">Remove</span>
                               </button>

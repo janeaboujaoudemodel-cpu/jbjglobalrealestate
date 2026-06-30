@@ -425,7 +425,7 @@ export default function AISignatureDesigner() {
                       />
                     </button>
                     <CardContent className="p-3 flex flex-col items-center gap-1">
-                      <img src={sig.url} alt={sig.label} className="h-14 object-contain" />
+                      <img src={sig.url} alt={sig.label} className="h-14 object-contain"  loading="lazy" decoding="async" />
                       <div className="flex items-center gap-1">
                         <Badge variant="outline" className="text-[9px]">{sig.label}</Badge>
                         {selectedGenerated === idx && <Check className="w-3 h-3 text-[hsl(var(--gold))]" />}
@@ -489,7 +489,7 @@ export default function AISignatureDesigner() {
             {uploadedSignature && (
               <div className="space-y-3">
                 <div className="border-2 border-dashed border-[hsl(var(--gold)/.3)] rounded-xl p-4 bg-[#FDFBF7] flex items-center justify-center">
-                  <img src={uploadedSignature} alt="Uploaded signature" className="max-h-24 object-contain" />
+                  <img src={uploadedSignature} alt="Uploaded signature" className="max-h-24 object-contain"  loading="lazy" decoding="async" />
                 </div>
                 <Button
                   onClick={() => handleSave(uploadedSignature, "uploaded_signature")}
@@ -523,7 +523,7 @@ export default function AISignatureDesigner() {
             {uploadedStamp && (
               <div className="space-y-3">
                 <div className="border-2 border-dashed border-[hsl(var(--gold)/.3)] rounded-xl p-4 bg-[#FDFBF7] flex items-center justify-center">
-                  <img src={uploadedStamp} alt="Uploaded stamp" className="max-h-24 object-contain" />
+                  <img src={uploadedStamp} alt="Uploaded stamp" className="max-h-24 object-contain"  loading="lazy" decoding="async" />
                 </div>
                 <Button
                   onClick={() => handleSave(uploadedStamp, "uploaded_stamp")}
@@ -551,7 +551,7 @@ export default function AISignatureDesigner() {
               <Card key={sig.id} className="border border-[hsl(var(--gold)/.3)]">
                 <CardContent className="p-3 space-y-2">
                   <div className="bg-[#FDFBF7] rounded-lg p-3 flex items-center justify-center min-h-[60px]">
-                    <img src={sig.data_url} alt={sig.name} className="max-h-14 object-contain" />
+                    <img src={sig.data_url} alt={sig.name} className="max-h-14 object-contain"  loading="lazy" decoding="async" />
                   </div>
                   <div className="flex items-center justify-between">
                     <Badge variant="outline" className="text-[10px]">{sig.type}</Badge>
@@ -577,7 +577,7 @@ export default function AISignatureDesigner() {
               <Card key={sig.id} className="border border-border">
                 <CardContent className="p-3 space-y-2">
                   <div className="bg-[#FDFBF7] rounded-lg p-3 flex items-center justify-center min-h-[60px]">
-                    <img src={sig.data_url} alt={sig.name} className="max-h-14 object-contain" />
+                    <img src={sig.data_url} alt={sig.name} className="max-h-14 object-contain"  loading="lazy" decoding="async" />
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="min-w-0">

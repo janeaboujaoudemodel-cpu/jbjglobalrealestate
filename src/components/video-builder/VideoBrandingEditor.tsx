@@ -100,7 +100,7 @@ const VideoBrandingEditor = ({ project, onUpdate, onNext }: VideoBrandingEditorP
                 src={jbjLogo}
                 alt="JBJ Global Real Estate"
                 className="w-full h-full object-contain"
-              />
+               loading="lazy" decoding="async" />
             </div>
             <div>
               <p className="font-medium">JBJ Global Real Estate</p>

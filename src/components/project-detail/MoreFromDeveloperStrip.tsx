@@ -227,7 +227,7 @@ export default function MoreFromDeveloperStrip({
             >
               <div className="aspect-[4/3] bg-[#EFE6D6] overflow-hidden">
                 {p.cover_image_url ? (
-                  <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover" loading="lazy" />
+                  <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover" loading="lazy"  decoding="async" />
                 ) : null}
               </div>
               <div className="p-3">

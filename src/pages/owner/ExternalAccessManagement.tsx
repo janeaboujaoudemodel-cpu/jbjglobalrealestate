@@ -257,7 +257,7 @@ const ExternalAccessManagement = () => {
                     {/* Screenshot thumbnail */}
                     {f.screenshot_url && (
                       <a href={f.screenshot_url} target="_blank" rel="noopener noreferrer" className="w-20 h-14 rounded border border-[#1A1A1A] overflow-hidden flex-shrink-0">
-                        <img src={f.screenshot_url} alt="Screenshot" className="w-full h-full object-cover" />
+                        <img src={f.screenshot_url} alt="Screenshot" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                       </a>
                     )}
 

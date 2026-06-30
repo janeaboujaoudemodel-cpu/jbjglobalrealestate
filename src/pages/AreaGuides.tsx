@@ -383,7 +383,7 @@ const AreaGuides = () => {
                             />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
-                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
+                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10"  loading="lazy" decoding="async" />
                             </div>
                           )}
 

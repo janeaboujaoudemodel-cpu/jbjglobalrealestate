@@ -610,7 +610,7 @@ const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep,
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/10 border border-[#B89555]/30 flex items-center justify-center overflow-hidden">
               {developer.logo_url ? (
-                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-1" />
+                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-1"  loading="lazy" decoding="async" />
               ) : (
                 <Building2 className="w-6 h-6 text-[#1A1A1A]" />
               )}

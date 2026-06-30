@@ -357,7 +357,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                             src={uploadedImage}
                             alt="Original room"
                             className="w-full h-full object-cover"
-                          />
+                           loading="lazy" decoding="async" />
                         </div>
                       </div>
                       <div>
@@ -376,7 +376,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                               src={stagedResult}
                               alt="Staged room"
                               className="w-full h-full object-cover"
-                            />
+                             loading="lazy" decoding="async" />
                           ) : (
                             <div className="text-center p-4">
                               <Sparkles className="w-8 h-8 text-[#1A1A1A]/80 mx-auto mb-2" />
@@ -454,7 +454,7 @@ export default function VirtualStagingPage({ embedded = false }: VirtualStagingP
                           src={item.stagedUrl}
                           alt="Staged"
                           className="w-full h-full object-cover"
-                        />
+                         loading="lazy" decoding="async" />
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-1">
                           <p className="text-white text-[10px] truncate">{item.roomType}</p>
                         </div>

@@ -295,7 +295,7 @@ export default function CreativeSuiteEditor() {
                           src={project.property_snapshot.cover_image_url}
                           alt={project.property_snapshot.name}
                           className="w-16 h-16 rounded-lg object-cover"
-                        />
+                         loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-16 h-16 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
                           <Building2 className="w-6 h-6 text-[#1A1A1A]/70" />

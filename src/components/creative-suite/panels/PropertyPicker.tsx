@@ -99,7 +99,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                         src={property.cover_image_url}
                         alt={property.name}
                         className="w-full h-full object-cover"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <ImageIcon className="w-8 h-8 text-[#1A1A1A]/70" />

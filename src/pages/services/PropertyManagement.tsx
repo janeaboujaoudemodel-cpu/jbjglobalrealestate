@@ -166,10 +166,7 @@ const PropertyManagement = () => {
       <section className="relative bg-background border-b border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6 border border-border bg-card">
-              <Building2 className="w-4 h-4 text-foreground" />
-              <span className="text-foreground font-semibold text-[11px] uppercase tracking-[0.2em]">Property Management</span>
-            </div>
+                        <SectionEyebrow icon={Building2} className="mb-6">Property Management</SectionEyebrow>
 
             <h1 className="text-[2.25rem] leading-[1.1] sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-5 tracking-[-0.025em]">
               Property Management &<br className="hidden sm:block" /> Asset Stewardship

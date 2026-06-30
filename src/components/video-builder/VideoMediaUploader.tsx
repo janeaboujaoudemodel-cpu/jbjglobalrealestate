@@ -275,7 +275,7 @@ const VideoMediaUploader = ({ project, onUpdate, onNext }: VideoMediaUploaderPro
                     src={item.url}
                     alt={`Media ${index + 1}`}
                     className="w-full h-full object-cover"
-                  />
+                   loading="lazy" decoding="async" />
                 ) : (
                   <video
                     src={item.url}

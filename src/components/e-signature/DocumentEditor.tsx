@@ -296,7 +296,7 @@ export default function DocumentEditor({ open, onOpenChange, pdfFile, pdfUrl, fi
                       alt={`page ${idx + 1}`}
                       className="w-full h-full object-contain"
                       style={{ transform: `rotate(${p.rotation}deg)` }}
-                    />
+                     loading="lazy" decoding="async" />
                   ) : null}
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-background/80 px-2 py-1 text-[10px] text-center font-semibold">

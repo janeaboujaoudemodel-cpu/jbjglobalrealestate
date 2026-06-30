@@ -47,7 +47,7 @@ export default function AlertsDemo() {
                 alt="JBJ Global Real Estate"
                 className="w-28 h-28 object-contain"
                 style={{ filter: "drop-shadow(0 0 40px rgba(200,167,102,0.5))", animation: "splashPulse 2s ease-in-out infinite" }}
-              />
+               loading="lazy" decoding="async" />
             </div>
             <div className="mt-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
               <p className="text-lg font-bold text-white tracking-[0.2em] uppercase">JBJ GLOBAL REAL ESTATE</p>

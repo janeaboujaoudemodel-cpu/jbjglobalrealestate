@@ -55,7 +55,7 @@ export default function ExistingProjectsReview({ developerName }: Props) {
             {existingProjects.slice(0, 20).map(p => (
               <div key={p.id} className="flex items-center gap-3 p-3 rounded-lg border border-[#B89555]/15 hover:bg-muted/50 transition-colors">
                 {p.cover_image_url ? (
-                  <img src={p.cover_image_url} alt={p.name} className="w-14 h-10 object-cover rounded" />
+                  <img src={p.cover_image_url} alt={p.name} className="w-14 h-10 object-cover rounded"  loading="lazy" decoding="async" />
                 ) : (
                   <div className="w-14 h-10 bg-muted rounded flex items-center justify-center">
                     <Building2 className="w-4 h-4 text-muted-foreground" />

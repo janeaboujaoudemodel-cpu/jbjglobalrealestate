@@ -102,7 +102,7 @@ const ComparisonBar = () => {
                       src={project.images?.[0]?.image_url || "/placeholder.svg"}
                       alt={project.name}
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   </div>
                 ))}
                 {shortlist.length > 3 && (
@@ -207,7 +207,7 @@ const ComparisonBar = () => {
                             src={project.images?.[0]?.image_url || "/placeholder.svg"}
                             alt={project.name}
                             className="w-full h-full object-cover"
-                          />
+                           loading="lazy" decoding="async" />
                         </div>
                         
                         <div className="p-4 space-y-3">

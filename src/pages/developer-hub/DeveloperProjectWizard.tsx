@@ -222,7 +222,7 @@ const DeveloperProjectWizard = () => {
               <Label className="text-[#1A1A1A]">Cover image</Label>
               {cover ? (
                 <div className="relative inline-block mt-2">
-                  <img src={cover.url} alt="cover" className="h-40 rounded border border-[#B89555]/40" />
+                  <img src={cover.url} alt="cover" className="h-40 rounded border border-[#B89555]/40"  loading="lazy" decoding="async" />
                   <button onClick={() => setCover(null)} className="absolute -top-2 -right-2 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full p-1">
                     <X className="w-3.5 h-3.5 text-[#1A1A1A]" />
                   </button>
@@ -241,7 +241,7 @@ const DeveloperProjectWizard = () => {
               <div className="flex flex-wrap gap-3 mt-2">
                 {gallery.map((g, i) => (
                   <div key={i} className="relative">
-                    <img src={g.url} alt={g.name} className="h-24 rounded border border-[#B89555]/40" />
+                    <img src={g.url} alt={g.name} className="h-24 rounded border border-[#B89555]/40"  loading="lazy" decoding="async" />
                     <button onClick={() => setGallery(gallery.filter((_, j) => j !== i))} className="absolute -top-2 -right-2 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full p-1">
                       <X className="w-3 h-3 text-[#1A1A1A]" />
                     </button>

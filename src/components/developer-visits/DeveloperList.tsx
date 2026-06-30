@@ -93,7 +93,7 @@ export function DeveloperList({ onSelectDeveloper, onRequestVisit, onCheckIn }: 
                         src={developer.logo_url}
                         alt={developer.name}
                         className="w-full h-full object-contain p-1"
-                      />
+                       loading="lazy" decoding="async" />
                     ) : (
                       <Building2 className="h-6 w-6 text-muted-foreground" />
                     )}

@@ -92,7 +92,7 @@ export function LockedLetterhead({ theme = "champagne" as LetterheadTheme }: { t
                 ? "brightness(0) invert(1) drop-shadow(0 1px 1px rgba(0,0,0,.18))"
                 : "saturate(1.12) contrast(1.06) drop-shadow(0 1px 0 rgba(255,255,255,.82)) drop-shadow(0 1.4px 1.4px rgba(72,48,15,.18))",
             }}
-          />
+           loading="lazy" decoding="async" />
         </div>
 
         <div

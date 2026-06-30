@@ -269,7 +269,7 @@ export function SiteCheckIn({ developerId, developerName, onSuccess, onCancel }:
                   src={selfieData}
                   alt="Selfie"
                   className="w-full h-48 object-cover"
-                />
+                 loading="lazy" decoding="async" />
                 <div className="absolute top-2 right-2">
                   <CheckCircle className="h-6 w-6 text-emerald-400" />
                 </div>

@@ -107,7 +107,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
                 src={agent.photo} 
                 alt={agent.name}
                 className="w-full h-full object-cover"
-              />
+               loading="lazy" decoding="async" />
             </div>
             
             {/* Status Indicator */}

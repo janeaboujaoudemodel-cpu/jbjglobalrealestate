@@ -56,7 +56,7 @@ export function A4Page({
       fontFamily: cfg.id === "premium" ? "Georgia, serif" : "'Helvetica Neue', Arial, sans-serif",
     }}>
       {logoVisible && (
-        <img src={logoUrl} alt="logo" style={getLogoStyle()} />
+        <img src={logoUrl} alt="logo" style={getLogoStyle()}  loading="lazy" decoding="async" />
       )}
       {children}
       {showPageNum && pageNum && (
@@ -114,7 +114,7 @@ export function CoverPage({
           {data.tagline && <p style={{ fontSize: px(13), color: "rgba(255,255,255,0.8)", marginTop: px(10), fontStyle: "italic" }}>{data.tagline}</p>}
           {showLogo && logoUrl && (
             <div style={{ marginTop: px(20) }}>
-              <img src={logoUrl} alt="logo" style={{ ...getInlineLogoStyle(), maxHeight: px(60) }} />
+              <img src={logoUrl} alt="logo" style={{ ...getInlineLogoStyle(), maxHeight: px(60) }}  loading="lazy" decoding="async" />
             </div>
           )}
         </div>
@@ -122,7 +122,7 @@ export function CoverPage({
 
       {isCoverLetter && (
         <div style={{ padding: `${px(40)}px ${px(50)}px ${px(50)}px` }}>
-          {showLogo && logoUrl && <img src={logoUrl} alt="logo" style={{ ...getInlineLogoStyle(), maxHeight: px(70), marginBottom: px(20) }} />}
+          {showLogo && logoUrl && <img src={logoUrl} alt="logo" style={{ ...getInlineLogoStyle(), maxHeight: px(70), marginBottom: px(20) }}  loading="lazy" decoding="async" />}
           <div style={{ borderBottom: `2px solid ${cfg.accent}`, paddingBottom: px(16), marginBottom: px(24) }}>
             <h1 style={{ fontSize: px(22), fontWeight: 800, color: cfg.coverTextColor, margin: 0 }}>{data.companyName || "Company Name"}</h1>
             {data.tagline && <p style={{ fontSize: px(11), color: cfg.accent, marginTop: px(4), fontStyle: "italic" }}>{data.tagline}</p>}
@@ -137,7 +137,7 @@ export function CoverPage({
 
       {isCopyright && (
         <div style={{ padding: `${px(40)}px ${px(50)}px ${px(50)}px` }}>
-          {showLogo && logoUrl && <img src={logoUrl} alt="logo" style={{ ...getInlineLogoStyle(), maxHeight: px(70), marginBottom: px(20) }} />}
+          {showLogo && logoUrl && <img src={logoUrl} alt="logo" style={{ ...getInlineLogoStyle(), maxHeight: px(70), marginBottom: px(20) }}  loading="lazy" decoding="async" />}
           <div style={{ borderLeft: `4px solid ${cfg.accent}`, paddingLeft: px(16), marginBottom: px(24) }}>
             <p style={{ fontSize: px(7), fontWeight: 700, letterSpacing: px(2), color: cfg.accent, marginBottom: px(6) }}>OFFICIAL COMPANY DOCUMENT</p>
             <h1 style={{ fontSize: px(24), fontWeight: 800, color: cfg.coverTextColor, margin: 0 }}>{data.companyName || "Company Name"}</h1>
@@ -160,7 +160,7 @@ export function CoverPage({
               right: logoPosition.includes("right") ? px(20) : "auto",
               transform: logoPosition.includes("center") ? "translateX(-50%)" : "none",
             }}>
-              <img src={logoUrl} alt="logo" style={{ width: lSize * 0.85, height: lSize * 0.85, objectFit: "contain", borderRadius: cfg.id === "premium" ? "50%" : px(6) }} />
+              <img src={logoUrl} alt="logo" style={{ width: lSize * 0.85, height: lSize * 0.85, objectFit: "contain", borderRadius: cfg.id === "premium" ? "50%" : px(6) }}  loading="lazy" decoding="async" />
             </div>
           )}
           <p style={{ fontSize: px(8), fontWeight: 700, letterSpacing: px(3), textTransform: "uppercase", color: cfg.accent, marginBottom: px(12) }}>COMPANY PROFILE</p>

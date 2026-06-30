@@ -156,7 +156,7 @@ export const PreJoinScreen: React.FC<PreJoinScreenProps> = ({
                           src={photo} 
                           alt="Your photo" 
                           className="w-32 h-32 rounded-full object-cover border-4 border-[#B89555]/30"
-                        />
+                         loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-32 h-32 rounded-full bg-[#1A1A1A] flex items-center justify-center border-4 border-[#1A1A1A]">
                           <User className="w-16 h-16 text-white/90" />

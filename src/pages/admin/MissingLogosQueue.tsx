@@ -470,7 +470,7 @@ export default function MissingLogosQueue() {
                             alt={`${r.name} candidate ${i + 1}`}
                             className="h-10 w-14 object-contain"
                             loading="lazy"
-                          />
+                           decoding="async" />
                           <span className="text-[10px] text-[#1A1A1A]/70 group-hover:text-[#1A1A1A]">
                             Approve
                           </span>

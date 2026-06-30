@@ -779,7 +779,7 @@ const ListingGenerator = () => {
                 {files.map((f) => (
                   <div key={f.id} className="flex items-center gap-3 p-2 rounded-lg bg-background/50">
                     {f.preview ? (
-                      <img src={f.preview} alt={f.name} className="w-10 h-10 rounded object-cover" />
+                      <img src={f.preview} alt={f.name} className="w-10 h-10 rounded object-cover"  loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-10 h-10 rounded bg-[#EFE6D6]/20 flex items-center justify-center">
                         <FileText className="w-5 h-5 text-[#1A1A1A]" />

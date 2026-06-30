@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
+import { SectionEyebrow } from '@/components/ui/SectionEyebrow';
 
 type Tab = 'audience' | 'services' | 'professional';
 
@@ -60,10 +61,7 @@ const StartingPointSection = () => {
       <div className="jj-layer-2">
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
-          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-[#F7F2EA] border border-[#B89555]/30 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
-            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#1A1A1A]/70" />
-            <span className="text-[#1A1A1A]">{t('hero.findStartingPoint')}</span>
-          </span>
+          <SectionEyebrow icon={Users}>{t('hero.findStartingPoint')}</SectionEyebrow>
         </div>
 
         {/* Tab navigation */}

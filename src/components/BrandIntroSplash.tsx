@@ -92,7 +92,7 @@ export default function BrandIntroSplash() {
             filter: "drop-shadow(0 0 40px rgba(200,167,102,0.5))",
             animation: "splashPulse 2s ease-in-out infinite",
           }}
-        />
+         loading="lazy" decoding="async" />
       </div>
 
       {/* Wordmark */}

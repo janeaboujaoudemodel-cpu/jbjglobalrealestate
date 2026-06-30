@@ -738,7 +738,7 @@ const AIDocumentGeneratorPremium = () => {
                         {asset.svg_content ? (
                           <StampSVGRenderer svgSource={asset.svg_content} tintColor="#1B3A8C" size={40} />
                         ) : asset.file_url || asset.thumbnail_url ? (
-                          <img src={asset.file_url || asset.thumbnail_url} alt={asset.name} className="max-h-[40px] object-contain" />
+                          <img src={asset.file_url || asset.thumbnail_url} alt={asset.name} className="max-h-[40px] object-contain"  loading="lazy" decoding="async" />
                         ) : (
                           <Package size={16} className="text-white/70" />
                         )}

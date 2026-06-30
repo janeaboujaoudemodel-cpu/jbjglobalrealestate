@@ -179,7 +179,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
                 onDragEnd={() => setDragId(null)}
                 className={`relative group rounded-lg overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7] aspect-square cursor-move ${isDragging ? "opacity-40 ring-2 ring-[#B89555]" : ""}`}
               >
-                <img src={img.image_url} alt={img.alt_text ?? ""} className="w-full h-full object-cover" loading="lazy" />
+                <img src={img.image_url} alt={img.alt_text ?? ""} className="w-full h-full object-cover" loading="lazy"  decoding="async" />
                 <span className="absolute top-1 right-1 text-[10px] font-bold px-1 py-0.5 rounded bg-black/50 text-white inline-flex items-center" data-no-contrast-guard>
                   <GripVertical className="w-3 h-3" />
                 </span>

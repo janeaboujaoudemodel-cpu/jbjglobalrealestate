@@ -409,7 +409,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           {!fullScreen && (
             <>
               <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/50 shadow-md">
-                <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
+                <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 <span className="absolute bottom-0 right-0 w-3 h-3 jj-surface-emerald border-2 border-white rounded-full" />
               </div>
               <div>
@@ -475,7 +475,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             >
               {message.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0 border-2 border-[hsl(var(--gold))]/50 shadow-sm">
-                  <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover" />
+                  <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                 </div>
               )}
               <div className={`max-w-[80%] ${
@@ -607,7 +607,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   className="flex items-center gap-3 w-full px-3 py-2 rounded-lg hover:bg-[#FDFBF7] hover:shadow-sm transition-colors">
                   <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[hsl(var(--gold))]/30 bg-[#FDFBF7]">
                     <img src={member.avatar} alt={member.name} className="w-full h-full"
-                      style={{ objectFit: "cover", objectPosition: "center 15%" }} />
+                      style={{ objectFit: "cover", objectPosition: "center 15%" }}  loading="lazy" decoding="async" />
                   </div>
                   <div className="text-left flex-1">
                     <p className="text-sm text-[#1A1A1A]">{member.name}</p>

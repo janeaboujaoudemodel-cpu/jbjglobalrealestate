@@ -241,7 +241,7 @@ const Favorites = () => {
       const badgeStr = badge ? badge === 'top1' ? 'Top 1 — Gold' : badge === 'top2' ? 'Top 2 — Silver' : 'Top 3 — Bronze' : null;
       const img = p.images?.[0]?.image_url || "";
       const url = `${window.location.origin}/project/${p.slug}`;
-      return `<div class="card">${img ? `<img class="img" src="${img}" alt="${p.name}"/>` : ''}<div class="content"><div class="title">${i + 1}. ${p.name}</div><div class="meta">${p.developer?.name || 'Developer'} • ${p.location || 'UAE'}</div>${badgeStr ? `<div class="badge">${badgeStr}</div>` : ''}<div class="links" style="margin-top:10px;font-size:12px">View: <a href="${url}">${url}</a></div></div></div>`;
+      return `<div class="card">${img ? `<img class="img" src="${img}" alt="${p.name}" loading="lazy" decoding="async" />` : ''}<div class="content"><div class="title">${i + 1}. ${p.name}</div><div class="meta">${p.developer?.name || 'Developer'} • ${p.location || 'UAE'}</div>${badgeStr ? `<div class="badge">${badgeStr}</div>` : ''}<div class="links" style="margin-top:10px;font-size:12px">View: <a href="${url}">${url}</a></div></div></div>`;
     }).join('')}</div><div class="footer">CONTACT@JBJ.AE • +971 54 716 7107 • JBJ.AE</div></div></body></html>`;
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);

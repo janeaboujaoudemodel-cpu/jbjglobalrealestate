@@ -319,13 +319,13 @@ const VideoBuilder = () => {
                       src={project.media[0]?.url || project.property?.images[0]}
                       alt="Preview"
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   ) : project.property?.images[0] ? (
                     <img
                       src={project.property.images[0]}
                       alt="Preview"
                       className="w-full h-full object-cover"
-                    />
+                     loading="lazy" decoding="async" />
                   ) : (
                     <div className="flex items-center justify-center h-full text-muted-foreground">
                       <div className="text-center">

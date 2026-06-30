@@ -266,7 +266,7 @@ const Index = () => {
             fetchPriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
-          />
+           loading="lazy" />
 
           <video
             autoPlay loop muted playsInline

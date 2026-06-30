@@ -123,7 +123,7 @@ const VirtualStagingForm = ({
                 src={preview}
                 alt={`Empty room ${index + 1}`}
                 className="w-full h-full object-cover"
-              />
+               loading="lazy" decoding="async" />
               <button
                 onClick={() => removePhoto(index)}
                 className="absolute top-2 right-2 p-1.5 bg-[#1A1A1A]/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
