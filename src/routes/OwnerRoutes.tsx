@@ -261,10 +261,10 @@ export const OwnerRoutes = () => (
     <Route path="exclusive-documents" element={<ExclusiveDocuments />} />
     <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
-    <Route path="crm/brokers" element={<Navigate to="/owner/crm?section=relationships&sub=brokers" replace />} />
+    <Route path="crm/brokers" element={<Navigate to="/owner/crm?entity=brokers&view=directory" replace />} />
     <Route path="crm/integrity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/DataIntegrityCheck")))}</Suspense>} />
-    <Route path="crm/network" element={<Navigate to="/owner/crm?section=relationships&sub=developers" replace />} />
-    <Route path="crm/campaigns" element={<Navigate to="/owner/crm?section=campaigns" replace />} />
+    <Route path="crm/network" element={<Navigate to="/owner/crm?entity=developers&view=registry" replace />} />
+    <Route path="crm/campaigns" element={<Navigate to="/owner/crm?entity=leads&view=campaigns" replace />} />
    <Route path="crm/company/:type/:name" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/CompanyHubPage")))}</Suspense>} />
    <Route path="crm/person/:variant/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/PersonHubPage")))}</Suspense>} />
    <Route path="crm/brokers/:brokerId" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokerProfile")))}</Suspense>} />
