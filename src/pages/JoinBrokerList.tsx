@@ -12,6 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
+import BrokerCircleSection from "@/components/BrokerCircleSection";
+
 
 const DRAFT_KEY = "jbj_broker_join_draft";
 
