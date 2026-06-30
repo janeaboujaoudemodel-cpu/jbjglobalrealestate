@@ -52,15 +52,16 @@ export default function BrokerEmailSetup() {
                 <Shield className="h-3.5 w-3.5 text-white" /> Redirect URI (paste this into Google / Microsoft)
               </div>
               <div className="mt-2 flex items-center gap-2">
-                <code className="flex-1 text-xs md:text-sm bg-white/95 border border-white/20 rounded px-3 py-2 break-all text-[#1A1A1A]">{redirect}</code>
-                <Button
-                  size="sm"
+                <code className="flex-1 min-w-0 text-xs md:text-sm bg-white/95 border border-white/20 rounded px-3 py-2 break-all text-[#1A1A1A]">{redirect}</code>
+                <button
+                  type="button"
                   onClick={copyRedirect}
-                  className="jj-surface-emerald allow-white text-white border border-white/30 hover:brightness-110 shrink-0"
+                  className="jj-surface-emerald allow-white shrink-0 inline-flex items-center justify-center h-9 w-9 rounded-md border border-white/30 text-white hover:brightness-110"
                   data-allow-dark-cta
+                  aria-label="Copy redirect URI"
                 >
                   {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                </Button>
+                </button>
               </div>
             </div>
           </div>
