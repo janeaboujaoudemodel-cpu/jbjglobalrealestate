@@ -394,7 +394,7 @@ export const PublicRoutes = () => (
     {import.meta.env.DEV && (
       <Route
         path="/__report-contrast"
-        element={React.createElement(lazy(() => import("@/pages/__ReportContrastHarness")))}
+        element={createElement(lazy(() => import("@/pages/__ReportContrastHarness")))}
       />
     )}
     <Route path="/dashboard" element={<Dashboard />} />
