@@ -12,6 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { toast } from "sonner";
+import BrokerCircleSection from "@/components/BrokerCircleSection";
+
 
 const DRAFT_KEY = "jbj_broker_join_draft";
 
@@ -158,7 +160,11 @@ const JoinBrokerList = () => {
           </div>
         </section>
 
+        {/* Broker Circle — support team, services & ecosystem */}
+        <BrokerCircleSection />
+
         {/* Form Section */}
+
         <section className="pb-10 px-4">
           <div className="max-w-5xl mx-auto">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
