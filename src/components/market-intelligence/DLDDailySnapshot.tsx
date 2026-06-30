@@ -23,7 +23,6 @@ import {
   Landmark,
   MailOpen,
   PhoneCall,
-  TrendingUp,
 } from "lucide-react";
 
 type TopArea = { area: string; count: number; avg_aed_per_sqft?: number | null };
@@ -98,8 +97,9 @@ const WhiteRank = ({ children }: { children: React.ReactNode }) => {
 };
 
 // Reusable champagne card with PREMIUM gold border (double hairline + soft glow).
-const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
+const BlackCard: React.FC<React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>> = ({ children, className = "", ...rest }) => (
   <div
+    {...rest}
     data-surface="light"
     className={`surface-light relative overflow-hidden rounded-2xl ${className}`}
     style={{
@@ -185,26 +185,18 @@ export const DLDDailySnapshot = () => {
             { label: "Cash Share", value: `${cashShare}%`, Icon: Banknote },
             { label: "Mortgage Share", value: `${mortgageShare}%`, Icon: Landmark },
           ].map(({ label, value, Icon }) => (
-            <BlackCard key={label} className="p-4 md:p-5">
-              <div className="flex items-start justify-between gap-2">
+            <BlackCard key={label} data-dld-kpi-card className="p-4 md:p-5">
+              <div className="flex items-start gap-3">
                 <IconTile
                   icon={Icon}
                   tone="emerald"
                   size="md"
                   data-dld-emerald-tile
+                  aria-label={`${label} icon`}
                   className="mi-no-flip"
                   iconClassName="text-white"
                   style={{ background: EMERALD_BAR, color: PURE_WHITE, border: "1px solid rgba(184,149,85,0.62)" }}
                 />
-                <span
-                  data-no-contrast-guard
-                  data-allow-dark-cta
-                  data-dld-emerald-tile
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-md"
-                  style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)" }}
-                >
-                    <WhiteGlyphIcon Icon={TrendingUp} className="h-4 w-4 text-white" />
-                </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
                 {label}
