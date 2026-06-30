@@ -33,6 +33,7 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     updateFrequency: 'daily',
     lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['demographics', 'housing', 'economic'],
+    url: 'https://www.dsc.gov.ae',
   },
   {
     id: 'dubai_land',
@@ -63,6 +64,16 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     lastUpdated: new Date().toISOString().slice(0, 10),
     dataTypes: ['rental_index', 'service_charges', 'regulations'],
     url: 'https://www.rera.gov.ae',
+  },
+  {
+    id: 'dubai_police',
+    name: 'Dubai Police',
+    provider: 'Dubai Government',
+    description: 'Official public-safety and verification services relevant to property due diligence',
+    updateFrequency: 'daily',
+    lastUpdated: new Date().toISOString().slice(0, 10),
+    dataTypes: ['verification', 'public_safety', 'reports'],
+    url: 'https://www.dubaipolice.gov.ae',
   },
 ];
 

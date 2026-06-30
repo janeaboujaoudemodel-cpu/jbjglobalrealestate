@@ -114,7 +114,7 @@ const MarketIntelligence = () => {
   return (
     // Remapped: --mi-navy → ink, --mi-navy-soft → soft-ink. Neon shell removed so
     // the entire Market Intelligence tree matches the global champagne+gold+ink palette.
-    <div className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:0_0%_4%] [--mi-navy-soft:0_0%_12%]">
+    <div data-mi-page className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:0_0%_4%] [--mi-navy-soft:0_0%_12%]">
 
 
       <SEOHead 
@@ -125,7 +125,7 @@ const MarketIntelligence = () => {
       />
 
       {/* Hero — full-screen Market Intelligence data scene, no video */}
-      <section data-mi-hero data-surface="dark" className="mi-hero-scene relative flex min-h-[100svh] w-full items-end overflow-hidden">
+      <section data-mi-hero data-hero-dark data-no-compare-frame data-no-section-frame data-surface="dark" className="mi-hero-scene relative flex min-h-[100svh] w-full items-end overflow-hidden">
         <div className="mi-hero-grid" aria-hidden="true" />
         <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
         <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />
@@ -137,7 +137,7 @@ const MarketIntelligence = () => {
         </div>
 
         <motion.div
-          className="relative z-10 w-full px-4 pb-16 md:px-10 md:pb-24 lg:px-16 lg:pb-28"
+          className="relative z-10 w-full px-5 pb-16 md:px-10 md:pb-24 lg:px-16 lg:pb-28"
           initial="hidden"
           animate="visible"
           variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
