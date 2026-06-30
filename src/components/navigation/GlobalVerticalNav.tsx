@@ -1166,10 +1166,21 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           labelStyle={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                         />
                       )}
-                      {items.map((item, i) => {
-                        const hasMega = !!item.megaMenu;
-                        const isMenuOpen = activeMegaMenu === item.megaMenu;
-                        const subitemActive = activeMegaMenu ? isMenuOpen : isRouteActive(item.href);
+                      {(() => {
+                        // Compute most-specific active href within this section so
+                        // sibling links cannot both light up (e.g. /market-intelligence
+                        // and /market-intelligence/areas on the Areas route).
+                        const path = location.pathname;
+                        const sectionMatches = items
+                          .map(it => it.href)
+                          .filter(h => h && h !== '#' && (path === h || path.startsWith(h + '/')))
+                          .sort((a, b) => b.length - a.length);
+                        const mostSpecific = sectionMatches[0];
+                        return items.map((item, i) => {
+                          const hasMega = !!item.megaMenu;
+                          const isMenuOpen = activeMegaMenu === item.megaMenu;
+                          const routeMatchExclusive = !!item.href && item.href === mostSpecific;
+                          const subitemActive = activeMegaMenu ? isMenuOpen : routeMatchExclusive;
                         const Icon = item.icon;
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
                         return (
@@ -1213,7 +1224,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             )}
                           </React.Fragment>
                         );
-                      })}
+                        });
+                      })()}
                     </div>
                   </div>
                 </div>
