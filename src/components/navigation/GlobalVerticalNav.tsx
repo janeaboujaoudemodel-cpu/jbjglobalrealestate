@@ -1039,9 +1039,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         <div className="px-2.5 pt-1.5 pb-3 flex-1 flex flex-col">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
-          {/* All categories (highlights + sections) share one flex-column with justify-between
-              so spacing between AI Home Finder → MY ACCOUNT is visually balanced. */}
-          <div className="flex-1 flex flex-col gap-1 justify-evenly">
+          {/* All categories (highlights + sections) share one flex-column.
+              Use justify-start with consistent gap so content fills naturally
+              from the top — no large empty gap below Company/Legal. */}
+          <div className="flex flex-col gap-1">
+
           {/* Highlight hubs (gold labels) */}
 
           {highlightItems.map((item, i) => {
