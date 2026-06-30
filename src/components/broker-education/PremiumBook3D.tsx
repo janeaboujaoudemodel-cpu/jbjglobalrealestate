@@ -98,7 +98,6 @@ export function PremiumBook3DStyles() {
 
 export function PremiumBook3D({
   title,
-  subtitle: _subtitle,
   bookNumber,
   paletteIndex,
   className,

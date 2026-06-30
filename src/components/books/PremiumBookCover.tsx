@@ -61,8 +61,6 @@ function splitTitle(title: string) {
  */
 export function PremiumBookCover({
   title,
-  number: _number,
-  subtitle: _subtitle,
   tone,
   className,
 }: PremiumBookCoverProps) {
