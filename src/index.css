@@ -21479,11 +21479,14 @@ html body .jj-text-emerald * {
   width: min(34vw, 420px);
 }
 .mi-hero-data-stack span {
-  display: block;
-  border: 1px solid rgba(184,149,85,.46);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(255,255,255,.32);
   border-radius: 14px;
   padding: 14px 18px;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,.06);
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   font-size: 11px;
@@ -21491,11 +21494,31 @@ html body .jj-text-emerald * {
   letter-spacing: .22em;
   text-align: right;
   backdrop-filter: blur(18px);
+  animation: mi-hero-pulse 3.4s ease-in-out infinite;
+}
+.mi-hero-data-stack span:nth-child(2) { animation-delay: .4s; }
+.mi-hero-data-stack span:nth-child(3) { animation-delay: .8s; }
+.mi-hero-data-stack span:nth-child(4) { animation-delay: 1.2s; }
+.mi-hero-data-stack span::before {
+  content: "";
+  display: inline-block;
+  width: 8px; height: 8px; border-radius: 9999px;
+  background: #34D399;
+  box-shadow: 0 0 12px rgba(52,211,153,.85);
+  animation: mi-hero-blink 1.6s ease-in-out infinite;
+}
+@keyframes mi-hero-pulse {
+  0%, 100% { border-color: rgba(255,255,255,.32); }
+  50% { border-color: rgba(255,255,255,.6); box-shadow: 0 0 22px rgba(255,255,255,.12); }
+}
+@keyframes mi-hero-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
 }
 .mi-hero-kicker {
   display: inline-flex;
   margin-bottom: 18px;
-  border: 1px solid rgba(184,149,85,.65);
+  border: 1px solid rgba(255,255,255,.45);
   border-radius: 9999px;
   padding: 8px 14px;
   background: rgba(255,255,255,.08);
@@ -21507,6 +21530,7 @@ html body .jj-text-emerald * {
   text-transform: uppercase;
   backdrop-filter: blur(16px);
 }
+
 
 /* Emerald icon tile (white glyph) used across MI sections */
 .mi-icon-tile {
