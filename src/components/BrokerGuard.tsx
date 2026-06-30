@@ -53,42 +53,71 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
 
   useEffect(() => {
     async function checkBrokerStatus() {
-      if (authLoading) return;
-      
+      if (authLoading) {
+        brokerLog("guard", "waiting for auth", { authLoading });
+        return;
+      }
+
       if (!user) {
+        brokerLog("guard", "no user → will redirect to /auth", { path: location.pathname }, "warn");
         setIsBroker(false);
         setIsLoading(false);
         return;
       }
 
+      brokerLog("guard", "checking broker status", {
+        userId: user.id,
+        email: user.email,
+        path: location.pathname,
+      });
+
       try {
-        // Check if user is owner (owner has all broker privileges)
-        const { data: ownerData } = await supabase.functions.invoke('verify-owner');
-        if (ownerData?.isOwner) {
+        // 1. Owner short-circuit
+        const ownerResp = await supabase.functions.invoke('verify-owner');
+        brokerLog("guard", "verify-owner returned", {
+          isOwner: ownerResp.data?.isOwner,
+          error: ownerResp.error?.message,
+        });
+        if (ownerResp.data?.isOwner) {
           setIsBroker(true);
           setIsLoading(false);
           return;
         }
 
-        // CRM-invited broker (crm_brokers.user_id link) — self-heal by email if needed
-        let { data: brokerRow } = await supabase
+        // 2. CRM-invited broker (with self-heal by email)
+        let { data: brokerRow, error: brokerErr } = await supabase
           .from('crm_brokers')
           .select('id, blocked_at, is_active_broker')
           .eq('user_id', user.id)
           .maybeSingle();
+        brokerLog("guard", "crm_brokers lookup", {
+          found: !!brokerRow,
+          blocked: !!brokerRow?.blocked_at,
+          active: !!brokerRow?.is_active_broker,
+          error: brokerErr?.message,
+        }, brokerErr ? "warn" : "info");
 
         if (!brokerRow) {
-          // Try to link by email (idempotent)
-          await supabase.rpc('link_broker_entity_by_email' as any);
+          brokerLog("guard", "no crm_brokers row → attempting link_broker_entity_by_email");
+          const linkResp = await supabase.rpc('link_broker_entity_by_email' as any);
+          brokerLog("guard", "link_broker_entity_by_email returned", {
+            error: linkResp.error?.message,
+          }, linkResp.error ? "warn" : "info");
+
           const retry = await supabase
             .from('crm_brokers')
             .select('id, blocked_at, is_active_broker')
             .eq('user_id', user.id)
             .maybeSingle();
           brokerRow = retry.data as any;
+          brokerLog("guard", "crm_brokers retry", {
+            found: !!brokerRow,
+            error: retry.error?.message,
+          });
         }
 
         if (brokerRow?.blocked_at) {
+          brokerLog("guard", "broker blocked → signing out", { blocked_at: brokerRow.blocked_at }, "warn");
           await supabase.auth.signOut();
           setIsBroker(false);
           setIsLoading(false);
@@ -96,22 +125,31 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
         }
 
         if (brokerRow?.is_active_broker) {
+          brokerLog("guard", "active broker via crm_brokers → allowed");
           setIsBroker(true);
           setIsLoading(false);
           return;
         }
 
-        // Fallback: legacy broker subscription
-        const { data: subscriptionData } = await supabase
+        // 3. Legacy subscription fallback
+        const subResp = await supabase
           .from('broker_subscriptions')
           .select('status')
           .eq('user_id', user.id)
           .eq('status', 'active')
           .maybeSingle();
-
-        const hasBrokerRole = !!subscriptionData;
+        const hasBrokerRole = !!subResp.data;
+        brokerLog(
+          "guard",
+          hasBrokerRole
+            ? "active broker via broker_subscriptions → allowed"
+            : "no broker role found → will redirect to /403",
+          { error: subResp.error?.message },
+          hasBrokerRole ? "info" : "warn",
+        );
         setIsBroker(hasBrokerRole);
       } catch (err) {
+        brokerLog("guard", "broker verification threw", { err: String(err) }, "error");
         console.error('Broker verification failed:', err);
         setIsBroker(false);
       } finally {
@@ -120,7 +158,8 @@ const BrokerGuard = ({ children, showLoading = true }: BrokerGuardProps) => {
     }
 
     checkBrokerStatus();
-  }, [user, authLoading]);
+  }, [user, authLoading, location.pathname]);
+
 
   // Auto-track broker session (heartbeats + blocked-device enforcement)
   useBrokerSessionTracking(isBroker && !isLoading && !!user);
