@@ -25,57 +25,45 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
-/* Icon box — champagne/gold standard */
+/* Icon box — emerald standard with white glyph */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
-  >
-    <Icon className="w-6 h-6 text-[#1A1A1A]" />
+  <div className={`mi-icon-tile mi-no-flip ${className}`}>
+    <Icon className="w-5 h-5" />
   </div>
 );
 
-const TONE_BY_ACCENT: Record<string, string> = {
-  "text-[#1A1A1A]": "gold",
-  "text-foreground": "magenta",
-};
-
-const StatCard = ({ 
-  title, 
-  value, 
-  change, 
-  icon: Icon, 
+const StatCard = ({
+  title,
+  value,
+  change,
+  icon: Icon,
   suffix = "",
   prefix = "",
-  accentColor = "text-foreground"
-}: { 
-  title: string; 
-  value: string | number; 
-  change: number; 
+}: {
+  title: string;
+  value: string | number;
+  change: number;
   icon: React.ElementType;
   suffix?: string;
   prefix?: string;
   accentColor?: string;
 }) => {
   const isPositive = change >= 0;
-  const tone = TONE_BY_ACCENT[accentColor] ?? "violet";
 
   return (
     <motion.div variants={fadeInUp}>
-      <Card
-        data-tone={tone}
-        className="jj-card-inner transition-all h-full rounded-xl"
-      >
+      <Card className="mi-card-hover-emerald mi-gold-frame group h-full rounded-2xl">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 ${MI_CHIP} rounded-full border px-2 py-0.5 border-[#B89555]/40 bg-[#EFE6D6] text-[#1A1A1A]`}>
-              {isPositive ? <TrendingUp className="w-4 h-4 text-[#064E3B]" /> : <TrendingDown className="w-4 h-4 text-[#064E3B]" />}
+            <span className="mi-chip-emerald">
+              {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
-            </div>
+            </span>
           </div>
           <div className="mt-4">
-            <p className="text-sm font-semibold leading-snug text-[hsl(var(--mi-navy))] mb-1">{title}</p>
-            <p className={`${MI_KPI} ${accentColor ?? 'text-foreground'} truncate`}>
+            <p className="text-sm font-semibold leading-snug text-[#1A1A1A] mb-1">{title}</p>
+            <p className={`${MI_KPI} text-[#1A1A1A] truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
           </div>
@@ -149,10 +137,10 @@ export const MarketOverviewDashboard = () => {
           <div className="grid grid-cols-1 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full rounded-xl jj-card-inner transition-all">
+              <Card className="h-full rounded-2xl mi-gold-frame transition-all">
                 <CardHeader>
-                  <CardTitle className="text-[hsl(var(--mi-navy))] flex items-center gap-3">
-                    <IconBox icon={BarChart3} className="w-10 h-10" />
+                  <CardTitle className="text-[#1A1A1A] flex items-center gap-3">
+                    <IconBox icon={BarChart3} className="mi-icon-tile-lg" />
                     <span>Quarterly Transaction Trends</span>
                   </CardTitle>
                 </CardHeader>
@@ -193,13 +181,13 @@ export const MarketOverviewDashboard = () => {
             className="mt-8 text-center"
             variants={fadeInUp}
           >
-            <div className="inline-flex flex-wrap items-center justify-center gap-2 border border-[hsl(var(--mi-navy)/0.35)] bg-card px-4 py-2">
-              <Calendar className="w-4 h-4 text-foreground" />
-              <span className="text-sm font-semibold leading-none text-foreground">
+            <div className="mi-chip-emerald inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 text-sm">
+              <Calendar className="w-4 h-4" />
+              <span className="font-semibold">
                 Daily freshness check: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-muted-foreground">•</span>
-              <span className={MI_BODY_MUTED}>
+              <span className="opacity-70">•</span>
+              <span className="opacity-90">
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>

@@ -31,10 +31,8 @@ const frequencyClasses: Record<string, string> = {
 };
 
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div
-    className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
-  >
-    <Icon className="w-6 h-6 text-[#1A1A1A]" />
+  <div className={`mi-icon-tile mi-icon-tile-lg mi-no-flip ${className}`}>
+    <Icon className="w-5 h-5" />
   </div>
 );
 
@@ -66,17 +64,16 @@ export const DataSourcesPanel = () => {
           {/* Data Sources Grid */}
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {OPEN_DATA_SOURCES.map((source) => {
-              const fc = frequencyClasses[source.updateFrequency] || frequencyClasses.monthly;
               return (
                 <motion.div key={source.id} variants={fadeInUp}>
-                  <Card className="jj-card-inner h-full rounded-xl transition-all hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
+                  <Card className="mi-gold-frame h-full rounded-2xl transition-shadow hover:shadow-[0_18px_40px_rgba(26,26,26,0.10)]">
                     <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start justify-between gap-3 mb-4">
                         <IconBox icon={Database} />
-                        <Badge className={`whitespace-nowrap rounded-none border ${fc}`}>
-                          <RefreshCw className="w-3 h-3 mr-1" />
+                        <span className="mi-chip-emerald shrink-0 capitalize">
+                          <RefreshCw className="w-3.5 h-3.5" />
                           {source.updateFrequency}
-                        </Badge>
+                        </span>
                       </div>
 
                       <h3 className={`${MI_CARD_TITLE} mb-1`}>{source.name}</h3>
@@ -85,17 +82,14 @@ export const DataSourcesPanel = () => {
 
                       <div className="flex flex-wrap gap-2 mb-4">
                         {source.dataTypes.map((type) => (
-                          <span
-                            key={type}
-                            className={`${MI_CHIP} px-2 py-1 rounded-none capitalize bg-muted text-foreground`}
-                          >
+                          <span key={type} className="mi-chip-emerald capitalize">
                             {type}
                           </span>
                         ))}
                       </div>
 
-                      <div className="flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A]">
-                        <Shield className="w-4 h-4 text-[#B89555]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold leading-none text-[#1A1A1A] mb-4">
+                        <Shield className="w-4 h-4 text-[#064E3B]" />
                         Official Government Source
                       </div>
 
@@ -104,10 +98,11 @@ export const DataSourcesPanel = () => {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm mt-4 font-semibold leading-none underline-offset-4 hover:underline text-foreground"
+                          data-no-contrast-guard
+                          className="mi-cta-emerald w-full text-sm rounded-lg"
                         >
-                          Visit Source
-                          <ExternalLink className="w-3 h-3" />
+                          <span>Visit Source</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       )}
                     </CardContent>
@@ -116,27 +111,6 @@ export const DataSourcesPanel = () => {
               );
             })}
           </div>
-
-          {/* Trust Indicators */}
-          <motion.div
-            className="mt-12 flex flex-wrap justify-center gap-6"
-            variants={fadeInUp}
-          >
-            {[
-              { icon: CheckCircle, text: 'No Scraping' },
-              { icon: CheckCircle, text: 'No Private Platforms' },
-              { icon: CheckCircle, text: 'Official Sources Only' },
-              { icon: CheckCircle, text: 'Analytics & Aggregation' },
-            ].map((item) => (
-              <div
-                key={item.text}
-                className={`${MI_BODY} flex items-center gap-2`}
-              >
-                <item.icon className="w-5 h-5 text-[#B89555]" />
-                <span>{item.text}</span>
-              </div>
-            ))}
-          </motion.div>
         </motion.div>
       </div>
     </section>

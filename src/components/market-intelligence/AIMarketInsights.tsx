@@ -35,12 +35,10 @@ interface InsightCard {
   category: 'trend' | 'demand' | 'supply' | 'opportunity';
 }
 
-/* Icon box - champagne/gold standard */
+/* Icon box - emerald standard */
 const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) => (
-  <div
-    className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 bg-[#EFE6D6] border border-[#B89555]/40 shadow-sm ${className}`}
-  >
-    <Icon className="w-5 h-5 text-[#1A1A1A]" />
+  <div className={`mi-icon-tile mi-no-flip ${className}`}>
+    <Icon className="w-5 h-5" />
   </div>
 );
 
@@ -161,7 +159,7 @@ export const AIMarketInsights = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {PRESET_INSIGHTS.map((insight) => (
               <motion.div key={insight.id} variants={fadeInUp}>
-                <Card className="jj-card-inner h-full rounded-xl transition-all hover:shadow-[0_16px_38px_rgba(26,26,26,0.08)]">
+                <Card className="mi-card-hover-emerald mi-gold-frame group h-full rounded-2xl">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                       <IconBox icon={insight.icon} className="shrink-0" />
@@ -183,10 +181,10 @@ export const AIMarketInsights = () => {
 
           {/* AI Narrative Generator */}
           <motion.div variants={fadeInUp}>
-            <Card className="rounded-xl shadow-lg bg-[#FDFBF7] border border-[#B89555]/35">
+            <Card className="rounded-2xl shadow-lg mi-gold-frame">
               <CardContent className="p-8">
                 <div className="flex flex-col md:flex-row items-start gap-6 mb-6">
-                  <IconBox icon={Brain} className="w-12 h-12 shrink-0" />
+                  <IconBox icon={Brain} className="mi-icon-tile-xl shrink-0" />
                   <div className="flex-1">
                     <h3 className={`${MI_CARD_TITLE} mb-2`}>
                       Generate Market Narrative
@@ -199,12 +197,13 @@ export const AIMarketInsights = () => {
                 </div>
 
                 <Tabs value={activeNarrativeType} onValueChange={(v) => setActiveNarrativeType(v as NarrativeType)}>
-                  <TabsList className="mb-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35">
+                  <TabsList className="mb-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/35 p-1 gap-1">
                     {narrativeOptions.map((opt) => (
                       <TabsTrigger
                         key={opt.id}
                         value={opt.id}
-                        className="flex items-center gap-2 data-[state=active]:bg-[#FDFBF7]"
+                        data-no-contrast-guard
+                        className="flex items-center gap-2 rounded-md text-[#1A1A1A] data-[state=active]:!bg-[#064E3B] data-[state=active]:!text-white data-[state=active]:shadow-[0_6px_16px_rgba(3,48,38,0.28)] [&[data-state=active]_svg]:!text-white [&[data-state=active]_svg]:!stroke-white"
                       >
                         <opt.icon className="w-4 h-4" />
                         <span className="hidden sm:inline">{opt.label}</span>
@@ -215,25 +214,26 @@ export const AIMarketInsights = () => {
                   {narrativeOptions.map((opt) => (
                     <TabsContent key={opt.id} value={opt.id}>
                       <div className="space-y-4">
-                         <Button
-                          variant="primary"
+                         <button
+                          type="button"
                           onClick={() => generatePublicNarrative(opt.id)}
                           disabled={isGenerating}
-                          className="rounded-lg"
+                          data-no-contrast-guard
+                          className="mi-cta-emerald rounded-lg px-5 py-2.5 disabled:opacity-60"
                         >
                           {isGenerating && activeNarrativeType === opt.id ? (
                             <>
-                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              <RefreshCw className="w-4 h-4 animate-spin" />
                               <span>Generating...</span>
                             </>
                           ) : (
                             <>
-                              <Sparkles className="w-4 h-4 mr-2" />
+                              <Sparkles className="w-4 h-4" />
                               <span>Generate {opt.label}</span>
-                              <ChevronRight className="w-4 h-4 ml-1" />
+                              <ChevronRight className="w-4 h-4" />
                             </>
                           )}
-                        </Button>
+                        </button>
 
                         {generatedNarratives[opt.id] && (
                            <div className="p-6 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30">
@@ -256,11 +256,20 @@ export const AIMarketInsights = () => {
 
           {/* Disclaimer */}
           <motion.div
-            className="mt-8 flex items-start gap-3 p-4 max-w-3xl mx-auto rounded-xl bg-[#EFE6D6] border border-[#B89555]/30"
+            data-no-contrast-guard
+            className="mt-8 flex items-start gap-3 p-5 max-w-3xl mx-auto rounded-2xl"
+            style={{
+              background: "linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)",
+              border: "1px solid rgba(184,149,85,0.55)",
+              boxShadow: "0 14px 32px rgba(3,48,38,0.28)",
+              color: "#ffffff",
+            }}
             variants={fadeInUp}
           >
-            <Info className="w-5 h-5 shrink-0 mt-0.5 text-foreground" />
-            <p className={MI_CAPTION}>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 border border-white/25">
+              <Info className="w-5 h-5 text-white" />
+            </div>
+            <p className="text-[12px] leading-relaxed text-white">
               AI-assisted insights are based on official government sources and are provided for informational purposes only.
               They do not constitute financial, investment, or legal advice.
               AI explains data but does not predict prices or provide specific investment recommendations.

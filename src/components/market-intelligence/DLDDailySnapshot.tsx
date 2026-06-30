@@ -122,10 +122,10 @@ export const DLDDailySnapshot = () => {
             </h2>
           </div>
           <div
-            className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] px-3 py-1.5 text-xs font-semibold text-[#1A1A1A]"
+            className="mi-chip-emerald px-3 py-1.5 text-xs"
             title="Snapshot refreshed daily from official sources"
           >
-            <CalendarCheck className="h-3.5 w-3.5 text-[#B89555]" />
+            <CalendarCheck className="h-3.5 w-3.5" />
             Updated {updatedLabel}
           </div>
         </motion.div>
@@ -144,13 +144,10 @@ export const DLDDailySnapshot = () => {
             { label: "Cash Share", value: `${cashShare}%`, Icon: Banknote },
             { label: "Mortgage Share", value: `${mortgageShare}%`, Icon: Landmark },
           ].map(({ label, value, Icon }) => (
-            <BlackCard key={label} className="p-4 md:p-5">
+            <BlackCard key={label} className="mi-card-hover-emerald p-4 md:p-5">
               <div className="flex items-start justify-between gap-2">
-                <div
-                  data-no-contrast-guard
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#B89555]/45 bg-[#EFE6D6]"
-                >
-                  <Icon className="h-4 w-4 text-[#1A1A1A]" />
+                <div data-no-contrast-guard className="mi-icon-tile mi-no-flip">
+                  <Icon className="h-4 w-4" />
                 </div>
                 <TrendingUp className="h-3.5 w-3.5 text-[#B89555]" />
               </div>
@@ -188,8 +185,7 @@ export const DLDDailySnapshot = () => {
                   <motion.div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    className="dld-bar-fill-ink"
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
@@ -197,7 +193,7 @@ export const DLDDailySnapshot = () => {
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full bg-[#0A0A0A]" /> Cash · {cashShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#064E3B]" /> Cash · {cashShare}% of all transactions
                 </p>
               </div>
 
@@ -253,25 +249,19 @@ export const DLDDailySnapshot = () => {
                 return (
                   <div
                     key={`${row.area}-${i}`}
-                    className={`grid grid-cols-[150px_1fr_auto] items-center gap-3 rounded-lg ${isLeader ? "px-2 py-1.5 ring-1 ring-[#0A0A0A]/15" : ""}`}
-                    style={isLeader ? { backgroundColor: "rgba(184,149,85,0.10)" } : undefined}
+                    className={`grid grid-cols-[minmax(170px,1.2fr)_1fr_auto] items-center gap-3 rounded-lg ${isLeader ? "px-2 py-1.5 ring-1 ring-[#064E3B]/20" : ""}`}
+                    style={isLeader ? { backgroundColor: "rgba(6,78,59,0.06)" } : undefined}
                   >
-                    <span className="flex items-center gap-2 truncate text-sm font-semibold text-[#1A1A1A]">
+                    <span className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A] min-w-0">
                       <span
                         data-no-contrast-guard
                         data-allow-dark-cta
-                        className={`inline-flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-[10px] font-bold tabular-nums ${
-                          isLeader
-                            ? "bg-[#0A0A0A] text-white"
-                            : isPodium
-                              ? "border border-[#B89555] text-[#1A1A1A]"
-                              : "text-[#1A1A1A]/55"
-                        }`}
-                        style={isPodium ? { backgroundColor: "rgba(184,149,85,0.18)" } : undefined}
+                        className="inline-flex h-6 min-w-6 items-center justify-center rounded-md px-1.5 text-[10px] font-bold tabular-nums text-white shrink-0"
+                        style={{ background: "linear-gradient(135deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)", border: "1px solid rgba(184,149,85,0.5)" }}
                       >
                         {String(rank).padStart(2, "0")}
                       </span>
-                      <span className="truncate">{row.area}</span>
+                      <span className="whitespace-normal break-words leading-tight">{row.area}</span>
                     </span>
                     <div
                       data-no-contrast-guard
@@ -281,17 +271,23 @@ export const DLDDailySnapshot = () => {
                       <motion.div
                         data-no-contrast-guard
                         data-allow-dark-cta
-                        className={`absolute inset-y-0 left-0 h-full rounded-full ${
-                          isLeader ? "dld-bar-fill-leader" : isPodium ? "dld-bar-fill-podium" : "dld-bar-fill-rest"
-                        }`}
-                        style={{ transformOrigin: "left center", width: "100%" }}
+                        className="absolute inset-y-0 left-0 h-full rounded-full"
+                        style={{
+                          transformOrigin: "left center",
+                          width: "100%",
+                          background: isLeader
+                            ? "linear-gradient(90deg, #0B6B4F 0%, #064E3B 60%, #033026 100%)"
+                            : isPodium
+                              ? "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)"
+                              : "linear-gradient(90deg, rgba(11,107,79,0.55), rgba(6,78,59,0.55))",
+                        }}
                         initial={{ transform: "scaleX(0)" }}
                         whileInView={{ transform: `scaleX(${pct})` }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, ease: "easeOut", delay: i * 0.03 }}
                       />
                     </div>
-                    <span className={`text-xs tabular-nums ${isLeader ? "font-bold text-[#0A0A0A]" : "text-[#1A1A1A]"}`}>{row.count}</span>
+                    <span className={`text-xs tabular-nums ${isLeader ? "font-bold text-[#064E3B]" : "text-[#1A1A1A]"}`}>{row.count}</span>
                   </div>
                 );
               })}
@@ -304,13 +300,10 @@ export const DLDDailySnapshot = () => {
 
         {/* Notice + Expert Consultation cards (item #9) */}
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-          <BlackCard className="p-6">
+          <BlackCard className="mi-card-hover-emerald p-6">
             <div className="flex items-start gap-4">
-              <div
-                data-no-contrast-guard
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/45 bg-[#EFE6D6]"
-              >
-                <Flag className="h-5 w-5 text-[#1A1A1A]" />
+              <div data-no-contrast-guard className="mi-icon-tile mi-icon-tile-lg mi-no-flip">
+                <Flag className="h-5 w-5" />
               </div>
               <div className="flex-1">
                 <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Notice something incorrect?</h4>
@@ -321,7 +314,7 @@ export const DLDDailySnapshot = () => {
                 <Link
                   to="/contact?topic=market-intelligence-correction"
                   data-no-contrast-guard
-                  className="jj-cta-champagne mt-4 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors"
+                  className="mi-cta-emerald mt-4 text-xs uppercase tracking-[0.16em] rounded-full"
                 >
                   <MailOpen className="h-3.5 w-3.5" />
                   Report an issue
@@ -330,13 +323,10 @@ export const DLDDailySnapshot = () => {
             </div>
           </BlackCard>
 
-          <BlackCard className="p-6">
+          <BlackCard className="mi-card-hover-emerald p-6">
             <div className="flex items-start gap-4">
-              <div
-                data-no-contrast-guard
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#B89555]/45 bg-[#EFE6D6]"
-              >
-                <PhoneCall className="h-5 w-5 text-[#1A1A1A]" />
+              <div data-no-contrast-guard className="mi-icon-tile mi-icon-tile-lg mi-no-flip">
+                <PhoneCall className="h-5 w-5" />
               </div>
               <div className="flex-1">
                 <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Expert Consultation</h4>
@@ -347,7 +337,7 @@ export const DLDDailySnapshot = () => {
                 <Link
                   to="/book"
                   data-no-contrast-guard
-                  className="jj-cta-champagne mt-4 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition-colors"
+                  className="mi-cta-emerald mt-4 text-xs uppercase tracking-[0.16em] rounded-full"
                 >
                   <CalendarCheck className="h-3.5 w-3.5" />
                   Book consultation
