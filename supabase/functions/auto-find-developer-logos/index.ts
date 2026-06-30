@@ -167,7 +167,7 @@ function extFor(ct: string): string {
   return "png";
 }
 
-type DevRow = { id: string; name: string; slug: string | null; website?: string | null };
+type DevRow = { id: string; name: string; slug: string | null; website_url?: string | null };
 
 async function processDeveloper(
   supabase: any,
@@ -176,7 +176,7 @@ async function processDeveloper(
 ): Promise<{ id: string; name: string; status: "approved" | "unavailable" | "error"; reason?: string; url?: string }> {
   // 1) discover candidate sites
   let sites: string[] = [];
-  if (dev.website && /^https?:\/\//i.test(dev.website)) sites.push(dev.website);
+  if (dev.website_url && /^https?:\/\//i.test(dev.website_url)) sites.push(dev.website_url);
 
   const searchHits = await firecrawlSearch(
     apiKey,
@@ -294,7 +294,7 @@ Deno.serve(async (req) => {
 
     let q = supabase
       .from("developers")
-      .select("id, name, slug, website, logo_status");
+      .select("id, name, slug, website_url, logo_status");
 
     if (explicit_ids.length > 0) {
       q = q.in("id", explicit_ids).neq("logo_status", "approved");
