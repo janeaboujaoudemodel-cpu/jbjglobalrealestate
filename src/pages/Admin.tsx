@@ -78,19 +78,19 @@ const Admin = () => {
   if (!h.isOwner) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <div data-backend-portal="owner-admin" className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <CommandPalette isOpen={h.showCommandPalette} onClose={() => h.setShowCommandPalette(false)} />
 
       {/* Premium Header */}
-      <header className="border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
+      <header data-admin-owner-header className="border border-[#B89555]/35 bg-[#F7F2EA] rounded-2xl shadow-[0_14px_36px_-24px_rgba(26,26,26,0.28)]">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B89555] to-[#A68444] flex items-center justify-center shadow-lg shadow-gold/20">
-              <Shield className="w-5 h-5 text-[#1A1A1A]" />
+            <div data-backend-icon-tile="emerald" data-surface="emerald" className="w-10 h-10 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 flex items-center justify-center shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.18)]">
+              <Shield className="w-4 h-4 allow-white" strokeWidth={2.35} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden sm:block min-w-0 max-w-[460px]">
               <h1 className="text-[#1A1A1A] text-lg font-bold leading-tight">Owner Panel</h1>
-              <p className="text-[#1A1A1A] text-xs font-medium truncate max-w-[180px]">{h.user?.email}</p>
+              <p className="text-[#1A1A1A] text-xs font-semibold whitespace-normal break-words leading-tight">{h.user?.email}</p>
             </div>
           </div>
           <div className="hidden lg:flex items-center flex-1 max-w-sm mx-4">
@@ -102,8 +102,8 @@ const Admin = () => {
           </div>
           <div className="flex items-center gap-2 ml-auto flex-shrink-0">
             <AdminNotificationBell />
-            <Link to="/admin/marketing-hub">
-              <Button size="sm" className="bg-gradient-to-r from-gold to-amber-600 hover:from-gold/90 hover:to-amber-600/90 text-[#1A1A1A] font-semibold shadow-lg shadow-gold/20">
+            <Link to="/owner/marketing-hub">
+              <Button size="sm" data-emerald-action="true" data-surface="emerald" className="jj-cta-emerald font-semibold shadow-[0_12px_24px_-18px_rgba(6,78,59,0.85)]">
                 <Send className="w-3.5 h-3.5 mr-1.5" />
                 <span className="hidden xl:inline">Marketing Hub</span>
                 <span className="xl:hidden">Marketing</span>
@@ -149,8 +149,8 @@ const Admin = () => {
                 { value: "partnerships", icon: Handshake, label: "Partnerships" },
                 { value: "book-hub", icon: BookOpen, label: "Book Hub" },
               ].map(tab => (
-                <TabsTrigger key={tab.value} value={tab.value} className="tab-trigger-champagne text-[#1A1A1A]">
-                  <tab.icon className="w-4 h-4 mr-2" />{tab.label}
+                <TabsTrigger key={tab.value} value={tab.value} data-admin-tab-trigger className="text-[#1A1A1A] data-[state=active]:!text-white [&[data-state=active]_*]:!text-white">
+                  <tab.icon className="w-4 h-4 mr-2 data-[state=active]:!text-white" />{tab.label}
                 </TabsTrigger>
               ))}
             </TabsList>

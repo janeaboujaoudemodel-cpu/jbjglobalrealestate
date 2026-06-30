@@ -91,6 +91,10 @@ const OwnerMeetings = lazy(() => import("@/pages/owner/OwnerMeetings"));
 const OwnerNewsHub = lazy(() => import("@/pages/owner/OwnerNewsHub"));
 const OwnerMarketIntel = lazy(() => import("@/pages/owner/OwnerMarketIntel"));
 const OwnerBooks = lazy(() => import("@/pages/owner/OwnerBooks"));
+const CareersPortal = lazy(() => import("@/pages/owner/CareersPortal"));
+const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
+const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
+const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
@@ -161,6 +165,8 @@ export const OwnerRoutes = () => (
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />
+    <Route path="careers-portal" element={<CareersPortal />} />
+    <Route path="job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="analytics" element={<JBJAnalyticsDashboard />} />
     <Route path="users" element={
       <Suspense fallback={<PageLoader />}>
@@ -230,6 +236,9 @@ export const OwnerRoutes = () => (
     <Route path="news" element={<OwnerNewsHub />} />
     <Route path="market-intel" element={<OwnerMarketIntel />} />
     <Route path="books" element={<OwnerBooks />} />
+    <Route path="creative-suite" element={<OwnerCreativeSuite />} />
+    <Route path="brand-palette" element={<BrandPaletteHub />} />
+    <Route path="exclusive-documents" element={<ExclusiveDocuments />} />
     <Route path="crm/relationships/activity" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/AgencyActivityLog")))}</Suspense>} />
     <Route path="crm/brokerage-actions" element={<Navigate to="/owner/crm/relationships/activity" replace />} />
     <Route path="crm/brokers" element={<Navigate to="/owner/crm?section=relationships&sub=brokers" replace />} />

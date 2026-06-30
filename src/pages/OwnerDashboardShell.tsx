@@ -8,8 +8,6 @@ import {
   Shield,
   Menu,
   X,
-  Maximize2,
-  Minimize2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -26,7 +24,7 @@ const OwnerDashboardShell = () => {
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [fullscreen, setFullscreen] = useState<boolean>(false);
+  const [fullscreen] = useState<boolean>(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -173,7 +171,7 @@ const OwnerDashboardShell = () => {
   // Expose content-area offsets so the global BrandedLoader centers in the
   // visible main area (right of sidebar, below the top bar) rather than over
   // the whole viewport.
-  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "280px";
+  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "320px";
   const contentTop = "var(--shell-header-h)";
 
   return (
@@ -205,7 +203,7 @@ const OwnerDashboardShell = () => {
           data-surface="champagne"
           className={cn(
             "owner-shell-surface fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
-            sidebarCollapsed ? "w-[72px]" : "w-[280px]"
+            sidebarCollapsed ? "w-[72px]" : "w-[320px]"
           )}
           role="navigation"
           aria-label="Owner dashboard navigation"
@@ -218,7 +216,7 @@ const OwnerDashboardShell = () => {
       <main 
         className={cn(
           "flex-1 transition-all duration-300 overscroll-contain",
-          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[280px]")
+          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[320px]")
         )}
         role="main"
       >
@@ -249,31 +247,17 @@ const OwnerDashboardShell = () => {
           
           <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* Owner Badge */}
-            <div className="flex items-center gap-1.5 md:gap-2 bg-[#EFE6D6] border border-[#B89555] rounded-xl px-2 md:px-4 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
-              <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" strokeWidth={2.5} />
+            <div className="flex items-center gap-1.5 md:gap-2 bg-[#EFE6D6] border border-[#B89555] rounded-xl px-2 md:px-3 py-1.5 md:py-2 shadow-sm whitespace-nowrap">
+              <span data-backend-icon-tile="emerald" data-surface="emerald" className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
+                <Shield className="allow-white w-3.5 h-3.5 flex-shrink-0" strokeWidth={2.35} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              </span>
               <span className="text-[#1A1A1A] text-xs md:text-sm font-bold hidden sm:inline tracking-wide">Owner</span>
             </div>
             
-            {/* Fullscreen toggle */}
-            {!isMobile && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setFullscreen((f) => !f)}
-                data-no-contrast-guard
-                style={{ color: "#1A1A1A" }}
-                className="hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:ring-2 focus:ring-[#B89555]/40"
-                aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-                title={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-              >
-                {fullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-              </Button>
-            )}
-
             {/* User Email */}
-            <div className="text-right hidden md:block whitespace-nowrap">
-              <p className="text-[#1A1A1A] text-sm font-medium truncate max-w-[120px]">
-                {user?.email?.split("@")[0] || "Jane"}
+            <div className="text-right hidden md:block min-w-0 max-w-[360px]">
+              <p className="text-[#1A1A1A] text-sm font-semibold whitespace-normal break-words leading-tight">
+                {user?.email || "Jane"}
               </p>
               <p className="text-[#1A1A1A]/70 text-xs">Verified Owner</p>
             </div>

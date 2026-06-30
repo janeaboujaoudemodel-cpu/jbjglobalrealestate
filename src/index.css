@@ -1357,7 +1357,7 @@ All colors MUST be HSL.
     --jj-content-gutter: 80px;
   }
   body.jj-vertical-nav-active {
-    --jj-content-gutter-l: 232px;
+    --jj-content-gutter-l: 272px;
     --jj-content-gutter-r: 32px;
     --jj-content-gutter: 232px;
   }
@@ -4130,7 +4130,7 @@ a[class*="bg-red-"]:hover {
     padding-right: 1rem !important;
   }
   body.jj-vertical-nav-active [data-chrome="cookie-banner"] {
-    padding-left: calc(240px + 1.25rem) !important;
+    padding-left: calc(280px + 1.25rem) !important;
     padding-right: 1.25rem !important;
   }
 }
@@ -14922,8 +14922,8 @@ html body #root .jj-developer-logo-metallic img {
   }
 
   body.jj-vertical-nav-active {
-    --jj-shell-sidebar-w: 240px;
-    --jj-shell-main-w: calc(100vw - 240px);
+    --jj-shell-sidebar-w: 280px;
+    --jj-shell-main-w: calc(100vw - 280px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
@@ -22329,4 +22329,74 @@ html body #root [data-backend-portal] [data-backend-sidebar-icon-tile] {
   height: 28px !important;
   min-width: 28px !important;
   border-radius: 10px !important;
+}
+
+/* PASS 144 — OWNER/BACKEND SIDEBAR + ACTIVE PILL FINAL LOCK
+   Last rule wins over legacy champagne/tab sweeps that repainted emerald
+   active controls black. Backend emerald = pure white content, always. */
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is(
+  [data-sidebar-owner-item][data-surface="emerald"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [data-admin-tab-trigger][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar]) :is(
+  [data-sidebar-owner-item][data-surface="emerald"],
+  [data-sidebar-owner-item][data-emerald="true"],
+  [data-admin-tab-trigger][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,button,label,strong,em,b,i,small,li,dt,dd,th,td,div,time,svg,[data-lucide],[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal]) [data-admin-owner-header],
+html body #root :is(.owner-dashboard-shell, [data-backend-portal]) [data-admin-owner-header] :is(h1,p,span,div):not([data-backend-icon-tile]):not([data-backend-icon-tile] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal]) [data-admin-owner-header] [data-backend-icon-tile] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal]) [data-admin-owner-header] [data-backend-icon-tile] :is(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]),
+html body #root [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]),
+html body #root [data-chrome="sidebar"] [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  stroke-width: 2.25 !important;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
