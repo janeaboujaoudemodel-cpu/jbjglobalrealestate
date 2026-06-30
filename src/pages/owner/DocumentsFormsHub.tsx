@@ -746,7 +746,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                 />
               </div>
 
-              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))] min-w-0">
                 {TEMPLATE_CATEGORIES.map((item) => {
                   const Icon = item.icon;
                   const active = activeTemplateCategory === item.key;
@@ -756,13 +756,13 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       type="button"
                       onClick={() => showCategory(item.key)}
                       data-surface={active ? "emerald" : "champagne"}
-                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0", active ? "border-transparent bg-[var(--jj-emerald-ombre)] shadow-lg" : "border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#EFE6D6]"].join(" ")}
+                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0 max-w-full overflow-hidden", active ? "border-transparent bg-[var(--jj-emerald-ombre)] shadow-lg" : "border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#EFE6D6]"].join(" ")}
                     >
                       <div className="flex items-start gap-2 min-w-0">
                         <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />
-                        <div className="min-w-0">
-                          <div className={active ? "text-sm font-semibold text-[#FFFFFF]" : "text-sm font-semibold text-[#1A1A1A]"}>{item.label}</div>
-                          <div className={active ? "text-[11px] text-[#FFFFFF]/85 leading-tight mt-0.5" : "text-[11px] text-[#1A1A1A]/65 leading-tight mt-0.5"}>{item.description}</div>
+                        <div className="min-w-0 max-w-full overflow-hidden">
+                          <div className={active ? "text-sm font-semibold text-[#FFFFFF] truncate" : "text-sm font-semibold text-[#1A1A1A] truncate"}>{item.label}</div>
+                          <div className={active ? "text-[11px] text-[#FFFFFF]/85 leading-tight mt-0.5 break-words line-clamp-2" : "text-[11px] text-[#1A1A1A]/65 leading-tight mt-0.5 break-words line-clamp-2"}>{item.description}</div>
                         </div>
                       </div>
                     </button>
