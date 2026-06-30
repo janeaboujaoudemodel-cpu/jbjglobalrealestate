@@ -11,52 +11,31 @@ interface CertificatePreviewProps {
   isLocked?: boolean;
 }
 
-/** Premium gold-rimmed certificate medallion — pure white ShieldCheck on emerald */
+/** Premium emerald certificate medallion — pure white ShieldCheck, no gold border */
 function CertificateMedallion({ size = 64 }: { size?: number }) {
-  const ringW = Math.max(3, Math.round(size * 0.06));
   return (
     <span
-      className="relative inline-flex items-center justify-center"
-      style={{ width: size, height: size }}
+      className="relative inline-flex items-center justify-center rounded-full"
+      style={{
+        width: size,
+        height: size,
+        background:
+          "radial-gradient(circle at 32% 26%, #0E8A66 0%, #064E3B 55%, #032A1F 100%)",
+        boxShadow:
+          "inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -6px 14px rgba(0,0,0,0.35), 0 6px 18px rgba(6,78,59,0.35)",
+      }}
       data-no-contrast-guard
+      data-surface="emerald"
       aria-hidden
     >
-      {/* Outer gold conic ring (foil) */}
-      <span
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            "conic-gradient(from 210deg, #B89555 0%, #F1E2B8 18%, #B89555 36%, #8A6A35 54%, #F1E2B8 72%, #B89555 100%)",
-          padding: ringW,
-          WebkitMask:
-            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-          WebkitMaskComposite: "xor",
-          maskComposite: "exclude",
-          boxShadow:
-            "0 8px 20px -8px rgba(184,149,85,0.55), 0 1px 0 rgba(255,246,224,0.6) inset",
-        }}
-      />
-      {/* Inner emerald disc */}
-      <span
-        className="absolute rounded-full"
-        style={{
-          inset: ringW + 1,
-          background:
-            "radial-gradient(circle at 32% 26%, #0E8A66 0%, #064E3B 55%, #032A1F 100%)",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -6px 14px rgba(0,0,0,0.35), 0 6px 18px rgba(6,78,59,0.35)",
-        }}
-      />
-      {/* Specular highlight */}
       <span
         className="absolute rounded-full pointer-events-none"
         style={{
-          inset: ringW + 2,
+          inset: 2,
           background:
             "radial-gradient(ellipse 70% 35% at 50% 18%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%)",
         }}
       />
-      {/* White ShieldCheck glyph */}
       <ShieldCheck
         className="relative !text-white !stroke-white"
         style={{
