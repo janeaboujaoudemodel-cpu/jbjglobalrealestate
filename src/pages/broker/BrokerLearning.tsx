@@ -752,12 +752,13 @@ function ReferenceCard({ title, items, tone, icon: Icon }: {
     <span
       data-no-contrast-guard
       data-emerald-ok="icon"
-      className="shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)] [&_svg]:!text-white [&_svg]:!stroke-white"
+      data-jbj-white-glyph
+      className="allow-white shrink-0 mt-0.5 grid place-items-center w-5 h-5 rounded-full shadow-[0_3px_8px_-3px_rgba(0,0,0,0.35)]"
       style={{ background: markBg }}
     >
       {isRed
-        ? <X className="w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        : <Check className="w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
+        ? <X data-no-contrast-guard className="allow-white w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        : <Check data-no-contrast-guard className="allow-white w-3 h-3" strokeWidth={3.4} color="#FFFFFF" stroke="#FFFFFF" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
     </span>
   );
   // Corner-only gold frame (matches Compare Projects card on the homepage):
