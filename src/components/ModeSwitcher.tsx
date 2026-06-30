@@ -368,6 +368,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   <div
                     data-no-contrast-guard
                     data-mode-icon-tile={isEmerald ? 'active' : 'idle'}
+                    data-surface={isEmerald ? 'emerald' : 'champagne'}
+                    {...(!isEmerald ? { 'data-allow-ink': 'true' } : {})}
                     className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       backgroundImage: rowIconBg,
@@ -406,6 +408,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       data-no-contrast-guard
                       data-mode-active-pill=""
+                      data-surface="champagne"
+                      data-allow-ink="true"
                       className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{
                         background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
@@ -428,6 +432,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     <span
                       data-no-contrast-guard
                       data-mode-select-pill=""
+                      data-surface="emerald"
                       className="mode-switcher-select-pill ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
                       style={{
                         color: '#FFFFFF',
