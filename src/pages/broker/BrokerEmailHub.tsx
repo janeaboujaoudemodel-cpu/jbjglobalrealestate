@@ -162,7 +162,8 @@ export default function BrokerEmailHub() {
                     {!e.ai_category && (
                       <button
                         onClick={(ev) => { ev.stopPropagation(); classify.mutate(e.id); }}
-                        className="jj-surface-emerald allow-white mt-2 inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-md border border-white/20 text-white hover:-translate-y-0.5 hover:brightness-110 transition-all"
+                        data-surface="emerald"
+                        className="jj-surface-emerald allow-white mt-2 inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-md border border-white/20 text-white [&_svg]:text-white [&_svg]:stroke-white hover:-translate-y-0.5 hover:brightness-110 transition-all"
                       >
                         <Sparkles className="h-3 w-3" /> Categorise with AI
                       </button>
