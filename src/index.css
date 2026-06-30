@@ -22393,10 +22393,16 @@ html body #root :is(.owner-dashboard-shell, [data-backend-portal]) [data-admin-o
 html body #root .owner-dashboard-shell [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]),
 html body #root [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]),
 html body #root [data-chrome="sidebar"] [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
-  width: 14px !important;
-  height: 14px !important;
-  min-width: 14px !important;
+  width: 13px !important;
+  height: 13px !important;
+  min-width: 13px !important;
   stroke-width: 2.25 !important;
   color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .owner-dashboard-shell :is([role="tab"][data-state="active"], [data-admin-tab-trigger][data-state="active"], [data-sidebar-owner-item][data-surface="emerald"]) :is(*, svg, path, span, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
