@@ -447,11 +447,12 @@ export default function LogCallDialog({
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o && isSaving) return; onOpenChange(o); if (!o) reset(); }}>
       <DialogContent className="max-w-2xl bg-[#FDFBF7] border-[#B89555]/30 max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
-            <Phone className="h-5 w-5 text-[#1A1A1A]" /> Log a call
+        <DialogHeader className="pr-10">
+          <DialogTitle className="text-[#1A1A1A] flex items-center gap-2 text-left">
+            <Phone className="h-5 w-5 text-[#1A1A1A] shrink-0" />
+            <span className="min-w-0">Log a call</span>
           </DialogTitle>
-          <DialogDescription className="text-[#1A1A1A]/70">
+          <DialogDescription className="text-[#1A1A1A]/70 text-left">
             Pick a lead, start recording from your laptop mic (put your phone on speaker),
             and the AI will transcribe and summarise the call into the lead's history.
           </DialogDescription>
