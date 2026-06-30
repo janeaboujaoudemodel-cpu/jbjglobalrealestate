@@ -590,8 +590,8 @@ function TocPage({
                 onClick={() => idx >= 0 && onJump(idx)}
                 className="w-full text-left flex items-baseline gap-3 px-2 py-2 rounded-md hover:bg-[#F2EADB] transition-colors"
               >
-                <span className="text-[11px] text-[#1A1A1A]/55 w-7">
-                  {String(m.module_number).padStart(2, "0")}
+                <span className="text-[11px] text-[#1A1A1A]/55 w-7 inline-flex justify-center">
+                  <Lock className="w-3 h-3" />
                 </span>
                 <span className="text-[#1A1A1A] text-sm font-medium flex-1">{m.title}</span>
                 <span className="text-[11px] text-[#1A1A1A]/55">{m.estimated_minutes} min</span>
