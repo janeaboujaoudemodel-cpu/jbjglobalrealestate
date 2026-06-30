@@ -205,7 +205,7 @@ const RegisterBroker = lazy(() => import("@/pages/register/RegisterBroker"));
 const RegisterDeveloper = lazy(() => import("@/pages/register/RegisterDeveloper"));
 const CVBuilder = lazy(() => import("@/pages/CVBuilder"));
 
-const OwnerAwareBrokerRedirect = () => {
+export const OwnerAwareBrokerRedirect = () => {
   const { isOwner, isLoading } = useIsAppOwner();
   const { mode } = useUserModeContext();
 
