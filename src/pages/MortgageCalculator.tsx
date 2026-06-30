@@ -243,7 +243,7 @@ const MortgageCalculatorPage = () => {
                       <Landmark className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg jj-title-emerald">Bank Partner Network</h3>
+                      <h3 className="font-bold text-lg text-[#1A1A1A]">Bank Partner Network</h3>
                       <p className="text-sm" style={{ color: `${INK}B3` }}>Introductions through licensed mortgage partners connected with leading UAE banks.</p>
                     </div>
                   </div>
