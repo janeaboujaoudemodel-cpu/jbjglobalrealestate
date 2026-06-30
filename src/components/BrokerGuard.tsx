@@ -3,6 +3,11 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrokerSessionTracking } from "@/hooks/useBrokerSessionTracking";
+import { brokerLog, installBrokerNetworkLogger } from "@/utils/brokerAuthDebug";
+
+// Install the global 4xx network logger as soon as this module loads.
+installBrokerNetworkLogger();
+
 
 /**
  * Routes a pure broker (non-owner) is NEVER allowed to reach.
