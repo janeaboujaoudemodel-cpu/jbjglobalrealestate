@@ -93,7 +93,7 @@ export default function CRMFloatingInsightsWidget({ flaggedCount, onOpenFlagged 
   const hasFlags = flaggedCount > 0;
 
   return (
-    <div ref={wrapRef} className="relative z-30">
+    <div ref={wrapRef} className="relative z-30 min-w-0">
       {/* Minimized pill */}
       <button
         type="button"
@@ -103,7 +103,7 @@ export default function CRMFloatingInsightsWidget({ flaggedCount, onOpenFlagged 
           data-surface="emerald"
           data-emerald-ok="button"
           className={[
-            "jj-surface-emerald inline-flex h-10 min-w-[148px] items-center justify-center gap-2 rounded-xl px-4 text-xs font-semibold",
+            "jj-surface-emerald inline-flex h-10 min-w-[118px] max-w-[170px] items-center justify-center gap-2 rounded-xl px-3 text-xs font-semibold",
             "border-transparent transition-transform hover:-translate-y-0.5 shadow-sm",
           open
               ? ""
@@ -113,7 +113,7 @@ export default function CRMFloatingInsightsWidget({ flaggedCount, onOpenFlagged 
         ].join(" ")}
       >
         <AlertTriangle className="h-3.5 w-3.5" />
-        <span>Flagged Insights</span>
+        <span className="truncate">Flagged Insights</span>
         <span
           className={[
             "inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] tabular-nums",
