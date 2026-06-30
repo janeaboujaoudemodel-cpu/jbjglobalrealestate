@@ -95,6 +95,16 @@ const CareersPortal = lazy(() => import("@/pages/owner/CareersPortal"));
 const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
+const DeveloperDirectory = lazy(() => import("@/pages/developer-hub-admin/DeveloperDirectory"));
+const DeveloperEnrichmentQueue = lazy(() => import("@/pages/developer-hub-admin/DeveloperEnrichmentQueue"));
+const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
+const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
+const RepDirectory = lazy(() => import("@/pages/developers-portal/reps/RepDirectory"));
+const RepByEmirate = lazy(() => import("@/pages/developers-portal/reps/RepByEmirate"));
+const RepProfileEditor = lazy(() => import("@/pages/developers-portal/reps/RepProfileEditor"));
+const AccessRequestQueue = lazy(() => import("@/pages/developers-portal/access/AccessRequestQueue"));
+const DeveloperLaunchEvents = lazy(() => import("@/pages/developer-hub/DeveloperLaunchEvents"));
+const DeveloperLiveEditor = lazy(() => import("@/pages/developer-hub/DeveloperLiveEditor"));
 
 const OwnerDocumentsTab = () => <DocumentsFormsHub initialTabOverride="documents" />;
 const OwnerEsignTab = () => <DocumentsFormsHub initialTabOverride="esign" />;
@@ -181,6 +191,16 @@ export const OwnerRoutes = () => (
     } />
     <Route path="founder-assistant" element={<FoundersAssistant />} />
     <Route path="recommendations" element={<GlobalRecommendationsHub />} />
+    <Route path="developers" element={<DeveloperDirectory />} />
+    <Route path="developers/profile-rebuild" element={<DeveloperEnrichmentQueue />} />
+    <Route path="developers/missing-logos" element={<MissingLogosQueue />} />
+    <Route path="developers/reps" element={<RepDirectory />} />
+    <Route path="developers/reps/by-emirate" element={<RepByEmirate />} />
+    <Route path="developers/reps/:id" element={<RepProfileEditor />} />
+    <Route path="developers/projects" element={<DeveloperLiveEditor />} />
+    <Route path="developers/calendar" element={<DeveloperLaunchEvents />} />
+    <Route path="developers/access-requests" element={<AccessRequestQueue />} />
+    <Route path="developers/:slug" element={<DeveloperProfilePage />} />
     <Route path="uae-registry" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryOverview")))}</Suspense>} />
     <Route path="uae-registry/developers" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryListPage").then(m => ({ default: () => <m.default type="developer" /> }))))}</Suspense>} />
     <Route path="uae-registry/developers/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryDetailPage").then(m => ({ default: () => <m.default type="developer" /> }))))}</Suspense>} />
