@@ -221,7 +221,7 @@ export default function DeveloperDirectory() {
     },
     onSuccess: (r) => {
       toast.success(`Staged ${r.count} for review`, {
-        action: { label: "Open queue", onClick: () => navigate("/developers-portal/enrichment") },
+        action: { label: "Open queue", onClick: () => navigate("/owner/developers/profile-rebuild") },
       });
       clearSelection();
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
@@ -289,10 +289,39 @@ export default function DeveloperDirectory() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 max-w-full overflow-hidden">
+      <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+          <div className="flex items-start gap-4 min-w-0">
+            <span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center shadow-[0_16px_34px_-20px_rgba(6,78,59,0.9)]">
+              <BuildingIcon className="size-5 text-white" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Developers</p>
+              <h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Developer Registry</h1>
+              <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">One owner-console section for developer profiles, logos, project counts, reps, rebuild approvals and exports. Developer-mode users keep their separate limited portal.</p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant={viewMode === "cards" ? "gold" : "outline"} onClick={() => setViewMode("cards")}>
+              <LayoutGrid className="size-4 mr-1" /> Cards
+            </Button>
+            <Button size="sm" variant={viewMode === "excel" ? "gold" : "outline"} onClick={() => setViewMode("excel")}>
+              <Table2 className="size-4 mr-1" /> Excel View
+            </Button>
+            <Button size="sm" variant="outline" onClick={exportCsv} disabled={!rows.length}>
+              <Download className="size-4 mr-1" /> CSV
+            </Button>
+            <Button size="sm" variant="gold" onClick={exportExcel} disabled={!rows.length}>
+              <FileSpreadsheet className="size-4 mr-1" /> Download Excel
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <p className="text-sm text-[#1A1A1A]/80">
-          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/developers-portal/enrichment" className="underline">Site Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
+          <span className="font-semibold text-[#1A1A1A]">Directory</span> = the live owner-side developer list. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/owner/developers/profile-rebuild" className="underline">Profile Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 
