@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { TrendingUp, Briefcase, Building2, ArrowRight, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Briefcase, Building2, ArrowRight, CheckCircle2, Crown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useIsRegistered } from "@/hooks/useIsRegistered";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 import { toast } from "sonner";
 
-type Category = "investor" | "broker" | "developer";
+type Category = "investor" | "broker" | "developer" | "owner";
 
 const CATEGORIES: Array<{
   id: Category;
@@ -45,11 +46,24 @@ const CATEGORIES: Array<{
   },
 ];
 
+const OWNER_CATEGORY: (typeof CATEGORIES)[number] = {
+  id: "owner",
+  label: "I'm the Owner",
+  tagline: "Private command center",
+  description:
+    "Access the executive owner portal, CRM oversight, approvals, and private operations.",
+  icon: Crown,
+  bullets: ["Owner Dashboard", "Executive CRM", "Approvals & Controls"],
+};
+
 export default function CategorySelectorSection() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { setMode, hasMadeInitialSelection } = useUserModeContext();
   const { data: isRegistered } = useIsRegistered();
+  const visibleCategories = isOwnerBackendEmail(user?.email)
+    ? [...CATEGORIES, OWNER_CATEGORY]
+    : CATEGORIES;
 
   // "Mode" = lightweight browse preference (can flip any time from the header).
   // "Registered" = a real category profile (investor_intake / broker_profiles /
@@ -63,6 +77,13 @@ export default function CategorySelectorSection() {
 
 
   const handleSelect = async (cat: Category) => {
+    if (cat === "owner") {
+      if (!isOwnerBackendEmail(user?.email)) return;
+      await setMode("owner");
+      navigate("/owner");
+      return;
+    }
+
     // Track source regardless of auth state so anonymous picks still appear in counters
     try {
       const { registerRolePick, SIGNUP_SOURCES } = await import('@/lib/signupSources');
@@ -104,8 +125,8 @@ export default function CategorySelectorSection() {
         </div>
 
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
-          {CATEGORIES.map((cat, i) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch">
+          {visibleCategories.map((cat, i) => {
             const Icon = cat.icon;
             return (
               <motion.button
@@ -118,7 +139,7 @@ export default function CategorySelectorSection() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className="group relative h-full flex flex-col text-left bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
+                className="group relative h-full min-h-[330px] flex flex-col text-left bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-6 hover:border-[#1A1A1A] hover:shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
                 style={{ color: "#1A1A1A" }}
               >
                 {/* Header: icon + tagline tightly aligned */}
