@@ -271,6 +271,11 @@ export default function ReportPreviewModal({
           #jbj-aihf-preview-root [data-aihf-scope-dot] {
             background: #FFFFFF !important; background-color: #FFFFFF !important;
           }
+          #jbj-aihf-preview-root [data-aihf-scope-row],
+          #jbj-aihf-preview-root [data-aihf-scope-row] *,
+          #jbj-aihf-preview-root [data-aihf-scope-text] {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
+          }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
