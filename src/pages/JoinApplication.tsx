@@ -30,6 +30,7 @@ import CareersFAQ from "@/components/careers/CareersFAQ";
 import CareersContactBlock from "@/components/careers/CareersContactBlock";
 import FieldError from "@/components/forms/FieldError";
 import { z } from "zod";
+import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 
 interface OpenPosition {
   id: string;
