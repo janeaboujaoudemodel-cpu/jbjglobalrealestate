@@ -192,7 +192,7 @@ export const DLDDailySnapshot = () => {
                   <motion.div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "var(--jj-emerald-ombre)" }}
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${cashShare / 100})` }}
                     viewport={{ once: true }}
@@ -215,12 +215,12 @@ export const DLDDailySnapshot = () => {
                 <div
                   data-no-contrast-guard
                   className="dld-bar-track"
-                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: `1px solid ${GOLD}` }}
+                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <motion.div
                     data-no-contrast-guard
-                    className="dld-bar-fill-gold"
-                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center" }}
+                    data-allow-dark-cta
+                    style={{ position: "absolute", inset: 0, borderRadius: 9999, transformOrigin: "left center", background: "linear-gradient(90deg, #0B6B4F 0%, #064E3B 100%)" }}
                     initial={{ transform: "scaleX(0)" }}
                     whileInView={{ transform: `scaleX(${mortgageShare / 100})` }}
                     viewport={{ once: true }}
@@ -228,7 +228,7 @@ export const DLDDailySnapshot = () => {
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: GOLD }} /> Mortgage · {mortgageShare}% of all transactions
+                  <span className="inline-block h-2 w-2 rounded-full bg-[#064E3B]" /> Mortgage · {mortgageShare}% of all transactions
                 </p>
               </div>
             </div>
