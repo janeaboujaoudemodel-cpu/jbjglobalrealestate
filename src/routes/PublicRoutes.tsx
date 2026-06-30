@@ -2,7 +2,7 @@
  * Public-facing routes — properties, guides, services, company, user pages
  * These render inside MainLayoutWrapper (header + footer shell)
  */
-import { lazy } from "react";
+import { createElement, lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
