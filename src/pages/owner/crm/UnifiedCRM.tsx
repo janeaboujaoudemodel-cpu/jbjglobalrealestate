@@ -544,7 +544,7 @@ export default function UnifiedCRM() {
                 data-surface={active ? "emerald" : undefined}
                 data-emerald-ok={active ? "tab" : undefined}
               >
-                <Icon className={active ? "allow-white h-4 w-4 text-white" : "h-4 w-4 text-[#1A1A1A]"} style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined} />
+                <Icon className={active ? "allow-white h-4 w-4 text-white" : "h-4 w-4 text-[#1A1A1A]"} />
                 {it.label}
                 {c !== null && c > 0 && (
                   <span
