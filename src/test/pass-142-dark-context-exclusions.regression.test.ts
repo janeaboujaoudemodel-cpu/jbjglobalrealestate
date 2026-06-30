@@ -62,13 +62,13 @@ describe("PASS 142 — emerald/dark surfaces force WHITE foreground", () => {
     expect(css).toMatch(/\[data-surface="emerald"\][\s\S]{0,4000}#FFFFFF/);
   });
 
-  it("emerald CTAs do not allow ink-black text", () => {
-    // Guard against accidental `color: #1A1A1A` on .jj-cta-emerald descendants.
-    const offenders = Array.from(
-      css.matchAll(
-        /\.jj-cta-emerald[^\{]*\{[^}]*color:\s*#1[Aa]1[Aa]1[Aa][^}]*\}/g,
-      ),
+  it("emerald CTA classes are referenced inside the white-foreground enforcement block", () => {
+    // Ensure .jj-cta-emerald / .jj-pill-emerald-metallic appear in a selector
+    // list that ends with `color: #FFFFFF !important` (the PASS 130/142 lock).
+    const block = css.match(
+      /\.jj-cta-emerald[^{}]{0,4000}\{[^}]*color:\s*#FFFFFF\s*!important[^}]*\}/,
     );
-    expect(offenders.length, "Found ink-black on .jj-cta-emerald").toBe(0);
+    expect(block, "Missing canonical white-on-emerald enforcement block").toBeTruthy();
   });
 });
+
