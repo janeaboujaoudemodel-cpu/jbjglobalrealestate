@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, Share2, Lock, Award, Medal, BadgeCheck, GraduationCap } from "lucide-react";
+import { Download, Share2, Lock, Award, Medal, BadgeCheck, GraduationCap, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { useOwnerSignatureAssets } from "@/hooks/useOwnerSignatureAssets";
