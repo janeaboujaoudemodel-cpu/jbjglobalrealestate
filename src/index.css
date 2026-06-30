@@ -21241,9 +21241,13 @@ html body #root [data-insights-page] [data-neon-page] [class~="bg-cream"] {
   background-color: initial !important;
 }
 
-/* Restore ink for the neon body / heading overrides */
-html body #root [data-insights-page] [data-neon-page] :is(h1, h2, h3, h4, h5, h6, p, span, a, li, label):not([data-no-contrast-guard]):not([data-on-dark]):not(.allow-white):not([class*="text-white"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
+/* NOTE: deliberately no blanket "force ink on all neon descendants"
+ * rule here — that would crush legitimately white text living inside
+ * the page's own dark hero/glass sections (e.g. Buyer Guide TOC).
+ * Per-element contrast is handled by:
+ *   - PASS 133 for champagne sections
+ *   - the page's own bg-[#…] opt-outs for dark sections
+ *   - [data-hero-dark] for video heroes
+ */
+
 
