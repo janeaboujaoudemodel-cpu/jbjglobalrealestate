@@ -24,7 +24,6 @@ const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
-    data-surface="champagne"
     data-jj-segmented-list=""
     className={cn(
       "surface-champagne inline-flex h-10 items-center justify-center rounded-md bg-[color:var(--surface,#F7F2EA)] p-1 text-[#1A1A1A] border border-[color:var(--emerald-1)]/25",
