@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Headphones, ArrowLeft, Sparkles, Info } from "lucide-react";
+import { Headphones, ArrowLeft, Sparkles, Info, Lock } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -132,8 +132,8 @@ export default function BrokerLearningVoiceAdmin() {
               data-gold-hairline
             >
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-[#EFE6D6] border border-[#B89555]/40 flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0">
-                  {b.book_number}
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#fff2c4] via-[#d8b86a] to-[#8a6a25] border border-[#B89555]/60 flex items-center justify-center text-[#1A1A1A] font-bold flex-shrink-0 shadow-sm">
+                  <Lock className="w-4 h-4" strokeWidth={2.5} style={{ color: "#3a2a08" }} />
                 </div>
                 <div className="min-w-0">
                   <div className="font-semibold text-[#1A1A1A] truncate">{b.title}</div>

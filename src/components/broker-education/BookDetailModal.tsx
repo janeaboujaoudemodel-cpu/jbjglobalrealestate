@@ -55,8 +55,6 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             <div className="relative flex-shrink-0 w-28 aspect-[3/4] overflow-hidden rounded-r-[4px] rounded-l-[2px] shadow-[8px_10px_22px_rgba(0,0,0,0.32),inset_0_0_0_1px_rgba(184,149,85,0.4)]">
               <PremiumBookCover
                 title={book.title}
-                number={book.book_number}
-                subtitle={book.learning_path}
                 tone="black"
               />
               <div className="absolute inset-y-0 left-0 w-[6%] pointer-events-none bg-gradient-to-r from-[#030303]/90 via-[#1A1A1A]/60 to-transparent" />
@@ -65,8 +63,8 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-2">
                 <Badge className={`${pathColors.badge} text-xs`}>
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  Book {book.book_number} • {book.learning_path}
+                  <Lock className="w-3 h-3 mr-1" />
+                  {book.learning_path}
                 </Badge>
               </div>
               <DialogTitle className="text-2xl text-foreground mb-2 leading-tight">

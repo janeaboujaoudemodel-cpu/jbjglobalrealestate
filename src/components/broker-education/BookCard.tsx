@@ -77,9 +77,9 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
               {/* Book spine effect */}
               <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-gold/40 to-transparent" />
               
-              {/* Book number */}
-              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                <span className="text-[#1A1A1A] text-sm font-bold">{book.book_number}</span>
+              {/* Gold lock replaces all book numbering */}
+              <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gradient-to-br from-[#fff2c4] via-[#d8b86a] to-[#8a6a25] border border-[#B89555]/70 flex items-center justify-center shadow-[0_3px_12px_rgba(0,0,0,.35)]">
+                <Lock className="w-3.5 h-3.5" strokeWidth={2.5} style={{ color: "#3a2a08" }} />
               </div>
               
               {/* Icon */}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X, Check, Sparkles, Trophy } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Clock, Headphones, Target, List, X, Check, Sparkles, Trophy, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEOHead } from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
@@ -260,8 +260,8 @@ export default function BookReader() {
             <ArrowLeft className="w-4 h-4 mr-1.5" /> Library
           </Button>
           <div className="flex-1 min-w-0">
-            <div className="text-xs text-[#1A1A1A]/60 truncate">
-              Book {book.book_number} · {book.learning_path}
+            <div className="text-xs text-[#1A1A1A]/60 truncate inline-flex items-center gap-1.5">
+              <Lock className="w-3 h-3" /> {book.learning_path}
             </div>
             <div className="text-sm font-semibold text-[#1A1A1A] truncate">{book.title}</div>
           </div>
@@ -460,8 +460,8 @@ export default function BookReader() {
                       }}
                       className="w-full text-left text-sm px-3 py-2 rounded-lg hover:bg-[#F7F2EA] text-[#1A1A1A]/85 flex items-start gap-3"
                     >
-                      <span className="text-[10px] text-[#1A1A1A]/50 mt-1 w-6">
-                        {String(m.module_number).padStart(2, "0")}
+                      <span className="text-[10px] text-[#1A1A1A]/50 mt-1 w-6 inline-flex justify-center">
+                        <Lock className="w-3 h-3" />
                       </span>
                       <span className="flex-1">{m.title}</span>
                     </button>
@@ -502,15 +502,13 @@ function CoverFace({
     <div className="absolute inset-0">
       <PremiumBookCover
         title={book.title}
-        number={book.book_number}
-        subtitle={book.learning_path}
         tone="black"
         className="absolute inset-0"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
       <div className="absolute inset-0 flex flex-col justify-end p-7 md:p-9">
-        <div className="allow-white text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
-          Book {book.book_number} · {book.learning_path}
+        <div className="allow-white inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#EFE6D6]/85 mb-3 uppercase">
+          <Lock className="w-3 h-3" /> {book.learning_path}
         </div>
         <h1 className="allow-white text-white text-2xl md:text-3xl font-bold leading-tight mb-2 drop-shadow">
           {book.title}
@@ -563,8 +561,8 @@ function BackCoverFace({ book, onRestart }: { book: EducationBook; onRestart: ()
           <ArrowLeft className="w-4 h-4" /> Back to Cover
         </button>
       </div>
-      <div className="mt-5 text-[10px] tracking-[0.3em] text-[#EFE6D6]/60 uppercase">
-        Book {book.book_number} · {book.learning_path}
+      <div className="mt-5 inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#EFE6D6]/60 uppercase">
+        <Lock className="w-3 h-3" /> {book.learning_path}
       </div>
     </div>
   );
@@ -592,8 +590,8 @@ function TocPage({
                 onClick={() => idx >= 0 && onJump(idx)}
                 className="w-full text-left flex items-baseline gap-3 px-2 py-2 rounded-md hover:bg-[#F2EADB] transition-colors"
               >
-                <span className="text-[11px] text-[#1A1A1A]/55 w-7">
-                  {String(m.module_number).padStart(2, "0")}
+                <span className="text-[11px] text-[#1A1A1A]/55 w-7 inline-flex justify-center">
+                  <Lock className="w-3 h-3" />
                 </span>
                 <span className="text-[#1A1A1A] text-sm font-medium flex-1">{m.title}</span>
                 <span className="text-[11px] text-[#1A1A1A]/55">{m.estimated_minutes} min</span>
@@ -608,15 +606,14 @@ function TocPage({
 
 function ChapterOpenPage({
   module,
-  moduleIndex,
 }: {
   module: EducationModule;
   moduleIndex: number;
 }) {
   return (
     <div className="absolute inset-0 px-10 py-12 flex flex-col">
-      <div className="text-[10px] tracking-[0.4em] text-[#B89555] uppercase mb-3">
-        Chapter {String(moduleIndex + 1).padStart(2, "0")}
+      <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.4em] text-[#B89555] uppercase mb-3">
+        <Lock className="w-3 h-3" /> Chapter
       </div>
       <div
         className="h-px w-16 bg-[#B89555]/60 mb-5"
