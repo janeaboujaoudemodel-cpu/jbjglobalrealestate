@@ -4115,7 +4115,7 @@ a[class*="bg-red-"]:hover {
 
 /* =====================================================================
    COOKIE BANNER — RESPONSIVE LAYOUT LOCK (sidebar-aware + mobile compact)
-   - Offsets the banner past the vertical sidebar (48px collapsed / 200px expanded)
+   - Offsets the banner past the vertical sidebar (48px collapsed / 240px expanded)
      so "We value your privacy" never sits under the rail.
    - Compacts the popup on phones so it does not consume half the screen.
    ===================================================================== */
@@ -4130,7 +4130,7 @@ a[class*="bg-red-"]:hover {
     padding-right: 1rem !important;
   }
   body.jj-vertical-nav-active [data-chrome="cookie-banner"] {
-    padding-left: calc(200px + 1.25rem) !important;
+    padding-left: calc(240px + 1.25rem) !important;
     padding-right: 1.25rem !important;
   }
 }
@@ -14922,8 +14922,8 @@ html body #root .jj-developer-logo-metallic img {
   }
 
   body.jj-vertical-nav-active {
-    --jj-shell-sidebar-w: 200px;
-    --jj-shell-main-w: calc(100vw - 200px);
+    --jj-shell-sidebar-w: 240px;
+    --jj-shell-main-w: calc(100vw - 240px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
@@ -17376,16 +17376,16 @@ html body [data-radix-popper-content-wrapper] [data-on-dark]
  * at every viewport so the circle is NEVER hidden behind the rail.
  *   mobile  (<640px)            : sidebar hidden        → 16px gutter
  *   sm+ collapsed sidebar (48px) : button starts at 64px
- *   sm+ expanded  sidebar (200px): button starts at 216px
+ *   sm+ expanded  sidebar (240px): button starts at 256px
  * Mirrors for RTL.
  * ========================================================= */
 .jj-page-nav-anchor--left  { left: 16px; right: auto; }
 .jj-page-nav-anchor--right { right: 16px; left: auto; }
 
 @media (min-width: 640px) {
-  /* Default = expanded sidebar (200px rail). */
-  .jj-page-nav-anchor--left  { left: 216px; }
-  .jj-page-nav-anchor--right { right: 216px; }
+  /* Default = expanded sidebar (240px rail). */
+  .jj-page-nav-anchor--left  { left: 256px; }
+  .jj-page-nav-anchor--right { right: 256px; }
 
   /* Collapsed sidebar (48px rail). */
   body.jj-vertical-nav-collapsed .jj-page-nav-anchor--left  { left: 64px; }
@@ -22265,4 +22265,68 @@ html body [data-mode-card="true"][data-mode-row="active"] :is(p, span, svg, [cla
   text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   opacity: 1 !important;
+}
+
+/* PASS 143 — BACKEND SIDEBAR + ICON CONTRAST RESTORE
+   The regression came from broad light-surface and sidebar SVG rules later in
+   the cascade forcing champagne icons to emerald/20px. Backend emerald tiles
+   now win last: tile sizes are premium and glyphs are pure white. */
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar])
+  :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-emerald-icon-surface], [data-icon-tile], .jj-icon-tile-emerald) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -12px rgba(4,44,28,0.86), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-backend-sidebar])
+  :is([data-backend-icon-tile], [data-backend-sidebar-icon-tile], [data-emerald-icon-surface], [data-icon-tile], .jj-icon-tile-emerald)
+  :is(*, span, svg, [class*="lucide"], [data-lucide], path, circle, rect, line, polyline, polygon, ellipse, use, g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  fill-opacity: 1 !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-sidebar-icon-tile] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 10px !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  stroke-width: 2.15 !important;
+}
+
+html body #root .owner-dashboard-shell [data-backend-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-chrome="sidebar"] [data-emerald-icon-surface] :is(svg, [class*="lucide"], [data-lucide]),
+html body #root [data-chrome="sidebar"] [data-backend-sidebar-icon-tile] :is(svg, [class*="lucide"], [data-lucide]) {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-backend-portal] [data-backend-sidebar-icon-tile] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 10px !important;
 }

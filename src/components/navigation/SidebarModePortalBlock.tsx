@@ -53,10 +53,10 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
       >
         <span
           data-emerald-icon-surface
-          className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
+          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
         >
           <Icon
-            className="w-[14px] h-[14px] allow-white"
+            className="w-4 h-4 allow-white"
             strokeWidth={2.1}
             style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
           />
@@ -73,7 +73,7 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg transition-all duration-200 ${
+        className={`group flex items-center gap-3 px-3 min-h-11 rounded-xl transition-all duration-200 ${
           active ? "" : "hover:bg-[#1A1A1A]/[0.045]"
         }`}
         style={
@@ -88,16 +88,16 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
       >
         <span
           data-emerald-icon-surface
-          className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
+          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${EMERALD_TILE}`}
         >
           <Icon
-            className="w-[14px] h-[14px] allow-white"
+            className="w-4 h-4 allow-white"
             strokeWidth={2.1}
             style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
           />
         </span>
         <span
-          className="flex-1 min-w-0 text-left text-[9px] uppercase tracking-[0.055em] leading-[1.18] font-bold whitespace-normal break-words [overflow-wrap:anywhere]"
+          className="flex-1 min-w-0 text-left text-[11px] uppercase tracking-[0.08em] leading-[1.15] font-extrabold whitespace-normal break-words [overflow-wrap:anywhere]"
           style={{
             color: active ? "#FFFFFF" : "#1A1A1A",
             WebkitTextFillColor: active ? "#FFFFFF" : "#1A1A1A",
