@@ -60,6 +60,7 @@ const MarketReport = () => {
               className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_8px_22px_rgba(6,78,59,0.28)]"
               style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
               data-no-contrast-guard
+              data-icon-tone="emerald"
             >
               <Check className="w-10 h-10" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={3} />
             </div>
@@ -291,6 +292,7 @@ const MarketReport = () => {
                         className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
+                        data-icon-tone="emerald"
                       >
                         <Icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
                       </div>
@@ -385,6 +387,7 @@ const MarketReport = () => {
                     className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center shadow-[0_10px_28px_rgba(6,78,59,0.30)]"
                     style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                     data-no-contrast-guard
+                    data-icon-tone="emerald"
                   >
                     <Check
                       className="w-10 h-10"
@@ -424,6 +427,7 @@ const MarketReport = () => {
                       className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-[0_8px_22px_rgba(6,78,59,0.28)]"
                       style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                       data-no-contrast-guard
+                      data-icon-tone="emerald"
                     >
                       <Unlock className="w-6 h-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </div>
@@ -561,6 +565,7 @@ const MarketReport = () => {
                         className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-[0_3px_10px_rgba(6,78,59,0.25)]"
                         style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                         data-no-contrast-guard
+                        data-icon-tone="emerald"
                       >
                         <Check
                           className="w-4 h-4"
