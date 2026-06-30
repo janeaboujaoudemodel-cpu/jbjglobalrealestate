@@ -140,11 +140,14 @@ describe("ReportEngine inline-style contrast contract", () => {
   it("every emerald-painted block also sets WHITE foreground", () => {
     const offenders: string[] = [];
     for (const block of blocks) {
+      // Only treat blocks that actually paint an emerald BACKGROUND as
+      // contrast-critical. `T.emeraldGradient` / `T.emeraldDeep` are exclusively
+      // backgrounds; bare `T.emerald` is also used as a foreground accent, so we
+      // only flag it when it appears in a background property.
       const paintsEmerald =
         block.includes("T.emeraldGradient") ||
         block.includes("T.emeraldDeep") ||
-        block.includes("T.emerald,") || // bare T.emerald used as background
-        /background[A-Za-z]*:\s*T\.emerald(?!Hair)/.test(block);
+        /background(?:Color|Image)?:\s*T\.emerald\b(?!Hair)/.test(block);
       if (!paintsEmerald) continue;
       const setsWhiteFg =
         /color:\s*WHITE/.test(block) || /color:\s*"#FFFFFF"/i.test(block);
