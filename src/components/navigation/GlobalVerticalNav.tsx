@@ -1244,8 +1244,6 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         </div>
       </nav>
 
-      {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
-      <div className="flex-shrink-0">
       {/* ━━━ BOTTOM — Support + Sign Out (compact half-height) ━━━ */}
       <div className="flex-shrink-0">
         <div className="h-px mb-1 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
