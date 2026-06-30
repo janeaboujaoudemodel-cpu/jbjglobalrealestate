@@ -245,7 +245,7 @@ export default function BrokerDashboardLanding() {
           data-allow-dark-cta
           className="pointer-events-none absolute inset-x-0 inset-y-2 rounded-[1.6rem] bg-[#0A0A0A] border border-[#B89555]/55 shadow-[0_22px_60px_-30px_rgba(10,10,10,0.55)]"
         />
-        <div className="relative m-1 rounded-[1.4rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-9 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden">
+        <div className="relative m-1 rounded-[1.4rem] border border-[#B89555]/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-5 md:p-9 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset] overflow-hidden">
           <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/60 to-transparent" />
           <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(184,149,85,0.12),transparent_60%)]" />
 
@@ -256,18 +256,18 @@ export default function BrokerDashboardLanding() {
                 <button
                   type="button"
                   aria-label="Open account menu"
-                  className="group flex items-center gap-4 md:gap-5 min-w-0 text-left rounded-2xl -m-1 p-1 transition-colors hover:bg-[#FDFBF7]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/60"
+                  className="group flex items-center gap-3 md:gap-5 min-w-0 w-full text-left rounded-2xl -m-1 p-1 transition-colors hover:bg-[#FDFBF7]/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]/60"
                 >
-                  <div className="relative h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 grid place-items-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_22px_-12px_rgba(184,149,85,0.5)] shrink-0">
+                  <div className="relative h-14 w-14 md:h-20 md:w-20 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/55 grid place-items-center overflow-hidden shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_10px_22px_-12px_rgba(184,149,85,0.5)] shrink-0">
                     {profile?.photo_url ? (
                       <img src={profile.photo_url} alt="" className="h-full w-full object-cover" />
                     ) : (
-                      <span className="font-display text-xl md:text-2xl font-semibold tracking-[0.04em] text-[#1A1A1A] tabular-nums">
+                      <span className="font-display text-lg md:text-2xl font-semibold tracking-[0.04em] text-[#1A1A1A] tabular-nums">
                         {initials}
                       </span>
                     )}
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     {/* eyebrow plaque */}
                     <div
                       data-section-label=""
@@ -282,10 +282,11 @@ export default function BrokerDashboardLanding() {
                       </span>
                     </div>
 
-                    <h1 className="font-display text-[28px] md:text-[40px] lg:text-[44px] font-semibold text-[#1A1A1A] truncate leading-[1.04] tracking-[-0.02em] mt-2.5 flex items-center gap-2">
-                      <span className="truncate">Welcome, {profileLoading ? "…" : firstName}</span>
-                      <ChevronDown className="h-5 w-5 md:h-6 md:w-6 text-[#1A1A1A]/45 group-hover:text-[#1A1A1A] transition-transform group-data-[state=open]:rotate-180 shrink-0" strokeWidth={2.2} />
+                    <h1 className="font-display text-[22px] md:text-[40px] lg:text-[44px] font-semibold text-[#1A1A1A] leading-[1.08] tracking-[-0.02em] mt-2.5 flex items-center gap-2 min-w-0">
+                      <span className="truncate min-w-0">Welcome, {profileLoading ? "…" : firstName}</span>
+                      <ChevronDown className="h-4 w-4 md:h-6 md:w-6 text-[#1A1A1A]/45 group-hover:text-[#1A1A1A] transition-transform group-data-[state=open]:rotate-180 shrink-0" strokeWidth={2.2} />
                     </h1>
+
                     <div className="mt-2 flex items-center gap-3" aria-hidden="true">
                       <span className="block h-px w-10 bg-gradient-to-r from-[color:var(--emerald-1)]/75 to-transparent" />
                       <span className="block w-1 h-1 rotate-45 bg-[color:var(--emerald-1)]/75" />
