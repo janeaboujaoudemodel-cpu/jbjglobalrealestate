@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface Developer {
   id: string;
@@ -58,6 +59,11 @@ const MEDIA_KINDS = [
   { k: "file", label: "Other Files", icon: FileText, accept: "*/*" },
 ] as const;
 
+const preferRicherDeveloper = (rows: Developer[]) => rows.reduce((best, row) => {
+  const score = (d: Developer) => (d.logo_url ? 10 : 0) + (d.website_url ? 4 : 0) + (d.description?.length ?? 0) / 300 + (d.last_confirmed_at ? 2 : 0);
+  return score(row) > score(best) ? row : best;
+});
+
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -72,9 +78,10 @@ export default function DeveloperProfilePage() {
         .from("developers")
         .select("*")
         .eq("slug", slug!)
-        .maybeSingle();
+        .limit(10);
       if (error) throw error;
-      return data as unknown as Developer | null;
+      const rows = (data ?? []) as unknown as Developer[];
+      return rows.length ? preferRicherDeveloper(rows) : null;
     },
     enabled: !!slug,
   });
@@ -322,13 +329,13 @@ export default function DeveloperProfilePage() {
   const confirmed = !!developer.last_confirmed_at;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
-      <div className="max-w-6xl mx-auto p-6 pt-[100px] space-y-6">
+    <div data-backend-portal="developer-profile" className="space-y-6">
+      <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/admin/developers")}>
-              <ArrowLeft className="w-4 h-4 mr-1" /> Developer Portal
+            <Button variant="outline" size="sm" onClick={() => navigate("/developers-portal/directory")}>
+              <ArrowLeft className="w-4 h-4 mr-1" /> Directory
             </Button>
           </div>
           <div className="flex items-center gap-2">
@@ -346,23 +353,19 @@ export default function DeveloperProfilePage() {
         </div>
 
         {/* Identity card */}
-        <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
-          <CardContent className="p-6 flex items-center gap-5">
+        <Card className="overflow-hidden border border-[#B89555]/35 bg-[#F7F2EA] shadow-[0_22px_55px_-42px_rgba(26,26,26,0.5)] rounded-2xl">
+          <CardContent className="p-0">
+            <div className="relative bg-[image:var(--jj-emerald-ombre)] px-6 py-7 md:px-8 md:py-8 border-b border-[#B89555]/45">
+              <div className="absolute inset-x-0 top-0 h-px bg-[#B89555]/70" />
+              <div className="flex flex-col md:flex-row md:items-center gap-6">
             <button
               type="button"
               disabled={!canEdit}
               onClick={() => logoInputRef.current?.click()}
-              className="w-24 h-24 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] flex items-center justify-center overflow-hidden group relative shrink-0"
+              className="w-28 h-28 rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] flex items-center justify-center overflow-hidden group relative shrink-0 shadow-[0_22px_45px_-26px_rgba(0,0,0,0.65)]"
               title={canEdit ? "Click to upload logo" : "Logo"}
             >
-              {developer.logo_url ? (
-                <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain p-2"  loading="lazy" decoding="async" />
-              ) : (
-                <div className="text-center text-xs text-[#1A1A1A]/60">
-                  <Building2 className="w-8 h-8 mx-auto mb-1" />
-                  Upload logo
-                </div>
-              )}
+              <DeveloperLogo src={developer.logo_url} alt={`${developer.name} logo`} name={developer.name} variant="card" renderFallback className="w-full h-full rounded-2xl border-0 shadow-none p-4" />
               {canEdit && (
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <Upload className="w-6 h-6 text-white" />
@@ -377,18 +380,21 @@ export default function DeveloperProfilePage() {
               onChange={(e) => e.target.files?.[0] && uploadLogo(e.target.files[0])}
             />
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl font-semibold text-[#1A1A1A]">{developer.name}</h1>
-              <div className="flex items-center gap-3 mt-1 text-sm text-[#1A1A1A]/70 flex-wrap">
-                {developer.headquarters && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{developer.headquarters}</span>}
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#EFE6D6] font-black">Developer Profile</p>
+              <h1 className="mt-1 text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">{developer.name}</h1>
+              <div className="flex items-center gap-3 mt-3 text-sm text-white/85 flex-wrap">
+                {developer.headquarters && <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{developer.headquarters}</span>}
                 {developer.website_url && (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-[11px] font-medium text-[#1A1A1A]">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 text-[11px] font-black text-[#1A1A1A]">
                     <ShieldCheck className="w-3 h-3" /> Owner-only
                     <a href={developer.website_url} target="_blank" rel="noreferrer" className="ml-1 inline-flex items-center gap-1 underline">
                       <Globe className="w-3 h-3" /> {developer.website_url.replace(/^https?:\/\//, "")}
                     </a>
                   </span>
                 )}
-                <span>{projects.length} projects · {reps.length} sales reps</span>
+                <span className="font-semibold">{projects.length} projects · {reps.length} sales reps</span>
+              </div>
+            </div>
               </div>
             </div>
           </CardContent>
