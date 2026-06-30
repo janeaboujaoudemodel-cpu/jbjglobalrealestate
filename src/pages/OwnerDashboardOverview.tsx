@@ -443,7 +443,13 @@ export default function OwnerDashboardOverview() {
           .order('created_at', { ascending: false })
           .limit(10);
         if (error) throw error;
-        return data || [];
+        const seen = new Set<string>();
+        return (data || []).filter((conversation) => {
+          const key = `${conversation.user_email || conversation.user_name || conversation.id}::${conversation.page_source || "chat"}`.toLowerCase();
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
       } catch {
         return [];
       }
