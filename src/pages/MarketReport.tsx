@@ -184,45 +184,44 @@ const MarketReport = () => {
                     }}
                   />
 
-                  {/* ============ BACK COVER — visible as premium backside depth ============ */}
+                  {/* ============ BACK COVER — aligned exactly behind the front cover ============ */}
                   <div
-                    className="absolute inset-y-2 left-5 -right-7 rounded-r-[24px] rounded-l-[12px] overflow-hidden"
+                    className="absolute inset-0 rounded-r-[20px] rounded-l-[10px] overflow-hidden"
                     style={{
-                      transform: "translate3d(14px, 10px, -36px) scale(0.985)",
+                      transform: "translate3d(2px, 4px, -22px)",
                       background:
                         "linear-gradient(135deg, #0B5132 0%, #073821 48%, #02170f 100%)",
-                      boxShadow: "inset 18px 0 34px rgba(0,0,0,.34), inset -3px 0 14px rgba(255,255,255,.10), 18px 22px 46px rgba(0,0,0,.20)",
+                      boxShadow:
+                        "inset 18px 0 34px rgba(0,0,0,.34), inset -3px 0 14px rgba(255,255,255,.10), 18px 22px 46px rgba(0,0,0,.20)",
                     }}
                   >
-                    <div className="absolute inset-4 rounded-[16px] border border-[#B89555]/30" />
-                    <div className="absolute inset-0 opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent)" }} />
+                    <div className="absolute inset-4 rounded-[14px] border border-[#B89555]/30" />
                   </div>
 
-                  {/* White inner page block — fills only the visible gap between cover and back */}
+                  {/* ============ TOP PAGE-EDGE STACK — thick white pages visible from above ============ */}
                   <div
                     aria-hidden="true"
                     data-market-book-pages
-                    className="absolute inset-y-4 -right-8 w-12 rounded-r-[20px] overflow-hidden pointer-events-none"
+                    className="absolute left-[6px] right-[2px] -top-[10px] h-[16px] rounded-t-[6px] overflow-hidden pointer-events-none"
                     style={{
-                      transform: "translate3d(9px, 8px, -8px) scaleY(0.975)",
+                      transform: "translateZ(12px) rotateX(62deg)",
+                      transformOrigin: "bottom center",
                       background:
-                        "linear-gradient(90deg, #EFE6D6 0%, #FFFDF8 16%, #FFFFFF 48%, #F7F2EA 100%)",
+                        "linear-gradient(180deg, #FFFFFF 0%, #FBF7EE 55%, #EFE6D6 100%)",
                       boxShadow:
-                        "inset 5px 0 10px rgba(184,149,85,0.16), inset -8px 0 14px rgba(26,26,26,0.08), 10px 18px 26px rgba(26,26,26,0.10)",
+                        "inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -2px 4px rgba(184,149,85,0.25), 0 -2px 6px rgba(26,26,26,0.10)",
                     }}
                   >
                     <div
-                      className="absolute inset-0 opacity-70"
+                      className="absolute inset-0 opacity-80"
                       style={{
                         background:
-                          "repeating-linear-gradient(180deg, rgba(184,149,85,0.18) 0 1px, transparent 1px 7px)",
+                          "repeating-linear-gradient(90deg, rgba(184,149,85,0.22) 0 1px, transparent 1px 4px)",
                       }}
                     />
-                    <div
-                      className="absolute inset-y-0 left-0 w-2"
-                      style={{ background: "linear-gradient(90deg, rgba(26,26,26,0.16), transparent)" }}
-                    />
                   </div>
+
+
 
 
                   {/* ============ FRONT COVER (photo, unchanged) ============ */}
