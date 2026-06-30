@@ -4,7 +4,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { BookOpen, Upload, Loader2, Eye, Trash2, RefreshCcw } from "lucide-react";
+import { BookOpen, Upload, Loader2, Eye, Trash2, RefreshCcw, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
