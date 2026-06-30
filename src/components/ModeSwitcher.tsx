@@ -185,7 +185,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   if (variant === 'compact') {
     return (
       <button
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsOpen((open) => !open)}
         disabled={isLoading}
         style={triggerStyle}
         data-no-contrast-guard
@@ -210,18 +210,13 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
   return (
     <div
-      onClick={(e) => e.stopPropagation()}
-      onPointerDown={(e) => e.stopPropagation()}
       data-mode-switcher-root="true"
     >
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
         <DropdownMenuTrigger asChild>
           <button
             disabled={isLoading}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsOpen(true);
-            }}
+            onClick={(e) => e.stopPropagation()}
             style={triggerStyle}
             data-no-contrast-guard
             data-emerald-action="true"
@@ -231,7 +226,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             data-mode-trigger="header"
             data-header-control-family="pill"
           className={cn(
-              "jj-header-selector-control jj-header-premium-control allow-white h-11 flex items-center gap-1.5 px-4 py-1.5 rounded-full border-0 transition-all duration-150 hover:brightness-110 whitespace-nowrap shrink-0",
+              "jj-header-selector-control jj-header-premium-control allow-white h-11 flex items-center gap-1.5 px-4 py-1.5 rounded-full border-0 transition-none duration-0 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className
@@ -248,7 +243,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             </span>
             <ChevronDown
               data-no-contrast-guard
-              className={cn("mode-switcher-trigger-chevron w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
+              className={cn("mode-switcher-trigger-chevron w-3.5 h-3.5 shrink-0 transition-none duration-0", isOpen && "rotate-180")}
               style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
             />
           </button>
@@ -433,6 +428,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       data-no-contrast-guard
                       data-mode-select-pill=""
                       data-surface="emerald"
+                      data-on-dark="true"
                       className="mode-switcher-select-pill ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
                       style={{
                         color: '#FFFFFF',

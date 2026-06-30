@@ -69,8 +69,9 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       data-surface="light"
+        data-jbj-fast-dropdown="true"
       className={cn(
-        "z-[120000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
+        "z-[120000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 transition-none duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
         className,
       )}
       {...props}
@@ -100,7 +101,7 @@ const DropdownMenuItem = React.forwardRef<
     className={cn(
       "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       !unstyled &&
-        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-colors duration-150 ease-out hover:text-white focus:text-white data-[highlighted]:text-white",
+        "min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A1A] transition-none duration-0 hover:text-white focus:text-white data-[highlighted]:text-white",
       inset && "pl-8",
       className,
     )}

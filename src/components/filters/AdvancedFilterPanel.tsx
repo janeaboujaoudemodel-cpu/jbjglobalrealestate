@@ -512,9 +512,9 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Property Price</h4>
               <Tabs value={localFilters.priceMode} onValueChange={(v) => update({ priceMode: v as any })}>
                 <TabsList className="w-full mb-3 bg-[#FDFBF7]/60">
-                  <TabsTrigger value="unit" className="flex-1 text-xs">Per unit</TabsTrigger>
-                  <TabsTrigger value="sqft" className="flex-1 text-xs">Per sqft</TabsTrigger>
-                  <TabsTrigger value="sqm" className="flex-1 text-xs">Per sqm</TabsTrigger>
+                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'unit' ? 'emerald' : undefined} value="unit" className="flex-1 text-xs">Per unit</TabsTrigger>
+                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'sqft' ? 'emerald' : undefined} value="sqft" className="flex-1 text-xs">Per sqft</TabsTrigger>
+                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'sqm' ? 'emerald' : undefined} value="sqm" className="flex-1 text-xs">Per sqm</TabsTrigger>
                 </TabsList>
               </Tabs>
               <div className="grid grid-cols-2 gap-3">
