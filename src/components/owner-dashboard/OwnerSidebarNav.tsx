@@ -55,7 +55,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "CORE",
     items: [
-      { label: "Owner Panel", icon: Crown, path: "/admin" },
+      { label: "Owner Panel", icon: Crown, path: "/owner/admin" },
       { label: "Developer Portal", icon: Building2, path: "/admin/developers" },
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
       { label: "Document Studio", icon: FileText, path: "/owner/documents/forms" },
@@ -119,7 +119,6 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "ADMIN",
     items: [
-      { label: "Admin Panel", icon: Shield, path: "/owner/admin" },
       { label: "Analytics", icon: BarChart3, path: "/owner/analytics" },
       { label: "Users", icon: Users, path: "/owner/users" },
       { label: "Research Users", icon: Users, path: "/owner/research-users" },
@@ -234,7 +233,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             }
           }}
           className={cn(
-            "group w-full flex items-center gap-3 px-3.5 min-h-11 rounded-xl text-[15px] font-semibold transition-all duration-200 border relative",
+            "group w-full flex items-center gap-3.5 px-4 min-h-12 rounded-xl text-[16px] font-extrabold transition-all duration-200 border relative",
             active
               ? "jj-emerald-metallic allow-white !text-white border-transparent font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
               : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-[#B89555]/50 hover:!text-[#064E3B] hover:bg-[#EFE6D6]/55",
@@ -251,8 +250,8 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
             )}
           >
             <item.icon
-              className="allow-white w-4 h-4 flex-shrink-0 text-white transition-colors duration-200"
-              strokeWidth={2.1}
+              className="allow-white w-[13px] h-[13px] flex-shrink-0 text-white transition-colors duration-200"
+              strokeWidth={2.25}
               style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
             />
           </span>
@@ -295,11 +294,11 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
   };
 
   return (
-    <nav data-no-contrast-guard data-surface="light" className="p-2.5 space-y-3 overflow-y-auto flex-1 jj-scrollbar-gold">
+    <nav data-no-contrast-guard data-surface="light" className="p-4 space-y-2 overflow-y-auto flex-1 jj-scrollbar-gold">
       {NAV_SECTIONS.map((section) => (
-        <div key={section.label}>
+        <div key={section.label} className="mb-1.5 last:mb-0">
           {!collapsed && (
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[#1A1A1A] font-extrabold px-3.5 mb-2">
+            <p className="text-[12px] uppercase tracking-[0.2em] text-[#1A1A1A] font-black px-4 mb-2.5">
               {section.label}
             </p>
           )}

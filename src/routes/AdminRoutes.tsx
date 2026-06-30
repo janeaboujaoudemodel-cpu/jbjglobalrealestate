@@ -40,10 +40,8 @@ const FadedGoldAllowlist = lazy(() => import("@/pages/admin/FadedGoldAllowlist")
 const HRAgent = lazy(() => import("@/pages/HRAgent"));
 const HRAnnouncementsHub = lazy(() => import("@/pages/owner/HRAnnouncementsHub"));
 const ReferralAdmin = lazy(() => import("@/pages/ReferralAdmin"));
-const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
 const JobOfferTemplate = lazy(() => import("@/pages/JobOfferTemplate"));
-const OwnerRecommendations = lazy(() => import("@/pages/OwnerRecommendations"));
 const ExecutiveAssistant = lazy(() => import("@/pages/ExecutiveAssistant"));
 const CallReview = lazy(() => import("@/pages/CallReview"));
 const VideoBuilder = lazy(() => import("@/pages/VideoBuilder"));
@@ -65,7 +63,6 @@ const CustomerHappiness = lazy(() => import("@/pages/CustomerHappiness"));
 const SecurityConsole = lazy(() => import("@/pages/SecurityConsole"));
 const EmployeeManagementHub = lazy(() => import("@/pages/EmployeeManagementHub"));
 const HRDashboard = lazy(() => import("@/pages/HRDashboard"));
-const CareersPortal = lazy(() => import("@/pages/owner/CareersPortal"));
 // CompanyComm + EmailClient deleted — both redirect to /owner/inbox
 const TeamChat = lazy(() => import("@/pages/TeamChat"));
 const KanbanBoard = lazy(() => import("@/pages/KanbanBoard"));
@@ -90,9 +87,7 @@ const DeveloperProfileSlugPortalRedirect = () => {
 };
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
-const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
-const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel"));
 const TranslationCoverage = lazy(() => import("@/pages/admin/TranslationCoverage"));
 const MediaIngestionHub = lazy(() => import("@/pages/admin/MediaIngestionHub"));
 const ListingsApproval = lazy(() => import("@/pages/admin/ListingsApproval"));
@@ -102,15 +97,15 @@ export const AdminRoutes = () => (
     {/* ── Alerts Demo (owner preview) ── */}
     <Route path="/alerts-demo" element={<AlertsDemo />} />
     {/* ── Core Admin ── */}
-    <Route path="/admin" element={<OwnerGuard><Admin /></OwnerGuard>} />
-    <Route path="/admin/leads" element={<OwnerGuard><AdminLeads /></OwnerGuard>} />
+    <Route path="/admin" element={<Navigate to="/owner/admin" replace />} />
+    <Route path="/admin/leads" element={<Navigate to="/owner/admin/leads" replace />} />
     <Route path="/admin/inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
     <Route path="/admin-inquiries" element={<OwnerGuard><RouteErrorBoundary routeName="Inquiry Management Hub"><InquiryManagementHub /></RouteErrorBoundary></OwnerGuard>} />
-    <Route path="/admin/crm" element={<OwnerGuard><AdminCRM /></OwnerGuard>} />
+    <Route path="/admin/crm" element={<Navigate to="/owner/crm" replace />} />
     <Route path="/admin/chat-conversations" element={<OwnerGuard><AdminChatDashboard /></OwnerGuard>} />
     {/* /admin/onboarding redirected to Careers Portal below */}
-    <Route path="/admin/roles" element={<OwnerGuard><AdminRoleManagement /></OwnerGuard>} />
-    <Route path="/admin/intelligence" element={<OwnerGuard><AdminIntelligence /></OwnerGuard>} />
+    <Route path="/admin/roles" element={<Navigate to="/owner/admin" replace />} />
+    <Route path="/admin/intelligence" element={<Navigate to="/owner/admin" replace />} />
     {/* Legacy /admin/developers/* → redirect to new Developer Hub */}
     <Route path="/admin/developers" element={<Navigate to="/developer-hub-admin/directory" replace />} />
     <Route path="/admin/developers/profile/:slug" element={<DeveloperProfileSlugRedirect />} />
@@ -136,7 +131,7 @@ export const AdminRoutes = () => (
     {/* Owner-only legacy admin developer tools still reachable */}
     <Route path="/admin/developers-legacy" element={<OwnerGuard><AdminDevelopers /></OwnerGuard>} />
     <Route path="/admin/categories" element={<OwnerGuard><AdminCategories /></OwnerGuard>} />
-    <Route path="/admin/marketing-hub" element={<OwnerGuard><MarketingHub /></OwnerGuard>} />
+    <Route path="/admin/marketing-hub" element={<Navigate to="/owner/marketing-hub" replace />} />
     <Route path="/admin/reelly-import-test" element={<OwnerGuard><ListingAdminGuard><ReellyImportTest /></ListingAdminGuard></OwnerGuard>} />
     <Route path="/admin/legal-center" element={<OwnerGuard><LegalComplianceCenter /></OwnerGuard>} />
     <Route path="/admin/media-ingestion" element={<OwnerGuard><ListingAdminGuard><Suspense fallback={<PageLoader />}><MediaIngestionHub /></Suspense></ListingAdminGuard></OwnerGuard>} />
@@ -164,12 +159,9 @@ export const AdminRoutes = () => (
     <Route path="/hr-hub" element={<Navigate to="/owner/careers-portal?section=employees" replace />} />
 
     {/* ── Owner Tools (in main layout) ── */}
-    <Route path="/owner/creative-suite" element={<OwnerGuard><OwnerCreativeSuite /></OwnerGuard>} />
-    <Route path="/owner/brand-palette" element={<OwnerGuard><BrandPaletteHub /></OwnerGuard>} />
     <Route path="/brand-palette" element={<OwnerGuard><BrandPaletteHub /></OwnerGuard>} />
     <Route path="/owner/job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
     <Route path="/job-offer-template" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
-    <Route path="/owner/recommendations" element={<OwnerGuard><OwnerRecommendations /></OwnerGuard>} />
     {/* Public Jessica chat page — must NOT redirect into owner-only careers portal. */}
     <Route path="/hr-agent" element={<HRAgent />} />
     <Route path="/owner/hr/announcements" element={<OwnerGuard><HRAnnouncementsHub /></OwnerGuard>} />
@@ -213,7 +205,6 @@ export const AdminRoutes = () => (
     <Route path="/admin/onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
     <Route path="/admin-onboarding" element={<Navigate to="/owner/careers-portal?section=onboarding" replace />} />
     <Route path="/contract-forms" element={<Navigate to="/owner/careers-portal?section=contracts" replace />} />
-    <Route path="/owner/careers-portal" element={<OwnerGuard><CareersPortal /></OwnerGuard>} />
     <Route path="/careers-portal" element={<Navigate to="/owner/careers-portal" replace />} />
 
 
@@ -227,9 +218,6 @@ export const AdminRoutes = () => (
     <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
 
     {/* ── Exclusive Documents ── */}
-    <Route path="/owner/exclusive-documents" element={<OwnerGuard><ExclusiveDocuments /></OwnerGuard>} />
-    <Route path="/owner/ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />
-
     {/* ── E-Signature (legacy → unified Documents & Agreements hub) ── */}
     <Route path="/e-signature" element={<OwnerGuard><DocumentsFormsHub initialTabOverride="esign" /></OwnerGuard>} />
     <Route path="/e-signature/create" element={<Navigate to="/owner/documents/forms/create" replace />} />

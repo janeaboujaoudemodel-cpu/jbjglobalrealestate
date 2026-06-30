@@ -568,12 +568,19 @@ export default function GlobalVerticalNav() {
     try {
       const stored = localStorage.getItem('jj_nav_collapsed');
       if (stored === '0') return false;
+      if (stored === '1') {
+        // Retire stale collapsed state from the earlier compact rail pass —
+        // page names must be readable by default.
+        try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+        return false;
+      }
       if (stored === null) {
-        // Default: collapsed on first visit so the page stays clean.
-        try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
+        // Default: expanded so the page names are readable and the rail feels premium.
+        try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+        return false;
       }
       return true;
-    } catch { return true; }
+    } catch { return false; }
   });
   const [showExpandPulse, setShowExpandPulse] = useState(() => {
     try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
@@ -665,8 +672,8 @@ export default function GlobalVerticalNav() {
   }, []);
 
   const collapseAfterNavigation = useCallback(() => {
-    setCollapsed(true);
-    try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
+    setCollapsed(false);
+    try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
     setActiveMegaMenu(null);
     setMobileOpen(false);
   }, []);
@@ -841,7 +848,7 @@ export default function GlobalVerticalNav() {
   /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu || collapsed) return null;
-    const sidebarWidth = '240px';
+    const sidebarWidth = '280px';
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
 
     // Shortcuts now render inline (accordion) inside the sidebar — never as a popout panel.
@@ -870,7 +877,7 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(600px,calc(100vw-280px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -964,7 +971,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-280px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -1036,13 +1043,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-2 pb-3 flex-1 flex flex-col">
+        <div className="px-3 pt-2 pb-3 flex flex-col">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
           {/* All categories (highlights + sections) share one flex-column.
               Use justify-start with consistent gap so content fills naturally
               from the top — no large empty gap below Company/Legal. */}
-          <div className="flex-1 flex flex-col justify-between gap-1.5">
+          <div className="flex flex-col justify-start gap-1.5">
 
           {/* Highlight hubs (gold labels) */}
 
@@ -1070,12 +1077,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   data-sidebar-highlight
                   data-active={highlightActive ? 'true' : undefined}
                   aria-current={highlightActive ? 'page' : undefined}
-                  className={`group flex items-center gap-3 px-3 min-h-11 text-[13px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
+                  className={`group flex items-center gap-3 px-3 min-h-11 text-[14px] transition-all duration-200 rounded-xl ${highlightActive ? '' : 'hover:bg-[#1A1A1A]/[0.045]'} ${getItemStyle(item)}`}
                   style={highlightActive ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
                   iconWrapperData={{ 'data-sidebar-highlight-tile': true, 'data-emerald-icon-surface': true }}
                   iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
-                  iconClassName="w-4 h-4 transition-colors"
-                  iconStrokeWidth={2.1}
+                  iconClassName="w-3.5 h-3.5 transition-colors"
+                  iconStrokeWidth={2.25}
                   iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                   iconData={{ 'data-sidebar-highlight-icon': true, 'data-no-contrast-guard': true }}
                   labelClassName="flex-1 text-left relative inline-block transition-colors duration-200"
@@ -1115,11 +1122,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                       WebkitTextFillColor: sectionHighlighted ? '#FFFFFF' : '#1A1A1A',
                     }}
-                    className="w-full flex items-center gap-3 px-3 min-h-11 text-[10.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
+                    className="w-full flex items-center gap-3 px-3 min-h-11 text-[11.5px] uppercase tracking-[0.12em] leading-[1.15] font-extrabold transition-all duration-200 group hover:bg-[#EFE6D6]/35 rounded-xl"
                     iconWrapperData={{ 'data-emerald-icon-surface': true }}
                     iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${getIconTileClass()}`}
-                    iconClassName="w-4 h-4 transition-colors"
-                    iconStrokeWidth={2.1}
+                    iconClassName="w-3.5 h-3.5 transition-colors"
+                    iconStrokeWidth={2.25}
                     iconData={{ 'data-sidebar-section-icon': true }}
                     iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                     labelData={{ 'data-sidebar-section-label': true, 'data-no-contrast-guard': true }}
@@ -1207,14 +1214,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               data-active={subitemActive ? 'true' : undefined}
                               aria-current={subitemActive ? 'page' : undefined}
                               data-no-contrast-guard
-                              className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13px] transition-all duration-150 ${subitemActive ? 'font-semibold' : 'font-medium hover:bg-[#1A1A1A]/[0.045]'}`}
+                              className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13.5px] transition-all duration-150 ${subitemActive ? 'font-semibold' : 'font-medium hover:bg-[#1A1A1A]/[0.045]'}`}
                               style={subitemActive
                                 ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                                 : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
                               iconWrapperData={{ 'data-emerald-icon-surface': true }}
                               iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass(item)}`}
-                              iconClassName="w-4 h-4 transition-colors"
-                              iconStrokeWidth={2.1}
+                              iconClassName="w-3.5 h-3.5 transition-colors"
+                              iconStrokeWidth={2.25}
                               iconData={{ 'data-sidebar-subitem-icon': true }}
                               iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                               labelData={{ 'data-sidebar-subitem-label': true }}
@@ -1239,7 +1246,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       </nav>
 
       {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
-      <div className="mt-auto flex-shrink-1">
+      <div className="flex-shrink-0">
         <div className="h-px mb-1.5 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
         <div className="px-2 py-1.5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
           <div className="flex gap-1.5 mb-1">
@@ -1534,7 +1541,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[240px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[280px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
