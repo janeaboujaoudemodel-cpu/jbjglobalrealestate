@@ -6,6 +6,7 @@ import { useBrokerPersonalNotes } from "@/hooks/useBrokerPersonalNotes";
 import { useBrokerPersonalCalendar } from "@/hooks/useBrokerPersonalCalendar";
 import { Database, Users, ListTodo, StickyNote, Calendar, ArrowRight } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
+import LoggingErrorBoundary from "@/components/LoggingErrorBoundary";
 
 function Stat({ icon: Icon, label, value, to }: any) {
   return (
