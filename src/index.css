@@ -20805,3 +20805,28 @@ html body #root [data-careers-job-card]:not(#p126a):not(#p126b):not(#p126c):not(
   filter: none !important;
   mix-blend-mode: normal !important;
 }
+
+/* PASS 128 — Broker Toolkit CTA must be the same emerald card system as
+   homepage "Ready to Get Started". Keep white content, white icon tiles,
+   same border/shadow/radius/animation and prevent late CTA guards from
+   stripping the glass hairline on this reused component. */
+html body #root :is(#ready-to-get-started, #section-cta) .jj-emerald-card,
+html body #root :is(#ready-to-get-started, #section-cta) .jj-loop-block {
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 10px 24px -12px rgba(4,44,28,0.86), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root :is(#ready-to-get-started, #section-cta) .jj-emerald-card *,
+html body #root :is(#ready-to-get-started, #section-cta) .jj-loop-block *,
+html body #root :is(#ready-to-get-started, #section-cta) .jj-emerald-metallic,
+html body #root :is(#ready-to-get-started, #section-cta) .jj-emerald-metallic * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is(#ready-to-get-started, #section-cta) :is(svg, [class*="lucide"]),
+html body #root :is(#ready-to-get-started, #section-cta) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
