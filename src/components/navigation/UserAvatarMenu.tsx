@@ -137,14 +137,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     );
     return (
       <DropdownMenuItem
+        data-account-menu-row="true"
         asChild={!!to}
         active={active}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5"
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0"
       >
         {to ? (
           <Link
             to={to}
+            data-account-menu-row="true"
             data-surface={active ? "emerald" : undefined}
             data-on-dark={active ? "true" : undefined}
           >
@@ -178,6 +180,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         data-account-menu-content
+        data-jbj-fast-dropdown="true"
         align="end"
         sideOffset={12}
         className="z-[10100] w-[280px] p-2 rounded-xl border border-[#EFE6D6] bg-[#FDFBF7] shadow-2xl"
@@ -191,6 +194,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             {roleLabel && (
               <span
                 data-account-role-label
+                data-surface="emerald"
+                data-on-dark="true"
                 className="inline-flex items-center mt-1 px-2 py-[2px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-white border border-[#B89555]/40"
                 style={{
                   background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%))",
@@ -228,6 +233,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
         <DropdownMenuItem
           onSelect={handleSignOut}
+          data-account-signout-row="true"
           className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA]"
         >
           <span className="flex items-center gap-2.5 w-full">

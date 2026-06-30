@@ -100,6 +100,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         data-currency-menu-content
+        data-jbj-fast-dropdown="true"
         align="end" 
         sideOffset={12}
         className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border border-[#B89555]/30 overflow-hidden"
