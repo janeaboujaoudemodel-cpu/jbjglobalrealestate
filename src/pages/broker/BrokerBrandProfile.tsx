@@ -263,16 +263,16 @@ export default function BrokerBrandProfile() {
           <Button
             onClick={handleSave}
             disabled={saving}
-            className="jj-cta-dark !bg-[#0A0A0A] hover:!bg-[#1F1F1F] !text-white border border-[#B89555]/60"
-            data-cta="dark"
-            data-allow-dark-cta
+            className="jj-pill-emerald-metallic"
+            data-cta="emerald-primary"
+            data-surface="emerald"
           >
             {saving ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin !text-white" />
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (
-              <Save className="w-4 h-4 mr-2 !text-white" />
+              <Save className="w-4 h-4 mr-2" />
             )}
-            <span className="!text-white">Save brand profile</span>
+            <span>Save brand profile</span>
           </Button>
         </div>
       </div>

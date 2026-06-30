@@ -63,12 +63,13 @@ export function BrokerToolkitHero() {
             <button
               type="button"
               data-cta="hero-primary"
+              data-surface="emerald"
               onClick={() =>
                 user
                   ? navigate("/broker/portal")
                   : navigate("/auth?redirect=/broker/portal")
               }
-              className="jj-cta-dark inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium"
+              className="jj-pill-emerald-metallic inline-flex items-center gap-2 h-11 px-5 rounded-full text-sm font-medium"
             >
               <span>{user ? "Open My Dashboard" : "Join Free Now"}</span>
               <ArrowUpRight className="w-4 h-4" />
