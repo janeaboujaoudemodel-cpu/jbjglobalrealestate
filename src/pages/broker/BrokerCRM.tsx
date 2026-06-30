@@ -469,7 +469,7 @@ export default function BrokerCRM() {
               </span>
               <span className="text-xs text-[#1A1A1A]/60">{totalLeads} total leads</span>
             </div>
-            <div className="grid gap-3 min-w-0 [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))]">
+            <div className="grid gap-3 w-full min-w-0 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
               {stageCounts.map((s) => (
                 <button
                   key={s.key}
