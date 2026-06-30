@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 const base='http://127.0.0.1:8080';
 const paths=['/owner','/owner/documents/forms','/owner/crm'];
 const sizes=[{w:1216,h:900},{w:900,h:900},{w:768,h:900}];
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true, executablePath:'/bin/chromium', args:['--no-sandbox']});
 for (const s of sizes) {
   const page=await browser.newPage({viewport:{width:s.w,height:s.h}, deviceScaleFactor:1});
   for (const path of paths) {
