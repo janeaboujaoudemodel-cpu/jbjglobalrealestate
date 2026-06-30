@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { LogOut, Home, Building2 } from "lucide-react";
+import { LogOut, Home, Building2, Menu } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -8,6 +8,9 @@ import {
   Inbox, Briefcase, Calendar, ShieldCheck, Sparkles, ImageOff, Settings, UserPlus,
 } from "lucide-react";
 import { usePortalRole } from "@/hooks/usePortalRole";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 type Item = { to: string; label: string; icon: any; end?: boolean; roles: Array<"owner" | "portal_developer" | "portal_rep"> };
 
@@ -27,14 +30,11 @@ const ITEMS: Item[] = [
   { to: "/developers-portal/settings", label: "Settings", icon: Settings, roles: ["owner"] },
 ];
 
-/**
- * PortalShell — single shell for the standalone Developers Portal.
- * Horizontal button-row nav (no vertical sidebar, no empty top header).
- */
 export default function PortalShell() {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const { role } = usePortalRole();
+  const isMobile = useIsMobile();
 
   const roleLabel =
     role === "owner" ? "Owner Console"
@@ -44,64 +44,99 @@ export default function PortalShell() {
 
   const visible = ITEMS.filter((i) => role && i.roles.includes(role));
 
-  return (
-    <div className="min-h-screen bg-[#FDFBF7]">
-      {/* Sticky top bar — brand + horizontal button nav + actions */}
-      <header className="sticky top-0 z-40 bg-[#F7F2EA]/95 backdrop-blur border-b border-[#B89555]/40">
-        <div className="jj-global-container py-3 flex items-center gap-4 flex-wrap">
-          <div className="flex items-center gap-2.5 pr-4 border-r border-[#B89555]/30">
-            <Building2 className="w-4 h-4 text-[#1A1A1A]" />
-            <div className="leading-tight">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60">{roleLabel}</p>
-              <span className="text-[#1A1A1A] font-semibold text-[14px] tracking-tight">Developers Portal</span>
-            </div>
-          </div>
+  const handleSignOut = async () => {
+    try { await signOut(); toast.success("Signed out"); navigate("/"); }
+    catch { toast.error("Failed to sign out"); }
+  };
 
-          <nav className="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
-            {visible.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.end}
-                className={({ isActive }) =>
-                  cn(
-                    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] transition-colors border",
-                    isActive
-                      ? "bg-[#EFE6D6] text-[#1A1A1A] font-semibold border-[#B89555]/60"
-                      : "text-[#1A1A1A]/75 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/70 border-transparent"
-                  )
-                }
-              >
-                <item.icon className="h-3.5 w-3.5" strokeWidth={1.75} />
-                <span>{item.label}</span>
-              </NavLink>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-1.5 pl-2 border-l border-[#B89555]/30">
-            <button
-              onClick={() => navigate("/")}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/70 transition-colors"
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>Return to Site</span>
-            </button>
-            <button
-              onClick={async () => {
-                try { await signOut(); toast.success("Signed out"); navigate("/"); }
-                catch { toast.error("Failed to sign out"); }
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/70 transition-colors"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
-            </button>
-          </div>
+  const Sidebar = ({ onNavigate }: { onNavigate?: () => void }) => (
+    <aside
+      data-backend-portal="developers"
+      data-backend-sidebar="developers"
+      data-surface="champagne"
+      className="h-full bg-[#F7F2EA] border-r border-[#B89555]/40 flex flex-col shadow-xl shadow-[#B89555]/10"
+    >
+      <div className="h-[88px] px-5 border-b border-[#B89555]/40 flex items-center gap-3 shrink-0">
+        <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.9),inset_0_1px_0_rgba(255,255,255,0.18)]">
+          <Building2 className="allow-white w-[17px] h-[17px]" strokeWidth={2.3} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        </span>
+        <div className="min-w-0 leading-tight">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#1A1A1A]/65 font-black">{roleLabel}</p>
+          <h1 className="text-[17px] font-black text-[#1A1A1A] tracking-tight truncate">Developers Portal</h1>
         </div>
-      </header>
+      </div>
 
-      <main>
-        <div className="jj-global-container py-8">
+      <nav className="flex-1 overflow-y-auto p-4 space-y-1.5 jj-scrollbar-gold">
+        {visible.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            onClick={onNavigate}
+            data-sidebar-owner-item
+            className={({ isActive }) =>
+              cn(
+                "group min-h-12 w-full flex items-center gap-3.5 px-4 rounded-xl border text-[15px] font-extrabold transition-colors",
+                isActive
+                  ? "jj-emerald-metallic allow-white !text-white border-transparent shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
+                  : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/55"
+              )
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <span data-backend-sidebar-icon-tile data-surface="emerald" className="allow-white w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]">
+                  <item.icon className="allow-white w-[13px] h-[13px]" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                </span>
+                <span className={cn("min-w-0 flex-1 text-left leading-[1.15]", isActive ? "text-white" : "text-[#1A1A1A]")}>{item.label}</span>
+              </>
+            )}
+          </NavLink>
+        ))}
+      </nav>
+
+      <div className="p-4 border-t border-[#B89555]/40 space-y-2 shrink-0">
+        <button
+          onClick={() => { navigate("/"); onNavigate?.(); }}
+          className="w-full min-h-11 flex items-center gap-3 px-4 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] text-[14px] font-extrabold hover:bg-[#EFE6D6]/65"
+        >
+          <Home className="w-4 h-4 shrink-0" />
+          <span>Return to Site</span>
+        </button>
+        <button
+          onClick={handleSignOut}
+          className="w-full min-h-11 flex items-center gap-3 px-4 rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] text-[14px] font-extrabold hover:bg-[#EFE6D6]/65"
+        >
+          <LogOut className="w-4 h-4 shrink-0" />
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+  );
+
+  return (
+    <div data-backend-portal="developers" className="min-h-screen bg-[#FDFBF7]">
+      {!isMobile && <div className="fixed inset-y-0 left-0 z-40 w-[320px]"><Sidebar /></div>}
+
+      {isMobile && (
+        <header className="sticky top-0 z-40 h-[72px] bg-[#F7F2EA] border-b border-[#B89555]/40 flex items-center px-4">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="outline" aria-label="Open developer portal navigation"><Menu className="w-4 h-4" /></Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[300px] p-0 bg-[#F7F2EA] border-r border-[#B89555]/40">
+              <Sidebar />
+            </SheetContent>
+          </Sheet>
+          <div className="ml-3 leading-tight">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/65 font-black">{roleLabel}</p>
+            <span className="text-[#1A1A1A] font-black text-[16px]">Developers Portal</span>
+          </div>
+        </header>
+      )}
+
+      <main className={cn("min-h-screen", !isMobile && "ml-[320px]") }>
+        <div className="w-full max-w-[1680px] mx-auto px-6 lg:px-8 py-8">
           <Outlet />
         </div>
       </main>

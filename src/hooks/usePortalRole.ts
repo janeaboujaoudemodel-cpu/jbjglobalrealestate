@@ -14,17 +14,16 @@ export type PortalRole = "owner" | "portal_developer" | "portal_rep" | null;
  * null → no portal access (will be redirected by PortalGuard).
  */
 export function usePortalRole() {
-  const { user, isOwner } = useAuth();
+  const { user, isOwner, ownerLoading } = useAuth();
   const { mode } = useUserModeContext();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["portal-role", user?.id, mode],
-    enabled: !!user?.id,
+    queryKey: ["portal-role", user?.id, mode, isOwner],
+    enabled: !!user?.id && !ownerLoading,
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<PortalRole> => {
       if (!user?.id) return null;
-      if (isOwner && mode === "owner") return "owner";
-      if (isOwner && mode === "developer") return "portal_developer";
+      if (isOwner) return "owner";
 
       const { data: roles } = await supabase
         .from("user_roles")
@@ -41,7 +40,7 @@ export function usePortalRole() {
 
   return {
     role: (data ?? null) as PortalRole,
-    isLoading,
+    isLoading: isLoading || (!!user?.id && ownerLoading),
     isOwner: data === "owner",
     isDeveloper: data === "portal_developer",
     isRep: data === "portal_rep",
