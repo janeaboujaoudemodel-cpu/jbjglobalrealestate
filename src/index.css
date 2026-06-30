@@ -21195,3 +21195,59 @@ html body #root [data-insights-page] .jj-icon-tile-emerald svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* ============================================================
+ * PASS 134 — INSIGHTS NEON-SHELL NEUTRALIZER (Option 1)
+ *
+ * The user retired the Neon Page Shell for News / Market
+ * Intelligence / Guides / FAQ in favour of the unified champagne
+ * brand contract. Rather than tear <NeonPageShell /> out of 17
+ * page files (risk of broken layouts), we neutralize it at the
+ * CSS layer whenever the page is also tagged [data-insights-page].
+ *
+ * Effects when nested inside [data-insights-page]:
+ *   - the deep-navy background is replaced with champagne
+ *   - the two neon orbs (::before / ::after) are hidden
+ *   - dark-glass card overrides revert to champagne raised tone
+ *   - body / heading text returns to ink #1A1A1A via PASS 133
+ * ========================================================== */
+html body #root [data-insights-page][data-neon-page],
+html body #root [data-insights-page] [data-neon-page] {
+  background: var(--background) !important;
+  color: #1A1A1A !important;
+}
+
+html body #root [data-insights-page][data-neon-page]::before,
+html body #root [data-insights-page][data-neon-page]::after,
+html body #root [data-insights-page] [data-neon-page]::before,
+html body #root [data-insights-page] [data-neon-page]::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  animation: none !important;
+}
+
+/* Re-allow champagne band tokens that the neon shell forced to
+ * transparent / glass — restore the brand tones. */
+html body #root [data-insights-page] [data-neon-page] .jj-band,
+html body #root [data-insights-page] [data-neon-page] .jj-band--page,
+html body #root [data-insights-page] [data-neon-page] .jj-band--surface,
+html body #root [data-insights-page] [data-neon-page] .jj-band--raised,
+html body #root [data-insights-page] [data-neon-page] [class~="bg-[#FDFBF7]"],
+html body #root [data-insights-page] [data-neon-page] [class~="bg-[#F7F2EA]"],
+html body #root [data-insights-page] [data-neon-page] [class~="bg-[#EFE6D6]"],
+html body #root [data-insights-page] [data-neon-page] [class~="bg-champagne"],
+html body #root [data-insights-page] [data-neon-page] [class~="bg-cream"] {
+  background-color: initial !important;
+}
+
+/* NOTE: deliberately no blanket "force ink on all neon descendants"
+ * rule here — that would crush legitimately white text living inside
+ * the page's own dark hero/glass sections (e.g. Buyer Guide TOC).
+ * Per-element contrast is handled by:
+ *   - PASS 133 for champagne sections
+ *   - the page's own bg-[#…] opt-outs for dark sections
+ *   - [data-hero-dark] for video heroes
+ */
+
+
