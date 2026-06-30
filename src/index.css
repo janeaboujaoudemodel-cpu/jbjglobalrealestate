@@ -21031,27 +21031,27 @@ html body [data-jbj-white-glyph] :is(path, line, polyline, polygon, circle, rect
    the card is hovered or keyboard-focused; badge stays right-aligned under
    shortlist via the component stack.
    ============================================================ */
-html body #root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
-html body #root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g) {
+html body #root#root#root#root#root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g) {
   opacity: 0 !important;
   pointer-events: none !important;
 }
 
-html body #root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) {
+html body #root#root#root#root#root .group [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) {
   transform: translateY(-2px) !important;
   transition: opacity 200ms ease, transform 200ms ease !important;
 }
 
-html body #root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
-html body #root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
-html body #root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g),
-html body #root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g) {
+html body #root#root#root#root#root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g),
+html body #root#root#root#root#root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) :is(button, a, span, svg, path, circle, rect, line, polyline, polygon, g) {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
 
-html body #root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
-html body #root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) {
+html body #root#root#root#root#root .group:hover [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d),
+html body #root#root#root#root#root .group:focus-within [data-card-actions-overlay]:not(#jbj-card-actions-lock-a):not(#jbj-card-actions-lock-b):not(#jbj-card-actions-lock-c):not(#jbj-card-actions-lock-d) {
   transform: translateY(0) !important;
 }
 
