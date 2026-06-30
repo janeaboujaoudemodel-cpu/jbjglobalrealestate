@@ -163,7 +163,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Landlord Guide", href: "/landlord-guide", icon: FileText },
   { label: "Investor Education", href: "/investor-education", icon: GraduationCap },
   { label: "Golden Visa Guide", href: "/guides/golden-visa-uae", icon: Award },
-  { label: "Books Library", href: "/education-hub", icon: BookMarked },
+  // "Books Library" retired — merged into Guides Library above. /education-hub now 301s to /guides.
   { label: "FAQ Hub", href: "/faq", icon: HelpCircle },
 
   // ── Services ──
