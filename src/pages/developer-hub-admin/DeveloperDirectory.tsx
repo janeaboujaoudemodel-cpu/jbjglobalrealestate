@@ -83,6 +83,7 @@ export default function DeveloperDirectory() {
   const [page, setPage] = useState(0);
   const [accumulated, setAccumulated] = useState<Row[]>([]);
   const [visOpen, setVisOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
 
   // Reset pagination when filters change
   useEffect(() => { setPage(0); setAccumulated([]); }, [search, onlyBroken]);
@@ -94,7 +95,7 @@ export default function DeveloperDirectory() {
       const to = from + PAGE_SIZE - 1;
       let q = supabase
         .from("developers")
-        .select("id, name, slug, logo_url, website_url, description, last_enriched_at", { count: "exact" })
+        .select("id, name, slug, logo_url, website_url, description, last_enriched_at, ceo_name, founded_year, headquarters, completed_projects, offplan_projects, total_units_delivered, upcoming_units, logo_status", { count: "exact" })
         .eq("is_hidden", false)
         .order("name")
         .range(from, to);
@@ -102,7 +103,17 @@ export default function DeveloperDirectory() {
       if (onlyBroken) q = q.or("logo_url.is.null,logo_url.eq.,description.is.null");
       const { data, error, count } = await q;
       if (error) throw error;
-      return { rows: data as Row[], total: count ?? 0 };
+      return {
+        rows: (data ?? []).map((row: any) => ({
+          ...row,
+          project_count: 0,
+          projects_for_sale: 0,
+          total_project_units: 0,
+          avg_price_from: null,
+          coverage: [],
+        })) as Row[],
+        total: count ?? 0,
+      };
     },
   });
 
@@ -115,7 +126,7 @@ export default function DeveloperDirectory() {
     });
   }, [data, page]);
 
-  const rows = useMemo(() => {
+  const dedupedRows = useMemo(() => {
     const map = new Map<string, Row>();
     for (const row of accumulated) {
       const key = normalizeDeveloperKey(row) || row.id;
@@ -123,6 +134,60 @@ export default function DeveloperDirectory() {
     }
     return Array.from(map.values());
   }, [accumulated]);
+
+  const developerIds = useMemo(() => dedupedRows.map((r) => r.id), [dedupedRows]);
+
+  const { data: projectStats } = useQuery({
+    queryKey: ["dev-directory-project-stats", developerIds],
+    enabled: developerIds.length > 0,
+    staleTime: 2 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("id, developer_id, emirate, location, is_published, is_sold_out, sale_status, availability_status, status, price_from, price_to, total_units, available_units")
+        .in("developer_id", developerIds)
+        .is("deleted_at", null)
+        .limit(5000);
+      if (error) throw error;
+
+      const map = new Map<string, {
+        project_count: number;
+        projects_for_sale: number;
+        total_project_units: number;
+        avg_price_from: number | null;
+        coverage: string[];
+      }>();
+
+      for (const project of ((data ?? []) as ProjectStatRow[])) {
+        if (!project.developer_id) continue;
+        const stat = map.get(project.developer_id) ?? {
+          project_count: 0,
+          projects_for_sale: 0,
+          total_project_units: 0,
+          avg_price_from: null,
+          coverage: [],
+        };
+        stat.project_count += 1;
+        stat.total_project_units += Number(project.total_units ?? project.available_units ?? 0);
+        const statusText = `${project.sale_status ?? ""} ${project.availability_status ?? ""} ${project.status ?? ""}`.toLowerCase();
+        const isForSale = project.is_published !== false && !project.is_sold_out && !/sold\s*out|unavailable|inactive|archived/.test(statusText);
+        if (isForSale) stat.projects_for_sale += 1;
+        if (project.price_from && project.price_from > 0) {
+          const previousTotal = (stat.avg_price_from ?? 0) * Math.max(stat.project_count - 1, 0);
+          stat.avg_price_from = Math.round((previousTotal + project.price_from) / stat.project_count);
+        }
+        const place = (project.emirate || project.location || "").trim();
+        if (place && !stat.coverage.includes(place)) stat.coverage.push(place);
+        map.set(project.developer_id, stat);
+      }
+      return map;
+    },
+  });
+
+  const rows = useMemo(() => dedupedRows.map((row) => ({
+    ...row,
+    ...(projectStats?.get(row.id) ?? {}),
+  })), [dedupedRows, projectStats]);
   const total = data?.total ?? rows.length;
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
 
