@@ -8,10 +8,12 @@
  *    table via the DLD ingestion edge function or manual insert; the view
  *    here just renders whatever the most recent row contains.
  */
+import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
+import { IconTile } from "@/components/ui/icon-tile";
 import {
   Banknote,
   Building2,
@@ -60,6 +62,37 @@ const INK = "#0A0A0A";
 // Brand emerald metallic ombre — matches var(--jj-emerald-ombre) site-wide.
 const EMERALD_BAR = "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
 const EMERALD_DOT = "#064E3B";
+
+const WhiteGlyphIcon = ({ Icon, className = "h-5 w-5" }: { Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; className?: string }) => {
+  const forceWhite = React.useCallback((el: SVGSVGElement | null) => {
+    if (!el) return;
+    el.style.setProperty("color", "#FFFFFF", "important");
+    el.style.setProperty("stroke", "#FFFFFF", "important");
+    el.style.setProperty("fill", "none", "important");
+    el.style.setProperty("opacity", "1", "important");
+    el.querySelectorAll("path, circle, rect, line, polyline, polygon, ellipse").forEach((part) => {
+      const node = part as SVGElement;
+      node.style.setProperty("color", "#FFFFFF", "important");
+      node.style.setProperty("stroke", "#FFFFFF", "important");
+      node.style.setProperty("fill", "none", "important");
+      node.style.setProperty("opacity", "1", "important");
+    });
+  }, []);
+
+  return <Icon ref={forceWhite as React.Ref<SVGSVGElement>} data-dld-white-icon className={className} strokeWidth={2.5} />;
+};
+
+const WhiteRank = ({ children }: { children: React.ReactNode }) => {
+  const forceWhite = React.useCallback((el: HTMLSpanElement | null) => {
+    if (!el) return;
+    el.style.setProperty("color", "#FFFFFF", "important");
+    el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+    el.style.setProperty("text-fill-color", "#FFFFFF", "important");
+    el.style.setProperty("opacity", "1", "important");
+  }, []);
+
+  return <span ref={forceWhite} data-dld-rank-number>{children}</span>;
+};
 
 // Reusable champagne card with PREMIUM gold border (double hairline + soft glow).
 const BlackCard: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className = "" }) => (
@@ -151,9 +184,7 @@ export const DLDDailySnapshot = () => {
           ].map(({ label, value, Icon }) => (
             <BlackCard key={label} className="p-4 md:p-5">
               <div className="flex items-start justify-between gap-2">
-                <div data-no-contrast-guard data-dld-emerald-tile className="mi-icon-tile mi-no-flip">
-                  <Icon data-dld-white-icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
-                </div>
+                <IconTile icon={Icon} tone="emerald" size="md" data-dld-emerald-tile className="mi-no-flip" />
                 <span
                   data-no-contrast-guard
                   data-allow-dark-cta
@@ -161,7 +192,7 @@ export const DLDDailySnapshot = () => {
                   className="inline-flex h-7 w-7 items-center justify-center rounded-md"
                   style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)" }}
                 >
-                  <TrendingUp data-dld-white-icon className="h-4 w-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.4} />
+                  <WhiteGlyphIcon Icon={TrendingUp} className="h-4 w-4" />
                 </span>
               </div>
               <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
@@ -193,14 +224,14 @@ export const DLDDailySnapshot = () => {
                 <div
                   data-no-contrast-guard
                   className="dld-bar-track"
-                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
+                  style={{ position: "relative", height: 16, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <div
                     data-no-contrast-guard
                     data-allow-dark-cta
                     data-dld-emerald-fill
                     className="dld-emerald-fill"
-                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${cashShare}%`, borderRadius: 9999, background: EMERALD_BAR }}
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(cashShare, 2)}%`, minWidth: cashShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR }}
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
@@ -219,14 +250,14 @@ export const DLDDailySnapshot = () => {
                 <div
                   data-no-contrast-guard
                   className="dld-bar-track"
-                  style={{ position: "relative", height: 12, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
+                  style={{ position: "relative", height: 16, width: "100%", overflow: "hidden", borderRadius: 9999, backgroundColor: "#EFE6D6", border: "1px solid rgba(184,149,85,0.35)" }}
                 >
                   <div
                     data-no-contrast-guard
                     data-allow-dark-cta
                     data-dld-emerald-fill
                     className="dld-emerald-fill"
-                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${mortgageShare}%`, borderRadius: 9999, background: EMERALD_BAR }}
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(mortgageShare, 2)}%`, minWidth: mortgageShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR }}
                   />
                 </div>
                 <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
@@ -257,7 +288,8 @@ export const DLDDailySnapshot = () => {
                 return (
                   <div
                     key={`${row.area}-${i}`}
-                    className="grid grid-cols-[2.75rem_minmax(0,1fr)_minmax(110px,1fr)_3.75rem] items-center gap-3 rounded-lg px-2 py-1.5"
+                    data-dld-area-row
+                    className="grid grid-cols-[2.75rem_minmax(165px,1fr)_minmax(110px,1fr)_3.75rem] items-center gap-3 rounded-lg px-2 py-1.5"
                   >
                     <span
                       data-no-contrast-guard
@@ -266,9 +298,9 @@ export const DLDDailySnapshot = () => {
                       className="inline-flex h-7 w-9 items-center justify-center rounded-md text-[11px] font-bold tabular-nums shrink-0"
                       style={{ background: EMERALD_BAR, border: "1px solid rgba(184,149,85,0.5)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                     >
-                      {String(rank).padStart(2, "0")}
+                      <WhiteRank>{String(rank).padStart(2, "0")}</WhiteRank>
                     </span>
-                    <span className="min-w-0 whitespace-normal break-words text-left text-sm font-semibold leading-tight text-[#1A1A1A]">{row.area}</span>
+                    <span data-dld-area-name className="min-w-0 whitespace-nowrap text-left text-sm font-semibold leading-tight text-[#1A1A1A]">{row.area}</span>
                     <div
                       data-no-contrast-guard
                       className="relative h-2.5 overflow-hidden rounded-full"

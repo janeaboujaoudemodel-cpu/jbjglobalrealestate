@@ -22012,3 +22012,67 @@ html body [data-radix-popover-content] {
   animation-delay: 0ms !important;
   transition-delay: 0ms !important;
 }
+
+/* PASS 143 — DLD SNAPSHOT PROOF LOCK
+   User-selected fixes: pure white glyphs/numbers on emerald boxes, emerald
+   Cash/Mortgage fills, and fixed Top-10 row columns so Dubai Marina aligns. */
+html body #root [data-dld-emerald-tile],
+html body #root [data-dld-rank-badge] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(184,149,85,.62) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-dld-emerald-tile] :is(svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g),
+html body #root [data-dld-white-icon],
+html body #root [data-dld-white-icon] :is(path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+html body #root [data-dld-rank-badge],
+html body #root [data-dld-rank-badge] *,
+html body #root [data-dld-rank-number] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body #root [data-dld-emerald-fill],
+html body #root .dld-emerald-fill {
+  display: block !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transform-origin: left center !important;
+  visibility: visible !important;
+}
+
+html body #root [data-dld-area-row] {
+  grid-template-columns: 2.75rem minmax(165px, 1fr) minmax(110px, 1fr) 3.75rem !important;
+  align-items: center !important;
+}
+
+html body #root [data-dld-area-name] {
+  display: block !important;
+  min-width: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;
+}
