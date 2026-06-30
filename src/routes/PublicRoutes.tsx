@@ -2,7 +2,7 @@
  * Public-facing routes — properties, guides, services, company, user pages
  * These render inside MainLayoutWrapper (header + footer shell)
  */
-import { lazy } from "react";
+import { createElement, lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { RedirectWithParams } from "@/components/RedirectWithParams";
 import { RedirectWithSearch } from "@/routes/RedirectWithSearch";
@@ -391,6 +391,12 @@ export const PublicRoutes = () => (
     {/* AI Home Finder — canonical URL (no legacy /quiz route). */}
     <Route path="/ai-home-finder" element={<Quiz />} />
     <Route path="/ai-home-finder-results" element={<QuizResults />} />
+    {import.meta.env.DEV && (
+      <Route
+        path="/__report-contrast"
+        element={createElement(lazy(() => import("@/pages/__ReportContrastHarness")))}
+      />
+    )}
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/my-dashboard" element={<AuthRequiredRoute><MyDashboard /></AuthRequiredRoute>} />
     <Route path="/my-dashboard/progress" element={<AuthRequiredRoute><MyDashboardProgress /></AuthRequiredRoute>} />
