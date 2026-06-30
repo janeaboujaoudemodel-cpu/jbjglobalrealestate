@@ -177,8 +177,9 @@ export default function BrokerCalendar() {
 }
 
 function Tab({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return <button type="button" onClick={onClick} className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${active ? "jj-surface-emerald allow-white text-white border border-white/20" : "text-[#1A1A1A]/70 hover:bg-[#EFE6D6]"}`}>{children}</button>;
+  return <button type="button" onClick={onClick} data-surface={active ? "emerald" : undefined} className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${active ? "jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white border border-white/20 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "text-[#1A1A1A]/75 hover:bg-[#EFE6D6] hover:text-[#1A1A1A]"}`}>{children}</button>;
 }
+
 
 function EventList({ events, onDelete, onDuplicate }: { events: BrokerEvent[]; onDelete: (id: string) => void; onDuplicate: (e: BrokerEvent) => void }) {
   return <div className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 divide-y divide-[#B89555]/15 overflow-hidden">

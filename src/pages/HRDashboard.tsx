@@ -119,91 +119,91 @@ export default function HRDashboard() {
             <TabsList className="bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-[#B89555]/30 p-1.5 h-auto flex-wrap rounded-xl shadow-sm">
               <TabsTrigger 
                 value="performance" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Activity className="h-4 w-4" />
                 Performance
               </TabsTrigger>
               <TabsTrigger 
                 value="hunting" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Target className="h-4 w-4" />
                 Hunting
               </TabsTrigger>
               <TabsTrigger 
                 value="cv-center" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <FolderOpen className="h-4 w-4" />
                 CV Center
               </TabsTrigger>
               <TabsTrigger 
                 value="positions" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Plus className="h-4 w-4" />
                 Positions
               </TabsTrigger>
               <TabsTrigger 
                 value="leave" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Calendar className="h-4 w-4" />
                 Leave
               </TabsTrigger>
               <TabsTrigger 
                 value="approvals" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <CheckSquare className="h-4 w-4" />
                 Approvals
               </TabsTrigger>
               <TabsTrigger 
                 value="warnings" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <AlertTriangle className="h-4 w-4" />
                 Warnings
               </TabsTrigger>
               <TabsTrigger 
                 value="job-offers" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <FileText className="h-4 w-4" />
                 Job Offers
               </TabsTrigger>
               <TabsTrigger 
                 value="payroll" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Wallet className="h-4 w-4" />
                 Payroll
               </TabsTrigger>
               <TabsTrigger 
                 value="salary" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <DollarSign className="h-4 w-4" />
                 Benchmarks
               </TabsTrigger>
               <TabsTrigger 
                 value="linkedin" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Linkedin className="h-4 w-4" />
                 LinkedIn
               </TabsTrigger>
               <TabsTrigger 
                 value="competitors" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Building2 className="h-4 w-4" />
                 Competitors
               </TabsTrigger>
               <TabsTrigger 
                 value="inbox" 
-                className="gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40 data-[state=active]:shadow-sm"
+                className="gap-2 rounded-lg text-[#1A1A1A]/75 data-[state=active]:jj-surface-emerald data-[state=active]:allow-white data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_svg]:text-white [&[data-state=active]_svg]:stroke-white"
               >
                 <Inbox className="h-4 w-4" />
                 Inbox

@@ -341,15 +341,17 @@ function TabBtn({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors ${
+      data-surface={active ? "emerald" : undefined}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${
         active
-          ? "jj-surface-emerald allow-white text-white border border-white/20 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]"
-          : "text-[#1A1A1A]/70 hover:text-[#1A1A1A]"
+          ? "jj-surface-emerald allow-white text-white [&_svg]:text-white [&_svg]:stroke-white border border-white/20 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]"
+          : "text-[#1A1A1A]/75 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]"
       }`}
     >
       <Icon className="h-3.5 w-3.5" /> {children}
     </button>
   );
+
 }
 
 function BulkBtn({
