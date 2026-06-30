@@ -298,13 +298,13 @@ export const DLDDailySnapshot = () => {
         </div>
 
         {/* Notice + Expert Consultation cards (item #9) */}
-        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-          <BlackCard className="p-6">
-            <div className="flex items-start gap-4">
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 md:auto-rows-fr">
+          <BlackCard className="p-6 h-full">
+            <div className="flex h-full items-start gap-4">
               <div data-no-contrast-guard className="mi-icon-tile mi-icon-tile-lg mi-no-flip">
                 <Flag className="h-5 w-5" />
               </div>
-              <div className="flex-1">
+              <div className="flex flex-1 flex-col">
                 <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Notice something incorrect?</h4>
                 <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">
                   Spotted a number that doesn't match your records or an area we're missing? Send us a quick
@@ -313,7 +313,7 @@ export const DLDDailySnapshot = () => {
                 <Link
                   to="/contact?topic=market-intelligence-correction"
                   data-no-contrast-guard
-                  className="mi-cta-emerald mt-4 text-xs uppercase tracking-[0.16em] rounded-full"
+                  className="mi-cta-emerald mt-auto pt-4 text-xs uppercase tracking-[0.16em] rounded-full self-start"
                 >
                   <MailOpen className="h-3.5 w-3.5" />
                   Report an issue
@@ -322,12 +322,12 @@ export const DLDDailySnapshot = () => {
             </div>
           </BlackCard>
 
-          <BlackCard className="p-6">
-            <div className="flex items-start gap-4">
+          <BlackCard className="p-6 h-full">
+            <div className="flex h-full items-start gap-4">
               <div data-no-contrast-guard className="mi-icon-tile mi-icon-tile-lg mi-no-flip">
                 <PhoneCall className="h-5 w-5" />
               </div>
-              <div className="flex-1">
+              <div className="flex flex-1 flex-col">
                 <h4 className="text-base font-bold text-[#1A1A1A] md:text-lg">Expert Consultation</h4>
                 <p className="mt-1 text-sm leading-relaxed text-[#1A1A1A]/70">
                   Want this data interpreted for your portfolio? Book a 30-minute call with Jane Bou Jaoude
@@ -336,7 +336,7 @@ export const DLDDailySnapshot = () => {
                 <Link
                   to="/book"
                   data-no-contrast-guard
-                  className="mi-cta-emerald mt-4 text-xs uppercase tracking-[0.16em] rounded-full"
+                  className="mi-cta-emerald mt-auto pt-4 text-xs uppercase tracking-[0.16em] rounded-full self-start"
                 >
                   <CalendarCheck className="h-3.5 w-3.5" />
                   Book consultation
