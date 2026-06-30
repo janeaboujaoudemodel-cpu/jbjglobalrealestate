@@ -158,7 +158,11 @@ const JoinBrokerList = () => {
           </div>
         </section>
 
+        {/* Broker Circle — support team, services & ecosystem */}
+        <BrokerCircleSection />
+
         {/* Form Section */}
+
         <section className="pb-10 px-4">
           <div className="max-w-5xl mx-auto">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
