@@ -848,7 +848,7 @@ export default function GlobalVerticalNav() {
   /* ─── RENDER MEGA MENU ─── */
   const renderMegaMenu = () => {
     if (!activeMegaMenu || collapsed) return null;
-    const sidebarWidth = '320px';
+    const sidebarWidth = '264px';
     const title = MEGA_MENU_TITLES[activeMegaMenu] || activeMegaMenu;
 
     // Shortcuts now render inline (accordion) inside the sidebar — never as a popout panel.
@@ -877,7 +877,7 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative w-[min(600px,calc(100vw-320px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -971,7 +971,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto relative w-[min(600px,calc(100vw-320px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -1546,7 +1546,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden sm:flex w-[320px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+        <div className="hidden sm:flex w-[264px] flex-shrink-0 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] h-full relative overscroll-contain after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
           {renderNavContent()}
         </div>
       )}
