@@ -128,12 +128,12 @@ export const OwnerRoutes = () => (
     path="/owner/crm/jbj"
     element={
       <OwnerGuard>
-        <JbjCrmShell />
+        <CrmShell />
       </OwnerGuard>
     }
   >
-    <Route index element={<JbjCrmHome />} />
-    <Route path=":section" element={<JbjCrmModulePage />} />
+    <Route index element={<CrmHome />} />
+    <Route path=":section" element={<CrmModulePage />} />
   </Route>
 
   <Route path="/owner" element={
@@ -179,8 +179,8 @@ export const OwnerRoutes = () => (
     <Route path="crm/zoho" element={<Navigate to="/owner/crm/jbj" replace />} />
     {/* /owner/crm/jbj is mounted OUTSIDE this shell — see top of OwnerRoutes for the standalone route. */}
 
-    {/* Deprecated direct entry kept for deep links */}
-    <Route path="crm/zoho-legacy" element={<ZohoCRMPage />} />
+    {/* Legacy Zoho embed removed — CRM is standalone JBJ. */}
+    <Route path="crm/zoho-legacy" element={<Navigate to="/owner/crm/jbj" replace />} />
     <Route path="academy-approvals" element={<OwnerAcademyApprovals />} />
     <Route path="academy-access" element={<OwnerAcademyAccessQueue />} />
     <Route path="crm/academy" element={<OwnerAcademyApprovals />} />
