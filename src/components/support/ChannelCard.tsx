@@ -29,28 +29,42 @@ export default function ChannelCard({
   const Inner = (
     <div
       data-emerald="true"
+      data-allow-dark-cta
       data-no-contrast-guard
-      className={`group/channel flex ${compact ? "flex-row items-center gap-3" : "flex-col items-start gap-1"}
-        px-3 py-2.5 rounded-xl text-left w-full
-        jj-emerald-metallic border-white/20 text-white allow-white
+      className={`group/channel flex flex-row items-center gap-3 w-full text-left
+        px-3.5 py-3 rounded-xl min-h-[64px]
+        jj-emerald-metallic border border-white/25 text-white allow-white
         transform-gpu transition-[filter,border-color,box-shadow,transform] duration-200
         hover:-translate-y-0.5 hover:brightness-110
-        hover:shadow-[0_16px_34px_-14px_rgba(6,78,59,0.95),0_0_22px_rgba(52,211,153,0.28),inset_0_1px_0_rgba(255,255,255,0.28)]`}
+        hover:shadow-[0_16px_34px_-14px_rgba(6,78,59,0.95),0_0_22px_rgba(184,149,85,0.35),inset_0_1px_0_rgba(255,255,255,0.28)]`}
+      style={{ color: "#FFFFFF" }}
     >
-      <div className="flex items-center gap-2">
-        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/35 bg-white/12 text-white allow-white transition-colors group-hover/channel:bg-white/16 group-hover/channel:border-white/60">
-          <channel.Icon className="h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        </span>
-        <span className="text-[13px] font-semibold text-white allow-white transition-colors">{channel.label}</span>
-      </div>
-      <span className={`text-[11.5px] leading-tight text-white/85 allow-white transition-colors ${compact ? "ml-auto" : ""}`}>
-        {channel.description}
+      <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/40 bg-white/12 text-white allow-white transition-colors group-hover/channel:bg-white/20 group-hover/channel:border-white/70">
+        <channel.Icon className="h-5 w-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
       </span>
-      {!compact && channel.responseTime && (
-        <span className="inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 allow-white transition-colors">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> {channel.responseTime}
+      <div className="flex flex-1 min-w-0 flex-col justify-center gap-0.5">
+        <span
+          className="allow-white text-[14px] font-semibold leading-tight text-white truncate"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
+          {channel.label}
         </span>
-      )}
+        <span
+          className="allow-white text-[12px] leading-tight text-white/85 truncate"
+          style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
+        >
+          {channel.description}
+        </span>
+        {channel.responseTime && (
+          <span
+            className="allow-white inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.16em] font-semibold text-white/80"
+            style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+            {channel.responseTime}
+          </span>
+        )}
+      </div>
     </div>
   );
 
