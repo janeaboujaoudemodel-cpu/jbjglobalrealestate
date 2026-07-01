@@ -487,9 +487,9 @@ const PropertyMeasurement = () => {
                 }}
               >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.95)" }}>
-                    <Building2 className="w-5 h-5" style={{ color: "#6EE7B7" }} />
-                    <span style={{ color: "rgba(255,255,255,0.95)" }}>Step 1: Property Information</span>
+                  <CardTitle className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                    <Building2 className="w-5 h-5" style={{ color: "#064E3B" }} />
+                    <span style={{ color: "#1A1A1A" }}>Step 1: Property Information</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
