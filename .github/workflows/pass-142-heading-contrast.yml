@@ -1,0 +1,168 @@
+name: PASS 142 — Heading Contrast Regression
+
+# Runs the heading-focused visual regression suite whenever a PR (or push
+# to main) touches any file that participates in the PASS 142 contract:
+# the global bright-background contract in index.css, the dark-context
+# exclusion guards, the <SectionTitle /> primitive, the `label`-class
+# lint, the Playwright dark-host sweep, and the shareable report
+# generator. If none of these files change, the workflow is skipped
+# entirely — CI stays fast for unrelated PRs.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/index.css"
+      - "src/components/ui/SectionTitle.tsx"
+      - "src/components/ui/icon-tile.tsx"
+      - "src/test/pass-142-*.ts"
+      - "src/test/section-heading-label-class.regression.test.ts"
+      - "tests/dark-surface-heading-contrast.spec.ts"
+      - "scripts/pass142/**"
+      - ".github/workflows/pass-142-heading-contrast.yml"
+  pull_request:
+    paths:
+      - "src/index.css"
+      - "src/components/ui/SectionTitle.tsx"
+      - "src/components/ui/icon-tile.tsx"
+      - "src/test/pass-142-*.ts"
+      - "src/test/section-heading-label-class.regression.test.ts"
+      - "tests/dark-surface-heading-contrast.spec.ts"
+      - "scripts/pass142/**"
+      - ".github/workflows/pass-142-heading-contrast.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: pass-142-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  heading-contrast:
+    name: PASS 142 Heading Contrast Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ---------- Layer 1: static Vitest guards (fast, blocks first) ----------
+      # These do not need a running browser:
+      #   - dark-context exclusions still present in index.css
+      #   - <h2> without `label` count never grows past baseline
+      - name: Static heading guards (Vitest)
+        id: static
+        run: |
+          mkdir -p artifacts/pass-142
+          set +e
+          npx vitest run \
+            src/test/pass-142-dark-context-exclusions.regression.test.ts \
+            src/test/section-heading-label-class.regression.test.ts \
+            2>&1 | tee artifacts/pass-142/static.log
+          status=${PIPESTATUS[0]}
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit $status
+
+      # ---------- Layer 2: rendered Playwright sweep ----------
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build app
+        run: npm run build
+
+      - name: Start preview server
+        run: |
+          npm run preview -- --host 0.0.0.0 --port 8080 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:8080 > /dev/null && break || sleep 1
+          done
+
+      - name: Dark-host heading sweep (Playwright, 13 routes × 3 viewports)
+        id: sweep
+        env:
+          PREVIEW_URL: http://localhost:8080
+        run: |
+          set +e
+          npx playwright test tests/dark-surface-heading-contrast.spec.ts \
+            --reporter=list \
+            2>&1 | tee artifacts/pass-142/sweep.log
+          status=${PIPESTATUS[0]}
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit $status
+
+      # ---------- Layer 3: shareable HTML report ----------
+      # Always runs so reviewers get a visual diff even on green PRs.
+      - name: Generate shareable HTML report
+        if: always()
+        env:
+          PREVIEW_URL: http://localhost:8080
+        run: |
+          mkdir -p artifacts/pass-142
+          node scripts/pass142/generate-report.mjs || true
+          cp -f /mnt/documents/pass-142-report.html artifacts/pass-142/ 2>/dev/null || \
+            cp -f pass-142-report.html artifacts/pass-142/ 2>/dev/null || true
+          cp -f /mnt/documents/pass-142-report.json artifacts/pass-142/ 2>/dev/null || \
+            cp -f pass-142-report.json artifacts/pass-142/ 2>/dev/null || true
+
+      - name: Upload PASS 142 artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pass-142-report
+          path: |
+            artifacts/pass-142/
+            e2e-artifacts/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Post PR summary
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const staticOutcome = '${{ steps.static.outcome }}';
+            const sweepOutcome  = '${{ steps.sweep.outcome }}';
+            const staticLog = 'artifacts/pass-142/static.log';
+            const sweepLog  = 'artifacts/pass-142/sweep.log';
+
+            const tail = (p, n = 4000) => {
+              if (!fs.existsSync(p)) return '';
+              const s = fs.readFileSync(p, 'utf8').trim();
+              return s.length > n ? s.slice(-n) : s;
+            };
+
+            let body = '## PASS 142 — Heading Contrast Regression\n\n';
+            const badge = (o) => o === 'success' ? '✅ passed' : o === 'failure' ? '❌ failed' : `⚠️ ${o}`;
+            body += `- **Static guards (Vitest):** ${badge(staticOutcome)}\n`;
+            body += `- **Rendered sweep (Playwright, 13 routes × 3 viewports):** ${badge(sweepOutcome)}\n\n`;
+
+            if (staticOutcome === 'failure') {
+              body += '<details open><summary>Static guard output</summary>\n\n```\n' +
+                tail(staticLog) + '\n```\n\n</details>\n\n';
+              body += '**Fix:** either add `label` to the offending `<h2>`, wrap it in `<SectionTitle />`, or annotate it with `data-no-label-lint` and a justification. If you legitimately cleaned up offenders, lower `OFFENSE_BASELINE` in `src/test/section-heading-label-class.regression.test.ts` in the same commit.\n\n';
+            }
+            if (sweepOutcome === 'failure') {
+              body += '<details open><summary>Playwright sweep output</summary>\n\n```\n' +
+                tail(sweepLog) + '\n```\n\n</details>\n\n';
+              body += '**Fix:** headings inside `[data-hero-dark]`, `[data-on-dark]`, `[data-surface="dark|emerald|ink|navy"]` etc. must render pure white (WCAG AAA ≥ 7:1). The full per-route report and screenshots are attached as the `pass-142-report` artifact on this run.\n\n';
+            }
+            if (staticOutcome === 'success' && sweepOutcome === 'success') {
+              body += 'No new heading-contrast regressions detected. See the `pass-142-report` artifact for the shareable HTML report.\n';
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
