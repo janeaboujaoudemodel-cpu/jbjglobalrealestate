@@ -177,43 +177,53 @@ function ToolCard({ tool, index }: { tool: ToolDef; index: number }) {
     >
       <Link
         to={tool.link}
-        className="group relative h-full flex flex-col rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-[#FDFBF7] border border-[#B89555]/40 hover:border-[#B89555]/70 hover:shadow-[0_18px_40px_-22px_rgba(184,149,85,0.35)]"
+        data-surface="emerald"
+        className="group relative h-full flex flex-col rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-white/15 hover:border-white/35 hover:shadow-[0_18px_40px_-22px_rgba(6,95,70,0.55)]"
+        style={{
+          background:
+            "linear-gradient(155deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+        }}
       >
-        {/* Gold hairline top accent */}
+        {/* White hairline top accent */}
         <div
           aria-hidden
           className="absolute top-0 left-4 right-4 h-px pointer-events-none"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.7), transparent)" }}
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)" }}
         />
 
         <div className="flex items-start justify-between mb-4 gap-3 relative">
-          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#EFE6D6] border border-[#B89555]/50">
-            <Icon className="w-5 h-5 text-[#1A1A1A]" />
+          <div
+            className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/25"
+            style={{ background: "rgba(255,255,255,0.08)" }}
+          >
+            <Icon className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
           </div>
           <span
-            className="text-[10px] font-semibold tracking-[0.18em] uppercase px-2 py-1 rounded-md bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A]"
+            className="allow-white text-[10px] font-semibold tracking-[0.18em] uppercase px-2 py-1 rounded-md border border-white/30"
+            style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF" }}
           >
             Free
           </span>
         </div>
 
-        <h3 className="text-[15px] font-semibold leading-snug mb-1.5 relative text-[#1A1A1A]">
+        <h3 className="allow-white text-[15px] font-semibold leading-snug mb-1.5 relative" style={{ color: "#FFFFFF" }}>
           {tool.title}
         </h3>
-        <p className="text-[13px] leading-relaxed line-clamp-2 flex-1 relative text-[#1A1A1A]/70">
+        <p className="allow-white text-[13px] leading-relaxed line-clamp-2 flex-1 relative" style={{ color: "rgba(255,255,255,0.82)" }}>
           {tool.description}
         </p>
 
         <div className="mt-4 flex items-center justify-between text-[12px] font-semibold relative">
-          <span className="text-[#1A1A1A]/75 group-hover:text-[#1A1A1A] transition-colors">
+          <span className="allow-white transition-colors" style={{ color: "rgba(255,255,255,0.9)" }}>
             Open tool
           </span>
-          <ArrowUpRight className="w-4 h-4 text-[#1A1A1A]" />
+          <ArrowUpRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
         </div>
       </Link>
     </motion.div>
   );
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Main page
@@ -343,10 +353,12 @@ const AIHub = () => {
                     document.getElementById("discover-tools")?.scrollIntoView({ behavior: "smooth" })
                   }
                   className="jj-cta-champagne inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
+                  style={{ color: "#1A1A1A" }}
                 >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Explore Free Tools</span>
+                  <Sparkles className="w-4 h-4" style={{ color: "#1A1A1A" }} data-allow-gold />
+                  <span style={{ color: "#1A1A1A" }}>Explore Free Tools</span>
                 </button>
+
 
                 <button
                   data-cta="dark"
@@ -376,22 +388,31 @@ const AIHub = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.06 }}
-                    className="rounded-2xl p-5 text-center bg-[#FDFBF7] border border-[#B89555]/40"
+                    data-surface="emerald"
+                    className="rounded-2xl p-5 text-center border border-white/15"
+                    style={{
+                      background:
+                        "linear-gradient(155deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+                    }}
                   >
                     <div className="flex justify-center mb-3">
-                      <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#EFE6D6] border border-[#B89555]/50">
-                        <Icon className="w-5 h-5 text-[#1A1A1A]" />
+                      <div
+                        className="flex items-center justify-center w-11 h-11 rounded-xl border border-white/25"
+                        style={{ background: "rgba(255,255,255,0.08)" }}
+                      >
+                        <Icon className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
                       </div>
                     </div>
-                    <h3 className="font-semibold text-sm mb-1 text-[#1A1A1A]">
+                    <h3 className="allow-white font-semibold text-sm mb-1" style={{ color: "#FFFFFF" }}>
                       {b.title}
                     </h3>
-                    <p className="text-xs leading-relaxed text-[#1A1A1A]/70">
+                    <p className="allow-white text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
                       {b.desc}
                     </p>
                   </motion.div>
                 );
               })}
+
             </div>
           </div>
         </section>
@@ -405,10 +426,19 @@ const AIHub = () => {
         >
           <div className="container mx-auto px-4 max-w-7xl">
             <div className="text-center max-w-3xl mx-auto mb-10">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 bg-[#F7F2EA] border border-[#B89555]/60 text-[#1A1A1A]">
-                <Sparkles className="w-3 h-3 text-[#1A1A1A]" />
-                All Free Tools
+              <span
+                data-surface="emerald"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 border border-white/25"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>All Free Tools</span>
               </span>
+
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-3 text-[#1A1A1A]">
                 Discover All Free{" "}
                 <span style={{ color: "#B89555" }}>AI Tools</span>
@@ -440,8 +470,8 @@ const AIHub = () => {
                       onClick={() => setToolFilter(f.id)}
                       className={
                         active
-                          ? "jj-pill-active px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-[0.16em] transition-all"
-                          : "px-4 h-10 rounded-full text-[11px] font-semibold uppercase tracking-[0.16em] transition-all bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555]/70"
+                          ? "jj-pill-active px-4 h-10 rounded-xl text-[11px] font-semibold uppercase tracking-[0.16em] transition-all"
+                          : "px-4 h-10 rounded-xl text-[11px] font-semibold uppercase tracking-[0.16em] transition-all bg-[#F7F2EA] border border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:border-[#B89555]"
                       }
                     >
                       {f.label}
@@ -449,6 +479,7 @@ const AIHub = () => {
                   );
                 })}
               </div>
+
             </div>
 
             {filteredTools.length === 0 ? (
@@ -472,23 +503,27 @@ const AIHub = () => {
         </section>
 
         {/* ════════════════════════════════════════════════════════════════
-            BOTTOM CTA BAND — navy (#0A0A0A) with white text, gold hairline
+            BOTTOM CTA BAND — emerald ombré, white ink, white hairline
         ════════════════════════════════════════════════════════════════ */}
         <section
+          data-surface="emerald"
           data-allow-dark-cta
           data-on-dark
           className="py-16 md:py-20 relative overflow-hidden"
-          style={{ background: "#0A0A0A" }}
+          style={{
+            background:
+              "linear-gradient(155deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+          }}
         >
           <div
             aria-hidden
             className="absolute inset-x-0 top-0 h-px"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.65), transparent)" }}
+            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)" }}
           />
           <div
             aria-hidden
             className="absolute inset-x-0 bottom-0 h-px"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.65), transparent)" }}
+            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)" }}
           />
           <div className="container mx-auto px-4 max-w-3xl text-center relative">
             <h2
@@ -497,46 +532,61 @@ const AIHub = () => {
             >
               {user ? (
                 <>
-                  Welcome back to your{" "}
-                  <span style={{ color: "#E8C76A" }}>Command Center</span>
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Welcome back to your </span>
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Command Center</span>
                 </>
               ) : (
                 <>
-                  Start using{" "}
-                  <span style={{ color: "#E8C76A" }}>All Free AI Tools</span>
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Start using </span>
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>All Free AI Tools</span>
                 </>
               )}
             </h2>
             <p
               className="mb-8 max-w-xl mx-auto allow-white"
-              style={{ color: "rgba(255,255,255,0.85)" }}
+              style={{ color: "rgba(255,255,255,0.9)" }}
             >
               60+ free tools for property analysis, corporate documents, creative design, and productivity.
             </p>
             <button
-              data-cta="dark"
               onClick={() =>
                 user
                   ? document.getElementById("discover-tools")?.scrollIntoView({ behavior: "smooth" })
                   : navigate("/auth?redirect=/ai-hub")
               }
-              className="jj-cta-dark inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm font-semibold"
+              className="allow-white inline-flex items-center justify-center gap-2 h-12 px-7 rounded-xl text-sm font-semibold border border-white/40 hover:border-white/70 transition-all"
+              style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF" }}
             >
-              <Sparkles className="w-4 h-4" />
-              <span>
+              <Sparkles className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>
                 {user ? "Explore Tools Above" : "Sign In / Create Account"}
               </span>
-              <ArrowUpRight className="w-4 h-4" />
+              <ArrowUpRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
             </button>
           </div>
         </section>
 
+
         {/* HOW IT WORKS */}
         <section className="jj-band jj-band--surface py-16 md:py-20">
           <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-10 tracking-tight">
-              How It Works
-            </h2>
+            <div className="text-center mb-10">
+              <span
+                data-surface="emerald"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 border border-white/25"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Simple Workflow</span>
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+                How It Works
+              </h2>
+            </div>
             <ol className="space-y-4">
               {[
                 { n: 1, t: "Input your scenario", d: "Enter the verified figures you want to model." },
@@ -545,7 +595,16 @@ const AIHub = () => {
                 { n: 4, t: "Share a formatted snapshot", d: "Brokers and teams can export a clean client-ready summary where available." },
               ].map((s) => (
                 <li key={s.n} className="flex items-start gap-5 rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-5">
-                  <span className="shrink-0 w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 flex items-center justify-center text-[#1A1A1A] font-bold">
+                  <span
+                    data-surface="emerald"
+                    className="allow-white shrink-0 w-10 h-10 rounded-full border border-white/20 flex items-center justify-center font-bold"
+                    style={{
+                      background:
+                        "linear-gradient(155deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+                      color: "#FFFFFF",
+                      boxShadow: "0 6px 16px -8px rgba(6,95,70,0.55)",
+                    }}
+                  >
                     {s.n}
                   </span>
                   <div>
@@ -561,12 +620,36 @@ const AIHub = () => {
         {/* TRANSPARENCY & RESPONSIBLE USE — UAE-aligned */}
         <section className="jj-band jj-band--raised py-16 md:py-20">
           <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-8 tracking-tight">
-              Transparency & Responsible Use
-            </h2>
+            <div className="text-center mb-8">
+              <span
+                data-surface="emerald"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 border border-white/25"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Shield className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>UAE Aligned</span>
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+                Transparency & Responsible Use
+              </h2>
+            </div>
             <div className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/40 p-6 md:p-8">
               <div className="flex items-start gap-4">
-                <Shield className="w-7 h-7 text-[#1A1A1A] shrink-0 mt-1" />
+                <div
+                  data-surface="emerald"
+                  className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center border border-white/20 mt-0.5"
+                  style={{
+                    background:
+                      "linear-gradient(155deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+                    boxShadow: "0 6px 16px -8px rgba(6,95,70,0.55)",
+                  }}
+                >
+                  <Shield className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+                </div>
                 <div className="space-y-3 text-[#1A1A1A]/80 leading-relaxed">
                   <p>
                     Outputs are generated from the inputs you provide and structured logic. They are <strong>informational only</strong> and do not constitute investment, legal, tax, valuation, or regulated brokerage advice under UAE law.
@@ -586,12 +669,27 @@ const AIHub = () => {
         {/* FAQ — UAE-aligned */}
         <section id="ai-hub-faq" className="jj-band jj-band--surface py-16 md:py-20">
           <div className="container mx-auto px-4 max-w-4xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] text-center mb-10 tracking-tight">
-              Frequently Asked Questions
-            </h2>
+            <div className="text-center mb-10">
+              <span
+                data-surface="emerald"
+                className="allow-white inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] mb-4 border border-white/25"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Common Questions</span>
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+                Frequently Asked Questions
+              </h2>
+            </div>
             <AIHubFaqSection />
           </div>
         </section>
+
       </main>
     </>
   );
@@ -652,17 +750,18 @@ function AIHubFaqSection() {
           <AccordionItem
             key={i}
             value={`ai-hub-faq-${i}`}
-            className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 px-5"
+            className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden transition-colors hover:bg-[#F7F2EA]"
           >
-            <AccordionTrigger className="text-left text-[#1A1A1A] hover:no-underline py-4">
+            <AccordionTrigger className="w-full text-left text-[#1A1A1A] hover:no-underline py-4 px-5 hover:bg-[#EFE6D6]/40 transition-colors">
               <span className="font-semibold">{faq.question}</span>
             </AccordionTrigger>
-            <AccordionContent className="text-[#1A1A1A]/75 leading-relaxed pb-5">
+            <AccordionContent className="text-[#1A1A1A]/75 leading-relaxed pb-5 px-5">
               {faq.answer}
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
+
     </>
   );
 }
