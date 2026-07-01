@@ -250,15 +250,18 @@ export default function ReportPreviewModal({
 
   // Reusable button styles
   const primaryBtn: React.CSSProperties = {
-    backgroundImage: C.emeraldGradient,
+    background: "#064E3B",
+    backgroundImage: "none",
     backgroundColor: "#064E3B",
     color: "#FFFFFF",
+    WebkitTextFillColor: "#FFFFFF",
     border: 0,
     boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)",
   };
   const secondaryBtn: React.CSSProperties = {
     background: "#FFFFFF",
     color: C.ink,
+    WebkitTextFillColor: C.ink,
     border: `1px solid ${C.goldSoft}`,
   };
 
@@ -320,6 +323,17 @@ export default function ReportPreviewModal({
           #jbj-aihf-preview-root [data-aihf-scope-row] *,
           #jbj-aihf-preview-root [data-aihf-scope-text] {
             color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
+          }
+          #jbj-aihf-preview-root [data-aihf-primary-btn],
+          #jbj-aihf-preview-root [data-aihf-primary-btn] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
+          }
+          #jbj-aihf-preview-root [data-aihf-secondary-btn],
+          #jbj-aihf-preview-root [data-aihf-secondary-btn] * {
+            color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important;
+          }
+          #jbj-aihf-preview-root [data-report-root] [data-report-page] {
+            overflow: hidden !important;
           }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
@@ -529,7 +543,7 @@ export default function ReportPreviewModal({
           <div className="overflow-y-auto p-5" style={{ background: C.raised }}>
             <p className="text-xs uppercase tracking-widest mb-3 font-semibold" style={{ color: C.muted }}>Live Preview</p>
             {(() => {
-              const previewWidth = 560;
+              const previewWidth = Math.min(560, Math.max(320, window.innerWidth - 430));
               const scale = previewWidth / REPORT_PAGE_PX.width;
               // Engine renders exactly 6 fixed pages + N matched property detail pages (max 3).
               const pageCount = 6 + Math.min(previewProjects.length, 3);
@@ -576,13 +590,13 @@ export default function ReportPreviewModal({
 
         {/* Actions */}
         <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>
-          <Button onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold" style={secondaryBtn}>
             <LinkIcon className="w-4 h-4 mr-2" /> Copy text
           </Button>
-          <Button onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold" style={secondaryBtn}>
             <MessageCircle className="w-4 h-4 mr-2" /> Share WhatsApp
           </Button>
-          <Button onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold" style={secondaryBtn}>
             <Mail className="w-4 h-4 mr-2" /> Share Email
           </Button>
           <Button data-aihf-primary-btn onClick={() => run("jbj", () => onSendToConsultant(branding))} disabled={busy === "jbj"} className="font-semibold allow-white" style={primaryBtn}>
