@@ -17,8 +17,9 @@ interface BusinessCardPrivacyNoticeProps {
   onDecline: () => void;
 }
 
-// Rose neon palette (matches the Business Card Scanner tool theme)
-const ACCENT = "#FFFFFF"; // emerald-500
+// Emerald scanner palette: emerald CTAs, pure-white ink, white hairlines — no gold.
+const ACCENT = "#FFFFFF";
+const CTA_GRADIENT = "linear-gradient(135deg, #065F46 0%, #04231A 58%, #022c1c 100%)";
 const ACCENT_SOFT = "rgba(255,255,255,0.14)";
 const ACCENT_BORDER = "rgba(255,255,255,0.45)";
 const ACCENT_GLOW =
@@ -228,10 +229,10 @@ const BusinessCardPrivacyNotice = ({
               data-no-contrast-guard
               className="allow-white h-10 px-5 disabled:opacity-50"
               style={{
-                background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
+                background: CTA_GRADIENT,
                 color: "#FFFFFF",
                 border: `1px solid ${ACCENT_BORDER}`,
-                boxShadow: "0 12px 30px -12px rgba(255,255,255,0.55)",
+                boxShadow: "0 12px 30px -12px rgba(6,95,70,0.78)",
               }}
               disabled={!agreed}
               onClick={async () => {

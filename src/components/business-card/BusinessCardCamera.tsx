@@ -39,10 +39,16 @@ type ScanStatus =
   | "success"
   | "error";
 
-// Emerald-dark scanner palette (white ink, white hairlines — no gold)
-const ACCENT = "#FFFFFF";
+// Emerald-dark scanner palette (emerald surfaces, pure-white ink, white hairlines — no gold)
+const WHITE = "#FFFFFF";
+const EMERALD = "#065F46";
+const EMERALD_DEEP = "#04231A";
+const EMERALD_INK = "#022c1c";
+const ACCENT = WHITE;
 const ACCENT_SOFT = "rgba(255,255,255,0.14)";
 const ACCENT_BORDER = "rgba(255,255,255,0.45)";
+const CTA_GRADIENT = `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DEEP} 58%, ${EMERALD_INK} 100%)`;
+const CTA_SHADOW = "0 14px 36px -14px rgba(6,95,70,0.88)";
 const PANEL_BG =
   "linear-gradient(180deg, #0a1a12 0%, #04120a 55%, #000000 100%)";
 
@@ -423,12 +429,13 @@ const BusinessCardCamera = ({
 
       {/* Preview frame — video element ALWAYS mounted (so videoRef is always live) */}
       <div
-        className={`relative rounded-xl overflow-hidden ${isCameraReady ? "aspect-[4/3]" : "min-h-[520px]"}`}
+        className={`relative rounded-xl overflow-hidden ${isCameraReady ? "aspect-[4/3]" : ""}`}
         style={{
+          minHeight: isCameraReady ? undefined : "clamp(380px, 52vh, 500px)",
           background: PANEL_BG,
           border: `1px solid ${ACCENT_BORDER}`,
           boxShadow:
-            "0 0 0 1px rgba(255,255,255,0.18), 0 20px 60px -24px rgba(255,255,255,0.45)",
+            "0 0 0 1px rgba(255,255,255,0.18), 0 20px 60px -24px rgba(6,95,70,0.65)",
         }}
       >
         {/* Always-mounted video — hidden when not ready */}
@@ -446,10 +453,11 @@ const BusinessCardCamera = ({
 
         {!isCameraReady && (
           <div
-            className="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center w-full h-full min-h-[520px]"
+            className="flex flex-col items-center justify-center gap-4 px-4 sm:px-6 py-8 text-center w-full h-full"
             style={{
+              minHeight: "clamp(380px, 52vh, 500px)",
               background:
-                "radial-gradient(800px 400px at 50% 0%, rgba(255,255,255,0.18), transparent 60%), " +
+                "radial-gradient(800px 400px at 50% 0%, rgba(6,95,70,0.32), transparent 62%), " +
                 PANEL_BG,
             }}
           >
@@ -458,9 +466,9 @@ const BusinessCardCamera = ({
               <div
                 className="w-20 h-20 rounded-2xl flex items-center justify-center"
                 style={{
-                  background: ACCENT_SOFT,
+                  background: CTA_GRADIENT,
                   border: `1px solid ${ACCENT_BORDER}`,
-                  boxShadow: `0 0 30px ${ACCENT}55`,
+                  boxShadow: "0 18px 42px -18px rgba(6,95,70,0.95), inset 0 1px 0 rgba(255,255,255,0.18)",
                 }}
               >
                 <Camera className="h-9 w-9 allow-white" style={{ color: ACCENT }} />
@@ -470,7 +478,7 @@ const BusinessCardCamera = ({
                 animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.1, 0.4] }}
                 transition={{ duration: 2.2, repeat: Infinity }}
                 className="absolute inset-0 rounded-2xl"
-                style={{ border: `1px solid ${ACCENT}` }}
+                style={{ border: `1px solid rgba(255,255,255,0.45)` }}
               />
             </div>
 
@@ -499,10 +507,10 @@ const BusinessCardCamera = ({
               data-no-contrast-guard
               className="allow-white gap-2 px-6 py-5 rounded-xl font-semibold"
               style={{
-                background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
+                background: CTA_GRADIENT,
                 color: "#FFFFFF",
                 border: `1px solid ${ACCENT_BORDER}`,
-                boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+                boxShadow: CTA_SHADOW,
               }}
             >
               {starting ? (
@@ -569,7 +577,7 @@ const BusinessCardCamera = ({
             >
               <span
                 className="w-1.5 h-1.5 rounded-full animate-pulse"
-                style={{ background: "#34d399" }}
+                style={{ background: "#FFFFFF" }}
               />
               <span className="text-[10px] font-medium tracking-wide allow-white" style={{ color: "#FFFFFF" }}>
                 LIVE
@@ -611,10 +619,10 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white gap-2 h-12 px-7 rounded-xl font-semibold"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
+              background: CTA_GRADIENT,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
-              boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+              boxShadow: CTA_SHADOW,
             }}
           >
             <Zap className="h-4 w-4" />
@@ -654,7 +662,7 @@ const BusinessCardCamera = ({
             <div className="flex items-center gap-2">
               <div
                 className="w-7 h-7 rounded-full flex items-center justify-center"
-                style={{ background: ACCENT_SOFT, border: `1px solid ${ACCENT_BORDER}` }}
+                style={{ background: CTA_GRADIENT, border: `1px solid ${ACCENT_BORDER}` }}
               >
                 <CheckCircle className="h-3.5 w-3.5 allow-white" style={{ color: ACCENT }} />
               </div>
@@ -694,10 +702,10 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white w-full gap-2 h-11 rounded-xl font-semibold"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
+              background: CTA_GRADIENT,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
-              boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+              boxShadow: CTA_SHADOW,
             }}
           >
             {isProcessing ? (

@@ -162,6 +162,8 @@ const BusinessCardUpload = ({
   };
 
   const ACCENT = "#FFFFFF";
+  const CTA_GRADIENT = "linear-gradient(135deg, #065F46 0%, #04231A 58%, #022c1c 100%)";
+  const CTA_SHADOW = "0 14px 36px -14px rgba(6,95,70,0.88)";
   const ACCENT_BORDER = "rgba(255,255,255,0.55)";
 
   return (
@@ -171,7 +173,7 @@ const BusinessCardUpload = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`bcs-drop rounded-xl p-8 text-center transition-colors flex items-center justify-center min-h-[460px] ${isDragging ? "is-dragging" : ""}`}
+        className={`bcs-drop rounded-xl p-5 sm:p-8 text-center transition-colors flex items-center justify-center min-h-[360px] sm:min-h-[420px] ${isDragging ? "is-dragging" : ""}`}
         style={{
           border: `2px dashed ${ACCENT_BORDER}`,
           background: isDragging ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.03)",
@@ -193,9 +195,9 @@ const BusinessCardUpload = ({
           <div
             className="p-4 rounded-full"
             style={{
-              background: "rgba(255,255,255,0.14)",
+              background: CTA_GRADIENT,
               border: `1px solid ${ACCENT_BORDER}`,
-              boxShadow: `0 0 24px ${ACCENT}33`,
+              boxShadow: "0 18px 42px -18px rgba(6,95,70,0.95), inset 0 1px 0 rgba(255,255,255,0.18)",
             }}
           >
             <Upload className="h-8 w-8 allow-white" style={{ color: ACCENT }} />
@@ -212,10 +214,10 @@ const BusinessCardUpload = ({
             data-no-contrast-guard
             className="allow-white gap-2"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
+              background: CTA_GRADIENT,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
-              boxShadow: `0 12px 30px -14px ${ACCENT}88`,
+              boxShadow: CTA_SHADOW,
             }}
           >
             <ImageIcon className="h-4 w-4" />
@@ -258,7 +260,7 @@ const BusinessCardUpload = ({
                 <button
                   onClick={() => removeFile(index)}
                   className="absolute top-2 right-2 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ background: ACCENT, color: "#FFFFFF" }}
+                  style={{ background: CTA_GRADIENT, color: "#FFFFFF", border: `1px solid ${ACCENT_BORDER}` }}
                   aria-label="Remove image"
                 >
                   <X className="h-3 w-3" />
@@ -278,10 +280,10 @@ const BusinessCardUpload = ({
             data-no-contrast-guard
             className="allow-white w-full gap-2 h-11 rounded-xl font-semibold"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
+              background: CTA_GRADIENT,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
-              boxShadow: `0 14px 36px -14px ${ACCENT}88`,
+              boxShadow: CTA_SHADOW,
             }}
             onClick={processImages}
             disabled={isProcessing}
