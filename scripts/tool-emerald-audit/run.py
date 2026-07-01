@@ -98,8 +98,12 @@ async def audit_route(page, route: str):
         "violations": {}, "breach": [],
     }
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=25000)
-        await page.wait_for_timeout(1600)
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        # Give the app time to hydrate and mount the tool shell.
+        for _ in range(6):
+            await page.wait_for_timeout(1000)
+            if await page.query_selector("[data-tool-emerald]"):
+                break
         result["reachable"] = True
 
         shell = await page.query_selector("[data-tool-emerald]")
