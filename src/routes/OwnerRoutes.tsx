@@ -182,12 +182,8 @@ export const OwnerRoutes = () => (
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />
     <Route path="crm/zoho" element={<Navigate to="/owner/crm/jbj" replace />} />
-    <Route path="crm/jbj" element={<JbjCrmShell />}>
-      <Route index element={<JbjCrmHome />} />
-      <Route path="integrations" element={<JbjCrmIntegrations />} />
-      <Route path="settings/roles" element={<JbjCrmRoles />} />
-      <Route path=":section" element={<JbjCrmModulePage section="leads" />} />
-    </Route>
+    {/* /owner/crm/jbj is mounted OUTSIDE this shell — see top of OwnerRoutes for the standalone route. */}
+
     {/* Deprecated direct entry kept for deep links */}
     <Route path="crm/zoho-legacy" element={<ZohoCRMPage />} />
     <Route path="academy-approvals" element={<OwnerAcademyApprovals />} />
