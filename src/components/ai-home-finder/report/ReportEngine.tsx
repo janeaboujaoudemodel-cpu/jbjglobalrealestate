@@ -730,6 +730,10 @@ function ReportVerdictBadge({ verdict }: { verdict: Verdict }) {
   const v = verdictCopy[verdict];
   const isMatch = verdict === "match";
   const isClose = verdict === "close";
+  const badgeBackground = isMatch ? T.emeraldGradient : isClose ? T.raised : WHITE;
+  const badgeBackgroundColor = isMatch ? T.emeraldDeep : isClose ? T.raised : WHITE;
+  const badgeBackgroundImage = isMatch ? T.emeraldGradient : "none";
+  const badgeColor = isMatch ? WHITE : T.ink;
   return (
     <span
       data-report-pill
@@ -741,12 +745,12 @@ function ReportVerdictBadge({ verdict }: { verdict: Verdict }) {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        background: isMatch ? T.emeraldGradient : isClose ? T.raised : WHITE,
-        backgroundColor: isMatch ? T.emeraldDeep : isClose ? T.raised : WHITE,
-        backgroundImage: isMatch ? T.emeraldGradient : "none",
+        background: badgeBackground,
+        backgroundColor: badgeBackgroundColor,
+        backgroundImage: badgeBackgroundImage,
         border: `1px solid ${isMatch ? T.gold : isClose ? T.gold : T.goldHair}`,
-        color: isMatch ? WHITE : T.ink,
-        WebkitTextFillColor: isMatch ? WHITE : T.ink,
+        color: badgeColor,
+        WebkitTextFillColor: badgeColor,
         fontSize: 9.2,
         lineHeight: 1,
         fontWeight: 900,
