@@ -14,10 +14,9 @@ const OwnerInbox = lazy(() => import("@/pages/OwnerInbox"));
 const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
 const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
-const ZohoCRMPage = lazy(() => import("@/pages/owner/crm/ZohoCRMPage"));
-const JbjCrmShell = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmShell"));
-const JbjCrmHome = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmHome"));
-const JbjCrmModulePage = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmModulePage"));
+const CrmShell = lazy(() => import("@/pages/owner/crm/shell/CrmShell"));
+const CrmHome = lazy(() => import("@/pages/owner/crm/shell/CrmHome"));
+const CrmModulePage = lazy(() => import("@/pages/owner/crm/shell/CrmModulePage"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
@@ -129,12 +128,12 @@ export const OwnerRoutes = () => (
     path="/owner/crm/jbj"
     element={
       <OwnerGuard>
-        <JbjCrmShell />
+        <CrmShell />
       </OwnerGuard>
     }
   >
-    <Route index element={<JbjCrmHome />} />
-    <Route path=":section" element={<JbjCrmModulePage />} />
+    <Route index element={<CrmHome />} />
+    <Route path=":section" element={<CrmModulePage />} />
   </Route>
 
   <Route path="/owner" element={
@@ -180,8 +179,8 @@ export const OwnerRoutes = () => (
     <Route path="crm/zoho" element={<Navigate to="/owner/crm/jbj" replace />} />
     {/* /owner/crm/jbj is mounted OUTSIDE this shell — see top of OwnerRoutes for the standalone route. */}
 
-    {/* Deprecated direct entry kept for deep links */}
-    <Route path="crm/zoho-legacy" element={<ZohoCRMPage />} />
+    {/* Legacy Zoho embed removed — CRM is standalone JBJ. */}
+    <Route path="crm/zoho-legacy" element={<Navigate to="/owner/crm/jbj" replace />} />
     <Route path="academy-approvals" element={<OwnerAcademyApprovals />} />
     <Route path="academy-access" element={<OwnerAcademyAccessQueue />} />
     <Route path="crm/academy" element={<OwnerAcademyApprovals />} />
