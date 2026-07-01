@@ -177,6 +177,7 @@ export default function ReportPreviewModal({
         "[data-aihf-darkband]","[data-aihf-darkband] *",
         "[data-aihf-role-chip]","[data-aihf-role-chip] *",
         '[data-aihf-include-btn][data-active="true"]','[data-aihf-include-btn][data-active="true"] *',
+        "[data-aihf-primary-btn]","[data-aihf-primary-btn] *",
         "[data-on-dark]","[data-on-dark] *",
         '[data-surface="emerald"]','[data-surface="emerald"] *',
         "[data-aihf-scope-row]","[data-aihf-scope-row] *","[data-aihf-scope-text]",
@@ -187,6 +188,10 @@ export default function ReportPreviewModal({
       });
       root.querySelectorAll<HTMLElement>("[data-aihf-scope-dot]").forEach((el) => {
         el.style.setProperty("background-color", "#FFFFFF", "important");
+      });
+      root.querySelectorAll<HTMLElement>("[data-aihf-secondary-btn], [data-aihf-secondary-btn] *").forEach((el) => {
+        el.style.setProperty("color", "#1A1A1A", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
       });
     };
     tick();
@@ -271,7 +276,7 @@ export default function ReportPreviewModal({
         id="jbj-aihf-preview-root"
         data-no-contrast-guard
         data-aihf-preview
-        className="sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
+        className="w-[min(1120px,calc(100vw-24px))] sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
         style={{ background: C.page }}
       >
         {/* ID-anchored overrides — (1,*,*) specificity always beats the global
@@ -345,9 +350,9 @@ export default function ReportPreviewModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-[380px_1fr] gap-0 overflow-hidden flex-1 min-h-0">
+        <div className="grid md:grid-cols-[380px_minmax(0,1fr)] gap-0 overflow-hidden flex-1 min-h-0 min-w-0">
           {/* LEFT — branding form */}
-          <div className="overflow-y-auto px-5 py-4 border-r space-y-4" style={{ borderColor: C.goldHair, background: C.surface }}>
+          <div className="overflow-y-auto px-5 py-4 border-r space-y-4 min-w-0" style={{ borderColor: C.goldHair, background: C.surface }}>
             {/* Auto-detected role chip (read-only, synced to active mode) */}
             <div>
               <Label className="text-xs font-semibold uppercase tracking-wide" style={{ color: C.ink }}>Profile / Role</Label>
@@ -417,7 +422,7 @@ export default function ReportPreviewModal({
                     onClick={() => update({ showOfficeAddress: !branding.showOfficeAddress })}
                     className="relative shrink-0 inline-flex h-6 w-11 items-center rounded-full transition"
                     style={{
-                      backgroundImage: branding.showOfficeAddress ? C.emeraldGradient : undefined,
+                      backgroundImage: "none",
                       backgroundColor: branding.showOfficeAddress ? "#064E3B" : "#E5DCC8",
                       border: `1px solid ${branding.showOfficeAddress ? "#064E3B" : C.goldSoft}`,
                     }}
@@ -540,10 +545,12 @@ export default function ReportPreviewModal({
               with CSS transform so they fit the preview pane. The DOM size
               and the PDF output stay byte-equivalent — there is no second
               layout anywhere. */}
-          <div className="overflow-y-auto p-5" style={{ background: C.raised }}>
+          <div className="overflow-y-auto p-5 min-w-0" style={{ background: C.raised }}>
             <p className="text-xs uppercase tracking-widest mb-3 font-semibold" style={{ color: C.muted }}>Live Preview</p>
             {(() => {
-              const previewWidth = Math.min(560, Math.max(320, window.innerWidth - 430));
+              const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1120;
+              const availablePreviewWidth = viewportWidth < 768 ? viewportWidth - 64 : viewportWidth - 430;
+              const previewWidth = Math.min(560, Math.max(280, availablePreviewWidth));
               const scale = previewWidth / REPORT_PAGE_PX.width;
               // Engine renders exactly 6 fixed pages + N matched property detail pages (max 3).
               const pageCount = 6 + Math.min(previewProjects.length, 3);
