@@ -373,7 +373,7 @@ const BusinessCardScanner = () => {
 
 
   return (
-    <ToolAnimatedFrame theme={toolThemes.rose}>
+    <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
       data-no-contrast-guard
       data-allow-dark-cta

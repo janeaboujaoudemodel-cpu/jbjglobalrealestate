@@ -39,7 +39,7 @@ import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
 import { useGuidedRequiredFields } from "@/hooks/useGuidedRequiredFields";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
-const theme = toolThemes.burgundy;
+const theme = toolThemes.emerald;
 
 const dubaiCommunities = [
   "Downtown Dubai",
@@ -114,16 +114,13 @@ const FormLabel = ({
   children: React.ReactNode;
   required?: boolean;
 }) => (
-  <Label
-    className="flex items-center gap-2 mb-2 text-sm font-semibold"
-    style={{ color: "#1A1A1A" }}
-  >
+  <Label className="flex items-center gap-2 mb-2 text-sm font-semibold ri-label">
     {Icon && (
       <span
         className="inline-flex items-center justify-center w-6 h-6 rounded-md"
         style={{
-          background: theme.accentSoft,
-          border: `1px solid ${theme.accentBorder}`,
+          background: "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.34)",
         }}
       >
         <Icon className="w-3.5 h-3.5" style={BRAND_ICON_STYLE} />
@@ -132,7 +129,7 @@ const FormLabel = ({
     <span>
       {children}
       {required && (
-        <span style={{ color: theme.accent }} className="ml-0.5">
+        <span style={{ color: "#6EE7B7" }} className="ml-0.5">
           *
         </span>
       )}
@@ -153,18 +150,18 @@ const SectionHeader = ({
     <span
       className="inline-flex items-center justify-center w-11 h-11 rounded-xl"
       style={{
-        background: theme.accentSoft,
-        border: `1px solid ${theme.accentBorder}`,
+          background: "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.34)",
       }}
     >
       <Icon className="w-5 h-5" style={BRAND_ICON_STYLE} />
     </span>
     <div>
-      <h2 className="text-xl font-bold" style={{ color: "#1A1A1A" }}>
+        <h2 className="text-xl font-bold ri-heading">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-sm ri-dim" style={{ color: "rgba(26,26,26,0.72)" }}>
+        <p className="text-sm ri-dim">
           {subtitle}
         </p>
       )}
@@ -236,49 +233,50 @@ const RentalIndex = () => {
       eyebrow="AI Rental Index"
       title={
         <>
-          Dubai <span style={{ color: "#B89555" }}>Rental Index</span> Evaluator
+          Dubai <span style={{ color: "#FFFFFF" }}>Rental Index</span> Evaluator
         </>
       }
       subtitle="AI-powered rental estimates for any Dubai property. Live market rates, trends and investment context — sourced from DLD, RERA and our internal data fabric."
     >
-      {/* Brand-aligned local tokens — champagne surfaces, ink text, gold hairline */}
+      {/* Property Measurement parity — black cards, white hairlines, emerald CTAs */}
       <style>{`
-        .ri-root { color: #1A1A1A; }
-        .ri-root .ri-dim { color: rgba(26,26,26,0.72); }
-        .ri-root .ri-accent { color: #B89555; }
+        .ri-root { color: #FFFFFF; }
+        .ri-root .ri-heading, .ri-root .ri-label { color: rgba(255,255,255,0.96) !important; -webkit-text-fill-color: rgba(255,255,255,0.96) !important; }
+        .ri-root .ri-dim { color: rgba(255,255,255,0.74) !important; -webkit-text-fill-color: rgba(255,255,255,0.74) !important; }
+        .ri-root .ri-accent { color: #6EE7B7 !important; -webkit-text-fill-color: #6EE7B7 !important; }
         .ri-card {
-          background: #F7F2EA;
-          border: 1px solid rgba(184,149,85,0.45);
+          background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%);
+          border: 1px solid rgba(255,255,255,0.42);
           border-radius: 1rem;
         }
         .ri-card-soft {
-          background: #FDFBF7;
-          border: 1px solid rgba(184,149,85,0.35);
+          background: linear-gradient(135deg, rgba(8,18,13,0.94) 0%, rgba(3,8,5,0.97) 58%, rgba(0,0,0,1) 100%);
+          border: 1px solid rgba(255,255,255,0.34);
           border-radius: 1rem;
         }
-        .ri-input, .ri-root [data-radix-select-trigger], .ri-root input, .ri-root [role="combobox"] {
-          background: #FDFBF7 !important;
-          border: 1px solid rgba(184,149,85,0.45) !important;
-          color: #1A1A1A !important;
-          -webkit-text-fill-color: #1A1A1A !important;
+        .ri-root button.ri-input[role="combobox"], .ri-root .ri-input, .ri-root [data-radix-select-trigger], .ri-root input, .ri-root [role="combobox"] {
+          background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
         }
         .ri-input::placeholder, .ri-root input::placeholder {
-          color: rgba(26,26,26,0.45) !important;
-          -webkit-text-fill-color: rgba(26,26,26,0.45) !important;
+          color: rgba(255,255,255,0.55) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
         }
-        .ri-input:focus, .ri-root input:focus, .ri-root [data-radix-select-trigger]:focus {
-          border-color: #B89555 !important;
-          box-shadow: 0 0 0 3px rgba(184,149,85,0.20) !important;
+        .ri-root button.ri-input[role="combobox"]:focus, .ri-input:focus, .ri-root input:focus, .ri-root [data-radix-select-trigger]:focus {
+          border-color: rgba(110,231,183,0.82) !important;
+          box-shadow: 0 0 0 3px rgba(16,185,129,0.22) !important;
           outline: none !important;
         }
         .ri-root .ri-tile {
-          background: #FDFBF7;
-          border: 1px solid rgba(184,149,85,0.35);
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.28);
           border-radius: 0.75rem;
         }
         .ri-root .ri-tile-strong {
-          background: #EFE6D6;
-          border: 1px solid rgba(184,149,85,0.55);
+          background: linear-gradient(135deg, rgba(6,78,59,0.55), rgba(0,0,0,0.7));
+          border: 1px solid rgba(255,255,255,0.38);
           border-radius: 0.75rem;
         }
       `}</style>
@@ -351,8 +349,8 @@ const RentalIndex = () => {
             </div>
           </div>
 
-          <AnimatedShineCTA
-            tone="burgundy"
+            <AnimatedShineCTA
+            tone="emerald"
             onClick={handleAnalyze}
             loading={isLoading}
             fullWidth
@@ -439,13 +437,13 @@ const RentalIndex = () => {
               <Link to="/contact">
                 <button
                   className="inline-flex items-center gap-2 px-7 py-5 rounded-xl text-base font-bold transition-all"
-                  style={{
-                    background: "rgba(10,2,4,0.65)",
-                    color: "#FBEAEC",
-                    border: `1px solid ${theme.accent}`,
+                    style={{
+                    background: "linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)",
+                    color: "#FFFFFF",
+                    border: "1px solid rgba(255,255,255,0.46)",
                   }}
                 >
-                  <FileText className="w-4 h-4" style={{ color: "#1A1A1A" }} />
+                  <FileText className="w-4 h-4" style={{ color: "#FFFFFF" }} />
                   Consult an Expert
                 </button>
               </Link>
@@ -474,8 +472,8 @@ const RentalIndex = () => {
                 <span
                   className="inline-flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
                   style={{
-                    background: "rgba(139,30,46,0.35)",
-                    border: "1px solid rgba(242,165,174,0.55)",
+                     background: "rgba(255,255,255,0.08)",
+                     border: "1px solid rgba(255,255,255,0.34)",
                   }}
                 >
                   <c.icon className="w-5 h-5" style={{ color: "#1A1A1A" }} />

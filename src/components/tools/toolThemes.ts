@@ -4,8 +4,8 @@
  * Every tool (front-end + owner/back-end) renders on the same emerald
  * ombré surface pioneered by Interior Design AI / Property Measurement:
  *   background: linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)
- * Text is pure white; hairlines are gold #B89555; primary CTAs are emerald
- * metallic with white ink. No champagne fills inside a tool.
+ * Text is pure white; tool-panel hairlines are white; primary CTAs are
+ * emerald metallic with white ink. No champagne fills inside a tool body.
  */
 
 export type ToolTheme = {
@@ -38,7 +38,7 @@ const EMERALD_INK = "#000000";
 const GOLD = "#B89555";
 const WHITE = "#FFFFFF";
 
-// Ombré used everywhere (page wash, hero, body)
+// Ombré used for headers/accent bands; body panels fade to black.
 const OMBRE = `linear-gradient(180deg, ${EMERALD_DEEP} 0%, ${EMERALD_MID} 48%, ${EMERALD_INK} 100%)`;
 
 const emeraldTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
@@ -47,14 +47,14 @@ const emeraldTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   accent: GOLD,
   heroGradient: `linear-gradient(180deg, ${EMERALD_DEEP} 0%, ${EMERALD_MID} 60%, ${EMERALD_INK} 100%)`,
   accentSoft: `rgba(184,149,85,0.12)`,
-  accentBorder: `rgba(184,149,85,0.55)`,
+  accentBorder: `rgba(255,255,255,0.42)`,
   // Primary CTA: emerald metallic → deeper emerald
   ctaGradient: `linear-gradient(135deg, #10B981 0%, #059669 55%, ${EMERALD_DEEP} 100%)`,
   ctaHover: `linear-gradient(135deg, ${EMERALD_DEEP} 0%, #059669 55%, #10B981 100%)`,
   chipBg: `rgba(6,78,59,0.55)`,
-  chipBorder: `rgba(184,149,85,0.55)`,
-  // Outer shell border: gold hairline (subtle) — no rainbow
-  borderConic: `conic-gradient(from 0deg, ${GOLD}, rgba(184,149,85,0.35), ${GOLD}, rgba(184,149,85,0.35), ${GOLD})`,
+  chipBorder: `rgba(255,255,255,0.42)`,
+  // Outer shell border: white hairline — no gold frame around fullscreen/tools
+  borderConic: `conic-gradient(from 0deg, rgba(255,255,255,0.72), rgba(255,255,255,0.24), rgba(255,255,255,0.72), rgba(255,255,255,0.24), rgba(255,255,255,0.72))`,
   pageWash: OMBRE,
 });
 
@@ -72,6 +72,7 @@ export const toolThemes: Record<ToolTheme["id"], ToolTheme> = {
 /** Universal tool surface tokens */
 export const TOOL_PAGE_BG = OMBRE;
 export const TOOL_CARD_BG =
-  "linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%)";
+  "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)";
 export const TOOL_INK = WHITE;
 export const TOOL_GOLD = GOLD;
+export const TOOL_WHITE_BORDER = "rgba(255,255,255,0.42)";

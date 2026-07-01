@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { type LucideIcon } from "lucide-react";
-import { TOOL_GOLD, ToolTheme } from "./toolThemes";
+import { TOOL_WHITE_BORDER, ToolTheme } from "./toolThemes";
 
 interface PrimaryCTAProps {
   theme: ToolTheme;
@@ -14,7 +14,7 @@ interface PrimaryCTAProps {
 
 /**
  * Primary CTA used by tool pages. Ombré gradient (accent → ink)
- * with white text and a 1px gold hairline. Hover reverses the
+ * with white text and a 1px white hairline. Hover reverses the
  * gradient direction (ink → accent) so it stays premium, never
  * a flat saturated fill.
  */
@@ -44,7 +44,7 @@ export const PrimaryCTA = ({
       className={`group inline-flex items-center justify-center gap-2 w-full px-8 py-5 rounded-xl text-base md:text-lg font-bold text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       style={{
         background: theme.ctaGradient,
-        border: `1px solid ${TOOL_GOLD}`,
+        border: `1px solid ${TOOL_WHITE_BORDER}`,
         boxShadow:
           "0 10px 30px -10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08)",
       }}

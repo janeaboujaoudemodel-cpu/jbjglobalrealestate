@@ -325,10 +325,10 @@ const ListProperty = () => {
                 data-no-contrast-guard
                 className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
                 style={{
-                  background: CHAMPAGNE,
-                  color: theme.primary,
-                  WebkitTextFillColor: theme.primary,
-                  border: `1px solid ${GOLD}`,
+                  background: "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)",
+                  color: WHITE,
+                  WebkitTextFillColor: WHITE,
+                  border: "1px solid rgba(255,255,255,0.42)",
                   boxShadow: `0 6px 16px -10px ${theme.primary}66`,
                 }}
               >
@@ -408,11 +408,12 @@ function SegmentedPill({
               boxShadow: `0 10px 24px -12px ${theme.primary}99`,
             }
           : {
-              backgroundColor: CHAMPAGNE,
-              color: inactiveFg,
-              WebkitTextFillColor: inactiveFg,
-              ["--jj-pill-fg" as any]: inactiveFg,
-              border: `1px solid ${GOLD}`,
+              background: "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)",
+              color: WHITE,
+              WebkitTextFillColor: WHITE,
+              ["--jj-pill-fg" as any]: WHITE,
+              border: "1px solid rgba(255,255,255,0.42)",
+              boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)",
             }
       }
     >

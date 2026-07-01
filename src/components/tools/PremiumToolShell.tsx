@@ -2,7 +2,7 @@ import { ReactNode, type CSSProperties } from "react";
 import { ArrowLeft, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ToolTheme, TOOL_INK } from "./toolThemes";
+import { ToolTheme, TOOL_CARD_BG, TOOL_WHITE_BORDER } from "./toolThemes";
 import FullscreenToolToggle from "./FullscreenToolToggle";
 
 
@@ -45,11 +45,6 @@ export const PremiumToolShell = ({
 }: Props) => {
   const navigate = useNavigate();
 
-  const borderStyle: CSSProperties = {
-    background: theme.borderConic,
-    animation: "jbj-tool-border-spin 9s linear infinite",
-  };
-
   return (
     <div
       data-tool-shell-root
@@ -72,9 +67,9 @@ export const PremiumToolShell = ({
         [data-tool-emerald] .id-text-muted { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
         [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
         [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold, [data-tool-emerald] .jj-gold-accent { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
-        [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select {
-          background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
-          border: 1px solid rgba(184,149,85,0.55) !important;
+        [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select, [data-tool-emerald] [role="combobox"] {
+          background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
@@ -89,8 +84,8 @@ export const PremiumToolShell = ({
         [data-tool-emerald] [class*="bg-champagne"],
         [data-tool-emerald] .bg-white,
         [data-tool-emerald] [class*="bg-white/"] {
-          background-color: rgba(6,78,59,0.55) !important;
-          background-image: none !important;
+          background: ${TOOL_CARD_BG} !important;
+          background-color: transparent !important;
         }
         [data-tool-emerald] [class*="border-rose"],
         [data-tool-emerald] [class*="border-pink"],
@@ -98,7 +93,7 @@ export const PremiumToolShell = ({
         [data-tool-emerald] [class*="border-indigo"],
         [data-tool-emerald] [class*="border-amber"],
         [data-tool-emerald] [class*="border-teal"],
-        [data-tool-emerald] [class*="border-champagne"] { border-color: rgba(184,149,85,0.55) !important; }
+        [data-tool-emerald] [class*="border-champagne"] { border-color: ${TOOL_WHITE_BORDER} !important; }
         [data-tool-emerald] [class*="text-rose"],
         [data-tool-emerald] [class*="text-pink"],
         [data-tool-emerald] [class*="text-violet"],
@@ -112,16 +107,30 @@ export const PremiumToolShell = ({
         [data-tool-emerald] [style*="#FDFBF7"],
         [data-tool-emerald] [style*="#F7F2EA"],
         [data-tool-emerald] [style*="#EFE6D6"] {
-          background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
+          background: ${TOOL_CARD_BG} !important;
           color: #FFFFFF !important;
         }
         [data-tool-emerald] [data-slot="card"],
         [data-tool-emerald] .jbj-card,
         [data-tool-emerald] .card {
-          background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
-          border-color: rgba(184,149,85,0.45) !important;
+          background: ${TOOL_CARD_BG} !important;
+          border-color: ${TOOL_WHITE_BORDER} !important;
           color: #FFFFFF !important;
         }
+        [data-tool-emerald] :is(button, a)[data-allow-dark-cta],
+        [data-tool-emerald] :is(button, a).id-primary,
+        [data-tool-emerald] :is(button, a).bcs-action-dark,
+        [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-rose"],
+        [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-red"],
+        [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-amber"] {
+          background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+          border-color: rgba(255,255,255,0.46) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        [data-tool-emerald] :is(button, a)[data-allow-dark-cta] svg,
+        [data-tool-emerald] :is(button, a).id-primary svg,
+        [data-tool-emerald] :is(button, a).bcs-action-dark svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
         .jbj-tool-shell-border::before {
           content: ""; position: absolute; inset: -2px; border-radius: 1.25rem; padding: 2px;
           background: var(--jbj-tool-border); animation: jbj-tool-border-spin 9s linear infinite;
@@ -148,7 +157,7 @@ export const PremiumToolShell = ({
             background:
               "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
             boxShadow:
-              "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(184,149,85,0.45)",
+              "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.22)",
           }}
         >
           {/* Hero — emerald ombré, white ink. Back button lives inside. */}
@@ -190,7 +199,7 @@ export const PremiumToolShell = ({
                   style={{
                     background:
                       "linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(0,0,0,0.98) 100%)",
-                    border: `1px solid ${theme.accent}`,
+                    border: `1px solid ${TOOL_WHITE_BORDER}`,
                     boxShadow: `0 8px 24px -10px ${theme.accent}88`,
                   }}
                 >
@@ -205,7 +214,7 @@ export const PremiumToolShell = ({
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
                 style={{
                   background: "rgba(6,78,59,0.55)",
-                  border: `1px solid ${theme.accent}88`,
+                  border: `1px solid ${TOOL_WHITE_BORDER}`,
                 }}
               >
                 <span
@@ -297,9 +306,9 @@ export const ToolAnimatedFrame = ({
       [data-tool-emerald] .text-muted-foreground { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
       [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
       [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
-      [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select {
-        background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
-        border: 1px solid rgba(184,149,85,0.55) !important;
+      [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select, [data-tool-emerald] [role="combobox"] {
+        background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+        border: 1px solid rgba(255,255,255,0.42) !important;
         color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; caret-color: #FFFFFF !important;
       }
       [data-tool-emerald] input::placeholder, [data-tool-emerald] textarea::placeholder { color: rgba(255,255,255,0.55) !important; }
@@ -313,8 +322,8 @@ export const ToolAnimatedFrame = ({
       [data-tool-emerald] [class*="bg-champagne"],
       [data-tool-emerald] .bg-white,
       [data-tool-emerald] [class*="bg-white/"] {
-        background-color: rgba(6,78,59,0.55) !important;
-        background-image: none !important;
+        background: ${TOOL_CARD_BG} !important;
+        background-color: transparent !important;
       }
       [data-tool-emerald] [class*="border-rose"],
       [data-tool-emerald] [class*="border-pink"],
@@ -323,7 +332,7 @@ export const ToolAnimatedFrame = ({
       [data-tool-emerald] [class*="border-amber"],
       [data-tool-emerald] [class*="border-teal"],
       [data-tool-emerald] [class*="border-champagne"] {
-        border-color: rgba(184,149,85,0.55) !important;
+        border-color: ${TOOL_WHITE_BORDER} !important;
       }
       [data-tool-emerald] [class*="text-rose"],
       [data-tool-emerald] [class*="text-pink"],
@@ -339,17 +348,31 @@ export const ToolAnimatedFrame = ({
       [data-tool-emerald] [style*="#FDFBF7"],
       [data-tool-emerald] [style*="#F7F2EA"],
       [data-tool-emerald] [style*="#EFE6D6"] {
-        background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
+        background: ${TOOL_CARD_BG} !important;
         color: #FFFFFF !important;
       }
       /* shadcn Card baseline coercion inside a tool */
       [data-tool-emerald] [data-slot="card"],
       [data-tool-emerald] .jbj-card,
       [data-tool-emerald] .card {
-        background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
-        border-color: rgba(184,149,85,0.45) !important;
+        background: ${TOOL_CARD_BG} !important;
+        border-color: ${TOOL_WHITE_BORDER} !important;
         color: #FFFFFF !important;
       }
+      [data-tool-emerald] :is(button, a)[data-allow-dark-cta],
+      [data-tool-emerald] :is(button, a).id-primary,
+      [data-tool-emerald] :is(button, a).bcs-action-dark,
+      [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-rose"],
+      [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-red"],
+      [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-amber"] {
+        background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+        border-color: rgba(255,255,255,0.46) !important;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+      }
+      [data-tool-emerald] :is(button, a)[data-allow-dark-cta] svg,
+      [data-tool-emerald] :is(button, a).id-primary svg,
+      [data-tool-emerald] :is(button, a).bcs-action-dark svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
       .jbj-tool-frame-border::before {
         content: ""; position: absolute; inset: -2px; border-radius: 1.25rem; padding: 2px;
         background: var(--jbj-tool-border); animation: jbj-tool-border-spin 9s linear infinite;
@@ -373,7 +396,7 @@ export const ToolAnimatedFrame = ({
           background:
             "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
           boxShadow:
-            "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(184,149,85,0.45)",
+            "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.22)",
         }}
       >
         {children}
