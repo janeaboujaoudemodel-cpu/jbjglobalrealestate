@@ -32,30 +32,61 @@ const FIXTURE_BRANDING: ReportBranding = {
 const FIXTURE_PROJECTS: ReportProject[] = [
   {
     id: "p1",
-    name: "Marina Heights",
+    name: "Boulevard Heights",
     cover_image_url: null,
-    area: "Dubai Marina",
+    area: "Downtown Dubai",
+    location: "Downtown Dubai",
+    emirate: "Dubai",
     developer_name: "Emaar",
-    price_from: 1_800_000,
-    price_to: 2_900_000,
-    bedrooms_min: 1,
-    bedrooms_max: 3,
-    handover_year: 2027,
+    price_from: 3_800_000,
+    price_to: null,
+    bedrooms_min: null,
+    bedrooms_max: null,
+    handover_date: "2028-12-31",
     payment_plan: "60/40",
   },
   {
     id: "p2",
-    name: "Palm Vista",
-    area: "Palm Jumeirah",
-    developer_name: "Nakheel",
-    price_from: 4_200_000,
-    price_to: 6_500_000,
-    bedrooms_min: 2,
-    bedrooms_max: 4,
-    handover_year: 2028,
+    name: "Pinewood Village",
+    area: "Jumeirah Golf Estates",
+    location: "Jumeirah Golf Estates",
+    emirate: "Dubai",
+    developer_name: "Wasl",
+    price_from: 5_600_000,
+    price_to: null,
+    bedrooms_min: null,
+    bedrooms_max: null,
+    handover_date: "Ready",
+    construction_status: "Ready",
     payment_plan: "50/50",
   },
+  {
+    id: "p3",
+    name: "North 43 Serviced Residences",
+    area: "Jumeirah Village Circle (JVC)",
+    location: "Jumeirah Village Circle (JVC)",
+    emirate: "Dubai",
+    developer_name: "Avenew Development",
+    price_from: 1_900_000,
+    price_to: null,
+    bedrooms_min: null,
+    bedrooms_max: null,
+    handover_date: "Ready",
+    construction_status: "Ready",
+  },
 ];
+
+const FIXTURE_REQUIREMENTS = {
+  property_type: "apartment",
+  purpose: "investment",
+  budget: "under-1m",
+  bedrooms: "studio",
+  areas: ["other", "downtown"],
+  location_type: ["beachfront"],
+  views_and_features: ["balcony"],
+  timeline: "2027-plus",
+  payment_preference: "flexible",
+};
 
 export default function ReportContrastHarness() {
   const [includeMode, setIncludeMode] = useState<"both" | "photo" | "logo" | "none">("both");
@@ -67,7 +98,7 @@ export default function ReportContrastHarness() {
       branding: { ...FIXTURE_BRANDING, mode: includeMode },
       projects: FIXTURE_PROJECTS,
       clientName: "Test Client",
-      clientRequirements: { goal: "Investment" },
+      clientRequirements: FIXTURE_REQUIREMENTS,
     });
     if (!out) {
       setStatus("no pdf");
@@ -175,7 +206,7 @@ export default function ReportContrastHarness() {
           branding={{ ...FIXTURE_BRANDING, mode: includeMode }}
           projects={FIXTURE_PROJECTS}
           clientName="Test Client"
-          clientRequirements={{ goal: "Investment" }}
+          clientRequirements={FIXTURE_REQUIREMENTS}
           pageIdPrefix="preview"
         />
       </div>
