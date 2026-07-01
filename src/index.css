@@ -4482,10 +4482,10 @@ a[class*="bg-red-"]:hover {
 
 /* 7. Sidebar nav active item — locked cream system (front + back).
  *    Hover: soft cream wash + 1px gold left bar. Active: same cream + bold. */
-nav button[aria-current="page"]:not([data-allow-dark-cta]):not([data-hr-pill]),
-nav a[aria-current="page"]:not([data-allow-dark-cta]):not([data-hr-pill]),
-nav button[data-active="true"]:not([data-allow-dark-cta]):not([data-hr-pill]),
-nav a[data-active="true"]:not([data-allow-dark-cta]):not([data-hr-pill]) {
+nav button[aria-current="page"]:not([data-allow-dark-cta]):not([data-hr-pill]):not(.jc-side-link):not(.jc-team-item),
+nav a[aria-current="page"]:not([data-allow-dark-cta]):not([data-hr-pill]):not(.jc-side-link):not(.jc-team-item),
+nav button[data-active="true"]:not([data-allow-dark-cta]):not([data-hr-pill]):not(.jc-side-link):not(.jc-team-item),
+nav a[data-active="true"]:not([data-allow-dark-cta]):not([data-hr-pill]):not(.jc-side-link):not(.jc-team-item) {
   background-color: #EFE6D6 !important;
   color: #1A1A1A;
   border-left: 2px solid #B89555 !important;

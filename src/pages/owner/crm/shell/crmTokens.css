@@ -4,21 +4,21 @@
  * Colors below replace Zoho's blue/orange with JBJ Emerald + Pearl.
  */
 :root {
-  --jbjcrm-emerald: #0F9F67;
-  --jbjcrm-emerald-ink: #0B4636;
-  --jbjcrm-emerald-line: #22B86D;
-  --jbjcrm-emerald-soft: rgba(15, 159, 103, 0.12);
-  --jbjcrm-emerald-tint: rgba(15, 159, 103, 0.08);
-  --jbjcrm-sidebar: #253D65;
-  --jbjcrm-sidebar-deep: #223A60;
-  --jbjcrm-sidebar-line: rgba(255, 255, 255, 0.15);
-  --jbjcrm-sidebar-text: #D6DEEA;
-  --jbjcrm-sidebar-muted: #92A2BA;
-  --jbjcrm-active: #3C4F80;
+  --jbjcrm-emerald: hsl(var(--ai-emerald));
+  --jbjcrm-emerald-ink: hsl(var(--ai-emerald));
+  --jbjcrm-emerald-line: hsl(var(--ai-emerald));
+  --jbjcrm-emerald-soft: hsl(var(--ai-emerald) / 0.12);
+  --jbjcrm-emerald-tint: hsl(var(--ai-emerald) / 0.08);
+  --jbjcrm-sidebar: #213559;
+  --jbjcrm-sidebar-deep: #213559;
+  --jbjcrm-sidebar-line: rgba(255, 255, 255, 0.16);
+  --jbjcrm-sidebar-text: rgba(255, 255, 255, 0.84);
+  --jbjcrm-sidebar-muted: rgba(255, 255, 255, 0.52);
+  --jbjcrm-active: rgba(255, 255, 255, 0.09);
 
   --jbjcrm-pearl: #FFFFFF;
   --jbjcrm-canvas: #FFFFFF;
-  --jbjcrm-search: #EEF1F8;
+  --jbjcrm-search: #F3F5F9;
   --jbjcrm-graphite: #202124;
   --jbjcrm-graphite-2: #475569;
   --jbjcrm-graphite-3: #8791A6;
@@ -34,9 +34,9 @@
   --jbjcrm-shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.10);
   --jbjcrm-shadow-2: 0 4px 8px -2px rgba(15, 23, 42, 0.10), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
 
-  --jbjcrm-header-h: 62px;
-  --jbjcrm-bottom-h: 32px;
-  --jbjcrm-sidebar-w: 304px;
+  --jbjcrm-header-h: 64px;
+  --jbjcrm-bottom-h: 36px;
+  --jbjcrm-sidebar-w: 305px;
   --jbjcrm-radius-sm: 4px;
   --jbjcrm-radius: 7px;
   --jbjcrm-radius-lg: 10px;

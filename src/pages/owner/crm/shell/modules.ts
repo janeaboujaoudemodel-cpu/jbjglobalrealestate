@@ -48,11 +48,11 @@ export type CrmFolder = {
 };
 
 export const CRM_PRIMARY_NAV: CrmModule[] = [
-  { slug: "home", label: "Home", icon: Home, color: "#6D84FF" },
-  { slug: "reports", label: "Reports", icon: BarChart3, color: "#FF4B82" },
-  { slug: "analytics", label: "Analytics", icon: FileBarChart2, color: "#A855F7" },
-  { slug: "my-requests", label: "My Requests", icon: ClipboardList, color: "#25D39A" },
-  { slug: "agents", label: "Agents", icon: BriefcaseBusiness, color: "#F59E2B" },
+  { slug: "home", label: "Home", icon: Home },
+  { slug: "reports", label: "Reports", icon: BarChart3 },
+  { slug: "analytics", label: "Analytics", icon: FileBarChart2 },
+  { slug: "my-requests", label: "My Requests", icon: ClipboardList },
+  { slug: "agents", label: "Agents", icon: BriefcaseBusiness },
 ];
 
 export const CRM_TEAMSPACE_TOP: CrmModule[] = [

@@ -19,7 +19,7 @@ export default function CrmShell() {
   }, []);
 
   return (
-    <div className="jc-app">
+    <div className="jc-app" data-no-contrast-guard>
       <CrmSidebar />
       <CrmHeader />
       <main className="jc-content" role="main">

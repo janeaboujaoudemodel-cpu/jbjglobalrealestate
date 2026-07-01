@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, Link2, MoreHorizontal, PanelLeft, Search } from "lucide-react";
+import { ChevronDown, MoreHorizontal, PanelLeft, Search } from "lucide-react";
+import jbjFullLogoLight from "@/assets/jbj-logo-light.png";
 import {
   CRM_DEFAULT_SECTION,
   CRM_PRIMARY_NAV,
@@ -31,10 +32,10 @@ export default function CrmSidebar() {
   };
 
   return (
-    <aside className="jc-rail" aria-label="CRM navigation">
+    <aside className="jc-rail" aria-label="CRM navigation" data-no-contrast-guard>
       <div className="jc-brand-row">
-        <div className="jc-brand-logo" aria-hidden="true"><Link2 size={26} /></div>
-        <div className="jc-brand-name">JBJ CRM</div>
+        <img className="jc-brand-logo-img" src={jbjFullLogoLight} alt="JBJ Global Real Estate" />
+        <span className="jc-brand-product">CRM</span>
         <ChevronDown size={18} className="jc-brand-caret" />
         <button type="button" className="jc-collapse-visual" aria-label="Collapse sidebar"><PanelLeft size={22} /></button>
       </div>
