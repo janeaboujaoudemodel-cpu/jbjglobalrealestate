@@ -1031,7 +1031,8 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           /* Ensure emerald boxes use the same single solid color in preview + PDF. */
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] {
-            background-image: linear-gradient(135deg,#064E3B 0%,#064E3B 100%) !important;
+            background: #064E3B !important;
+            background-image: none !important;
             background-color: #064E3B !important;
           }
         `}</style>

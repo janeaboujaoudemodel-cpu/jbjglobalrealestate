@@ -309,7 +309,8 @@ export default function ReportPreviewModal({
           }
           #jbj-aihf-preview-root [data-on-dark],
           #jbj-aihf-preview-root [data-surface="emerald"] {
-            background-image: linear-gradient(135deg,#064E3B 0%,#064E3B 100%) !important;
+            background: #064E3B !important;
+            background-image: none !important;
             background-color: #064E3B !important;
           }
           #jbj-aihf-preview-root [data-aihf-scope-dot] {
