@@ -96,7 +96,7 @@ const probe = async (page) =>
       });
     });
     return rows;
-  }, hosts => hosts, DARK_HOSTS).catch(() => []);
+  }, DARK_HOSTS).catch((e) => { console.warn('probe error:', e.message); return []; });
 
 async function auditRoute(browser, route, vp) {
   const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
