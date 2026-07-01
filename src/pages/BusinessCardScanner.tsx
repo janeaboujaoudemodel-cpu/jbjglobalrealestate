@@ -485,7 +485,7 @@ const BusinessCardScanner = () => {
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
                 <TabsList
-                  className="grid w-full grid-cols-2 mb-4"
+                  className="grid w-full grid-cols-2 mb-4 h-auto p-1 gap-1 rounded-lg"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     border: "1px solid rgba(255,255,255,0.24)",
@@ -501,7 +501,7 @@ const BusinessCardScanner = () => {
                         key={v}
                         value={v}
                         data-allow-dark-cta
-                        className="gap-2"
+                        className="gap-2 h-10 rounded-md data-[state=active]:shadow-none"
                         style={{
                           background: active
                             ? "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)"
@@ -517,7 +517,8 @@ const BusinessCardScanner = () => {
                   })}
                 </TabsList>
 
-                <TabsContent value="camera" className="min-h-[560px]">
+
+                <TabsContent value="camera" className="mt-0">
                   <BusinessCardCamera
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -526,7 +527,7 @@ const BusinessCardScanner = () => {
                   />
                 </TabsContent>
 
-                <TabsContent value="upload" className="min-h-[560px]">
+                <TabsContent value="upload" className="mt-0">
                   <BusinessCardUpload
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -534,6 +535,7 @@ const BusinessCardScanner = () => {
                     encryptionKey={encryptionKey}
                   />
                 </TabsContent>
+
               </Tabs>
             </CardContent>
           </Card>

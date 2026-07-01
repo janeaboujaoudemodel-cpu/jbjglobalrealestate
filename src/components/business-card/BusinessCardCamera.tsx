@@ -423,7 +423,7 @@ const BusinessCardCamera = ({
 
       {/* Preview frame — video element ALWAYS mounted (so videoRef is always live) */}
       <div
-        className="relative aspect-[4/3] rounded-xl overflow-hidden"
+        className={`relative rounded-xl overflow-hidden ${isCameraReady ? "aspect-[4/3]" : "min-h-[520px]"}`}
         style={{
           background: PANEL_BG,
           border: `1px solid ${ACCENT_BORDER}`,
@@ -434,19 +434,19 @@ const BusinessCardCamera = ({
         {/* Always-mounted video — hidden when not ready */}
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={isCameraReady ? "absolute inset-0 w-full h-full object-cover" : "hidden"}
           playsInline
           muted
           autoPlay
           style={{
-            visibility: isCameraReady ? "visible" : "hidden",
-            transform: facingMode === "user" ? "scaleX(-1)" : "none",
+            transform: isCameraReady && facingMode === "user" ? "scaleX(-1)" : "none",
           }}
         />
 
+
         {!isCameraReady && (
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center"
+            className="flex flex-col items-center justify-center gap-5 px-6 py-10 text-center w-full h-full min-h-[520px]"
             style={{
               background:
                 "radial-gradient(800px 400px at 50% 0%, rgba(255,255,255,0.18), transparent 60%), " +
