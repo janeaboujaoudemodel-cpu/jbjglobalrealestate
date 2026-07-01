@@ -468,7 +468,7 @@ const BusinessCardScanner = () => {
           {/* Scanner Section */}
           <Card
             style={{
-              background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+              background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
               border: "1px solid rgba(255,255,255,0.28)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
@@ -541,7 +541,7 @@ const BusinessCardScanner = () => {
           {/* Results Section */}
           <Card
             style={{
-              background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+              background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
               border: "1px solid rgba(255,255,255,0.28)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
@@ -598,7 +598,7 @@ const BusinessCardScanner = () => {
           <Card
             className="mt-6"
             style={{
-              background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+              background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
               border: "1px solid rgba(255,255,255,0.28)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
             }}
