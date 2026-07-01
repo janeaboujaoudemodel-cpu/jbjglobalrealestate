@@ -476,21 +476,24 @@ const PropertyMeasurement = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div id="pm-step1-ink-scope" className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard>
+            <div id="pm-step1-ink-scope" className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard data-surface="emerald">
               <Card
                 data-allow-dark-cta
                 data-no-contrast-guard
+                data-surface="emerald"
+                data-emerald-ok="card"
                 className="allow-white !border-0 rounded-2xl overflow-hidden"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(247,242,234,0.98) 0%, rgba(239,230,214,0.98) 100%)",
-                  border: "1px solid rgba(255,255,255,0.52)",
+                    "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)",
+                  border: "1px solid rgba(255,255,255,0.42)",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.45), inset 0 0 24px rgba(16,185,129,0.14)",
                 }}
               >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
-                    <Building2 className="w-5 h-5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
-                    <span style={{ color: "#1A1A1A" }}>Step 1: Property Information</span>
+                  <CardTitle className="flex items-center gap-2" style={{ color: "#FFFFFF" }}>
+                    <Building2 className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span style={{ color: "#FFFFFF" }}>Step 1: Property Information</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
