@@ -207,11 +207,10 @@ export const PremiumToolShell = ({
           </div>
         </div>
       </div>
-
-      </div>
     </div>
   );
 };
+
 
 /**
  * Lightweight wrapper that gives an existing tool page the animated
