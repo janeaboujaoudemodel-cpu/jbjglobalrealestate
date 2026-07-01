@@ -393,9 +393,19 @@ const PropertyMeasurement = () => {
             animate="visible"
             variants={fadeInUp}
           >
-            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium jj-surface-emerald-soft text-[color:var(--emerald-on)] border border-[color:var(--emerald-1)]/30/30 select-none">
-              <Ruler className="w-4 h-4 mr-2" />
-              FREE AI Tool
+            <span
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-semibold select-none"
+              style={{
+                background: "linear-gradient(135deg, #10B981 0%, #047857 55%, #064E3B 100%)",
+                border: "1px solid rgba(184,149,85,0.55)",
+                color: "#FFFFFF",
+                boxShadow: "0 4px 14px rgba(6,78,59,0.35), inset 0 0 12px rgba(255,255,255,0.08)",
+              }}
+            >
+              <Ruler className="w-4 h-4 mr-2" style={{ color: "#FFFFFF" }} />
+              <span style={{ color: "#FFFFFF" }}>FREE AI Tool</span>
             </span>
 
             <h1 className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: "rgba(255,255,255,0.96)" }}>
@@ -466,7 +476,7 @@ const PropertyMeasurement = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard>
+            <div id="pm-step1-ink-scope" className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard>
               <Card
                 data-allow-dark-cta
                 data-no-contrast-guard
@@ -477,14 +487,14 @@ const PropertyMeasurement = () => {
                 }}
               >
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.95)" }}>
-                    <Building2 className="w-5 h-5" style={{ color: "#6EE7B7" }} />
-                    <span style={{ color: "rgba(255,255,255,0.95)" }}>Step 1: Property Information</span>
+                  <CardTitle className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                    <Building2 className="w-5 h-5" style={{ color: "#064E3B" }} />
+                    <span style={{ color: "#1A1A1A" }}>Step 1: Property Information</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="mb-3 block" style={{ color: "rgba(255,255,255,0.88)" }}>Property Type</Label>
+                    <Label className="mb-3 block" style={{ color: "#1A1A1A", fontWeight: 600 }}>Property Type</Label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {propertyTypes.map((type) => {
                         const active = propertyType === type.id;
@@ -525,7 +535,7 @@ const PropertyMeasurement = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="propertyName" style={{ color: "rgba(255,255,255,0.88)" }}>Property Name (Optional)</Label>
+                    <Label htmlFor="propertyName" style={{ color: "#1A1A1A", fontWeight: 600 }}>Property Name (Optional)</Label>
                     <Input
                       id="propertyName"
                       value={propertyName}
@@ -549,7 +559,7 @@ const PropertyMeasurement = () => {
                   </div>
 
                   <div>
-                    <Label className="mb-3 block" style={{ color: "rgba(255,255,255,0.88)" }}>Unit Preference</Label>
+                    <Label className="mb-3 block" style={{ color: "#1A1A1A", fontWeight: 600 }}>Unit Preference</Label>
                     <div className="flex gap-3 flex-wrap">
                       {[
                         { id: "sqft", label: "Square Feet" },
