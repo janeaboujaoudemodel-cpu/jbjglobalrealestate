@@ -277,6 +277,11 @@ export default function SupportLauncher() {
  `}
 
           style={{
+            position: "fixed",
+            right: 0,
+            left: "auto",
+            top: "50%",
+            zIndex: 60,
             writingMode: "vertical-rl",
             transform: "translate3d(0, -50%, 0)",
             color: "#FFFFFF",
