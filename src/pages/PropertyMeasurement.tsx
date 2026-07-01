@@ -494,7 +494,7 @@ const PropertyMeasurement = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="mb-3 block" style={{ color: "rgba(255,255,255,0.88)" }}>Property Type</Label>
+                    <Label className="mb-3 block" style={{ color: "#1A1A1A", fontWeight: 600 }}>Property Type</Label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {propertyTypes.map((type) => {
                         const active = propertyType === type.id;
