@@ -126,8 +126,8 @@ const addCanvasPageToPdf = (
     pageCanvas.height
   );
 
-  const pdfW = pdf.internal.pageSize.getWidth();
-  const pdfH = pdf.internal.pageSize.getHeight();
+  const pdfW = REPORT_PAGE_PX.width;
+  const pdfH = REPORT_PAGE_PX.height;
   if (pageIndex > 0) pdf.addPage();
   // PNG keeps exact brand colors; JPEG was shifting emerald/champagne boxes.
   pdf.addImage(pageCanvas.toDataURL("image/png"), "PNG", 0, 0, pdfW, pdfH, undefined, "FAST");
@@ -138,7 +138,12 @@ const captureReportRootToPdf = async (
   pages: HTMLElement[],
   filename: string
 ): Promise<{ blob: Blob; filename: string }> => {
-  const pdf = new jsPDF({ unit: "pt", format: "a4", orientation: "portrait" });
+  const pdf = new jsPDF({
+    unit: "px",
+    format: [REPORT_PAGE_PX.width, REPORT_PAGE_PX.height],
+    orientation: "portrait",
+    hotfixes: ["px_scaling"],
+  });
 
   // One DOM capture, then slice into A4 pages. Capturing each page separately
   // makes html2canvas re-clone/re-parse the entire modal N times and caused
