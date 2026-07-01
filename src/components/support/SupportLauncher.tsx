@@ -58,14 +58,13 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
 }
 
 function useSuppressed() {
-  // Hide launcher whenever a major support drawer or modal is open,
-  // and on all internal owner/admin workspaces (no consumer launcher there).
+  // Keep the Contact Us edge tag persistent across public pages. It should not
+  // disappear because another support surface briefly mounted/opened during load.
+  // Only suppress it behind blocking modals and internal back-office shells.
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
     const check = () => {
       const body = document.body;
-      const conciergeOpen = !!document.querySelector("[data-jbj-concierge-open=\"true\"]");
-      const chatOpen = !!document.querySelector("[data-jbj-chat-open=\"true\"]");
       const modalOpen = body.getAttribute("data-modal-open") === "true";
       const path = window.location.pathname || "";
       const internal =
@@ -74,11 +73,11 @@ function useSuppressed() {
         path.startsWith("/broker") ||
         path.startsWith("/developers-portal") ||
         path.startsWith("/developer-hub");
-      setHidden(conciergeOpen || chatOpen || modalOpen || internal);
+      setHidden(modalOpen || internal);
     };
     check();
     const obs = new MutationObserver(check);
-    obs.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-jbj-concierge-open", "data-jbj-chat-open", "data-modal-open"] });
+    obs.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["data-modal-open"] });
     window.addEventListener("popstate", check);
     return () => {
       obs.disconnect();
@@ -286,7 +285,7 @@ export default function SupportLauncher() {
 
           style={{
             writingMode: "vertical-rl",
-            transform: "translateY(-50%)",
+            transform: "translate3d(0, -50%, 0)",
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
             borderColor: "rgba(52,211,153,0.55)",
