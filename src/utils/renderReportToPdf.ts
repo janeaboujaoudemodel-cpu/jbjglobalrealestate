@@ -62,45 +62,11 @@ const makeFilename = (filename?: string) => {
   return filename || `JBJ-AI-Recommendations-${sessionId}-${Date.now()}.pdf`;
 };
 
-const findLivePreviewRoot = () => {
-  const modalRoot = document.getElementById("jbj-aihf-preview-root");
-  const reportRoot = document.querySelector<HTMLElement>(
-    "#jbj-report-contrast-lock-preview[data-report-root]"
-  );
-  if (!modalRoot || !reportRoot || !modalRoot.contains(reportRoot)) return null;
-  return reportRoot;
-};
-
-const prepareLivePreviewForCapture = async <T,>(
-  reportRoot: HTMLElement,
-  fn: () => Promise<T>
-) => {
-  const host = reportRoot.parentElement as HTMLElement | null;
-  if (!host) return fn();
-
-  const previousStyle = host.getAttribute("style");
-  host.style.position = "fixed";
-  host.style.left = "-10000px";
-  host.style.top = "0";
-  host.style.width = `${REPORT_PAGE_PX.width}px`;
-  host.style.transform = "none";
-  host.style.transformOrigin = "top left";
-  host.style.pointerEvents = "none";
-  host.style.zIndex = "-1";
-  host.style.setProperty(PAGE_SEP_VAR, "0px");
-  host.style.setProperty("--jbj-report-page-shadow", "none");
-
-  await new Promise<void>((r) =>
-    requestAnimationFrame(() => requestAnimationFrame(() => r()))
-  );
-
-  try {
-    return await fn();
-  } finally {
-    if (previousStyle == null) host.removeAttribute("style");
-    else host.setAttribute("style", previousStyle);
-  }
-};
+// The visible Live Preview stays untouched during export. We render a second
+// ReportEngine offscreen so the preview keeps showing the document while the
+// PDF is generated. Repositioning the on-screen preview blanked it out during
+// download (users saw an empty modal until the file arrived).
+const findLivePreviewRoot = () => null as HTMLElement | null;
 
 const addCanvasPageToPdf = (
   pdf: jsPDF,
