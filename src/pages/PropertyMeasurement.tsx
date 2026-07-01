@@ -498,7 +498,7 @@ const PropertyMeasurement = () => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="mb-3 block" style={{ color: "#1A1A1A", fontWeight: 600 }}>Property Type</Label>
+                    <Label className="mb-3 block" style={{ color: "#FFFFFF", fontWeight: 600 }}>Property Type</Label>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {propertyTypes.map((type) => {
                         const active = propertyType === type.id;
@@ -539,7 +539,7 @@ const PropertyMeasurement = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="propertyName" style={{ color: "#1A1A1A", fontWeight: 600 }}>Property Name (Optional)</Label>
+                    <Label htmlFor="propertyName" style={{ color: "#FFFFFF", fontWeight: 600 }}>Property Name (Optional)</Label>
                     <Input
                       id="propertyName"
                       value={propertyName}
@@ -563,7 +563,7 @@ const PropertyMeasurement = () => {
                   </div>
 
                   <div>
-                    <Label className="mb-3 block" style={{ color: "#1A1A1A", fontWeight: 600 }}>Unit Preference</Label>
+                    <Label className="mb-3 block" style={{ color: "#FFFFFF", fontWeight: 600 }}>Unit Preference</Label>
                     <div className="flex gap-3 flex-wrap">
                       {[
                         { id: "sqft", label: "Square Feet" },
