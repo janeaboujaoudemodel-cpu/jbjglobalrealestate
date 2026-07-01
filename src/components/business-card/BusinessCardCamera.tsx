@@ -432,27 +432,17 @@ const BusinessCardCamera = ({
         }}
       >
         {/* Always-mounted video — hidden when not ready */}
-        {isCameraReady && (
-          <video
-            ref={videoRef}
-            className="absolute inset-0 w-full h-full object-cover"
-            playsInline
-            muted
-            autoPlay
-            style={{
-              transform: facingMode === "user" ? "scaleX(-1)" : "none",
-            }}
-          />
-        )}
-        {!isCameraReady && (
-          <video
-            ref={videoRef}
-            className="hidden"
-            playsInline
-            muted
-            autoPlay
-          />
-        )}
+        <video
+          ref={videoRef}
+          className={isCameraReady ? "absolute inset-0 w-full h-full object-cover" : "hidden"}
+          playsInline
+          muted
+          autoPlay
+          style={{
+            transform: isCameraReady && facingMode === "user" ? "scaleX(-1)" : "none",
+          }}
+        />
+
 
         {!isCameraReady && (
           <div
