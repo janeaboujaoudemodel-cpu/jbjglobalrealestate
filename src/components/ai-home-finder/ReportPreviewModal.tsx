@@ -177,6 +177,7 @@ export default function ReportPreviewModal({
         "[data-aihf-darkband]","[data-aihf-darkband] *",
         "[data-aihf-role-chip]","[data-aihf-role-chip] *",
         '[data-aihf-include-btn][data-active="true"]','[data-aihf-include-btn][data-active="true"] *',
+        "[data-aihf-primary-btn]","[data-aihf-primary-btn] *",
         "[data-on-dark]","[data-on-dark] *",
         '[data-surface="emerald"]','[data-surface="emerald"] *',
         "[data-aihf-scope-row]","[data-aihf-scope-row] *","[data-aihf-scope-text]",
@@ -187,6 +188,10 @@ export default function ReportPreviewModal({
       });
       root.querySelectorAll<HTMLElement>("[data-aihf-scope-dot]").forEach((el) => {
         el.style.setProperty("background-color", "#FFFFFF", "important");
+      });
+      root.querySelectorAll<HTMLElement>("[data-aihf-secondary-btn], [data-aihf-secondary-btn] *").forEach((el) => {
+        el.style.setProperty("color", "#1A1A1A", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
       });
     };
     tick();
@@ -250,15 +255,18 @@ export default function ReportPreviewModal({
 
   // Reusable button styles
   const primaryBtn: React.CSSProperties = {
-    backgroundImage: C.emeraldGradient,
+    background: "#064E3B",
+    backgroundImage: "none",
     backgroundColor: "#064E3B",
     color: "#FFFFFF",
+    WebkitTextFillColor: "#FFFFFF",
     border: 0,
     boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)",
   };
   const secondaryBtn: React.CSSProperties = {
     background: "#FFFFFF",
     color: C.ink,
+    WebkitTextFillColor: C.ink,
     border: `1px solid ${C.goldSoft}`,
   };
 
@@ -268,7 +276,7 @@ export default function ReportPreviewModal({
         id="jbj-aihf-preview-root"
         data-no-contrast-guard
         data-aihf-preview
-        className="sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
+        className="w-[min(1120px,calc(100vw-24px))] sm:max-w-[1120px] max-h-[92vh] h-[92vh] overflow-hidden p-0 border-0 flex flex-col"
         style={{ background: C.page }}
       >
         {/* ID-anchored overrides — (1,*,*) specificity always beats the global
@@ -321,6 +329,17 @@ export default function ReportPreviewModal({
           #jbj-aihf-preview-root [data-aihf-scope-text] {
             color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important;
           }
+          #jbj-aihf-preview-root [data-aihf-primary-btn],
+          #jbj-aihf-preview-root [data-aihf-primary-btn] * {
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
+          }
+          #jbj-aihf-preview-root [data-aihf-secondary-btn],
+          #jbj-aihf-preview-root [data-aihf-secondary-btn] * {
+            color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important;
+          }
+          #jbj-aihf-preview-root [data-report-root] [data-report-page] {
+            overflow: hidden !important;
+          }
         `}</style>
         <DialogHeader className="px-6 pt-5 pb-3 border-b" style={{ borderColor: C.goldHair }}>
           <DialogTitle className="text-xl font-bold" style={{ color: C.ink }}>
@@ -331,9 +350,9 @@ export default function ReportPreviewModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-[380px_1fr] gap-0 overflow-hidden flex-1 min-h-0">
+        <div className="grid md:grid-cols-[380px_minmax(0,1fr)] gap-0 overflow-hidden flex-1 min-h-0 min-w-0">
           {/* LEFT — branding form */}
-          <div className="overflow-y-auto px-5 py-4 border-r space-y-4" style={{ borderColor: C.goldHair, background: C.surface }}>
+          <div className="overflow-y-auto px-5 py-4 border-r space-y-4 min-w-0" style={{ borderColor: C.goldHair, background: C.surface }}>
             {/* Auto-detected role chip (read-only, synced to active mode) */}
             <div>
               <Label className="text-xs font-semibold uppercase tracking-wide" style={{ color: C.ink }}>Profile / Role</Label>
@@ -403,7 +422,7 @@ export default function ReportPreviewModal({
                     onClick={() => update({ showOfficeAddress: !branding.showOfficeAddress })}
                     className="relative shrink-0 inline-flex h-6 w-11 items-center rounded-full transition"
                     style={{
-                      backgroundImage: branding.showOfficeAddress ? C.emeraldGradient : undefined,
+                      backgroundImage: "none",
                       backgroundColor: branding.showOfficeAddress ? "#064E3B" : "#E5DCC8",
                       border: `1px solid ${branding.showOfficeAddress ? "#064E3B" : C.goldSoft}`,
                     }}
@@ -526,10 +545,12 @@ export default function ReportPreviewModal({
               with CSS transform so they fit the preview pane. The DOM size
               and the PDF output stay byte-equivalent — there is no second
               layout anywhere. */}
-          <div className="overflow-y-auto p-5" style={{ background: C.raised }}>
+          <div className="overflow-y-auto p-5 min-w-0" style={{ background: C.raised }}>
             <p className="text-xs uppercase tracking-widest mb-3 font-semibold" style={{ color: C.muted }}>Live Preview</p>
             {(() => {
-              const previewWidth = 560;
+              const viewportWidth = typeof window !== "undefined" ? window.innerWidth : 1120;
+              const availablePreviewWidth = viewportWidth < 768 ? viewportWidth - 64 : viewportWidth - 430;
+              const previewWidth = Math.min(560, Math.max(280, availablePreviewWidth));
               const scale = previewWidth / REPORT_PAGE_PX.width;
               // Engine renders exactly 6 fixed pages + N matched property detail pages (max 3).
               const pageCount = 6 + Math.min(previewProjects.length, 3);
@@ -576,13 +597,13 @@ export default function ReportPreviewModal({
 
         {/* Actions */}
         <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>
-          <Button onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold" style={secondaryBtn}>
             <LinkIcon className="w-4 h-4 mr-2" /> Copy text
           </Button>
-          <Button onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold" style={secondaryBtn}>
             <MessageCircle className="w-4 h-4 mr-2" /> Share WhatsApp
           </Button>
-          <Button onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold" style={secondaryBtn}>
             <Mail className="w-4 h-4 mr-2" /> Share Email
           </Button>
           <Button data-aihf-primary-btn onClick={() => run("jbj", () => onSendToConsultant(branding))} disabled={busy === "jbj"} className="font-semibold allow-white" style={primaryBtn}>

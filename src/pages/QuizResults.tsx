@@ -64,8 +64,9 @@ const AIHF_RESULTS_STYLE = `
     border: 1px solid rgba(184,149,85,0.45) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta:hover, .aihf-results .aihf-cta:focus-visible {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     border: 0 !important;
     box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   }
@@ -76,18 +77,20 @@ const AIHF_RESULTS_STYLE = `
     opacity: 1 !important;
   }
   .aihf-results .aihf-cta svg *, .aihf-results .aihf-cta :is(path,line,polyline,polygon,rect,circle,ellipse) { stroke: #FFFFFF !important; color: #FFFFFF !important; }
-  .aihf-results .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; transform: translateY(-1px); }
+  .aihf-results .aihf-cta:hover { background: #064E3B !important; background-image: none !important; background-color: #064E3B !important; transform: translateY(-1px); }
   .aihf-results .aihf-cta-glow {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     border: 0 !important;
     box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
     transform: translateZ(0);
     transition: transform .25s ease, background-color .25s ease !important;
   }
   .aihf-results .aihf-cta-glow:hover {
-    background: var(--jj-emerald-ombre-hover) !important;
-    background-image: var(--jj-emerald-ombre-hover) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     transform: translateY(-1px);
   }
   .aihf-results .aihf-outline {
@@ -101,8 +104,9 @@ const AIHF_RESULTS_STYLE = `
     box-shadow: 0 0 18px rgba(184,149,85,0.14), 0 18px 55px rgba(0,0,0,0.12) !important;
   }
   .aihf-results .aihf-action-icon {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     border: 0 !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
@@ -158,7 +162,8 @@ const AIHF_RESULTS_STYLE = `
   /* Favorite / shortlist buttons — locked emerald fill + white glyph */
   .aihf-results .jj-favorite-trigger,
   .aihf-results .jj-favorite-trigger:hover {
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
     background-color: #064E3B !important;
     border: 1px solid rgba(255,255,255,0.35) !important;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 10px 24px -12px rgba(6,78,59,0.95) !important;
@@ -913,7 +918,7 @@ const QuizResults = () => {
   }
 
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "#FDFBF7" }}>
+    <section data-allow-dark-cta data-no-contrast-guard className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "#FDFBF7" }}>
       <style>{AIHF_RESULTS_STYLE}</style>
       <div className="container mx-auto px-4">
         {/* Header */}
@@ -1059,7 +1064,7 @@ const QuizResults = () => {
                           background: "#F7F2EA",
                           border: "1px solid rgba(184,149,85,0.55)",
                           boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
-                          color: "#FFFFFF",
+                          color: "#1A1A1A",
                         }}
                       >
                         <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(projects[0].id, 'top1')}>
@@ -1180,7 +1185,7 @@ const QuizResults = () => {
                             background: "#F7F2EA",
                             border: "1px solid rgba(184,149,85,0.55)",
                             boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
-                            color: "#FFFFFF",
+                            color: "#1A1A1A",
                           }}
                         >
                           <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(project.id, 'top1')}>
@@ -1330,19 +1335,18 @@ const QuizResults = () => {
           data-aihf-dialog
           data-allow-dark-cta
           data-no-contrast-guard
-          data-on-dark
           className="aihf-results allow-white sm:max-w-md border-0"
           style={{
             background: "#F7F2EA",
             border: "1px solid rgba(184,149,85,0.45)",
             boxShadow:
               "0 24px 70px rgba(45,212,191,0.25), inset 0 0 34px rgba(103,232,249,0.07)",
-            color: "#FFFFFF",
+            color: "#1A1A1A",
           }}
         >
           <style>{AIHF_RESULTS_STYLE}</style>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2" style={{ color: "#FFFFFF" }}>
+            <DialogTitle className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
               <Share2 className="w-5 h-5 aihf-tiffany" />
               {shareTrigger === "post-download" ? "Share your report" : "Share your recommendations"}
             </DialogTitle>
@@ -1359,7 +1363,7 @@ const QuizResults = () => {
               {projects?.map((p, i) => (
                 <div key={p.id} className="flex items-center gap-2 text-sm py-0.5">
                   <span className="aihf-tiffany font-semibold">#{i + 1}</span>
-                  <span className="truncate" style={{ color: "#FFFFFF" }}>{p.name}</span>
+                  <span className="truncate" style={{ color: "#1A1A1A" }}>{p.name}</span>
                 </div>
               ))}
             </div>
@@ -1385,7 +1389,7 @@ const QuizResults = () => {
             </div>
 
             <div className="pt-3 space-y-2" style={{ borderTop: "1px solid rgba(184,149,85,0.30)" }}>
-              <p className="text-xs font-semibold flex items-center gap-1.5" style={{ color: "#FFFFFF" }}>
+              <p className="text-xs font-semibold flex items-center gap-1.5" style={{ color: "#1A1A1A" }}>
                 <Building2 className="w-3.5 h-3.5 aihf-tiffany" />
                 Send to a JBJ Consultant
               </p>
