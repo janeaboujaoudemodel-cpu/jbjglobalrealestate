@@ -29,7 +29,7 @@ export default function ChannelCard({
   const Inner = (
     <div
       data-no-contrast-guard
-      className="jbj-emerald-animated-border rounded-xl p-[2px] w-full h-full block"
+      className="jbj-emerald-animated-border rounded-xl p-[2px] w-full h-full min-w-0 block"
     >
       <div
         data-emerald="true"
@@ -80,14 +80,14 @@ export default function ChannelCard({
 
   if (channel.action) {
     return (
-      <button type="button" onClick={onClick} className="text-left w-full">
+      <button type="button" onClick={onClick} className="block text-left w-full h-full min-w-0">
         {Inner}
       </button>
     );
   }
   if (channel.route) {
     return (
-      <Link to={channel.route} onClick={onActivate} className="block w-full">
+      <Link to={channel.route} onClick={onActivate} className="block w-full h-full min-w-0">
         {Inner}
       </Link>
     );
@@ -98,7 +98,7 @@ export default function ChannelCard({
       target={channel.external ? "_blank" : undefined}
       rel={channel.external ? "noreferrer" : undefined}
       onClick={onActivate}
-      className="block w-full"
+      className="block w-full h-full min-w-0"
     >
       {Inner}
     </a>

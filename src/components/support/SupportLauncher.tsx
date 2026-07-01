@@ -212,9 +212,9 @@ export default function SupportLauncher() {
                     <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <div className="flex flex-col gap-2 overflow-y-auto pr-0.5">
+                <div className="grid grid-cols-1 auto-rows-[86px] gap-2 overflow-y-auto pr-0.5">
                   {channels.map((c) => (
-                    <div key={c.id} className="rounded-xl">
+                    <div key={c.id} className="rounded-xl h-[86px] min-w-0">
                       <ChannelCard channel={c} compact onActivate={close} />
                     </div>
                   ))}
@@ -341,9 +341,11 @@ export default function SupportLauncher() {
                       <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </button>
                   </div>
-                  <div className="flex flex-col gap-2.5 overflow-y-auto pr-0.5">
+                  <div className="grid grid-cols-1 auto-rows-[86px] gap-2.5 overflow-y-auto pr-0.5">
                     {channels.map((c) => (
-                      <ChannelCard key={c.id} channel={c} onActivate={close} />
+                      <div key={c.id} className="h-[86px] min-w-0">
+                        <ChannelCard channel={c} onActivate={close} />
+                      </div>
                     ))}
                   </div>
                 </div>
