@@ -1,109 +1,127 @@
-## Goal
 
-Rebuild the filter + list layout on **Projects (Properties/Off-Plan)**, **Areas / Area Detail**, and **Resale Properties** to match the Bayut and Property Finder filter model (density, controls, hierarchy), keep every existing JBJ-only filter that isn't on those portals, and render everything in our champagne + emerald palette. The horizontal utility bar in the header is out of scope.
+# JBJ CRM — Full Workspace Rebuild
 
-## What stays untouched
+Rename and rebuild the current `/owner/crm/zoho` page into a full **JBJ CRM** workspace that visually and functionally mirrors Zoho CRM, powered by (a) our own database as the source of truth and (b) the Zoho connector as a live sync layer so data survives disconnect.
 
-- `src/components/navigation/HorizontalUtilityBar.tsx` (search / views / heart / sq ft-m / currency / mode / avatar).
-- Global sidebar, header, mode picker, tokens in `index.css`.
-- Data sources, RLS, edge functions. Frontend/presentation only.
+## Scope of this phase (Phase 1)
 
-## Filter model (merged: Bayut ∪ PropertyFinder ∪ JBJ)
+Ship the **shell + all module screens + Zoho mirror-to-DB sync** so the layout, navigation, and every module page exist end-to-end. Deep automation (portal push, social ads, lead-distribution engine) lands in Phase 2 as separate work items — the UI slots for each are created now so nothing needs re-plumbing later.
 
-One reusable panel + one sticky results toolbar, shared by all three pages. Fields:
+## New route structure
 
-```text
-Primary row (always visible, sticky):
-  Purpose (Buy / Rent / Off-Plan)   — page-scoped
-  Location (multi-chip: city → community → sub-community, searchable)
-  Property Type (multi: Apartment, Villa, Townhouse, Penthouse, Plot, Building, Office, Retail, Warehouse, Hotel Apt)
-  Beds (Studio, 1–7+, multi-select pills)
-  Baths (1–7+, multi-select pills)
-  Price (min–max, currency-aware via existing currency store) + "Any"
-  Area size (min–max, unit-aware sq ft/sq m via existing store)
-  [More filters] button → full panel
-
-More filters panel (drawer/sheet on mobile, popover on desktop):
-  Completion status (Ready / Off-Plan / Under Construction)  [Bayut+PF]
-  Handover date range                                        [JBJ – keep]
-  Payment plan slider (post-handover %)                      [JBJ – keep]
-  Furnishing (Furnished / Semi / Unfurnished)                [Bayut+PF]
-  View (Sea / Marina / Burj / Park / Golf / Community)       [PF]
-  Amenities (multi-chip; pool, gym, parking, maid, study…)   [Bayut+PF]
-  Developer (multi, searchable)                              [PF+JBJ]
-  Project / Tower (multi, searchable)                        [JBJ – keep]
-  Sale status (Available / Reserved / Sold)                  [JBJ – keep]
-  Verified only toggle                                       [Bayut]
-  Virtual tour only toggle                                   [Bayut+PF]
-  Floor range (min–max)                                      [PF]
-  Year built / Handover year                                 [PF]
-  Rental frequency (Yearly/Monthly/Weekly/Daily)             [Rent only]
-  Keyword (free text, e.g. "vacant on transfer")             [Bayut+PF]
-
-Sticky results toolbar:
-  Result count + active-filter chips (removable) + Save search
-  Sort (Newest, Price ↑/↓, Beds, Size, Handover, Popularity)
-  View toggle (Grid / List / Map) — Map only where a map exists
+```
+/owner/crm/jbj                        Home (dashboard tiles)
+/owner/crm/jbj/reports
+/owner/crm/jbj/analytics
+/owner/crm/jbj/my-requests
+/owner/crm/jbj/agents
+/owner/crm/jbj/team-space
+/owner/crm/jbj/work-queue
+/owner/crm/jbj/leads
+/owner/crm/jbj/contacts
+/owner/crm/jbj/accounts
+/owner/crm/jbj/deals
+/owner/crm/jbj/forecast
+/owner/crm/jbj/documents
+/owner/crm/jbj/campaigns
+/owner/crm/jbj/tasks
+/owner/crm/jbj/meetings
+/owner/crm/jbj/calls
+/owner/crm/jbj/inventory      (products, quotes, invoices, orders)
+/owner/crm/jbj/support        (cases, solutions)
+/owner/crm/jbj/services
+/owner/crm/jbj/projects
+/owner/crm/jbj/integrations   (Zoho, portals, socials, API keys)
+/owner/crm/jbj/settings/roles
 ```
 
-Behavior: URL-synced query params, chip-based active filters (Bayut pattern), "Reset all", auto-count refresh, mobile bottom-sheet with sticky Apply/Reset (Property Finder pattern).
+Old `/owner/crm/zoho` becomes a 301 redirect to `/owner/crm/jbj`.
 
-## Layout model (per page)
+## Layout — dedicated JBJ CRM shell
+
+New `JbjCrmShell.tsx` renders **only** when inside `/owner/crm/jbj/*`, replacing the standard owner sidebar with a Zoho-style left rail:
 
 ```text
-┌───────────────────────────────────────────────────────────────┐
-│ Page hero (compact, champagne band, black ink title)         │
-├───────────────────────────────────────────────────────────────┤
-│ Sticky primary filter row  (emerald pills, white ink)        │
-│ [Purpose][Location][Type][Beds][Baths][Price][Area][More▾]   │
-├───────────────────────────────────────────────────────────────┤
-│ Active-chip strip · result count · Save · Sort · View toggle │
-├──────────────┬────────────────────────────────────────────────┤
-│ (Desktop)    │  Result grid / list / map                      │
-│ Left rail    │  Cards keep existing JBJ card component        │
-│ Facet groups │                                                │
-└──────────────┴────────────────────────────────────────────────┘
++------+---------------------------------------+
+| Rail |  Top bar: module title · search · +   |
+|      +---------------------------------------+
+|      |  Module content (list / kanban / …)   |
+|      |                                       |
++------+---------------------------------------+
 ```
 
-- Desktop ≥1280px: optional left facet rail (collapsible) mirroring Bayut. Below: full-width results.
-- Tablet/mobile: no rail; primary row + [More filters] bottom sheet.
+- 224 px collapsible rail (72 px icon-only).
+- Champagne surface `#F7F2EA`, emerald metallic active pill, gold hairline dividers — brand palette, no Zoho blue.
+- Rail footer: **two 3D emerald pills** stacked
+  - "Owner Panel" → `/owner/admin`
+  - "Return to Site" → `/`
+- Rail header: JBJ monogram + label "JBJ CRM" + edition chip "Enterprise".
 
-## Files to add
+## Module screens (Phase 1 render contract)
 
-- `src/components/filters/UnifiedFilterPanel.tsx` — merged panel used by all three pages.
-- `src/components/filters/UnifiedFilterBar.tsx` — sticky primary row.
-- `src/components/filters/ActiveFilterChips.tsx` — Bayut-style removable chip strip.
-- `src/components/filters/FacetRail.tsx` — collapsible desktop left rail.
-- `src/components/filters/useUnifiedFilters.ts` — URL-synced state, currency/unit-aware, replaces per-page ad-hoc state.
-- `src/components/filters/filterSchema.ts` — single source of truth for fields, options, labels, palette bindings.
+Every module ships with the standard Zoho four-view header — **List · Kanban · Table · Chart** — plus create/edit drawer, filter panel, and inline row actions. Backed by our own tables so data persists after Zoho disconnect.
 
-## Files to edit
+| Group          | Modules                                                                 |
+|----------------|-------------------------------------------------------------------------|
+| Home           | Dashboard tiles (open deals, tasks due, meetings today, pipeline)       |
+| Sales          | Leads, Contacts, Accounts, Deals, Forecast                              |
+| Marketing      | Campaigns                                                               |
+| Activities     | Tasks, Meetings, Calls                                                  |
+| Inventory      | Products, Price Books, Quotes, Sales Orders, Invoices                   |
+| Support        | Cases, Solutions                                                        |
+| Collaboration  | Documents, Team Space, Work Queue, My Requests                          |
+| Delivery       | Projects, Services                                                      |
+| Intelligence   | Reports, Analytics, Agents (AI assistants)                              |
+| Config         | Integrations, Roles & Permissions                                       |
 
-- `src/pages/Properties.tsx` (Off-Plan / Projects) — swap ad-hoc filters for `UnifiedFilterBar` + `UnifiedFilterPanel`. Preserve existing card grid, empty state, and JBJ-only extras (sale status, handover, payment plan).
-- `src/pages/ResaleProperties.tsx` — same swap; keep "verified investor" and resale-only extras; hide off-plan-only fields (handover, payment plan post-handover).
-- `src/pages/AreaGuides.tsx` + `src/pages/AreaDetail.tsx` + `src/components/area-detail/AreaProjectsGrid.tsx` — apply the same bar/panel, scoped to the area (Location pre-filled, disabled).
-- `src/pages/PropertiesReelly.tsx`, `src/pages/PropertyMap.tsx` — align sticky bar and chip strip; keep map-specific behavior.
-- `src/components/filters/AdvancedFilterPanel.tsx`, `FilterShortcutBar.tsx` — become thin wrappers around the unified components (no duplicate logic), so existing tests keep passing.
+## Zoho mirror (source-of-truth strategy)
 
-## Palette + contrast rules (non-negotiable)
+- New tables `jbj_crm_<module>` mirror the 9 Zoho modules already reachable via connector, plus internal-only modules (Team Space, Work Queue, Projects, etc.).
+- Extend `zoho-crm-proxy` into `jbj-crm-sync` edge function that pulls Zoho modules into the mirror tables on demand and on a scheduled cron; every list screen reads from the mirror, so **data stays visible after disconnect**.
+- Two-way write comes in Phase 2; Phase 1 is read-through-mirror + local create/edit on JBJ-only modules.
 
-- Page background: `#FDFBF7`. Panels/cards: `#F7F2EA` with `#B89555` 1px hairline (accent only, never fill).
-- Primary pill / active state: `.jj-pill-emerald-metallic` (emerald metallic) + `#FFFFFF` text & icons.
-- Inactive pill: champagne fill + `#1A1A1A` ink; hover raises to raised champagne `#EFE6D6`.
-- Chips: emerald outline when active, champagne fill when neutral. Remove-x always visible.
-- No restricted green (`#10B981`). No gold as a fill. No raw gray dividers — separation is tone step.
-- Titles use `<SectionTitle />` (ink black). Prices use `<PricePill />`. Developer names use `<DeveloperLink />`.
+## Integrations hub (stubs wired, deep work in Phase 2)
+
+The `/integrations` screen ships with cards for each target so users see the roadmap and can paste keys today:
+
+- Zoho CRM (already live) — status, last sync, disconnect
+- Developer Upload API — generates per-developer API key, docs snippet showing how a developer's site posts new projects into JBJ (auto-syncs to platform listings)
+- Portals: Property Monitor, Bayut, DXB Interact, DLD, Property Finder, Property Guru, Dubizzle — each with an on/off toggle per listing
+- Social: Facebook, Instagram, TikTok, LinkedIn — connect + campaign push toggle
+
+Toggles persist to a `jbj_crm_integration_settings` table; actual push jobs are Phase 2.
+
+## Roles & lead distribution (skeleton)
+
+- `jbj_crm_roles` table (Owner, Sales Manager, Agent, Marketing, Support) with per-module CRUD flags.
+- `jbj_crm_lead_assignments` with round-robin or manual assignment; screen shows who owns each lead and last-touch age so "who's not following up" is visible.
+- Distribution engine (rules-based auto-assign) queued for Phase 2.
+
+## Technical notes
+
+- Files:
+  - `src/pages/owner/crm/jbj/JbjCrmShell.tsx` — layout + rail
+  - `src/pages/owner/crm/jbj/index.tsx` — dashboard
+  - `src/pages/owner/crm/jbj/modules/<Module>Page.tsx` — one per module
+  - `src/components/crm/jbj/RecordTable.tsx`, `RecordKanban.tsx`, `RecordDrawer.tsx`, `FilterPanel.tsx` — shared primitives
+  - `src/routes/OwnerRoutes.tsx` — nest `/owner/crm/jbj/*` under a `<JbjCrmShell>` outlet, add redirect from `/owner/crm/zoho`
+- Sidebar entry in `OwnerSidebarNav.tsx` renamed **Zoho CRM → JBJ CRM**, routes to `/owner/crm/jbj`.
+- Edge functions: rename `zoho-crm-proxy` role to `jbj-crm-sync` (keep proxy for live pass-through), add cron trigger for scheduled mirror.
+- DB migration adds `jbj_crm_*` tables with RLS restricted to owner + assigned CRM roles, plus GRANTs per project standard.
+- Existing `/owner/crm` (internal JBJ leads CRM) is untouched — this is an additive workspace.
+
+## Out of scope for Phase 1 (explicit, so nothing is silently dropped)
+
+- Two-way Zoho write-back (create in JBJ → push to Zoho)
+- Live portal publishing to Bayut/PF/etc. (only toggles + storage now)
+- Social campaign execution
+- Automated lead-distribution rules engine
+- AI Agents runtime (module screen ships, agents themselves are stubs)
+
+Each is a follow-up phase; the UI already has its slot so no rework needed.
 
 ## Validation
 
-- Playwright sweep (desktop 1440, iPad 1024, mobile 390) on `/properties`, `/resale-properties`, `/areas`, `/areas/:slug` — screenshots before/after, zero horizontal overflow, zero restricted-green hex, active-chip round-trip via URL, More-filters sheet opens/closes and applies.
-- Vitest: extend `src/components/filters/__tests__` to cover Unified panel selection, chip removal, reset all, URL sync.
-- Contrast audit on emerald pill (white ink ≥ 7:1) and champagne pill (black ink ≥ 7:1).
-
-## Out of scope (explicit)
-
-- Horizontal header utility bar and its dropdowns.
-- Card component redesign, PDP layout, backend/schema, listing ingestion.
-- Any tool page, portal shell, or CRM view.
-
-Approve and I'll implement in this order: schema → hook → panel/bar/chips → wire Projects → Resale → Areas → tests + Playwright.
+- Visual: Playwright screenshots at 1440/1024/390 across every module route, compared for brand palette compliance (no blue, no raw gray, emerald active pill, champagne surface).
+- Functional: click every rail item, confirm route loads with the four-view header and at least the list view rendering mirror data.
+- Regression: existing `/owner/crm` and `/owner/admin` unaffected.
