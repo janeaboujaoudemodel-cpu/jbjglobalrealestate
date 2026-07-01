@@ -143,6 +143,8 @@ const MODULE_CONFIG: Partial<Record<JbjCrmSection, { zohoModule: string; columns
       { key: "Due_Date", label: "Due" },
     ],
   },
+};
+
 
 export default function JbjCrmModulePage() {
   const params = useParams();
