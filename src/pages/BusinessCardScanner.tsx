@@ -463,49 +463,54 @@ const BusinessCardScanner = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Scanner Section */}
           <Card
-            className="border-rose-500/50 allow-white"
-            data-no-contrast-guard
             style={{
-              background: "linear-gradient(180deg, rgba(7,16,31,0.94) 0%, rgba(4,7,13,0.97) 100%)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 60px -22px rgba(251,113,133,0.35)",
+              background: "linear-gradient(180deg, #065F46 0%, #04231A 60%, #000000 100%)",
+              border: "1px solid rgba(255,255,255,0.28)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
           >
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white allow-white">
-                <Sparkles className="h-5 w-5 text-rose-300 allow-white" />
+              <CardTitle className="flex items-center gap-2" style={{ color: "#FFFFFF" }}>
+                <Sparkles className="h-5 w-5" style={{ color: "#FFFFFF" }} />
                 Scan Business Cards
               </CardTitle>
-              <CardDescription className="text-white/85 allow-white">
+              <CardDescription style={{ color: "rgba(255,255,255,0.85)" }}>
                 Use your camera or upload images to extract contact information
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "camera" | "upload")}>
                 <TabsList
-                  className="bcs-tabs grid w-full grid-cols-2 mb-4 border border-rose-500/40 allow-white"
-                  data-no-contrast-guard
-                  style={{ background: "rgba(255,255,255,0.04)" }}
+                  className="grid w-full grid-cols-2 mb-4"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.24)",
+                  }}
                 >
-                  <TabsTrigger
-                    value="camera"
-                    data-no-contrast-guard
-                    data-allow-dark-cta
-                    className="bcs-tab gap-2 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
-                    style={{ color: activeTab === "camera" ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
-                  >
-                    <Camera className="h-4 w-4 allow-white" />
-                    Camera
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="upload"
-                    data-no-contrast-guard
-                    data-allow-dark-cta
-                    className="bcs-tab gap-2 allow-white data-[state=active]:bg-rose-500 data-[state=active]:text-white"
-                    style={{ color: activeTab === "upload" ? "#FFFFFF" : "rgba(255,255,255,0.78)" }}
-                  >
-                    <Upload className="h-4 w-4 allow-white" />
-                    Upload
-                  </TabsTrigger>
+                  {[
+                    { v: "camera", Icon: Camera, label: "Camera" },
+                    { v: "upload", Icon: Upload, label: "Upload" },
+                  ].map(({ v, Icon, label }) => {
+                    const active = activeTab === v;
+                    return (
+                      <TabsTrigger
+                        key={v}
+                        value={v}
+                        data-allow-dark-cta
+                        className="gap-2"
+                        style={{
+                          background: active
+                            ? "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)"
+                            : "transparent",
+                          color: "#FFFFFF",
+                          border: active ? "1px solid rgba(255,255,255,0.46)" : "1px solid transparent",
+                        }}
+                      >
+                        <Icon className="h-4 w-4" style={{ color: "#FFFFFF" }} />
+                        {label}
+                      </TabsTrigger>
+                    );
+                  })}
                 </TabsList>
 
                 <TabsContent value="camera" className="min-h-[560px]">
@@ -531,26 +536,31 @@ const BusinessCardScanner = () => {
 
           {/* Results Section */}
           <Card
-            className="border-rose-500/50 allow-white"
-            data-no-contrast-guard
             style={{
-              background: "linear-gradient(180deg, rgba(7,16,31,0.94) 0%, rgba(4,7,13,0.97) 100%)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 60px -22px rgba(251,113,133,0.35)",
+              background: "linear-gradient(180deg, #065F46 0%, #04231A 60%, #000000 100%)",
+              border: "1px solid rgba(255,255,255,0.28)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
           >
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="flex items-center gap-2 text-white allow-white">
-                    <CheckCircle2 className="h-5 w-5 text-rose-300 allow-white" />
+                  <CardTitle className="flex items-center gap-2" style={{ color: "#FFFFFF" }}>
+                    <CheckCircle2 className="h-5 w-5" style={{ color: "#FFFFFF" }} />
                     Scanned Contacts
                     {scannedContacts.length > 0 && (
-                      <Badge className="bg-rose-500/25 text-rose-100 allow-white" data-no-contrast-guard>
+                      <Badge
+                        style={{
+                          background: "rgba(255,255,255,0.14)",
+                          border: "1px solid rgba(255,255,255,0.32)",
+                          color: "#FFFFFF",
+                        }}
+                      >
                         {scannedContacts.length}
                       </Badge>
                     )}
                   </CardTitle>
-                  <CardDescription className="text-white/85 allow-white">
+                  <CardDescription style={{ color: "rgba(255,255,255,0.85)" }}>
                     Review and export your extracted contacts
                   </CardDescription>
                 </div>
@@ -558,12 +568,11 @@ const BusinessCardScanner = () => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    data-no-contrast-guard
                     data-allow-dark-cta
-                    className="text-white/85 hover:text-white allow-white"
+                    style={{ color: "#FFFFFF" }}
                     onClick={() => setShowEncryptedData(!showEncryptedData)}
                   >
-                    {showEncryptedData ? <EyeOff className="h-4 w-4 allow-white" /> : <Eye className="h-4 w-4 allow-white" />}
+                    {showEncryptedData ? <EyeOff className="h-4 w-4" style={{ color: "#FFFFFF" }} /> : <Eye className="h-4 w-4" style={{ color: "#FFFFFF" }} />}
                   </Button>
                 )}
               </div>
@@ -583,66 +592,48 @@ const BusinessCardScanner = () => {
         {/* Actions Bar */}
         {scannedContacts.length > 0 && (
           <Card
-            className="mt-6 border-rose-500/50 allow-white"
-            data-no-contrast-guard
+            className="mt-6"
             style={{
-              background: "linear-gradient(180deg, rgba(7,16,31,0.94) 0%, rgba(4,7,13,0.97) 100%)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+              background: "linear-gradient(180deg, #065F46 0%, #04231A 60%, #000000 100%)",
+              border: "1px solid rgba(255,255,255,0.28)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
             }}
           >
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex flex-col gap-1 text-sm text-white/90 allow-white">
+                <div className="flex flex-col gap-1 text-sm" style={{ color: "rgba(255,255,255,0.92)" }}>
                   <div className="flex items-center gap-2">
-                    <Lock className="h-4 w-4 text-rose-300 allow-white" />
+                    <Lock className="h-4 w-4" style={{ color: "#FFFFFF" }} />
                     <span>All data encrypted with your session key</span>
                   </div>
-                  <div className="text-[11px] text-white/65 allow-white">
+                  <div className="text-[11px]" style={{ color: "rgba(255,255,255,0.66)" }}>
                     Delete here only clears the scanner. CRM records remain — manage them on the CRM page.
                   </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleExportCSV}
-                    data-no-contrast-guard
-                    data-allow-dark-cta
-                    className="gap-2 allow-white"
-                    style={{ background: "transparent", borderColor: "rgba(251,113,133,0.45)", color: "#FFFFFF" }}
-                  >
-                    <Download className="h-4 w-4 allow-white" />
-                    Export CSV
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleExportExcel}
-                    data-no-contrast-guard
-                    data-allow-dark-cta
-                    className="gap-2 allow-white"
-                    style={{ background: "transparent", borderColor: "rgba(251,113,133,0.45)", color: "#FFFFFF" }}
-                  >
-                    <FileSpreadsheet className="h-4 w-4 allow-white" />
-                    Export Excel
-                  </Button>
-                  {user && (
+                  {[
+                    { onClick: handleExportCSV, Icon: Download, label: "Export CSV" },
+                    { onClick: handleExportExcel, Icon: FileSpreadsheet, label: "Export Excel" },
+                    ...(user ? [{ onClick: handleSaveAll, Icon: UserPlus, label: "Save All to CRM" }] : []),
+                    { onClick: handleClearAll, Icon: Trash2, label: "Clear All" },
+                  ].map(({ onClick, Icon, label }) => (
                     <Button
+                      key={label}
                       size="sm"
-                      data-no-contrast-guard
                       data-allow-dark-cta
-                      className="bcs-action-dark gap-2 allow-white"
-                      onClick={handleSaveAll}
+                      className="gap-2"
+                      onClick={onClick}
+                      style={{
+                        background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+                        border: "1px solid rgba(255,255,255,0.46)",
+                        color: "#FFFFFF",
+                      }}
                     >
-                      <UserPlus className="h-4 w-4 allow-white" />
-                      Save All to CRM
+                      <Icon className="h-4 w-4" style={{ color: "#FFFFFF" }} />
+                      {label}
                     </Button>
-                  )}
-                  <Button variant="outline" size="sm" onClick={handleClearAll} className="bcs-action-danger gap-2 allow-white" data-no-contrast-guard data-allow-dark-cta>
-                    <Trash2 className="h-4 w-4 allow-white" />
-                    Clear All
-                  </Button>
+                  ))}
                 </div>
               </div>
             </CardContent>
@@ -650,14 +641,15 @@ const BusinessCardScanner = () => {
         )}
 
         {/* Footer Privacy Notice */}
-        <div className="mt-8 text-center text-xs text-white/90 space-y-2 allow-white" data-no-contrast-guard>
+        <div className="mt-8 text-center text-xs space-y-2" style={{ color: "rgba(255,255,255,0.85)" }}>
           <p>
-            <Lock className="h-3 w-3 inline mr-1 text-rose-300 allow-white" />
+            <Lock className="h-3 w-3 inline mr-1" style={{ color: "#FFFFFF" }} />
             Your scanned data is encrypted client-side and never transmitted to our servers unencrypted.
           </p>
           <p>
-            <Shield className="h-3 w-3 inline mr-1 text-rose-300 allow-white" />
+            <Shield className="h-3 w-3 inline mr-1" style={{ color: "#FFFFFF" }} />
             Platform analytics track only usage counts, never personal contact data.
+
           </p>
         </div>
       </div>
