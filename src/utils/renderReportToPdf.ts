@@ -149,22 +149,12 @@ export async function renderReportToPdf(
 
   const filename = makeFilename(opts.filename);
 
-  // Fast path: capture the already-rendered Live Preview the user is looking at.
-  // This avoids mounting a second React tree, avoids re-loading every image, and
-  // guarantees the downloaded PDF uses the exact same CSS cascade and colors.
-  const livePreviewRoot = findLivePreviewRoot();
-  if (livePreviewRoot) {
-    const pages = Array.from(
-      livePreviewRoot.querySelectorAll<HTMLElement>("[data-report-page]")
-    );
-    if (pages.length) {
-      await waitForFonts();
-      await waitForImages(livePreviewRoot, 900);
-      return prepareLivePreviewForCapture(livePreviewRoot, () =>
-        captureReportRootToPdf(livePreviewRoot, pages, filename)
-      );
-    }
-  }
+  // NOTE: The live-preview fast path is intentionally disabled — capturing the
+  // visible preview required repositioning it offscreen, which blanked out the
+  // modal during download. We always mount an offscreen ReportEngine below so
+  // the user keeps seeing the document while the PDF is generated.
+  void findLivePreviewRoot;
+
 
   // Offscreen mount — kept on-screen at -10000px so html2canvas can paint
   // styles correctly (display:none / visibility:hidden break it).
