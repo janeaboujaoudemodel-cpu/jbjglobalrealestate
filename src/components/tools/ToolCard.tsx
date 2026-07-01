@@ -21,7 +21,7 @@ export const ToolCard = ({
   className = "",
 }: ToolCardProps) => {
   const border =
-    accentEdge && theme ? `1px solid ${theme.accentBorder}` : `1px solid ${TOOL_GOLD}55`;
+    accentEdge && theme ? `1px solid ${theme.accentBorder}` : `1px solid ${TOOL_WHITE_BORDER}`;
 
   return (
     <div
