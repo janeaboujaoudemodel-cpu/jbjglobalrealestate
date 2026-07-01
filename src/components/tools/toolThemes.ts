@@ -1,14 +1,14 @@
 /**
- * Tool Theme Registry — Premium per-tool ombré system.
+ * Tool Theme Registry — Unified Emerald Ombré + Gold Hairline.
  *
- * Each theme renders as: accent → ink black ombré, full saturation accent
- * used for the animated outer border, icons, focus rings, status chips and
- * primary CTAs. Champagne/gold survives only as the page background tint —
- * never as a card fill inside a tool.
+ * Every tool (front-end + owner/back-end) renders on the same emerald
+ * ombré surface pioneered by Interior Design AI / Property Measurement:
+ *   background: linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)
+ * Text is pure white; hairlines are gold #B89555; primary CTAs are emerald
+ * metallic with white ink. No champagne fills inside a tool.
  */
 
 export type ToolTheme = {
-  /** Internal id */
   id:
     | "emerald"
     | "navy"
@@ -18,73 +18,60 @@ export type ToolTheme = {
     | "rose"
     | "amber"
     | "indigo";
-
-  /** Display label */
   label: string;
-  /** Tailwind/CSS values for the hero band gradient */
   heroGradient: string;
-  /** Solid accent (used for icon tile + asterisk) */
   accent: string;
-  /** Soft accent tint for surfaces/borders (rgba) */
   accentSoft: string;
-  /** Border colour for accent-tinted hairlines (rgba) */
   accentBorder: string;
-  /** Primary CTA gradient (accent → ink) */
   ctaGradient: string;
-  /** Hover state CTA gradient (ink → accent reverse) */
   ctaHover: string;
-  /** Eyebrow chip bg + border */
   chipBg: string;
   chipBorder: string;
-  /** Animated outer-shell conic border (accent → ink → accent) */
   borderConic: string;
-  /** Soft page tint behind the shell (very subtle wash) */
   pageWash: string;
 };
 
-/**
- * BRAND LOCK — all tool themes flatten to the JBJ champagne/gold/ink palette.
- * Accent = gold #B89555 (hairline only), dark = clean ink #0A0A0A, hero wash =
- * champagne. No more emerald/navy/burgundy/violet/teal/rose/amber/indigo per
- * tool — every tool reads as one unified brand surface.
- */
-const BRAND_GOLD = "#B89555";
-const BRAND_INK = "#0A0A0A";
-const BRAND_CHAMPAGNE = "#FDFBF7";
-const BRAND_RAISED = "#EFE6D6";
+// JBJ Emerald Ombré palette
+const EMERALD_DEEP = "#064E3B";
+const EMERALD_MID = "#042c1c";
+const EMERALD_INK = "#000000";
+const GOLD = "#B89555";
+const WHITE = "#FFFFFF";
 
-const brandTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
+// Ombré used everywhere (page wash, hero, body)
+const OMBRE = `linear-gradient(180deg, ${EMERALD_DEEP} 0%, ${EMERALD_MID} 48%, ${EMERALD_INK} 100%)`;
+
+const emeraldTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   id,
   label,
-  accent: BRAND_GOLD,
-  // Hero band: champagne with a subtle gold radial — matches /compare hero
-  heroGradient: `radial-gradient(1200px 600px at 50% -10%, rgba(184,149,85,0.14), transparent 60%), ${BRAND_CHAMPAGNE}`,
-  accentSoft: `rgba(184,149,85,0.10)`,
-  accentBorder: `rgba(184,149,85,0.45)`,
-  // Primary CTA: clean ink black with gold hairline — matches .jj-cta-dark
-  ctaGradient: BRAND_INK,
-  ctaHover: `#1F1F1F`,
-  chipBg: `rgba(184,149,85,0.12)`,
-  chipBorder: `rgba(184,149,85,0.45)`,
-  // Outer shell border: subtle gold hairline (no animated rainbow conic)
-  borderConic: `conic-gradient(from 0deg, ${BRAND_GOLD}, rgba(184,149,85,0.35), ${BRAND_GOLD}, rgba(184,149,85,0.35), ${BRAND_GOLD})`,
-  // Page wash: champagne, no colored radial
-  pageWash: `radial-gradient(1200px 600px at 50% -10%, rgba(184,149,85,0.08), transparent 60%), ${BRAND_CHAMPAGNE}`,
+  accent: GOLD,
+  heroGradient: `linear-gradient(180deg, ${EMERALD_DEEP} 0%, ${EMERALD_MID} 60%, ${EMERALD_INK} 100%)`,
+  accentSoft: `rgba(184,149,85,0.12)`,
+  accentBorder: `rgba(184,149,85,0.55)`,
+  // Primary CTA: emerald metallic → deeper emerald
+  ctaGradient: `linear-gradient(135deg, #10B981 0%, #059669 55%, ${EMERALD_DEEP} 100%)`,
+  ctaHover: `linear-gradient(135deg, ${EMERALD_DEEP} 0%, #059669 55%, #10B981 100%)`,
+  chipBg: `rgba(6,78,59,0.55)`,
+  chipBorder: `rgba(184,149,85,0.55)`,
+  // Outer shell border: gold hairline (subtle) — no rainbow
+  borderConic: `conic-gradient(from 0deg, ${GOLD}, rgba(184,149,85,0.35), ${GOLD}, rgba(184,149,85,0.35), ${GOLD})`,
+  pageWash: OMBRE,
 });
 
 export const toolThemes: Record<ToolTheme["id"], ToolTheme> = {
-  emerald: brandTheme("emerald", "Champagne"),
-  navy: brandTheme("navy", "Champagne"),
-  burgundy: brandTheme("burgundy", "Champagne"),
-  violet: brandTheme("violet", "Champagne"),
-  teal: brandTheme("teal", "Champagne"),
-  rose: brandTheme("rose", "Champagne"),
-  amber: brandTheme("amber", "Champagne"),
-  indigo: brandTheme("indigo", "Champagne"),
+  emerald: emeraldTheme("emerald", "Emerald"),
+  navy: emeraldTheme("navy", "Emerald"),
+  burgundy: emeraldTheme("burgundy", "Emerald"),
+  violet: emeraldTheme("violet", "Emerald"),
+  teal: emeraldTheme("teal", "Emerald"),
+  rose: emeraldTheme("rose", "Emerald"),
+  amber: emeraldTheme("amber", "Emerald"),
+  indigo: emeraldTheme("indigo", "Emerald"),
 };
 
-/** Universal champagne page background + ink text */
-export const TOOL_PAGE_BG = "#FDFBF7";
-export const TOOL_CARD_BG = "#F7F2EA";
-export const TOOL_INK = "#1A1A1A";
-export const TOOL_GOLD = "#B89555";
+/** Universal tool surface tokens */
+export const TOOL_PAGE_BG = OMBRE;
+export const TOOL_CARD_BG =
+  "linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%)";
+export const TOOL_INK = WHITE;
+export const TOOL_GOLD = GOLD;
