@@ -77,6 +77,15 @@ function formatWebsite(value?: string | null): string {
 
 const escText = (value: unknown) => String(value ?? "").replace(/\s+/g, " ").trim();
 const titleCase = (value: string) => value.replace(/[-_]+/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
+function WordSpans({ value, gap = 4 }: { value: string; gap?: number }) {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "baseline", flexWrap: "wrap", columnGap: gap, rowGap: 0 }}>
+      {value.split(/\s+/).filter(Boolean).map((word, idx) => (
+        <span key={`${word}-${idx}`} style={{ display: "inline-block" }}>{word}</span>
+      ))}
+    </span>
+  );
+}
 
 const stripHtml = (s?: string | null) =>
   escText(s || "")
@@ -173,7 +182,7 @@ const fmtPrice = (p: ReportProject) => {
 };
 
 const fmtBeds = (p: ReportProject) => {
-  if (p.bedrooms_min == null && p.bedrooms_max == null) return "Bedroom mix on request";
+  if (p.bedrooms_min == null && p.bedrooms_max == null) return "On request";
   const min = p.bedrooms_min ?? p.bedrooms_max ?? 0;
   const max = p.bedrooms_max ?? min;
   if (min === 0) return `Studio${max > 0 ? ` – ${max} BR` : ""}`;
@@ -184,11 +193,24 @@ const fmtBeds = (p: ReportProject) => {
 const fmtHandover = (p: ReportProject) => {
   if (p.handover_quarter && p.handover_year) return `${p.handover_quarter} ${p.handover_year}`;
   if (p.handover_year) return String(p.handover_year);
-  if (p.handover_date) return p.handover_date;
+  if (p.handover_date) {
+    const m = String(p.handover_date).match(/^(\d{4})-(\d{2})(?:-\d{2})?/);
+    if (m) {
+      return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, 1)).toLocaleDateString("en-GB", {
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC",
+      });
+    }
+    return p.handover_date;
+  }
   return p.construction_status || "On request";
 };
 
-const fmtType = (p: ReportProject) => p.property_type_label || p.property_type || p.unit_types?.slice(0, 2).join(" / ") || "Off-plan property";
+const fmtType = (p: ReportProject) => {
+  const raw = p.property_type_label || p.property_type || p.unit_types?.slice(0, 2).join(" / ") || "Off-plan";
+  return titleCase(raw).replace(/\bApartments\b/g, "Apartment");
+};
 const todayStr = () => new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 
 const requirementLabels: Record<string, string> = {
@@ -492,22 +514,22 @@ function PageFooter({ branding }: { branding: ReportBranding }) {
     <footer
       style={{
         height: SP.footerH,
-        padding: "9px 44px",
+        padding: "9px 42px",
 
         boxSizing: "border-box",
         flexShrink: 0,
-        fontSize: 9.5,
+        fontSize: 10.5,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: 18,
+        gap: 26,
         background: T.surface,
         color: T.ink,
         borderTop: `1px solid ${T.gold}`,
       }}
     >
-      <span style={{ color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 700, letterSpacing: "0.04em" }}>{BRAND_LINE}</span>
-      <span style={{ color: T.ink, WebkitTextFillColor: T.ink, textAlign: "right", maxWidth: 380, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{contact}</span>
+      <span style={{ color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 800, letterSpacing: 0, whiteSpace: "nowrap", flexShrink: 0 }}><WordSpans value={BRAND_LINE} gap={4} /></span>
+      <span style={{ color: T.ink, WebkitTextFillColor: T.ink, textAlign: "right", minWidth: 0, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 700, letterSpacing: 0 }}>{contact}</span>
     </footer>
   );
 }
@@ -532,9 +554,9 @@ function SectionEyebrow({ children, light = false }: { children: React.ReactNode
 
 function FieldCard({ label, value, accent }: { label: string; value: React.ReactNode; accent?: boolean }) {
   return (
-    <div style={{ padding: "11px 12px", borderRadius: 7, background: T.surface, border: `1px solid ${T.goldHair}`, minHeight: 62, minWidth: 0, overflow: "hidden" }}>
-      <div style={{ fontSize: 8.8, textTransform: "uppercase", letterSpacing: "0.12em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 800 }}>{label}</div>
-      <div style={{ fontSize: 13, fontWeight: 900, color: accent ? PRICE : T.ink, WebkitTextFillColor: accent ? PRICE : T.ink, marginTop: 5, lineHeight: 1.2, overflowWrap: "anywhere", wordBreak: "break-word", hyphens: "auto" }}>{value}</div>
+    <div style={{ padding: "11px 12px", borderRadius: 7, background: T.surface, border: `1px solid ${T.goldHair}`, minHeight: 62, minWidth: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <div style={{ fontSize: 8.8, textTransform: "uppercase", letterSpacing: "0.12em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 800 }}><WordSpans value={label} gap={5} /></div>
+      <div style={{ fontSize: 12.6, fontWeight: 900, color: accent ? PRICE : T.ink, WebkitTextFillColor: accent ? PRICE : T.ink, marginTop: 5, lineHeight: 1.2, overflowWrap: "break-word", wordBreak: "normal", hyphens: "none" }}>{value}</div>
     </div>
   );
 }
@@ -667,7 +689,7 @@ function MatchedPropertiesPage({ branding, projects, pageIdPrefix, criteriaRows 
             <div key={p.id} style={{ display: "grid", gridTemplateColumns: "224px 1fr", gap: 16, borderRadius: 10, overflow: "hidden", border: `1px solid ${T.goldHair}`, background: T.surface, minHeight: 178 }}>
               <div style={{ position: "relative", background: T.raised }}>
                 <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
-                <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 12, top: 12, minWidth: 72, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{i + 1}</div>
+                <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 12, top: 12, minWidth: 72, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{i + 1}</div>
               </div>
               <div style={{ padding: "16px 16px 14px 0", minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 9 }}>
@@ -684,7 +706,7 @@ function MatchedPropertiesPage({ branding, projects, pageIdPrefix, criteriaRows 
                   <FieldCard label="Type" value={fmtType(p)} />
                 </div>
                 <div style={{ borderTop: `1px solid ${T.goldHair}`, paddingTop: 10 }}>
-                  <div style={{ fontSize: 12, fontWeight: 900, color: T.emerald, WebkitTextFillColor: T.emerald }}>{verdict.label}</div>
+                  <div style={{ fontSize: 12, fontWeight: 900, color: T.emerald, WebkitTextFillColor: T.emerald }}><WordSpans value={verdict.label} /></div>
                   <div style={{ fontSize: 11.2, lineHeight: 1.45, color: T.ink, WebkitTextFillColor: T.ink, marginTop: 3 }}>{verdict.detail}</div>
                 </div>
               </div>
@@ -721,9 +743,9 @@ function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { br
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 14 }}>
         {top3.map((p, i) => (
           <div key={p.id} style={{ background: T.surface, border: `1px solid ${T.goldHair}`, borderRadius: 8, overflow: "hidden" }}>
-            <div style={{ height: 92, background: T.raised, position: "relative" }}>
+              <div style={{ height: 92, background: T.raised, position: "relative" }}>
               <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
-              <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 8, top: 8, width: 26, height: 26, borderRadius: 999, background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>{i + 1}</div>
+              <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 8, top: 8, width: 26, height: 26, borderRadius: 999, background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 900 }}>{i + 1}</div>
             </div>
             <div style={{ padding: "9px 10px" }}>
               <div style={{ fontSize: 12.5, lineHeight: 1.2, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{clamp(p.name, 42)}</div>
@@ -752,16 +774,16 @@ function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { br
                   const v = verdictCopy[cell.verdict];
                   return (
                     <td key={p.id} style={{ padding: "8px 9px", verticalAlign: "top", borderTop: `1px solid ${T.goldHair}` }}>
-                      <div style={{ display: "inline-flex", alignItems: "center", gap: 5, borderRadius: 999, padding: "2px 7px", border: `1px solid ${v.tone}`, color: v.tone, WebkitTextFillColor: v.tone, fontSize: 8.8, fontWeight: 900, marginBottom: 4 }}>{v.label}</div>
-                      <div style={{ color: T.ink, WebkitTextFillColor: T.ink, lineHeight: 1.28, fontWeight: 700 }}>{clamp(cell.value, 60)}</div>
+                      <div data-report-pill style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minHeight: 21, lineHeight: 1, gap: 5, borderRadius: 999, padding: "4px 9px 3px", border: `1px solid ${v.tone}`, color: v.tone, WebkitTextFillColor: v.tone, fontSize: 8.8, fontWeight: 900, marginBottom: 5 }}>{v.label}</div>
+                      <div style={{ color: T.ink, WebkitTextFillColor: T.ink, lineHeight: 1.28, fontWeight: 700, letterSpacing: 0, wordSpacing: 0 }}>{clamp(cell.value, 60)}</div>
                     </td>
                   );
                 })}
               </tr>
             ))}
             <tr data-no-contrast-guard data-on-dark>
-              <td style={{ background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", color: WHITE, WebkitTextFillColor: WHITE, padding: 10, fontWeight: 900 }}>Match summary</td>
-              {totals.map((t, i) => <td key={i} style={{ background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", color: WHITE, WebkitTextFillColor: WHITE, padding: 10, fontWeight: 900 }}>{i === 0 ? "Lead option" : "Comparable"} · {t.match}/{t.total} match</td>)}
+              <td style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, padding: 10, fontWeight: 900 }}>Match summary</td>
+              {totals.map((t, i) => <td key={i} style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, padding: 10, fontWeight: 900 }}>{i === 0 ? "Lead option" : "Comparable"} · {t.match}/{t.total} match</td>)}
             </tr>
           </tbody>
         </table>
@@ -780,7 +802,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
       <div style={{ display: "grid", gridTemplateColumns: "1fr 252px", gap: 18, height: "100%" }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-            <div data-no-contrast-guard data-on-dark style={{ width: 82, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{index + 1}</div>
+            <div data-no-contrast-guard data-on-dark style={{ width: 82, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{index + 1}</div>
             <PlainText style={{ fontSize: 11, color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 700 }}>{developerName(project)} · {locationText(project)}</PlainText>
           </div>
           <h2 style={{ fontSize: 30, lineHeight: 1.08, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 12px" }}>{project.name}</h2>
@@ -800,7 +822,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <div style={{ padding: 13, borderRadius: 8, background: T.surface, border: `1px solid ${T.goldHair}` }}>
               <SectionEyebrow>Why it matches</SectionEyebrow>
-              <p style={{ fontSize: 11, lineHeight: 1.5, color: T.ink, WebkitTextFillColor: T.ink, margin: 0 }}>{verdict.label}. {verdict.detail}</p>
+            <p style={{ fontSize: 11, lineHeight: 1.5, color: T.ink, WebkitTextFillColor: T.ink, margin: 0 }}><WordSpans value={verdict.label} />. {verdict.detail}</p>
             </div>
             <div style={{ padding: 13, borderRadius: 8, background: T.surface, border: `1px solid ${T.goldHair}` }}>
               <SectionEyebrow>Next check</SectionEyebrow>
@@ -819,9 +841,9 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
               </div>
             </div>
           </div>
-          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 9, background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", border: `1px solid ${T.gold}`, padding: "20px 22px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE }}>
+          <div data-no-contrast-guard data-on-dark style={{ borderRadius: 9, background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, border: `1px solid ${T.gold}`, padding: "20px 22px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE }}>
             <SectionEyebrow light>AI recommendation</SectionEyebrow>
-            <div style={{ fontSize: 18, lineHeight: 1.15, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{verdict.label}</div>
+        <div style={{ fontSize: 18, lineHeight: 1.15, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}><WordSpans value={verdict.label} /></div>
             <p style={{ margin: "8px 0 0", fontSize: 11, lineHeight: 1.55, color: WHITE, WebkitTextFillColor: WHITE }}>{verdict.detail}. JBJ should verify final unit mix and pricing before reservation.</p>
           </div>
           <div style={{ borderRadius: 9, background: WHITE, border: `1px solid ${T.goldHair}`, padding: 13 }}>
@@ -853,7 +875,7 @@ function AiRecommendationSummaryPage({ branding, projects, pageIdPrefix, criteri
     <PageFrame id={`${pageIdPrefix}-ai-summary`} pageLabel="AI summary" section="Recommendation" branding={branding}>
       <SectionEyebrow>AI recommendation summary</SectionEyebrow>
       <h2 style={{ fontSize: 30, lineHeight: 1.1, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 14px" }}>Recommended route for the client</h2>
-      <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 16 }}>
+      <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 16 }}>
         <SectionEyebrow light>Lead recommendation</SectionEyebrow>
         <div style={{ fontSize: 25, lineHeight: 1.12, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{lead?.name || "Top matched option"}</div>
         <p style={{ margin: "10px 0 0", fontSize: 12.4, lineHeight: 1.6, color: WHITE, WebkitTextFillColor: WHITE, maxWidth: 620 }}>
@@ -959,7 +981,7 @@ function ContactPage({ branding, pageIdPrefix }: { branding: ReportBranding; pag
           </div>
         </section>
 
-        <div data-no-contrast-guard data-on-dark style={{ marginTop: "auto", borderRadius: 10, background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", border: `1px solid ${T.gold}`, padding: "18px 22px", color: WHITE, WebkitTextFillColor: WHITE, display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 18 }}>
+        <div data-no-contrast-guard data-on-dark style={{ marginTop: "auto", borderRadius: 10, background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, border: `1px solid ${T.gold}`, padding: "18px 22px", color: WHITE, WebkitTextFillColor: WHITE, display: "grid", gridTemplateColumns: "1fr auto", alignItems: "center", gap: 18 }}>
           <div>
             <SectionEyebrow light>JBJ Global Real Estate</SectionEyebrow>
             <div style={{ fontSize: 22, fontWeight: 900, color: WHITE, WebkitTextFillColor: WHITE }}>{COMPANY_CONTACT.email}</div>
@@ -1002,8 +1024,9 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
         <style>{`
           [data-report-root], [data-report-root] * { box-sizing: border-box; }
           [data-report-root] :where(h1,h2,h3,h4,p,span,div,td,th,li,button) {
-            overflow-wrap: anywhere;
+            overflow-wrap: break-word;
             word-break: normal;
+            hyphens: none;
           }
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] *,
@@ -1031,11 +1054,8 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           [data-report-root] [data-report-page] {
             box-shadow: var(--jbj-report-page-shadow, none);
           }
-          /* html2canvas word-collision fix: a tiny letter-spacing forces per-glyph
-             measurement so words never visually concatenate ("Topoptionsselected"). */
-          [data-report-root] :where(h1,h2,h3,h4) {
-            letter-spacing: 0.005em !important;
-            word-spacing: 0.06em !important;
+          [data-report-root] :where(h1,h2,h3,h4,td,th,p,span,div) {
+            letter-spacing: 0 !important;
           }
           /* Ensure emerald boxes use the same single solid color in preview + PDF. */
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
