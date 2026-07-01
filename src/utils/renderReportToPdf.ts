@@ -14,7 +14,7 @@ import {
   type ReportEngineProps,
   type ReportProject,
 } from "@/components/ai-home-finder/report/ReportEngine";
-import { PAGE_SEP_VAR, REPORT_PAGE_PX } from "@/components/ai-home-finder/report/tokens";
+import { REPORT_PAGE_PX } from "@/components/ai-home-finder/report/tokens";
 import type { ReportBranding } from "@/components/ai-home-finder/ReportPreviewModal";
 
 // Export at 2× A4 CSS pixels so downloaded PDFs stay sharp when zoomed/printed.
