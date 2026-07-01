@@ -22680,3 +22680,33 @@ html body #root .owner-dashboard-shell [data-backend-portal="owner-crm"] :is(td,
   overflow-wrap: normal !important;
   word-break: normal !important;
 }
+
+/* PASS 149 — LIST YOUR PROPERTY BRAND PALETTE + CONTRAST LOCK
+   The canonical /list-property page must never inherit old navy/purple tool
+   rules. Champagne controls keep emerald ink; emerald ombré controls keep pure
+   white text/icons. */
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"],
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink),
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"] :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline),
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="inactive"]:not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink):not(#jj-list-prop-ink) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline) {
+  color: #042c1c !important;
+  -webkit-text-fill-color: #042c1c !important;
+  text-fill-color: #042c1c !important;
+  stroke: #042c1c !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="active"],
+html body #root [data-list-property-page] .jj-listing-pill[data-listing-pill="active"] :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline),
+html body #root [data-list-property-page] [data-allow-dark-cta]:not(.jj-listing-pill[data-listing-pill="inactive"]):not(.jj-listing-pill[data-listing-pill="inactive"] *) :is(span, svg, [class*="lucide"], path, circle, rect, line, polyline) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-list-property-page] :is(.jj-purple-anim-border, .jj-purple-ombre, .jj-purple-ghost) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  border-color: #B89555 !important;
+}
