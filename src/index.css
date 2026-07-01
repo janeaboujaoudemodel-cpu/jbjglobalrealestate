@@ -7987,8 +7987,19 @@ html body footer p:last-child {
    - No gold borders/dividers anywhere inside the sidebar nav rows
    ============================================================ */
 
+/* Sidebar shell fill guard — the inner emerald column MUST fill the 320px
+   fixed sidebar container. If left as flex-item auto width it shrinks to
+   its content and exposes a champagne strip between the sidebar and the
+   main content area. Lock to 100% width so that gap can never come back. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] {
+  width: 100% !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
 /* Gold left-border on expanded section column */
 [data-sidebar-emerald] .border-l { border-left-color: rgba(184, 149, 85, 0.45) !important; }
+
 
 /* Emerald gradient utility (reuse) */
 [data-sidebar-emerald] :where([data-sidebar-section], a.group)[class*="!text-[#B89555]"],
