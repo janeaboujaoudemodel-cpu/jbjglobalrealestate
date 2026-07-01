@@ -49,8 +49,8 @@ const emeraldTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   accentSoft: `rgba(184,149,85,0.12)`,
   accentBorder: `rgba(255,255,255,0.42)`,
   // Primary CTA: emerald metallic → deeper emerald
-  ctaGradient: `linear-gradient(135deg, #10B981 0%, #059669 55%, ${EMERALD_DEEP} 100%)`,
-  ctaHover: `linear-gradient(135deg, ${EMERALD_DEEP} 0%, #059669 55%, #10B981 100%)`,
+  ctaGradient: `linear-gradient(135deg, #065F46 0%, #064E3B 55%, ${EMERALD_DEEP} 100%)`,
+  ctaHover: `linear-gradient(135deg, ${EMERALD_DEEP} 0%, #064E3B 55%, #065F46 100%)`,
   chipBg: `rgba(6,78,59,0.55)`,
   chipBorder: `rgba(255,255,255,0.42)`,
   // Outer shell border: white hairline — no gold frame around fullscreen/tools
