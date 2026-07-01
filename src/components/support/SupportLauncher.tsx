@@ -325,8 +325,14 @@ export default function SupportLauncher() {
                 >
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 border-b border-white/15 mb-2">
                     <span
-                      className="allow-white inline-flex items-center gap-1.5 px-0 py-1 text-[11px] font-semibold text-white bg-transparent border-0"
-                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: "transparent", border: "0" }}
+                      className="allow-white inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold text-white"
+                      style={{
+                        color: "#FFFFFF",
+                        WebkitTextFillColor: "#FFFFFF",
+                        background: "linear-gradient(180deg, #0B5F46 0%, #064E3B 55%, #043528 100%)",
+                        border: "1px solid #10B981",
+                        boxShadow: "inset 0 1px 0 rgba(110,231,183,0.55), inset 0 -1px 0 rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.35)",
+                      }}
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
                       Call our agent now · Free
@@ -335,8 +341,13 @@ export default function SupportLauncher() {
                       onClick={close}
                       aria-label="Close"
                       data-allow-dark-cta
-                      className="allow-white h-8 w-8 inline-flex items-center justify-center rounded-full text-white hover:bg-white/10 transition-colors bg-transparent border-0"
-                      style={{ color: "#FFFFFF", background: "transparent", border: "0" }}
+                      className="allow-white h-8 w-8 inline-flex items-center justify-center rounded-full text-white transition-transform hover:scale-105"
+                      style={{
+                        color: "#FFFFFF",
+                        background: "linear-gradient(180deg, #0B5F46 0%, #064E3B 55%, #043528 100%)",
+                        border: "1px solid #10B981",
+                        boxShadow: "inset 0 1px 0 rgba(110,231,183,0.55), inset 0 -1px 0 rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.35)",
+                      }}
                     >
                       <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </button>
