@@ -1,44 +1,78 @@
+
+# Unify all AI tools to the Property Measurement emerald contract
+
 ## Goal
-Rebuild every page reachable from the **Insights** branch of the vertical sidebar so it conforms to the locked brand contract (champagne surfaces, emerald CTAs, white-on-emerald, ink-on-champagne, gold hairline only as corners, IconTile, PremiumSectionCard, full-bleed bands, no gray, no white-svg-on-light, white-svg-on-emerald). Consolidate the duplicate "Guides Library" / "Books Library" into a single canonical page. Then sweep any pages reachable from the sidebar that I find drifted from the contract.
+Every AI tool (public + owner/back-office) renders on the exact same emerald ombré surface used by Property Measurement:
+- Background: deep emerald → black ombré
+- Cards: dark emerald, white ink, gold hairline
+- Primary CTAs: brand emerald metallic (`#065F46 → #064E3B → #04231A`) — never bright `#10B981` "restricted green"
+- Selectable pills / toggles (Property Type, Unit Preference style): same emerald gradient, white text + white icon when active
+- All icons/text readable, WCAG-passing contrast, zero color violations
 
-## Step 1 — Audit (one turn, no UI changes)
-- Map every Insights route in `GlobalVerticalNav.tsx` to its component.
-- Diff the route list against `src/pages/*` to flag orphan pages that are linked from nav but missing, or built but unlinked.
-- Identify the canonical file for each of the 17 targets and note which currently violate the contract.
-- Decide: **keep "Guides Library" as canonical, redirect "Books Library"** (or vice versa — confirm with you below).
+## Scope — tools to migrate & screenshot
 
-Deliverable: a short table (route → component → status → planned action) posted back in chat, no commits.
+### Front-end (public) AI tools
+1. `/property-measurement` (reference — already correct)
+2. `/interior-design-ai`
+3. `/ai-home-finder` (`/quiz`)
+4. `/mortgage-calculator`
+5. `/property-evaluator`
+6. `/rental-index`
+7. `/property-comparison` (Compare Projects)
+8. `/list-property` (Sell Your Property)
+9. `/list-property-rent`
+10. AI Business Card Scanner (`/scan-sign` / toolkit route)
 
-## Step 2 — Shared primitives (one turn)
-Before touching pages, lock the shared scaffolding so each page rebuild is a small edit, not a bespoke redesign:
-- `InsightsPageShell` — full-bleed champagne band, hero with IconTile + eyebrow + title (ink #1A1A1A) + lede, breadcrumb, `<PremiumSectionCard>` children slot.
-- `InsightsHero` variant of the shell with emerald CTA pair (`jj-pill-emerald-metallic` primary, champagne+emerald-ink secondary).
-- `GuideCard`, `ReportCard`, `FAQAccordion` primitives so Buyer/Seller/Tenant/Landlord/Investor/Golden-Visa guides all render through the same component.
+### Back-office / owner AI tools (routed through `AIToolPremiumLayout`)
+11. Email Generator
+12. ROI Calculator
+13. Market Report
+14. Lead Qualification
+15. Neighborhood Insights
+16. Contract Reviewer
+17. Follow-up Scheduler
+18. Objection Handler
+19. Property Analyzer
+20. Meeting Summarizer
+21. Call Summarizer
+22. Document Generator
+23. Background AI (image tools)
+24. AI Video Studio
 
-## Step 3 — Page rebuilds, in waves
-Each page = (1) refactor to shared primitives, (2) Playwright screenshot at 1280×1800, (3) zoom-inspect hero + one card grid + one CTA, (4) post the screenshot, (5) only then move on. If a page fails inspection I patch and re-shoot before advancing.
+## Approach
 
-**Wave A — Intelligence (5):** Market Intelligence · Market Overview · Market Report · Area Intelligence · Reports Archive
-**Wave B — Editorial (2):** News · Methodology
-**Wave C — Guides hub + buyer/seller side (4):** Guides Library (canonical, absorbs Books Library) · Buyer's Guides · Seller's Guides · Golden Visa Guide
-**Wave D — Rental side + education (4):** Rental Guides · Tenant Guide · Landlord Guide · Investor Education
-**Wave E — Help (1):** FAQ Hub
-**Wave F — Orphan sweep:** any sidebar-linked page from Step 1 that isn't one of the 17 but drifts from contract gets the same shell treatment.
+1. **Central tokens (single source of truth)**
+   - Confirm `toolThemes.ts`, `PremiumToolShell`, `AIToolPremiumLayout`, `ToolAnimatedFrame` all use the brand emerald constants (no `#10B981` / `#059669` / `#047857` left).
+   - Add a scoped `[data-tool-emerald]` CSS block that force-coerces any child button/pill/chip to the brand emerald ombré with white ink + white icon, so any tool page that renders inside a tool shell inherits the correct contract without per-file edits.
 
-Books Library route is kept as a 301-style redirect to Guides Library so existing links don't 404.
+2. **Per-page selectable-tile primitive**
+   - Extract the Property Measurement "Property Type / Unit Preference" tile pattern into a shared `<EmeraldSelectTile />` component and swap it into every tool that uses ad-hoc selector cards (Interior Design mode picker, AI Home Finder quiz options, Sell Your Property step choices, etc.) so the active state renders identically everywhere.
 
-## Step 4 — Final verification
-- Playwright pass over every rebuilt route, full-page screenshot, posted as a contact-sheet.
-- Run `src/test/global-x-overflow.regression.test.ts` adding the new routes.
+3. **Sweep for residual violations**
+   - `rg` for `#10B981|#10b981|#059669|#047857|bg-emerald-500|bg-emerald-600|bg-green-*|from-emerald-500|to-emerald-500` inside `src/pages/**`, `src/components/ai-tools/**`, `src/components/tools/**`, `src/components/interior-design/**`, `src/components/ai-video-studio/**`, `src/pages/toolkit/**`.
+   - Replace tool-surface hits with the deep emerald tokens. Leave data-viz palettes (charts, analytics) untouched.
 
-## Technical details
-- No business logic / data-fetching changes — visual + structural only, per your standing rule.
-- All color values come from existing tokens / `index.css` utilities (`jj-band`, `jj-pill-emerald-metallic`, `jj-corner-card`, `PremiumSectionCard`, `IconTile`, `SectionEyebrow`). Zero new hex.
-- `data-no-contrast-guard` only where a token surface legitimately demands an override (e.g. emerald CTA inside a champagne card).
-- Guides/Books consolidation: keep `/guides-library` (or whichever route you confirm), delete the duplicate page component, add a `<Navigate replace>` in `App.tsx` for the retired path.
+4. **Contrast guard**
+   - Extend `report-contrast.regression.test.ts` with a `tool-surface-contrast` case that fails if any tool page renders text on a background with contrast < 4.5, or if `#10B981` reappears in a tool CSS payload.
 
-## Two quick confirmations before I start Step 1
-1. **Canonical name** — keep **Guides Library** and retire Books Library, or the reverse?
-2. **Validation cadence** — screenshot + post **every** page (17 round-trips), or screenshot every page but batch-post per wave (5 round-trips)? Batched is ~3× faster with the same coverage.
+5. **Visual validation — Playwright**
+   - One script that iterates every route above at desktop 1440×900, tablet 834×1112, mobile 390×844.
+   - For each tool: full-viewport screenshot + close-up screenshots of (a) the primary CTA, (b) the selectable tile row, (c) any secondary button/pill.
+   - Save under `/mnt/documents/tool-emerald-sweep/<tool>/<viewport>.png` and `<tool>/<viewport>-cta.png` etc.
+   - Assertion pass in the script: no on-screen pixel with the banned bright green, primary CTA text luminance ≥ 0.9 on a dark bg (white ink), selectable tile icon is pure white when active.
 
-Reply with the two answers and I'll start Step 1 immediately.
+6. **Report**
+   - Deliver a summary listing each tool + a checkmark for: layout parity, CTA color, tile parity, contrast pass, screenshot path.
+   - Any tool that can't reach parity in this pass is listed explicitly with the reason (I will not claim success on unverified tools).
+
+## Non-goals
+- No changes to tool business logic, form fields, copy, routing, or data.
+- No changes to chart/data-viz colors (those are semantic, not brand).
+- No changes to header/sidebar/marketing surfaces — this pass is scoped to tool pages only.
+
+## Deliverables
+- Updated shared primitives (`toolThemes.ts`, `PremiumToolShell`, `AIToolPremiumLayout`, new `EmeraldSelectTile`).
+- Per-tool patches removing the "restricted green" and legacy selector styles.
+- New Playwright validation script + regression test.
+- Screenshot bundle under `/mnt/documents/tool-emerald-sweep/` (one folder per tool, three viewports each).
+- Written pass/fail table in the chat reply.
