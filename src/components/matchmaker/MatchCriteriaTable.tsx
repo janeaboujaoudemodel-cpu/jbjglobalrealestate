@@ -106,6 +106,23 @@ function priceVerdict(p: any, budget?: string): RowCell {
   return { verdict: "miss", value: display };
 }
 
+function formatHandoverForDisplay(p: any): string {
+  const status = String(p?.construction_status || "").trim();
+  const raw = String(p?.handover_date || "").trim();
+  if (/ready/i.test(status) || /ready/i.test(raw)) return "Ready";
+  if (p?.handover_quarter && p?.handover_year) return `${p.handover_quarter} ${p.handover_year}`;
+  if (p?.handover_year) return String(p.handover_year);
+  const iso = raw.match(/^(\d{4})-(\d{2})(?:-\d{2})?/);
+  if (iso) {
+    return new Date(Date.UTC(Number(iso[1]), Number(iso[2]) - 1, 1)).toLocaleDateString("en-GB", {
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    });
+  }
+  return raw || "TBA";
+}
+
 function bedroomVerdict(p: any, choice?: string): RowCell {
   const min = p?.bedrooms_min;
   const max = p?.bedrooms_max ?? min;
@@ -162,7 +179,7 @@ function areaVerdict(p: any, areas?: string[]): RowCell {
 
 function timelineVerdict(p: any, choice?: string): RowCell {
   const h = (p?.handover_date || "").toString();
-  const value = h || "TBA";
+  const value = formatHandoverForDisplay(p);
   if (!choice || !h) return { verdict: "close", value };
   const lower = h.toLowerCase();
   let match = false;

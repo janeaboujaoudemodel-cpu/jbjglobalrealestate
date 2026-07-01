@@ -176,7 +176,7 @@ const locationText = (p: ReportProject) => escText([p.area || p.area_name || p.l
 
 const fmtPrice = (p: ReportProject) => {
   if (!p.price_from) return "Price on Request";
-  const money = (n: number) => (n >= 1_000_000 ? `AED ${(n / 1_000_000).toFixed(1)}M` : `AED ${Math.round(n / 1000)}K`);
+  const money = (n: number) => (n >= 1_000_000 ? `AED\u00A0${(n / 1_000_000).toFixed(1)}M` : `AED\u00A0${Math.round(n / 1000)}K`);
   if (p.price_to && p.price_to > p.price_from) return `${money(p.price_from)} – ${money(p.price_to)}`;
   return `From ${money(p.price_from)}`;
 };
@@ -553,10 +553,12 @@ function SectionEyebrow({ children, light = false }: { children: React.ReactNode
 }
 
 function FieldCard({ label, value, accent }: { label: string; value: React.ReactNode; accent?: boolean }) {
+  const valueText = typeof value === "string" ? value : "";
+  const compactValue = Boolean(accent || /^([A-Z][a-z]{2}\s\d{4}|Ready|On request|\d+\sBR|Studio|Apartment)$/i.test(valueText));
   return (
     <div style={{ padding: "11px 12px", borderRadius: 7, background: T.surface, border: `1px solid ${T.goldHair}`, minHeight: 62, minWidth: 0, overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-      <div style={{ fontSize: 8.8, textTransform: "uppercase", letterSpacing: "0.12em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 800 }}><WordSpans value={label} gap={5} /></div>
-      <div style={{ fontSize: 12.6, fontWeight: 900, color: accent ? PRICE : T.ink, WebkitTextFillColor: accent ? PRICE : T.ink, marginTop: 5, lineHeight: 1.2, overflowWrap: "break-word", wordBreak: "normal", hyphens: "none" }}>{value}</div>
+      <div style={{ fontSize: 8.4, textTransform: "uppercase", letterSpacing: "0.06em", color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 850, lineHeight: 1.05 }}><WordSpans value={label} gap={5} /></div>
+      <div style={{ fontSize: compactValue ? 11.8 : 12.6, fontWeight: 900, color: accent ? PRICE : T.ink, WebkitTextFillColor: accent ? PRICE : T.ink, marginTop: 5, lineHeight: 1.16, overflowWrap: "break-word", wordBreak: "normal", hyphens: "none", whiteSpace: compactValue ? "nowrap" : "normal" }}>{value}</div>
     </div>
   );
 }
@@ -724,6 +726,47 @@ const verdictCopy: Record<Verdict, { label: string; tone: string }> = {
   miss: { label: "Review", tone: T.muted },
 };
 
+function ReportVerdictBadge({ verdict }: { verdict: Verdict }) {
+  const v = verdictCopy[verdict];
+  const isMatch = verdict === "match";
+  const isClose = verdict === "close";
+  const badgeBackground = isMatch ? T.emeraldGradient : isClose ? T.raised : WHITE;
+  const badgeBackgroundColor = isMatch ? T.emeraldDeep : isClose ? T.raised : WHITE;
+  const badgeBackgroundImage = isMatch ? T.emeraldGradient : "none";
+  const badgeColor = isMatch ? WHITE : T.ink;
+  return (
+    <span
+      data-report-pill
+      {...(isMatch ? { "data-no-contrast-guard": true, "data-on-dark": true } : {})}
+      style={{
+        width: 74,
+        height: 24,
+        borderRadius: 5,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: badgeBackground,
+        backgroundColor: badgeBackgroundColor,
+        backgroundImage: badgeBackgroundImage,
+        border: `1px solid ${isMatch ? T.gold : isClose ? T.gold : T.goldHair}`,
+        color: badgeColor,
+        WebkitTextFillColor: badgeColor,
+        fontSize: 9.2,
+        lineHeight: 1,
+        fontWeight: 900,
+        textTransform: "uppercase",
+      }}
+    >
+      {v.label}
+    </span>
+  );
+}
+
+function formatMatrixValue(value: string) {
+  const clean = escText(value).replace(/^—$/, "To verify");
+  return clamp(clean, 54);
+}
+
 function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { branding: ReportBranding; projects: ReportProject[]; pageIdPrefix: string; criteriaRows: CriterionRow[] }) {
   const top3 = projects.slice(0, 3);
   const baseRows = [
@@ -754,39 +797,37 @@ function ComparisonPage({ branding, projects, pageIdPrefix, criteriaRows }: { br
           </div>
         ))}
       </div>
-      <div style={{ borderRadius: 8, overflow: "hidden", border: `1px solid ${T.goldHair}` }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed", fontSize: 10.6 }}>
-          <thead>
-            <tr style={{ background: T.raised }}>
-              <th style={{ width: 132, textAlign: "left", padding: "9px", color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 900, borderBottom: `1px solid ${T.goldHair}` }}>Requirement</th>
-              {top3.map((p, i) => <th key={p.id} style={{ textAlign: "left", padding: "9px", color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 900, borderBottom: `1px solid ${T.goldHair}` }}>#{i + 1} {clamp(p.name, 24)}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, ri) => (
-              <tr key={row.label} style={{ background: ri % 2 ? T.surface : WHITE }}>
-                <td style={{ padding: "8px 9px", verticalAlign: "top", borderTop: `1px solid ${T.goldHair}` }}>
-                  <div style={{ fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{row.label}</div>
-                  <div style={{ marginTop: 2, fontSize: 9.2, lineHeight: 1.25, color: T.muted, WebkitTextFillColor: T.muted }}>{clamp(row.userPick, 46)}</div>
-                </td>
-                {top3.map((p, i) => {
-                  const cell = row.cells[i] || { verdict: "close" as Verdict, value: "On request" };
-                  const v = verdictCopy[cell.verdict];
-                  return (
-                    <td key={p.id} style={{ padding: "8px 9px", verticalAlign: "top", borderTop: `1px solid ${T.goldHair}` }}>
-                      <div data-report-pill style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minHeight: 21, lineHeight: 1, gap: 5, borderRadius: 999, padding: "4px 9px 3px", border: `1px solid ${v.tone}`, color: v.tone, WebkitTextFillColor: v.tone, fontSize: 8.8, fontWeight: 900, marginBottom: 5 }}>{v.label}</div>
-                      <div style={{ color: T.ink, WebkitTextFillColor: T.ink, lineHeight: 1.28, fontWeight: 700, letterSpacing: 0, wordSpacing: 0 }}>{clamp(cell.value, 60)}</div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-            <tr data-no-contrast-guard data-on-dark>
-              <td style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, padding: 10, fontWeight: 900 }}>Match summary</td>
-              {totals.map((t, i) => <td key={i} style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, padding: 10, fontWeight: 900 }}>{i === 0 ? "Lead option" : "Comparable"} · {t.match}/{t.total} match</td>)}
-            </tr>
-          </tbody>
-        </table>
+      <div style={{ borderRadius: 8, overflow: "hidden", border: `1px solid ${T.goldHair}`, display: "grid", gridTemplateColumns: "132px repeat(3, minmax(0, 1fr))", fontSize: 10.6 }}>
+        <div style={{ background: T.raised, padding: "10px 11px", color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 900, borderBottom: `1px solid ${T.goldHair}` }}>Requirement</div>
+        {top3.map((p, i) => (
+          <div key={p.id} style={{ background: T.raised, padding: "10px 11px", color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 900, borderBottom: `1px solid ${T.goldHair}`, borderLeft: `1px solid ${T.goldHair}`, lineHeight: 1.18 }}>
+            #{i + 1} {clamp(p.name, 34)}
+          </div>
+        ))}
+
+        {rows.map((row, ri) => {
+          const rowBg = ri % 2 ? T.surface : WHITE;
+          return (
+            <React.Fragment key={row.label}>
+              <div style={{ minHeight: 72, padding: "11px", background: rowBg, borderTop: `1px solid ${T.goldHair}`, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div style={{ fontSize: 11.1, lineHeight: 1.15, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink }}>{row.label}</div>
+                <div style={{ marginTop: 4, fontSize: 9.7, lineHeight: 1.28, color: T.ink, WebkitTextFillColor: T.ink, fontWeight: 500 }}>{clamp(row.userPick, 44)}</div>
+              </div>
+              {top3.map((p, i) => {
+                const cell = row.cells[i] || { verdict: "close" as Verdict, value: "On request" };
+                return (
+                  <div key={`${row.label}-${p.id}`} style={{ minHeight: 72, padding: "10px 11px", background: rowBg, borderTop: `1px solid ${T.goldHair}`, borderLeft: `1px solid ${T.goldHair}`, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-start", gap: 7 }}>
+                    <ReportVerdictBadge verdict={cell.verdict} />
+                    <div style={{ color: T.ink, WebkitTextFillColor: T.ink, lineHeight: 1.22, fontWeight: 800, letterSpacing: 0, wordSpacing: 0, fontSize: 10.7, maxWidth: "100%" }}>{formatMatrixValue(cell.value)}</div>
+                  </div>
+                );
+              })}
+            </React.Fragment>
+          );
+        })}
+
+        <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, padding: "12px 11px", fontWeight: 900, borderTop: `1px solid ${T.gold}`, minHeight: 46, display: "flex", alignItems: "center" }}>Match summary</div>
+        {totals.map((t, i) => <div key={i} data-no-contrast-guard data-on-dark style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, padding: "12px 11px", fontWeight: 900, borderTop: `1px solid ${T.gold}`, borderLeft: `1px solid rgba(184,149,85,0.45)`, minHeight: 46, display: "flex", alignItems: "center", lineHeight: 1.2 }}>{i === 0 ? "Lead option" : "Comparable"} · {t.match}/{t.total} match</div>)}
       </div>
     </PageFrame>
   );
