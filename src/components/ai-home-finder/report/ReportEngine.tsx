@@ -691,7 +691,7 @@ function MatchedPropertiesPage({ branding, projects, pageIdPrefix, criteriaRows 
             <div key={p.id} style={{ display: "grid", gridTemplateColumns: "224px 1fr", gap: 16, borderRadius: 10, overflow: "hidden", border: `1px solid ${T.goldHair}`, background: T.surface, minHeight: 178 }}>
               <div style={{ position: "relative", background: T.raised }}>
                 <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
-                <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 12, top: 12, minWidth: 72, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{i + 1}</div>
+                <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 12, top: 12, minWidth: 72, height: 28, padding: "0 12px", borderRadius: 999, display: "inline-flex", alignItems: "center", justifyContent: "center", background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, lineHeight: "28px", letterSpacing: "0.08em", textIndent: "0.08em", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap", textAlign: "center", boxSizing: "border-box" }}>RANK #{i + 1}</div>
               </div>
               <div style={{ padding: "16px 16px 14px 0", minWidth: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 9 }}>
@@ -741,6 +741,7 @@ function ReportVerdictBadge({ verdict }: { verdict: Verdict }) {
       style={{
         width: 74,
         height: 24,
+        padding: "0 8px",
         borderRadius: 5,
         display: "inline-flex",
         alignItems: "center",
@@ -752,9 +753,15 @@ function ReportVerdictBadge({ verdict }: { verdict: Verdict }) {
         color: badgeColor,
         WebkitTextFillColor: badgeColor,
         fontSize: 9.2,
-        lineHeight: 1,
+        lineHeight: "24px",
         fontWeight: 900,
+        letterSpacing: "0.06em",
+        textIndent: "0.06em",
         textTransform: "uppercase",
+        whiteSpace: "nowrap",
+        textAlign: "center",
+        fontVariantNumeric: "tabular-nums",
+        boxSizing: "border-box",
       }}
     >
       {v.label}
@@ -843,7 +850,7 @@ function PropertyDetailPage({ branding, project, index, pageIdPrefix, criteriaRo
       <div style={{ display: "grid", gridTemplateColumns: "1fr 252px", gap: 18, height: "100%" }}>
         <div style={{ minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-            <div data-no-contrast-guard data-on-dark style={{ width: 82, height: 28, borderRadius: 999, display: "flex", alignItems: "center", justifyContent: "center", background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, letterSpacing: "0.08em" }}>RANK #{index + 1}</div>
+            <div data-no-contrast-guard data-on-dark style={{ minWidth: 82, height: 28, padding: "0 12px", borderRadius: 999, display: "inline-flex", alignItems: "center", justifyContent: "center", background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, fontSize: 10, fontWeight: 900, lineHeight: "28px", letterSpacing: "0.08em", textIndent: "0.08em", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap", textAlign: "center", boxSizing: "border-box" }}>RANK #{index + 1}</div>
             <PlainText style={{ fontSize: 11, color: T.muted, WebkitTextFillColor: T.muted, fontWeight: 700 }}>{developerName(project)} · {locationText(project)}</PlainText>
           </div>
           <h2 style={{ fontSize: 30, lineHeight: 1.08, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 12px" }}>{project.name}</h2>
