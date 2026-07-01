@@ -1248,8 +1248,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {/* ━━━ BOTTOM — Support + Sign Out (compact half-height) ━━━ */}
       <div className="flex-shrink-0">
         <div className="h-px mb-1 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
-        <div className="px-4 pt-5 pb-5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
-          <div className="flex gap-2.5 mb-3.5">
+        <div className="px-4 pt-7 pb-7 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
+          <div className="flex gap-2.5 mb-5">
+
 
 
             {(() => {
