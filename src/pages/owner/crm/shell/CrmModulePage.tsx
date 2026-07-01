@@ -104,6 +104,3 @@ export default function CrmModulePage() {
     <div className="jc-blank-module" aria-label={mod?.label ?? section} />
   );
 }
-    </div>
-  );
-}

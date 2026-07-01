@@ -4,33 +4,41 @@
  * Colors below replace Zoho's blue/orange with JBJ Emerald + Pearl.
  */
 :root {
-  --jbjcrm-emerald: #0F5A45;
+  --jbjcrm-emerald: #0F9F67;
   --jbjcrm-emerald-ink: #0B4636;
-  --jbjcrm-emerald-soft: #E8F1EE;
-  --jbjcrm-emerald-tint: #F3F8F6;
+  --jbjcrm-emerald-line: #22B86D;
+  --jbjcrm-emerald-soft: rgba(15, 159, 103, 0.12);
+  --jbjcrm-emerald-tint: rgba(15, 159, 103, 0.08);
+  --jbjcrm-sidebar: #253D65;
+  --jbjcrm-sidebar-deep: #223A60;
+  --jbjcrm-sidebar-line: rgba(255, 255, 255, 0.15);
+  --jbjcrm-sidebar-text: #D6DEEA;
+  --jbjcrm-sidebar-muted: #92A2BA;
+  --jbjcrm-active: #3C4F80;
 
   --jbjcrm-pearl: #FFFFFF;
-  --jbjcrm-canvas: #F5F6F8;
-  --jbjcrm-graphite: #2B2F36;
-  --jbjcrm-graphite-2: #5A6270;
-  --jbjcrm-graphite-3: #8A93A0;
+  --jbjcrm-canvas: #FFFFFF;
+  --jbjcrm-search: #EEF1F8;
+  --jbjcrm-graphite: #202124;
+  --jbjcrm-graphite-2: #475569;
+  --jbjcrm-graphite-3: #8791A6;
 
-  --jbjcrm-hairline: #E4E7EC;
-  --jbjcrm-hairline-strong: #D0D5DD;
+  --jbjcrm-hairline: #E7EAF1;
+  --jbjcrm-hairline-strong: #CBD2E1;
   --jbjcrm-accent: #B89555;
 
   --jbjcrm-danger: #D0342C;
   --jbjcrm-warning: #C9791F;
   --jbjcrm-success: #0F5A45;
 
-  --jbjcrm-shadow-1: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.10);
-  --jbjcrm-shadow-2: 0 4px 8px -2px rgba(16, 24, 40, 0.10), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --jbjcrm-shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.10);
+  --jbjcrm-shadow-2: 0 4px 8px -2px rgba(15, 23, 42, 0.10), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
 
-  --jbjcrm-header-h: 56px;
-  --jbjcrm-rail-w: 56px;
-  --jbjcrm-rail-w-expanded: 208px;
+  --jbjcrm-header-h: 62px;
+  --jbjcrm-bottom-h: 32px;
+  --jbjcrm-sidebar-w: 304px;
   --jbjcrm-radius-sm: 4px;
-  --jbjcrm-radius: 6px;
+  --jbjcrm-radius: 7px;
   --jbjcrm-radius-lg: 10px;
 
   --jbjcrm-font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
