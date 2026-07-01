@@ -535,7 +535,7 @@ const PropertyMeasurement = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="propertyName" style={{ color: "rgba(255,255,255,0.88)" }}>Property Name (Optional)</Label>
+                    <Label htmlFor="propertyName" style={{ color: "#1A1A1A", fontWeight: 600 }}>Property Name (Optional)</Label>
                     <Input
                       id="propertyName"
                       value={propertyName}
