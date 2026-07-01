@@ -1,0 +1,62 @@
+name: Report Pill Snapshot
+
+on:
+  pull_request:
+    paths:
+      - "src/components/ai-home-finder/report/**"
+      - "src/components/ai-home-finder/ReportPreviewModal.tsx"
+      - "src/utils/renderReportToPdf.ts"
+      - "src/pages/__ReportContrastHarness.tsx"
+      - "scripts/report-pill-snapshot/**"
+      - ".github/workflows/report-pill-snapshot.yml"
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+
+      - name: Install Python deps
+        run: python -m pip install --upgrade pip playwright pillow
+
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+
+      - name: Install node deps
+        run: npm ci
+
+      - name: Build + start preview server
+        run: |
+          npm run build
+          npx vite preview --port 8080 --host 127.0.0.1 &
+          for i in {1..40}; do
+            curl -sf http://127.0.0.1:8080 >/dev/null && break
+            sleep 1
+          done
+
+      - name: Run pill snapshot test
+        env:
+          REPORT_SNAPSHOT_BASE_URL: http://127.0.0.1:8080
+        run: python3 scripts/report-pill-snapshot/run.py
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-pill-snapshot
+          path: scripts/report-pill-snapshot/artifacts
