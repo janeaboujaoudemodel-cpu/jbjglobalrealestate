@@ -436,7 +436,6 @@ export default function ReportPreviewModal({
                     onClick={() => update({ showOfficeAddress: !branding.showOfficeAddress })}
                     className="relative shrink-0 inline-flex h-6 w-11 items-center rounded-full transition"
                     style={{
-                      backgroundImage: "none",
                       background: branding.showOfficeAddress ? C.emeraldGradient : "#E5DCC8",
                       backgroundImage: branding.showOfficeAddress ? C.emeraldGradient : "none",
                       backgroundColor: branding.showOfficeAddress ? C.emeraldDeep : "#E5DCC8",
