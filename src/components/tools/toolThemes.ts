@@ -3,7 +3,7 @@
  *
  * Every tool (front-end + owner/back-end) renders on the same emerald
  * ombré surface pioneered by Interior Design AI / Property Measurement:
- *   background: linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)
+ *   background: linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)
  * Text is pure white; tool-panel hairlines are white; primary CTAs are
  * emerald metallic with white ink. No champagne fills inside a tool body.
  */
