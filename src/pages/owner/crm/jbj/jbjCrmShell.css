@@ -388,6 +388,127 @@
   border-radius: 4px;
 }
 
+.jbj-crm-stage-canvas--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--jbj-crm-muted);
+  font-size: 13px;
+}
+
+/* Module list view */
+.jbj-crm-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: 14px;
+  background: var(--jbj-crm-raised);
+  border: 1px solid var(--jbj-crm-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.jbj-crm-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--jbj-crm-border);
+  background: var(--jbj-crm-raised);
+}
+.jbj-crm-list-title { display: flex; align-items: baseline; gap: 10px; }
+.jbj-crm-list-title h1 { margin: 0; font-size: 15px; font-weight: 600; color: var(--jbj-crm-ink); }
+.jbj-crm-list-count { font-size: 11px; color: var(--jbj-crm-muted); }
+.jbj-crm-list-tools { display: flex; align-items: center; gap: 8px; }
+.jbj-crm-list-search {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 10px;
+  border: 1px solid var(--jbj-crm-border);
+  border-radius: 4px; background: #fff;
+  color: var(--jbj-crm-ink);
+}
+.jbj-crm-list-search input {
+  border: 0; outline: 0; background: transparent;
+  font-size: 12px; width: 200px; color: var(--jbj-crm-ink);
+}
+.jbj-crm-list-iconbtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px;
+  border: 1px solid var(--jbj-crm-border);
+  background: #fff; color: var(--jbj-crm-ink);
+  border-radius: 4px; cursor: pointer;
+}
+.jbj-crm-list-iconbtn:hover:not(:disabled) { background: var(--jbj-crm-page); }
+.jbj-crm-list-iconbtn:disabled { opacity: 0.45; cursor: default; }
+.jbj-crm-list-scroll { flex: 1 1 auto; overflow: auto; }
+.jbj-crm-list-empty {
+  padding: 48px 16px; text-align: center;
+  color: var(--jbj-crm-muted); font-size: 13px;
+}
+.jbj-crm-list-error { color: #7A1E1E; }
+.jbj-crm-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.jbj-crm-table thead th {
+  position: sticky; top: 0; z-index: 1;
+  text-align: left; font-weight: 600;
+  color: var(--jbj-crm-muted);
+  background: var(--jbj-crm-page);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--jbj-crm-border);
+  white-space: nowrap;
+}
+.jbj-crm-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--jbj-crm-border);
+  color: var(--jbj-crm-ink);
+  white-space: nowrap;
+  max-width: 320px; overflow: hidden; text-overflow: ellipsis;
+}
+.jbj-crm-table tbody tr { cursor: pointer; }
+.jbj-crm-table tbody tr:hover { background: var(--jbj-crm-page); }
+.jbj-crm-list-footer {
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  padding: 8px 14px; border-top: 1px solid var(--jbj-crm-border);
+  background: var(--jbj-crm-raised);
+}
+.jbj-crm-list-page { font-size: 12px; color: var(--jbj-crm-muted); }
+
+/* Detail drawer */
+.jbj-crm-drawer-scrim {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(2, 23, 18, 0.4);
+  display: flex; justify-content: flex-end;
+}
+.jbj-crm-drawer {
+  width: min(480px, 100vw);
+  height: 100%;
+  background: var(--jbj-crm-raised);
+  border-left: 1px solid var(--jbj-crm-border);
+  display: flex; flex-direction: column;
+  animation: jbjCrmDrawerIn 180ms ease-out;
+}
+@keyframes jbjCrmDrawerIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.jbj-crm-drawer-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px 16px;
+  background: var(--jbj-crm-emerald); color: #fff;
+}
+.jbj-crm-drawer-head h2 { margin: 0; font-size: 14px; font-weight: 600; color: #fff; }
+.jbj-crm-drawer-head .jbj-crm-list-iconbtn { background: transparent; color: #fff; border-color: rgba(255,255,255,0.35); }
+.jbj-crm-drawer-head .jbj-crm-list-iconbtn:hover { background: rgba(255,255,255,0.12); }
+.jbj-crm-drawer-body { flex: 1 1 auto; overflow: auto; padding: 8px 0; }
+.jbj-crm-drawer-row {
+  display: grid; grid-template-columns: 40% 60%;
+  gap: 12px; padding: 8px 16px;
+  border-bottom: 1px solid var(--jbj-crm-border);
+  font-size: 12px;
+}
+.jbj-crm-drawer-k { color: var(--jbj-crm-muted); }
+.jbj-crm-drawer-v { color: var(--jbj-crm-ink); word-break: break-word; }
+
 @media (max-width: 900px) {
   .jbj-crm-shell {
     --jbj-crm-sidebar-w: 176px;
