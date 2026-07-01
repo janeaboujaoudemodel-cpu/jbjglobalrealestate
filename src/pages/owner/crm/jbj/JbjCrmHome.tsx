@@ -19,7 +19,7 @@ export default function JbjCrmHome() {
             <Link
               key={m.id}
               to={to}
-              className="group rounded-2xl bg-white border border-[#E7DDC8] p-4 flex flex-col gap-2 hover:border-emerald-500/60 transition-colors shadow-[0_6px_18px_-18px_rgba(6,78,59,0.35)]"
+              className="group rounded-2xl bg-white border border-[#E7DDC8] p-4 flex flex-col gap-2 hover:border-[#064E3B]/60 transition-colors shadow-[0_6px_18px_-18px_rgba(6,78,59,0.35)]"
             >
               <div
                 className="h-9 w-9 rounded-lg inline-flex items-center justify-center text-white"

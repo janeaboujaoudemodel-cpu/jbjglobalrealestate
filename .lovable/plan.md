@@ -1,127 +1,102 @@
+# JBJ CRM Enterprise — Full Zoho-Parity Rebuild
 
-# JBJ CRM — Full Workspace Rebuild
+## Goals (from your feedback)
 
-Rename and rebuild the current `/owner/crm/zoho` page into a full **JBJ CRM** workspace that visually and functionally mirrors Zoho CRM, powered by (a) our own database as the source of truth and (b) the Zoho connector as a live sync layer so data survives disconnect.
+1. **One sidebar only.** When inside `/owner/crm/jbj/*`, the JBJ CRM rail **replaces** the Owner backend sidebar — no double rail, no compressed content.
+2. **Zoho layout parity.** Match Zoho CRM's UX exactly (top bar, left rail, module tabs, list header, filter drawer, record detail, related-list tabs). Only the colors change (emerald + champagne + white; no restricted "green").
+3. **Collapse button at the BOTTOM** of the rail (not top), plus **Owner Panel** + **Return to Site** pills below it.
+4. **All emerald, never restricted green.** Fix all icon/text contrast: white ink on emerald, black ink on champagne.
+5. **Fully functional modules**, not stubs. Every listed module must open, load, search, paginate, and show a working record detail — either from Zoho (live) or the JBJ local cache — with no "not implemented" placeholders.
+6. **Hostinger domain re-validation guide** (`jbj.ae` / `www.jbj.ae`) so you can revalidate DNS end-to-end.
 
-## Scope of this phase (Phase 1)
-
-Ship the **shell + all module screens + Zoho mirror-to-DB sync** so the layout, navigation, and every module page exist end-to-end. Deep automation (portal push, social ads, lead-distribution engine) lands in Phase 2 as separate work items — the UI slots for each are created now so nothing needs re-plumbing later.
-
-## New route structure
-
-```
-/owner/crm/jbj                        Home (dashboard tiles)
-/owner/crm/jbj/reports
-/owner/crm/jbj/analytics
-/owner/crm/jbj/my-requests
-/owner/crm/jbj/agents
-/owner/crm/jbj/team-space
-/owner/crm/jbj/work-queue
-/owner/crm/jbj/leads
-/owner/crm/jbj/contacts
-/owner/crm/jbj/accounts
-/owner/crm/jbj/deals
-/owner/crm/jbj/forecast
-/owner/crm/jbj/documents
-/owner/crm/jbj/campaigns
-/owner/crm/jbj/tasks
-/owner/crm/jbj/meetings
-/owner/crm/jbj/calls
-/owner/crm/jbj/inventory      (products, quotes, invoices, orders)
-/owner/crm/jbj/support        (cases, solutions)
-/owner/crm/jbj/services
-/owner/crm/jbj/projects
-/owner/crm/jbj/integrations   (Zoho, portals, socials, API keys)
-/owner/crm/jbj/settings/roles
-```
-
-Old `/owner/crm/zoho` becomes a 301 redirect to `/owner/crm/jbj`.
-
-## Layout — dedicated JBJ CRM shell
-
-New `JbjCrmShell.tsx` renders **only** when inside `/owner/crm/jbj/*`, replacing the standard owner sidebar with a Zoho-style left rail:
+## Architecture
 
 ```text
-+------+---------------------------------------+
-| Rail |  Top bar: module title · search · +   |
-|      +---------------------------------------+
-|      |  Module content (list / kanban / …)   |
-|      |                                       |
-+------+---------------------------------------+
+/owner/crm/jbj                         (JBJ CRM shell — REPLACES OwnerShell sidebar)
+ ├─ top bar   [logo | module tabs | search | create | notif | user]
+ ├─ left rail (Zoho-style, 240px / 56px collapsed)
+ │   groups: Workspace · Sales · Marketing · Activities · Collaboration ·
+ │           Operations · Intelligence · Configure
+ │   footer (bottom): [Collapse ⟷] [Owner Panel] [Return to Site]
+ └─ main
+     ├─ ListView   (filter drawer left · list right · bulk actions · pagination)
+     ├─ KanbanView (stage columns · drag-drop · WIP counters)
+     ├─ Detail     (header · related-list tabs · timeline · notes · emails · files)
+     └─ Settings   (per-module: fields, layouts, workflow rules stub-safe)
 ```
 
-- 224 px collapsible rail (72 px icon-only).
-- Champagne surface `#F7F2EA`, emerald metallic active pill, gold hairline dividers — brand palette, no Zoho blue.
-- Rail footer: **two 3D emerald pills** stacked
-  - "Owner Panel" → `/owner/admin`
-  - "Return to Site" → `/`
-- Rail header: JBJ monogram + label "JBJ CRM" + edition chip "Enterprise".
+Routing change: `OwnerRoutes` renders `<JbjCrmShell/>` for `/owner/crm/jbj/*` **outside** `<OwnerShell/>` so only one sidebar mounts.
 
-## Module screens (Phase 1 render contract)
+## Modules (all functional in Phase 1)
 
-Every module ships with the standard Zoho four-view header — **List · Kanban · Table · Chart** — plus create/edit drawer, filter panel, and inline row actions. Backed by our own tables so data persists after Zoho disconnect.
+Live via Zoho gateway (v6, correct `fields` param, 204 = empty):
+Leads · Contacts · Accounts · Deals · Tasks · Meetings · Calls · Cases · Products · Quotes · Invoices · Sales Orders · Purchase Orders · Vendors · Price Books · Campaigns · Solutions · Notes · Attachments
 
-| Group          | Modules                                                                 |
-|----------------|-------------------------------------------------------------------------|
-| Home           | Dashboard tiles (open deals, tasks due, meetings today, pipeline)       |
-| Sales          | Leads, Contacts, Accounts, Deals, Forecast                              |
-| Marketing      | Campaigns                                                               |
-| Activities     | Tasks, Meetings, Calls                                                  |
-| Inventory      | Products, Price Books, Quotes, Sales Orders, Invoices                   |
-| Support        | Cases, Solutions                                                        |
-| Collaboration  | Documents, Team Space, Work Queue, My Requests                          |
-| Delivery       | Projects, Services                                                      |
-| Intelligence   | Reports, Analytics, Agents (AI assistants)                              |
-| Config         | Integrations, Roles & Permissions                                       |
+Local (Supabase-backed, real CRUD on existing JBJ tables):
+Documents · Team Space · Work Queue · My Requests · Projects · Reports · Analytics · AI Agents · Integrations · Roles
 
-## Zoho mirror (source-of-truth strategy)
+Every module supports: list, search (server-side for Zoho `criteria=`, client-side for local), pagination (50/page, `more_records`), sort, column chooser (persisted per-user in `localStorage`), CSV export, and a right-drawer detail with related-list tabs.
 
-- New tables `jbj_crm_<module>` mirror the 9 Zoho modules already reachable via connector, plus internal-only modules (Team Space, Work Queue, Projects, etc.).
-- Extend `zoho-crm-proxy` into `jbj-crm-sync` edge function that pulls Zoho modules into the mirror tables on demand and on a scheduled cron; every list screen reads from the mirror, so **data stays visible after disconnect**.
-- Two-way write comes in Phase 2; Phase 1 is read-through-mirror + local create/edit on JBJ-only modules.
+## Design tokens (locked)
 
-## Integrations hub (stubs wired, deep work in Phase 2)
+- Emerald metallic `#064E3B → #0A6E4F → #064E3B` — used for rail selection, primary buttons, active tab underline, badges.
+- Champagne `#F7F2EA` page, `#EFE6D6` raised, `#FDFBF7` card.
+- Ink `#1A1A1A` on champagne. **Pure white `#FFFFFF`** on emerald (icons + text, no exceptions).
+- Gold `#B89555` — 1px hairline only, never a fill.
+- Removes every `emerald-500/600/700` Tailwind class from the CRM tree (which was the "restricted green") — replaced with the `.jbj-emerald-*` metallic tokens.
 
-The `/integrations` screen ships with cards for each target so users see the roadmap and can paste keys today:
+## Rail behavior
 
-- Zoho CRM (already live) — status, last sync, disconnect
-- Developer Upload API — generates per-developer API key, docs snippet showing how a developer's site posts new projects into JBJ (auto-syncs to platform listings)
-- Portals: Property Monitor, Bayut, DXB Interact, DLD, Property Finder, Property Guru, Dubizzle — each with an on/off toggle per listing
-- Social: Facebook, Instagram, TikTok, LinkedIn — connect + campaign push toggle
+- Default expanded 240px; collapsed 56px (icon-only).
+- **Collapse button pinned to rail footer**, above the two 3D emerald pills:
+  - `Owner Panel` → `/owner/admin`
+  - `Return to Site` → `/`
+- Groups are accordions, remember open state per-user.
+- Active item: emerald metallic pill, white icon+label, 2px gold left indicator.
+- Inactive: transparent, ink text, gold-hover.
 
-Toggles persist to a `jbj_crm_integration_settings` table; actual push jobs are Phase 2.
+## Real functionality contract
 
-## Roles & lead distribution (skeleton)
+For each live module the engine will:
 
-- `jbj_crm_roles` table (Owner, Sales Manager, Agent, Marketing, Support) with per-module CRUD flags.
-- `jbj_crm_lead_assignments` with round-robin or manual assignment; screen shows who owns each lead and last-touch age so "who's not following up" is visible.
-- Distribution engine (rules-based auto-assign) queued for Phase 2.
+1. `GET /zoho_crm/{Module}?fields=…&page=…&per_page=50` — real columns per module.
+2. Detail: `GET /zoho_crm/{Module}/{id}` + related lists (`/Notes`, `/Attachments`, `/Activities`, `/Emails`) rendered as Zoho-style tabs.
+3. Create/Edit: POST/PUT `{ data:[{…}] }` with client-side Zod validation + inline errors.
+4. Delete: DELETE with confirm.
+5. Search: `/{Module}/search?criteria=(Field:starts_with:value)` debounced 300ms.
+6. Empty (204) and Zoho error envelopes rendered as first-class states (never a raw JSON dump).
+7. Mirror-cache to `localStorage` per module so the workspace still renders if Zoho is momentarily down.
 
-## Technical notes
+## Files to add / change
 
-- Files:
-  - `src/pages/owner/crm/jbj/JbjCrmShell.tsx` — layout + rail
-  - `src/pages/owner/crm/jbj/index.tsx` — dashboard
-  - `src/pages/owner/crm/jbj/modules/<Module>Page.tsx` — one per module
-  - `src/components/crm/jbj/RecordTable.tsx`, `RecordKanban.tsx`, `RecordDrawer.tsx`, `FilterPanel.tsx` — shared primitives
-  - `src/routes/OwnerRoutes.tsx` — nest `/owner/crm/jbj/*` under a `<JbjCrmShell>` outlet, add redirect from `/owner/crm/zoho`
-- Sidebar entry in `OwnerSidebarNav.tsx` renamed **Zoho CRM → JBJ CRM**, routes to `/owner/crm/jbj`.
-- Edge functions: rename `zoho-crm-proxy` role to `jbj-crm-sync` (keep proxy for live pass-through), add cron trigger for scheduled mirror.
-- DB migration adds `jbj_crm_*` tables with RLS restricted to owner + assigned CRM roles, plus GRANTs per project standard.
-- Existing `/owner/crm` (internal JBJ leads CRM) is untouched — this is an additive workspace.
+New:
+- `src/pages/owner/crm/jbj/JbjCrmShell.tsx` (replaces OwnerShell for this route)
+- `src/pages/owner/crm/jbj/JbjTopBar.tsx`
+- `src/pages/owner/crm/jbj/JbjLeftRail.tsx` (footer collapse + pills)
+- `src/pages/owner/crm/jbj/views/ListView.tsx`
+- `src/pages/owner/crm/jbj/views/KanbanView.tsx`
+- `src/pages/owner/crm/jbj/views/RecordDetail.tsx`
+- `src/pages/owner/crm/jbj/views/RelatedListTabs.tsx`
+- `src/pages/owner/crm/jbj/engine/zohoClient.ts` (edge-fn wrapper, fields registry, pagination, search, CRUD)
+- `src/pages/owner/crm/jbj/engine/moduleRegistry.ts` (fields, columns, kanban stage field, related lists per module)
+- `src/pages/owner/crm/jbj/engine/localModuleAdapters.ts` (Supabase-backed modules)
+- `src/pages/owner/crm/jbj/styles/jbj-crm.css` (emerald-metallic tokens + Zoho-parity layout classes)
 
-## Out of scope for Phase 1 (explicit, so nothing is silently dropped)
+Changed:
+- `src/routes/OwnerRoutes.tsx` — mount JBJ CRM **outside** `OwnerShell`, remove second sidebar.
+- `supabase/functions/zoho-crm-proxy/index.ts` — add all modules, correct `fields` per module, search endpoint, single-record GET/PUT/DELETE, related lists.
 
-- Two-way Zoho write-back (create in JBJ → push to Zoho)
-- Live portal publishing to Bayut/PF/etc. (only toggles + storage now)
-- Social campaign execution
-- Automated lead-distribution rules engine
-- AI Agents runtime (module screen ships, agents themselves are stubs)
+## Hostinger domain re-validation guide
 
-Each is a follow-up phase; the UI already has its slot so no rework needed.
+Delivered inline in chat after build (no code needed): DNS records to check on Hostinger, how to re-verify in Lovable Publish → Domains for `jbj.ae` and `www.jbj.ae`, TTL waits, and how to test with `dig`.
+
+## Out of scope for this pass (called out honestly)
+
+- Workflow Rules **execution engine** and Blueprint editor — UI shells only; running rules would need scheduler infra. Everything else on the list ships fully working.
 
 ## Validation
 
-- Visual: Playwright screenshots at 1440/1024/390 across every module route, compared for brand palette compliance (no blue, no raw gray, emerald active pill, champagne surface).
-- Functional: click every rail item, confirm route loads with the four-view header and at least the list view rendering mirror data.
-- Regression: existing `/owner/crm` and `/owner/admin` unaffected.
+- Playwright: navigate every rail item on desktop + iPad + mobile; assert no double sidebar, footer collapse works, active pill is emerald white, no `text-emerald-6/7/800` residue.
+- Manual: Leads/Contacts/Deals show real Zoho rows; create + edit + delete round-trips; search returns filtered rows; empty module shows empty state, not error.
+
+Approve and I'll build the whole thing in one pass.

@@ -124,11 +124,29 @@ const LegacyOwnerEnvelopeDetail = () => {
 };
 
 export const OwnerRoutes = () => (
+  <>
+  {/* JBJ CRM — standalone shell, MUST be declared BEFORE the /owner shell route
+      so React Router matches the more specific path first and only ONE sidebar mounts. */}
+  <Route
+    path="/owner/crm/jbj"
+    element={
+      <OwnerGuard>
+        <JbjCrmShell />
+      </OwnerGuard>
+    }
+  >
+    <Route index element={<JbjCrmHome />} />
+    <Route path="integrations" element={<JbjCrmIntegrations />} />
+    <Route path="settings/roles" element={<JbjCrmRoles />} />
+    <Route path=":section" element={<JbjCrmModulePage section="leads" />} />
+  </Route>
+
   <Route path="/owner" element={
     <OwnerGuard>
       <OwnerDashboardShell />
     </OwnerGuard>
   }>
+
     <Route index element={<OwnerDashboardOverview />} />
     <Route path="inbox" element={<OwnerInbox />} />
     <Route path="templates" element={<OwnerTemplates />} />
@@ -164,12 +182,8 @@ export const OwnerRoutes = () => (
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />
     <Route path="crm/zoho" element={<Navigate to="/owner/crm/jbj" replace />} />
-    <Route path="crm/jbj" element={<JbjCrmShell />}>
-      <Route index element={<JbjCrmHome />} />
-      <Route path="integrations" element={<JbjCrmIntegrations />} />
-      <Route path="settings/roles" element={<JbjCrmRoles />} />
-      <Route path=":section" element={<JbjCrmModulePage section="leads" />} />
-    </Route>
+    {/* /owner/crm/jbj is mounted OUTSIDE this shell — see top of OwnerRoutes for the standalone route. */}
+
     {/* Deprecated direct entry kept for deep links */}
     <Route path="crm/zoho-legacy" element={<ZohoCRMPage />} />
     <Route path="academy-approvals" element={<OwnerAcademyApprovals />} />
@@ -292,4 +306,6 @@ export const OwnerRoutes = () => (
    <Route path="crm/person/:variant/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/PersonHubPage")))}</Suspense>} />
    <Route path="crm/brokers/:brokerId" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokerProfile")))}</Suspense>} />
   </Route>
+  </>
 );
+
