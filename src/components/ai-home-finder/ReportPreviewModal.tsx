@@ -307,6 +307,11 @@ export default function ReportPreviewModal({
           #jbj-aihf-preview-root [data-surface="emerald"] * {
             color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
+          #jbj-aihf-preview-root [data-on-dark],
+          #jbj-aihf-preview-root [data-surface="emerald"] {
+            background-image: linear-gradient(135deg,#064E3B 0%,#064E3B 100%) !important;
+            background-color: #064E3B !important;
+          }
           #jbj-aihf-preview-root [data-aihf-scope-dot] {
             background: #FFFFFF !important; background-color: #FFFFFF !important;
           }
