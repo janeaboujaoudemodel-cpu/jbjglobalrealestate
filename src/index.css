@@ -22727,24 +22727,42 @@ html body #root [data-list-property-page] [data-listing-choice-card] {
 }
 
 /* =====================================================================
-   PASS 150 — PROPERTY MEASUREMENT STEP 1 CARD INK LOCK
-   The Step 1 card is rendered on a champagne surface (global guard
-   forces the emerald gradient to champagne). Force title, label, and
-   header-icon ink to black so text is legible on champagne, while
-   letting the inner emerald buttons keep white ink via their own
-   [data-allow-dark-cta] scopes.
+   PASS 152 — AI TOOL EMERALD-ONLY LOCK (no champagne inside tools)
+   Step 1 card + every card inside a tool shell is emerald with white ink.
    ===================================================================== */
 html body #pm-step1-ink-scope h3,
 html body #pm-step1-ink-scope h3 > span,
 html body #pm-step1-ink-scope h3 > svg,
-html body #pm-step1-ink-scope label {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+html body #pm-step1-ink-scope label,
+html body #pm-step1-ink-scope p,
+html body #pm-step1-ink-scope [class*="CardTitle"] {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: none !important;
 }
-html body #pm-step1-ink-scope h3 > svg {
-  color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
+html body #pm-step1-ink-scope h3 > svg,
+html body #pm-step1-ink-scope svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Global: no champagne surfaces inside any AI tool shell — coerce to emerald. */
+html body [data-tool-emerald] [style*="rgba(247,242,234"],
+html body [data-tool-emerald] [style*="rgba(239,230,214"],
+html body [data-tool-emerald] [style*="#F7F2EA"],
+html body [data-tool-emerald] [style*="#EFE6D6"],
+html body [data-tool-emerald] [style*="#FDFBF7"] {
+  background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.42) !important;
+  color: #FFFFFF !important;
+}
+html body [data-tool-emerald] [data-surface="champagne"],
+html body [data-tool-emerald] .jj-band[data-tone="champagne"] {
+  background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+}
+html body [data-tool-emerald] [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 /* PASS 151 — AI TOOL PROPERTY-MEASUREMENT PARITY LOCK
