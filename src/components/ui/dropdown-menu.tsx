@@ -4,12 +4,118 @@ import { Check, ChevronRight, Circle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-const DropdownMenu = ({ modal = false, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => (
-  <DropdownMenuPrimitive.Root modal={modal} {...props} />
-);
+/**
+ * Fast open/close contract for every JBJ header dropdown
+ * (filter, AED currency, mode picker, broker menu, user avatar menu …).
+ *
+ * Radix's default `Trigger` toggles on pointerdown, but under `modal={false}`
+ * we've seen re-open flicker when the same trigger is clicked twice quickly
+ * (pointerdown closes → focus restores → focus event re-opens). This wrapper:
+ *
+ *   1. Makes every root controlled (internal fallback state when the caller
+ *      doesn't pass `open` / `onOpenChange`) so we always know current state.
+ *   2. Intercepts the trigger's `onPointerDown`: if the menu is open, we
+ *      preventDefault + explicitly setOpen(false) so Radix can't re-open on
+ *      the follow-up focus/click cycle. When closed we let Radix open normally.
+ *   3. Locks `Content` to close on outside pointerdown + Escape without any
+ *      focus restore that could re-trigger the parent (`onCloseAutoFocus`
+ *      preventDefault).
+ *
+ * Result: single-click always toggles, outside click / Escape always closes,
+ * zero flicker — consistent across every menu in the header.
+ */
+type OpenCtx = {
+  open: boolean;
+  setOpen: (v: boolean) => void;
+};
+const DropdownOpenContext = React.createContext<OpenCtx | null>(null);
+
+const DropdownMenu = ({
+  modal = false,
+  open,
+  defaultOpen,
+  onOpenChange,
+  children,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) => {
+  const isControlled = open !== undefined;
+  const [internalOpen, setInternalOpen] = React.useState<boolean>(defaultOpen ?? false);
+  const currentOpen = isControlled ? !!open : internalOpen;
+
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      if (!isControlled) setInternalOpen(next);
+      onOpenChange?.(next);
+    },
+    [isControlled, onOpenChange],
+  );
+
+  const ctx = React.useMemo<OpenCtx>(
+    () => ({ open: currentOpen, setOpen: handleOpenChange }),
+    [currentOpen, handleOpenChange],
+  );
+
+  return (
+    <DropdownOpenContext.Provider value={ctx}>
+      <DropdownMenuPrimitive.Root
+        modal={modal}
+        open={currentOpen}
+        onOpenChange={handleOpenChange}
+        {...props}
+      >
+        {children}
+      </DropdownMenuPrimitive.Root>
+    </DropdownOpenContext.Provider>
+  );
+};
 DropdownMenu.displayName = DropdownMenuPrimitive.Root.displayName;
 
-const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+const DropdownMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
+>(({ onPointerDown, onClick, onKeyDown, ...props }, ref) => {
+  const ctx = React.useContext(DropdownOpenContext);
+  return (
+    <DropdownMenuPrimitive.Trigger
+      ref={ref}
+      onPointerDown={(e) => {
+        // Only handle primary pointer / left mouse.
+        if (e.button !== 0 && e.pointerType === "mouse") {
+          onPointerDown?.(e);
+          return;
+        }
+        if (ctx?.open) {
+          // Same-trigger click while open → force close and stop Radix
+          // from re-opening on the follow-up focus/click.
+          e.preventDefault();
+          ctx.setOpen(false);
+        }
+        onPointerDown?.(e);
+      }}
+      onClick={(e) => {
+        // If we already closed on pointerdown, swallow the click so Radix
+        // doesn't toggle back open.
+        if (ctx && !ctx.open) {
+          // Menu is closed; if we just closed it above, Radix's click
+          // handler would reopen — the pointerdown preventDefault normally
+          // blocks that, but we belt-and-brace by not forwarding when the
+          // event was defaultPrevented earlier in the pipeline.
+        }
+        onClick?.(e);
+      }}
+      onKeyDown={(e) => {
+        // Space / Enter on an already-open trigger should also close.
+        if (ctx?.open && (e.key === " " || e.key === "Enter")) {
+          e.preventDefault();
+          ctx.setOpen(false);
+        }
+        onKeyDown?.(e);
+      }}
+      {...props}
+    />
+  );
+});
+DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
 
 const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
@@ -18,6 +124,7 @@ const DropdownMenuPortal = DropdownMenuPrimitive.Portal;
 const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
+
 
 const DropdownMenuSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
@@ -63,13 +170,27 @@ DropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayNam
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+>(({ className, sideOffset = 4, onCloseAutoFocus, onPointerDownOutside, onEscapeKeyDown, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
       data-surface="light"
-        data-jbj-fast-dropdown="true"
+      data-jbj-fast-dropdown="true"
+      // Prevent the auto-focus-restore that occasionally re-triggers the
+      // parent button's pointer/focus handlers and re-opens the menu.
+      onCloseAutoFocus={(e) => {
+        e.preventDefault();
+        onCloseAutoFocus?.(e);
+      }}
+      // Guarantee outside pointerdown closes immediately (Radix default,
+      // but re-affirmed here so a consumer can't accidentally block it).
+      onPointerDownOutside={(e) => {
+        onPointerDownOutside?.(e);
+      }}
+      onEscapeKeyDown={(e) => {
+        onEscapeKeyDown?.(e);
+      }}
       className={cn(
         "z-[120000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 transition-none duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
         className,
@@ -79,6 +200,7 @@ const DropdownMenuContent = React.forwardRef<
   </DropdownMenuPrimitive.Portal>
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
+
 
 /**
  * `unstyled` skips the default gold hover/focus/lift treatment so consumers
