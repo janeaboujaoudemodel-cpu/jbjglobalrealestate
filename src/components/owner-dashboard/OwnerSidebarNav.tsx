@@ -65,6 +65,7 @@ const NAV_SECTIONS: NavSection[] = [
         icon: Users,
         path: "/owner/crm",
       },
+      { label: "Zoho CRM", icon: Network, path: "/owner/crm/zoho" },
     ],
   },
   {
