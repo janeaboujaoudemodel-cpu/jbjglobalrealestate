@@ -103,16 +103,16 @@ export const PremiumToolShell = ({
         <div
           className="relative min-h-screen overflow-hidden"
           style={{
-            background: darkBody
-              ? "linear-gradient(180deg, #0A0807 0%, #0E0A05 60%, #060402 100%)"
-              : "#FDFBF7",
+            background:
+              "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
             boxShadow:
-              "0 30px 80px -30px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.04)",
+              "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(184,149,85,0.45)",
           }}
         >
-          {/* Hero — centered, ombré accent → ink. Back button lives inside. */}
+          {/* Hero — emerald ombré, white ink. Back button lives inside. */}
           <div
             data-allow-dark-cta
+            data-surface="dark"
             className="relative overflow-hidden text-center px-5 pt-6 pb-10 md:pt-7 md:pb-14"
             style={{ background: theme.heroGradient }}
           >
@@ -128,11 +128,11 @@ export const PremiumToolShell = ({
             {showBack && (
               <button
                 onClick={() => navigate(-1)}
-                className="absolute top-4 left-4 md:top-5 md:left-6 z-20 inline-flex items-center gap-1.5 text-xs md:text-sm font-medium transition-transform group"
-                style={{ color: TOOL_INK }}
+                className="absolute top-4 left-4 md:top-5 md:left-6 z-20 inline-flex items-center gap-1.5 text-xs md:text-sm font-medium transition-transform group allow-white"
+                style={{ color: "#FFFFFF" }}
               >
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" style={{ color: TOOL_INK }} />
-                <span style={{ color: TOOL_INK }}>Back</span>
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform allow-white" style={{ color: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Back</span>
               </button>
             )}
 
@@ -146,14 +146,15 @@ export const PremiumToolShell = ({
                 <span
                   className="inline-flex items-center justify-center w-14 h-14 rounded-2xl"
                   style={{
-                    background: "#EFE6D6",
+                    background:
+                      "linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(0,0,0,0.98) 100%)",
                     border: `1px solid ${theme.accent}`,
-                    boxShadow: `0 8px 24px -10px ${theme.accent}55`,
+                    boxShadow: `0 8px 24px -10px ${theme.accent}88`,
                   }}
                 >
                   <EyebrowIcon
-                    className="w-6 h-6"
-                    style={{ color: theme.accent }}
+                    className="w-6 h-6 allow-white"
+                    style={{ color: "#FFFFFF" }}
                   />
                 </span>
               </div>
@@ -161,29 +162,29 @@ export const PremiumToolShell = ({
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
                 style={{
-                  background: "#EFE6D6",
-                  border: `1px solid ${theme.accent}55`,
+                  background: "rgba(6,78,59,0.55)",
+                  border: `1px solid ${theme.accent}88`,
                 }}
               >
                 <span
-                  className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-                  style={{ color: TOOL_INK }}
+                  className="text-[10px] font-semibold uppercase tracking-[0.22em] allow-white"
+                  style={{ color: "#FFFFFF" }}
                 >
                   {eyebrow}
                 </span>
               </div>
 
               <h1
-                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] mb-4"
-                style={{ color: TOOL_INK }}
+                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] mb-4 allow-white"
+                style={{ color: "#FFFFFF" }}
               >
                 {title}
               </h1>
 
               {subtitle && (
                 <p
-                  className="text-sm md:text-base max-w-2xl mx-auto"
-                  style={{ color: `${TOOL_INK}B3` }}
+                  className="text-sm md:text-base max-w-2xl mx-auto allow-white"
+                  style={{ color: "rgba(255,255,255,0.82)" }}
                 >
                   {subtitle}
                 </p>
@@ -193,22 +194,20 @@ export const PremiumToolShell = ({
 
           {/* Body */}
           <div
-            data-tool-darkbody={darkBody ? "true" : undefined}
+            data-tool-darkbody="true"
             className="px-4 py-8 md:px-8 md:py-10"
             style={{
-              color: darkBody ? "#FFFFFF" : TOOL_INK,
-              ...(darkBody
-                ? ({
-                    ["--tool-accent" as any]: theme.accent,
-                    ["--tool-accent-soft" as any]: `${theme.accent}33`,
-                    ["--tool-accent-border" as any]: `${theme.accent}66`,
-                  } as CSSProperties)
-                : {}),
+              color: "#FFFFFF",
+              ["--tool-accent" as any]: theme.accent,
+              ["--tool-accent-soft" as any]: `${theme.accent}33`,
+              ["--tool-accent-border" as any]: `${theme.accent}66`,
             }}
           >
             {children}
           </div>
         </div>
+      </div>
+
       </div>
     </div>
   );
