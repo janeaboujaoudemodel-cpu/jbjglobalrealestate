@@ -80,7 +80,11 @@ export default function ChannelCard({
 
   if (channel.action) {
     return (
-      <button type="button" onClick={onClick} className="block text-left w-full h-full min-w-0">
+      <button
+        type="button"
+        onClick={onClick}
+        className="block h-full w-full min-w-0 appearance-none border-0 bg-transparent p-0 m-0 text-left font-inherit text-inherit leading-normal rounded-xl overflow-visible"
+      >
         {Inner}
       </button>
     );
