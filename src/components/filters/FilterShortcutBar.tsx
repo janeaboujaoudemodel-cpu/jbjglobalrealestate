@@ -49,6 +49,7 @@ export interface ShortcutFilterState {
   propertyCategory: 'residential' | 'commercial' | null;
   propertyTypes: string[];
   bedrooms: string[];
+  bathrooms: string[];
   statuses: string[];
   sortBy: 'newest' | 'price_asc' | 'price_desc' | 'alpha' | 'most_projects' | 'trending' | null;
   hideSoldOut: boolean;
@@ -60,7 +61,12 @@ export interface ShortcutFilterState {
   developers: string[];
   searchQuery: string;
   views: string[];
+  amenities: string[];
+  verifiedOnly: boolean;
+  virtualTourOnly: boolean;
+  furnishing: string[];
 }
+
 
 export const defaultShortcutFilters: ShortcutFilterState = {
   priceMode: 'unit',
@@ -74,6 +80,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   propertyCategory: null,
   propertyTypes: [],
   bedrooms: [],
+  bathrooms: [],
   statuses: [],
   sortBy: null,
   hideSoldOut: false,
@@ -85,7 +92,12 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   developers: [],
   searchQuery: '',
   views: [],
+  amenities: [],
+  verifiedOnly: false,
+  virtualTourOnly: false,
+  furnishing: [],
 };
+
 
 interface FilterShortcutBarProps {
   variant: 'light' | 'dark';

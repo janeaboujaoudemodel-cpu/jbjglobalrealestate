@@ -18,8 +18,13 @@
 // NOTE: hover lift via transform is BANNED here — these pills sit inside a
 // horizontally-scrolling row with overflow clipping, so any translate-y crops
 // the top border. We use shadow-only hover for the 3D feel instead.
-export const filterPillBase ="inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2" +"rounded-full text-xs md:text-[13px] font-semibold whitespace-nowrap select-none" +"overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0 touch-manipulation" +"transition-[background-color,border-color,box-shadow,color] duration-200 cursor-pointer" +
- "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
+export const filterPillBase =
+  "inline-flex !w-auto min-w-0 items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 " +
+  "rounded-full text-xs md:text-[13px] font-semibold whitespace-nowrap select-none " +
+  "overflow-hidden text-ellipsis max-w-[220px] flex-shrink-0 touch-manipulation " +
+  "transition-[background-color,border-color,box-shadow,color] duration-200 cursor-pointer " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]";
+
 
 // Inactive (no value selected). Champagne fill, gold border, ink label.
 export const filterPillInactiveLight ="bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A]" +"hover:bg-[#F7F2EA] hover:border-[#B89555] hover:shadow-[0_4px_12px_rgba(184,149,85,0.18)]";
