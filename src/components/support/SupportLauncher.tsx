@@ -315,23 +315,33 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.99 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 data-no-contrast-guard
-                className="jbj-gold-animated-border fixed right-11 sm:right-14 top-1/2 w-[min(300px,calc(100vw-4rem))] rounded-2xl p-[1.5px] pointer-events-auto shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.22)]"
+                className="jbj-gold-animated-border fixed right-11 sm:right-14 top-1/2 w-[min(320px,calc(100vw-4rem))] max-h-[calc(100dvh-6rem)] rounded-2xl p-[2px] pointer-events-auto shadow-[0_30px_60px_rgba(0,0,0,0.35),0_0_34px_rgba(184,149,85,0.35)]"
               >
-                <div className="flex flex-col overflow-hidden rounded-[14px] bg-background text-foreground p-3">
-                  <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[10px] font-semibold border border-gold bg-raised text-ink">
-                      <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
+                <div
+                  data-emerald="true"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="jj-emerald-metallic allow-white flex flex-col overflow-hidden rounded-[14px] p-3 text-white max-h-[calc(100dvh-6.5rem)]"
+                >
+                  <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 border-b border-white/15 mb-2">
+                    <span
+                      className="allow-white inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border border-white/40 bg-white/10 text-white"
+                      style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
                       Call our agent now · Free
                     </span>
                     <button
                       onClick={close}
                       aria-label="Close"
-                      className="h-7 w-7 inline-flex items-center justify-center rounded-full border border-gold bg-raised text-[#B89555] hover:bg-[#1A1A1A] hover:text-[#B89555] transition-colors"
+                      data-allow-dark-cta
+                      className="allow-white h-8 w-8 inline-flex items-center justify-center rounded-full border border-white/40 bg-white/10 text-white hover:bg-white/20 transition-colors"
+                      style={{ color: "#FFFFFF" }}
                     >
-                      <X className="h-3.5 w-3.5" />
+                      <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </button>
                   </div>
-                  <div className="flex flex-col gap-3 rounded-xl p-1">
+                  <div className="flex flex-col gap-2.5 overflow-y-auto pr-0.5">
                     {channels.map((c) => (
                       <ChannelCard key={c.id} channel={c} onActivate={close} />
                     ))}
