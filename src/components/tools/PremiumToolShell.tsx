@@ -80,6 +80,48 @@ export const PremiumToolShell = ({
           caret-color: #FFFFFF !important;
         }
         [data-tool-emerald] input::placeholder, [data-tool-emerald] textarea::placeholder { color: rgba(255,255,255,0.55) !important; }
+        [data-tool-emerald] [class*="bg-rose"],
+        [data-tool-emerald] [class*="bg-pink"],
+        [data-tool-emerald] [class*="bg-violet"],
+        [data-tool-emerald] [class*="bg-indigo"],
+        [data-tool-emerald] [class*="bg-amber"],
+        [data-tool-emerald] [class*="bg-teal"],
+        [data-tool-emerald] [class*="bg-champagne"],
+        [data-tool-emerald] .bg-white,
+        [data-tool-emerald] [class*="bg-white/"] {
+          background-color: rgba(6,78,59,0.55) !important;
+          background-image: none !important;
+        }
+        [data-tool-emerald] [class*="border-rose"],
+        [data-tool-emerald] [class*="border-pink"],
+        [data-tool-emerald] [class*="border-violet"],
+        [data-tool-emerald] [class*="border-indigo"],
+        [data-tool-emerald] [class*="border-amber"],
+        [data-tool-emerald] [class*="border-teal"],
+        [data-tool-emerald] [class*="border-champagne"] { border-color: rgba(184,149,85,0.55) !important; }
+        [data-tool-emerald] [class*="text-rose"],
+        [data-tool-emerald] [class*="text-pink"],
+        [data-tool-emerald] [class*="text-violet"],
+        [data-tool-emerald] [class*="text-indigo"],
+        [data-tool-emerald] [class*="text-amber"],
+        [data-tool-emerald] [class*="text-teal"] { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+        [data-tool-emerald] [style*="rgba(251,113,133"],
+        [data-tool-emerald] [style*="rgba(159,18,57"],
+        [data-tool-emerald] [style*="rgba(7,16,31"],
+        [data-tool-emerald] [style*="rgba(4,7,13"],
+        [data-tool-emerald] [style*="#FDFBF7"],
+        [data-tool-emerald] [style*="#F7F2EA"],
+        [data-tool-emerald] [style*="#EFE6D6"] {
+          background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
+          color: #FFFFFF !important;
+        }
+        [data-tool-emerald] [data-slot="card"],
+        [data-tool-emerald] .jbj-card,
+        [data-tool-emerald] .card {
+          background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
+          border-color: rgba(184,149,85,0.45) !important;
+          color: #FFFFFF !important;
+        }
         .jbj-tool-shell-border::before {
           content: ""; position: absolute; inset: -2px; border-radius: 1.25rem; padding: 2px;
           background: var(--jbj-tool-border); animation: jbj-tool-border-spin 9s linear infinite;
@@ -261,6 +303,53 @@ export const ToolAnimatedFrame = ({
         color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; caret-color: #FFFFFF !important;
       }
       [data-tool-emerald] input::placeholder, [data-tool-emerald] textarea::placeholder { color: rgba(255,255,255,0.55) !important; }
+      /* Coerce residual per-tool palettes (rose/navy/champagne/white) to emerald ombré */
+      [data-tool-emerald] [class*="bg-rose"],
+      [data-tool-emerald] [class*="bg-pink"],
+      [data-tool-emerald] [class*="bg-violet"],
+      [data-tool-emerald] [class*="bg-indigo"],
+      [data-tool-emerald] [class*="bg-amber"],
+      [data-tool-emerald] [class*="bg-teal"],
+      [data-tool-emerald] [class*="bg-champagne"],
+      [data-tool-emerald] .bg-white,
+      [data-tool-emerald] [class*="bg-white/"] {
+        background-color: rgba(6,78,59,0.55) !important;
+        background-image: none !important;
+      }
+      [data-tool-emerald] [class*="border-rose"],
+      [data-tool-emerald] [class*="border-pink"],
+      [data-tool-emerald] [class*="border-violet"],
+      [data-tool-emerald] [class*="border-indigo"],
+      [data-tool-emerald] [class*="border-amber"],
+      [data-tool-emerald] [class*="border-teal"],
+      [data-tool-emerald] [class*="border-champagne"] {
+        border-color: rgba(184,149,85,0.55) !important;
+      }
+      [data-tool-emerald] [class*="text-rose"],
+      [data-tool-emerald] [class*="text-pink"],
+      [data-tool-emerald] [class*="text-violet"],
+      [data-tool-emerald] [class*="text-indigo"],
+      [data-tool-emerald] [class*="text-amber"],
+      [data-tool-emerald] [class*="text-teal"] { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+      /* Inline-style rose/navy gradients used by BusinessCardScanner */
+      [data-tool-emerald] [style*="rgba(251,113,133"],
+      [data-tool-emerald] [style*="rgba(159,18,57"],
+      [data-tool-emerald] [style*="rgba(7,16,31"],
+      [data-tool-emerald] [style*="rgba(4,7,13"],
+      [data-tool-emerald] [style*="#FDFBF7"],
+      [data-tool-emerald] [style*="#F7F2EA"],
+      [data-tool-emerald] [style*="#EFE6D6"] {
+        background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
+        color: #FFFFFF !important;
+      }
+      /* shadcn Card baseline coercion inside a tool */
+      [data-tool-emerald] [data-slot="card"],
+      [data-tool-emerald] .jbj-card,
+      [data-tool-emerald] .card {
+        background: linear-gradient(180deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.96) 60%, rgba(0,0,0,0.98) 100%) !important;
+        border-color: rgba(184,149,85,0.45) !important;
+        color: #FFFFFF !important;
+      }
       .jbj-tool-frame-border::before {
         content: ""; position: absolute; inset: -2px; border-radius: 1.25rem; padding: 2px;
         background: var(--jbj-tool-border); animation: jbj-tool-border-spin 9s linear infinite;

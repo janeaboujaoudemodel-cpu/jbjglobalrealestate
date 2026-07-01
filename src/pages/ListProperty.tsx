@@ -40,6 +40,8 @@ import { useSellerListings } from "@/hooks/useSellerListings";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDisplayDate as formatDate } from "@/utils/formatDate";
 import { AnimatedBorderShell } from "@/components/tools/AnimatedBorderShell";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 const ManualWizard = lazy(() => import("@/pages/SellerListing"));
 const AIWizard = lazy(() => import("@/pages/ListingPortalSubmit"));
@@ -140,9 +142,10 @@ const ListProperty = () => {
     `radial-gradient(circle at 18% 18%, ${theme.iconAccent}33 0%, transparent 60%)`;
 
   return (
+    <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
       className="min-h-screen"
-      style={{ backgroundColor: CHAMPAGNE, color: INK }}
+      style={{ color: WHITE }}
       data-listing-mode={theme.name}
       data-list-property-page
     >
@@ -365,6 +368,7 @@ const ListProperty = () => {
       <MySubmissionsSection theme={theme} />
       </div>
     </div>
+    </ToolAnimatedFrame>
   );
 };
 
