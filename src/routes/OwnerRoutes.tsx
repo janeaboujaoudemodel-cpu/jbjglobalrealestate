@@ -310,4 +310,6 @@ export const OwnerRoutes = () => (
    <Route path="crm/person/:variant/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/PersonHubPage")))}</Suspense>} />
    <Route path="crm/brokers/:brokerId" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/crm/BrokerProfile")))}</Suspense>} />
   </Route>
+  </>
 );
+
