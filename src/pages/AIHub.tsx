@@ -752,7 +752,7 @@ function AIHubFaqSection() {
             value={`ai-hub-faq-${i}`}
             className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden transition-colors hover:bg-[#F7F2EA]"
           >
-            <AccordionTrigger className="w-full text-left text-[#1A1A1A] hover:no-underline py-4 px-5 hover:bg-[#EFE6D6]/40 transition-colors">
+            <AccordionTrigger className="w-full text-left text-[#1A1A1A] hover:no-underline py-4 px-5">
               <span className="font-semibold">{faq.question}</span>
             </AccordionTrigger>
             <AccordionContent className="text-[#1A1A1A]/75 leading-relaxed pb-5 px-5">
