@@ -326,7 +326,11 @@ function PremiumImage(props: { src?: string; srcList?: string[]; alt: string }) 
   if (!list.length || idx >= list.length) return <ImageFallback alt={props.alt} />;
 
   const src = list[idx];
-  const useCors = mode === "pdf";
+  // CORS on for both preview AND pdf — guarantees BOTH trees pick the exact
+  // same candidate URL (otherwise PDF's CORS request can fall back to a
+  // different image than the preview, and the exported report ends up with
+  // different photos than the user just approved).
+  const useCors = true;
   return (
     <img
       key={`${idx}-${src}`}
