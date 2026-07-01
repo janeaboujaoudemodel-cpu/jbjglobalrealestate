@@ -39776,6 +39776,13 @@ export type Database = {
           bank_name: string
         }[]
       }
+      get_public_marketing_config: {
+        Args: never
+        Returns: {
+          key: string
+          value: string
+        }[]
+      }
       get_referral_partner_full_details: {
         Args: { p_partner_id: string }
         Returns: {
