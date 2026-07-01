@@ -13,7 +13,7 @@ import {
   Settings,
   UserRound,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { JBJLogo } from "@/components/JBJLogo";
 import { JBJ_CRM_MODULES, getJbjCrmPath } from "./jbjCrmConfig";
@@ -22,6 +22,23 @@ import "./jbjCrmShell.css";
 export default function JbjCrmShell() {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    const staleKeys = [
+      "jbj_crm_rail_collapsed_v1",
+      "jbj_crm_rail_groups_v1",
+      "jbj_crm_integration_toggles",
+    ];
+    try {
+      staleKeys.forEach((key) => window.localStorage.removeItem(key));
+      for (let index = window.localStorage.length - 1; index >= 0; index -= 1) {
+        const key = window.localStorage.key(index);
+        if (key?.startsWith("jbj_crm_mirror::")) window.localStorage.removeItem(key);
+      }
+    } catch {
+      // Ignore storage access errors; the shell itself remains stateless.
+    }
+  }, []);
 
   return (
     <div className={cn("jbj-crm-shell", collapsed && "is-collapsed")} data-jbj-crm-shell>
