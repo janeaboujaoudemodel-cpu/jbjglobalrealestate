@@ -11,11 +11,15 @@ const corsHeaders = {
 const GATEWAY = "https://connector-gateway.lovable.dev/zoho_crm";
 
 const MODULES: Record<string, string> = {
-  Leads: "Last_Name,First_Name,Full_Name,Email,Phone,Company,Lead_Status,Lead_Source,Created_Time,Modified_Time",
-  Contacts: "Last_Name,First_Name,Full_Name,Email,Phone,Account_Name,Title,Created_Time,Modified_Time",
-  Accounts: "Account_Name,Phone,Website,Industry,Account_Type,Created_Time,Modified_Time",
-  Deals: "Deal_Name,Amount,Stage,Closing_Date,Account_Name,Probability,Created_Time,Modified_Time",
-  Tasks: "Subject,Status,Priority,Due_Date,Created_Time,Modified_Time",
+  Leads: "Last_Name,First_Name,Full_Name,Email,Phone,Mobile,Company,Title,Lead_Status,Lead_Source,Industry,Annual_Revenue,City,Country,Description,Created_Time,Modified_Time",
+  Contacts: "Last_Name,First_Name,Full_Name,Email,Phone,Mobile,Account_Name,Title,Department,Mailing_City,Mailing_Country,Description,Created_Time,Modified_Time",
+  Accounts: "Account_Name,Phone,Website,Industry,Account_Type,Annual_Revenue,Employees,Billing_City,Billing_Country,Description,Created_Time,Modified_Time",
+  Deals: "Deal_Name,Amount,Stage,Closing_Date,Account_Name,Contact_Name,Probability,Expected_Revenue,Type,Lead_Source,Description,Created_Time,Modified_Time",
+  Tasks: "Subject,Status,Priority,Due_Date,Description,Created_Time,Modified_Time",
+  Cases: "Subject,Status,Priority,Case_Origin,Type,Account_Name,Description,Created_Time,Modified_Time",
+  Products: "Product_Name,Product_Code,Product_Category,Unit_Price,Qty_in_Stock,Product_Active,Description,Created_Time,Modified_Time",
+  Quotes: "Subject,Quote_Stage,Grand_Total,Valid_Till,Account_Name,Contact_Name,Created_Time,Modified_Time",
+  Invoices: "Subject,Status,Grand_Total,Due_Date,Account_Name,Contact_Name,Created_Time,Modified_Time",
 };
 
 Deno.serve(async (req) => {
