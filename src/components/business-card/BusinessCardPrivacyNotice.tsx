@@ -18,11 +18,11 @@ interface BusinessCardPrivacyNoticeProps {
 }
 
 // Rose neon palette (matches the Business Card Scanner tool theme)
-const ACCENT = "#fb7185"; // rose-400
-const ACCENT_SOFT = "rgba(251,113,133,0.14)";
-const ACCENT_BORDER = "rgba(251,113,133,0.45)";
+const ACCENT = "#FFFFFF"; // emerald-500
+const ACCENT_SOFT = "rgba(255,255,255,0.14)";
+const ACCENT_BORDER = "rgba(255,255,255,0.45)";
 const ACCENT_GLOW =
-  "0 0 0 1px rgba(251,113,133,0.35), 0 18px 60px -22px rgba(251,113,133,0.55)";
+  "0 0 0 1px rgba(255,255,255,0.35), 0 18px 60px -22px rgba(255,255,255,0.55)";
 
 const BusinessCardPrivacyNotice = ({
   onAccept,
@@ -71,7 +71,7 @@ const BusinessCardPrivacyNotice = ({
       className="min-h-[calc(100vh-88px)] flex items-center justify-center px-4 py-6"
       style={{
         background:
-          "radial-gradient(1200px 700px at 50% -10%, rgba(251,113,133,0.18), transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
+          "radial-gradient(1200px 700px at 50% -10%, rgba(255,255,255,0.18), transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
       }}
     >
       <div
@@ -178,7 +178,7 @@ const BusinessCardPrivacyNotice = ({
               }}
               data-no-contrast-guard
               data-allow-dark-cta
-              className="bcs-consent-box peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
+              className="bcs-consent-box peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
               style={{
                 backgroundColor: agreed ? "#FFFFFF" : "rgba(255,255,255,0.06)",
                 border: `1.5px solid ${agreed ? "#FFFFFF" : ACCENT_BORDER}`,
@@ -228,10 +228,10 @@ const BusinessCardPrivacyNotice = ({
               data-no-contrast-guard
               className="allow-white h-10 px-5 disabled:opacity-50"
               style={{
-                background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+                background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
                 color: "#FFFFFF",
                 border: `1px solid ${ACCENT_BORDER}`,
-                boxShadow: "0 12px 30px -12px rgba(251,113,133,0.55)",
+                boxShadow: "0 12px 30px -12px rgba(255,255,255,0.55)",
               }}
               disabled={!agreed}
               onClick={async () => {

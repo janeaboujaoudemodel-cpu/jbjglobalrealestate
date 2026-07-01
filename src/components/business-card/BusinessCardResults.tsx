@@ -114,7 +114,7 @@ const BusinessCardResults = ({
   if (contacts.length === 0) {
     return (
       <div className="text-center py-12 allow-white" style={{ color: "rgba(255,255,255,0.78)" }} data-no-contrast-guard>
-        <Lock className="h-12 w-12 mx-auto mb-4 opacity-60 allow-white" style={{ color: "#fb7185" }} />
+        <Lock className="h-12 w-12 mx-auto mb-4 opacity-60 allow-white" style={{ color: "#FFFFFF" }} />
         <p className="font-medium allow-white" style={{ color: "#FFFFFF" }}>No contacts scanned yet</p>
         <p className="text-sm mt-1 allow-white" style={{ color: "rgba(255,255,255,0.72)" }}>
           Scan business cards to see extracted contacts here
@@ -136,7 +136,7 @@ const BusinessCardResults = ({
         return (
           <Card
             key={contact.id}
-            className="border-rose-500/45 transition-colors allow-white"
+            className="border-emerald-700/45 transition-colors allow-white"
             data-no-contrast-guard
             style={{ background: "rgba(4,7,13,0.62)", color: "#FFFFFF" }}
           >
@@ -169,11 +169,11 @@ const BusinessCardResults = ({
                     </div>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <Button size="sm" variant="ghost" className="text-white hover:bg-rose-500/15 hover:text-white allow-white" data-no-contrast-guard data-allow-dark-cta onClick={cancelEdit}>
+                    <Button size="sm" variant="ghost" className="text-white hover:bg-emerald-700/15 hover:text-white allow-white" data-no-contrast-guard data-allow-dark-cta onClick={cancelEdit}>
                       <X className="h-4 w-4 mr-1 allow-white" />
                       Cancel
                     </Button>
-                    <Button size="sm" className="border border-rose-500/55 bg-rose-500/18 text-white hover:bg-rose-500/28 hover:text-white allow-white" data-no-contrast-guard data-allow-dark-cta onClick={saveEdit}>
+                    <Button size="sm" className="border border-emerald-700/55 bg-emerald-700/18 text-white hover:bg-emerald-700/28 hover:text-white allow-white" data-no-contrast-guard data-allow-dark-cta onClick={saveEdit}>
                       <Check className="h-4 w-4 mr-1 allow-white" />
                       Save
                     </Button>
@@ -198,7 +198,7 @@ const BusinessCardResults = ({
                     </div>
                     <div className="flex items-center gap-1">
                       {needsReview && (
-                          <Badge variant="outline" className="text-[10px] border-rose-400/70 bg-transparent text-rose-100 allow-white" data-no-contrast-guard>
+                          <Badge variant="outline" className="text-[10px] border-emerald-500/70 bg-transparent text-emerald-50 allow-white" data-no-contrast-guard>
                           Needs Review
                         </Badge>
                       )}
@@ -210,7 +210,7 @@ const BusinessCardResults = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-7 w-7 rounded-full border border-rose-500/45 bg-transparent text-white hover:bg-rose-500/15 hover:text-white allow-white"
+                        className="h-7 w-7 rounded-full border border-emerald-700/45 bg-transparent text-white hover:bg-emerald-700/15 hover:text-white allow-white"
                         data-no-contrast-guard
                         data-allow-dark-cta
                         aria-label="Edit scanned contact"
@@ -272,14 +272,14 @@ const BusinessCardResults = ({
                   </div>
 
                   {/* Classification & labels */}
-                  <div className="mt-4 pt-3 space-y-3" style={{ borderTop: "1px solid rgba(251,113,133,0.35)" }}>
+                  <div className="mt-4 pt-3 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.35)" }}>
                     <div className="flex items-center gap-2">
                       <span className="text-xs w-24 allow-white" style={{ color: "rgba(255,255,255,0.78)" }}>Contact type</span>
                       <Select
                         value={contact.contactType || "client"}
                         onValueChange={(v) => onUpdateContact(contact.id, { contactType: v as ContactTypeLabel })}
                       >
-                        <SelectTrigger className="h-8 w-56 border-rose-500/45 bg-rose-500/10 text-white allow-white" data-no-contrast-guard>
+                        <SelectTrigger className="h-8 w-56 border-emerald-700/45 bg-emerald-700/10 text-white allow-white" data-no-contrast-guard>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -304,8 +304,8 @@ const BusinessCardResults = ({
                               onClick={() => toggleLabel(contact.id, l, labels)}
                               className={`text-[11px] px-2 py-0.5 rounded-full border transition ${
  active
- ? "bg-rose-500/22 text-white border-rose-300 allow-white"
- : "bg-transparent text-white/75 border-rose-500/35 hover:border-rose-300 hover:text-white allow-white"
+ ? "bg-emerald-700/22 text-white border-emerald-300 allow-white"
+ : "bg-transparent text-white/75 border-emerald-700/35 hover:border-emerald-300 hover:text-white allow-white"
  }`}
                               data-no-contrast-guard
                             >
@@ -317,13 +317,13 @@ const BusinessCardResults = ({
                     </div>
                   </div>
 
-                  <div className="mt-3 pt-2 flex items-center justify-between text-xs gap-2 allow-white" style={{ borderTop: "1px solid rgba(251,113,133,0.35)", color: "rgba(255,255,255,0.72)" }}>
+                  <div className="mt-3 pt-2 flex items-center justify-between text-xs gap-2 allow-white" style={{ borderTop: "1px solid rgba(255,255,255,0.35)", color: "rgba(255,255,255,0.72)" }}>
                     <span className="allow-white">Scanned {new Date(contact.scannedAt).toLocaleString()}</span>
                     <div className="flex items-center gap-2">
                       {onSaveContact && (
                         <Button
                           size="sm"
-                          className="h-7 gap-1 rounded-full border border-rose-500/55 bg-rose-500/12 px-3 text-white hover:bg-rose-500/22 hover:text-white disabled:bg-rose-500/12 disabled:text-white disabled:opacity-100 allow-white"
+                          className="h-7 gap-1 rounded-full border border-emerald-700/55 bg-emerald-700/12 px-3 text-white hover:bg-emerald-700/22 hover:text-white disabled:bg-emerald-700/12 disabled:text-white disabled:opacity-100 allow-white"
                           data-no-contrast-guard
                           data-allow-dark-cta
                           disabled={saveStatus === "saving" || saveStatus === "saved" || !saveable}
@@ -339,7 +339,7 @@ const BusinessCardResults = ({
                           {saveStatus === "saved" ? "Saved to CRM" : saveable ? "Save to CRM" : "Not a business card"}
                         </Button>
                       )}
-                      <Lock className="h-3 w-3 allow-white" style={{ color: "#fb7185" }} />
+                      <Lock className="h-3 w-3 allow-white" style={{ color: "#FFFFFF" }} />
                     </div>
                   </div>
                 </div>
@@ -369,7 +369,7 @@ const Field = ({
       type={type}
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
-      className="h-8 border-rose-500/45 bg-rose-500/10 text-white placeholder:text-white/45 allow-white"
+      className="h-8 border-emerald-700/45 bg-emerald-700/10 text-white placeholder:text-white/45 allow-white"
       data-no-contrast-guard
     />
   </div>
