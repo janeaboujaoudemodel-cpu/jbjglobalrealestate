@@ -161,8 +161,8 @@ const BusinessCardUpload = ({
     }
   };
 
-  const ACCENT = "#fb7185";
-  const ACCENT_BORDER = "rgba(251,113,133,0.55)";
+  const ACCENT = "#FFFFFF";
+  const ACCENT_BORDER = "rgba(255,255,255,0.55)";
 
   return (
     <div className="space-y-4" data-no-contrast-guard data-allow-dark-cta>
@@ -174,7 +174,7 @@ const BusinessCardUpload = ({
         className={`bcs-drop rounded-xl p-8 text-center transition-colors flex items-center justify-center min-h-[460px] ${isDragging ? "is-dragging" : ""}`}
         style={{
           border: `2px dashed ${ACCENT_BORDER}`,
-          background: isDragging ? "rgba(251,113,133,0.10)" : "rgba(255,255,255,0.03)",
+          background: isDragging ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.03)",
         }}
       >
         <input
@@ -193,7 +193,7 @@ const BusinessCardUpload = ({
           <div
             className="p-4 rounded-full"
             style={{
-              background: "rgba(251,113,133,0.14)",
+              background: "rgba(255,255,255,0.14)",
               border: `1px solid ${ACCENT_BORDER}`,
               boxShadow: `0 0 24px ${ACCENT}33`,
             }}
@@ -212,7 +212,7 @@ const BusinessCardUpload = ({
             data-no-contrast-guard
             className="allow-white gap-2"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
               boxShadow: `0 12px 30px -14px ${ACCENT}88`,
@@ -278,7 +278,7 @@ const BusinessCardUpload = ({
             data-no-contrast-guard
             className="allow-white w-full gap-2 h-11 rounded-xl font-semibold"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
               boxShadow: `0 14px 36px -14px ${ACCENT}88`,

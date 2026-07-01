@@ -40,9 +40,9 @@ type ScanStatus =
   | "error";
 
 // Rose neon palette (matches scanner brand)
-const ACCENT = "#fb7185";
-const ACCENT_SOFT = "rgba(251,113,133,0.14)";
-const ACCENT_BORDER = "rgba(251,113,133,0.45)";
+const ACCENT = "#FFFFFF";
+const ACCENT_SOFT = "rgba(255,255,255,0.14)";
+const ACCENT_BORDER = "rgba(255,255,255,0.45)";
 const PANEL_BG =
   "linear-gradient(180deg, rgba(7,16,31,0.96) 0%, rgba(4,7,13,0.98) 100%)";
 
@@ -428,7 +428,7 @@ const BusinessCardCamera = ({
           background: PANEL_BG,
           border: `1px solid ${ACCENT_BORDER}`,
           boxShadow:
-            "0 0 0 1px rgba(251,113,133,0.18), 0 20px 60px -24px rgba(251,113,133,0.45)",
+            "0 0 0 1px rgba(255,255,255,0.18), 0 20px 60px -24px rgba(255,255,255,0.45)",
         }}
       >
         {/* Always-mounted video — hidden when not ready */}
@@ -449,7 +449,7 @@ const BusinessCardCamera = ({
             className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center"
             style={{
               background:
-                "radial-gradient(800px 400px at 50% 0%, rgba(251,113,133,0.18), transparent 60%), " +
+                "radial-gradient(800px 400px at 50% 0%, rgba(255,255,255,0.18), transparent 60%), " +
                 PANEL_BG,
             }}
           >
@@ -499,7 +499,7 @@ const BusinessCardCamera = ({
               data-no-contrast-guard
               className="allow-white gap-2 px-6 py-5 rounded-xl font-semibold"
               style={{
-                background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+                background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
                 color: "#FFFFFF",
                 border: `1px solid ${ACCENT_BORDER}`,
                 boxShadow: `0 14px 36px -14px ${ACCENT}88`,
@@ -597,7 +597,7 @@ const BusinessCardCamera = ({
               background: "rgba(7,16,31,0.92)",
               border: `1px solid ${ACCENT_BORDER}`,
               color: "#FFFFFF",
-              boxShadow: `inset 0 0 0 1px rgba(251,113,133,0.18)`,
+              boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.18)`,
             }}
             title="Switch camera"
           >
@@ -611,7 +611,7 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white gap-2 h-12 px-7 rounded-xl font-semibold"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
               boxShadow: `0 14px 36px -14px ${ACCENT}88`,
@@ -694,7 +694,7 @@ const BusinessCardCamera = ({
             data-no-contrast-guard
             className="allow-white w-full gap-2 h-11 rounded-xl font-semibold"
             style={{
-              background: `linear-gradient(135deg, ${ACCENT} 0%, #9f1239 100%)`,
+              background: `linear-gradient(135deg, ${ACCENT} 0%, #022c1c 100%)`,
               color: "#FFFFFF",
               border: `1px solid ${ACCENT_BORDER}`,
               boxShadow: `0 14px 36px -14px ${ACCENT}88`,
