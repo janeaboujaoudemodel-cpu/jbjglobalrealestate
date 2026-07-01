@@ -651,156 +651,193 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
     );
   }
 
+  // ============================================================
+  //  PROPERTY COMPARISON — JBJ BRAND LOCK (matches home ToolkitShowcaseCard)
+  //  Hero band: emerald ombré + white ink. Body: champagne + black ink.
+  //  Primary CTA: emerald metallic + white. Secondary: champagne + black.
+  //  Zero gold-gradient buttons. Zero white ink on champagne.
+  // ============================================================
+  const EMERALD_INK = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
+  const CHAMPAGNE = "#F7F2EA";
+  const GOLD_HAIRLINE = "1px solid rgba(184,149,85,0.35)";
+
   return (
-    <ToolAnimatedFrame theme={toolThemes.burgundy}>
-    <section className="min-h-screen bg-[#FDFBF7]">
-      {/* Hero Section - Champagne/Gold Theme */}
-      <div className="relative py-16 md:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gold/10 via-zinc-950 to-zinc-950" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#EFE6D6]/3 rounded-full blur-2xl" />
-        
-        <div className="container mx-auto px-4 relative z-10">
+    <section className="min-h-screen" style={{ background: "#FDFBF7" }}>
+      {/* =============== HERO — EMERALD OMBRÉ =============== */}
+      <div
+        data-ink-emerald
+        data-no-contrast-guard
+        className="relative overflow-hidden"
+        style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}
+      >
+        <div className="container mx-auto px-4 py-14 md:py-16 relative z-10">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-[#1A1A1A] transition-colors mb-8"
+            data-no-contrast-guard
+            className="allow-white inline-flex items-center gap-2 mb-8 text-sm font-medium"
+            style={{ color: "rgba(255,255,255,0.85)" }}
           >
-            <ArrowLeft className="w-5 h-5" />
-            <span>Back to Previous Page</span>
+            <ArrowLeft className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+            <span className="allow-white" style={{ color: "#FFFFFF" }}>Back to Previous Page</span>
           </button>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full mb-6">
-              <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] text-sm font-medium">AI-Powered</span>
-            </div>
-            
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#ECE2D2]">Property Comparison</span>
-            </h1>
-            <p className="text-white/85 text-lg md:text-xl mb-4 max-w-2xl">
-              Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
-            </p>
-            <div className="flex items-center gap-3 mt-3">
-              <div className="h-px w-12" style={{ background: "#B89555" }} />
-              <span className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/60">Powered by</span>
-              <span className="text-xs font-bold tracking-[0.14em] text-white">JBJ GLOBAL REAL ESTATE</span>
+            {/* Eyebrow pill — white on white/10 */}
+            <div
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+              style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.28)" }}
+            >
+              <BarChart3 className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="allow-white text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#FFFFFF" }}>
+                AI-Powered
+              </span>
             </div>
 
-            {/* Feature Cards - Champagne Theme */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+            <h1
+              data-no-contrast-guard
+              className="allow-white text-4xl md:text-5xl font-bold tracking-tight mb-4"
+              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            >
+              Property Comparison
+            </h1>
+            <p
+              data-no-contrast-guard
+              className="allow-white text-base md:text-lg leading-relaxed max-w-2xl"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
+              Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
+            </p>
+
+            <div className="flex items-center gap-3 mt-5">
+              <div className="h-px w-12" style={{ background: "rgba(255,255,255,0.55)" }} />
+              <span className="allow-white text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "rgba(255,255,255,0.75)" }}>
+                Powered by
+              </span>
+              <span className="allow-white text-xs font-bold tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
+                JBJ GLOBAL REAL ESTATE
+              </span>
+            </div>
+
+            {/* Mode toggle */}
+            <div className="mt-8">
+              <CompareModeToggle mode="projects" onChange={onModeChange} />
+            </div>
+
+            {/* Feature tiles — white ink on white/8 over emerald */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
               {[
-                { icon: BarChart3, title: "Compare 2-5 Projects", sub: "Side-by-side analysis" },
+                { icon: BarChart3, title: "Compare 2–5 Projects", sub: "Side-by-side analysis" },
                 { icon: TrendingUp, title: "ROI Projections", sub: "Investment returns" },
                 { icon: Award, title: "Smart Ratings", sub: "Location, value & more" },
               ].map((f) => (
-                <div key={f.title} className="flex items-center gap-3 bg-[#EFE6D6]/5 backdrop-blur-sm border border-[#B89555]/20 rounded-xl p-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#EFE6D6]/10 flex items-center justify-center">
-                    <f.icon className="w-5 h-5 text-[#1A1A1A]" />
+                <div
+                  key={f.title}
+                  data-no-contrast-guard
+                  className="allow-white flex items-center gap-3 rounded-xl p-4"
+                  style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.22)" }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.28)" }}
+                  >
+                    <f.icon className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <div>
-                    <p className="text-white font-medium">{f.title}</p>
-                    <p className="text-[#1A1A1A]/70 text-sm">{f.sub}</p>
+                  <div className="min-w-0">
+                    <p className="allow-white font-semibold text-sm leading-tight" style={{ color: "#FFFFFF" }}>{f.title}</p>
+                    <p className="allow-white text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.78)" }}>{f.sub}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 mt-8">
+            {/* CTA row — primary emerald metallic (white ink), secondary champagne (black ink) */}
+            <div className="flex flex-wrap gap-3 mt-8">
               <button
                 onClick={generateSmartAnalysis}
                 disabled={isGenerating || projects.length < 2}
-                className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                data-no-contrast-guard
+                data-allow-dark-cta
+                className="allow-white jj-pill-emerald-metallic inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)',
-                  border: '2px solid rgba(200,167,102,0.5)',
-                  boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
+                  backgroundImage: EMERALD_INK,
+                  color: "#FFFFFF",
+                  border: "1px solid rgba(255,255,255,0.35)",
+                  boxShadow: "0 10px 28px rgba(4,120,87,0.45), inset 0 1px 0 rgba(255,255,255,0.18)",
                 }}
               >
-                <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                <span className="relative flex items-center justify-center gap-2">
-                  {isGenerating ? (
-                    <>
-                      <Sparkles className="w-5 h-5 text-[#1A1A1A] animate-pulse" />
-                      <span className="text-[#1A1A1A]">Analyzing Property Intelligence...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
-                      <span className="text-[#1A1A1A]">Start</span>
-                      <span className="text-[#1A1A1A]">Comparing</span>
-                    </>
-                  )}
-                </span>
+                {isGenerating ? (
+                  <><Loader2 className="w-4 h-4 animate-spin allow-white" style={{ color: "#FFFFFF" }} /><span className="allow-white" style={{ color: "#FFFFFF" }}>Analyzing…</span></>
+                ) : (
+                  <><Sparkles className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /><span className="allow-white" style={{ color: "#FFFFFF" }}>Start Comparing</span></>
+                )}
               </button>
+
               <button
                 onClick={() => setAiAddOpen(true)}
-                data-cta="champagne"
-                className="jj-cta-champagne inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
               >
-                <Sparkles className="w-5 h-5" /> Add via link / PDF (AI fill)
+                <Sparkles className="w-4 h-4" style={{ color: "#064E3B" }} />
+                Add via link / PDF (AI fill)
               </button>
+
               <Link to="/compare-manual">
                 <button
-                  data-cta="outline"
-                  className="jj-cta-outline inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                  style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)" }}
+                  data-no-contrast-guard
                 >
-                  Compare manually
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Compare manually</span>
                 </button>
               </Link>
+
               {aiAnalysis && (
                 <>
                   <button
                     onClick={downloadComprehensiveReport}
-                    data-emerald-action="true"
-                    className="jj-emerald-action relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 shadow-sm group"
+                    data-no-contrast-guard
+                    data-allow-dark-cta
+                    className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                    style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)" }}
                   >
-                    <Download className="w-5 h-5" />
-                    <span>Download Report</span>
+                    <Download className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span className="allow-white" style={{ color: "#FFFFFF" }}>Download Report</span>
                   </button>
                   <button
                     onClick={() => {
                       import("@/utils/exportXlsx").then(({ exportPremiumXlsx }) => {
                         const rows = (aiAnalysis.projectDetailsTable || []).map((row: any) => ({
-                          project: row.projectName,
-                          developer: row.developer,
-                          location: row.location,
-                          price_range: row.priceRange,
-                          price_per_sqft: row.pricePerSqft,
-                          bedrooms: row.bedrooms,
-                          size_range: row.sizeRange,
-                          handover: row.handover,
-                          payment_plan: row.paymentPlan,
-                          views: (row.views || []).join(", "),
+                          project: row.projectName, developer: row.developer, location: row.location,
+                          price_range: row.priceRange, price_per_sqft: row.pricePerSqft,
+                          bedrooms: row.bedrooms, size_range: row.sizeRange, handover: row.handover,
+                          payment_plan: row.paymentPlan, views: (row.views || []).join(", "),
                           amenities: (row.keyAmenities || []).join(", "),
                           usps: (row.uniqueSellingPoints || []).join(", "),
-                          investment_type: row.investmentType,
-                          target_buyer: row.targetBuyer,
+                          investment_type: row.investmentType, target_buyer: row.targetBuyer,
                         }));
                         exportPremiumXlsx(rows, {
-                          filename: "JBJ-Property-Comparison",
-                          sheetName: "Comparison",
-                          title: "JBJ GLOBAL REAL ESTATE",
-                          subtitle: "AI Property Comparison",
+                          filename: "JBJ-Property-Comparison", sheetName: "Comparison",
+                          title: "JBJ GLOBAL REAL ESTATE", subtitle: "AI Property Comparison",
                         });
                       });
                     }}
-                    className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-[#F7F2EA] border-2 border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
                   >
-                    <Download className="w-5 h-5" />
+                    <Download className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Download Excel
                   </button>
                   <button
                     onClick={() => {
                       const projectSummary = projects.map(p => `- ${p.name} | ${p.developer?.name || 'N/A'} | ${p.location || 'Dubai'} | ${p.price_from ? `AED ${(p.price_from/1000000).toFixed(1)}M` : 'Price on request'}`).join('\n');
                       const shareText = `JBJ GLOBAL REAL ESTATE\nAI Property Comparison Report\n\n${projectSummary}\n\nPrepared by JBJ Global Real Estate\n+971 54 716 7107 | www.JBJ.ae\n\nView: ${window.location.href}`;
-                      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-                      window.location.href = whatsappUrl;
+                      window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                     }}
-                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 jj-surface-emerald hover:jj-surface-emerald text-white group"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
                   >
-                    <Send className="w-5 h-5" />
+                    <Send className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Share via WhatsApp
                   </button>
                   <button
@@ -810,9 +847,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 54 716 7107\nContact@JBJ.ae | www.JBJ.ae`);
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
-                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-[#F7F2EA] hover:bg-[#1A1A1A] text-white group"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
                   >
-                    <Mail className="w-5 h-5" />
+                    <Mail className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Share via Email
                   </button>
                 </>
@@ -822,60 +860,76 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 pb-16">
-        {/* Champagne/gold border wrapper */}
-        <div className="rounded-2xl border-2 border-[#B89555]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-[#FDFBF7]/60 backdrop-blur-sm flex flex-col gap-8">
-          {/* Properties Count */}
-          <div className="flex items-center gap-2 text-white/70">
-            <span className="text-lg font-medium text-white">{projects.length}</span>
-            <span>properties in comparison</span>
+      {/* =============== BODY — CHAMPAGNE + BLACK INK =============== */}
+      <div className="container mx-auto px-4 py-10 md:py-14">
+        <div
+          className="rounded-2xl p-5 md:p-7 flex flex-col gap-8"
+          style={{ background: CHAMPAGNE, border: GOLD_HAIRLINE, boxShadow: "0 10px 32px -18px rgba(4,78,59,0.15)" }}
+        >
+          {/* Counter */}
+          <div className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+            <span className="text-lg font-bold" style={{ color: "#064E3B" }}>{projects.length}</span>
+            <span className="text-sm">properties in comparison</span>
           </div>
 
-          {/* Basic Comparison Table */}
-          <div ref={tableRef} className="overflow-x-auto bg-[#FDFBF7] rounded-2xl border border-[#1A1A1A]">
+          {/* Comparison Table */}
+          <div
+            ref={tableRef}
+            className="overflow-x-auto rounded-2xl"
+            style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}
+          >
             <table className="w-full">
               <thead>
-                <tr>
-                  <th className="text-left py-4 px-4 text-white/90 font-medium border-b border-[#1A1A1A] sticky left-0 bg-[#FDFBF7] z-10">
+                <tr style={{ background: "rgba(4,78,59,0.06)" }}>
+                  <th
+                    className="text-left py-4 px-4 font-semibold text-sm sticky left-0 z-10"
+                    style={{ color: "#1A1A1A", background: "#F7F2EA", borderBottom: GOLD_HAIRLINE }}
+                  >
                     Feature
                   </th>
-                    {projects.map((project) => {
-                      const badge = getBadge(project.id);
-                      const isFav = shortlistIds.includes(project.id);
-                      return (
-                        <th
-                          key={project.id}
-                          className="text-left py-4 px-4 border-b border-[#1A1A1A]"
-                          style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px' }}
-                        >
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center justify-between gap-2">
-                              {badge && (
-                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-bold w-fit ${
- badge === 'top1' ? 'bg-[#EFE6D6]/20 text-[#1A1A1A]' :
- badge === 'top2' ? 'bg-[#EFE6D6]/15 text-[#1A1A1A]' :
- 'bg-[#EFE6D6]/10 text-[#1A1A1A]/70'
- }`}>
-                                  {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
-                                </span>
-                              )}
-                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
- isFav ? 'bg-red-500/15 text-red-400' : 'bg-[#F7F2EA] text-white/90'
- }`}>
-                                <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
-                                {isFav ? 'In Favorites' : 'Not Saved'}
+                  {projects.map((project) => {
+                    const badge = getBadge(project.id);
+                    const isFav = shortlistIds.includes(project.id);
+                    return (
+                      <th
+                        key={project.id}
+                        className="text-left py-4 px-4"
+                        style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: GOLD_HAIRLINE }}
+                      >
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center justify-between gap-2">
+                            {badge && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide"
+                                style={{ background: "#064E3B", color: "#FFFFFF" }}
+                              >
+                                {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                               </span>
-                            </div>
-                            <div className="aspect-[16/9] h-40 overflow-hidden rounded-lg">
-                              <img
-                                src={project.images?.[0]?.image_url || "/placeholder.svg"}
-                                alt={project.name}
-                                className="w-full h-full object-cover"
-                               loading="lazy" decoding="async" />
-                            </div>
-                            <h3 className="text-white font-semibold">{project.name}</h3>
-                            <p data-developer-name className="text-white/90 text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer?.name}</p>
+                            )}
+                            <span
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold"
+                              style={{
+                                background: isFav ? "rgba(220,38,38,0.10)" : "#F7F2EA",
+                                color: isFav ? "#DC2626" : "#1A1A1A",
+                                border: GOLD_HAIRLINE,
+                              }}
+                            >
+                              <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
+                              {isFav ? 'In Favorites' : 'Not Saved'}
+                            </span>
+                          </div>
+                          <div className="aspect-[16/9] h-40 overflow-hidden rounded-lg">
+                            <img
+                              src={project.images?.[0]?.image_url || "/placeholder.svg"}
+                              alt={project.name}
+                              className="w-full h-full object-cover"
+                              loading="lazy" decoding="async"
+                            />
+                          </div>
+                          <h3 className="font-bold text-base" style={{ color: "#1A1A1A" }}>{project.name}</h3>
+                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "#064E3B" }}>
+                            {project.developer?.name}
+                          </p>
                         </div>
                       </th>
                     );
@@ -890,16 +944,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   { label: "Price From", format: (_: any, p: any) => p.price_from ? `AED ${(p.price_from / 1000000).toFixed(2)}M` : "Price on request" },
                   { label: "Price To", format: (_: any, p: any) => p.price_to ? `AED ${(p.price_to / 1000000).toFixed(2)}M` : "Price on request" },
                   { label: "Bedrooms", format: (_: any, p: any) => {
-                    const min = p.bedrooms_min;
-                    const max = p.bedrooms_max;
+                    const min = p.bedrooms_min; const max = p.bedrooms_max;
                     if (min != null && max != null && (min !== max)) return `${min} – ${max} BR`;
                     if (min != null) return `${min} BR`;
                     if (max != null) return `${max} BR`;
                     return "Studio / Various";
                   }},
                   { label: "Size Range", format: (_: any, p: any) => {
-                    const min = p.size_min;
-                    const max = p.size_max;
+                    const min = p.size_min; const max = p.size_max;
                     if (min && max) return `${min.toLocaleString()} – ${max.toLocaleString()} sqft`;
                     if (min) return `From ${min.toLocaleString()} sqft`;
                     return "Size on request";
@@ -922,13 +974,13 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     if (Array.isArray(amenities) && amenities.length > 0) return amenities.slice(0, 5).join(", ");
                     return "See project page";
                   }},
-                ].map((row) => (
-                  <tr key={row.label} className="border-b border-[#1A1A1A]/50 even:bg-[#F7F2EA]/20 odd:bg-[#FDFBF7]/40 hover:bg-[#1A1A1A]/30">
-                    <td className="py-4 px-4 text-white/70 sticky left-0 bg-[#FDFBF7] font-medium">
+                ].map((row, idx) => (
+                  <tr key={row.label} style={{ background: idx % 2 === 0 ? "#FDFBF7" : "#F7F2EA", borderBottom: "1px solid rgba(184,149,85,0.18)" }}>
+                    <td className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#1A1A1A", background: idx % 2 === 0 ? "#FDFBF7" : "#F7F2EA" }}>
                       {row.label}
                     </td>
                     {projects.map((project) => (
-                      <td key={project.id} className={`py-4 px-4 text-white text-sm ${row.label === 'Location' ? 'truncate max-w-[200px]' : ''}`}>
+                      <td key={project.id} className="py-3.5 px-4 text-sm" style={{ color: "#1A1A1A" }}>
                         {row.format(null, project)}
                       </td>
                     ))}
@@ -941,26 +993,28 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           {/* AI Analysis Section */}
           {aiAnalysis ? (
             <div className="space-y-8">
-              {/* Summary */}
-              <div className="bg-gradient-to-br from-gold/10 to-zinc-900 rounded-2xl border border-[#B89555]/20 p-6">
+              {/* Summary — emerald ombré card */}
+              <div
+                data-ink-emerald
+                data-no-contrast-guard
+                className="allow-white rounded-2xl p-6"
+                style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B", border: "1px solid rgba(255,255,255,0.15)" }}
+              >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center">
-                    <Sparkles className="w-5 h-5 text-[#1A1A1A]" />
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.28)" }}>
+                    <Sparkles className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold text-lg">Executive Summary</h3>
-                    <p className="text-[#1A1A1A] text-sm">AI-Generated Analysis</p>
+                    <h3 className="allow-white font-bold text-lg" style={{ color: "#FFFFFF" }}>Executive Summary</h3>
+                    <p className="allow-white text-xs" style={{ color: "rgba(255,255,255,0.75)" }}>AI-Generated Analysis</p>
                   </div>
                 </div>
-                <p className="text-white/85 leading-relaxed">{aiAnalysis.summary}</p>
+                <p className="allow-white leading-relaxed text-sm md:text-base" style={{ color: "rgba(255,255,255,0.92)" }}>{aiAnalysis.summary}</p>
               </div>
 
-              {/* Market Context */}
               {Array.isArray((aiAnalysis as any).marketContext) && (aiAnalysis as any).marketContext.length > 0 && (
                 <MarketContextStrip data={(aiAnalysis as any).marketContext} />
               )}
-
-              {/* Risk Scores */}
               {Array.isArray((aiAnalysis as any).riskScores) && (aiAnalysis as any).riskScores.length > 0 && (
                 <RiskScoreGauge data={(aiAnalysis as any).riskScores} />
               )}
@@ -968,32 +1022,32 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               {/* Negotiation Leverage */}
               {Array.isArray((aiAnalysis as any).negotiationLeverage) && (aiAnalysis as any).negotiationLeverage.length > 0 && (
                 <div>
-                  <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-[#B89555]" />
+                  <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                    <Zap className="w-5 h-5" style={{ color: "#064E3B" }} />
                     Negotiation Leverage
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {(aiAnalysis as any).negotiationLeverage.map((n: any, i: number) => (
-                      <div key={i} className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
+                      <div key={i} className="rounded-2xl p-5" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-white font-semibold">{n.projectName}</h4>
+                          <h4 className="font-bold" style={{ color: "#1A1A1A" }}>{n.projectName}</h4>
                           <button
                             type="button"
                             onClick={() => {
                               navigator.clipboard.writeText((n.talkingPoints || []).map((t: string, idx: number) => `${idx + 1}. ${t}`).join("\n"));
                               toast.success("Talking points copied");
                             }}
-                            className="text-xs px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-white border border-white/15"
-                            data-no-contrast-guard
-                            data-allow-dark-cta
+                            className="text-xs px-3 py-1.5 rounded-md font-semibold"
+                            style={{ background: "#064E3B", color: "#FFFFFF" }}
+                            data-no-contrast-guard data-allow-dark-cta
                           >
-                            Copy
+                            <span className="allow-white" style={{ color: "#FFFFFF" }}>Copy</span>
                           </button>
                         </div>
                         <ul className="space-y-2">
                           {(n.talkingPoints || []).map((t: string, ti: number) => (
-                            <li key={ti} className="text-sm text-white/85 leading-relaxed flex gap-2">
-                              <span className="text-[#B89555] font-semibold">{ti + 1}.</span>
+                            <li key={ti} className="text-sm leading-relaxed flex gap-2" style={{ color: "#1A1A1A" }}>
+                              <span className="font-bold" style={{ color: "#064E3B" }}>{ti + 1}.</span>
                               <span>{t}</span>
                             </li>
                           ))}
@@ -1004,57 +1058,65 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 </div>
               )}
 
-              {/* Ratings Cards */}
+              {/* Ratings */}
               <div>
-                <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5 text-[#1A1A1A]" />
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                  <Star className="w-5 h-5" style={{ color: "#064E3B" }} />
                   Property Ratings
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {aiAnalysis.ratings.map((rating, index) => (
-                    <div key={index} className="bg-[#FDFBF7] rounded-xl border border-[#1A1A1A] p-5">
+                    <div key={index} className="rounded-xl p-5" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
                       <div className="flex justify-between items-start mb-3">
-                        <h4 className="text-white font-semibold">{rating.projectName}</h4>
-                        <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold" style={{ color: '#B89555' }}>{toScore(rating.overallRating)}</span>
-                          <span className="text-white/90 text-xs">/10</span>
+                        <h4 className="font-bold" style={{ color: "#1A1A1A" }}>{rating.projectName}</h4>
+                        <div className="flex items-center gap-1">
+                          <span className="text-2xl font-bold" style={{ color: "#064E3B" }}>{toScore(rating.overallRating)}</span>
+                          <span className="text-xs" style={{ color: "#1A1A1A", opacity: 0.65 }}>/10</span>
                         </div>
                       </div>
-                      
-                      <div className="text-sm mb-3">{renderStars(rating.overallRating)}</div>
+                      <div className="text-sm mb-3" style={{ color: "#B89555" }}>
+                        {"★".repeat(rating.overallRating)}<span style={{ color: "rgba(26,26,26,0.25)" }}>{"☆".repeat(5 - rating.overallRating)}</span>
+                      </div>
 
-                      {/* Score bars */}
                       <div className="space-y-1.5 mb-4">
-                        {renderScoreBar(rating.locationRating, 'Location')}
-                        {renderScoreBar(rating.valueRating, 'Value')}
-                        {renderScoreBar(rating.amenitiesRating, 'Amenities')}
-                        {renderScoreBar(rating.investmentRating, 'Investment')}
-                        {renderScoreBar(rating.developerRating, 'Developer')}
-                        {renderScoreBar(Math.round((rating.developerRating + rating.valueRating) / 2), 'Construction')}
-                        {renderScoreBar(Math.round((rating.investmentRating + rating.locationRating) / 2), 'Handover')}
-                        {renderScoreBar(Math.round((rating.valueRating + rating.investmentRating) / 2), 'Payment Plan')}
+                        {[
+                          { r: rating.locationRating, l: "Location" },
+                          { r: rating.valueRating, l: "Value" },
+                          { r: rating.amenitiesRating, l: "Amenities" },
+                          { r: rating.investmentRating, l: "Investment" },
+                          { r: rating.developerRating, l: "Developer" },
+                        ].map(({ r, l }) => {
+                          const score = toScore(r);
+                          const pct = (score / 10) * 100;
+                          const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#DC2626';
+                          return (
+                            <div key={l} className="flex items-center gap-2">
+                              <span className="text-[10px] w-20 shrink-0 text-right" style={{ color: "#1A1A1A", opacity: 0.7 }}>{l}</span>
+                              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(184,149,85,0.18)" }}>
+                                <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
+                              </div>
+                              <span className="text-xs font-bold w-6 text-right" style={{ color }}>{score.toFixed(0)}</span>
+                            </div>
+                          );
+                        })}
                       </div>
 
                       <div className={isConsVisible ? "grid grid-cols-2 gap-3" : "grid grid-cols-1 gap-3"}>
-                        <div className="bg-green-950/30 border border-green-900/30 rounded-lg p-3">
-                          <div className="text-green-400 text-xs font-semibold mb-2 flex items-center gap-1">
+                        <div className="rounded-lg p-3" style={{ background: "rgba(34,197,94,0.10)", border: "1px solid rgba(34,197,94,0.28)" }}>
+                          <div className="text-xs font-bold mb-2 flex items-center gap-1" style={{ color: "#16A34A" }}>
                             <ThumbsUp className="w-3 h-3" /> Pros
                           </div>
-                          <ul className="text-xs text-white/70 space-y-1">
-                            {rating.pros?.slice(0, 3).map((pro, i) => (
-                              <li key={i}>• {pro}</li>
-                            ))}
+                          <ul className="text-xs space-y-1" style={{ color: "#1A1A1A" }}>
+                            {rating.pros?.slice(0, 3).map((pro, i) => (<li key={i}>• {pro}</li>))}
                           </ul>
                         </div>
                         {isConsVisible && (
-                          <div className="bg-red-950/30 border border-red-900/30 rounded-lg p-3">
-                            <div className="text-red-400 text-xs font-semibold mb-2 flex items-center gap-1">
+                          <div className="rounded-lg p-3" style={{ background: "rgba(220,38,38,0.10)", border: "1px solid rgba(220,38,38,0.28)" }}>
+                            <div className="text-xs font-bold mb-2 flex items-center gap-1" style={{ color: "#DC2626" }}>
                               <ThumbsDown className="w-3 h-3" /> Cons
                             </div>
-                            <ul className="text-xs text-white/70 space-y-1">
-                              {rating.cons?.slice(0, 3).map((con, i) => (
-                                <li key={i}>• {con}</li>
-                              ))}
+                            <ul className="text-xs space-y-1" style={{ color: "#1A1A1A" }}>
+                              {rating.cons?.slice(0, 3).map((con, i) => (<li key={i}>• {con}</li>))}
                             </ul>
                           </div>
                         )}
@@ -1064,228 +1126,202 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 </div>
               </div>
 
-              {/* Recommendation - Champagne Theme */}
-              <div className="bg-gradient-to-r from-gold/10 to-[#ECE2D2]/10 rounded-2xl border border-[#B89555]/30 p-6">
+              {/* Recommendation — emerald ombré */}
+              <div
+                data-ink-emerald
+                data-no-contrast-guard
+                className="allow-white rounded-2xl p-6"
+                style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B", border: "1px solid rgba(255,255,255,0.15)" }}
+              >
                 <div className="flex items-center gap-3 mb-4">
-                  <Award className="w-8 h-8 text-[#1A1A1A]" />
+                  <Award className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   <div>
-                    <h3 className="text-white font-bold text-xl">Our Recommendation</h3>
-                    <p className="text-[#1A1A1A] text-lg">{aiAnalysis.recommendation.topChoice}</p>
+                    <h3 className="allow-white font-bold text-xl" style={{ color: "#FFFFFF" }}>Our Recommendation</h3>
+                    <p className="allow-white text-base" style={{ color: "rgba(255,255,255,0.9)" }}>{aiAnalysis.recommendation.topChoice}</p>
                   </div>
                 </div>
-                <p className="text-white/85 mb-6">{aiAnalysis.recommendation.reasoning}</p>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <p className="allow-white mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.88)" }}>{aiAnalysis.recommendation.reasoning}</p>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                   {[
                     { icon: TrendingUp, label: "For Investors", value: aiAnalysis.recommendation.bestFor.investors },
                     { icon: Home, label: "For Families", value: aiAnalysis.recommendation.bestFor.families },
                     { icon: Users, label: "First-Time Buyers", value: aiAnalysis.recommendation.bestFor.firstTimeBuyers },
                     { icon: Crown, label: "Luxury Buyers", value: aiAnalysis.recommendation.bestFor.luxuryBuyers },
                   ].map((item) => (
-                    <div key={item.label} className="bg-[#EFE6D6]/5 border border-[#B89555]/20 rounded-lg p-4">
-                      <div className="flex items-center gap-2 text-[#1A1A1A] text-sm mb-2">
-                        <item.icon className="w-4 h-4" /> {item.label}
+                    <div key={item.label} className="allow-white rounded-lg p-3" style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.22)" }}>
+                      <div className="allow-white flex items-center gap-1.5 text-xs font-semibold mb-1.5" style={{ color: "rgba(255,255,255,0.85)" }}>
+                        <item.icon className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> {item.label}
                       </div>
-                      <p className="text-white text-sm">{item.value}</p>
+                      <p className="allow-white text-sm" style={{ color: "#FFFFFF" }}>{item.value}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="bg-[#EFE6D6]/5 rounded-lg p-4 border border-[#B89555]/20">
-                  <div className="flex items-center gap-2 text-[#1A1A1A] mb-2">
-                    <Zap className="w-4 h-4" />
-                    <span className="font-semibold">Investment Advice</span>
+                <div className="allow-white rounded-lg p-4" style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.22)" }}>
+                  <div className="allow-white flex items-center gap-2 mb-2" style={{ color: "#FFFFFF" }}>
+                    <Zap className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <span className="allow-white font-semibold text-sm" style={{ color: "#FFFFFF" }}>Investment Advice</span>
                   </div>
-                  <p className="text-white/85 text-sm">{aiAnalysis.recommendation.investmentAdvice}</p>
+                  <p className="allow-white text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.9)" }}>{aiAnalysis.recommendation.investmentAdvice}</p>
                 </div>
 
                 {aiAnalysis.recommendation.riskFactors?.length > 0 && (
-                  <div className="mt-4 bg-red-950/20 border border-red-900/30 rounded-lg p-4">
-                    <div className="flex items-center gap-2 text-red-400 mb-2">
-                      <AlertTriangle className="w-4 h-4" />
-                      <span className="font-semibold">Risk Factors to Consider</span>
+                  <div className="mt-4 rounded-lg p-4" style={{ background: "rgba(220,38,38,0.18)", border: "1px solid rgba(220,38,38,0.35)" }}>
+                    <div className="allow-white flex items-center gap-2 mb-2" style={{ color: "#FCA5A5" }}>
+                      <AlertTriangle className="w-4 h-4" style={{ color: "#FCA5A5" }} />
+                      <span className="font-semibold text-sm">Risk Factors to Consider</span>
                     </div>
-                    <ul className="text-white/70 text-sm space-y-1">
-                      {aiAnalysis.recommendation.riskFactors.map((risk, i) => (
-                        <li key={i}>• {risk}</li>
-                      ))}
+                    <ul className="allow-white text-sm space-y-1" style={{ color: "rgba(255,255,255,0.9)" }}>
+                      {aiAnalysis.recommendation.riskFactors.map((risk, i) => (<li key={i}>• {risk}</li>))}
                     </ul>
                   </div>
                 )}
               </div>
             </div>
           ) : isGenerating ? (
-            /* Premium loading state */
-            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#B89555]/30 p-10">
-              <div className="flex flex-col items-center text-center">
-                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-10 h-10 text-[#1A1A1A] animate-pulse" />
-                  <div className="absolute inset-0 rounded-full border-2 border-[#B89555]/40 animate-ping" />
-                </div>
-                <h3 className="text-white text-2xl font-bold mb-2">Analyzing Property Intelligence...</h3>
-                <p className="text-white/70 max-w-md mx-auto mb-6">
-                  Our AI is comparing locations, pricing, ROI potential, developer track records, and generating investment recommendations.
-                </p>
-                <div className="w-full max-w-sm h-2 bg-[#F7F2EA] rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-gold via-[#ECE2D2] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
-                </div>
-                <p className="text-[#1A1A1A]/70 text-xs mt-3">This may take 15-30 seconds</p>
+            <div className="rounded-2xl p-10 text-center" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
+              <div className="relative w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
+                <Sparkles className="w-10 h-10 animate-pulse" style={{ color: "#FFFFFF" }} />
+                <div className="absolute inset-0 rounded-full animate-ping" style={{ border: "2px solid rgba(4,78,59,0.4)" }} />
               </div>
+              <h3 className="text-2xl font-bold mb-2" style={{ color: "#1A1A1A" }}>Analyzing Property Intelligence…</h3>
+              <p className="max-w-md mx-auto mb-6 text-sm" style={{ color: "#1A1A1A", opacity: 0.75 }}>
+                Our AI is comparing locations, pricing, ROI potential, developer track records, and generating investment recommendations.
+              </p>
+              <p className="text-xs" style={{ color: "#1A1A1A", opacity: 0.6 }}>This may take 15-30 seconds</p>
             </div>
           ) : (
-            <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#B89555]/20 p-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-[#1A1A1A]" />
+            <div className="rounded-2xl p-8 text-center" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
+                <Sparkles className="w-8 h-8" style={{ color: "#FFFFFF" }} />
               </div>
-              <h3 className="text-white text-2xl font-bold mb-2">AI Analysis Ready</h3>
-              <p className="text-white/70 max-w-md mx-auto mb-6">
-                Click <strong className="text-[#1A1A1A]">Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations.
+              <h3 className="text-2xl font-bold mb-2" style={{ color: "#1A1A1A" }}>AI Analysis Ready</h3>
+              <p className="max-w-md mx-auto mb-6 text-sm" style={{ color: "#1A1A1A", opacity: 0.75 }}>
+                Click <strong style={{ color: "#064E3B" }}>Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations.
               </p>
-              <Button
+              <button
                 onClick={generateSmartAnalysis}
                 disabled={projects.length < 2}
-                size="lg"
-                className="bg-gradient-to-r from-gold to-[#ECE2D2] text-[#1A1A1A] hover:from-gold/90 hover:to-[#ECE2D2]/90 font-semibold"
+                data-no-contrast-guard data-allow-dark-cta
+                className="allow-white inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
+                style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)", boxShadow: "0 10px 28px rgba(4,120,87,0.35)" }}
               >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Generate AI Analysis
+                <Sparkles className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Generate AI Analysis</span>
                 {!hasActiveMembership && !hasUsedFreeCompare && (
-                  <Badge className="ml-2 jj-surface-emerald text-white text-xs">FREE</Badge>
+                  <span className="allow-white ml-1 px-2 py-0.5 rounded text-[10px] font-bold" style={{ background: "rgba(255,255,255,0.18)", color: "#FFFFFF" }}>FREE</span>
                 )}
-              </Button>
+              </button>
               {projects.length < 2 && (
-                <p className="text-white/90 text-sm mt-4">Add at least 2 properties to enable AI comparison</p>
+                <p className="text-sm mt-4" style={{ color: "#1A1A1A", opacity: 0.65 }}>Add at least 2 properties to enable AI comparison</p>
               )}
             </div>
           )}
 
-          {/* Contact Advisor Section - Champagne Theme */}
-          <div className="bg-[#EFE6D6]/5 rounded-2xl border border-[#B89555]/20 p-6">
+          {/* Contact Advisor */}
+          <div className="rounded-2xl p-6" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center">
-                <Users className="w-5 h-5 text-[#1A1A1A]" />
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
+                <Users className="w-5 h-5" style={{ color: "#FFFFFF" }} />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg">Need Expert Guidance?</h3>
-                <p className="text-[#1A1A1A]/70 text-sm">Speak with our property consultants</p>
+                <h3 className="font-bold text-lg" style={{ color: "#1A1A1A" }}>Need Expert Guidance?</h3>
+                <p className="text-sm" style={{ color: "#1A1A1A", opacity: 0.7 }}>Speak with our property consultants</p>
               </div>
             </div>
 
             {requestSent ? (
               <div className="text-center py-8">
-                <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                <h4 className="text-white text-lg font-semibold mb-2">Request Sent!</h4>
-                <p className="text-white/70">Our advisor will contact you within 24 hours.</p>
+                <CheckCircle className="w-12 h-12 mx-auto mb-4" style={{ color: "#22C55E" }} />
+                <h4 className="text-lg font-bold mb-2" style={{ color: "#1A1A1A" }}>Request Sent!</h4>
+                <p className="text-sm" style={{ color: "#1A1A1A", opacity: 0.7 }}>Our advisor will contact you within 24 hours.</p>
               </div>
             ) : showRequestForm ? (
               <div className="space-y-4">
-                <Input
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
-                />
-                <Input
-                  type="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
-                />
-                <Input
-                  type="tel"
-                  placeholder="Phone Number"
-                  value={formData.phone}
-                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
-                />
+                <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
+                <Input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
+                <Input type="tel" placeholder="Phone Number" value={formData.phone} onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
                 <div className="flex gap-3">
-                  <Button
+                  <button
                     onClick={() => submitRequest.mutate()}
                     disabled={!formData.email || submitRequest.isPending}
-                    className="flex-1 bg-gradient-to-r from-gold to-[#ECE2D2] text-[#1A1A1A] font-semibold hover:from-gold/90 hover:to-[#ECE2D2]/90"
+                    data-no-contrast-guard data-allow-dark-cta
+                    className="allow-white flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl disabled:opacity-60"
+                    style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.3)" }}
                   >
-                    {submitRequest.isPending ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4 mr-2" />
-                        Request Consultation
-                      </>
+                    {submitRequest.isPending ? <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} /> : (
+                      <><Send className="w-4 h-4" style={{ color: "#FFFFFF" }} /><span className="allow-white" style={{ color: "#FFFFFF" }}>Request Consultation</span></>
                     )}
-                  </Button>
-                  <Button
-                    variant="outline"
+                  </button>
+                  <button
                     onClick={() => setShowRequestForm(false)}
-                    className="border-[#B89555]/50 text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
+                    className="px-6 py-3 text-sm font-bold rounded-xl"
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
                   >
                     Cancel
-                  </Button>
+                  </button>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Button
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <button
                   onClick={() => setShowRequestForm(true)}
-                  className="bg-gradient-to-r from-gold to-[#ECE2D2] text-[#1A1A1A] font-semibold hover:from-gold/90 hover:to-[#ECE2D2]/90"
+                  data-no-contrast-guard data-allow-dark-cta
+                  className="allow-white inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+                  style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.3)" }}
                 >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Request Consultation
-                </Button>
+                  <Mail className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Request Consultation</span>
+                </button>
                 <a href="tel:+971547167107" className="w-full">
-                  <Button
-                    className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/40 text-white font-semibold hover:bg-[#1A1A1A]"
-                  >
-                    <Phone className="w-4 h-4 mr-2" />
+                  <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}>
+                    <Phone className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Call Now
-                  </Button>
+                  </button>
                 </a>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
-                  <Button
-                    className="w-full bg-[#F7F2EA] border-2 border-[#B89555]/40 text-white font-semibold hover:bg-[#1A1A1A]"
-                  >
-                    <BadgeCheck className="w-4 h-4 mr-2" />
+                  <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}>
+                    <BadgeCheck className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Inquiry Form
-                  </Button>
+                  </button>
                 </a>
               </div>
             )}
           </div>
 
-          {/* AI Property Analyzer Integration */}
-          <div className="border-t border-[#B89555]/20 pt-8">
+          {/* Deep Area Analyzer */}
+          <div className="pt-6" style={{ borderTop: GOLD_HAIRLINE }}>
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-lg bg-[#EFE6D6]/10 border border-[#B89555]/30">
-                <Brain className="w-6 h-6 text-[#1A1A1A]" />
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
+                <Brain className="w-5 h-5" style={{ color: "#FFFFFF" }} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">Deep Area Analysis</h2>
-                <p className="text-white/70 text-sm">Analyze specific areas with government data sources</p>
+                <h2 className="text-2xl font-bold" style={{ color: "#1A1A1A" }}>Deep Area Analysis</h2>
+                <p className="text-sm" style={{ color: "#1A1A1A", opacity: 0.7 }}>Analyze specific areas with government data sources</p>
               </div>
             </div>
             <AIPropertyAnalyzer />
           </div>
 
-          {/* AI Tool Disclaimer */}
           <LegalDisclaimer variant="ai-tools" className="mt-2" />
+        </div>
 
-        </div>{/* end border wrapper */}
-
-        {/* Footer Branding */}
-        <div className="text-center text-[#1A1A1A]/70 text-sm py-6">
-          Powered & Made by <span className="text-[#1A1A1A]">JBJ Global Real Estate</span> — Real Estate Brokerage
+        <div className="text-center text-sm py-6" style={{ color: "#1A1A1A", opacity: 0.75 }}>
+          Powered &amp; Made by <span className="font-bold" style={{ color: "#064E3B" }}>JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
         <LegalDisclaimer variant="compact" className="pb-4" />
       </div>
 
-      {/* VIP Modal */}
       <PaymentModal
         open={showVipModal}
         onOpenChange={setShowVipModal}
-        onSuccess={() => {
-          setShowVipModal(false);
-          generateSmartAnalysis();
-        }}
+        onSuccess={() => { setShowVipModal(false); generateSmartAnalysis(); }}
         userInfo={{
           fullName: formData.name || user?.email?.split("@")[0] || "",
           email: formData.email || user?.email || "",
@@ -1293,12 +1329,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         }}
         mode="vip"
       />
-      
-      {/* Active Lead Banner for CRM linking */}
+
       <ActiveLeadBanner showAddToShortlist={false} />
       <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
     </section>
-    </ToolAnimatedFrame>
   );
 };
 
