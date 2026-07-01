@@ -421,7 +421,7 @@ function PageHeader({ pageLabel, section, branding }: { pageLabel: string; secti
   return (
     <header
       data-no-contrast-guard
-      data-surface="emerald"
+      data-surface="report-emerald"
       data-on-dark
       style={{
         height: SP.headerH,
@@ -549,7 +549,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 236px", gap: 22, height: "100%" }}>
         <div style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
           <SectionEyebrow>Private client proposal</SectionEyebrow>
-          <h1 style={{ fontSize: 40, lineHeight: 1.02, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 12px", letterSpacing: 0 }}>
+          <h1 style={{ fontSize: 38, lineHeight: 1.06, fontWeight: 900, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 12px", letterSpacing: 0, paddingBottom: 2, overflow: "visible" }}>
             AI Home Finder<br />Recommendation Report
           </h1>
           <p style={{ fontSize: 15, lineHeight: 1.55, color: T.ink, WebkitTextFillColor: T.ink, margin: "0 0 20px", maxWidth: 440 }}>
@@ -1008,7 +1008,9 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] *,
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
-          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] * {
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] *,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="report-emerald"],
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="report-emerald"] * {
             color: #FFFFFF !important;
             -webkit-text-fill-color: #FFFFFF !important;
             text-shadow: none !important;
@@ -1016,7 +1018,9 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] svg,
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] svg *,
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] svg,
-          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] svg * {
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"] svg *,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="report-emerald"] svg,
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="report-emerald"] svg * {
             stroke: #FFFFFF !important;
             color: #FFFFFF !important;
             -webkit-text-fill-color: #FFFFFF !important;
@@ -1035,6 +1039,7 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           }
           /* Ensure emerald boxes use the same single solid color in preview + PDF. */
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
+          :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="report-emerald"],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] {
             background: #064E3B !important;
             background-image: none !important;
