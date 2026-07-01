@@ -482,18 +482,18 @@ const BusinessCardCamera = ({
               />
             </div>
 
-            <div className="space-y-1.5 max-w-sm">
-              <h3 className="text-base font-semibold allow-white" style={{ color: "#FFFFFF" }}>
+            <div className="space-y-2.5 max-w-md">
+              <h3 className="text-lg sm:text-xl font-semibold allow-white leading-snug tracking-tight" style={{ color: "#FFFFFF" }}>
                 JBJ AI Business Card Scanner
               </h3>
-              <p className="text-xs allow-white" style={{ color: "rgba(255,255,255,0.7)" }}>
+              <p className="text-sm allow-white leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
                 Scan front and back, batch up to 100 cards. End-to-end encrypted OCR.
               </p>
             </div>
 
             {cameraError && (
               <p
-                className="text-xs max-w-sm allow-white"
+                className="text-sm max-w-md allow-white leading-relaxed"
                 style={{ color: "#fca5a5" }}
               >
                 {cameraError}
@@ -505,7 +505,7 @@ const BusinessCardCamera = ({
               disabled={starting}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white gap-2 px-6 py-5 rounded-xl font-semibold"
+              className="allow-white gap-2 px-7 py-5 rounded-xl font-semibold text-sm sm:text-base leading-none"
               style={{
                 background: CTA_GRADIENT,
                 color: "#FFFFFF",
@@ -521,9 +521,10 @@ const BusinessCardCamera = ({
               {cameraError ? "Try again" : "Open Camera"}
             </Button>
 
-            <p className="text-[11px] allow-white" style={{ color: "rgba(255,255,255,0.55)" }}>
+            <p className="text-xs max-w-sm allow-white leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
               If the camera doesn't open, allow access in your browser or use the Upload tab.
             </p>
+
           </div>
         )}
 
