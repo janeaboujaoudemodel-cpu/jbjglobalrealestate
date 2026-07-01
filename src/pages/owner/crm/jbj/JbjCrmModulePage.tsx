@@ -112,9 +112,10 @@ export default function JbjCrmModulePage({ section }: Props) {
   const Icon = module.icon;
 
   return (
-    <div className="min-h-screen">
-      {/* Sticky top bar */}
-      <div className="sticky top-[88px] z-10 bg-white border-b border-[#E7DDC8]">
+    <div className="min-h-full">
+      {/* Sticky top bar (module header) */}
+      <div className="sticky top-0 z-10 bg-white border-b border-[#E7DDC8]">
+
         <div className="flex items-center gap-3 px-5 py-3">
           <div className="h-8 w-8 rounded-lg inline-flex items-center justify-center" style={EMERALD_PILL}>
             <Icon className="h-4 w-4" />
@@ -137,7 +138,7 @@ export default function JbjCrmModulePage({ section }: Props) {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={`Search ${module.label.toLowerCase()}…`}
-                  className="pl-7 pr-3 py-1.5 rounded-lg text-[12px] text-[#1A1A1A] bg-[#F7F2EA] border border-[#E7DDC8] outline-none w-[200px] focus:border-emerald-500"
+                  className="pl-7 pr-3 py-1.5 rounded-lg text-[12px] text-[#1A1A1A] bg-[#F7F2EA] border border-[#E7DDC8] outline-none w-[200px] focus:border-[#064E3B]"
                 />
               </div>
             ) : null}
@@ -262,7 +263,7 @@ export default function JbjCrmModulePage({ section }: Props) {
           >
             <div className="px-5 py-4 flex items-center justify-between text-white" style={{ background: "linear-gradient(180deg, #0B5F46 0%, #064E3B 55%, #041F16 100%)" }}>
               <div>
-                <p className="text-[10px] uppercase tracking-[0.22em] text-emerald-200/90">{module.label.slice(0, -1) || module.label}</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-white/75">{module.label.slice(0, -1) || module.label}</p>
                 <p className="text-[15px] font-semibold text-white">
                   {formatCell(
                     (selected as any).Full_Name ?? (selected as any).Deal_Name ?? (selected as any).Account_Name ??
