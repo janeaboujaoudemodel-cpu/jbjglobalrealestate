@@ -22749,9 +22749,9 @@ html body #pm-step1-ink-scope svg {
 /* Global: no champagne surfaces inside any AI tool shell — coerce to emerald. */
 html body [data-tool-emerald] [style*="rgba(247,242,234"],
 html body [data-tool-emerald] [style*="rgba(239,230,214"],
-html body [data-tool-emerald] [style*="#F7F2EA"],
-html body [data-tool-emerald] [style*="#EFE6D6"],
-html body [data-tool-emerald] [style*="#FDFBF7"] {
+html body [data-tool-emerald] [style*="f7f2ea" i],
+html body [data-tool-emerald] [style*="efe6d6" i],
+html body [data-tool-emerald] [style*="fdfbf7" i] {
   background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
   border-color: rgba(255,255,255,0.42) !important;
   color: #FFFFFF !important;
