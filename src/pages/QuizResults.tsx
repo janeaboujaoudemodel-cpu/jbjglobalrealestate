@@ -70,7 +70,7 @@ const AIHF_RESULTS_STYLE = `
     box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta *, .aihf-results .aihf-cta svg {
-    color: #FFFFFF !important;
+    color: #1A1A1A !important;
     -webkit-text-fill-color: #FFFFFF !important;
     stroke: #FFFFFF !important;
     opacity: 1 !important;
@@ -913,7 +913,7 @@ const QuizResults = () => {
   }
 
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-on-dark className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "#FDFBF7" }}>
+    <section data-allow-dark-cta data-no-contrast-guard className="aihf-results min-h-screen py-12 md:py-20" style={{ background: "#FDFBF7" }}>
       <style>{AIHF_RESULTS_STYLE}</style>
       <div className="container mx-auto px-4">
         {/* Header */}
@@ -1330,19 +1330,18 @@ const QuizResults = () => {
           data-aihf-dialog
           data-allow-dark-cta
           data-no-contrast-guard
-          data-on-dark
           className="aihf-results allow-white sm:max-w-md border-0"
           style={{
             background: "#F7F2EA",
             border: "1px solid rgba(184,149,85,0.45)",
             boxShadow:
               "0 24px 70px rgba(45,212,191,0.25), inset 0 0 34px rgba(103,232,249,0.07)",
-            color: "#FFFFFF",
+            color: "#1A1A1A",
           }}
         >
           <style>{AIHF_RESULTS_STYLE}</style>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2" style={{ color: "#FFFFFF" }}>
+            <DialogTitle className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
               <Share2 className="w-5 h-5 aihf-tiffany" />
               {shareTrigger === "post-download" ? "Share your report" : "Share your recommendations"}
             </DialogTitle>
@@ -1359,7 +1358,7 @@ const QuizResults = () => {
               {projects?.map((p, i) => (
                 <div key={p.id} className="flex items-center gap-2 text-sm py-0.5">
                   <span className="aihf-tiffany font-semibold">#{i + 1}</span>
-                  <span className="truncate" style={{ color: "#FFFFFF" }}>{p.name}</span>
+                  <span className="truncate" style={{ color: "#1A1A1A" }}>{p.name}</span>
                 </div>
               ))}
             </div>
@@ -1385,7 +1384,7 @@ const QuizResults = () => {
             </div>
 
             <div className="pt-3 space-y-2" style={{ borderTop: "1px solid rgba(184,149,85,0.30)" }}>
-              <p className="text-xs font-semibold flex items-center gap-1.5" style={{ color: "#FFFFFF" }}>
+              <p className="text-xs font-semibold flex items-center gap-1.5" style={{ color: "#1A1A1A" }}>
                 <Building2 className="w-3.5 h-3.5 aihf-tiffany" />
                 Send to a JBJ Consultant
               </p>
