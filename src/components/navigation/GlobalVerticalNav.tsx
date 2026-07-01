@@ -1248,8 +1248,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {/* ━━━ BOTTOM — Support + Sign Out (compact half-height) ━━━ */}
       <div className="flex-shrink-0">
         <div className="h-px mb-1 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.4) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
-        <div className="px-4 pt-5 pb-5 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
-          <div className="flex gap-2.5 mb-3.5">
+        <div className="px-4 pt-7 pb-7 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent rounded-xl overflow-hidden">
+          <div className="flex gap-2.5 mb-5">
+
 
 
             {(() => {
@@ -1263,7 +1264,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-bottom-cta
                     data-active={contactActive ? 'true' : undefined}
                     aria-current={contactActive ? 'page' : undefined}
-                    className="flex-1 flex items-center justify-center gap-2 text-[12.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2.5 h-14 rounded-lg border will-change-transform"
+                    className="flex-1 flex items-center justify-center gap-2 text-[12.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2.5 h-16 rounded-lg border will-change-transform"
                   >
                     <span data-emerald-icon-surface className="w-5 h-5 rounded-[5px] flex items-center justify-center">
                       <Headphones className="w-3.5 h-3.5" strokeWidth={2.2} />
@@ -1276,7 +1277,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     data-sidebar-bottom-cta
                     data-active={supportActive ? 'true' : undefined}
                     aria-current={supportActive ? 'page' : undefined}
-                    className="flex-1 flex items-center justify-center gap-2 text-[12.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2.5 h-14 rounded-lg border will-change-transform"
+                    className="flex-1 flex items-center justify-center gap-2 text-[12.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2.5 h-16 rounded-lg border will-change-transform"
                   >
                     <span data-emerald-icon-surface className="w-5 h-5 rounded-[5px] flex items-center justify-center">
                       <Ticket className="w-3.5 h-3.5" strokeWidth={2.2} />
@@ -1295,7 +1296,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               onClick={() => { supabase.auth.signOut(); }}
               title="Sign Out"
               aria-label="Sign Out"
-              className="flex items-center justify-center gap-2 text-[12.5px] font-semibold uppercase tracking-[0.09em] transition-all px-3 h-14 rounded-lg border w-full group"
+              className="flex items-center justify-center gap-2 text-[12.5px] font-semibold uppercase tracking-[0.09em] transition-all px-3 h-16 rounded-lg border w-full group"
               style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
               onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.borderColor = '#DC2626'; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = '#B89555'; }}
@@ -1307,7 +1308,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/auth"
               data-no-contrast-guard
-              className="flex items-center justify-center gap-2 text-[12.5px] font-semibold transition-all px-3 h-14 rounded-lg border w-full group"
+              className="flex items-center justify-center gap-2 text-[12.5px] font-semibold transition-all px-3 h-16 rounded-lg border w-full group"
               style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
             >
               <User className="w-4 h-4" style={{ color: '#000000' }} />
@@ -1322,7 +1323,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             data-allow-dark-cta
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="allow-white jbj-sidebar-collapse-control group mt-3.5 flex items-center justify-center gap-2 w-full px-3 h-14 rounded-lg text-[12px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            className="allow-white jbj-sidebar-collapse-control group mt-5 flex items-center justify-center gap-2 w-full px-3 h-16 rounded-lg text-[12px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
               color: '#FFFFFF',
               background: 'var(--jj-emerald-ombre)',
