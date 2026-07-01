@@ -14,8 +14,10 @@ export const REPORT_TOKENS = {
   goldSoft: "rgba(184,149,85,0.45)",
   goldHair: "rgba(184,149,85,0.35)",
   emerald: "#064E3B",
-  emeraldDeep: "#042c1c",
-  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)",
+  // Report export lock: use one exact emerald value for every dark box.
+  // Gradients/compression create visible multi-shade bands in rasterized PDFs.
+  emeraldDeep: "#064E3B",
+  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#064E3B 100%)",
   font: '"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
 } as const;
 
