@@ -559,7 +559,7 @@ const PropertyMeasurement = () => {
                   </div>
 
                   <div>
-                    <Label className="mb-3 block" style={{ color: "rgba(255,255,255,0.88)" }}>Unit Preference</Label>
+                    <Label className="mb-3 block" style={{ color: "#1A1A1A", fontWeight: 600 }}>Unit Preference</Label>
                     <div className="flex gap-3 flex-wrap">
                       {[
                         { id: "sqft", label: "Square Feet" },
