@@ -273,7 +273,11 @@ function renderHtml(results, meta) {
 (async () => {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   console.log(`[pass-142] base=${BASE_URL} routes=${ROUTES.length} viewports=${VIEWPORTS.length}`);
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    executablePath: process.env.CHROMIUM_PATH || '/bin/chromium',
+    args: ['--no-sandbox'],
+  });
   const results = [];
   for (const route of ROUTES) {
     for (const vp of VIEWPORTS) {
