@@ -1,5 +1,5 @@
 /**
- * Tool Theme Registry — Unified Emerald Ombré + Gold Hairline.
+ * Tool Theme Registry — Unified Emerald Ombré + White Hairline.
  *
  * Every tool (front-end + owner/back-end) renders on the same emerald
  * ombré surface pioneered by Interior Design AI / Property Measurement:
@@ -35,7 +35,6 @@ export type ToolTheme = {
 const EMERALD_DEEP = "#064E3B";
 const EMERALD_MID = "#042c1c";
 const EMERALD_INK = "#000000";
-const GOLD = "#B89555";
 const WHITE = "#FFFFFF";
 
 // Body wash used for the tool page background — starts very dark so the emerald
@@ -46,9 +45,9 @@ const OMBRE = `linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)`;
 const emeraldTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   id,
   label,
-  accent: GOLD,
+  accent: WHITE,
   heroGradient: `linear-gradient(180deg, ${EMERALD_DEEP} 0%, ${EMERALD_MID} 60%, ${EMERALD_INK} 100%)`,
-  accentSoft: `rgba(184,149,85,0.12)`,
+  accentSoft: `rgba(255,255,255,0.12)`,
   accentBorder: `rgba(255,255,255,0.42)`,
   // Primary CTA: emerald metallic → deeper emerald
   ctaGradient: `linear-gradient(135deg, #065F46 0%, #064E3B 55%, ${EMERALD_DEEP} 100%)`,
@@ -76,5 +75,5 @@ export const TOOL_PAGE_BG = OMBRE;
 export const TOOL_CARD_BG =
   "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)";
 export const TOOL_INK = WHITE;
-export const TOOL_GOLD = GOLD;
+export const TOOL_GOLD = WHITE;
 export const TOOL_WHITE_BORDER = "rgba(255,255,255,0.42)";

@@ -66,7 +66,7 @@ export const PremiumToolShell = ({
         [data-tool-emerald] .text-muted-foreground,
         [data-tool-emerald] .id-text-muted { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
         [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
-        [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold, [data-tool-emerald] .jj-gold-accent { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
+        [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold, [data-tool-emerald] .jj-gold-accent { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select, [data-tool-emerald] [role="combobox"] {
           background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
           border: 1px solid rgba(255,255,255,0.42) !important;
@@ -305,7 +305,7 @@ export const ToolAnimatedFrame = ({
       }
       [data-tool-emerald] .text-muted-foreground { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
       [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
-      [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
+      [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
       [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select, [data-tool-emerald] [role="combobox"] {
         background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
         border: 1px solid rgba(255,255,255,0.42) !important;
