@@ -13,9 +13,9 @@ const TONES: Record<Tone, { from: string; to: string; hoverFrom: string; hoverTo
     ring: "rgba(255,255,255,0.35)",
   },
   emerald: {
-    from: "#059669",
-    to: "#10b981",
-    hoverFrom: "#047857",
+    from: "#064E3B",
+    to: "#065F46",
+    hoverFrom: "#04231A",
     hoverTo: "#34d399",
     ring: "rgba(255,255,255,0.4)",
   },
@@ -27,10 +27,10 @@ const TONES: Record<Tone, { from: string; to: string; hoverFrom: string; hoverTo
     ring: "rgba(255,255,255,0.35)",
   },
   burgundy: {
-    from: "#059669",
+    from: "#064E3B",
     to: "#064E3B",
     hoverFrom: "#064E3B",
-    hoverTo: "#10b981",
+    hoverTo: "#065F46",
     ring: "rgba(255,255,255,0.42)",
   },
 };

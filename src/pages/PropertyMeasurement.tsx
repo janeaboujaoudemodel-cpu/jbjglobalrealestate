@@ -352,7 +352,7 @@ const PropertyMeasurement = () => {
           -webkit-text-fill-color: #F6FBF8 !important;
         }
           .pm-card-active {
-          background: linear-gradient(135deg, #10B981 0%, #047857 45%, #04140C 100%) !important;
+          background: linear-gradient(135deg, #065F46 0%, #04231A 45%, #04140C 100%) !important;
             border: 1px solid rgba(255,255,255,0.52) !important;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 10px 36px rgba(16,185,129,0.35), inset 0 0 30px rgba(16,185,129,0.22) !important;
           color: #ECFDF5 !important;
@@ -398,7 +398,7 @@ const PropertyMeasurement = () => {
               data-no-contrast-guard
               className="allow-white inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-semibold select-none"
               style={{
-                background: "linear-gradient(135deg, #10B981 0%, #047857 55%, #064E3B 100%)",
+                background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #064E3B 100%)",
                 border: "1px solid rgba(184,149,85,0.55)",
                 color: "#FFFFFF",
                 boxShadow: "0 4px 14px rgba(6,78,59,0.35), inset 0 0 12px rgba(255,255,255,0.08)",
@@ -509,7 +509,7 @@ const PropertyMeasurement = () => {
                             className="allow-white relative p-4 rounded-xl text-left transition-all duration-300"
                             style={{
                               background: active
-                                ? "linear-gradient(135deg, #10B981 0%, #047857 45%, #000000 100%)"
+                                ? "linear-gradient(135deg, #065F46 0%, #04231A 45%, #000000 100%)"
                                 : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                               border: active
                                 ? "1px solid rgba(255,255,255,0.52)"
@@ -578,7 +578,7 @@ const PropertyMeasurement = () => {
                             className="allow-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
                             style={{
                               background: active
-                                ? "linear-gradient(135deg, #10B981 0%, #047857 55%, #000000 100%)"
+                                ? "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)"
                                 : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                               border: active
                                 ? "1px solid rgba(255,255,255,0.52)"
@@ -602,7 +602,7 @@ const PropertyMeasurement = () => {
                     className="allow-white w-full py-6"
                     style={{
                       background:
-                        "linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)",
+                        "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
                       color: "rgba(255,255,255,0.96)",
                       boxShadow: "0 0 28px rgba(16,185,129,0.45)",
                       border: "1px solid rgba(255,255,255,0.46)",

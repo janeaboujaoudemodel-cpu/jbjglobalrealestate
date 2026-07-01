@@ -10,7 +10,7 @@ const TONES: Record<Tone, { base: string; glow: string; ring: string }> = {
     ring: "rgba(10,10,10,0.35)",
   },
   emerald: {
-    base: "#10b981",
+    base: "#065F46",
     glow: "rgba(16,185,129,0.55)",
     ring: "rgba(16,185,129,0.35)",
   },

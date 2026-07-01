@@ -172,7 +172,7 @@ export function AIVideoStudioTopBar({
           onClick={onExport}
           className="min-w-11 h-11 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all"
           style={{
-            background: 'linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)',
+            background: 'linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)',
             border: '1px solid rgba(255,255,255,0.46)',
             color: '#FFFFFF',
             boxShadow: '0 0 16px rgba(16,185,129,0.28)',

@@ -123,7 +123,7 @@ export const PremiumToolShell = ({
         [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-rose"],
         [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-red"],
         [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-amber"] {
-          background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+          background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%) !important;
           border-color: rgba(255,255,255,0.46) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
@@ -365,7 +365,7 @@ export const ToolAnimatedFrame = ({
       [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-rose"],
       [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-red"],
       [data-tool-emerald] :is(button, a):not([role="tab"]):not([data-fullscreen-tool-toggle])[class*="bg-amber"] {
-        background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+        background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%) !important;
         border-color: rgba(255,255,255,0.46) !important;
         color: #FFFFFF !important;
         -webkit-text-fill-color: #FFFFFF !important;

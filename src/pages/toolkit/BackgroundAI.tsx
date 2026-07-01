@@ -1316,13 +1316,13 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               )}
               {result && activeTab !== 'video' && (
                 <button onClick={handleDownload} className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
-                  style={{ background: "linear-gradient(135deg, #059669, #059669)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}>
+                  style={{ background: "linear-gradient(135deg, #064E3B, #064E3B)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}>
                   <Download className="h-4 w-4" /> Download PNG
                 </button>
               )}
               {videoResult && activeTab === 'video' && (
                 <button onClick={handleVideoDownload} className="flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl text-sm font-semibold text-white transition-all"
-                  style={{ background: "linear-gradient(135deg, #059669, #059669)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}>
+                  style={{ background: "linear-gradient(135deg, #064E3B, #064E3B)", boxShadow: "0 4px 16px rgba(16,185,129,0.35)" }}>
                   <Download className="h-4 w-4" /> Download Video
                 </button>
               )}

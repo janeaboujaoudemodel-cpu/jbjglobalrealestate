@@ -438,7 +438,7 @@ const RentalIndex = () => {
                 <button
                   className="inline-flex items-center gap-2 px-7 py-5 rounded-xl text-base font-bold transition-all"
                     style={{
-                    background: "linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)",
+                    background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
                     color: "#FFFFFF",
                     border: "1px solid rgba(255,255,255,0.46)",
                   }}

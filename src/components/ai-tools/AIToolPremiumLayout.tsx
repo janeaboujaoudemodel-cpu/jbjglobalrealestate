@@ -131,7 +131,7 @@ const AIToolPremiumLayout = ({
               className="allow-white mb-6 relative z-10"
               style={{
                 background:
-                  "linear-gradient(135deg, #10B981 0%, #059669 55%, #064E3B 100%)",
+                  "linear-gradient(135deg, #065F46 0%, #064E3B 55%, #064E3B 100%)",
                 color: "#FFFFFF",
                 border: "1px solid rgba(255,255,255,0.46)",
               }}
