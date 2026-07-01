@@ -65,9 +65,9 @@ describe("report tokens (locked palette)", () => {
     expect(REPORT_TOKENS.ink).toBe("#1A1A1A");
     expect(REPORT_TOKENS.gold).toBe("#B89555");
     expect(REPORT_TOKENS.emerald).toBe("#064E3B");
-    expect(REPORT_TOKENS.emeraldDeep).toBe("#042c1c");
+    expect(REPORT_TOKENS.emeraldDeep).toBe("#064E3B");
     expect(REPORT_TOKENS.emeraldGradient).toMatch(/064E3B/);
-    expect(REPORT_TOKENS.emeraldGradient).toMatch(/042c1c/);
+    expect(REPORT_TOKENS.emeraldGradient).not.toMatch(/042c1c|000000/i);
   });
 });
 
@@ -190,5 +190,10 @@ describe("renderReportToPdf host", () => {
   it("renders the same ReportEngine the preview uses (no parallel layout)", () => {
     expect(src).toMatch(/ReportEngine/);
     expect(src).toMatch(/mode:\s*["']pdf["']/);
+  });
+  it("uses the live preview fast path and one html2canvas capture for the whole report", () => {
+    expect(src).toMatch(/findLivePreviewRoot/);
+    expect(src).toMatch(/captureReportRootToPdf/);
+    expect(src).not.toMatch(/for \(let i = 0; i < pages\.length; i\+\+\) \{\s*const page = pages\[i\];\s*const canvas = await html2canvas\(page/s);
   });
 });
