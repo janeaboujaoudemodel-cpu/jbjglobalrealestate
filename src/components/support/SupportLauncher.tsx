@@ -315,7 +315,7 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.99 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 data-no-contrast-guard
-                className="jbj-gold-animated-border fixed right-11 sm:right-14 top-1/2 w-[min(320px,calc(100vw-4rem))] max-h-[calc(100dvh-6rem)] rounded-2xl p-[2px] pointer-events-auto shadow-[0_30px_60px_rgba(0,0,0,0.35),0_0_34px_rgba(184,149,85,0.35)]"
+                className="jbj-emerald-animated-border fixed right-11 sm:right-14 top-1/2 w-[min(320px,calc(100vw-4rem))] max-h-[calc(100dvh-6rem)] rounded-2xl p-[2px] pointer-events-auto shadow-[0_30px_60px_rgba(0,0,0,0.35),0_0_34px_rgba(16,185,129,0.35)]"
               >
                 <div
                   data-emerald="true"

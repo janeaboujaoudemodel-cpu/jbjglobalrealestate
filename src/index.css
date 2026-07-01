@@ -4954,6 +4954,31 @@ hr[data-gold-hairline],
   .jbj-gold-animated-border { animation: none; }
 }
 
+/* Animated emerald border (JBJ Support panel + channel cards) */
+@keyframes jbjEmeraldBorderSpin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.jbj-emerald-animated-border {
+  background: linear-gradient(
+    120deg,
+    rgba(6, 78, 59, 0.95) 0%,
+    rgba(16, 185, 129, 0.85) 25%,
+    rgba(52, 211, 153, 0.95) 50%,
+    rgba(16, 185, 129, 0.85) 75%,
+    rgba(6, 78, 59, 0.95) 100%
+  );
+  background-size: 220% 220%;
+  animation: jbjEmeraldBorderSpin 5.5s ease-in-out infinite;
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.45),
+    0 0 22px rgba(16, 185, 129, 0.28);
+}
+@media (prefers-reduced-motion: reduce) {
+  .jbj-emerald-animated-border { animation: none; }
+}
+
 /* ──────────────────────────────────────────────────────────────
    Banned bright yellow-gold guard
    The hexes #B89555 / #B89555 / #B89555 are FORBIDDEN site-wide.
