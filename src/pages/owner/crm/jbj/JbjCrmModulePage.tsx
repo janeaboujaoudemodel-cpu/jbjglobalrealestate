@@ -85,7 +85,66 @@ const MODULE_CONFIG: Partial<Record<JbjCrmSection, { zohoModule: string; columns
       { key: "Due_Date", label: "Due" },
     ],
   },
+  calls: {
+    zohoModule: "Calls",
+    columns: [
+      { key: "Subject", label: "Subject" },
+      { key: "Call_Type", label: "Type" },
+      { key: "Call_Purpose", label: "Purpose" },
+      { key: "Call_Start_Time", label: "Start" },
+      { key: "Call_Duration", label: "Duration" },
+    ],
+  },
+  meetings: {
+    zohoModule: "Events",
+    columns: [
+      { key: "Event_Title", label: "Title" },
+      { key: "Start_DateTime", label: "Start" },
+      { key: "End_DateTime", label: "End" },
+      { key: "Venue", label: "Venue" },
+    ],
+  },
+  campaigns: {
+    zohoModule: "Campaigns",
+    columns: [
+      { key: "Campaign_Name", label: "Campaign" },
+      { key: "Type", label: "Type" },
+      { key: "Status", label: "Status" },
+      { key: "Start_Date", label: "Start" },
+      { key: "End_Date", label: "End" },
+      { key: "Expected_Revenue", label: "Expected" },
+    ],
+  },
+  "price-books": {
+    zohoModule: "Price_Books",
+    columns: [
+      { key: "Price_Book_Name", label: "Price Book" },
+      { key: "Pricing_Model", label: "Model" },
+      { key: "Active", label: "Active" },
+    ],
+  },
+  "sales-orders": {
+    zohoModule: "Sales_Orders",
+    columns: [
+      { key: "Subject", label: "Subject" },
+      { key: "Account_Name", label: "Account" },
+      { key: "Status", label: "Status" },
+      { key: "Grand_Total", label: "Total" },
+      { key: "Due_Date", label: "Due" },
+    ],
+  },
+  "purchase-orders": {
+    zohoModule: "Purchase_Orders",
+    columns: [
+      { key: "Subject", label: "Subject" },
+      { key: "Vendor_Name", label: "Vendor" },
+      { key: "Status", label: "Status" },
+      { key: "Grand_Total", label: "Total" },
+      { key: "Due_Date", label: "Due" },
+    ],
+  },
 };
+
 
 export default function JbjCrmModulePage() {
   const params = useParams();
