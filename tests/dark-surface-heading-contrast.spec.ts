@@ -239,18 +239,59 @@ test.describe('Dark-surface heading contrast (PASS 142 follow-up)', () => {
     });
   }
 
-  // Cross-viewport sweep on a representative subset to catch responsive flips.
-  const RESPONSIVE_SUBSET = ['/', '/properties', '/insights'] as const;
-  for (const route of RESPONSIVE_SUBSET) {
+  // Cross-viewport sweep — PASS 142 responsive lock.
+  // Runs the dark-host heading probe at desktop / tablet / mobile so any
+  // responsive layout swap (mobile-only hero, stacked tablet CTA, sticky
+  // mobile nav) can't silently flip headings ink-black at a breakpoint.
+  const RESPONSIVE_ROUTES = [
+    '/',
+    '/properties',
+    '/off-plan',
+    '/developers',
+    '/insights',
+    '/market-intelligence',
+    '/guides',
+    '/careers',
+    '/services/property-management',
+    '/services/buying-advisory',
+    '/about',
+    '/contact',
+    '/ai-home-finder',
+  ] as const;
+
+  for (const route of RESPONSIVE_ROUTES) {
     for (const vp of VIEWPORTS) {
       test(`responsive: dark headings stay light @ ${route} (${vp.name})`, async ({ browser }) => {
         const ctx = await browser.newContext({ viewport: { width: vp.width, height: vp.height } });
         const page = await ctx.newPage();
+
+        await page.addInitScript(() => {
+          try {
+            localStorage.setItem('smart_popup_dismissed_until', String(Date.now() + 7 * 864e5));
+            localStorage.setItem('cookies_consent', JSON.stringify({ accepted: true, ts: Date.now() }));
+            localStorage.setItem('cookiesConsent', 'accepted');
+          } catch {}
+        });
+
         const resp = await page.goto(`${BASE_URL}${route}`, { waitUntil: 'domcontentloaded' });
         test.skip(!resp || resp.status() >= 400, `route not deployed: ${route}`);
         await page.waitForTimeout(900);
 
-        // Lighter heuristic: just check first heading inside each dark host.
+        // Scroll so lazy dark sections mount at this viewport width — a
+        // section that only renders below-the-fold on mobile still has
+        // to satisfy the contract.
+        await page.evaluate(async () => {
+          const max = document.documentElement.scrollHeight;
+          for (let y = 0; y < max; y += Math.floor(window.innerHeight * 0.8)) {
+            window.scrollTo(0, y);
+            await new Promise((r) => setTimeout(r, 60));
+          }
+          window.scrollTo(0, 0);
+        });
+        await page.waitForTimeout(300);
+
+        // Sweep ALL headings inside every dark host (not just the first),
+        // so a responsive reorder of h2/h3 blocks still gets audited.
         const offenders = await page.evaluate((hosts) => {
           const parse = (s: string) => {
             const m = s.match(/rgba?\(([^)]+)\)/i);
@@ -264,28 +305,42 @@ test.describe('Dark-surface heading contrast (PASS 142 follow-up)', () => {
             };
             return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
           };
+          const visible = (el: Element) => {
+            const cs = getComputedStyle(el);
+            if (cs.visibility === 'hidden' || cs.display === 'none' || +cs.opacity < 0.1) return false;
+            const r = (el as HTMLElement).getBoundingClientRect();
+            return r.width >= 20 && r.height >= 10;
+          };
           const out: any[] = [];
           document.querySelectorAll((hosts as string[]).join(',')).forEach((host) => {
-            const h = host.querySelector('h1, h2, h3') as HTMLElement | null;
-            if (!h) return;
-            const r = h.getBoundingClientRect();
-            if (r.width < 24 || r.height < 12) return;
-            const fgLum = lum(parse(getComputedStyle(h).color));
-            // On a dark host the heading must read as a light token (lum >= 0.6).
-            if (fgLum < 0.6) {
-              out.push({
-                text: (h.textContent || '').trim().slice(0, 60),
-                color: getComputedStyle(h).color,
-              });
-            }
+            if (!visible(host)) return;
+            host.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((h) => {
+              if (!visible(h)) return;
+              const text = (h.textContent || '').trim().slice(0, 60);
+              if (!text) return;
+              const fgLum = lum(parse(getComputedStyle(h).color));
+              // On a dark host the heading MUST read as a light token
+              // (luminance ≥ 0.6 ≈ #999 or lighter). Ink-black = ~0.02.
+              if (fgLum < 0.6) {
+                out.push({
+                  tag: h.tagName.toLowerCase(),
+                  text,
+                  color: getComputedStyle(h).color,
+                });
+              }
+            });
           });
           return out;
         }, DARK_HOSTS);
 
+        // Per-viewport artifact for CI debugging.
+        const slug = route.replace(/\W+/g, '_') || 'root';
+        await page.screenshot({ path: `e2e-artifacts/dark-contrast-${slug}-${vp.name}.png` });
+
         expect(
           offenders,
-          `Dark-host headings rendered too dark at ${route} (${vp.name}):\n` +
-            offenders.map((o: any) => `  "${o.text}" — ${o.color}`).join('\n'),
+          `Dark-host headings rendered too dark at ${route} (${vp.name} ${vp.width}x${vp.height}):\n` +
+            offenders.map((o: any) => `  ${o.tag} "${o.text}" — ${o.color}`).join('\n'),
         ).toEqual([]);
 
         await ctx.close();
