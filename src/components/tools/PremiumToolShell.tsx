@@ -155,7 +155,7 @@ export const PremiumToolShell = ({
           className="relative min-h-screen overflow-hidden"
           style={{
             background:
-              "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
+              "linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)",
             boxShadow:
               "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.22)",
           }}
@@ -289,7 +289,7 @@ export const ToolAnimatedFrame = ({
     style={
       {
         background:
-          "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
+          "linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)",
         color: "#FFFFFF",
         ["--tool-accent" as string]: theme.accent,
         ["--tool-accent-border" as string]: theme.accentBorder,
@@ -394,7 +394,7 @@ export const ToolAnimatedFrame = ({
         className="relative min-h-screen overflow-hidden"
         style={{
           background:
-            "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
+            "linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)",
           boxShadow:
             "0 30px 80px -30px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.22)",
         }}

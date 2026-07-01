@@ -377,78 +377,82 @@ const BusinessCardScanner = () => {
     <div
       data-allow-dark-cta
       className="min-h-screen"
+      style={{
+        background:
+          "linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)",
+      }}
     >
-      <div className="container mx-auto px-4 pt-6 pb-8 max-w-6xl">
-        {/* Header — emerald ombré, white ink (matches Interior Design / Property Measurement) */}
+      {/* Header — FULL-BLEED edge-to-edge emerald ombré, white ink */}
+      <div
+        className="w-full px-6 py-12 text-center relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.22)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 60px -30px rgba(0,0,0,0.55)",
+        }}
+      >
         <div
-          className="rounded-2xl px-6 py-10 mb-8 text-center relative overflow-hidden"
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
-            border: "1px solid rgba(255,255,255,0.22)",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 60px -30px rgba(0,0,0,0.55)",
+              "radial-gradient(ellipse at top, rgba(255,255,255,0.10), transparent 60%)",
           }}
-        >
+        />
+        <div className="relative z-10 max-w-4xl mx-auto">
           <div
-            aria-hidden
-            className="absolute inset-0 pointer-events-none"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1 mb-4"
             style={{
-              background:
-                "radial-gradient(ellipse at top, rgba(255,255,255,0.10), transparent 60%)",
+              background: "rgba(255,255,255,0.10)",
+              border: "1px solid rgba(255,255,255,0.28)",
+              color: "#FFFFFF",
             }}
-          />
-          <div className="relative z-10">
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1 mb-4"
-              style={{
-                background: "rgba(255,255,255,0.10)",
-                border: "1px solid rgba(255,255,255,0.28)",
-                color: "#FFFFFF",
-              }}
-            >
-              <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-              <span className="text-sm font-medium" style={{ color: "#FFFFFF" }}>AI-Powered OCR</span>
-            </div>
-            <h1
-              className="text-3xl md:text-4xl font-bold mb-2"
-              style={{ color: "#FFFFFF" }}
-            >
-              AI Business Card Scanner
-            </h1>
-            <p className="max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.90)" }}>
-              Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
-            </p>
+          >
+            <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+            <span className="text-sm font-medium" style={{ color: "#FFFFFF" }}>AI-Powered OCR</span>
+          </div>
+          <h1
+            className="text-3xl md:text-4xl font-bold mb-2"
+            style={{ color: "#FFFFFF" }}
+          >
+            AI Business Card Scanner
+          </h1>
+          <p className="max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.90)" }}>
+            Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
+          </p>
 
-            {/* Security Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-              {[
-                { icon: Lock, label: "End-to-End Encrypted" },
-                { icon: Shield, label: "GDPR Compliant" },
-                { icon: Eye, label: "Private Processing" },
-              ].map(({ icon: Icon, label }) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
-                  style={{
-                    background: "rgba(255,255,255,0.10)",
-                    border: "1px solid rgba(255,255,255,0.28)",
-                    color: "#FFFFFF",
-                  }}
-                >
-                  <Icon className="h-3 w-3" style={{ color: "#FFFFFF" }} />
-                  {label}
-                </span>
-              ))}
-            </div>
+          {/* Security Badges */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+            {[
+              { icon: Lock, label: "End-to-End Encrypted" },
+              { icon: Shield, label: "GDPR Compliant" },
+              { icon: Eye, label: "Private Processing" },
+            ].map(({ icon: Icon, label }) => (
+              <span
+                key={label}
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
+                style={{
+                  background: "rgba(255,255,255,0.10)",
+                  border: "1px solid rgba(255,255,255,0.28)",
+                  color: "#FFFFFF",
+                }}
+              >
+                <Icon className="h-3 w-3" style={{ color: "#FFFFFF" }} />
+                {label}
+              </span>
+            ))}
           </div>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 pt-8 pb-8 max-w-6xl">
         {/* Privacy Alert */}
         <Alert
           className="mb-6"
           style={{
-            background: "linear-gradient(135deg, rgba(6,95,70,0.28), rgba(0,0,0,0.55))",
+            background: "linear-gradient(135deg, rgba(6,95,70,0.18), rgba(0,0,0,0.65))",
             border: "1px solid rgba(255,255,255,0.28)",
           }}
         >
@@ -464,7 +468,7 @@ const BusinessCardScanner = () => {
           {/* Scanner Section */}
           <Card
             style={{
-              background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+              background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
               border: "1px solid rgba(255,255,255,0.28)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
@@ -537,7 +541,7 @@ const BusinessCardScanner = () => {
           {/* Results Section */}
           <Card
             style={{
-              background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+              background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
               border: "1px solid rgba(255,255,255,0.28)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
@@ -594,7 +598,7 @@ const BusinessCardScanner = () => {
           <Card
             className="mt-6"
             style={{
-              background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+              background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
               border: "1px solid rgba(255,255,255,0.28)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
             }}

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { TOOL_CARD_BG, TOOL_GOLD, ToolTheme } from "./toolThemes";
+import { TOOL_CARD_BG, TOOL_WHITE_BORDER, ToolTheme } from "./toolThemes";
 
 interface ToolCardProps {
   children: ReactNode;
@@ -21,7 +21,7 @@ export const ToolCard = ({
   className = "",
 }: ToolCardProps) => {
   const border =
-    accentEdge && theme ? `1px solid ${theme.accentBorder}` : `1px solid ${TOOL_GOLD}55`;
+    accentEdge && theme ? `1px solid ${theme.accentBorder}` : `1px solid ${TOOL_WHITE_BORDER}`;
 
   return (
     <div
