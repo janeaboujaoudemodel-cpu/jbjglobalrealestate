@@ -393,9 +393,19 @@ const PropertyMeasurement = () => {
             animate="visible"
             variants={fadeInUp}
           >
-            <span className="inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-medium jj-surface-emerald-soft text-[color:var(--emerald-on)] border border-[color:var(--emerald-1)]/30/30 select-none">
-              <Ruler className="w-4 h-4 mr-2" />
-              FREE AI Tool
+            <span
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white inline-flex items-center mb-6 px-4 py-2 rounded-full text-sm font-semibold select-none"
+              style={{
+                background: "linear-gradient(135deg, #10B981 0%, #047857 55%, #064E3B 100%)",
+                border: "1px solid rgba(184,149,85,0.55)",
+                color: "#FFFFFF",
+                boxShadow: "0 4px 14px rgba(6,78,59,0.35), inset 0 0 12px rgba(255,255,255,0.08)",
+              }}
+            >
+              <Ruler className="w-4 h-4 mr-2" style={{ color: "#FFFFFF" }} />
+              <span style={{ color: "#FFFFFF" }}>FREE AI Tool</span>
             </span>
 
             <h1 className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: "rgba(255,255,255,0.96)" }}>
