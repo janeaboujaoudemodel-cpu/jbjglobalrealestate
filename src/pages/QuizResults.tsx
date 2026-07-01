@@ -104,8 +104,9 @@ const AIHF_RESULTS_STYLE = `
     box-shadow: 0 0 18px rgba(184,149,85,0.14), 0 18px 55px rgba(0,0,0,0.12) !important;
   }
   .aihf-results .aihf-action-icon {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     border: 0 !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
