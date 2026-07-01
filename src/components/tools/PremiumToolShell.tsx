@@ -53,30 +53,42 @@ export const PremiumToolShell = ({
   return (
     <div
       data-tool-shell-root
-      className="min-h-screen w-full p-0"
-      style={{ background: theme.pageWash }}
+      data-tool-emerald
+      data-allow-dark-cta
+      data-no-contrast-guard
+      data-surface="dark"
+      className="allow-white min-h-screen w-full p-0"
+      style={{ background: theme.pageWash, color: "#FFFFFF" }}
     >
       <FullscreenToolToggle />
       <style>{`
-        @keyframes jbj-tool-border-spin {
-          to { transform: rotate(1turn); }
+        @keyframes jbj-tool-border-spin { to { transform: rotate(1turn); } }
+        [data-tool-emerald],
+        [data-tool-emerald] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,a,button,textarea,input,div,figcaption,dt,dd,th,td,time):not([class*="bg-clip-text"]):not([data-price-pill]) {
+          color: #FFFFFF;
+          -webkit-text-fill-color: #FFFFFF;
         }
+        [data-tool-emerald] .text-muted-foreground,
+        [data-tool-emerald] .id-text-muted { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
+        [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
+        [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold, [data-tool-emerald] .jj-gold-accent { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
+        [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select {
+          background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
+          border: 1px solid rgba(184,149,85,0.55) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          caret-color: #FFFFFF !important;
+        }
+        [data-tool-emerald] input::placeholder, [data-tool-emerald] textarea::placeholder { color: rgba(255,255,255,0.55) !important; }
         .jbj-tool-shell-border::before {
-          content: "";
-          position: absolute;
-          inset: -2px;
-          border-radius: 1.25rem;
-          padding: 2px;
-          background: var(--jbj-tool-border);
-          animation: jbj-tool-border-spin 9s linear infinite;
-          -webkit-mask:
-            linear-gradient(#000 0 0) content-box,
-            linear-gradient(#000 0 0);
-          -webkit-mask-composite: xor;
-                  mask-composite: exclude;
-          pointer-events: none;
+          content: ""; position: absolute; inset: -2px; border-radius: 1.25rem; padding: 2px;
+          background: var(--jbj-tool-border); animation: jbj-tool-border-spin 9s linear infinite;
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
         }
       `}</style>
+
+
 
       <div
         data-tool-frame
