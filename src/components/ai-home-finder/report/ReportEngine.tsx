@@ -77,14 +77,14 @@ function formatWebsite(value?: string | null): string {
 
 const escText = (value: unknown) => String(value ?? "").replace(/\s+/g, " ").trim();
 const titleCase = (value: string) => value.replace(/[-_]+/g, " ").replace(/\b\w/g, (m) => m.toUpperCase());
-function WordSpans({ value, gap = 4 }: { value: string; gap?: number }) {
-  return (
-    <span style={{ display: "inline-flex", alignItems: "baseline", flexWrap: "wrap", columnGap: gap, rowGap: 0 }}>
-      {value.split(/\s+/).filter(Boolean).map((word, idx) => (
-        <span key={`${word}-${idx}`} style={{ display: "inline-block" }}>{word}</span>
-      ))}
-    </span>
-  );
+/**
+ * Renders text as-is. Historically split words to work around html2canvas
+ * dropping spaces, but that produced visible double-spaces in eyebrows/labels
+ * (e.g. "PROPERTY  TYPE"). html2canvas 1.4 without letterRendering preserves
+ * single spaces correctly, so we render a plain string.
+ */
+function WordSpans({ value }: { value: string; gap?: number }) {
+  return <>{value}</>;
 }
 
 const stripHtml = (s?: string | null) =>

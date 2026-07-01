@@ -14,7 +14,7 @@ import {
   type ReportEngineProps,
   type ReportProject,
 } from "@/components/ai-home-finder/report/ReportEngine";
-import { PAGE_SEP_VAR, REPORT_PAGE_PX } from "@/components/ai-home-finder/report/tokens";
+import { REPORT_PAGE_PX } from "@/components/ai-home-finder/report/tokens";
 import type { ReportBranding } from "@/components/ai-home-finder/ReportPreviewModal";
 
 // Export at 2× A4 CSS pixels so downloaded PDFs stay sharp when zoomed/printed.
@@ -62,45 +62,11 @@ const makeFilename = (filename?: string) => {
   return filename || `JBJ-AI-Recommendations-${sessionId}-${Date.now()}.pdf`;
 };
 
-const findLivePreviewRoot = () => {
-  const modalRoot = document.getElementById("jbj-aihf-preview-root");
-  const reportRoot = document.querySelector<HTMLElement>(
-    "#jbj-report-contrast-lock-preview[data-report-root]"
-  );
-  if (!modalRoot || !reportRoot || !modalRoot.contains(reportRoot)) return null;
-  return reportRoot;
-};
-
-const prepareLivePreviewForCapture = async <T,>(
-  reportRoot: HTMLElement,
-  fn: () => Promise<T>
-) => {
-  const host = reportRoot.parentElement as HTMLElement | null;
-  if (!host) return fn();
-
-  const previousStyle = host.getAttribute("style");
-  host.style.position = "fixed";
-  host.style.left = "-10000px";
-  host.style.top = "0";
-  host.style.width = `${REPORT_PAGE_PX.width}px`;
-  host.style.transform = "none";
-  host.style.transformOrigin = "top left";
-  host.style.pointerEvents = "none";
-  host.style.zIndex = "-1";
-  host.style.setProperty(PAGE_SEP_VAR, "0px");
-  host.style.setProperty("--jbj-report-page-shadow", "none");
-
-  await new Promise<void>((r) =>
-    requestAnimationFrame(() => requestAnimationFrame(() => r()))
-  );
-
-  try {
-    return await fn();
-  } finally {
-    if (previousStyle == null) host.removeAttribute("style");
-    else host.setAttribute("style", previousStyle);
-  }
-};
+// The visible Live Preview stays untouched during export. We render a second
+// ReportEngine offscreen so the preview keeps showing the document while the
+// PDF is generated. Repositioning the on-screen preview blanked it out during
+// download (users saw an empty modal until the file arrived).
+const findLivePreviewRoot = () => null as HTMLElement | null;
 
 const addCanvasPageToPdf = (
   pdf: jsPDF,
@@ -183,22 +149,12 @@ export async function renderReportToPdf(
 
   const filename = makeFilename(opts.filename);
 
-  // Fast path: capture the already-rendered Live Preview the user is looking at.
-  // This avoids mounting a second React tree, avoids re-loading every image, and
-  // guarantees the downloaded PDF uses the exact same CSS cascade and colors.
-  const livePreviewRoot = findLivePreviewRoot();
-  if (livePreviewRoot) {
-    const pages = Array.from(
-      livePreviewRoot.querySelectorAll<HTMLElement>("[data-report-page]")
-    );
-    if (pages.length) {
-      await waitForFonts();
-      await waitForImages(livePreviewRoot, 900);
-      return prepareLivePreviewForCapture(livePreviewRoot, () =>
-        captureReportRootToPdf(livePreviewRoot, pages, filename)
-      );
-    }
-  }
+  // NOTE: The live-preview fast path is intentionally disabled — capturing the
+  // visible preview required repositioning it offscreen, which blanked out the
+  // modal during download. We always mount an offscreen ReportEngine below so
+  // the user keeps seeing the document while the PDF is generated.
+  void findLivePreviewRoot;
+
 
   // Offscreen mount — kept on-screen at -10000px so html2canvas can paint
   // styles correctly (display:none / visibility:hidden break it).
