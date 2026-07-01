@@ -61,8 +61,17 @@ export async function renderReportToPdf(
 
   // Offscreen mount — kept on-screen at -10000px so html2canvas can paint
   // styles correctly (display:none / visibility:hidden break it).
+  //
+  // CRITICAL: Mount INSIDE the preview modal root when it exists so the exact
+  // same CSS cascade (id-scoped overrides + inherited contrast guards) applies
+  // to the PDF tree as to the on-screen Live Preview. Without this the PDF
+  // renders with different colors than what the user just approved.
   const host = document.createElement("div");
   host.setAttribute("data-report-export-host", "");
+  // Mirror the preview modal's guard-suppression attributes so global
+  // contrast/champagne guards behave identically for both trees.
+  host.setAttribute("data-no-contrast-guard", "");
+  host.setAttribute("data-aihf-preview", "");
   host.style.cssText = [
     "position:fixed",
     "left:-10000px",
@@ -72,7 +81,8 @@ export async function renderReportToPdf(
     "z-index:-1",
     "background:transparent",
   ].join(";");
-  document.body.appendChild(host);
+  const previewRoot = document.getElementById("jbj-aihf-preview-root");
+  (previewRoot || document.body).appendChild(host);
 
   let root: Root | null = null;
   try {
