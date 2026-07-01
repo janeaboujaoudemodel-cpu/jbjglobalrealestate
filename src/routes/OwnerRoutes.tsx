@@ -124,11 +124,29 @@ const LegacyOwnerEnvelopeDetail = () => {
 };
 
 export const OwnerRoutes = () => (
+  <>
+  {/* JBJ CRM — standalone shell, MUST be declared BEFORE the /owner shell route
+      so React Router matches the more specific path first and only ONE sidebar mounts. */}
+  <Route
+    path="/owner/crm/jbj"
+    element={
+      <OwnerGuard>
+        <JbjCrmShell />
+      </OwnerGuard>
+    }
+  >
+    <Route index element={<JbjCrmHome />} />
+    <Route path="integrations" element={<JbjCrmIntegrations />} />
+    <Route path="settings/roles" element={<JbjCrmRoles />} />
+    <Route path=":section" element={<JbjCrmModulePage section="leads" />} />
+  </Route>
+
   <Route path="/owner" element={
     <OwnerGuard>
       <OwnerDashboardShell />
     </OwnerGuard>
   }>
+
     <Route index element={<OwnerDashboardOverview />} />
     <Route path="inbox" element={<OwnerInbox />} />
     <Route path="templates" element={<OwnerTemplates />} />
