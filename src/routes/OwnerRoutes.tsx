@@ -18,8 +18,6 @@ const ZohoCRMPage = lazy(() => import("@/pages/owner/crm/ZohoCRMPage"));
 const JbjCrmShell = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmShell"));
 const JbjCrmHome = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmHome"));
 const JbjCrmModulePage = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmModulePage"));
-const JbjCrmIntegrations = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmIntegrations"));
-const JbjCrmRoles = lazy(() => import("@/pages/owner/crm/jbj/JbjCrmRoles"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
@@ -136,9 +134,7 @@ export const OwnerRoutes = () => (
     }
   >
     <Route index element={<JbjCrmHome />} />
-    <Route path="integrations" element={<JbjCrmIntegrations />} />
-    <Route path="settings/roles" element={<JbjCrmRoles />} />
-    <Route path=":section" element={<JbjCrmModulePage section="leads" />} />
+    <Route path=":section" element={<JbjCrmModulePage />} />
   </Route>
 
   <Route path="/owner" element={
