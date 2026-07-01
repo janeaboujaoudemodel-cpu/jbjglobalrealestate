@@ -2,195 +2,116 @@ import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useNavigate, Link } from "react-router-dom";
+
+/**
+ * AIToolPremiumLayout — Unified Emerald Ombré Surface
+ *
+ * Matches the Interior Design AI / Property Measurement contract:
+ *   background: linear-gradient(180deg, #064E3B → #042c1c → #000000)
+ *   text: pure white  |  accents: gold #B89555 hairline
+ *   primary CTA: emerald metallic with white ink
+ *
+ * Scoped via [data-tool-emerald] so all downstream cards/inputs/text auto-adopt
+ * white ink + dark emerald surfaces without touching each tool page.
+ */
 
 interface AIToolPremiumLayoutProps {
   title: string;
   subtitle: string;
   icon: ReactNode;
-  accentColor: string;
-  gradientFrom: string;
+  accentColor?: string;   // kept for backward compat, ignored (emerald unified)
+  gradientFrom?: string;  // kept for backward compat, ignored
   children: ReactNode;
   badge?: string;
   description?: string;
   showFinancialDisclaimer?: boolean;
 }
 
-const colorClasses: Record<string, { bg: string; border: string; text: string; glow: string; gradient: string }> = {
-  emerald: {
-    bg: "jj-surface-emerald-soft",
-    border: "border-[color:var(--emerald-1)]/30/30",
-    text: "text-emerald-400",
-    glow: "shadow-emerald-500/20",
-    gradient: " ",
-  },
-  purple: {
-    bg: "bg-purple-500/10",
-    border: "border-purple-500/30",
-    text: "text-purple-400",
-    glow: "shadow-purple-500/20",
-    gradient: "from-purple-400 to-violet-400",
-  },
-  blue: {
-    bg: "bg-blue-500/10",
-    border: "border-blue-500/30",
-    text: "text-blue-400",
-    glow: "shadow-blue-500/20",
-    gradient: "from-blue-400 to-cyan-400",
-  },
-  teal: {
-    bg: "jj-surface-emerald-soft",
-    border: "border-[color:var(--emerald-1)]/30/30",
-    text: "text-teal-400",
-    glow: "shadow-teal-500/20",
-    gradient: " to-cyan-400",
-  },
-  orange: {
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/30",
-    text: "text-orange-400",
-    glow: "shadow-orange-500/20",
-    gradient: "from-orange-400 to-amber-400",
-  },
-  indigo: {
-    bg: "bg-indigo-500/10",
-    border: "border-indigo-500/30",
-    text: "text-indigo-400",
-    glow: "shadow-indigo-500/20",
-    gradient: "from-indigo-400 to-purple-400",
-  },
-  rose: {
-    bg: "bg-rose-500/10",
-    border: "border-rose-500/30",
-    text: "text-rose-400",
-    glow: "shadow-rose-500/20",
-    gradient: "from-rose-400 to-pink-400",
-  },
-  cyan: {
-    bg: "bg-cyan-500/10",
-    border: "border-cyan-500/30",
-    text: "text-cyan-400",
-    glow: "shadow-cyan-500/20",
-    gradient: "from-cyan-400 to-blue-400",
-  },
-  violet: {
-    bg: "bg-violet-500/10",
-    border: "border-violet-500/30",
-    text: "text-violet-400",
-    glow: "shadow-violet-500/20",
-    gradient: "from-violet-400 to-purple-400",
-  },
-  amber: {
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/30",
-    text: "text-[#1A1A1A]",
-    glow: "shadow-amber-500/20",
-    gradient: "from-amber-400 to-yellow-400",
-  },
-  pink: {
-    bg: "bg-pink-500/10",
-    border: "border-pink-500/30",
-    text: "text-pink-400",
-    glow: "shadow-pink-500/20",
-    gradient: "from-pink-400 to-rose-400",
-  },
-  red: {
-    bg: "bg-red-500/10",
-    border: "border-red-500/30",
-    text: "text-red-400",
-    glow: "shadow-red-500/20",
-    gradient: "from-red-400 to-rose-400",
-  },
-  lime: {
-    bg: "bg-lime-500/10",
-    border: "border-lime-500/30",
-    text: "text-lime-400",
-    glow: "shadow-lime-500/20",
-    gradient: "from-lime-400 ",
-  },
-  sky: {
-    bg: "bg-sky-500/10",
-    border: "border-sky-500/30",
-    text: "text-sky-400",
-    glow: "shadow-sky-500/20",
-    gradient: "from-sky-400 to-blue-400",
-  },
-  gold: {
-    bg: "bg-[#EFE6D6]/10",
-    border: "border-[#B89555]/30",
-    text: "text-[#1A1A1A]",
-    glow: "shadow-gold/20",
-    gradient: "from-gold to-amber-400",
-  },
-};
-
-const gradientClasses: Record<string, string> = {
-  emerald: "from-emerald-950/60 via-[#0D0C08] to-[#0D0C08]",
-  purple: "from-purple-950/60 via-[#0D0C08] to-[#0D0C08]",
-  blue: "from-blue-950/60 via-[#0D0C08] to-[#0D0C08]",
-  teal: "from-teal-950/60 via-[#0D0C08] to-[#0D0C08]",
-  orange: "from-orange-950/60 via-[#0D0C08] to-[#0D0C08]",
-  indigo: "from-indigo-950/60 via-[#0D0C08] to-[#0D0C08]",
-  rose: "from-rose-950/60 via-[#0D0C08] to-[#0D0C08]",
-  cyan: "from-cyan-950/60 via-[#0D0C08] to-[#0D0C08]",
-  violet: "from-violet-950/60 via-[#0D0C08] to-[#0D0C08]",
-  amber: "from-amber-950/60 via-[#0D0C08] to-[#0D0C08]",
-  pink: "from-pink-950/60 via-[#0D0C08] to-[#0D0C08]",
-  red: "from-red-950/60 via-[#0D0C08] to-[#0D0C08]",
-  lime: "from-lime-950/60 via-[#0D0C08] to-[#0D0C08]",
-  sky: "from-sky-950/60 via-[#0D0C08] to-[#0D0C08]",
-  gold: "from-gold/20 via-[#0D0C08] to-[#0D0C08]",
-};
-
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
 const AIToolPremiumLayout = ({
   title,
   subtitle,
   icon,
-  accentColor,
-  gradientFrom,
   children,
   badge = "AI-Powered",
-  description,
   showFinancialDisclaimer = false,
 }: AIToolPremiumLayoutProps) => {
   const navigate = useNavigate();
-  const colors = colorClasses[accentColor] || colorClasses.gold;
-  const gradient = gradientClasses[gradientFrom] || gradientClasses.gold;
 
-  // Extract the gradient word from title (usually the second word or last word)
-  const titleWords = title.split(" ");
-  const gradientWordIndex = titleWords.findIndex(word => 
-    word.toLowerCase().includes("calculator") || 
-    word.toLowerCase().includes("predictor") || 
-    word.toLowerCase().includes("analyzer") ||
-    word.toLowerCase().includes("insights") ||
-    word.toLowerCase().includes("handler") ||
-    word.toLowerCase().includes("scheduler") ||
-    word.toLowerCase().includes("summarizer") ||
-    word.toLowerCase().includes("hub") ||
-    word.toLowerCase().includes("report") ||
-    word.toLowerCase().includes("generator") ||
-    word.toLowerCase().includes("script") ||
-    word.toLowerCase().includes("reviewer") ||
-    word.toLowerCase().includes("qualification") ||
-    word.toLowerCase().includes("analysis")
-  );
-  
-  const beforeGradient = gradientWordIndex > 0 ? titleWords.slice(0, gradientWordIndex).join(" ") : title.split(" ")[0];
-  const gradientWord = gradientWordIndex >= 0 ? titleWords.slice(gradientWordIndex).join(" ") : titleWords.slice(1).join(" ");
+  // Highlight second word of the title in gold
+  const words = title.split(" ");
+  const firstWord = words[0] ?? title;
+  const restWords = words.slice(1).join(" ");
 
   return (
-    <div data-marketing-page data-surface="page" className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
-      {/* Hero Section — champagne tone with subtle gold accent */}
-      <section className="pt-32 pb-16 bg-gradient-to-b from-[#F7F2EA] via-[#FDFBF7] to-[#FDFBF7] border-b border-[#B89555]/30">
+    <div
+      data-tool-shell-root
+      data-tool-emerald
+      data-allow-dark-cta
+      data-no-contrast-guard
+      data-surface="dark"
+      data-marketing-page
+      className="allow-white min-h-screen w-full"
+      style={{
+        background:
+          "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
+        color: "#FFFFFF",
+      }}
+    >
+      <style>{`
+        [data-tool-emerald],
+        [data-tool-emerald] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,a,button,textarea,input,div,figcaption,dt,dd,th,td,time):not([class*="bg-clip-text"]):not([data-price-pill]) {
+          color: #FFFFFF; -webkit-text-fill-color: #FFFFFF;
+        }
+        [data-tool-emerald] .text-muted-foreground {
+          color: rgba(255,255,255,0.76) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.76) !important;
+        }
+        [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold):not(.text-\\[\\#B89555\\]) { color: #FFFFFF; }
+        [data-tool-emerald] [data-allow-gold],
+        [data-tool-emerald] .text-gold,
+        [data-tool-emerald] .text-\\[\\#B89555\\] {
+          color: #B89555 !important;
+          -webkit-text-fill-color: #B89555 !important;
+        }
+        [data-tool-emerald] input,
+        [data-tool-emerald] textarea,
+        [data-tool-emerald] select,
+        [data-tool-emerald] [role="combobox"] {
+          background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
+          border: 1px solid rgba(184,149,85,0.55) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          caret-color: #FFFFFF !important;
+        }
+        [data-tool-emerald] input::placeholder,
+        [data-tool-emerald] textarea::placeholder {
+          color: rgba(255,255,255,0.55) !important;
+        }
+        [data-tool-emerald] .id-panel,
+        [data-tool-emerald] .ai-tool-card {
+          background: linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%) !important;
+          border: 1px solid rgba(184,149,85,0.48) !important;
+          box-shadow: 0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04) !important;
+        }
+      `}</style>
+
+      {/* Hero — emerald ombré with gold hairline */}
+      <section
+        className="pt-32 pb-16 border-b"
+        style={{
+          background:
+            "linear-gradient(180deg, #064E3B 0%, #042c1c 60%, #000000 100%)",
+          borderColor: "rgba(184,149,85,0.55)",
+        }}
+      >
         <div className="container mx-auto px-4">
-          {/* Back Button - Always left-aligned */}
+          {/* Back button */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -200,19 +121,23 @@ const AIToolPremiumLayout = ({
             <Button
               size="sm"
               onClick={() => {
-                const referrer = document.referrer;
-                const hasRealHistory = referrer && referrer.includes(window.location.hostname);
-                if (hasRealHistory) {
-                  navigate(-1);
-                } else {
-                  navigate('/toolkit');
-                }
+                const ref = document.referrer;
+                const local = ref && ref.includes(window.location.hostname);
+                if (local) navigate(-1);
+                else navigate("/toolkit");
               }}
+              data-allow-dark-cta
               data-no-contrast-guard
-              className="mb-6 relative z-10 bg-[#1A1A1A] hover:bg-[#A68444] text-white border-2 border-[#1A1A1A] hover:border-[#A68444]"
+              className="allow-white mb-6 relative z-10"
+              style={{
+                background:
+                  "linear-gradient(135deg, #10B981 0%, #059669 55%, #064E3B 100%)",
+                color: "#FFFFFF",
+                border: "1px solid rgba(184,149,85,0.55)",
+              }}
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              <ArrowLeft className="h-4 w-4 mr-2 allow-white" style={{ color: "#FFFFFF" }} />
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Back</span>
             </Button>
           </motion.div>
 
@@ -222,54 +147,100 @@ const AIToolPremiumLayout = ({
             variants={fadeInUp}
             className="text-center max-w-3xl mx-auto"
           >
-            {/* Badge */}
-            <div className={`inline-flex items-center gap-2 px-4 py-2 ${colors.bg} border ${colors.border} rounded-full mb-6`}>
-              <div className={colors.text}>{icon}</div>
-              <span className={`${colors.text} text-xs font-semibold uppercase tracking-wider`}>{badge}</span>
-            </div>
-            
-            {/* Title with gold accent on the second word */}
-            <h1
-              className="text-[#1A1A1A] text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
-              style={{ fontFamily: "'Inter', 'SF Pro Display', system-ui, sans-serif", letterSpacing: "-0.02em" }}
+            {/* Emerald badge */}
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
+              style={{
+                background: "rgba(6,78,59,0.55)",
+                border: "1px solid rgba(184,149,85,0.55)",
+              }}
             >
-              {beforeGradient}{" "}
-              <span className="text-[#B89555]">
-                {gradientWord}
+              <div className="allow-white" style={{ color: "#FFFFFF" }}>{icon}</div>
+              <span
+                className="allow-white text-xs font-semibold uppercase tracking-wider"
+                style={{ color: "#FFFFFF" }}
+              >
+                {badge}
               </span>
+            </div>
+
+            {/* Title (rest of title in gold) */}
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+              style={{
+                fontFamily:
+                  "'Inter', 'SF Pro Display', system-ui, sans-serif",
+                letterSpacing: "-0.02em",
+                color: "#FFFFFF",
+              }}
+            >
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>{firstWord}</span>
+              {restWords ? " " : ""}
+              {restWords && (
+                <span data-allow-gold style={{ color: "#B89555" }}>
+                  {restWords}
+                </span>
+              )}
             </h1>
 
-            {/* Subtitle/Description */}
-            <p className="text-[#1A1A1A] text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto opacity-90">
+            <p
+              className="text-base sm:text-lg md:text-xl mb-4 max-w-2xl mx-auto allow-white"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
               {subtitle}
             </p>
 
-            {/* Powered by AI */}
-            <p className="text-[#1A1A1A]/70 text-sm">
-              <Sparkles className="inline h-4 w-4 mr-1 text-[#B89555]" />
+            <p className="text-sm allow-white" style={{ color: "rgba(255,255,255,0.65)" }}>
+              <Sparkles
+                className="inline h-4 w-4 mr-1"
+                data-allow-gold
+                style={{ color: "#B89555" }}
+              />
               Powered by AI • Data-driven insights • Real-time analysis
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Content Section — champagne page surface */}
-      <section className="py-12 bg-[#FDFBF7]">
+      {/* Content — dark emerald panel with gold hairline */}
+      <section className="py-12">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="max-w-6xl mx-auto border border-[#B89555]/30 bg-[#FDFBF7] rounded-2xl p-6 md:p-8 shadow-sm"
+            className="max-w-6xl mx-auto rounded-2xl p-6 md:p-8 id-panel ai-tool-card"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%)",
+              border: "1px solid rgba(184,149,85,0.48)",
+              boxShadow:
+                "0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04)",
+            }}
           >
             {children}
 
             {showFinancialDisclaimer && (
-              <div className="mt-8 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30">
-                <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                  <strong className="text-[#1A1A1A]">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
-                  <Link to="/contact" className="text-[#A68444] underline hover:text-[#1A1A1A]">Contact our team</Link> for professional guidance.
-                  Past performance does not guarantee future results.
+              <div
+                className="mt-8 p-4 rounded-xl"
+                style={{
+                  background: "rgba(6,78,59,0.55)",
+                  border: "1px solid rgba(184,149,85,0.55)",
+                }}
+              >
+                <p className="text-sm leading-relaxed allow-white" style={{ color: "#FFFFFF" }}>
+                  <strong className="allow-white" style={{ color: "#FFFFFF" }}>Disclaimer:</strong>{" "}
+                  This AI-generated analysis is for informational purposes only. Does not
+                  constitute financial, investment, or legal advice.{" "}
+                  <Link
+                    to="/contact"
+                    className="underline"
+                    data-allow-gold
+                    style={{ color: "#B89555" }}
+                  >
+                    Contact our team
+                  </Link>{" "}
+                  for professional guidance. Past performance does not guarantee future results.
                 </p>
               </div>
             )}
