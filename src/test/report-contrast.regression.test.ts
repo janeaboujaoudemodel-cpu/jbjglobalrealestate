@@ -201,3 +201,21 @@ describe("renderReportToPdf host", () => {
     expect(src).not.toMatch(/for \(let i = 0; i < pages\.length; i\+\+\) \{\s*const page = pages\[i\];\s*const canvas = await html2canvas\(page/s);
   });
 });
+
+describe("report comparison matrix layout locks", () => {
+  const reportSrc = read("components/ai-home-finder/report/ReportEngine.tsx");
+  const matchSrc = read("components/matchmaker/MatchCriteriaTable.tsx");
+
+  it("uses balanced rectangular verdict pills instead of thin outline capsules", () => {
+    expect(reportSrc).toMatch(/function ReportVerdictBadge/);
+    expect(reportSrc).toMatch(/width:\s*74/);
+    expect(reportSrc).toMatch(/borderRadius:\s*5/);
+    expect(reportSrc).not.toMatch(/data-report-pill[^\n]+borderRadius:\s*999/);
+  });
+
+  it("exports human-readable handover dates instead of raw ISO dates", () => {
+    expect(matchSrc).toMatch(/formatHandoverForDisplay/);
+    expect(matchSrc).toMatch(/month:\s*["']short["']/);
+    expect(matchSrc).not.toMatch(/const value = h \|\| ["']TBA["']/);
+  });
+});
