@@ -13,19 +13,15 @@ import {
   Settings,
   UserRound,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { JBJLogo } from "@/components/JBJLogo";
 import { JBJ_CRM_MODULES, getJbjCrmPath } from "./jbjCrmConfig";
 import "./jbjCrmShell.css";
 
-const COLLAPSE_KEY = "jbj_crm_rail_collapsed_v1";
-
 export default function JbjCrmShell() {
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState<boolean>(() => localStorage.getItem(COLLAPSE_KEY) === "1");
-
-  useEffect(() => { localStorage.setItem(COLLAPSE_KEY, collapsed ? "1" : "0"); }, [collapsed]);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className={cn("jbj-crm-shell", collapsed && "is-collapsed")} data-jbj-crm-shell>
