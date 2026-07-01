@@ -21,8 +21,6 @@ import type { ReportBranding } from "@/components/ai-home-finder/ReportPreviewMo
 // Higher scales were the root cause of 2–3 minute exports on full reports.
 const EXPORT_SCALE = 1;
 const EXPORT_BACKGROUND = "#FDFBF7";
-const EXPORT_EMERALD = "#064E3B";
-const EXPORT_EMERALD_RGB = { r: 6, g: 78, b: 59 };
 
 export interface RenderReportOptions {
   branding: ReportBranding;
@@ -56,61 +54,6 @@ const waitForImages = (root: HTMLElement, timeoutMs = 1800) =>
         })
     )
   );
-
-type CaptureRect = { x: number; y: number; width: number; height: number };
-
-const collectEmeraldSurfaceRects = (reportRoot: HTMLElement): CaptureRect[] => {
-  const rootRect = reportRoot.getBoundingClientRect();
-  return Array.from(
-    reportRoot.querySelectorAll<HTMLElement>(
-      '[data-on-dark], [data-surface="emerald"], [data-surface="report-emerald"]'
-    )
-  )
-    .map((el) => {
-      const rect = el.getBoundingClientRect();
-      return {
-        x: Math.max(0, rect.left - rootRect.left),
-        y: Math.max(0, rect.top - rootRect.top),
-        width: Math.max(0, Math.min(rect.right, rootRect.right) - Math.max(rect.left, rootRect.left)),
-        height: Math.max(0, Math.min(rect.bottom, rootRect.bottom) - Math.max(rect.top, rootRect.top)),
-      };
-    })
-    .filter((rect) => rect.width > 0 && rect.height > 0);
-};
-
-const isShiftedEmeraldPixel = (r: number, g: number, b: number) =>
-  r <= 92 &&
-  g >= 52 &&
-  g <= 138 &&
-  b >= 36 &&
-  b <= 124 &&
-  g - r >= 18 &&
-  b - r >= 4;
-
-const normalizeEmeraldSurfaces = (canvas: HTMLCanvasElement, rects: CaptureRect[]) => {
-  if (!rects.length) return;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return;
-
-  for (const rect of rects) {
-    const x = Math.max(0, Math.floor(rect.x * EXPORT_SCALE));
-    const y = Math.max(0, Math.floor(rect.y * EXPORT_SCALE));
-    const width = Math.min(canvas.width - x, Math.ceil(rect.width * EXPORT_SCALE));
-    const height = Math.min(canvas.height - y, Math.ceil(rect.height * EXPORT_SCALE));
-    if (width <= 0 || height <= 0) continue;
-
-    const image = ctx.getImageData(x, y, width, height);
-    const data = image.data;
-    for (let i = 0; i < data.length; i += 4) {
-      if (isShiftedEmeraldPixel(data[i], data[i + 1], data[i + 2])) {
-        data[i] = EXPORT_EMERALD_RGB.r;
-        data[i + 1] = EXPORT_EMERALD_RGB.g;
-        data[i + 2] = EXPORT_EMERALD_RGB.b;
-      }
-    }
-    ctx.putImageData(image, x, y);
-  }
-};
 
 const makeFilename = (filename?: string) => {
   const sessionId =
@@ -207,7 +150,6 @@ const captureReportRootToPdf = async (
   // minute-long exports. This keeps PDF output identical to the preview while
   // reducing work to a single render pass.
   const totalHeight = REPORT_PAGE_PX.height * pages.length;
-  const emeraldRects = collectEmeraldSurfaceRects(reportRoot);
   const canvas = await html2canvas(reportRoot, {
     scale: EXPORT_SCALE,
     useCORS: true,
@@ -220,26 +162,7 @@ const captureReportRootToPdf = async (
     height: totalHeight,
     windowWidth: REPORT_PAGE_PX.width,
     windowHeight: totalHeight,
-    onclone: (clonedDocument) => {
-      clonedDocument
-        .querySelectorAll<HTMLElement>(
-          '[data-report-root] [data-on-dark], [data-report-root] [data-surface="emerald"], [data-report-root] [data-surface="report-emerald"]'
-        )
-        .forEach((el) => {
-          el.style.setProperty("background", EXPORT_EMERALD, "important");
-          el.style.setProperty("background-color", EXPORT_EMERALD, "important");
-          el.style.setProperty("background-image", "none", "important");
-          el.style.setProperty("box-shadow", "none", "important");
-          el.style.setProperty("color", "#FFFFFF", "important");
-          el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
-        });
-    },
   });
-
-  // Some PDF viewers and canvas rasterization can shift a solid emerald surface
-  // into visible green bands. Normalize only the known emerald report rectangles
-  // after capture so brand surfaces stay flat while property photos remain intact.
-  normalizeEmeraldSurfaces(canvas, emeraldRects);
 
   for (let i = 0; i < pages.length; i++) {
     addCanvasPageToPdf(pdf, canvas, i * REPORT_PAGE_PX.height * EXPORT_SCALE, i);
