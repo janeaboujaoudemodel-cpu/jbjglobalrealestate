@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { TOOL_CARD_BG, TOOL_GOLD, ToolTheme } from "./toolThemes";
+import { TOOL_CARD_BG, TOOL_WHITE_BORDER, ToolTheme } from "./toolThemes";
 
 interface ToolCardProps {
   children: ReactNode;
