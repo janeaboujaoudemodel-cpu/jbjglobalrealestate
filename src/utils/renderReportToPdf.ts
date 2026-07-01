@@ -101,31 +101,66 @@ const prepareLivePreviewForCapture = async <T,>(
   }
 };
 
-const capturePagesToPdf = async (
+const addCanvasPageToPdf = (
+  pdf: jsPDF,
+  sourceCanvas: HTMLCanvasElement,
+  sourceY: number,
+  pageIndex: number
+) => {
+  const pageCanvas = document.createElement("canvas");
+  pageCanvas.width = Math.round(REPORT_PAGE_PX.width * EXPORT_SCALE);
+  pageCanvas.height = Math.round(REPORT_PAGE_PX.height * EXPORT_SCALE);
+  const ctx = pageCanvas.getContext("2d", { alpha: false });
+  if (!ctx) throw new Error("Could not create report page canvas");
+  ctx.fillStyle = EXPORT_BACKGROUND;
+  ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+  ctx.drawImage(
+    sourceCanvas,
+    0,
+    sourceY,
+    pageCanvas.width,
+    pageCanvas.height,
+    0,
+    0,
+    pageCanvas.width,
+    pageCanvas.height
+  );
+
+  const pdfW = pdf.internal.pageSize.getWidth();
+  const pdfH = pdf.internal.pageSize.getHeight();
+  if (pageIndex > 0) pdf.addPage();
+  // PNG keeps exact brand colors; JPEG was shifting emerald/champagne boxes.
+  pdf.addImage(pageCanvas.toDataURL("image/png"), "PNG", 0, 0, pdfW, pdfH, undefined, "FAST");
+};
+
+const captureReportRootToPdf = async (
+  reportRoot: HTMLElement,
   pages: HTMLElement[],
   filename: string
 ): Promise<{ blob: Blob; filename: string }> => {
   const pdf = new jsPDF({ unit: "pt", format: "a4", orientation: "portrait" });
-  const pdfW = pdf.internal.pageSize.getWidth();
-  const pdfH = pdf.internal.pageSize.getHeight();
+
+  // One DOM capture, then slice into A4 pages. Capturing each page separately
+  // makes html2canvas re-clone/re-parse the entire modal N times and caused
+  // minute-long exports. This keeps PDF output identical to the preview while
+  // reducing work to a single render pass.
+  const totalHeight = REPORT_PAGE_PX.height * pages.length;
+  const canvas = await html2canvas(reportRoot, {
+    scale: EXPORT_SCALE,
+    useCORS: true,
+    allowTaint: false,
+    backgroundColor: EXPORT_BACKGROUND,
+    logging: false,
+    imageTimeout: 1800,
+    removeContainer: true,
+    width: REPORT_PAGE_PX.width,
+    height: totalHeight,
+    windowWidth: REPORT_PAGE_PX.width,
+    windowHeight: totalHeight,
+  });
 
   for (let i = 0; i < pages.length; i++) {
-    const page = pages[i];
-    const canvas = await html2canvas(page, {
-      scale: EXPORT_SCALE,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor: EXPORT_BACKGROUND,
-      logging: false,
-      imageTimeout: 1800,
-      removeContainer: true,
-      windowWidth: REPORT_PAGE_PX.width,
-      windowHeight: REPORT_PAGE_PX.height,
-    });
-    const img = canvas.toDataURL("image/png");
-    if (i > 0) pdf.addPage();
-    // PNG keeps exact brand colors; JPEG was shifting emerald/champagne boxes.
-    pdf.addImage(img, "PNG", 0, 0, pdfW, pdfH, undefined, "FAST");
+    addCanvasPageToPdf(pdf, canvas, i * REPORT_PAGE_PX.height * EXPORT_SCALE, i);
   }
 
   return { blob: pdf.output("blob"), filename };
@@ -154,7 +189,7 @@ export async function renderReportToPdf(
       await waitForFonts();
       await waitForImages(livePreviewRoot, 900);
       return prepareLivePreviewForCapture(livePreviewRoot, () =>
-        capturePagesToPdf(pages, filename)
+        captureReportRootToPdf(livePreviewRoot, pages, filename)
       );
     }
   }
@@ -207,7 +242,7 @@ export async function renderReportToPdf(
 
     const pages = Array.from(host.querySelectorAll<HTMLElement>("[data-report-page]"));
     if (!pages.length) throw new Error("No report pages rendered");
-    return capturePagesToPdf(pages, filename);
+    return captureReportRootToPdf(host, pages, filename);
   } finally {
     try {
       root?.unmount();
