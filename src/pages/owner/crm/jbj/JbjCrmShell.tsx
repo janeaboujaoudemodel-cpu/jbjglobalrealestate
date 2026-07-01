@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   Bell,
   ChevronLeft,
@@ -50,8 +50,8 @@ export default function JbjCrmShell() {
             <Plus aria-hidden="true" />
             <span>Create</span>
           </button>
-          <button type="button" className="jbj-crm-top-link" onClick={() => navigate("/owner/admin")}>Owner</button>
-          <button type="button" className="jbj-crm-top-link" onClick={() => navigate("/")}>Return to Site</button>
+          <Link className="jbj-crm-top-link" to="/owner/admin">Owner</Link>
+          <Link className="jbj-crm-top-link" to="/">Return to Site</Link>
           <button type="button" className="jbj-crm-icon-button" aria-label="Marketplace"><Grid3X3 /></button>
           <button type="button" className="jbj-crm-icon-button" aria-label="Notifications"><Bell /></button>
           <button type="button" className="jbj-crm-icon-button" aria-label="Settings"><Settings /></button>
@@ -92,14 +92,14 @@ export default function JbjCrmShell() {
               {collapsed ? <PanelLeftOpen aria-hidden="true" /> : <PanelLeftClose aria-hidden="true" />}
               <span>{collapsed ? "Expand" : "Collapse"}</span>
             </button>
-            <button type="button" className="jbj-crm-footer-link" onClick={() => navigate("/owner/admin")}>
+            <Link className="jbj-crm-footer-link" to="/owner/admin">
               <ChevronLeft aria-hidden="true" />
               <span>Owner</span>
-            </button>
-            <button type="button" className="jbj-crm-footer-link" onClick={() => navigate("/")}>
+            </Link>
+            <Link className="jbj-crm-footer-link" to="/">
               <Globe aria-hidden="true" />
               <span>Return to Site</span>
-            </button>
+            </Link>
           </footer>
         </aside>
 
