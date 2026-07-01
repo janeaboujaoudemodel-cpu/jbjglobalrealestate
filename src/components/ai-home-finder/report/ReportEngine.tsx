@@ -432,8 +432,8 @@ function PageHeader({ pageLabel, section, branding }: { pageLabel: string; secti
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        background: T.emeraldDeep,
-        backgroundImage: "none",
+        background: T.emeraldGradient,
+        backgroundImage: T.emeraldGradient,
         backgroundColor: T.emeraldDeep,
         borderBottom: `1px solid ${T.gold}`,
         color: WHITE,
@@ -556,7 +556,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
             {greeting}. A focused shortlist of developer-direct property options prepared as a premium JBJ business proposal.
           </p>
 
-          <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", borderRadius: 9, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 18 }}>
+          <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, borderRadius: 9, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE, marginBottom: 18 }}>
             <SectionEyebrow light>Report scope</SectionEyebrow>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12 }}>
               {["Client requirements", "Matched properties", "Comparison matrix", "Consultant next steps"].map((item) => (
@@ -600,7 +600,7 @@ function CoverPage({ branding, projects, clientName, pageIdPrefix, requirements 
             {projects.slice(0, 3).map((p, i) => (
               <div key={p.id} style={{ height: 76, borderRadius: 7, overflow: "hidden", position: "relative", border: `1px solid ${T.goldHair}` }}>
                 <PremiumImage srcList={projectImageCandidates(p)} alt={p.name} />
-                <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 6, top: 6, width: 22, height: 22, borderRadius: 999, background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900 }}>{i + 1}</div>
+                <div data-no-contrast-guard data-on-dark style={{ position: "absolute", left: 6, top: 6, width: 22, height: 22, borderRadius: 999, background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, color: WHITE, WebkitTextFillColor: WHITE, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900 }}>{i + 1}</div>
               </div>
             ))}
           </div>
@@ -626,7 +626,7 @@ function ClientRequirementsPage({ branding, pageIdPrefix, requirements, projects
       <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, marginBottom: 18 }}>
         {requirementSet.slice(0, 10).map((r) => <FieldCard key={r.label} label={r.label} value={r.value} />)}
       </div>
-      <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldDeep, backgroundColor: T.emeraldDeep, backgroundImage: "none", borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE }}>
+      <div data-no-contrast-guard data-on-dark style={{ background: T.emeraldGradient, backgroundColor: T.emeraldDeep, backgroundImage: T.emeraldGradient, borderRadius: 10, border: `1px solid ${T.gold}`, padding: "22px 24px", boxShadow: "none", color: WHITE, WebkitTextFillColor: WHITE }}>
         <SectionEyebrow light>JBJ selection method</SectionEyebrow>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
           {[
@@ -1041,9 +1041,9 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="emerald"],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-surface="report-emerald"],
           :is(#jbj-report-contrast-lock-preview,#jbj-report-contrast-lock-pdf,#jbj-report-contrast-lock-report)[data-report-root] [data-on-dark] {
-            background: #064E3B !important;
-            background-image: none !important;
-            background-color: #064E3B !important;
+            background: linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%) !important;
+            background-image: linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%) !important;
+            background-color: #042c1c !important;
           }
         `}</style>
         <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />

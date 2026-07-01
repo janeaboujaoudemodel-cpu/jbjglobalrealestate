@@ -114,8 +114,10 @@ const C = {
   gold: "#B89555",
   goldSoft: "rgba(184,149,85,0.45)",
   goldHair: "rgba(184,149,85,0.35)",
-  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#064E3B 100%)",
-  emeraldGradientHover: "linear-gradient(135deg,#064E3B 0%,#064E3B 100%)",
+  emerald: "#064E3B",
+  emeraldDeep: "#042c1c",
+  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)",
+  emeraldGradientHover: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)",
 };
 
 export default function ReportPreviewModal({
@@ -255,9 +257,9 @@ export default function ReportPreviewModal({
 
   // Reusable button styles
   const primaryBtn: React.CSSProperties = {
-    background: "#064E3B",
-    backgroundImage: "none",
-    backgroundColor: "#064E3B",
+    background: C.emeraldGradient,
+    backgroundImage: C.emeraldGradient,
+    backgroundColor: C.emeraldDeep,
     color: "#FFFFFF",
     WebkitTextFillColor: "#FFFFFF",
     border: 0,
@@ -312,14 +314,17 @@ export default function ReportPreviewModal({
           #jbj-aihf-preview-root [data-on-dark],
           #jbj-aihf-preview-root [data-on-dark] *,
           #jbj-aihf-preview-root [data-surface="emerald"],
-          #jbj-aihf-preview-root [data-surface="emerald"] * {
+          #jbj-aihf-preview-root [data-surface="emerald"] *,
+          #jbj-aihf-preview-root [data-surface="report-emerald"],
+          #jbj-aihf-preview-root [data-surface="report-emerald"] * {
             color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
           #jbj-aihf-preview-root [data-on-dark],
-          #jbj-aihf-preview-root [data-surface="emerald"] {
-            background: #064E3B !important;
-            background-image: none !important;
-            background-color: #064E3B !important;
+          #jbj-aihf-preview-root [data-surface="emerald"],
+          #jbj-aihf-preview-root [data-surface="report-emerald"] {
+            background: linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%) !important;
+            background-image: linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%) !important;
+            background-color: #042c1c !important;
           }
           #jbj-aihf-preview-root [data-aihf-scope-dot] {
             background: #FFFFFF !important; background-color: #FFFFFF !important;
@@ -333,9 +338,18 @@ export default function ReportPreviewModal({
           #jbj-aihf-preview-root [data-aihf-primary-btn] * {
             color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
           }
+          #jbj-aihf-preview-root [data-aihf-primary-btn],
+          #jbj-aihf-preview-root [data-aihf-primary-btn] *,
           #jbj-aihf-preview-root [data-aihf-secondary-btn],
           #jbj-aihf-preview-root [data-aihf-secondary-btn] * {
-            color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; stroke: #1A1A1A !important;
+            color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
+          }
+          #jbj-aihf-preview-root [data-aihf-primary-btn],
+          #jbj-aihf-preview-root [data-aihf-secondary-btn] {
+            background: linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%) !important;
+            background-image: linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%) !important;
+            background-color: #042c1c !important;
+            border: 0 !important;
           }
           #jbj-aihf-preview-root [data-report-root] [data-report-page] {
             overflow: hidden !important;
@@ -423,8 +437,10 @@ export default function ReportPreviewModal({
                     className="relative shrink-0 inline-flex h-6 w-11 items-center rounded-full transition"
                     style={{
                       backgroundImage: "none",
-                      backgroundColor: branding.showOfficeAddress ? "#064E3B" : "#E5DCC8",
-                      border: `1px solid ${branding.showOfficeAddress ? "#064E3B" : C.goldSoft}`,
+                      background: branding.showOfficeAddress ? C.emeraldGradient : "#E5DCC8",
+                      backgroundImage: branding.showOfficeAddress ? C.emeraldGradient : "none",
+                      backgroundColor: branding.showOfficeAddress ? C.emeraldDeep : "#E5DCC8",
+                      border: `1px solid ${branding.showOfficeAddress ? C.emeraldDeep : C.goldSoft}`,
                     }}
                   >
                     <span
@@ -597,13 +613,13 @@ export default function ReportPreviewModal({
 
         {/* Actions */}
         <div className="px-5 py-4 border-t flex flex-wrap items-center justify-end gap-2 shrink-0" style={{ borderColor: C.goldHair, background: C.page }}>
-          <Button data-aihf-secondary-btn onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("copy", () => onCopy())} disabled={busy === "copy"} className="font-semibold allow-white" style={primaryBtn}>
             <LinkIcon className="w-4 h-4 mr-2" /> Copy text
           </Button>
-          <Button data-aihf-secondary-btn onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("wa", () => onShareWhatsApp(branding))} disabled={busy === "wa"} className="font-semibold allow-white" style={primaryBtn}>
             <MessageCircle className="w-4 h-4 mr-2" /> Share WhatsApp
           </Button>
-          <Button data-aihf-secondary-btn onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold" style={secondaryBtn}>
+          <Button data-aihf-secondary-btn onClick={() => run("em", () => onShareEmail(branding))} disabled={busy === "em"} className="font-semibold allow-white" style={primaryBtn}>
             <Mail className="w-4 h-4 mr-2" /> Share Email
           </Button>
           <Button data-aihf-primary-btn onClick={() => run("jbj", () => onSendToConsultant(branding))} disabled={busy === "jbj"} className="font-semibold allow-white" style={primaryBtn}>
