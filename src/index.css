@@ -18549,9 +18549,10 @@ html body #root :is([data-chrome="sidebar"], [data-backend-sidebar]) :is(
 }
 
 html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > nav > div > div {
-  justify-content: flex-start !important;
-  gap: 4px !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
 }
+
 
 
 /* ── Avatar metallic spinner shine (Header JB) ───────────────── */
