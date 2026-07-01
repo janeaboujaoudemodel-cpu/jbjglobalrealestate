@@ -63,6 +63,11 @@ export const PremiumToolShell = ({
           color: #FFFFFF;
           -webkit-text-fill-color: #FFFFFF;
         }
+        [data-tool-emerald],
+        [data-tool-emerald] * {
+          border-color: rgba(255,255,255,0.42) !important;
+          outline-color: rgba(255,255,255,0.52) !important;
+        }
         [data-tool-emerald] .text-muted-foreground,
         [data-tool-emerald] .id-text-muted { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
         [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
@@ -302,6 +307,11 @@ export const ToolAnimatedFrame = ({
       [data-tool-emerald],
       [data-tool-emerald] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,a,button,textarea,input,div,figcaption,dt,dd,th,td,time):not([class*="bg-clip-text"]):not([data-price-pill]) {
         color: #FFFFFF; -webkit-text-fill-color: #FFFFFF;
+      }
+      [data-tool-emerald],
+      [data-tool-emerald] * {
+        border-color: rgba(255,255,255,0.42) !important;
+        outline-color: rgba(255,255,255,0.52) !important;
       }
       [data-tool-emerald] .text-muted-foreground { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
       [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
