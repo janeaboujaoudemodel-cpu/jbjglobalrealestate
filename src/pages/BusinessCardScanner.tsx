@@ -518,7 +518,7 @@ const BusinessCardScanner = () => {
                 </TabsList>
 
 
-                <TabsContent value="camera" className="min-h-[560px]">
+                <TabsContent value="camera" className="mt-0">
                   <BusinessCardCamera
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -527,7 +527,7 @@ const BusinessCardScanner = () => {
                   />
                 </TabsContent>
 
-                <TabsContent value="upload" className="min-h-[560px]">
+                <TabsContent value="upload" className="mt-0">
                   <BusinessCardUpload
                     onScanComplete={handleScanComplete}
                     isProcessing={isProcessing}
@@ -535,6 +535,7 @@ const BusinessCardScanner = () => {
                     encryptionKey={encryptionKey}
                   />
                 </TabsContent>
+
               </Tabs>
             </CardContent>
           </Card>
