@@ -476,7 +476,7 @@ const PropertyMeasurement = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard>
+            <div id="pm-step1-ink-scope" className="jbj-emerald-ring rounded-2xl" data-allow-dark-cta data-no-contrast-guard>
               <Card
                 data-allow-dark-cta
                 data-no-contrast-guard
