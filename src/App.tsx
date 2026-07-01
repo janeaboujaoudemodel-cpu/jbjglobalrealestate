@@ -29,6 +29,7 @@ import PageLoader from "@/components/PageLoader";
 import { InlinePageLoader } from "@/components/PageLoader";
 import PrintModeBoundary from "@/components/PrintModeBoundary";
 import PrintBlockerGuard from "@/components/PrintBlockerGuard";
+import GlobalSupportMount from "@/components/support/GlobalSupportMount";
 
 // BrandIntroSplash disabled until further notice
 // import BrandIntroSplash from "@/components/BrandIntroSplash";
@@ -147,6 +148,7 @@ const App = () => {
                 </Route>
               </Route>
             </Routes>
+                  <GlobalSupportMount />
                   </PopupCoordinatorProvider>
                 </ActiveLeadProvider>
               </TeamPageVisibilityProvider>

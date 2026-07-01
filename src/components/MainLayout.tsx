@@ -37,7 +37,6 @@ const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFee
 const VoiceConciergeWidget = lazy(() => import("@/components/VoiceConciergeWidget"));
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
 import PageNavigation from "@/components/PageNavigation";
-const GlobalSupportMount = lazy(() => import("@/components/support/GlobalSupportMount"));
 const MarketingScripts = lazy(() => import("@/components/marketing/MarketingScripts"));
 const PopupLayer = lazy(() => import("@/components/PopupLayer"));
 const CommandPaletteRoot = lazy(() => import("@/components/ui/command-palette-root"));
@@ -359,11 +358,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       {!usesStandalonePortalChrome && (
         <Suspense fallback={null}>
           <CompleteProfilePrompt />
-        </Suspense>
-      )}
-      {!usesStandalonePortalChrome && (
-        <Suspense fallback={null}>
-          <GlobalSupportMount />
         </Suspense>
       )}
     </div>

@@ -58,22 +58,15 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
 }
 
 function useSuppressed() {
-  // Keep the Contact Us edge tag persistent across public pages. It should not
+  // Keep the Contact Us edge tag persistent across every page. It should not
   // disappear because another support surface briefly mounted/opened during load.
-  // Only suppress it behind blocking modals and internal back-office shells.
+  // Only suppress it behind blocking modals.
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
     const check = () => {
       const body = document.body;
       const modalOpen = body.getAttribute("data-modal-open") === "true";
-      const path = window.location.pathname || "";
-      const internal =
-        path.startsWith("/owner") ||
-        path.startsWith("/admin") ||
-        path.startsWith("/broker") ||
-        path.startsWith("/developers-portal") ||
-        path.startsWith("/developer-hub");
-      setHidden(modalOpen || internal);
+      setHidden(modalOpen);
     };
     check();
     const obs = new MutationObserver(check);
@@ -177,7 +170,7 @@ export default function SupportLauncher() {
   return (
     <>
       {/* ============== MOBILE: horizontal "Contact us" pill (bottom-right) ============== */}
-      <div className="md:hidden fixed bottom-5 right-4 z-[60]" data-no-contrast-guard>
+      <div className="hidden" data-no-contrast-guard>
         <AnimatePresence>
           {open && (
             <>
@@ -267,7 +260,7 @@ export default function SupportLauncher() {
 
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="hidden md:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
+      <div className="block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
         {/* Tag */}
         <button
           type="button"
@@ -295,7 +288,7 @@ export default function SupportLauncher() {
           <Sparkles className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           {/* Label hidden on portrait tablet & phone — icon only there.
               Visible from large landscape tablet / desktop up. */}
-          <span className="hidden md:inline allow-white text-[11px] font-semibold uppercase tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Us</span>
+          <span className="inline allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
         </button>
 
@@ -317,7 +310,7 @@ export default function SupportLauncher() {
                 exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.99 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 data-no-contrast-guard
-                className="jbj-gold-animated-border fixed right-14 top-1/2 w-[300px] rounded-2xl p-[1.5px] pointer-events-auto shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.22)]"
+                className="jbj-gold-animated-border fixed right-11 sm:right-14 top-1/2 w-[min(300px,calc(100vw-4rem))] rounded-2xl p-[1.5px] pointer-events-auto shadow-[0_30px_60px_hsl(var(--foreground)/0.25),0_0_34px_hsl(var(--gold)/0.22)]"
               >
                 <div className="flex flex-col overflow-hidden rounded-[14px] bg-background text-foreground p-3">
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3">
