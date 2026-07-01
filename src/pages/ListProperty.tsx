@@ -537,7 +537,8 @@ function PickerCard({
       onClick={onClick}
       data-no-contrast-guard
       data-allow-dark-cta
-      className="group relative flex min-h-[306px] flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110"
+      data-listing-choice-card
+      className="group relative flex w-full min-w-0 min-h-[306px] flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110 whitespace-normal overflow-hidden"
       style={{
         background: cardGradient,
         border: `1px solid ${GOLD}`,
@@ -554,7 +555,7 @@ function PickerCard({
           background: `radial-gradient(circle at 18% 18%, rgba(184,149,85,0.22) 0%, transparent 60%)`,
         }}
       />
-      <div className="relative flex items-start justify-between gap-4">
+      <div className="relative flex w-full min-w-0 items-start justify-between gap-4">
         <div
           className="w-12 h-12 rounded-xl grid place-items-center"
           style={{
@@ -579,7 +580,7 @@ function PickerCard({
         )}
       </div>
 
-      <div className="relative mt-5">
+      <div className="relative mt-5 w-full min-w-0 whitespace-normal">
         <div
           className="text-[10px] uppercase tracking-[0.22em] font-semibold"
           style={{ color: GOLD, WebkitTextFillColor: GOLD }}
