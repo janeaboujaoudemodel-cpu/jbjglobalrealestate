@@ -1048,7 +1048,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {!collapsed && <SidebarModePortalBlock />}
           {/* Items stack from the top with a consistent compact gap so the
               sidebar never shows a big empty area below Company/Legal. */}
-          <div className="flex flex-col flex-1 justify-between gap-1.5">
+          <div className="flex flex-col flex-1 gap-1.5" style={{ justifyContent: 'space-between' }}>
 
 
           {/* Highlight hubs (gold labels) */}
