@@ -1,13 +1,35 @@
 /**
- * JBJ CRM module registry — mirrors Zoho CRM's sidebar sections EXACTLY.
- * Order and names are preserved. Do NOT add, remove, or rename.
- * Icons are lucide equivalents chosen to visually match Zoho.
+ * JBJ CRM shell navigation registry.
+ * This file mirrors the uploaded Projects-screen sidebar only: same visible
+ * folders, same order, same nesting, and no live external dependency.
  */
 import {
-  Home, Rss, UserPlus, Users, Building2, Handshake, CheckSquare,
-  Video, PhoneCall, FileBarChart2, LineChart, Package, FileText,
-  ShoppingCart, ClipboardList, Receipt, Megaphone, Truck, BookOpen,
-  LifeBuoy, Lightbulb, TrendingUp, Folder, MapPin, Share2, FolderKanban,
+  BarChart3,
+  BriefcaseBusiness,
+  CalendarDays,
+  ChevronDown,
+  ClipboardList,
+  Contact,
+  FileBarChart2,
+  FileText,
+  Folder,
+  Handshake,
+  Home,
+  Lightbulb,
+  Mail,
+  Package,
+  Phone,
+  ReceiptText,
+  ScrollText,
+  Search,
+  Share2,
+  ShoppingCart,
+  Store,
+  Tag,
+  TicketCheck,
+  Users,
+  Video,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
@@ -15,37 +37,86 @@ export type CrmModule = {
   slug: string;
   label: string;
   icon: LucideIcon;
+  color?: string;
 };
 
+export type CrmFolder = {
+  label: string;
+  icon: LucideIcon;
+  defaultOpen?: boolean;
+  children: CrmModule[];
+};
+
+export const CRM_PRIMARY_NAV: CrmModule[] = [
+  { slug: "home", label: "Home", icon: Home, color: "#6D84FF" },
+  { slug: "reports", label: "Reports", icon: BarChart3, color: "#FF4B82" },
+  { slug: "analytics", label: "Analytics", icon: FileBarChart2, color: "#A855F7" },
+  { slug: "my-requests", label: "My Requests", icon: ClipboardList, color: "#25D39A" },
+  { slug: "agents", label: "Agents", icon: BriefcaseBusiness, color: "#F59E2B" },
+];
+
+export const CRM_TEAMSPACE_TOP: CrmModule[] = [
+  { slug: "meetings", label: "Meetings", icon: Video },
+  { slug: "calls", label: "Calls", icon: Phone },
+];
+
+export const CRM_TEAMSPACE_FOLDERS: CrmFolder[] = [
+  {
+    label: "Inventory",
+    icon: Folder,
+    defaultOpen: true,
+    children: [
+      { slug: "products", label: "Products", icon: Package },
+      { slug: "price-books", label: "Price Books", icon: Tag },
+      { slug: "quotes", label: "Quotes", icon: FileText },
+      { slug: "sales-orders", label: "Sales Orders", icon: ReceiptText },
+      { slug: "purchase-orders", label: "Purchase Orders", icon: ShoppingCart },
+      { slug: "invoices", label: "Invoices", icon: ScrollText },
+      { slug: "vendors", label: "Vendors", icon: Store },
+    ],
+  },
+  {
+    label: "Support",
+    icon: Folder,
+    defaultOpen: true,
+    children: [
+      { slug: "cases", label: "Cases", icon: TicketCheck },
+      { slug: "solutions", label: "Solutions", icon: Lightbulb },
+    ],
+  },
+  {
+    label: "Integrations",
+    icon: Folder,
+    defaultOpen: true,
+    children: [
+      { slug: "salesinbox", label: "SalesInbox", icon: Mail },
+      { slug: "social", label: "Social", icon: Share2 },
+      { slug: "visits", label: "Visits", icon: Contact },
+    ],
+  },
+];
+
+export const CRM_TEAMSPACE_BOTTOM: CrmModule[] = [
+  { slug: "services", label: "Services", icon: Wrench },
+  { slug: "projects", label: "Projects", icon: Handshake },
+];
+
 export const CRM_MODULES: CrmModule[] = [
-  { slug: "home",             label: "Home",            icon: Home },
-  { slug: "feeds",            label: "Feeds",           icon: Rss },
-  { slug: "leads",            label: "Leads",           icon: UserPlus },
-  { slug: "contacts",         label: "Contacts",        icon: Users },
-  { slug: "accounts",         label: "Accounts",        icon: Building2 },
-  { slug: "deals",            label: "Deals",           icon: Handshake },
-  { slug: "tasks",            label: "Tasks",           icon: CheckSquare },
-  { slug: "meetings",         label: "Meetings",        icon: Video },
-  { slug: "calls",            label: "Calls",           icon: PhoneCall },
-  { slug: "reports",          label: "Reports",         icon: FileBarChart2 },
-  { slug: "analytics",        label: "Analytics",       icon: LineChart },
-  { slug: "products",         label: "Products",        icon: Package },
-  { slug: "quotes",           label: "Quotes",          icon: FileText },
-  { slug: "sales-orders",     label: "Sales Orders",    icon: ShoppingCart },
-  { slug: "purchase-orders",  label: "Purchase Orders", icon: ClipboardList },
-  { slug: "invoices",         label: "Invoices",        icon: Receipt },
-  { slug: "campaigns",        label: "Campaigns",       icon: Megaphone },
-  { slug: "vendors",          label: "Vendors",         icon: Truck },
-  { slug: "price-books",      label: "Price Books",     icon: BookOpen },
-  { slug: "cases",            label: "Cases",           icon: LifeBuoy },
-  { slug: "solutions",        label: "Solutions",       icon: Lightbulb },
-  { slug: "forecasts",        label: "Forecasts",       icon: TrendingUp },
-  { slug: "documents",        label: "Documents",       icon: Folder },
-  { slug: "visits",           label: "Visits",          icon: MapPin },
-  { slug: "social",           label: "Social",          icon: Share2 },
-  { slug: "projects",         label: "Projects",        icon: FolderKanban },
+  ...CRM_PRIMARY_NAV,
+  ...CRM_TEAMSPACE_TOP,
+  ...CRM_TEAMSPACE_FOLDERS.flatMap((folder) => folder.children),
+  ...CRM_TEAMSPACE_BOTTOM,
 ];
 
 export const CRM_MODULE_MAP = Object.fromEntries(
   CRM_MODULES.map((m) => [m.slug, m])
 ) as Record<string, CrmModule>;
+
+export const CRM_DEFAULT_SECTION = "projects";
+
+export const crmSectionPath = (slug: string) => `/owner/crm/jbj/${slug}`;
+
+export const getCrmModuleLabel = (slug?: string) =>
+  CRM_MODULE_MAP[slug || CRM_DEFAULT_SECTION]?.label ?? "Projects";
+
+export { ChevronDown, Search, Users, Contact, CalendarDays };

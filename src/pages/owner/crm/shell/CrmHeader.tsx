@@ -1,73 +1,53 @@
-import { NavLink, Link, useLocation } from "react-router-dom";
-import { Search, Plus, Bell, MessageSquare, Calendar, Settings, ChevronDown } from "lucide-react";
-import { CRM_MODULES } from "./modules";
-
-// Pinned header tabs — Zoho pins these top-level modules; the rest live under "More".
-const PINNED = ["home", "leads", "contacts", "accounts", "deals", "tasks", "meetings", "reports", "analytics"];
+import { Link, useLocation } from "react-router-dom";
+import { Bell, CalendarDays, CircleUserRound, Grip, Plus, Search, Settings, Store, Wand2 } from "lucide-react";
+import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
 
 export default function CrmHeader() {
   const { pathname } = useLocation();
-  const active = pathname.replace(/\/+$/, "").split("/").pop() || "home";
-  const tabs = CRM_MODULES.filter((m) => PINNED.includes(m.slug));
+  const active = pathname.replace(/\/+$/, "").split("/").pop() || CRM_DEFAULT_SECTION;
+  const title = getCrmModuleLabel(active === "jbj" ? CRM_DEFAULT_SECTION : active);
 
   return (
     <header className="jc-header">
-      <div className="jc-header__brand" aria-label="JBJ Global Real Estate">
-        <div className="jc-header__brand-mark">JBJ</div>
-        <div className="jc-header__brand-text">CRM</div>
-      </div>
-
-      <nav className="jc-header__tabs" aria-label="Primary modules">
-        {tabs.map((m) => {
-          const isActive = active === m.slug || (m.slug === "home" && (active === "" || active === "crm"));
-          return (
-            <NavLink
-              key={m.slug}
-              to={m.slug === "home" ? "/owner/crm" : `/owner/crm/${m.slug}`}
-              end={m.slug === "home"}
-              className="jc-tab"
-              data-active={isActive}
-            >
-              {m.label}
-            </NavLink>
-          );
-        })}
-        <button type="button" className="jc-tab__overflow" aria-label="More modules">
-          More <ChevronDown size={14} />
-        </button>
-      </nav>
+      <h1 className="jc-header__title">{title}</h1>
 
       <div className="jc-header__actions">
         <label className="jc-search" aria-label="Search CRM">
-          <Search size={14} />
-          <input placeholder="Search Leads, Contacts, Accounts…" />
-          <kbd>/</kbd>
+          <Search size={19} strokeWidth={2.25} />
+          <input placeholder="Search records" />
         </label>
 
         <button className="jc-icon-btn" data-solid="true" type="button" aria-label="Quick create">
-          <Plus size={16} />
+          <Plus size={22} strokeWidth={1.9} />
+        </button>
+        <button className="jc-icon-btn" type="button" aria-label="Zia assistant">
+          <Wand2 size={21} />
         </button>
         <button className="jc-icon-btn" type="button" aria-label="Notifications">
-          <Bell size={16} />
-        </button>
-        <button className="jc-icon-btn" type="button" aria-label="Feeds">
-          <MessageSquare size={16} />
+          <Bell size={21} />
         </button>
         <button className="jc-icon-btn" type="button" aria-label="Calendar">
-          <Calendar size={16} />
+          <CalendarDays size={21} />
+        </button>
+        <button className="jc-icon-btn" type="button" aria-label="Marketplace">
+          <Store size={21} />
         </button>
         <button className="jc-icon-btn" type="button" aria-label="Setup">
-          <Settings size={16} />
+          <Settings size={21} />
         </button>
         <Link
           to="/owner"
-          className="jc-icon-btn"
+          className="jc-jbj-avatar"
           aria-label="Back to Owner"
-          style={{ fontSize: 11, fontWeight: 600, width: "auto", padding: "0 10px" }}
         >
-          Owner
+          JBJ
         </Link>
-        <button className="jc-avatar" type="button" aria-label="Account">JB</button>
+        <button className="jc-icon-btn" type="button" aria-label="Profile">
+          <CircleUserRound size={21} />
+        </button>
+        <button className="jc-grid-btn" type="button" aria-label="Apps">
+          <Grip size={26} />
+        </button>
       </div>
     </header>
   );
