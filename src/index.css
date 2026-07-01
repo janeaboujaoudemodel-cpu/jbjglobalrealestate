@@ -22724,3 +22724,24 @@ html body #root [data-list-property-page] [data-listing-choice-card] {
   min-width: 0 !important;
   overflow: hidden !important;
 }
+
+/* =====================================================================
+   PASS 150 — PROPERTY MEASUREMENT STEP 1 CARD INK LOCK
+   The Step 1 card is rendered on a champagne surface (global guard
+   forces the emerald gradient to champagne). Force title, label, and
+   header-icon ink to black so text is legible on champagne, while
+   letting the inner emerald buttons keep white ink via their own
+   [data-allow-dark-cta] scopes.
+   ===================================================================== */
+html body #pm-step1-ink-scope [data-slot="card-title"],
+html body #pm-step1-ink-scope [data-slot="card-title"] > span,
+html body #pm-step1-ink-scope > * > * > [data-slot="card-header"] > *,
+html body #pm-step1-ink-scope label {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+html body #pm-step1-ink-scope [data-slot="card-title"] > svg:first-child {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+}
