@@ -296,7 +296,7 @@ const PropertyMeasurement = () => {
   const currentRoom = roomUploads[currentRoomIndex];
 
   return (
-    <ToolAnimatedFrame theme={toolThemes.teal}>
+    <ToolAnimatedFrame theme={toolThemes.emerald}>
     <section
       data-allow-dark-cta
       data-no-contrast-guard
@@ -351,10 +351,10 @@ const PropertyMeasurement = () => {
           color: #F6FBF8 !important;
           -webkit-text-fill-color: #F6FBF8 !important;
         }
-        .pm-card-active {
+          .pm-card-active {
           background: linear-gradient(135deg, #10B981 0%, #047857 45%, #04140C 100%) !important;
-          border: 1px solid rgba(184,149,85,0.75) !important;
-          box-shadow: 0 0 0 1px rgba(184,149,85,0.45), 0 10px 36px rgba(16,185,129,0.35), inset 0 0 30px rgba(16,185,129,0.22) !important;
+            border: 1px solid rgba(255,255,255,0.52) !important;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 10px 36px rgba(16,185,129,0.35), inset 0 0 30px rgba(16,185,129,0.22) !important;
           color: #ECFDF5 !important;
           -webkit-text-fill-color: #ECFDF5 !important;
         }
@@ -483,12 +483,13 @@ const PropertyMeasurement = () => {
                 className="allow-white !border-0 rounded-2xl overflow-hidden"
                 style={{
                   background:
-                    "linear-gradient(135deg, #064E3B 0%, #052e1d 35%, #000000 100%)",
+                    "linear-gradient(135deg, rgba(247,242,234,0.98) 0%, rgba(239,230,214,0.98) 100%)",
+                  border: "1px solid rgba(255,255,255,0.52)",
                 }}
               >
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
-                    <Building2 className="w-5 h-5" style={{ color: "#064E3B" }} />
+                    <Building2 className="w-5 h-5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
                     <span style={{ color: "#1A1A1A" }}>Step 1: Property Information</span>
                   </CardTitle>
                 </CardHeader>
@@ -511,10 +512,10 @@ const PropertyMeasurement = () => {
                                 ? "linear-gradient(135deg, #10B981 0%, #047857 45%, #000000 100%)"
                                 : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                               border: active
-                                ? "1px solid rgba(184,149,85,0.65)"
-                                : "1px solid rgba(16,185,129,0.28)",
+                                ? "1px solid rgba(255,255,255,0.52)"
+                              : "1px solid rgba(255,255,255,0.34)",
                               boxShadow: active
-                                ? "0 0 0 1px rgba(184,149,85,0.35), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18)"
+                                ? "0 0 0 1px rgba(255,255,255,0.18), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18)"
                                 : "inset 0 0 0 1px rgba(255,255,255,0.04)",
                             }}
                           >
@@ -548,7 +549,7 @@ const PropertyMeasurement = () => {
                       className="property-measurement-name-input allow-white mt-2 focus-visible:ring-emerald-400 placeholder:!text-[rgba(246,251,248,0.55)] placeholder:!opacity-100 !text-[#FFFFFF]"
                       style={{
                         background: "linear-gradient(135deg, rgba(4,40,28,0.85), rgba(0,0,0,0.85))",
-                        border: "1px solid rgba(184,149,85,0.55)",
+                        border: "1px solid rgba(255,255,255,0.42)",
                         color: "#FFFFFF",
                         WebkitTextFillColor: "#FFFFFF",
                         opacity: 1,
@@ -580,8 +581,8 @@ const PropertyMeasurement = () => {
                                 ? "linear-gradient(135deg, #10B981 0%, #047857 55%, #000000 100%)"
                                 : "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)",
                               border: active
-                                ? "1px solid rgba(184,149,85,0.65)"
-                                : "1px solid rgba(16,185,129,0.28)",
+                                ? "1px solid rgba(255,255,255,0.52)"
+                                : "1px solid rgba(255,255,255,0.34)",
                               color: active ? "#ECFDF5" : "rgba(255,255,255,0.85)",
                               boxShadow: active ? "0 0 18px rgba(16,185,129,0.35)" : "none",
                             }}
@@ -604,7 +605,7 @@ const PropertyMeasurement = () => {
                         "linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)",
                       color: "rgba(255,255,255,0.96)",
                       boxShadow: "0 0 28px rgba(16,185,129,0.45)",
-                      border: "1px solid rgba(184,149,85,0.45)",
+                      border: "1px solid rgba(255,255,255,0.46)",
                     }}
                   >
                     Continue

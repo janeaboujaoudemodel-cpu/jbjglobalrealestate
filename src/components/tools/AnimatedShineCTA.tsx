@@ -27,11 +27,11 @@ const TONES: Record<Tone, { from: string; to: string; hoverFrom: string; hoverTo
     ring: "rgba(255,255,255,0.35)",
   },
   burgundy: {
-    from: "#5b1320",
-    to: "#8B1E2E",
-    hoverFrom: "#3f0c17",
-    hoverTo: "#a8243a",
-    ring: "rgba(255,255,255,0.35)",
+    from: "#059669",
+    to: "#064E3B",
+    hoverFrom: "#064E3B",
+    hoverTo: "#10b981",
+    ring: "rgba(255,255,255,0.42)",
   },
 };
 
@@ -82,6 +82,9 @@ export const AnimatedShineCTA: React.FC<Props> = ({
   const styleProps: React.CSSProperties = {
     background: `linear-gradient(135deg, ${t.from} 0%, ${t.to} 100%)`,
     boxShadow: `0 10px 30px -12px ${t.from}`,
+    border: `1px solid ${t.ring}`,
+    color: "#FFFFFF",
+    WebkitTextFillColor: "#FFFFFF",
   };
 
   const inner = (

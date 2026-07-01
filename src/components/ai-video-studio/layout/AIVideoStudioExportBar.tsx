@@ -49,7 +49,7 @@ export function AIVideoStudioExportBar({
           style={{ background: 'rgba(184,149,85,0.06)', borderBottom: '1px solid rgba(184,149,85,0.15)' }}
         >
           <Sparkles className="w-3 h-3 shrink-0" style={{ color: '#B89555' }} />
-          <span className="text-[10px] font-semibold" style={{ color: '#B89555' }}>Beauty filter baked into export:</span>
+          <span className="text-[10px] font-semibold" style={{ color: '#FFFFFF' }}>Beauty filter baked into export:</span>
           <span className="text-[10px] flex-1 truncate" style={{ color: '#8A8A9A' }}>{filterSummary}</span>
           <button
             onClick={onClearExportFilter}

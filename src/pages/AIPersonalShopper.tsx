@@ -17,6 +17,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { toolThemes } from "@/components/tools/toolThemes";
 
 interface TripPlan {
   id: string;
@@ -227,6 +229,7 @@ const AIPersonalShopper = () => {
   };
 
   return (
+    <ToolAnimatedFrame theme={toolThemes.emerald}>
     <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
       {/* Header */}
       <div className="bg-gradient-to-r /30 /20 /30 border-b border-[color:var(--emerald-1)]/30/20">
@@ -553,6 +556,7 @@ const AIPersonalShopper = () => {
         </div>
       </div>
     </section>
+    </ToolAnimatedFrame>
   );
 };
 

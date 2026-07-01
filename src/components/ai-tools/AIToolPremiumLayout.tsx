@@ -9,7 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
  *
  * Matches the Interior Design AI / Property Measurement contract:
  *   background: linear-gradient(180deg, #064E3B → #042c1c → #000000)
- *   text: pure white  |  accents: gold #B89555 hairline
+ *   text: pure white  |  tool-panel hairlines: white
  *   primary CTA: emerald metallic with white ink
  *
  * Scoped via [data-tool-emerald] so all downstream cards/inputs/text auto-adopt
@@ -83,8 +83,8 @@ const AIToolPremiumLayout = ({
         [data-tool-emerald] textarea,
         [data-tool-emerald] select,
         [data-tool-emerald] [role="combobox"] {
-          background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
-          border: 1px solid rgba(184,149,85,0.55) !important;
+          background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
@@ -95,8 +95,8 @@ const AIToolPremiumLayout = ({
         }
         [data-tool-emerald] .id-panel,
         [data-tool-emerald] .ai-tool-card {
-          background: linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%) !important;
-          border: 1px solid rgba(184,149,85,0.48) !important;
+          background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
           box-shadow: 0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04) !important;
         }
       `}</style>
@@ -107,7 +107,7 @@ const AIToolPremiumLayout = ({
         style={{
           background:
             "linear-gradient(180deg, #064E3B 0%, #042c1c 60%, #000000 100%)",
-          borderColor: "rgba(184,149,85,0.55)",
+          borderColor: "rgba(255,255,255,0.24)",
         }}
       >
         <div className="container mx-auto px-4">
@@ -133,7 +133,7 @@ const AIToolPremiumLayout = ({
                 background:
                   "linear-gradient(135deg, #10B981 0%, #059669 55%, #064E3B 100%)",
                 color: "#FFFFFF",
-                border: "1px solid rgba(184,149,85,0.55)",
+                border: "1px solid rgba(255,255,255,0.46)",
               }}
             >
               <ArrowLeft className="h-4 w-4 mr-2 allow-white" style={{ color: "#FFFFFF" }} />
@@ -152,7 +152,7 @@ const AIToolPremiumLayout = ({
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6"
               style={{
                 background: "rgba(6,78,59,0.55)",
-                border: "1px solid rgba(184,149,85,0.55)",
+                 border: "1px solid rgba(255,255,255,0.42)",
               }}
             >
               <div className="allow-white" style={{ color: "#FFFFFF" }}>{icon}</div>
@@ -212,8 +212,8 @@ const AIToolPremiumLayout = ({
             className="max-w-6xl mx-auto rounded-2xl p-6 md:p-8 id-panel ai-tool-card"
             style={{
               background:
-                "linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%)",
-              border: "1px solid rgba(184,149,85,0.48)",
+                "linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%)",
+              border: "1px solid rgba(255,255,255,0.42)",
               boxShadow:
                 "0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04)",
             }}
@@ -224,8 +224,8 @@ const AIToolPremiumLayout = ({
               <div
                 className="mt-8 p-4 rounded-xl"
                 style={{
-                  background: "rgba(6,78,59,0.55)",
-                  border: "1px solid rgba(184,149,85,0.55)",
+                  background: "rgba(0,0,0,0.35)",
+                  border: "1px solid rgba(255,255,255,0.34)",
                 }}
               >
                 <p className="text-sm leading-relaxed allow-white" style={{ color: "#FFFFFF" }}>

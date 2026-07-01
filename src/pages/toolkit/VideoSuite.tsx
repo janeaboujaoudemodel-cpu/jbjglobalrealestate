@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
 import { Play, Maximize2, Languages, Loader2, FileText, Sparkles, Mic, AudioLines, Film, Wand2, Eraser, Image } from 'lucide-react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ToolAnimatedFrame } from '@/components/tools/PremiumToolShell';
+import { toolThemes } from '@/components/tools/toolThemes';
 
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
 const VideoResizePack = lazy(() => import('@/pages/toolkit/VideoResizePack'));
@@ -52,7 +54,8 @@ export default function VideoSuite() {
         description="Professional video editing, resizing, captioning, thumbnail generation and beauty tools for real estate content."
       />
 
-      <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
+      <ToolAnimatedFrame theme={toolThemes.emerald}>
+      <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)" }}>
         {/* ── Suite Header — centered ── */}
         <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,149,85,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
@@ -174,6 +177,7 @@ export default function VideoSuite() {
           </div>
         </Tabs>
       </div>
+      </ToolAnimatedFrame>
     </>
   );
 }

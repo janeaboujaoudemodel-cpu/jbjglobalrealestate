@@ -287,19 +287,19 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           -webkit-text-fill-color: rgba(255,255,255,0.76) !important;
         }
         [data-interior-design-ai] .id-panel {
-          background: linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.96) 55%, rgba(0,0,0,0.98) 100%) !important;
-          border: 1px solid rgba(184,149,85,0.48) !important;
+          background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
           box-shadow: 0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04) !important;
         }
         [data-interior-design-ai] .id-panel-soft {
-          background: linear-gradient(135deg, rgba(6,78,59,0.76) 0%, rgba(4,44,28,0.88) 58%, rgba(0,0,0,0.92) 100%) !important;
-          border: 1px solid rgba(16,185,129,0.34) !important;
+          background: linear-gradient(135deg, rgba(8,18,13,0.94) 0%, rgba(3,8,5,0.97) 58%, rgba(0,0,0,1) 100%) !important;
+          border: 1px solid rgba(255,255,255,0.34) !important;
         }
         [data-interior-design-ai] .id-input,
         [data-interior-design-ai] .id-input:focus,
         [data-interior-design-ai] .id-input:focus-visible {
           background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
-          border: 1px solid rgba(184,149,85,0.55) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
@@ -315,7 +315,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
-          border-color: rgba(184,149,85,0.55) !important;
+          border-color: rgba(255,255,255,0.46) !important;
         }
         [data-interior-design-ai] .id-primary:disabled,
         [data-interior-design-ai] .id-primary[disabled] {
@@ -326,7 +326,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         }
         [data-interior-design-ai] .id-outline {
           background: rgba(255,255,255,0.05) !important;
-          border: 1px solid rgba(184,149,85,0.52) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
@@ -342,11 +342,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
           background: rgba(255,255,255,0.10) !important;
-          border-color: rgba(184,149,85,0.82) !important;
+          border-color: rgba(255,255,255,0.62) !important;
         }
         [data-interior-design-ai] .id-choice-active {
           background: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #000000 100%) !important;
-          border-color: rgba(184,149,85,0.78) !important;
+          border-color: rgba(255,255,255,0.58) !important;
           box-shadow: 0 0 22px rgba(16,185,129,0.34) !important;
         }
         [data-interior-design-ai] svg,

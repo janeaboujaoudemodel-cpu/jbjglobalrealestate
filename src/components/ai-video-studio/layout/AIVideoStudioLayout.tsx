@@ -16,12 +16,12 @@ const C = {
   bgButtonHov:  '#252530',
   borderSubtle: 'rgba(255,255,255,0.06)',
   borderActive: 'rgba(255,255,255,0.14)',
-  borderAccent: 'rgba(200,168,122,0.35)',
+  borderAccent: 'rgba(255,255,255,0.42)',
   textPrimary:  '#F1F0EE',
   textSecondary:'#8A8A9A',
-  accent:       '#C8A87A',
-  accentGlow:   'rgba(200,168,122,0.15)',
-  accentTabBg:  'rgba(200,168,122,0.1)',
+  accent:       '#6EE7B7',
+  accentGlow:   'rgba(16,185,129,0.18)',
+  accentTabBg:  'rgba(16,185,129,0.14)',
   danger:       '#E05252',
 } as const;
 

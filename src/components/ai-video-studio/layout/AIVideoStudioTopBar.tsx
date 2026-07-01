@@ -33,7 +33,7 @@ export function AIVideoStudioTopBar({
     switch (renderJob.status) {
       case 'queued':
         return (
-          <div className="flex items-center gap-2 text-sm" style={{ color: '#C8A87A' }}>
+          <div className="flex items-center gap-2 text-sm" style={{ color: '#FFFFFF' }}>
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>In Queue…</span>
           </div>
@@ -74,10 +74,10 @@ export function AIVideoStudioTopBar({
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ background: 'rgba(200,168,122,0.12)', border: '1px solid rgba(200,168,122,0.3)' }}
           >
-            <FileVideo className="w-4 h-4" style={{ color: '#C8A87A' }} />
+            <FileVideo className="w-4 h-4" style={{ color: '#FFFFFF' }} />
           </div>
           <div className="hidden sm:flex flex-col">
-            <span className="font-bold text-sm tracking-wide leading-tight" style={{ color: '#C8A87A' }}>
+            <span className="font-bold text-sm tracking-wide leading-tight" style={{ color: '#FFFFFF' }}>
               JBJ AI Video Studio™
             </span>
             <span className="text-[9px] tracking-widest uppercase leading-tight" style={{ color: '#8A8A9A' }}>
@@ -104,7 +104,7 @@ export function AIVideoStudioTopBar({
             <button
               onClick={handleSave}
               className="p-1.5 rounded"
-              style={{ color: '#C8A87A' }}
+              style={{ color: '#FFFFFF' }}
             >
               <Check className="w-4 h-4" />
             </button>
@@ -126,7 +126,7 @@ export function AIVideoStudioTopBar({
           <button
             onClick={onUndo}
             disabled={!canUndo}
-            className="p-1.5 rounded transition-opacity disabled:opacity-20"
+            className="min-w-11 h-11 p-1.5 rounded transition-opacity disabled:opacity-20 inline-flex items-center justify-center"
             style={{ color: '#8A8A9A' }}
           >
             <Undo2 className="w-4 h-4" />
@@ -134,7 +134,7 @@ export function AIVideoStudioTopBar({
           <button
             onClick={onRedo}
             disabled={!canRedo}
-            className="p-1.5 rounded transition-opacity disabled:opacity-20"
+            className="min-w-11 h-11 p-1.5 rounded transition-opacity disabled:opacity-20 inline-flex items-center justify-center"
             style={{ color: '#8A8A9A' }}
           >
             <Redo2 className="w-4 h-4" />
@@ -147,7 +147,7 @@ export function AIVideoStudioTopBar({
       <div className="flex items-center gap-2">
         <button
           onClick={onNewProject}
-          className="px-3 py-1.5 rounded-md text-xs font-semibold transition-opacity hover:opacity-80"
+          className="min-w-11 h-11 px-3 py-1.5 rounded-md text-xs font-semibold transition-opacity hover:opacity-80 inline-flex items-center justify-center"
           style={{
             background: '#1E1E28',
             border: '1px solid rgba(255,255,255,0.08)',
@@ -157,7 +157,7 @@ export function AIVideoStudioTopBar({
           New
         </button>
         <button
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-opacity hover:opacity-80"
+          className="min-w-11 h-11 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-opacity hover:opacity-80"
           style={{
             background: '#1E1E28',
             border: '1px solid rgba(255,255,255,0.08)',
@@ -170,18 +170,19 @@ export function AIVideoStudioTopBar({
         </button>
         <button
           onClick={onExport}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all"
+          className="min-w-11 h-11 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all"
           style={{
-            background: '#C8A87A',
-            color: '#0A0A0F',
-            boxShadow: '0 0 16px rgba(200,168,122,0.25)',
+            background: 'linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%)',
+            border: '1px solid rgba(255,255,255,0.46)',
+            color: '#FFFFFF',
+            boxShadow: '0 0 16px rgba(16,185,129,0.28)',
           }}
         >
           <Download className="w-3.5 h-3.5" />
           Export
         </button>
         <button
-          className="p-1.5 rounded-md transition-opacity hover:opacity-80"
+          className="min-w-11 h-11 p-1.5 rounded-md transition-opacity hover:opacity-80 inline-flex items-center justify-center"
           style={{
             background: '#1E1E28',
             border: '1px solid rgba(255,255,255,0.08)',

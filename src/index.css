@@ -6492,11 +6492,11 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-tool-darkbody="true"] .border.rounded-lg.bg-card,
 [data-tool-darkbody="true"] .rounded-lg.border.bg-card,
 [data-tool-darkbody="true"] [class*="rounded-lg"][class*="border"][class*="bg-card"] {
-  background: linear-gradient(135deg, rgba(20,14,4,0.92) 0%, rgba(8,5,2,0.96) 70%, #000 100%) !important;
-  border: 1px solid var(--tool-accent-border, rgba(245,158,11,0.45)) !important;
+  background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
   box-shadow:
-    0 0 0 1px var(--tool-accent-soft, rgba(245,158,11,0.20)),
-    0 18px 48px -22px var(--tool-accent, #F59E0B),
+    0 0 0 1px rgba(255,255,255,0.10),
+    0 18px 48px -22px rgba(16,185,129,0.42),
     inset 0 0 28px rgba(0,0,0,0.35) !important;
   color: #FFFFFF !important;
 }
@@ -6520,7 +6520,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-tool-darkbody="true"] [role="combobox"]:not([data-no-contrast-guard]),
 [data-tool-darkbody="true"] [data-radix-select-trigger]:not([data-no-contrast-guard]) {
   background: rgba(255,255,255,0.06) !important;
-  border: 1px solid var(--tool-accent-border, rgba(245,158,11,0.45)) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -6533,8 +6533,8 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 [data-tool-darkbody="true"] input:not([data-no-contrast-guard]):focus,
 [data-tool-darkbody="true"] textarea:not([data-no-contrast-guard]):focus,
 [data-tool-darkbody="true"] [role="combobox"]:not([data-no-contrast-guard]):focus {
-  border-color: var(--tool-accent, #F59E0B) !important;
-  box-shadow: 0 0 0 2px var(--tool-accent-soft, rgba(245,158,11,0.30)) !important;
+  border-color: rgba(110,231,183,0.82) !important;
+  box-shadow: 0 0 0 2px rgba(16,185,129,0.24) !important;
   outline: none !important;
 }
 [data-tool-darkbody="true"] input[data-no-contrast-guard],
@@ -6551,8 +6551,9 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   color: rgba(255,255,255,0.70) !important;
 }
 [data-tool-darkbody="true"] [role="tab"][data-state="active"] {
-  background: var(--tool-accent, #F59E0B) !important;
-  color: #1A1A1A !important;
+  background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 /* ============================================================
@@ -22742,6 +22743,69 @@ html body #pm-step1-ink-scope label {
   text-shadow: none !important;
 }
 html body #pm-step1-ink-scope h3 > svg {
-  color: #064E3B !important;
-  stroke: #064E3B !important;
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* PASS 151 — AI TOOL PROPERTY-MEASUREMENT PARITY LOCK
+   Tool shells use emerald headers and black-gradient bodies. Any residual
+   champagne/red/gold control styling inside AI tools is coerced to black
+   panels, emerald CTAs, pure-white ink, and white hairlines. */
+html body [data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], [role="combobox"], input, textarea, select) {
+  background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+  border-color: rgba(255,255,255,0.42) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+}
+html body [data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], [role="combobox"], input, textarea, select):focus,
+html body [data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], [role="combobox"], input, textarea, select):focus-visible {
+  border-color: rgba(110,231,183,0.82) !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.22) !important;
+}
+html body [data-tool-emerald] :is(.jbj-form-field, [data-radix-select-trigger]) svg,
+html body [data-tool-emerald] :is(.jbj-form-field, [data-radix-select-trigger]) [class*="lucide"] {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-tool-emerald] .jj-listing-pill,
+html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"],
+html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"] :is(span, svg, [class*="lucide"]) {
+  background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
+  border-color: rgba(255,255,255,0.42) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="active"] {
+  background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+  border-color: rgba(255,255,255,0.52) !important;
+}
+html body [data-tool-emerald] :is(button, a)[style*="#C8A87A"],
+html body [data-tool-emerald] :is(button, a)[style*="#B89555"],
+html body [data-tool-emerald] :is(button, a)[style*="rgb(200, 168, 122)"] {
+  background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+  border-color: rgba(255,255,255,0.46) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html[data-tool-fullscreen="true"] body [data-tool-emerald] [data-tool-frame]::before,
+html[data-tool-fullscreen="true"] body [data-tool-emerald] [data-tool-frame] {
+  border-color: rgba(255,255,255,0.52) !important;
+}
+html body #root [data-tool-shell-root][data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], button[role="combobox"], [role="combobox"], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select) {
+  background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04) !important;
+}
+html body #root [data-tool-shell-root][data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], button[role="combobox"], [role="combobox"], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select):focus,
+html body #root [data-tool-shell-root][data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], button[role="combobox"], [role="combobox"], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select):focus-visible {
+  border: 1px solid rgba(110,231,183,0.82) !important;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.22) !important;
+}
+html body #root [data-tool-shell-root][data-tool-emerald] :is([class*="border-[#B89555]"], [class*="border-champagne"], [class*="border-amber"], [class*="border-yellow"]),
+html body #root [data-tool-shell-root][data-tool-emerald] :is([style*="border: 1px solid #B89555"], [style*="border-color: #B89555"], [style*="rgba(184,149,85"], [style*="rgba(200,168,122"]) {
+  border-color: rgba(255,255,255,0.42) !important;
 }
