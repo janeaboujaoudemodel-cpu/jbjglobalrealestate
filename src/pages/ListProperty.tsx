@@ -57,9 +57,10 @@ const EMERALD_BLACK = "#000000";
 const EMERALD_GRADIENT = "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))";
 const EMERALD_GRADIENT_HOVER = "var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%))";
 const GOLD = "#B89555";
-const CHAMPAGNE = "#FDFBF7";
-const CHAMPAGNE_SURFACE = "#F7F2EA";
-const CHAMPAGNE_RAISED = "#EFE6D6";
+/* PASS 152 — no champagne inside AI tool shells. Constants below map to emerald ombré. */
+const CHAMPAGNE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
+const CHAMPAGNE_SURFACE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
+const CHAMPAGNE_RAISED = "linear-gradient(135deg, #075e46 0%, #052c1c 55%, #000000 100%)";
 const INK = "#1A1A1A";
 const WHITE = "#FFFFFF";
 
