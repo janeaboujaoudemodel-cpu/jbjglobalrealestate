@@ -375,97 +375,90 @@ const BusinessCardScanner = () => {
   return (
     <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
-      data-no-contrast-guard
       data-allow-dark-cta
       className="min-h-screen"
-      style={{
-        background:
-          "radial-gradient(1200px 700px at 50% -10%, rgba(251,113,133,0.18), transparent 60%), linear-gradient(180deg, #050912 0%, #07101F 60%, #04070D 100%)",
-      }}
     >
-      {/* Scoped scanner contrast lock */}
-      <style>{`
-        .bcs-tab[data-state="inactive"]:hover { background: rgba(251,113,133,0.16) !important; color: #FFFFFF !important; }
-        .bcs-tab[data-state="inactive"]:hover svg { color: #FFFFFF !important; }
-        .bcs-tab[data-state="active"] { background: #f43f5e !important; color: #FFFFFF !important; }
-        .bcs-tab[data-state="active"] svg { color: #FFFFFF !important; }
-        .bcs-consent-box:hover { box-shadow: 0 0 0 4px rgba(251,113,133,0.18); }
-        .bcs-drop { border: 2px dashed rgba(251,113,133,0.55) !important; background: rgba(255,255,255,0.03) !important; }
-        .bcs-drop:hover, .bcs-drop.is-dragging { border-color: #fb7185 !important; background: rgba(251,113,133,0.08) !important; }
-        .bcs-drop * { color: #FFFFFF !important; }
-        .bcs-drop .bcs-drop-sub { color: rgba(255,255,255,0.72) !important; }
-        .bcs-action-dark,
-        .bcs-action-dark:disabled,
-        .bcs-action-dark:hover {
-          background: rgba(7,16,31,0.92) !important;
-          border: 1px solid rgba(251,113,133,0.55) !important;
-          color: #FFFFFF !important;
-          opacity: 1 !important;
-        }
-        .bcs-action-dark svg,
-        .bcs-action-dark:disabled svg,
-        .bcs-action-dark:hover svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
-        .bcs-action-danger,
-        .bcs-action-danger:hover {
-          background: rgba(127,29,29,0.28) !important;
-          border: 1px solid rgba(248,113,113,0.65) !important;
-          color: #FECACA !important;
-        }
-        .bcs-action-danger svg,
-        .bcs-action-danger:hover svg { color: #FECACA !important; stroke: #FECACA !important; }
-      `}</style>
       <div className="container mx-auto px-4 pt-6 pb-8 max-w-6xl">
-        {/* Header (no black strip — sits flush on the rose-navy page) */}
+        {/* Header — emerald ombré, white ink (matches Interior Design / Property Measurement) */}
         <div
-          className="rounded-2xl border border-rose-500/40 px-4 py-8 mb-8"
+          className="rounded-2xl px-6 py-10 mb-8 text-center relative overflow-hidden"
           style={{
             background:
-              "linear-gradient(135deg, rgba(159,18,57,0.35) 0%, rgba(7,16,31,0.55) 60%, rgba(159,18,57,0.30) 100%)",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
+              "linear-gradient(135deg, #064E3B 0%, #04231A 55%, #022c1c 100%)",
+            border: "1px solid rgba(255,255,255,0.22)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 60px -30px rgba(0,0,0,0.55)",
           }}
         >
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-rose-500/25 border border-rose-500/50 rounded-full px-4 py-1 mb-4 allow-white" data-no-contrast-guard>
-              <Sparkles className="w-4 h-4 text-rose-200 allow-white" />
-              <span className="text-rose-100 text-sm font-medium allow-white">AI-Powered OCR</span>
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at top, rgba(255,255,255,0.10), transparent 60%)",
+            }}
+          />
+          <div className="relative z-10">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1 mb-4"
+              style={{
+                background: "rgba(255,255,255,0.10)",
+                border: "1px solid rgba(255,255,255,0.28)",
+                color: "#FFFFFF",
+              }}
+            >
+              <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+              <span className="text-sm font-medium" style={{ color: "#FFFFFF" }}>AI-Powered OCR</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 allow-white">
-              AI Business Card <span className="text-[#B89555]">Scanner</span>
+            <h1
+              className="text-3xl md:text-4xl font-bold mb-2"
+              style={{ color: "#FFFFFF" }}
+            >
+              AI Business Card Scanner
             </h1>
-            <p className="text-white/90 max-w-2xl mx-auto allow-white">
+            <p className="max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.90)" }}>
               Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
             </p>
 
             {/* Security Badges */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
-              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-100 allow-white" data-no-contrast-guard>
-                <Lock className="h-3 w-3 allow-white" />
-                End-to-End Encrypted
-              </Badge>
-              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-100 allow-white" data-no-contrast-guard>
-                <Shield className="h-3 w-3 allow-white" />
-                GDPR Compliant
-              </Badge>
-              <Badge className="gap-1 bg-rose-500/25 border-rose-500/50 text-rose-100 allow-white" data-no-contrast-guard>
-                <Eye className="h-3 w-3 allow-white" />
-                Private Processing
-              </Badge>
+              {[
+                { icon: Lock, label: "End-to-End Encrypted" },
+                { icon: Shield, label: "GDPR Compliant" },
+                { icon: Eye, label: "Private Processing" },
+              ].map(({ icon: Icon, label }) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
+                  style={{
+                    background: "rgba(255,255,255,0.10)",
+                    border: "1px solid rgba(255,255,255,0.28)",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  <Icon className="h-3 w-3" style={{ color: "#FFFFFF" }} />
+                  {label}
+                </span>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Privacy Alert */}
         <Alert
-          className="mb-6 border-rose-500/50 allow-white"
-          data-no-contrast-guard
-          style={{ background: "rgba(7,16,31,0.92)" }}
+          className="mb-6"
+          style={{
+            background: "linear-gradient(135deg, rgba(6,95,70,0.28), rgba(0,0,0,0.55))",
+            border: "1px solid rgba(255,255,255,0.28)",
+          }}
         >
-          <Info className="h-4 w-4 text-rose-300 allow-white" />
-          <AlertDescription className="text-sm text-white allow-white">
-            <strong className="text-white allow-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess.
+          <Info className="h-4 w-4" style={{ color: "#FFFFFF" }} />
+          <AlertDescription className="text-sm" style={{ color: "#FFFFFF" }}>
+            <strong style={{ color: "#FFFFFF" }}>Your privacy matters:</strong> All scanned data is encrypted with a key only you possess.
             Data is processed in-memory and never stored on our servers.
           </AlertDescription>
         </Alert>
+
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Scanner Section */}
