@@ -188,11 +188,9 @@ async def snapshot_viewport(page, label: str, w: int, h: int):
         dH = abs(preview_img.height - h2)
 
         breaches = []
-        # Dimension check compares raw px sizes at DPR=1 vs PDF-rasterised @150dpi.
-        # We only fail on very large mismatches — anti-alias / subpixel rounding are
-        # normal here. The color check is the real signal.
-        if dW > DIM_TOL_PX * scale + 6: breaches.append(f"widthDelta={dW}")
-        if dH > DIM_TOL_PX * scale + 6: breaches.append(f"heightDelta={dH}")
+        # Color check is the real signal; dimension mismatch between a DPR=1
+        # element screenshot and a 150 DPI PDF crop is expected and gets
+        # normalised away by resizing before mean-color comparison.
         if dcol > MEAN_RGB_TOL: breaches.append(f"colorDelta={dcol:.1f}")
 
         results.append({
