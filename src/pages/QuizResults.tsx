@@ -64,30 +64,33 @@ const AIHF_RESULTS_STYLE = `
     border: 1px solid rgba(184,149,85,0.45) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta:hover, .aihf-results .aihf-cta:focus-visible {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     border: 0 !important;
     box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
   }
   .aihf-results .aihf-cta, .aihf-results .aihf-cta *, .aihf-results .aihf-cta svg {
-    color: #1A1A1A !important;
+    color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     stroke: #FFFFFF !important;
     opacity: 1 !important;
   }
   .aihf-results .aihf-cta svg *, .aihf-results .aihf-cta :is(path,line,polyline,polygon,rect,circle,ellipse) { stroke: #FFFFFF !important; color: #FFFFFF !important; }
-  .aihf-results .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; transform: translateY(-1px); }
+  .aihf-results .aihf-cta:hover { background: #064E3B !important; background-image: none !important; background-color: #064E3B !important; transform: translateY(-1px); }
   .aihf-results .aihf-cta-glow {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     border: 0 !important;
     box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
     transform: translateZ(0);
     transition: transform .25s ease, background-color .25s ease !important;
   }
   .aihf-results .aihf-cta-glow:hover {
-    background: var(--jj-emerald-ombre-hover) !important;
-    background-image: var(--jj-emerald-ombre-hover) !important;
+    background: #064E3B !important;
+    background-image: none !important;
+    background-color: #064E3B !important;
     transform: translateY(-1px);
   }
   .aihf-results .aihf-outline {
@@ -158,7 +161,8 @@ const AIHF_RESULTS_STYLE = `
   /* Favorite / shortlist buttons — locked emerald fill + white glyph */
   .aihf-results .jj-favorite-trigger,
   .aihf-results .jj-favorite-trigger:hover {
-    background-image: var(--jj-emerald-ombre) !important;
+    background: #064E3B !important;
+    background-image: none !important;
     background-color: #064E3B !important;
     border: 1px solid rgba(255,255,255,0.35) !important;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 10px 24px -12px rgba(6,78,59,0.95) !important;
@@ -1059,7 +1063,7 @@ const QuizResults = () => {
                           background: "#F7F2EA",
                           border: "1px solid rgba(184,149,85,0.55)",
                           boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
-                          color: "#FFFFFF",
+                          color: "#1A1A1A",
                         }}
                       >
                         <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(projects[0].id, 'top1')}>
@@ -1180,7 +1184,7 @@ const QuizResults = () => {
                             background: "#F7F2EA",
                             border: "1px solid rgba(184,149,85,0.55)",
                             boxShadow: "0 20px 50px rgba(34,211,238,0.25)",
-                            color: "#FFFFFF",
+                            color: "#1A1A1A",
                           }}
                         >
                           <DropdownMenuItem data-medal="gold" onClick={() => handleSetBadge(project.id, 'top1')}>
