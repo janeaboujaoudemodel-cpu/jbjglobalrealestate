@@ -15,7 +15,6 @@ const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
 const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
 const CrmShell = lazy(() => import("@/pages/owner/crm/shell/CrmShell"));
-const CrmHome = lazy(() => import("@/pages/owner/crm/shell/CrmHome"));
 const CrmModulePage = lazy(() => import("@/pages/owner/crm/shell/CrmModulePage"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
@@ -132,7 +131,7 @@ export const OwnerRoutes = () => (
       </OwnerGuard>
     }
   >
-    <Route index element={<CrmHome />} />
+    <Route index element={<CrmModulePage />} />
     <Route path=":section" element={<CrmModulePage />} />
   </Route>
 
