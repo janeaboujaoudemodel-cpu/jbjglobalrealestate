@@ -19,8 +19,3 @@ export default function JbjCrmModulePage() {
     </section>
   );
 }
-        This module lives inside JBJ CRM. Start creating {label.toLowerCase()} or connect a source in Integrations.
-      </p>
-    </div>
-  );
-}

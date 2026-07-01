@@ -5,6 +5,6 @@ export default function JbjCrmHome() {
         <h1>Home</h1>
       </div>
       <div className="jbj-crm-stage-canvas" />
-    </div>
+    </section>
   );
 }
