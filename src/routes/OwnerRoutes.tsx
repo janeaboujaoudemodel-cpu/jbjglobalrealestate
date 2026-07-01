@@ -14,6 +14,7 @@ const OwnerInbox = lazy(() => import("@/pages/OwnerInbox"));
 const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
 const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
+const ZohoCRMPage = lazy(() => import("@/pages/owner/crm/ZohoCRMPage"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
@@ -157,6 +158,7 @@ export const OwnerRoutes = () => (
     <Route path="settings" element={<OwnerCommSettings />} />
     {/* Unified CRM — single owner-only hub. All legacy sub-routes redirect into it. */}
     <Route path="crm" element={<UnifiedCRM />} />
+    <Route path="crm/zoho" element={<ZohoCRMPage />} />
     <Route path="academy-approvals" element={<OwnerAcademyApprovals />} />
     <Route path="academy-access" element={<OwnerAcademyAccessQueue />} />
     <Route path="crm/academy" element={<OwnerAcademyApprovals />} />
