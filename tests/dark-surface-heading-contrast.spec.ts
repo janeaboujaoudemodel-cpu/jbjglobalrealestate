@@ -203,11 +203,13 @@ test.describe('Dark-surface heading contrast (PASS 142 follow-up)', () => {
             const cs = getComputedStyle(h);
             const fg = parse(cs.color);
             const bg = effectiveBg(h);
-            // Only flag when the host actually painted dark — luminance < 0.35.
+            // Tightened (PASS 142.1): flag any host that isn't clearly bright
+            // (bgLum < 0.5) and require AAA-grade contrast (≥ 7.0:1) to catch
+            // subtle heading-color drift long before it becomes visible.
             const bgLum = lum(bg[0], bg[1], bg[2]);
-            if (bgLum > 0.35) return;
+            if (bgLum > 0.5) return;
             const ratio = contrast([fg[0], fg[1], fg[2]], bg);
-            if (ratio < 4.5) {
+            if (ratio < 7.0) {
               out.push({
                 selector: host.tagName.toLowerCase() +
                   (host.getAttribute('data-hero-dark') !== null ? '[data-hero-dark]' : '') +

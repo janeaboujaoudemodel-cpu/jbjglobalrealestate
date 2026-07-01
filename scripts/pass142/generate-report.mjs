@@ -91,7 +91,7 @@ const probe = async (page) =>
             (host.className && typeof host.className === 'string'
               ? '.' + host.className.split(/\s+/).filter(Boolean).slice(0,2).join('.')
               : ''),
-          pass: fgLum >= 0.6,
+          pass: fgLum >= 0.75,
         });
       });
     });
