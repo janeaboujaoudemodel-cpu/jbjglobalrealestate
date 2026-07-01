@@ -180,8 +180,10 @@ export default function ReportPreviewModal({
         "[data-aihf-role-chip]","[data-aihf-role-chip] *",
         '[data-aihf-include-btn][data-active="true"]','[data-aihf-include-btn][data-active="true"] *',
         "[data-aihf-primary-btn]","[data-aihf-primary-btn] *",
+        "[data-aihf-secondary-btn]","[data-aihf-secondary-btn] *",
         "[data-on-dark]","[data-on-dark] *",
         '[data-surface="emerald"]','[data-surface="emerald"] *',
+        '[data-surface="report-emerald"]','[data-surface="report-emerald"] *',
         "[data-aihf-scope-row]","[data-aihf-scope-row] *","[data-aihf-scope-text]",
       ].join(",");
       root.querySelectorAll<HTMLElement>(whiteSel).forEach((el) => {
@@ -192,8 +194,9 @@ export default function ReportPreviewModal({
         el.style.setProperty("background-color", "#FFFFFF", "important");
       });
       root.querySelectorAll<HTMLElement>("[data-aihf-secondary-btn], [data-aihf-secondary-btn] *").forEach((el) => {
-        el.style.setProperty("color", "#1A1A1A", "important");
-        el.style.setProperty("-webkit-text-fill-color", "#1A1A1A", "important");
+        el.style.setProperty("color", "#FFFFFF", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+        el.style.setProperty("stroke", "#FFFFFF", "important");
       });
     };
     tick();
