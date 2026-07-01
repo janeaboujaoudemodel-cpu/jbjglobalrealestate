@@ -6551,7 +6551,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
   color: rgba(255,255,255,0.70) !important;
 }
 [data-tool-darkbody="true"] [role="tab"][data-state="active"] {
-  background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+  background: linear-gradient(135deg, #065F46 0%, #064E3B 55%, #04231A 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
