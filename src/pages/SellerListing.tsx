@@ -679,7 +679,7 @@ Requirements:
  : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
  }`}
                   style={currentStep === step.number
-                    ? { background: 'linear-gradient(135deg, #10B981 0%, #0F5132 100%)' }
+                    ? { background: 'linear-gradient(135deg, #065F46 0%, #0F5132 100%)' }
                     : currentStep > step.number
                       ? { backgroundColor: 'rgba(255,255,255,0.18)' }
                       : { backgroundColor: 'rgba(255,255,255,0.08)' }
@@ -762,7 +762,7 @@ Requirements:
                           <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-[#10B981]/40">
+                          <SelectContent className="bg-white border-[#065F46]/40">
                             <SelectItem value="en">English</SelectItem>
                             <SelectItem value="ar">Arabic</SelectItem>
                             <SelectItem value="fr">French</SelectItem>
@@ -780,7 +780,7 @@ Requirements:
                           <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-[#10B981]/40">
+                          <SelectContent className="bg-white border-[#065F46]/40">
                             <SelectItem value="whatsapp">WhatsApp</SelectItem>
                             <SelectItem value="call">Phone Call</SelectItem>
                             <SelectItem value="email">Email</SelectItem>
@@ -843,7 +843,7 @@ Requirements:
                           <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-[#10B981]/40">
+                          <SelectContent className="bg-white border-[#065F46]/40">
                             <SelectItem value="apartment">Apartment</SelectItem>
                             <SelectItem value="villa">Villa</SelectItem>
                             <SelectItem value="townhouse">Townhouse</SelectItem>
@@ -883,7 +883,7 @@ Requirements:
                           <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-[#10B981]/40">
+                          <SelectContent className="bg-white border-[#065F46]/40">
                             <SelectItem value="0">Studio</SelectItem>
                             <SelectItem value="1">1 BR</SelectItem>
                             <SelectItem value="2">2 BR</SelectItem>

@@ -37,15 +37,15 @@ interface SignatureData {
 // ─── Emerald Green Palette ──────────────────────────────────────────────────
 
 const G = {
-  accent: "#059669",
-  accentLight: "#059669",
-  accentDim: "#047857",
+  accent: "#064E3B",
+  accentLight: "#064E3B",
+  accentDim: "#04231A",
   card: "rgba(5,150,105,0.03)",
   border: "rgba(5,150,105,0.15)",
   borderHover: "rgba(5,150,105,0.35)",
-  text: "#059669",
+  text: "#064E3B",
   textMuted: "rgba(0,0,0,0.4)",
-  btnPrimary: "linear-gradient(135deg, #047857, #059669)",
+  btnPrimary: "linear-gradient(135deg, #04231A, #064E3B)",
   btnPrimaryShadow: "0 4px 20px rgba(5,150,105,0.25)",
   btnOutline: { background: "rgba(5,150,105,0.06)", border: "1px solid rgba(5,150,105,0.25)", color: "#1F2937" },
   outerBorder: "1px solid rgba(5,150,105,0.18)",
@@ -497,7 +497,7 @@ export default function ScanSignPage() {
                 onSave={saveProject}
                 onClear={clearProject}
                 canSave={pages.length > 0}
-                accentColor="#059669"
+                accentColor="#064E3B"
                 accentBorder="rgba(5,150,105,0.2)"
                 toolId="scan-sign"
               />
@@ -771,7 +771,7 @@ export default function ScanSignPage() {
         open={stampModalOpen}
         onClose={() => setStampModalOpen(false)}
         onStampReady={handleStampReady}
-        accentColor="#059669"
+        accentColor="#064E3B"
       />
 
       <canvas ref={canvasRef} className="hidden" />
