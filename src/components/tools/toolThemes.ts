@@ -38,8 +38,10 @@ const EMERALD_INK = "#000000";
 const GOLD = "#B89555";
 const WHITE = "#FFFFFF";
 
-// Ombré used for headers/accent bands; body panels fade to black.
-const OMBRE = `linear-gradient(180deg, ${EMERALD_DEEP} 0%, ${EMERALD_MID} 48%, ${EMERALD_INK} 100%)`;
+// Body wash used for the tool page background — starts very dark so the emerald
+// header sits on top as an edge-to-edge band and the body underneath is
+// balanced ink-black. Individual tools own their own hero gradient.
+const OMBRE = `linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%)`;
 
 const emeraldTheme = (id: ToolTheme["id"], label: string): ToolTheme => ({
   id,
