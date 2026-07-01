@@ -39,12 +39,12 @@ type ScanStatus =
   | "success"
   | "error";
 
-// Rose neon palette (matches scanner brand)
+// Emerald-dark scanner palette (white ink, white hairlines — no gold)
 const ACCENT = "#FFFFFF";
 const ACCENT_SOFT = "rgba(255,255,255,0.14)";
 const ACCENT_BORDER = "rgba(255,255,255,0.45)";
 const PANEL_BG =
-  "linear-gradient(180deg, rgba(7,16,31,0.96) 0%, rgba(4,7,13,0.98) 100%)";
+  "linear-gradient(180deg, #0a1a12 0%, #04120a 55%, #000000 100%)";
 
 const BusinessCardCamera = ({
   onScanComplete,
