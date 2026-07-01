@@ -187,6 +187,10 @@ describe("renderReportToPdf host", () => {
   it("html2canvas captures on the champagne page color, never pure white", () => {
     expect(src).toMatch(/backgroundColor:\s*["']#FDFBF7["']/);
   });
+  it("exports the AI Home Finder report at high-resolution 2x scale", () => {
+    expect(src).toMatch(/const EXPORT_SCALE = 2/);
+    expect(src).toMatch(/toDataURL\(["']image\/png["']\)/);
+  });
   it("renders the same ReportEngine the preview uses (no parallel layout)", () => {
     expect(src).toMatch(/ReportEngine/);
     expect(src).toMatch(/mode:\s*["']pdf["']/);

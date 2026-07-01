@@ -201,13 +201,13 @@ export function useMarketReport() {
           const bgColor = (isCoverPage || isBackCover) ? '#09090b' : '#FDFBF7';
 
           const canvas = await html2canvas(page, {
-            scale: 1, useCORS: true, allowTaint: false, logging: false,
+            scale: 2, useCORS: true, allowTaint: false, logging: false,
             width: 794, height: 1123, windowWidth: 794, backgroundColor: bgColor,
-          });
+          } as any);
 
-          const imgData = canvas.toDataURL("image/jpeg", 0.82);
+          const imgData = canvas.toDataURL("image/png");
           if (i > 0) pdf.addPage();
-          pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
+          pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
 
           canvas.width = 1;
           canvas.height = 1;

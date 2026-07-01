@@ -17,9 +17,10 @@ import {
 import { PAGE_SEP_VAR, REPORT_PAGE_PX } from "@/components/ai-home-finder/report/tokens";
 import type { ReportBranding } from "@/components/ai-home-finder/ReportPreviewModal";
 
-// 1:1 A4 pixels are already the exact report design size (794×1123 @ 96dpi).
-// Higher scales were the root cause of 2–3 minute exports on full reports.
-const EXPORT_SCALE = 1;
+// Export at 2× A4 CSS pixels so downloaded PDFs stay sharp when zoomed/printed.
+// The exporter still performs ONE full-report capture, so this avoids the old
+// multi-minute per-page capture path while fixing the low-resolution output.
+const EXPORT_SCALE = 2;
 const EXPORT_BACKGROUND = "#FDFBF7";
 
 export interface RenderReportOptions {
@@ -162,7 +163,7 @@ const captureReportRootToPdf = async (
     height: totalHeight,
     windowWidth: REPORT_PAGE_PX.width,
     windowHeight: totalHeight,
-  });
+  } as any);
 
   for (let i = 0; i < pages.length; i++) {
     addCanvasPageToPdf(pdf, canvas, i * REPORT_PAGE_PX.height * EXPORT_SCALE, i);
