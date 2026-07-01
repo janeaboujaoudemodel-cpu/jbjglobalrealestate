@@ -1,12 +1,12 @@
 /**
  * /list-property — Single canonical entry point for all property listings.
  *
- * - Premium navy/blue hero band (blue-fade gradient) replacing the old champagne hero
+ * - Premium emerald hero band using the locked JBJ emerald ombré
  * - One unified card with Purpose (Sale/Rent) + Mode (Manual / AI / Browse) segmented controls
  * - Active form renders below based on selection
  * - "My Submissions" section pulls live data from seller_listings via useSellerListings
  *   so users can track status of every application (Pending / Approved / Declined / Live)
- * - Fully responsive (mobile → desktop), gold accents, no white-on-light text
+ * - Fully responsive (mobile → desktop), champagne surfaces, gold hairlines, no broken contrast
  *
  * Legacy routes (/sell, /seller-listing, /listing-portal, /listing-portal/submit)
  * redirect into this page with the right ?purpose= / ?mode= params.
@@ -48,22 +48,22 @@ const BrowseListings = lazy(() => import("@/pages/ListingPortal"));
 type Mode = "pick" | "manual" | "ai" | "browse";
 type Purpose = "sale" | "rent";
 
-/* ────────────────────────────── theme tokens ────────────────────────────── */
-const BLUE = "#0A0A0A";
-const BLUE_HOVER = "#1F1F1F";
-const BLUE_DEEP = "#0B1B33";
-const BLUE_GRADIENT =
-  "linear-gradient(135deg, #0B1B33 0%, #0A0A0A 50%, #1F1F1F 100%)";
+/* ────────────────────────────── brand tokens ────────────────────────────── */
+const EMERALD = "#064E3B";
+const EMERALD_DEEP = "#042C1C";
+const EMERALD_BLACK = "#000000";
+const EMERALD_GRADIENT = "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))";
+const EMERALD_GRADIENT_HOVER = "var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%))";
 const GOLD = "#B89555";
 const CHAMPAGNE = "#FDFBF7";
 const CHAMPAGNE_SURFACE = "#F7F2EA";
 const CHAMPAGNE_RAISED = "#EFE6D6";
 const INK = "#1A1A1A";
+const WHITE = "#FFFFFF";
 
-/* per-mode accent system: manual = premium emerald/black ombre,
-   ai = purple/navy, pick/browse = navy */
+/* per-mode accent system: every listing mode uses the locked emerald palette. */
 type ModeTheme = {
-  name: "navy" | "emerald" | "purple";
+  name: "emerald";
   primary: string;       // solid accent
   primaryDeep: string;   // deeper variant
   badgeBorder: string;   // accent border for pills/badges
@@ -73,55 +73,25 @@ type ModeTheme = {
   ctaText: string;       // CTA text color over solid primary
   iconAccent: string;    // sparkle / leaf icon color
 };
-const THEME_NAVY: ModeTheme = {
-  name: "navy",
-  primary: BLUE,
-  primaryDeep: BLUE_DEEP,
-  badgeBorder: "#A855F7",
-  badgeBg: "rgba(184,149,85,0.14)",
-  heroGradient: BLUE_GRADIENT,
-  sectionGradient: BLUE_GRADIENT,
-  ctaText: "#FFFFFF",
-  iconAccent: "#A855F7",
-};
 const THEME_EMERALD: ModeTheme = {
   name: "emerald",
-  primary: "#064E3B",
-  primaryDeep: "#022C22",
-  badgeBorder: "#10B981",
-  badgeBg: "rgba(16,185,129,0.16)",
-  heroGradient:
-    "linear-gradient(135deg, #022C22 0%, #064E3B 45%, #0B0B0B 100%)",
-  sectionGradient:
-    "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)",
-  ctaText: "#FFFFFF",
-  iconAccent: "#10B981",
+  primary: EMERALD,
+  primaryDeep: EMERALD_DEEP,
+  badgeBorder: GOLD,
+  badgeBg: "rgba(184,149,85,0.18)",
+  heroGradient: EMERALD_GRADIENT,
+  sectionGradient: `linear-gradient(180deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_SURFACE} 100%)`,
+  ctaText: WHITE,
+  iconAccent: GOLD,
 };
-const THEME_PURPLE: ModeTheme = {
-  name: "purple",
-  primary: "#5B21B6",
-  primaryDeep: "#2E1065",
-  badgeBorder: "#A855F7",
-  badgeBg: "rgba(184,149,85,0.16)",
-  heroGradient:
-    "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
-  sectionGradient:
-    "linear-gradient(135deg, #2E1065 0%, #4C1D95 50%, #0B0B0B 100%)",
-  ctaText: "#FFFFFF",
-  iconAccent: "#C4B5FD",
-};
-const themeForMode = (m: Mode): ModeTheme =>
-  m === "manual" ? THEME_EMERALD : m === "ai" ? THEME_PURPLE : THEME_NAVY;
+const THEME_BRAND = THEME_EMERALD;
+const themeForMode = (_m: Mode): ModeTheme => THEME_BRAND;
 
 /* Soft mode-tinted ombre used for "white" surfaces (Purpose card, empty
    states, "Open full dashboard" pill) so they match the page's accent
    instead of reading as harsh pure white. */
 const ombreSoft = (t: ModeTheme): string => {
-  if (t.name === "emerald")
-    return "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)";
-  if (t.name === "purple")
-    return "linear-gradient(135deg, #F2EBFF 0%, #FFFFFF 55%, #E5D6FF 100%)";
-  return "linear-gradient(135deg, #E5EAF3 0%, #FFFFFF 50%, #DDE3F0 100%)";
+  return `linear-gradient(135deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_SURFACE} 55%, ${CHAMPAGNE_RAISED} 100%)`;
 };
 
 const ListProperty = () => {
@@ -174,6 +144,7 @@ const ListProperty = () => {
       className="min-h-screen"
       style={{ backgroundColor: CHAMPAGNE, color: INK }}
       data-listing-mode={theme.name}
+      data-list-property-page
     >
       <SEOHead
         title={purpose === "rent" ? "List Your Property for Rent — JBJ Global Real Estate" : "List Your Property for Sale — JBJ Global Real Estate"}
@@ -197,7 +168,7 @@ const ListProperty = () => {
         <div
           className="absolute inset-x-0 bottom-0 h-px"
           style={{
-            background: `linear-gradient(90deg, transparent, ${theme.badgeBorder}A6, transparent)`,
+            background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
           }}
         />
         <div
@@ -217,18 +188,20 @@ const ListProperty = () => {
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
               style={{
                 backgroundColor: theme.badgeBg,
-                color: "#FFFFFF",
-                border: `1px solid ${theme.badgeBorder}`,
+                color: WHITE,
+                WebkitTextFillColor: WHITE,
+                border: `1px solid ${GOLD}`,
               }}
               data-no-contrast-guard
             >
-              <ShieldCheck className="w-3.5 h-3.5" style={{ color: theme.badgeBorder }} />
+              <ShieldCheck className="w-3.5 h-3.5" style={{ color: WHITE }} />
               {purpose === "rent" ? "JBJ Landlord Portal" : "JBJ Seller Portal"}
             </span>
             <h1
               className="mt-5 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight"
               style={{
-                color: "#FFFFFF",
+                color: WHITE,
+                WebkitTextFillColor: WHITE,
                 textShadow: "0 2px 18px rgba(0,0,0,0.35)",
                 letterSpacing: "-0.02em",
               }}
@@ -238,7 +211,7 @@ const ListProperty = () => {
             </h1>
             <p
               className="mt-4 text-base sm:text-lg max-w-2xl mx-auto"
-              style={{ color: "rgba(255,255,255,0.88)" }}
+              style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)" }}
               data-no-contrast-guard
             >
               List your property for {purpose === "rent" ? "rent" : "sale"} with
@@ -261,21 +234,24 @@ const ListProperty = () => {
           <div
             className="rounded-2xl p-5 sm:p-6 md:p-7 shadow-xl"
             style={{
-              background: `linear-gradient(135deg, #FFFFFF 0%, ${theme.primary}14 55%, #FFFFFF 100%)`,
-              border: `1.5px solid ${theme.primary}`,
-              boxShadow: `0 18px 40px -22px ${theme.primary}66`,
+              background: CHAMPAGNE,
+              border: `1px solid ${GOLD}`,
+              boxShadow: `0 18px 40px -22px rgba(6,78,59,0.32)`,
             }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-start">
               {/* Purpose */}
-              <div className="md:col-span-4">
+              <div className="xl:col-span-4">
                 <div
                   className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-3"
                   style={{ color: theme.primary }}
                 >
                   Purpose
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div
+                  className="grid gap-2"
+                  style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 132px), 1fr))" }}
+                >
                   <SegmentedPill
                     active={purpose === "sale"}
                     onClick={() => setPurpose("sale")}
@@ -296,14 +272,17 @@ const ListProperty = () => {
               </div>
 
               {/* Mode */}
-              <div className="md:col-span-8">
+              <div className="xl:col-span-8">
                 <div
                   className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-3"
                   style={{ color: theme.primary }}
                 >
                   How would you like to list?
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div
+                  className="grid gap-2"
+                  style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 150px), 1fr))" }}
+                >
                   <SegmentedPill
                     active={mode === "manual"}
                     onClick={() => setMode("manual")}
@@ -316,7 +295,7 @@ const ListProperty = () => {
                     active={mode === "ai"}
                     onClick={() => setMode("ai")}
                     icon={<Wand2 className="w-4 h-4" />}
-                    theme={THEME_PURPLE}
+                    theme={THEME_BRAND}
                     trailing={<Sparkles className="w-3 h-3" />}
                   >
                     AI-Assisted
@@ -325,7 +304,7 @@ const ListProperty = () => {
                     active={mode === "browse"}
                     onClick={() => setMode("browse")}
                     icon={<Eye className="w-4 h-4" />}
-                    theme={THEME_NAVY}
+                    theme={THEME_BRAND}
                   >
                     Browse
                   </SegmentedPill>
@@ -343,10 +322,10 @@ const ListProperty = () => {
                 data-no-contrast-guard
                 className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl text-sm font-semibold transition-all hover:brightness-105"
                 style={{
-                  background: "#FFFFFF",
+                  background: CHAMPAGNE,
                   color: theme.primary,
                   WebkitTextFillColor: theme.primary,
-                  border: `1.5px solid ${theme.primary}`,
+                  border: `1px solid ${GOLD}`,
                   boxShadow: `0 6px 16px -10px ${theme.primary}66`,
                 }}
               >
@@ -395,7 +374,7 @@ function SegmentedPill({
   onClick,
   icon,
   children,
-  theme = THEME_NAVY,
+  theme = THEME_BRAND,
   trailing,
 }: {
   active: boolean;
@@ -406,31 +385,30 @@ function SegmentedPill({
   trailing?: React.ReactNode;
 }) {
   const inactiveFg = theme.primaryDeep || theme.primary;
-  const fg = active ? "#FFFFFF" : inactiveFg;
   return (
     <button
       type="button"
       onClick={onClick}
-      data-allow-dark-cta
       data-no-contrast-guard
+      {...(active ? { "data-allow-dark-cta": true } : {})}
       data-listing-pill={active ? "active" : "inactive"}
       className="jj-listing-pill inline-flex items-center justify-center gap-2 w-full h-10 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-all duration-150 hover:brightness-110"
       style={
         active
           ? {
-              background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              ["--jj-pill-fg" as any]: "#FFFFFF",
+              background: EMERALD_GRADIENT,
+              color: WHITE,
+              WebkitTextFillColor: WHITE,
+              ["--jj-pill-fg" as any]: WHITE,
               border: `1px solid ${theme.primaryDeep}`,
               boxShadow: `0 10px 24px -12px ${theme.primary}99`,
             }
           : {
-              backgroundColor: "#FFFFFF",
+              backgroundColor: CHAMPAGNE,
               color: inactiveFg,
               WebkitTextFillColor: inactiveFg,
               ["--jj-pill-fg" as any]: inactiveFg,
-              border: `2px solid ${inactiveFg}`,
+              border: `1px solid ${GOLD}`,
             }
       }
     >
@@ -445,13 +423,10 @@ function SegmentedPill({
 
 /* ───────────────── Premium two-card mode picker ───────────────── */
 function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => void; purpose?: Purpose }) {
-  // Pick screen uses the navy hero theme as its accent system, so cards
-  // visually match the band above. Inner Start CTAs are white-fill / navy-ink.
-  const accent = THEME_NAVY.primary;          // #0A0A0A
-  const accentDeep = THEME_NAVY.primaryDeep;  // #0B1B33
-  const accentGlow = THEME_NAVY.badgeBorder;  // purple #A855F7
-  const cardGradient =
-    `linear-gradient(135deg, ${accentDeep} 0%, ${accent} 55%, #0B0B0B 100%)`;
+  const accent = THEME_BRAND.primary;
+  const accentDeep = THEME_BRAND.primaryDeep;
+  const accentGlow = GOLD;
+  const cardGradient = EMERALD_GRADIENT;
 
   // Purpose-aware copy: sale → Seller, rent → Landlord
   const isRent = purpose === "rent";
@@ -473,15 +448,15 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
           className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold"
           style={{
             background: cardGradient,
-            color: "#FFFFFF",
-            WebkitTextFillColor: "#FFFFFF",
+            color: WHITE,
+            WebkitTextFillColor: WHITE,
             border: `1px solid ${accentGlow}`,
             boxShadow: `0 10px 24px -12px ${accent}99`,
           }}
           data-no-contrast-guard
           data-allow-dark-cta
         >
-          <ShieldCheck className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
+          <ShieldCheck className="w-3.5 h-3.5" style={{ color: WHITE }} />
           Choose how to list {isRent ? "your rental" : "your property"}
         </span>
         <h2
@@ -492,7 +467,7 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
           How would you like to add your {isRent ? "rental" : "property"}?
         </h2>
         <p
-          className="mt-2 text-sm md:text-base max-w-2xl mx-auto"
+          className="mt-2 text-sm md:text-base max-w-2xl mx-auto leading-relaxed"
           style={{ color: INK + "B3" }}
         >
           Both options stay inside JBJ — your draft is auto-saved and you can come
@@ -500,10 +475,13 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div
+        className="grid gap-5"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 320px), 1fr))" }}
+      >
         <PickerCard
           onClick={() => onPick("manual")}
-          icon={<ClipboardCheck className="w-6 h-6" style={{ color: "#FFFFFF" }} />}
+          icon={<ClipboardCheck className="w-6 h-6" style={{ color: WHITE }} />}
           eyebrow={manualEyebrow}
           title={manualTitle}
           description={manualDesc}
@@ -511,7 +489,7 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
         />
         <PickerCard
           onClick={() => onPick("ai")}
-          icon={<Wand2 className="w-6 h-6" style={{ color: "#FFFFFF" }} />}
+          icon={<Wand2 className="w-6 h-6" style={{ color: WHITE }} />}
           eyebrow={aiEyebrow}
           title={aiTitle}
           description={aiDesc}
@@ -552,24 +530,21 @@ function PickerCard({
   tag: string;
   accent?: boolean;
 }) {
-  const NAVY = THEME_NAVY.primary;
-  const NAVY_DEEP = THEME_NAVY.primaryDeep;
-  const PURPLE = THEME_NAVY.badgeBorder; // #A855F7
-  const cardGradient =
-    `linear-gradient(135deg, ${NAVY_DEEP} 0%, ${NAVY} 55%, #0B0B0B 100%)`;
+  const cardGradient = EMERALD_GRADIENT;
   return (
     <button
       type="button"
       onClick={onClick}
       data-no-contrast-guard
       data-allow-dark-cta
-      className="group relative flex flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110"
+      data-listing-choice-card
+      className="group relative flex w-full min-w-0 min-h-[306px] flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110 whitespace-normal overflow-hidden"
       style={{
         background: cardGradient,
-        border: `1px solid ${PURPLE}`,
-        boxShadow: `0 18px 40px -18px ${NAVY}AA`,
-        color: "#FFFFFF",
-        WebkitTextFillColor: "#FFFFFF",
+        border: `1px solid ${GOLD}`,
+        boxShadow: `0 18px 40px -18px rgba(6,78,59,0.68)`,
+        color: WHITE,
+        WebkitTextFillColor: WHITE,
       }}
     >
       {/* shimmer ombre glow */}
@@ -577,15 +552,15 @@ function PickerCard({
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-2xl"
         style={{
-          background: `radial-gradient(circle at 18% 18%, ${PURPLE}33 0%, transparent 60%)`,
+          background: `radial-gradient(circle at 18% 18%, rgba(184,149,85,0.22) 0%, transparent 60%)`,
         }}
       />
-      <div className="relative flex items-start justify-between gap-4">
+      <div className="relative flex w-full min-w-0 items-start justify-between gap-4">
         <div
           className="w-12 h-12 rounded-xl grid place-items-center"
           style={{
             backgroundColor: "rgba(255,255,255,0.10)",
-            border: `1px solid ${PURPLE}66`,
+            border: `1px solid ${GOLD}`,
           }}
         >
           {icon}
@@ -595,45 +570,45 @@ function PickerCard({
             className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
             style={{
               backgroundColor: "rgba(184,149,85,0.18)",
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              border: `1px solid ${PURPLE}`,
+              color: WHITE,
+              WebkitTextFillColor: WHITE,
+              border: `1px solid ${GOLD}`,
             }}
           >
-            <Sparkles className="w-3 h-3" style={{ color: "#FFFFFF" }} /> Recommended
+            <Sparkles className="w-3 h-3" style={{ color: WHITE }} /> Recommended
           </span>
         )}
       </div>
 
-      <div className="relative mt-5">
+      <div className="relative mt-5 w-full min-w-0 whitespace-normal">
         <div
           className="text-[10px] uppercase tracking-[0.22em] font-semibold"
-          style={{ color: PURPLE, WebkitTextFillColor: PURPLE }}
+          style={{ color: GOLD, WebkitTextFillColor: GOLD }}
         >
           {eyebrow}
         </div>
         <h3
           className="mt-1 text-xl md:text-2xl font-bold leading-tight"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          style={{ color: WHITE, WebkitTextFillColor: WHITE }}
         >
           {title}
         </h3>
         <p
           className="mt-2 text-sm leading-relaxed"
-          style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
+          style={{ color: "rgba(255,255,255,0.92)", WebkitTextFillColor: "rgba(255,255,255,0.92)", overflowWrap: "break-word" }}
         >
           {description}
         </p>
       </div>
 
-      <div className="relative mt-6 flex items-center justify-between">
+      <div className="relative mt-auto pt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         <span
           className="text-[11px] font-semibold rounded-md px-2 py-1"
           style={{
             backgroundColor: "rgba(255,255,255,0.10)",
             color: "rgba(255,255,255,0.88)",
             WebkitTextFillColor: "rgba(255,255,255,0.88)",
-            border: `1px solid ${PURPLE}55`,
+            border: `1px solid rgba(184,149,85,0.65)`,
           }}
         >
           {tag}
@@ -642,16 +617,16 @@ function PickerCard({
           className="inline-flex items-center gap-1.5 text-sm font-bold px-4 h-9 rounded-md group-hover:gap-2 transition-all"
           data-no-contrast-guard
           style={{
-            background: "#FFFFFF",
-            color: NAVY_DEEP,
-            WebkitTextFillColor: NAVY_DEEP,
-            border: `1.5px solid ${NAVY_DEEP}`,
+            background: CHAMPAGNE,
+            color: EMERALD_DEEP,
+            WebkitTextFillColor: EMERALD_DEEP,
+            border: `1px solid ${GOLD}`,
             boxShadow: `0 6px 18px -8px rgba(184,149,85,0.55)`,
           }}
         >
-          <span style={{ color: NAVY_DEEP, WebkitTextFillColor: NAVY_DEEP, fontWeight: 800 }}>Start</span>
-          <span className="jj-arrow-anim inline-flex" style={{ color: NAVY_DEEP }}>
-            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: NAVY_DEEP }} />
+          <span style={{ color: EMERALD_DEEP, WebkitTextFillColor: EMERALD_DEEP, fontWeight: 800 }}>Start</span>
+          <span className="jj-arrow-anim inline-flex" style={{ color: EMERALD_DEEP }}>
+            <ArrowRight className="w-4 h-4" style={{ strokeWidth: 2.5, color: EMERALD_DEEP }} />
           </span>
         </span>
 
@@ -663,7 +638,7 @@ function PickerCard({
 
 
 /* ───────────────── My Submissions Section (mode-aware) ───────────────── */
-function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
+function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
   const { user } = useAuth();
   const { listings, isLoading, fetchListings } = useSellerListings();
   const accent = theme.primary;
@@ -685,7 +660,7 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 85% 12%, ${theme.badgeBorder}33 0%, transparent 55%)`,
+          background: `radial-gradient(circle at 85% 12%, rgba(184,149,85,0.18) 0%, transparent 55%)`,
         }}
       />
       <div className="relative max-w-6xl mx-auto">
@@ -693,14 +668,14 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
           <div>
             <h2
               className="text-2xl md:text-3xl font-bold tracking-tight"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              style={{ color: INK, WebkitTextFillColor: INK }}
               data-no-contrast-guard
             >
               My Listing Submissions
             </h2>
             <p
               className="mt-1 text-sm"
-              style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}
+              style={{ color: INK + "B3", WebkitTextFillColor: INK + "B3" }}
               data-no-contrast-guard
             >
               Track the status of every property you've listed with JBJ. You'll
@@ -715,17 +690,17 @@ function MySubmissionsSection({ theme = THEME_NAVY }: { theme?: ModeTheme }) {
               data-no-contrast-guard
               className="font-semibold hover:brightness-105 jj-dashboard-pulse"
               style={{
-                background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.primaryDeep} 100%)`,
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-                border: `1.5px solid ${theme.badgeBorder}`,
+                background: EMERALD_GRADIENT,
+                color: WHITE,
+                WebkitTextFillColor: WHITE,
+                border: `1px solid ${GOLD}`,
                 boxShadow: `0 10px 24px -10px ${theme.primaryDeep}`,
               }}
             >
               <Link to="/dashboard/my-listings">
-                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: "#FFFFFF" }} />
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", fontWeight: 700 }}>Open full dashboard</span>
-                <span className="jj-arrow-anim inline-flex ml-2" style={{ color: "#FFFFFF" }}><ArrowRight className="w-4 h-4" style={{ color: "#FFFFFF" }} /></span>
+                <LayoutDashboard className="w-4 h-4 mr-2" style={{ color: WHITE }} />
+                <span style={{ color: WHITE, WebkitTextFillColor: WHITE, fontWeight: 700 }}>Open full dashboard</span>
+                <span className="jj-arrow-anim inline-flex ml-2" style={{ color: WHITE }}><ArrowRight className="w-4 h-4" style={{ color: WHITE }} /></span>
 
               </Link>
             </Button>
@@ -873,8 +848,8 @@ function SubmissionCard({ listing }: { listing: any }) {
       className="rounded-2xl overflow-hidden flex flex-col transition-all hover:shadow-lg"
       data-no-contrast-guard
       style={{
-        backgroundColor: "#FFFFFF",
-        border: `1px solid ${BLUE}33`,
+        backgroundColor: CHAMPAGNE,
+        border: `1px solid ${GOLD}`,
       }}
     >
       <div
@@ -925,7 +900,7 @@ function SubmissionCard({ listing }: { listing: any }) {
             data-allow-dark-cta
             data-no-contrast-guard
             className="font-semibold border-0 h-8 px-3 text-xs flex-1"
-            style={{ backgroundColor: BLUE, color: "#FFFFFF" }}
+            style={{ background: EMERALD_GRADIENT, color: WHITE, WebkitTextFillColor: WHITE, border: `1px solid ${GOLD}` }}
           >
             <Link to={`/dashboard/my-listings?id=${listing.id}`}>
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View details</span>
