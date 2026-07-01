@@ -1321,7 +1321,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             data-allow-dark-cta
             onClick={toggleCollapse}
             aria-label="Collapse navigation"
-            className="allow-white jbj-sidebar-collapse-control group mt-2 flex items-center justify-center gap-2 w-full px-3 h-12 rounded-lg text-[12px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
+            className="allow-white jbj-sidebar-collapse-control group mt-2.5 flex items-center justify-center gap-2 w-full px-3 h-12 rounded-lg text-[12px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
             style={{
               color: '#FFFFFF',
               background: 'var(--jj-emerald-ombre)',
