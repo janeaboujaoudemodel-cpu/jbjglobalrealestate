@@ -80,6 +80,7 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   propertyCategory: null,
   propertyTypes: [],
   bedrooms: [],
+  bathrooms: [],
   statuses: [],
   sortBy: null,
   hideSoldOut: false,
@@ -91,7 +92,12 @@ export const defaultShortcutFilters: ShortcutFilterState = {
   developers: [],
   searchQuery: '',
   views: [],
+  amenities: [],
+  verifiedOnly: false,
+  virtualTourOnly: false,
+  furnishing: [],
 };
+
 
 interface FilterShortcutBarProps {
   variant: 'light' | 'dark';
