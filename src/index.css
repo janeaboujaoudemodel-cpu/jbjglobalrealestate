@@ -22757,10 +22757,52 @@ html body [data-tool-emerald] [style*="#FDFBF7"] {
   color: #FFFFFF !important;
 }
 html body [data-tool-emerald] [data-surface="champagne"],
-html body [data-tool-emerald] .jj-band[data-tone="champagne"] {
+html body [data-tool-emerald] .jj-band[data-tone="champagne"],
+html body [data-tool-emerald] [class*="bg-card"],
+html body [data-tool-emerald] [class*="bg-background"],
+html body [data-tool-emerald] [class*="bg-muted"],
+html body [data-tool-emerald] [class*="bg-secondary"],
+html body [data-tool-emerald] [class*="bg-popover"],
+html body [data-tool-emerald] [class*="bg-accent"],
+html body [data-tool-emerald] [class*="bg-yellow"],
+html body [data-tool-emerald] [class*="bg-orange"],
+html body [data-tool-emerald] [class*="bg-stone"],
+html body [data-tool-emerald] [class*="bg-neutral"],
+html body [data-tool-emerald] [class*="bg-slate"],
+html body [data-tool-emerald] [class*="bg-gray"],
+html body [data-tool-emerald] [class*="bg-zinc"],
+html body [data-tool-emerald] [class*="F7F2EA"],
+html body [data-tool-emerald] [class*="EFE6D6"],
+html body [data-tool-emerald] [class*="FDFBF7"],
+html body [data-tool-emerald] [class*="FFF7E6"],
+html body [data-tool-emerald] [class*="FFFBEB"] {
   background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+  background-color: transparent !important;
+  border-color: rgba(255,255,255,0.42) !important;
 }
-html body [data-tool-emerald] [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li) {
+html body [data-tool-emerald] [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
+html body [data-tool-emerald] [class*="bg-card"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
+html body [data-tool-emerald] [class*="bg-muted"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
+html body [data-tool-emerald] [class*="bg-secondary"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
+html body [data-tool-emerald] [class*="bg-popover"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td),
+html body [data-tool-emerald] [class*="bg-accent"] :is(h1,h2,h3,h4,h5,h6,p,label,span,li,a,dt,dd,th,td) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+/* Text tokens that would render dark on emerald */
+html body [data-tool-emerald] [class*="text-card-foreground"],
+html body [data-tool-emerald] [class*="text-foreground"],
+html body [data-tool-emerald] [class*="text-popover-foreground"],
+html body [data-tool-emerald] [class*="text-secondary-foreground"],
+html body [data-tool-emerald] [class*="text-accent-foreground"],
+html body [data-tool-emerald] [class*="text-black"],
+html body [data-tool-emerald] [class*="text-ink"],
+html body [data-tool-emerald] [class*="text-neutral-9"],
+html body [data-tool-emerald] [class*="text-stone-9"],
+html body [data-tool-emerald] [class*="text-slate-9"],
+html body [data-tool-emerald] [class*="text-gray-9"],
+html body [data-tool-emerald] [class*="text-zinc-9"],
+html body [data-tool-emerald] [class*="1A1A1A"] {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
