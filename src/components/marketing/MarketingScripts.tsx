@@ -22,18 +22,22 @@ const getMarketingConfig = async (): Promise<MarketingConfig> => {
   }
 
   try {
+    // Call the SECURITY DEFINER RPC that whitelists only the six
+    // non-secret tracking IDs. The base marketing_config table is locked
+    // to owner/admin, so a direct select from anon sessions raises
+    // "permission denied" — which broke analytics for every visitor.
     const { data, error } = await supabase
-      .from('marketing_config')
-      .select('key, value');
-    
+      .rpc('get_public_marketing_config');
+
     if (error || !data) return {};
-    
+
+    const allowed = new Set([
+      'ga4MeasurementId', 'gtmContainerId', 'metaPixelId',
+      'linkedInPartnerId', 'clarityProjectId', 'tiktokPixelId',
+    ]);
     const config: MarketingConfig = {};
-    data.forEach((row: { key: string; value: string }) => {
-      if (row.key in config || [
-        'ga4MeasurementId', 'gtmContainerId', 'metaPixelId',
-        'linkedInPartnerId', 'clarityProjectId', 'tiktokPixelId'
-      ].includes(row.key)) {
+    (data as Array<{ key: string; value: string }>).forEach((row) => {
+      if (allowed.has(row.key)) {
         (config as any)[row.key] = row.value;
       }
     });
