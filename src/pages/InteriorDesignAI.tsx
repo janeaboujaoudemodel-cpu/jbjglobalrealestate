@@ -338,6 +338,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-choice {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
+          border-color: rgba(255,255,255,0.42) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {

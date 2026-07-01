@@ -22809,3 +22809,13 @@ html body #root [data-tool-shell-root][data-tool-emerald] :is([class*="border-[#
 html body #root [data-tool-shell-root][data-tool-emerald] :is([style*="border: 1px solid #B89555"], [style*="border-color: #B89555"], [style*="rgba(184,149,85"], [style*="rgba(200,168,122"]) {
   border-color: rgba(255,255,255,0.42) !important;
 }
+
+@media (max-width: 640px) {
+  html body #root [data-tool-shell-root][data-tool-emerald] :is(button, a[role="button"], [role="button"], [role="tab"]) {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+  html body #root [data-tool-shell-root][data-tool-emerald] :is(button, a[role="button"], [role="button"], [role="tab"]):not([class*="rounded-full"]) {
+    border-color: rgba(255,255,255,0.42) !important;
+  }
+}
