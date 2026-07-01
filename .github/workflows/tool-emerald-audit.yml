@@ -1,0 +1,37 @@
+name: Tool Emerald Visual Regression
+on:
+  pull_request:
+    paths:
+      - "src/pages/**"
+      - "src/components/tools/**"
+      - "src/components/ai-tools/**"
+      - "src/index.css"
+      - "scripts/tool-emerald-audit/**"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with: { bun-version: latest }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: bun install
+      - run: pip install playwright pillow && python -m playwright install --with-deps chromium
+      - name: Start dev server
+        run: |
+          bun run dev &
+          for i in {1..40}; do curl -sf http://localhost:8080 && break || sleep 2; done
+      - name: Run tool emerald audit
+        env:
+          TOOL_AUDIT_BASE_URL: http://localhost:8080
+        run: python scripts/tool-emerald-audit/run.py
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tool-emerald-audit
+          path: scripts/tool-emerald-audit/artifacts
