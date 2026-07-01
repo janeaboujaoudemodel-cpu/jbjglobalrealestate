@@ -22778,13 +22778,13 @@ html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="inactive"] :is
   stroke: #FFFFFF !important;
 }
 html body [data-tool-emerald] .jj-listing-pill[data-listing-pill="active"] {
-  background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+  background: linear-gradient(135deg, #065F46 0%, #064E3B 55%, #04231A 100%) !important;
   border-color: rgba(255,255,255,0.52) !important;
 }
 html body [data-tool-emerald] :is(button, a)[style*="#C8A87A"],
 html body [data-tool-emerald] :is(button, a)[style*="#B89555"],
 html body [data-tool-emerald] :is(button, a)[style*="rgb(200, 168, 122)"] {
-  background: linear-gradient(135deg, #10B981 0%, #047857 55%, #022c1c 100%) !important;
+  background: linear-gradient(135deg, #065F46 0%, #064E3B 55%, #04231A 100%) !important;
   border-color: rgba(255,255,255,0.46) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
