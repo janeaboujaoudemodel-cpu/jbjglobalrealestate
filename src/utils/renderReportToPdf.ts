@@ -154,7 +154,7 @@ const captureReportRootToPdf = async (
     scale: EXPORT_SCALE,
     useCORS: true,
     allowTaint: false,
-    backgroundColor: EXPORT_BACKGROUND,
+    backgroundColor: "#FDFBF7",
     logging: false,
     imageTimeout: 1800,
     removeContainer: true,
@@ -219,7 +219,7 @@ export async function renderReportToPdf(
     `width:${REPORT_PAGE_PX.width}px`,
     "pointer-events:none",
     "z-index:-1",
-    "background:transparent",
+    "background:#FDFBF7",
   ].join(";");
   const previewRoot = document.getElementById("jbj-aihf-preview-root");
   (previewRoot || document.body).appendChild(host);
