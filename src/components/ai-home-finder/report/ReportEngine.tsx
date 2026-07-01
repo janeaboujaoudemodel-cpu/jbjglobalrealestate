@@ -1028,10 +1028,10 @@ export function ReportEngine({ mode, branding, projects, clientName, clientRequi
             letter-spacing: 0.005em !important;
             word-spacing: 0.06em !important;
           }
-          /* Ensure emerald gradients render with a stable solid fallback in html2canvas */
+          /* Ensure emerald boxes use the same single solid color in preview + PDF. */
           [data-report-root] [data-surface="emerald"],
           [data-report-root] [data-on-dark] {
-            background-color: #042c1c !important;
+            background-color: #064E3B !important;
           }
         `}</style>
         <CoverPage branding={branding} projects={safeProjects} clientName={clientName} pageIdPrefix={pageIdPrefix} requirements={requirements} />

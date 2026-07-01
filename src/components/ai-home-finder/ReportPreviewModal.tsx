@@ -114,8 +114,8 @@ const C = {
   gold: "#B89555",
   goldSoft: "rgba(184,149,85,0.45)",
   goldHair: "rgba(184,149,85,0.35)",
-  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)",
-  emeraldGradientHover: "linear-gradient(135deg,#0a6b53 0%,#064E3B 58%,#042c1c 100%)",
+  emeraldGradient: "linear-gradient(135deg,#064E3B 0%,#064E3B 100%)",
+  emeraldGradientHover: "linear-gradient(135deg,#064E3B 0%,#064E3B 100%)",
 };
 
 export default function ReportPreviewModal({
