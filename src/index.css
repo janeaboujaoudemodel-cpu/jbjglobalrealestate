@@ -14934,8 +14934,8 @@ html body #root .jj-developer-logo-metallic img {
   }
 
   body.jj-vertical-nav-active {
-    --jj-shell-sidebar-w: 320px;
-    --jj-shell-main-w: calc(100vw - 320px);
+    --jj-shell-sidebar-w: 264px;
+    --jj-shell-main-w: calc(100vw - 264px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
