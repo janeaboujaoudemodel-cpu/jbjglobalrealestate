@@ -170,13 +170,27 @@ DropdownMenuSubContent.displayName = DropdownMenuPrimitive.SubContent.displayNam
 const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
+>(({ className, sideOffset = 4, onCloseAutoFocus, onPointerDownOutside, onEscapeKeyDown, ...props }, ref) => (
   <DropdownMenuPrimitive.Portal>
     <DropdownMenuPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
       data-surface="light"
-        data-jbj-fast-dropdown="true"
+      data-jbj-fast-dropdown="true"
+      // Prevent the auto-focus-restore that occasionally re-triggers the
+      // parent button's pointer/focus handlers and re-opens the menu.
+      onCloseAutoFocus={(e) => {
+        e.preventDefault();
+        onCloseAutoFocus?.(e);
+      }}
+      // Guarantee outside pointerdown closes immediately (Radix default,
+      // but re-affirmed here so a consumer can't accidentally block it).
+      onPointerDownOutside={(e) => {
+        onPointerDownOutside?.(e);
+      }}
+      onEscapeKeyDown={(e) => {
+        onEscapeKeyDown?.(e);
+      }}
       className={cn(
         "z-[120000] min-w-[8rem] overflow-hidden rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-1.5 text-[#1A1A1A] shadow-xl shadow-gold/20 transition-none duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
         className,
@@ -186,6 +200,7 @@ const DropdownMenuContent = React.forwardRef<
   </DropdownMenuPrimitive.Portal>
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
+
 
 /**
  * `unstyled` skips the default gold hover/focus/lift treatment so consumers
