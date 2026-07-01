@@ -237,22 +237,33 @@ export default function SupportLauncher() {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close support" : "Contact us"}
-          data-surface="dark"
+          data-surface="emerald"
           data-allow-dark-cta
           data-no-contrast-guard
-          whileTap={{ scale: 0.94 }}
-          className="allow-white relative inline-flex items-center justify-center h-11 w-11 rounded-full bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/70 text-white shadow-[0_10px_28px_rgba(0,0,0,0.35),0_0_0_1px_rgba(184,149,85,0.24)] transition-colors"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          whileTap={{ scale: 0.96 }}
+          className="allow-white jj-emerald-metallic relative inline-flex items-center gap-2 h-11 px-4 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
+          style={{
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            borderColor: "rgba(52,211,153,0.55)",
+          }}
         >
           {open ? (
             <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           ) : (
             <>
               <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full jj-surface-emerald ring-2 ring-[#0A0A0A] animate-pulse" />
+              <span
+                className="allow-white text-[11px] font-semibold uppercase tracking-[0.2em]"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
+                Contact Us
+              </span>
+              <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
             </>
           )}
         </motion.button>
+
       </div>
 
 
