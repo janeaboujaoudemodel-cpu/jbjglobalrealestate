@@ -453,7 +453,7 @@ export const PublicRoutes = () => (
     <Route path="/owner/broker-learning/voice" element={<OwnerGuard><BrokerLearningVoiceAdmin /></OwnerGuard>} />
     <Route path="/ai-hub" element={<AuthRequiredRoute><AIHub /></AuthRequiredRoute>} />
     <Route path="/assistant-hub" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/interior-design-ai" element={<AuthRequiredRoute><InteriorDesignAI /></AuthRequiredRoute>} />
+    <Route path="/interior-design-ai" element={<InteriorDesignAI />} />
     <Route path="/interior-design-studio" element={<Navigate to="/interior-design-ai" replace />} />
     <Route path="/investor-hub" element={<AuthRequiredRoute><ModeRequiredRoute modes={['investor']}><InvestorHub /></ModeRequiredRoute></AuthRequiredRoute>} />
     {/* /broker-hub fully deleted — no route, no redirect. Falls through to NotFound. */}
