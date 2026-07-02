@@ -1097,24 +1097,25 @@ const Quiz = () => {
               ))}
             </ul>
 
-            {/* Meta row */}
-            <div className="aihf-meta-row flex flex-wrap items-center justify-center gap-6 text-sm mb-6" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            {/* Meta row — matches the feature card style above */}
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
-                 <div key={label} className="flex items-center gap-2" data-surface="emerald">
+                <div
+                  key={label}
+                  className="flex items-center gap-2.5 px-3.5 py-2 bg-[#F7F2EA] border border-[#B89555]/35 rounded-xl"
+                >
                   <div
-                    className="aihf-icon-chip w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                    style={{
-                      background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
-                      border: "1px solid rgba(255,255,255,0.42)",
-                    }}
+                    data-surface="emerald"
+                    data-emerald-ok="icon"
+                    className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
                   >
-                    <Icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
                   </div>
-                  <span className="font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{label}</span>
+                  <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
                 </div>
               ))}
             </div>
