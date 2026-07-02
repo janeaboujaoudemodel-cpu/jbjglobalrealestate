@@ -52,20 +52,20 @@ export const MarketIntelligenceHero = ({
         variants={staggerContainer}
       >
         <div className="max-w-4xl mx-auto text-center px-4">
-          {/* Badge - Glass style with gold border, engraved look (matching Services page) */}
+          {/* Badge - glass emerald/white, no gold border */}
           <motion.button 
             className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 50%, rgba(184,149,85,0.12) 100%)',
+              background: 'rgba(255,255,255,0.10)',
               backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(184,149,85,0.72)',
+              border: '1px solid rgba(255,255,255,0.38)',
               boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
             }}
             variants={fadeInUp}
           >
-            <BadgeIcon className="h-3.5 w-3.5 text-[#B89555]" />
+            <BadgeIcon className="h-3.5 w-3.5 text-white" />
             <span
-              className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
+              className="text-white font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
               style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
             >
               {badge}
