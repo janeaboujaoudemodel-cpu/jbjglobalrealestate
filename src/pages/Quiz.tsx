@@ -1168,7 +1168,7 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg, #063D2F 0%, #041F18 100%)" }}>
         <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[#B89555]/25 bg-[#F7F2EA]">
@@ -1313,7 +1313,7 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #063D2F 0%, #041F18 100%)" }}>
       <style>{AIHF_STYLE}</style>
       {/* Hero Header — full-bleed deep emerald band with question inside */}
       <div className="aihf-hero sticky top-[88px] z-10">
@@ -1351,7 +1351,7 @@ const Quiz = () => {
 
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-10">
+      <div className="flex-1 flex items-start justify-center px-4 pt-14 md:pt-20 pb-10 md:pb-14">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
           {/* Main Question Area */}
           <div className="w-full max-w-2xl mx-auto">
