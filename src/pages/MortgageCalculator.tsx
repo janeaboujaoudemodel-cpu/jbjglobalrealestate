@@ -94,7 +94,7 @@ const MortgageCalculatorPage = () => {
                 border: WHITE_HAIRLINE,
               }}
             >
-              <div className="flex flex-col md:flex-row md:items-center gap-5">
+              <div className="flex flex-col gap-5">
                 <div className="flex items-center gap-3 min-w-0">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
@@ -105,14 +105,14 @@ const MortgageCalculatorPage = () => {
                   >
                     <Landmark className="w-6 h-6" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-bold text-lg" style={{ color: "#FFFFFF" }}>Bank Partner Network</h3>
                     <p className="text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
                       Introductions through licensed mortgage partners connected with leading UAE banks.
                     </p>
                   </div>
                 </div>
-                <div className="w-full md:flex-1 flex flex-wrap gap-2 md:justify-end">
+                <div className="w-full flex flex-wrap gap-2">
                   {bankPartners.map((bank) => (
                     <span
                       key={bank}
