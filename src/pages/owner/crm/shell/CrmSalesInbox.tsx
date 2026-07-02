@@ -88,7 +88,7 @@ const MESSAGES: Message[] = [
 ];
 
 const LABELS = [
-  { name: "Deals", color: "#064E3B", bg: "#DDF0E6", icon: Handshake },
+  { name: "Deals", color: "#064E3B", bg: "#FDFBF7", icon: Handshake },
   { name: "Leads", color: "#7A5A1E", bg: "#FFF3D6", icon: Target },
   { name: "Contacts", color: "#1F3A63", bg: "#DDE6F5", icon: UserCircle2 },
 ];

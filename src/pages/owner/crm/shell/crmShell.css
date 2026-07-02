@@ -3347,7 +3347,74 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 .jc-wq__pane-foot strong{ margin-left:4px; }
 
 @media (max-width: 900px){
-  .jc-wq__grid{ grid-template-columns:1fr; }
+  .jc-wq{ overflow:auto; }
+  .jc-wq__title{ height:auto; min-height:54px; align-items:center; flex-wrap:wrap; padding:8px 14px; }
+  .jc-wq__title-tabs{ height:44px; }
+  .jc-wq__tab{ min-width:min(244px, calc(100vw - 130px)); }
+  .jc-wq__grid{ grid-template-columns:1fr; min-height:720px; }
+  .jc-wq__rail{ max-height:360px; }
+}
+
+/* PASS 153 — CRM EMERALD/WHITE-INK FINAL LOCK
+   Any emerald action/active surface inside the JBJ CRM must use JBJ Emerald
+   (#064E3B -> #032A1E) and pure white ink/icons. This intentionally sits
+   after legacy Phase 13 blocks to neutralize older green/black conflicts. */
+.jc-app :where(
+  .jc-cal__create,
+  .jc-cal__view-switch button[data-active="true"],
+  .jc-cal__mini-day[data-today="true"],
+  .jc-cal__month-date[data-today="true"],
+  .jc-cal__week-dow[data-today="true"] b,
+  .jc-cal__chip,
+  .jc-cal__week-event,
+  .jc-cal__day-badge,
+  .jc-cal__agenda-badge,
+  .jc-cal__swatch,
+  .jc-wq__row[data-active="true"],
+  .jc-wq__tab-avatar,
+  .jc-feeds__filter[data-active="true"],
+  .jc-feeds__post-btn,
+  .jc-feeds__avatar,
+  .jc-feeds__group-badge,
+  .jc-mail__compose,
+  .jc-mail__folder[data-active="true"],
+  .jc-rp__create,
+  .jc-an__cta,
+  .jc-flt__apply,
+  .jc-flt__ww button[data-active="true"]
+) {
+  background: var(--jbjcrm-emerald-action) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #064E3B !important;
+}
+.jc-app :where(
+  .jc-cal__create,
+  .jc-cal__view-switch button[data-active="true"],
+  .jc-cal__mini-day[data-today="true"],
+  .jc-cal__month-date[data-today="true"],
+  .jc-cal__week-dow[data-today="true"] b,
+  .jc-cal__chip,
+  .jc-cal__week-event,
+  .jc-cal__day-badge,
+  .jc-cal__agenda-badge,
+  .jc-cal__swatch,
+  .jc-wq__row[data-active="true"],
+  .jc-wq__tab-avatar,
+  .jc-feeds__filter[data-active="true"],
+  .jc-feeds__post-btn,
+  .jc-feeds__avatar,
+  .jc-feeds__group-badge,
+  .jc-mail__compose,
+  .jc-mail__folder[data-active="true"],
+  .jc-rp__create,
+  .jc-an__cta,
+  .jc-flt__apply,
+  .jc-flt__ww button[data-active="true"]
+) :where(svg, path, circle, rect, line, polyline, polygon, ellipse, span, strong, b, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
 }
 
 /* =========================================================================
