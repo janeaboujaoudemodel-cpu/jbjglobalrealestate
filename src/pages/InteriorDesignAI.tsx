@@ -429,7 +429,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       <Icon className="w-4 h-4" />
                       <span className="text-sm font-semibold">{m.label}</span>
                     </div>
-                    <span className="id-text-muted text-xs">{m.desc}</span>
+                    <span className="id-text-muted text-xs block leading-snug">{m.desc}</span>
                   </button>
                 );
               })}
