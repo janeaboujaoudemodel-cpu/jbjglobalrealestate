@@ -3288,7 +3288,7 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 /* =========================================================================
    Workqueue — two-pane (left rail + selected queue table)
    ========================================================================= */
-.jc-wq{ padding:0; background:#FDFBF7; min-height:100%; }
+.jc-wq{ display:block !important; grid-template-columns:none !important; padding:0; background:#FDFBF7; min-height:100%; color:#1A1A1A; }
 .jc-wq__title{ display:flex; align-items:center; gap:24px; padding:14px 22px 0; }
 .jc-wq__title h1{ font-size:19px; font-weight:600; color:#1A1A1A; margin:0; }
 .jc-wq__title-tabs{ display:flex; align-items:center; gap:6px; margin-left:8px; border-bottom:1px solid transparent; }
