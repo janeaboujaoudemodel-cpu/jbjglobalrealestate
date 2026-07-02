@@ -31,8 +31,8 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
           color: "#FFFFFF",
           WebkitTextFillColor: "#FFFFFF",
           background: active
-            ? "linear-gradient(135deg, #053D2F 0%, #031F18 48%, #010806 100%)"
-            : "linear-gradient(135deg, rgba(5,61,47,0.74) 0%, rgba(3,31,24,0.82) 58%, rgba(1,8,6,0.88) 100%)",
+            ? "linear-gradient(135deg, #032820 0%, #021611 54%, #000000 100%)"
+            : "linear-gradient(135deg, rgba(3,40,32,0.78) 0%, rgba(2,22,17,0.86) 58%, rgba(0,0,0,0.90) 100%)",
           border: active
             ? "1px solid rgba(255,255,255,0.34)"
             : "1px solid rgba(255,255,255,0.28)",
@@ -55,7 +55,7 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
       data-on-dark="true"
       className="inline-flex items-center gap-1 p-1 rounded-full"
       style={{
-        background: "linear-gradient(135deg, #053D2F 0%, #031F18 58%, #010806 100%)",
+        background: "linear-gradient(135deg, #032820 0%, #021611 58%, #000000 100%)",
         border: "1px solid rgba(255,255,255,0.26)",
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
       }}
