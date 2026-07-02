@@ -150,11 +150,20 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
       <div className="flex items-center justify-center">
         <span
           data-no-contrast-guard
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold border border-[#B89555]/55 bg-[#F7F2EA] text-[#1A1A1A]"
+          data-allow-dark-cta
+          className="allow-white inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold text-white"
+          style={{
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            backgroundImage: "var(--jj-emerald-ombre)",
+            border: 0,
+            boxShadow: "none",
+          }}
         >
-          <span className="h-1.5 w-1.5 rounded-full jj-surface-emerald animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
           Call our agent now · Free
         </span>
+
       </div>
 
       <div className="mt-4 text-center space-y-1">
