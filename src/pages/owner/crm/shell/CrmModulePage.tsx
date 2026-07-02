@@ -234,6 +234,12 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
   const kanbanAvailable = canKanban(slug);
   const showKanban = view === "kanban" && kanbanAvailable;
 
+  // Real data — only Leads is wired to live crm_leads today.
+  const isLeads = slug === "leads";
+  const leadsQuery = useOwnerCrmLeads(isLeads ? 500 : 0);
+  const rows = isLeads ? leadsQuery.rows : [];
+  const rowCount = isLeads ? rows.length : 0;
+
   return (
     <div className="jc-list" data-no-contrast-guard>
       <div className="jc-list__toolbar">
