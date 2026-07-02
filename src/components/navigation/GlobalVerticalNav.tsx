@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
@@ -558,6 +558,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
 
 export default function GlobalVerticalNav() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { session } = useAuth();
   const { isInvestor, isOwner } = useUserRole();
   const { mode, isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
@@ -1222,9 +1223,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               active={subitemActive}
                               onMouseEnter={() => prefetchAITool(item.href)}
                               onFocus={() => prefetchAITool(item.href)}
-                              onClick={() => {
+                              onClick={(event) => {
                                 // Never open the full-screen mega drop-down overlay from inside
                                 // an expanded section — just navigate.
+                                if (item.href === "/map") {
+                                  event.preventDefault();
+                                  collapseAfterNavigation();
+                                  navigate("/map");
+                                  return;
+                                }
                                 collapseAfterNavigation();
                                 if (sectionKey === 'MY ACCOUNT') {
                                   setOpenSection('MY ACCOUNT');
