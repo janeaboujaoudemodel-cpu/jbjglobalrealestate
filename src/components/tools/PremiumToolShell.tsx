@@ -65,8 +65,8 @@ export const PremiumToolShell = ({
         @keyframes jbj-tool-border-spin { to { transform: rotate(1turn); } }
         [data-tool-emerald],
         [data-tool-emerald] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,a,button,textarea,input,div,figcaption,dt,dd,th,td,time):not([class*="bg-clip-text"]):not([data-price-pill]) {
-          color: #FFFFFF;
-          -webkit-text-fill-color: #FFFFFF;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
         }
         [data-tool-emerald],
         [data-tool-emerald] * {
@@ -75,7 +75,13 @@ export const PremiumToolShell = ({
         }
         [data-tool-emerald] .text-muted-foreground,
         [data-tool-emerald] .id-text-muted { color: rgba(255,255,255,0.76) !important; -webkit-text-fill-color: rgba(255,255,255,0.76) !important; }
-        [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF; }
+        [data-tool-emerald] :is(svg, [class*="lucide"]):not([data-allow-gold]):not(.text-gold) { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+        [data-tool-emerald] :is([data-surface="emerald"], .jj-surface-emerald, .jj-emerald-action, .jj-pill-emerald-metallic, .jj-cta-primary, .jj-cta-emerald),
+        [data-tool-emerald] :is([data-surface="emerald"], .jj-surface-emerald, .jj-emerald-action, .jj-pill-emerald-metallic, .jj-cta-primary, .jj-cta-emerald) * {
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+        }
         [data-tool-emerald] [data-allow-gold], [data-tool-emerald] .text-gold, [data-tool-emerald] .jj-gold-accent { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
         [data-tool-emerald] input, [data-tool-emerald] textarea, [data-tool-emerald] select, [data-tool-emerald] [role="combobox"] {
           background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
