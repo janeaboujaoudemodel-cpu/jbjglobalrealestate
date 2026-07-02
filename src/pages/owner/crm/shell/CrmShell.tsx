@@ -3,12 +3,26 @@ import { Outlet } from "react-router-dom";
 import CrmHeader from "./CrmHeader";
 import CrmSidebar from "./CrmSidebar";
 import "./crmShell.css";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
 /**
  * JBJ CRM Shell — standalone application shell.
  * Zero Zoho runtime dependency. Uses only JBJ tokens and local state.
  */
 export default function CrmShell() {
+  const { user } = useAuth();
+  const { mode, setMode } = useUserModeContext();
+
+  // Auto-switch to owner mode so OwnerGuard doesn't kick the founder back
+  // to /investor-dashboard when opening the CRM from any other mode.
+  useEffect(() => {
+    if (isOwnerBackendEmail(user?.email) && mode !== "owner") {
+      setMode("owner").catch(() => {});
+    }
+  }, [user?.email, mode, setMode]);
+
   // One-time purge of any leftover Zoho / mirror cache keys from prior builds.
   useEffect(() => {
     try {
