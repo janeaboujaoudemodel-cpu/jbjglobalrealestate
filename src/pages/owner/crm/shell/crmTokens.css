@@ -8,8 +8,8 @@
   --jbjcrm-emerald-ink: #032A1E;
   --jbjcrm-emerald-deep: #011B13;
   --jbjcrm-emerald-line: #053626;
-  --jbjcrm-emerald-soft: rgba(15, 90, 69, 0.12);
-  --jbjcrm-emerald-tint: rgba(15, 90, 69, 0.08);
+  --jbjcrm-emerald-soft: rgba(6, 78, 59, 0.12);
+  --jbjcrm-emerald-tint: rgba(6, 78, 59, 0.08);
   /* Metallic Emerald→Black gradient for sidebar & header (JBJ brand lock) */
   --jbjcrm-metallic-emerald: linear-gradient(180deg, #064E3B 0%, #032A1E 42%, #000000 100%);
   --jbjcrm-metallic-emerald-h: linear-gradient(90deg, #064E3B 0%, #032A1E 52%, #000000 100%);
