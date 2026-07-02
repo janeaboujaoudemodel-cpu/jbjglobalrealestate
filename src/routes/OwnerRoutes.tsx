@@ -137,6 +137,8 @@ export const OwnerRoutes = () => (
     <Route index element={<CrmHome />} />
     <Route path="home" element={<CrmHome />} />
     <Route path=":section" element={<CrmModulePage />} />
+    <Route path=":section/new" element={<CrmCreatePage />} />
+    <Route path=":section/:id" element={<CrmRecordPage />} />
   </Route>
 
   <Route path="/owner" element={
