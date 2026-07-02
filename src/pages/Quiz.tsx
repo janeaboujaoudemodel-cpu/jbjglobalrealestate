@@ -1038,9 +1038,16 @@ const Quiz = () => {
             </div>
 
             {/* Label pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 jj-surface-emerald-soft">
-              <Sparkles className="w-4 h-4" />
-              <span className="text-xs font-medium uppercase tracking-wider">Completely Free</span>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
+              style={{
+                background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                border: "1px solid rgba(255,255,255,0.42)",
+                boxShadow: "0 6px 18px -8px rgba(16,185,129,0.5)",
+              }}
+            >
+              <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>Completely Free</span>
             </div>
 
             <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
