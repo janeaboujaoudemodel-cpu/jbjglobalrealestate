@@ -24755,3 +24755,16 @@ html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"] :is(s
   stroke: #1A1A1A !important;
 }
 /* END PASS 169 */
+
+/* PASS 170 — MEDIA HERO LOCK: no decorative circle overlays; hero title/subtitle stay white */
+html body #root .jj-hero-fullscreen > [class*="rounded-full"][class*="blur"],
+html body #root [data-hero-dark] > [class*="rounded-full"][class*="blur"] {
+  display: none !important;
+}
+html body #root .jj-hero-fullscreen :is(h1, p).allow-white,
+html body #root [data-hero-dark] :is(h1, p).allow-white {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+/* END PASS 170 */
