@@ -482,7 +482,7 @@ export const DeveloperAIAnalyzer = ({
           {activeProjects && (
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
               <Building2 className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
-              <div className="text-2xl font-bold text-[#1A1A1A]">{activeProjects}</div>
+              <div className="text-2xl font-bold text-[#1A1A1A]">{activeProjects.toLocaleString()}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
           )}
