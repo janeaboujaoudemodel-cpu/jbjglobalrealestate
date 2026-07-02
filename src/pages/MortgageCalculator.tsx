@@ -32,102 +32,22 @@ const MortgageCalculatorPage = () => {
   const { t } = useLanguage();
 
   return (
-    <ToolAnimatedFrame theme={toolThemes.navy}>
+    <PremiumToolShell
+      theme={toolThemes.amber}
+      eyebrowIcon={Calculator}
+      eyebrow="AI-Powered Mortgage Tool"
+      title={
+        <>
+          Mortgage <span style={{ textShadow: `0 0 24px ${toolThemes.amber.accent}` }}>Calculator</span>
+        </>
+      }
+      subtitle={`${t('mortgage.subtitle')}. Get accurate estimates for monthly payments, total interest and find the right financing option for your UAE property purchase.`}
+      poweredBy
+      readMore={{ href: "/services", label: "Read more · Mortgage Advisory & Bank Partners" }}
+    >
       <SEOHead {...pagesSEO.mortgageCalculator} />
+      <div className="w-full">
 
-      <section
-        className="relative w-full min-h-screen overflow-hidden"
-        style={{ background: PAGE }}
-      >
-        {/* Hero — tight on mobile, expanded on desktop */}
-        <div className="relative pt-6 pb-4 md:py-24 overflow-hidden">
-          <div className="container mx-auto px-4 relative z-10">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-xs md:text-sm mb-4 md:mb-8 transition-colors group"
-              style={{ color: INK }}
-            >
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" style={{ color: INK }} />
-              <span>Back to Home</span>
-            </Link>
-
-            <motion.div
-              className="text-center max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span
-                className="inline-flex items-center mb-3 md:mb-6 px-3 py-1.5 md:px-4 md:py-2 rounded-full text-[11px] md:text-sm font-medium"
-                style={{
-                  background: RAISED,
-                  border: `1px solid ${GOLD}55`,
-                  color: INK,
-                }}
-              >
-                <Calculator className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2" style={{ color: GOLD }} />
-                FREE AI Tool
-              </span>
-
-              <h1
-                className="text-2xl md:text-5xl lg:text-6xl font-bold mb-2 md:mb-6 leading-tight"
-                style={{ color: INK }}
-              >
-                Mortgage <span style={{ color: GOLD }}>Calculator</span>
-              </h1>
-
-              {/* Subtitle: short on mobile, full on desktop */}
-              <p className="hidden md:block text-lg md:text-xl max-w-2xl mx-auto mb-8" style={{ color: `${INK}B3` }}>
-                {t('mortgage.subtitle')}. Get accurate estimates for monthly payments, total interest and find the right financing option for your UAE property purchase.
-              </p>
-              <p className="md:hidden text-sm max-w-md mx-auto mb-4 px-2" style={{ color: `${INK}B3` }}>
-                Instant UAE mortgage estimates — free, no signup.
-              </p>
-
-              {/* Trust strip — compact horizontal pills on mobile, full cards on desktop */}
-              <div className="md:hidden flex items-center justify-center gap-2 mb-2">
-                {[
-                  { Icon: CheckCircle, label: "Instant" },
-                  { Icon: Sparkles, label: "All Banks" },
-                  { Icon: Shield, label: "100% Free" },
-                ].map(({ Icon, label }) => (
-                  <span
-                    key={label}
-                    className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold"
-                    style={{ background: SURFACE, border: `1px solid ${GOLD}40`, color: INK }}
-                  >
-                    <Icon className="w-3 h-3" style={{ color: GOLD }} />
-                    {label}
-                  </span>
-                ))}
-              </div>
-
-              <div className="hidden md:grid md:grid-cols-3 gap-4 max-w-4xl mx-auto mt-10">
-                {[
-                  { Icon: CheckCircle, title: "Instant Estimates",  body: "Monthly payment, total interest, and loan breakdown in real time" },
-                  { Icon: Sparkles,    title: "All Major UAE Banks", body: "Tuned to current local rates and down-payment rules" },
-                  { Icon: Shield,      title: "100% Free",            body: "No signup required, no commitment — just clarity" },
-                ].map(({ Icon, title, body }) => (
-                  <div
-                    key={title}
-                    className="rounded-xl p-4 text-left"
-                    style={{
-                      background: SURFACE,
-                      border: `1px solid ${GOLD}40`,
-                    }}
-                  >
-                    <Icon className="w-7 h-7 mb-2" style={{ color: GOLD }} />
-                    <p className="font-medium" style={{ color: INK }}>{title}</p>
-                    <p className="text-sm" style={{ color: `${INK}B3` }}>{body}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Calculator body — champagne raised card. Reduced shell padding on mobile. */}
-        <div className="container mx-auto px-2 md:px-4 pt-2 md:pt-12 pb-10 md:pb-16 space-y-6 md:space-y-10">
           <div className="max-w-5xl mx-auto">
             <AIShellCard padding="lg" className="!p-3 md:!p-8">
               <MortgageCalculator compact showHeading={false} showAssistant />
