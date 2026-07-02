@@ -11,6 +11,7 @@ import {
   Settings2,
   SlidersHorizontal,
   UserRound,
+  type LucideIcon,
   Users,
   Wallet,
 } from "lucide-react";
@@ -37,7 +38,7 @@ type QueueKey =
 type QueueDef = {
   id: QueueKey;
   label: string;
-  icon: React.ComponentType<{ size?: number }>;
+  icon: LucideIcon;
   count: number;
   columns: string[];
 };
