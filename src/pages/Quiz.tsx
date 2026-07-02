@@ -253,7 +253,13 @@ const NATIONALITIES = getCountryList();
 // below, so we do NOT need to rewrite the JSX to flip the palette.
 const AIHF_STYLE = `
   .aihf-root {
-    background: linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%) !important;
+    background: linear-gradient(180deg, #062B1E 0%, #041A12 55%, #02120C 100%) !important;
+  }
+  /* Question hero band — full-bleed deep emerald */
+  .aihf-root .aihf-hero {
+    background: linear-gradient(180deg, #064E3B 0%, #043828 60%, #032218 100%) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.28) !important;
+    box-shadow: 0 10px 40px -20px rgba(0,0,0,0.6) !important;
   }
   .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div,li,strong,em,a) {
     color: #FFFFFF !important;
