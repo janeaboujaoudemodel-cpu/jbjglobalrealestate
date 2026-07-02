@@ -11,9 +11,10 @@ import {
   FileText,
   Megaphone,
   ReceiptText,
+  type LucideIcon,
 } from "lucide-react";
 
-type Item = { slug: string; label: string; icon: React.ComponentType<{ size?: number }> };
+type Item = { slug: string; label: string; icon: LucideIcon };
 
 const ITEMS: Item[] = [
   { slug: "leads/new", label: "Lead", icon: Target },

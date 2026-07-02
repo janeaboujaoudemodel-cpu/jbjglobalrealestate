@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Bell, Check, MessageSquare, Target, Handshake, CalendarDays, FileText } from "lucide-react";
+import { Bell, Check, MessageSquare, Target, Handshake, CalendarDays, FileText, type LucideIcon } from "lucide-react";
 
 type Notif = {
   id: string;
-  icon: React.ComponentType<{ size?: number }>;
+  icon: LucideIcon;
   title: string;
   body: string;
   time: string;
