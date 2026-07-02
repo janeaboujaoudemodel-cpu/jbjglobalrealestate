@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
 import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -33,10 +34,21 @@ export const GuideTableOfContents = ({
   sticky = true,
   ctaAction
 }: GuideTableOfContentsProps) => {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const isScrollingRef = useRef(false);
+
+  const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
+    const target = event.currentTarget;
+    const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
+    const atTop = target.scrollTop <= 0;
+    const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 2;
+    if (!hasLocalScroll || (event.deltaY < 0 && atTop) || (event.deltaY > 0 && atBottom)) {
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, behavior: "auto" });
+    }
+  };
 
   useEffect(() => {
     // Check if tooltip was already dismissed
@@ -70,10 +82,9 @@ export const GuideTableOfContents = ({
           }
         }
       },
-      { 
-        // Smaller top margin to detect sections earlier when scrolling down
-        rootMargin: "-80px 0px -60% 0px", 
-        threshold: [0, 0.1, 0.2, 0.3] 
+      {
+        rootMargin: "-112px 0px -58% 0px",
+        threshold: [0, 0.1, 0.25, 0.5]
       }
     );
 
@@ -90,13 +101,11 @@ export const GuideTableOfContents = ({
     isScrollingRef.current = true;
     setActiveId(id);
     
-    // Use a larger offset to ensure section header is clearly visible
-    scrollToId(id, { extraOffset: 40 });
+    scrollToId(id, { extraOffset: 20 });
 
-    // Re-enable observer after scroll animation completes (longer delay for reliability)
     setTimeout(() => {
       isScrollingRef.current = false;
-    }, 1200);
+    }, 650);
   };
 
   const handleDismissTooltip = () => {
@@ -105,7 +114,7 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 lg:right-8 top-32 z-40 w-64 lg:w-72">
+    <div className="fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72" data-guide-toc>
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -115,7 +124,7 @@ export const GuideTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-[#FDFBF7] border border-white/30 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-[#1A1A1A]" />
@@ -123,7 +132,7 @@ export const GuideTableOfContents = ({
                 <div>
                   <h4 className="font-semibold text-[#1A1A1A] text-sm mb-1">Quick Navigation</h4>
                   <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
-                    Click any section button to jump directly to that part of the guide. The active section is highlighted in gold.
+                    Click any section button to jump directly to that part of the guide. The active section is highlighted in emerald.
                   </p>
                 </div>
               </div>
@@ -142,65 +151,67 @@ export const GuideTableOfContents = ({
         )}
       </AnimatePresence>
 
-      {/* Main TOC Container - Fixed position with visible gold scrollbar */}
+      {/* Main TOC Container - fixed position with emerald scrollbar */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
+        className="bg-[#FDFBF7] border border-white/30 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[calc(100dvh-8rem)] flex flex-col jj-scrollbar-emerald"
       >
         {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
+        <div className="flex items-center justify-between p-3 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
           <div className="flex items-center gap-2">
-            <List className="w-5 h-5 text-[#1A1A1A]" />
-            <h3 className="text-[#1A1A1A] font-semibold">{title}</h3>
+            <List className="w-5 h-5 text-white" />
+            <h3 className="text-white font-semibold">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg bg-[#F7F2EA] hover:bg-[#EFE6D6]/10 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-[#1A1A1A]/70" />
+              <ChevronDown className="w-4 h-4 text-white" />
             ) : (
-              <ChevronUp className="w-4 h-4 text-[#1A1A1A]/70" />
+              <ChevronUp className="w-4 h-4 text-white" />
             )}
           </button>
         </div>
         
-        {/* Collapsible content */}
-        <AnimatePresence>
+        {/* Collapsible content — stable scroll box; active rows never resize the container */}
+        <AnimatePresence initial={false}>
           {!isMinimized && (
             <motion.nav
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="p-3 space-y-1 overflow-y-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12 }}
+              onWheel={passBoundaryWheelToPage}
+              className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
             >
               {items.map((item, index) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
+                    "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
                     activeId === item.id
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-[#B89555]/40"
-                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent hover:border-[#B89555]/30"
+                      ? "bg-[image:var(--jj-emerald-ombre)] text-white font-semibold shadow-sm border-white/20"
+                      : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#064E3B]/10 border-transparent"
                   )}
                 >
                   <span className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
+                    "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
                     activeId === item.id
-                      ? "bg-[#1A1A1A] text-white"
-                      : "bg-[#EFE6D6]/10 text-[#1A1A1A]"
+                      ? "bg-[#064E3B] text-white border border-white/35"
+                      : "bg-[image:var(--jj-emerald-ombre)] text-white border border-white/25"
                   )}>
                     {index + 1}
                   </span>
                   {item.icon && <item.icon className={cn(
                     "w-4 h-4",
-                    activeId === item.id ? "text-[#1A1A1A]" : "text-[#1A1A1A]"
+                    activeId === item.id ? "text-white" : "text-[#064E3B]"
                   )} />}
-                  <span className="flex-1">{item.title}</span>
+                  {!item.icon && <span aria-hidden />}
+                  <span className="min-w-0 leading-snug">{item.title}</span>
                 </button>
               ))}
               
@@ -209,7 +220,7 @@ export const GuideTableOfContents = ({
                 <Link to={ctaAction.href} className="block mt-4">
                   <Button 
                     variant="primary"
-                    className="w-full relative py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+                    className="w-full relative py-3 mi-cta-emerald"
                   >
                     {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}
                     <span>{ctaAction.label}</span>

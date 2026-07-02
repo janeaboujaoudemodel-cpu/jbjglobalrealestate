@@ -113,7 +113,7 @@ const MarketReportsPage = () => {
   const featuredReports = reports;
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div data-mi-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Dubai Real Estate Market Reports | BUY · SELL · RENT Analysis | JBJ GLOBAL REAL ESTATE"
         description="Download monthly, quarterly, and annual Dubai real estate market reports. Data-driven insights powered by official government Open Data. No predictions, just clear analysis."

@@ -34,7 +34,7 @@ const fadeInUp = {
 
 const Methodology = () => {
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div data-mi-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Market Intelligence Methodology & Data Sources | JBJ GLOBAL REAL ESTATE"
         description="Full transparency on how we source, aggregate, and present Dubai real estate market intelligence. Official government Open Data sources, update frequency, and what the data is and is not."
