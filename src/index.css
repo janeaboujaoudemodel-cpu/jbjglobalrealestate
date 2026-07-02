@@ -23021,7 +23021,8 @@ html body [data-radix-select-content] :is([role="option"], [role="menuitem"], [d
 }
 html body [data-radix-popper-content-wrapper] :is([role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [cmdk-item], .cmdk-item):is([data-state="checked"], [aria-selected="true"], [data-selected="true"]),
 html body [data-radix-select-content] :is([role="option"], [role="menuitem"], [data-radix-collection-item]):is([data-state="checked"], [aria-selected="true"], [data-selected="true"]) {
-  background: linear-gradient(135deg, #065F46 0%, #042C1C 100%) !important;
+  background: transparent !important;
+  background-image: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
