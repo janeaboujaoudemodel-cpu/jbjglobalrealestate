@@ -424,6 +424,43 @@ export function useProjectsListing() {
   });
 }
 
+/**
+ * Ultra-light map hook: only fetch the fields needed by /map so the map route
+ * can paint immediately instead of waiting for the full listing catalogue query.
+ */
+export function useProjectsMapListing() {
+  return useQuery({
+    queryKey: ["projects-map-listing"],
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    queryFn: async () => {
+      const MAP_COLUMNS = `
+        id, name, slug, location, price_from,
+        bedrooms_min, bedrooms_max, size_min,
+        handover_date, status, is_sold_out,
+        property_type_label, status_label, emirate,
+        created_at, sale_status, construction_status,
+        area_name, cover_image_url, is_published,
+        developer_name, latitude, longitude,
+        community:communities(id, name, slug)
+      `;
+
+      const { data, error } = await supabase
+        .from("projects")
+        .select(MAP_COLUMNS)
+        .eq("is_published", true)
+        .or("listing_kind.is.null,listing_kind.neq.leasing")
+        .not("latitude", "is", null)
+        .not("longitude", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(900);
+
+      if (error) throw error;
+      return dedupePublicProjects((data ?? []) as unknown as UnifiedProject[]);
+    },
+  });
+}
+
 export function useProjectsByCommunity(communitySlug: string) {
   return useQuery({
     queryKey: ["projects", "community", communitySlug],
