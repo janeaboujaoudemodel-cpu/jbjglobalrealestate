@@ -24054,3 +24054,21 @@ html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div *
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   MAP-PAGE PHOTO INVERT GUARD
+   The global emerald contrast guard applies `filter: brightness(0)
+   invert(1)` to every <img> inside a data-surface="emerald" surface
+   so icon glyphs stay white. On the /map route the property photos
+   themselves live inside emerald cards — the filter turned them into
+   pure white blocks. Restore normal photo rendering everywhere on
+   the map surface. Icons here are lucide SVGs, not <img>, so they
+   are unaffected.
+   ═══════════════════════════════════════════════════════════════ */
+html body #root :where([data-map-page], [data-map-shell]) img,
+html body #root :where([data-map-page], [data-map-shell]) canvas {
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}

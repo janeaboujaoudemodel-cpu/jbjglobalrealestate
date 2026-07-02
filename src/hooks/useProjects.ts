@@ -445,15 +445,16 @@ export function useProjectsMapListing() {
         community:communities(id, name, slug)
       `;
 
+      // Fetch ALL published projects so the total count (e.g. 813) matches
+      // the site-wide inventory. Markers are still only rendered for rows
+      // that have coordinates — the map view filters those downstream.
       const { data, error } = await supabase
         .from("projects")
         .select(MAP_COLUMNS)
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
-        .not("latitude", "is", null)
-        .not("longitude", "is", null)
         .order("created_at", { ascending: false })
-        .limit(900);
+        .limit(1200);
 
       if (error) throw error;
       return dedupePublicProjects((data ?? []) as unknown as UnifiedProject[]);

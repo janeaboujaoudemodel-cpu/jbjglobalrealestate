@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { MapPin, List, X, ChevronRight, ExternalLink, Bed, Maximize, Calendar, Grid3X3, ArrowUpDown, Search, EyeOff } from "lucide-react";
+import { MapPin, List, X, ChevronRight, ExternalLink, Bed, Maximize, Calendar, Grid3X3, ArrowUpDown, Search } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
@@ -383,16 +383,7 @@ const PropertyMap = () => {
             <ArrowUpDown className="h-3 w-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
-          {/* Hide Sold toggle */}
-          <button
-            onClick={() => setHideSold(!hideSold)}
-            className="jj-map-filter-toggle"
-            data-active={hideSold ? "true" : "false"}
-            data-surface={hideSold ? "emerald" : "champagne"}
-          >
-            <EyeOff className="h-3.5 w-3.5" />
-            Hide Sold
-          </button>
+          {/* Hide Sold intentionally removed — nothing on the site is marked sold */}
         </div>
       </div>
 
@@ -461,15 +452,22 @@ const PropertyMap = () => {
             className="absolute z-[1000] pointer-events-none"
             style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
           >
-            <Card className="jj-map-hover-card pointer-events-auto">
-              <CardContent className="p-0">
+            <Card
+              className="jj-map-hover-card pointer-events-auto"
+              style={{
+                background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)',
+                color: '#FFFFFF',
+                border: '1px solid rgba(255,255,255,0.18)',
+              }}
+            >
+              <CardContent className="p-0" style={{ color: '#FFFFFF' }}>
                 {hoveredProject.cover_image_url && (
                   <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" />
                 )}
-                <div className="p-2">
-                  <h4 className="font-semibold text-xs truncate">{hoveredProject.name}</h4>
-                  <p data-developer-name className="text-[10px] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
-                  <p className="text-xs font-bold mt-1">{formatPrice(hoveredProject.price_from)}</p>
+                <div className="p-2" style={{ color: '#FFFFFF' }}>
+                  <h4 className="font-semibold text-xs truncate" style={{ color: '#FFFFFF' }}>{hoveredProject.name}</h4>
+                  <p data-developer-name className="text-[10px] leading-snug truncate" style={{ color: '#FFFFFF' }}>{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
+                  <p className="text-xs font-bold mt-1" style={{ color: '#FFFFFF' }}>{formatPrice(hoveredProject.price_from)}</p>
                 </div>
               </CardContent>
             </Card>
@@ -564,38 +562,78 @@ const PropertyMap = () => {
             {filteredProjects.slice(0, 100).map((project) => (
               <Card
                 key={project.id}
-                className="jj-map-list-card cursor-pointer transition-colors"
+                className="jj-map-list-card cursor-pointer transition-colors overflow-hidden"
                 onClick={() => setSelectedProject(project)}
                 data-surface="emerald"
+                style={{
+                  background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)',
+                  color: '#FFFFFF',
+                }}
               >
-                <CardContent className="p-0">
-                  {/* Image */}
-                  <div className={viewMode === "grid" ? "h-28 w-full" : "h-24 w-full"}>
-                    <SafeImage
-                      src={project.cover_image_url || "/placeholder.svg"}
-                      alt={project.name}
-                      className="w-full h-full object-cover rounded-t-lg"
-                      fallbackSrc="/placeholder.svg"
-                    />
-                  </div>
-                  <div className="p-2.5">
-                    <h3 className="font-semibold text-xs truncate">{project.name}</h3>
-                    <p data-developer-name className="text-[11px] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer_name}</p>
-                    <p className="text-[11px] truncate">{project.area_name || project.location}</p>
-                    <div className="flex items-center gap-1.5 mt-1.5">
-                      <span className="text-sm font-bold">{formatPrice(project.price_from)}</span>
-                      {project.bedrooms_min != null && (
-                        <Badge variant="secondary" className="jj-map-card-mini-badge text-[10px] px-1.5 py-0" data-surface="emerald">
-                          {project.bedrooms_min}-{project.bedrooms_max} BR
-                        </Badge>
-                      )}
+                <CardContent className="p-0" style={{ color: '#FFFFFF' }}>
+                  {viewMode === "grid" ? (
+                    <>
+                      {/* GRID: large image on top */}
+                      <div className="h-40 w-full">
+                        <SafeImage
+                          src={project.cover_image_url || "/placeholder.svg"}
+                          alt={project.name}
+                          className="w-full h-full object-cover"
+                          fallbackSrc="/placeholder.svg"
+                        />
+                      </div>
+                      <div className="p-2.5" style={{ color: '#FFFFFF' }}>
+                        <h3 className="font-semibold text-xs truncate" style={{ color: '#FFFFFF' }}>{project.name}</h3>
+                        <p className="text-[11px] truncate" style={{ color: 'rgba(255,255,255,0.86)' }}>
+                          {project.developer_name} • {project.area_name || project.location}
+                        </p>
+                        <div className="flex items-center justify-between mt-1.5 gap-1.5">
+                          <span className="text-sm font-bold" style={{ color: '#FFFFFF' }}>{formatPrice(project.price_from)}</span>
+                          {project.bedrooms_min != null && (
+                            <Badge variant="secondary" className="jj-map-card-mini-badge text-[10px] px-1.5 py-0" data-surface="emerald" style={{ color: '#FFFFFF' }}>
+                              {project.bedrooms_min}-{project.bedrooms_max} BR
+                            </Badge>
+                          )}
+                        </div>
+                        <Link to={`/project/${project.slug}`} onClick={(e) => e.stopPropagation()}>
+                          <Button size="sm" className="jj-map-details-button w-full mt-2 h-7 text-xs" data-surface="emerald" style={{ color: '#FFFFFF' }}>
+                            View Details <ExternalLink className="h-3 w-3 ml-1" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex">
+                      {/* LIST: large image LEFT, single-line details RIGHT */}
+                      <div className="w-40 h-36 shrink-0">
+                        <SafeImage
+                          src={project.cover_image_url || "/placeholder.svg"}
+                          alt={project.name}
+                          className="w-full h-full object-cover"
+                          fallbackSrc="/placeholder.svg"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0 p-2.5 flex flex-col justify-between" style={{ color: '#FFFFFF' }}>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-sm truncate" style={{ color: '#FFFFFF' }}>{project.name}</h3>
+                          {/* All details on ONE line */}
+                          <p className="text-[11px] truncate mt-0.5" style={{ color: 'rgba(255,255,255,0.9)' }}>
+                            {[
+                              project.developer_name,
+                              project.area_name || project.location,
+                              project.bedrooms_min != null ? `${project.bedrooms_min}-${project.bedrooms_max} BR` : null,
+                            ].filter(Boolean).join(' • ')}
+                          </p>
+                          <p className="text-sm font-bold mt-1" style={{ color: '#FFFFFF' }}>{formatPrice(project.price_from)}</p>
+                        </div>
+                        <Link to={`/project/${project.slug}`} onClick={(e) => e.stopPropagation()} className="mt-2">
+                          <Button size="sm" className="jj-map-details-button w-full h-7 text-xs" data-surface="emerald" style={{ color: '#FFFFFF' }}>
+                            View Details <ExternalLink className="h-3 w-3 ml-1" />
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                    <Link to={`/project/${project.slug}`} onClick={(e) => e.stopPropagation()}>
-                      <Button size="sm" className="jj-map-details-button w-full mt-2 h-7 text-xs" data-surface="emerald">
-                        View Details <ExternalLink className="h-3 w-3 ml-1" />
-                      </Button>
-                    </Link>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
