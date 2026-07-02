@@ -23075,8 +23075,24 @@ html body:has(#root [data-interior-design-ai]) #root .jj-footer-shell {
 }
 html body:has(#root .aihf-root) footer[data-jj-minimal-footer] > div,
 html body:has(#root [data-interior-design-ai]) footer[data-jj-minimal-footer] > div {
-  padding-top: 12px !important;
-  padding-bottom: 14px !important;
+  padding-top: 10px !important;
+  padding-bottom: 12px !important;
+}
+html body:has(#root .aihf-root) footer[data-jj-minimal-footer] .jj-footer-rule,
+html body:has(#root [data-interior-design-ai]) footer[data-jj-minimal-footer] .jj-footer-rule {
+  display: none !important;
+}
+html body:has(#root .aihf-root) footer[data-jj-minimal-footer] p,
+html body:has(#root [data-interior-design-ai]) footer[data-jj-minimal-footer] p {
+  margin-top: 8px !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] {
+  min-height: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+}
+html body [data-chrome="sidebar"] a[href="/auth"] {
+  min-height: 40px !important;
+  max-height: 40px !important;
 }
 
 @media (min-width: 640px) {
