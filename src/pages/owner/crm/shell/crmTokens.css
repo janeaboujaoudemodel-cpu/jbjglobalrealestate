@@ -4,18 +4,18 @@
  * Colors below replace Zoho's blue/orange with JBJ Emerald + Pearl.
  */
 :root {
-  --jbjcrm-emerald: #0F5A45;
-  --jbjcrm-emerald-ink: #064E3B;
-  --jbjcrm-emerald-deep: #032a1e;
-  --jbjcrm-emerald-line: #0B3E2F;
+  --jbjcrm-emerald: #064E3B;
+  --jbjcrm-emerald-ink: #032A1E;
+  --jbjcrm-emerald-deep: #011B13;
+  --jbjcrm-emerald-line: #053626;
   --jbjcrm-emerald-soft: rgba(15, 90, 69, 0.12);
   --jbjcrm-emerald-tint: rgba(15, 90, 69, 0.08);
   /* Metallic Emerald→Black gradient for sidebar & header (JBJ brand lock) */
-  --jbjcrm-metallic-emerald: linear-gradient(180deg, #0B4A38 0%, #052A1E 40%, #010805 100%);
-  --jbjcrm-metallic-emerald-h: linear-gradient(90deg, #0B4A38 0%, #052A1E 55%, #000000 100%);
+  --jbjcrm-metallic-emerald: linear-gradient(180deg, #064E3B 0%, #032A1E 42%, #000000 100%);
+  --jbjcrm-metallic-emerald-h: linear-gradient(90deg, #064E3B 0%, #032A1E 52%, #000000 100%);
   --jbjcrm-sidebar: var(--jbjcrm-metallic-emerald);
   --jbjcrm-sidebar-deep: #010805;
-  --jbjcrm-sidebar-line: rgba(255, 255, 255, 0.18);
+  --jbjcrm-sidebar-line: rgba(255, 255, 255, 0.28);
   --jbjcrm-sidebar-text: #FFFFFF;
   --jbjcrm-sidebar-muted: rgba(255, 255, 255, 0.85);
   --jbjcrm-active: rgba(255, 255, 255, 0.20);

@@ -542,3 +542,90 @@
   .jc-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .jc-widget-row { grid-template-columns: 1fr; }
 }
+
+/* PASS 154 — CRM CHROME CONTRAST PROOF LOCK
+   Header + vertical sidebar are dark emerald→black chrome. Every text run,
+   icon, caret, button glyph, dropdown label, and SVG primitive inside chrome
+   resolves to pure white, including parent rows that previously computed black
+   and leaked through currentColor. */
+.jc-app :is(.jc-header, .jc-rail),
+.jc-app :is(.jc-header, .jc-rail) :is(
+  h1, h2, h3, h4, p, span, label, input, button, a, div,
+  .jc-brand-row, .jc-brand-product, .jc-brand-caret, .jc-collapse-visual,
+  .jc-header__title, .jc-search, .jc-search input, .jc-icon-btn, .jc-grid-btn,
+  .jc-teamspace__title, .jc-teamspace__badge, .jc-side-link, .jc-team-item,
+  .jc-folder__label, .jc-side-search, .jc-side-search input
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.jc-app :is(.jc-header, .jc-rail) :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+.jc-app :is(.jc-header, .jc-rail) svg {
+  stroke-width: 2.15px !important;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.35));
+}
+
+.jc-app :is(.jc-header, .jc-rail) input::placeholder {
+  color: rgba(255,255,255,0.82) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
+  opacity: 1 !important;
+}
+
+.jc-header {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-left: 1px solid rgba(255,255,255,0.42) !important;
+}
+
+.jc-rail,
+.jc-brand-row {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.jc-collapse-visual {
+  border-left: 1px solid rgba(255,255,255,0.34) !important;
+  border-radius: 0 6px 6px 0 !important;
+}
+
+.jc-side-link:hover,
+.jc-team-item:hover,
+.jc-folder__label:hover,
+.jc-collapse-visual:hover,
+.jc-icon-btn:hover,
+.jc-grid-btn:hover {
+  background: rgba(255,255,255,0.16) !important;
+}
+
+.jc-side-link[data-active="true"],
+.jc-team-item[data-active="true"] {
+  background: rgba(255,255,255,0.24) !important;
+  box-shadow: inset 3px 0 0 #FFFFFF !important;
+}
+
+.jc-search,
+.jc-side-search {
+  background: rgba(255,255,255,0.11) !important;
+  border-color: rgba(255,255,255,0.42) !important;
+}
+
+.jc-brand-mark,
+.jc-teamspace__badge {
+  background: linear-gradient(160deg, #064E3B 0%, #032A1E 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.48) !important;
+}
+
+.jc-org-picker,
+.jc-org-picker :is(span, svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
