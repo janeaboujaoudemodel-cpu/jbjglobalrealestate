@@ -277,13 +277,13 @@
   font-weight: 600;
   line-height: 20px;
 }
-.jc-folder__label svg:first-child { color: var(--jbjcrm-emerald-ink) !important; fill: var(--jbjcrm-emerald-ink) !important; stroke-width: 1.6 !important; }
+.jc-folder__label svg:first-child { color: #FFFFFF !important; fill: none !important; stroke: #FFFFFF !important; stroke-width: 1.75 !important; opacity: 0.95; }
 .jc-folder__children { display: block; }
 .jc-folder[data-open="false"] .jc-folder__children { display: none; }
 .jc-folder__children .jc-team-item { padding-left: 13px !important; }
 
 .jc-side-link svg,
-.jc-team-item svg { color: var(--jbjcrm-emerald-ink) !important; -webkit-text-fill-color: var(--jbjcrm-emerald-ink) !important; stroke: currentColor !important; stroke-width: 1.75 !important; width: 20px !important; height: 20px !important; min-width: 20px !important; }
+.jc-team-item svg { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; stroke-width: 1.75 !important; width: 20px !important; height: 20px !important; min-width: 20px !important; opacity: 0.92; }
 .jc-side-link span,
 .jc-team-item span { color: currentColor !important; -webkit-text-fill-color: currentColor !important; }
 .jc-side-link[data-active="true"] svg,
