@@ -435,13 +435,13 @@ const Developers = () => {
                 {[...Array(8)].map((_, i) => (
                   <div 
                     key={i} 
-                    className="h-[280px] rounded-xl bg-champagne/50 animate-pulse"
-                    style={{ border: '2px solid hsl(42 45% 59% / 0.3)' }}
+                    className="h-[280px] rounded-xl bg-[#04241C]/50 animate-pulse"
+                    style={{ border: '2px solid rgba(255,255,255,0.12)' }}
                   />
                 ))}
               </div>
             ) : filteredDevelopers.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-[#B89555]/30 rounded-xl bg-premium-card/50">
+              <div className="text-center py-20 border border-dashed border-[#064E3B]/25 rounded-xl bg-premium-card/50">
                 <Building2 className="w-20 h-20 text-[#1A1A1A]/70 mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
@@ -455,7 +455,7 @@ const Developers = () => {
                       Clear Filters
                     </Button>
                   )}
-                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-[#064E3B]/25 text-[#1A1A1A] hover:bg-[#064E3B]/10">
                     Retry
                   </Button>
                 </div>
@@ -483,7 +483,7 @@ const Developers = () => {
                       size="sm"
                       disabled={currentPage <= 1}
                       onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                      className="border-[#B89555]/30 text-foreground"
+                      className="border-[#064E3B]/25 text-foreground"
                     >
                       Previous
                     </Button>
@@ -503,7 +503,7 @@ const Developers = () => {
                             variant={p === currentPage ? "default" : "outline"}
                             size="sm"
                             onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                            className={p === currentPage ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-foreground"}
+                            className={p === currentPage ? "jj-pill-emerald-metallic allow-white text-white border-0" : "border-[#064E3B]/25 text-foreground"}
                           >
                             {p}
                           </Button>
@@ -514,7 +514,7 @@ const Developers = () => {
                       size="sm"
                       disabled={currentPage >= totalPages}
                       onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                      className="border-[#B89555]/30 text-foreground"
+                      className="border-[#064E3B]/25 text-foreground"
                     >
                       Next
                     </Button>
