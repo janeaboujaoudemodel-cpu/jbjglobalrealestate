@@ -1308,7 +1308,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <Link
               to="/auth"
               data-no-contrast-guard
-              className="flex items-center justify-center gap-2 text-[12.5px] font-semibold transition-all px-3 h-16 rounded-lg border w-full group"
+              className="flex items-center justify-center gap-2 text-[12px] font-semibold transition-all px-3 h-10 rounded-lg border w-full group"
               style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
             >
               <User className="w-4 h-4" style={{ color: '#000000' }} />
@@ -1498,8 +1498,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" data-no-contrast-guard className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-[hsl(var(--gold))]/10 transition-all">
-                      <User className="w-4 h-4 text-[hsl(var(--gold))]" />
+                    <Link to="/auth" data-no-contrast-guard className="jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+                      <User className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
