@@ -325,7 +325,7 @@ export default function SupportLauncher() {
                   data-no-contrast-guard
                   className="jj-emerald-metallic allow-white flex flex-col overflow-hidden rounded-[14px] p-3 text-white max-h-[calc(100dvh-6.5rem)]"
                 >
-                  <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 border-b border-white/15 mb-2">
+                  <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 mb-2">
                     <span
                       className="allow-white inline-flex h-11 items-center gap-1.5 px-4 rounded-full text-[11px] font-semibold text-white"
                       style={{
@@ -333,7 +333,7 @@ export default function SupportLauncher() {
                         WebkitTextFillColor: "#FFFFFF",
                         backgroundImage: "var(--jj-emerald-ombre)",
                         border: 0,
-                        boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+                        boxShadow: "none",
                       }}
                     >
                       <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
@@ -350,12 +350,13 @@ export default function SupportLauncher() {
                         WebkitTextFillColor: "#FFFFFF",
                         backgroundImage: "var(--jj-emerald-ombre)",
                         border: 0,
-                        boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+                        boxShadow: "none",
                       }}
                     >
                       <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </button>
                   </div>
+
                   <div
                     className="grid w-full grid-cols-[minmax(0,1fr)] auto-rows-[86px] items-stretch justify-stretch gap-2.5 overflow-y-auto overflow-x-hidden pr-0.5"
                     style={{ gridTemplateColumns: "minmax(0, 1fr)" }}
