@@ -56,6 +56,7 @@ export type CrmFolder = {
 
 export const CRM_PRIMARY_NAV: CrmModule[] = [
   { slug: "home", label: "Home", icon: Home },
+  { slug: "calendar", label: "Calendar", icon: CalendarDays },
   { slug: "reports", label: "Reports", icon: BarChart3 },
   { slug: "analytics", label: "Analytics", icon: FileBarChart2 },
   { slug: "my-requests", label: "My Requests", icon: ClipboardList },
