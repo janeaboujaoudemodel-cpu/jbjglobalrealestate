@@ -5,6 +5,7 @@ import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
 import CrmSearchOverlay from "./CrmSearchOverlay";
 import CrmQuickCreateMenu from "./CrmQuickCreateMenu";
 import CrmNotificationsPanel from "./CrmNotificationsPanel";
+import CrmZiaPanel from "./CrmZiaPanel";
 import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
 
 export default function CrmHeader() {
@@ -14,6 +15,7 @@ export default function CrmHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [ziaOpen, setZiaOpen] = useState(false);
   const unreadCount = 3;
 
   useEffect(() => {
@@ -61,7 +63,14 @@ export default function CrmHeader() {
           </button>
           <CrmQuickCreateMenu open={quickOpen} onClose={() => setQuickOpen(false)} />
         </div>
-        <button className="jc-icon-btn" type="button" aria-label="Zia assistant">
+        <button
+          className="jc-icon-btn"
+          type="button"
+          aria-label="Zia assistant"
+          aria-expanded={ziaOpen}
+          data-active={ziaOpen ? "true" : undefined}
+          onClick={() => { setZiaOpen((v) => !v); setQuickOpen(false); setNotifOpen(false); }}
+        >
           <Wand2 size={21} />
         </button>
         <div className="jc-popover-anchor">
@@ -102,6 +111,7 @@ export default function CrmHeader() {
         </button>
       </div>
       <CrmSearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <CrmZiaPanel open={ziaOpen} onClose={() => setZiaOpen(false)} />
     </header>
   );
 }
