@@ -26163,3 +26163,79 @@ html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden
 }
 
 /* END PASS 180 */
+
+/* PASS 181 — Guide hero/dropdown emerald lock.
+   Fixes Buyer/Seller/Rental guide hero CTAs, In This Guide rows, and
+   the "I Understand" popover so the selected/header areas are emerald
+   with inverted white content instead of champagne/black states. */
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a),
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a)[class*="px-6"],
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a)[class*="px-8"],
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 14px 32px -18px rgba(0,0,0,0.74), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  transform: none !important;
+}
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a):hover {
+  background: var(--jj-emerald-ombre-hover) !important;
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 18px 38px -18px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a) :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) :is(span,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  filter: none !important;
+}
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] span[style],
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] span.absolute {
+  display: none !important;
+}
+
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip],
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip] *,
+html body #root [data-insights-page] [data-guide-toc] [data-guide-toc-header],
+html body #root [data-insights-page] [data-guide-toc] [data-guide-toc-header] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip-button],
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip-button] * {
+  background: rgba(0,0,0,0.22) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-toc-item] {
+  background: rgba(0,0,0,0.18) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-toc-item]:hover,
+html body #root [data-insights-page] [data-guide-toc] [data-toc-state="active"] {
+  background: rgba(255,255,255,0.13) !important;
+  border-color: rgba(255,255,255,0.20) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-toc-number] {
+  background: rgba(0,0,0,0.24) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+}
+
+/* END PASS 181 */
