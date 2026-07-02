@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, CRM_MODULE_MAP } from "./modules";
+import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
 
 /**
  * JBJ CRM — Module views (Phase 3 + Phase 5).
@@ -233,6 +234,12 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
   const kanbanAvailable = canKanban(slug);
   const showKanban = view === "kanban" && kanbanAvailable;
 
+  // Real data — only Leads is wired to live crm_leads today.
+  const isLeads = slug === "leads";
+  const leadsQuery = useOwnerCrmLeads(isLeads ? 500 : 0);
+  const rows = isLeads ? leadsQuery.rows : [];
+  const rowCount = isLeads ? rows.length : 0;
+
   return (
     <div className="jc-list" data-no-contrast-guard>
       <div className="jc-list__toolbar">
@@ -240,7 +247,13 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
           <span>All {plural}</span>
           <ChevronDown size={15} />
         </button>
-        <span className="jc-list__count">0 Records</span>
+        <span className="jc-list__count">
+          {isLeads
+            ? leadsQuery.loading
+              ? "Loading…"
+              : `${rowCount} Record${rowCount === 1 ? "" : "s"}`
+            : "0 Records"}
+        </span>
         {kanbanAvailable && (
           <div className="jc-view-switch" role="tablist" aria-label="View mode">
             <button
@@ -342,17 +355,58 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
               </div>
             </div>
 
-            <div className="jc-list__empty" role="row">
-              <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
-                <rect x="10" y="16" width="52" height="40" rx="4" stroke="#CBD2E1" strokeWidth="1.6" />
-                <path d="M18 28h36M18 36h36M18 44h24" stroke="#CBD2E1" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-              <h3>No {plural} found</h3>
-              <p>Create your first {label.toLowerCase()} to get started.</p>
-              <button type="button" className="jc-list__cta" onClick={goCreate}>
-                <Plus size={15} /> Create {label}
-              </button>
-            </div>
+            {isLeads && rowCount > 0 ? (
+              rows.map((r: OwnerCrmLead) => {
+                const on = selected.has(r.id);
+                return (
+                  <div
+                    key={r.id}
+                    className="jc-list__row"
+                    role="row"
+                    data-selected={on}
+                    onClick={() => navigate(`/owner/crm/jbj/${section}/${r.id}`)}
+                  >
+                    <div className="jc-list__td jc-list__td--check" onClick={(e) => e.stopPropagation()}>
+                      <input
+                        type="checkbox"
+                        checked={on}
+                        onChange={(e) => {
+                          setSelected((prev) => {
+                            const next = new Set(prev);
+                            if (e.target.checked) next.add(r.id); else next.delete(r.id);
+                            return next;
+                          });
+                        }}
+                        aria-label={`Select ${r.full_name}`}
+                      />
+                    </div>
+                    <div className="jc-list__td jc-list__td--link">{r.full_name || "—"}</div>
+                    <div className="jc-list__td">{r.company_name || "—"}</div>
+                    <div className="jc-list__td">{r.email || "—"}</div>
+                    <div className="jc-list__td">{r.phone || "—"}</div>
+                    <div className="jc-list__td">{r.source || "—"}</div>
+                    <div className="jc-list__td">{r.owner_user_id ? "Assigned" : "Unassigned"}</div>
+                    <div className="jc-list__td jc-list__td--tools" />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="jc-list__empty" role="row">
+                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+                  <rect x="10" y="16" width="52" height="40" rx="4" stroke="#CBD2E1" strokeWidth="1.6" />
+                  <path d="M18 28h36M18 36h36M18 44h24" stroke="#CBD2E1" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+                <h3>{isLeads && leadsQuery.error ? "Could not load leads" : `No ${plural} found`}</h3>
+                <p>
+                  {isLeads && leadsQuery.error
+                    ? leadsQuery.error
+                    : `Create your first ${label.toLowerCase()} to get started.`}
+                </p>
+                <button type="button" className="jc-list__cta" onClick={goCreate}>
+                  <Plus size={15} /> Create {label}
+                </button>
+              </div>
+            )}
           </section>
         </div>
       )}

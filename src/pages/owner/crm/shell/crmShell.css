@@ -821,6 +821,26 @@
 .jc-list__th--tools { max-width: 40px; text-align: right; color: var(--jbjcrm-graphite-3); }
 .jc-list__th--check input { accent-color: var(--jbjcrm-emerald); }
 
+/* Data rows — mirror the header grid so cells align 1:1. */
+.jc-list__row {
+  display: grid; grid-auto-columns: minmax(140px, 1fr); grid-auto-flow: column;
+  padding: 0 18px; background: #FFFFFF; cursor: pointer;
+  border-bottom: 1px solid var(--jbjcrm-hairline);
+  transition: background .12s ease;
+}
+.jc-list__row:hover { background: #F7FAFC; }
+.jc-list__row[data-selected="true"] { background: var(--jbjcrm-emerald-tint); }
+.jc-list__td {
+  padding: 11px 8px; font-size: 13px; color: var(--jbjcrm-graphite);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: flex; align-items: center;
+}
+.jc-list__td--check { max-width: 34px; padding-left: 0; }
+.jc-list__td--check input { accent-color: var(--jbjcrm-emerald); }
+.jc-list__td--tools { max-width: 40px; }
+.jc-list__td--link { color: var(--jbjcrm-emerald); font-weight: 600; }
+
+
 .jc-list__empty {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: 10px; padding: 80px 24px;
