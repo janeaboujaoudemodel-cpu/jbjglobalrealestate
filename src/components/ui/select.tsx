@@ -215,6 +215,8 @@ const SelectItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
+      data-surface="emerald"
+      data-no-contrast-guard
     className={cn(
       "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-white outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -246,6 +248,8 @@ const SelectItemDark = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
+      data-surface="emerald"
+      data-no-contrast-guard
     className={cn(
       "relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-8 pr-3 text-sm outline-none transition-all duration-200 whitespace-normal overflow-visible",
       "text-white",
