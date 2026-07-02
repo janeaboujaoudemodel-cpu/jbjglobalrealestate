@@ -2186,9 +2186,10 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 /* ============================================================
    Phase 13 — Workqueue + SalesSignals
    ============================================================ */
+/* Legacy Phase 13 selector neutralized: the active Workqueue layout is the
+   full-card two-pane contract at the bottom of this file. Do not reintroduce
+   a 3-column grid here. */
 .jc-wq {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr) 380px;
   height: 100%;
   min-height: 0;
   background: var(--jbjcrm-canvas);
