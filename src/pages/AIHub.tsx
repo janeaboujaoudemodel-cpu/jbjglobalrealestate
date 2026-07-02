@@ -768,11 +768,13 @@ function AIHubFaqSection() {
             value={`ai-hub-faq-${i}`}
             data-ai-hub-faq-item
             data-allow-bg
-            className="group rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden transition-colors data-[state=open]:border-white/35 data-[state=open]:bg-[#064E3B]"
+            className="group rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden transition-colors data-[state=open]:border-white/35"
+            data-allow-ink
           >
             <AccordionTrigger
               data-ai-hub-faq-trigger
-              className="w-full text-left text-[#1A1A1A] hover:text-[#1A1A1A] hover:no-underline py-4 px-5 transition-colors hover:bg-[#F7F2EA] data-[state=open]:bg-[#064E3B] data-[state=open]:text-white data-[state=open]:hover:bg-[#064E3B]"
+              data-allow-ink
+              className="w-full text-left text-[#1A1A1A] hover:text-[#1A1A1A] hover:no-underline py-4 px-5 transition-colors"
             >
               <span className="font-semibold group-data-[state=open]:text-white">{faq.question}</span>
             </AccordionTrigger>
