@@ -10,7 +10,9 @@ interface DeveloperCardProps {
   developer: Developer;
   projectCount?: number;
   index?: number;
+  heroImageUrl?: string;
 }
+
 
 // Developer tier classification
 const TIER_CONFIG: Record<string, { label: string; color: string }> = {
