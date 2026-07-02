@@ -267,7 +267,7 @@ const Developers = () => {
               className="text-center max-w-4xl mx-auto"
             >
               {/* Label */}
-              <div className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-white/18 bg-[#064E3B]/80 backdrop-blur-md">
+              <div className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-white/20 bg-gradient-to-r from-black/85 via-[#03170F]/85 to-[#04241C]/85 backdrop-blur-md shadow-[0_4px_18px_rgba(0,0,0,0.35)]">
                 <Building2 className="w-4 h-4 text-white" />
                 <span className="text-white font-semibold text-xs uppercase tracking-[0.2em]">
                   Developer-Direct Properties
