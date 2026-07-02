@@ -443,7 +443,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               {generatedImage ? (
                 <div className="relative">
                   <Design3DViewer imageUrl={generatedImage} projectName={projectName} />
-                  <div className="p-4 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+                  <div className="p-4 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                     <Button onClick={() => generateDesign()} disabled={isProcessing} className="id-primary flex-1">
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Regenerate
@@ -466,7 +466,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   >
                     <X className="w-4 h-4" />
                   </button>
-                  <div className="p-4 border-t" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+                  <div className="p-4 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                     <Button onClick={() => generateDesign()} disabled={isProcessing} className="id-primary w-full min-h-12">
                       {isProcessing ? (
                         <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" /> Generating...</>
@@ -600,7 +600,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </Collapsible>
 
             <div className="id-panel rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '420px' }}>
-              <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+              <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                 <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4" />
                 </div>
@@ -625,7 +625,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-3 border-t" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+              <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                 <div className="flex gap-2">
                   <Textarea
                     value={chatInput}
