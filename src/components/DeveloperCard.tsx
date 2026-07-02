@@ -10,7 +10,9 @@ interface DeveloperCardProps {
   developer: Developer;
   projectCount?: number;
   index?: number;
+  heroImageUrl?: string;
 }
+
 
 // Developer tier classification
 const TIER_CONFIG: Record<string, { label: string; color: string }> = {
@@ -44,42 +46,54 @@ function getDeveloperTier(slug: string): { label: string; color: string } | null
  *  - Bottom half = developer name + 1-line description + stats row.
  *  - Hover = subtle lift + soft glow only. No color flips.
  */
-const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCardProps) => {
+const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }: DeveloperCardProps) => {
   const tier = getDeveloperTier(developer.slug || "");
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
+  const hasHero = !!heroImageUrl;
+  const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
 
   return (
-    <Link to={`/developer/${developer.slug}`} className="block h-full">
+    <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
       <motion.div
-        whileHover={{ y: -6 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="group rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
+        whileHover={{ y: -8, scale: 1.015, boxShadow: "0 24px 48px -12px rgba(0,0,0,0.28), 0 12px 24px -8px rgba(184,149,85,0.25)" }}
+        transition={{ type: "spring", stiffness: 260, damping: 22 }}
+        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
         style={{
-          border: "1px solid rgba(184,149,85,0.35)",
-          boxShadow:
-            "0 8px 24px rgba(200,167,102,0.18), 0 2px 6px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)",
+          boxShadow: "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)",
         }}
       >
-        {/* Logo plate — uniform white surface, full-fit logo, no crops */}
-        <div className="relative aspect-[5/3] bg-white border-b border-[#B89555]/25 flex items-center justify-center p-8">
-          {override.forceNameplate ? (
+
+        {/* Hero — project photo (preferred) with logo/name fallback */}
+        <div className="relative aspect-[5/3] bg-[#F5F0E6] flex items-center justify-center overflow-hidden">
+          {hasHero ? (
+            <>
+              <img
+                src={heroImageUrl}
+                alt={`${developer.name} featured project`}
+                loading={isEager ? "eager" : "lazy"}
+                referrerPolicy="no-referrer"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
+            </>
+          ) : override.forceNameplate ? (
             <span className="text-[#1A1A1A] font-bold text-2xl md:text-3xl tracking-tight text-center px-2">
               {developer.name}
             </span>
-          ) : isValidDeveloperLogoUrl(developer.logo_url) ? (
+          ) : logoValid ? (
             <img
               src={developer.logo_url}
               alt={`${developer.name} logo`}
               loading={isEager ? "eager" : "lazy"}
               referrerPolicy="no-referrer"
-              className="block max-h-full max-w-full w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+              decoding="async"
+              className="block max-h-[70%] max-w-[80%] w-auto h-auto object-contain"
               style={{
-                filter: override.invert
-                  ? "invert(1) brightness(1)"
-                  : "contrast(1.08) saturate(1.1)",
+                filter: override.invert ? "invert(1) brightness(1)" : "contrast(1.08) saturate(1.1)",
               }}
-             decoding="async" />
+            />
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
               <Building2 className="w-10 h-10 text-[#1A1A1A]/40" />
@@ -89,7 +103,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             </div>
           )}
 
-          {/* Tier Badge — top-right pill on the plate */}
+          {/* Tier Badge */}
           {tier && (
             <div className="absolute top-3 right-3 z-10">
               <Badge
@@ -103,8 +117,8 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
         </div>
 
         {/* Content section */}
-        <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
-          <h3 className="text-[#1A1A1A] font-bold text-base md:text-lg mb-1.5 line-clamp-1 group-hover:text-[#1A1A1A] transition-colors">
+        <div className="flex-1 p-4 bg-[#FDFBF7] flex flex-col">
+          <h3 className="text-[#1A1A1A] font-bold text-base md:text-lg mb-1.5 line-clamp-1">
             {developer.name}
           </h3>
 
@@ -120,7 +134,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-[#1A1A1A]/75 text-xs mt-3 pt-3 border-t border-[#B89555]/20">
+          <div className="flex items-center gap-3 text-[#1A1A1A]/75 text-xs mt-3 pt-3 border-t border-black/5">
             {projectCount > 0 ? (
               <div className="flex items-center gap-1">
                 <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
@@ -144,3 +158,4 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
 };
 
 export default DeveloperCard;
+

@@ -126,6 +126,21 @@ const Developers = () => {
     }, {});
   }, [projects]);
 
+  // Top project cover image per developer (used as the card hero photo)
+  const topProjectImageByDev = useMemo(() => {
+    if (!projects) return {} as Record<string, string>;
+    const map: Record<string, string> = {};
+    for (const p of projects) {
+      const devId = p.developer?.id;
+      if (!devId) continue;
+      if (map[devId]) continue;
+      const img = (p as any).cover_image_url || (p as any).images?.find?.((i: any) => i?.image_url)?.image_url;
+      if (img) map[devId] = img;
+    }
+    return map;
+  }, [projects]);
+
+
   // Apply filters to developers
   const filteredDevelopers = useMemo(() => {
     if (!developers) return [];
@@ -444,16 +459,18 @@ const Developers = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
                   {paginatedDevelopers.map((developer, idx) => (
                     <DeveloperCard 
                       key={developer.id} 
                       developer={developer} 
                       projectCount={projectCounts[developer.id] || 0}
+                      heroImageUrl={topProjectImageByDev[developer.id]}
                       index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                     />
                   ))}
                 </div>
+
 
                 {/* Pagination */}
                 {totalPages > 1 && (
