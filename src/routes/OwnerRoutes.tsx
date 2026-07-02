@@ -21,6 +21,7 @@ const CrmCreatePage = lazy(() => import("@/pages/owner/crm/shell/CrmCreatePage")
 const CrmRecordPage = lazy(() => import("@/pages/owner/crm/shell/CrmRecordPage"));
 const CrmReports = lazy(() => import("@/pages/owner/crm/shell/CrmReports"));
 const CrmAnalytics = lazy(() => import("@/pages/owner/crm/shell/CrmAnalytics"));
+const CrmSetup = lazy(() => import("@/pages/owner/crm/shell/CrmSetup"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
@@ -140,6 +141,8 @@ export const OwnerRoutes = () => (
     <Route path="home" element={<CrmHome />} />
     <Route path="reports" element={<CrmReports />} />
     <Route path="analytics" element={<CrmAnalytics />} />
+    <Route path="setup" element={<CrmSetup />} />
+    <Route path="setup/:categoryId" element={<CrmSetup />} />
     <Route path=":section" element={<CrmModulePage />} />
     <Route path=":section/new" element={<CrmCreatePage />} />
     <Route path=":section/:id" element={<CrmRecordPage />} />

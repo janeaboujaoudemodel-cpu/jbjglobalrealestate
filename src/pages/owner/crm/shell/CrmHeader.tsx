@@ -84,9 +84,9 @@ export default function CrmHeader() {
         <button className="jc-icon-btn" type="button" aria-label="Marketplace">
           <Store size={21} />
         </button>
-        <button className="jc-icon-btn" type="button" aria-label="Setup">
+        <Link to="/owner/crm/jbj/setup" className="jc-icon-btn" aria-label="Setup">
           <Settings size={21} />
-        </button>
+        </Link>
         <Link
           to="/owner"
           className="jc-jbj-avatar"
