@@ -629,3 +629,40 @@
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+.jc-header .jc-search {
+  position: relative !important;
+  overflow: hidden !important;
+  flex: 0 0 292px !important;
+  width: 292px !important;
+  min-width: 292px !important;
+  max-width: 292px !important;
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.48) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+.jc-header .jc-search input,
+.jc-header .jc-search input:hover,
+.jc-header .jc-search input:focus,
+.jc-header .jc-search input:active {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+}
+
+.jc-header .jc-search input:-webkit-autofill,
+.jc-header .jc-search input:-webkit-autofill:hover,
+.jc-header .jc-search input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  transition: background-color 999999s ease-in-out 0s !important;
+}
