@@ -15,8 +15,8 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
   DollarSign, Bed, Ruler, FileText,
-  ChevronLeft, ChevronRight, Merge, Plus, CheckSquare,
-  Upload, Globe, Building, Timer, Eye, Search
+  ChevronLeft, ChevronRight, Merge, Plus, 
+  Upload, Globe, Building, Timer, Eye, Search, UploadCloud
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
@@ -456,7 +456,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           })
           .eq("id", importData.id);
         
-        throw new Error(`DUPLICATE: Project "${existingProject.name}" already exists. Use "Merge Updates" to update the existing project instead.`);
+        throw new Error(`DUPLICATE: Project "${existingProject.name}" already exists. Use "Select and Merge" to update the existing project instead.`);
       }
     }
 
@@ -585,7 +585,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       await approveImportInDb(importData, forceCreate);
 
       toast({
-        title: "Project Approved",
+        title: "Project Published",
         description: `"${importData.name}" has been added to your listings`,
       });
 
@@ -675,7 +675,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
         toast({
           title: "Bulk approve finished",
-          description: `${totalApproved.toLocaleString()} projects approved`,
+          description: `${totalApproved.toLocaleString()} projects published`,
         });
       } finally {
         setIsBulkProcessing(false);
@@ -1096,13 +1096,14 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     size="sm"
                     onClick={showApproveSelectedConfirmation}
                     disabled={isBulkProcessing || isLoading}
-                    className="jj-surface-emerald hover:jj-surface-emerald text-white"
+                    data-cta="dark"
+                    className="jj-cta-dark"
                   >
-                    <CheckSquare className="h-4 w-4 mr-2" />
-                    Approve Selected ({selectedIds.size})
+                    <UploadCloud className="h-4 w-4 mr-2" />
+                    Publish Selected ({selectedIds.size})
                   </Button>
-                 )}
-                 {/* Approve ALL Pending button - calls edge function in batches */}
+                )}
+                 {/* Publish ALL Pending button - calls edge function in batches */}
                  {(totalCount ?? 0) > 0 && (
                    <Button
                      size="sm"
@@ -1110,8 +1111,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                      disabled={isBulkProcessing || isLoading}
                      className="jj-surface-emerald hover:jj-surface-emerald text-white"
                    >
-                     <Check className="h-4 w-4 mr-2" />
-                     Approve ALL ({(totalCount ?? 0).toLocaleString()})
+                      <UploadCloud className="h-4 w-4 mr-2" />
+                      Publish ALL ({(totalCount ?? 0).toLocaleString()})
                    </Button>
                  )}
                  {(totalNeedsWorkCount ?? needsWorkCount) > 0 && (
@@ -1673,17 +1674,26 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       className="border-blue-200 text-blue-600 hover:bg-blue-50"
                     >
                       <Merge className="h-4 w-4 mr-2" />
-                      Merge Updates
+                      Select and Merge
                     </Button>
                   )}
+                  <Button
+                    onClick={() => handleApprove(selectedImport)}
+                    disabled={processingId === selectedImport.id}
+                    data-cta="dark"
+                    className="jj-cta-dark"
+                  >
+                    <UploadCloud className="h-4 w-4 mr-2" />
+                    Publish
+                  </Button>
                   
                   <Button
                     onClick={() => handleApprove(selectedImport)}
                     disabled={processingId === selectedImport.id}
                     className="jj-surface-emerald hover:jj-surface-emerald text-white"
                   >
-                    <Check className="h-4 w-4 mr-2" />
-                    {selectedImport.is_new_project ? 'Approve & Create' : 'Approve as New'}
+                    <UploadCloud className="h-4 w-4 mr-2" />
+                     {selectedImport.is_new_project ? 'Publish & Create' : 'Publish as New'}
                   </Button>
                 </div>
               </div>

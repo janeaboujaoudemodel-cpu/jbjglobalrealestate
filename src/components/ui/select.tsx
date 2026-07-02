@@ -224,7 +224,7 @@ const SelectItem = React.forwardRef<
       "focus:bg-white/12 focus:text-white",
       "data-[highlighted]:bg-white/12 data-[highlighted]:text-white",
       "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
-      "data-[state=checked]:bg-[#065F46] data-[state=checked]:text-white data-[state=checked]:font-semibold",
+      "data-[state=checked]:bg-transparent data-[state=checked]:text-white data-[state=checked]:font-semibold",
       className,
     )}
     {...props}
@@ -257,7 +257,7 @@ const SelectItemDark = React.forwardRef<
       "hover:bg-white/12 hover:text-white",
       "focus:bg-white/12 focus:text-white",
       "data-[highlighted]:bg-white/12 data-[highlighted]:text-white",
-      "data-[state=checked]:bg-[#065F46] data-[state=checked]:text-white data-[state=checked]:font-semibold",
+      "data-[state=checked]:bg-transparent data-[state=checked]:text-white data-[state=checked]:font-semibold",
       className,
     )}
     {...props}

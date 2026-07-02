@@ -7,6 +7,7 @@ import {
   RefreshCw,
   Download,
   X,
+  UploadCloud,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -59,6 +60,9 @@ export function BulkToolbar({
       <div className="w-px h-6 bg-[#B89555]/30 mx-1" />
       <Button size="sm" variant="gold" onClick={onAttach} disabled={disabled}>
         <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Attach to listing
+      </Button>
+      <Button size="sm" data-cta="dark" className="jj-cta-dark" onClick={onAttach} disabled={disabled}>
+        <UploadCloud className="w-3.5 h-3.5 mr-1" /> Publish selected
       </Button>
       <Button size="sm" variant="outline" onClick={onExtract} disabled={disabled}>
         <Sparkles className="w-3.5 h-3.5 mr-1" /> Extract only
