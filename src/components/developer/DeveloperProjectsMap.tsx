@@ -209,8 +209,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   // No projects with coordinates
   if (projectsWithCoords.length === 0) {
     return (
-      <div className="rounded-xl border-2 border-[#B89555]/30 bg-champagne/20 p-8 text-center">
-        <p className="text-foreground/70">{t('map.noLocations')}</p>
+      <div data-map-shell className="rounded-xl border border-white/15 p-8 text-center">
+        <p className="text-white">{t('map.noLocations')}</p>
       </div>
     );
   }
@@ -218,16 +218,17 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   // Error state
   if (mapError) {
     return (
-      <div className="rounded-xl border-2 border-amber-500/40 bg-amber-50/50 dark:bg-amber-950/20 p-8 h-[400px] flex items-center justify-center">
+      <div data-map-shell className="rounded-xl border border-white/15 p-8 h-[400px] flex items-center justify-center">
         <div className="text-center">
-          <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-          <h3 className="text-foreground font-semibold mb-2">Map could not be loaded</h3>
-          <p className="text-muted-foreground text-sm mb-4">{mapError}</p>
+          <AlertTriangle className="w-12 h-12 text-white mx-auto mb-3" />
+          <h3 className="text-white font-semibold mb-2">Map could not be loaded</h3>
+          <p className="text-white/80 text-sm mb-4">{mapError}</p>
           <Button 
             variant="outline" 
             size="sm"
             onClick={handleRetry}
-            className="gap-2"
+            className="jj-map-details-button gap-2"
+            data-surface="emerald"
           >
             <RefreshCw className="w-4 h-4" />
             Try Again
@@ -275,7 +276,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         {/* Click to enable overlay */}
         {!mapInteractive && (
           <div
-            className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
+            className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#03251F]/10"
             onClick={() => {
               setMapInteractive(true);
               if (mapInstanceRef.current) {
@@ -284,7 +285,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
               }
             }}
           >
-            <div className="bg-[#FDFBF7]/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-[#B89555]/30 text-sm font-medium text-[#1A1A1A]/70">
+            <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium">
               {t('map.clickToEnable')}
             </div>
           </div>

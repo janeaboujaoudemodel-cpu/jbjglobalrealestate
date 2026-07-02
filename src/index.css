@@ -24072,3 +24072,227 @@ html body #root :where([data-map-page], [data-map-shell]) canvas {
   mix-blend-mode: normal !important;
   opacity: 1 !important;
 }
+
+/* PASS 162 — Universal map emerald/white lock.
+   Every map surface now follows the same contract: emerald panels/filters,
+   pure white text/icons, white dividers only, natural photos, and no hover
+   popup can render black text on emerald. */
+html body #root :where([data-map-page], [data-map-shell]) {
+  --jj-map-emerald-solid: #073B2F !important;
+  --jj-map-emerald-deep: #03251F !important;
+  --jj-map-emerald: linear-gradient(135deg, #0B5A45 0%, #073B2F 58%, #03251F 100%) !important;
+  --jj-map-emerald-hover: linear-gradient(135deg, #0E6C53 0%, #0B5A45 58%, #073B2F 100%) !important;
+  --jj-map-panel: linear-gradient(145deg, rgba(5, 43, 35, 0.99) 0%, rgba(3, 37, 31, 0.995) 100%) !important;
+  background: var(--jj-map-emerald-deep) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,input,select,option,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-command-bar, .jj-properties-map-filter, .jj-map-side-list, .jj-map-embedded-header, [data-map-list-panel]) {
+  background: var(--jj-map-panel) !important;
+  background-image: var(--jj-map-panel) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  box-shadow: 0 28px 60px -34px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+html body #root [data-map-page] .jj-map-command-bar {
+  margin: 10px 12px 8px 12px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  backdrop-filter: blur(16px) saturate(1.08) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segmented-control, .jj-map-layer-switcher) {
+  background: rgba(3,37,31,0.92) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 36px -28px rgba(0,0,0,0.74) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment, .jj-map-layer-button, .jj-map-filter-toggle, .jj-map-sort-select, .jj-map-search-input, .jj-map-enable-chip) {
+  background: linear-gradient(135deg, rgba(11,90,69,0.88) 0%, rgba(7,59,47,0.94) 58%, rgba(3,37,31,0.98) 100%) !important;
+  background-image: linear-gradient(135deg, rgba(11,90,69,0.88) 0%, rgba(7,59,47,0.94) 58%, rgba(3,37,31,0.98) 100%) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment:hover, .jj-map-layer-button:hover, .jj-map-filter-toggle:hover, .jj-map-sort-select:hover, .jj-map-enable-chip:hover),
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"]) {
+  background: var(--jj-map-emerald-hover) !important;
+  background-image: var(--jj-map-emerald-hover) !important;
+  border-color: rgba(255,255,255,0.24) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-square-control, .jj-map-card-close, .jj-map-panel-close, .jj-map-details-button, .jj-map-stat-tile, .jj-map-status-badge, .jj-map-card-mini-badge, .jj-map-count-pill) {
+  background: var(--jj-map-emerald) !important;
+  background-image: var(--jj-map-emerald) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-marker-pill,
+html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 58px !important;
+  min-height: 30px !important;
+  padding: 6px 12px !important;
+  border-radius: 999px !important;
+  background: var(--jj-map-emerald) !important;
+  background-image: var(--jj-map-emerald) !important;
+  border: 2px solid rgba(255,255,255,0.96) !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.32) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-size: 12px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+html body .jj-map-popup .leaflet-popup-content-wrapper,
+html body .developer-map-popup .leaflet-popup-content-wrapper,
+html body #root :where([data-map-page], [data-map-shell]) .leaflet-popup-content-wrapper {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .jj-map-popup .leaflet-popup-content,
+html body .developer-map-popup .leaflet-popup-content,
+html body #root :where([data-map-page], [data-map-shell]) .leaflet-popup-content {
+  margin: 0 !important;
+}
+
+html body .jj-map-popup .leaflet-popup-tip,
+html body .developer-map-popup .leaflet-popup-tip,
+html body #root :where([data-map-page], [data-map-shell]) .leaflet-popup-tip {
+  background: #073B2F !important;
+  box-shadow: none !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-project-card, .jj-map-hover-card, .jj-map-list-card, .jj-map-popup-card),
+html body .jj-map-popup .jj-map-popup-card,
+html body .developer-map-popup .jj-map-popup-card {
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  border-radius: 18px !important;
+  background: var(--jj-map-emerald) !important;
+  background-image: var(--jj-map-emerald) !important;
+  box-shadow: 0 28px 60px -34px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-project-card, .jj-map-hover-card, .jj-map-list-card, .jj-map-popup-card, [data-map-list-panel]) :where(h1,h2,h3,h4,p,span,div,a,button,label,small,strong,svg,path,line,rect,circle,polyline,polygon),
+html body .jj-map-popup .jj-map-popup-card :where(h1,h2,h3,h4,p,span,div,a,button,label,small,strong,svg,path,line,rect,circle,polyline,polygon),
+html body .developer-map-popup .jj-map-popup-card :where(h1,h2,h3,h4,p,span,div,a,button,label,small,strong,svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-popup-card :is([data-price-badge], .price-pill-premium),
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-popup-card :is([data-price-badge], .price-pill-premium) *,
+html body .jj-map-popup .jj-map-popup-card :is([data-price-badge], .price-pill-premium),
+html body .jj-map-popup .jj-map-popup-card :is([data-price-badge], .price-pill-premium) * {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.border-\[\#B89555\]\/30, .border-\[\#B89555\]\/40, .border-\[\#B89555\]\/55, .border-gold, .border-gold\/40),
+html body #root :where([data-map-page], [data-map-shell]) [class*="via-gold"],
+html body #root :where([data-map-page], [data-map-shell]) [class*="bg-gold"] {
+  border-color: rgba(255,255,255,0.16) !important;
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) input::placeholder,
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-search-input::placeholder {
+  color: rgba(255,255,255,0.78) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+  opacity: 1 !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(img, canvas, .leaflet-tile) {
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
+
+/* Map filters/popovers/dialogs are Radix portals mounted under <body>, not
+   always inside #root. Keep those portal surfaces on the same map contract. */
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) {
+  --jj-map-emerald-solid: #073B2F !important;
+  --jj-map-emerald-deep: #03251F !important;
+  --jj-map-emerald: linear-gradient(135deg, #0B5A45 0%, #073B2F 58%, #03251F 100%) !important;
+  --jj-map-panel: linear-gradient(145deg, rgba(5, 43, 35, 0.99) 0%, rgba(3, 37, 31, 0.995) 100%) !important;
+  background: var(--jj-map-panel) !important;
+  background-image: var(--jj-map-panel) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,input,select,option,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) :is(input, select, button, [role="combobox"], .jj-map-search-input, .jj-map-segment, .jj-map-details-button) {
+  background: linear-gradient(135deg, rgba(11,90,69,0.88) 0%, rgba(7,59,47,0.94) 58%, rgba(3,37,31,0.98) 100%) !important;
+  background-image: linear-gradient(135deg, rgba(11,90,69,0.88) 0%, rgba(7,59,47,0.94) 58%, rgba(3,37,31,0.98) 100%) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) input::placeholder {
+  color: rgba(255,255,255,0.78) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+  opacity: 1 !important;
+}
+
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) :is([class*="via-gold"], [class*="bg-gold"]),
+html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map-shell]) :is(.border-\[\#B89555\]\/30, .border-\[\#B89555\]\/40, .border-\[\#B89555\]\/55, .border-gold, .border-gold\/40) {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.16) !important;
+}
+
+/* FINAL MAP OVERRIDE — exact selectors to beat older champagne map passes. */
+html body #root [data-map-page] .jj-map-command-bar,
+html body #root [data-map-page] :is(.jj-map-command-bar),
+html body #root [data-map-shell] .jj-map-command-bar,
+html body #root [data-map-shell] :is(.jj-map-command-bar),
+html body [data-map-shell].jj-map-command-bar {
+  background: linear-gradient(145deg, rgba(5,43,35,0.99) 0%, rgba(3,37,31,0.996) 100%) !important;
+  background-image: linear-gradient(145deg, rgba(5,43,35,0.99) 0%, rgba(3,37,31,0.996) 100%) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-map-page] .jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon),
+html body #root [data-map-shell] .jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon),
+html body [data-map-shell].jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

@@ -36,27 +36,18 @@ const RedIcon = L.divIcon({
   popupAnchor: [0, -46],
 });
 
-// Champagne/gold pin — other developers in this area
-const CHAMPAGNE_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42" fill="none">
-  <defs>
-    <linearGradient id="champagnePin" x1="16" y1="0" x2="16" y2="38" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#FDFBF7"/>
-      <stop offset="58%" stop-color="#F7F2EA"/>
-      <stop offset="100%" stop-color="#EFE6D6"/>
-    </linearGradient>
-  </defs>
-  <path d="M16 0C7 0 0 7 0 16c0 12 16 26 16 26s16-14 16-26C32 7 25 0 16 0z" fill="url(#champagnePin)" stroke="#B89555" stroke-width="1.5"/>
-  <circle cx="16" cy="14" r="6" fill="#FDFBF7" stroke="#B89555" stroke-width="1"/>
-  <circle cx="16" cy="14" r="3" fill="#1A1A1A"/>
-</svg>`;
+const formatMarkerPrice = (price: number | null | undefined) => {
+  if (!price) return "Ask";
+  if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
+  return `${Math.round(price / 1000)}K`;
+};
 
-const ChampagneIcon = L.divIcon({
-  html: CHAMPAGNE_PIN_SVG,
-  className: "jj-map-pin",
-  iconSize: [32, 42],
-  iconAnchor: [16, 42],
-  popupAnchor: [0, -42],
+const createEmeraldMarkerIcon = (price: number | null | undefined) => L.divIcon({
+  html: `<div class="jj-map-marker-pill">${formatMarkerPrice(price)}</div>`,
+  className: "custom-marker",
+  iconSize: [72, 32],
+  iconAnchor: [36, 32],
+  popupAnchor: [0, -32],
 });
 
 interface ProjectNearbyPropertiesMapProps {
@@ -266,16 +257,12 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${
-          isActive
-            ? "jj-emerald-action text-white border-transparent"
-            : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
-        } ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
-        data-emerald-action={isActive ? "true" : undefined}
-        data-no-contrast-guard={isActive ? undefined : true}
+        className={`jj-map-filter-toggle inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
+        data-active={isActive ? "true" : "false"}
+        data-surface={isActive ? "emerald" : "champagne"}
       >
         <span>{label}</span>
-        <span className="text-[10px] tabular-nums" style={isActive ? undefined : { color: "rgba(26,26,26,0.6)" }}>
+        <span className="text-[10px] tabular-nums">
           {count}
         </span>
       </button>
@@ -284,22 +271,23 @@ export default function ProjectNearbyPropertiesMap({
 
   return (
     <div className={className}>
-      <div className="mb-2 flex items-center gap-2 flex-wrap">
+      <div data-map-shell className="mb-2 flex items-center gap-2 flex-wrap">
         {chip("all", "All nearby", allMarkers.length)}
         {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
         {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
       </div>
       <div
+        data-map-shell
         className="rounded-2xl overflow-hidden"
         style={{
           height: 380,
-          border: "1px solid rgba(184,149,85,0.40)",
-          boxShadow: "0 4px 16px rgba(184,149,85,0.15)",
+          border: "1px solid rgba(255,255,255,0.16)",
+          boxShadow: "0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)",
         }}
       >
       <style>{`
         .jj-map-pin { background: none !important; border: none !important; }
-        .leaflet-popup-content-wrapper { border-radius: 12px; border: 1px solid rgba(184,149,85,0.35); }
+        .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; }
         .leaflet-popup-content { margin: 0; }
       `}</style>
       <MapContainer
@@ -312,16 +300,16 @@ export default function ProjectNearbyPropertiesMap({
         zoomControl={false}
         attributionControl={false}
       >
-        <TileLayer url={tiles.satellite.url} attribution={tiles.satellite.attribution} maxZoom={19} />
+        <TileLayer url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
         <MapNavigationControls latitude={center[0]} longitude={center[1]} />
 
         {/* Current project marker (red) — only when we have real coords */}
         {hasOwnCoords && (
           <Marker position={[latitude as number, longitude as number]} icon={RedIcon}>
-            <Popup>
-              <div className="min-w-[200px] max-w-[260px] p-3">
-                <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
-                <div className="text-xs text-[#1A1A1A]/70 mt-1">
+            <Popup className="jj-map-popup">
+              <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3">
+                <div className="text-sm font-bold">{currentProjectName}</div>
+                <div className="text-xs mt-1">
                   {t("map.thisProject") || "This project"}
                 </div>
               </div>
@@ -330,12 +318,12 @@ export default function ProjectNearbyPropertiesMap({
         )}
 
 
-        {/* Nearby projects (champagne/gold) */}
+        {/* Nearby projects */}
         {markers.map((p) => (
           <Marker
             key={p.id}
             position={[p.latitude!, p.longitude!]}
-            icon={ChampagneIcon}
+            icon={createEmeraldMarkerIcon(p.price_from)}
             eventHandlers={{
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => {
@@ -349,8 +337,8 @@ export default function ProjectNearbyPropertiesMap({
               },
             }}
           >
-            <Popup>
-              <div className="min-w-[220px] max-w-[280px]">
+            <Popup className="jj-map-popup">
+              <div className="jj-map-popup-card min-w-[220px] max-w-[280px]">
                 {p.cover_image_url && (
                   <img
                     src={p.cover_image_url}
@@ -364,12 +352,12 @@ export default function ProjectNearbyPropertiesMap({
                     <button
                       type="button"
                       onClick={() => handleOpenNearby(p.slug)}
-                      className="text-sm font-semibold text-[#1A1A1A] hover:underline text-left block w-full"
+                      className="text-sm font-semibold hover:underline text-left block w-full"
                     >
                       {p.name}
                     </button>
                   ) : (
-                    <div className="text-sm font-semibold text-[#1A1A1A]">{p.name}</div>
+                    <div className="text-sm font-semibold">{p.name}</div>
                   )}
 
                   {p.developer_name && (
@@ -390,7 +378,7 @@ export default function ProjectNearbyPropertiesMap({
                     <button
                       type="button"
                       onClick={() => handleOpenNearby(p.slug)}
-                      className="mt-1 text-[11px] font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] underline underline-offset-2"
+                      className="mt-1 text-[11px] font-medium underline underline-offset-2"
                     >
                       Open & remember {currentProjectName} →
                     </button>

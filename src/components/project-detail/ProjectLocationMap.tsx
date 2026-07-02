@@ -36,16 +36,14 @@ function MapViewToggle({
 }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="jj-map-layer-switcher">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className={`px-3 py-2 text-xs font-medium rounded transition-all ${
-              mapView === view 
-                ? "bg-[#EFE6D6] text-foreground" 
-                : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
-            }`}
+            className="jj-map-layer-button"
+            data-active={mapView === view ? "true" : "false"}
+            data-surface={mapView === view ? "emerald" : "champagne"}
           >
             {t(`map.${view}`)}
           </button>
@@ -55,10 +53,11 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all"
+        className="jj-map-square-control"
+        data-surface="emerald"
         aria-label={t('map.openInGoogleMaps')}
       >
-        <Maximize className="w-5 h-5 text-foreground" />
+        <Maximize className="w-5 h-5" />
       </a>
     </div>
   );
@@ -74,8 +73,10 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
       map.removeLayer(layerRef.current);
     }
     const tiles = getMapTiles(language);
-    const { url, attribution } = tiles[mapView];
-    layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
+    const { url, attribution, subdomains } = tiles[mapView];
+    const tileOptions: L.TileLayerOptions = { attribution, maxZoom: 19 };
+    if (subdomains) tileOptions.subdomains = subdomains;
+    layerRef.current = L.tileLayer(url, tileOptions);
     layerRef.current.addTo(map);
 
     return () => {
@@ -134,7 +135,7 @@ export default function ProjectLocationMap({
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
   return (
-    <div className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '3px solid hsl(42 45% 59%)', boxShadow: '0 8px 32px rgba(200,167,102,0.25), 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
+    <div data-map-shell className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '1px solid rgba(255,255,255,0.16)', boxShadow: '0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)' }}>
       <MapContainer
         center={coordinates}
         zoom={15}
@@ -155,9 +156,11 @@ export default function ProjectLocationMap({
         />
         <MapNavigationControls latitude={coordinates[0]} longitude={coordinates[1]} />
         <Marker position={coordinates}>
-          <Popup>
-            <div className="text-sm font-medium">{projectName}</div>
-            {location && <div className="text-xs text-muted-foreground">{location}</div>}
+          <Popup className="jj-map-popup">
+            <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3">
+              <div className="text-sm font-medium">{projectName}</div>
+              {location && <div className="text-xs">{location}</div>}
+            </div>
           </Popup>
         </Marker>
       </MapContainer>
@@ -168,7 +171,7 @@ export default function ProjectLocationMap({
           className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
           onClick={() => setScrollZoomEnabled(true)}
         >
-          <div className="bg-[#1A1A1A]/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
+          <div className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
             <MousePointer className="w-4 h-4" />
             {t('map.clickToEnable')}
           </div>
