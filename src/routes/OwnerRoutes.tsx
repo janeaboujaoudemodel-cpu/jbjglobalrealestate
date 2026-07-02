@@ -28,6 +28,7 @@ const CrmSalesInbox = lazy(() => import("@/pages/owner/crm/shell/CrmSalesInbox")
 const CrmWorkqueue = lazy(() => import("@/pages/owner/crm/shell/CrmWorkqueue"));
 const CrmAutomation = lazy(() => import("@/pages/owner/crm/shell/CrmAutomation"));
 const CrmMarketplace = lazy(() => import("@/pages/owner/crm/shell/CrmMarketplace"));
+const CrmDocumentsLibrary = lazy(() => import("@/pages/owner/crm/shell/CrmDocumentsLibrary"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
