@@ -24985,26 +24985,79 @@ export type Database = {
         }
         Relationships: []
       }
+      organization_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          organization_id: string
+          role: Database["public"]["Enums"]["org_role"]
+          status: string
+          token: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          organization_id: string
+          role?: Database["public"]["Enums"]["org_role"]
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          organization_id?: string
+          role?: Database["public"]["Enums"]["org_role"]
+          status?: string
+          token?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_invitations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_members: {
         Row: {
           id: string
           joined_at: string
           organization_id: string
-          role: string
+          role: Database["public"]["Enums"]["org_role"]
           user_id: string
         }
         Insert: {
           id?: string
           joined_at?: string
           organization_id: string
-          role?: string
+          role?: Database["public"]["Enums"]["org_role"]
           user_id: string
         }
         Update: {
           id?: string
           joined_at?: string
           organization_id?: string
-          role?: string
+          role?: Database["public"]["Enums"]["org_role"]
           user_id?: string
         }
         Relationships: [
@@ -30348,6 +30401,27 @@ export type Database = {
           },
         ]
       }
+      role_permissions: {
+        Row: {
+          created_at: string
+          id: string
+          permission: Database["public"]["Enums"]["org_permission"]
+          role: Database["public"]["Enums"]["org_role"]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          permission: Database["public"]["Enums"]["org_permission"]
+          role: Database["public"]["Enums"]["org_role"]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          permission?: Database["public"]["Enums"]["org_permission"]
+          role?: Database["public"]["Enums"]["org_role"]
+        }
+        Relationships: []
+      }
       salary_access_logs: {
         Row: {
           access_type: string
@@ -32573,21 +32647,21 @@ export type Database = {
         Row: {
           id: string
           joined_at: string
-          role: string
+          role: Database["public"]["Enums"]["team_role"]
           team_id: string
           user_id: string
         }
         Insert: {
           id?: string
           joined_at?: string
-          role?: string
+          role?: Database["public"]["Enums"]["team_role"]
           team_id: string
           user_id: string
         }
         Update: {
           id?: string
           joined_at?: string
-          role?: string
+          role?: Database["public"]["Enums"]["team_role"]
           team_id?: string
           user_id?: string
         }
@@ -34092,6 +34166,32 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_current_org: {
+        Row: {
+          organization_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          organization_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          organization_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_current_org_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_cvs: {
         Row: {
@@ -39509,6 +39609,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      current_org_id: { Args: { _user?: string }; Returns: string }
       decrypt_bank_field: {
         Args: { encrypted_data: string; salt_id: string }
         Returns: string
@@ -39770,6 +39871,10 @@ export type Database = {
           token_expires_at: string
         }[]
       }
+      get_org_role: {
+        Args: { _org: string; _user?: string }
+        Returns: Database["public"]["Enums"]["org_role"]
+      }
       get_owner_email: { Args: never; Returns: string }
       get_partner_banking_details: {
         Args: { p_partner_id: string }
@@ -39871,6 +39976,22 @@ export type Database = {
         Returns: boolean
       }
       has_lead_access: { Args: { p_lead_id: string }; Returns: boolean }
+      has_org_permission: {
+        Args: {
+          _org: string
+          _perm: Database["public"]["Enums"]["org_permission"]
+          _user?: string
+        }
+        Returns: boolean
+      }
+      has_org_role: {
+        Args: {
+          _org: string
+          _role: Database["public"]["Enums"]["org_role"]
+          _user?: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -39910,7 +40031,7 @@ export type Database = {
       is_jbj_owner: { Args: { _user_id: string }; Returns: boolean }
       is_listing_admin: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
-        Args: { _org_id: string; _user_id: string }
+        Args: { _org: string; _user?: string }
         Returns: boolean
       }
       is_owner_or_admin: { Args: { _user_id: string }; Returns: boolean }
@@ -39923,7 +40044,7 @@ export type Database = {
         Returns: boolean
       }
       is_team_member: {
-        Args: { _team_id: string; _user_id: string }
+        Args: { _team: string; _user?: string }
         Returns: boolean
       }
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
@@ -40449,6 +40570,28 @@ export type Database = {
         | "approved"
         | "rejected"
         | "expired"
+      org_permission:
+        | "org.manage"
+        | "org.billing.manage"
+        | "members.manage"
+        | "teams.manage"
+        | "invitations.manage"
+        | "crm.leads.read"
+        | "crm.leads.write"
+        | "crm.leads.delete"
+        | "crm.contacts.read"
+        | "crm.contacts.write"
+        | "crm.accounts.read"
+        | "crm.accounts.write"
+        | "crm.deals.read"
+        | "crm.deals.write"
+        | "crm.tasks.read"
+        | "crm.tasks.write"
+        | "crm.reports.read"
+        | "crm.analytics.read"
+        | "crm.settings.manage"
+        | "crm.export"
+      org_role: "owner" | "admin" | "manager" | "member" | "viewer"
       outreach_channel:
         | "email"
         | "phone"
@@ -40568,6 +40711,7 @@ export type Database = {
         | "lockdown_triggered"
       security_severity: "info" | "low" | "medium" | "high" | "critical"
       signature_asset_kind: "signature" | "initial" | "stamp"
+      team_role: "lead" | "member" | "viewer"
       uae_company_priority: "High" | "Medium" | "Low" | "Unknown"
       uae_developer_company_type:
         | "Private Developer"
@@ -41112,6 +41256,29 @@ export const Constants = {
         "rejected",
         "expired",
       ],
+      org_permission: [
+        "org.manage",
+        "org.billing.manage",
+        "members.manage",
+        "teams.manage",
+        "invitations.manage",
+        "crm.leads.read",
+        "crm.leads.write",
+        "crm.leads.delete",
+        "crm.contacts.read",
+        "crm.contacts.write",
+        "crm.accounts.read",
+        "crm.accounts.write",
+        "crm.deals.read",
+        "crm.deals.write",
+        "crm.tasks.read",
+        "crm.tasks.write",
+        "crm.reports.read",
+        "crm.analytics.read",
+        "crm.settings.manage",
+        "crm.export",
+      ],
+      org_role: ["owner", "admin", "manager", "member", "viewer"],
       outreach_channel: [
         "email",
         "phone",
@@ -41244,6 +41411,7 @@ export const Constants = {
       ],
       security_severity: ["info", "low", "medium", "high", "critical"],
       signature_asset_kind: ["signature", "initial", "stamp"],
+      team_role: ["lead", "member", "viewer"],
       uae_company_priority: ["High", "Medium", "Low", "Unknown"],
       uae_developer_company_type: [
         "Private Developer",
