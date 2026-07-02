@@ -929,19 +929,19 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             <span
                               className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold"
                               style={{
-                                background: "rgba(255,255,255,0.10)",
-                                color: "#FFFFFF",
-                                WebkitTextFillColor: "#FFFFFF",
-                                border: "1px solid rgba(255,255,255,0.24)",
+                                background: "rgba(6,78,59,0.10)",
+                                color: "#064E3B",
+                                WebkitTextFillColor: "#064E3B",
+                                border: "1px solid rgba(6,78,59,0.28)",
                               }}
                             >
                               <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
                               {isFav ? 'In Favorites' : 'Not Saved'}
                             </span>
                           </div>
-                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06))", border: "1px solid rgba(255,255,255,0.18)" }}>
+                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "linear-gradient(135deg, #EFE6D6, #E6D9BF)", border: "1px solid rgba(6,78,59,0.20)" }}>
                             <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-                              <Building className="w-9 h-9" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                              <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                             </div>
                             {(project.cover_image_url || project.images?.[0]?.image_url) ? (
                               <img
@@ -956,12 +956,12 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center" aria-label={`${project.name} image pending`}>
-                                <Building className="w-9 h-9" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                                <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                               </div>
                             )}
                           </div>
-                          <h3 className="font-bold text-base" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{project.name}</h3>
-                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
+                          <h3 className="font-bold text-base" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{project.name}</h3>
+                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(26,26,26,0.72)", WebkitTextFillColor: "rgba(26,26,26,0.72)" }}>
                             {project.developer?.name}
                           </p>
                         </div>
