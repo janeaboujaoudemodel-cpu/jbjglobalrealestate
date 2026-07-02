@@ -1055,6 +1055,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
         onWheel={passSidebarBoundaryWheelToPage}
+        onClick={(event) => {
+          const target = event.target as HTMLElement | null;
+          const explicitMapLink = target?.closest?.('a[href="/map"]');
+          if (explicitMapLink) {
+            event.preventDefault();
+            collapseAfterNavigation();
+            navigate('/map');
+          }
+        }}
         className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0 flex flex-col"
         style={{ scrollbarGutter: "stable" }}
       >
