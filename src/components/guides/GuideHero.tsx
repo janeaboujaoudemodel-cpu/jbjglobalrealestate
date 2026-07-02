@@ -30,7 +30,7 @@ const staggerContainer = {
  * Premium full-viewport guide hero.
  * - 100dvh (true full screen, mobile-safe)
  * - Strong dark scrim → headline always readable on photo
- * - Unified white headline with gold underline accent
+ * - Unified white headline with white/emerald accent
  * - Two CTAs via locked primitives (.jj-cta-champagne / .jj-cta-outline)
  */
 export const GuideHero = ({
@@ -88,14 +88,14 @@ export const GuideHero = ({
           <motion.div
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8"
             style={{
-              background: "rgba(255,255,255,0.06)",
+              background: "rgba(255,255,255,0.10)",
               backdropFilter: "blur(20px)",
-              border: "1px solid rgba(184,149,85,0.55)",
+              border: "1px solid rgba(255,255,255,0.38)",
             }}
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-3.5 h-3.5 text-[#B89555]" />
-            <span className="text-[#B89555] font-semibold text-[10px] md:text-xs uppercase tracking-[0.22em]">
+            <BadgeIcon className="w-3.5 h-3.5 text-white" />
+            <span className="text-white font-semibold text-[10px] md:text-xs uppercase tracking-[0.22em]">
               {badge}
             </span>
           </motion.div>
@@ -109,13 +109,13 @@ export const GuideHero = ({
             {title}
           </motion.h1>
 
-          {/* Gold hairline accent */}
+          {/* White hairline accent */}
           <motion.div
             variants={fadeInUp}
             className="mx-auto mb-6 h-px w-24"
             style={{
               background:
-                "linear-gradient(90deg, transparent, rgba(184,149,85,0.85), transparent)",
+                "linear-gradient(90deg, transparent, rgba(255,255,255,0.82), transparent)",
             }}
           />
 
