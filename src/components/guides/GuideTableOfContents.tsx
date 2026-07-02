@@ -124,7 +124,7 @@ export const GuideTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-xl p-4 shadow-xl">
+            <div data-guide-tooltip data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
                 <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-white" />
@@ -140,13 +140,14 @@ export const GuideTableOfContents = ({
                 onClick={handleDismissTooltip}
                 size="sm"
                 variant="primary"
+                data-guide-tooltip-button
                 className="w-full text-xs"
               >
                 I Understand
               </Button>
             </div>
             {/* Arrow pointing to nav */}
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#ECE2D2]" />
+            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#064E3B]" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -155,16 +156,18 @@ export const GuideTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
+        data-surface="emerald"
         className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
       >
         {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-3 border-b border-white/15 bg-black/10 flex-shrink-0">
+        <div data-guide-toc-header data-surface="emerald" className="flex items-center justify-between p-3 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-5 h-5 text-white" />
             <h3 className="text-white font-semibold">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
+              data-surface="emerald"
             className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
@@ -185,12 +188,14 @@ export const GuideTableOfContents = ({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.12 }}
               onWheel={passBoundaryWheelToPage}
+              data-surface="emerald"
               className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
             >
               {items.map((item, index) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
+                  data-surface="emerald"
                   data-toc-item
                   data-toc-state={activeId === item.id ? "active" : "inactive"}
                   className={cn(
@@ -222,6 +227,7 @@ export const GuideTableOfContents = ({
                 <Link to={ctaAction.href} className="block mt-4">
                   <Button 
                     variant="primary"
+                    data-surface="emerald"
                     className="w-full relative py-3 mi-cta-emerald"
                   >
                     {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}

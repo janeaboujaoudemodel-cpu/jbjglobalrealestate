@@ -105,6 +105,7 @@ export const GuideHero = ({
 
           {actions && (
             <motion.div
+              data-guide-hero-actions
               variants={fadeInUp}
               className="flex flex-wrap justify-center gap-4"
             >
