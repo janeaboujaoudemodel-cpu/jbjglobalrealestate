@@ -191,7 +191,15 @@ DISCLAIMER: ${result.disclaimer}
   return (
     <div className="space-y-6" data-ai-property-analyzer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
       {/* Input Section */}
-      <Card className="overflow-hidden bg-gradient-to-br from-[#075B45] via-[#053D2F] to-[#010806] border-white/25 shadow-[0_22px_56px_rgba(0,0,0,0.28)]">
+      <Card
+        data-ai-analyzer-card
+        className="overflow-hidden border-white/25 shadow-[0_22px_56px_rgba(0,0,0,0.28)]"
+        style={{
+          backgroundImage: "linear-gradient(135deg, #075B45 0%, #053D2F 48%, #010806 100%)",
+          backgroundColor: "#053D2F",
+          color: "#FFFFFF",
+        }}
+      >
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-white">
             <div className="p-2 rounded-lg bg-white/12 border border-white/25">
@@ -367,7 +375,17 @@ DISCLAIMER: ${result.disclaimer}
           {/* Data Sources */}
           <div className="flex flex-wrap gap-2 justify-center pt-2">
             {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-              <Badge key={source} variant="outline" className="text-white/90 border-white/30 bg-white/8 text-xs">
+              <Badge
+                key={source}
+                variant="outline"
+                className="text-xs"
+                style={{
+                  background: "rgba(255,255,255,0.10)",
+                  borderColor: "rgba(255,255,255,0.32)",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                }}
+              >
                 {source}
               </Badge>
             ))}

@@ -23188,3 +23188,118 @@ html body [data-chrome="sidebar"] a[href="/auth"] {
     right: calc(var(--jj-shell-sidebar-w, 72px) + 16px) !important;
   }
 }
+
+/* PASS 154 — Final header dropdown and Compare analyzer proof lock.
+   This is intentionally last: restore champagne currency/mode menus, keep
+   account menu rows transparent until hover, and force Deep Area Analysis to
+   a true emerald card with readable white controls/pills. */
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-row]:not(#pass154a):not(#pass154b):not(#pass154c):not(#pass154d),
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted],[data-state="checked"]):not(#pass154a):not(#pass154b):not(#pass154c):not(#pass154d) {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  background-color: #F7F2EA !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.30) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.66) !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"]:not(#pass154a):not(#pass154b):not(#pass154c):not(#pass154d) {
+  border-color: rgba(6,78,59,0.68) !important;
+  box-shadow: inset 0 0 0 1px rgba(6,78,59,0.38), inset 0 1px 0 rgba(255,255,255,0.66) !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-row] :is(*,span,p,small,strong,em,b,svg,path,circle,rect,line,polyline,polygon,label):not(#pass154a):not(#pass154b):not(#pass154c):not(#pass154d) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #064E3B !important;
+  stroke-opacity: 1 !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"]
+  [data-mode-card][data-mode-card][data-mode-card],
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"]
+  [data-mode-card][data-mode-card][data-mode-card]:is(:hover,:focus,[data-highlighted]) {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  background-color: #F7F2EA !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"]
+  [data-mode-card][data-mode-card][data-mode-card] :is(*,p,span,small,strong,em,b,svg,path,circle,rect,line,polyline,polygon,label):not([data-mode-active-pill]):not([data-mode-active-pill] *):not(#pass154a):not(#pass154b):not(#pass154c):not(#pass154d) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #064E3B !important;
+  stroke-opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-active-pill],
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-active-pill] :is(svg,path,circle,rect,line,polyline,polygon,span) {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content][data-account-menu-content]
+  [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item],
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content][data-account-menu-content]
+  [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-selected="true"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content][data-account-menu-content]
+  [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-item]:is(:hover,:focus,[data-highlighted]) {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+html body #root [data-ai-analyzer-card][data-ai-analyzer-card] {
+  background: linear-gradient(135deg, #075B45 0%, #053D2F 48%, #010806 100%) !important;
+  background-color: #053D2F !important;
+  background-image: linear-gradient(135deg, #075B45 0%, #053D2F 48%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-ai-analyzer-card][data-ai-analyzer-card] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,b,button,div,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+}
+
+html body #root [data-ai-analyzer-card][data-ai-analyzer-card] :is([role="combobox"], [data-radix-select-trigger], .jbj-form-field) {
+  background: rgba(255,255,255,0.10) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.34) !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-ai-analyzer-card][data-ai-analyzer-card] .badge,
+html body #root [data-ai-analyzer-card][data-ai-analyzer-card] [class*="badge"] {
+  background: rgba(255,255,255,0.10) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.32) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
