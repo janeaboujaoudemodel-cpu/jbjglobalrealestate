@@ -101,8 +101,8 @@ interface RentalAnalysis {
 }
 
 const BRAND_ICON_STYLE: React.CSSProperties = {
-  color: "#1A1A1A",
-  stroke: "#1A1A1A",
+  color: "#FFFFFF",
+  stroke: "#FFFFFF",
 };
 
 const FormLabel = ({
@@ -436,11 +436,12 @@ const RentalIndex = () => {
               </Link>
               <Link to="/contact">
                 <button
-                  className="inline-flex items-center gap-2 px-7 py-5 rounded-xl text-base font-bold transition-all"
-                    style={{
-                    background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
+                  className="inline-flex items-center gap-2 px-7 py-5 rounded-xl text-base font-bold transition-all hover:brightness-110"
+                  style={{
+                    background: theme.ctaGradient,
                     color: "#FFFFFF",
                     border: "1px solid rgba(255,255,255,0.46)",
+                    boxShadow: "0 10px 24px -12px rgba(6,78,59,0.55)",
                   }}
                 >
                   <FileText className="w-4 h-4" style={{ color: "#FFFFFF" }} />
@@ -476,7 +477,7 @@ const RentalIndex = () => {
                      border: "1px solid rgba(255,255,255,0.34)",
                   }}
                 >
-                  <c.icon className="w-5 h-5" style={{ color: "#1A1A1A" }} />
+                  <c.icon className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </span>
                 <div>
                   <h3 className="font-semibold mb-1">{c.title}</h3>
