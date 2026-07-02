@@ -657,15 +657,16 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   //  Primary CTA: emerald metallic + white. Secondary: dark emerald glass.
   //  Zero gold-gradient buttons. Zero white ink on champagne.
   // ============================================================
-  const EMERALD_INK = "linear-gradient(135deg, #032820 0%, #021611 54%, #000000 100%)";
-  const EMERALD_CARD = "linear-gradient(135deg, #032820 0%, #021611 52%, #000000 100%)";
+  const EMERALD_INK = "linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%)";
+  const EMERALD_CARD = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
   const CHAMPAGNE = "#F7F2EA";
-  const GOLD_HAIRLINE = "1px solid rgba(6,78,59,0.24)";
+  const EMERALD_HAIRLINE = "1px solid rgba(6,78,59,0.24)";
 
   return (
     <section data-compare-page data-surface="emerald" data-on-dark="true" className="min-h-screen" style={{ background: EMERALD_INK }}>
       {/* =============== HERO — EMERALD OMBRÉ =============== */}
       <div
+        data-compare-hero
         data-ink-emerald
         data-no-contrast-guard
         className="relative overflow-hidden"
@@ -791,7 +792,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               <Link to="/compare-manual">
                 <button
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                  style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)" }}
+                  style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "0", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
                   data-no-contrast-guard
                 >
                   <span className="allow-white" style={{ color: "#FFFFFF" }}>Compare manually</span>
@@ -829,7 +830,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       });
                     }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
+                   style={{ background: CHAMPAGNE, color: "#1A1A1A", border: EMERALD_HAIRLINE }}
                   >
                     <Download className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Download Excel
@@ -841,7 +842,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                     }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: EMERALD_HAIRLINE }}
                   >
                     <Send className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Share via WhatsApp
@@ -854,7 +855,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
                     className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: EMERALD_HAIRLINE }}
                   >
                     <Mail className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Share via Email
@@ -870,21 +871,24 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       <div className="container mx-auto px-4 py-10 md:py-14">
         <div
           data-compare-content-frame
-          data-surface="emerald"
+          data-surface="champagne"
           data-on-dark="true"
           className="rounded-2xl p-5 md:p-7 flex flex-col gap-8"
-          style={{ background: "linear-gradient(135deg, rgba(184,149,85,0.18) 0%, rgba(184,149,85,0.10) 54%, rgba(184,149,85,0.06) 100%)", border: "1px solid rgba(184,149,85,0.48)", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.10)" }}
+          style={{ background: CHAMPAGNE, border: EMERALD_HAIRLINE, boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.68)" }}
         >
           {/* Counter */}
-          <div className="flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            <span className="text-lg font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{projects.length}</span>
-            <span className="text-sm" style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}>properties in comparison</span>
+          <div data-allow-ink className="flex items-center gap-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+            <span className="text-lg font-bold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{projects.length}</span>
+            <span className="text-sm" style={{ color: "rgba(26,26,26,0.78)", WebkitTextFillColor: "rgba(26,26,26,0.78)" }}>properties in comparison</span>
           </div>
 
           {/* Comparison Table */}
           <div
             ref={tableRef}
             data-compare-project-table
+            data-surface="emerald"
+            data-on-dark="true"
+            data-no-contrast-guard
             className="overflow-x-auto rounded-2xl"
             style={{ background: EMERALD_CARD, border: "1px solid rgba(255,255,255,0.22)" }}
           >
@@ -929,13 +933,26 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                               {isFav ? 'In Favorites' : 'Not Saved'}
                             </span>
                           </div>
-                          <div className="aspect-[16/9] h-40 overflow-hidden rounded-lg">
-                            <img
-                              src={project.images?.[0]?.image_url || "/placeholder.svg"}
-                              alt={project.name}
-                              className="w-full h-full object-cover"
-                              loading="lazy" decoding="async"
-                            />
+                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06))", border: "1px solid rgba(255,255,255,0.18)" }}>
+                            <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                              <Building className="w-9 h-9" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                            </div>
+                            {(project.cover_image_url || project.images?.[0]?.image_url) ? (
+                              <img
+                                src={project.cover_image_url || project.images?.[0]?.image_url}
+                                alt={project.name}
+                                className="relative z-10 w-full h-full object-cover"
+                                loading="lazy" decoding="async"
+                                onError={(event) => {
+                                  event.currentTarget.style.display = "none";
+                                  event.currentTarget.parentElement?.setAttribute("data-image-missing", "true");
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center" aria-label={`${project.name} image pending`}>
+                                <Building className="w-9 h-9" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                              </div>
+                            )}
                           </div>
                           <h3 className="font-bold text-base" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{project.name}</h3>
                           <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
@@ -1251,11 +1268,11 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             ) : showRequestForm ? (
               <div className="space-y-4">
                 <Input placeholder="Your Name" value={formData.name} onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
+                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: EMERALD_HAIRLINE }} />
                 <Input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
+                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: EMERALD_HAIRLINE }} />
                 <Input type="tel" placeholder="Phone Number" value={formData.phone} onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
+                  style={{ background: "#FFFFFF", color: "#1A1A1A", border: EMERALD_HAIRLINE }} />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={() => submitRequest.mutate()}
@@ -1271,7 +1288,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   <button
                     onClick={() => setShowRequestForm(false)}
                     className="min-h-12 px-6 py-3 text-sm font-bold rounded-xl"
-                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
+                    style={{ background: CHAMPAGNE, color: "#1A1A1A", border: EMERALD_HAIRLINE }}
                   >
                     Cancel
                   </button>

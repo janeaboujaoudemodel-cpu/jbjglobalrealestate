@@ -89,9 +89,9 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "ai-tools") {
     return (
-      <div className={`bg-gradient-to-br from-[#032820] via-[#021611] to-black border border-white/30 rounded-xl p-5 shadow-[0_18px_48px_rgba(0,0,0,0.34)] ${className}`} data-ai-tools-disclaimer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
+      <div className={`bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black border border-white/30 rounded-xl p-5 shadow-[0_18px_48px_rgba(0,0,0,0.34)] ${className}`} data-ai-tools-disclaimer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#032820] via-[#021611] to-black border border-white/35 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black border-0 rounded-lg flex items-center justify-center flex-shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.16)]">
             <Shield className="w-5 h-5 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </div>
           <div>
@@ -112,16 +112,16 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
               href={getWhatsAppUrl("Hello, I used your AI tool and would like expert guidance.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border border-white/35 hover:border-white/50"
-              style={{ background: "linear-gradient(135deg, #032820 0%, #021611 52%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border-0"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
               <MessageCircle className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               WhatsApp Us
             </a>
             <a 
               href={`tel:${CONTACT_INFO.phone}`}
-              className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border border-white/35 hover:border-white/50"
-              style={{ background: "linear-gradient(135deg, #032820 0%, #021611 52%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border-0"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
               <Phone className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               {CONTACT_INFO.phone}

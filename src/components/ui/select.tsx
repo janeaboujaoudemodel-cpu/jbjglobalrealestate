@@ -215,14 +215,13 @@ const SelectItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
-      data-surface="emerald"
       data-no-contrast-guard
     className={cn(
       "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-white outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-white/12 hover:text-white",
-      "focus:bg-white/12 focus:text-white",
-      "data-[highlighted]:bg-white/12 data-[highlighted]:text-white",
+      "focus:bg-transparent focus:text-white",
+      "data-[highlighted]:bg-transparent data-[highlighted]:text-white data-[highlighted]:hover:bg-white/12",
       "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
       "data-[state=checked]:bg-transparent data-[state=checked]:text-white data-[state=checked]:font-semibold",
       className,
@@ -248,15 +247,14 @@ const SelectItemDark = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
-      data-surface="emerald"
       data-no-contrast-guard
     className={cn(
       "relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-8 pr-3 text-sm outline-none transition-all duration-200 whitespace-normal overflow-visible",
       "text-white",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       "hover:bg-white/12 hover:text-white",
-      "focus:bg-white/12 focus:text-white",
-      "data-[highlighted]:bg-white/12 data-[highlighted]:text-white",
+      "focus:bg-transparent focus:text-white",
+      "data-[highlighted]:bg-transparent data-[highlighted]:text-white data-[highlighted]:hover:bg-white/12",
       "data-[state=checked]:bg-transparent data-[state=checked]:text-white data-[state=checked]:font-semibold",
       className,
     )}
