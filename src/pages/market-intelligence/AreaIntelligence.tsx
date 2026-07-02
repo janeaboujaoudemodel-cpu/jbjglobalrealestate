@@ -58,6 +58,7 @@ const AreaIntelligence = () => {
         badgeIcon={MapPin}
         title="Area Intelligence"
         description="Area Intelligence explains how individual locations in Dubai are evaluated using official, location-specific government data. This page shows how to read areas, not how to speculate on them. All insights are descriptive and based on registered activity."
+        backgroundImage="https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=2200&q=85"
       />
 
       {/* Main Content - Black background with 3-layer system */}
@@ -133,7 +134,7 @@ const AreaIntelligence = () => {
                         "Approved service charges",
                         "Official rental benchmarks"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
+                        <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
                           <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                           <span>{item}</span>
                         </li>
@@ -179,6 +180,7 @@ const AreaIntelligence = () => {
                       ].map((source, idx) => (
                         <a 
                           key={idx}
+                          data-surface="emerald"
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -228,7 +230,7 @@ const AreaIntelligence = () => {
                         { num: "4", title: "Supply Status", desc: "Existing stock versus registered handovers and newly delivered units, as published by DLD." },
                         { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
                       ].map((item, idx) => (
-                        <div key={idx} className="flex gap-4 p-4 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl">
+                        <div key={idx} data-surface="emerald" className="flex gap-4 p-4 bg-[image:var(--jj-emerald-ombre)] border border-white/20 rounded-xl shadow-sm">
                           <div className="w-10 h-10 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 flex items-center justify-center flex-shrink-0">
                             <span className="text-white font-bold">{item.num}</span>
                           </div>
@@ -272,8 +274,8 @@ const AreaIntelligence = () => {
                         "Assign scores or ratings",
                         "Provide guarantees or forecasts"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
-                          <div className="w-6 h-6 rounded-full bg-[#EFE6D6] border border-[#B89555]/35 flex items-center justify-center flex-shrink-0">
+                        <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
+                          <div className="w-6 h-6 rounded-full bg-white/15 border border-white/35 flex items-center justify-center flex-shrink-0">
                             <span className="text-[#1A1A1A] text-xs font-bold">✕</span>
                           </div>
                           <span>{item}</span>
@@ -319,7 +321,7 @@ const AreaIntelligence = () => {
                         "Tenant profiles",
                         "Approved pricing benchmarks"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
+                        <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
                           <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                           <span>{item}</span>
                         </li>
@@ -363,7 +365,7 @@ const AreaIntelligence = () => {
                         "Align properties with client objectives",
                         "Avoid misrepresentation or over-marketing"
                       ].map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-[#1A1A1A]/70">
+                        <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
                           <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
                           <span>{item}</span>
                         </li>

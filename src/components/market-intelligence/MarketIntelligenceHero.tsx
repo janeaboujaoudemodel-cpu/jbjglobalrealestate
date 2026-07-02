@@ -31,6 +31,9 @@ export const MarketIntelligenceHero = ({
   badgeIcon: BadgeIcon, 
   title, 
   description, 
+  videoSrc,
+  videoPoster,
+  backgroundImage,
   actions 
 }: MarketIntelligenceHeroProps) => {
   const titleText = typeof title === "string" ? title : "Market Intelligence";
@@ -60,6 +63,29 @@ export const MarketIntelligenceHero = ({
       data-surface="dark"
       className="mi-hero-scene relative flex w-full items-center overflow-hidden"
     >
+      {(videoSrc || backgroundImage) && (
+        <div className="absolute inset-0 z-0" aria-hidden="true">
+          {videoSrc ? (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              poster={videoPoster}
+              className="h-full w-full object-cover"
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </video>
+          ) : (
+            <div
+              className="h-full w-full bg-cover bg-center"
+              style={{ backgroundImage: `url(${backgroundImage})` }}
+            />
+          )}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,8,6,0.70)_0%,rgba(1,8,6,0.56)_48%,rgba(1,8,6,0.88)_100%)]" />
+        </div>
+      )}
       <div className="mi-hero-grid" aria-hidden="true" />
       <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
       <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />

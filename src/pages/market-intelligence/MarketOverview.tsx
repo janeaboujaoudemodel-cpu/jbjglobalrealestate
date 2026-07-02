@@ -154,6 +154,7 @@ const MarketOverview = () => {
         badgeIcon={BarChart3}
         title="Market Overview"
         description="Dubai's real estate market operates within a regulated framework led by the Dubai Land Department (DLD) and RERA. This overview presents how the market functions, how activity is measured, and how pricing, rent, and ownership costs are officially determined—using government sources only, without speculation or projections."
+        backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2200&q=85"
       />
 
       {/* Fixed TOC Sidebar */}

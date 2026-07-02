@@ -116,6 +116,8 @@ export const MarketIntelligenceNavigation = ({
               <Link
                 key={link.path}
                 to={link.path}
+                data-active={link.path === current ? "true" : undefined}
+                aria-current={link.path === current ? "page" : undefined}
                 className={`px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border-2 ${
                   link.path === current
                     ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-sm"
