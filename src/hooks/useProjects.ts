@@ -189,7 +189,49 @@ export function useDevelopers(includeHidden = false) {
       
       const { data, error } = await query;
       if (error) throw error;
-      return data as unknown as Developer[];
+      const rows = (data as unknown as Developer[]) ?? [];
+
+      // Exclude bad merged records like "Ellington and RAK Properties"
+      // where two distinct developer brands were combined into one row.
+      const isMergedBadRecord = (name: string) => {
+        const n = (name || "").toLowerCase().trim();
+        if (!n) return true;
+        // "X and Y Properties/Developers" pattern
+        return /\b(and|&|\+)\b/.test(n) &&
+          /(propert|develop|estate|group|holding|residenc)/i.test(n) &&
+          // Only flag when it looks like two brand names joined
+          n.split(/\s+(?:and|&|\+)\s+/).length === 2 &&
+          n.split(/\s+(?:and|&|\+)\s+/).every((p) => p.trim().split(/\s+/).length <= 3);
+      };
+
+      // Dedupe by normalized name — keep the "best" row per brand.
+      // Score: has logo (+3), canonical slug (no leading digits, no "developed-by-") (+2),
+      // shorter slug (+1), lower rank (better).
+      const scoreOf = (d: Developer): number => {
+        const slug = (d.slug || "").toLowerCase();
+        const hasLogo = d.logo_url && !d.logo_url.includes("emaar_properties_f2c4d0a72c") ? 3 : 0;
+        const canonicalSlug = !/^\d/.test(slug) && !slug.startsWith("developed-by-") ? 2 : 0;
+        const shortSlug = slug.length > 0 && slug.length < 40 ? 1 : 0;
+        const rankBonus = typeof d.rank === "number" ? Math.max(0, 1000 - d.rank) / 1000 : 0;
+        return hasLogo + canonicalSlug + shortSlug + rankBonus;
+      };
+
+      const byKey = new Map<string, Developer>();
+      for (const row of rows) {
+        if (isMergedBadRecord(row.name || "")) continue;
+        const key = (row.name || "").toLowerCase().replace(/\s+/g, " ").trim();
+        if (!key) continue;
+        const existing = byKey.get(key);
+        if (!existing || scoreOf(row) > scoreOf(existing)) {
+          byKey.set(key, row);
+        }
+      }
+      return Array.from(byKey.values()).sort((a, b) => {
+        const ra = typeof a.rank === "number" ? a.rank : 9999;
+        const rb = typeof b.rank === "number" ? b.rank : 9999;
+        if (ra !== rb) return ra - rb;
+        return (a.name || "").localeCompare(b.name || "");
+      });
     },
   });
 }
