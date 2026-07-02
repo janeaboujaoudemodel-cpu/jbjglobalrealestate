@@ -20,32 +20,43 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
     return (
       <button
         type="button"
+        data-compare-mode-toggle-button
+        data-compare-mode-active={active ? "true" : "false"}
+        data-surface="emerald"
+        data-on-dark="true"
+        data-no-contrast-guard
         onClick={() => onChange(value)}
         className="relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all"
         style={{
-          color: active ? "#FFFFFF" : "#064E3B",
-          background: active ? "var(--jj-emerald-ombre)" : "rgba(253,251,247,0.96)",
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
+          background: active
+            ? "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)"
+            : "rgba(255,255,255,0.12)",
           border: active
             ? "1px solid rgba(255,255,255,0.34)"
-            : "1px solid rgba(6,78,59,0.28)",
+            : "1px solid rgba(255,255,255,0.28)",
           boxShadow: active
             ? "0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.16)"
-            : "inset 0 1px 0 rgba(255,255,255,0.6)",
+            : "inset 0 1px 0 rgba(255,255,255,0.12)",
         }}
         {...(active ? { "data-allow-dark-cta": true, "data-cta": "dark" } : {})}
       >
-        <Icon className="w-4 h-4" style={{ color: active ? "#FFFFFF" : "#064E3B", stroke: active ? "#FFFFFF" : "#064E3B" }} />
-        {label}
+        <Icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{label}</span>
       </button>
     );
   };
 
   return (
     <div
+      data-compare-mode-toggle
+      data-surface="emerald"
+      data-on-dark="true"
       className="inline-flex items-center gap-1 p-1 rounded-full"
       style={{
-        background: "rgba(253,251,247,0.28)",
-        border: "1px solid rgba(6,78,59,0.24)",
+        background: "rgba(255,255,255,0.12)",
+        border: "1px solid rgba(255,255,255,0.26)",
       }}
       role="tablist"
       aria-label="Comparison mode"

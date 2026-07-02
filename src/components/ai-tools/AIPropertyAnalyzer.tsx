@@ -193,10 +193,13 @@ DISCLAIMER: ${result.disclaimer}
       {/* Input Section */}
       <Card
         data-ai-analyzer-card
+        data-surface="emerald"
+        data-on-dark="true"
         className="overflow-hidden border-white/25 shadow-[0_22px_56px_rgba(0,0,0,0.28)]"
         style={{
           backgroundImage: "linear-gradient(135deg, #075B45 0%, #053D2F 48%, #010806 100%)",
           backgroundColor: "#053D2F",
+          border: "1px solid rgba(255,255,255,0.25)",
           color: "#FFFFFF",
         }}
       >
@@ -220,13 +223,13 @@ DISCLAIMER: ${result.disclaimer}
                 <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue placeholder="Choose an area" />
                 </SelectTrigger>
-                <SelectContent className="max-h-60">
+                <SelectContent data-surface="emerald" data-on-dark="true" className="max-h-60 bg-[#053D2F] border-white/25 text-white">
                   {DUBAI_AREAS.map((a) => (
-                    <SelectItem key={a} value={a} className="text-white">
+                    <SelectItem key={a} value={a} className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">
                       {a}
                     </SelectItem>
                   ))}
-                  <SelectItem value="custom" className="text-white">
+                  <SelectItem value="custom" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">
                     ✏️ Enter Custom Area
                   </SelectItem>
                 </SelectContent>
@@ -239,9 +242,9 @@ DISCLAIMER: ${result.disclaimer}
                 <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent data-surface="emerald" data-on-dark="true" className="bg-[#053D2F] border-white/25 text-white">
                   {PROPERTY_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value} className="text-white">
+                    <SelectItem key={t.value} value={t.value} className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">
                       {t.label}
                     </SelectItem>
                   ))}
@@ -281,9 +284,9 @@ DISCLAIMER: ${result.disclaimer}
                   <SelectTrigger className="w-auto bg-white/10 border-white/30 text-white text-sm h-8 px-3 [&>svg]:!text-white">
                     <span>+ Add area</span>
                   </SelectTrigger>
-                  <SelectContent className="max-h-40">
+                  <SelectContent data-surface="emerald" data-on-dark="true" className="max-h-40 bg-[#053D2F] border-white/25 text-white">
                     {DUBAI_AREAS.filter(a => a !== area && !compareWith.includes(a)).map((a) => (
-                      <SelectItem key={a} value={a} className="text-white text-sm">
+                      <SelectItem key={a} value={a} className="text-white text-sm focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">
                         {a}
                       </SelectItem>
                     ))}
@@ -301,10 +304,10 @@ DISCLAIMER: ${result.disclaimer}
                 <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="sqft" className="text-white">Square Feet (sq ft)</SelectItem>
-                  <SelectItem value="sqm" className="text-white">Square Meters (m²)</SelectItem>
-                  <SelectItem value="both" className="text-white">Both (sq ft & m²)</SelectItem>
+                <SelectContent data-surface="emerald" data-on-dark="true" className="bg-[#053D2F] border-white/25 text-white">
+                  <SelectItem value="sqft" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">Square Feet (sq ft)</SelectItem>
+                  <SelectItem value="sqm" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">Square Meters (m²)</SelectItem>
+                  <SelectItem value="both" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">Both (sq ft & m²)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -320,9 +323,9 @@ DISCLAIMER: ${result.disclaimer}
                     })()}
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="max-h-60">
+                <SelectContent data-surface="emerald" data-on-dark="true" className="max-h-60 bg-[#053D2F] border-white/25 text-white">
                   {ALL_CURRENCIES.map((c) => (
-                    <SelectItem key={c.code} value={c.code} className="text-white">
+                    <SelectItem key={c.code} value={c.code} className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">
                       <span className="flex items-center gap-2">
                         <span>{c.flag}</span>
                         <span className="font-medium">{c.code}</span>
@@ -340,12 +343,12 @@ DISCLAIMER: ${result.disclaimer}
                 <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="en" className="text-white">English</SelectItem>
-                  <SelectItem value="ar" className="text-white">العربية (Arabic)</SelectItem>
-                  <SelectItem value="ru" className="text-white">Русский (Russian)</SelectItem>
-                  <SelectItem value="zh" className="text-white">中文 (Chinese)</SelectItem>
-                  <SelectItem value="hi" className="text-white">हिन्दी (Hindi)</SelectItem>
+                <SelectContent data-surface="emerald" data-on-dark="true" className="bg-[#053D2F] border-white/25 text-white">
+                  <SelectItem value="en" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">English</SelectItem>
+                  <SelectItem value="ar" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">العربية (Arabic)</SelectItem>
+                  <SelectItem value="ru" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">Русский (Russian)</SelectItem>
+                  <SelectItem value="zh" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">中文 (Chinese)</SelectItem>
+                  <SelectItem value="hi" className="text-white focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white">हिन्दी (Hindi)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -378,6 +381,8 @@ DISCLAIMER: ${result.disclaimer}
               <Badge
                 key={source}
                 variant="outline"
+                data-surface="emerald"
+                data-on-dark="true"
                 className="text-xs"
                 style={{
                   background: "rgba(255,255,255,0.10)",

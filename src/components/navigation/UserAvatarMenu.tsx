@@ -135,18 +135,20 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     return (
       <DropdownMenuItem
         data-account-menu-row="true"
-        data-surface="emerald"
+        data-no-emerald-hover="true"
         data-on-dark="true"
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
         className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-white hover:bg-white/10 focus:bg-white/10 data-[highlighted]:bg-white/10"
+        style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
       >
         {to ? (
           <Link
             to={to}
             data-account-menu-row="true"
-            data-surface="emerald"
+            data-no-emerald-hover="true"
             data-on-dark="true"
+            style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
           >
             {inner}
           </Link>
@@ -238,9 +240,11 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         <DropdownMenuItem
           onSelect={handleSignOut}
           data-account-signout-row="true"
-          data-surface="emerald"
+          data-account-menu-row="true"
+          data-no-emerald-hover="true"
           data-on-dark="true"
           className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-white focus:bg-white/10 data-[highlighted]:bg-white/10"
+          style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
         >
           <span className="flex items-center gap-2.5 w-full" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
             <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />

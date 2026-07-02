@@ -758,6 +758,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 disabled={isGenerating || projects.length < 2}
                 data-no-contrast-guard
                 data-allow-dark-cta
+                data-compare-hero-cta="start"
                 className="allow-white jj-pill-emerald-metallic inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   backgroundImage: EMERALD_INK,
@@ -777,6 +778,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 onClick={() => setAiAddOpen(true)}
                 data-no-contrast-guard
                 data-allow-dark-cta
+                data-compare-hero-cta="ai-add"
                 className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
                 style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)", boxShadow: "0 10px 28px rgba(4,120,87,0.32)" }}
               >
@@ -1252,11 +1254,11 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     onClick={() => submitRequest.mutate()}
                     disabled={!formData.email || submitRequest.isPending}
                     data-no-contrast-guard data-allow-dark-cta
-                    className="allow-white min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl disabled:opacity-60 whitespace-normal text-center leading-tight"
+                className="allow-white w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold rounded-xl disabled:opacity-60 whitespace-nowrap text-center leading-tight overflow-hidden"
                     style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.3)" }}
                   >
                     {submitRequest.isPending ? <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} /> : (
-                      <><Send className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /><span className="allow-white min-w-0" style={{ color: "#FFFFFF" }}>Request Consultation</span></>
+                      <><Send className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /><span className="allow-white min-w-0 truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Consultation</span></>
                     )}
                   </button>
                   <button
@@ -1273,11 +1275,11 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 <button
                   onClick={() => setShowRequestForm(true)}
                   data-no-contrast-guard data-allow-dark-cta
-                  className="allow-white min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold rounded-xl whitespace-normal text-center leading-tight"
+                  className="allow-white w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold rounded-xl whitespace-nowrap text-center leading-tight overflow-hidden"
                   style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.3)" }}
                 >
                   <Mail className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                  <span className="allow-white min-w-0" style={{ color: "#FFFFFF" }}>Request Consultation</span>
+                  <span className="allow-white min-w-0 truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Consultation</span>
                 </button>
                 <a href="tel:+971547167107" className="w-full">
                   <button className="w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold rounded-xl whitespace-normal text-center leading-tight"
