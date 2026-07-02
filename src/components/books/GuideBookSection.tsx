@@ -41,14 +41,12 @@ export function GuideBookSection({ book }: GuideBookSectionProps) {
             viewport={{ once: true }}
             className="lg:col-span-4 flex justify-center lg:justify-end"
           >
-            <button
-              type="button"
+            <BookCard
+              book={book}
+              size="lg"
               onClick={() => openAt(0)}
               className="group transition-transform duration-300 hover:-translate-y-1"
-              aria-label={`Open ${book.title}`}
-            >
-              <BookCard book={book} size="lg" />
-            </button>
+            />
           </motion.div>
 
           {/* TOC */}

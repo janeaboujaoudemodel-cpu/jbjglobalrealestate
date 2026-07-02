@@ -26239,3 +26239,110 @@ html body #root [data-insights-page] [data-guide-toc] [data-toc-number] {
 }
 
 /* END PASS 181 */
+
+/* PASS 182 — Guide dropdown final emerald rebuild.
+   The guide hero, side "In This Guide" dropdown, selected rows, bottom CTA,
+   and onboarding popup must be emerald surfaces with inverted white content,
+   no champagne/black hover states, and no white highlight rings. */
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] {
+  width: 100% !important;
+}
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a) {
+  min-width: min(100%, 230px) !important;
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 54%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 54%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 14px 34px -22px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a):hover,
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a):focus-visible {
+  background: linear-gradient(135deg, #0C7B60 0%, #075C46 54%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0C7B60 0%, #075C46 54%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  box-shadow: 0 16px 38px -22px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body #root [data-insights-page] [data-guide-hero] [data-guide-hero-actions] :is(button, a) :is(span,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  filter: none !important;
+}
+
+html body #root [data-insights-page] [data-guide-toc] > div,
+html body #root [data-insights-page] [data-guide-toc] nav {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-guide-toc-header] {
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 58%, #010806 100%) !important;
+  border-bottom-color: rgba(255,255,255,0.12) !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-toc-item],
+html body #root [data-insights-page] [data-guide-toc] a:has(> button),
+html body #root [data-insights-page] [data-guide-toc] a:has(> button) > button {
+  background: linear-gradient(135deg, #064E3B 0%, #053F30 62%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #053F30 62%, #010806 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-toc-item]:hover,
+html body #root [data-insights-page] [data-guide-toc] [data-toc-state="active"],
+html body #root [data-insights-page] [data-guide-toc] a:has(> button):hover > button,
+html body #root [data-insights-page] [data-guide-toc] a:has(> button) > button:hover {
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 58%, #010806 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-toc-number] {
+  background: #064E3B !important;
+  border-color: rgba(255,255,255,0.14) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] [data-guide-toc] [data-guide-tooltip-button] {
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 58%, #010806 100%) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+html body #root [data-insights-page] [data-guide-toc] :is([data-guide-tooltip], [data-guide-tooltip-button], [data-guide-toc-header], [data-toc-item]) :is(h1,h2,h3,h4,p,span,a,button,small,strong,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Keep the fixed guide dropdown from covering hero headings/buttons on desktop. */
+@media (min-width: 1024px) {
+  html body #root [data-insights-page] [data-guide-hero] > div.relative > div.max-w-4xl {
+    max-width: min(56rem, calc(100vw - 25rem)) !important;
+    margin-left: auto !important;
+    margin-right: 22rem !important;
+  }
+}
+
+/* END PASS 182 */
