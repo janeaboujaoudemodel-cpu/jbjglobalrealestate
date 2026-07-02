@@ -61,7 +61,7 @@ export const MarketIntelligenceHero = ({
       data-no-compare-frame
       data-no-section-frame
       data-surface="dark"
-      className="mi-hero-scene relative flex w-full items-center overflow-hidden"
+      className="jj-hero-fullscreen jj-hero-compact mi-hero-scene relative flex w-full items-center overflow-hidden"
     >
       {(videoSrc || backgroundImage) && (
         <div className="absolute inset-0 z-0" aria-hidden="true">

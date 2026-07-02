@@ -45,28 +45,28 @@ export const GuideCard = ({
       <div className="flex items-start gap-4">
         {number !== undefined && (
           <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
-            <span className="text-[#1A1A1A] text-xl font-semibold">{number}</span>
+            <span className="text-white text-xl font-semibold">{number}</span>
           </div>
         )}
         {Icon && !number && (
           <div className="flex-shrink-0 w-12 h-12 bg-[#1A1A1A] border border-[#B89555] rounded-xl flex items-center justify-center">
-            <Icon className="w-6 h-6 text-[#1A1A1A]" />
+            <Icon className="w-6 h-6 text-white" />
           </div>
         )}
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            {Icon && number !== undefined && <Icon className="w-5 h-5 text-[#1A1A1A]" />}
-            <h3 className="text-xl md:text-2xl font-medium text-[#1A1A1A]">{title}</h3>
+            {Icon && number !== undefined && <Icon className="w-5 h-5 text-white" />}
+            <h3 className="text-xl md:text-2xl font-medium text-white">{title}</h3>
           </div>
           {description && (
-            <p className="text-[#1A1A1A]/70 mb-4">{description}</p>
+            <p className="text-white/70 mb-4">{description}</p>
           )}
           {items && items.length > 0 && (
             <ul className="space-y-2">
               {items.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-1" />
-                  <span className="text-[#1A1A1A]/70 text-sm">{item}</span>
+                  <CheckCircle2 className="w-4 h-4 text-white flex-shrink-0 mt-1" />
+                  <span className="text-white/70 text-sm">{item}</span>
                 </li>
               ))}
             </ul>

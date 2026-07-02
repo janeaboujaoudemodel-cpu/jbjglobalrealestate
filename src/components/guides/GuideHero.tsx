@@ -48,7 +48,7 @@ export const GuideHero = ({
       data-guide-hero
       data-hero-dark
       className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
-      style={{ minHeight: "clamp(520px, 68svh, 760px)" }}
+      style={{ minHeight: "clamp(480px, 60svh, 720px)" }}
     >
       {/* Media background */}
       <div className="absolute inset-0 z-0">
