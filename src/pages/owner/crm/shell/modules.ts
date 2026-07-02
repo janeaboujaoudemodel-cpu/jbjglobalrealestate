@@ -22,6 +22,7 @@ import {
   Phone,
   ReceiptText,
   ScrollText,
+  Rss,
   Search,
   Share2,
   ShoppingCart,
