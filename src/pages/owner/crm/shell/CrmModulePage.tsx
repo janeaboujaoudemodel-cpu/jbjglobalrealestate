@@ -105,10 +105,12 @@ const MODULE_COLUMNS: Record<string, ColumnDef[]> = {
 
 const columnsFor = (slug: string): ColumnDef[] => MODULE_COLUMNS[slug] ?? DEFAULT_COLUMNS;
 
-function ModuleListView({ slug, label }: { slug: string; label: string }) {
+function ModuleListView({ slug, label, section }: { slug: string; label: string; section: string }) {
   const columns = useMemo(() => columnsFor(slug), [slug]);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const plural = /s$/.test(label) ? label : `${label}s`;
+  const navigate = useNavigate();
+  const goCreate = () => navigate(`/owner/crm/jbj/${section}/new`);
 
   return (
     <div className="jc-list" data-no-contrast-guard>
