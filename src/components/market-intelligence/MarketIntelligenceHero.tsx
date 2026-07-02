@@ -36,64 +36,30 @@ export const MarketIntelligenceHero = ({
   backgroundImage,
   actions 
 }: MarketIntelligenceHeroProps) => {
-  const titleText = typeof title === "string" ? title : "Market Intelligence";
-  const key = titleText.toLowerCase();
-  const variant = key.includes("area")
-    ? "areas"
-    : key.includes("report")
-      ? "reports"
-      : key.includes("methodology") || key.includes("source")
-        ? "methodology"
-        : "overview";
-
-  const heroSignals: Record<string, string[]> = {
-    overview: ["REGULATED MARKET", "TRANSACTION CONTEXT", "RENT BENCHMARKS", "OWNERSHIP COSTS"],
-    areas: ["LOCATION SIGNALS", "AREA ACTIVITY", "SUPPLY STATUS", "RENT INDEX"],
-    reports: ["REPORT ARCHIVE", "MONTHLY REVIEW", "QUARTERLY SIGNALS", "OFFICIAL SOURCES"],
-    methodology: ["SOURCE CONTROL", "DATA VALIDATION", "NO SPECULATION", "GOVERNMENT DATA"],
-  };
-
   return (
     <section
       data-mi-hero
-      data-mi-hero-variant={variant}
+      data-unified-hero
+      data-faq-hero
       data-hero-dark
       data-no-compare-frame
       data-no-section-frame
-      data-surface="dark"
-      className="jj-hero-fullscreen jj-hero-compact mi-hero-scene relative flex w-full items-center overflow-hidden"
+      data-surface="emerald"
+      className="jj-hero-fullscreen jj-hero-compact relative flex w-full items-center overflow-hidden"
     >
+      <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" aria-hidden="true" />
       {(videoSrc || backgroundImage) && (
-        <div className="absolute inset-0 z-0" aria-hidden="true">
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           {videoSrc ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              poster={videoPoster}
-              className="h-full w-full object-cover"
-            >
+            <video autoPlay muted loop playsInline preload="auto" poster={videoPoster} className="absolute inset-0 h-full w-full object-cover opacity-30">
               <source src={videoSrc} type="video/mp4" />
             </video>
           ) : (
-            <div
-              className="h-full w-full bg-cover bg-center"
-              style={{ backgroundImage: `url(${backgroundImage})` }}
-            />
+            <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${backgroundImage})` }} />
           )}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(1,8,6,0.70)_0%,rgba(1,8,6,0.56)_48%,rgba(1,8,6,0.88)_100%)]" />
         </div>
       )}
-      <div className="mi-hero-grid" aria-hidden="true" />
-      <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
-      <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />
-      <div className="mi-hero-data-stack" aria-hidden="true">
-        {heroSignals[variant].map((signal) => (
-          <span key={signal}>{signal}</span>
-        ))}
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" aria-hidden="true" />
 
       <motion.div 
         className="relative z-10 w-full py-20 md:py-24"
@@ -101,48 +67,33 @@ export const MarketIntelligenceHero = ({
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="mi-hero-copy mx-auto max-w-4xl px-4 text-center">
-          {/* Badge - glass emerald/white, no gold border */}
-          <motion.button 
-            className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"
-            style={{
-              background: 'rgba(255,255,255,0.10)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.38)',
-              boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -1px 2px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.3)',
-            }}
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <motion.div 
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-white/35"
             variants={fadeInUp}
           >
-            <BadgeIcon className="h-3.5 w-3.5 text-white" />
-            <span
-              className="text-white font-semibold text-[10px] md:text-xs uppercase tracking-[0.2em]"
-              style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
-            >
-              {badge}
-            </span>
-          </motion.button>
+            <BadgeIcon className="w-4 h-4 text-white" />
+            <span className="text-white text-sm font-semibold tracking-wide uppercase">{badge}</span>
+          </motion.div>
           
-          {/* Title */}
           <motion.h1
             data-no-contrast-guard
-            className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold !text-white mb-6 leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.75)]"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="allow-white text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight"
+            style={{ color: "#F6FBF8", WebkitTextFillColor: "#F6FBF8" }}
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
 
-          {/* Description */}
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-lg md:text-xl !text-white/95 font-light leading-relaxed max-w-3xl mx-auto mb-10 drop-shadow-[0_1px_6px_rgba(0,0,0,0.75)]"
-            style={{ color: "rgba(255,255,255,0.96)", WebkitTextFillColor: "rgba(255,255,255,0.96)" }}
+            className="allow-white text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            style={{ color: "rgba(246,251,248,0.85)", WebkitTextFillColor: "rgba(246,251,248,0.85)" }}
             variants={fadeInUp}
           >
             {description}
           </motion.p>
           
-          {/* Actions - Hero CTA Buttons with consistent styling */}
           {actions && (
             <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
               {actions}
