@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle,
   Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin,
@@ -558,6 +558,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
 
 export default function GlobalVerticalNav() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { session } = useAuth();
   const { isInvestor, isOwner } = useUserRole();
   const { mode, isDeveloperMode, isBrokerMode, isInvestorMode } = useUserModeContext();
@@ -660,6 +661,26 @@ export default function GlobalVerticalNav() {
       setNavRevealed(true);
       try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
     }
+  }, []);
+
+  // Warm the heavy Leaflet/property-map chunk after the chrome is idle so
+  // clicking Map in the vertical sidebar navigates immediately instead of
+  // waiting on a late lazy import.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const browserWindow = window as Window & typeof globalThis & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+
+    if (browserWindow.requestIdleCallback) {
+      const idleId = browserWindow.requestIdleCallback(() => prefetchAITool('/map'), { timeout: 2500 });
+      return () => browserWindow.cancelIdleCallback?.(idleId);
+    }
+
+    const timer = globalThis.setTimeout(() => prefetchAITool('/map'), 1200);
+    return () => globalThis.clearTimeout(timer);
   }, []);
 
   const toggleCollapse = useCallback(() => {
@@ -1034,6 +1055,21 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
         onWheel={passSidebarBoundaryWheelToPage}
+        onClick={(event) => {
+          const target = event.target as HTMLElement | null;
+          const explicitMapLink = target?.closest?.('a[href="/map"]');
+          const sidebarMapRow = Array.from(
+            event.currentTarget.querySelectorAll<HTMLAnchorElement>('a[href="/map"]')
+          ).find((anchor) => {
+            const rect = anchor.getBoundingClientRect();
+            return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+          });
+          if (explicitMapLink || sidebarMapRow) {
+            event.preventDefault();
+            collapseAfterNavigation();
+            navigate('/map');
+          }
+        }}
         className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0 flex flex-col"
         style={{ scrollbarGutter: "stable" }}
       >
@@ -1202,9 +1238,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               active={subitemActive}
                               onMouseEnter={() => prefetchAITool(item.href)}
                               onFocus={() => prefetchAITool(item.href)}
-                              onClick={() => {
+                              onClick={(event) => {
                                 // Never open the full-screen mega drop-down overlay from inside
                                 // an expanded section — just navigate.
+                                if (item.href === "/map") {
+                                  event.preventDefault();
+                                  collapseAfterNavigation();
+                                  navigate("/map");
+                                  return;
+                                }
                                 collapseAfterNavigation();
                                 if (sectionKey === 'MY ACCOUNT') {
                                   setOpenSection('MY ACCOUNT');

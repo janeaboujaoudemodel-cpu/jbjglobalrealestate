@@ -4,6 +4,7 @@
  * hovering a sidebar link warms the chunk cache before the click.
  */
 const PREFETCH_MAP: Record<string, () => Promise<unknown>> = {
+  "/map": () => import("@/pages/PropertyMap"),
   "/ai-property-analyzer": () => import("@/pages/AIPropertyAnalyzerPage"),
   "/ai-lead-qualification": () => import("@/pages/AILeadQualificationPage"),
   "/ai-price-predictor": () => import("@/pages/AIPricePredictorPage"),

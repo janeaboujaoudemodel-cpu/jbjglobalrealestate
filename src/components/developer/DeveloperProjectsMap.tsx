@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Layers, AlertTriangle, RefreshCw } from "lucide-react";
 import { MapNavigationControlsStandalone } from "@/components/maps/MapNavigationControls";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getMapTiles } from "@/constants/mapTiles";
+import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
 
 interface DeveloperProject {
@@ -31,7 +31,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   
-  const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('satellite');
+  const [tileLayer, setTileLayer] = useState<MapViewType>('satellite');
   const [mapError, setMapError] = useState<string | null>(null);
   const [mapInteractive, setMapInteractive] = useState(false);
 
@@ -53,15 +53,15 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       className: "custom-marker",
       html: `
         <div style="
-          background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
-          color: #1a1a2e;
+          background: linear-gradient(135deg, #0B5A45 0%, #073B2F 58%, #03251F 100%);
+          color: #FFFFFF;
           padding: 6px 12px;
           border-radius: 20px;
           font-weight: bold;
           font-size: 12px;
           white-space: nowrap;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-          border: 2px solid #fff;
+          box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+          border: 2px solid rgba(255,255,255,0.96);
           cursor: pointer;
           transition: transform 0.2s;
         ">
@@ -82,18 +82,18 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       : '';
     
     const locationHtml = project.location 
-      ? `<p style="font-size: 12px; color: #666; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${project.location}</p>`
+      ? `<p style="font-size: 12px; color: rgba(255,255,255,0.84); margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${project.location}</p>`
       : '';
 
     return `
-      <div style="width: 240px; padding: 0;">
+      <div class="jj-map-popup-card" style="width: 240px; padding: 0; background: linear-gradient(135deg, #0B5A45 0%, #073B2F 58%, #03251F 100%); color: #FFFFFF;">
         ${imageHtml}
         <div style="padding: 12px;">
-          <h4 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${project.name}</h4>
+          <h4 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: #FFFFFF;">${project.name}</h4>
           ${locationHtml}
           <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-weight: 700; color: #ea580c; font-size: 14px;">${formatPrice(project.price_from)}</span>
-            <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; text-decoration: none; color: #333;">
+            <span style="font-weight: 700; color: #FFFFFF; font-size: 14px;">${formatPrice(project.price_from)}</span>
+            <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.28); border-radius: 6px; font-size: 12px; text-decoration: none; color: #FFFFFF; background: rgba(255,255,255,0.10);">
               ${t('map.view')} →
             </a>
           </div>
@@ -126,9 +126,10 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       mapInstanceRef.current = map;
 
       const tiles = getMapTiles(language);
-      const initialTileLayer = L.tileLayer(tiles.satellite.url, {
-        attribution: '',
-      });
+      const initialTileConfig = tiles.satellite;
+      const initialTileOptions: L.TileLayerOptions = { attribution: initialTileConfig.attribution };
+      if (initialTileConfig.subdomains) initialTileOptions.subdomains = initialTileConfig.subdomains;
+      const initialTileLayer = L.tileLayer(initialTileConfig.url, initialTileOptions);
       initialTileLayer.addTo(map);
       
       map.attributionControl.remove();
@@ -181,10 +182,12 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
     try {
       tileLayerRef.current.remove();
       const tiles = getMapTiles(language);
-      const tileConfig = tileLayer === 'satellite' ? tiles.satellite : tiles.street;
-      const newTileLayer = L.tileLayer(tileConfig.url, {
+      const tileConfig = tiles[tileLayer];
+      const tileOptions: L.TileLayerOptions = {
         attribution: tileConfig.attribution,
-      });
+      };
+      if (tileConfig.subdomains) tileOptions.subdomains = tileConfig.subdomains;
+      const newTileLayer = L.tileLayer(tileConfig.url, tileOptions);
       newTileLayer.addTo(mapInstanceRef.current);
       tileLayerRef.current = newTileLayer;
     } catch (err) {
@@ -235,28 +238,31 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   }
 
   return (
-    <div className="rounded-xl overflow-hidden border-2 border-[#B89555]/40" style={{
-      boxShadow: '0 0 20px rgba(200,167,102,0.2)',
-    }}>
+    <div data-map-page data-map-shell className="rounded-xl overflow-hidden border border-white/15">
       {/* Map Header */}
-      <div className="bg-gradient-to-r from-champagne/80 to-champagne/40 px-4 py-3 flex items-center justify-between border-b border-[#B89555]/30">
-        <h3 className="text-foreground font-semibold">
-          {developerName} {t('map.projectsMap')}
-          <span className="ml-2 text-sm font-normal text-foreground/70">
+      <div className="jj-map-embedded-header px-4 py-3 flex items-center justify-between gap-3 border-b border-white/15">
+        <h3 className="font-semibold inline-flex items-center gap-2">
+          <Layers className="w-4 h-4" />
+          <span>{developerName} {t('map.projectsMap')}</span>
+          <span className="ml-1 text-sm font-normal">
             ({projectsWithCoords.length} {t('map.locations')})
           </span>
         </h3>
         
-        {/* Layer Toggle */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setTileLayer(tileLayer === 'street' ? 'satellite' : 'street')}
-          className="gap-2 border-[#B89555]/50 hover:bg-[#EFE6D6]/10"
-        >
-          <Layers className="w-4 h-4" />
-          {tileLayer === 'street' ? t('map.satellite') : t('map.street')}
-        </Button>
+        <div className="jj-map-layer-switcher">
+          {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
+            <button
+              key={view}
+              type="button"
+              onClick={() => setTileLayer(view)}
+              className="jj-map-layer-button"
+              data-active={tileLayer === view ? "true" : "false"}
+              data-surface={tileLayer === view ? "emerald" : "champagne"}
+            >
+              {t(`map.${view}`)}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Map Container */}

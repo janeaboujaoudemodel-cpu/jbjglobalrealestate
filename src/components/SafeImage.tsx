@@ -61,6 +61,9 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
 
     const loadingAttr = props.loading ?? "lazy";
     const fetchPriority = loadingAttr === "eager" ? "high" : undefined;
+    const fetchPriorityProps = fetchPriority
+      ? ({ fetchpriority: fetchPriority } as unknown as React.ImgHTMLAttributes<HTMLImageElement>)
+      : {};
 
     const champagneFor = (img: HTMLImageElement) =>
       buildChampagneInitialsDataUri({
@@ -76,8 +79,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
         src={resolvedSrc}
         loading={loadingAttr}
         decoding={props.decoding ?? "async"}
-        // @ts-ignore - fetchpriority is a valid HTML attribute
-        fetchPriority={fetchPriority}
+        {...fetchPriorityProps}
         referrerPolicy="strict-origin-when-cross-origin"
         onLoad={(e) => {
           const img = e.currentTarget;
