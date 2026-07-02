@@ -22,7 +22,6 @@ const TIER_CONFIG: Record<string, { label: string; color: string }> = {
   PREMIUM:     { label: "PREMIUM",     color: TIER_PILL },
   TOP_TIER:    { label: "TOP TIER",    color: TIER_PILL },
   ESTABLISHED: { label: "ESTABLISHED", color: TIER_PILL },
-  PARTNER:     { label: "PARTNER",     color: TIER_PILL },
 };
 
 const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
@@ -30,43 +29,40 @@ const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select
 const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
 const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
+// Curated master-plan / signature-project photography per developer. ONLY
+// developer-specific, real, premium imagery lives here — no generic stock,
+// no cross-developer reuse. If a developer is not in this map, the card
+// falls back to logo/nameplate rather than risk showing a wrong photo.
 const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
-  "developed-by-emaar-properties": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
-  "emaar-properties": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
-  emaar: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
-  "developed-by-danube-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
-  "danube-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
+  emaar: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80", // Downtown / Burj Khalifa master plan
   danube: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
-  "developed-by-azizi-developments": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
-  "azizi-developments": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
   azizi: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
-  "developed-by-binghatti": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg",
-  binghatti: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg",
+  binghatti: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg", // Bugatti Residences — restored
+  ellington: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg", // Mercer House
+  wellington: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=80", // distinct residential tower — never share with Ellington
+  beyond: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Passo_by_Beyond_at_Palm_Jumeirah_Luxury_Residences_955c20826b.jpg",
+  "majid al futtaim": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Lacina_Residences_by_Majid_Al_Futtaim_a869016d98.jpg",
+  "select group": "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1600&q=80", // Dubai Marina waterfront master plan
+  sobha: "https://images.unsplash.com/photo-1512699355324-f07e3106dae5?w=1600&q=80", // Sobha Hartland-scale master plan
+  samana: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600&q=80", // standalone residential tower exterior
   "sunrise-valley": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
-  "hirat-real-estate-development": "https://new-projects-media.propertyfinder.com/project/2e8e9a04-428d-4e4b-b789-1c68f242cb09/gallery/image/5bB3dAv-CyrCK9YgvseOoLY0th0zmZ3677dZm8mFhY0=/big.webp",
   "ax-capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
-  "6-ellington-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg",
-  "6ellington-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg",
-  "developed-by-ellington-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg",
-  "developed-by-beyond": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Passo_by_Beyond_at_Palm_Jumeirah_Luxury_Residences_955c20826b.jpg",
-  "developed-by-majid-al-futtaim": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Lacina_Residences_by_Majid_Al_Futtaim_a869016d98.jpg",
 };
 
+// Match by matching *any* keyword token in the developer name/slug against
+// the curated map keys. Keeps rules explicit and prevents accidental reuse
+// (e.g. Wellington will never match `ellington` because we use word boundary).
 function getIconicDeveloperImage(slug: string, name: string) {
-  const normalized = slug.toLowerCase();
-  if (ICONIC_DEVELOPER_IMAGES[normalized]) return ICONIC_DEVELOPER_IMAGES[normalized];
-  const combined = `${slug} ${name}`.toLowerCase();
-  if (combined.includes("emaar")) return ICONIC_DEVELOPER_IMAGES.emaar;
-  if (combined.includes("danube")) return ICONIC_DEVELOPER_IMAGES.danube;
-  if (combined.includes("azizi")) return ICONIC_DEVELOPER_IMAGES.azizi;
-  if (combined.includes("binghatti")) return ICONIC_DEVELOPER_IMAGES.binghatti;
-  if (combined.includes("ellington")) return ICONIC_DEVELOPER_IMAGES["developed-by-ellington-properties"];
-  if (combined.includes("beyond")) return ICONIC_DEVELOPER_IMAGES["developed-by-beyond"];
-  if (combined.includes("majid al futtaim")) return ICONIC_DEVELOPER_IMAGES["developed-by-majid-al-futtaim"];
+  const combined = ` ${slug} ${name} `.toLowerCase().replace(/[-_]/g, " ");
+  for (const key of Object.keys(ICONIC_DEVELOPER_IMAGES)) {
+    const re = new RegExp(`(^|\\s)${key.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}(\\s|$)`);
+    if (re.test(combined)) return ICONIC_DEVELOPER_IMAGES[key];
+  }
   return undefined;
 }
 
-function getDeveloperTier(slug: string, name = "", rank?: number | null): { label: string; color: string } {
+
+function getDeveloperTier(slug: string, name = "", rank?: number | null): { label: string; color: string } | null {
   const normalized = `${slug} ${name}`.toLowerCase();
   if (ELITE_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.ELITE;
   if (PREMIUM_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.PREMIUM;
@@ -77,8 +73,10 @@ function getDeveloperTier(slug: string, name = "", rank?: number | null): { labe
     if (rank <= 30) return TIER_CONFIG.PREMIUM;
     if (rank <= 80) return TIER_CONFIG.TOP_TIER;
   }
-  return TIER_CONFIG.PARTNER; // universal fallback so every card has a badge
+  // No generic "PARTNER" label — leave badgeless rather than mislabel.
+  return null;
 }
+
 
 /**
  * Reelly-style developer card.
@@ -94,7 +92,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
   const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
-  const cardHeroImageUrl = getIconicDeveloperImage(developer.slug || "", developer.name || "") || developer.feature_image_url || heroImageUrl;
+  // Only use a photo when we have a curated developer-specific image.
+  // DB feature_image_url and the passed-in heroImageUrl are NOT trusted for
+  // developer cards because they routinely leak stock/unrelated imagery
+  // (e.g. Amal → Downtown, Samana → interior, 971 ≈ AAA reuse). Falling
+  // back to logo/nameplate is safer than showing a wrong photo.
+  const cardHeroImageUrl = getIconicDeveloperImage(developer.slug || "", developer.name || "");
+
   const hasHero = !!cardHeroImageUrl;
   const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
 
