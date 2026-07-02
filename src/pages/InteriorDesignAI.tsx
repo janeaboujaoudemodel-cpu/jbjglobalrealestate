@@ -274,7 +274,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       data-no-contrast-guard
       data-surface="dark"
       className="allow-white relative w-full min-h-screen overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)", color: "#FFFFFF" }}
+      style={{ background: "linear-gradient(180deg, #021610 0%, #010A07 60%, #000000 100%)", color: "#FFFFFF" }}
     >
       <style>{`
         [data-interior-design-ai],
@@ -283,49 +283,51 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           -webkit-text-fill-color: #FFFFFF;
         }
         [data-interior-design-ai] .id-text-muted {
-          color: rgba(255,255,255,0.76) !important;
-          -webkit-text-fill-color: rgba(255,255,255,0.76) !important;
+          color: rgba(255,255,255,0.82) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
         }
+        /* Cards: FULL emerald with white content */
         [data-interior-design-ai] .id-panel {
-          background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
-          border: 1px solid rgba(255,255,255,0.42) !important;
-          box-shadow: 0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04) !important;
+          background: linear-gradient(140deg, #0A6B53 0%, #065F46 55%, #054E3A 100%) !important;
+          border: 1px solid rgba(255,255,255,0.28) !important;
+          box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55), inset 0 0 30px rgba(255,255,255,0.04) !important;
         }
         [data-interior-design-ai] .id-panel-soft {
-          background: linear-gradient(135deg, rgba(8,18,13,0.94) 0%, rgba(3,8,5,0.97) 58%, rgba(0,0,0,1) 100%) !important;
-          border: 1px solid rgba(255,255,255,0.34) !important;
+          background: linear-gradient(140deg, rgba(10,107,83,0.72) 0%, rgba(6,95,70,0.72) 55%, rgba(5,78,58,0.72) 100%) !important;
+          border: 1px solid rgba(255,255,255,0.30) !important;
         }
         [data-interior-design-ai] .id-input,
         [data-interior-design-ai] .id-input:focus,
         [data-interior-design-ai] .id-input:focus-visible {
-          background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
-          border: 1px solid rgba(255,255,255,0.42) !important;
+          background: rgba(0,0,0,0.28) !important;
+          border: 1px solid rgba(255,255,255,0.38) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
           box-shadow: none !important;
         }
         [data-interior-design-ai] .id-input::placeholder {
-          color: rgba(255,255,255,0.58) !important;
-          -webkit-text-fill-color: rgba(255,255,255,0.58) !important;
+          color: rgba(255,255,255,0.65) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.65) !important;
           opacity: 1 !important;
         }
-        [data-interior-design-ai] .id-primary,
-        [data-interior-design-ai] .id-primary * {
-          background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+        [data-interior-design-ai] .id-primary {
+          background-image: linear-gradient(135deg, #0A6B53 0%, #043024 58%, #000000 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
-          border-color: rgba(255,255,255,0.46) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
+        }
+        /* Do NOT cascade background-image into children — that was painting the icon as a white/emerald block */
+        [data-interior-design-ai] .id-primary > * {
+          background-image: none !important;
+          background: transparent !important;
         }
         [data-interior-design-ai] .id-primary:disabled,
         [data-interior-design-ai] .id-primary[disabled] {
           opacity: 0.72 !important;
-          background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
         }
         [data-interior-design-ai] .id-outline {
-          background: rgba(255,255,255,0.05) !important;
+          background: rgba(255,255,255,0.06) !important;
           border: 1px solid rgba(255,255,255,0.42) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
@@ -338,7 +340,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-choice {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
-          border-color: rgba(255,255,255,0.42) !important;
+          border-color: rgba(255,255,255,0.38) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
@@ -346,23 +348,36 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           border-color: rgba(255,255,255,0.62) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #000000 100%) !important;
-          border-color: rgba(255,255,255,0.58) !important;
-          box-shadow: 0 0 22px rgba(16,185,129,0.34) !important;
+          background: linear-gradient(135deg, #10B981 0%, #059669 55%, #064E3B 100%) !important;
+          border-color: rgba(255,255,255,0.72) !important;
+          box-shadow: 0 0 22px rgba(16,185,129,0.42) !important;
         }
-        [data-interior-design-ai] svg,
-        [data-interior-design-ai] svg * {
+        /* Icons: line-art white, never filled block */
+        [data-interior-design-ai] svg {
+          background: transparent !important;
+          background-image: none !important;
+          fill: none !important;
           color: #FFFFFF !important;
+        }
+        [data-interior-design-ai] svg * {
+          background: transparent !important;
+          background-image: none !important;
+          fill: none !important;
           stroke: #FFFFFF !important;
+          color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
+        /* Responsive safety — content must never overflow cards */
+        [data-interior-design-ai] .id-panel, [data-interior-design-ai] .id-panel-soft { min-width: 0 !important; }
+        [data-interior-design-ai] .id-panel * { min-width: 0; }
       `}</style>
+
 
       {!embedded && (
         <div className="relative py-16 md:py-24 overflow-hidden" data-hero-dark>
-          <div className="absolute inset-0" style={{ background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))" }} />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_28%,rgba(255,255,255,0.12),transparent_42%),radial-gradient(circle_at_78%_68%,rgba(16,185,129,0.18),transparent_48%)]" />
-          <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: "linear-gradient(90deg, transparent, #B89555, transparent)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #010604 0%, #020F0A 60%, #011008 100%)" }} />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_28%,rgba(255,255,255,0.06),transparent_42%),radial-gradient(circle_at_78%_68%,rgba(16,185,129,0.10),transparent_48%)]" />
+
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               className="text-center max-w-4xl mx-auto"
@@ -398,7 +413,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           </div>
           <div className="id-panel rounded-2xl p-4">
             <p className="text-[11px] uppercase tracking-[0.22em] font-semibold mb-3">Design mode</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="flex flex-wrap gap-3">
               {modeConfig.map(m => {
                 const Icon = m.icon;
                 const active = mode === m.id;
@@ -407,14 +422,15 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     key={m.id}
                     type="button"
                     onClick={() => setMode(m.id)}
-                    className={`id-choice ${active ? "id-choice-active" : "id-panel-soft"} min-h-[72px] rounded-xl p-3 text-left transition-all border`}
+                    className={`id-choice ${active ? "id-choice-active" : "id-panel-soft"} flex flex-col items-start gap-1 flex-1 basis-[160px] min-w-[140px] min-h-[72px] rounded-xl p-3 text-left transition-all border`}
                     aria-pressed={active}
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Icon className="w-4 h-4" />
-                      <span className="text-sm font-semibold">{m.label}</span>
+                    <div className="flex items-center gap-2 mb-1" style={{ display: "flex" }}>
+                      <Icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="text-sm font-semibold truncate">{m.label}</span>
                     </div>
-                    <span className="id-text-muted text-xs">{m.desc}</span>
+                    <div className="id-text-muted text-xs leading-snug" style={{ display: "block" }}>{m.desc}</div>
+
                   </button>
                 );
               })}
@@ -428,7 +444,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               {generatedImage ? (
                 <div className="relative">
                   <Design3DViewer imageUrl={generatedImage} projectName={projectName} />
-                  <div className="p-4 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+                  <div className="p-4 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                     <Button onClick={() => generateDesign()} disabled={isProcessing} className="id-primary flex-1">
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Regenerate
@@ -451,7 +467,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   >
                     <X className="w-4 h-4" />
                   </button>
-                  <div className="p-4 border-t" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+                  <div className="p-4 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                     <Button onClick={() => generateDesign()} disabled={isProcessing} className="id-primary w-full min-h-12">
                       {isProcessing ? (
                         <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" /> Generating...</>
@@ -585,7 +601,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </Collapsible>
 
             <div className="id-panel rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '420px' }}>
-              <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+              <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                 <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4" />
                 </div>
@@ -610,7 +626,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="p-3 border-t" style={{ borderColor: "rgba(184,149,85,0.42)" }}>
+              <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                 <div className="flex gap-2">
                   <Textarea
                     value={chatInput}
