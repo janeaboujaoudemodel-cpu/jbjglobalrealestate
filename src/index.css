@@ -23048,3 +23048,42 @@ html body #root :is([data-ai-listing-shell], [data-manual-listing-shell]) :is(
     border-color: rgba(255,255,255,0.42) !important;
   }
 }
+
+/* Final AI tool layout guard: no champagne spacer between emerald tools and footer,
+   no page arrow under the sidebar, and no bright green selected states. */
+html body #root .aihf-root {
+  background: linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%) !important;
+}
+html body #root .aihf-root .aihf-hero,
+html body #root .aihf-root .aihf-cta,
+html body #root .aihf-root .aihf-option[aria-pressed="true"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+}
+html body #root .aihf-root .aihf-option:not([aria-pressed="true"]) {
+  background: linear-gradient(135deg, #042c1c 0%, #031711 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #042c1c 0%, #031711 58%, #000000 100%) !important;
+}
+html body:has(#root .aihf-root) #root .jj-main-shell,
+html body:has(#root [data-interior-design-ai]) #root .jj-main-shell {
+  background: #000000 !important;
+}
+html body:has(#root .aihf-root) #root .jj-footer-shell,
+html body:has(#root [data-interior-design-ai]) #root .jj-footer-shell {
+  margin-top: 0 !important;
+  border-top: 0 !important;
+}
+html body:has(#root .aihf-root) footer[data-jj-minimal-footer] > div,
+html body:has(#root [data-interior-design-ai]) footer[data-jj-minimal-footer] > div {
+  padding-top: 12px !important;
+  padding-bottom: 14px !important;
+}
+
+@media (min-width: 640px) {
+  html body .jj-page-nav-anchor--left {
+    left: calc(var(--jj-shell-sidebar-w, 72px) + 16px) !important;
+  }
+  html body .jj-page-nav-anchor--right {
+    right: calc(var(--jj-shell-sidebar-w, 72px) + 16px) !important;
+  }
+}
