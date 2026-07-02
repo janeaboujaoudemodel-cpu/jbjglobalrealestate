@@ -9,6 +9,7 @@ import {
   ChevronUp,
   AlertCircle,
   CheckCircle2,
+  UploadCloud,
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
@@ -154,6 +155,9 @@ export function IngestionCard({
             <div className="mt-3 flex flex-wrap gap-2">
               <Button size="sm" variant="gold" onClick={onAttach}>
                 <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Attach to listing
+              </Button>
+              <Button size="sm" data-cta="dark" className="jj-cta-dark" onClick={onAttach}>
+                <UploadCloud className="w-3.5 h-3.5 mr-1" /> Publish
               </Button>
               <Button size="sm" variant="outline" onClick={onExtract}>
                 <Sparkles className="w-3.5 h-3.5 mr-1" /> Extract only

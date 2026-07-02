@@ -16,7 +16,7 @@ import {
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
   DollarSign, Bed, Ruler, FileText,
   ChevronLeft, ChevronRight, Merge, Plus, CheckSquare,
-  Upload, Globe, Building, Timer, Eye, Search
+  Upload, Globe, Building, Timer, Eye, Search, UploadCloud
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
@@ -1096,13 +1096,14 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     size="sm"
                     onClick={showApproveSelectedConfirmation}
                     disabled={isBulkProcessing || isLoading}
-                    className="jj-surface-emerald hover:jj-surface-emerald text-white"
+                    data-cta="dark"
+                    className="jj-cta-dark"
                   >
-                    <CheckSquare className="h-4 w-4 mr-2" />
-                    Approve Selected ({selectedIds.size})
+                    <UploadCloud className="h-4 w-4 mr-2" />
+                    Publish Selected ({selectedIds.size})
                   </Button>
-                 )}
-                 {/* Approve ALL Pending button - calls edge function in batches */}
+                )}
+                 {/* Publish ALL Pending button - calls edge function in batches */}
                  {(totalCount ?? 0) > 0 && (
                    <Button
                      size="sm"
@@ -1110,8 +1111,8 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                      disabled={isBulkProcessing || isLoading}
                      className="jj-surface-emerald hover:jj-surface-emerald text-white"
                    >
-                     <Check className="h-4 w-4 mr-2" />
-                     Approve ALL ({(totalCount ?? 0).toLocaleString()})
+                      <UploadCloud className="h-4 w-4 mr-2" />
+                      Publish ALL ({(totalCount ?? 0).toLocaleString()})
                    </Button>
                  )}
                  {(totalNeedsWorkCount ?? needsWorkCount) > 0 && (
@@ -1676,6 +1677,15 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       Merge Updates
                     </Button>
                   )}
+                  <Button
+                    onClick={() => handleApprove(selectedImport)}
+                    disabled={processingId === selectedImport.id}
+                    data-cta="dark"
+                    className="jj-cta-dark"
+                  >
+                    <UploadCloud className="h-4 w-4 mr-2" />
+                    Publish
+                  </Button>
                   
                   <Button
                     onClick={() => handleApprove(selectedImport)}
@@ -1683,7 +1693,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     className="jj-surface-emerald hover:jj-surface-emerald text-white"
                   >
                     <Check className="h-4 w-4 mr-2" />
-                    {selectedImport.is_new_project ? 'Approve & Create' : 'Approve as New'}
+                     {selectedImport.is_new_project ? 'Publish & Create' : 'Publish as New'}
                   </Button>
                 </div>
               </div>

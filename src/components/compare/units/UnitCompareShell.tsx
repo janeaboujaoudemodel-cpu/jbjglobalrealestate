@@ -100,7 +100,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
 
   return (
     <CompareAIShell>
-      <div className="container mx-auto px-4 py-10 md:py-14">
+      <div data-compare-units-shell data-surface="emerald" data-on-dark="true" className="container mx-auto px-4 py-10 md:py-14">
         <button
           onClick={() => navigate(-1)}
           data-no-contrast-guard

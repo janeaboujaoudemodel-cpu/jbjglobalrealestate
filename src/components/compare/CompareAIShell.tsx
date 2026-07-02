@@ -1,24 +1,22 @@
 /**
- * CompareAIShell — Champagne/gold premium wrapper for /compare and /compare-manual.
+ * CompareAIShell — premium emerald wrapper for /compare and /compare-manual.
  *
- * Brand-locked: page #FDFBF7 → surface #F7F2EA → raised #EFE6D6 with
- * 1px gold #B89555 hairlines. No blue/purple/pink anywhere. Ink #1A1A1A text.
+ * Brand-locked: dark emerald page, gold hairline accents, white ink.
  */
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ReactNode } from "react";
 
 export const COMPARE_AI_PALETTE = {
-  page: "#FDFBF7",
-  surface: "#F7F2EA",
-  raised: "#EFE6D6",
+  page: "#010806",
+  surface: "#053D2F",
+  raised: "#064E3B",
   gold: "#B89555",
   goldSoft: "rgba(184,149,85,0.18)",
   goldHairline: "rgba(184,149,85,0.55)",
-  ink: "#1A1A1A",
-  // Gradient kept as champagne sweep for any legacy callers
-  gradient: "linear-gradient(135deg, #EFE6D6 0%, #F7F2EA 50%, #FDFBF7 100%)",
-  gradientText: "linear-gradient(90deg, #1A1A1A 0%, #1A1A1A 100%)",
+  ink: "#FFFFFF",
+  gradient: "linear-gradient(135deg, #032820 0%, #021611 54%, #000000 100%)",
+  gradientText: "linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 100%)",
 } as const;
 
 interface CompareAIShellProps {
@@ -63,14 +61,16 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
     <div
       data-compare-ai-shell
       data-marketing-page
+      data-surface="emerald"
+      data-on-dark="true"
       className="relative min-h-screen overflow-hidden"
-      style={{ background: COMPARE_AI_PALETTE.page, color: COMPARE_AI_PALETTE.ink }}
+      style={{ background: COMPARE_AI_PALETTE.gradient, color: COMPARE_AI_PALETTE.ink }}
     >
-      {/* Subtle champagne ambient blobs — purely decorative */}
+      {/* Subtle emerald ambient blobs — purely decorative */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {blob(720, { x: "-10%", y: "-15%" }, 22, 0, 0.28)}
-        {blob(640, { x: "55%", y: "10%" }, 26, 2, 0.22)}
-        {blob(560, { x: "20%", y: "55%" }, 24, 4, 0.18)}
+        {blob(720, { x: "-10%", y: "-15%" }, 22, 0, 0.08)}
+        {blob(640, { x: "55%", y: "10%" }, 26, 2, 0.07)}
+        {blob(560, { x: "20%", y: "55%" }, 24, 4, 0.06)}
       </div>
 
       {/* Content layer */}
@@ -79,7 +79,7 @@ export default function CompareAIShell({ children }: CompareAIShellProps) {
   );
 }
 
-/** Champagne glass card primitive for sections inside CompareAIShell. */
+/** Emerald glass card primitive for sections inside CompareAIShell. */
 export function GlassCard({
   children,
   className = "",
@@ -91,11 +91,11 @@ export function GlassCard({
     <div
       className={`relative rounded-2xl ${className}`}
       style={{
-        background: COMPARE_AI_PALETTE.surface,
-        border: `1px solid ${COMPARE_AI_PALETTE.goldHairline}`,
+        background: COMPARE_AI_PALETTE.gradient,
+        border: "1px solid rgba(255,255,255,0.22)",
         boxShadow:
-          "0 20px 60px -30px rgba(184,149,85,0.25), inset 0 1px 0 rgba(255,255,255,0.6)",
-        color: COMPARE_AI_PALETTE.ink,
+          "0 20px 60px -30px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.10)",
+        color: "#FFFFFF",
       }}
     >
       {children}
@@ -103,7 +103,7 @@ export function GlassCard({
   );
 }
 
-/** Gold-ink accent text helper (replaces former vivid gradient). */
+/** White accent text helper (legacy name kept for callers). */
 export function GradientText({
   children,
   className = "",
@@ -114,7 +114,7 @@ export function GradientText({
   return (
     <span
       className={className}
-      style={{ color: COMPARE_AI_PALETTE.gold, fontWeight: 700 }}
+      style={{ color: "#FFFFFF", fontWeight: 700 }}
     >
       {children}
     </span>

@@ -31,14 +31,14 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
           color: "#FFFFFF",
           WebkitTextFillColor: "#FFFFFF",
           background: active
-            ? "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)"
-            : "rgba(255,255,255,0.12)",
+            ? "linear-gradient(135deg, #053D2F 0%, #031F18 48%, #010806 100%)"
+            : "linear-gradient(135deg, rgba(5,61,47,0.74) 0%, rgba(3,31,24,0.82) 58%, rgba(1,8,6,0.88) 100%)",
           border: active
             ? "1px solid rgba(255,255,255,0.34)"
             : "1px solid rgba(255,255,255,0.28)",
           boxShadow: active
-            ? "0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.16)"
-            : "inset 0 1px 0 rgba(255,255,255,0.12)",
+            ? "0 0 0 1px rgba(255,255,255,0.16), 0 14px 30px -18px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.18)"
+            : "inset 0 1px 0 rgba(255,255,255,0.10)",
         }}
         {...(active ? { "data-allow-dark-cta": true, "data-cta": "dark" } : {})}
       >
@@ -55,8 +55,9 @@ export default function CompareModeToggle({ mode, onChange }: Props) {
       data-on-dark="true"
       className="inline-flex items-center gap-1 p-1 rounded-full"
       style={{
-        background: "rgba(255,255,255,0.12)",
+        background: "linear-gradient(135deg, #053D2F 0%, #031F18 58%, #010806 100%)",
         border: "1px solid rgba(255,255,255,0.26)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
       }}
       role="tablist"
       aria-label="Comparison mode"

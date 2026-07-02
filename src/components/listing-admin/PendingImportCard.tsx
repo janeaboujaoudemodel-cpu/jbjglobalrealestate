@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/SafeImage";
 import { filterValidImages, getFirstValidImageUrl } from "@/lib/imageUtils";
-import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2, Eye, Building2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, MapPin, Mail, Phone, MessageCircle, Bed, AlertTriangle, RefreshCw, Check, X, Loader2, Eye, Building2, UploadCloud } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getWhatsAppUrl } from "@/constants/stats";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -474,8 +474,8 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
               className="flex-1 gap-1 jj-surface-emerald hover:jj-surface-emerald text-white"
               title={isIncomplete ? "Complete extraction first" : "Approve and add to listings"}
             >
-              {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-              Approve
+              {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
+              Publish
             </Button>
             <Button
               onClick={handleReject}
