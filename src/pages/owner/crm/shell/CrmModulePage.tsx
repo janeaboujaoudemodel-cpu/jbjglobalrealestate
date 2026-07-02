@@ -263,5 +263,5 @@ export default function CrmModulePage() {
 
   if (slug === "projects") return <ProjectsIntro />;
 
-  return <ModuleListView slug={slug} label={mod?.label ?? section} />;
+  return <ModuleListView slug={slug} label={mod?.label ?? section} section={section} />;
 }
