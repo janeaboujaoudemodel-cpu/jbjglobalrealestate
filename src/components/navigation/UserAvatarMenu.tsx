@@ -108,23 +108,20 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     onClick?: () => void;
   }) => {
     const active = isRowActive(to);
-    const activeInkStyle = active
-      ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }
-      : { color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" };
-    const activeIconStyle = active
-      ? { color: "#FFFFFF", stroke: "#FFFFFF" }
-      : { color: "#1A1A1A", stroke: "#1A1A1A" };
+    // Always white text/icons; hover state handled by DropdownMenuItem CSS unchanged.
+    const inkStyle = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" };
+    const iconStyle = { color: "#FFFFFF", stroke: "#FFFFFF" };
 
     const inner = (
-      <span className="flex items-center gap-2.5 w-full" style={activeInkStyle}>
+      <span className="flex items-center gap-2.5 w-full" style={inkStyle}>
         <Icon
           className="w-5 h-5 shrink-0"
           strokeWidth={2.25}
-          style={activeIconStyle}
+          style={iconStyle}
         />
         <span
           className={`text-sm flex-1 ${active ? "font-semibold" : "font-medium"}`}
-          style={activeInkStyle}
+          style={inkStyle}
         >
           {label}
         </span>
@@ -138,17 +135,19 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     return (
       <DropdownMenuItem
         data-account-menu-row="true"
+        data-surface="emerald"
+        data-on-dark="true"
         asChild={!!to}
         active={active}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0"
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-white focus:bg-white/10 data-[highlighted]:bg-white/10"
       >
         {to ? (
           <Link
             to={to}
             data-account-menu-row="true"
-            data-surface={active ? "emerald" : undefined}
-            data-on-dark={active ? "true" : undefined}
+            data-surface="emerald"
+            data-on-dark="true"
           >
             {inner}
           </Link>
@@ -181,27 +180,33 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuContent
         data-account-menu-content
         data-jbj-fast-dropdown="true"
+        data-surface="emerald"
+        data-on-dark="true"
         align="end"
         sideOffset={12}
-        className="z-[10100] w-[280px] p-2 rounded-xl border border-[#EFE6D6] bg-[#FDFBF7] shadow-2xl"
+        className="z-[10100] w-[280px] p-2 rounded-xl border border-white/25 shadow-2xl text-white"
+        style={{
+          backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
+        }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-2 py-2.5">
+        <div className="flex items-center gap-3 px-2 py-2.5" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold text-[#1A1A1A] truncate">{displayName}</div>
-            <div className="text-[11px] text-[#1A1A1A]/55 truncate">JBJ account</div>
+            <div className="text-sm font-semibold truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{displayName}</div>
+            <div className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.75)", WebkitTextFillColor: "rgba(255,255,255,0.75)" }}>JBJ account</div>
             {roleLabel && (
               <span
                 data-account-role-label
                 data-surface="emerald"
                 data-on-dark="true"
-                className="inline-flex items-center mt-1 px-2 py-[2px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] text-white border border-[#B89555]/40"
+                className="inline-flex items-center mt-1 px-2 py-[2px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] border border-white/40"
                 style={{
-                  background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%))",
+                  background: "rgba(255,255,255,0.10)",
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
-                  boxShadow: "0 6px 14px -10px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)",
                 }}
               >
                 {roleLabel}
@@ -209,7 +214,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             )}
           </div>
         </div>
-        <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
+        <DropdownMenuSeparator className="bg-white/15 my-1" />
 
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
@@ -222,23 +227,25 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <div className="h-px mx-2 my-1 bg-[#EFE6D6]" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/15" aria-hidden="true" />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <div className="h-px mx-2 my-1 bg-[#EFE6D6]" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/15" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <div className="h-px mx-2 my-1 bg-[#EFE6D6]" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-white/15" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 
-        <DropdownMenuSeparator className="bg-[#EFE6D6] my-1" />
+        <DropdownMenuSeparator className="bg-white/15 my-1" />
         <DropdownMenuItem
           onSelect={handleSignOut}
           data-account-signout-row="true"
-          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 focus:bg-[#F7F2EA] data-[highlighted]:bg-[#F7F2EA]"
+          data-surface="emerald"
+          data-on-dark="true"
+          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-white focus:bg-white/10 data-[highlighted]:bg-white/10"
         >
-          <span className="flex items-center gap-2.5 w-full">
-            <LogOut className="w-5 h-5 text-[#064E3B]" strokeWidth={2.25} />
-            <span className="text-sm font-medium text-[#1A1A1A]">Sign out</span>
+          <span className="flex items-center gap-2.5 w-full" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign out</span>
           </span>
         </DropdownMenuItem>
       </DropdownMenuContent>
