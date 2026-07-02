@@ -309,30 +309,31 @@ export const PublicRoutes = () => (
     <Route path="/market-intelligence/methodology" element={<InsightsPageScope><Methodology /></InsightsPageScope>} />
     
 
-    {/* ── Services ── */}
-    <Route path="/services" element={<Services />} />
-    <Route path="/services/architecture" element={<Architecture />} />
-    <Route path="/services/interior-design" element={<InteriorDesign />} />
-    <Route path="/services/fit-out" element={<FitOut />} />
-    <Route path="/services/design-build" element={<DesignBuild />} />
-    <Route path="/services/law-firm" element={<LawFirm />} />
-    <Route path="/services/buying-advisory" element={<BuyingAdvisory />} />
-    <Route path="/services/selling-advisory" element={<SellingAdvisory />} />
-    <Route path="/services/rental-advisory" element={<RentalAdvisory />} />
-    <Route path="/services/investment-advisory" element={<InvestmentAdvisory />} />
+    {/* ── Services ── (wrapped in InsightsPageScope so every services page inherits
+        the Market Intelligence / champagne+emerald brand contract enforced in index.css) */}
+    <Route path="/services" element={<InsightsPageScope><Services /></InsightsPageScope>} />
+    <Route path="/services/architecture" element={<InsightsPageScope><Architecture /></InsightsPageScope>} />
+    <Route path="/services/interior-design" element={<InsightsPageScope><InteriorDesign /></InsightsPageScope>} />
+    <Route path="/services/fit-out" element={<InsightsPageScope><FitOut /></InsightsPageScope>} />
+    <Route path="/services/design-build" element={<InsightsPageScope><DesignBuild /></InsightsPageScope>} />
+    <Route path="/services/law-firm" element={<InsightsPageScope><LawFirm /></InsightsPageScope>} />
+    <Route path="/services/buying-advisory" element={<InsightsPageScope><BuyingAdvisory /></InsightsPageScope>} />
+    <Route path="/services/selling-advisory" element={<InsightsPageScope><SellingAdvisory /></InsightsPageScope>} />
+    <Route path="/services/rental-advisory" element={<InsightsPageScope><RentalAdvisory /></InsightsPageScope>} />
+    <Route path="/services/investment-advisory" element={<InsightsPageScope><InvestmentAdvisory /></InsightsPageScope>} />
     <Route path="/services/partner-introductions" element={<Navigate to="/partners" replace />} />
-    <Route path="/services/snagging" element={<Snagging />} />
-    <Route path="/services/property-management" element={<PropertyManagement />} />
-    <Route path="/services/short-term-rentals" element={<ShortTermRentals />} />
-    <Route path="/services/currency-exchange" element={<CurrencyExchange />} />
-    <Route path="/services/concierge" element={<Concierge />} />
-    <Route path="/services/company-setup" element={<CompanySetup />} />
-    <Route path="/services/signature-collection" element={<SignatureCollection />} />
-    
-    <Route path="/services/broker-certification" element={<BrokerCertification />} />
-    <Route path="/services/complaint-procedures" element={<ComplaintProcedures />} />
-    <Route path="/services/customer-happiness-center" element={<CustomerHappinessCenter />} />
-    <Route path="/services/testimonials" element={<TestimonialsPage />} />
+    <Route path="/services/snagging" element={<InsightsPageScope><Snagging /></InsightsPageScope>} />
+    <Route path="/services/property-management" element={<InsightsPageScope><PropertyManagement /></InsightsPageScope>} />
+    <Route path="/services/short-term-rentals" element={<InsightsPageScope><ShortTermRentals /></InsightsPageScope>} />
+    <Route path="/services/currency-exchange" element={<InsightsPageScope><CurrencyExchange /></InsightsPageScope>} />
+    <Route path="/services/concierge" element={<InsightsPageScope><Concierge /></InsightsPageScope>} />
+    <Route path="/services/company-setup" element={<InsightsPageScope><CompanySetup /></InsightsPageScope>} />
+    <Route path="/services/signature-collection" element={<InsightsPageScope><SignatureCollection /></InsightsPageScope>} />
+
+    <Route path="/services/broker-certification" element={<InsightsPageScope><BrokerCertification /></InsightsPageScope>} />
+    <Route path="/services/complaint-procedures" element={<InsightsPageScope><ComplaintProcedures /></InsightsPageScope>} />
+    <Route path="/services/customer-happiness-center" element={<InsightsPageScope><CustomerHappinessCenter /></InsightsPageScope>} />
+    <Route path="/services/testimonials" element={<InsightsPageScope><TestimonialsPage /></InsightsPageScope>} />
     <Route path="/referral-partner" element={<ReferralPartner />} />
     <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
     <Route path="/investors" element={<InvestorServices />} />
