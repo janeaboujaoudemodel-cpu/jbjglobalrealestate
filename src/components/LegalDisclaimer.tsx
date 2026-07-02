@@ -89,22 +89,22 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "ai-tools") {
     return (
-      <div className={`bg-[#FDFBF7]/80 border border-[#B89555]/30 rounded-xl p-5 ${className}`}>
+      <div className={`bg-gradient-to-br from-[#064E3B]/92 via-[#042C1C]/88 to-[#010806]/95 border border-white/35 rounded-xl p-5 ${className}`} data-ai-tools-disclaimer>
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Shield className="w-5 h-5 text-[#1A1A1A]" />
+          <div className="w-10 h-10 bg-white/10 border border-white/35 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="text-[#1A1A1A] text-sm font-semibold mb-1">AI Tool Disclaimer</p>
-            <p className="text-white/70 text-xs leading-relaxed">
+            <p className="text-white text-sm font-semibold mb-1">AI Tool Disclaimer</p>
+            <p className="text-white/82 text-xs leading-relaxed">
               AI outputs support information and comparisons based on available data and inputs. 
               They are not guarantees and do not replace official documents or registration records.
             </p>
           </div>
         </div>
         
-        <div className="border-t border-[#1A1A1A] pt-4">
-          <p className="text-white/70 text-xs mb-3">
+        <div className="border-t border-white/28 pt-4">
+          <p className="text-white/82 text-xs mb-3">
             For legal, mortgage, or visa guidance, contact our team to connect you with our licensed partners.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -112,14 +112,14 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
               href={getWhatsAppUrl("Hello, I used your AI tool and would like expert guidance.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/50 rounded-lg text-green-400 text-xs hover:jj-surface-emerald-soft0 transition-colors"
+              className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors bg-white/10 border border-white/35 hover:bg-white/16"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               WhatsApp Us
             </a>
             <a 
               href={`tel:${CONTACT_INFO.phone}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900/30 border border-blue-700/50 rounded-lg text-blue-400 text-xs hover:bg-blue-900/50 transition-colors"
+              className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors bg-white/10 border border-white/35 hover:bg-white/16"
             >
               <Phone className="w-3.5 h-3.5" />
               {CONTACT_INFO.phone}
