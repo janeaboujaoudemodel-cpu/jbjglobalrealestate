@@ -32,7 +32,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { PrimaryCTA } from "@/components/tools/PrimaryCTA";
-import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import { AnimatedShineCTA } from "@/components/tools/AnimatedShineCTA";
@@ -282,9 +281,7 @@ const RentalIndex = () => {
       `}</style>
 
       <div className="ri-root max-w-5xl mx-auto space-y-8">
-        <div className="flex justify-center">
-          <PoweredByJBJ />
-        </div>
+
 
         {/* Main form card — full width, no aside */}
         <div className="ri-card p-6 md:p-8 space-y-6">

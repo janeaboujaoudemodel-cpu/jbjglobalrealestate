@@ -1,8 +1,8 @@
 import { ReactNode, type CSSProperties } from "react";
-import { ArrowLeft, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Info, type LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ToolTheme, TOOL_CARD_BG, TOOL_WHITE_BORDER } from "./toolThemes";
+import { ToolTheme, TOOL_CARD_BG, TOOL_WHITE_BORDER, TOOL_GOLD } from "./toolThemes";
 import FullscreenToolToggle from "./FullscreenToolToggle";
 
 
@@ -31,6 +31,10 @@ interface Props {
    *  (Property Measurement style) and inner shadcn Cards/inputs are
    *  auto-darkened via [data-tool-darkbody] global CSS. */
   darkBody?: boolean;
+  /** Show "Powered by JBJ" lockup + optional "Read more" pill at top of body (Property Evaluator layout). Default true. */
+  poweredBy?: boolean;
+  /** Optional "Read more" pill (href + label) rendered next to Powered By. */
+  readMore?: { href: string; label: string };
 }
 
 export const PremiumToolShell = ({
@@ -41,7 +45,8 @@ export const PremiumToolShell = ({
   subtitle,
   showBack = true,
   children,
-  darkBody = false,
+  poweredBy = true,
+  readMore,
 }: Props) => {
   const navigate = useNavigate();
 
@@ -259,6 +264,33 @@ export const PremiumToolShell = ({
               ["--tool-accent-border" as any]: `${theme.accent}66`,
             }}
           >
+            {poweredBy && (
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+                {/* Powered by JBJ lockup — white on dark body (Property Evaluator layout) */}
+                <div className="flex items-center gap-3">
+                  <div aria-hidden className="h-px w-16" style={{ background: TOOL_GOLD }} />
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "rgba(255,255,255,0.6)" }}>Powered by</span>
+                    <span className="text-xs font-bold tracking-[0.14em]" style={{ color: "#FFFFFF" }}>JBJ GLOBAL REAL ESTATE</span>
+                  </div>
+                  <div aria-hidden className="h-px w-16" style={{ background: TOOL_GOLD }} />
+                </div>
+                {readMore && (
+                  <a
+                    href={readMore.href}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
+                    style={{
+                      background: "rgba(6,78,59,0.55)",
+                      border: `1px solid ${TOOL_WHITE_BORDER}`,
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    <Info className="w-3.5 h-3.5" />
+                    {readMore.label}
+                  </a>
+                )}
+              </div>
+            )}
             {children}
           </div>
         </div>

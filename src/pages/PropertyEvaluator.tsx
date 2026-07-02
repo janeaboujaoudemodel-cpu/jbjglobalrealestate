@@ -21,7 +21,6 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ToolHero } from "@/components/tools/ToolHero";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
-import { PoweredByJBJ } from "@/components/tools/PoweredByJBJ";
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 
@@ -306,29 +305,15 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
       theme={toolThemes.amber}
       eyebrowIcon={Sparkles}
       eyebrow="AI-Powered Valuation"
-      
       title={
         <>
           Property <span style={{ textShadow: `0 0 24px ${toolThemes.amber.accent}` }}>Evaluator</span>
         </>
       }
       subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
+      readMore={{ href: "/sell/valuation", label: "Read more · Valuation & Strategic Pricing Advisory" }}
     >
-      <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-        <PoweredByJBJ />
-        <a
-          href="/sell/valuation"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-colors"
-          style={{
-            background: toolThemes.amber.accentSoft,
-            border: `1px solid ${toolThemes.amber.accentBorder}`,
-            color: toolThemes.amber.accent,
-          }}
-        >
-          <Info className="w-3.5 h-3.5" />
-          Read more · Valuation & Strategic Pricing Advisory
-        </a>
-      </div>
+
 
       <AIShellCard padding="lg">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
