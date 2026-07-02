@@ -342,6 +342,29 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
         @media (max-width: 520px) {
           [data-property-evaluator] .pe-tabs-list { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         }
+        @media (max-width: 520px) {
+          [data-property-evaluator] { padding-left: 0 !important; padding-right: 0 !important; }
+          [data-property-evaluator] [data-pe-field-grid] {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)) !important;
+            gap: 14px !important;
+          }
+          [data-property-evaluator] .pe-spec-compact {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+          }
+          [data-property-evaluator] label {
+            white-space: normal !important;
+            line-height: 1.15 !important;
+          }
+          [data-property-evaluator] input:not([type="file"]),
+          [data-property-evaluator] textarea,
+          [data-property-evaluator] [role="combobox"] {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            font-size: 14px !important;
+          }
+        }
         [data-property-evaluator] .pe-card {
           background: linear-gradient(135deg, rgba(6,78,59,0.88) 0%, rgba(4,44,28,0.72) 46%, rgba(0,0,0,0.92) 100%) !important;
           border: 1px solid rgba(255,255,255,0.28) !important;
@@ -439,7 +462,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/85 flex items-center gap-1">
                         Building Name <span className="text-[#B89555]">*</span>
@@ -468,7 +491,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 flex items-center gap-1">
                         Community <span className="text-[#B89555]">*</span>
@@ -519,7 +542,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70">Property Type</Label>
                       <Select value={property.propertyType} onValueChange={(v: any) => updateProperty('propertyType', v)}>
@@ -585,7 +608,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-4 pe-spec-compact">
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bedrooms</Label>
                       <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
@@ -600,7 +623,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1">
                         Internal Size (sq ft) <span className="text-[#B89555]">*</span>
@@ -613,7 +636,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Carpet Area (sq ft)</Label>
                       <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} placeholder="e.g., 1,050" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
@@ -624,7 +647,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Service Charge (AED/sq ft)</Label>
                       <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} placeholder="e.g., 18" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
