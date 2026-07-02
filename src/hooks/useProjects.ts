@@ -216,16 +216,35 @@ export function useDevelopers(includeHidden = false) {
         return hasLogo + canonicalSlug + shortSlug + rankBonus;
       };
 
+      // Normalize name → strip common corporate suffixes so
+      // "Acube Developers" and "Acube Abodes Realty" collapse to the same brand.
+      const SUFFIX_TOKENS = new Set([
+        "properties", "property", "developers", "developer", "development", "developments",
+        "real", "estate", "realty", "realties", "group", "holding", "holdings",
+        "llc", "l.l.c", "l.l.c.", "pjsc", "psc", "fzco", "fze", "inc", "co", "company",
+        "residences", "residence", "homes", "abodes", "abode",
+      ]);
+      const normalizeBrand = (name: string) => {
+        const cleaned = (name || "")
+          .toLowerCase()
+          .replace(/[.,&]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+        const tokens = cleaned.split(" ").filter((t) => t && !SUFFIX_TOKENS.has(t));
+        return tokens.join(" ") || cleaned;
+      };
+
       const byKey = new Map<string, Developer>();
       for (const row of rows) {
         if (isMergedBadRecord(row.name || "")) continue;
-        const key = (row.name || "").toLowerCase().replace(/\s+/g, " ").trim();
+        const key = normalizeBrand(row.name || "");
         if (!key) continue;
         const existing = byKey.get(key);
         if (!existing || scoreOf(row) > scoreOf(existing)) {
           byKey.set(key, row);
         }
       }
+
       return Array.from(byKey.values()).sort((a, b) => {
         const ra = typeof a.rank === "number" ? a.rank : 9999;
         const rb = typeof b.rank === "number" ? b.rank : 9999;
