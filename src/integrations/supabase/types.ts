@@ -4186,6 +4186,7 @@ export type Database = {
           broker_user_id: string
           color: string | null
           created_at: string
+          deleted_at: string | null
           description: string | null
           ends_at: string
           id: string
@@ -4200,6 +4201,7 @@ export type Database = {
           broker_user_id: string
           color?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           ends_at: string
           id?: string
@@ -4214,6 +4216,7 @@ export type Database = {
           broker_user_id?: string
           color?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           ends_at?: string
           id?: string
