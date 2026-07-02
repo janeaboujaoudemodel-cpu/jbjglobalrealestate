@@ -326,7 +326,7 @@ const PropertyMap = () => {
       <div className="jj-map-command-bar shrink-0 z-10">
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
           {/* Left: count */}
-          <Badge variant="secondary" className="jj-map-count-pill gap-1 shrink-0">
+          <Badge variant="secondary" className="jj-map-count-pill gap-1 shrink-0" data-surface="emerald">
             <MapPin className="h-3 w-3" />
             {filteredProjects.length} {t('map.properties')}
           </Badge>
@@ -489,7 +489,7 @@ const PropertyMap = () => {
                   <div className="relative h-36">
                     <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
                     <Badge className="jj-map-status-badge absolute bottom-2 left-2" data-surface="emerald">
-                      {selectedProject.status || "Off-Plan"}
+                      {selectedProject.status || selectedProject.status_label || "Available"}
                     </Badge>
                   </div>
                 )}
@@ -499,16 +499,16 @@ const PropertyMap = () => {
                     {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-3">
-                    <div className="text-center p-1.5 bg-muted rounded-lg">
-                      <Bed className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                    <div className="jj-map-stat-tile text-center p-1.5 rounded-lg" data-surface="emerald">
+                      <Bed className="h-3.5 w-3.5 mx-auto mb-0.5" />
                       <p className="text-[10px] font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
                     </div>
-                    <div className="text-center p-1.5 bg-muted rounded-lg">
-                      <Maximize className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                    <div className="jj-map-stat-tile text-center p-1.5 rounded-lg" data-surface="emerald">
+                      <Maximize className="h-3.5 w-3.5 mx-auto mb-0.5" />
                       <p className="text-[10px] font-medium">{selectedProject.size_min || "—"} sqft</p>
                     </div>
-                    <div className="text-center p-1.5 bg-muted rounded-lg">
-                      <Calendar className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                    <div className="jj-map-stat-tile text-center p-1.5 rounded-lg" data-surface="emerald">
+                      <Calendar className="h-3.5 w-3.5 mx-auto mb-0.5" />
                       <p className="text-[10px] font-medium">{selectedProject.handover_date || "TBA"}</p>
                     </div>
                   </div>
@@ -518,7 +518,7 @@ const PropertyMap = () => {
                       <p className="text-lg font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
                     </div>
                     <Link to={`/project/${selectedProject.slug}`}>
-                      <Button size="sm" className="gap-1.5">
+                      <Button size="sm" className="jj-map-details-button gap-1.5" data-surface="emerald">
                         {t('map.viewDetails')}
                         <ExternalLink className="h-3.5 w-3.5" />
                       </Button>
