@@ -56,23 +56,14 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
       <motion.div
-        whileHover={{ y: -8, scale: 1.015 }}
+        whileHover={{ y: -8, scale: 1.015, boxShadow: "0 24px 48px -12px rgba(0,0,0,0.28), 0 12px 24px -8px rgba(184,149,85,0.25)" }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7] transition-shadow duration-300"
+        className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
         style={{
-          boxShadow:
-            "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)",
-        }}
-        whileHoverStyle={undefined as any}
-        onHoverStart={(e) => {
-          (e.currentTarget as HTMLElement).style.boxShadow =
-            "0 24px 48px -12px rgba(0,0,0,0.28), 0 12px 24px -8px rgba(184,149,85,0.25)";
-        }}
-        onHoverEnd={(e) => {
-          (e.currentTarget as HTMLElement).style.boxShadow =
-            "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)";
+          boxShadow: "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)",
         }}
       >
+
         {/* Hero — project photo (preferred) with logo/name fallback */}
         <div className="relative aspect-[5/3] bg-[#F5F0E6] flex items-center justify-center overflow-hidden">
           {hasHero ? (
