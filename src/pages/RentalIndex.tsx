@@ -101,8 +101,8 @@ interface RentalAnalysis {
 }
 
 const BRAND_ICON_STYLE: React.CSSProperties = {
-  color: "#1A1A1A",
-  stroke: "#1A1A1A",
+  color: "#FFFFFF",
+  stroke: "#FFFFFF",
 };
 
 const FormLabel = ({
