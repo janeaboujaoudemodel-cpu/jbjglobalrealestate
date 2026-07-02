@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import {
   Building2,
   ChevronDown,
@@ -7,14 +9,32 @@ import {
   SlidersHorizontal,
   Plus,
 } from "lucide-react";
+import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
 
 /**
- * JBJ CRM — Home Dashboard (Phase 2)
- * Standalone. Mirrors Zoho CRM home rhythm: welcome bar, KPI row,
- * widget grid (Tasks / Meetings / Leads / Deals) and pipeline funnel.
- * All colors bound to JBJ tokens.
+ * JBJ CRM — Home Dashboard
+ * Mirrors Zoho CRM home structure pixel-for-pixel (welcome bar → KPI row →
+ * two ListWidget rows → funnel + activity), painted with JBJ tokens only.
  */
 export default function CrmHome() {
+  const { rows: leads, loading } = useOwnerCrmLeads(200);
+
+  const startOfToday = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d.getTime();
+  }, []);
+  const todaysLeads = useMemo(
+    () => leads.filter((l) => new Date(l.created_at).getTime() >= startOfToday),
+    [leads, startOfToday],
+  );
+  const myLeadsCount = leads.length;
+  const openDeals = 0; // placeholder until deals hook lands
+  const untouched = leads.filter(
+    (l) =>
+      Date.now() - new Date(l.created_at).getTime() > 7 * 24 * 60 * 60 * 1000,
+  ).length;
+
   return (
     <div className="jc-home" data-no-contrast-guard>
       {/* Welcome row */}
@@ -44,10 +64,10 @@ export default function CrmHome() {
 
       {/* KPI tiles */}
       <section className="jc-kpi-row" aria-label="Key metrics">
-        <KpiTile label="My Open Deals" value="0" sub="Active pipeline" />
-        <KpiTile label="My Untouched Deals" value="0" sub="No activity in 7d" />
-        <KpiTile label="My Calls Today" value="0" sub="Scheduled + logged" />
-        <KpiTile label="My Leads" value="0" sub="Assigned to me" />
+        <KpiTile label="My Open Deals" value={String(openDeals)} sub="Active pipeline" />
+        <KpiTile label="My Untouched Leads" value={loading ? "…" : String(untouched)} sub="No activity in 7d" />
+        <KpiTile label="Today's Leads" value={loading ? "…" : String(todaysLeads.length)} sub="Captured today" />
+        <KpiTile label="My Leads" value={loading ? "…" : String(myLeadsCount)} sub="Assigned to me" />
       </section>
 
       {/* Tasks + Meetings */}
@@ -68,12 +88,7 @@ export default function CrmHome() {
 
       {/* Leads + Deals closing */}
       <section className="jc-widget-row">
-        <ListWidget
-          title="Today's Leads"
-          scope="All Leads"
-          columns={["Lead Name", "Company", "Email"]}
-          empty="No Leads found."
-        />
+        <LeadsWidget rows={todaysLeads.length > 0 ? todaysLeads : leads.slice(0, 5)} loading={loading} />
         <ListWidget
           title="My Deals Closing This Month"
           scope="This Month"
@@ -121,6 +136,70 @@ function KpiTile({ label, value, sub }: { label: string; value: string; sub: str
       <div className="jc-kpi__sub">{sub}</div>
       <footer className="jc-kpi__foot" aria-hidden="true" />
     </article>
+  );
+}
+
+function LeadsWidget({ rows, loading }: { rows: OwnerCrmLead[]; loading: boolean }) {
+  const columns = ["Lead Name", "Company", "Email"];
+  return (
+    <div className="jc-widget">
+      <div className="jc-widget__head">
+        <h3>Today's Leads</h3>
+        <div className="jc-widget__head-actions">
+          <button type="button" className="jc-widget__scope">
+            All Leads <ChevronDown size={13} />
+          </button>
+          <Link to="/owner/crm/jbj/leads/new" className="jc-widget__icon" aria-label="Add lead">
+            <Plus size={14} />
+          </Link>
+        </div>
+      </div>
+      <div className="jc-widget__toolbar">
+        <button type="button" className="jc-widget__sort">
+          <ArrowUpDown size={13} /> Sort
+        </button>
+        <Link className="jc-widget__viewall" to="/owner/crm/jbj/leads">
+          View All
+        </Link>
+      </div>
+      <div className="jc-widget__table" role="table">
+        <div className="jc-widget__thead" role="row">
+          {columns.map((c) => (
+            <div key={c} className="jc-widget__th" role="columnheader">
+              {c}
+            </div>
+          ))}
+          <div className="jc-widget__th jc-widget__th--tools" role="columnheader">
+            <SlidersHorizontal size={13} />
+          </div>
+        </div>
+        {loading ? (
+          <div className="jc-widget__empty">Loading…</div>
+        ) : rows.length === 0 ? (
+          <div className="jc-widget__empty">No Leads found.</div>
+        ) : (
+          <div className="jc-widget__tbody">
+            {rows.slice(0, 5).map((l) => (
+              <Link
+                key={l.id}
+                to={`/owner/crm/jbj/leads/${l.id}`}
+                className="jc-widget__tr"
+                role="row"
+              >
+                <div className="jc-widget__td jc-widget__td--link">{l.full_name || "—"}</div>
+                <div className="jc-widget__td">{l.company_name || "—"}</div>
+                <div className="jc-widget__td">{l.email || "—"}</div>
+                <div className="jc-widget__td jc-widget__td--tools" />
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="jc-widget__foot">
+        <span className="jc-widget__foot-label">Total Records</span>
+        <span className="jc-widget__foot-value">{loading ? "…" : rows.length}</span>
+      </div>
+    </div>
   );
 }
 
