@@ -74,6 +74,7 @@ export default function CrmHeader() {
           <Grip size={26} />
         </button>
       </div>
+      <CrmSearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }
