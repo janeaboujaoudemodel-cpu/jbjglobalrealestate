@@ -1009,12 +1009,12 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     return "See project page";
                   }},
                 ].map((row, idx) => (
-                  <tr key={row.label} style={{ background: idx % 2 === 0 ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.14)" }}>
-                    <td className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: idx % 2 === 0 ? "#053D2F" : "#032820" }}>
+                  <tr key={row.label} style={{ background: idx % 2 === 0 ? "#FFFFFF" : CHAMPAGNE, borderBottom: "1px solid rgba(6,78,59,0.14)" }}>
+                    <td className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: idx % 2 === 0 ? "#FFFFFF" : CHAMPAGNE }}>
                       {row.label}
                     </td>
                     {projects.map((project) => (
-                      <td key={project.id} className="py-3.5 px-4 text-sm" style={{ color: "rgba(255,255,255,0.90)", WebkitTextFillColor: "rgba(255,255,255,0.90)" }}>
+                      <td key={project.id} className="py-3.5 px-4 text-sm" style={{ color: "rgba(26,26,26,0.88)", WebkitTextFillColor: "rgba(26,26,26,0.88)" }}>
                         {row.format(null, project)}
                       </td>
                     ))}
