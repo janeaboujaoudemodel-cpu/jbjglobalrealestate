@@ -217,10 +217,19 @@ export default function AIConcierge({ open, onClose }: { open: boolean; onClose:
                 onClick={onClose}
                 aria-label="Close concierge"
                 data-no-contrast-guard
-                className="shrink-0 flex h-9 w-9 items-center justify-center rounded-lg text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#FDFBF7]/70 border border-transparent hover:border-[#B89555]/40 transition"
+                data-allow-dark-cta
+                className="allow-white shrink-0 flex h-9 w-9 items-center justify-center rounded-full text-white transition-[filter] hover:brightness-110"
+                style={{
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  backgroundImage: "var(--jj-emerald-ombre)",
+                  border: 0,
+                  boxShadow: "none",
+                }}
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </button>
+
             </div>
 
             {/* Messages */}
