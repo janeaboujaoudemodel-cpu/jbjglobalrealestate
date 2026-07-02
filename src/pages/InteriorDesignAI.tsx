@@ -80,7 +80,6 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   const [mode, setMode] = useState<DesignMode>('concept');
   const [designStyle, setDesignStyle] = useState('');
   const [colorPalette, setColorPalette] = useState('');
-  const [customNotes, setCustomNotes] = useState('');
   const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -158,13 +157,13 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       if (!chatPrompt) {
         switch (mode) {
           case 'concept':
-            prompt = `Create a ${styleLabel} interior design concept. Color palette: ${colorLabel}. ${customNotes || ''}`;
+            prompt = `Create a ${styleLabel} interior design concept. Color palette: ${colorLabel}.`;
             break;
           case 'redesign':
-            prompt = `Redesign this room in ${styleLabel} style with ${colorLabel} colors. ${customNotes || ''}`;
+            prompt = `Redesign this room in ${styleLabel} style with ${colorLabel} colors.`;
             break;
           case 'staging':
-            prompt = `Stage this empty room with ${styleLabel} furniture. Add realistic decor and styling. ${customNotes || ''}`;
+            prompt = `Stage this empty room with ${styleLabel} furniture. Add realistic decor and styling.`;
             break;
         }
       }
@@ -290,8 +289,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-panel,
         [data-interior-design-ai] .id-panel-soft {
           background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
-          border: 1px solid rgba(255,255,255,0.22) !important;
+          border: 1px solid rgba(255,255,255,0.16) !important;
           box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55) !important;
+        }
+        [data-interior-design-ai] :is([style*="#B89555"], [style*="rgb(184, 149, 85)"], [class*="border-[#B89555]"], [class*="border-gold"], [class*="ring-gold"]) {
+          border-color: rgba(255,255,255,0.16) !important;
+          --tw-ring-color: rgba(255,255,255,0.28) !important;
         }
         /* Dropzone: no border at all */
         [data-interior-design-ai] .id-dropzone {
@@ -303,7 +306,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-input:focus,
         [data-interior-design-ai] .id-input:focus-visible {
           background: rgba(0,0,0,0.28) !important;
-          border: 1px solid rgba(255,255,255,0.38) !important;
+          border: 1px solid rgba(255,255,255,0.20) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
@@ -318,7 +321,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
-          border: 1px solid rgba(255,255,255,0.42) !important;
+          border: 1px solid rgba(255,255,255,0.18) !important;
         }
         [data-interior-design-ai] .id-primary > * {
           background-image: none !important;
@@ -330,7 +333,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         }
         [data-interior-design-ai] .id-outline {
           background: rgba(255,255,255,0.06) !important;
-          border: 1px solid rgba(255,255,255,0.42) !important;
+          border: 1px solid rgba(255,255,255,0.18) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
@@ -343,16 +346,16 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
           background: rgba(255,255,255,0.04) !important;
-          border: 1px solid rgba(255,255,255,0.28) !important;
+          border: 1px solid rgba(255,255,255,0.14) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
           background: rgba(255,255,255,0.10) !important;
-          border-color: rgba(255,255,255,0.62) !important;
+          border-color: rgba(255,255,255,0.28) !important;
         }
         [data-interior-design-ai] .id-choice-active {
           background: linear-gradient(135deg, #0a6e52 0%, #064E3B 58%, #01110b 100%) !important;
-          border-color: rgba(255,255,255,0.72) !important;
+          border-color: rgba(255,255,255,0.30) !important;
           box-shadow: 0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
         }
         [data-interior-design-ai] svg {
@@ -492,7 +495,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onClick={() => fileInputRef.current?.click()}
                     onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") fileInputRef.current?.click(); }}
                   >
-                    <div className="id-primary w-16 h-16 mx-auto mb-4 rounded-2xl border flex items-center justify-center">
+                    <div className="id-primary w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center">
                       <Upload className="w-8 h-8" />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">Upload a room photo</h3>
@@ -587,25 +590,24 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             </div>
           </Collapsible>
 
-          {/* ROW D — Design Assistant (full width, Additional Notes integrated) */}
+          {/* ROW D — Design Assistant (full width) */}
           <div className="id-panel rounded-2xl overflow-hidden flex flex-col">
             <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
-              <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
+              <div className="id-primary w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Bot className="w-4 h-4" />
               </div>
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold text-sm">Design Assistant</h3>
-                <p className="id-text-muted text-[11px]">Describe edits, new ideas, or add notes for the AI</p>
+                <p className="id-text-muted text-[11px]">Describe edits or new ideas directly in the message box</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-              {/* Chat area — 2/3 */}
-              <div className="lg:col-span-2 flex flex-col border-b lg:border-b-0 lg:border-r" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
+            <div className="flex flex-col">
+              <div className="flex flex-col">
                 <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: 340, minHeight: 260 }}>
                   {messages.map(msg => (
                     <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                      <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-primary'} w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0`}>
+                      <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-primary'} w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0`}>
                         {msg.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
                       </div>
                       <div className={`id-choice ${msg.role === 'user' ? 'id-choice-active' : ''} max-w-[85%] rounded-xl border p-3`}>
@@ -632,25 +634,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                 </div>
               </div>
-
-              {/* Additional Notes — 1/3, integrated inside the same card */}
-              <div className="p-4 flex flex-col">
-                <label className="text-xs font-semibold mb-2 block uppercase tracking-[0.2em]">Additional Notes</label>
-                <Textarea
-                  value={customNotes}
-                  onChange={(e) => setCustomNotes(e.target.value)}
-                  placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                  className="id-input flex-1 text-xs rounded-xl resize-none min-h-[220px]"
-                  maxLength={500}
-                />
-                <p className="id-text-muted text-[10px] mt-2 text-right">{customNotes.length}/500</p>
-              </div>
             </div>
           </div>
 
           {isProcessing && (
             <div className="id-panel rounded-2xl p-6 text-center">
-              <div className="id-primary w-12 h-12 mx-auto mb-4 rounded-2xl border flex items-center justify-center">
+              <div className="id-primary w-12 h-12 mx-auto mb-4 rounded-2xl flex items-center justify-center">
                 <Sparkles className="w-6 h-6 animate-pulse" />
               </div>
               <p className="font-semibold mb-3">Creating your design</p>
