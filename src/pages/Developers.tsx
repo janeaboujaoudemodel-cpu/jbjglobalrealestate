@@ -295,12 +295,12 @@ const Developers = () => {
         {/* Scroll sentinel for two-phase filter fix */}
         <div ref={filterSentinelRef} className="h-0" />
 
-        {/* Filters Section - Champagne Layer matching Properties page */}
-        <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-4 border-b border-[#B89555]/30">
+        {/* Filters Section — clean single-layer emerald bar (no double borders) */}
+        <section className="z-40 bg-[#010806] py-4 border-b border-white/10">
           <div className="container mx-auto px-3 sm:px-4">
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+            <div className="jj-filter-emerald-shell rounded-2xl p-4 sm:p-5" style={{ background: "linear-gradient(180deg,#04241C 0%,#03170F 100%)", boxShadow: "0 12px 40px rgba(0,0,0,0.35)" }}>
               <FilterShortcutBar
-                variant="light"
+                variant="dark"
                 filters={shortcutFilters}
                 onFilterChange={(f) => {
                   setShortcutFilters(f);
@@ -313,14 +313,13 @@ const Developers = () => {
                 resultsCount={filteredDevelopers.length}
                 resultsLabel="Developers"
               />
-              
-              {/* Tier filter row - unique to developers */}
-              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-[#B89555]/20">
-                {/* Tier Filter */}
+
+              {/* Tier filter row */}
+              <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
                 <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
-                    <Crown className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                    <span className="truncate text-left flex-1">
+                  <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md hover:shadow-lg [&>svg]:text-white">
+                    <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
+                    <span className="truncate text-left flex-1 text-white font-semibold">
                       {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                     </span>
                   </SelectTrigger>
@@ -333,19 +332,17 @@ const Developers = () => {
                   </SelectContent>
                 </Select>
 
-                {/* Results Count */}
-                <div className="flex-1 text-[#1A1A1A]/70 text-sm">
+                <div className="flex-1 text-white/80 text-sm">
                   {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
                 </div>
 
-                {/* Clear Filters */}
                 {activeFilterCount > 0 && (
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={clearFilters}
-                    className="h-9 px-3 bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
+                    className="h-9 px-3 bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-full flex items-center gap-1.5"
                   >
                     <X className="w-3.5 h-3.5" />
                     Clear ({activeFilterCount})
@@ -364,13 +361,15 @@ const Developers = () => {
           onFilterChange={setShortcutFilters}
         />
 
-        {/* Fixed portal copy of filters when scrolled past */}
+        {/* Fixed portal copy of filters when scrolled past —
+            rendered into #root so the .jj-utility-shell sidebar-safe left
+            offset applies and the bar stops before the vertical sidebar. */}
         {isFilterFixed && createPortal(
-          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md bg-gradient-to-br from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 py-4 border-b border-[#B89555]/30 shadow-lg">
+          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/10 shadow-lg" style={{ background: "linear-gradient(180deg,#04241C 0%,#03170F 100%)" }}>
             <div className="container mx-auto px-3 sm:px-4">
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg">
+              <div className="rounded-2xl p-3 sm:p-4">
                 <FilterShortcutBar
-                  variant="light"
+                  variant="dark"
                   filters={shortcutFilters}
                   onFilterChange={(f) => {
                     setShortcutFilters(f);
@@ -383,13 +382,12 @@ const Developers = () => {
                   resultsCount={filteredDevelopers.length}
                   resultsLabel="Developers"
                 />
-                
-                {/* Tier filter row */}
-                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-[#B89555]/20">
+
+                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
                   <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-[#1A1A1A] rounded-lg text-sm shadow-sm">
-                      <Crown className="w-4 h-4 mr-2 text-[#1A1A1A] flex-shrink-0" />
-                      <span className="truncate text-left flex-1">
+                    <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md [&>svg]:text-white">
+                      <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
+                      <span className="truncate text-left flex-1 text-white font-semibold">
                         {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                       </span>
                     </SelectTrigger>
@@ -402,7 +400,7 @@ const Developers = () => {
                     </SelectContent>
                   </Select>
 
-                  <div className="flex-1 text-[#1A1A1A]/70 text-sm">
+                  <div className="flex-1 text-white/80 text-sm">
                     {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   </div>
 
@@ -411,7 +409,7 @@ const Developers = () => {
                       variant="outline"
                       size="sm"
                       onClick={clearFilters}
-                      className="h-9 px-3 bg-[#FDFBF7]/80 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7] rounded-lg flex items-center gap-1.5"
+                      className="h-9 px-3 bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-full flex items-center gap-1.5"
                     >
                       <X className="w-3.5 h-3.5" />
                       Clear ({activeFilterCount})
@@ -421,7 +419,7 @@ const Developers = () => {
               </div>
             </div>
           </section>,
-          document.body
+          document.getElementById('root') || document.body
         )}
 
         {/* Developer Cards Grid */}

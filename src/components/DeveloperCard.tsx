@@ -14,26 +14,29 @@ interface DeveloperCardProps {
 }
 
 
-// Developer tier classification
+// Developer tier — every card gets a unified emerald metallic pill with pure
+// white text. No black-on-emerald, no missing badges, one readable style.
+const TIER_PILL = "jj-pill-emerald-metallic allow-white text-white border-0";
 const TIER_CONFIG: Record<string, { label: string; color: string }> = {
-  ELITE: { label: "ELITE", color: "bg-gradient-to-r from-gold to-[#E8D5A3] text-[#1A1A1A]" },
-  PREMIUM: { label: "PREMIUM", color: "bg-gradient-to-r from-amber-500 to-amber-400 text-[#1A1A1A]" },
-  TOP_TIER: { label: "TOP TIER", color: "bg-gradient-to-r from-zinc-700 to-zinc-600 text-white" },
-  ESTABLISHED: { label: "ESTABLISHED", color: "bg-gradient-to-r from-slate-600 to-slate-500 text-white" },
+  ELITE:       { label: "ELITE",       color: TIER_PILL },
+  PREMIUM:     { label: "PREMIUM",     color: TIER_PILL },
+  TOP_TIER:    { label: "TOP TIER",    color: TIER_PILL },
+  ESTABLISHED: { label: "ESTABLISHED", color: TIER_PILL },
+  PARTNER:     { label: "PARTNER",     color: TIER_PILL },
 };
 
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat"];
-const PREMIUM_DEVELOPERS = ["ellington", "aldar"];
-const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim"];
-const ESTABLISHED_DEVELOPERS = ["danube", "azizi"];
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties"];
+const PREMIUM_DEVELOPERS = ["ellington", "select-group", "select group", "arada", "deyaar"];
+const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim", "imtiaz", "samana"];
+const ESTABLISHED_DEVELOPERS = ["danube", "azizi", "tiger", "dubai-south", "object", "aark", "ab-developers"];
 
-function getDeveloperTier(slug: string): { label: string; color: string } | null {
+function getDeveloperTier(slug: string): { label: string; color: string } {
   const normalizedSlug = slug.toLowerCase();
   if (ELITE_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.ELITE;
   if (PREMIUM_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.PREMIUM;
   if (TOP_TIER_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.TOP_TIER;
   if (ESTABLISHED_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.ESTABLISHED;
-  return null;
+  return TIER_CONFIG.PARTNER; // universal fallback so every card has a badge
 }
 
 /**
@@ -103,14 +106,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
             </div>
           )}
 
-          {/* Tier Badge */}
+          {/* Tier Badge — unified emerald metallic pill, white text, always present */}
           {tier && (
             <div className="absolute top-3 right-3 z-10">
               <Badge
-                className={`${tier.color} px-2.5 py-0.5 text-[9px] font-bold tracking-wider shadow-md`}
+                className={`${tier.color} px-3 py-1 text-[10px] font-bold tracking-[0.14em] shadow-[0_6px_16px_rgba(4,31,24,0.35)] rounded-full`}
                 data-no-contrast-guard
+                data-allow-white
               >
-                {tier.label}
+                <span className="text-white">{tier.label}</span>
               </Badge>
             </div>
           )}
