@@ -775,6 +775,7 @@ const MortgageCalculator = ({
                 <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Mortgage Introduction</span>
               </a>
             </div>
+            </div>
 
           </div>
         </div>
