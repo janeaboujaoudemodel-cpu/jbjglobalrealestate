@@ -25,17 +25,22 @@ const TIER_CONFIG: Record<string, { label: string; color: string }> = {
   PARTNER:     { label: "PARTNER",     color: TIER_PILL },
 };
 
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties"];
-const PREMIUM_DEVELOPERS = ["ellington", "select-group", "select group", "arada", "deyaar"];
-const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim", "imtiaz", "samana"];
-const ESTABLISHED_DEVELOPERS = ["danube", "azizi", "tiger", "dubai-south", "object", "aark", "ab-developers"];
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
+const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select-group", "select group", "deyaar", "majid-al-futtaim", "majid al futtaim", "arada", "nshama", "wasl"];
+const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
+const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
-function getDeveloperTier(slug: string): { label: string; color: string } {
-  const normalizedSlug = slug.toLowerCase();
-  if (ELITE_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.ELITE;
-  if (PREMIUM_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.PREMIUM;
-  if (TOP_TIER_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.TOP_TIER;
-  if (ESTABLISHED_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.ESTABLISHED;
+function getDeveloperTier(slug: string, name = "", rank?: number | null): { label: string; color: string } {
+  const normalized = `${slug} ${name}`.toLowerCase();
+  if (ELITE_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.ELITE;
+  if (PREMIUM_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.PREMIUM;
+  if (TOP_TIER_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.TOP_TIER;
+  if (ESTABLISHED_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.ESTABLISHED;
+  if (rank && rank > 0) {
+    if (rank <= 10) return TIER_CONFIG.ELITE;
+    if (rank <= 30) return TIER_CONFIG.PREMIUM;
+    if (rank <= 80) return TIER_CONFIG.TOP_TIER;
+  }
   return TIER_CONFIG.PARTNER; // universal fallback so every card has a badge
 }
 
@@ -50,10 +55,11 @@ function getDeveloperTier(slug: string): { label: string; color: string } {
  *  - Hover = subtle lift + soft glow only. No color flips.
  */
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }: DeveloperCardProps) => {
-  const tier = getDeveloperTier(developer.slug || "");
+  const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
-  const hasHero = !!heroImageUrl;
+  const cardHeroImageUrl = developer.feature_image_url || heroImageUrl;
+  const hasHero = !!cardHeroImageUrl;
   const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
 
   return (
@@ -72,7 +78,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
           {hasHero ? (
             <>
               <img
-                src={heroImageUrl}
+                src={cardHeroImageUrl}
                 alt={`${developer.name} featured project`}
                 loading={isEager ? "eager" : "lazy"}
                 referrerPolicy="no-referrer"
