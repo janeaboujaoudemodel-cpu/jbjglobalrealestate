@@ -286,15 +286,18 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           color: rgba(255,255,255,0.82) !important;
           -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
         }
-        /* Cards: FULL emerald with white content */
-        [data-interior-design-ai] .id-panel {
-          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-          border: 1px solid rgba(255,255,255,0.28) !important;
-          box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55), inset 0 0 30px rgba(255,255,255,0.04) !important;
-        }
+        /* Cards: SINGLE unified emerald surface — no lighter/darker variants, no gold */
+        [data-interior-design-ai] .id-panel,
         [data-interior-design-ai] .id-panel-soft {
-          background: linear-gradient(135deg, rgba(4,44,28,0.96) 0%, rgba(3,23,17,0.96) 58%, rgba(0,0,0,0.94) 100%) !important;
-          border: 1px solid rgba(255,255,255,0.30) !important;
+          background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
+          border: 1px solid rgba(255,255,255,0.22) !important;
+          box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55) !important;
+        }
+        /* Dropzone: no border at all */
+        [data-interior-design-ai] .id-dropzone {
+          background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
+          border: 0 !important;
+          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10) !important;
         }
         [data-interior-design-ai] .id-input,
         [data-interior-design-ai] .id-input:focus,
@@ -312,12 +315,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           opacity: 1 !important;
         }
         [data-interior-design-ai] .id-primary {
-          background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+          background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           border: 1px solid rgba(255,255,255,0.42) !important;
         }
-        /* Do NOT cascade background-image into children — that was painting the icon as a white/emerald block */
         [data-interior-design-ai] .id-primary > * {
           background-image: none !important;
           background: transparent !important;
@@ -340,7 +342,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-choice {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
-          border-color: rgba(255,255,255,0.38) !important;
+          background: rgba(255,255,255,0.04) !important;
+          border: 1px solid rgba(255,255,255,0.28) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
@@ -348,11 +351,10 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           border-color: rgba(255,255,255,0.62) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+          background: linear-gradient(135deg, #0a6e52 0%, #064E3B 58%, #01110b 100%) !important;
           border-color: rgba(255,255,255,0.72) !important;
           box-shadow: 0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
         }
-        /* Icons: line-art white, never filled block */
         [data-interior-design-ai] svg {
           background: transparent !important;
           background-image: none !important;
@@ -367,10 +369,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
-        /* Responsive safety — content must never overflow cards */
-        [data-interior-design-ai] .id-panel, [data-interior-design-ai] .id-panel-soft { min-width: 0 !important; }
+        [data-interior-design-ai] .id-panel,
+        [data-interior-design-ai] .id-panel-soft,
+        [data-interior-design-ai] .id-dropzone { min-width: 0 !important; }
         [data-interior-design-ai] .id-panel * { min-width: 0; }
       `}</style>
+
 
 
       {!embedded && (
@@ -401,48 +405,50 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       )}
 
       <div className="container mx-auto px-4 py-8 md:py-12 pb-20">
-        <div className="max-w-6xl mx-auto mb-6 grid grid-cols-1 lg:grid-cols-[minmax(0,360px)_1fr] gap-4 items-stretch">
-          <div className="id-panel rounded-2xl p-4">
-            <label className="block text-[11px] uppercase tracking-[0.22em] font-semibold mb-2">Project name</label>
-            <Input
-              value={projectName}
-              onChange={(e) => setProjectName(e.target.value)}
-              placeholder="Optional project name"
-              className="id-input h-12 rounded-xl"
-            />
-          </div>
-          <div className="id-panel rounded-2xl p-4">
-            <p className="text-[11px] uppercase tracking-[0.22em] font-semibold mb-3">Design mode</p>
-            <div className="flex flex-wrap gap-3">
-              {modeConfig.map(m => {
-                const Icon = m.icon;
-                const active = mode === m.id;
-                return (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => setMode(m.id)}
-                    className={`id-choice ${active ? "id-choice-active" : "id-panel-soft"} flex flex-col items-start gap-1 flex-1 basis-[160px] min-w-[140px] min-h-[72px] rounded-xl p-3 text-left transition-all border`}
-                    aria-pressed={active}
-                  >
-                    <div className="flex items-center gap-2 mb-1" style={{ display: "flex" }}>
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      <span className="text-sm font-semibold truncate">{m.label}</span>
-                    </div>
-                    <div className="id-text-muted text-xs leading-snug" style={{ display: "block" }}>{m.desc}</div>
+        <div className="max-w-6xl mx-auto space-y-4">
 
-                  </button>
-                );
-              })}
+          {/* ROW A — Project Name | Design Mode */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+            <div className="id-panel rounded-2xl p-4 flex flex-col">
+              <label className="block text-[11px] uppercase tracking-[0.22em] font-semibold mb-2">Project name</label>
+              <Input
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                placeholder="Optional project name"
+                className="id-input h-12 rounded-xl"
+              />
+            </div>
+            <div className="id-panel rounded-2xl p-4 flex flex-col">
+              <p className="text-[11px] uppercase tracking-[0.22em] font-semibold mb-3">Design mode</p>
+              <div className="flex flex-wrap gap-2 flex-1">
+                {modeConfig.map(m => {
+                  const Icon = m.icon;
+                  const active = mode === m.id;
+                  return (
+                    <button
+                      key={m.id}
+                      type="button"
+                      onClick={() => setMode(m.id)}
+                      className={`id-choice ${active ? "id-choice-active" : ""} flex flex-col items-start gap-1 flex-1 basis-[110px] min-w-[100px] rounded-xl p-2.5 text-left transition-all border`}
+                      aria-pressed={active}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="text-sm font-semibold truncate">{m.label}</span>
+                      </div>
+                      <div className="id-text-muted text-[11px] leading-snug">{m.desc}</div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
-          <div className="lg:col-span-3 space-y-4 min-w-0">
-            <div className="id-panel rounded-2xl overflow-hidden">
+          {/* ROW B — Upload / Result | Design Style */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+            <div className="id-panel rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: 420 }}>
               {generatedImage ? (
-                <div className="relative">
+                <div className="relative flex-1 flex flex-col">
                   <Design3DViewer imageUrl={generatedImage} projectName={projectName} />
                   <div className="p-4 border-t flex flex-col sm:flex-row gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                     <Button onClick={() => generateDesign()} disabled={isProcessing} className="id-primary flex-1">
@@ -455,9 +461,9 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                 </div>
               ) : uploadedPhoto ? (
-                <div className="relative">
-                  <div className="bg-black/40">
-                    <img src={uploadedPhoto} alt="Uploaded room reference" className="w-full h-auto max-h-[520px] object-contain" loading="lazy" decoding="async" />
+                <div className="relative flex-1 flex flex-col">
+                  <div className="bg-black/40 flex-1 flex items-center justify-center">
+                    <img src={uploadedPhoto} alt="Uploaded room reference" className="w-full h-auto max-h-[360px] object-contain" loading="lazy" decoding="async" />
                   </div>
                   <button
                     type="button"
@@ -478,12 +484,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                 </div>
               ) : (
-                <div className="p-5 md:p-8">
+                <div className="p-5 md:p-6 flex-1 flex flex-col">
                   <div
                     role="button"
                     tabIndex={0}
-                    className="id-panel-soft rounded-2xl p-8 md:p-14 text-center cursor-pointer transition-all"
-                    style={{ borderStyle: "dashed" }}
+                    className="id-dropzone rounded-2xl p-6 md:p-8 text-center cursor-pointer transition-all flex-1 flex flex-col items-center justify-center"
                     onClick={() => fileInputRef.current?.click()}
                     onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") fileInputRef.current?.click(); }}
                   >
@@ -492,20 +497,19 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     </div>
                     <h3 className="text-xl font-semibold mb-2">Upload a room photo</h3>
                     <p className="id-text-muted text-sm mb-5 max-w-md mx-auto">Drag and drop or choose a room image to redesign, stage, or use as visual reference.</p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <Button type="button" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }} className="id-outline">
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center w-full">
+                      <Button type="button" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }} className="id-outline flex-1">
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Browse Files
                       </Button>
-                      <Button type="button" onClick={(e) => { e.stopPropagation(); cameraInputRef.current?.click(); }} className="id-outline">
+                      <Button type="button" onClick={(e) => { e.stopPropagation(); cameraInputRef.current?.click(); }} className="id-outline flex-1">
                         <Camera className="w-4 h-4 mr-2" />
                         Take Photo
                       </Button>
                     </div>
                   </div>
-                  <div className="mt-6 text-center">
-                    <p className="id-text-muted text-xs mb-3">Generate from description only</p>
-                    <Button onClick={() => generateDesign()} disabled={isProcessing || !designStyle} className="id-primary min-h-12 px-8">
+                  <div className="mt-4 text-center">
+                    <Button onClick={() => generateDesign()} disabled={isProcessing || !designStyle} className="id-primary min-h-12 px-8 w-full">
                       <Sparkles className="w-4 h-4 mr-2" />
                       Generate Concept
                     </Button>
@@ -514,27 +518,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               )}
             </div>
 
-            {isProcessing && (
-              <div className="id-panel rounded-2xl p-6 text-center">
-                <div className="id-primary w-12 h-12 mx-auto mb-4 rounded-2xl border flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 animate-pulse" />
-                </div>
-                <p className="font-semibold mb-3">Creating your design</p>
-                <Progress value={progress} className="h-2 max-w-xs mx-auto" />
-                <p className="id-text-muted text-xs mt-2">{progress}%</p>
-              </div>
-            )}
-
-            {user && (
-              <div className="id-panel rounded-2xl p-4">
-                <DesignHistoryList history={history} isLoading={historyLoading} onDelete={deleteDesign} onSelect={handleSelectHistoryItem} />
-              </div>
-            )}
-          </div>
-
-          <div className="lg:col-span-2 space-y-4 min-w-0">
-            <Collapsible open={styleOpen} onOpenChange={setStyleOpen}>
-              <div className="id-panel rounded-2xl overflow-hidden">
+            <Collapsible open={styleOpen} onOpenChange={setStyleOpen} asChild>
+              <div className="id-panel rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: 420 }}>
                 <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left transition-colors">
                   <div className="flex items-center gap-2 min-w-0">
                     <Wand2 className="w-4 h-4 flex-shrink-0" />
@@ -547,14 +532,14 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                   {styleOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </CollapsibleTrigger>
-                <CollapsibleContent>
+                <CollapsibleContent className="flex-1">
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
                     {designStyles.map(style => (
                       <button
                         key={style.id}
                         type="button"
                         onClick={() => setDesignStyle(style.id)}
-                        className={`id-choice ${designStyle === style.id ? "id-choice-active" : "id-panel-soft"} min-h-11 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-all`}
+                        className={`id-choice ${designStyle === style.id ? "id-choice-active" : ""} min-h-11 rounded-xl border px-3 py-2 text-center text-xs font-semibold transition-all`}
                       >
                         {style.label}
                       </button>
@@ -563,62 +548,67 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </CollapsibleContent>
               </div>
             </Collapsible>
+          </div>
 
-            <Collapsible open={paletteOpen} onOpenChange={setPaletteOpen}>
-              <div className="id-panel rounded-2xl overflow-hidden">
-                <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left transition-colors">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ background: "linear-gradient(135deg,#B89555,#EFE6D6)" }} />
-                    <span className="text-sm font-semibold">Color Palette</span>
-                    {colorPalette && (
-                      <Badge className="id-outline rounded-full text-xs truncate max-w-[150px]">
-                        {colorPalettes.find(p => p.id === colorPalette)?.name}
-                      </Badge>
-                    )}
-                  </div>
-                  {paletteOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div className="px-4 pb-4 grid grid-cols-2 gap-2">
-                    {colorPalettes.map(palette => (
-                      <button
-                        key={palette.id}
-                        type="button"
-                        onClick={() => setColorPalette(palette.id)}
-                        className={`id-choice ${colorPalette === palette.id ? "id-choice-active" : "id-panel-soft"} min-h-[78px] rounded-xl border p-3 transition-all`}
-                      >
-                        <div className="flex gap-1 mb-2 justify-center">
-                          {palette.colors.map((c, i) => (
-                            <div key={i} className="w-5 h-5 rounded-full border" style={{ backgroundColor: c, borderColor: "rgba(255,255,255,0.72)" }} />
-                          ))}
-                        </div>
-                        <span className="block text-[10px] font-semibold leading-tight">{palette.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                </CollapsibleContent>
-              </div>
-            </Collapsible>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-              <div className="id-panel rounded-2xl overflow-hidden flex flex-col lg:col-span-2" style={{ minHeight: '420px' }}>
-                <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
-                  <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="font-semibold text-sm">Design Assistant</h3>
-                    <p className="id-text-muted text-[11px]">Describe edits or new ideas</p>
-                  </div>
+          {/* ROW C — Color Palette (full width, unified card) */}
+          <Collapsible open={paletteOpen} onOpenChange={setPaletteOpen} asChild>
+            <div className="id-panel rounded-2xl overflow-hidden">
+              <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left transition-colors">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Palette className="w-4 h-4 flex-shrink-0" />
+                  <span className="text-sm font-semibold">Color Palette</span>
+                  {colorPalette && (
+                    <Badge className="id-outline rounded-full text-xs truncate max-w-[150px]">
+                      {colorPalettes.find(p => p.id === colorPalette)?.name}
+                    </Badge>
+                  )}
                 </div>
+                {paletteOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="px-4 pb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+                  {colorPalettes.map(palette => (
+                    <button
+                      key={palette.id}
+                      type="button"
+                      onClick={() => setColorPalette(palette.id)}
+                      className={`id-choice ${colorPalette === palette.id ? "id-choice-active" : ""} min-h-[78px] rounded-xl border p-3 transition-all`}
+                    >
+                      <div className="flex gap-1 mb-2 justify-center">
+                        {palette.colors.map((c, i) => (
+                          <div key={i} className="w-5 h-5 rounded-full border" style={{ backgroundColor: c, borderColor: "rgba(255,255,255,0.72)" }} />
+                        ))}
+                      </div>
+                      <span className="block text-[10px] font-semibold leading-tight">{palette.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
 
-                <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: '350px' }}>
+          {/* ROW D — Design Assistant (full width, Additional Notes integrated) */}
+          <div className="id-panel rounded-2xl overflow-hidden flex flex-col">
+            <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
+              <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
+                <Bot className="w-4 h-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-semibold text-sm">Design Assistant</h3>
+                <p className="id-text-muted text-[11px]">Describe edits, new ideas, or add notes for the AI</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+              {/* Chat area — 2/3 */}
+              <div className="lg:col-span-2 flex flex-col border-b lg:border-b-0 lg:border-r" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
+                <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: 340, minHeight: 260 }}>
                   {messages.map(msg => (
                     <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                       <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-primary'} w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0`}>
                         {msg.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
                       </div>
-                      <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-panel-soft'} max-w-[85%] rounded-xl border p-3`}>
+                      <div className={`id-choice ${msg.role === 'user' ? 'id-choice-active' : ''} max-w-[85%] rounded-xl border p-3`}>
                         {msg.image && <img src={msg.image} alt="Generated interior design" className="rounded-lg mb-2 max-h-[200px] w-auto" loading="lazy" decoding="async" />}
                         <div className="text-xs whitespace-pre-wrap leading-relaxed">{msg.content}</div>
                       </div>
@@ -626,7 +616,6 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
-
                 <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
                   <div className="flex items-stretch gap-2">
                     <Textarea
@@ -644,25 +633,44 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </div>
               </div>
 
-              <div className="id-panel rounded-2xl p-4 flex flex-col" style={{ minHeight: '420px' }}>
-                <label className="text-xs font-semibold mb-2 block">Additional Notes (Optional)</label>
+              {/* Additional Notes — 1/3, integrated inside the same card */}
+              <div className="p-4 flex flex-col">
+                <label className="text-xs font-semibold mb-2 block uppercase tracking-[0.2em]">Additional Notes</label>
                 <Textarea
                   value={customNotes}
                   onChange={(e) => setCustomNotes(e.target.value)}
                   placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                  className="id-input flex-1 text-xs rounded-xl resize-none"
+                  className="id-input flex-1 text-xs rounded-xl resize-none min-h-[220px]"
                   maxLength={500}
                 />
-                <p className="id-text-muted text-[10px] mt-2">{customNotes.length}/500</p>
+                <p className="id-text-muted text-[10px] mt-2 text-right">{customNotes.length}/500</p>
               </div>
             </div>
           </div>
+
+          {isProcessing && (
+            <div className="id-panel rounded-2xl p-6 text-center">
+              <div className="id-primary w-12 h-12 mx-auto mb-4 rounded-2xl border flex items-center justify-center">
+                <Sparkles className="w-6 h-6 animate-pulse" />
+              </div>
+              <p className="font-semibold mb-3">Creating your design</p>
+              <Progress value={progress} className="h-2 max-w-xs mx-auto" />
+              <p className="id-text-muted text-xs mt-2">{progress}%</p>
+            </div>
+          )}
+
+          {user && history && history.length > 0 && (
+            <div className="id-panel rounded-2xl p-4">
+              <DesignHistoryList history={history} isLoading={historyLoading} onDelete={deleteDesign} onSelect={handleSelectHistoryItem} />
+            </div>
+          )}
         </div>
       </div>
 
       {/* Hidden file inputs */}
       <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} accept="image/*" className="hidden" />
       <input type="file" ref={cameraInputRef} onChange={handlePhotoUpload} accept="image/*" capture="environment" className="hidden" />
+
 
       {/* Modals */}
       <ContactGatingModal isOpen={showGatingModal} onClose={closeGatingModal} onComplete={handleGatingComplete} triggerSource={triggerSource} />
