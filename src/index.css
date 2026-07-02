@@ -25220,3 +25220,78 @@ html body #root [data-insights-page] [data-mi-page] #quarterly-trends {
   max-height: 54dvh !important;
   overflow-y: auto !important;
 }
+
+/* ============================================================
+   PASS 175 — Card-width parity with homepage
+   ------------------------------------------------------------
+   The homepage renders every non-hero card inside .jj-content-track
+   (max-width: var(--jj-global-container-max, 1760px)) with symmetric
+   gutters and NO reserved right-side navigator column.
+
+   Prior insights passes (170–174) constrained cards to 1080–1180px and
+   reserved 320–328px on the right for a floating navigator, which made
+   Insights / Guides / FAQ cards visibly narrower than the homepage.
+   PASS 175 undoes those width restrictions and restores the homepage
+   width contract while keeping the rest of the insights palette,
+   contrast, and framing rules intact.
+
+   Company / Legal / Services pages already inherit .jj-content-track
+   sizing via the global alignment normalization (line ~1517+), so this
+   pass focuses on the insights branch — the only tree that overrode it.
+   ============================================================ */
+
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+  section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]),
+html body #root [data-insights-page] :is([data-mi-nav], [data-guide-nav]) {
+  width: 100% !important;
+  max-width: var(--jj-global-container-max, 1760px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--jj-global-container-px-mobile, 16px) !important;
+  padding-right: var(--jj-global-container-px-mobile, 16px) !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+  html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+    section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]),
+  html body #root [data-insights-page] :is([data-mi-nav], [data-guide-nav]) {
+    padding-left: var(--jj-global-container-px-tablet, 24px) !important;
+    padding-right: var(--jj-global-container-px-tablet, 24px) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Homepage does NOT reserve a right navigator gutter — neither should insights. */
+  html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+    section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]),
+  html body #root [data-insights-page] :is([data-mi-nav], [data-guide-nav]) {
+    width: 100% !important;
+    max-width: var(--jj-global-container-max, 1760px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: var(--jj-global-container-px-desktop, 32px) !important;
+    padding-right: var(--jj-global-container-px-desktop, 32px) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+    section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]),
+  html body #root [data-insights-page] :is([data-mi-nav], [data-guide-nav]) {
+    padding-left: var(--jj-global-container-px-xl, 48px) !important;
+    padding-right: var(--jj-global-container-px-xl, 48px) !important;
+  }
+}
+
+/* Kill any legacy right-column reservation (lg:pr-72, xl:pr-72, pr-[320px]) that
+   pushed insights content into a narrower band than the homepage. */
+html body #root [data-insights-page] [class*="lg:pr-72"],
+html body #root [data-insights-page] [class*="xl:pr-72"],
+html body #root [data-insights-page] [class*="pr-[320px]"],
+html body #root [data-insights-page] [class*="pr-[328px]"],
+html body #root [data-insights-page] [class*="pr-[360px]"] {
+  padding-right: clamp(16px, 4vw, 48px) !important;
+}
+
+/* END PASS 175 */
