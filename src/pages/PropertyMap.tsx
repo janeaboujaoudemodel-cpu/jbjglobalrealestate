@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { MapContainer, Marker, useMap } from "react-leaflet";
 import { DivIcon } from "leaflet";
 import L from "leaflet";
-import { useProjectsListing } from "@/hooks/useProjects";
+import { useProjectsMapListing } from "@/hooks/useProjects";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +24,18 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
   useEffect(() => {
     if (layerRef.current) map.removeLayer(layerRef.current);
     const tiles = getMapTiles(language);
-    const { url, attribution } = tiles[mapView];
-    layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
+    const { url, attribution, subdomains } = tiles[mapView];
+    layerRef.current = L.tileLayer(url, {
+      attribution,
+      maxZoom: 18,
+      minZoom: 5,
+      keepBuffer: 2,
+      updateWhenIdle: true,
+      updateWhenZooming: false,
+      detectRetina: false,
+      crossOrigin: true,
+      subdomains,
+    });
     layerRef.current.addTo(map);
     return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
   }, [mapView, language, map]);
@@ -36,14 +46,14 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
 function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void; t: (key: string) => string }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="jj-map-layer-switcher">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className={`px-3 py-2 text-xs font-medium rounded transition-all ${
-              mapView === view ? "bg-[#EFE6D6] text-foreground" : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
-            }`}
+            className="jj-map-layer-button"
+            data-active={mapView === view ? "true" : "false"}
+            data-surface={mapView === view ? "emerald" : "champagne"}
           >
             {t(`map.${view}`)}
           </button>
@@ -112,29 +122,72 @@ function ScrollWheelZoomGuard() {
 
 function FitBounds({ coords }: { coords: [number, number][] }) {
   const map = useMap();
+  const hasFitRef = useRef(false);
   useEffect(() => {
-    if (coords.length === 0) return;
-    const bounds = L.latLngBounds(coords);
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+    if (hasFitRef.current || coords.length === 0) return;
+    hasFitRef.current = true;
+    window.requestAnimationFrame(() => {
+      const bounds = L.latLngBounds(coords.slice(0, 160));
+      map.fitBounds(bounds, { padding: [36, 36], maxZoom: 11, animate: false });
+    });
   }, [coords, map]);
   return null;
 }
 
+function ViewportMarkerGate({
+  projects,
+  onVisibleIds,
+}: {
+  projects: Array<{ id: string | number; lat: number; lng: number }>;
+  onVisibleIds: (ids: Set<string | number>) => void;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const bounds = map.getBounds().pad(0.3);
+        const visible = projects
+          .filter((project) => bounds.contains([project.lat, project.lng]))
+          .slice(0, 180)
+          .map((project) => project.id);
+        onVisibleIds(new Set(visible));
+      });
+    };
+
+    update();
+    map.on("moveend zoomend resize", update);
+    return () => {
+      cancelAnimationFrame(raf);
+      map.off("moveend zoomend resize", update);
+    };
+  }, [map, onVisibleIds, projects]);
+
+  return null;
+}
+
+const priceMarkerIconCache = new globalThis.Map<string, DivIcon>();
+
 const createCustomIcon = (price: number | null) => {
   const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "Ask";
-  return new DivIcon({
+  const cachedIcon = priceMarkerIconCache.get(priceText);
+  if (cachedIcon) return cachedIcon;
+
+  const icon = new DivIcon({
     className: "custom-marker",
     html: `
       <div style="
-        background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
-        color: #1a1a2e;
+        background: linear-gradient(135deg, #0B5A45 0%, #073B2F 55%, #03251F 100%);
+        color: #FFFFFF;
         padding: 6px 10px;
         border-radius: 20px;
         font-weight: bold;
         font-size: 12px;
         white-space: nowrap;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        border: 2px solid #fff;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+        border: 2px solid rgba(255,255,255,0.96);
         cursor: pointer;
       ">
         ${priceText}
@@ -143,6 +196,9 @@ const createCustomIcon = (price: number | null) => {
     iconSize: [60, 30],
     iconAnchor: [30, 30],
   });
+
+  priceMarkerIconCache.set(priceText, icon);
+  return icon;
 };
 
 type ViewMode = "map" | "list" | "grid";
@@ -150,7 +206,7 @@ type SortMode = "newest" | "price_asc" | "price_desc" | "alpha";
 
 const PropertyMap = () => {
   const { t, language } = useLanguage();
-  const { data: allProjects = [], isLoading } = useProjectsListing();
+  const { data: allProjects = [], isLoading } = useProjectsMapListing();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [mapView, setMapView] = useState<MapViewType>("satellite");
@@ -158,6 +214,7 @@ const PropertyMap = () => {
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [hideSold, setHideSold] = useState(false);
   const [listSearch, setListSearch] = useState("");
+  const [visibleMarkerIds, setVisibleMarkerIds] = useState<Set<string | number> | null>(null);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -249,17 +306,10 @@ const PropertyMap = () => {
   }, [projectsWithCoords]);
 
   const coordsList = useMemo(() => projectsWithCoords.map(p => [p.lat, p.lng] as [number, number]), [projectsWithCoords]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">{t('map.loadingProperties')}</p>
-        </div>
-      </div>
-    );
-  }
+  const visibleProjects = useMemo(() => {
+    if (!visibleMarkerIds) return projectsWithCoords.slice(0, 120);
+    return projectsWithCoords.filter((project) => visibleMarkerIds.has(project.id)).slice(0, 180);
+  }, [projectsWithCoords, visibleMarkerIds]);
 
   const showPanel = viewMode === "list" || viewMode === "grid";
 
@@ -271,12 +321,12 @@ const PropertyMap = () => {
   ];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden" data-map-page>
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
-      <div className="shrink-0 z-10 bg-gradient-to-r from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] border-b border-[#B89555]/20">
+      <div className="jj-map-command-bar shrink-0 z-10">
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
           {/* Left: count */}
-          <Badge variant="secondary" className="gap-1 shrink-0 bg-[#EFE6D6]/10 text-foreground border-[#B89555]/30">
+          <Badge variant="secondary" className="jj-map-count-pill gap-1 shrink-0" data-surface="emerald">
             <MapPin className="h-3 w-3" />
             {filteredProjects.length} {t('map.properties')}
           </Badge>
@@ -284,24 +334,30 @@ const PropertyMap = () => {
           <div className="flex-1" />
 
           {/* View toggles */}
-          <div className="flex items-center border border-border rounded-lg overflow-hidden">
+          <div className="jj-map-segmented-control">
             <button
               onClick={() => setViewMode("map")}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "map" ? "bg-[#EFE6D6]/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+              className="jj-map-segment"
+              data-active={viewMode === "map" ? "true" : "false"}
+              data-surface={viewMode === "map" ? "emerald" : "champagne"}
             >
               <MapPin className="h-3.5 w-3.5 inline mr-1" />
               Map
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors border-x border-border ${viewMode === "list" ? "bg-[#EFE6D6]/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+              className="jj-map-segment"
+              data-active={viewMode === "list" ? "true" : "false"}
+              data-surface={viewMode === "list" ? "emerald" : "champagne"}
             >
               <List className="h-3.5 w-3.5 inline mr-1" />
               List
             </button>
             <button
               onClick={() => setViewMode("grid")}
-              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "grid" ? "bg-[#EFE6D6]/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+              className="jj-map-segment"
+              data-active={viewMode === "grid" ? "true" : "false"}
+              data-surface={viewMode === "grid" ? "emerald" : "champagne"}
             >
               <Grid3X3 className="h-3.5 w-3.5 inline mr-1" />
               Grid
@@ -313,17 +369,19 @@ const PropertyMap = () => {
             <select
               value={sortMode}
               onChange={(e) => setSortMode(e.target.value as SortMode)}
-              className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 text-xs font-medium text-foreground cursor-pointer pr-7"
+              className="jj-map-sort-select appearance-none"
             >
               {sortOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
-            <ArrowUpDown className="h-3 w-3 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <ArrowUpDown className="h-3 w-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Hide Sold toggle */}
           <button
             onClick={() => setHideSold(!hideSold)}
-            className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${hideSold ? "bg-[#EFE6D6]/20 border-[#B89555]/40 text-foreground" : "border-border text-muted-foreground hover:bg-muted"}`}
+            className="jj-map-filter-toggle"
+            data-active={hideSold ? "true" : "false"}
+            data-surface={hideSold ? "emerald" : "champagne"}
           >
             <EyeOff className="h-3.5 w-3.5" />
             Hide Sold
@@ -339,6 +397,7 @@ const PropertyMap = () => {
           scrollWheelZoom={false}
           touchZoom={true}
           dragging={true}
+          preferCanvas={true}
           zoomControl={false}
           wheelDebounceTime={150}
           wheelPxPerZoomLevel={120}
@@ -352,8 +411,9 @@ const PropertyMap = () => {
           <ScrollWheelZoomGuard />
           <FitBounds coords={coordsList} />
           <MapRefGetter onMap={onMapReady} />
+          <ViewportMarkerGate projects={projectsWithCoords} onVisibleIds={setVisibleMarkerIds} />
 
-          {projectsWithCoords.map((project) => (
+          {visibleProjects.map((project) => (
             <Marker
               key={project.id}
               position={[project.lat, project.lng]}
@@ -380,6 +440,13 @@ const PropertyMap = () => {
             />
           ))}
         </MapContainer>
+
+        {isLoading && (
+          <div className="jj-map-loading-chip" role="status" aria-live="polite" data-surface="emerald">
+            <span className="jj-map-loading-dot" />
+            {t('map.loadingProperties')}
+          </div>
+        )}
 
         {/* ── HOVER CARD (compact) ── */}
         {hoveredProject && !selectedProject && hoverPos && (
@@ -408,19 +475,21 @@ const PropertyMap = () => {
             className="absolute z-[1000]"
             style={{ left: clickPos.left, top: clickPos.top, width: 384, maxWidth: 'calc(100% - 24px)' }}
           >
-            <Card className="shadow-xl border-2">
+            <Card className="jj-map-project-card shadow-xl" data-map-project-card>
               <CardContent className="p-0">
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm rounded-full p-1 hover:bg-background"
+                  className="jj-map-card-close"
+                  aria-label="Close property card"
+                  data-surface="emerald"
                 >
                   <X className="h-4 w-4" />
                 </button>
                 {selectedProject.cover_image_url && (
                   <div className="relative h-36">
                     <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
-                    <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
-                      {selectedProject.status || "Off-Plan"}
+                    <Badge className="jj-map-status-badge absolute bottom-2 left-2" data-surface="emerald">
+                      {selectedProject.status || selectedProject.status_label || "Available"}
                     </Badge>
                   </div>
                 )}
@@ -430,16 +499,16 @@ const PropertyMap = () => {
                     {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-3">
-                    <div className="text-center p-1.5 bg-muted rounded-lg">
-                      <Bed className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                    <div className="jj-map-stat-tile text-center p-1.5 rounded-lg" data-surface="emerald">
+                      <Bed className="h-3.5 w-3.5 mx-auto mb-0.5" />
                       <p className="text-[10px] font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
                     </div>
-                    <div className="text-center p-1.5 bg-muted rounded-lg">
-                      <Maximize className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                    <div className="jj-map-stat-tile text-center p-1.5 rounded-lg" data-surface="emerald">
+                      <Maximize className="h-3.5 w-3.5 mx-auto mb-0.5" />
                       <p className="text-[10px] font-medium">{selectedProject.size_min || "—"} sqft</p>
                     </div>
-                    <div className="text-center p-1.5 bg-muted rounded-lg">
-                      <Calendar className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                    <div className="jj-map-stat-tile text-center p-1.5 rounded-lg" data-surface="emerald">
+                      <Calendar className="h-3.5 w-3.5 mx-auto mb-0.5" />
                       <p className="text-[10px] font-medium">{selectedProject.handover_date || "TBA"}</p>
                     </div>
                   </div>
@@ -449,7 +518,7 @@ const PropertyMap = () => {
                       <p className="text-lg font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
                     </div>
                     <Link to={`/project/${selectedProject.slug}`}>
-                      <Button size="sm" className="gap-1.5">
+                      <Button size="sm" className="jj-map-details-button gap-1.5" data-surface="emerald">
                         {t('map.viewDetails')}
                         <ExternalLink className="h-3.5 w-3.5" />
                       </Button>

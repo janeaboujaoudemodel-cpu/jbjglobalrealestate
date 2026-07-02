@@ -21,22 +21,22 @@ export function MapNavigationControls({ latitude, longitude }: MapNavigationCont
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const btnClass =
-    "w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all text-foreground";
+  const btnClass = "jj-map-square-control";
+  const iconClass = "h-5 w-5";
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      <button onClick={handleZoomIn} className={btnClass} aria-label="Zoom in">
-        <ZoomIn className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleZoomIn} className={btnClass} aria-label="Zoom in" data-surface="emerald">
+        <ZoomIn className={iconClass} strokeWidth={2.5} />
       </button>
-      <button onClick={handleZoomOut} className={btnClass} aria-label="Zoom out">
-        <ZoomOut className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleZoomOut} className={btnClass} aria-label="Zoom out" data-surface="emerald">
+        <ZoomOut className={iconClass} strokeWidth={2.5} />
       </button>
-      <button onClick={handleRecenter} className={btnClass} aria-label="Recenter map">
-        <Navigation className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleRecenter} className={btnClass} aria-label="Recenter map" data-surface="emerald">
+        <Navigation className={iconClass} strokeWidth={2.5} />
       </button>
-      <button onClick={handleOpen3D} className={btnClass} aria-label="Open 3D view in Google Earth">
-        <Box className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleOpen3D} className={btnClass} aria-label="Open 3D view in Google Earth" data-surface="emerald">
+        <Box className={iconClass} strokeWidth={2.5} />
       </button>
     </div>
   );
@@ -66,22 +66,22 @@ export function MapNavigationControlsStandalone({
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const btnClass =
-    "w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-[#B89555]/40 shadow-lg hover:bg-[#EFE6D6]/20 active:bg-[#EFE6D6]/30 transition-all text-foreground";
+  const btnClass = "jj-map-square-control";
+  const iconClass = "h-5 w-5";
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      <button onClick={handleZoomIn} className={btnClass} aria-label="Zoom in">
-        <ZoomIn className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleZoomIn} className={btnClass} aria-label="Zoom in" data-surface="emerald">
+        <ZoomIn className={iconClass} strokeWidth={2.5} />
       </button>
-      <button onClick={handleZoomOut} className={btnClass} aria-label="Zoom out">
-        <ZoomOut className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleZoomOut} className={btnClass} aria-label="Zoom out" data-surface="emerald">
+        <ZoomOut className={iconClass} strokeWidth={2.5} />
       </button>
-      <button onClick={handleRecenter} className={btnClass} aria-label="Recenter map">
-        <Navigation className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleRecenter} className={btnClass} aria-label="Recenter map" data-surface="emerald">
+        <Navigation className={iconClass} strokeWidth={2.5} />
       </button>
-      <button onClick={handleOpen3D} className={btnClass} aria-label="Open 3D view in Google Earth">
-        <Box className="w-5 h-5 text-[#0A0A0A]" strokeWidth={2.5} />
+      <button onClick={handleOpen3D} className={btnClass} aria-label="Open 3D view in Google Earth" data-surface="emerald">
+        <Box className={iconClass} strokeWidth={2.5} />
       </button>
     </div>
   );

@@ -6,6 +6,7 @@ export type MapViewType = "satellite" | "street" | "terrain";
 export interface TileConfig {
   url: string;
   attribution: string;
+  subdomains?: string | string[];
 }
 
 /**
@@ -31,8 +32,9 @@ export function getMapTiles(language: string = "en"): Record<MapViewType, TileCo
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
         },
     terrain: {
-      url: "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>',
+      url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+      attribution: 'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap',
+      subdomains: ["a", "b", "c"],
     },
   };
 }
