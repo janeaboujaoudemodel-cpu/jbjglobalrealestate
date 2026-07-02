@@ -203,9 +203,7 @@ const MortgageCalculatorPage = () => {
               </div>
             </AIShellCard>
           </div>
-        </div>
-      </section>
-
+      </div>
 
       <InquiryFormModal
         isOpen={isInquiryOpen}
@@ -213,7 +211,7 @@ const MortgageCalculatorPage = () => {
         source="mortgage-advisory"
       />
       <ActiveLeadBanner showAddToShortlist={false} />
-    </ToolAnimatedFrame>
+    </PremiumToolShell>
   );
 };
 
