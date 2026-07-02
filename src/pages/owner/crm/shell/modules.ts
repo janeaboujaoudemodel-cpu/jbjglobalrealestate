@@ -22,6 +22,7 @@ import {
   Phone,
   ReceiptText,
   ScrollText,
+  Rss,
   Search,
   Share2,
   ShoppingCart,
@@ -63,6 +64,7 @@ export const CRM_PRIMARY_NAV: CrmModule[] = [
 
 // Standalone teamspace item above the folder groups.
 export const CRM_TEAMSPACE_TOP: CrmModule[] = [
+  { slug: "feeds", label: "Feeds", icon: Rss },
   { slug: "workqueue", label: "Workqueue", icon: Sparkles },
 ];
 
