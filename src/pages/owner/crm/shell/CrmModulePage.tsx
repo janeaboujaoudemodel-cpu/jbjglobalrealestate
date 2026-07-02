@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   ChevronDown,
   ChevronRight,
@@ -105,10 +105,12 @@ const MODULE_COLUMNS: Record<string, ColumnDef[]> = {
 
 const columnsFor = (slug: string): ColumnDef[] => MODULE_COLUMNS[slug] ?? DEFAULT_COLUMNS;
 
-function ModuleListView({ slug, label }: { slug: string; label: string }) {
+function ModuleListView({ slug, label, section }: { slug: string; label: string; section: string }) {
   const columns = useMemo(() => columnsFor(slug), [slug]);
   const [filtersOpen, setFiltersOpen] = useState(true);
   const plural = /s$/.test(label) ? label : `${label}s`;
+  const navigate = useNavigate();
+  const goCreate = () => navigate(`/owner/crm/jbj/${section}/new`);
 
   return (
     <div className="jc-list" data-no-contrast-guard>
@@ -124,7 +126,7 @@ function ModuleListView({ slug, label }: { slug: string; label: string }) {
         <button type="button" className="jc-list__actions">
           Actions <ChevronDown size={13} />
         </button>
-        <button type="button" className="jc-list__cta">
+        <button type="button" className="jc-list__cta" onClick={goCreate}>
           <Plus size={15} /> Create {label}
         </button>
         <button type="button" className="jc-list__icon" aria-label="More"><MoreHorizontal size={18} /></button>
@@ -185,7 +187,7 @@ function ModuleListView({ slug, label }: { slug: string; label: string }) {
             </svg>
             <h3>No {plural} found</h3>
             <p>Create your first {label.toLowerCase()} to get started.</p>
-            <button type="button" className="jc-list__cta">
+            <button type="button" className="jc-list__cta" onClick={goCreate}>
               <Plus size={15} /> Create {label}
             </button>
           </div>
@@ -261,5 +263,5 @@ export default function CrmModulePage() {
 
   if (slug === "projects") return <ProjectsIntro />;
 
-  return <ModuleListView slug={slug} label={mod?.label ?? section} />;
+  return <ModuleListView slug={slug} label={mod?.label ?? section} section={section} />;
 }
