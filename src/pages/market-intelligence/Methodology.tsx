@@ -62,6 +62,7 @@ const Methodology = () => {
           
               {/* SECTION 1 — Introduction */}
               <motion.section
+                data-no-section-frame
                 id="introduction"
                 initial="hidden"
                 whileInView="visible"
@@ -91,6 +92,7 @@ const Methodology = () => {
 
               {/* SECTION 2 — Data Selection Principles */}
               <motion.section
+                data-no-section-frame
                 id="data-selection"
                 initial="hidden"
                 whileInView="visible"
@@ -138,6 +140,7 @@ const Methodology = () => {
 
               {/* SECTION 3 — Primary Official Sources */}
               <motion.section
+                data-no-section-frame
                 id="primary-sources"
                 initial="hidden"
                 whileInView="visible"
@@ -235,6 +238,7 @@ const Methodology = () => {
 
               {/* SECTION 4 — Data Validation Process */}
               <motion.section
+                data-no-section-frame
                 id="validation-process"
                 initial="hidden"
                 whileInView="visible"
@@ -282,6 +286,7 @@ const Methodology = () => {
 
               {/* SECTION 5 — Presentation Standards */}
               <motion.section
+                data-no-section-frame
                 id="presentation-standards"
                 initial="hidden"
                 whileInView="visible"
@@ -329,6 +334,7 @@ const Methodology = () => {
 
               {/* SECTION 6 — Update Frequency */}
               <motion.section
+                data-no-section-frame
                 id="update-frequency"
                 initial="hidden"
                 whileInView="visible"
@@ -387,6 +393,7 @@ const Methodology = () => {
 
               {/* SECTION 7 — Compliance & Use of Information */}
               <motion.section
+                data-no-section-frame
                 id="compliance"
                 initial="hidden"
                 whileInView="visible"

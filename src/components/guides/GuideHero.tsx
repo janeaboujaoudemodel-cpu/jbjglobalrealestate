@@ -45,9 +45,10 @@ export const GuideHero = ({
 }: GuideHeroProps) => {
   return (
     <section
+      data-guide-hero
       data-hero-dark
       className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
-      style={{ minHeight: "100dvh" }}
+      style={{ minHeight: "clamp(520px, 68svh, 760px)" }}
     >
       {/* Media background */}
       <div className="absolute inset-0 z-0">
@@ -68,7 +69,7 @@ export const GuideHero = ({
             style={{ backgroundImage: `url(${backgroundImage})` }}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-b from-zinc-900 to-black" />
+          <div className="w-full h-full bg-[image:var(--jj-emerald-ombre)]" />
         )}
         {/* Two-layer scrim — readable headline guarantee */}
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.45)_45%,rgba(0,0,0,0.78)_100%)]" />
