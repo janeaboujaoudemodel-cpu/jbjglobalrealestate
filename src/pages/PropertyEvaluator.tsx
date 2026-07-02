@@ -302,17 +302,13 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
   return (
     <PremiumToolShell
-      theme={toolThemes.amber}
+      theme={toolThemes.emerald}
       eyebrowIcon={Sparkles}
       eyebrow="AI-Powered Valuation"
-      title={
-        <>
-          Property <span style={{ textShadow: `0 0 24px ${toolThemes.amber.accent}` }}>Evaluator</span>
-        </>
-      }
+      title="Property Evaluator"
       subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
-      readMore={{ href: "/sell/valuation", label: "Read more · Valuation & Strategic Pricing Advisory" }}
     >
+
 
 
       <AIShellCard padding="lg">
