@@ -107,8 +107,9 @@
 }
 .jc-grid-btn {
   width: 34px; height: 34px; border: 0; background: transparent;
-  color: #3E4657; padding: 0; display: grid; place-items: center; cursor: pointer;
+  color: #FFFFFF !important; padding: 0; display: grid; place-items: center; cursor: pointer;
 }
+.jc-grid-btn svg { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
 
 .jc-rail {
   grid-column: 1;
