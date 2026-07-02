@@ -327,7 +327,7 @@ export default function SupportLauncher() {
                 >
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 border-b border-white/15 mb-2">
                     <span
-                      className="allow-white inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white"
+                      className="allow-white inline-flex h-11 items-center gap-1.5 px-4 rounded-full text-[11px] font-semibold text-white"
                       style={{
                         color: "#FFFFFF",
                         WebkitTextFillColor: "#FFFFFF",
@@ -344,7 +344,7 @@ export default function SupportLauncher() {
                       aria-label="Close"
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white h-8 w-8 inline-flex items-center justify-center rounded-full text-white transition-[filter] hover:brightness-110"
+                      className="allow-white h-11 w-11 min-w-11 inline-flex items-center justify-center rounded-full text-white transition-[filter] hover:brightness-110"
                       style={{
                         color: "#FFFFFF",
                         WebkitTextFillColor: "#FFFFFF",
