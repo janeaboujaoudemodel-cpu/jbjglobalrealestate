@@ -524,11 +524,8 @@ const PropertyMap = () => {
             <Card
               surface="emerald"
               className="jj-map-hover-card pointer-events-auto"
-              style={{
-                background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)',
-                color: '#FFFFFF',
-                border: '1px solid rgba(255,255,255,0.18)',
-              }}
+              data-map-project-card
+              data-surface="emerald"
             >
               <CardContent className="p-0" style={{ color: '#FFFFFF' }}>
                 {hoveredProject.cover_image_url && (
@@ -671,10 +668,7 @@ const PropertyMap = () => {
                   setSelectedProject(project);
                 }}
                 data-surface="emerald"
-                style={{
-                  background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)',
-                  color: '#FFFFFF',
-                }}
+                data-map-project-card
               >
                 <CardContent className="p-0" style={{ color: '#FFFFFF' }}>
                   {viewMode === "grid" ? (
@@ -688,7 +682,6 @@ const PropertyMap = () => {
                           fallbackSrc="/placeholder.svg"
                           loading="eager"
                           decoding="async"
-                          fetchPriority="high"
                           fetchPriority="high"
                         />
                       </div>
@@ -723,7 +716,6 @@ const PropertyMap = () => {
                           fallbackSrc="/placeholder.svg"
                           loading="eager"
                           decoding="async"
-                          fetchPriority="high"
                           fetchPriority="high"
                         />
                       </div>
