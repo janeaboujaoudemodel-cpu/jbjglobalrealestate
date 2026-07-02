@@ -129,14 +129,15 @@ export function OwnerTasksPopupAlert() {
           onClick={handleClose}
           aria-label="Close pending tasks alert"
           data-no-contrast-guard
-          style={{ backgroundColor: "#EFE6D6", color: "#1A1A1A" }}
-          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-[#B89555] hover:!bg-[#E0D3BC] hover:!border-[#A68444] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+          data-emerald="true"
+          style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", border: "none", boxShadow: "none" }}
+          className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
         >
           <X
             className="w-5 h-5"
             data-no-contrast-guard
             strokeWidth={2.5}
-            style={{ color: "#1A1A1A", stroke: "#1A1A1A", opacity: 1 }}
+            style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }}
           />
         </button>
 
