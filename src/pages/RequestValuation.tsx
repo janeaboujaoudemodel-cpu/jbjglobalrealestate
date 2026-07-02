@@ -150,7 +150,7 @@ const RequestValuation = () => {
         canonicalPath="/sell/valuation"
       />
 
-      <div className="min-h-screen" style={{ background: TOOL_PAGE_BG }}>
+      <div className="min-h-screen" style={{ background: '#FDFBF7' }}>
         {/* ── Premium navy hero ── */}
         <ToolHero
           theme={toolThemes.navy}
