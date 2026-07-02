@@ -2638,3 +2638,184 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
 }
 .jc-auto-action-name { font-size: 13.5px; font-weight: 700; color: #1A1A1A; }
 .jc-auto-action-meta { font-size: 11.5px; color: #6b6250; }
+
+/* ===================================================================
+   Phase 15 — Zia AI Assistant slide-over panel
+   =================================================================== */
+.jc-zia__scrim {
+  position: fixed; inset: 0; background: rgba(6, 26, 20, 0.42);
+  backdrop-filter: blur(2px); z-index: 90;
+  animation: jc-zia-fade 160ms ease-out;
+}
+.jc-zia {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(440px, 96vw);
+  background: #FFFFFF;
+  border-left: 1px solid rgba(15, 90, 69, 0.14);
+  box-shadow: -18px 0 48px rgba(6, 26, 20, 0.18);
+  z-index: 91;
+  display: flex; flex-direction: column;
+  animation: jc-zia-slide 220ms cubic-bezier(.22,.61,.36,1);
+}
+@keyframes jc-zia-fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes jc-zia-slide { from { transform: translateX(24px); opacity: 0 } to { transform: none; opacity: 1 } }
+
+.jc-zia__head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #0F5A45 0%, #0B4636 55%, #063526 100%);
+  color: #FFFFFF;
+}
+.jc-zia__brand { display: flex; align-items: center; gap: 12px; }
+.jc-zia__mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+  border: 1px solid rgba(255,255,255,0.28); color: #FFFFFF;
+}
+.jc-zia__brand h3 { margin: 0; font-size: 15px; font-weight: 600; color: #FFFFFF; letter-spacing: 0.2px; }
+.jc-zia__brand p { margin: 2px 0 0; font-size: 11.5px; color: rgba(255,255,255,0.78); }
+.jc-zia__close {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(255,255,255,0.10); color: #FFFFFF;
+  border: 1px solid rgba(255,255,255,0.20);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 120ms;
+}
+.jc-zia__close:hover { background: rgba(255,255,255,0.20); }
+
+.jc-zia__tabs {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+  padding: 8px; background: #F7F2EA; border-bottom: 1px solid rgba(15, 90, 69, 0.10);
+}
+.jc-zia__tab {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 6px; font-size: 12px; font-weight: 600;
+  color: #1A1A1A; background: transparent; border: 1px solid transparent;
+  border-radius: 8px; cursor: pointer; transition: all 120ms;
+}
+.jc-zia__tab:hover { background: rgba(15, 90, 69, 0.08); }
+.jc-zia__tab[data-active="true"] {
+  background: #FFFFFF; border-color: rgba(15, 90, 69, 0.18); color: #0F5A45;
+  box-shadow: 0 1px 2px rgba(6,26,20,0.06);
+}
+
+.jc-zia__body { flex: 1; overflow-y: auto; padding: 16px 18px 12px; }
+.jc-zia__section { display: flex; flex-direction: column; gap: 12px; }
+.jc-zia__section--chat { height: 100%; }
+.jc-zia__section-title {
+  margin: 6px 0 2px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.9px; text-transform: uppercase; color: #6B7A75;
+}
+
+.jc-zia__insights { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.jc-zia__insight {
+  padding: 12px; border-radius: 10px;
+  background: #F7F2EA; border: 1px solid rgba(15, 90, 69, 0.10);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.jc-zia__insight-label { font-size: 10.5px; font-weight: 700; color: #6B7A75; letter-spacing: 0.6px; text-transform: uppercase; }
+.jc-zia__insight-value { font-size: 17px; font-weight: 700; color: #1A1A1A; }
+.jc-zia__insight-delta { font-size: 11.5px; font-weight: 600; color: #0F5A45; }
+.jc-zia__insight-delta[data-up="false"] { color: #B0413E; }
+
+.jc-zia__highlights { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.jc-zia__highlights li {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-radius: 8px; font-size: 13px;
+  color: #1A1A1A; background: #FFFFFF; border: 1px solid rgba(15, 90, 69, 0.10);
+}
+.jc-zia__highlights li svg { color: #0F5A45; }
+
+.jc-zia__preds { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.jc-zia__preds li {
+  padding: 12px; border-radius: 10px; background: #FFFFFF;
+  border: 1px solid rgba(15, 90, 69, 0.10);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.jc-zia__pred-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.jc-zia__pred-title { font-size: 13px; font-weight: 600; color: #1A1A1A; }
+.jc-zia__pred-meta { font-size: 11.5px; color: #6B7A75; }
+.jc-zia__pred-score {
+  font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+}
+.jc-zia__pred-score[data-band="high"] { background: rgba(15, 90, 69, 0.14); color: #0F5A45; }
+.jc-zia__pred-score[data-band="mid"]  { background: rgba(184, 149, 85, 0.18); color: #7A5F2A; }
+.jc-zia__pred-score[data-band="low"]  { background: rgba(176, 65, 62, 0.14); color: #8A2E2B; }
+.jc-zia__pred-bar {
+  height: 6px; border-radius: 999px; background: rgba(15, 90, 69, 0.10); overflow: hidden;
+}
+.jc-zia__pred-bar span { display: block; height: 100%; border-radius: 999px; background: #0F5A45; }
+.jc-zia__pred-bar span[data-band="mid"] { background: #B89555; }
+.jc-zia__pred-bar span[data-band="low"] { background: #B0413E; }
+
+.jc-zia__sugs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.jc-zia__sug {
+  display: flex; gap: 12px; padding: 12px; border-radius: 10px;
+  background: #FFFFFF; border: 1px solid rgba(15, 90, 69, 0.10);
+}
+.jc-zia__sug-icon {
+  width: 32px; height: 32px; flex: 0 0 32px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(15, 90, 69, 0.10); color: #0F5A45;
+}
+.jc-zia__sug--risk .jc-zia__sug-icon { background: rgba(176, 65, 62, 0.14); color: #8A2E2B; }
+.jc-zia__sug--growth .jc-zia__sug-icon { background: rgba(184, 149, 85, 0.20); color: #7A5F2A; }
+.jc-zia__sug-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.jc-zia__sug-title { font-size: 13px; font-weight: 600; color: #1A1A1A; }
+.jc-zia__sug-text { font-size: 12px; color: #4B5B57; line-height: 1.45; }
+.jc-zia__sug-cta {
+  align-self: flex-start; margin-top: 4px;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600;
+  color: #FFFFFF; background: #0F5A45; border: none; cursor: pointer;
+  transition: background 120ms;
+}
+.jc-zia__sug-cta:hover { background: #0B4636; }
+
+.jc-zia__chat {
+  display: flex; flex-direction: column; gap: 10px; padding: 4px 0 12px;
+}
+.jc-zia__msg { display: flex; gap: 8px; align-items: flex-start; }
+.jc-zia__msg--you { justify-content: flex-end; }
+.jc-zia__msg-avatar {
+  width: 22px; height: 22px; border-radius: 50%; flex: 0 0 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #0F5A45, #063526); color: #FFFFFF;
+}
+.jc-zia__msg-bubble {
+  padding: 9px 12px; border-radius: 12px; font-size: 13px; line-height: 1.45;
+  max-width: 82%;
+}
+.jc-zia__msg--zia .jc-zia__msg-bubble { background: #F7F2EA; color: #1A1A1A; border: 1px solid rgba(15, 90, 69, 0.10); border-top-left-radius: 4px; }
+.jc-zia__msg--you .jc-zia__msg-bubble { background: #0F5A45; color: #FFFFFF; border-top-right-radius: 4px; }
+
+.jc-zia__quick { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.jc-zia__quick button {
+  text-align: left; padding: 9px 12px; border-radius: 10px;
+  background: #FFFFFF; border: 1px dashed rgba(15, 90, 69, 0.28);
+  color: #0F5A45; font-size: 12.5px; font-weight: 500; cursor: pointer;
+  transition: all 120ms;
+}
+.jc-zia__quick button:hover { background: rgba(15, 90, 69, 0.06); border-style: solid; }
+
+.jc-zia__composer {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-top: 1px solid rgba(15, 90, 69, 0.12);
+  background: #FFFFFF;
+}
+.jc-zia__composer input {
+  flex: 1; min-width: 0; padding: 9px 12px;
+  border-radius: 10px; border: 1px solid rgba(15, 90, 69, 0.16);
+  background: #F7F2EA; color: #1A1A1A; font-size: 13px;
+}
+.jc-zia__composer input:focus { outline: none; border-color: #0F5A45; background: #FFFFFF; }
+.jc-zia__composer > button {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: transparent; color: #4B5B57; border: 1px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 120ms;
+}
+.jc-zia__composer > button:hover { background: rgba(15, 90, 69, 0.08); color: #0F5A45; }
+.jc-zia__composer .jc-zia__send { background: #0F5A45; color: #FFFFFF; }
+.jc-zia__composer .jc-zia__send:hover { background: #0B4636; color: #FFFFFF; }
