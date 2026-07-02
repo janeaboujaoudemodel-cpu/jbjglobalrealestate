@@ -25922,6 +25922,8 @@ html body #root [data-insights-page] :is(
   margin: 0 !important;
   padding-top: clamp(5rem, 9vw, 7.5rem) !important;
   padding-bottom: clamp(5rem, 9vw, 7.5rem) !important;
+  padding-left: clamp(1.5rem, 4vw, 3rem) !important;
+  padding-right: clamp(1.5rem, 4vw, 3rem) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -25931,6 +25933,18 @@ html body #root [data-insights-page] :is(
   background: var(--jj-insights-hero) !important;
   color: #F6FBF8 !important;
   text-align: center !important;
+}
+@media (min-width: 1024px) {
+  html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) {
+    padding-right: clamp(20rem, 24vw, 22rem) !important;
+    padding-left: clamp(3rem, 6vw, 5rem) !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+  html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(h1,p,.container,.mx-auto,[class*="max-w-"]) {
+    margin-left: 0 !important;
+    text-align: left !important;
+  }
 }
 html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen)::before,
 html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen)::after {
