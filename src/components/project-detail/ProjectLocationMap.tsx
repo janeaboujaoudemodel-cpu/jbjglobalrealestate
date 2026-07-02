@@ -22,6 +22,14 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const PROJECT_LOCATION_ICON = L.divIcon({
+  className: "custom-marker",
+  html: `<div class="jj-map-marker-pill">Here</div>`,
+  iconSize: [72, 32],
+  iconAnchor: [36, 32],
+  popupAnchor: [0, -32],
+});
+
 // View toggle controls
 function MapViewToggle({ 
   mapView, 
@@ -155,9 +163,9 @@ export default function ProjectLocationMap({
           t={t}
         />
         <MapNavigationControls latitude={coordinates[0]} longitude={coordinates[1]} />
-        <Marker position={coordinates}>
+        <Marker position={coordinates} icon={PROJECT_LOCATION_ICON}>
           <Popup className="jj-map-popup">
-            <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3">
+            <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3" data-map-project-card data-surface="emerald">
               <div className="text-sm font-medium">{projectName}</div>
               {location && <div className="text-xs">{location}</div>}
             </div>

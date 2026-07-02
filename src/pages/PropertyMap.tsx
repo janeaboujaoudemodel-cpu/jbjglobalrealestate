@@ -334,6 +334,7 @@ const PropertyMap = () => {
         .forEach((src) => {
           const image = new Image();
           image.decoding = "async";
+          image.fetchPriority = "high";
           image.src = src as string;
         });
     };
@@ -341,10 +342,13 @@ const PropertyMap = () => {
     let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
     let idleId: number | null = null;
 
+    // Start immediately for visible cards so hover/click details are ready without a delay.
+    preload();
+
     if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(preload, { timeout: 1600 });
+      idleId = window.requestIdleCallback(preload, { timeout: 600 });
     } else {
-      timeoutId = globalThis.setTimeout(preload, 350);
+      timeoutId = globalThis.setTimeout(preload, 120);
     }
 
     return () => {
@@ -528,7 +532,7 @@ const PropertyMap = () => {
             >
               <CardContent className="p-0" style={{ color: '#FFFFFF' }}>
                 {hoveredProject.cover_image_url && (
-                  <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" loading="eager" decoding="async" />
+                  <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" loading="eager" decoding="async" fetchPriority="high" />
                 )}
                 <div className="p-2" style={{ color: '#FFFFFF' }}>
                   <h4 className="font-semibold text-xs truncate" style={{ color: '#FFFFFF' }}>{hoveredProject.name}</h4>
@@ -558,7 +562,7 @@ const PropertyMap = () => {
                 </button>
                 {selectedProject.cover_image_url && (
                   <div className="relative h-36">
-                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" loading="eager" decoding="async" />
+                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" loading="eager" decoding="async" fetchPriority="high" />
                     <Badge className="jj-map-status-badge absolute bottom-2 left-2" data-surface="emerald">
                       {selectedProject.status || selectedProject.status_label || "Available"}
                     </Badge>
@@ -684,6 +688,8 @@ const PropertyMap = () => {
                           fallbackSrc="/placeholder.svg"
                           loading="eager"
                           decoding="async"
+                          fetchPriority="high"
+                          fetchPriority="high"
                         />
                       </div>
                       <div className="p-2.5" style={{ color: '#FFFFFF' }}>
@@ -717,6 +723,8 @@ const PropertyMap = () => {
                           fallbackSrc="/placeholder.svg"
                           loading="eager"
                           decoding="async"
+                          fetchPriority="high"
+                          fetchPriority="high"
                         />
                       </div>
                       <div className="flex-1 min-w-0 p-2.5 flex flex-col justify-between" style={{ color: '#FFFFFF' }}>
