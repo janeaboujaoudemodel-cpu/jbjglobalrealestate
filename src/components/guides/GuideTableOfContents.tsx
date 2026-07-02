@@ -114,7 +114,7 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-guide-toc>
+    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-guide-toc data-surface="emerald" data-premium-navigator>
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -124,14 +124,14 @@ export const GuideTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-[#FDFBF7] border border-white/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-[#EFE6D6]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-[#1A1A1A]" />
+                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <HelpCircle className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[#1A1A1A] text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-[#1A1A1A]/70 text-xs leading-relaxed">
+                  <h4 className="font-semibold text-white text-sm mb-1">Quick Navigation</h4>
+                  <p className="text-white/80 text-xs leading-relaxed">
                     Click any section button to jump directly to that part of the guide. The active section is highlighted in emerald.
                   </p>
                 </div>
@@ -155,10 +155,10 @@ export const GuideTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#FDFBF7] border border-white/30 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
+        className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
       >
         {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-3 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
+        <div className="flex items-center justify-between p-3 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-5 h-5 text-white" />
             <h3 className="text-white font-semibold">{title}</h3>
@@ -196,21 +196,21 @@ export const GuideTableOfContents = ({
                   className={cn(
                     "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
                     activeId === item.id
-                      ? "bg-[image:var(--jj-emerald-ombre)] text-white font-semibold shadow-sm border-white/20"
-                      : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#064E3B]/10 border-transparent"
+                      ? "bg-white/12 text-white font-semibold border-white/10"
+                      : "text-white hover:text-white hover:bg-white/10 border-transparent"
                   )}
                 >
                   <span data-toc-number className={cn(
                     "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
                     activeId === item.id
-                      ? "bg-[#064E3B] text-white border border-white/35"
-                      : "bg-[image:var(--jj-emerald-ombre)] text-white border border-white/25"
+                      ? "bg-white/15 text-white border border-white/20"
+                      : "bg-black/15 text-white border border-white/10"
                   )}>
                     {index + 1}
                   </span>
                   {item.icon && <item.icon data-toc-icon className={cn(
                     "w-4 h-4",
-                    activeId === item.id ? "text-white" : "text-[#064E3B]"
+                    "text-white"
                   )} />}
                   {!item.icon && <span aria-hidden />}
                   <span data-toc-label className="min-w-0 leading-snug">{item.title}</span>
