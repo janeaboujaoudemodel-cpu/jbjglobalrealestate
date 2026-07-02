@@ -14,7 +14,7 @@ export default function CrmHeader() {
       <div className="jc-header__actions">
         <label className="jc-search" aria-label="Search CRM">
           <Search size={19} strokeWidth={2.25} />
-          <input placeholder="Search records" />
+          <input type="text" placeholder="Search records" autoComplete="off" spellCheck={false} />
         </label>
 
         <button className="jc-icon-btn" data-solid="true" type="button" aria-label="Quick create">
