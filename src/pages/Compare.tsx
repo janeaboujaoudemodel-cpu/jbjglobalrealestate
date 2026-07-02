@@ -874,30 +874,29 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         </div>
       </div>
 
-      {/* =============== BODY — GOLD WRAPPER + EMERALD CARDS =============== */}
+      {/* =============== BODY — DARK EMERALD WRAPPER + CHAMPAGNE COMPARISON TABLE =============== */}
       <div className="container mx-auto px-4 py-10 md:py-14">
         <div
           data-compare-content-frame
-          data-surface="champagne"
+          data-surface="emerald"
           data-on-dark="true"
           className="rounded-2xl p-5 md:p-7 flex flex-col gap-8"
-          style={{ background: CHAMPAGNE, border: EMERALD_HAIRLINE, boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.68)" }}
+          style={{ background: PAGE_DARK, border: "1px solid rgba(255,255,255,0.14)", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72)" }}
         >
           {/* Counter */}
-          <div data-allow-ink data-no-contrast-guard className="flex items-center gap-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
-            <span data-allow-ink data-no-contrast-guard className="text-lg font-bold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{projects.length}</span>
-            <span data-allow-ink data-no-contrast-guard className="text-sm" style={{ color: "rgba(26,26,26,0.78)", WebkitTextFillColor: "rgba(26,26,26,0.78)" }}>properties in comparison</span>
+          <div data-allow-ink data-no-contrast-guard className="flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <span data-allow-ink data-no-contrast-guard className="text-lg font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{projects.length}</span>
+            <span data-allow-ink data-no-contrast-guard className="text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>properties in comparison</span>
           </div>
 
-          {/* Comparison Table */}
+          {/* Comparison Table — premium champagne (restored) */}
           <div
             ref={tableRef}
             data-compare-project-table
-            data-surface="emerald"
-            data-on-dark="true"
+            data-surface="champagne"
             data-no-contrast-guard
             className="overflow-x-auto rounded-2xl"
-            style={{ background: EMERALD_CARD, border: "1px solid rgba(255,255,255,0.22)" }}
+            style={{ background: CHAMPAGNE, border: EMERALD_HAIRLINE, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.65), 0 12px 40px -20px rgba(0,0,0,0.35)" }}
           >
             <table className="w-full">
               <thead>
