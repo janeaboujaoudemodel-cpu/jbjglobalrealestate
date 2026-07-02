@@ -71,16 +71,16 @@ export const FAQFloatingSidebar = ({
   };
 
   return (
-    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64">
+    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-faq-toc data-surface="emerald" data-premium-navigator>
       <AnimatePresence>
         {showTooltip && !isMinimized && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="absolute right-full mr-4 top-0 w-64 z-50">
-            <div className="bg-[#FDFBF7] border border-white/30 rounded-xl p-4 shadow-xl">
+            <div className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
-                <HelpCircle className="w-4 h-4 text-[#1A1A1A] shrink-0 mt-0.5" />
+                <HelpCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-[#1A1A1A] text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-[#1A1A1A]/70 text-xs">Jump to any FAQ category directly.</p>
+                  <h4 className="font-semibold text-white text-sm mb-1">Quick Navigation</h4>
+                  <p className="text-white/80 text-xs">Jump to any FAQ category directly.</p>
                 </div>
               </div>
               <Button onClick={handleDismissTooltip} size="sm" className="w-full text-xs bg-[image:var(--jj-emerald-ombre)] text-white hover:opacity-90">I Understand</Button>
@@ -89,8 +89,8 @@ export const FAQFloatingSidebar = ({
         )}
       </AnimatePresence>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[#FDFBF7] border border-white/30 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] flex flex-col jj-scrollbar-emerald max-h-[56dvh]">
-        <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex flex-col jj-scrollbar-emerald max-h-[56dvh]">
+        <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4 text-white" />
             <h3 className="text-sm font-semibold text-white">{title}</h3>
@@ -110,10 +110,10 @@ export const FAQFloatingSidebar = ({
                   onClick={() => scrollToSection(`category-${index}`)}
                   className={cn(
                     "w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left text-xs transition-colors border",
-                    isActive ? "bg-[image:var(--jj-emerald-ombre)] text-white font-semibold border-white/20" : "text-[#1A1A1A] hover:bg-[#064E3B]/8 border-transparent"
+                    isActive ? "bg-white/12 text-white font-semibold border-white/10" : "text-white hover:bg-white/10 border-transparent"
                   )}
                 >
-                  <span className={cn("w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold flex-shrink-0", isActive ? "bg-[#064E3B] text-white border border-white/35" : "bg-[image:var(--jj-emerald-ombre)] text-white border border-white/25")}>
+                  <span className={cn("w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold flex-shrink-0", isActive ? "bg-white/15 text-white border border-white/20" : "bg-black/15 text-white border border-white/10")}>
                     {index + 1}
                   </span>
                   <span className="truncate flex-1">{category.title}</span>
