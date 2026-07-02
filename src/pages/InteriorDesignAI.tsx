@@ -274,7 +274,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       data-no-contrast-guard
       data-surface="dark"
       className="allow-white relative w-full min-h-screen overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)", color: "#FFFFFF" }}
+      style={{ background: "linear-gradient(180deg, #021610 0%, #010A07 60%, #000000 100%)", color: "#FFFFFF" }}
     >
       <style>{`
         [data-interior-design-ai],
@@ -283,49 +283,51 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           -webkit-text-fill-color: #FFFFFF;
         }
         [data-interior-design-ai] .id-text-muted {
-          color: rgba(255,255,255,0.76) !important;
-          -webkit-text-fill-color: rgba(255,255,255,0.76) !important;
+          color: rgba(255,255,255,0.82) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
         }
+        /* Cards: FULL emerald with white content */
         [data-interior-design-ai] .id-panel {
-          background: linear-gradient(135deg, rgba(8,18,13,0.96) 0%, rgba(3,8,5,0.98) 58%, rgba(0,0,0,1) 100%) !important;
-          border: 1px solid rgba(255,255,255,0.42) !important;
-          box-shadow: 0 18px 52px -28px rgba(16,185,129,0.48), inset 0 0 28px rgba(255,255,255,0.04) !important;
+          background: linear-gradient(140deg, #0A6B53 0%, #065F46 55%, #054E3A 100%) !important;
+          border: 1px solid rgba(255,255,255,0.28) !important;
+          box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55), inset 0 0 30px rgba(255,255,255,0.04) !important;
         }
         [data-interior-design-ai] .id-panel-soft {
-          background: linear-gradient(135deg, rgba(8,18,13,0.94) 0%, rgba(3,8,5,0.97) 58%, rgba(0,0,0,1) 100%) !important;
-          border: 1px solid rgba(255,255,255,0.34) !important;
+          background: linear-gradient(140deg, rgba(10,107,83,0.72) 0%, rgba(6,95,70,0.72) 55%, rgba(5,78,58,0.72) 100%) !important;
+          border: 1px solid rgba(255,255,255,0.30) !important;
         }
         [data-interior-design-ai] .id-input,
         [data-interior-design-ai] .id-input:focus,
         [data-interior-design-ai] .id-input:focus-visible {
-          background: linear-gradient(135deg, rgba(4,40,28,0.88), rgba(0,0,0,0.86)) !important;
-          border: 1px solid rgba(255,255,255,0.42) !important;
+          background: rgba(0,0,0,0.28) !important;
+          border: 1px solid rgba(255,255,255,0.38) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
           box-shadow: none !important;
         }
         [data-interior-design-ai] .id-input::placeholder {
-          color: rgba(255,255,255,0.58) !important;
-          -webkit-text-fill-color: rgba(255,255,255,0.58) !important;
+          color: rgba(255,255,255,0.65) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.65) !important;
           opacity: 1 !important;
         }
-        [data-interior-design-ai] .id-primary,
-        [data-interior-design-ai] .id-primary * {
-          background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+        [data-interior-design-ai] .id-primary {
+          background-image: linear-gradient(135deg, #0A6B53 0%, #043024 58%, #000000 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
-          border-color: rgba(255,255,255,0.46) !important;
+          border: 1px solid rgba(255,255,255,0.42) !important;
+        }
+        /* Do NOT cascade background-image into children — that was painting the icon as a white/emerald block */
+        [data-interior-design-ai] .id-primary > * {
+          background-image: none !important;
+          background: transparent !important;
         }
         [data-interior-design-ai] .id-primary:disabled,
         [data-interior-design-ai] .id-primary[disabled] {
           opacity: 0.72 !important;
-          background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-          color: #FFFFFF !important;
-          -webkit-text-fill-color: #FFFFFF !important;
         }
         [data-interior-design-ai] .id-outline {
-          background: rgba(255,255,255,0.05) !important;
+          background: rgba(255,255,255,0.06) !important;
           border: 1px solid rgba(255,255,255,0.42) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
@@ -338,7 +340,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-choice {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
-          border-color: rgba(255,255,255,0.42) !important;
+          border-color: rgba(255,255,255,0.38) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
@@ -346,17 +348,30 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           border-color: rgba(255,255,255,0.62) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: linear-gradient(135deg, #0A6B53 0%, #064E3B 52%, #000000 100%) !important;
-          border-color: rgba(255,255,255,0.58) !important;
-          box-shadow: 0 0 22px rgba(16,185,129,0.34) !important;
+          background: linear-gradient(135deg, #10B981 0%, #059669 55%, #064E3B 100%) !important;
+          border-color: rgba(255,255,255,0.72) !important;
+          box-shadow: 0 0 22px rgba(16,185,129,0.42) !important;
         }
-        [data-interior-design-ai] svg,
-        [data-interior-design-ai] svg * {
+        /* Icons: line-art white, never filled block */
+        [data-interior-design-ai] svg {
+          background: transparent !important;
+          background-image: none !important;
+          fill: none !important;
           color: #FFFFFF !important;
+        }
+        [data-interior-design-ai] svg * {
+          background: transparent !important;
+          background-image: none !important;
+          fill: none !important;
           stroke: #FFFFFF !important;
+          color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
+        /* Responsive safety — content must never overflow cards */
+        [data-interior-design-ai] .id-panel, [data-interior-design-ai] .id-panel-soft { min-width: 0 !important; }
+        [data-interior-design-ai] .id-panel * { min-width: 0; }
       `}</style>
+
 
       {!embedded && (
         <div className="relative py-16 md:py-24 overflow-hidden" data-hero-dark>
