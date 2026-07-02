@@ -349,7 +349,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
           {/* Property Details Tab */}
           <TabsContent value="property">
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               <Card className={blueCardPrimary}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
@@ -508,15 +508,15 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <Label className="text-[#1A1A1A]/70 text-sm">Bedrooms</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bedrooms</Label>
                       <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <Label className="text-[#1A1A1A]/70 text-sm">Bathrooms</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bathrooms</Label>
                       <Input type="number" value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <Label className="text-[#1A1A1A]/70 text-sm">Parking</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Parking</Label>
                       <Input type="number" value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                   </div>
@@ -886,7 +886,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                 </Card>
 
                 {/* Value Breakdown */}
-                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div className="grid lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
                   <Card className={blueCardSecondary}>
                     <CardHeader>
                       <CardTitle className="text-[#1A1A1A] text-lg flex items-center gap-2">
