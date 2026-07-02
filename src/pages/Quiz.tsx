@@ -1088,17 +1088,23 @@ const Quiz = () => {
             </ul>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center justify-center gap-5 text-sm mb-5 text-[#1A1A1A]/70">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-6" style={{ color: "#FFFFFF" }}>
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center bg-[#EFE6D6]/60">
-                    <Icon className="w-3 h-3 text-[#1A1A1A]" />
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                    style={{
+                      background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                      border: "1px solid rgba(255,255,255,0.42)",
+                    }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <span>{label}</span>
+                  <span className="font-semibold" style={{ color: "#FFFFFF" }}>{label}</span>
                 </div>
               ))}
             </div>
