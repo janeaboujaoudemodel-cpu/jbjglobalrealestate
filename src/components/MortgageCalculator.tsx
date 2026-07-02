@@ -781,7 +781,7 @@ const MortgageCalculator = ({
         </div>
 
         {showAssistant && (
-          <div className="mt-6">
+          <div className={detailsExpanded ? "mt-6" : "mt-6 hidden md:block"}>
             <MortgageAIAssistant
               context={{
                 propertyPrice,
