@@ -62,7 +62,7 @@ function getIconicDeveloperImage(slug: string, name: string) {
 }
 
 
-function getDeveloperTier(slug: string, name = "", rank?: number | null): { label: string; color: string } {
+function getDeveloperTier(slug: string, name = "", rank?: number | null): { label: string; color: string } | null {
   const normalized = `${slug} ${name}`.toLowerCase();
   if (ELITE_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.ELITE;
   if (PREMIUM_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.PREMIUM;
@@ -73,8 +73,10 @@ function getDeveloperTier(slug: string, name = "", rank?: number | null): { labe
     if (rank <= 30) return TIER_CONFIG.PREMIUM;
     if (rank <= 80) return TIER_CONFIG.TOP_TIER;
   }
-  return TIER_CONFIG.PARTNER; // universal fallback so every card has a badge
+  // No generic "PARTNER" label — leave badgeless rather than mislabel.
+  return null;
 }
+
 
 /**
  * Reelly-style developer card.
