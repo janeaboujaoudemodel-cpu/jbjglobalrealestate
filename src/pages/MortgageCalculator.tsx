@@ -7,7 +7,7 @@ import InquiryFormModal from "@/components/InquiryFormModal";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
-import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
+import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import { AIShellCard } from "@/components/ui/ai-shell-card";
 
