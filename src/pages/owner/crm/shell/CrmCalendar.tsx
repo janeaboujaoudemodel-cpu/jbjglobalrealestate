@@ -19,9 +19,9 @@ type CrmEvent = {
 };
 
 const KIND_META: Record<EventKind, { label: string; icon: any; color: string; bg: string }> = {
-  meeting: { label: "Meeting", icon: Video, color: "#064E3B", bg: "#DDF0E6" },
-  call:    { label: "Call",    icon: Phone, color: "#7A5A1E", bg: "#FFF3D6" },
-  task:    { label: "Task",    icon: CheckSquare, color: "#1F3A63", bg: "#DDE6F5" },
+  meeting: { label: "Meeting", icon: Video, color: "#FFFFFF", bg: "#064E3B" },
+  call:    { label: "Call",    icon: Phone, color: "#FFFFFF", bg: "#064E3B" },
+  task:    { label: "Task",    icon: CheckSquare, color: "#FFFFFF", bg: "#064E3B" },
 };
 
 const now = new Date();
