@@ -102,15 +102,15 @@ export const MarketIntelligenceTableOfContents = ({
           </button>
         </div>
 
-        {/* Collapsible content */}
+        {/* Collapsible content — no height animation, so the internal list keeps a stable scroll box */}
         <AnimatePresence initial={false}>
           {!isMinimized && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col min-h-0 flex-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12 }}
+              className="flex flex-col min-h-0 flex-1 overflow-hidden"
             >
               <nav className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald">
                 {items.map((item, index) => {
@@ -123,7 +123,7 @@ export const MarketIntelligenceTableOfContents = ({
                       data-allow-white={isActive ? "true" : undefined}
                       data-no-contrast-guard
                       className={cn(
-                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left transition-colors border text-[13px]",
+                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left transition-colors border text-[13px] box-border overflow-hidden",
                         isActive
                           ? "font-semibold shadow-sm border-white/20"
                           : "border-transparent bg-transparent hover:bg-[#064E3B]/8"
