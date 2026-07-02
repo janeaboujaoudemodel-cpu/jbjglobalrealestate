@@ -247,7 +247,13 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
           <span>All {plural}</span>
           <ChevronDown size={15} />
         </button>
-        <span className="jc-list__count">0 Records</span>
+        <span className="jc-list__count">
+          {isLeads
+            ? leadsQuery.loading
+              ? "Loading…"
+              : `${rowCount} Record${rowCount === 1 ? "" : "s"}`
+            : "0 Records"}
+        </span>
         {kanbanAvailable && (
           <div className="jc-view-switch" role="tablist" aria-label="View mode">
             <button
