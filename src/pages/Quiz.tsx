@@ -308,9 +308,21 @@ const AIHF_STYLE = `
     box-shadow: 0 10px 24px -16px rgba(16,185,129,0.55) !important;
   }
   .aihf-root .aihf-option[aria-pressed="true"] {
-    background: linear-gradient(135deg, #065F46 0%, #04231A 45%, #000000 100%) !important;
-    border-color: rgba(255,255,255,0.52) !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18) !important;
+    background-image:
+      linear-gradient(110deg,
+        rgba(255,255,255,0.00) 0%,
+        rgba(255,255,255,0.24) 18%,
+        rgba(255,255,255,0.06) 36%,
+        rgba(255,255,255,0.20) 58%,
+        rgba(255,255,255,0.00) 100%
+      ),
+      linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+    background-size: 250% 100%, 100% 100% !important;
+    background-position: -50% 0, 0 0 !important;
+    background-blend-mode: overlay, normal !important;
+    animation: jj-metallic-sweep 4.5s ease-in-out infinite, jj-emerald-pulse 3.2s ease-in-out infinite !important;
+    border-color: rgba(255,255,255,0.55) !important;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.22), 0 10px 32px rgba(16,185,129,0.35), inset 0 1px 0 rgba(255,255,255,0.18) !important;
   }
 
   /* CTAs */
@@ -377,6 +389,19 @@ const Quiz = () => {
   });
   const [resumed, setResumed] = useState(false);
   const estimatedTime = 45;
+
+  // Paint the whole viewport emerald so no champagne band leaks below the tool.
+  useEffect(() => {
+    const prevHtml = document.documentElement.style.background;
+    const prevBody = document.body.style.background;
+    const emerald = "linear-gradient(180deg, #062B1E 0%, #041A12 55%, #02120C 100%)";
+    document.documentElement.style.background = emerald;
+    document.body.style.background = emerald;
+    return () => {
+      document.documentElement.style.background = prevHtml;
+      document.body.style.background = prevBody;
+    };
+  }, []);
 
   // Restore in-progress matchmaker session on mount (refresh / re-open safe)
   const hasHydrated = useRef(false);
@@ -1291,7 +1316,7 @@ const Quiz = () => {
     <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Hero Header — full-bleed deep emerald band with question inside */}
-      <div className="aihf-hero sticky top-0 lg:top-[48px] z-10">
+      <div className="aihf-hero sticky top-[88px] z-10">
         <div className="container mx-auto px-4 pt-5 pb-8 md:pt-6 md:pb-10">
           <div className="flex items-center justify-between mb-4">
             <button
