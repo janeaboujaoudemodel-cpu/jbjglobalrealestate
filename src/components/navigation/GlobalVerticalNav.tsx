@@ -1058,13 +1058,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         onClick={(event) => {
           const target = event.target as HTMLElement | null;
           const explicitMapLink = target?.closest?.('a[href="/map"]');
-          const sidebarMapRow = Array.from(
-            event.currentTarget.querySelectorAll<HTMLAnchorElement>('a[href="/map"]')
-          ).find((anchor) => {
-            const rect = anchor.getBoundingClientRect();
-            return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
-          });
-          if (explicitMapLink || sidebarMapRow) {
+          if (explicitMapLink) {
             event.preventDefault();
             collapseAfterNavigation();
             navigate('/map');
