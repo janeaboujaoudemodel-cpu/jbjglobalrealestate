@@ -745,10 +745,17 @@ export default function GlobalVerticalNav() {
 
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
-    if (href === "/properties") return location.pathname === "/properties" || location.pathname.startsWith("/properties/");
+    const pathname = location.pathname;
+
+    // The Insights tree has parent and child routes side-by-side in the same
+    // expanded group. Keep parent hubs exact-only so a child like
+    // /market-intelligence/areas cannot also light up /market-intelligence.
+    if (href === "/market-intelligence" || href === "/guides") return pathname === href;
+
+    if (href === "/properties") return pathname === "/properties" || pathname.startsWith("/properties/");
     // Prefix matching for toolkit sub-routes (stamp-generator, corporate-suite, etc.)
-    if (href.startsWith("/toolkit/")) return location.pathname === href || location.pathname.startsWith(href + "/");
-    return location.pathname === href;
+    if (href.startsWith("/toolkit/")) return pathname === href || pathname.startsWith(href + "/");
+    return pathname === href;
   };
 
   // Group nav items by section (with consolidated aliases)
@@ -1201,9 +1208,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         // sibling links cannot both light up (e.g. /market-intelligence
                         // and /market-intelligence/areas on the Areas route).
                         const path = location.pathname;
+                        const exactOnlyHubs = new Set(["/market-intelligence", "/guides"]);
                         const sectionMatches = items
                           .map(it => it.href)
-                          .filter(h => h && h !== '#' && (path === h || path.startsWith(h + '/')))
+                          .filter(h => h && h !== '#' && (path === h || (!exactOnlyHubs.has(h) && path.startsWith(h + '/'))))
                           .sort((a, b) => b.length - a.length);
                         const mostSpecific = sectionMatches[0];
                         return items.map((item, i) => {
@@ -1226,6 +1234,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               onClick={(event) => {
                                 // Never open the full-screen mega drop-down overlay from inside
                                 // an expanded section — just navigate.
+                                if (item.href === "/market-intelligence/reports") {
+                                  event.preventDefault();
+                                  collapseAfterNavigation();
+                                  navigate("/market-intelligence/reports");
+                                  return;
+                                }
                                 if (item.href === "/map") {
                                   event.preventDefault();
                                   collapseAfterNavigation();

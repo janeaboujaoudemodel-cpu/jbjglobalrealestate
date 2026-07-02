@@ -1,0 +1,13 @@
+import { chromium } from 'playwright';
+const browser=await chromium.launch({headless:true,executablePath:'/bin/chromium',args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:1440,height:1100}});
+const reqs=[];
+page.on('response', r=>{ if(r.status()>=300) reqs.push([r.status(),r.url()]); });
+page.on('requestfailed', r=>reqs.push(['FAIL',r.url(),r.failure()?.errorText]));
+page.on('console', msg=>{ if(['error','warning'].includes(msg.type())) console.log('CONSOLE', msg.type(), msg.text())});
+page.on('pageerror', err=>console.log('PAGEERR', err.stack||err.message));
+await page.goto('http://127.0.0.1:5177/market-intelligence/areas',{waitUntil:'load'});
+await page.waitForTimeout(5000);
+console.log('reqs', JSON.stringify(reqs,null,2));
+console.log(await page.evaluate(()=>({scripts:[...document.scripts].map(s=>s.src).filter(Boolean), html:document.querySelector('[data-content-gutter]')?.outerHTML.slice(0,500)})));
+await browser.close();

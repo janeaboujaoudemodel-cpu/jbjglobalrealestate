@@ -52,6 +52,7 @@ const Methodology = () => {
         badgeIcon={Database}
         title="Methodology & Sources"
         description="Full transparency on how market data is selected, verified, and presented across all Market Intelligence pages."
+        backgroundImage="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=2200&q=85"
       />
 
       {/* Main Content with TOC Sidebar - Active Champagne Layer */}

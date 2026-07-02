@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import VideoBackground from "@/components/VideoBackground";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
@@ -46,17 +46,6 @@ const learningTopics = [
 const Guides = () => {
   const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
   const navigate = useNavigate();
-
-  // Auto-scroll to guides grid on mount so the main hub is immediately visible
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const el = document.getElementById('guides-library');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
 
   const goToChapter = (book: BookData, index: number) => {
     const directHref = book._chapterHrefs?.[index];

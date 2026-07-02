@@ -94,9 +94,9 @@ export const MarketIntelligenceTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[52dvh] border bg-[#FDFBF7] border-white/30 flex flex-col"
+        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[56dvh] border bg-[#FDFBF7] border-white/30 flex flex-col"
       >
-        <div className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
+        <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4 text-white" />
             <h3 className="text-sm font-semibold leading-snug text-white">{title}</h3>
