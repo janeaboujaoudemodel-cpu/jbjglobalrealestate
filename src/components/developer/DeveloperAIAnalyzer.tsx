@@ -616,36 +616,36 @@ export const DeveloperAIAnalyzer = ({
               )}
 
               {ratingScore !== null && (
-                <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#EFE6D6]/10 rounded-full blur-[60px] pointer-events-none" />
-                  <Star className="w-7 h-7 text-[#1A1A1A] mb-3 relative z-10" />
+                <div className="bg-gradient-to-br from-black via-[#03170F] to-[#04241C] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden allow-white">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] pointer-events-none" />
+                  <Star className="w-7 h-7 text-white mb-3 relative z-10" />
                   <div className="relative w-32 h-32 mb-3">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={[{ value: ratingScore, fill: '#D4AF37' }, { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.08)' }]}
+                          data={[{ value: ratingScore, fill: '#10b981' }, { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.08)' }]}
                           cx="50%" cy="50%" innerRadius={42} outerRadius={56} startAngle={90} endAngle={-270} dataKey="value" stroke="none"
                         >
-                          <Cell fill="#D4AF37" />
+                          <Cell fill="#10b981" />
                           <Cell fill="rgba(255,255,255,0.08)" />
                         </Pie>
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-[#1A1A1A]">{ratingScore}</span>
-                      <span className="text-[#1A1A1A]/70 text-[10px] font-medium">/10</span>
+                      <span className="text-4xl font-bold text-white">{ratingScore}</span>
+                      <span className="text-white/70 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
-                  <div className="text-[#1A1A1A]/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-white/80 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-[#1A1A1A]/70 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-white/70 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
-                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
- ratingScore >= 8 ? 'jj-surface-emerald-soft text-emerald-400 border border-[color:var(--emerald-1)]/30/30' :
- ratingScore >= 6 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30' :
- 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30'
+                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 border ${
+ ratingScore >= 8 ? 'bg-emerald-500/20 text-white border-emerald-400/40' :
+ ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
+ 'bg-amber-500/20 text-white border-amber-400/40'
  }`}>
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
