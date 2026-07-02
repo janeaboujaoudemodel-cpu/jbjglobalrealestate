@@ -387,6 +387,27 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           box-shadow: inset 0 0 18px rgba(0,0,0,0.16) !important;
+          transition: none !important;
+        }
+        /* Kill focus/hover highlight rings on fields & dropdowns */
+        [data-property-evaluator] input:not([type="file"]):hover,
+        [data-property-evaluator] input:not([type="file"]):focus,
+        [data-property-evaluator] input:not([type="file"]):focus-visible,
+        [data-property-evaluator] input:not([type="file"]):focus-within,
+        [data-property-evaluator] textarea:hover,
+        [data-property-evaluator] textarea:focus,
+        [data-property-evaluator] textarea:focus-visible,
+        [data-property-evaluator] [role="combobox"]:hover,
+        [data-property-evaluator] [role="combobox"]:focus,
+        [data-property-evaluator] [role="combobox"]:focus-visible,
+        [data-property-evaluator] [role="combobox"][data-state="open"] {
+          outline: none !important;
+          outline-offset: 0 !important;
+          border-color: rgba(255,255,255,0.38) !important;
+          box-shadow: inset 0 0 18px rgba(0,0,0,0.16) !important;
+          --tw-ring-shadow: 0 0 #0000 !important;
+          --tw-ring-offset-shadow: 0 0 #0000 !important;
+          ring: 0 !important;
         }
         [data-property-evaluator] input[type="number"] {
           text-align: center !important;
