@@ -164,22 +164,22 @@ export const GuideTableOfContents = ({
           </button>
         </div>
         
-        {/* Collapsible content */}
-        <AnimatePresence>
+        {/* Collapsible content — stable scroll box; active rows never resize the container */}
+        <AnimatePresence initial={false}>
           {!isMinimized && (
             <motion.nav
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.12 }}
+              className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
             >
               {items.map((item, index) => (
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={cn(
-                    "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border",
+                    "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
                     activeId === item.id
                       ? "bg-[image:var(--jj-emerald-ombre)] text-white font-semibold shadow-sm border-white/20"
                       : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#064E3B]/10 border-transparent"
