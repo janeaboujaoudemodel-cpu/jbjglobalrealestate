@@ -1351,7 +1351,7 @@ const Quiz = () => {
 
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-10">
+      <div className="flex-1 flex items-start justify-center px-4 pt-14 md:pt-20 pb-10 md:pb-14">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
           {/* Main Question Area */}
           <div className="w-full max-w-2xl mx-auto">
