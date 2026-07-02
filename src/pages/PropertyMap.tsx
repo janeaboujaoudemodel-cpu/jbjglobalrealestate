@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { MapContainer, Marker, useMap } from "react-leaflet";
 import { DivIcon } from "leaflet";
 import L from "leaflet";
-import { useProjectsListing } from "@/hooks/useProjects";
+import { useProjectsMapListing } from "@/hooks/useProjects";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -206,7 +206,7 @@ type SortMode = "newest" | "price_asc" | "price_desc" | "alpha";
 
 const PropertyMap = () => {
   const { t, language } = useLanguage();
-  const { data: allProjects = [], isLoading } = useProjectsListing();
+  const { data: allProjects = [], isLoading } = useProjectsMapListing();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [mapView, setMapView] = useState<MapViewType>("satellite");
