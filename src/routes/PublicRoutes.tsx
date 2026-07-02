@@ -286,11 +286,11 @@ export const PublicRoutes = () => (
     {/* /broker-education retired — merged into /jbj-academy */}
     <Route path="/faq" element={<InsightsPageScope><FAQ /></InsightsPageScope>} />
     <Route path="/investor-faq" element={<Navigate to="/faq" replace />} />
-    <Route path="/buyer-faq" element={<BuyerFAQ />} />
-    <Route path="/seller-faq" element={<SellerFAQ />} />
-    <Route path="/landlord-faq" element={<LandlordFAQ />} />
-    <Route path="/tenant-faq" element={<TenantFAQ />} />
-    <Route path="/broker-faq" element={<BrokerFAQ />} />
+    <Route path="/buyer-faq" element={<InsightsPageScope><BuyerFAQ /></InsightsPageScope>} />
+    <Route path="/seller-faq" element={<InsightsPageScope><SellerFAQ /></InsightsPageScope>} />
+    <Route path="/landlord-faq" element={<InsightsPageScope><LandlordFAQ /></InsightsPageScope>} />
+    <Route path="/tenant-faq" element={<InsightsPageScope><TenantFAQ /></InsightsPageScope>} />
+    <Route path="/broker-faq" element={<InsightsPageScope><BrokerFAQ /></InsightsPageScope>} />
     <Route path="/guides/buying" element={<Navigate to="/buyer-guide" replace />} />
     <Route path="/guides/renting" element={<Navigate to="/rent-guide" replace />} />
     <Route path="/guides/selling" element={<Navigate to="/seller-guide" replace />} />
