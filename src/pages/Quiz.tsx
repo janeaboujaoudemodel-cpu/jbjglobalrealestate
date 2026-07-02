@@ -325,6 +325,29 @@ const AIHF_STYLE = `
     box-shadow: 0 0 0 1px rgba(255,255,255,0.22), 0 10px 32px rgba(6,78,59,0.38), inset 0 1px 0 rgba(255,255,255,0.18) !important;
   }
 
+  .aihf-root .aihf-question-card,
+  .aihf-root .aihf-preferences-card {
+    background: linear-gradient(135deg, #064E3B 0%, #04231A 56%, #010806 100%) !important;
+    border: 1px solid rgba(255,255,255,0.28) !important;
+    box-shadow: 0 18px 48px -30px rgba(0,0,0,0.72) !important;
+  }
+
+  .aihf-root .aihf-options-grid {
+    justify-items: stretch;
+  }
+
+  .aihf-root .aihf-option--center-last {
+    grid-column: 1 / -1 !important;
+    justify-self: center !important;
+    width: min(calc((100% - 0.75rem) / 2), 22rem) !important;
+  }
+
+  @media (max-width: 520px) {
+    .aihf-root .aihf-option--center-last {
+      width: 100% !important;
+    }
+  }
+
   /* CTAs */
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
     min-width: 7rem;
@@ -1031,11 +1054,11 @@ const Quiz = () => {
         data-no-contrast-guard
         data-surface="dark"
         className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col"
-        style={{ background: "#FDFBF7" }}
+        style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}
       >
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[#B89555]/25" style={{ background: "#F7F2EA" }}>
+        <div className="border-b border-white/20" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)" }}>
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -1061,7 +1084,7 @@ const Quiz = () => {
             as="div"
             data-surface="dark"
             padding="lg"
-            className="w-full max-w-2xl text-center border border-[#B89555]/60 shadow-[0_0_18px_rgba(184,149,85,0.14),0_18px_55px_rgba(0,0,0,0.12)]"
+            className="w-full max-w-2xl text-center border border-white/24 shadow-[0_18px_55px_rgba(0,0,0,0.28)]"
           >
             {/* Centered emerald identity tile */}
             <div
@@ -1105,7 +1128,7 @@ const Quiz = () => {
               ].map((f) => (
                 <li
                   key={f.label}
-                  className="flex items-start gap-3 p-3 bg-[#F7F2EA] border border-[#B89555]/35 rounded-xl"
+                  className="flex items-start gap-3 p-3 bg-white/5 border border-white/18 rounded-xl"
                 >
                   <div
                     data-surface="emerald"
@@ -1131,7 +1154,7 @@ const Quiz = () => {
               ].map(({ Icon, label }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-2.5 px-3.5 py-2 bg-[#F7F2EA] border border-[#B89555]/35 rounded-xl"
+                  className="flex items-center gap-2.5 px-3.5 py-2 bg-white/5 border border-white/18 rounded-xl"
                 >
                   <div
                     data-surface="emerald"
@@ -1313,11 +1336,11 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh+120px)] flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
+      <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
       <style>{AIHF_STYLE}</style>
-      {/* Hero Header — full-bleed deep emerald band with question inside */}
+      {/* Header — compact progress band only; question sits separately below it */}
       <div className="aihf-hero relative z-10">
-        <div className="container mx-auto px-4 pt-6 pb-8 md:pt-8 md:pb-10">
+        <div className="container mx-auto px-4 pt-6 pb-6 md:pt-8 md:pb-7">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
@@ -1339,22 +1362,50 @@ const Quiz = () => {
               style={{ width: `${progress}%`, background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }}
             />
           </div>
-          {/* Question title lives inside the hero band */}
-          <h2
-            className="text-2xl md:text-4xl font-bold text-center tracking-tight max-w-3xl mx-auto"
-            style={{ color: "#FFFFFF" }}
-          >
-            {currentQuestion.question}
-          </h2>
         </div>
       </div>
 
 
-      {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-start justify-center px-4 pt-12 md:pt-16 pb-20 md:pb-24">
-        <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
-          {/* Main Question Area */}
-          <div className="w-full max-w-2xl mx-auto">
+      {/* Question Content */}
+      <div className="flex-1 flex items-start justify-center px-4 pt-8 md:pt-10 pb-20 md:pb-24">
+        <div className="w-full max-w-3xl mx-auto">
+          <div className="w-full">
+
+            <div className="aihf-question-card rounded-2xl px-5 py-5 md:px-8 md:py-6 mb-5 text-center">
+              <h2
+                className="text-2xl md:text-4xl font-bold tracking-tight max-w-3xl mx-auto"
+                style={{ color: "#FFFFFF" }}
+              >
+                {currentQuestion.question}
+              </h2>
+            </div>
+
+            <div className="aihf-preferences-card rounded-2xl px-5 py-4 md:px-6 mb-6">
+              <div className="flex items-center gap-2 mb-3 justify-center sm:justify-start">
+                <Sparkles className="w-4 h-4" />
+                <h3 className="text-sm font-bold uppercase tracking-[0.16em]">Your Preferences</h3>
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                {QUIZ_QUESTIONS.slice(0, currentStep + 1).map((q) => {
+                  const answer = answers[q.id];
+                  if (!answer) return null;
+                  const displayValue = Array.isArray(answer)
+                    ? answer.map(v => q.options.find(o => o.value === v)?.label || v).join(", ")
+                    : q.options.find(o => o.value === answer)?.label || String(answer);
+                  return (
+                    <div key={q.id} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-left max-w-full">
+                      <p className="text-[9px] uppercase tracking-wider mb-0.5" style={{ color: "rgba(255,255,255,0.68)" }}>
+                        {q.id.replace(/_/g, " ")}
+                      </p>
+                      <p className="text-xs font-semibold truncate max-w-[14rem]">{displayValue}</p>
+                    </div>
+                  );
+                })}
+                {Object.keys(answers).length === 0 && (
+                  <p className="text-sm italic" style={{ color: "rgba(255,255,255,0.76)" }}>Answer questions to see your preferences here</p>
+                )}
+              </div>
+            </div>
 
 
 
@@ -1367,7 +1418,7 @@ const Quiz = () => {
                   onClick={handleSelectAll}
                   disabled={allSelected()}
                   data-no-contrast-guard
-                  className="aihf-option text-[#1A1A1A] hover:text-[#1A1A1A] border-[#B89555]/55 font-semibold disabled:opacity-50"
+                    className="aihf-option text-white hover:text-white border-white/30 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -1377,7 +1428,7 @@ const Quiz = () => {
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
                   data-no-contrast-guard
-                  className="aihf-option text-[#1A1A1A] hover:text-[#1A1A1A] border-[#B89555]/55 font-semibold disabled:opacity-50"
+                  className="aihf-option text-white hover:text-white border-white/30 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -1385,12 +1436,13 @@ const Quiz = () => {
             )}
 
             {/* Options Grid */}
-            <div className={`grid gap-3 ${currentQuestion.options.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
-              {currentQuestion.options.map((option) => {
+            <div className={`aihf-options-grid grid gap-3 ${currentQuestion.options.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
+              {currentQuestion.options.map((option, optionIndex) => {
                 const isSelected =
                   currentQuestion.type === "multiple"
                     ? (answers[currentQuestion.id] as string[] || []).includes(option.value)
                     : answers[currentQuestion.id] === option.value;
+                const centerLastOption = currentQuestion.options.length % 2 === 1 && currentQuestion.options.length <= 6 && optionIndex === currentQuestion.options.length - 1;
 
                 return (
                   <button
@@ -1398,15 +1450,15 @@ const Quiz = () => {
                     onClick={() => handleAnswer(option.value)}
                     aria-pressed={isSelected}
                     data-no-contrast-guard
-                    className={`aihf-option relative p-4 md:p-5 rounded-xl border transition-all text-left group ${
+                    className={`aihf-option relative p-4 md:p-5 rounded-xl border transition-all text-center group ${centerLastOption ? "aihf-option--center-last" : ""} ${
                       isSelected
                         ? "jj-surface-emerald border-transparent"
-                        : "border-[#B89555]/45 bg-[#FDFBF7] hover:border-[#B89555]/85"
+                        : "border-white/28 bg-white/5 hover:border-white/55"
                     }`}
                   >
                     {currentQuestion.type === "multiple" && (
                       <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "jj-surface-emerald border-transparent" : "border-[#B89555]/45"
+                        isSelected ? "jj-surface-emerald border-transparent" : "border-white/35"
                       }`}>
                         {isSelected && <CheckCircle2 className="w-3 h-3" />}
                       </div>
@@ -1440,36 +1492,6 @@ const Quiz = () => {
                 {currentStep === QUIZ_QUESTIONS.length - 1 ? "Continue" : "Next"}
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
-            </div>
-          </div>
-
-          {/* Preferences Summary Sidebar (desktop only) */}
-          <div className="hidden lg:block w-full shrink-0">
-            <div className="rounded-2xl border border-[#B89555]/45 bg-[#F7F2EA] overflow-hidden shadow-[0_8px_24px_rgba(6,78,59,0.08)]">
-              <div className="jj-surface-emerald px-5 py-3 flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                <h3 className="text-sm font-bold">Your Preferences</h3>
-              </div>
-              <div className="p-5 space-y-3">
-                {QUIZ_QUESTIONS.slice(0, currentStep + 1).map((q) => {
-                  const answer = answers[q.id];
-                  if (!answer) return null;
-                  const displayValue = Array.isArray(answer)
-                    ? answer.map(v => q.options.find(o => o.value === v)?.label || v).join(", ")
-                    : q.options.find(o => o.value === answer)?.label || String(answer);
-                  return (
-                    <div key={q.id} className="text-xs">
-                      <p className="text-[#1A1A1A]/55 uppercase tracking-wider text-[10px] mb-0.5">
-                        {q.id.replace(/_/g, " ")}
-                      </p>
-                      <p className="text-[#1A1A1A] font-medium truncate">{displayValue}</p>
-                    </div>
-                  );
-                })}
-                {Object.keys(answers).length === 0 && (
-                  <p className="text-[#1A1A1A]/55 text-xs italic">Answer questions to see your preferences here</p>
-                )}
-              </div>
             </div>
           </div>
 

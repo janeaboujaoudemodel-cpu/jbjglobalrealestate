@@ -92,36 +92,49 @@ export default function RoyalToolsHub() {
       {/* Seamless champagne background - no black borders */}
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Hero Header */}
-        <div className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-[#B89555]/30">
+        <div
+          data-surface="emerald"
+          className="relative overflow-hidden border-b border-white/15"
+          style={{ background: "linear-gradient(135deg, #064E3B 0%, #04231A 48%, #010806 100%)" }}
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(900px 420px at 50% 0%, rgba(255,255,255,0.10), transparent 64%)" }}
+          />
           <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EFE6D6]/20 border border-[#B89555]/40 text-[#1A1A1A] text-xs uppercase tracking-[0.2em]">
-                <Sparkles className="w-3 h-3" />
-                AI-Powered Professional Toolkit
+            <div className="relative z-10 flex items-center gap-3 mb-4">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/30 shadow-[0_18px_44px_-26px_rgba(255,255,255,0.42)]">
+                <Sparkles className="w-6 h-6" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </div>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/35 text-white text-xs uppercase tracking-[0.2em]">
+                <Sparkles className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                <span style={{ color: '#FFFFFF' }}>AI-Powered Professional Toolkit</span>
               </div>
             </div>
             
             <h1 
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-2"
+              className="relative z-10 text-2xl md:text-3xl lg:text-4xl font-bold mb-2"
+              style={{ color: '#FFFFFF' }}
             >
               JBJ Royal Tools Hub
             </h1>
             
-            <p className="text-[#1A1A1A]/70 text-sm md:text-base max-w-2xl mb-6">
+            <p className="relative z-10 text-sm md:text-base max-w-2xl mb-6" style={{ color: 'rgba(255,255,255,0.88)' }}>
               Professional-grade tools for images, videos, documents, and AI-powered analytics — all designed for real estate professionals.
             </p>
             
-            <div className="flex flex-wrap gap-4 md:gap-6">
-              <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                <CheckCircle2 className="h-4 w-4 text-[#1A1A1A]" />
+            <div className="relative z-10 flex flex-wrap gap-4 md:gap-6">
+              <div className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.88)' }}>
+                <CheckCircle2 className="h-4 w-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <span className="text-sm">Free Media Tools</span>
               </div>
-              <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                <Shield className="h-4 w-4 text-[#1A1A1A]" />
+              <div className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.88)' }}>
+                <Shield className="h-4 w-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <span className="text-sm">Privacy First</span>
               </div>
-              <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                <Clock className="h-4 w-4 text-[#1A1A1A]" />
+              <div className="flex items-center gap-2" style={{ color: 'rgba(255,255,255,0.88)' }}>
+                <Clock className="h-4 w-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <span className="text-sm">No Login Required</span>
               </div>
             </div>
