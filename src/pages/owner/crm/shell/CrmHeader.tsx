@@ -1,22 +1,46 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Bell, CalendarDays, CircleUserRound, Grip, Plus, Search, Settings, Store, Wand2 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
+import CrmSearchOverlay from "./CrmSearchOverlay";
 import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
 
 export default function CrmHeader() {
   const { pathname } = useLocation();
   const active = pathname.replace(/\/+$/, "").split("/").pop() || CRM_DEFAULT_SECTION;
   const title = getCrmModuleLabel(active === "jbj" ? CRM_DEFAULT_SECTION : active);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      } else if (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <header className="jc-header">
       <h1 className="jc-header__title">{title}</h1>
 
       <div className="jc-header__actions">
-        <label className="jc-search" aria-label="Search CRM">
+        <button
+          type="button"
+          className="jc-search"
+          aria-label="Search CRM"
+          onClick={() => setSearchOpen(true)}
+        >
           <Search size={19} strokeWidth={2.25} />
-          <input type="text" placeholder="Search records" autoComplete="off" spellCheck={false} />
-        </label>
+          <span className="jc-search__placeholder">Search records</span>
+          <span className="jc-search__kbd">⌘ K</span>
+        </button>
 
         <button className="jc-icon-btn" data-solid="true" type="button" aria-label="Quick create">
           <Plus size={22} strokeWidth={1.9} />
