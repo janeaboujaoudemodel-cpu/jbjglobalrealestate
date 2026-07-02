@@ -123,7 +123,7 @@ const whyJBJ = [
 
 const RentalAdvisory = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Rental Advisory Services | JBJ Global Real Estate"
         description="Professional rental advisory for landlords and property investors in Dubai. Expert guidance from pricing strategy to tenant placement."

@@ -206,7 +206,7 @@ const faqData = [
 
 const SellingAdvisory = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Selling Advisory Services | JBJ Global Real Estate"
         description="Professional selling advisory and representation for property sales in Dubai. Expert guidance from pricing strategy to transaction completion."

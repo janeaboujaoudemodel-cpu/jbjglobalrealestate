@@ -201,7 +201,7 @@ const scopeExcludes = [
 
 const Services = () => {
   return (
-    <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-brand-emerald-page data-marketing-page className="min-h-screen" style={{ background: "#010806" }}>
       <SEOHead 
         title="Real Estate Services | JBJ Global Real Estate"
         description="A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards."
@@ -210,7 +210,7 @@ const Services = () => {
       />
 
       {/* Hero Section with Video */}
-      <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden" data-surface="dark">
+      <section data-brand-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden" data-surface="emerald">
         {/* Background Video */}
         <video
           autoPlay

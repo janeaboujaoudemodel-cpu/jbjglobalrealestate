@@ -136,7 +136,7 @@ const faqData = [
 
 const ComplaintProcedures = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Complaint Procedures | JBJ Global Real Estate"
         description="A structured pathway to raise concerns, track outcomes, and escalate responsibly—without noise or confusion."

@@ -98,7 +98,7 @@ const faqData = [
 
 const CompanySetup = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Company Setup Support | JBJ Global Real Estate"
         description="Structured coordination for company setup through licensed specialists—clear steps, document readiness, and progress tracking."

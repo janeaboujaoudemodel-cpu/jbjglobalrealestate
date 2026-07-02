@@ -156,7 +156,7 @@ const PropertyManagement = () => {
   });
 
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Property Management & Asset Stewardship | JBJ Global Real Estate"
         description="Comprehensive property management for residential, commercial and investment properties in the UAE. Structured oversight, financial accountability, and regulatory compliance."
@@ -164,7 +164,7 @@ const PropertyManagement = () => {
       />
 
       {/* ═══ 1. HERO ═══ */}
-      <section className="relative bg-background border-b border-border">
+      <section data-brand-hero data-surface="emerald" className="relative border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="text-center max-w-3xl mx-auto">
                         <SectionEyebrow icon={Building2} className="mb-6">Property Management</SectionEyebrow>

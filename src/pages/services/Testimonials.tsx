@@ -238,7 +238,7 @@ const Testimonials = () => {
   );
 
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Testimonials | JBJ Global Real Estate"
         description="Real feedback, presented with premium formatting and privacy respect—because trust is built with receipts, not hype."

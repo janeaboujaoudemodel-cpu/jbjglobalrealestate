@@ -139,7 +139,7 @@ const ShortTermRentals = () => {
   };
 
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Short-Term Rental & Holiday Home Management | JBJ Global Real Estate"
         description="Maximize yield, maintain standards, and operate in full compliance with our luxury short-term rental and holiday home management services."

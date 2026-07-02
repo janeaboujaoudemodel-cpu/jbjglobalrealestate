@@ -134,7 +134,7 @@ const SignatureCollection = () => {
   };
 
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Signature Collection | JBJ Global Real Estate"
         description="A controlled internal signature request workflow—tracked, timestamped, and audit-ready."
