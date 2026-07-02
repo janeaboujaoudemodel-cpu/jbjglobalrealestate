@@ -653,7 +653,7 @@ const ResaleProperties = () => {
               <span
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3 bg-[#0A0A0A] text-white border border-[#B89555]/40 allow-white"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] uppercase tracking-[0.18em] font-semibold mb-3 bg-gradient-to-r from-black via-[#03170F] to-[#04241C] text-white border border-white/20 allow-white"
               >
                 Investor Resale
               </span>
