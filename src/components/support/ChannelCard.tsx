@@ -29,24 +29,26 @@ export default function ChannelCard({
   const Inner = (
     <div
       data-no-contrast-guard
-      className="jbj-emerald-animated-border rounded-xl p-[2px] w-full h-full min-w-0 block"
+      data-support-channel-frame
+      className="jbj-emerald-animated-border block h-full w-full min-w-0 overflow-hidden rounded-xl p-[2px]"
     >
       <div
         data-emerald="true"
         data-allow-dark-cta
         data-no-contrast-guard
-        className={`group/channel flex flex-row items-center gap-3 w-full h-full text-left
-          px-3.5 py-3 rounded-[10px] min-h-[76px]
+        data-support-channel-card
+        className={`group/channel grid h-full w-full min-w-0 grid-cols-[44px_minmax(0,1fr)] items-center gap-3 text-left
+          rounded-[10px] px-3.5 py-2.5
           jj-emerald-metallic text-white allow-white
-          transform-gpu transition-[filter,box-shadow,transform] duration-200
-          hover:-translate-y-0.5 hover:brightness-110
+          transition-[filter,box-shadow] duration-200
+          hover:brightness-110
           hover:shadow-[0_16px_34px_-14px_rgba(6,78,59,0.95),0_0_22px_rgba(16,185,129,0.35),inset_0_1px_0_rgba(255,255,255,0.28)]`}
-        style={{ color: "#FFFFFF" }}
+        style={{ color: "#FFFFFF", transform: "none" }}
       >
         <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/40 bg-white/12 text-white allow-white transition-colors group-hover/channel:bg-white/20 group-hover/channel:border-white/70">
           <channel.Icon className="h-5 w-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         </span>
-        <div className="flex flex-1 min-w-0 flex-col justify-center gap-0.5">
+        <div className="flex min-w-0 flex-col justify-center gap-0.5 overflow-hidden">
           <span
             className="allow-white text-[14px] font-semibold leading-tight text-white truncate"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
@@ -84,7 +86,7 @@ export default function ChannelCard({
         type="button"
         onClick={onClick}
         data-support-channel-button
-        className="block h-full w-full min-w-0 appearance-none border-0 bg-transparent p-0 m-0 text-left font-inherit text-inherit leading-normal rounded-xl overflow-visible"
+        className="block h-full w-full min-w-0 appearance-none overflow-hidden rounded-xl border-0 bg-transparent p-0 m-0 text-left font-inherit text-inherit leading-normal"
         style={{
           display: "block",
           padding: 0,
@@ -100,7 +102,7 @@ export default function ChannelCard({
   }
   if (channel.route) {
     return (
-      <Link to={channel.route} onClick={onActivate} className="block w-full h-full min-w-0">
+      <Link to={channel.route} onClick={onActivate} className="block h-full w-full min-w-0 overflow-hidden rounded-xl">
         {Inner}
       </Link>
     );
@@ -111,7 +113,7 @@ export default function ChannelCard({
       target={channel.external ? "_blank" : undefined}
       rel={channel.external ? "noreferrer" : undefined}
       onClick={onActivate}
-      className="block w-full h-full min-w-0"
+      className="block h-full w-full min-w-0 overflow-hidden rounded-xl"
     >
       {Inner}
     </a>
