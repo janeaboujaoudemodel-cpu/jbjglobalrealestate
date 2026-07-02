@@ -656,6 +656,18 @@ const MortgageCalculator = ({
               <p className="text-muted-foreground text-[10px] lg:text-xs mt-1 lg:mt-2">per month for {loanTermYears} years</p>
             </div>
 
+            {/* Mobile-only toggle to expand the detailed breakdown */}
+            <button
+              type="button"
+              onClick={() => setDetailsExpanded((v) => !v)}
+              aria-expanded={detailsExpanded}
+              className="md:hidden w-full h-11 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-semibold flex items-center justify-center gap-2"
+            >
+              {detailsExpanded ? "Hide detailed breakdown" : "Show detailed breakdown"}
+              <span aria-hidden className={detailsExpanded ? "rotate-180 transition-transform" : "transition-transform"}>▾</span>
+            </button>
+
+            <div className={detailsExpanded ? "space-y-4 lg:space-y-6" : "hidden md:block space-y-4 lg:space-y-6"}>
             {/* 6 Champagne Summary Cards - 3x2 Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5">
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
