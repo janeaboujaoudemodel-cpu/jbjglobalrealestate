@@ -141,11 +141,8 @@ const viewOptions = [
   'Garden View', 'Pool View', 'Golf View', 'Canal View', 'Palm View'
 ];
 
-// LOCKED blue theme classes — never use gold hover on evaluator cards
-// Amber neon card system — mirrors Property Measurement's emerald-on-ink look
-// but tinted to match the orange Property Evaluator hero.
 const blueCard =
-  "transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_0_28px_rgba(245,158,11,0.32)]";
+  "pe-card transition-all duration-300 hover:-translate-y-[2px] hover:shadow-[0_0_28px_rgba(16,185,129,0.28)]";
 const blueCardPrimary = `!border-0 !bg-transparent ${blueCard}`;
 const blueCardSecondary = `!border-0 !bg-transparent ${blueCard}`;
 
@@ -309,11 +306,134 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
       subtitle="AI-powered valuation built on DLD transaction data, RERA Rental Index and institutional market analysis."
     >
 
+      <style>{`
+        [data-property-evaluator] {
+          background: transparent !important;
+          overflow: visible !important;
+        }
+        [data-property-evaluator] .pe-tabs-list {
+          display: grid !important;
+          grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+          gap: 0 !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+          min-height: 48px !important;
+          border-radius: 14px !important;
+          background: rgba(255,255,255,0.08) !important;
+          border: 1px solid rgba(255,255,255,0.32) !important;
+        }
+        [data-property-evaluator] .pe-tabs-list [role="tab"] {
+          min-width: 0 !important;
+          min-height: 48px !important;
+          border-radius: 0 !important;
+          border: 0 !important;
+          color: rgba(255,255,255,0.78) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+          white-space: normal !important;
+          overflow-wrap: anywhere !important;
+          line-height: 1.12 !important;
+        }
+        [data-property-evaluator] .pe-tabs-list [role="tab"][data-state="active"] {
+          background: linear-gradient(135deg, #065F46 0%, #042C1C 58%, #010806 100%) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22), 0 8px 22px rgba(0,0,0,0.26) !important;
+        }
+        @media (max-width: 520px) {
+          [data-property-evaluator] .pe-tabs-list { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+        }
+        @media (max-width: 520px) {
+          [data-property-evaluator] { padding-left: 0 !important; padding-right: 0 !important; }
+          [data-property-evaluator] [data-pe-field-grid] {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)) !important;
+            gap: 14px !important;
+          }
+          [data-property-evaluator] .pe-spec-compact {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+          }
+          [data-property-evaluator] label {
+            white-space: normal !important;
+            line-height: 1.15 !important;
+          }
+          [data-property-evaluator] input:not([type="file"]),
+          [data-property-evaluator] textarea,
+          [data-property-evaluator] [role="combobox"] {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            font-size: 14px !important;
+          }
+        }
+        [data-property-evaluator] .pe-card {
+          background: linear-gradient(135deg, rgba(6,78,59,0.88) 0%, rgba(4,44,28,0.72) 46%, rgba(0,0,0,0.92) 100%) !important;
+          border: 1px solid rgba(255,255,255,0.28) !important;
+          border-radius: 24px !important;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 44px rgba(0,0,0,0.28) !important;
+          overflow: hidden !important;
+        }
+        [data-property-evaluator] .pe-card :is(h2,h3,h4,p,span,label,strong,button,svg,[class*="lucide"]) {
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          stroke: currentColor !important;
+        }
+        [data-property-evaluator] input:not([type="file"]),
+        [data-property-evaluator] textarea,
+        [data-property-evaluator] [role="combobox"] {
+          min-height: 48px !important;
+          background: linear-gradient(135deg, rgba(8,18,13,0.94), rgba(0,0,0,0.9)) !important;
+          border: 1px solid rgba(255,255,255,0.38) !important;
+          border-radius: 12px !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          box-shadow: inset 0 0 18px rgba(0,0,0,0.16) !important;
+        }
+        [data-property-evaluator] input[type="number"] {
+          text-align: center !important;
+          font-variant-numeric: tabular-nums !important;
+          font-weight: 700 !important;
+        }
+        [data-property-evaluator] input::placeholder,
+        [data-property-evaluator] textarea::placeholder {
+          color: rgba(255,255,255,0.58) !important;
+          -webkit-text-fill-color: rgba(255,255,255,0.58) !important;
+        }
+        [data-property-evaluator] .pe-select-trigger span {
+          white-space: normal !important;
+          overflow: visible !important;
+          text-overflow: clip !important;
+        }
+        [data-property-evaluator] .pe-view-pill[data-active="true"] {
+          background: linear-gradient(135deg, #065F46 0%, #042C1C 100%) !important;
+          border-color: rgba(255,255,255,0.48) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        [data-property-evaluator] .pe-view-pill[data-active="false"] {
+          background: rgba(255,255,255,0.04) !important;
+          border-color: rgba(255,255,255,0.34) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        [data-property-evaluator] .pe-view-pill[data-active="false"]:hover {
+          background: rgba(255,255,255,0.12) !important;
+          border-color: rgba(255,255,255,0.62) !important;
+        }
+        [data-property-evaluator] .pe-community-menu {
+          background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+          border: 1px solid rgba(255,255,255,0.34) !important;
+          color: #FFFFFF !important;
+        }
+        [data-property-evaluator] .pe-community-menu button:hover {
+          background: rgba(255,255,255,0.12) !important;
+        }
+      `}</style>
 
 
-      <AIShellCard padding="lg">
+
+      <AIShellCard padding="lg" noOrbs data-property-evaluator>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full max-w-4xl mx-auto bg-[#EFE6D6] border border-[#B89555]/45 mb-8 h-auto p-1 gap-1">
+          <TabsList className="pe-tabs-list w-full max-w-4xl mx-auto mb-8 h-auto">
             <TabsTrigger value="property" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Property Details
             </TabsTrigger>
@@ -330,7 +450,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
           {/* Property Details Tab */}
           <TabsContent value="property">
-            <div className="grid lg:grid-cols-2 gap-6">
+            <div className="grid 2xl:grid-cols-2 gap-6">
               <Card className={blueCardPrimary}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
@@ -342,7 +462,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/85 flex items-center gap-1">
                         Building Name <span className="text-[#B89555]">*</span>
@@ -371,7 +491,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 flex items-center gap-1">
                         Community <span className="text-[#B89555]">*</span>
@@ -385,7 +505,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                           className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60 mb-1"
                         />
                         {communitySearch && (
-                          <div className="absolute z-50 w-full max-h-48 overflow-y-auto bg-[#F7F2EA] border border-[#B89555]/45 rounded-md shadow-xl">
+                          <div className="pe-community-menu absolute z-50 w-full max-h-48 overflow-y-auto rounded-xl shadow-xl">
                             {filteredCommunities.length > 0 ? (
                               filteredCommunities.map(c => (
                                 <button
@@ -394,7 +514,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                                     updateProperty('community', c);
                                     setCommunitySearch('');
                                   }}
-                                  className="w-full text-left px-3 py-2 text-sm text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+                                   className="w-full text-left px-3 py-2 text-sm transition-colors"
                                 >
                                   {c}
                                 </button>
@@ -422,19 +542,19 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70">Property Type</Label>
                       <Select value={property.propertyType} onValueChange={(v: any) => updateProperty('propertyType', v)}>
-                        <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]">
+                        <SelectTrigger className="pe-select-trigger">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#F7F2EA] border-[#B89555]/45">
-                          <SelectItem value="studio" className="text-[#1A1A1A]">Studio</SelectItem>
-                          <SelectItem value="apartment" className="text-[#1A1A1A]">Apartment</SelectItem>
-                          <SelectItem value="penthouse" className="text-[#1A1A1A]">Penthouse</SelectItem>
-                          <SelectItem value="townhouse" className="text-[#1A1A1A]">Townhouse</SelectItem>
-                          <SelectItem value="villa" className="text-[#1A1A1A]">Villa</SelectItem>
+                        <SelectContent>
+                          <SelectItem value="studio">Studio</SelectItem>
+                          <SelectItem value="apartment">Apartment</SelectItem>
+                          <SelectItem value="penthouse">Penthouse</SelectItem>
+                          <SelectItem value="townhouse">Townhouse</SelectItem>
+                          <SelectItem value="villa">Villa</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -455,16 +575,17 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                       {viewOptions.map(view => (
                         <button
                           key={view}
+                          data-active={property.views.includes(view) ? "true" : "false"}
                           onClick={() => {
                             const views = property.views.includes(view)
                               ? property.views.filter(v => v !== view)
                               : [...property.views, view];
                             updateProperty('views', views);
                           }}
-                          className={`px-3 py-1.5 text-xs rounded-full border transition-all ${
+                          className={`pe-view-pill px-3 py-1.5 text-xs rounded-full border transition-all ${
  property.views.includes(view)
- ? "bg-[#1A1A1A] border-[#1A1A1A] text-white font-medium"
- : 'border-[#B89555]/45 text-[#1A1A1A]/70 hover:border-[#B89555]/60 hover:text-[#B89555]'
+ ? "font-medium"
+ : ''
  }`}
                         >
                           {view}
@@ -487,7 +608,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-4 pe-spec-compact">
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bedrooms</Label>
                       <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
@@ -502,7 +623,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1">
                         Internal Size (sq ft) <span className="text-[#B89555]">*</span>
@@ -515,21 +636,21 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Carpet Area (sq ft)</Label>
-                      <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} placeholder="e.g., 1,050" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Floor Level</Label>
-                      <Input type="number" value={property.floor || ''} onChange={(e) => updateProperty('floor', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.floor || ''} onChange={(e) => updateProperty('floor', parseInt(e.target.value) || 0)} placeholder="e.g., 25" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Service Charge (AED/sq ft)</Label>
-                      <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} placeholder="e.g., 18" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Handover Year</Label>
@@ -540,13 +661,13 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                   <div>
                     <Label className="text-[#1A1A1A]/70 text-sm">Furnished Status</Label>
                     <Select value={property.furnishedStatus} onValueChange={(v: any) => updateProperty('furnishedStatus', v)}>
-                      <SelectTrigger className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]">
+                      <SelectTrigger className="pe-select-trigger">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-[#F7F2EA] border-[#B89555]/45">
-                        <SelectItem value="unfurnished" className="text-[#1A1A1A]">Unfurnished</SelectItem>
-                        <SelectItem value="semi-furnished" className="text-[#1A1A1A]">Semi-Furnished</SelectItem>
-                        <SelectItem value="furnished" className="text-[#1A1A1A]">Fully Furnished</SelectItem>
+                      <SelectContent>
+                        <SelectItem value="unfurnished">Unfurnished</SelectItem>
+                        <SelectItem value="semi-furnished">Semi-Furnished</SelectItem>
+                        <SelectItem value="furnished">Fully Furnished</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
