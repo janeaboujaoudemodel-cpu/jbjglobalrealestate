@@ -4,7 +4,7 @@ const outDir='/mnt/documents/insights-guides-audit';
 fs.mkdirSync(outDir,{recursive:true});
 const base=process.env.BASE_URL || 'http://127.0.0.1:4175';
 const routes=['/faq','/guides/golden-visa-uae','/landlord-guide','/market-intelligence/overview'];
-const browser=await chromium.launch({headless:true});
+const browser=await chromium.launch({headless:true, executablePath:'/bin/chromium', args:['--no-sandbox']});
 const page=await browser.newPage({viewport:{width:1440,height:1200}, deviceScaleFactor:1});
 for (const r of routes){
   await page.goto(base+r,{waitUntil:'domcontentloaded',timeout:60000});
