@@ -219,7 +219,6 @@ const PropertyMap = () => {
   const [mapView, setMapView] = useState<MapViewType>("satellite");
   const [filters, setFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [sortMode, setSortMode] = useState<SortMode>("newest");
-  const [hideSold, setHideSold] = useState(false);
   const [listSearch, setListSearch] = useState("");
   const [visibleMarkerIds, setVisibleMarkerIds] = useState<Set<string | number> | null>(null);
 
@@ -245,7 +244,7 @@ const PropertyMap = () => {
   useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [viewMode]);
 
   // Clear selected/hovered project on filter/sort changes
-  useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [filters, sortMode, hideSold]);
+  useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [filters, sortMode]);
 
 
   // Auto-close card when map container leaves viewport
@@ -268,7 +267,7 @@ const PropertyMap = () => {
 
   // Apply filters + local sort + hideSold
   const filteredProjects = useMemo(() => {
-    let result = applyShortcutFilters(allProjects, { ...filters, hideSoldOut: hideSold || filters.hideSoldOut });
+    let result = applyShortcutFilters(allProjects, { ...filters, hideSoldOut: false });
 
     // Local list search
     if (listSearch.trim()) {
@@ -288,7 +287,7 @@ const PropertyMap = () => {
     else if (sortMode === 'alpha') result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
     return result;
-  }, [allProjects, filters, hideSold, listSearch, sortMode]);
+  }, [allProjects, filters, listSearch, sortMode]);
 
   // Clear if selected project no longer in filtered results
   useEffect(() => {
@@ -418,6 +417,7 @@ const PropertyMap = () => {
               icon={createCustomIcon(project.price_from)}
               eventHandlers={{
                 click: () => {
+                  if (showPanel) return;
                   setHoveredProject(null);
                   setSelectedProject(project);
                   if (mapInstanceRef.current && mapContainerRef.current) {
@@ -425,6 +425,7 @@ const PropertyMap = () => {
                   }
                 },
                 mouseover: () => {
+                  if (showPanel) return;
                   if (selectedProject?.id === project.id) return;
                   setHoveredProject(project);
                   if (mapInstanceRef.current && mapContainerRef.current) {
@@ -447,7 +448,7 @@ const PropertyMap = () => {
         )}
 
         {/* ── HOVER CARD (compact) ── */}
-        {hoveredProject && !selectedProject && hoverPos && (
+        {hoveredProject && !selectedProject && !showPanel && hoverPos && (
           <div
             className="absolute z-[1000] pointer-events-none"
             style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
@@ -475,7 +476,7 @@ const PropertyMap = () => {
         )}
 
         {/* ── CLICK CARD (detailed) ── */}
-        {selectedProject && clickPos && (
+        {selectedProject && !showPanel && clickPos && (
           <div
             className="absolute z-[1000]"
             style={{ left: clickPos.left, top: clickPos.top, width: 384, maxWidth: 'calc(100% - 24px)' }}
@@ -537,7 +538,22 @@ const PropertyMap = () => {
 
         {/* ── LIST / GRID PANEL — attached to map stage, never over the filter bar ── */}
         {showPanel && (
-        <div data-map-list-panel className="absolute top-3 right-3 bottom-3 w-[min(420px,calc(100%-24px))] sm:w-[420px] z-[900] overflow-hidden flex flex-col">
+        <div
+          data-map-list-panel
+          className="absolute top-3 right-3 bottom-3 w-[min(420px,calc(100%-24px))] sm:w-[420px] z-[1200] overflow-hidden flex flex-col pointer-events-auto"
+          onPointerEnter={() => setHoveredProject(null)}
+          onPointerOver={(event) => {
+            event.stopPropagation();
+            setHoveredProject(null);
+          }}
+          onMouseMove={(event) => {
+            event.stopPropagation();
+            setHoveredProject(null);
+          }}
+          onClick={(event) => event.stopPropagation()}
+          onWheel={() => setHoveredProject(null)}
+          onScroll={() => setHoveredProject(null)}
+        >
           {/* Panel header with search */}
           <div className="p-3 border-b border-white/14 space-y-2">
             <div className="flex items-center justify-between">
@@ -563,7 +579,11 @@ const PropertyMap = () => {
               <Card
                 key={project.id}
                 className="jj-map-list-card cursor-pointer transition-colors overflow-hidden"
-                onClick={() => setSelectedProject(project)}
+                onClick={() => {
+                  setHoveredProject(null);
+                  setClickPos(null);
+                  setSelectedProject(project);
+                }}
                 data-surface="emerald"
                 style={{
                   background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)',

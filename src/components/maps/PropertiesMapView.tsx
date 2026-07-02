@@ -9,41 +9,27 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
-// Custom gold SVG marker pin
-function createGoldMarkerIcon(highlighted = false) {
-  const size = highlighted ? 44 : 34;
-  const svg = `
-    <svg width="${size}" height="${size + 8}" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="pinGrad" cx="40%" cy="30%" r="70%">
-          <stop offset="0%" stop-color="#F5D78E"/>
-          <stop offset="60%" stop-color="#B89555"/>
-          <stop offset="100%" stop-color="#A07840"/>
-        </radialGradient>
-        <filter id="shadow" x="-30%" y="-10%" width="160%" height="160%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.35)"/>
-        </filter>
-      </defs>
-      <!-- Pin body -->
-      <path d="M17 1C9.82 1 4 6.82 4 14c0 9.33 13 26 13 26S30 23.33 30 14C30 6.82 24.18 1 17 1z"
-            fill="url(#pinGrad)" stroke="#8B6914" stroke-width="1.2" filter="url(#shadow)"/>
-      <!-- Inner circle -->
-      <circle cx="17" cy="14" r="5.5" fill="white" opacity="0.92"/>
-      <circle cx="17" cy="14" r="3.5" fill="#B89555"/>
-    </svg>
-  `;
-  const anchor = highlighted ? [22, 52] : [17, 42];
-  return L.divIcon({
-    html: svg,
-    className: '',
-    iconSize: [size, size + 8] as [number, number],
-    iconAnchor: anchor as [number, number],
-    popupAnchor: [0, -(size + 4)] as [number, number],
-  });
+function formatMarkerPrice(price: number | null | undefined) {
+  if (!price) return "Ask";
+  if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
+  return `${Math.round(price / 1000)}K`;
 }
 
-const defaultIcon = createGoldMarkerIcon(false);
-const highlightedIcon = createGoldMarkerIcon(true);
+function createEmeraldMarkerIcon(price: number | null | undefined, highlighted = false) {
+  const priceText = formatMarkerPrice(price);
+  const scale = highlighted ? 1.08 : 1;
+  return L.divIcon({
+    html: `
+      <div class="jj-map-marker-pill" style="transform: scale(${scale});">
+        ${priceText}
+      </div>
+    `,
+    className: "custom-marker",
+    iconSize: [72, 32] as [number, number],
+    iconAnchor: [36, 32] as [number, number],
+    popupAnchor: [0, -32] as [number, number],
+  });
+}
 
 function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
@@ -156,7 +142,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
             <Marker
               key={project.id}
               position={[project.lat, project.lng]}
-              icon={hoveredProjectId === project.id ? highlightedIcon : defaultIcon}
+              icon={createEmeraldMarkerIcon(project.price_from, hoveredProjectId === project.id)}
               eventHandlers={{
                 mouseover: (e: any) => {
                   e.target.openPopup();

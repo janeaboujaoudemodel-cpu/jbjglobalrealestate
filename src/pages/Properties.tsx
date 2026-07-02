@@ -36,7 +36,6 @@ import { ActiveFilterIndicator } from "@/components/properties/ActiveFilterIndic
 // DisplayModeToggle removed — user mode already chosen globally in header
 import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
 import { SortBySelect } from "@/components/filters/SortBySelect";
-import { SectionDividerGold } from "@/components/ui/section-divider-gold";
 import { getSaleStatusConfig, type DisplayMode, type CurrencyCode, type AreaUnit } from "@/constants/filterConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -554,14 +553,15 @@ const Properties = () => {
       {/* Scroll sentinel for two-phase filter fix */}
       <div ref={filterSentinelRef} className="h-0" />
 
-      {/* Filters Section - Champagne page surface, sticks below the 88px header on scroll */}
+      {/* Filters Section - sticks below the 88px header on scroll */}
       <section
-        className="sticky top-[88px] z-40 bg-[#FDFBF7] py-3 md:py-4 border-b border-[#B89555]/30"
+        data-map-shell={isMapMode ? true : undefined}
+        className={`sticky top-[88px] z-40 py-3 md:py-4 ${isMapMode ? "jj-properties-map-filter" : "bg-[#FDFBF7] border-b border-[#B89555]/30"}`}
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg" style={{ overflow: 'visible' }}>
+          <div className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 shadow-lg"} style={{ overflow: 'visible' }}>
           {/* Active deep-link filter chips (status / category) */}
           <ActiveFilterIndicator
             transactionType={appliedFilters.transactionType}
@@ -619,15 +619,16 @@ const Properties = () => {
             return (
               <div data-no-contrast-guard className="flex items-center gap-2">
                 {/* Unified pill: Intent (left half) | Sort By (right half) */}
-                <div
-                  className="flex items-stretch h-11 rounded-xl border border-[#B89555]/55 bg-[#F7F2EA] overflow-hidden flex-shrink-0"
+                  <div
+                    className={isMapMode ? "jj-map-segmented-control flex items-stretch h-11 rounded-xl overflow-hidden flex-shrink-0" : "flex items-stretch h-11 rounded-xl border border-[#B89555]/55 bg-[#F7F2EA] overflow-hidden flex-shrink-0"}
                   data-no-contrast-guard
                 >
                   <div className="flex-1 min-w-[110px]">
                     <Select value={intentValue} onValueChange={setIntent}>
                       <SelectTrigger
-                        className="h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]/50"
+                        className={isMapMode ? "jj-map-segment h-full w-full px-3 border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold" : "h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-[#1A1A1A] hover:bg-[#EFE6D6]/50"}
                         aria-label="Transaction intent"
+                        data-surface={isMapMode ? "emerald" : undefined}
                       >
                         <SelectValue />
                       </SelectTrigger>
@@ -639,7 +640,7 @@ const Properties = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="w-px bg-[#B89555]/40 flex-shrink-0" />
+                  <div className={isMapMode ? "w-px bg-white/18 flex-shrink-0" : "w-px bg-[#B89555]/40 flex-shrink-0"} />
                   <div className="flex-1 min-w-[110px] [&_*]:!ring-0 [&_*]:!ring-offset-0 [&_button]:!outline-none">
                     <SortBySelect
                       value={sortBy}
@@ -670,14 +671,15 @@ const Properties = () => {
                   <PopoverContent
                     align="start"
                     sideOffset={8}
-                    className="w-[320px] sm:w-[380px] p-3 bg-white border border-[#B89555]/40"
+                    data-map-shell={isMapMode ? true : undefined}
+                    className={isMapMode ? "w-[320px] sm:w-[380px] p-3 jj-map-command-bar" : "w-[320px] sm:w-[380px] p-3 bg-white border border-[#B89555]/40"}
                   >
                     <form
                       onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
                       role="search"
                       className="flex items-center gap-2"
                     >
-                      <div className="flex flex-1 items-center px-3 h-10 rounded-lg border border-[#B89555]/40 bg-white">
+                      <div className={isMapMode ? "flex flex-1 items-center px-3 h-10 rounded-lg jj-map-search-input" : "flex flex-1 items-center px-3 h-10 rounded-lg border border-[#B89555]/40 bg-white"}>
                         <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
                         <input
                           type="text"
@@ -697,7 +699,7 @@ const Properties = () => {
                       <button
                         type="submit"
                         data-no-contrast-guard
-                        className="h-10 px-4 rounded-lg bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] font-semibold flex-shrink-0 allow-white"
+                        className={isMapMode ? "jj-map-details-button h-10 px-4 rounded-lg text-[13px] font-semibold flex-shrink-0 allow-white" : "h-10 px-4 rounded-lg bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] font-semibold flex-shrink-0 allow-white"}
                         style={{ color: '#FFFFFF' }}
                       >
                         Search
@@ -713,7 +715,7 @@ const Properties = () => {
                       type="button"
                       data-no-contrast-guard
                       aria-label="Open all filters"
-                      className="inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white"
+                      className={isMapMode ? "jj-map-details-button inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white" : "inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white"}
                       style={{ color: '#FFFFFF' }}
                     >
                       <SlidersHorizontal
@@ -741,14 +743,14 @@ const Properties = () => {
                     </button>
                   </DialogTrigger>
 
-                  <DialogContent className="max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-[#B89555]/30 text-[#1A1A1A] p-0">
-                    <DialogHeader className="p-6 border-b border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                  <DialogContent data-map-shell={isMapMode ? true : undefined} className={isMapMode ? "max-w-2xl jj-map-command-bar p-0" : "max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-[#B89555]/30 text-[#1A1A1A] p-0"}>
+                    <DialogHeader className={isMapMode ? "p-6 border-b border-white/14" : "p-6 border-b border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
                       <DialogTitle className="text-xl font-semibold text-[#1A1A1A]">
                         Filters
                       </DialogTitle>
                     </DialogHeader>
                     <ScrollArea className="max-h-[70vh]">
-                      <div className="p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                      <div className={isMapMode ? "p-6 space-y-6" : "p-6 space-y-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
                         {/* Search */}
                         <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Search</label>
@@ -1132,17 +1134,16 @@ const Properties = () => {
 
       {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
-      {/* Premium gold divider between Filters and Results — section-level (lg) */}
-      <SectionDividerGold size="lg" className="my-2" />
+      {!isMapMode && <div className="h-px bg-white/70" />}
 
       {/* Results Section - Split-screen map mode or standard grid */}
       {isMapMode ? (
-        <section className="bg-[#FDFBF7]">
+        <section data-map-shell className="bg-[#03251F]">
           <div className="flex" style={{ height: 'calc(100vh - 80px)' }}>
             {/* Vertical nav handled globally by MainLayout */}
 
             {/* Left: Scrollable card list */}
-            <div ref={cardListRef} className="w-[55%] flex-shrink-0 overflow-y-auto bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+            <div ref={cardListRef} className="jj-map-side-list w-[55%] flex-shrink-0 overflow-y-auto">
               {/* Results Count (hidden while initial fetch in flight) */}
               <div className="px-4 pt-4 pb-2 flex items-center justify-between min-h-[24px]">
                 {!showSkeletons && (
@@ -1165,7 +1166,7 @@ const Properties = () => {
                       id={`map-card-${project.id}`}
                       onMouseEnter={() => setHoveredProjectId(project.id)}
                       onMouseLeave={() => setHoveredProjectId(null)}
-                      className={`transition-all duration-200 rounded-2xl ${hoveredProjectId === project.id ? 'ring-2 ring-gold shadow-lg scale-[1.01]' : ''}`}
+                      className={`transition-all duration-200 rounded-2xl ${hoveredProjectId === project.id ? 'ring-2 ring-white/40 shadow-lg scale-[1.01]' : ''}`}
                     >
                       <ProjectCard
                         project={project}

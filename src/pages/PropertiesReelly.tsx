@@ -276,22 +276,21 @@ const PropertiesReelly = () => {
 
       {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
-      {/* Gold divider between hero and continue searching */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {!isMapMode && <div className="w-full h-px bg-white/70" />}
 
       {/* Pre-render map hidden in background so Leaflet initialises before user switches to map mode */}
-      <div style={{ display: isMapMode ? 'block' : 'none', minHeight: '600px', maxHeight: '85vh' }} className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden">
+      <div data-map-shell style={{ display: isMapMode ? 'block' : 'none', minHeight: '600px', maxHeight: '85vh' }} className="relative bg-[#03251F] overflow-hidden">
         <div className="flex flex-col md:flex-row" style={{ minHeight: '600px', maxHeight: '85vh' }}>
           {/* Left: Scrollable card list */}
-          <div className="w-full md:w-1/2 h-[420px] md:h-full overflow-y-auto jj-scrollbar-gold bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+          <div className="jj-map-side-list w-full md:w-1/2 h-[420px] md:h-full overflow-y-auto">
             <div className="p-4 pt-3 pb-6">
               <div className="mb-4 flex items-center justify-between">
-                <p className="text-[#1A1A1A]/70 text-sm">
+                  <p className="text-white text-sm">
                   {isDbLoading ? (
-                    <span className="text-[#1A1A1A]/40 animate-pulse">Loading properties…</span>
+                    <span className="text-white/70 animate-pulse">Loading properties…</span>
                   ) : (
-                    <>Showing <span className="text-[#1A1A1A] font-medium">{sortedProjects.length}</span> of{' '}
-                    <span className="text-[#1A1A1A] font-medium">{totalCount.toLocaleString()}</span> properties</>
+                    <>Showing <span className="text-white font-medium">{sortedProjects.length}</span> of{' '}
+                    <span className="text-white font-medium">{totalCount.toLocaleString()}</span> properties</>
                   )}
                 </p>
               </div>
@@ -312,8 +311,8 @@ const PropertiesReelly = () => {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <Search className="w-10 h-10 text-[#1A1A1A] mx-auto mb-3" />
-                  <p className="text-[#1A1A1A]/60">No properties found</p>
+                  <Search className="w-10 h-10 text-white mx-auto mb-3" />
+                  <p className="text-white/80">No properties found</p>
                 </div>
               )}
             </div>
