@@ -111,6 +111,7 @@ export default function CrmHeader() {
         </button>
       </div>
       <CrmSearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <CrmZiaPanel open={ziaOpen} onClose={() => setZiaOpen(false)} />
     </header>
   );
 }
