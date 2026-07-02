@@ -153,6 +153,8 @@ export const OwnerRoutes = () => (
     <Route path="salesinbox" element={<CrmSalesInbox />} />
     <Route path="workqueue" element={<CrmWorkqueue />} />
     <Route path="signals" element={<CrmWorkqueue />} />
+    <Route path="automation" element={<CrmAutomation />} />
+    <Route path="automation/:tab" element={<CrmAutomation />} />
     <Route path=":section" element={<CrmModulePage />} />
     <Route path=":section/new" element={<CrmCreatePage />} />
     <Route path=":section/:id" element={<CrmRecordPage />} />
