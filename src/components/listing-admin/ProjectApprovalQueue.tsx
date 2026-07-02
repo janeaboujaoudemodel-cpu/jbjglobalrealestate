@@ -15,7 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { 
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
   DollarSign, Bed, Ruler, FileText,
-  ChevronLeft, ChevronRight, Merge, Plus, CheckSquare,
+  ChevronLeft, ChevronRight, Merge, Plus, 
   Upload, Globe, Building, Timer, Eye, Search, UploadCloud
 } from "lucide-react";
 import { format } from "date-fns";
@@ -456,7 +456,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           })
           .eq("id", importData.id);
         
-        throw new Error(`DUPLICATE: Project "${existingProject.name}" already exists. Use "Merge Updates" to update the existing project instead.`);
+        throw new Error(`DUPLICATE: Project "${existingProject.name}" already exists. Use "Select and Merge" to update the existing project instead.`);
       }
     }
 
@@ -585,7 +585,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
       await approveImportInDb(importData, forceCreate);
 
       toast({
-        title: "Project Approved",
+        title: "Project Published",
         description: `"${importData.name}" has been added to your listings`,
       });
 
@@ -675,7 +675,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
         toast({
           title: "Bulk approve finished",
-          description: `${totalApproved.toLocaleString()} projects approved`,
+          description: `${totalApproved.toLocaleString()} projects published`,
         });
       } finally {
         setIsBulkProcessing(false);
@@ -1674,7 +1674,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       className="border-blue-200 text-blue-600 hover:bg-blue-50"
                     >
                       <Merge className="h-4 w-4 mr-2" />
-                      Merge Updates
+                      Select and Merge
                     </Button>
                   )}
                   <Button
@@ -1692,7 +1692,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                     disabled={processingId === selectedImport.id}
                     className="jj-surface-emerald hover:jj-surface-emerald text-white"
                   >
-                    <Check className="h-4 w-4 mr-2" />
+                    <UploadCloud className="h-4 w-4 mr-2" />
                      {selectedImport.is_new_project ? 'Publish & Create' : 'Publish as New'}
                   </Button>
                 </div>

@@ -658,7 +658,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   //  Zero gold-gradient buttons. Zero white ink on champagne.
   // ============================================================
   const EMERALD_INK = "linear-gradient(135deg, #032820 0%, #021611 54%, #000000 100%)";
-  const EMERALD_CARD = "linear-gradient(135deg, #043527 0%, #021F18 52%, #000000 100%)";
+  const EMERALD_CARD = "linear-gradient(135deg, #032820 0%, #021611 52%, #000000 100%)";
   const CHAMPAGNE = "#F7F2EA";
   const GOLD_HAIRLINE = "1px solid rgba(6,78,59,0.24)";
 
@@ -1033,15 +1033,15 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               {/* Negotiation Leverage */}
               {Array.isArray((aiAnalysis as any).negotiationLeverage) && (aiAnalysis as any).negotiationLeverage.length > 0 && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
-                    <Zap className="w-5 h-5" style={{ color: "#064E3B" }} />
+                  <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                    <Zap className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     Negotiation Leverage
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {(aiAnalysis as any).negotiationLeverage.map((n: any, i: number) => (
-                      <div key={i} className="rounded-2xl p-5" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
+                      <div key={i} className="rounded-2xl p-5" style={{ background: EMERALD_CARD, border: "1px solid rgba(255,255,255,0.22)" }}>
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-bold" style={{ color: "#1A1A1A" }}>{n.projectName}</h4>
+                          <h4 className="font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{n.projectName}</h4>
                           <button
                             type="button"
                             onClick={() => {
@@ -1057,8 +1057,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                         </div>
                         <ul className="space-y-2">
                           {(n.talkingPoints || []).map((t: string, ti: number) => (
-                            <li key={ti} className="text-sm leading-relaxed flex gap-2" style={{ color: "#1A1A1A" }}>
-                              <span className="font-bold" style={{ color: "#064E3B" }}>{ti + 1}.</span>
+                            <li key={ti} className="text-sm leading-relaxed flex gap-2" style={{ color: "rgba(255,255,255,0.90)", WebkitTextFillColor: "rgba(255,255,255,0.90)" }}>
+                              <span className="font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{ti + 1}.</span>
                               <span>{t}</span>
                             </li>
                           ))}
@@ -1071,22 +1071,22 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
               {/* Ratings */}
               <div>
-                <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
-                  <Star className="w-5 h-5" style={{ color: "#064E3B" }} />
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  <Star className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   Property Ratings
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {aiAnalysis.ratings.map((rating, index) => (
-                    <div key={index} className="rounded-xl p-5" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
+                    <div key={index} className="rounded-xl p-5" style={{ background: EMERALD_CARD, border: "1px solid rgba(255,255,255,0.22)" }}>
                       <div className="flex justify-between items-start mb-3">
-                        <h4 className="font-bold" style={{ color: "#1A1A1A" }}>{rating.projectName}</h4>
+                        <h4 className="font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{rating.projectName}</h4>
                         <div className="flex items-center gap-1">
-                          <span className="text-2xl font-bold" style={{ color: "#064E3B" }}>{toScore(rating.overallRating)}</span>
-                          <span className="text-xs" style={{ color: "#1A1A1A", opacity: 0.65 }}>/10</span>
+                          <span className="text-2xl font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{toScore(rating.overallRating)}</span>
+                          <span className="text-xs" style={{ color: "rgba(255,255,255,0.65)", WebkitTextFillColor: "rgba(255,255,255,0.65)" }}>/10</span>
                         </div>
                       </div>
-                      <div className="text-sm mb-3" style={{ color: "#B89555" }}>
-                        {"★".repeat(rating.overallRating)}<span style={{ color: "rgba(26,26,26,0.25)" }}>{"☆".repeat(5 - rating.overallRating)}</span>
+                      <div className="text-sm mb-3" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                        {"★".repeat(rating.overallRating)}<span style={{ color: "rgba(255,255,255,0.30)", WebkitTextFillColor: "rgba(255,255,255,0.30)" }}>{"☆".repeat(5 - rating.overallRating)}</span>
                       </div>
 
                       <div className="space-y-1.5 mb-4">
@@ -1102,8 +1102,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                           const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#DC2626';
                           return (
                             <div key={l} className="flex items-center gap-2">
-                              <span className="text-[10px] w-20 shrink-0 text-right" style={{ color: "#1A1A1A", opacity: 0.7 }}>{l}</span>
-                              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(184,149,85,0.18)" }}>
+                              <span className="text-[10px] w-20 shrink-0 text-right" style={{ color: "rgba(255,255,255,0.72)", WebkitTextFillColor: "rgba(255,255,255,0.72)" }}>{l}</span>
+                              <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.16)" }}>
                                 <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
                               </div>
                               <span className="text-xs font-bold w-6 text-right" style={{ color }}>{score.toFixed(0)}</span>
@@ -1126,7 +1126,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             <div className="text-xs font-bold mb-2 flex items-center gap-1" style={{ color: "#DC2626" }}>
                               <ThumbsDown className="w-3 h-3" /> Cons
                             </div>
-                            <ul className="text-xs space-y-1" style={{ color: "#1A1A1A" }}>
+                            <ul className="text-xs space-y-1" style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}>
                               {rating.cons?.slice(0, 3).map((con, i) => (<li key={i}>• {con}</li>))}
                             </ul>
                           </div>

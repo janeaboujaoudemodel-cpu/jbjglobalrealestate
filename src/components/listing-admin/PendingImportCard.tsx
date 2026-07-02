@@ -231,7 +231,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
       toast.success(`"${item.name}" ${existing ? 'updated' : 'approved and added to listings'}!`);
       onApproved?.();
     } catch (err) {
-      toast.error(`Approve failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+      toast.error(`Publish failed: ${err instanceof Error ? err.message : "Unknown error"}`);
     } finally {
       setIsApproving(false);
     }
@@ -465,14 +465,14 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
 
         {/* ========== OUTSIDE APPROVE/REJECT + ACTION BAR ========== */}
         <div className="mt-auto pt-3 border-t border-border space-y-2">
-          {/* Approve/Reject row */}
+          {/* Publish/Reject row */}
           <div className="flex items-center gap-2">
             <Button
               onClick={handleApprove}
               disabled={isApproving || isIncomplete}
               size="sm"
               className="flex-1 gap-1 jj-surface-emerald hover:jj-surface-emerald text-white"
-              title={isIncomplete ? "Complete extraction first" : "Approve and add to listings"}
+              title={isIncomplete ? "Complete extraction first" : "Publish and add to listings"}
             >
               {isApproving ? <Loader2 className="w-4 h-4 animate-spin" /> : <UploadCloud className="w-4 h-4" />}
               Publish
