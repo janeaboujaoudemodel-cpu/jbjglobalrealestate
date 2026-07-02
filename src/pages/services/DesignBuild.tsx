@@ -85,7 +85,7 @@ const aiTools = [
 
 const DesignBuild = () => {
   return (
-    <section data-marketing-page className="relative w-full min-h-screen bg-[#FDFBF7]">
+    <section data-brand-emerald-page data-marketing-page className="relative w-full min-h-screen" style={{ background: "#010806" }}>
       {/* Hero Section - Premium Video Background */}
       <div className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
