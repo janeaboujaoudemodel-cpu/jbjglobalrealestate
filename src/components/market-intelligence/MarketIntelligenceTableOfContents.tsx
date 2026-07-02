@@ -89,14 +89,14 @@ export const MarketIntelligenceTableOfContents = ({
   };
 
   return (
-    <div className="surface-light fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-surface="light" data-mi-toc>
+    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-surface="emerald" data-mi-toc data-premium-navigator>
       {/* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[56dvh] border bg-[#FDFBF7] border-white/30 flex flex-col"
+        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
       >
-        <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
+        <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4 text-white" />
             <h3 className="text-sm font-semibold leading-snug text-white">{title}</h3>
@@ -124,7 +124,7 @@ export const MarketIntelligenceTableOfContents = ({
               transition={{ duration: 0.12 }}
               className="flex flex-col min-h-0 flex-1 overflow-hidden"
             >
-              <nav onWheel={passBoundaryWheelToPage} className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald">
+              <nav onWheel={passBoundaryWheelToPage} className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald bg-transparent">
                 {items.map((item, index) => {
                   const isActive = activeId === item.id;
                   return (
@@ -139,17 +139,17 @@ export const MarketIntelligenceTableOfContents = ({
                       className={cn(
                         "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left transition-colors border text-[13px] box-border overflow-hidden",
                         isActive
-                          ? "font-semibold shadow-sm border-white/20"
-                          : "border-transparent bg-transparent hover:bg-[#064E3B]/8"
+                          ? "font-semibold border-white/10 bg-white/12"
+                          : "border-transparent bg-transparent hover:bg-white/10"
                       )}
                       style={
                         isActive
                           ? {
-                              backgroundImage: 'var(--jj-emerald-ombre, linear-gradient(135deg,#0B5132 0%,#0F6B43 100%))',
+                              backgroundColor: 'rgba(255,255,255,0.12)',
                               color: '#FFFFFF',
                               WebkitTextFillColor: '#FFFFFF',
                             }
-                          : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }
+                          : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
                       }
                     >
                       <span
@@ -158,8 +158,8 @@ export const MarketIntelligenceTableOfContents = ({
                         className={cn(
                           "h-7 w-7 rounded-lg flex items-center justify-center text-[11px] font-bold leading-none",
                           isActive
-                            ? "bg-[#064E3B] text-white border border-white/35"
-                            : "bg-[image:var(--jj-emerald-ombre)] text-white border border-white/25"
+                            ? "bg-white/15 text-white border border-white/20"
+                            : "bg-black/15 text-white border border-white/10"
                         )}
                         style={
                           isActive
@@ -173,14 +173,14 @@ export const MarketIntelligenceTableOfContents = ({
                         <item.icon
                           data-toc-icon
                           className="w-4 h-4 flex-shrink-0"
-                          style={{ color: isActive ? '#FFFFFF' : '#064E3B', stroke: isActive ? '#FFFFFF' : '#064E3B' }}
+                          style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                         />
                       )}
                       {!item.icon && <span aria-hidden />}
                       <span
                         data-toc-label
                         className="min-w-0 leading-snug"
-                        style={{ color: isActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: isActive ? '#FFFFFF' : '#1A1A1A' }}
+                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                       >
                         {item.title}
                       </span>
@@ -192,7 +192,7 @@ export const MarketIntelligenceTableOfContents = ({
 
               {/* Sticky CTA footer — never cropped */}
               {ctaAction && (
-                <div className="border-t border-white/20 p-2.5 bg-[#FDFBF7] flex-shrink-0">
+                <div className="border-t border-white/15 p-2.5 bg-black/10 flex-shrink-0">
                   <Link to={ctaAction.href} className="block">
                     <Button variant="primary" size="sm" className="w-full mi-cta-emerald">
                       {ctaAction.icon && <ctaAction.icon className="w-3.5 h-3.5 mr-1.5" />}
