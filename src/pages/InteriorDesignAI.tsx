@@ -375,9 +375,9 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
       {!embedded && (
         <div className="relative py-16 md:py-24 overflow-hidden" data-hero-dark>
-          <div className="absolute inset-0" style={{ background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))" }} />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_28%,rgba(255,255,255,0.12),transparent_42%),radial-gradient(circle_at_78%_68%,rgba(16,185,129,0.18),transparent_48%)]" />
-          <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: "linear-gradient(90deg, transparent, #B89555, transparent)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #010604 0%, #020F0A 60%, #011008 100%)" }} />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_28%,rgba(255,255,255,0.06),transparent_42%),radial-gradient(circle_at_78%_68%,rgba(16,185,129,0.10),transparent_48%)]" />
+
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               className="text-center max-w-4xl mx-auto"
