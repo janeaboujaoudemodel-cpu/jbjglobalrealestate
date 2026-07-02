@@ -112,11 +112,11 @@ const MortgageCalculatorPage = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex-1 flex flex-wrap gap-2 md:justify-end">
+                <div className="w-full md:flex-1 flex flex-wrap gap-2 md:justify-end">
                   {bankPartners.map((bank) => (
                     <span
                       key={bank}
-                      className="rounded-full px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em]"
+                      className="whitespace-nowrap rounded-full px-3.5 py-1.5 text-[11px] md:text-xs font-extrabold uppercase tracking-[0.08em]"
                       style={{
                         background: "rgba(255,255,255,0.08)",
                         border: "1px solid rgba(255,255,255,0.42)",
