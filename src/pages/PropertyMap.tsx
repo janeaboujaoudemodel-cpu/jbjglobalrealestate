@@ -122,10 +122,14 @@ function ScrollWheelZoomGuard() {
 
 function FitBounds({ coords }: { coords: [number, number][] }) {
   const map = useMap();
+  const hasFitRef = useRef(false);
   useEffect(() => {
-    if (coords.length === 0) return;
-    const bounds = L.latLngBounds(coords);
-    map.fitBounds(bounds, { padding: [36, 36], maxZoom: 12, animate: false });
+    if (hasFitRef.current || coords.length === 0) return;
+    hasFitRef.current = true;
+    window.requestAnimationFrame(() => {
+      const bounds = L.latLngBounds(coords.slice(0, 160));
+      map.fitBounds(bounds, { padding: [36, 36], maxZoom: 11, animate: false });
+    });
   }, [coords, map]);
   return null;
 }
@@ -147,7 +151,7 @@ function ViewportMarkerGate({
         const bounds = map.getBounds().pad(0.3);
         const visible = projects
           .filter((project) => bounds.contains([project.lat, project.lng]))
-          .slice(0, 360)
+          .slice(0, 180)
           .map((project) => project.id);
         onVisibleIds(new Set(visible));
       });
@@ -303,8 +307,8 @@ const PropertyMap = () => {
 
   const coordsList = useMemo(() => projectsWithCoords.map(p => [p.lat, p.lng] as [number, number]), [projectsWithCoords]);
   const visibleProjects = useMemo(() => {
-    if (!visibleMarkerIds) return projectsWithCoords.slice(0, 360);
-    return projectsWithCoords.filter((project) => visibleMarkerIds.has(project.id));
+    if (!visibleMarkerIds) return projectsWithCoords.slice(0, 120);
+    return projectsWithCoords.filter((project) => visibleMarkerIds.has(project.id)).slice(0, 180);
   }, [projectsWithCoords, visibleMarkerIds]);
 
   const showPanel = viewMode === "list" || viewMode === "grid";
