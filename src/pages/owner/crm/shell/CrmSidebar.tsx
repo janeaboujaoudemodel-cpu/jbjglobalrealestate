@@ -34,7 +34,7 @@ export default function CrmSidebar() {
   return (
     <aside className="jc-rail" aria-label="CRM navigation" data-no-contrast-guard>
       <div className="jc-brand-row">
-        <img className="jc-brand-logo-img" src={jbjFullLogoLight} alt="JBJ Global Real Estate" />
+        <div className="jc-brand-mark" aria-hidden="true">JBJ</div>
         <span className="jc-brand-product">CRM</span>
         <ChevronDown size={18} className="jc-brand-caret" />
         <button type="button" className="jc-collapse-visual" aria-label="Collapse sidebar"><PanelLeft size={22} /></button>
