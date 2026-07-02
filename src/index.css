@@ -24598,20 +24598,40 @@ html body #root [data-brand-emerald-page] [data-gold-hairline]:not([data-surface
 /* END PASS 165 */
 
 /* PASS 165.1 — Restore dark ink on elements that keep a light background */
+/* Any element with a light background (Tailwind or inline) that isn't an
+   explicit champagne surface: convert to emerald tile with white ink so it
+   reads correctly on the dark page. Champagne surfaces are exempt via the
+   :not() chain because they render correctly on their own. */
 html body #root [data-brand-emerald-page] :where(
-  .bg-white, .bg-cream, .bg-champagne,
-  [class*="bg-[#F"], [class*="bg-[#E"], [class*="bg-white"],
-  [style*="background:#F"], [style*="background:#f"],
-  [style*="background: #F"], [style*="background: #f"],
-  [style*="background-color:#F"], [style*="background-color: #F"]
-) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+  .bg-white, .bg-cream, .bg-champagne, .bg-background, .bg-card, .bg-muted, .bg-secondary, .bg-popover,
+  [class*="bg-[#F"], [class*="bg-[#E"], [class*="bg-white"]
+):not([data-surface="champagne"]):not([data-surface="champagne-raised"]):not([data-surface="champagne"] *):not([data-surface="champagne-raised"] *):not([data-allow-bg]) {
+  background: #064E3B !important;
+  background-color: #064E3B !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 html body #root [data-brand-emerald-page] :where(
-  .bg-white, .bg-cream, .bg-champagne,
+  .bg-white, .bg-cream, .bg-champagne, .bg-background, .bg-card, .bg-muted, .bg-secondary, .bg-popover,
   [class*="bg-[#F"], [class*="bg-[#E"], [class*="bg-white"]
-) :where(h1,h2,h3,h4,h5,h6,p,span,li,label,dt,dd,small,strong,em,a,div,button) {
+):not([data-surface="champagne"]):not([data-surface="champagne-raised"]) :where(h1,h2,h3,h4,h5,h6,p,span,li,label,dt,dd,small,strong,em,a,div,button) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+/* Explicit champagne surface always wins — dark ink on light card */
+html body #root [data-brand-emerald-page] [data-surface="champagne"],
+html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+}
+html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] {
+  background: #EFE6D6 !important;
+}
+html body #root [data-brand-emerald-page] [data-surface="champagne"] :where(h1,h2,h3,h4,h5,h6,p,span,li,label,dt,dd,small,strong,em,a,div,button),
+html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] :where(h1,h2,h3,h4,h5,h6,p,span,li,label,dt,dd,small,strong,em,a,div,button) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
