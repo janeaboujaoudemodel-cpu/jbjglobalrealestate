@@ -425,11 +425,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     className={`id-choice ${active ? "id-choice-active" : "id-panel-soft"} flex-1 basis-[160px] min-w-[140px] min-h-[72px] rounded-xl p-3 text-left transition-all border`}
                     aria-pressed={active}
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Icon className="w-4 h-4" />
-                      <span className="text-sm font-semibold">{m.label}</span>
+                    <div className="flex items-center gap-2 mb-1" style={{ display: "flex" }}>
+                      <Icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="text-sm font-semibold truncate">{m.label}</span>
                     </div>
-                    <span className="id-text-muted text-xs block leading-snug">{m.desc}</span>
+                    <div className="id-text-muted text-xs leading-snug" style={{ display: "block" }}>{m.desc}</div>
+
                   </button>
                 );
               })}
