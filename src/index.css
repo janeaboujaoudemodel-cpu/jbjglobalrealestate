@@ -23378,15 +23378,17 @@ html body #root [data-compare-content-frame] :is(.rounded-xl,.rounded-2xl):not([
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root [data-compare-content-frame] :is(input,textarea,[role="combobox"]) {
-  background: rgba(255,255,255,0.10) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.28) !important;
+html body #root [data-compare-content-frame] :is(input,textarea,[role="combobox"]),
+html body #root [data-ai-property-analyzer] :is(input,textarea,[role="combobox"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.26) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root [data-compare-content-frame] :is(input,textarea)::placeholder {
+html body #root [data-compare-content-frame] :is(input,textarea)::placeholder,
+html body #root [data-ai-property-analyzer] :is(input,textarea)::placeholder {
   color: rgba(255,255,255,0.62) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.62) !important;
 }
@@ -23397,9 +23399,9 @@ html body #root [data-compare-ai-shell] :is(img,video,picture) {
 }
 
 html body #root [data-ai-analyzer-card][data-ai-analyzer-card] {
-  background: linear-gradient(135deg, #053D2F 0%, #031F18 52%, #010806 100%) !important;
-  background-color: #031F18 !important;
-  background-image: linear-gradient(135deg, #053D2F 0%, #031F18 52%, #010806 100%) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
 }
 
 html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [role="option"],
@@ -23413,16 +23415,40 @@ html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][
   box-shadow: none !important;
 }
 
-html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [role="option"]:is(:hover,:focus,[data-highlighted]),
-html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [data-radix-select-item]:is(:hover,:focus,[data-highlighted]) {
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [role="option"]:is(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [data-radix-select-item]:is(:hover) {
   background: rgba(255,255,255,0.12) !important;
   background-image: none !important;
 }
 
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [role="option"][data-highlighted]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content][data-ai-analyzer-select-content] [data-radix-select-item][data-highlighted]:not(:hover),
+html body [data-radix-popper-content-wrapper] [role="option"][data-highlighted]:not(:hover) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
 html body #root [data-ai-tools-disclaimer] {
-  background: linear-gradient(135deg, #053D2F 0%, #031F18 52%, #010806 100%) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   border-color: rgba(255,255,255,0.22) !important;
   color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-ai-tools-disclaimer] > div:first-child > div:first-child {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-ai-tools-disclaimer] > div:first-child > div:first-child :is(svg,[class*="lucide"],svg *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
@@ -23436,13 +23462,117 @@ html body #root [data-ai-tools-disclaimer] > div:nth-child(2) {
 }
 
 html body #root [data-ai-tools-disclaimer] :is(a,button) {
-  background: linear-gradient(135deg, #053D2F 0%, #031F18 52%, #010806 100%) !important;
-  border-color: rgba(255,255,255,0.30) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body #root [data-ai-tools-disclaimer] :is(a,button):hover {
-  background: linear-gradient(135deg, #064E3B 0%, #032820 52%, #010806 100%) !important;
-  border-color: rgba(255,255,255,0.46) !important;
+  background: linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%) !important;
+  border-color: transparent !important;
+}
+
+html body #root [data-compare-hero] {
+  background: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+}
+
+html body #root [data-compare-content-frame] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  border-color: rgba(6,78,59,0.24) !important;
+}
+
+html body #root [data-compare-content-frame] [data-surface="emerald"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+}
+
+/* PASS 157 — hard lock the Compare hierarchy after global light/dark guards.
+   Page = dark emerald, wrapper = champagne, all internal cards/fields = emerald,
+   emerald card text/icons = pure white, dropdown highlight only on hover. */
+html body #root [data-compare-page],
+html body #root [data-compare-ai-shell],
+html body:has(#root [data-compare-page]) #root .jj-main-shell,
+html body:has(#root [data-compare-page]) #root .jj-footer-shell {
+  background: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+}
+
+html body #root [data-compare-content-frame] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  border: 1px solid rgba(6,78,59,0.24) !important;
+}
+
+html body #root [data-compare-content-frame] [data-allow-ink],
+html body #root [data-compare-content-frame] [data-allow-ink] :is(h1,h2,h3,h4,h5,h6,p,span,div,td,th,label,small,strong,em,b,button,a,li,dt,dd) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+html body #root :is([data-compare-project-table],[data-compare-ai-ready-card],[data-compare-expert-card],[data-compare-deep-area-shell],[data-ai-analyzer-card],[data-ai-tools-disclaimer],[data-compare-powered-strip]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root :is([data-compare-project-table],[data-compare-ai-ready-card],[data-compare-expert-card],[data-compare-deep-area-shell],[data-ai-analyzer-card],[data-ai-tools-disclaimer],[data-compare-powered-strip]) :is(h1,h2,h3,h4,h5,h6,p,span,div,td,th,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon):not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-ai-tools-disclaimer] > div:first-child > div:first-child,
+html body #root [data-ai-tools-disclaimer] > div:first-child > div:first-child :is(svg,path,circle,rect,line,polyline,polygon) {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"],
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"]:hover,
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item]:hover {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+}
+
+/* PASS 158 — final Compare validation lock: outrank global contrast guards. */
+html body #root [data-compare-content-frame] :where([data-compare-ai-ready-card],[data-compare-expert-card],[data-compare-deep-area-shell],[data-ai-analyzer-card],[data-ai-tools-disclaimer]) :where(h1,h2,h3,h4,h5,h6,p,span,div,td,th,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-compare-content-frame] > [data-allow-ink],
+html body #root [data-compare-content-frame] > [data-allow-ink] :where(span,div,p) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"][data-highlighted]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item][data-highlighted]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item]:not(:hover) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"]:hover,
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item]:hover {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
 }
