@@ -24275,3 +24275,24 @@ html body :where([data-map-shell], [data-radix-popper-content-wrapper] [data-map
   background-image: none !important;
   border-color: rgba(255,255,255,0.16) !important;
 }
+
+/* FINAL MAP OVERRIDE — exact selectors to beat older champagne map passes. */
+html body #root [data-map-page] .jj-map-command-bar,
+html body #root [data-map-page] :is(.jj-map-command-bar),
+html body #root [data-map-shell] .jj-map-command-bar,
+html body #root [data-map-shell] :is(.jj-map-command-bar),
+html body [data-map-shell].jj-map-command-bar {
+  background: linear-gradient(145deg, rgba(5,43,35,0.99) 0%, rgba(3,37,31,0.996) 100%) !important;
+  background-image: linear-gradient(145deg, rgba(5,43,35,0.99) 0%, rgba(3,37,31,0.996) 100%) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-map-page] .jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon),
+html body #root [data-map-shell] .jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon),
+html body [data-map-shell].jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,label,button,a,svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
