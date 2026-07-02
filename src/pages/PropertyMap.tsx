@@ -179,15 +179,15 @@ const createCustomIcon = (price: number | null) => {
     className: "custom-marker",
     html: `
       <div style="
-        background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
-        color: #1A1A1A;
+        background: linear-gradient(135deg, #0B5A45 0%, #073B2F 55%, #03251F 100%);
+        color: #FFFFFF;
         padding: 6px 10px;
         border-radius: 20px;
         font-weight: bold;
         font-size: 12px;
         white-space: nowrap;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        border: 2px solid #fff;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+        border: 2px solid rgba(255,255,255,0.96);
         cursor: pointer;
       ">
         ${priceText}
