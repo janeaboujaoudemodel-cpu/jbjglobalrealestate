@@ -185,15 +185,15 @@ export const FAQTableOfContents = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-xl overflow-hidden shadow-lg jj-scrollbar-gold",
+        "bg-[#FDFBF7] border border-white/30 rounded-xl overflow-hidden shadow-lg jj-scrollbar-emerald",
         sticky ? "sticky top-4 z-[60] max-h-[calc(100vh-200px)]" : "max-h-[400px]"
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-[#B89555]/30 bg-gradient-to-r from-gold/5 to-transparent">
+      <div className="flex items-center justify-between p-4 border-b border-white/30 bg-[image:var(--jj-emerald-ombre)]">
         <div className="flex items-center gap-2">
-          <List className="w-5 h-5 text-[#1A1A1A]" />
-          <h3 className="text-[#1A1A1A] font-semibold">{title}</h3>
+          <List className="w-5 h-5 text-white" />
+          <h3 className="text-white font-semibold">{title}</h3>
         </div>
         <button
           onClick={() => setIsMinimized(!isMinimized)}
@@ -201,9 +201,9 @@ export const FAQTableOfContents = ({
           aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
         >
           {isMinimized ? (
-            <ChevronDown className="w-4 h-4 text-[#1A1A1A]/70" />
+            <ChevronDown className="w-4 h-4 text-white/70" />
           ) : (
-            <ChevronUp className="w-4 h-4 text-[#1A1A1A]/70" />
+            <ChevronUp className="w-4 h-4 text-white/70" />
           )}
         </button>
       </div>
@@ -220,14 +220,14 @@ export const FAQTableOfContents = ({
           >
             {/* Search Bar */}
             <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/70" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/70" />
               <Input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search your question..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 pr-10 bg-[#F7F2EA] border-[#B89555]/30 focus:border-[#B89555] focus:ring-gold/20"
+                className="pl-10 pr-10 bg-[#F7F2EA] border-white/30 focus:border-[#B89555] focus:ring-gold/20"
               />
               {searchQuery && (
                 <button
@@ -239,7 +239,7 @@ export const FAQTableOfContents = ({
                   }}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-[#EFE6D6] hover:bg-[#EFE6D6] flex items-center justify-center transition-colors"
                 >
-                  <X className="w-3 h-3 text-[#1A1A1A]/70" />
+                  <X className="w-3 h-3 text-white/70" />
                 </button>
               )}
             </div>
@@ -247,13 +247,13 @@ export const FAQTableOfContents = ({
             {/* Search Results */}
             {searchResults.length > 0 && (
               <div className="mb-4 p-2 bg-[#EFE6D6]/5 rounded-lg border border-[#B89555]/20">
-                <p className="text-xs text-[#1A1A1A]/70 mb-2">{searchResults.length} result(s) found:</p>
+                <p className="text-xs text-white/70 mb-2">{searchResults.length} result(s) found:</p>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
                   {searchResults.map((result, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleResultClick(result.categoryIndex, result.questionIndex)}
-                      className="w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#1A1A1A] p-2 rounded-md hover:bg-[#EFE6D6]/10 transition-colors truncate"
+                      className="w-full text-left text-sm text-white/70 hover:text-white p-2 rounded-md hover:bg-[#EFE6D6]/10 transition-colors truncate"
                     >
                       {result.question}
                     </button>
@@ -264,12 +264,12 @@ export const FAQTableOfContents = ({
 
             {/* No Results - Show submit option */}
             {showNoResults && !showContactForm && (
-              <div className="mb-4 p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
+              <div className="mb-4 p-3 bg-[#F7F2EA] rounded-lg border border-white/30">
                 <div className="flex items-start gap-2 mb-3">
-                  <HelpCircle className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
+                  <HelpCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-[#1A1A1A]">Question not found</p>
-                    <p className="text-xs text-[#1A1A1A]/70 mt-1">
+                    <p className="text-sm font-medium text-white">Question not found</p>
+                    <p className="text-xs text-white/70 mt-1">
                       Would you like to submit this question? We'll add it to our FAQ and contact you with the answer.
                     </p>
                   </div>
@@ -277,7 +277,7 @@ export const FAQTableOfContents = ({
                 <Button
                   onClick={() => setShowContactForm(true)}
                   size="sm"
-                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-medium"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white font-medium"
                 >
                   <Send className="w-3 h-3 mr-2" />
                   Submit Question
@@ -287,33 +287,33 @@ export const FAQTableOfContents = ({
 
             {/* Contact Form for submitting question */}
             {showContactForm && (
-              <div className="mb-4 p-3 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30 space-y-3">
-                <p className="text-sm font-medium text-[#1A1A1A]">Your Contact Details (Optional)</p>
+              <div className="mb-4 p-3 bg-[#F7F2EA] rounded-lg border border-white/30 space-y-3">
+                <p className="text-sm font-medium text-white">Your Contact Details (Optional)</p>
                 <Input
                   type="text"
                   placeholder="Your Name"
                   value={contactInfo.name}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-[#FDFBF7] border-[#B89555]/30 text-sm"
+                  className="bg-[#FDFBF7] border-white/30 text-sm"
                 />
                 <Input
                   type="email"
                   placeholder="Your Email"
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-[#FDFBF7] border-[#B89555]/30 text-sm"
+                  className="bg-[#FDFBF7] border-white/30 text-sm"
                 />
                 <Input
                   type="tel"
                   placeholder="Your Phone"
                   value={contactInfo.phone}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-[#FDFBF7] border-[#B89555]/30 text-sm"
+                  className="bg-[#FDFBF7] border-white/30 text-sm"
                 />
                 <Button
                   onClick={handleSubmitQuestion}
                   disabled={isSubmitting}
-                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-medium"
+                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-white font-medium"
                 >
                   {isSubmitting ? (
                     <>
@@ -339,20 +339,20 @@ export const FAQTableOfContents = ({
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
-                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-[#1A1A1A] font-medium shadow-md border border-[#B89555]/40"
-                      : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent hover:border-[#B89555]/30"
+                      ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-white font-medium shadow-md border border-[#B89555]/40"
+                      : "text-white/70 hover:text-white hover:bg-[#EFE6D6]/10 border border-transparent hover:border-white/30"
                   )}
                 >
                   <category.icon className={cn(
                     "w-4 h-4 flex-shrink-0",
-                    activeId === `category-${index}` ? "text-[#1A1A1A]" : "text-[#1A1A1A]"
+                    activeId === `category-${index}` ? "text-white" : "text-white"
                   )} />
                   <span className="flex-1 truncate">{category.title}</span>
                   <span className={cn(
                     "text-xs px-2 py-0.5 rounded-full",
                     activeId === `category-${index}`
-                      ? "bg-[#1A1A1A]/10 text-[#1A1A1A]"
-                      : "bg-[#EFE6D6]/10 text-[#1A1A1A]"
+                      ? "bg-[#1A1A1A]/10 text-white"
+                      : "bg-[#EFE6D6]/10 text-white"
                   )}>
                     {category.questions.length}
                   </span>

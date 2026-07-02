@@ -52,7 +52,7 @@ const StatCard = ({
 
   return (
     <motion.div variants={fadeInUp}>
-      <Card className="mi-gold-frame h-full rounded-2xl">
+      <Card className="jj-card-gold-frame h-full rounded-2xl">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
@@ -137,7 +137,7 @@ export const MarketOverviewDashboard = () => {
           <div className="grid grid-cols-1 gap-8">
             {/* Quarterly Trends */}
             <motion.div variants={fadeInUp}>
-              <Card className="h-full rounded-2xl mi-gold-frame transition-all">
+              <Card className="h-full rounded-2xl jj-card-gold-frame transition-all">
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-3">
                     <IconBox icon={BarChart3} className="mi-icon-tile-lg" />
