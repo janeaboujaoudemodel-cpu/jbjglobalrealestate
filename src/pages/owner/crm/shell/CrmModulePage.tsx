@@ -149,6 +149,56 @@ function BulkActionBar({ count, onClear }: { count: number; onClear: () => void 
   );
 }
 
+function FilterGroup({
+  title, items, defaultOpen = false, withWithout = false,
+}: { title: string; items: string[]; defaultOpen?: boolean; withWithout?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [mode, setMode] = useState<Record<string, "with" | "without">>({});
+  return (
+    <div className="jc-flt__group" data-open={open}>
+      <button type="button" className="jc-flt__group-head" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        <ChevronRight size={12} className="jc-flt__caret" data-open={open} />
+        <span>{title}</span>
+      </button>
+      {open && (
+        <ul className="jc-flt__items">
+          {items.map((it) => {
+            const on = !!checked[it];
+            return (
+              <li key={it} className="jc-flt__item" data-on={on}>
+                <label className="jc-flt__check">
+                  <input
+                    type="checkbox"
+                    checked={on}
+                    onChange={(e) => setChecked((p) => ({ ...p, [it]: e.target.checked }))}
+                  />
+                  <span>{it}</span>
+                </label>
+                {withWithout && on && (
+                  <div className="jc-flt__ww">
+                    <button
+                      type="button"
+                      data-active={(mode[it] ?? "with") === "with"}
+                      onClick={() => setMode((p) => ({ ...p, [it]: "with" }))}
+                    >with</button>
+                    <button
+                      type="button"
+                      data-active={mode[it] === "without"}
+                      onClick={() => setMode((p) => ({ ...p, [it]: "without" }))}
+                    >without</button>
+                    <span className="jc-flt__any">Any</span>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function KanbanView({ slug, label }: { slug: string; label: string }) {
   const stages = KANBAN_STAGES[slug] ?? [];
   return (
