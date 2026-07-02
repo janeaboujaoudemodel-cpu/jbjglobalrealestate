@@ -270,7 +270,7 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           className={`allow-white jj-emerald-metallic group fixed right-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-l-xl
- border border-r-0 text-white transform-gpu pointer-events-auto
+ text-white transform-gpu pointer-events-auto
  transition-opacity duration-300
  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]
  ${overHero ? "opacity-70" : "opacity-100"}
@@ -284,9 +284,11 @@ export default function SupportLauncher() {
             zIndex: 60,
             writingMode: "vertical-rl",
             transform: "translate3d(0, -50%, 0)",
+            backgroundImage: "var(--jj-emerald-ombre)",
+            border: 0,
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
-            borderColor: "rgba(52,211,153,0.55)",
+            boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
           }}
 
         >
@@ -325,28 +327,30 @@ export default function SupportLauncher() {
                 >
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 border-b border-white/15 mb-2">
                     <span
-                      className="allow-white inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold text-white"
+                      className="allow-white inline-flex h-11 items-center gap-1.5 px-4 rounded-full text-[11px] font-semibold text-white"
                       style={{
                         color: "#FFFFFF",
                         WebkitTextFillColor: "#FFFFFF",
-                        background: "linear-gradient(180deg, #0B5F46 0%, #064E3B 55%, #043528 100%)",
-                        border: "1px solid #10B981",
-                        boxShadow: "inset 0 1px 0 rgba(110,231,183,0.55), inset 0 -1px 0 rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.35)",
+                        backgroundImage: "var(--jj-emerald-ombre)",
+                        border: 0,
+                        boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
                       }}
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
-                      Call our agent now · Free
+                      <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                      Call Our Agent
                     </span>
                     <button
                       onClick={close}
                       aria-label="Close"
                       data-allow-dark-cta
-                      className="allow-white h-8 w-8 inline-flex items-center justify-center rounded-full text-white transition-transform hover:scale-105"
+                      data-no-contrast-guard
+                      className="allow-white h-11 w-11 min-w-11 inline-flex items-center justify-center rounded-full text-white transition-[filter] hover:brightness-110"
                       style={{
                         color: "#FFFFFF",
-                        background: "linear-gradient(180deg, #0B5F46 0%, #064E3B 55%, #043528 100%)",
-                        border: "1px solid #10B981",
-                        boxShadow: "inset 0 1px 0 rgba(110,231,183,0.55), inset 0 -1px 0 rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.35)",
+                        WebkitTextFillColor: "#FFFFFF",
+                        backgroundImage: "var(--jj-emerald-ombre)",
+                        border: 0,
+                        boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
                       }}
                     >
                       <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
