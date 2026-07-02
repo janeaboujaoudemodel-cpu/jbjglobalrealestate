@@ -23771,3 +23771,91 @@ html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] 
   background: rgba(255,255,255,0.12) !important;
   background-image: none !important;
 }
+
+/* PASS 160 — final Property Map validation lock.
+   Premium map UI contract: selected controls, status labels, close/min/max
+   buttons, stat pills, and property actions are filled emerald with pure white
+   foreground; the filter strip is a polished champagne/emerald command surface. */
+html body #root [data-map-page] {
+  --jj-map-emerald: linear-gradient(135deg, #0B5A45 0%, #073B2F 58%, #03251F 100%) !important;
+  --jj-map-emerald-hover: linear-gradient(135deg, #0F6B52 0%, #0B5A45 58%, #073B2F 100%) !important;
+  --jj-map-champagne: linear-gradient(135deg, #FFFCF4 0%, #F6ECDD 56%, #E6D2B4 100%) !important;
+  background: #03251F !important;
+}
+
+html body #root [data-map-page] .jj-map-command-bar {
+  margin: 10px 12px 8px 12px !important;
+  border-radius: 18px !important;
+  background: var(--jj-map-champagne) !important;
+  border: 1px solid rgba(11,90,69,0.28) !important;
+  box-shadow: 0 24px 58px -38px rgba(3,37,31,0.62), inset 0 1px 0 rgba(255,255,255,0.88) !important;
+  overflow: hidden !important;
+}
+
+html body #root [data-map-page] .jj-map-count-pill,
+html body #root [data-map-page] .jj-map-count-pill *,
+html body #root [data-map-page] .jj-map-count-pill :is(svg,path,line,rect,circle,polyline,polygon) {
+  background: var(--jj-map-emerald) !important;
+  background-image: var(--jj-map-emerald) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-map-page] .jj-map-segmented-control,
+html body #root [data-map-page] .jj-map-layer-switcher {
+  background: rgba(255,252,244,0.82) !important;
+  border: 1px solid rgba(11,90,69,0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 14px 34px -26px rgba(3,37,31,0.44) !important;
+}
+
+html body #root [data-map-page] .jj-map-segment,
+html body #root [data-map-page] .jj-map-layer-button,
+html body #root [data-map-page] .jj-map-filter-toggle,
+html body #root [data-map-page] .jj-map-sort-select {
+  border-radius: 11px !important;
+  border: 1px solid rgba(11,90,69,0.16) !important;
+  background: rgba(255,255,255,0.34) !important;
+  color: #073B2F !important;
+  -webkit-text-fill-color: #073B2F !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55) !important;
+}
+
+html body #root [data-map-page] .jj-map-segment[data-active="true"],
+html body #root [data-map-page] .jj-map-layer-button[data-active="true"],
+html body #root [data-map-page] .jj-map-filter-toggle[data-active="true"],
+html body #root [data-map-page] .jj-map-details-button,
+html body #root [data-map-page] .jj-map-stat-tile,
+html body #root [data-map-page] .jj-map-card-close,
+html body #root [data-map-page] .jj-map-square-control,
+html body #root [data-map-page] .jj-map-status-badge {
+  background: var(--jj-map-emerald) !important;
+  background-image: var(--jj-map-emerald) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 16px 34px -22px rgba(3,37,31,0.78), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+}
+
+html body #root [data-map-page] :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-square-control, .jj-map-status-badge),
+html body #root [data-map-page] :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-square-control, .jj-map-status-badge) *,
+html body #root [data-map-page] :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-filter-toggle[data-active="true"], .jj-map-details-button, .jj-map-stat-tile, .jj-map-card-close, .jj-map-square-control, .jj-map-status-badge) :is(svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-map-page] .jj-map-card-close:hover,
+html body #root [data-map-page] .jj-map-square-control:hover,
+html body #root [data-map-page] .jj-map-details-button:hover {
+  background: var(--jj-map-emerald-hover) !important;
+  background-image: var(--jj-map-emerald-hover) !important;
+  transform: translateY(-1px) !important;
+}
+
+html body #root [data-map-page] .custom-marker > div,
+html body #root [data-map-page] .custom-marker > div * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
