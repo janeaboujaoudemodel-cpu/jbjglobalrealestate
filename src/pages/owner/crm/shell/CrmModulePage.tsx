@@ -126,7 +126,7 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
         <button type="button" className="jc-list__actions">
           Actions <ChevronDown size={13} />
         </button>
-        <button type="button" className="jc-list__cta">
+        <button type="button" className="jc-list__cta" onClick={goCreate}>
           <Plus size={15} /> Create {label}
         </button>
         <button type="button" className="jc-list__icon" aria-label="More"><MoreHorizontal size={18} /></button>
