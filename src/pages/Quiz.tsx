@@ -248,86 +248,98 @@ const PROPERTY_TYPE_KEYWORDS: Record<string, string[]> = {
 const LANGUAGES = getLanguageList();
 const NATIONALITIES = getCountryList();
 
+// AI Home Finder — Emerald Ombré + Pure White Ink (matches Property Measurement).
+// This overrides every legacy champagne/gold color declared inline in the JSX
+// below, so we do NOT need to rewrite the JSX to flip the palette.
 const AIHF_STYLE = `
-  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div):not(.aihf-cta):not(.aihf-cta *):not(.aihf-option[aria-pressed="true"]):not(.aihf-option[aria-pressed="true"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-emerald-action="true"]):not([data-emerald-action="true"] *), .aihf-root svg:not(.aihf-cta svg):not(.aihf-option[aria-pressed="true"] svg):not(.jj-surface-emerald svg):not(.jj-pill-emerald-metallic svg):not([data-emerald-action="true"] svg) {
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
+  .aihf-root {
+    background: linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%) !important;
+  }
+  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div,li,strong,em,a) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
     opacity: 1 !important;
   }
-  .aihf-root svg:not(.aihf-cta svg):not(.aihf-option[aria-pressed="true"] svg):not(.jj-surface-emerald svg):not(.jj-pill-emerald-metallic svg):not([data-emerald-action="true"] svg),
-  .aihf-root svg:not(.aihf-cta svg):not(.aihf-option[aria-pressed="true"] svg):not(.jj-surface-emerald svg):not(.jj-pill-emerald-metallic svg):not([data-emerald-action="true"] svg) * { stroke: #1A1A1A !important; }
-  .aihf-root .aihf-muted { color: rgba(26,26,26,0.70) !important; -webkit-text-fill-color: rgba(26,26,26,0.70) !important; }
-  .aihf-root .aihf-tiffany { color: #B89555 !important; -webkit-text-fill-color: #B89555 !important; }
+  .aihf-root svg, .aihf-root svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; }
+  .aihf-root .aihf-muted { color: rgba(255,255,255,0.75) !important; -webkit-text-fill-color: rgba(255,255,255,0.75) !important; }
+  .aihf-root .aihf-tiffany { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+
+  /* Any champagne / raised / page-tint background flips to emerald ombré card. */
+  .aihf-root [class*="bg-[#F7F2EA]"],
+  .aihf-root [class*="bg-[#FDFBF7]"],
+  .aihf-root [class*="bg-[#EFE6D6]"],
+  .aihf-root [style*="#F7F2EA"],
+  .aihf-root [style*="#FDFBF7"],
+  .aihf-root [style*="#EFE6D6"],
   .aihf-root .aihf-card {
-    background: #F7F2EA !important;
-    border: 1px solid rgba(184,149,85,0.55) !important;
+    background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+    background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+    border-color: rgba(255,255,255,0.34) !important;
     box-shadow: none !important;
   }
-  .aihf-root .aihf-option {
-    background: #FDFBF7 !important;
-    border-color: rgba(184,149,85,0.45) !important;
+
+  /* Header bar stays as full-bleed deep emerald band. */
+  .aihf-root > div:first-of-type[class*="border-b"] {
+    background: linear-gradient(180deg, #064E3B 0%, #042c1c 100%) !important;
+    border-bottom-color: rgba(255,255,255,0.24) !important;
   }
-  .aihf-root .aihf-option:hover, .aihf-root .aihf-option[aria-pressed="true"] {
-    border-color: transparent !important;
-    box-shadow: 0 10px 24px -16px rgba(6,78,59,0.8) !important;
+
+  /* Option tiles */
+  .aihf-root .aihf-option {
+    background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+    border-color: rgba(255,255,255,0.34) !important;
+  }
+  .aihf-root .aihf-option:hover {
+    border-color: rgba(255,255,255,0.55) !important;
+    box-shadow: 0 10px 24px -16px rgba(16,185,129,0.55) !important;
   }
   .aihf-root .aihf-option[aria-pressed="true"] {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
+    background: linear-gradient(135deg, #065F46 0%, #04231A 45%, #000000 100%) !important;
+    border-color: rgba(255,255,255,0.52) !important;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 8px 28px rgba(16,185,129,0.28), inset 0 0 24px rgba(16,185,129,0.18) !important;
   }
-  .aihf-root .aihf-option[aria-pressed="true"],
-  .aihf-root .aihf-option[aria-pressed="true"] *,
-  .aihf-root .aihf-option[aria-pressed="true"] svg,
-  .aihf-root .aihf-option[aria-pressed="true"] svg * {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-    stroke: #FFFFFF !important;
-  }
+
+  /* CTAs */
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
     min-width: 7rem;
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
-    border: 0 !important;
-    box-shadow: 0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+    background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%) !important;
+    background-image: linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%) !important;
+    border: 1px solid rgba(255,255,255,0.46) !important;
+    box-shadow: 0 0 28px rgba(16,185,129,0.45) !important;
   }
-  .aihf-root .aihf-cta, .aihf-root .aihf-cta *, .aihf-root .aihf-cta svg {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-    stroke: #FFFFFF !important;
-    opacity: 1 !important;
-  }
-  .aihf-root .aihf-cta svg *, .aihf-root .aihf-cta :is(path,line,polyline,polygon,rect,circle,ellipse) { stroke: #FFFFFF !important; color: #FFFFFF !important; }
-  .aihf-root .aihf-cta:hover { background: var(--jj-emerald-ombre-hover) !important; background-image: var(--jj-emerald-ombre-hover) !important; }
+  .aihf-root .aihf-cta, .aihf-root .aihf-cta * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
+
+  /* Solid emerald surfaces stay emerald with white ink */
   .aihf-root .jj-surface-emerald,
   .aihf-root .jj-pill-emerald-metallic,
   .aihf-root .jj-emerald-metallic {
-    background: var(--jj-emerald-ombre) !important;
-    background-image: var(--jj-emerald-ombre) !important;
-    border: 0 !important;
+    background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+    background-image: linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+    border: 1px solid rgba(255,255,255,0.42) !important;
   }
-  .aihf-root .jj-surface-emerald,
-  .aihf-root .jj-surface-emerald *,
-  .aihf-root .jj-pill-emerald-metallic,
-  .aihf-root .jj-pill-emerald-metallic *,
-  .aihf-root .jj-emerald-metallic,
-  .aihf-root .jj-emerald-metallic *,
-  .aihf-root .jj-surface-emerald svg,
-  .aihf-root .jj-surface-emerald svg * {
+  .aihf-root .jj-surface-emerald, .aihf-root .jj-surface-emerald *,
+  .aihf-root .jj-pill-emerald-metallic, .aihf-root .jj-pill-emerald-metallic *,
+  .aihf-root .jj-emerald-metallic, .aihf-root .jj-emerald-metallic * {
+    color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important;
+  }
+
+  /* Inputs */
+  .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
+    background: linear-gradient(135deg, rgba(4,40,28,0.85), rgba(0,0,0,0.85)) !important;
+    border: 1px solid rgba(255,255,255,0.42) !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
-    stroke: #FFFFFF !important;
   }
-  .aihf-root .aihf-input, .aihf-root input, .aihf-root [data-searchable-trigger] {
-    background: #FDFBF7 !important;
-    border: 1px solid rgba(184,149,85,0.55) !important;
-    color: #1A1A1A !important;
-    -webkit-text-fill-color: #1A1A1A !important;
-  }
-  .aihf-root input::placeholder { color: rgba(26,26,26,0.55) !important; -webkit-text-fill-color: rgba(26,26,26,0.55) !important; }
-  .aihf-popover, .aihf-popover * { background-color: #FDFBF7 !important; color: #1A1A1A !important; -webkit-text-fill-color: #1A1A1A !important; }
-  .aihf-popover { border: 1px solid rgba(184,149,85,0.55) !important; }
-  .aihf-popover svg, .aihf-popover svg * { stroke: #1A1A1A !important; color: #1A1A1A !important; }
-  .aihf-popover .jbj-form-option:hover { background-color: #EFE6D6 !important; }
+  .aihf-root input::placeholder { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
+
+  /* Popover keeps light surface so lists are readable */
+  .aihf-popover, .aihf-popover * { background-color: #041610 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+  .aihf-popover { border: 1px solid rgba(255,255,255,0.34) !important; }
+  .aihf-popover svg, .aihf-popover svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; }
+  .aihf-popover .jbj-form-option:hover { background-color: rgba(255,255,255,0.06) !important; }
+
+  /* Progress track (champagne rail) */
+  .aihf-root [class*="bg-[#EFE6D6]"].h-2 { background: rgba(255,255,255,0.12) !important; }
 `;
 
 const Quiz = () => {
