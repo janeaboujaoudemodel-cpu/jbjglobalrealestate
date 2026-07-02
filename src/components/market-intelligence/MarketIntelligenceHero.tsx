@@ -34,7 +34,14 @@ export const MarketIntelligenceHero = ({
   actions 
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section data-mi-hero data-surface="dark" className="mi-hero-scene relative flex min-h-[100svh] w-full items-center overflow-hidden">
+    <section
+      data-mi-hero
+      data-hero-dark
+      data-no-compare-frame
+      data-no-section-frame
+      data-surface="dark"
+      className="mi-hero-scene relative flex min-h-[100svh] w-full items-center overflow-hidden"
+    >
       <div className="mi-hero-grid" aria-hidden="true" />
       <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
       <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />

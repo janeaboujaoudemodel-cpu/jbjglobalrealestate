@@ -40,7 +40,7 @@ const AreaIntelligence = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div data-mi-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Dubai Area Intelligence | Rent Trends & Property Prices by Neighborhood | JBJ GLOBAL REAL ESTATE"
         description="Deep dive into Dubai neighborhoods. Historical price trends, rent analysis, demand vs supply indicators, and market insights for BUY · SELL · RENT decisions."
@@ -182,14 +182,14 @@ const AreaIntelligence = () => {
                           href={source.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] rounded-xl transition-all group shadow-sm"
+                          className="block p-4 rounded-xl transition-all group shadow-sm bg-[image:var(--jj-emerald-ombre)] border border-white/20 hover:-translate-y-0.5"
                         >
                           <div className="flex items-start justify-between">
                             <div>
-                              <h4 className="font-semibold text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">{source.title}</h4>
-                              <p className="text-[#1A1A1A]/70 text-sm mt-1">{source.desc}</p>
+                              <h4 className="font-semibold text-white transition-colors">{source.title}</h4>
+                              <p className="text-white/85 text-sm mt-1">{source.desc}</p>
                             </div>
-                            <ExternalLink className="w-4 h-4 text-[#1A1A1A] opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <ExternalLink className="w-4 h-4 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
                           </div>
                         </a>
                       ))}
@@ -228,9 +228,9 @@ const AreaIntelligence = () => {
                         { num: "4", title: "Supply Status", desc: "Existing stock versus registered handovers and newly delivered units, as published by DLD." },
                         { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
                       ].map((item, idx) => (
-                        <div key={idx} className="flex gap-4 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl">
-                          <div className="w-10 h-10 rounded-full bg-[#EFE6D6] border border-[#B89555] flex items-center justify-center flex-shrink-0">
-                            <span className="text-[#B89555] font-bold">{item.num}</span>
+                        <div key={idx} className="flex gap-4 p-4 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl">
+                          <div className="w-10 h-10 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 flex items-center justify-center flex-shrink-0">
+                            <span className="text-white font-bold">{item.num}</span>
                           </div>
                           <div>
                             <h4 className="font-semibold text-[#1A1A1A]">{item.title}</h4>

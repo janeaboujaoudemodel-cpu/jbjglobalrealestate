@@ -46,11 +46,9 @@ export const GuideHero = ({
   return (
     <section
       data-hero-dark
-      className="jj-hero-fullscreen jj-hero-compact jj-hero-neon relative flex items-center overflow-hidden"
+      className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
       style={{ minHeight: "100dvh" }}
     >
-      <span aria-hidden className="jj-hero-neon-accent" />
-
       {/* Media background */}
       <div className="absolute inset-0 z-0">
         {videoSrc ? (

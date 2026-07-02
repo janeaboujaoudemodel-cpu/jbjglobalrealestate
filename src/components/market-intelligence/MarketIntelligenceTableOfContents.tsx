@@ -35,6 +35,17 @@ export const MarketIntelligenceTableOfContents = ({
   const [isMinimized, setIsMinimized] = useState(false);
   const isScrollingRef = useRef(false);
 
+  const passBoundaryWheelToPage = (event: React.WheelEvent<HTMLElement>) => {
+    const target = event.currentTarget;
+    const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
+    const atTop = target.scrollTop <= 0;
+    const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 2;
+    if (!hasLocalScroll || (event.deltaY < 0 && atTop) || (event.deltaY > 0 && atBottom)) {
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, behavior: "auto" });
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -77,7 +88,7 @@ export const MarketIntelligenceTableOfContents = ({
   };
 
   return (
-    <div className="surface-light fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72" data-surface="light">
+    <div className="surface-light fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72" data-surface="light" data-mi-toc>
       {/* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -112,7 +123,7 @@ export const MarketIntelligenceTableOfContents = ({
               transition={{ duration: 0.12 }}
               className="flex flex-col min-h-0 flex-1 overflow-hidden"
             >
-              <nav className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald">
+              <nav onWheel={passBoundaryWheelToPage} className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald">
                 {items.map((item, index) => {
                   const isActive = activeId === item.id;
                   return (
@@ -143,7 +154,7 @@ export const MarketIntelligenceTableOfContents = ({
                         className={cn(
                           "h-7 w-7 rounded-lg flex items-center justify-center text-[11px] font-bold leading-none",
                           isActive
-                            ? "bg-white/12 text-white border border-white/35"
+                            ? "bg-[#064E3B] text-white border border-white/35"
                             : "bg-[image:var(--jj-emerald-ombre)] text-white border border-white/25"
                         )}
                         style={

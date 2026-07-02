@@ -38,6 +38,17 @@ export const GuideTableOfContents = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const isScrollingRef = useRef(false);
 
+  const passBoundaryWheelToPage = (event: React.WheelEvent<HTMLElement>) => {
+    const target = event.currentTarget;
+    const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
+    const atTop = target.scrollTop <= 0;
+    const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 2;
+    if (!hasLocalScroll || (event.deltaY < 0 && atTop) || (event.deltaY > 0 && atBottom)) {
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, behavior: "auto" });
+    }
+  };
+
   useEffect(() => {
     // Check if tooltip was already dismissed
     const dismissed = localStorage.getItem(TOOLTIP_DISMISSED_KEY);
@@ -102,7 +113,7 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72">
+    <div className="fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72" data-guide-toc>
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -172,6 +183,7 @@ export const GuideTableOfContents = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.12 }}
+              onWheel={passBoundaryWheelToPage}
               className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
             >
               {items.map((item, index) => (
@@ -188,7 +200,7 @@ export const GuideTableOfContents = ({
                   <span className={cn(
                     "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
                     activeId === item.id
-                      ? "bg-white/12 text-white border border-white/35"
+                      ? "bg-[#064E3B] text-white border border-white/35"
                       : "bg-[image:var(--jj-emerald-ombre)] text-white border border-white/25"
                   )}>
                     {index + 1}

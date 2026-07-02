@@ -135,7 +135,7 @@ const MarketOverview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <div data-mi-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Dubai Real Estate Market Overview | BUY · SELL · RENT Trends | JBJ GLOBAL REAL ESTATE"
         description="UAE & Dubai real estate market trends and analysis. Transaction volumes, price movements, and rent trends powered by official government Open Data. No predictions, just insights."
