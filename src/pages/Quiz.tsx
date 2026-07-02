@@ -254,6 +254,8 @@ const NATIONALITIES = getCountryList();
 const AIHF_STYLE = `
   .aihf-root {
     background: linear-gradient(180deg, #062B1E 0%, #041A12 55%, #02120C 100%) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
   }
   /* Question hero band — full-bleed deep emerald */
   .aihf-root .aihf-hero {
@@ -261,12 +263,18 @@ const AIHF_STYLE = `
     border-bottom: 1px solid rgba(255,255,255,0.28) !important;
     box-shadow: 0 10px 40px -20px rgba(0,0,0,0.6) !important;
   }
-  .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div,li,strong,em,a) {
+  .aihf-root, .aihf-root :is(h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,strong,em,a,small,time,dt,dd,th,td) {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
     opacity: 1 !important;
   }
-  .aihf-root svg, .aihf-root svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; }
+  .aihf-root svg, .aihf-root svg * { stroke: #FFFFFF !important; color: #FFFFFF !important; fill: none !important; }
+  .aihf-root :is(.aihf-meta-row, .aihf-meta-row *, .aihf-icon-chip, .aihf-icon-chip *, [data-surface="emerald"], [data-surface="emerald"] *, .jj-surface-emerald, .jj-surface-emerald *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *) {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+    opacity: 1 !important;
+  }
   .aihf-root .aihf-muted { color: rgba(255,255,255,0.75) !important; -webkit-text-fill-color: rgba(255,255,255,0.75) !important; }
   .aihf-root .aihf-tiffany { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
 
@@ -996,6 +1004,7 @@ const Quiz = () => {
       <section
         data-allow-dark-cta
         data-no-contrast-guard
+        data-surface="dark"
         className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col"
         style={{ background: "#FDFBF7" }}
       >
@@ -1008,12 +1017,12 @@ const Quiz = () => {
                 onClick={() => navigate(-1)}
                 data-no-contrast-guard
                 className="transition-colors flex items-center gap-2"
-                style={{ color: "#1A1A1A" }}
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
                 <ChevronLeft className="w-5 h-5" />
                 <span>Exit</span>
               </button>
-              <div className="flex items-center gap-3" style={{ color: "#1A1A1A" }}>
+              <div className="flex items-center gap-3" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                 <Clock className="w-4 h-4" />
                 <span className="text-sm">~{estimatedTime} seconds</span>
               </div>
@@ -1025,6 +1034,7 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-6">
           <AIShellCard
             as="div"
+            data-surface="dark"
             padding="lg"
             className="w-full max-w-2xl text-center border border-[#B89555]/60 shadow-[0_0_18px_rgba(184,149,85,0.14),0_18px_55px_rgba(0,0,0,0.12)]"
           >
@@ -1088,15 +1098,15 @@ const Quiz = () => {
             </ul>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-6" style={{ color: "#FFFFFF" }}>
+            <div className="aihf-meta-row flex flex-wrap items-center justify-center gap-6 text-sm mb-6" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
-                <div key={label} className="flex items-center gap-2">
+                 <div key={label} className="flex items-center gap-2" data-surface="emerald">
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                    className="aihf-icon-chip w-8 h-8 rounded-full flex items-center justify-center shrink-0"
                     style={{
                       background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
                       border: "1px solid rgba(255,255,255,0.42)",
@@ -1104,7 +1114,7 @@ const Quiz = () => {
                   >
                     <Icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <span className="font-semibold" style={{ color: "#FFFFFF" }}>{label}</span>
+                  <span className="font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{label}</span>
                 </div>
               ))}
             </div>
@@ -1132,7 +1142,7 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
+      <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen bg-[#FDFBF7] flex flex-col">
         <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[#B89555]/25 bg-[#F7F2EA]">
@@ -1277,7 +1287,7 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
       {/* Hero Header — full-bleed deep emerald band with question inside */}
       <div className="aihf-hero sticky top-0 lg:top-[48px] z-10">

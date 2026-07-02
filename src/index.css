@@ -22963,6 +22963,82 @@ html body #root [data-tool-shell-root][data-tool-emerald] :is([style*="border: 1
   border-color: rgba(255,255,255,0.42) !important;
 }
 
+/* PASS 153 — AI TOOLS EMERALD CONTRAST FINAL LOCK
+   Any emerald/dark AI tool surface must render pure white text and white
+   icon strokes. This intentionally beats legacy light-surface rescue rules,
+   sidebar champagne locks, and inline Tailwind ink classes when they are
+   nested under AI Home Finder or PremiumToolShell. */
+html body #root :is(.aihf-root, [data-tool-shell-root][data-tool-emerald]) :is(
+  h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,a,button,div,figcaption,dt,dd,th,td,time,
+  [class*="text-[#1A1A1A]"], [class*="text-black"], [class*="text-foreground"], [class*="text-muted-foreground"],
+  [class*="text-slate"], [class*="text-gray"], [class*="text-zinc"], [class*="text-neutral"], [class*="text-stone"]
+):not([data-price-pill]):not([data-price-pill] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root :is(.aihf-root, [data-tool-shell-root][data-tool-emerald]) :is(
+  svg, svg *, [class*="lucide"], [class*="lucide"] *,
+  [class*="text-[#1A1A1A]"] svg, [class*="text-black"] svg, [class*="text-foreground"] svg
+):not([data-price-pill]):not([data-price-pill] *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root :is(.aihf-root, [data-tool-shell-root][data-tool-emerald]) :is(
+  [data-surface="emerald"], [data-surface="emerald"] *,
+  .jj-surface-emerald, .jj-surface-emerald *,
+  .jj-emerald-action, .jj-emerald-action *,
+  .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *,
+  .jj-cta-primary, .jj-cta-primary *,
+  .jj-cta-emerald, .jj-cta-emerald *,
+  .aihf-meta-row, .aihf-meta-row *,
+  .aihf-icon-chip, .aihf-icon-chip *
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root .aihf-root :is([data-surface="light"], .surface-light, [class*="bg-[#F7F2EA]"], [class*="bg-[#FDFBF7]"], [class*="bg-[#EFE6D6]"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  background-color: transparent !important;
+  border-color: rgba(255,255,255,0.42) !important;
+}
+html body #root .aihf-root :is(input, textarea, select, [role="combobox"], [data-searchable-trigger]) {
+  background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
+  border-color: rgba(255,255,255,0.42) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  caret-color: #FFFFFF !important;
+}
+html body #root .aihf-root :is(input, textarea)::placeholder {
+  color: rgba(255,255,255,0.58) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.58) !important;
+  opacity: 1 !important;
+}
+
+/* Listing assistant tools are also AI tools: emerald buttons must never carry
+   black/ink text or black icons on emerald fills. */
+html body #root :is([data-ai-listing-shell], [data-manual-listing-shell]) :is(
+  [data-surface="emerald"], [data-surface="emerald"] *,
+  .jj-surface-emerald, .jj-surface-emerald *,
+  .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *,
+  .jj-cta-primary, .jj-cta-primary *,
+  .jj-cta-emerald, .jj-cta-emerald *,
+  button[class*="bg-[#064E3B]"], button[class*="bg-[#064E3B]"] *,
+  button[class*="bg-[#065F46]"], button[class*="bg-[#065F46]"] *,
+  button[class*="from-[#064E3B]"], button[class*="from-[#064E3B]"] *,
+  button[class*="from-[#065F46]"], button[class*="from-[#065F46]"] *,
+  a[class*="bg-[#064E3B]"], a[class*="bg-[#064E3B]"] *,
+  a[class*="from-[#064E3B]"], a[class*="from-[#064E3B]"] *
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 @media (max-width: 640px) {
   html body #root [data-tool-shell-root][data-tool-emerald] :is(button, a[role="button"], [role="button"], [role="tab"]) {
     min-width: 44px !important;
