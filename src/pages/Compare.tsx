@@ -877,9 +877,9 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           style={{ background: CHAMPAGNE, border: EMERALD_HAIRLINE, boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.68)" }}
         >
           {/* Counter */}
-          <div data-allow-ink className="flex items-center gap-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
-            <span className="text-lg font-bold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{projects.length}</span>
-            <span className="text-sm" style={{ color: "rgba(26,26,26,0.78)", WebkitTextFillColor: "rgba(26,26,26,0.78)" }}>properties in comparison</span>
+          <div data-allow-ink data-no-contrast-guard className="flex items-center gap-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+            <span data-allow-ink data-no-contrast-guard className="text-lg font-bold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{projects.length}</span>
+            <span data-allow-ink data-no-contrast-guard className="text-sm" style={{ color: "rgba(26,26,26,0.78)", WebkitTextFillColor: "rgba(26,26,26,0.78)" }}>properties in comparison</span>
           </div>
 
           {/* Comparison Table */}
@@ -1224,8 +1224,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               <div data-surface="emerald" data-on-dark="true" data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.25)" }}>
                 <Sparkles className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </div>
-              <h3 className="text-2xl font-bold mb-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>AI Analysis Ready</h3>
-              <p className="max-w-md mx-auto mb-6 text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
+              <h3 data-no-contrast-guard className="allow-white text-2xl font-bold mb-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>AI Analysis Ready</h3>
+              <p data-no-contrast-guard className="allow-white max-w-md mx-auto mb-6 text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
                 Click <strong style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations.
               </p>
               <button
@@ -1242,7 +1242,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 )}
               </button>
               {projects.length < 2 && (
-                <p className="text-sm mt-4" style={{ color: "rgba(255,255,255,0.70)", WebkitTextFillColor: "rgba(255,255,255,0.70)" }}>Add at least 2 properties to enable AI comparison</p>
+                <p data-no-contrast-guard className="allow-white text-sm mt-4" style={{ color: "rgba(255,255,255,0.70)", WebkitTextFillColor: "rgba(255,255,255,0.70)" }}>Add at least 2 properties to enable AI comparison</p>
               )}
             </div>
           )}
@@ -1254,8 +1254,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 <Users className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </div>
               <div>
-                <h3 className="font-bold text-lg" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Need Expert Guidance?</h3>
-                <p className="text-sm" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>Speak with our property consultants</p>
+                <h3 data-no-contrast-guard className="allow-white font-bold text-lg" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Need Expert Guidance?</h3>
+                <p data-no-contrast-guard className="allow-white text-sm" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>Speak with our property consultants</p>
               </div>
             </div>
 
