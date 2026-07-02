@@ -274,14 +274,23 @@ const AIHub = () => {
         {/* ════════════════════════════════════════════════════════════════
             HERO — champagne page band, gold hairline accents, ink type
         ════════════════════════════════════════════════════════════════ */}
-        <section className="jj-band jj-band--page relative overflow-hidden py-20 md:py-28">
-          {/* Soft gold radial wash */}
+        <section
+          data-surface="emerald"
+          data-allow-dark-cta
+          data-on-dark
+          className="relative overflow-hidden py-20 md:py-28"
+          style={{
+            background:
+              "linear-gradient(135deg, #064E3B 0%, #04231A 48%, #010806 100%)",
+          }}
+        >
+          {/* Emerald depth wash */}
           <div
             aria-hidden
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(900px 500px at 50% 0%, rgba(184,149,85,0.10), transparent 65%)",
+                "radial-gradient(900px 500px at 50% 0%, rgba(255,255,255,0.10), transparent 62%)",
             }}
           />
           <motion.div
@@ -291,11 +300,16 @@ const AIHub = () => {
             variants={staggerContainer}
           >
             <div className="max-w-4xl mx-auto text-center">
-              {/* Gold hairline eyebrow */}
+              <motion.div variants={fadeInUp} className="mb-5 flex justify-center">
+                <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-white/30 bg-white/10 shadow-[0_18px_44px_-26px_rgba(255,255,255,0.42)]">
+                  <Sparkles className="w-7 h-7 allow-white" style={{ color: "#FFFFFF" }} />
+                </span>
+              </motion.div>
+
               <motion.div variants={fadeInUp} className="mb-6 inline-block">
-                <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F7F2EA] border border-[#B89555]/60">
-                  <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                  <span className="font-semibold text-[10px] md:text-xs uppercase tracking-[0.24em] text-[#1A1A1A]">
+                <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/35 bg-white/10">
+                  <Sparkles className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF" }} />
+                  <span className="allow-white font-semibold text-[10px] md:text-xs uppercase tracking-[0.24em]" style={{ color: "#FFFFFF" }}>
                     Free for All Users · AI Command Center
                   </span>
                 </span>
@@ -303,33 +317,35 @@ const AIHub = () => {
 
               <motion.h1
                 variants={fadeInUp}
-                className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05] text-[#1A1A1A]"
+                className="allow-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 leading-[1.05]"
+                style={{ color: "#FFFFFF" }}
               >
                 JBJ Royal{" "}
-                <span style={{ color: "#B89555" }}>Tools Hub</span>
+                <span className="allow-white" style={{ color: "#FFFFFF" }}>Tools Hub</span>
               </motion.h1>
 
               <motion.p
                 variants={fadeInUp}
-                className="text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-3 text-[#1A1A1A]/85"
+                className="allow-white text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-3"
+                style={{ color: "rgba(255,255,255,0.92)" }}
               >
                 Your Complete AI Tools Command Center
               </motion.p>
 
               <motion.p
                 variants={fadeInUp}
-                className="text-sm md:text-base max-w-xl mx-auto mb-8 text-[#1A1A1A]/65"
+                className="allow-white text-sm md:text-base max-w-xl mx-auto mb-8"
+                style={{ color: "rgba(255,255,255,0.82)" }}
               >
                 60+ free tools · Property analysis · Investment calculators · Productivity suite
               </motion.p>
 
-              {/* Gold hairline divider */}
               <motion.div
                 variants={fadeInUp}
                 className="w-24 h-px mx-auto mb-9"
                 style={{
                   background:
-                    "linear-gradient(90deg, transparent, rgba(184,149,85,0.85), transparent)",
+                    "linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent)",
                 }}
               />
 
@@ -352,11 +368,11 @@ const AIHub = () => {
                   onClick={() =>
                     document.getElementById("discover-tools")?.scrollIntoView({ behavior: "smooth" })
                   }
-                  className="jj-cta-champagne inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full"
-                  style={{ color: "#1A1A1A" }}
+                  className="allow-white inline-flex items-center justify-center gap-2 h-12 px-4 rounded-xl text-sm font-semibold w-full border border-white/35 transition-all hover:border-white/60"
+                  style={{ color: "#FFFFFF", background: "rgba(255,255,255,0.10)" }}
                 >
-                  <Sparkles className="w-4 h-4" style={{ color: "#1A1A1A" }} data-allow-gold />
-                  <span style={{ color: "#1A1A1A" }}>Explore Free Tools</span>
+                  <Sparkles className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} />
+                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Explore Free Tools</span>
                 </button>
 
 
@@ -750,13 +766,21 @@ function AIHubFaqSection() {
           <AccordionItem
             key={i}
             value={`ai-hub-faq-${i}`}
-            className="rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden transition-colors hover:bg-[#F7F2EA]"
+            data-ai-hub-faq-item
+            data-allow-bg
+            className="group rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden transition-colors data-[state=open]:border-white/35 data-[state=open]:bg-[#064E3B]"
           >
-            <AccordionTrigger className="w-full text-left text-[#1A1A1A] hover:no-underline py-4 px-5">
-              <span className="font-semibold">{faq.question}</span>
+            <AccordionTrigger
+              data-ai-hub-faq-trigger
+              className="w-full text-left text-[#1A1A1A] hover:text-[#1A1A1A] hover:no-underline py-4 px-5 transition-colors hover:bg-[#F7F2EA] data-[state=open]:bg-[#064E3B] data-[state=open]:text-white data-[state=open]:hover:bg-[#064E3B]"
+            >
+              <span className="font-semibold group-data-[state=open]:text-white">{faq.question}</span>
             </AccordionTrigger>
-            <AccordionContent className="text-[#1A1A1A]/75 leading-relaxed pb-5 px-5">
-              {faq.answer}
+            <AccordionContent
+              data-ai-hub-faq-content
+              className="bg-[#064E3B] text-white leading-relaxed pb-5 px-5 pt-4"
+            >
+              <span>{faq.answer}</span>
             </AccordionContent>
           </AccordionItem>
         ))}
