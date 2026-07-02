@@ -45,7 +45,7 @@ export const PremiumToolShell = ({
   subtitle,
   showBack = true,
   children,
-  poweredBy = true,
+  poweredBy = false,
   readMore,
 }: Props) => {
   const navigate = useNavigate();
