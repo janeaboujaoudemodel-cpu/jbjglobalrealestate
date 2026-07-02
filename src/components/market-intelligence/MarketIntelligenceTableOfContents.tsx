@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
+import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
 import { LucideIcon, List, ChevronDown, ChevronUp, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,7 @@ export const MarketIntelligenceTableOfContents = ({
   const [isMinimized, setIsMinimized] = useState(false);
   const isScrollingRef = useRef(false);
 
-  const passBoundaryWheelToPage = (event: React.WheelEvent<HTMLElement>) => {
+  const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
     const target = event.currentTarget;
     const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
     const atTop = target.scrollTop <= 0;

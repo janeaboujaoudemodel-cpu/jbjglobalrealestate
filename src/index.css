@@ -24768,3 +24768,82 @@ html body #root [data-hero-dark] :is(h1, p).allow-white {
   opacity: 1 !important;
 }
 /* END PASS 170 */
+
+/* PASS 171 — INSIGHTS/GUIDES FINAL EDGE + EMERALD ACCENT LOCK
+   Fixes the reported drift on Area Intelligence and guide pages without
+   changing page content: full-bleed heroes, no hero gold frame, stable TOC
+   active rows, emerald icon accents with pure-white glyphs, and no legacy
+   neon/purple overlays inside the insights wrapper. */
+html body #root [data-insights-page] :is(.jj-hero-fullscreen, [data-mi-hero], [data-hero-dark]) {
+  width: 100% !important;
+  max-width: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+html body #root [data-insights-page] > div:not([data-mi-page]).min-h-screen,
+html body #root [data-insights-page] > [data-neon-page] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+html body #root [data-insights-page] [data-neon-page],
+html body #root [data-insights-page] [data-neon-page]::before,
+html body #root [data-insights-page] [data-neon-page]::after,
+html body #root [data-insights-page] .jj-hero-neon::before,
+html body #root [data-insights-page] .jj-hero-neon::after,
+html body #root [data-insights-page] .jj-hero-neon-accent {
+  background-image: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+html body #root [data-insights-page] [data-neon-page]::before,
+html body #root [data-insights-page] [data-neon-page]::after,
+html body #root [data-insights-page] .jj-hero-neon::before,
+html body #root [data-insights-page] .jj-hero-neon::after,
+html body #root [data-insights-page] .jj-hero-neon-accent {
+  display: none !important;
+  content: none !important;
+}
+html body #root [data-insights-page] section[data-hero-dark],
+html body #root [data-insights-page] [data-mi-hero] {
+  border-color: transparent !important;
+}
+html body #root [data-insights-page] :is(.jj-icon-box-active, .jj-icon-box, .jj-icon-tile-emerald, [data-icon-tone="emerald"]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg,#0B5132 0%,#064E3B 58%,#022C22 100%)) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is(.jj-icon-box-active, .jj-icon-box, .jj-icon-tile-emerald, [data-icon-tone="emerald"]) :is(svg, path, circle, rect, line, polyline, polygon),
+html body #root [data-insights-page] :is(.jj-icon-box-active, .jj-icon-box, .jj-icon-tile-emerald, [data-icon-tone="emerald"]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) button[style*="255, 255, 255"],
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) button[data-surface="emerald"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg,#0B5132 0%,#064E3B 58%,#022C22 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  transform: none !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) button,
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) button * {
+  box-sizing: border-box !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] {
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][data-active="true"] *,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem][aria-current="page"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* END PASS 171 */
