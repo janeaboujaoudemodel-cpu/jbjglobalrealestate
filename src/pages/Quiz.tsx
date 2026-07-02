@@ -253,7 +253,13 @@ const NATIONALITIES = getCountryList();
 // below, so we do NOT need to rewrite the JSX to flip the palette.
 const AIHF_STYLE = `
   .aihf-root {
-    background: linear-gradient(180deg, #041610 0%, #02100a 40%, #000000 100%) !important;
+    background: linear-gradient(180deg, #062B1E 0%, #041A12 55%, #02120C 100%) !important;
+  }
+  /* Question hero band — full-bleed deep emerald */
+  .aihf-root .aihf-hero {
+    background: linear-gradient(180deg, #064E3B 0%, #043828 60%, #032218 100%) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.28) !important;
+    box-shadow: 0 10px 40px -20px rgba(0,0,0,0.6) !important;
   }
   .aihf-root, .aihf-root :is(h1,h2,h3,h4,p,span,label,button,div,li,strong,em,a) {
     color: #FFFFFF !important;
@@ -1032,9 +1038,16 @@ const Quiz = () => {
             </div>
 
             {/* Label pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4 jj-surface-emerald-soft">
-              <Sparkles className="w-4 h-4" />
-              <span className="text-xs font-medium uppercase tracking-wider">Completely Free</span>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
+              style={{
+                background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                border: "1px solid rgba(255,255,255,0.42)",
+                boxShadow: "0 6px 18px -8px rgba(16,185,129,0.5)",
+              }}
+            >
+              <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>Completely Free</span>
             </div>
 
             <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
@@ -1075,17 +1088,23 @@ const Quiz = () => {
             </ul>
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center justify-center gap-5 text-sm mb-5 text-[#1A1A1A]/70">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm mb-6" style={{ color: "#FFFFFF" }}>
               {[
                 { Icon: Clock,        label: "~60 seconds" },
                 { Icon: Sparkles,     label: "AI-Powered"  },
                 { Icon: CheckCircle2, label: "100% Free"   },
               ].map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center bg-[#EFE6D6]/60">
-                    <Icon className="w-3 h-3 text-[#1A1A1A]" />
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                    style={{
+                      background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                      border: "1px solid rgba(255,255,255,0.42)",
+                    }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <span>{label}</span>
+                  <span className="font-semibold" style={{ color: "#FFFFFF" }}>{label}</span>
                 </div>
               ))}
             </div>
@@ -1260,43 +1279,47 @@ const Quiz = () => {
   return (
     <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
-      {/* Header */}
-      <div className="border-b border-[#B89555]/25 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-3">
+      {/* Hero Header — full-bleed deep emerald band with question inside */}
+      <div className="aihf-hero sticky top-0 lg:top-[48px] z-10">
+        <div className="container mx-auto px-4 pt-5 pb-8 md:pt-6 md:pb-10">
+          <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
               data-no-contrast-guard
-              className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
+              className="transition-colors flex items-center gap-2 text-sm font-medium"
+              style={{ color: "#FFFFFF" }}
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-[#1A1A1A]/70 text-sm">
+            <div className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
           {/* Emerald progress bar */}
-          <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
-            <div 
-              className="h-full rounded-full jj-surface-emerald transition-all duration-500 ease-out"
-              style={{ width: `${progress}%` }}
+          <div className="h-2 rounded-full overflow-hidden mb-6" style={{ background: "rgba(255,255,255,0.14)" }}>
+            <div
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }}
             />
           </div>
+          {/* Question title lives inside the hero band */}
+          <h2
+            className="text-2xl md:text-4xl font-bold text-center tracking-tight max-w-3xl mx-auto"
+            style={{ color: "#FFFFFF" }}
+          >
+            {currentQuestion.question}
+          </h2>
         </div>
       </div>
 
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-center justify-center px-4 py-6 md:py-8">
+      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-10">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
           {/* Main Question Area */}
           <div className="w-full max-w-2xl mx-auto">
-            <h2
-              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
-            >
-              {currentQuestion.question}
-            </h2>
+
 
 
             {/* Multiple Select Controls */}
