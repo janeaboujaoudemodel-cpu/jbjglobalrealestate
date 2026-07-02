@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, CRM_MODULE_MAP } from "./modules";
+import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
 
 /**
  * JBJ CRM — Module views (Phase 3 + Phase 5).
