@@ -900,10 +900,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           >
             <table className="w-full">
               <thead>
-                <tr style={{ background: "rgba(255,255,255,0.06)" }}>
+                <tr style={{ background: CHAMPAGNE_STRIPE }}>
                   <th
                     className="text-left py-4 px-4 font-semibold text-sm sticky left-0 z-10"
-                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: "#031F18", borderBottom: "1px solid rgba(255,255,255,0.18)" }}
+                    style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: CHAMPAGNE_STRIPE, borderBottom: "1px solid rgba(6,78,59,0.22)" }}
                   >
                     Feature
                   </th>
