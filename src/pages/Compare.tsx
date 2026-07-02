@@ -914,7 +914,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       <th
                         key={project.id}
                         className="text-left py-4 px-4"
-                        style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: "1px solid rgba(255,255,255,0.18)" }}
+                        style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: "1px solid rgba(6,78,59,0.22)" }}
                       >
                         <div className="flex flex-col gap-2">
                           <div className="flex items-center justify-between gap-2">
