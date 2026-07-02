@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -187,7 +187,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
 
     if (to && !asButton) {
       return (
-        <NavLink
+        <Link
           ref={ref as React.Ref<HTMLAnchorElement>}
           to={to}
           className={cls}
@@ -199,7 +199,7 @@ export const SidebarItem = React.forwardRef<HTMLElement, SidebarItemProps>(
           {...rest}
         >
           {inner}
-        </NavLink>
+        </Link>
       );
     }
     return (
