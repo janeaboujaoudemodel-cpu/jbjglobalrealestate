@@ -246,7 +246,7 @@ export default function SupportLauncher() {
             <>
               <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               <span
-                className="allow-white text-[11px] font-semibold uppercase tracking-[0.2em]"
+                className="allow-white hidden sm:inline text-[11px] font-semibold uppercase tracking-[0.2em]"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
                 Contact Us

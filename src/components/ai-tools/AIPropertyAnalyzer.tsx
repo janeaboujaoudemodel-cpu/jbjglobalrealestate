@@ -189,13 +189,13 @@ DISCLAIMER: ${result.disclaimer}
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-ai-property-analyzer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
       {/* Input Section */}
-      <Card className="bg-gradient-to-br from-zinc-900 to-black border-[#B89555]/30">
+      <Card className="overflow-hidden bg-gradient-to-br from-[#075B45] via-[#053D2F] to-[#010806] border-white/25 shadow-[0_22px_56px_rgba(0,0,0,0.28)]">
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-white">
-            <div className="p-2 rounded-lg bg-[#EFE6D6]/20">
-              <Brain className="w-6 h-6 text-[#1A1A1A]" />
+            <div className="p-2 rounded-lg bg-white/12 border border-white/25">
+              <Brain className="w-6 h-6 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
             AI Property Analyzer
           </CardTitle>
@@ -207,18 +207,18 @@ DISCLAIMER: ${result.disclaimer}
           {/* Area Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label className="text-white/85">Select Area</Label>
+              <Label className="text-white/90">Select Area</Label>
               <Select value={area} onValueChange={setArea}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
+                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue placeholder="Choose an area" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A] max-h-60">
+                <SelectContent className="max-h-60">
                   {DUBAI_AREAS.map((a) => (
-                    <SelectItem key={a} value={a} className="text-white hover:bg-[#1A1A1A]">
+                    <SelectItem key={a} value={a} className="text-white">
                       {a}
                     </SelectItem>
                   ))}
-                  <SelectItem value="custom" className="text-[#1A1A1A] hover:bg-[#1A1A1A]">
+                  <SelectItem value="custom" className="text-white">
                     ✏️ Enter Custom Area
                   </SelectItem>
                 </SelectContent>
@@ -226,14 +226,14 @@ DISCLAIMER: ${result.disclaimer}
             </div>
 
             <div>
-              <Label className="text-white/85">Property Type</Label>
+              <Label className="text-white/90">Property Type</Label>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
+                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A]">
+                <SelectContent>
                   {PROPERTY_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value} className="text-white hover:bg-[#1A1A1A]">
+                    <SelectItem key={t.value} value={t.value} className="text-white">
                       {t.label}
                     </SelectItem>
                   ))}
@@ -245,24 +245,24 @@ DISCLAIMER: ${result.disclaimer}
           {/* Custom Area Input */}
           {area === "custom" && (
             <div>
-              <Label className="text-white/85">Custom Area Name</Label>
+              <Label className="text-white/90">Custom Area Name</Label>
               <Input
                 placeholder="Enter area name (e.g., Al Quoz Industrial)"
                 value={customArea}
                 onChange={(e) => setCustomArea(e.target.value)}
-                className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1"
+                className="bg-white/10 border-white/30 text-white placeholder:text-white/60 mt-1"
               />
             </div>
           )}
 
           {/* Compare With */}
           <div>
-            <Label className="text-white/85">Compare With (Optional - max 3)</Label>
+            <Label className="text-white/90">Compare With (Optional - max 3)</Label>
             <div className="flex flex-wrap gap-2 mt-2">
               {compareWith.map((a) => (
                 <Badge 
                   key={a} 
-                  className="bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30 cursor-pointer hover:bg-red-500/20 hover:text-red-400"
+                  className="bg-white/12 text-white border-white/30 cursor-pointer hover:bg-white/18 hover:text-white"
                   onClick={() => removeCompareArea(a)}
                 >
                   {a} ×
@@ -270,12 +270,12 @@ DISCLAIMER: ${result.disclaimer}
               ))}
               {compareWith.length < 3 && (
                 <Select onValueChange={addCompareArea}>
-                  <SelectTrigger className="w-auto bg-[#1A1A1A] border-[#1A1A1A] text-white/70 text-sm h-7 px-2">
+                  <SelectTrigger className="w-auto bg-white/10 border-white/30 text-white text-sm h-8 px-3 [&>svg]:!text-white">
                     <span>+ Add area</span>
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A] max-h-40">
+                  <SelectContent className="max-h-40">
                     {DUBAI_AREAS.filter(a => a !== area && !compareWith.includes(a)).map((a) => (
-                      <SelectItem key={a} value={a} className="text-white hover:bg-[#1A1A1A] text-sm">
+                      <SelectItem key={a} value={a} className="text-white text-sm">
                         {a}
                       </SelectItem>
                     ))}
@@ -286,25 +286,25 @@ DISCLAIMER: ${result.disclaimer}
           </div>
 
           {/* Report Options */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-[#1A1A1A]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/20">
             <div>
-              <Label className="text-white/85">Measurement Unit</Label>
+              <Label className="text-white/90">Measurement Unit</Label>
               <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
+                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A]">
-                  <SelectItem value="sqft" className="text-white hover:bg-[#1A1A1A]">Square Feet (sq ft)</SelectItem>
-                  <SelectItem value="sqm" className="text-white hover:bg-[#1A1A1A]">Square Meters (m²)</SelectItem>
-                  <SelectItem value="both" className="text-white hover:bg-[#1A1A1A]">Both (sq ft & m²)</SelectItem>
+                <SelectContent>
+                  <SelectItem value="sqft" className="text-white">Square Feet (sq ft)</SelectItem>
+                  <SelectItem value="sqm" className="text-white">Square Meters (m²)</SelectItem>
+                  <SelectItem value="both" className="text-white">Both (sq ft & m²)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label className="text-white/85">Currency</Label>
+              <Label className="text-white/90">Currency</Label>
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
+                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue>
                     {(() => {
                       const c = ALL_CURRENCIES.find(x => x.code === currency) || ALL_CURRENCIES[0];
@@ -312,9 +312,9 @@ DISCLAIMER: ${result.disclaimer}
                     })()}
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A] max-h-60">
+                <SelectContent className="max-h-60">
                   {ALL_CURRENCIES.map((c) => (
-                    <SelectItem key={c.code} value={c.code} className="text-white hover:bg-[#1A1A1A]">
+                    <SelectItem key={c.code} value={c.code} className="text-white">
                       <span className="flex items-center gap-2">
                         <span>{c.flag}</span>
                         <span className="font-medium">{c.code}</span>
@@ -327,17 +327,17 @@ DISCLAIMER: ${result.disclaimer}
             </div>
 
             <div>
-              <Label className="text-white/85">Report Language</Label>
+              <Label className="text-white/90">Report Language</Label>
               <Select value={language} onValueChange={(v: "en" | "ar" | "ru" | "zh" | "hi") => setLanguage(v)}>
-                <SelectTrigger className="bg-[#1A1A1A] border-[#1A1A1A] text-white mt-1">
+                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#1A1A1A]">
-                  <SelectItem value="en" className="text-white hover:bg-[#1A1A1A]">English</SelectItem>
-                  <SelectItem value="ar" className="text-white hover:bg-[#1A1A1A]">العربية (Arabic)</SelectItem>
-                  <SelectItem value="ru" className="text-white hover:bg-[#1A1A1A]">Русский (Russian)</SelectItem>
-                  <SelectItem value="zh" className="text-white hover:bg-[#1A1A1A]">中文 (Chinese)</SelectItem>
-                  <SelectItem value="hi" className="text-white hover:bg-[#1A1A1A]">हिन्दी (Hindi)</SelectItem>
+                <SelectContent>
+                  <SelectItem value="en" className="text-white">English</SelectItem>
+                  <SelectItem value="ar" className="text-white">العربية (Arabic)</SelectItem>
+                  <SelectItem value="ru" className="text-white">Русский (Russian)</SelectItem>
+                  <SelectItem value="zh" className="text-white">中文 (Chinese)</SelectItem>
+                  <SelectItem value="hi" className="text-white">हिन्दी (Hindi)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -346,16 +346,19 @@ DISCLAIMER: ${result.disclaimer}
           <Button
             onClick={handleAnalyze}
             disabled={isAnalyzing || (!area && !customArea)}
-            className="w-full bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold py-6 hover:shadow-lg hover:shadow-gold/30"
+            data-surface="emerald"
+            data-on-dark="true"
+            data-no-contrast-guard
+            className="w-full allow-white bg-gradient-to-r from-[#042C1C] to-[#010806] text-white border border-white/30 font-bold py-6 hover:shadow-lg hover:shadow-emerald-950/30 disabled:opacity-60"
           >
             {isAnalyzing ? (
               <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 Analyzing Market Data...
               </>
             ) : (
               <>
-                <Search className="w-5 h-5 mr-2" />
+                <Search className="w-5 h-5 mr-2" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 Analyze {compareWith.length > 0 ? `& Compare` : 'Market'}
               </>
             )}
@@ -364,7 +367,7 @@ DISCLAIMER: ${result.disclaimer}
           {/* Data Sources */}
           <div className="flex flex-wrap gap-2 justify-center pt-2">
             {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-              <Badge key={source} variant="outline" className="text-white/90 border-[#1A1A1A] text-xs">
+              <Badge key={source} variant="outline" className="text-white/90 border-white/30 bg-white/8 text-xs">
                 {source}
               </Badge>
             ))}
@@ -382,12 +385,12 @@ DISCLAIMER: ${result.disclaimer}
             className="space-y-4"
           >
             {/* Header */}
-            <Card className="bg-gradient-to-br from-gold/10 to-transparent border-[#B89555]/30">
+            <Card className="bg-white/10 border-white/25">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>
                     <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                      <MapPin className="w-6 h-6 text-[#1A1A1A]" />
+                      <MapPin className="w-6 h-6 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                       {result.area}
                     </h2>
                     <p className="text-white/70 text-sm mt-1">
@@ -400,7 +403,7 @@ DISCLAIMER: ${result.disclaimer}
                       variant="outline"
                       size="sm"
                       onClick={copyToClipboard}
-                      className="border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
+                      className="border-white/35 text-white/90 hover:bg-white/12"
                     >
                       {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
                       {copied ? "Copied" : "Copy"}
@@ -409,7 +412,7 @@ DISCLAIMER: ${result.disclaimer}
                       variant="outline"
                       size="sm"
                       onClick={downloadReport}
-                      className="border-[#1A1A1A] text-white/85 hover:bg-[#1A1A1A]"
+                      className="border-white/35 text-white/90 hover:bg-white/12"
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -421,10 +424,10 @@ DISCLAIMER: ${result.disclaimer}
 
             {/* Analysis Sections */}
             <Accordion type="single" collapsible defaultValue="overview" className="space-y-2">
-              <AccordionItem value="overview" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="overview" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#1A1A1A]" />
+                    <MapPin className="w-4 h-4 text-white" />
                     Area Overview
                   </span>
                 </AccordionTrigger>
@@ -433,10 +436,10 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="price" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="price" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-[#1A1A1A]" />
+                    <DollarSign className="w-4 h-4 text-white" />
                     Price Analysis
                   </span>
                 </AccordionTrigger>
@@ -445,10 +448,10 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="developers" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="developers" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Building className="w-4 h-4 text-[#1A1A1A]" />
+                    <Building className="w-4 h-4 text-white" />
                     Developer Landscape
                   </span>
                 </AccordionTrigger>
@@ -457,10 +460,10 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="transactions" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="transactions" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
+                    <BarChart3 className="w-4 h-4 text-white" />
                     Transaction Data
                   </span>
                 </AccordionTrigger>
@@ -469,10 +472,10 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="investment" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="investment" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-[#1A1A1A]" />
+                    <TrendingUp className="w-4 h-4 text-white" />
                     Investment Metrics
                   </span>
                 </AccordionTrigger>
@@ -481,10 +484,10 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="timing" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="timing" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#1A1A1A]" />
+                    <Clock className="w-4 h-4 text-white" />
                     Market Timing
                   </span>
                 </AccordionTrigger>
@@ -493,7 +496,7 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="risks" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+              <AccordionItem value="risks" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-orange-400" />
@@ -505,10 +508,10 @@ DISCLAIMER: ${result.disclaimer}
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="recommendation" className="border-[#1A1A1A] bg-gradient-to-br from-gold/10 to-transparent rounded-lg px-4">
+              <AccordionItem value="recommendation" className="border-white/25 bg-white/10 rounded-lg px-4">
                 <AccordionTrigger className="text-white hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Award className="w-4 h-4 text-[#1A1A1A]" />
+                    <Award className="w-4 h-4 text-white" />
                     Recommendation
                   </span>
                 </AccordionTrigger>
@@ -518,10 +521,10 @@ DISCLAIMER: ${result.disclaimer}
               </AccordionItem>
 
               {result.sections.comparison && (
-                <AccordionItem value="comparison" className="border-[#1A1A1A] bg-[#FDFBF7]/50 rounded-lg px-4">
+                <AccordionItem value="comparison" className="border-white/25 bg-white/10 rounded-lg px-4">
                   <AccordionTrigger className="text-white hover:no-underline">
                     <span className="flex items-center gap-2">
-                      <Target className="w-4 h-4 text-[#1A1A1A]" />
+                       <Target className="w-4 h-4 text-white" />
                       Area Comparison
                     </span>
                   </AccordionTrigger>
@@ -533,7 +536,7 @@ DISCLAIMER: ${result.disclaimer}
             </Accordion>
 
             {/* Disclaimer */}
-            <Card className="bg-[#FDFBF7]/30 border-[#1A1A1A]">
+            <Card className="bg-white/10 border-white/25">
               <CardContent className="p-4">
                 <p className="text-xs text-white/90 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
@@ -541,7 +544,7 @@ DISCLAIMER: ${result.disclaimer}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {result.sources.map((source) => (
-                    <Badge key={source} variant="outline" className="text-white/90 border-[#1A1A1A] text-xs">
+                    <Badge key={source} variant="outline" className="text-white/90 border-white/30 bg-white/8 text-xs">
                       {source}
                     </Badge>
                   ))}

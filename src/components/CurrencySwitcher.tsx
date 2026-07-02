@@ -119,9 +119,8 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
                 active={active}
                 data-currency-row
                 data-currency-active={active ? "true" : "false"}
-                data-surface={active ? "emerald" : undefined}
-                data-on-dark={active ? "true" : undefined}
-                data-no-emerald-hover={active ? undefined : "true"}
+                data-surface="champagne"
+                data-no-emerald-hover="true"
                 onClick={() => setCurrency(curr.code)}
                 className="flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5"
               >

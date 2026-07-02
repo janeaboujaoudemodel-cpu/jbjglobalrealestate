@@ -138,9 +138,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         data-surface="emerald"
         data-on-dark="true"
         asChild={!!to}
-        active={active}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-white focus:bg-white/10 data-[highlighted]:bg-white/10"
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-white hover:bg-white/10 focus:bg-white/10 data-[highlighted]:bg-white/10"
       >
         {to ? (
           <Link
