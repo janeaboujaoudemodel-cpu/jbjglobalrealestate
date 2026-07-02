@@ -132,7 +132,8 @@ export const OwnerRoutes = () => (
       </OwnerGuard>
     }
   >
-    <Route index element={<CrmModulePage />} />
+    <Route index element={<CrmHome />} />
+    <Route path="home" element={<CrmHome />} />
     <Route path=":section" element={<CrmModulePage />} />
   </Route>
 
