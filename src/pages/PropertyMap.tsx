@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { MapPin, List, X, ChevronRight, ExternalLink, Bed, Maximize, Calendar, Grid3X3, ArrowUpDown, Search } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
@@ -210,6 +211,7 @@ const createCustomIcon = (price: number | null) => {
 
 type ViewMode = "map" | "list" | "grid";
 type SortMode = "newest" | "price_asc" | "price_desc" | "alpha";
+type SearchTarget = "all" | "project" | "developer" | "location";
 
 const PropertyMap = () => {
   const { t, language } = useLanguage();
@@ -220,6 +222,7 @@ const PropertyMap = () => {
   const [filters, setFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [listSearch, setListSearch] = useState("");
+  const [searchTarget, setSearchTarget] = useState<SearchTarget>("all");
   const [visibleMarkerIds, setVisibleMarkerIds] = useState<Set<string | number> | null>(null);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -269,14 +272,19 @@ const PropertyMap = () => {
   const filteredProjects = useMemo(() => {
     let result = applyShortcutFilters(allProjects, { ...filters, hideSoldOut: false });
 
-    // Local list search
+    // Local search: project, developer, location/community/emirate/country.
     if (listSearch.trim()) {
       const q = listSearch.trim().toLowerCase();
       result = result.filter(p => {
-        const name = (p.name || '').toLowerCase();
-        const dev = (p.developer_name || '').toLowerCase();
-        const area = (p.area_name || p.location || '').toLowerCase();
-        return name.includes(q) || dev.includes(q) || area.includes(q);
+        const projectFields = [p.name, p.slug];
+        const developerFields = [p.developer_name, p.developer?.name];
+        const locationFields = [p.area_name, p.location, p.community?.name, p.emirate, "UAE", "United Arab Emirates"];
+        const matches = (fields: Array<string | null | undefined>) => fields.some((field) => (field || "").toLowerCase().includes(q));
+
+        if (searchTarget === "project") return matches(projectFields);
+        if (searchTarget === "developer") return matches(developerFields);
+        if (searchTarget === "location") return matches(locationFields);
+        return matches([...projectFields, ...developerFields, ...locationFields]);
       });
     }
 
@@ -287,7 +295,7 @@ const PropertyMap = () => {
     else if (sortMode === 'alpha') result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 
     return result;
-  }, [allProjects, filters, listSearch, sortMode]);
+  }, [allProjects, filters, listSearch, searchTarget, sortMode]);
 
   // Clear if selected project no longer in filtered results
   useEffect(() => {
@@ -326,6 +334,21 @@ const PropertyMap = () => {
     { value: "alpha", label: "A → Z" },
   ];
 
+  const searchTargets: { value: SearchTarget; label: string }[] = [
+    { value: "all", label: "All" },
+    { value: "project", label: "Projects" },
+    { value: "developer", label: "Developers" },
+    { value: "location", label: "Locations" },
+  ];
+
+  const searchPlaceholder = searchTarget === "developer"
+    ? "Search developers..."
+    : searchTarget === "project"
+      ? "Search projects..."
+      : searchTarget === "location"
+        ? "Search location, community, emirate, country..."
+        : "Search projects, developers, locations...";
+
   return (
     <div className="relative flex flex-col h-[calc(100vh-88px)] overflow-hidden" data-map-page>
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
@@ -345,7 +368,8 @@ const PropertyMap = () => {
               onClick={() => setViewMode("map")}
               className="jj-map-segment"
               data-active={viewMode === "map" ? "true" : "false"}
-              data-surface={viewMode === "map" ? "emerald" : "champagne"}
+              data-surface="emerald"
+              data-emerald-shimmer={viewMode === "map" ? "true" : undefined}
             >
               <MapPin className="h-3.5 w-3.5 inline mr-1" />
               Map
@@ -354,7 +378,8 @@ const PropertyMap = () => {
               onClick={() => setViewMode("list")}
               className="jj-map-segment"
               data-active={viewMode === "list" ? "true" : "false"}
-              data-surface={viewMode === "list" ? "emerald" : "champagne"}
+              data-surface="emerald"
+              data-emerald-shimmer={viewMode === "list" ? "true" : undefined}
             >
               <List className="h-3.5 w-3.5 inline mr-1" />
               List
@@ -363,7 +388,8 @@ const PropertyMap = () => {
               onClick={() => setViewMode("grid")}
               className="jj-map-segment"
               data-active={viewMode === "grid" ? "true" : "false"}
-              data-surface={viewMode === "grid" ? "emerald" : "champagne"}
+              data-surface="emerald"
+              data-emerald-shimmer={viewMode === "grid" ? "true" : undefined}
             >
               <Grid3X3 className="h-3.5 w-3.5 inline mr-1" />
               Grid
@@ -371,15 +397,25 @@ const PropertyMap = () => {
           </div>
 
           {/* Sort dropdown */}
-          <div className="relative">
-            <select
-              value={sortMode}
-              onChange={(e) => setSortMode(e.target.value as SortMode)}
-              className="jj-map-sort-select appearance-none"
-            >
-              {sortOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </select>
-            <ArrowUpDown className="h-3 w-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <div className="relative jj-map-sort-shell">
+            <Select value={sortMode} onValueChange={(value) => setSortMode(value as SortMode)}>
+              <SelectTrigger
+                className="jj-map-sort-select jj-map-sort-trigger min-w-[132px]"
+                data-surface="emerald"
+                data-emerald-shimmer="true"
+                aria-label="Sort map properties"
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent data-map-shell className="jj-map-sort-content" align="end">
+                {sortOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value} className="jj-map-sort-option">
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <ArrowUpDown className="h-3 w-3 absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
           {/* Hide Sold intentionally removed — nothing on the site is marked sold */}
@@ -555,7 +591,7 @@ const PropertyMap = () => {
           onScroll={() => setHoveredProject(null)}
         >
           {/* Panel header with search */}
-          <div className="p-3 border-b border-white/14 space-y-2">
+          <div className="jj-map-panel-header p-3 space-y-2">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-sm">{filteredProjects.length} {t('map.properties')}</h2>
               <Button variant="ghost" size="sm" onClick={() => setViewMode("map")} className="jj-map-panel-close" data-surface="emerald" aria-label="Close map list panel">
@@ -565,11 +601,27 @@ const PropertyMap = () => {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" />
               <Input
-                placeholder="Search properties..."
+                placeholder={searchPlaceholder}
                 value={listSearch}
                 onChange={(e) => setListSearch(e.target.value)}
                 className="jj-map-search-input pl-9 h-8 text-xs"
+                aria-label="Search properties, developers, and locations"
               />
+            </div>
+            <div className="jj-map-search-targets" aria-label="Map search type">
+              {searchTargets.map((target) => (
+                <button
+                  key={target.value}
+                  type="button"
+                  className="jj-map-search-target"
+                  data-active={searchTarget === target.value ? "true" : "false"}
+                  data-surface="emerald"
+                  data-emerald-shimmer={searchTarget === target.value ? "true" : undefined}
+                  onClick={() => setSearchTarget(target.value)}
+                >
+                  {target.label}
+                </button>
+              ))}
             </div>
           </div>
 

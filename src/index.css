@@ -24296,3 +24296,161 @@ html body [data-map-shell].jj-map-command-bar :where(h1,h2,h3,h4,p,span,div,labe
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 163 — /map control and dropdown hard lock.
+   Sort/menu popovers are emerald, hover is white-only (no blue), active
+   Map/List/Grid/Search buttons use the same metallic sweep as the sq ft toggle,
+   and list/grid search chrome uses white dividers only. */
+html body #root [data-map-page] {
+  --jj-map-emerald-solid: #073B2F !important;
+  --jj-map-emerald-deep: #03251F !important;
+  --jj-map-emerald: linear-gradient(135deg, #0B5A45 0%, #073B2F 58%, #03251F 100%) !important;
+  --jj-map-emerald-hover: linear-gradient(135deg, #0E6C53 0%, #0B5A45 58%, #073B2F 100%) !important;
+  --jj-map-metallic-active:
+    linear-gradient(110deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.24) 18%, rgba(255,255,255,0.06) 36%, rgba(255,255,255,0.2) 58%, rgba(255,255,255,0) 100%),
+    linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+}
+
+html body #root [data-map-page] :is(.jj-map-command-bar, [data-map-list-panel], .jj-map-panel-header),
+html body #root [data-map-page] :is(.jj-map-segmented-control, .jj-map-layer-switcher, .jj-map-search-targets) {
+  background: linear-gradient(145deg, rgba(5,43,35,0.99) 0%, rgba(3,37,31,0.996) 100%) !important;
+  background-image: linear-gradient(145deg, rgba(5,43,35,0.99) 0%, rgba(3,37,31,0.996) 100%) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-map-page] .jj-map-panel-header {
+  border-bottom: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,0.06) !important;
+}
+
+html body #root [data-map-page] :is(.jj-map-segment, .jj-map-layer-button, .jj-map-sort-select, .jj-map-search-target, .jj-map-search-input) {
+  min-height: 36px !important;
+  background: var(--jj-map-emerald) !important;
+  background-image: var(--jj-map-emerald) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 12px 24px -22px rgba(0,0,0,0.78) !important;
+}
+
+html body #root [data-map-page] :is(.jj-map-segment, .jj-map-layer-button, .jj-map-sort-select, .jj-map-search-target, .jj-map-search-input):hover,
+html body #root [data-map-page] :is(.jj-map-segment, .jj-map-layer-button, .jj-map-sort-select, .jj-map-search-target, .jj-map-search-input):focus-visible {
+  background: var(--jj-map-emerald-hover) !important;
+  background-image: var(--jj-map-emerald-hover) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  outline: none !important;
+}
+
+html body #root [data-map-page] :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-search-target[data-active="true"], .jj-map-sort-trigger[data-emerald-shimmer="true"]) {
+  background-image: var(--jj-map-metallic-active) !important;
+  background-size: 250% 100%, 100% 100% !important;
+  background-position: -50% 0, 0 0 !important;
+  background-blend-mode: overlay, normal !important;
+  animation: jj-metallic-sweep 4.5s ease-in-out infinite, jj-emerald-pulse 3.2s ease-in-out infinite !important;
+  border-color: rgba(255,255,255,0.24) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-map-page] :is(.jj-map-segment, .jj-map-layer-button, .jj-map-sort-select, .jj-map-search-target, .jj-map-search-input) :where(span,svg,path,line,rect,circle,polyline,polygon),
+html body #root [data-map-page] :is(.jj-map-segment, .jj-map-layer-button, .jj-map-sort-select, .jj-map-search-target, .jj-map-search-input)::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-map-page] .jj-map-search-targets {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+  padding: 6px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+}
+
+html body #root [data-map-page] .jj-map-search-target {
+  height: 34px !important;
+  padding: 0 8px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+  font-weight: 850 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) {
+  background: linear-gradient(145deg, rgba(5,43,35,0.995) 0%, rgba(3,37,31,0.998) 100%) !important;
+  background-image: linear-gradient(145deg, rgba(5,43,35,0.995) 0%, rgba(3,37,31,0.998) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 26px 64px -34px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) :is([role="option"], .jj-map-sort-option) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) :is([role="option"]:hover, [role="option"][data-highlighted], .jj-map-sort-option:hover, .jj-map-sort-option[data-highlighted]) {
+  background: rgba(255,255,255,0.12) !important;
+  background-color: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) :is([role="option"], .jj-map-sort-option) :where(span,svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+@media (max-width: 768px) {
+  html body #root [data-map-page] {
+    height: calc(100dvh - 88px) !important;
+  }
+  html body #root [data-map-page] .jj-map-command-bar > div {
+    gap: 8px !important;
+  }
+  html body #root [data-map-page] .jj-map-segmented-control {
+    width: 100% !important;
+    order: 3 !important;
+  }
+  html body #root [data-map-page] .jj-map-segment {
+    flex: 1 1 0 !important;
+    padding-inline: 8px !important;
+  }
+  html body #root [data-map-page] .jj-map-sort-shell {
+    flex: 1 1 150px !important;
+  }
+  html body #root [data-map-page] .jj-map-sort-select {
+    width: 100% !important;
+  }
+  html body #root [data-map-page] [data-map-list-panel] {
+    left: 10px !important;
+    right: 10px !important;
+    top: 10px !important;
+    bottom: 10px !important;
+    width: auto !important;
+  }
+  html body #root [data-map-page] .jj-map-search-targets {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root [data-map-page] :is(.jj-map-segment[data-active="true"], .jj-map-layer-button[data-active="true"], .jj-map-search-target[data-active="true"], .jj-map-sort-trigger[data-emerald-shimmer="true"]) {
+    animation: none !important;
+  }
+}
