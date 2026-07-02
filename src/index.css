@@ -25565,3 +25565,203 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] :is(a,button)[aria-curr
 }
 
 /* END PASS 176 */
+
+/* ============================================================
+   PASS 177 — Hard correction for Insights/Guides regressions
+   ------------------------------------------------------------
+   Final rule block placed after all previous brand passes so inline
+   utility classes inside emerald cards, TOC rows, sidebar rows, and
+   MI stat cards cannot repaint icons/text black or gold.
+   ============================================================ */
+
+html body #root [data-insights-page] {
+  --jj-insights-emerald: #064E3B;
+  --jj-insights-emerald-deep: #022C22;
+  --jj-insights-black-emerald: #010806;
+  --jj-insights-champagne: #F7F2EA;
+  --jj-insights-card: #FDFBF7;
+  background: var(--jj-insights-card) !important;
+}
+
+/* Full-bleed hero contract: no gold border, no overlaid light text conflict. */
+html body #root .jj-main-shell [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-hero-dark]) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+html body #root .jj-main-shell [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-hero-dark]) :is(h1,h2,h3,h4,p,span,a,button,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Emerald means emerald: all text/icons/numbers inside must be pure white. */
+html body #root [data-insights-page] :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-icon-surface],
+  [data-icon-tone="emerald"],
+  [data-toc-state="active"],
+  .jj-icon-box-active,
+  .jj-icon-box,
+  .jj-icon-tile-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .mi-cta-emerald,
+  .jj-surface-emerald,
+  [class*="bg-[image:var(--jj-emerald-ombre)]"],
+  [class*="bg-[#064E3B]"],
+  [class*="from-[#064E3B]"]
+) {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg,#064E3B 0%,#022C22 58%,#010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+html body #root [data-insights-page] :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-icon-surface],
+  [data-icon-tone="emerald"],
+  [data-toc-state="active"],
+  .jj-icon-box-active,
+  .jj-icon-box,
+  .jj-icon-tile-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .mi-cta-emerald,
+  .jj-surface-emerald,
+  [class*="bg-[image:var(--jj-emerald-ombre)]"],
+  [class*="bg-[#064E3B]"],
+  [class*="from-[#064E3B]"]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,button,label,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none;
+}
+
+html body #root [data-insights-page] :is(.jj-icon-box-active, .jj-icon-box, .jj-icon-tile-emerald, [data-emerald-icon-surface], [data-icon-tone="emerald"]) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+/* Champagne section + inner-card dimensions match homepage card rhythm. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]) {
+  width: min(100%, var(--jj-global-container-max, 1760px)) !important;
+  max-width: var(--jj-global-container-max, 1760px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: var(--jj-insights-champagne) !important;
+  border: 1px solid rgba(6,78,59,0.16) !important;
+  border-radius: clamp(20px, 2vw, 30px) !important;
+  overflow: hidden !important;
+}
+
+html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, .jj-neon-tile, .card, [data-mi-nav-card], [data-guide-nav-card]) {
+  background: var(--jj-insights-card) !important;
+  background-image: none !important;
+  border: 1px solid rgba(6,78,59,0.18) !important;
+  box-shadow: 0 18px 44px -36px rgba(1,8,6,0.48) !important;
+}
+
+/* Remove old gold/purple guide language across the scoped pages. */
+html body #root [data-insights-page] :is([class*="border-[#B89555]"], [class*="border-gold"], [class*="shadow-gold"], [class*="from-gold"], [class*="to-gold"], [class*="via-gold"], [class*="purple"], [class*="violet"], [class*="fuchsia"], [class*="pink"]) {
+  border-color: rgba(6,78,59,0.18) !important;
+  --tw-shadow-color: rgba(1,8,6,0.22) !important;
+}
+
+/* TOC: stable active row, readable number/icon, contained local scroll. */
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) {
+  width: 272px !important;
+  right: 24px !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) > div {
+  max-height: min(56dvh, 520px) !important;
+  overflow: hidden !important;
+  background: var(--jj-insights-card) !important;
+  border-color: rgba(6,78,59,0.18) !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) nav {
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--jj-insights-emerald) var(--jj-insights-champagne) !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-item] {
+  display: grid !important;
+  grid-template-columns: 28px 16px minmax(0,1fr) !important;
+  align-items: center !important;
+  min-height: 44px !important;
+  padding: 8px 10px !important;
+  gap: 10px !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-number] {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Market Overview / Area Intelligence dark metric and list cards. */
+html body #root [data-insights-page] [data-mi-page] :is(#key-stats, #quarterly-trends) .jj-card-inner,
+html body #root [data-insights-page] [data-mi-page] #area-grid .card,
+html body #root [data-insights-page] [data-mi-page] #official-data-sources a[data-surface="emerald"],
+html body #root [data-insights-page] [data-mi-page] #how-area-evaluated [data-surface="emerald"] {
+  background: linear-gradient(135deg,#064E3B 0%,#022C22 58%,#010806 100%) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+html body #root [data-insights-page] [data-mi-page] :is(#key-stats, #quarterly-trends, #area-grid, #official-data-sources, #how-area-evaluated) :is(.jj-card-inner, .card, [data-surface="emerald"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* News filter: active emerald/white, inactive white/ink with emerald border. */
+html body #root [data-insights-page] .sticky button[data-surface="emerald"],
+html body #root [data-insights-page] .sticky button[data-emerald="true"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg,#064E3B,#022C22)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+
+html body #root [data-insights-page] .sticky button:not([data-surface="emerald"]):not([data-emerald="true"]) {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(6,78,59,0.22) !important;
+}
+
+/* Sidebar active rows: exact active item only remains emerald/white. */
+html body [data-chrome="sidebar"] :is(a,button)[data-sidebar-subitem][data-active="true"],
+html body [data-chrome="sidebar"] :is(a,button)[data-sidebar-subitem][aria-current="page"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg,#064E3B,#022C22)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body [data-chrome="sidebar"] :is(a,button)[data-sidebar-subitem][data-active="true"] *,
+html body [data-chrome="sidebar"] :is(a,button)[data-sidebar-subitem][aria-current="page"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* END PASS 177 */

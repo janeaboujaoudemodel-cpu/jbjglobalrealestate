@@ -1234,6 +1234,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                               onClick={(event) => {
                                 // Never open the full-screen mega drop-down overlay from inside
                                 // an expanded section — just navigate.
+                                if (item.href === "/market-intelligence/reports") {
+                                  event.preventDefault();
+                                  collapseAfterNavigation();
+                                  navigate("/market-intelligence/reports");
+                                  return;
+                                }
                                 if (item.href === "/map") {
                                   event.preventDefault();
                                   collapseAfterNavigation();
