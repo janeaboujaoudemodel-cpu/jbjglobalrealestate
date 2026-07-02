@@ -187,7 +187,7 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
             </svg>
             <h3>No {plural} found</h3>
             <p>Create your first {label.toLowerCase()} to get started.</p>
-            <button type="button" className="jc-list__cta">
+            <button type="button" className="jc-list__cta" onClick={goCreate}>
               <Plus size={15} /> Create {label}
             </button>
           </div>
