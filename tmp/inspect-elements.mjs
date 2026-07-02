@@ -2,7 +2,7 @@ import { chromium } from '@playwright/test';
 const browser=await chromium.launch({headless:true, executablePath:'/bin/chromium', args:['--no-sandbox']});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
 await page.goto('http://127.0.0.1:4175/faq',{waitUntil:'domcontentloaded'}); await page.waitForTimeout(3000);
-console.log(await page.evaluate(()=>{
+console.log(await page.evaluate(()=>{ console.log(document.body.innerText.slice(0,1000));
  const out=[];
  const texts=['Buyer FAQ','Browse by Audience','Your Questions Answered','Navigator'];
  for(const t of texts){
