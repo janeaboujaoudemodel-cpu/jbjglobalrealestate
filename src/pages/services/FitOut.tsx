@@ -92,7 +92,7 @@ const whyChooseUs = [
 
 const FitOut = () => {
   return (
-    <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead 
         title="Fit-Out & Renovation Dubai | Commercial & Residential | JBJ GLOBAL REAL ESTATE"
         description="Professional fit-out and renovation services in Dubai. Full fit-out, renovations, commercial spaces, and fast-track projects. Licensed contractors with quality guarantee."

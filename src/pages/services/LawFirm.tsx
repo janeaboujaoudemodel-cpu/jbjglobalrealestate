@@ -89,7 +89,7 @@ const whyChooseUs = [
 
 const LawFirm = () => {
   return (
-    <div data-marketing-page className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead 
         title="Legal Services Dubai | Real Estate Law | JBJ GLOBAL REAL ESTATE"
         description="Expert legal services for Dubai real estate. Property transactions, contract law, dispute resolution, and regulatory compliance. Licensed legal professionals."

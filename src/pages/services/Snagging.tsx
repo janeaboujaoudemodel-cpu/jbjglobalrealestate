@@ -295,7 +295,7 @@ const Snagging = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Snagging & Property Inspection Services | JBJ Global Real Estate"
         description="Protect your investment before handover with professional property snagging and inspection services. Structured defect documentation, severity grading, and developer follow-up support."

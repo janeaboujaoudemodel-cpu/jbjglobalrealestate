@@ -88,7 +88,7 @@ const CustomerHappinessCenter = () => {
   const whatsappUrl = getWhatsAppUrl("Hi, I need support from the Happiness Center.");
 
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Customer Happiness Center | JBJ Global Real Estate"
         description="Fast routing, clear answers, and structured support—built around ticket tracking and professional resolution."

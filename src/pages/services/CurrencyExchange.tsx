@@ -99,7 +99,7 @@ const faqData = [
 
 const CurrencyExchange = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Currency Exchange Support | JBJ Global Real Estate"
         description="Coordination support for cross-border buyers transferring funds—structured documentation, clean routing, and partner introductions when needed."

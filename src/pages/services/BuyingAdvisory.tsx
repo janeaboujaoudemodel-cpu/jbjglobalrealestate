@@ -202,7 +202,7 @@ const faqData = [
 
 const BuyingAdvisory = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Buying Advisory Services | JBJ Global Real Estate"
         description="Professional buying advisory and representation for property purchases in Dubai. Expert guidance from market analysis to transaction completion."

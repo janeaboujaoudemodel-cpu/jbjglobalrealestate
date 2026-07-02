@@ -99,7 +99,7 @@ const faqData = [
 
 const Concierge = () => {
   return (
-    <div data-marketing-page>
+    <div data-brand-emerald-page data-marketing-page style={{ background: "#010806" }}>
       <SEOHead
         title="Concierge Convenience Services | JBJ Global Real Estate"
         description="Time-saving operational support around your property journey—appointments, coordination, and structured follow-through."
