@@ -1,82 +1,57 @@
 ## Goal
+Unify card sizing across every non-hero section in Insights & Guides, Company & Legal, and Services so they match the homepage standard (JBJ Royal Tools Hub, AI Property Comparison, Mortgage Calculator, Ready to Get Started, Top Areas in Dubai). Give each page a unique hero video/photo that matches its title and content. Heroes themselves are not resized.
 
-Adopt the Market Intelligence page as the canonical template — same color system, contrast, typography, spacing, section shells, hero, dividers, and interaction states — across every Services and Company/Legal page. No custom deviations per page.
+## Homepage Card Standard (source of truth)
+- Wrapper: `<PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">`
+- `width="contained"` = centered, `max-width: 1500px`, `px-4 md:px-6`
+- Vertical rhythm: `py-4` between sections; hero/first section keeps its own padding
+- Inner grids: `max-w-[1500px] mx-auto` with `gap-4 md:gap-6`
+- Corners: 28px premium radius via PremiumSectionCard
 
-## Step 1 — Extract the Market Intelligence style into a reusable shell (single source of truth)
+## Pages In Scope (heroes untouched)
 
-Create a shared layout module so every page below inherits identical tokens automatically. This is the only way to guarantee "no violation" across 32 pages.
+**Insights & Guides (17)**
+- Market Intelligence: MarketOverview, AreaIntelligence, AreaDetail, MarketReports, Methodology, MonthlyMarketBrief, QuarterlyMarketReview, AnnualMarketSummary
+- Guides Library + BuyerGuide, SellerGuide, InvestorGuide, RenterGuide, ExpatGuide, GoldenVisaGuide, MortgageGuide
+- FAQ Hub
 
-- `src/components/layout/IntelPageShell.tsx` — page frame with:
-  - `PAGE_BG` (solid dark emerald/black, no gradient drift)
-  - Emerald hero band (dark → darker, short transition, matches Market Intel hero exactly)
-  - Champagne body band for content, using `<PremiumSectionCard>`
-  - White dividers only (no gold hairlines)
-  - White text on emerald, `#1A1A1A` on champagne
-- `IntelHero`, `IntelSection`, `IntelStatGrid`, `IntelFeatureGrid`, `IntelCTA` sub-components mirroring the exact blocks used on `/market-intelligence`.
-- No new tokens. Reuses existing emerald / champagne CSS variables.
+**Company & Legal (~10)**
+- About, CompanyProfile, Contact, Careers, AcademyGraduates, Awards
+- Legal: Terms, Privacy, Cookies, AmlKycPolicy, Disclaimer
 
-## Step 2 — Roll out order (one page per turn, validated before next)
+**Services (~12)**
+- Royal Tools Hub, AI Home Finder (Quiz), Compare Projects, Compare Units (CompareManual), Mortgage Calculator, Property Evaluator, Interior Design AI, Deep Area Analysis, Developers, Communities, AI Hub, Concierge
 
-Each turn: refactor page → run `tsgo` → drive Playwright to screenshot hero + one mid-section + CTA → attach screenshot → wait for user 👍 before proceeding.
+## Approach
 
-**Services (20)** — in navigation order:
-1. Buying Advisory
-2. Selling Advisory
-3. Rental Advisory
-4. Investment Advisory
-5. Property Management
-6. Short Term Rentals
-7. Snagging
-8. Interior Design
-9. Fit Out
-10. Design & Build
-11. Architecture
-12. Concierge
-13. Currency Exchange
-14. Law Firm
-15. Company Setup
-16. Broker Certification
-17. Signature Collection
-18. Complaint Procedures
-19. Customer Happiness Center
-20. Testimonials
+1. **New shared wrapper `InsightsPageBody`** (or extend `InsightsPageScope`) that forces every direct child section to:
+   - `max-width: 1500px`
+   - `margin-inline: auto`
+   - `padding: 16px` vertical, `16-24px` horizontal
+   - 28px radius on top-level cards
+   - No edge-touching (min side gutter 16px mobile, 24px desktop)
+2. Convert every page above to wrap its non-hero content in this component and replace ad-hoc `container`/`max-w-*` classes on top-level sections with the standard.
+3. Add CSS pass in `index.css` (PASS 175) as a safety net keyed on `[data-standard-body] > section, > div.section` for pages that still have legacy structure.
+4. Swap each hero to a page-specific asset:
+   - Use existing curated Unsplash/videos already in the repo where available
+   - For pages without one, add a matched still image (photo) via existing hero components — no new generation unless required
+   - Titles/subtitles left as-is
+5. Validate with Playwright: script iterates all listed routes at 1280×1800, screenshots hero + first 3 sections, asserts:
+   - top-level section width ≤ 1500 and ≥ 960 on desktop
+   - left/right gutter ≥ 16px
+   - no black-on-emerald contrast violations
+   - hero has a `<video>` or `<img>` with a unique `src`
+   Screenshots saved under `/tmp/browser/standardize/`.
+6. Iterate per page group (Insights → Guides → Company/Legal → Services), fixing regressions before moving to next group.
 
-**Company & Legal (12)** — in sidebar order:
-1. About
-2. Founder
-3. Contact
-4. Awards
-5. Company Profile
-6. Terms of Service
-7. Privacy Policy
-8. Cookie Policy
-9. Disclaimers
-10. Intellectual Property
-11. AML / KYC
-12. Founders Assistant
+## Technical Notes
+- Do not modify `PremiumSectionCard` API; reuse `width="contained"` + `wrapperClassName="cv-auto py-4"`.
+- Keep `InsightsPageScope` for palette; add layout via new `data-standard-body` attribute.
+- Hero components already read `data-mi-hero-variant` / `data-guide-hero`; extend those maps with new image/video srcs per route.
+- No business-logic changes; presentation only.
 
-## Step 3 — Per-page checklist (agent-side, not user-side)
-
-Before marking any page done, verify:
-- Hero uses `IntelHero` (no page-local gradient)
-- No `bg-[#…]` hex fills outside the shell
-- No `border-[#B89555]` / `border-champagne` — only white/emerald tokens
-- Every button = primary emerald-metallic or secondary champagne (no ad-hoc styles)
-- Dropdowns/pickers inherit global emerald select styling
-- All text meets contrast: white on emerald, ink on champagne
-- Playwright screenshot of hero + one content section + footer transition captured
-
-## Technical notes
-
-- Shell lives in `src/components/layout/`. Pages import once, wrap children.
-- No content changes — only presentation layer. Every existing form, PDF, button, and link is preserved verbatim.
-- `IntelPageShell` accepts `hero={{ eyebrow, title, subtitle, primary, secondary }}` and children sections.
-- Sidebar/header stays global; shell only owns the route body.
-
-## Delivery cadence
-
-- **This turn:** build `IntelPageShell` + refactor Page 1 (Buying Advisory) + screenshot.
-- **Every following turn:** one page, screenshot, wait for 👍.
-- Total: 33 turns (1 shell + 32 pages). No batching, no skipping.
-
-If you want a faster cadence (e.g. batch of 3–4 pages per turn without per-page screenshots), reply with the batch size before I start.
+## Deliverables
+- Updated pages (list above) with standardized card widths
+- New/updated wrapper component + `index.css` PASS 175
+- Per-page hero asset map
+- Playwright validation script + saved screenshots proving parity with homepage cards
