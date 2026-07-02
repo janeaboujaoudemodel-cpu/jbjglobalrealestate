@@ -325,6 +325,34 @@ const PropertyMap = () => {
     return projectsWithCoords.filter((project) => visibleMarkerIds.has(project.id)).slice(0, 180);
   }, [projectsWithCoords, visibleMarkerIds]);
 
+  useEffect(() => {
+    const preload = () => {
+      visibleProjects
+        .slice(0, 36)
+        .map((project) => project.cover_image_url)
+        .filter(Boolean)
+        .forEach((src) => {
+          const image = new Image();
+          image.decoding = "async";
+          image.src = src as string;
+        });
+    };
+
+    let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
+    let idleId: number | null = null;
+
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(preload, { timeout: 1600 });
+    } else {
+      timeoutId = globalThis.setTimeout(preload, 350);
+    }
+
+    return () => {
+      if (timeoutId !== null) globalThis.clearTimeout(timeoutId);
+      if (idleId !== null) window.cancelIdleCallback?.(idleId);
+    };
+  }, [visibleProjects]);
+
   const showPanel = viewMode === "list" || viewMode === "grid";
 
   const sortOptions: { value: SortMode; label: string }[] = [
@@ -490,6 +518,7 @@ const PropertyMap = () => {
             style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
           >
             <Card
+              surface="emerald"
               className="jj-map-hover-card pointer-events-auto"
               style={{
                 background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)',
@@ -499,7 +528,7 @@ const PropertyMap = () => {
             >
               <CardContent className="p-0" style={{ color: '#FFFFFF' }}>
                 {hoveredProject.cover_image_url && (
-                  <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" />
+                  <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" loading="eager" decoding="async" />
                 )}
                 <div className="p-2" style={{ color: '#FFFFFF' }}>
                   <h4 className="font-semibold text-xs truncate" style={{ color: '#FFFFFF' }}>{hoveredProject.name}</h4>
@@ -517,7 +546,7 @@ const PropertyMap = () => {
             className="absolute z-[1000]"
             style={{ left: clickPos.left, top: clickPos.top, width: 384, maxWidth: 'calc(100% - 24px)' }}
           >
-            <Card className="jj-map-project-card shadow-xl" data-map-project-card>
+            <Card surface="emerald" className="jj-map-project-card shadow-xl" data-map-project-card>
               <CardContent className="p-0">
                 <button
                   onClick={() => setSelectedProject(null)}
@@ -529,7 +558,7 @@ const PropertyMap = () => {
                 </button>
                 {selectedProject.cover_image_url && (
                   <div className="relative h-36">
-                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
+                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" loading="eager" decoding="async" />
                     <Badge className="jj-map-status-badge absolute bottom-2 left-2" data-surface="emerald">
                       {selectedProject.status || selectedProject.status_label || "Available"}
                     </Badge>
@@ -630,6 +659,7 @@ const PropertyMap = () => {
             {filteredProjects.slice(0, 100).map((project) => (
               <Card
                 key={project.id}
+                surface="emerald"
                 className="jj-map-list-card cursor-pointer transition-colors overflow-hidden"
                 onClick={() => {
                   setHoveredProject(null);
@@ -652,6 +682,8 @@ const PropertyMap = () => {
                           alt={project.name}
                           className="w-full h-full object-cover"
                           fallbackSrc="/placeholder.svg"
+                          loading="eager"
+                          decoding="async"
                         />
                       </div>
                       <div className="p-2.5" style={{ color: '#FFFFFF' }}>
@@ -683,6 +715,8 @@ const PropertyMap = () => {
                           alt={project.name}
                           className="w-full h-full object-cover"
                           fallbackSrc="/placeholder.svg"
+                          loading="eager"
+                          decoding="async"
                         />
                       </div>
                       <div className="flex-1 min-w-0 p-2.5 flex flex-col justify-between" style={{ color: '#FFFFFF' }}>

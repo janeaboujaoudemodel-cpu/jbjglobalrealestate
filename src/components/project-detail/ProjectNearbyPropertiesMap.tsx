@@ -344,8 +344,9 @@ export default function ProjectNearbyPropertiesMap({
                     src={p.cover_image_url}
                     alt={p.name}
                     className="w-full h-24 object-cover"
-                    loading="lazy"
-                   decoding="async" />
+                    loading="eager"
+                    decoding="async"
+                    {...({ fetchpriority: "high" } as any)} />
                 )}
                 <div className="p-3 space-y-2">
                   {p.slug ? (

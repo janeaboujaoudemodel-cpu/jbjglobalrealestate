@@ -155,7 +155,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
               <Popup className="jj-map-popup">
                 <div className="min-w-[220px] max-w-[260px] jj-map-popup-card">
                   {project.cover_image_url && (
-                    <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" loading="lazy"  decoding="async" />
+                    <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" loading="eager" decoding="async" {...({ fetchpriority: "high" } as any)} />
                   )}
                   <div className="p-3">
                     <Link to={`/project/${project.slug}`} className="font-bold text-sm block leading-tight mb-1">
