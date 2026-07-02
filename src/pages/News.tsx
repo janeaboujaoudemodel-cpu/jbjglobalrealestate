@@ -232,20 +232,21 @@ const News = () => {
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-[#FDFBF7]">
-        {/* Champagne hero — JBJ identity, no neon, no ticker */}
-        <section className="relative overflow-hidden border-b border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        {/* Dark emerald hero — aligned with Insights/Guides contrast contract */}
+        <section data-guide-hero data-hero-dark className="relative overflow-hidden border-b-0 bg-[linear-gradient(135deg,#064E3B_0%,#022C22_56%,#010806_100%)]">
+          <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_34%),radial-gradient(circle_at_80%_15%,rgba(6,78,59,0.85),transparent_38%)]" aria-hidden="true" />
           <div className="max-w-[1200px] mx-auto px-6 py-16 md:py-20 relative z-10">
-            <Link to="/" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-8 transition-colors group">
+            <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-8 transition-colors group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               <span>Back to Home</span>
             </Link>
 
             <div className="max-w-3xl">
               <SectionEyebrow icon={Landmark} className="mb-5">Dubai Real Estate — Official Sources</SectionEyebrow>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] leading-[1.05] mb-5">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.05] mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
                 News &amp; Insights
               </h1>
-              <p className="text-[#1A1A1A]/75 text-lg max-w-2xl leading-relaxed">
+              <p className="text-white/85 text-lg max-w-2xl leading-relaxed">
                 Curated Dubai &amp; UAE real-estate updates — DLD, RERA, developer launches, off-plan, mortgages, market reports and investor briefings.
               </p>
             </div>
@@ -253,7 +254,7 @@ const News = () => {
         </section>
 
         {/* Category filter — single champagne pill row, emerald active state via primitive */}
-        <div className="sticky top-0 z-20 bg-[#FDFBF7]/95 backdrop-blur-md border-b border-[#B89555]/30">
+        <div className="sticky top-0 z-20 bg-[#FDFBF7]/95 backdrop-blur-md border-b border-[#064E3B]/20">
           <div className="max-w-[1200px] mx-auto px-6 py-3">
             <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pr-4">
               {categories.map((category) => {
@@ -269,7 +270,7 @@ const News = () => {
                     className={`allow-white px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
                       isActive
                         ? "jj-cta-primary border-transparent text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
-                        : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"
+                        : "bg-white text-[#1A1A1A] border-[#064E3B]/25 hover:bg-[#F7F2EA]"
                     }`}
                     style={isActive ? { backgroundImage: "var(--jj-emerald-ombre, linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%))", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                   >
