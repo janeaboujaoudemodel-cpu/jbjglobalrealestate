@@ -422,7 +422,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     key={m.id}
                     type="button"
                     onClick={() => setMode(m.id)}
-                    className={`id-choice ${active ? "id-choice-active" : "id-panel-soft"} flex-1 basis-[160px] min-w-[140px] min-h-[72px] rounded-xl p-3 text-left transition-all border`}
+                    className={`id-choice ${active ? "id-choice-active" : "id-panel-soft"} flex flex-col items-start gap-1 flex-1 basis-[160px] min-w-[140px] min-h-[72px] rounded-xl p-3 text-left transition-all border`}
                     aria-pressed={active}
                   >
                     <div className="flex items-center gap-2 mb-1" style={{ display: "flex" }}>
