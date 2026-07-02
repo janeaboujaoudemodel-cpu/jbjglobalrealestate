@@ -352,9 +352,9 @@ export default function SupportLauncher() {
                       <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                     </button>
                   </div>
-                  <div className="grid grid-cols-1 auto-rows-[86px] gap-2.5 overflow-y-auto pr-0.5">
+                  <div className="grid w-full grid-cols-[minmax(0,1fr)] auto-rows-[86px] items-stretch justify-stretch gap-2.5 overflow-y-auto overflow-x-hidden pr-0.5">
                     {channels.map((c) => (
-                      <div key={c.id} className="h-[86px] min-w-0">
+                      <div key={c.id} className="block h-[86px] w-full min-w-0 max-w-full self-stretch justify-self-stretch">
                         <ChannelCard channel={c} onActivate={close} />
                       </div>
                     ))}
