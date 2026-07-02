@@ -92,7 +92,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
   const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
-  const cardHeroImageUrl = getIconicDeveloperImage(developer.slug || "", developer.name || "") || developer.feature_image_url || heroImageUrl;
+  // Only use a photo when we have a curated developer-specific image.
+  // DB feature_image_url and the passed-in heroImageUrl are NOT trusted for
+  // developer cards because they routinely leak stock/unrelated imagery
+  // (e.g. Amal → Downtown, Samana → interior, 971 ≈ AAA reuse). Falling
+  // back to logo/nameplate is safer than showing a wrong photo.
+  const cardHeroImageUrl = getIconicDeveloperImage(developer.slug || "", developer.name || "");
+
   const hasHero = !!cardHeroImageUrl;
   const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
 
