@@ -22902,6 +22902,50 @@ html[data-tool-fullscreen="true"] body [data-tool-emerald] [data-tool-frame]::be
 html[data-tool-fullscreen="true"] body [data-tool-emerald] [data-tool-frame] {
   border-color: rgba(255,255,255,0.52) !important;
 }
+
+/* PASS 152 — EMERALD DROPDOWN FINAL LOCK
+   Overrides legacy champagne/gold Radix popover rules for every select/menu
+   surface. Active is solid emerald; hover is a lighter wash and never the
+   same as active. */
+html body [data-radix-popper-content-wrapper] > [role="listbox"],
+html body [data-radix-popper-content-wrapper] > [role="menu"],
+html body [data-radix-popper-content-wrapper] > [data-radix-select-content],
+html body [data-radix-popper-content-wrapper] > .jbj-form-popover,
+html body [data-radix-select-content] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+  border: 1px solid rgba(255,255,255,0.34) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.42), 0 0 28px rgba(6,78,59,0.24) !important;
+}
+html body [data-radix-popper-content-wrapper] :is([role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [cmdk-item], .cmdk-item),
+html body [data-radix-select-content] :is([role="option"], [role="menuitem"], [data-radix-collection-item]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+html body [data-radix-popper-content-wrapper] :is([role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [cmdk-item], .cmdk-item):is(:hover, :focus, :focus-visible, [data-highlighted]),
+html body [data-radix-select-content] :is([role="option"], [role="menuitem"], [data-radix-collection-item]):is(:hover, :focus, :focus-visible, [data-highlighted]) {
+  background: rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-radix-popper-content-wrapper] :is([role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [cmdk-item], .cmdk-item):is([data-state="checked"], [aria-selected="true"], [data-selected="true"]),
+html body [data-radix-select-content] :is([role="option"], [role="menuitem"], [data-radix-collection-item]):is([data-state="checked"], [aria-selected="true"], [data-selected="true"]) {
+  background: linear-gradient(135deg, #065F46 0%, #042C1C 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-radix-popper-content-wrapper] :is([role="option"], [role="menuitem"], [cmdk-item], .cmdk-item) *,
+html body [data-radix-select-content] :is([role="option"], [role="menuitem"], [data-radix-collection-item]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 html body #root [data-tool-shell-root][data-tool-emerald] :is(.jbj-form-field, .ri-input, [data-radix-select-trigger], button[role="combobox"], [role="combobox"], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select) {
   background: linear-gradient(135deg, rgba(8,18,13,0.92), rgba(0,0,0,0.88)) !important;
   border: 1px solid rgba(255,255,255,0.42) !important;
