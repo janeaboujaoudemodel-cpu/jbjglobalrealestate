@@ -547,6 +547,47 @@
 .jc-funnel-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
 .jc-funnel-empty p { margin: 0; font-size: 13px; color: var(--jbjcrm-graphite-3); }
 
+/* Phase 2 — Home Dashboard polish */
+.jc-home__welcome-copy { display: flex; flex-direction: column; gap: 2px; }
+.jc-home__welcome-copy p { margin: 0; font-size: 12px; color: var(--jbjcrm-graphite-2); }
+.jc-home__ghost {
+  width: 32px; height: 32px; border-radius: 6px; background: transparent;
+  border: 0; display: inline-grid; place-items: center;
+  color: var(--jbjcrm-graphite-2); cursor: pointer;
+}
+.jc-home__ghost:hover { background: #EEF1F6; color: var(--jbjcrm-graphite); }
+
+.jc-kpi { position: relative; overflow: hidden; }
+.jc-kpi::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--jbjcrm-emerald) 0%, var(--jbjcrm-emerald-ink) 100%);
+}
+.jc-kpi__sub { font-size: 11px; color: var(--jbjcrm-graphite-3); margin-top: 2px; }
+
+.jc-widget__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.jc-widget__head-actions { display: flex; align-items: center; gap: 6px; }
+.jc-widget__scope {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #F3F5F9; border: 1px solid var(--jbjcrm-hairline);
+  color: var(--jbjcrm-graphite); font-size: 12px; font-weight: 600;
+  padding: 4px 10px; border-radius: 999px; cursor: pointer;
+}
+.jc-widget__scope:hover { background: #E9EDF4; }
+.jc-widget__scope svg { color: var(--jbjcrm-graphite-2); }
+.jc-widget__icon {
+  width: 26px; height: 26px; border-radius: 6px; border: 0; cursor: pointer;
+  background: var(--jbjcrm-emerald); color: #FFFFFF;
+  display: inline-grid; place-items: center;
+}
+.jc-widget__icon:hover { background: var(--jbjcrm-emerald-ink); }
+.jc-widget__toolbar { display: flex; align-items: center; justify-content: space-between; }
+.jc-widget__viewall {
+  font-size: 12px; font-weight: 600; color: var(--jbjcrm-emerald);
+  text-decoration: none; padding: 4px 6px; border-radius: 4px;
+}
+.jc-widget__viewall:hover { text-decoration: underline; }
+.jc-widget__empty--lg { padding: 60px 18px; }
+
 @media (max-width: 1100px) {
   .jc-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .jc-widget-row { grid-template-columns: 1fr; }
