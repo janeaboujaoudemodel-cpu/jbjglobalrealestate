@@ -1313,7 +1313,7 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
+    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #063D2F 0%, #041F18 100%)" }}>
       <style>{AIHF_STYLE}</style>
       {/* Hero Header — full-bleed deep emerald band with question inside */}
       <div className="aihf-hero sticky top-[88px] z-10">
