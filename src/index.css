@@ -24454,3 +24454,76 @@ html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-ma
     animation: none !important;
   }
 }
+
+/* PASS 164 — Map project-card opacity lock.
+   The Card base still carries champagne/gold utility classes, and older
+   anti-gold map guards were flattening those map cards into translucent
+   silver. These exact final selectors make every map hover/click/list/popup
+   project card opaque emerald with pure white content, across /map, property
+   listing map embeds, project detail maps, area maps, and developer maps. */
+html body #root :where([data-map-page], [data-map-shell]) {
+  --jj-map-card-emerald-solid: #073B2F !important;
+  --jj-map-card-emerald-deep: #03251F !important;
+  --jj-map-card-emerald-gradient: linear-gradient(135deg, #0B5A45 0%, #073B2F 56%, #03251F 100%) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-project-card, .jj-map-hover-card, .jj-map-list-card, .jj-map-popup-card, [data-map-project-card]),
+html body :is(.jj-map-popup, .developer-map-popup) .jj-map-popup-card,
+html body :is(.jj-map-popup, .developer-map-popup) .leaflet-popup-content-wrapper {
+  background-color: #073B2F !important;
+  background: linear-gradient(135deg, #0B5A45 0%, #073B2F 56%, #03251F 100%) !important;
+  background-image: linear-gradient(135deg, #0B5A45 0%, #073B2F 56%, #03251F 100%) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  border-radius: 18px !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 30px 70px -34px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-project-card, .jj-map-hover-card, .jj-map-list-card, .jj-map-popup-card, [data-map-project-card]) :where(h1,h2,h3,h4,h5,h6,p,span,div,a,button,label,small,strong,em,b,svg,path,line,rect,circle,polyline,polygon),
+html body :is(.jj-map-popup, .developer-map-popup) .jj-map-popup-card :where(h1,h2,h3,h4,h5,h6,p,span,div,a,button,label,small,strong,em,b,svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) :is(.jj-map-project-card, .jj-map-hover-card, .jj-map-list-card, .jj-map-popup-card, [data-map-project-card]) :is(img, picture, canvas),
+html body :is(.jj-map-popup, .developer-map-popup) .jj-map-popup-card :is(img, picture, canvas) {
+  display: block !important;
+  background: #073B2F !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+}
+
+html body :is(.jj-map-popup, .developer-map-popup) .leaflet-popup-content-wrapper {
+  padding: 0 !important;
+}
+
+html body :is(.jj-map-popup, .developer-map-popup) .leaflet-popup-content {
+  margin: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is(.jj-map-popup, .developer-map-popup) .leaflet-popup-tip {
+  background: #073B2F !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-list-card:hover,
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-hover-card:hover,
+html body :is(.jj-map-popup, .developer-map-popup) .jj-map-popup-card:hover {
+  background-color: #0B5A45 !important;
+  background: linear-gradient(135deg, #0E6C53 0%, #0B5A45 54%, #073B2F 100%) !important;
+  background-image: linear-gradient(135deg, #0E6C53 0%, #0B5A45 54%, #073B2F 100%) !important;
+  border-color: rgba(255,255,255,0.34) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}

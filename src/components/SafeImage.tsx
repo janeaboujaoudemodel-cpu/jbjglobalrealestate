@@ -53,16 +53,16 @@ function resolveAppAssetUrl(src?: string): string | undefined {
 }
 
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
-  ({ fallbackSrc, onError, loggerComponent, loggerContext, ...props }, ref) => {
+  ({ fallbackSrc, onError, loggerComponent, loggerContext, fetchPriority: explicitFetchPriority, ...props }, ref) => {
     const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
     const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
     const component = loggerComponent || "SafeImage";
     const baseContext = { ...loggerContext, alt: props.alt };
 
     const loadingAttr = props.loading ?? "lazy";
-    const fetchPriority = loadingAttr === "eager" ? "high" : undefined;
+    const fetchPriority = explicitFetchPriority ?? (loadingAttr === "eager" ? "high" : undefined);
     const fetchPriorityProps = fetchPriority
-      ? ({ fetchpriority: fetchPriority } as unknown as React.ImgHTMLAttributes<HTMLImageElement>)
+      ? ({ fetchpriority: fetchPriority } as any)
       : {};
 
     const champagneFor = (img: HTMLImageElement) =>
