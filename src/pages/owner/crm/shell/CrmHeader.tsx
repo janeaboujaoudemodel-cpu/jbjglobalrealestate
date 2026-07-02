@@ -41,7 +41,7 @@ export default function CrmHeader() {
           className="jc-jbj-avatar"
           aria-label="Back to Owner"
         >
-          JBJ
+          <img src={jbjMonogram} alt="JBJ Global Real Estate" draggable={false} />
         </Link>
         <button className="jc-icon-btn" type="button" aria-label="Profile">
           <CircleUserRound size={21} />
