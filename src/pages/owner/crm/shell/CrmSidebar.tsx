@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { ChevronDown, MoreHorizontal, PanelLeft, Search } from "lucide-react";
-import jbjFullLogoLight from "@/assets/jbj-logo-light.png";
+
 import {
   CRM_DEFAULT_SECTION,
   CRM_PRIMARY_NAV,
