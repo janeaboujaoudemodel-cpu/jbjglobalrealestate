@@ -677,7 +677,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         data-ink-emerald
         data-no-contrast-guard
         className="relative overflow-hidden"
-        style={{ backgroundImage: EMERALD_INK, backgroundColor: "#021611" }}
+        style={{ backgroundImage: HERO_EMERALD, backgroundColor: "#065F46" }}
       >
         <div className="container mx-auto px-4 py-14 md:py-16 relative z-10">
           <button
