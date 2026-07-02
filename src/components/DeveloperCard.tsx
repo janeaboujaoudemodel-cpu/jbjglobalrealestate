@@ -31,9 +31,9 @@ const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "r
 const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
 const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
-  "developed-by-emaar-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/marina_feat_ca27724071.jpg",
-  "emaar-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/marina_feat_ca27724071.jpg",
-  emaar: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/marina_feat_ca27724071.jpg",
+  "developed-by-emaar-properties": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
+  "emaar-properties": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
+  emaar: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
   "developed-by-danube-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
   "danube-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
   danube: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
