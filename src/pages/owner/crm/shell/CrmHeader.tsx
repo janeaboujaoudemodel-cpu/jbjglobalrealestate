@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Bell, CalendarDays, CircleUserRound, Grip, Plus, Search, Settings, Store, Wand2 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
+import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
 
 export default function CrmHeader() {
   const { pathname } = useLocation();
