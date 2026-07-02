@@ -5,6 +5,7 @@ import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
 import CrmSearchOverlay from "./CrmSearchOverlay";
 import CrmQuickCreateMenu from "./CrmQuickCreateMenu";
 import CrmNotificationsPanel from "./CrmNotificationsPanel";
+import CrmZiaPanel from "./CrmZiaPanel";
 import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
 
 export default function CrmHeader() {
