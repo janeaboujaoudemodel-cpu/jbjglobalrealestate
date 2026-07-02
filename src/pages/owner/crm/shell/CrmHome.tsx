@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   Building2,
@@ -10,6 +9,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
+import { useCrmHomeKpis, formatKpi } from "@/hooks/useCrmHomeKpis";
 
 /**
  * JBJ CRM — Home Dashboard
@@ -17,23 +17,17 @@ import { useOwnerCrmLeads, type OwnerCrmLead } from "@/hooks/useOwnerCrmLeads";
  * two ListWidget rows → funnel + activity), painted with JBJ tokens only.
  */
 export default function CrmHome() {
-  const { rows: leads, loading } = useOwnerCrmLeads(200);
+  const { rows: leads, loading: leadsLoading } = useOwnerCrmLeads(200);
+  const { kpis, loading: kpisLoading, error: kpisError, refresh } = useCrmHomeKpis();
 
-  const startOfToday = useMemo(() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d.getTime();
-  }, []);
-  const todaysLeads = useMemo(
-    () => leads.filter((l) => new Date(l.created_at).getTime() >= startOfToday),
-    [leads, startOfToday],
-  );
-  const myLeadsCount = leads.length;
-  const openDeals = 0; // placeholder until deals hook lands
-  const untouched = leads.filter(
-    (l) =>
-      Date.now() - new Date(l.created_at).getTime() > 7 * 24 * 60 * 60 * 1000,
-  ).length;
+  const todaysLeads = leads.filter((l) => {
+    const created = new Date(l.created_at).getTime();
+    const dubaiOffsetMs = 4 * 60 * 60 * 1000;
+    const dubaiNow = new Date(Date.now() + dubaiOffsetMs);
+    dubaiNow.setUTCHours(0, 0, 0, 0);
+    const startOfTodayDubai = dubaiNow.getTime() - dubaiOffsetMs;
+    return created >= startOfTodayDubai;
+  });
 
   return (
     <div className="jc-home" data-no-contrast-guard>
@@ -49,7 +43,12 @@ export default function CrmHome() {
           </div>
         </div>
         <div className="jc-home__welcome-right">
-          <button type="button" className="jc-home__ghost" aria-label="Refresh">
+          <button
+            type="button"
+            className="jc-home__ghost"
+            aria-label="Refresh metrics"
+            onClick={refresh}
+          >
             <RefreshCw size={15} />
           </button>
           <button type="button" className="jc-org-picker">
@@ -64,10 +63,34 @@ export default function CrmHome() {
 
       {/* KPI tiles */}
       <section className="jc-kpi-row" aria-label="Key metrics">
-        <KpiTile label="My Open Deals" value={String(openDeals)} sub="Active pipeline" />
-        <KpiTile label="My Untouched Leads" value={loading ? "…" : String(untouched)} sub="No activity in 7d" />
-        <KpiTile label="Today's Leads" value={loading ? "…" : String(todaysLeads.length)} sub="Captured today" />
-        <KpiTile label="My Leads" value={loading ? "…" : String(myLeadsCount)} sub="Assigned to me" />
+        <KpiTile
+          label="My Open Deals"
+          value={kpis.openDeals}
+          sub="Active pipeline"
+          loading={kpisLoading}
+          error={!!kpisError}
+        />
+        <KpiTile
+          label="My Untouched Leads"
+          value={kpis.untouchedLeads}
+          sub="No activity in 7d"
+          loading={kpisLoading}
+          error={!!kpisError}
+        />
+        <KpiTile
+          label="Today's Leads"
+          value={kpis.todaysLeads}
+          sub="Captured today (Asia/Dubai)"
+          loading={kpisLoading}
+          error={!!kpisError}
+        />
+        <KpiTile
+          label="My Leads"
+          value={kpis.myLeads}
+          sub="Assigned to me"
+          loading={kpisLoading}
+          error={!!kpisError}
+        />
       </section>
 
       {/* Tasks + Meetings */}
