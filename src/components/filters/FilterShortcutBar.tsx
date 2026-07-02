@@ -839,23 +839,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </PopoverContent>
         </Popover>
 
-        {/* Divider */}
-        <div className={filterDivider} />
-
-        {/* Hide Sold Out */}
-        <button
-          onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
-          className={cn(
-            pillBase, "px-3 py-1.5",
-            filters.hideSoldOut
-              ? pillActive
-              : "bg-[#FDFBF7] border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/30"
-          )}
-        >
-          {t('filter.hideSold')}
-        </button>
-
-        {/* Divider */}
+        {/* Hide Sold Out — permanently removed. Off-plan projects are never
+            marked sold on this site (developer stock that sells out reappears
+            in the secondary market). Only individual resale listings can be
+            sold, and that surfaces in the resale UI, not here. */}
         <div className={filterDivider} />
 
         {/* Sort pills (hidden when consumer page uses a dedicated SortBySelect) */}
