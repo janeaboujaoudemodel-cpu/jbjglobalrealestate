@@ -4,6 +4,7 @@
  */
 import {
   BarChart3,
+  Blocks,
   BriefcaseBusiness,
   CalendarDays,
   CheckSquare,
