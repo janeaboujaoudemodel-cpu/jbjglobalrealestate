@@ -309,30 +309,31 @@ export const PublicRoutes = () => (
     <Route path="/market-intelligence/methodology" element={<InsightsPageScope><Methodology /></InsightsPageScope>} />
     
 
-    {/* ── Services ── */}
-    <Route path="/services" element={<Services />} />
-    <Route path="/services/architecture" element={<Architecture />} />
-    <Route path="/services/interior-design" element={<InteriorDesign />} />
-    <Route path="/services/fit-out" element={<FitOut />} />
-    <Route path="/services/design-build" element={<DesignBuild />} />
-    <Route path="/services/law-firm" element={<LawFirm />} />
-    <Route path="/services/buying-advisory" element={<BuyingAdvisory />} />
-    <Route path="/services/selling-advisory" element={<SellingAdvisory />} />
-    <Route path="/services/rental-advisory" element={<RentalAdvisory />} />
-    <Route path="/services/investment-advisory" element={<InvestmentAdvisory />} />
+    {/* ── Services ── (wrapped in InsightsPageScope so every services page inherits
+        the Market Intelligence / champagne+emerald brand contract enforced in index.css) */}
+    <Route path="/services" element={<InsightsPageScope><Services /></InsightsPageScope>} />
+    <Route path="/services/architecture" element={<InsightsPageScope><Architecture /></InsightsPageScope>} />
+    <Route path="/services/interior-design" element={<InsightsPageScope><InteriorDesign /></InsightsPageScope>} />
+    <Route path="/services/fit-out" element={<InsightsPageScope><FitOut /></InsightsPageScope>} />
+    <Route path="/services/design-build" element={<InsightsPageScope><DesignBuild /></InsightsPageScope>} />
+    <Route path="/services/law-firm" element={<InsightsPageScope><LawFirm /></InsightsPageScope>} />
+    <Route path="/services/buying-advisory" element={<InsightsPageScope><BuyingAdvisory /></InsightsPageScope>} />
+    <Route path="/services/selling-advisory" element={<InsightsPageScope><SellingAdvisory /></InsightsPageScope>} />
+    <Route path="/services/rental-advisory" element={<InsightsPageScope><RentalAdvisory /></InsightsPageScope>} />
+    <Route path="/services/investment-advisory" element={<InsightsPageScope><InvestmentAdvisory /></InsightsPageScope>} />
     <Route path="/services/partner-introductions" element={<Navigate to="/partners" replace />} />
-    <Route path="/services/snagging" element={<Snagging />} />
-    <Route path="/services/property-management" element={<PropertyManagement />} />
-    <Route path="/services/short-term-rentals" element={<ShortTermRentals />} />
-    <Route path="/services/currency-exchange" element={<CurrencyExchange />} />
-    <Route path="/services/concierge" element={<Concierge />} />
-    <Route path="/services/company-setup" element={<CompanySetup />} />
-    <Route path="/services/signature-collection" element={<SignatureCollection />} />
-    
-    <Route path="/services/broker-certification" element={<BrokerCertification />} />
-    <Route path="/services/complaint-procedures" element={<ComplaintProcedures />} />
-    <Route path="/services/customer-happiness-center" element={<CustomerHappinessCenter />} />
-    <Route path="/services/testimonials" element={<TestimonialsPage />} />
+    <Route path="/services/snagging" element={<InsightsPageScope><Snagging /></InsightsPageScope>} />
+    <Route path="/services/property-management" element={<InsightsPageScope><PropertyManagement /></InsightsPageScope>} />
+    <Route path="/services/short-term-rentals" element={<InsightsPageScope><ShortTermRentals /></InsightsPageScope>} />
+    <Route path="/services/currency-exchange" element={<InsightsPageScope><CurrencyExchange /></InsightsPageScope>} />
+    <Route path="/services/concierge" element={<InsightsPageScope><Concierge /></InsightsPageScope>} />
+    <Route path="/services/company-setup" element={<InsightsPageScope><CompanySetup /></InsightsPageScope>} />
+    <Route path="/services/signature-collection" element={<InsightsPageScope><SignatureCollection /></InsightsPageScope>} />
+
+    <Route path="/services/broker-certification" element={<InsightsPageScope><BrokerCertification /></InsightsPageScope>} />
+    <Route path="/services/complaint-procedures" element={<InsightsPageScope><ComplaintProcedures /></InsightsPageScope>} />
+    <Route path="/services/customer-happiness-center" element={<InsightsPageScope><CustomerHappinessCenter /></InsightsPageScope>} />
+    <Route path="/services/testimonials" element={<InsightsPageScope><TestimonialsPage /></InsightsPageScope>} />
     <Route path="/referral-partner" element={<ReferralPartner />} />
     <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
     <Route path="/investors" element={<InvestorServices />} />
@@ -345,13 +346,13 @@ export const PublicRoutes = () => (
     <Route path="/partners/company-setup" element={<PartnerCompanySetup />} />
     <Route path="/partners/visa-services" element={<PartnerVisaServices />} />
 
-    {/* ── Company ── */}
-    <Route path="/contact" element={<Contact />} />
-    <Route path="/about" element={<About />} />
-    <Route path="/founder" element={<Founder />} />
-    <Route path="/awards" element={<Awards />} />
+    {/* ── Company ── (wrapped in InsightsPageScope for MI brand contract) */}
+    <Route path="/contact" element={<InsightsPageScope><Contact /></InsightsPageScope>} />
+    <Route path="/about" element={<InsightsPageScope><About /></InsightsPageScope>} />
+    <Route path="/founder" element={<InsightsPageScope><Founder /></InsightsPageScope>} />
+    <Route path="/awards" element={<InsightsPageScope><Awards /></InsightsPageScope>} />
     <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
-    <Route path="/company-profile" element={<CompanyProfile />} />
+    <Route path="/company-profile" element={<InsightsPageScope><CompanyProfile /></InsightsPageScope>} />
     <Route path="/news" element={<InsightsPageScope><News /></InsightsPageScope>} />
     <Route path="/news/:id" element={<InsightsPageScope><NewsDetail /></InsightsPageScope>} />
     <Route path="/team" element={<TeamRouteGate />} />
@@ -362,14 +363,14 @@ export const PublicRoutes = () => (
     <Route path="/thank-you" element={<ThankYou />} />
     <Route path="/blog" element={<Navigate to="/news" replace />} />
 
-    {/* ── Legal ── */}
-    <Route path="/terms" element={<Terms />} />
-    <Route path="/privacy" element={<Privacy />} />
-    <Route path="/cookies" element={<Cookies />} />
-    <Route path="/disclaimers" element={<Disclaimers />} />
+    {/* ── Legal ── (wrapped in InsightsPageScope for MI brand contract) */}
+    <Route path="/terms" element={<InsightsPageScope><Terms /></InsightsPageScope>} />
+    <Route path="/privacy" element={<InsightsPageScope><Privacy /></InsightsPageScope>} />
+    <Route path="/cookies" element={<InsightsPageScope><Cookies /></InsightsPageScope>} />
+    <Route path="/disclaimers" element={<InsightsPageScope><Disclaimers /></InsightsPageScope>} />
 
-    <Route path="/aml-kyc" element={<AmlKycPolicy />} />
-    <Route path="/intellectual-property" element={<IntellectualProperty />} />
+    <Route path="/aml-kyc" element={<InsightsPageScope><AmlKycPolicy /></InsightsPageScope>} />
+    <Route path="/intellectual-property" element={<InsightsPageScope><IntellectualProperty /></InsightsPageScope>} />
 
     {/* ── User / Account (Tier 2 — login required) ── */}
     <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />

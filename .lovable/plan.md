@@ -1,59 +1,82 @@
+## Goal
 
-## Scope (from vertical nav)
+Adopt the Market Intelligence page as the canonical template — same color system, contrast, typography, spacing, section shells, hero, dividers, and interaction states — across every Services and Company/Legal page. No custom deviations per page.
 
-**SERVICES (23 pages)** — `/services`, `/services/property-management`, `/partners/mortgage`, `/partners/legal`, `/partners/visa-services`, `/partners/company-setup`, `/sell/valuation`, `/services/selling-advisory`, `/services/short-term-rentals`, `/services/concierge`, `/services/architecture`, `/services/interior-design`, `/services/fit-out`, `/services/design-build`, `/services/law-firm`, `/services/buying-advisory`, `/services/rental-advisory`, `/services/investment-advisory`, `/services/snagging`, `/services/currency-exchange`, `/services/signature-collection`, `/services/broker-certification`, `/services/complaint-procedures`, `/services/customer-happiness-center`, `/services/testimonials`, `/referral-partner`
+## Step 1 — Extract the Market Intelligence style into a reusable shell (single source of truth)
 
-**INSIGHTS (6 pages)** — `/market-intelligence`, `/news`, `/market-report`, `/market-intelligence/overview`, `/market-intelligence/areas`, `/market-intelligence/reports`, `/market-intelligence/methodology`
+Create a shared layout module so every page below inherits identical tokens automatically. This is the only way to guarantee "no violation" across 32 pages.
 
-**GUIDES (9 pages)** — `/guides`, `/buyer-guide`, `/seller-guide`, `/rent-guide`, `/tenant-guide`, `/landlord-guide`, `/investor-education`, `/guides/golden-visa-uae`, `/faq`
+- `src/components/layout/IntelPageShell.tsx` — page frame with:
+  - `PAGE_BG` (solid dark emerald/black, no gradient drift)
+  - Emerald hero band (dark → darker, short transition, matches Market Intel hero exactly)
+  - Champagne body band for content, using `<PremiumSectionCard>`
+  - White dividers only (no gold hairlines)
+  - White text on emerald, `#1A1A1A` on champagne
+- `IntelHero`, `IntelSection`, `IntelStatGrid`, `IntelFeatureGrid`, `IntelCTA` sub-components mirroring the exact blocks used on `/market-intelligence`.
+- No new tokens. Reuses existing emerald / champagne CSS variables.
 
-**Total: ~38 pages**
+## Step 2 — Roll out order (one page per turn, validated before next)
 
-## Brand contract (locked, applied identically to every page)
+Each turn: refactor page → run `tsgo` → drive Playwright to screenshot hero + one mid-section + CTA → attach screenshot → wait for user 👍 before proceeding.
 
-- **Page background**: solid dark emerald `#010806` (matches footer band; no gradient).
-- **Hero band**: short emerald gradient `linear-gradient(180deg, #065F46 0%, #054C39 10%, #032820 32%, #010806 100%)`, white text/icons.
-- **Content cards**: champagne surface `#F7F2EA` with dark ink `#1A1A1A`, raised variant `#EFE6D6`, gold hairline `rgba(184,149,85,0.28)` — no gold fills.
-- **Emerald feature cards** (metric tiles, CTA tiles): `#064E3B` background, pure white text/icons.
-- **Dividers**: white `rgba(255,255,255,0.14)` on emerald, gold hairline on champagne. No gray, no gold dividers on emerald.
-- **Buttons**: primary = emerald metallic pill (white text), secondary = champagne (emerald text). No focus rings on inputs.
-- **Icons**: `<IconTile />`; on emerald surfaces → white FG.
-- All must carry `data-surface="emerald"` (dark bands) or `data-surface="champagne"` (light cards) so the global contrast guard passes.
+**Services (20)** — in navigation order:
+1. Buying Advisory
+2. Selling Advisory
+3. Rental Advisory
+4. Investment Advisory
+5. Property Management
+6. Short Term Rentals
+7. Snagging
+8. Interior Design
+9. Fit Out
+10. Design & Build
+11. Architecture
+12. Concierge
+13. Currency Exchange
+14. Law Firm
+15. Company Setup
+16. Broker Certification
+17. Signature Collection
+18. Complaint Procedures
+19. Customer Happiness Center
+20. Testimonials
 
-## Execution protocol
+**Company & Legal (12)** — in sidebar order:
+1. About
+2. Founder
+3. Contact
+4. Awards
+5. Company Profile
+6. Terms of Service
+7. Privacy Policy
+8. Cookie Policy
+9. Disclaimers
+10. Intellectual Property
+11. AML / KYC
+12. Founders Assistant
 
-For **each** page, one at a time, in order:
+## Step 3 — Per-page checklist (agent-side, not user-side)
 
-1. Read the current page file.
-2. Rewrite the page shell + section wrappers to the brand contract above (keep all copy, data, imports, features intact — no removal).
-3. Run Playwright against `http://localhost:8080<route>` at viewport 1280×1800, capture `/tmp/brand/<slug>.png`.
-4. Open the screenshot with `code--view` and visually verify: dark emerald page bg, no beige leak, no black-on-emerald, no gold dividers on dark, hero contrast correct.
-5. Only then move to the next page.
-
-If a page fails validation, fix in place and re-screenshot before advancing.
-
-## Batches (grouped only for reporting cadence, still one-by-one internally)
-
-- **Batch A — Services core (8)**: `/services`, `property-management`, `selling-advisory`, `buying-advisory`, `rental-advisory`, `investment-advisory`, `short-term-rentals`, `concierge`
-- **Batch B — Services build & legal (7)**: `architecture`, `interior-design`, `fit-out`, `design-build`, `law-firm`, `snagging`, `signature-collection`
-- **Batch C — Services partners & ops (8)**: `/partners/mortgage`, `/partners/legal`, `/partners/visa-services`, `/partners/company-setup`, `/sell/valuation`, `currency-exchange`, `broker-certification`, `referral-partner`
-- **Batch D — Services care (4)**: `complaint-procedures`, `customer-happiness-center`, `testimonials`, `/services` polish pass
-- **Batch E — Insights (7)**: `/market-intelligence`, `/news`, `/market-report`, `/market-intelligence/overview`, `/areas`, `/reports`, `/methodology`
-- **Batch F — Guides (9)**: `/guides`, `buyer-guide`, `seller-guide`, `rent-guide`, `tenant-guide`, `landlord-guide`, `investor-education`, `golden-visa-uae`, `/faq`
-
-I'll report back at the end of each batch with the screenshot filenames for spot-check.
+Before marking any page done, verify:
+- Hero uses `IntelHero` (no page-local gradient)
+- No `bg-[#…]` hex fills outside the shell
+- No `border-[#B89555]` / `border-champagne` — only white/emerald tokens
+- Every button = primary emerald-metallic or secondary champagne (no ad-hoc styles)
+- Dropdowns/pickers inherit global emerald select styling
+- All text meets contrast: white on emerald, ink on champagne
+- Playwright screenshot of hero + one content section + footer transition captured
 
 ## Technical notes
 
-- Where a page already uses `<InsightsPageScope />` or `<PremiumSectionCard />`, only the surface tokens change — component structure preserved.
-- Update the two shared scopes (`InsightsPageScope`, any `ServicesPageScope` if present; create one if missing) so guide/insight children inherit correct tokens without per-file duplication.
-- Global CSS (`src/index.css`) gets one new pass keyed on `[data-brand-emerald-page]` to force emerald bg + white ink defaults for these routes, reducing per-page churn.
-- No business logic, no data-fetching, no route changes — presentation only.
+- Shell lives in `src/components/layout/`. Pages import once, wrap children.
+- No content changes — only presentation layer. Every existing form, PDF, button, and link is preserved verbatim.
+- `IntelPageShell` accepts `hero={{ eyebrow, title, subtitle, primary, secondary }}` and children sections.
+- Sidebar/header stays global; shell only owns the route body.
 
-## Risks / trade-offs
+## Delivery cadence
 
-- **Time**: 38 pages × (edit + screenshot + view) is heavy. Screenshotting each is what you asked for; I will not skip it.
-- **Copy drift**: I will not rewrite any headline/body text; only surfaces, colors, dividers, buttons.
-- **Regression risk on shared scopes**: changing `InsightsPageScope` will visually update all 9 guides + 6 insights at once — that's intentional and the point of the rebuild.
+- **This turn:** build `IntelPageShell` + refactor Page 1 (Buying Advisory) + screenshot.
+- **Every following turn:** one page, screenshot, wait for 👍.
+- Total: 33 turns (1 shell + 32 pages). No batching, no skipping.
 
-Approve and I'll start with Batch A, page 1 (`/services`).
+If you want a faster cadence (e.g. batch of 3–4 pages per turn without per-page screenshots), reply with the batch size before I start.
