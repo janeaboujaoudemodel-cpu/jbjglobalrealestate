@@ -286,15 +286,18 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           color: rgba(255,255,255,0.82) !important;
           -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
         }
-        /* Cards: FULL emerald with white content */
-        [data-interior-design-ai] .id-panel {
-          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
-          border: 1px solid rgba(255,255,255,0.28) !important;
-          box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55), inset 0 0 30px rgba(255,255,255,0.04) !important;
-        }
+        /* Cards: SINGLE unified emerald surface — no lighter/darker variants, no gold */
+        [data-interior-design-ai] .id-panel,
         [data-interior-design-ai] .id-panel-soft {
-          background: linear-gradient(135deg, rgba(4,44,28,0.96) 0%, rgba(3,23,17,0.96) 58%, rgba(0,0,0,0.94) 100%) !important;
-          border: 1px solid rgba(255,255,255,0.30) !important;
+          background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
+          border: 1px solid rgba(255,255,255,0.22) !important;
+          box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55) !important;
+        }
+        /* Dropzone: no border at all */
+        [data-interior-design-ai] .id-dropzone {
+          background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
+          border: 0 !important;
+          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10) !important;
         }
         [data-interior-design-ai] .id-input,
         [data-interior-design-ai] .id-input:focus,
@@ -312,12 +315,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           opacity: 1 !important;
         }
         [data-interior-design-ai] .id-primary {
-          background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+          background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           border: 1px solid rgba(255,255,255,0.42) !important;
         }
-        /* Do NOT cascade background-image into children — that was painting the icon as a white/emerald block */
         [data-interior-design-ai] .id-primary > * {
           background-image: none !important;
           background: transparent !important;
@@ -340,7 +342,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-choice {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
-          border-color: rgba(255,255,255,0.38) !important;
+          background: rgba(255,255,255,0.04) !important;
+          border: 1px solid rgba(255,255,255,0.28) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
@@ -348,11 +351,10 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           border-color: rgba(255,255,255,0.62) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+          background: linear-gradient(135deg, #0a6e52 0%, #064E3B 58%, #01110b 100%) !important;
           border-color: rgba(255,255,255,0.72) !important;
           box-shadow: 0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
         }
-        /* Icons: line-art white, never filled block */
         [data-interior-design-ai] svg {
           background: transparent !important;
           background-image: none !important;
@@ -367,10 +369,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
-        /* Responsive safety — content must never overflow cards */
-        [data-interior-design-ai] .id-panel, [data-interior-design-ai] .id-panel-soft { min-width: 0 !important; }
+        [data-interior-design-ai] .id-panel,
+        [data-interior-design-ai] .id-panel-soft,
+        [data-interior-design-ai] .id-dropzone { min-width: 0 !important; }
         [data-interior-design-ai] .id-panel * { min-width: 0; }
       `}</style>
+
 
 
       {!embedded && (
