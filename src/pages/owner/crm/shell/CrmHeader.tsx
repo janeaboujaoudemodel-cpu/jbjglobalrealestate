@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Bell, CalendarDays, CircleUserRound, Grip, Plus, Search, Settings, Store, Wand2 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, getCrmModuleLabel } from "./modules";
 import CrmSearchOverlay from "./CrmSearchOverlay";
+import CrmQuickCreateMenu from "./CrmQuickCreateMenu";
+import CrmNotificationsPanel from "./CrmNotificationsPanel";
 import jbjMonogram from "@/assets/jbj-monogram-light-on-dark.png";
 
 export default function CrmHeader() {
@@ -10,6 +12,9 @@ export default function CrmHeader() {
   const active = pathname.replace(/\/+$/, "").split("/").pop() || CRM_DEFAULT_SECTION;
   const title = getCrmModuleLabel(active === "jbj" ? CRM_DEFAULT_SECTION : active);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [quickOpen, setQuickOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const unreadCount = 3;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -42,15 +47,37 @@ export default function CrmHeader() {
           <span className="jc-search__kbd">⌘ K</span>
         </button>
 
-        <button className="jc-icon-btn" data-solid="true" type="button" aria-label="Quick create">
-          <Plus size={22} strokeWidth={1.9} />
-        </button>
+        <div className="jc-popover-anchor">
+          <button
+            className="jc-icon-btn"
+            data-solid="true"
+            data-active={quickOpen ? "true" : undefined}
+            type="button"
+            aria-label="Quick create"
+            aria-expanded={quickOpen}
+            onClick={() => { setQuickOpen((v) => !v); setNotifOpen(false); }}
+          >
+            <Plus size={22} strokeWidth={1.9} />
+          </button>
+          <CrmQuickCreateMenu open={quickOpen} onClose={() => setQuickOpen(false)} />
+        </div>
         <button className="jc-icon-btn" type="button" aria-label="Zia assistant">
           <Wand2 size={21} />
         </button>
-        <button className="jc-icon-btn" type="button" aria-label="Notifications">
-          <Bell size={21} />
-        </button>
+        <div className="jc-popover-anchor">
+          <button
+            className="jc-icon-btn"
+            type="button"
+            aria-label="Notifications"
+            aria-expanded={notifOpen}
+            data-active={notifOpen ? "true" : undefined}
+            onClick={() => { setNotifOpen((v) => !v); setQuickOpen(false); }}
+          >
+            <Bell size={21} />
+            {unreadCount > 0 && <span className="jc-icon-btn__badge">{unreadCount}</span>}
+          </button>
+          <CrmNotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
+        </div>
         <button className="jc-icon-btn" type="button" aria-label="Calendar">
           <CalendarDays size={21} />
         </button>
