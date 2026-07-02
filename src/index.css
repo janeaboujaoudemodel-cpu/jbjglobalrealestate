@@ -26113,3 +26113,39 @@ html body #root [data-insights-page] :is([class*="border-[#B89555]"], [class*="b
 }
 
 /* END PASS 179 */
+
+/* PASS 180 — hero champagne CTAs and legal/FAQ mobile TOCs after emerald lock. */
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) {
+  background: linear-gradient(135deg,#FDFBF7 0%,#F7F2EA 55%,#EFE6D6 100%) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 12px 30px -18px rgba(0,0,0,0.55) !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"] :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"] :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) :is(span,svg,path,circle,rect,line,polyline,polygon) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden.mb-10, .lg\:hidden.sticky) {
+  background: var(--jj-insights-hero) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 18px 44px -30px rgba(1,8,6,0.55) !important;
+}
+html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden.mb-10, .lg\:hidden.sticky) :is(h1,h2,h3,h4,p,span,a,button,li,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden.mb-10, .lg\:hidden.sticky) :is(button,a):hover {
+  background: rgba(255,255,255,0.12) !important;
+}
+
+/* END PASS 180 */
