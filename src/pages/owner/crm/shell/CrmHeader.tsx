@@ -15,6 +15,7 @@ export default function CrmHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [quickOpen, setQuickOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [ziaOpen, setZiaOpen] = useState(false);
   const unreadCount = 3;
 
   useEffect(() => {
