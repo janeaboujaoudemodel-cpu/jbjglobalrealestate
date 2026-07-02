@@ -23550,3 +23550,29 @@ html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] 
   background: rgba(255,255,255,0.12) !important;
   background-image: none !important;
 }
+
+/* PASS 158 — final Compare validation lock: outrank global contrast guards. */
+html body #root [data-compare-content-frame] :where([data-compare-ai-ready-card],[data-compare-expert-card],[data-compare-deep-area-shell],[data-ai-analyzer-card],[data-ai-tools-disclaimer]) :where(h1,h2,h3,h4,h5,h6,p,span,div,td,th,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-compare-content-frame] > [data-allow-ink],
+html body #root [data-compare-content-frame] > [data-allow-ink] :where(span,div,p) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"][data-highlighted]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item][data-highlighted]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"]:not(:hover),
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item]:not(:hover) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [role="option"]:hover,
+html body [data-radix-popper-content-wrapper] [data-ai-analyzer-select-content] [data-radix-select-item]:hover {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+}
