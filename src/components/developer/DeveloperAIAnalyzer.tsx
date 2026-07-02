@@ -482,7 +482,7 @@ export const DeveloperAIAnalyzer = ({
           {activeProjects && (
             <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
               <Building2 className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
-              <div className="text-2xl font-bold text-[#1A1A1A]">{activeProjects}</div>
+              <div className="text-2xl font-bold text-[#1A1A1A]">{activeProjects.toLocaleString()}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
           )}
@@ -503,7 +503,7 @@ export const DeveloperAIAnalyzer = ({
         ) : !analysis && !isAnalyzing ? (
           <div className="text-center py-8 space-y-4">
             <p className="text-[#1A1A1A]/70 text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
-            <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold hover:brightness-110">
+            <Button onClick={handleRetry} className="bg-gradient-to-r from-black via-[#03170F] to-[#04241C] text-white font-bold hover:brightness-110 border border-white/20 allow-white">
               <Brain className="w-4 h-4 mr-2" />
               Analyze {developerName}
             </Button>
@@ -551,13 +551,13 @@ export const DeveloperAIAnalyzer = ({
               {sections?.overview && (
                 <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl shadow-sm overflow-hidden">
                   {/* Premium Gradient Header Bar */}
-                  <div className="bg-gradient-to-r from-black via-[#1a1a1a] to-black px-6 py-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-[#EFE6D6]/20 border border-[#B89555]/40 flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-white allow-white" data-no-contrast-guard />
+                  <div className="bg-gradient-to-r from-black via-[#03170F] to-[#04241C] px-6 py-4 flex items-center gap-4 allow-white">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/25 flex items-center justify-center">
+                      <Building2 className="w-6 h-6 text-white" data-no-contrast-guard />
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Overview</h3>
-                      <span className="text-[#1A1A1A]/70 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-[#1A1A1A]/70" /> — Portfolio Profile</span>
+                      <h3 className="font-bold text-white text-lg">Developer Overview</h3>
+                      <span className="text-white/70 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-white/70" /> — Portfolio Profile</span>
                     </div>
                   </div>
 
@@ -595,7 +595,7 @@ export const DeveloperAIAnalyzer = ({
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
                           <Home className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                           <div>
-                            <div className="text-xs font-bold text-[#1A1A1A]">{activeProjects}</div>
+                            <div className="text-xs font-bold text-[#1A1A1A]">{activeProjects.toLocaleString()}</div>
                             <div className="text-[10px] text-[#1A1A1A]/70">Active</div>
                           </div>
                         </div>
@@ -616,36 +616,36 @@ export const DeveloperAIAnalyzer = ({
               )}
 
               {ratingScore !== null && (
-                <div className="bg-[#1A1A1A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#EFE6D6]/10 rounded-full blur-[60px] pointer-events-none" />
-                  <Star className="w-7 h-7 text-[#1A1A1A] mb-3 relative z-10" />
+                <div className="bg-gradient-to-br from-black via-[#03170F] to-[#04241C] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden allow-white">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-emerald-500/10 rounded-full blur-[60px] pointer-events-none" />
+                  <Star className="w-7 h-7 text-white mb-3 relative z-10" />
                   <div className="relative w-32 h-32 mb-3">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={[{ value: ratingScore, fill: '#D4AF37' }, { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.08)' }]}
+                          data={[{ value: ratingScore, fill: '#10b981' }, { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.08)' }]}
                           cx="50%" cy="50%" innerRadius={42} outerRadius={56} startAngle={90} endAngle={-270} dataKey="value" stroke="none"
                         >
-                          <Cell fill="#D4AF37" />
+                          <Cell fill="#10b981" />
                           <Cell fill="rgba(255,255,255,0.08)" />
                         </Pie>
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-[#1A1A1A]">{ratingScore}</span>
-                      <span className="text-[#1A1A1A]/70 text-[10px] font-medium">/10</span>
+                      <span className="text-4xl font-bold text-white">{ratingScore}</span>
+                      <span className="text-white/70 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
-                  <div className="text-[#1A1A1A]/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
+                  <div className="text-white/80 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-[#1A1A1A]/70 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-white/70 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
-                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 ${
- ratingScore >= 8 ? 'jj-surface-emerald-soft text-emerald-400 border border-[color:var(--emerald-1)]/30/30' :
- ratingScore >= 6 ? 'bg-[#EFE6D6]/20 text-[#1A1A1A] border border-[#B89555]/30' :
- 'bg-amber-500/20 text-[#1A1A1A] border border-amber-500/30'
+                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 border ${
+ ratingScore >= 8 ? 'bg-emerald-500/20 text-white border-emerald-400/40' :
+ ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
+ 'bg-amber-500/20 text-white border-amber-400/40'
  }`}>
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
