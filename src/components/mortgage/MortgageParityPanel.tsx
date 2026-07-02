@@ -56,6 +56,7 @@ export default function MortgageParityPanel({
   // Bank B = pick a second bank to compare. Slider still lets you fine-tune Bank B's rate.
   const [bankAId, setBankAId] = useState<string>("enbd");
   const [bankBId, setBankBId] = useState<string>("fab");
+  const [openBankPicker, setOpenBankPicker] = useState<"Bank A" | "Bank B" | null>(null);
   const bankA = UAE_BANKS.find((b) => b.id === bankAId) ?? UAE_BANKS[0];
   const bankB = UAE_BANKS.find((b) => b.id === bankBId) ?? UAE_BANKS[1];
   const [compareRate, setCompareRate] = useState<number>(bankB.rate);
@@ -262,37 +263,81 @@ export default function MortgageParityPanel({
               </span>
               <div
                 className="relative rounded-lg"
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                    setOpenBankPicker(null);
+                  }
+                }}
                 style={{
                   background: isNavy ? "rgba(255,255,255,0.06)" : "#FFFFFF",
-                  border: isNavy ? "1px solid rgba(147,197,253,0.35)" : "1px solid rgba(184,149,85,0.40)",
+                  border: isNavy ? "1px solid rgba(255,255,255,0.42)" : "1px solid rgba(6,78,59,0.40)",
                 }}
               >
-                <select
-                  value={picker.value}
-                  onChange={(e) => picker.set(e.target.value)}
+                <button
+                  type="button"
                   data-no-contrast-guard
+                  data-bank-picker-trigger
+                  aria-expanded={openBankPicker === picker.label}
                   aria-label={`${picker.label} — choose UAE bank`}
-                  className={`${isNavy ? "allow-white " : ""}w-full appearance-none bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none`}
+                  onClick={() => setOpenBankPicker(openBankPicker === picker.label ? null : picker.label)}
+                  className={`${isNavy ? "allow-white " : ""}w-full min-h-11 bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none text-left leading-snug`}
                   style={{
                     color: isNavy ? "#FFFFFF" : "#1A1A1A",
                     WebkitTextFillColor: isNavy ? "#FFFFFF" : "#1A1A1A",
                   }}
                 >
-                  {UAE_BANKS.map((b) => (
-                    <option
-                      key={b.id}
-                      value={b.id}
-                      disabled={b.id === picker.exclude}
-                      style={{ color: "#1A1A1A", background: "#FFFFFF" }}
-                    >
-                      {b.name} — {b.rate.toFixed(2)}%
-                    </option>
-                  ))}
-                </select>
+                  {`${UAE_BANKS.find((b) => b.id === picker.value)?.name ?? "Select bank"} — ${(UAE_BANKS.find((b) => b.id === picker.value)?.rate ?? 0).toFixed(2)}%`}
+                </button>
                 <ChevronDown
                   className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
                   style={{ color: isNavy ? "#FFFFFF" : "#064E3B" }}
                 />
+                {openBankPicker === picker.label && (
+                  <div
+                    role="listbox"
+                    aria-label={`${picker.label} bank options`}
+                    className="absolute left-0 right-0 top-[calc(100%+8px)] z-[80] max-h-72 overflow-y-auto rounded-xl p-1"
+                    style={{
+                      background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)",
+                      border: "1px solid rgba(255,255,255,0.34)",
+                      boxShadow: "0 18px 42px rgba(0,0,0,0.48), 0 0 24px rgba(6,78,59,0.28)",
+                    }}
+                  >
+                    {UAE_BANKS.map((b) => {
+                      const selected = b.id === picker.value;
+                      const disabled = b.id === picker.exclude;
+                      return (
+                        <button
+                          key={b.id}
+                          type="button"
+                          role="option"
+                          aria-selected={selected}
+                          disabled={disabled}
+                          data-no-contrast-guard
+                          onClick={() => {
+                            if (disabled) return;
+                            picker.set(b.id);
+                            setOpenBankPicker(null);
+                          }}
+                          className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold leading-snug transition-colors disabled:cursor-not-allowed disabled:opacity-45"
+                          style={{
+                            background: selected ? "#065F46" : "transparent",
+                            color: "#FFFFFF",
+                            WebkitTextFillColor: "#FFFFFF",
+                          }}
+                          onMouseEnter={(event) => {
+                            if (!selected && !disabled) event.currentTarget.style.background = "rgba(255,255,255,0.12)";
+                          }}
+                          onMouseLeave={(event) => {
+                            event.currentTarget.style.background = selected ? "#065F46" : "transparent";
+                          }}
+                        >
+                          {b.name} — {b.rate.toFixed(2)}%
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </label>
           ))}
