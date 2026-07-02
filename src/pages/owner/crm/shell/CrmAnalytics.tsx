@@ -1,182 +1,188 @@
-import { BarChart3, ChevronDown, MoreHorizontal, Plus, RefreshCw, Share2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  ChevronDown,
+  GripVertical,
+  MoreHorizontal,
+  Plus,
+  RefreshCw,
+  Star,
+  Users,
+} from "lucide-react";
 
 /**
- * JBJ CRM — Analytics (Phase 6)
- * Zoho-parity dashboard grid: KPI ribbon + chart tiles.
+ * JBJ CRM — Analytics dashboard.
+ * Draggable/reorderable component tiles (HTML5 DnD, layout persisted to
+ * localStorage). Structural parity with Zoho Analytics; JBJ palette only.
  */
 
-const KPIS = [
-  { label: "Revenue This Quarter", value: "AED 4.82M", delta: "+18.4%", pos: true },
-  { label: "Deals Closed", value: "127", delta: "+9", pos: true },
-  { label: "Pipeline Value", value: "AED 12.6M", delta: "+3.1%", pos: true },
-  { label: "Win Rate", value: "42%", delta: "-1.2%", pos: false },
+type TileKind = "kpi" | "gauge" | "hbar" | "ranked" | "bar" | "pie";
+
+type Tile = {
+  id: string;
+  kind: TileKind;
+  title: string;
+  value?: string;
+  delta?: number;
+  helper?: string;
+  span?: 1 | 2; // grid columns
+};
+
+const DEFAULT_TILES: Tile[] = [
+  { id: "leads",   kind: "kpi", title: "Leads This Month",   value: "10",         delta: 100, helper: "Last Month Relative: 0" },
+  { id: "revenue", kind: "kpi", title: "Revenue This Month", value: "AED 35,000", delta: 100, helper: "Last Month Relative: 0" },
+  { id: "deals",   kind: "kpi", title: "Deals In Pipeline",  value: "8",                     helper: "" },
+  { id: "accts",   kind: "kpi", title: "Accounts This Month",value: "10",         delta: 100, helper: "Last Month Relative: 0" },
+  { id: "leadgoal",kind: "gauge",title: "Lead Generation Target — This Year", helper: "Remaining : 990 · Target: 1000", span: 1 },
+  { id: "revgoal", kind: "hbar", title: "Revenue Target — This Year",         helper: "Target AED 10,000 · Achieved AED 700,000", span: 1 },
+  { id: "perf",    kind: "bar",  title: "Last 3 Months Performance", helper: "July 2026", span: 1 },
+  { id: "source",  kind: "pie",  title: "Leads By Source", helper: "No data yet", span: 1 },
+  { id: "reps",    kind: "ranked", title: "Prolific Sales Reps", helper: "By Sum of Amount", span: 1 },
 ];
 
-function BarsChart() {
-  const bars = [46, 62, 38, 74, 55, 88, 42, 66, 30, 78, 52, 70];
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return (
-    <svg viewBox="0 0 480 200" role="img" aria-label="Monthly revenue">
-      <g stroke="#E7EAF1" strokeWidth="1">
-        {[0, 1, 2, 3].map((i) => <line key={i} x1="30" x2="470" y1={40 + i * 40} y2={40 + i * 40} />)}
-      </g>
-      {bars.map((h, i) => (
-        <g key={i}>
-          <rect
-            x={40 + i * 35}
-            y={200 - h * 1.7 - 10}
-            width="22"
-            height={h * 1.7}
-            rx="3"
-            fill="url(#jcBar)"
-          />
-          <text x={51 + i * 35} y={196} textAnchor="middle" fontSize="9" fill="#8791A6">{months[i]}</text>
-        </g>
-      ))}
-      <defs>
-        <linearGradient id="jcBar" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#0F5A45" />
-          <stop offset="100%" stopColor="#064E3B" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
+const LS_KEY = "jbjcrm.analytics.order.v1";
 
-function LineChart() {
-  const pts = [30, 45, 40, 60, 55, 75, 70, 92, 84, 110, 100, 128];
-  const max = 130;
-  const path = pts.map((v, i) => `${i === 0 ? "M" : "L"} ${30 + i * 38} ${180 - (v / max) * 150}`).join(" ");
-  return (
-    <svg viewBox="0 0 480 200" role="img" aria-label="Pipeline trend">
-      <g stroke="#E7EAF1" strokeWidth="1">
-        {[0, 1, 2, 3].map((i) => <line key={i} x1="30" x2="470" y1={40 + i * 40} y2={40 + i * 40} />)}
-      </g>
-      <path d={`${path} L 448 180 L 30 180 Z`} fill="rgba(15,90,69,0.10)" />
-      <path d={path} fill="none" stroke="#0F5A45" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-      {pts.map((v, i) => (
-        <circle key={i} cx={30 + i * 38} cy={180 - (v / max) * 150} r="3" fill="#0F5A45" />
-      ))}
-    </svg>
-  );
+function loadOrder(): string[] | null {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || "null"); } catch { return null; }
 }
-
-function Donut() {
-  const segs = [
-    { v: 42, c: "#064E3B", label: "Referral" },
-    { v: 28, c: "#0F5A45", label: "Web" },
-    { v: 18, c: "#B89555", label: "Campaign" },
-    { v: 12, c: "#CBD2E1", label: "Other" },
-  ];
-  let acc = 0;
-  const R = 60, C = 2 * Math.PI * R;
-  return (
-    <div className="jc-donut">
-      <svg viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="Lead sources">
-        <g transform="translate(80 80) rotate(-90)">
-          {segs.map((s, i) => {
-            const seg = (s.v / 100) * C;
-            const el = (
-              <circle
-                key={i}
-                r={R}
-                cx="0"
-                cy="0"
-                fill="none"
-                stroke={s.c}
-                strokeWidth="22"
-                strokeDasharray={`${seg} ${C - seg}`}
-                strokeDashoffset={-acc}
-              />
-            );
-            acc += seg;
-            return el;
-          })}
-        </g>
-        <text x="80" y="76" textAnchor="middle" fontSize="18" fontWeight="700" fill="#202124">312</text>
-        <text x="80" y="94" textAnchor="middle" fontSize="10" fill="#8791A6">Leads</text>
-      </svg>
-      <ul className="jc-donut__legend">
-        {segs.map((s) => (
-          <li key={s.label}><span style={{ background: s.c }} /> {s.label} <em>{s.v}%</em></li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function Funnel() {
-  const rows = [
-    { s: "Qualification", v: 128, w: 100 },
-    { s: "Needs Analysis", v: 92, w: 82 },
-    { s: "Proposal", v: 61, w: 64 },
-    { s: "Negotiation", v: 34, w: 46 },
-    { s: "Closed Won", v: 21, w: 30 },
-  ];
-  return (
-    <ul className="jc-funnel">
-      {rows.map((r) => (
-        <li key={r.s}>
-          <div className="jc-funnel__row">
-            <div className="jc-funnel__bar" style={{ width: `${r.w}%` }}>{r.v}</div>
-          </div>
-          <span>{r.s}</span>
-        </li>
-      ))}
-    </ul>
-  );
+function saveOrder(ids: string[]) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(ids)); } catch { /* ignore */ }
 }
 
 export default function CrmAnalytics() {
-  return (
-    <div className="jc-analytics" data-no-contrast-guard>
-      <header className="jc-analytics__head">
-        <div>
-          <h2>Sales Overview</h2>
-          <p>Last refreshed just now · Asia/Dubai</p>
-        </div>
-        <div className="jc-analytics__cta">
-          <button type="button" className="jc-btn jc-btn--ghost">
-            This Quarter <ChevronDown size={13} />
-          </button>
-          <button type="button" className="jc-btn jc-btn--ghost"><RefreshCw size={14} /> Refresh</button>
-          <button type="button" className="jc-btn jc-btn--ghost"><Share2 size={14} /> Share</button>
-          <button type="button" className="jc-btn jc-btn--primary"><Plus size={14} /> Add Component</button>
-        </div>
-      </header>
+  const [order, setOrder] = useState<string[]>(() => loadOrder() ?? DEFAULT_TILES.map((t) => t.id));
+  const [dragId, setDragId] = useState<string | null>(null);
 
-      <div className="jc-analytics__kpis">
-        {KPIS.map((k) => (
-          <div key={k.label} className="jc-analytics__kpi">
-            <span>{k.label}</span>
-            <strong>{k.value}</strong>
-            <em data-pos={k.pos}>{k.delta}</em>
-          </div>
-        ))}
+  useEffect(() => { saveOrder(order); }, [order]);
+
+  const tiles = useMemo(() => {
+    const byId = new Map(DEFAULT_TILES.map((t) => [t.id, t]));
+    const ordered = order.map((id) => byId.get(id)).filter(Boolean) as Tile[];
+    // append any newly-added tiles not yet in stored order
+    for (const t of DEFAULT_TILES) if (!order.includes(t.id)) ordered.push(t);
+    return ordered;
+  }, [order]);
+
+  const onDragStart = (id: string) => setDragId(id);
+  const onDragOver = (e: React.DragEvent, overId: string) => {
+    e.preventDefault();
+    if (!dragId || dragId === overId) return;
+    setOrder((prev) => {
+      const a = prev.indexOf(dragId);
+      const b = prev.indexOf(overId);
+      if (a === -1 || b === -1) return prev;
+      const next = prev.slice();
+      next.splice(a, 1);
+      next.splice(b, 0, dragId);
+      return next;
+    });
+  };
+  const onDragEnd = () => setDragId(null);
+
+  return (
+    <div className="jc-an" data-no-contrast-guard>
+      <div className="jc-an__toolbar">
+        <button type="button" className="jc-an__scope">
+          <span>All</span> <ChevronDown size={13} />
+        </button>
+        <button type="button" className="jc-an__scope">
+          <Star size={13} /> <span>Org Overview</span> <ChevronDown size={13} />
+        </button>
+        <button type="button" className="jc-an__scope">
+          <Users size={13} /> <span>All Users</span>
+        </button>
+        <div className="jc-an__spacer" />
+        <button type="button" className="jc-an__icon" aria-label="Refresh"><RefreshCw size={14} /></button>
+        <button type="button" className="jc-an__ghost">Add Component</button>
+        <button type="button" className="jc-an__cta"><Plus size={13} /> Create Dashboard</button>
+        <button type="button" className="jc-an__icon" aria-label="More"><MoreHorizontal size={16} /></button>
       </div>
 
-      <div className="jc-analytics__grid">
-        <article className="jc-analytics__tile jc-analytics__tile--wide">
-          <header><h3>Revenue by Month</h3><button type="button" aria-label="Tile actions"><MoreHorizontal size={15} /></button></header>
-          <BarsChart />
-        </article>
-        <article className="jc-analytics__tile">
-          <header><h3>Lead Sources</h3><button type="button" aria-label="Tile actions"><MoreHorizontal size={15} /></button></header>
-          <Donut />
-        </article>
-        <article className="jc-analytics__tile">
-          <header><h3>Deals Pipeline</h3><button type="button" aria-label="Tile actions"><MoreHorizontal size={15} /></button></header>
-          <Funnel />
-        </article>
-        <article className="jc-analytics__tile jc-analytics__tile--wide">
-          <header><h3>Pipeline Trend</h3><button type="button" aria-label="Tile actions"><MoreHorizontal size={15} /></button></header>
-          <LineChart />
-        </article>
-        <article className="jc-analytics__tile jc-analytics__tile--empty">
-          <BarChart3 size={32} />
-          <h3>Add a component</h3>
-          <p>Chart, KPI, cohort, or target meter.</p>
-        </article>
+      <div className="jc-an__grid">
+        {tiles.map((t) => (
+          <article
+            key={t.id}
+            className="jc-an__tile"
+            data-kind={t.kind}
+            data-span={t.span ?? 1}
+            data-dragging={dragId === t.id}
+            draggable
+            onDragStart={() => onDragStart(t.id)}
+            onDragOver={(e) => onDragOver(e, t.id)}
+            onDragEnd={onDragEnd}
+          >
+            <header className="jc-an__tile-head">
+              <span className="jc-an__handle" aria-hidden="true"><GripVertical size={12} /></span>
+              <h3>{t.title}</h3>
+              <button type="button" className="jc-an__tile-more" aria-label="Tile options"><MoreHorizontal size={14} /></button>
+            </header>
+            <div className="jc-an__tile-body">
+              {t.kind === "kpi" && (
+                <>
+                  <div className="jc-an__kpi-value">
+                    <strong>{t.value}</strong>
+                    {typeof t.delta === "number" && (
+                      <span className="jc-an__kpi-delta" data-dir={t.delta >= 0 ? "up" : "down"}>
+                        ▲ {Math.abs(t.delta)}%
+                      </span>
+                    )}
+                  </div>
+                  {t.helper && <div className="jc-an__kpi-helper">{t.helper}</div>}
+                </>
+              )}
+              {t.kind === "gauge" && (
+                <div className="jc-an__gauge" aria-hidden="true">
+                  <svg viewBox="0 0 200 110">
+                    <path d="M10 100 A 90 90 0 0 1 190 100" fill="none" stroke="#EFE6D6" strokeWidth="18" strokeLinecap="round" />
+                    <path d="M10 100 A 90 90 0 0 1 40 40" fill="none" stroke="#B89555" strokeWidth="18" strokeLinecap="round" />
+                    <line x1="100" y1="100" x2="70" y2="55" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+                    <circle cx="100" cy="100" r="6" fill="#1A1A1A" />
+                  </svg>
+                  <div className="jc-an__gauge-legend"><span>0</span><span>{t.helper}</span></div>
+                </div>
+              )}
+              {t.kind === "hbar" && (
+                <div className="jc-an__hbar" aria-hidden="true">
+                  <div className="jc-an__hbar-row">
+                    <span>Entire Org</span>
+                    <div className="jc-an__hbar-track">
+                      <div className="jc-an__hbar-fill" style={{ width: "78%" }} />
+                      <span className="jc-an__hbar-label">AED 700,000</span>
+                    </div>
+                  </div>
+                  <div className="jc-an__hbar-axis"><span>0</span><span>500k</span><span>1M</span></div>
+                  <div className="jc-an__hbar-helper">{t.helper}</div>
+                </div>
+              )}
+              {t.kind === "bar" && (
+                <div className="jc-an__bars" aria-hidden="true">
+                  {[40, 62, 28, 74, 55, 82].map((h, i) => (
+                    <div key={i} className="jc-an__bar" style={{ height: `${h}%` }} />
+                  ))}
+                </div>
+              )}
+              {t.kind === "pie" && (
+                <div className="jc-an__pie" aria-hidden="true">
+                  <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="#EFE6D6" />
+                    <path d="M50 10 A40 40 0 0 1 90 50 L50 50 Z" fill="#064E3B" />
+                    <path d="M90 50 A40 40 0 0 1 50 90 L50 50 Z" fill="#0F6E52" />
+                    <path d="M50 90 A40 40 0 0 1 20 68 L50 50 Z" fill="#B89555" />
+                  </svg>
+                  <div className="jc-an__pie-helper">{t.helper}</div>
+                </div>
+              )}
+              {t.kind === "ranked" && (
+                <ul className="jc-an__ranked">
+                  <li>
+                    <span className="jc-an__ranked-idx">1</span>
+                    <span className="jc-an__ranked-name">Jane Bou Jaoude</span>
+                    <span className="jc-an__ranked-val">AED 35,000</span>
+                  </li>
+                </ul>
+              )}
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   );

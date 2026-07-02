@@ -149,6 +149,56 @@ function BulkActionBar({ count, onClear }: { count: number; onClear: () => void 
   );
 }
 
+function FilterGroup({
+  title, items, defaultOpen = false, withWithout = false,
+}: { title: string; items: string[]; defaultOpen?: boolean; withWithout?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [mode, setMode] = useState<Record<string, "with" | "without">>({});
+  return (
+    <div className="jc-flt__group" data-open={open}>
+      <button type="button" className="jc-flt__group-head" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        <ChevronRight size={12} className="jc-flt__caret" data-open={open} />
+        <span>{title}</span>
+      </button>
+      {open && (
+        <ul className="jc-flt__items">
+          {items.map((it) => {
+            const on = !!checked[it];
+            return (
+              <li key={it} className="jc-flt__item" data-on={on}>
+                <label className="jc-flt__check">
+                  <input
+                    type="checkbox"
+                    checked={on}
+                    onChange={(e) => setChecked((p) => ({ ...p, [it]: e.target.checked }))}
+                  />
+                  <span>{it}</span>
+                </label>
+                {withWithout && on && (
+                  <div className="jc-flt__ww">
+                    <button
+                      type="button"
+                      data-active={(mode[it] ?? "with") === "with"}
+                      onClick={() => setMode((p) => ({ ...p, [it]: "with" }))}
+                    >with</button>
+                    <button
+                      type="button"
+                      data-active={mode[it] === "without"}
+                      onClick={() => setMode((p) => ({ ...p, [it]: "without" }))}
+                    >without</button>
+                    <span className="jc-flt__any">Any</span>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function KanbanView({ slug, label }: { slug: string; label: string }) {
   const stages = KANBAN_STAGES[slug] ?? [];
   return (
@@ -235,35 +285,45 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
         <KanbanView slug={slug} label={label} />
       ) : (
         <div className="jc-list__body" data-filters={filtersOpen ? "open" : "closed"}>
-          <aside className="jc-list__filters" aria-label="Filters">
-            <header className="jc-list__filters-head">
+          <aside className="jc-list__filters jc-flt" aria-label="Filters">
+            <header className="jc-flt__head">
               <button
                 type="button"
-                className="jc-list__filters-toggle"
+                className="jc-flt__toggle"
                 onClick={() => setFiltersOpen((v) => !v)}
                 aria-expanded={filtersOpen}
               >
-                <Filter size={14} /> Filter {plural} by
-                <ChevronRight size={14} className="jc-list__filters-caret" data-open={filtersOpen} />
+                <Filter size={13} /> Filter {plural} by
+                <ChevronRight size={13} className="jc-list__filters-caret" data-open={filtersOpen} />
               </button>
+              <input className="jc-flt__search" placeholder="Search" />
             </header>
-            <div className="jc-list__filters-group">
-              <div className="jc-list__filters-title">System Defined Filters</div>
-              <ul>
-                <li>Touched Records</li>
-                <li>Untouched Records</li>
-                <li>Record Action</li>
-                <li>Related Records Action</li>
-              </ul>
-            </div>
-            <div className="jc-list__filters-group">
-              <div className="jc-list__filters-title">Filter By Fields</div>
-              <ul>
-                <li>Owner</li>
-                <li>Created Time</li>
-                <li>Modified Time</li>
-                <li>Tag</li>
-              </ul>
+
+            <FilterGroup title="System Defined Filters" defaultOpen items={[
+              "Activities","Campaigns","Latest Email Status","Locked","Record Action",
+              "Related Records Action","Touched Records","Untouched Records","Cadences",
+            ]} />
+
+            <FilterGroup title="Filter By Fields" defaultOpen items={[
+              "Address","Address - City","Address - Country / Region",
+              "Address - Flat / House No. / Building / Apartment Name",
+              "Address - State / Province","Address - Street",
+              "Owner","Created Time","Modified Time","Tag","Website",
+            ]} />
+
+            <FilterGroup title="Filter By Related Modules" defaultOpen withWithout items={[
+              "Accounts (Connected Records)","Calls","Campaigns (Connected Records)",
+              "Cases (Connected Records)","Contacts (Connected Records)",
+              "Deals (Connected Records)","Emails","Invitees (Invited Meetings)",
+              "Invoices (Connected Records)","Lead Product Relation (Products)",
+              "Meetings","Notes","Products (Connected Records)",
+              "Purchase Orders (Connected Records)","Quotes (Connected Records)",
+              "Sales Orders (Connected Records)","Tasks",
+            ]} />
+
+            <div className="jc-flt__foot">
+              <button type="button" className="jc-flt__apply">Apply Filter</button>
+              <button type="button" className="jc-flt__clear">Clear</button>
             </div>
           </aside>
 

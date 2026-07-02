@@ -1,136 +1,231 @@
-import { useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import {
   BarChart3,
-  ChevronRight,
-  FileBarChart2,
-  FolderOpen,
-  MoreHorizontal,
-  Plus,
+  Check,
+  ChevronDown,
+  FolderCog,
+  HelpCircle,
   Search,
   Star,
-  Users,
 } from "lucide-react";
 
 /**
- * JBJ CRM — Reports (Phase 6)
- * Zoho-parity Reports library: folder rail on the left, report list on the right.
+ * JBJ CRM — Reports (folder dropdown + report table).
+ * Structural parity with Zoho's Reports; JBJ palette + tokens only.
  */
 
-type Folder = { key: string; label: string; count: number; icon: typeof FolderOpen };
-
-const FOLDERS: Folder[] = [
-  { key: "favourites", label: "Favourite Reports", count: 0, icon: Star },
-  { key: "all", label: "All Reports", count: 42, icon: FileBarChart2 },
-  { key: "public", label: "Public Reports", count: 18, icon: Users },
-  { key: "leads", label: "Lead Reports", count: 8, icon: FolderOpen },
-  { key: "deals", label: "Deal Reports", count: 9, icon: FolderOpen },
-  { key: "accounts", label: "Account and Contact Reports", count: 6, icon: FolderOpen },
-  { key: "activities", label: "Activity Reports", count: 5, icon: FolderOpen },
-  { key: "campaigns", label: "Campaign Reports", count: 3, icon: FolderOpen },
-  { key: "inventory", label: "Inventory Reports", count: 4, icon: FolderOpen },
-  { key: "custom", label: "My Custom Reports", count: 0, icon: FolderOpen },
-];
-
-const SAMPLE_REPORTS: Record<string, { name: string; module: string; owner: string; modified: string }[]> = {
-  all: [
-    { name: "Leads by Source", module: "Leads", owner: "Ban Al Amiri", modified: "Today" },
-    { name: "Leads by Owner", module: "Leads", owner: "Ban Al Amiri", modified: "Today" },
-    { name: "Deals Pipeline by Stage", module: "Deals", owner: "Ban Al Amiri", modified: "Yesterday" },
-    { name: "Deals Closing This Month", module: "Deals", owner: "Ban Al Amiri", modified: "Yesterday" },
-    { name: "Sales by Agent (MTD)", module: "Deals", owner: "Ban Al Amiri", modified: "2 days ago" },
-    { name: "Tasks Overdue", module: "Tasks", owner: "System", modified: "3 days ago" },
-    { name: "Meetings This Week", module: "Meetings", owner: "System", modified: "3 days ago" },
-    { name: "Calls Summary by Agent", module: "Calls", owner: "System", modified: "1 week ago" },
-    { name: "Invoice Aging Summary", module: "Invoices", owner: "Finance", modified: "1 week ago" },
-    { name: "Quotes vs Won", module: "Quotes", owner: "Ban Al Amiri", modified: "2 weeks ago" },
-  ],
+type Report = {
+  id: string;
+  name: string;
+  description: string;
+  folder: string;
+  lastAccessed: string;
+  createdBy: string;
+  starred?: boolean;
 };
 
+const FOLDERS = [
+  "All Reports",
+  "My Reports",
+  "Favorites",
+  "Recently Viewed",
+  "Shared Reports",
+  "Scheduled Reports",
+  "Recently Deleted",
+  "Account and Contact Reports",
+  "Email Reports",
+  "Meeting Reports",
+  "Sales Metrics Reports",
+  "Marketing Reports",
+];
+
+const SEED: Report[] = [
+  { id: "r1",  name: "Top 10 templates by open rate",       description: "Top 10 templates based on percentage of opens", folder: "Email Reports", lastAccessed: "—", createdBy: "—", starred: true },
+  { id: "r2",  name: "Top 10 templates by click rate",       description: "Top 10 templates based on percentage of clicks", folder: "Email Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r3",  name: "Rep activity summary",                 description: "No. of emails sent and replied, calls dialled…", folder: "Email Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r4",  name: "Rep engagement summary",               description: "No. of mails sent and replied, calls attended…", folder: "Email Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r5",  name: "Top 10 users by mail sent rate",       description: "Top 10 users based on Mails Sent Rate",         folder: "Email Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r6",  name: "Email status summary",                 description: "Summary of the email status (sent, bounced…)",   folder: "Email Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r7",  name: "Bounced emails summary",               description: "Summary of bounced emails, reason for the…",     folder: "Email Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r8",  name: "Planned Vs Realized Meetings this Month", description: "Know how many planned check-ins have…",     folder: "Meeting Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r9",  name: "Number of Check-Ins by Salesperson",    description: "Get number of monthly check-ins for cust…",     folder: "Meeting Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r10", name: "Number of Check-Ins by Locality",       description: "Get total number of monthly check-ins fo…",    folder: "Meeting Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r11", name: "Check-Ins by Locality",                  description: "Get check-in details categorized by locality", folder: "Meeting Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r12", name: "Check-Ins for Leads",                    description: "Get check-in details for each Lead",           folder: "Meeting Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r13", name: "Check-Ins for Accounts",                 description: "Get check-in details for each Account",        folder: "Meeting Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r14", name: "Overall Sales Duration Across Deal Type", description: "Average time taken for Lead to be convert…",  folder: "Sales Metrics Reports", lastAccessed: "—", createdBy: "—" },
+  { id: "r15", name: "Overall Sales Duration Across Lead Source", description: "Average number of days taken for the Lea…", folder: "Sales Metrics Reports", lastAccessed: "—", createdBy: "—" },
+];
+
 export default function CrmReports() {
-  const [active, setActive] = useState<string>("all");
-  const rows = SAMPLE_REPORTS[active] ?? [];
+  const [folder, setFolder] = useState("All Reports");
+  const [folderOpen, setFolderOpen] = useState(false);
+  const [folderSearch, setFolderSearch] = useState("");
+  const [tableSearch, setTableSearch] = useState("");
+  const [reports, setReports] = useState<Report[]>(SEED);
+  const ddRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (!ddRef.current?.contains(e.target as Node)) setFolderOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  const filteredFolders = useMemo(
+    () => FOLDERS.filter((f) => f.toLowerCase().includes(folderSearch.toLowerCase())),
+    [folderSearch],
+  );
+
+  const visible = useMemo(() => {
+    let list = reports;
+    if (folder === "Favorites") list = list.filter((r) => r.starred);
+    else if (folder !== "All Reports" && folder !== "My Reports" && folder !== "Recently Viewed" && folder !== "Shared Reports" && folder !== "Scheduled Reports" && folder !== "Recently Deleted") {
+      list = list.filter((r) => r.folder === folder);
+    }
+    if (tableSearch.trim()) {
+      const q = tableSearch.toLowerCase();
+      list = list.filter((r) => r.name.toLowerCase().includes(q) || r.description.toLowerCase().includes(q));
+    }
+    return list;
+  }, [reports, folder, tableSearch]);
+
+  const toggleStar = (id: string) =>
+    setReports((prev) => prev.map((r) => (r.id === id ? { ...r, starred: !r.starred } : r)));
 
   return (
-    <div className="jc-reports" data-no-contrast-guard>
-      <aside className="jc-reports__rail" aria-label="Report folders">
-        <div className="jc-reports__rail-head">
-          <h3>Folders</h3>
-          <button type="button" aria-label="New folder"><Plus size={14} /></button>
-        </div>
-        <label className="jc-reports__search">
-          <Search size={14} />
-          <input placeholder="Search folders" />
-        </label>
-        <ul className="jc-reports__folders">
-          {FOLDERS.map((f) => {
-            const Icon = f.icon;
-            return (
-              <li key={f.key}>
-                <button
-                  type="button"
-                  data-active={active === f.key}
-                  onClick={() => setActive(f.key)}
-                >
-                  <Icon size={15} />
-                  <span>{f.label}</span>
-                  <em>{f.count}</em>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </aside>
+    <div className="jc-rp" data-no-contrast-guard>
+      <div className="jc-rp__title">
+        <h1>Reports</h1>
+      </div>
 
-      <section className="jc-reports__main">
-        <header className="jc-reports__head">
-          <div>
-            <div className="jc-crumbs">
-              <span>Reports</span>
-              <ChevronRight size={12} />
-              <strong>{FOLDERS.find((f) => f.key === active)?.label ?? "All"}</strong>
-            </div>
-            <h2>{FOLDERS.find((f) => f.key === active)?.label}</h2>
-          </div>
-          <div className="jc-reports__cta">
-            <button type="button" className="jc-btn jc-btn--ghost">
-              <BarChart3 size={14} /> Analytics
-            </button>
-            <button type="button" className="jc-btn jc-btn--primary">
-              <Plus size={14} /> Create Report
-            </button>
-            <button type="button" className="jc-btn jc-btn--icon" aria-label="More">
-              <MoreHorizontal size={16} />
-            </button>
-          </div>
-        </header>
-
-        <div className="jc-reports__table" role="table" aria-label="Reports">
-          <div className="jc-reports__thead" role="row">
-            <div role="columnheader">Report Name</div>
-            <div role="columnheader">Module</div>
-            <div role="columnheader">Owner</div>
-            <div role="columnheader">Last Modified</div>
-            <div role="columnheader" aria-label="Actions" />
-          </div>
-          {rows.length === 0 ? (
-            <div className="jc-reports__empty">
-              <FileBarChart2 size={40} />
-              <h3>No reports yet</h3>
-              <p>Create your first report to visualize this data.</p>
-            </div>
-          ) : (
-            rows.map((r) => (
-              <div key={r.name} className="jc-reports__row" role="row">
-                <div><Star size={13} className="jc-reports__star" /> {r.name}</div>
-                <div>{r.module}</div>
-                <div>{r.owner}</div>
-                <div>{r.modified}</div>
-                <div><button type="button" aria-label="Row actions"><MoreHorizontal size={15} /></button></div>
+      <div className="jc-rp__toolbar">
+        <div className="jc-rp__folder" ref={ddRef}>
+          <button
+            type="button"
+            className="jc-rp__folder-btn"
+            aria-haspopup="listbox"
+            aria-expanded={folderOpen}
+            onClick={() => setFolderOpen((v) => !v)}
+          >
+            <span>{folder}</span>
+            <ChevronDown size={14} />
+          </button>
+          {folderOpen && (
+            <div className="jc-rp__folder-menu" role="listbox">
+              <div className="jc-rp__folder-search">
+                <Search size={13} />
+                <input
+                  autoFocus
+                  placeholder="Search Folder"
+                  value={folderSearch}
+                  onChange={(e) => setFolderSearch(e.target.value)}
+                />
               </div>
-            ))
+              <ul>
+                {filteredFolders.slice(0, 7).map((f) => (
+                  <li key={f}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={f === folder}
+                      data-active={f === folder}
+                      onClick={() => { setFolder(f); setFolderOpen(false); }}
+                    >
+                      <span className="jc-rp__folder-check">{f === folder && <Check size={13} />}</span>
+                      <span>{f}</span>
+                    </button>
+                  </li>
+                ))}
+                <li className="jc-rp__folder-sep" role="separator" />
+                {filteredFolders.slice(7).map((f) => (
+                  <li key={f}>
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={f === folder}
+                      data-active={f === folder}
+                      onClick={() => { setFolder(f); setFolderOpen(false); }}
+                    >
+                      <span className="jc-rp__folder-check">{f === folder && <Check size={13} />}</span>
+                      <span>{f}</span>
+                    </button>
+                  </li>
+                ))}
+                <li className="jc-rp__folder-sep" role="separator" />
+                <li>
+                  <button type="button" className="jc-rp__folder-manage">
+                    <FolderCog size={13} /> Manage Folders
+                  </button>
+                </li>
+                <li className="jc-rp__folder-advanced">
+                  <BarChart3 size={14} />
+                  <div>
+                    <strong>Advanced Analytics for JBJ CRM</strong>
+                    <span>powered by JBJ Analytics</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
           )}
         </div>
-      </section>
+
+        <div className="jc-rp__toolbar-right">
+          <div className="jc-rp__search">
+            <Search size={13} />
+            <input
+              placeholder="Search All Reports"
+              value={tableSearch}
+              onChange={(e) => setTableSearch(e.target.value)}
+            />
+          </div>
+          <button type="button" className="jc-rp__create">Create Report</button>
+          <button type="button" className="jc-rp__help" aria-label="Help"><HelpCircle size={16} /></button>
+        </div>
+      </div>
+
+      <div className="jc-rp__table" role="table" aria-label="Reports">
+        <div className="jc-rp__thead" role="row">
+          <div className="jc-rp__th jc-rp__th--check" role="columnheader">
+            <input type="checkbox" aria-label="Select all reports" />
+          </div>
+          <div className="jc-rp__th jc-rp__th--star" role="columnheader" />
+          <div className="jc-rp__th jc-rp__th--name" role="columnheader">Report Name</div>
+          <div className="jc-rp__th jc-rp__th--desc" role="columnheader">Description</div>
+          <div className="jc-rp__th jc-rp__th--folder" role="columnheader">Folder</div>
+          <div className="jc-rp__th" role="columnheader">Last Accessed Date</div>
+          <div className="jc-rp__th" role="columnheader">Created By</div>
+        </div>
+        {visible.map((r) => (
+          <div key={r.id} className="jc-rp__row" role="row">
+            <div className="jc-rp__td jc-rp__td--check" role="cell">
+              <input type="checkbox" aria-label={`Select ${r.name}`} />
+            </div>
+            <div className="jc-rp__td jc-rp__td--star" role="cell">
+              <button
+                type="button"
+                className="jc-rp__star"
+                data-on={!!r.starred}
+                onClick={() => toggleStar(r.id)}
+                aria-label={r.starred ? "Unstar report" : "Star report"}
+              >
+                <Star size={14} fill={r.starred ? "currentColor" : "none"} />
+              </button>
+            </div>
+            <div className="jc-rp__td jc-rp__td--name" role="cell">
+              <button type="button" className="jc-rp__name-link">{r.name}</button>
+            </div>
+            <div className="jc-rp__td" role="cell">{r.description}</div>
+            <div className="jc-rp__td" role="cell">{r.folder}</div>
+            <div className="jc-rp__td" role="cell">{r.lastAccessed}</div>
+            <div className="jc-rp__td" role="cell">{r.createdBy}</div>
+          </div>
+        ))}
+        {visible.length === 0 && (
+          <div className="jc-rp__empty">No reports match your filter.</div>
+        )}
+      </div>
     </div>
   );
 }
