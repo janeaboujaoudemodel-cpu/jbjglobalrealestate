@@ -24636,3 +24636,51 @@ html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] :whe
   -webkit-text-fill-color: #1A1A1A !important;
 }
 /* END PASS 165.1 */
+
+/* PASS 166 — NO GOLD BORDERS ON EMERALD SURFACES
+   Emerald/tool surfaces use white translucent hairlines only. Champagne cards
+   keep their own premium gold hairline outside emerald surfaces. */
+html body #root :where(
+  [data-surface="emerald"],
+  [data-tool-emerald],
+  [data-interior-design-ai],
+  .jj-surface-emerald,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .aihf-root
+) :where(
+  [class*="border-[#B89555]"],
+  [class*="border-gold"],
+  [class*="ring-[#B89555]"],
+  [class*="ring-gold"],
+  [style*="#B89555"],
+  [style*="rgb(184, 149, 85)"],
+  [style*="rgba(184, 149, 85"],
+  [style*="rgba(184,149,85"]
+):not([data-surface="champagne"]):not([data-surface="champagne"] *) {
+  border-color: rgba(255,255,255,0.16) !important;
+  outline-color: rgba(255,255,255,0.28) !important;
+  --tw-ring-color: rgba(255,255,255,0.28) !important;
+  box-shadow: none !important;
+}
+html body #root :where(
+  [data-surface="emerald"],
+  [data-tool-emerald],
+  [data-interior-design-ai],
+  .jj-surface-emerald,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .aihf-root
+) :where([data-gold-hairline], hr):not([data-surface="champagne"]):not([data-surface="champagne"] *) {
+  border-color: rgba(255,255,255,0.14) !important;
+  background: rgba(255,255,255,0.14) !important;
+}
+/* END PASS 166 */
