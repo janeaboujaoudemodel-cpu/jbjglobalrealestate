@@ -595,7 +595,7 @@ export const DeveloperAIAnalyzer = ({
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20">
                           <Home className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                           <div>
-                            <div className="text-xs font-bold text-[#1A1A1A]">{activeProjects}</div>
+                            <div className="text-xs font-bold text-[#1A1A1A]">{activeProjects.toLocaleString()}</div>
                             <div className="text-[10px] text-[#1A1A1A]/70">Active</div>
                           </div>
                         </div>
