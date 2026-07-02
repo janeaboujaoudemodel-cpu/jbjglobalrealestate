@@ -503,7 +503,7 @@ export const DeveloperAIAnalyzer = ({
         ) : !analysis && !isAnalyzing ? (
           <div className="text-center py-8 space-y-4">
             <p className="text-[#1A1A1A]/70 text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
-            <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold hover:brightness-110">
+            <Button onClick={handleRetry} className="bg-gradient-to-r from-black via-[#03170F] to-[#04241C] text-white font-bold hover:brightness-110 border border-white/20 allow-white">
               <Brain className="w-4 h-4 mr-2" />
               Analyze {developerName}
             </Button>
