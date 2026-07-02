@@ -74,23 +74,25 @@
 
 .jc-search {
   display: flex; align-items: center; gap: 6px;
-  height: 42px; padding: 0 14px;
-  background: var(--jbjcrm-search);
-  border: 0;
+  height: 40px; padding: 0 14px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 7px;
   width: 292px;
-  color: var(--jbjcrm-emerald-ink);
+  color: #FFFFFF;
 }
+.jc-search svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
 .jc-search:focus-within {
-  background: #F4F6FB;
-  box-shadow: inset 0 0 0 1px hsl(var(--gold) / 0.55);
+  background: rgba(255,255,255,0.22);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55);
 }
 .jc-search input {
   border: 0; outline: 0; background: transparent;
-  flex: 1; font-size: 16px; color: var(--jbjcrm-graphite);
+  flex: 1; font-size: 15px; color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   min-width: 0;
 }
-.jc-search input::placeholder { color: #7D8AA4; opacity: 1; }
+.jc-search input::placeholder { color: rgba(255,255,255,0.72); opacity: 1; }
 
 .jc-jbj-avatar {
   width: 40px; height: 40px; border-radius: 50%;
