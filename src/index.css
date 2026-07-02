@@ -24847,3 +24847,341 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] a[data-sidebar-subitem]
   stroke: #FFFFFF !important;
 }
 /* END PASS 171 */
+
+/* PASS 172 — INSIGHTS/GUIDES REBUILD BASELINE
+   Only heroes may run edge-to-edge. Content cards/sections must sit inside a
+   readable track, clear the fixed section navigator, and keep emerald/white
+   contrast on icon tiles, arrows, active rows, and CTAs. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) {
+  background: #FDFBF7 !important;
+  overflow-x: clip !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero]) {
+  min-height: clamp(520px, 68svh, 760px) !important;
+  height: auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding-inline: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-insights-page] [data-mi-hero] {
+  background:
+    radial-gradient(circle at 82% 20%, rgba(255,255,255,0.12), transparent 26%),
+    radial-gradient(circle at 20% 78%, rgba(6,78,59,0.42), transparent 34%),
+    linear-gradient(135deg, #064E3B 0%, #042C1C 54%, #010806 100%) !important;
+}
+html body #root [data-insights-page] [data-mi-hero-variant="areas"] {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,0.055) 1px, transparent 1px),
+    radial-gradient(circle at 78% 28%, rgba(255,255,255,0.10), transparent 24%),
+    linear-gradient(135deg, #052E22 0%, #0B6B4F 44%, #010806 100%) !important;
+  background-size: 72px 72px, 72px 72px, auto, auto !important;
+}
+html body #root [data-insights-page] [data-mi-hero-variant="reports"] {
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 88px),
+    radial-gradient(circle at 72% 22%, rgba(184,149,85,0.16), transparent 28%),
+    linear-gradient(135deg, #063F31 0%, #042C1C 48%, #010806 100%) !important;
+}
+html body #root [data-insights-page] [data-mi-hero-variant="methodology"] {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 18px),
+    radial-gradient(circle at 24% 22%, rgba(255,255,255,0.11), transparent 24%),
+    linear-gradient(135deg, #021912 0%, #064E3B 46%, #010806 100%) !important;
+}
+
+html body #root [data-insights-page] .mi-hero-scene .mi-hero-copy {
+  max-width: 860px !important;
+}
+
+/* Keep content as premium cards in a safe track — not edge-to-edge. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+  section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]) {
+  width: calc(100% - 32px) !important;
+  max-width: 1120px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  border-radius: 24px !important;
+  background: #F7F2EA !important;
+  border: 1px solid rgba(184,149,85,0.22) !important;
+  box-shadow: 0 20px 55px -38px rgba(26,26,26,0.42) !important;
+  overflow: hidden !important;
+}
+
+/* Nested semantic sections are content cards/anchors, not page frames. The
+   earlier global section rule caused Methodology text to collapse into a
+   one-character column. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) section section:not([data-hero-dark]) {
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 12px !important;
+  padding: 24px !important;
+  border-radius: 18px !important;
+  overflow: visible !important;
+}
+
+@media (min-width: 1024px) {
+  html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+    section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]) {
+    width: calc(100% - 360px) !important;
+    max-width: 1080px !important;
+    margin-left: max(32px, calc((100% - 360px - 1080px) / 2)) !important;
+    margin-right: 320px !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+    section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-no-section-frame]) {
+    max-width: 1180px !important;
+    margin-left: max(48px, calc((100% - 376px - 1180px) / 2)) !important;
+    margin-right: 328px !important;
+  }
+}
+
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) section:not([data-hero-dark])
+  :is(.jj-card-inner, .jj-box-active, .jj-guide-card, .jj-neon-tile, [data-mi-source-card]) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  border: 1px solid rgba(184,149,85,0.24) !important;
+  box-shadow: 0 12px 32px -26px rgba(26,26,26,0.38) !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) section:not([data-hero-dark])
+  :is(.jj-card-inner, .jj-box-active, .jj-guide-card, .jj-neon-tile, [data-mi-source-card])
+  :where(h1,h2,h3,h4,h5,h6,p,span,li,a,small,strong,em,div) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+/* Emerald tiles and action cards: white content, centered icons/arrows. */
+html body #root [data-insights-page] :is(
+  .jj-icon-box-active,
+  .jj-icon-box,
+  [data-icon-tone="emerald"],
+  .jj-icon-tile-emerald,
+  [data-dld-emerald-tile],
+  [data-dld-rank-badge]
+) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--jj-emerald-ombre, linear-gradient(135deg,#0B5132 0%,#064E3B 58%,#022C22 100%)) !important;
+  border-color: rgba(255,255,255,0.24) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is(
+  .jj-icon-box-active,
+  .jj-icon-box,
+  [data-icon-tone="emerald"],
+  .jj-icon-tile-emerald,
+  [data-dld-emerald-tile],
+  [data-dld-rank-badge]
+) :is(svg,path,circle,rect,line,polyline,polygon,span) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-nav], [data-guide-nav]) {
+  width: calc(100% - 32px) !important;
+  max-width: 1120px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+@media (min-width: 1024px) {
+  html body #root [data-insights-page] :is([data-mi-nav], [data-guide-nav]) {
+    width: calc(100% - 360px) !important;
+    max-width: 1080px !important;
+    margin-left: max(32px, calc((100% - 360px - 1080px) / 2)) !important;
+    margin-right: 320px !important;
+  }
+}
+html body #root [data-insights-page] :is([data-mi-nav-card], [data-guide-nav-card]) {
+  min-height: 128px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: #FDFBF7 !important;
+  border: 1px solid rgba(184,149,85,0.24) !important;
+  overflow: hidden !important;
+}
+html body #root [data-insights-page] :is([data-mi-nav-card], [data-guide-nav-card]) :is(svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Half-height scroller for the right navigator; inactive rows stay readable. */
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) > div {
+  max-height: 52dvh !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) nav {
+  max-height: calc(52dvh - 112px) !important;
+  overflow-y: auto !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-item] {
+  grid-template-columns: 1.75rem minmax(0,1rem) minmax(0,1fr) !important;
+  min-height: 42px !important;
+  align-items: center !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="inactive"],
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="inactive"] :is([data-toc-label], span:not([data-toc-number])) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="inactive"] :is([data-toc-label], [data-toc-label] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="inactive"] [data-toc-icon] {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="active"],
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-insights-page] :is(.mi-cta-emerald, .jj-cta-emerald, .jj-cta-primary, [data-cta="primary"]),
+html body #root [data-insights-page] :is(.mi-cta-emerald, .jj-cta-emerald, .jj-cta-primary, [data-cta="primary"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* FAQ branch: remove black content bands and keep accordions premium/readable. */
+html body #root [data-insights-page] #faq-content,
+html body #root [data-insights-page] #faq-content > div,
+html body #root [data-insights-page] #faq-content section {
+  background: #FDFBF7 !important;
+}
+html body #root [data-insights-page] #faq-content .jj-layer-2 {
+  background: #F7F2EA !important;
+  border-radius: 24px !important;
+}
+html body #root [data-insights-page] #faq-content [data-accordion-item] {
+  background: #FDFBF7 !important;
+  border-color: rgba(184,149,85,0.24) !important;
+}
+html body #root [data-insights-page] #faq-content [data-accordion-item] :is(button, span, p, div, svg, path, circle, rect, line, polyline, polygon) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+/* END PASS 172 */
+
+/* PASS 173 — Insights/Guides emergency layout lock.
+   Fixes the remaining broken Methodology collapse and stops insight guide
+   content cards from shrinking into the fixed right navigator gutter. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+  :is(.jj-section-champagne, .jj-band, .jj-band--surface, .jj-band--raised, .jj-band--page)
+  > :is(div, .container, .max-w-4xl, .max-w-5xl, .max-w-6xl)[class*="lg:pr-72"],
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+  :is(.jj-section-champagne, .jj-band, .jj-band--surface, .jj-band--raised, .jj-band--page)
+  > :is(div, .container, .max-w-4xl, .max-w-5xl, .max-w-6xl)[class*="xl:pr-72"] {
+  padding-right: clamp(16px, 4vw, 48px) !important;
+}
+
+/* Nested semantic sections must never inherit the page-frame width/margins. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+  section section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]),
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page])
+  .jj-section-champagne :is(section, .jj-card-inner) {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) .jj-card-inner {
+  overflow-wrap: anywhere !important;
+}
+
+/* Market Overview: keep dense statistic/trend blocks compact with internal scroll. */
+html body #root [data-insights-page] [data-mi-page] #key-stats > div,
+html body #root [data-insights-page] [data-mi-page] #quarterly-trends > div {
+  max-height: min(52dvh, 460px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #064E3B #F7F2EA !important;
+}
+
+html body #root [data-insights-page] [data-mi-page] #key-stats .grid,
+html body #root [data-insights-page] [data-mi-page] #quarterly-trends .grid {
+  gap: 14px !important;
+}
+
+html body #root [data-insights-page] [data-mi-page] #key-stats .jj-card-inner,
+html body #root [data-insights-page] [data-mi-page] #quarterly-trends .jj-card-inner {
+  padding: 16px !important;
+}
+
+/* Emerald surfaces always carry white copy/icons, regardless of older guards. */
+html body #root [data-insights-page] :is(
+  [class*="bg-[image:var(--jj-emerald-ombre)]"],
+  [style*="--jj-emerald-ombre"],
+  .jj-icon-box-active,
+  .jj-icon-box,
+  .jj-icon-tile-emerald,
+  .jj-cta-emerald,
+  .mi-cta-emerald,
+  [data-surface="emerald"]
+),
+html body #root [data-insights-page] :is(
+  [class*="bg-[image:var(--jj-emerald-ombre)]"],
+  [style*="--jj-emerald-ombre"],
+  .jj-icon-box-active,
+  .jj-icon-box,
+  .jj-icon-tile-emerald,
+  .jj-cta-emerald,
+  .mi-cta-emerald,
+  [data-surface="emerald"]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,button,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Report archive card rebuild guard: aligned content and contained buttons. */
+html body #root [data-insights-page] [data-mi-page] #report-archive .grid {
+  align-items: stretch !important;
+  gap: 18px !important;
+}
+html body #root [data-insights-page] [data-mi-page] #report-archive .grid > * {
+  min-width: 0 !important;
+}
+html body #root [data-insights-page] [data-mi-page] #report-archive :is(.rounded-xl, .card, [class*="Card"]) {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+html body #root [data-insights-page] [data-mi-page] #report-archive :is(button, a) {
+  max-width: 100% !important;
+}
+
+/* Navigation cards: no edge-touching, centered arrow/icon tiles. */
+html body #root [data-insights-page] :is([data-mi-nav-card], [data-guide-nav-card]) {
+  border-radius: 18px !important;
+  padding: clamp(18px, 2.4vw, 26px) !important;
+}
+html body #root [data-insights-page] :is([data-mi-nav-card], [data-guide-nav-card]) :is(.jj-icon-tile-emerald, [data-icon-tone], svg) {
+  flex-shrink: 0 !important;
+}

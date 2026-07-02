@@ -25,6 +25,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       className="py-8"
+      data-guide-nav
     >
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
@@ -54,6 +55,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {prevGuide ? (
             <Link 
               to={prevGuide.path}
+              data-guide-nav-card
               className="flex-1 group jj-card-inner border-2 border-[#B89555]/50 hover:border-[#B89555] rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1"
             >
               <div className="flex items-center gap-4 md:gap-6">
@@ -77,6 +79,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
           {nextGuide ? (
             <Link 
               to={nextGuide.path}
+              data-guide-nav-card
               className="flex-1 group jj-card-inner border-2 border-[#B89555]/50 hover:border-[#B89555] rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_12px_40px_rgba(200,167,102,0.35),0_8px_25px_rgba(0,0,0,0.15)] hover:-translate-y-1 text-right"
             >
               <div className="flex items-center justify-end gap-4 md:gap-6">

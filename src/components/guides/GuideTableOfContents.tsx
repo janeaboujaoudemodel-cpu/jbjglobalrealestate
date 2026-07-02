@@ -114,7 +114,7 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72" data-guide-toc>
+    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-guide-toc>
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -155,7 +155,7 @@ export const GuideTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#FDFBF7] border border-white/30 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[calc(100dvh-8rem)] flex flex-col jj-scrollbar-emerald"
+        className="bg-[#FDFBF7] border border-white/30 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
       >
         {/* Header with minimize button */}
         <div className="flex items-center justify-between p-3 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
@@ -191,6 +191,8 @@ export const GuideTableOfContents = ({
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
+                  data-toc-item
+                  data-toc-state={activeId === item.id ? "active" : "inactive"}
                   className={cn(
                     "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
                     activeId === item.id
@@ -198,7 +200,7 @@ export const GuideTableOfContents = ({
                       : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#064E3B]/10 border-transparent"
                   )}
                 >
-                  <span className={cn(
+                  <span data-toc-number className={cn(
                     "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
                     activeId === item.id
                       ? "bg-[#064E3B] text-white border border-white/35"
@@ -206,12 +208,12 @@ export const GuideTableOfContents = ({
                   )}>
                     {index + 1}
                   </span>
-                  {item.icon && <item.icon className={cn(
+                  {item.icon && <item.icon data-toc-icon className={cn(
                     "w-4 h-4",
                     activeId === item.id ? "text-white" : "text-[#064E3B]"
                   )} />}
                   {!item.icon && <span aria-hidden />}
-                  <span className="min-w-0 leading-snug">{item.title}</span>
+                  <span data-toc-label className="min-w-0 leading-snug">{item.title}</span>
                 </button>
               ))}
               

@@ -35,8 +35,7 @@ export const FAQHero = ({
   actions 
 }: FAQHeroProps) => {
   return (
-    <section data-hero-dark className="jj-hero-fullscreen jj-hero-compact jj-hero-neon relative flex items-center overflow-hidden">
-      <span aria-hidden className="jj-hero-neon-accent" />
+    <section data-hero-dark data-faq-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
 
       {/* Video Background */}
       {videoUrl && (
@@ -57,7 +56,7 @@ export const FAQHero = ({
       {/* Image Background Fallback */}
       {!videoUrl && (
         <>
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black" />
+          <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" />
           {backgroundImage && (
             <div 
               className="absolute inset-0 bg-cover bg-center opacity-30"
@@ -70,10 +69,6 @@ export const FAQHero = ({
       {/* Overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
       
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl" />
-      
       <motion.div 
         className="container mx-auto px-4 relative z-10"
         initial="hidden"
@@ -83,11 +78,11 @@ export const FAQHero = ({
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div 
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-full px-5 py-2.5 mb-6 shadow-lg hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-white/35"
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-4 h-4 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide uppercase">{badge}</span>
+            <BadgeIcon className="w-4 h-4 text-white" />
+            <span className="text-white text-sm font-semibold tracking-wide uppercase">{badge}</span>
           </motion.div>
           
           {/* Title */}

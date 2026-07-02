@@ -33,23 +33,40 @@ export const MarketIntelligenceHero = ({
   description, 
   actions 
 }: MarketIntelligenceHeroProps) => {
+  const titleText = typeof title === "string" ? title : "Market Intelligence";
+  const key = titleText.toLowerCase();
+  const variant = key.includes("area")
+    ? "areas"
+    : key.includes("report")
+      ? "reports"
+      : key.includes("methodology") || key.includes("source")
+        ? "methodology"
+        : "overview";
+
+  const heroSignals: Record<string, string[]> = {
+    overview: ["REGULATED MARKET", "TRANSACTION CONTEXT", "RENT BENCHMARKS", "OWNERSHIP COSTS"],
+    areas: ["LOCATION SIGNALS", "AREA ACTIVITY", "SUPPLY STATUS", "RENT INDEX"],
+    reports: ["REPORT ARCHIVE", "MONTHLY REVIEW", "QUARTERLY SIGNALS", "OFFICIAL SOURCES"],
+    methodology: ["SOURCE CONTROL", "DATA VALIDATION", "NO SPECULATION", "GOVERNMENT DATA"],
+  };
+
   return (
     <section
       data-mi-hero
+      data-mi-hero-variant={variant}
       data-hero-dark
       data-no-compare-frame
       data-no-section-frame
       data-surface="dark"
-      className="mi-hero-scene relative flex min-h-[100svh] w-full items-center overflow-hidden"
+      className="mi-hero-scene relative flex w-full items-center overflow-hidden"
     >
       <div className="mi-hero-grid" aria-hidden="true" />
       <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
       <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />
       <div className="mi-hero-data-stack" aria-hidden="true">
-        <span>OFFICIAL DATA</span>
-        <span>AREA SIGNALS</span>
-        <span>MARKET REPORTS</span>
-        <span>SOURCE REVIEW</span>
+        {heroSignals[variant].map((signal) => (
+          <span key={signal}>{signal}</span>
+        ))}
       </div>
 
       <motion.div 
@@ -58,7 +75,7 @@ export const MarketIntelligenceHero = ({
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto text-center px-4">
+        <div className="mi-hero-copy mx-auto max-w-4xl px-4 text-center">
           {/* Badge - glass emerald/white, no gold border */}
           <motion.button 
             className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 cursor-default"

@@ -42,6 +42,7 @@ export const MarketIntelligenceNavigation = ({
       viewport={{ once: true }}
       className="surface-light py-8"
       data-surface="light"
+      data-mi-nav
     >
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
@@ -67,6 +68,7 @@ export const MarketIntelligenceNavigation = ({
           {prevLink ? (
             <Link 
               to={prevLink.path}
+              data-mi-nav-card
               className="flex-1 group rounded-xl p-5 md:p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-[#FDFBF7] border border-[#B89555]/35"
             >
               <div className="flex items-center gap-4 md:gap-6">
@@ -87,6 +89,7 @@ export const MarketIntelligenceNavigation = ({
           {nextLink ? (
             <Link 
               to={nextLink.path}
+              data-mi-nav-card
               className="flex-1 group rounded-xl p-5 md:p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-right bg-[#FDFBF7] border border-[#B89555]/35"
             >
               <div className="flex items-center justify-end gap-4 md:gap-6">

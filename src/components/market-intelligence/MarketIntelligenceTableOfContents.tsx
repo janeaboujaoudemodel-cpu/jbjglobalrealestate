@@ -89,12 +89,12 @@ export const MarketIntelligenceTableOfContents = ({
   };
 
   return (
-    <div className="surface-light fixed right-4 lg:right-6 top-24 z-40 w-64 lg:w-72" data-surface="light" data-mi-toc>
+    <div className="surface-light fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-surface="light" data-mi-toc>
       {/* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[calc(100dvh-8rem)] border bg-[#FDFBF7] border-white/30 flex flex-col"
+        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.18)] max-h-[52dvh] border bg-[#FDFBF7] border-white/30 flex flex-col"
       >
         <div className="flex items-center justify-between px-3 py-2.5 border-b border-white/20 bg-[image:var(--jj-emerald-ombre)] flex-shrink-0">
           <div className="flex items-center gap-2">
@@ -131,6 +131,8 @@ export const MarketIntelligenceTableOfContents = ({
                     <button
                       key={item.id}
                       onClick={() => scrollToSection(item.id)}
+                      data-toc-item
+                      data-toc-state={isActive ? "active" : "inactive"}
                       data-surface={isActive ? "emerald" : "light"}
                       data-allow-white={isActive ? "true" : undefined}
                       data-no-contrast-guard
@@ -151,6 +153,7 @@ export const MarketIntelligenceTableOfContents = ({
                       }
                     >
                       <span
+                        data-toc-number
                         data-no-contrast-guard
                         className={cn(
                           "h-7 w-7 rounded-lg flex items-center justify-center text-[11px] font-bold leading-none",
@@ -168,12 +171,14 @@ export const MarketIntelligenceTableOfContents = ({
                       </span>
                       {item.icon && (
                         <item.icon
+                          data-toc-icon
                           className="w-4 h-4 flex-shrink-0"
                           style={{ color: isActive ? '#FFFFFF' : '#064E3B', stroke: isActive ? '#FFFFFF' : '#064E3B' }}
                         />
                       )}
                       {!item.icon && <span aria-hidden />}
                       <span
+                        data-toc-label
                         className="min-w-0 leading-snug"
                         style={{ color: isActive ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: isActive ? '#FFFFFF' : '#1A1A1A' }}
                       >
