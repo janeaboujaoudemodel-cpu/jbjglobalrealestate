@@ -89,10 +89,10 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "ai-tools") {
     return (
-      <div className={`bg-gradient-to-br from-[#064E3B]/92 via-[#042C1C]/88 to-[#010806]/95 border border-white/35 rounded-xl p-5 ${className}`} data-ai-tools-disclaimer>
+      <div className={`bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/35 rounded-xl p-5 shadow-[0_18px_48px_rgba(0,0,0,0.26)] ${className}`} data-ai-tools-disclaimer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
         <div className="flex items-start gap-3 mb-4">
           <div className="w-10 h-10 bg-white/10 border border-white/35 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Shield className="w-5 h-5 text-white" />
+            <Shield className="w-5 h-5 text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </div>
           <div>
             <p className="text-white text-sm font-semibold mb-1">AI Tool Disclaimer</p>
@@ -115,7 +115,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
               className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border border-white/35"
               style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <MessageCircle className="w-3.5 h-3.5" />
+              <MessageCircle className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               WhatsApp Us
             </a>
             <a 
@@ -123,7 +123,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
               className="inline-flex min-h-10 items-center justify-center gap-2 px-4 py-2 rounded-lg text-white text-xs font-semibold transition-colors border border-white/35"
               style={{ background: "rgba(255,255,255,0.10)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <Phone className="w-3.5 h-3.5" />
+              <Phone className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               {CONTACT_INFO.phone}
             </a>
           </div>

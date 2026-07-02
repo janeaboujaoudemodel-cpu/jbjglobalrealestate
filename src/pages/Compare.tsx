@@ -659,7 +659,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   // ============================================================
   const EMERALD_INK = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
   const CHAMPAGNE = "#F7F2EA";
-  const GOLD_HAIRLINE = "1px solid rgba(184,149,85,0.35)";
+  const GOLD_HAIRLINE = "1px solid rgba(6,78,59,0.24)";
 
   return (
     <section className="min-h-screen" style={{ background: "#FDFBF7" }}>
@@ -758,6 +758,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 disabled={isGenerating || projects.length < 2}
                 data-no-contrast-guard
                 data-allow-dark-cta
+                data-compare-hero-cta="start"
                 className="allow-white jj-pill-emerald-metallic inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   backgroundImage: EMERALD_INK,
@@ -775,11 +776,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
               <button
                 onClick={() => setAiAddOpen(true)}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
+                data-no-contrast-guard
+                data-allow-dark-cta
+                data-compare-hero-cta="ai-add"
+                className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)", boxShadow: "0 10px 28px rgba(4,120,87,0.32)" }}
               >
-                <Sparkles className="w-4 h-4" style={{ color: "#064E3B" }} />
-                Add via link / PDF (AI fill)
+                <Sparkles className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Add via link / PDF (AI fill)</span>
               </button>
 
               <Link to="/compare-manual">
@@ -1193,8 +1197,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             </div>
           ) : (
             <div className="rounded-2xl p-8 text-center" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
-                <Sparkles className="w-8 h-8" style={{ color: "#FFFFFF" }} />
+              <div data-surface="emerald" data-on-dark="true" data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
+                <Sparkles className="w-8 h-8 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </div>
               <h3 className="text-2xl font-bold mb-2" style={{ color: "#1A1A1A" }}>AI Analysis Ready</h3>
               <p className="max-w-md mx-auto mb-6 text-sm" style={{ color: "#1A1A1A", opacity: 0.75 }}>
@@ -1222,8 +1226,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           {/* Contact Advisor */}
           <div className="rounded-2xl p-6" style={{ background: "#FDFBF7", border: GOLD_HAIRLINE }}>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
-                <Users className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+              <div data-surface="emerald" data-on-dark="true" data-no-contrast-guard className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
+                <Users className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </div>
               <div>
                 <h3 className="font-bold text-lg" style={{ color: "#1A1A1A" }}>Need Expert Guidance?</h3>
@@ -1245,21 +1249,21 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
                 <Input type="tel" placeholder="Phone Number" value={formData.phone} onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                   style={{ background: "#FFFFFF", color: "#1A1A1A", border: GOLD_HAIRLINE }} />
-                <div className="flex gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={() => submitRequest.mutate()}
                     disabled={!formData.email || submitRequest.isPending}
                     data-no-contrast-guard data-allow-dark-cta
-                    className="allow-white flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl disabled:opacity-60"
+                className="allow-white w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 text-xs sm:text-sm font-bold rounded-xl disabled:opacity-60 whitespace-nowrap text-center leading-tight overflow-hidden"
                     style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.3)" }}
                   >
                     {submitRequest.isPending ? <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} /> : (
-                      <><Send className="w-4 h-4" style={{ color: "#FFFFFF" }} /><span className="allow-white" style={{ color: "#FFFFFF" }}>Request Consultation</span></>
+                      <><Send className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /><span className="allow-white min-w-0 truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Consultation</span></>
                     )}
                   </button>
                   <button
                     onClick={() => setShowRequestForm(false)}
-                    className="px-6 py-3 text-sm font-bold rounded-xl"
+                    className="min-h-12 px-6 py-3 text-sm font-bold rounded-xl"
                     style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}
                   >
                     Cancel
@@ -1267,28 +1271,28 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                 <button
                   onClick={() => setShowRequestForm(true)}
                   data-no-contrast-guard data-allow-dark-cta
-                  className="allow-white inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+                  className="allow-white w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold rounded-xl whitespace-nowrap text-center leading-tight overflow-hidden"
                   style={{ backgroundImage: EMERALD_INK, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.3)" }}
                 >
-                  <Mail className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Request Consultation</span>
+                  <Mail className="w-4 h-4 shrink-0 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="allow-white min-w-0 truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request Consultation</span>
                 </button>
                 <a href="tel:+971547167107" className="w-full">
-                  <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+                  <button className="w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold rounded-xl whitespace-normal text-center leading-tight"
                     style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}>
-                    <Phone className="w-4 h-4" style={{ color: "#064E3B" }} />
-                    Call Now
+                    <Phone className="w-4 h-4 shrink-0" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+                    <span className="min-w-0">Call Now</span>
                   </button>
                 </a>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
-                  <button className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+                  <button className="w-full min-w-0 min-h-12 inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold rounded-xl whitespace-normal text-center leading-tight"
                     style={{ background: CHAMPAGNE, color: "#1A1A1A", border: GOLD_HAIRLINE }}>
-                    <BadgeCheck className="w-4 h-4" style={{ color: "#064E3B" }} />
-                    Inquiry Form
+                    <BadgeCheck className="w-4 h-4 shrink-0" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+                    <span className="min-w-0">Inquiry Form</span>
                   </button>
                 </a>
               </div>
@@ -1296,14 +1300,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           </div>
 
           {/* Deep Area Analyzer */}
-          <div className="pt-6" style={{ borderTop: GOLD_HAIRLINE }}>
+          <div data-surface="emerald" data-on-dark="true" data-no-contrast-guard className="rounded-2xl p-5 md:p-6" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B", border: "1px solid rgba(255,255,255,0.24)", boxShadow: "0 18px 48px rgba(0,0,0,0.22)" }}>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundImage: EMERALD_INK, backgroundColor: "#064E3B" }}>
-                <Brain className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.28)" }}>
+                <Brain className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </div>
               <div>
-                <h2 className="text-2xl font-bold" style={{ color: "#1A1A1A" }}>Deep Area Analysis</h2>
-                <p className="text-sm" style={{ color: "#1A1A1A", opacity: 0.7 }}>Analyze specific areas with government data sources</p>
+                <h2 className="allow-white text-2xl font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Deep Area Analysis</h2>
+                <p className="allow-white text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>Analyze specific areas with government data sources</p>
               </div>
             </div>
             <AIPropertyAnalyzer />

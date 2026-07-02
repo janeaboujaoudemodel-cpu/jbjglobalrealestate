@@ -170,7 +170,7 @@ export default function SupportLauncher() {
   return (
     <>
       {/* ============== MOBILE: horizontal "Contact us" pill (bottom-right) ============== */}
-      <div className="hidden" data-no-contrast-guard>
+      <div className="fixed bottom-5 right-4 z-[60] block lg:hidden pointer-events-none" data-no-contrast-guard>
         <AnimatePresence>
           {open && (
             <>
@@ -233,7 +233,7 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           whileTap={{ scale: 0.96 }}
-          className="allow-white jj-emerald-metallic relative inline-flex items-center gap-2 h-11 px-4 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
+          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center gap-2 h-11 w-11 sm:w-11 sm:px-0 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
           style={{
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
@@ -246,7 +246,7 @@ export default function SupportLauncher() {
             <>
               <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               <span
-                className="allow-white text-[11px] font-semibold uppercase tracking-[0.2em]"
+                className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
                 Contact Us
@@ -260,7 +260,7 @@ export default function SupportLauncher() {
 
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
-      <div className="block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
+      <div className="hidden lg:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
         {/* Tag */}
         <button
           type="button"

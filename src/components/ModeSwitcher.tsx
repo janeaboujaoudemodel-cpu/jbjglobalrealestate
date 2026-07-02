@@ -306,24 +306,20 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;
 
-              // One-card mode system: the row itself owns all hover/active
-              // styling. Children are transparent so global dropdown hover
-              // rules can never create nested rectangles inside a card.
-              const isEmerald = isActive;
-              const rowTextColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
-              const rowDescriptionColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
-              const rowIconBg = isEmerald
-                ? 'linear-gradient(135deg, #042F22 0%, #064E3B 100%)'
-                : 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)';
-              const rowIconColor = isEmerald ? '#FFFFFF' : '#1A1A1A';
+              // Champagne dropdown rows: selected mode is indicated by an
+              // emerald hairline/check only, never by a full emerald row fill.
+              const rowTextColor = '#1A1A1A';
+              const rowDescriptionColor = '#3A2D1D';
+              const rowIconBg = 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)';
+              const rowIconColor = isActive ? '#064E3B' : '#1A1A1A';
 
               const rowStyle: CSSProperties = {
-                ['--mode-row-bg' as string]: isEmerald
-                  ? 'var(--jj-emerald-ombre)'
+                ['--mode-row-bg' as string]: isActive
+                  ? 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)'
                   : 'linear-gradient(135deg, #FDFBF7 0%, #F2E8D2 100%)',
-                ['--mode-row-border' as string]: isHovered ? '#A9823E' : '#B89555',
-                ['--mode-row-shadow' as string]: isEmerald
-                  ? '0 10px 24px -14px rgba(6,78,59,0.7), inset 0 1px 0 rgba(255,255,255,0.18)'
+                ['--mode-row-border' as string]: isActive ? '#064E3B' : isHovered ? '#A9823E' : '#B89555',
+                ['--mode-row-shadow' as string]: isActive
+                  ? '0 10px 24px -16px rgba(6,78,59,0.28), inset 0 1px 0 rgba(255,255,255,0.70)'
                   : isHovered
                   ? '0 12px 26px -16px rgba(184,149,85,0.72), inset 0 1px 0 rgba(255,255,255,0.72)'
                   : '0 6px 18px -14px rgba(184,149,85,0.45), inset 0 1px 0 rgba(255,255,255,0.6)',
@@ -331,7 +327,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 background: 'var(--mode-row-bg)',
                 backgroundImage: 'var(--mode-row-bg)',
                 borderColor: 'var(--mode-row-border)',
-                borderWidth: isEmerald ? 1.5 : 1,
+                borderWidth: isActive ? 1.5 : 1,
                 color: rowTextColor,
                 boxShadow: 'var(--mode-row-shadow)',
                 transform: 'var(--mode-row-transform)',
@@ -355,9 +351,9 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   unstyled
                   data-no-contrast-guard
                   data-no-emerald-hover
-                  data-mode-row={isEmerald ? 'active' : 'idle'}
+                  data-mode-row={isActive ? 'active' : 'idle'}
                   data-mode-card="true"
-                  {...(isEmerald ? { 'data-surface': 'emerald', 'data-emerald-action': 'true', 'data-on-dark': 'true' } : {})}
+                  data-surface="champagne"
                   className={cn(
                     "mode-switcher-item",
                     "mode-switcher-equal-card relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full min-h-[92px]",
@@ -366,14 +362,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 >
                   <div
                     data-no-contrast-guard
-                    data-mode-icon-tile={isEmerald ? 'active' : 'idle'}
-                    data-surface={isEmerald ? 'emerald' : 'champagne'}
-                    {...(!isEmerald ? { 'data-allow-ink': 'true' } : {})}
+                    data-mode-icon-tile={isActive ? 'active' : 'idle'}
+                    data-surface="champagne"
+                    data-allow-ink="true"
                     className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       backgroundImage: rowIconBg,
-                      boxShadow: isEmerald
-                        ? 'inset 0 1px 0 rgba(255,255,255,0.18)'
+                      boxShadow: isActive
+                        ? '0 0 0 1px rgba(6,78,59,0.45)'
                         : '0 0 0 1px rgba(184,149,85,0.35)',
                     }}
                   >
@@ -403,18 +399,18 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     </p>
                   </div>
 
-                  {isEmerald ? (
+                  {isActive ? (
                     <span
                       data-no-contrast-guard
                       data-mode-active-pill=""
                       data-surface="champagne"
                       data-allow-ink="true"
-                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
+                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 h-8 w-8 rounded-full text-[10px] font-bold shrink-0"
                       style={{
-                        background: 'linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)',
-                        color: '#1A1A1A',
-                        WebkitTextFillColor: '#1A1A1A',
-                        borderColor: '#B89555',
+                        background: 'rgba(6,78,59,0.10)',
+                        color: '#064E3B',
+                        WebkitTextFillColor: '#064E3B',
+                        borderColor: '#064E3B',
                         borderWidth: 1,
                         borderStyle: 'solid',
                       }}
@@ -422,29 +418,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       <Check
                         data-no-contrast-guard
                         className="w-3 h-3 shrink-0"
-                        style={{ color: '#1A1A1A', stroke: '#1A1A1A' }}
+                        style={{ color: '#064E3B', stroke: '#064E3B' }}
                         strokeWidth={3}
                       />
-                      <span style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>Active</span>
                     </span>
-                  ) : (
-                    <span
-                      data-no-contrast-guard
-                      data-mode-select-pill=""
-                      data-surface="emerald"
-                      data-on-dark="true"
-                      className="mode-switcher-select-pill ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[76px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap allow-white"
-                      style={{
-                        color: '#FFFFFF',
-                        WebkitTextFillColor: '#FFFFFF',
-                        background: 'var(--jj-emerald-ombre)',
-                        borderColor: 'transparent',
-                        textShadow: '0 1px 0 rgba(0,0,0,0.25)',
-                      }}
-                    >
-                      <span className="allow-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Select</span>
-                    </span>
-                  )}
+                  ) : null}
 
                 </DropdownMenuItem>
               );
