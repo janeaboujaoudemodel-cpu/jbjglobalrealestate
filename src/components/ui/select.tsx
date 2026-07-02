@@ -68,7 +68,7 @@ const SelectScrollUpButton = React.forwardRef<
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
-    <ChevronUp className="h-4 w-4 text-[#1A1A1A]/70" />
+    <ChevronUp className="h-4 w-4 text-white" />
   </SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
@@ -82,7 +82,7 @@ const SelectScrollDownButton = React.forwardRef<
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
-    <ChevronDown className="h-4 w-4 text-[#1A1A1A]/70" />
+    <ChevronDown className="h-4 w-4 text-white" />
   </SelectPrimitive.ScrollDownButton>
 ));
 SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName;
@@ -97,7 +97,7 @@ const SelectScrollUpButtonDark = React.forwardRef<
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
-    <ChevronUp className="h-4 w-4 text-[#1A1A1A]/70" />
+    <ChevronUp className="h-4 w-4 text-white" />
   </SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButtonDark.displayName = "SelectScrollUpButtonDark";
@@ -111,7 +111,7 @@ const SelectScrollDownButtonDark = React.forwardRef<
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
-    <ChevronDown className="h-4 w-4 text-[#1A1A1A]/70" />
+    <ChevronDown className="h-4 w-4 text-white" />
   </SelectPrimitive.ScrollDownButton>
 ));
 SelectScrollDownButtonDark.displayName = "SelectScrollDownButtonDark";
