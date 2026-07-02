@@ -993,3 +993,142 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   .jc-record__rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid #E1E6EF; }
   .jc-record__biz-grid, .jc-record__fields { grid-template-columns: 1fr; }
 }
+
+/* ==================================================================
+   Phase 5 — View switcher, Kanban board, Bulk action bar
+   ================================================================== */
+.jc-view-switch {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  border: 1px solid var(--jbjcrm-hairline-strong);
+  border-radius: var(--jbjcrm-radius-sm);
+  overflow: hidden;
+  background: var(--jbjcrm-pearl);
+}
+.jc-view-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  background: var(--jbjcrm-pearl);
+  color: var(--jbjcrm-graphite-2);
+  border: 0;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+.jc-view-switch button + button { border-left: 1px solid var(--jbjcrm-hairline-strong); }
+.jc-view-switch button:hover { background: var(--jbjcrm-search); color: var(--jbjcrm-graphite); }
+.jc-view-switch button[data-active="true"] {
+  background: var(--jbjcrm-emerald);
+  color: #FFFFFF;
+}
+
+/* Bulk action bar */
+.jc-bulk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  margin: 0 12px 8px;
+  background: var(--jbjcrm-emerald-tint);
+  border: 1px solid var(--jbjcrm-emerald-soft);
+  border-radius: var(--jbjcrm-radius);
+  font-size: var(--jbjcrm-fs-13);
+  color: var(--jbjcrm-graphite);
+}
+.jc-bulk__count { font-weight: 600; color: var(--jbjcrm-emerald); }
+.jc-bulk__sep { width: 1px; height: 20px; background: var(--jbjcrm-hairline-strong); }
+.jc-bulk__spacer { flex: 1; }
+.jc-bulk__btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px;
+  background: var(--jbjcrm-pearl);
+  border: 1px solid var(--jbjcrm-hairline-strong);
+  border-radius: var(--jbjcrm-radius-sm);
+  color: var(--jbjcrm-graphite);
+  cursor: pointer;
+  font-size: var(--jbjcrm-fs-12);
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.jc-bulk__btn:hover { background: var(--jbjcrm-search); border-color: var(--jbjcrm-emerald-soft); }
+.jc-bulk__btn--danger { color: var(--jbjcrm-danger); }
+.jc-bulk__btn--danger:hover { background: rgba(208, 52, 44, 0.08); border-color: rgba(208, 52, 44, 0.35); }
+.jc-bulk__close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  background: transparent; border: 0; border-radius: 50%;
+  color: var(--jbjcrm-graphite-2); cursor: pointer;
+}
+.jc-bulk__close:hover { background: rgba(15,23,42,0.08); color: var(--jbjcrm-graphite); }
+
+/* Kanban */
+.jc-kanban {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  overflow-x: auto;
+  align-items: flex-start;
+  background: var(--jbjcrm-search);
+  min-height: calc(100vh - var(--jbjcrm-header-h) - 120px);
+}
+.jc-kanban__col {
+  flex: 0 0 288px;
+  background: var(--jbjcrm-pearl);
+  border: 1px solid var(--jbjcrm-hairline);
+  border-radius: var(--jbjcrm-radius);
+  box-shadow: var(--jbjcrm-shadow-1);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - var(--jbjcrm-header-h) - 140px);
+}
+.jc-kanban__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--jbjcrm-hairline);
+}
+.jc-kanban__title { display: inline-flex; align-items: center; gap: 8px; }
+.jc-kanban__title h4 {
+  margin: 0;
+  font-size: var(--jbjcrm-fs-13);
+  font-weight: 600;
+  color: var(--jbjcrm-graphite);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.jc-kanban__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--jbjcrm-emerald);
+  display: inline-block;
+}
+.jc-kanban__count {
+  font-size: var(--jbjcrm-fs-11);
+  font-weight: 600;
+  color: var(--jbjcrm-graphite-2);
+  background: var(--jbjcrm-search);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.jc-kanban__meta {
+  padding: 6px 12px 10px;
+  font-size: var(--jbjcrm-fs-11);
+  color: var(--jbjcrm-graphite-3);
+  border-bottom: 1px dashed var(--jbjcrm-hairline);
+}
+.jc-kanban__body {
+  padding: 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 160px;
+}
+.jc-kanban__empty {
+  border: 1.5px dashed var(--jbjcrm-hairline-strong);
+  border-radius: var(--jbjcrm-radius-sm);
+  padding: 24px 10px;
+  text-align: center;
+  color: var(--jbjcrm-graphite-3);
+  font-size: var(--jbjcrm-fs-12);
+}

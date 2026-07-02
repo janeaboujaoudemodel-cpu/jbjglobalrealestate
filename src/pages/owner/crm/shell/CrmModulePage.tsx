@@ -4,22 +4,30 @@ import {
   ChevronDown,
   ChevronRight,
   Filter,
+  LayoutGrid,
+  List as ListIcon,
+  Mail,
   MoreHorizontal,
   Plus,
   RefreshCw,
   Search,
   SlidersHorizontal,
+  Tag,
+  Trash2,
+  UserPlus,
+  X,
 } from "lucide-react";
 import { CRM_DEFAULT_SECTION, CRM_MODULE_MAP } from "./modules";
 
 /**
- * JBJ CRM — Standard Module List View (Phase 3)
- * Mirrors Zoho's list-view chrome: view picker, records counter, primary
- * "Create" CTA, actions menu, filter rail, sortable header, empty state.
- * Data-agnostic: renders empty state until per-module data sources land.
+ * JBJ CRM — Module views (Phase 3 + Phase 5).
+ * Phase 5 adds: List/Kanban view switcher, Kanban board (grouped by stage),
+ * and a bulk-action bar that appears when rows are selected.
+ * Data-agnostic: renders empty placeholders until per-module data lands.
  */
 
 type ColumnDef = { key: string; label: string; width?: string };
+type ViewMode = "list" | "kanban";
 
 const DEFAULT_COLUMNS: ColumnDef[] = [
   { key: "name", label: "Name" },
@@ -103,14 +111,77 @@ const MODULE_COLUMNS: Record<string, ColumnDef[]> = {
   ],
 };
 
+const KANBAN_STAGES: Record<string, string[]> = {
+  leads: ["Not Contacted", "Attempted", "Contacted", "Junk Lead", "Lost Lead"],
+  deals: [
+    "Qualification",
+    "Needs Analysis",
+    "Proposal",
+    "Negotiation",
+    "Closed Won",
+    "Closed Lost",
+  ],
+  tasks: ["Not Started", "In Progress", "Waiting", "Deferred", "Completed"],
+  cases: ["New", "On Hold", "Escalated", "Closed"],
+  quotes: ["Draft", "Negotiation", "Delivered", "On Hold", "Confirmed", "Closed"],
+  "sales-orders": ["Created", "Approved", "Delivered", "Cancelled"],
+  "purchase-orders": ["Created", "Approved", "Delivered", "Cancelled"],
+  invoices: ["Created", "Sent", "Paid", "Cancelled"],
+};
+
 const columnsFor = (slug: string): ColumnDef[] => MODULE_COLUMNS[slug] ?? DEFAULT_COLUMNS;
+const canKanban = (slug: string) => Boolean(KANBAN_STAGES[slug]);
+
+function BulkActionBar({ count, onClear }: { count: number; onClear: () => void }) {
+  return (
+    <div className="jc-bulk" role="region" aria-label="Bulk actions">
+      <span className="jc-bulk__count">{count} selected</span>
+      <div className="jc-bulk__sep" />
+      <button type="button" className="jc-bulk__btn"><Mail size={14} /> Mass Email</button>
+      <button type="button" className="jc-bulk__btn"><UserPlus size={14} /> Change Owner</button>
+      <button type="button" className="jc-bulk__btn"><Tag size={14} /> Add Tags</button>
+      <button type="button" className="jc-bulk__btn jc-bulk__btn--danger"><Trash2 size={14} /> Delete</button>
+      <div className="jc-bulk__spacer" />
+      <button type="button" className="jc-bulk__close" onClick={onClear} aria-label="Clear selection">
+        <X size={14} />
+      </button>
+    </div>
+  );
+}
+
+function KanbanView({ slug, label }: { slug: string; label: string }) {
+  const stages = KANBAN_STAGES[slug] ?? [];
+  return (
+    <div className="jc-kanban" role="list" aria-label={`${label} kanban`}>
+      {stages.map((stage) => (
+        <section key={stage} className="jc-kanban__col" role="listitem">
+          <header className="jc-kanban__head">
+            <div className="jc-kanban__title">
+              <span className="jc-kanban__dot" aria-hidden="true" />
+              <h4>{stage}</h4>
+            </div>
+            <span className="jc-kanban__count">0</span>
+          </header>
+          <div className="jc-kanban__meta">USD 0.00 · 0 Record(s)</div>
+          <div className="jc-kanban__body">
+            <div className="jc-kanban__empty">Drop {label.toLowerCase()} here</div>
+          </div>
+        </section>
+      ))}
+    </div>
+  );
+}
 
 function ModuleListView({ slug, label, section }: { slug: string; label: string; section: string }) {
   const columns = useMemo(() => columnsFor(slug), [slug]);
   const [filtersOpen, setFiltersOpen] = useState(true);
+  const [view, setView] = useState<ViewMode>("list");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const plural = /s$/.test(label) ? label : `${label}s`;
   const navigate = useNavigate();
   const goCreate = () => navigate(`/owner/crm/jbj/${section}/new`);
+  const kanbanAvailable = canKanban(slug);
+  const showKanban = view === "kanban" && kanbanAvailable;
 
   return (
     <div className="jc-list" data-no-contrast-guard>
@@ -120,6 +191,30 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
           <ChevronDown size={15} />
         </button>
         <span className="jc-list__count">0 Records</span>
+        {kanbanAvailable && (
+          <div className="jc-view-switch" role="tablist" aria-label="View mode">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === "list"}
+              data-active={view === "list"}
+              onClick={() => setView("list")}
+              title="List View"
+            >
+              <ListIcon size={15} />
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === "kanban"}
+              data-active={view === "kanban"}
+              onClick={() => setView("kanban")}
+              title="Kanban View"
+            >
+              <LayoutGrid size={15} />
+            </button>
+          </div>
+        )}
         <div className="jc-list__spacer" />
         <button type="button" className="jc-list__icon" aria-label="Search"><Search size={16} /></button>
         <button type="button" className="jc-list__icon" aria-label="Refresh"><RefreshCw size={16} /></button>
@@ -132,67 +227,75 @@ function ModuleListView({ slug, label, section }: { slug: string; label: string;
         <button type="button" className="jc-list__icon" aria-label="More"><MoreHorizontal size={18} /></button>
       </div>
 
-      <div className="jc-list__body" data-filters={filtersOpen ? "open" : "closed"}>
-        <aside className="jc-list__filters" aria-label="Filters">
-          <header className="jc-list__filters-head">
-            <button
-              type="button"
-              className="jc-list__filters-toggle"
-              onClick={() => setFiltersOpen((v) => !v)}
-              aria-expanded={filtersOpen}
-            >
-              <Filter size={14} /> Filter {plural} by
-              <ChevronRight size={14} className="jc-list__filters-caret" data-open={filtersOpen} />
-            </button>
-          </header>
-          <div className="jc-list__filters-group">
-            <div className="jc-list__filters-title">System Defined Filters</div>
-            <ul>
-              <li>Touched Records</li>
-              <li>Untouched Records</li>
-              <li>Record Action</li>
-              <li>Related Records Action</li>
-            </ul>
-          </div>
-          <div className="jc-list__filters-group">
-            <div className="jc-list__filters-title">Filter By Fields</div>
-            <ul>
-              <li>Owner</li>
-              <li>Created Time</li>
-              <li>Modified Time</li>
-              <li>Tag</li>
-            </ul>
-          </div>
-        </aside>
+      {selected.size > 0 && (
+        <BulkActionBar count={selected.size} onClear={() => setSelected(new Set())} />
+      )}
 
-        <section className="jc-list__table" role="table" aria-label={`${plural} table`}>
-          <div className="jc-list__thead" role="row">
-            <div className="jc-list__th jc-list__th--check" role="columnheader">
-              <input type="checkbox" aria-label={`Select all ${plural}`} />
+      {showKanban ? (
+        <KanbanView slug={slug} label={label} />
+      ) : (
+        <div className="jc-list__body" data-filters={filtersOpen ? "open" : "closed"}>
+          <aside className="jc-list__filters" aria-label="Filters">
+            <header className="jc-list__filters-head">
+              <button
+                type="button"
+                className="jc-list__filters-toggle"
+                onClick={() => setFiltersOpen((v) => !v)}
+                aria-expanded={filtersOpen}
+              >
+                <Filter size={14} /> Filter {plural} by
+                <ChevronRight size={14} className="jc-list__filters-caret" data-open={filtersOpen} />
+              </button>
+            </header>
+            <div className="jc-list__filters-group">
+              <div className="jc-list__filters-title">System Defined Filters</div>
+              <ul>
+                <li>Touched Records</li>
+                <li>Untouched Records</li>
+                <li>Record Action</li>
+                <li>Related Records Action</li>
+              </ul>
             </div>
-            {columns.map((c) => (
-              <div key={c.key} className="jc-list__th" role="columnheader">
-                {c.label}
+            <div className="jc-list__filters-group">
+              <div className="jc-list__filters-title">Filter By Fields</div>
+              <ul>
+                <li>Owner</li>
+                <li>Created Time</li>
+                <li>Modified Time</li>
+                <li>Tag</li>
+              </ul>
+            </div>
+          </aside>
+
+          <section className="jc-list__table" role="table" aria-label={`${plural} table`}>
+            <div className="jc-list__thead" role="row">
+              <div className="jc-list__th jc-list__th--check" role="columnheader">
+                <input type="checkbox" aria-label={`Select all ${plural}`} />
               </div>
-            ))}
-            <div className="jc-list__th jc-list__th--tools" role="columnheader">
-              <SlidersHorizontal size={14} />
+              {columns.map((c) => (
+                <div key={c.key} className="jc-list__th" role="columnheader">
+                  {c.label}
+                </div>
+              ))}
+              <div className="jc-list__th jc-list__th--tools" role="columnheader">
+                <SlidersHorizontal size={14} />
+              </div>
             </div>
-          </div>
 
-          <div className="jc-list__empty" role="row">
-            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
-              <rect x="10" y="16" width="52" height="40" rx="4" stroke="#CBD2E1" strokeWidth="1.6" />
-              <path d="M18 28h36M18 36h36M18 44h24" stroke="#CBD2E1" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-            <h3>No {plural} found</h3>
-            <p>Create your first {label.toLowerCase()} to get started.</p>
-            <button type="button" className="jc-list__cta" onClick={goCreate}>
-              <Plus size={15} /> Create {label}
-            </button>
-          </div>
-        </section>
-      </div>
+            <div className="jc-list__empty" role="row">
+              <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+                <rect x="10" y="16" width="52" height="40" rx="4" stroke="#CBD2E1" strokeWidth="1.6" />
+                <path d="M18 28h36M18 36h36M18 44h24" stroke="#CBD2E1" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+              <h3>No {plural} found</h3>
+              <p>Create your first {label.toLowerCase()} to get started.</p>
+              <button type="button" className="jc-list__cta" onClick={goCreate}>
+                <Plus size={15} /> Create {label}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
