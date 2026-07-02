@@ -25185,3 +25185,38 @@ html body #root [data-insights-page] :is([data-mi-nav-card], [data-guide-nav-car
 html body #root [data-insights-page] :is([data-mi-nav-card], [data-guide-nav-card]) :is(.jj-icon-tile-emerald, [data-icon-tone], svg) {
   flex-shrink: 0 !important;
 }
+
+/* PASS 174 — final hard locks for broken methodology/card contrast. */
+html body #root [data-insights-page] [data-mi-page] section[data-no-section-frame] {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 0 12px 0 !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+html body #root [data-insights-page] [data-mi-page] .jj-section-champagne > .relative > [class*="space-y"] {
+  padding-left: clamp(16px, 4vw, 48px) !important;
+  padding-right: clamp(16px, 4vw, 48px) !important;
+}
+
+html body #root [data-insights-page] :is(
+  [class*="bg-[#064E3B]"], [class*="bg-[#0B5132]"], [class*="bg-[#022C22]"],
+  [class*="bg-emerald"], [class*="from-[#064E3B]"], [class*="to-[#022C22]"]
+),
+html body #root [data-insights-page] :is(
+  [class*="bg-[#064E3B]"], [class*="bg-[#0B5132]"], [class*="bg-[#022C22]"],
+  [class*="bg-emerald"], [class*="from-[#064E3B]"], [class*="to-[#022C22]"]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,button,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-insights-page] [data-mi-page] #key-stats,
+html body #root [data-insights-page] [data-mi-page] #quarterly-trends {
+  max-height: 54dvh !important;
+  overflow-y: auto !important;
+}
