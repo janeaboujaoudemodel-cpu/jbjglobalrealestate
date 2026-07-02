@@ -1266,43 +1266,47 @@ const Quiz = () => {
   return (
     <section data-allow-dark-cta data-no-contrast-guard className="aihf-root min-h-[calc(100dvh-88px)] bg-[#FDFBF7] flex flex-col">
       <style>{AIHF_STYLE}</style>
-      {/* Header */}
-      <div className="border-b border-[#B89555]/25 bg-[#F7F2EA] sticky top-0 lg:top-[48px] z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-3">
+      {/* Hero Header — full-bleed deep emerald band with question inside */}
+      <div className="aihf-hero sticky top-0 lg:top-[48px] z-10">
+        <div className="container mx-auto px-4 pt-5 pb-8 md:pt-6 md:pb-10">
+          <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
               data-no-contrast-guard
-              className="text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors flex items-center gap-2"
+              className="transition-colors flex items-center gap-2 text-sm font-medium"
+              style={{ color: "#FFFFFF" }}
             >
               <ChevronLeft className="w-5 h-5" />
               {currentStep > 0 ? "Back" : "Exit"}
             </button>
-            <div className="text-[#1A1A1A]/70 text-sm">
+            <div className="text-sm" style={{ color: "rgba(255,255,255,0.85)" }}>
               Question {currentStep + 1} of {QUIZ_QUESTIONS.length}
             </div>
           </div>
           {/* Emerald progress bar */}
-          <div className="h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
-            <div 
-              className="h-full rounded-full jj-surface-emerald transition-all duration-500 ease-out"
-              style={{ width: `${progress}%` }}
+          <div className="h-2 rounded-full overflow-hidden mb-6" style={{ background: "rgba(255,255,255,0.14)" }}>
+            <div
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }}
             />
           </div>
+          {/* Question title lives inside the hero band */}
+          <h2
+            className="text-2xl md:text-4xl font-bold text-center tracking-tight max-w-3xl mx-auto"
+            style={{ color: "#FFFFFF" }}
+          >
+            {currentQuestion.question}
+          </h2>
         </div>
       </div>
 
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-center justify-center px-4 py-6 md:py-8">
+      <div className="flex-1 flex items-start justify-center px-4 py-8 md:py-10">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
           {/* Main Question Area */}
           <div className="w-full max-w-2xl mx-auto">
-            <h2
-              className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-8 text-center"
-            >
-              {currentQuestion.question}
-            </h2>
+
 
 
             {/* Multiple Select Controls */}
