@@ -600,58 +600,61 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               </div>
             </Collapsible>
 
-            <div className="id-panel rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '420px' }}>
-              <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
-                <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-sm">Design Assistant</h3>
-                  <p className="id-text-muted text-[11px]">Describe edits or new ideas</p>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: '350px' }}>
-                {messages.map(msg => (
-                  <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                    <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-primary'} w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0`}>
-                      {msg.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
-                    </div>
-                    <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-panel-soft'} max-w-[85%] rounded-xl border p-3`}>
-                      {msg.image && <img src={msg.image} alt="Generated interior design" className="rounded-lg mb-2 max-h-[200px] w-auto" loading="lazy" decoding="async" />}
-                      <div className="text-xs whitespace-pre-wrap leading-relaxed">{msg.content}</div>
-                    </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+              <div className="id-panel rounded-2xl overflow-hidden flex flex-col lg:col-span-2" style={{ minHeight: '420px' }}>
+                <div className="p-4 border-b flex items-center gap-3" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
+                  <div className="id-primary w-10 h-10 rounded-xl border flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-4 h-4" />
                   </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-sm">Design Assistant</h3>
+                    <p className="id-text-muted text-[11px]">Describe edits or new ideas</p>
+                  </div>
+                </div>
 
-              <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
-                <div className="flex items-stretch gap-2">
-                  <Textarea
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Describe changes: make it brighter, add marble, change sofa..."
-                    className="id-input min-h-[44px] max-h-[90px] resize-none flex-1 text-xs rounded-xl"
-                    disabled={isProcessing}
-                  />
-                  <Button onClick={handleChatSend} disabled={isProcessing || !chatInput.trim()} size="icon" className="id-primary h-auto min-h-[44px] w-11 shrink-0 rounded-xl self-stretch">
-                    {isProcessing ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
-                  </Button>
+                <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: '350px' }}>
+                  {messages.map(msg => (
+                    <div key={msg.id} className={`flex gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                      <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-primary'} w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0`}>
+                        {msg.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3" />}
+                      </div>
+                      <div className={`${msg.role === 'user' ? 'id-choice-active' : 'id-panel-soft'} max-w-[85%] rounded-xl border p-3`}>
+                        {msg.image && <img src={msg.image} alt="Generated interior design" className="rounded-lg mb-2 max-h-[200px] w-auto" loading="lazy" decoding="async" />}
+                        <div className="text-xs whitespace-pre-wrap leading-relaxed">{msg.content}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
+                  <div className="flex items-stretch gap-2">
+                    <Textarea
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Describe changes: make it brighter, add marble, change sofa..."
+                      className="id-input min-h-[44px] max-h-[90px] resize-none flex-1 text-xs rounded-xl"
+                      disabled={isProcessing}
+                    />
+                    <Button onClick={handleChatSend} disabled={isProcessing || !chatInput.trim()} size="icon" className="id-primary h-auto min-h-[44px] w-11 shrink-0 rounded-xl self-stretch">
+                      {isProcessing ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="id-panel rounded-2xl p-4">
-              <label className="text-xs font-semibold mb-2 block">Additional Notes (Optional)</label>
-              <Textarea
-                value={customNotes}
-                onChange={(e) => setCustomNotes(e.target.value)}
-                placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="id-input min-h-[72px] text-xs rounded-xl"
-                maxLength={500}
-              />
+              <div className="id-panel rounded-2xl p-4 flex flex-col" style={{ minHeight: '420px' }}>
+                <label className="text-xs font-semibold mb-2 block">Additional Notes (Optional)</label>
+                <Textarea
+                  value={customNotes}
+                  onChange={(e) => setCustomNotes(e.target.value)}
+                  placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
+                  className="id-input flex-1 text-xs rounded-xl resize-none"
+                  maxLength={500}
+                />
+                <p className="id-text-muted text-[10px] mt-2">{customNotes.length}/500</p>
+              </div>
             </div>
           </div>
         </div>
