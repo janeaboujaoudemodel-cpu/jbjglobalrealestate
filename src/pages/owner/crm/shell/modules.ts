@@ -4,6 +4,7 @@
  */
 import {
   BarChart3,
+  Blocks,
   BriefcaseBusiness,
   CalendarDays,
   CheckSquare,
@@ -132,6 +133,7 @@ export const CRM_TEAMSPACE_FOLDERS: CrmFolder[] = [
 export const CRM_TEAMSPACE_BOTTOM: CrmModule[] = [
   { slug: "services", label: "Services", icon: Wrench },
   { slug: "projects", label: "Projects", icon: Handshake },
+  { slug: "marketplace", label: "Marketplace", icon: Blocks },
 ];
 
 export const CRM_MODULES: CrmModule[] = [
