@@ -25,17 +25,58 @@ const TIER_CONFIG: Record<string, { label: string; color: string }> = {
   PARTNER:     { label: "PARTNER",     color: TIER_PILL },
 };
 
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties"];
-const PREMIUM_DEVELOPERS = ["ellington", "select-group", "select group", "arada", "deyaar"];
-const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim", "imtiaz", "samana"];
-const ESTABLISHED_DEVELOPERS = ["danube", "azizi", "tiger", "dubai-south", "object", "aark", "ab-developers"];
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "omniyat", "aldar", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
+const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select-group", "select group", "deyaar", "majid-al-futtaim", "majid al futtaim", "arada", "nshama", "wasl"];
+const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
+const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
-function getDeveloperTier(slug: string): { label: string; color: string } {
-  const normalizedSlug = slug.toLowerCase();
-  if (ELITE_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.ELITE;
-  if (PREMIUM_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.PREMIUM;
-  if (TOP_TIER_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.TOP_TIER;
-  if (ESTABLISHED_DEVELOPERS.some((d) => normalizedSlug.includes(d))) return TIER_CONFIG.ESTABLISHED;
+const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
+  "developed-by-emaar-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/marina_feat_ca27724071.jpg",
+  "emaar-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/marina_feat_ca27724071.jpg",
+  emaar: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/marina_feat_ca27724071.jpg",
+  "developed-by-danube-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
+  "danube-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
+  danube: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
+  "developed-by-azizi-developments": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
+  "azizi-developments": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
+  azizi: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
+  "developed-by-binghatti": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg",
+  binghatti: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg",
+  "sunrise-valley": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
+  "hirat-real-estate-development": "https://new-projects-media.propertyfinder.com/project/2e8e9a04-428d-4e4b-b789-1c68f242cb09/gallery/image/5bB3dAv-CyrCK9YgvseOoLY0th0zmZ3677dZm8mFhY0=/big.webp",
+  "ax-capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
+  "6-ellington-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg",
+  "6ellington-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg",
+  "developed-by-ellington-properties": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg",
+  "developed-by-beyond": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Passo_by_Beyond_at_Palm_Jumeirah_Luxury_Residences_955c20826b.jpg",
+  "developed-by-majid-al-futtaim": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Lacina_Residences_by_Majid_Al_Futtaim_a869016d98.jpg",
+};
+
+function getIconicDeveloperImage(slug: string, name: string) {
+  const normalized = slug.toLowerCase();
+  if (ICONIC_DEVELOPER_IMAGES[normalized]) return ICONIC_DEVELOPER_IMAGES[normalized];
+  const combined = `${slug} ${name}`.toLowerCase();
+  if (combined.includes("emaar")) return ICONIC_DEVELOPER_IMAGES.emaar;
+  if (combined.includes("danube")) return ICONIC_DEVELOPER_IMAGES.danube;
+  if (combined.includes("azizi")) return ICONIC_DEVELOPER_IMAGES.azizi;
+  if (combined.includes("binghatti")) return ICONIC_DEVELOPER_IMAGES.binghatti;
+  if (combined.includes("ellington")) return ICONIC_DEVELOPER_IMAGES["developed-by-ellington-properties"];
+  if (combined.includes("beyond")) return ICONIC_DEVELOPER_IMAGES["developed-by-beyond"];
+  if (combined.includes("majid al futtaim")) return ICONIC_DEVELOPER_IMAGES["developed-by-majid-al-futtaim"];
+  return undefined;
+}
+
+function getDeveloperTier(slug: string, name = "", rank?: number | null): { label: string; color: string } {
+  const normalized = `${slug} ${name}`.toLowerCase();
+  if (ELITE_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.ELITE;
+  if (PREMIUM_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.PREMIUM;
+  if (TOP_TIER_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.TOP_TIER;
+  if (ESTABLISHED_DEVELOPERS.some((d) => normalized.includes(d))) return TIER_CONFIG.ESTABLISHED;
+  if (rank && rank > 0) {
+    if (rank <= 10) return TIER_CONFIG.ELITE;
+    if (rank <= 30) return TIER_CONFIG.PREMIUM;
+    if (rank <= 80) return TIER_CONFIG.TOP_TIER;
+  }
   return TIER_CONFIG.PARTNER; // universal fallback so every card has a badge
 }
 
@@ -50,16 +91,17 @@ function getDeveloperTier(slug: string): { label: string; color: string } {
  *  - Hover = subtle lift + soft glow only. No color flips.
  */
 const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }: DeveloperCardProps) => {
-  const tier = getDeveloperTier(developer.slug || "");
+  const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
-  const hasHero = !!heroImageUrl;
+  const cardHeroImageUrl = getIconicDeveloperImage(developer.slug || "", developer.name || "") || developer.feature_image_url || heroImageUrl;
+  const hasHero = !!cardHeroImageUrl;
   const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
 
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
       <motion.div
-        whileHover={{ y: -8, scale: 1.015, boxShadow: "0 24px 48px -12px rgba(0,0,0,0.28), 0 12px 24px -8px rgba(184,149,85,0.25)" }}
+        whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
         className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
         style={{
@@ -72,7 +114,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
           {hasHero ? (
             <>
               <img
-                src={heroImageUrl}
+                src={cardHeroImageUrl}
                 alt={`${developer.name} featured project`}
                 loading={isEager ? "eager" : "lazy"}
                 referrerPolicy="no-referrer"

@@ -39,10 +39,10 @@ const TIER_FILTERS = [
   { value: "established", label: "Established" },
 ];
 
-const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat"];
-const PREMIUM_DEVELOPERS = ["ellington"];
-const TOP_TIER_DEVELOPERS = ["binghatti", "majid-al-futtaim", "majid al futtaim"];
-const ESTABLISHED_DEVELOPERS = ["danube", "azizi"];
+const ELITE_DEVELOPERS = ["emaar", "nakheel", "damac", "sobha", "meraas", "aldar", "omniyat", "dubai-properties", "dubai properties", "dubai-holding", "dubai holding"];
+const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select-group", "select group", "deyaar", "majid-al-futtaim", "majid al futtaim", "arada", "nshama", "wasl"];
+const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
+const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
 // Exact order for elite developers at the top of the directory
 const ELITE_PRIORITY_ORDER = [
@@ -50,12 +50,17 @@ const ELITE_PRIORITY_ORDER = [
   'ellington', 'damac', 'meraas', 'dubai-properties'
 ];
 
-function getDeveloperTierKey(slug: string): string {
-  const normalizedSlug = slug.toLowerCase();
-  if (ELITE_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "elite";
-  if (PREMIUM_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "premium";
-  if (TOP_TIER_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "top-tier";
-  if (ESTABLISHED_DEVELOPERS.some(d => normalizedSlug.includes(d))) return "established";
+function getDeveloperTierKey(slug: string, name = "", rank?: number | null): string {
+  const normalized = `${slug} ${name}`.toLowerCase();
+  if (ELITE_DEVELOPERS.some(d => normalized.includes(d))) return "elite";
+  if (PREMIUM_DEVELOPERS.some(d => normalized.includes(d))) return "premium";
+  if (TOP_TIER_DEVELOPERS.some(d => normalized.includes(d))) return "top-tier";
+  if (ESTABLISHED_DEVELOPERS.some(d => normalized.includes(d))) return "established";
+  if (rank && rank > 0) {
+    if (rank <= 10) return "elite";
+    if (rank <= 30) return "premium";
+    if (rank <= 80) return "top-tier";
+  }
   return "other";
 }
 
@@ -179,7 +184,7 @@ const Developers = () => {
     // Tier filter
     if (tierFilter !== "all") {
       filtered = filtered.filter(dev => 
-        getDeveloperTierKey(dev.slug || "") === tierFilter
+        getDeveloperTierKey(dev.slug || "", dev.name || "", dev.rank) === tierFilter
       );
     }
     
@@ -262,9 +267,9 @@ const Developers = () => {
               className="text-center max-w-4xl mx-auto"
             >
               {/* Label */}
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-[#B89555]/40 bg-[#1A1A1A]/30 backdrop-blur-md">
-                <Building2 className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-[#1A1A1A] font-semibold text-xs uppercase tracking-[0.2em]">
+              <div className="allow-white inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-6 border border-white/18 bg-[#064E3B]/80 backdrop-blur-md">
+                <Building2 className="w-4 h-4 text-white" />
+                <span className="text-white font-semibold text-xs uppercase tracking-[0.2em]">
                   Developer-Direct Properties
                 </span>
               </div>
@@ -287,18 +292,18 @@ const Developers = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.6 }}
           >
-            <span className="text-[#1A1A1A]/70 text-xs tracking-widest uppercase">Explore</span>
-            <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
+            <span className="allow-white text-white/75 text-xs tracking-widest uppercase">Explore</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-white/45 to-transparent" />
           </motion.div>
         </section>
 
         {/* Scroll sentinel for two-phase filter fix */}
-        <div ref={filterSentinelRef} className="h-0" />
+        <div ref={filterSentinelRef} className="h-0 bg-[#010806]" />
 
-        {/* Filters Section — clean single-layer emerald bar (no double borders) */}
-        <section className="z-40 bg-[#010806] py-4 border-b border-white/10">
-          <div className="container mx-auto px-3 sm:px-4">
-            <div className="jj-filter-emerald-shell rounded-2xl p-4 sm:p-5" style={{ background: "linear-gradient(180deg,#04241C 0%,#03170F 100%)", boxShadow: "0 12px 40px rgba(0,0,0,0.35)" }}>
+        {/* Filters Section — separated below the hero, full-width within the main shell, no gold/double borders */}
+        <section className="relative z-40 bg-[#010806] pt-8 pb-5 border-y border-white/10">
+          <div className="w-full px-3 sm:px-4">
+            <div className="p-0">
               <FilterShortcutBar
                 variant="dark"
                 filters={shortcutFilters}
@@ -317,13 +322,13 @@ const Developers = () => {
               {/* Tier filter row */}
               <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
                 <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md hover:shadow-lg [&>svg]:text-white">
+                  <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md hover:shadow-lg transition-none duration-0 [&>svg]:text-white">
                     <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
                     <span className="truncate text-left flex-1 text-white font-semibold">
                       {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                     </span>
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none">
                     {TIER_FILTERS.map((tier) => (
                       <SelectItem key={tier.value} value={tier.value}>
                         {tier.label}
@@ -342,7 +347,7 @@ const Developers = () => {
                     variant="outline"
                     size="sm"
                     onClick={clearFilters}
-                    className="h-9 px-3 bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-full flex items-center gap-1.5"
+                    className="allow-white h-9 px-3 bg-[#04241C] border-0 text-white hover:bg-[#064E3B] rounded-full flex items-center gap-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] [&_svg]:text-white"
                   >
                     <X className="w-3.5 h-3.5" />
                     Clear ({activeFilterCount})
@@ -365,9 +370,9 @@ const Developers = () => {
             rendered into #root so the .jj-utility-shell sidebar-safe left
             offset applies and the bar stops before the vertical sidebar. */}
         {isFilterFixed && createPortal(
-          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/10 shadow-lg" style={{ background: "linear-gradient(180deg,#04241C 0%,#03170F 100%)" }}>
-            <div className="container mx-auto px-3 sm:px-4">
-              <div className="rounded-2xl p-3 sm:p-4">
+          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/10 shadow-lg" style={{ background: "#010806" }}>
+            <div className="w-full px-3 sm:px-4">
+              <div className="p-0">
                 <FilterShortcutBar
                   variant="dark"
                   filters={shortcutFilters}
@@ -385,13 +390,13 @@ const Developers = () => {
 
                 <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
                   <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md [&>svg]:text-white">
+                    <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md transition-none duration-0 [&>svg]:text-white">
                       <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
                       <span className="truncate text-left flex-1 text-white font-semibold">
                         {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
                       </span>
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none">
                       {TIER_FILTERS.map((tier) => (
                         <SelectItem key={tier.value} value={tier.value}>
                           {tier.label}
@@ -409,7 +414,7 @@ const Developers = () => {
                       variant="outline"
                       size="sm"
                       onClick={clearFilters}
-                      className="h-9 px-3 bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-full flex items-center gap-1.5"
+                      className="allow-white h-9 px-3 bg-[#04241C] border-0 text-white hover:bg-[#064E3B] rounded-full flex items-center gap-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] [&_svg]:text-white"
                     >
                       <X className="w-3.5 h-3.5" />
                       Clear ({activeFilterCount})
@@ -430,13 +435,13 @@ const Developers = () => {
                 {[...Array(8)].map((_, i) => (
                   <div 
                     key={i} 
-                    className="h-[280px] rounded-xl bg-champagne/50 animate-pulse"
-                    style={{ border: '2px solid hsl(42 45% 59% / 0.3)' }}
+                    className="h-[280px] rounded-xl bg-[#04241C]/50 animate-pulse"
+                    style={{ border: '2px solid rgba(255,255,255,0.12)' }}
                   />
                 ))}
               </div>
             ) : filteredDevelopers.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-[#B89555]/30 rounded-xl bg-premium-card/50">
+              <div className="text-center py-20 border border-dashed border-[#064E3B]/25 rounded-xl bg-premium-card/50">
                 <Building2 className="w-20 h-20 text-[#1A1A1A]/70 mx-auto mb-6" />
                 <h3 className="text-2xl font-semibold text-foreground mb-3">No Developers Found</h3>
                 <p className="text-foreground/70 max-w-lg mx-auto mb-6">
@@ -450,7 +455,7 @@ const Developers = () => {
                       Clear Filters
                     </Button>
                   )}
-                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                  <Button variant="outline" onClick={() => refetchDevelopers()} className="border-[#064E3B]/25 text-[#1A1A1A] hover:bg-[#064E3B]/10">
                     Retry
                   </Button>
                 </div>
@@ -463,7 +468,7 @@ const Developers = () => {
                       key={developer.id} 
                       developer={developer} 
                       projectCount={projectCounts[developer.id] || 0}
-                      heroImageUrl={topProjectImageByDev[developer.id]}
+                      heroImageUrl={developer.feature_image_url || topProjectImageByDev[developer.id]}
                       index={(currentPage - 1) * ITEMS_PER_PAGE + idx}
                     />
                   ))}
@@ -478,7 +483,7 @@ const Developers = () => {
                       size="sm"
                       disabled={currentPage <= 1}
                       onClick={() => { setCurrentPage(p => p - 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                      className="border-[#B89555]/30 text-foreground"
+                      className="border-[#064E3B]/25 text-foreground"
                     >
                       Previous
                     </Button>
@@ -498,7 +503,7 @@ const Developers = () => {
                             variant={p === currentPage ? "default" : "outline"}
                             size="sm"
                             onClick={() => { setCurrentPage(p); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                            className={p === currentPage ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90" : "border-[#B89555]/30 text-foreground"}
+                            className={p === currentPage ? "jj-pill-emerald-metallic allow-white text-white border-0" : "border-[#064E3B]/25 text-foreground"}
                           >
                             {p}
                           </Button>
@@ -509,7 +514,7 @@ const Developers = () => {
                       size="sm"
                       disabled={currentPage >= totalPages}
                       onClick={() => { setCurrentPage(p => p + 1); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                      className="border-[#B89555]/30 text-foreground"
+                      className="border-[#064E3B]/25 text-foreground"
                     >
                       Next
                     </Button>
