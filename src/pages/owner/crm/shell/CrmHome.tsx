@@ -111,7 +111,7 @@ export default function CrmHome() {
 
       {/* Leads + Deals closing */}
       <section className="jc-widget-row">
-        <LeadsWidget rows={todaysLeads.length > 0 ? todaysLeads : leads.slice(0, 5)} loading={loading} />
+        <LeadsWidget rows={todaysLeads.length > 0 ? todaysLeads : leads.slice(0, 5)} loading={leadsLoading} />
         <ListWidget
           title="My Deals Closing This Month"
           scope="This Month"
