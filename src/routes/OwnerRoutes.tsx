@@ -16,6 +16,7 @@ const SecondaryMarketHub = lazy(() => import("@/pages/SecondaryMarketHub"));
 const UnifiedCRM = lazy(() => import("@/pages/owner/crm/UnifiedCRM"));
 const CrmShell = lazy(() => import("@/pages/owner/crm/shell/CrmShell"));
 const CrmModulePage = lazy(() => import("@/pages/owner/crm/shell/CrmModulePage"));
+const CrmHome = lazy(() => import("@/pages/owner/crm/shell/CrmHome"));
 const EmployeeProfile = lazy(() => import("@/pages/owner/EmployeeProfile"));
 const OwnerAcademyApprovals = lazy(() => import("@/pages/owner/OwnerAcademyApprovals"));
 const OwnerAcademyAccessQueue = lazy(() => import("@/pages/owner/OwnerAcademyAccessQueue"));
