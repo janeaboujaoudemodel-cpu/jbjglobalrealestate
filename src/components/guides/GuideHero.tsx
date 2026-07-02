@@ -75,7 +75,7 @@ export const GuideHero = ({
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto text-center px-4">
+        <div className="max-w-4xl mx-auto text-center px-4 lg:max-w-[min(56rem,calc(100vw-25rem))] lg:ml-auto lg:mr-[22rem]">
           <motion.div
             className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-white/35"
             variants={fadeInUp}
@@ -105,6 +105,7 @@ export const GuideHero = ({
 
           {actions && (
             <motion.div
+              data-guide-hero-actions
               variants={fadeInUp}
               className="flex flex-wrap justify-center gap-4"
             >
