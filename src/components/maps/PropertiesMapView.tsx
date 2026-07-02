@@ -52,8 +52,18 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
   useEffect(() => {
     if (layerRef.current) map.removeLayer(layerRef.current);
     const tiles = getMapTiles(language);
-    const { url, attribution } = tiles[mapView];
-    layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
+    const { url, attribution, subdomains } = tiles[mapView];
+    layerRef.current = L.tileLayer(url, {
+      attribution,
+      maxZoom: 18,
+      minZoom: 5,
+      keepBuffer: 2,
+      updateWhenIdle: true,
+      updateWhenZooming: false,
+      detectRetina: false,
+      crossOrigin: true,
+      subdomains,
+    });
     layerRef.current.addTo(map);
     return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
   }, [mapView, language, map]);
@@ -64,14 +74,14 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
 function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void; t: (key: string) => string }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-[#B89555]/40 shadow-lg p-1 flex flex-col gap-1">
+      <div className="jj-map-layer-switcher">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className={`px-3 py-2 text-xs font-medium rounded transition-all ${
-              mapView === view ? "bg-[#EFE6D6] text-foreground" : "hover:bg-[#EFE6D6]/20 text-muted-foreground"
-            }`}
+            className="jj-map-layer-button"
+            data-active={mapView === view ? "true" : "false"}
+            data-surface={mapView === view ? "emerald" : "champagne"}
           >
             {t(`map.${view}`)}
           </button>
@@ -86,7 +96,7 @@ function FitBounds({ projects }: { projects: { lat: number; lng: number }[] }) {
   useEffect(() => {
     if (projects.length === 0) return;
     const bounds = L.latLngBounds(projects.map(p => [p.lat, p.lng]));
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+    map.fitBounds(bounds, { padding: [36, 36], maxZoom: 12, animate: false });
   }, [projects, map]);
   return null;
 }
@@ -131,6 +141,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
           scrollWheelZoom={false}
           dragging={true}
           touchZoom={true}
+          preferCanvas={true}
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
           attributionControl={false}
