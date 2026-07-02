@@ -239,17 +239,17 @@ export default function MortgageParityPanel({
             </div>
           ))}
           <div
-            className="flex justify-between pt-2 mt-2 font-bold"
+            className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 pt-2 mt-2 font-bold"
             style={{ borderTop: isNavy ? "1px solid rgba(147,197,253,0.30)" : "1px solid rgba(184,149,85,0.35)" }}
           >
-            <span>Total upfront (incl. down payment)</span>
-            <span className="tabular-nums" style={{ color: "var(--price-orange, #E97A2C)" }}>{aed(fees.total + (propertyPrice * downPaymentPercent) / 100)}</span>
+            <span className="min-w-0 leading-snug">Total upfront (incl. down payment)</span>
+            <span className="tabular-nums whitespace-nowrap text-right" style={{ color: isNavy ? "#FFFFFF" : "var(--price-orange, #E97A2C)" }}>{aed(fees.total + (propertyPrice * downPaymentPercent) / 100)}</span>
           </div>
         </div>
       </Card>
 
       {/* Comparison */}
-      <Card title="Compare to Bank Rates" className="mortgage-compare-card">
+      <Card title="Compare to Bank Rates" className="mortgage-compare-card lg:col-span-2">
         {/* Bank pickers — explicit dropdowns of UAE banks with starting rates */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           {([
@@ -280,7 +280,7 @@ export default function MortgageParityPanel({
                   aria-expanded={openBankPicker === picker.label}
                   aria-label={`${picker.label} — choose UAE bank`}
                   onClick={() => setOpenBankPicker(openBankPicker === picker.label ? null : picker.label)}
-                  className={`${isNavy ? "allow-white " : ""}w-full min-h-11 bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none text-left leading-snug`}
+                  className={`${isNavy ? "allow-white " : ""}w-full min-h-11 bg-transparent rounded-lg px-3 py-2.5 pr-9 text-sm font-semibold cursor-pointer outline-none text-left leading-snug whitespace-normal break-words`}
                   style={{
                     color: isNavy ? "#FFFFFF" : "#1A1A1A",
                     WebkitTextFillColor: isNavy ? "#FFFFFF" : "#1A1A1A",
