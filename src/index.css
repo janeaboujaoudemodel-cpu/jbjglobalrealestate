@@ -25765,3 +25765,99 @@ html body [data-chrome="sidebar"] :is(a,button)[data-sidebar-subitem][aria-curre
 }
 
 /* END PASS 177 */
+
+/* ============================================================
+   PASS 178 — Insights/Guides visual audit corrections
+   ------------------------------------------------------------
+   This is intentionally after every older brand pass. It fixes the
+   remaining audited violations: old gold card borders, non-full-bleed
+   Insights heroes inside the desktop shell, cramped TOC rows, and News
+   filter/hero contrast.
+   ============================================================ */
+
+html body #root main.jj-main-shell [data-insights-page] {
+  background: #FDFBF7 !important;
+}
+
+/* Hero must touch the visible content-shell edges and never keep legacy gold borders. */
+html body #root main.jj-main-shell [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-hero-dark]) {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: #010806 !important;
+}
+
+/* Standard homepage-card rhythm: champagne section shell + white inner card + emerald border. */
+html body #root [data-insights-page] :is([data-mi-page], [data-neon-page]) :is(.jj-section-champagne, section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero])) {
+  background: #F7F2EA !important;
+  border-color: rgba(6,78,59,0.16) !important;
+}
+
+html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, .jj-neon-tile, .card, article, [data-mi-nav-card], [data-guide-nav-card]) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border-color: rgba(6,78,59,0.18) !important;
+  box-shadow: 0 18px 44px -36px rgba(1,8,6,0.48) !important;
+}
+
+html body #root [data-insights-page] :is([class*="border-[#B89555]"], [style*="184, 149, 85"], [style*="#B89555" i]) {
+  border-color: rgba(6,78,59,0.18) !important;
+}
+
+/* Market Overview key metrics and trend cards are emerald-dark with pure white content. */
+html body #root [data-insights-page] [data-mi-page] :is(#key-stats, #quarterly-trends) :is(.jj-card-inner, .card) {
+  background: linear-gradient(135deg,#064E3B 0%,#022C22 58%,#010806 100%) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+html body #root [data-insights-page] [data-mi-page] :is(#key-stats, #quarterly-trends) :is(.jj-card-inner, .card) :is(h1,h2,h3,h4,h5,h6,p,span,small,strong,div,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* TOC: wider, stable rows. The active row cannot turn into a white block or push outside. */
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) {
+  width: min(288px, calc(100vw - 32px)) !important;
+  right: 24px !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-item] {
+  grid-template-columns: 28px 12px minmax(0,1fr) !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-label] {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="active"],
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc]) [data-toc-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* News page: emerald hero/filter contract; no gold filter divider. */
+html body #root [data-insights-page] section[data-guide-hero][data-hero-dark] {
+  color: #FFFFFF !important;
+}
+
+html body #root [data-insights-page] section[data-guide-hero][data-hero-dark] :is(h1,h2,h3,p,span,a,svg,path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-insights-page] .sticky {
+  border-color: rgba(6,78,59,0.2) !important;
+}
+
+/* END PASS 178 */
