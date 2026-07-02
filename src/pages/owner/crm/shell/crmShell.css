@@ -716,3 +716,120 @@
   box-shadow: 0 0 0 1000px transparent inset !important;
   transition: background-color 999999s ease-in-out 0s !important;
 }
+
+/* ============================================================
+   PHASE 3 — MODULE LIST VIEW
+   Zoho-standard list chrome for every module (Leads, Contacts,
+   Accounts, Deals, Tasks, ...). Data-agnostic, empty by default.
+   ============================================================ */
+.jc-list {
+  display: flex; flex-direction: column; min-height: 100%;
+  background: #F5F7FB; font-family: var(--jbjcrm-font);
+}
+.jc-list__toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px; background: #FFFFFF;
+  border-bottom: 1px solid var(--jbjcrm-hairline);
+  min-height: 52px;
+}
+.jc-view-picker {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border: 1px solid transparent;
+  background: transparent; cursor: pointer;
+  color: var(--jbjcrm-graphite); font-size: 15px; font-weight: 700;
+  border-radius: 6px;
+}
+.jc-view-picker:hover { background: #EEF1F6; }
+.jc-view-picker svg { color: var(--jbjcrm-graphite-2); }
+.jc-list__count { font-size: 12px; color: var(--jbjcrm-graphite-2); margin-left: 4px; }
+.jc-list__spacer { flex: 1; }
+.jc-list__icon {
+  width: 32px; height: 32px; border-radius: 6px; border: 0;
+  background: transparent; cursor: pointer;
+  color: var(--jbjcrm-graphite-2);
+  display: inline-grid; place-items: center;
+}
+.jc-list__icon:hover { background: #EEF1F6; color: var(--jbjcrm-graphite); }
+.jc-list__actions {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 6px;
+  background: #FFFFFF; border: 1px solid var(--jbjcrm-hairline);
+  color: var(--jbjcrm-graphite); font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.jc-list__actions:hover { background: #F3F5F9; }
+.jc-list__cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 6px; border: 0; cursor: pointer;
+  background: var(--jbjcrm-emerald); color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-size: 13px; font-weight: 700;
+  box-shadow: 0 1px 2px rgba(6, 78, 59, 0.35);
+}
+.jc-list__cta:hover { background: var(--jbjcrm-emerald-ink); }
+.jc-list__cta svg { color: #FFFFFF !important; stroke: #FFFFFF !important; }
+
+.jc-list__body {
+  display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 0;
+  flex: 1; min-height: 0;
+}
+.jc-list__body[data-filters="closed"] { grid-template-columns: 44px minmax(0, 1fr); }
+.jc-list__body[data-filters="closed"] .jc-list__filters-group { display: none; }
+.jc-list__body[data-filters="closed"] .jc-list__filters-toggle span,
+.jc-list__body[data-filters="closed"] .jc-list__filters-toggle { justify-content: center; gap: 0; }
+
+.jc-list__filters {
+  background: #FFFFFF; border-right: 1px solid var(--jbjcrm-hairline);
+  padding: 12px 12px 24px; overflow-y: auto;
+}
+.jc-list__filters-head { margin-bottom: 10px; }
+.jc-list__filters-toggle {
+  width: 100%; display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 6px; border: 0;
+  background: #F3F5F9; color: var(--jbjcrm-graphite); cursor: pointer;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.2px;
+}
+.jc-list__filters-toggle:hover { background: #E9EDF4; }
+.jc-list__filters-caret { margin-left: auto; transition: transform .15s; }
+.jc-list__filters-caret[data-open="true"] { transform: rotate(90deg); }
+.jc-list__filters-group { margin: 14px 6px; }
+.jc-list__filters-title {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  color: var(--jbjcrm-graphite-3); letter-spacing: 0.4px; margin-bottom: 6px;
+}
+.jc-list__filters-group ul { list-style: none; padding: 0; margin: 0; }
+.jc-list__filters-group li {
+  padding: 7px 10px; border-radius: 5px; font-size: 13px;
+  color: var(--jbjcrm-graphite); cursor: pointer;
+}
+.jc-list__filters-group li:hover { background: #F3F5F9; }
+
+.jc-list__table {
+  background: #FFFFFF; overflow: auto; display: flex; flex-direction: column;
+}
+.jc-list__thead {
+  display: grid; grid-auto-columns: minmax(140px, 1fr); grid-auto-flow: column;
+  padding: 0 18px; background: #FAFBFD;
+  border-bottom: 1px solid var(--jbjcrm-hairline);
+  position: sticky; top: 0; z-index: 1;
+}
+.jc-list__th {
+  padding: 12px 8px; font-size: 12px; font-weight: 700;
+  color: var(--jbjcrm-graphite-2); text-transform: none;
+  white-space: nowrap;
+}
+.jc-list__th--check { max-width: 34px; padding-left: 0; }
+.jc-list__th--tools { max-width: 40px; text-align: right; color: var(--jbjcrm-graphite-3); }
+.jc-list__th--check input { accent-color: var(--jbjcrm-emerald); }
+
+.jc-list__empty {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px; padding: 80px 24px;
+  text-align: center;
+}
+.jc-list__empty h3 { margin: 4px 0 0; font-size: 15px; font-weight: 700; color: var(--jbjcrm-graphite); }
+.jc-list__empty p { margin: 0 0 8px; font-size: 13px; color: var(--jbjcrm-graphite-2); }
+
+@media (max-width: 900px) {
+  .jc-list__body { grid-template-columns: 44px minmax(0, 1fr); }
+  .jc-list__body .jc-list__filters-group { display: none; }
+}

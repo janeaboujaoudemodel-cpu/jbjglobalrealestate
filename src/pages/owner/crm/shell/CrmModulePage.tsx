@@ -1,5 +1,199 @@
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import {
+  ChevronDown,
+  ChevronRight,
+  Filter,
+  MoreHorizontal,
+  Plus,
+  RefreshCw,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 import { CRM_DEFAULT_SECTION, CRM_MODULE_MAP } from "./modules";
+
+/**
+ * JBJ CRM — Standard Module List View (Phase 3)
+ * Mirrors Zoho's list-view chrome: view picker, records counter, primary
+ * "Create" CTA, actions menu, filter rail, sortable header, empty state.
+ * Data-agnostic: renders empty state until per-module data sources land.
+ */
+
+type ColumnDef = { key: string; label: string; width?: string };
+
+const DEFAULT_COLUMNS: ColumnDef[] = [
+  { key: "name", label: "Name" },
+  { key: "owner", label: "Record Owner" },
+  { key: "email", label: "Email" },
+  { key: "phone", label: "Phone" },
+  { key: "created", label: "Created Time" },
+];
+
+const MODULE_COLUMNS: Record<string, ColumnDef[]> = {
+  leads: [
+    { key: "name", label: "Lead Name" },
+    { key: "company", label: "Company" },
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone" },
+    { key: "source", label: "Lead Source" },
+    { key: "owner", label: "Lead Owner" },
+  ],
+  contacts: [
+    { key: "name", label: "Contact Name" },
+    { key: "account", label: "Account Name" },
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone" },
+    { key: "owner", label: "Contact Owner" },
+  ],
+  accounts: [
+    { key: "name", label: "Account Name" },
+    { key: "phone", label: "Phone" },
+    { key: "website", label: "Website" },
+    { key: "type", label: "Account Type" },
+    { key: "owner", label: "Account Owner" },
+  ],
+  deals: [
+    { key: "name", label: "Deal Name" },
+    { key: "amount", label: "Amount" },
+    { key: "stage", label: "Stage" },
+    { key: "close", label: "Closing Date" },
+    { key: "owner", label: "Deal Owner" },
+  ],
+  tasks: [
+    { key: "subject", label: "Subject" },
+    { key: "due", label: "Due Date" },
+    { key: "status", label: "Status" },
+    { key: "priority", label: "Priority" },
+    { key: "owner", label: "Task Owner" },
+  ],
+  meetings: [
+    { key: "title", label: "Title" },
+    { key: "from", label: "From" },
+    { key: "to", label: "To" },
+    { key: "location", label: "Location" },
+    { key: "owner", label: "Host" },
+  ],
+  calls: [
+    { key: "subject", label: "Subject" },
+    { key: "type", label: "Call Type" },
+    { key: "start", label: "Call Start Time" },
+    { key: "duration", label: "Duration" },
+    { key: "owner", label: "Call Owner" },
+  ],
+  products: [
+    { key: "name", label: "Product Name" },
+    { key: "code", label: "Product Code" },
+    { key: "category", label: "Category" },
+    { key: "price", label: "Unit Price" },
+    { key: "active", label: "Active" },
+  ],
+  quotes: [
+    { key: "subject", label: "Quote Subject" },
+    { key: "account", label: "Account Name" },
+    { key: "stage", label: "Quote Stage" },
+    { key: "total", label: "Grand Total" },
+    { key: "owner", label: "Quote Owner" },
+  ],
+  invoices: [
+    { key: "subject", label: "Invoice Subject" },
+    { key: "account", label: "Account Name" },
+    { key: "status", label: "Status" },
+    { key: "total", label: "Grand Total" },
+    { key: "due", label: "Due Date" },
+  ],
+};
+
+const columnsFor = (slug: string): ColumnDef[] => MODULE_COLUMNS[slug] ?? DEFAULT_COLUMNS;
+
+function ModuleListView({ slug, label }: { slug: string; label: string }) {
+  const columns = useMemo(() => columnsFor(slug), [slug]);
+  const [filtersOpen, setFiltersOpen] = useState(true);
+  const plural = /s$/.test(label) ? label : `${label}s`;
+
+  return (
+    <div className="jc-list" data-no-contrast-guard>
+      <div className="jc-list__toolbar">
+        <button type="button" className="jc-view-picker">
+          <span>All {plural}</span>
+          <ChevronDown size={15} />
+        </button>
+        <span className="jc-list__count">0 Records</span>
+        <div className="jc-list__spacer" />
+        <button type="button" className="jc-list__icon" aria-label="Search"><Search size={16} /></button>
+        <button type="button" className="jc-list__icon" aria-label="Refresh"><RefreshCw size={16} /></button>
+        <button type="button" className="jc-list__actions">
+          Actions <ChevronDown size={13} />
+        </button>
+        <button type="button" className="jc-list__cta">
+          <Plus size={15} /> Create {label}
+        </button>
+        <button type="button" className="jc-list__icon" aria-label="More"><MoreHorizontal size={18} /></button>
+      </div>
+
+      <div className="jc-list__body" data-filters={filtersOpen ? "open" : "closed"}>
+        <aside className="jc-list__filters" aria-label="Filters">
+          <header className="jc-list__filters-head">
+            <button
+              type="button"
+              className="jc-list__filters-toggle"
+              onClick={() => setFiltersOpen((v) => !v)}
+              aria-expanded={filtersOpen}
+            >
+              <Filter size={14} /> Filter {plural} by
+              <ChevronRight size={14} className="jc-list__filters-caret" data-open={filtersOpen} />
+            </button>
+          </header>
+          <div className="jc-list__filters-group">
+            <div className="jc-list__filters-title">System Defined Filters</div>
+            <ul>
+              <li>Touched Records</li>
+              <li>Untouched Records</li>
+              <li>Record Action</li>
+              <li>Related Records Action</li>
+            </ul>
+          </div>
+          <div className="jc-list__filters-group">
+            <div className="jc-list__filters-title">Filter By Fields</div>
+            <ul>
+              <li>Owner</li>
+              <li>Created Time</li>
+              <li>Modified Time</li>
+              <li>Tag</li>
+            </ul>
+          </div>
+        </aside>
+
+        <section className="jc-list__table" role="table" aria-label={`${plural} table`}>
+          <div className="jc-list__thead" role="row">
+            <div className="jc-list__th jc-list__th--check" role="columnheader">
+              <input type="checkbox" aria-label={`Select all ${plural}`} />
+            </div>
+            {columns.map((c) => (
+              <div key={c.key} className="jc-list__th" role="columnheader">
+                {c.label}
+              </div>
+            ))}
+            <div className="jc-list__th jc-list__th--tools" role="columnheader">
+              <SlidersHorizontal size={14} />
+            </div>
+          </div>
+
+          <div className="jc-list__empty" role="row">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+              <rect x="10" y="16" width="52" height="40" rx="4" stroke="#CBD2E1" strokeWidth="1.6" />
+              <path d="M18 28h36M18 36h36M18 44h24" stroke="#CBD2E1" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+            <h3>No {plural} found</h3>
+            <p>Create your first {label.toLowerCase()} to get started.</p>
+            <button type="button" className="jc-list__cta">
+              <Plus size={15} /> Create {label}
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
 
 function ProjectIllustration({ variant }: { variant: "connect" | "track" | "deliver" }) {
   if (variant === "connect") {
@@ -14,11 +208,6 @@ function ProjectIllustration({ variant }: { variant: "connect" | "track" | "deli
           <path d="M313 30v-9h28v13" />
           <circle cx="331" cy="57" r="8" />
           <path d="M316 80c5-18 29-18 34 0" />
-          <path d="M90 86c0 41 10 49 50 47" stroke="var(--jbjcrm-emerald-line)" />
-          <path d="M286 88c-7 34-31 47-58 43" stroke="var(--jbjcrm-emerald-line)" />
-          <rect x="145" y="102" width="72" height="43" rx="21" stroke="var(--jbjcrm-emerald-line)" />
-          <path d="M169 109c-6 10-6 22 0 32m18-33c-6 10-6 23 0 34m17-31c-5 9-5 21 0 29" stroke="var(--jbjcrm-emerald-line)" />
-          <path d="M137 113l-21-8m8 42l14-16m101-19l25-10m-12 43l-21-14" />
         </g>
       </svg>
     );
@@ -29,14 +218,8 @@ function ProjectIllustration({ variant }: { variant: "connect" | "track" | "deli
         <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3">
           <circle cx="80" cy="54" r="31" />
           <path d="M60 91h40c12 0 20 9 20 21v48H40v-48c0-12 8-21 20-21z" />
-          <path d="M125 112c35 6 56-16 84-35" />
-          <path d="M209 78l34 19-14 56-45-25z" stroke="var(--jbjcrm-emerald-line)" />
           <rect x="243" y="14" width="80" height="55" rx="11" />
-          <path d="M259 55c20-1 26-17 32-22 6 12 12 11 17 10" />
           <rect x="259" y="82" width="55" height="56" rx="9" />
-          <path d="M271 96h26m-26 13h26m-26 13h18" />
-          <rect x="248" y="144" width="78" height="16" rx="5" />
-          <circle cx="265" cy="121" r="9" />
         </g>
       </svg>
     );
@@ -44,15 +227,8 @@ function ProjectIllustration({ variant }: { variant: "connect" | "track" | "deli
   return (
     <svg viewBox="0 0 360 170" aria-hidden="true" className="jc-project-illo">
       <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3">
-        <circle cx="105" cy="88" r="29" />
-        <path d="M88 119h35c12 0 19 8 19 20v24H70v-24c0-12 7-20 18-20z" />
-        <circle cx="254" cy="88" r="29" />
-        <path d="M237 119h35c12 0 19 8 19 20v24h-72v-24c0-12 7-20 18-20z" />
         <circle cx="180" cy="65" r="54" />
         <path d="M148 58l30 28 51-50" stroke="var(--jbjcrm-emerald-line)" strokeWidth="5" />
-        <path d="M158 138c14 20 30 20 45 0" />
-        <path d="M165 143c9-10 22-10 31 0" />
-        <path d="M137 36l-10-11m51-9V2m52 32l12-11" />
       </g>
     </svg>
   );
@@ -65,25 +241,11 @@ function ProjectsIntro() {
         <h2>Unified Sales and Project Management</h2>
         <p>A smarter way to bridge the gap between sales and<br />project tracking. <button type="button">Learn More</button></p>
       </div>
-
       <div className="jc-projects-grid">
-        <article className="jc-project-step">
-          <ProjectIllustration variant="connect" />
-          <h3>Connect</h3>
-          <p>Integrate JBJ Projects to create and associate<br />projects in JBJ CRM.</p>
-        </article>
-        <article className="jc-project-step">
-          <ProjectIllustration variant="track" />
-          <h3>Track</h3>
-          <p>Stay on top of your tasks and milestones.</p>
-        </article>
-        <article className="jc-project-step">
-          <ProjectIllustration variant="deliver" />
-          <h3>Deliver</h3>
-          <p>Execute customer projects on time, every time.</p>
-        </article>
+        <article className="jc-project-step"><ProjectIllustration variant="connect" /><h3>Connect</h3><p>Integrate JBJ Projects to create and associate<br />projects in JBJ CRM.</p></article>
+        <article className="jc-project-step"><ProjectIllustration variant="track" /><h3>Track</h3><p>Stay on top of your tasks and milestones.</p></article>
+        <article className="jc-project-step"><ProjectIllustration variant="deliver" /><h3>Deliver</h3><p>Execute customer projects on time, every time.</p></article>
       </div>
-
       <div className="jc-projects-cta">
         <button type="button" className="jc-get-started">Get Started</button>
         <button type="button" className="jc-hide-tab">Don't show this tab again.</button>
@@ -95,12 +257,9 @@ function ProjectsIntro() {
 export default function CrmModulePage() {
   const { section = CRM_DEFAULT_SECTION } = useParams();
   const mod = CRM_MODULE_MAP[section];
+  const slug = mod?.slug ?? section;
 
-  if ((mod?.slug ?? section) === "projects") {
-    return <ProjectsIntro />;
-  }
+  if (slug === "projects") return <ProjectsIntro />;
 
-  return (
-    <div className="jc-blank-module" aria-label={mod?.label ?? section} />
-  );
+  return <ModuleListView slug={slug} label={mod?.label ?? section} />;
 }
