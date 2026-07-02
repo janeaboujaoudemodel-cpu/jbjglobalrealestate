@@ -63,7 +63,14 @@ export default function CrmHeader() {
           </button>
           <CrmQuickCreateMenu open={quickOpen} onClose={() => setQuickOpen(false)} />
         </div>
-        <button className="jc-icon-btn" type="button" aria-label="Zia assistant">
+        <button
+          className="jc-icon-btn"
+          type="button"
+          aria-label="Zia assistant"
+          aria-expanded={ziaOpen}
+          data-active={ziaOpen ? "true" : undefined}
+          onClick={() => { setZiaOpen((v) => !v); setQuickOpen(false); setNotifOpen(false); }}
+        >
           <Wand2 size={21} />
         </button>
         <div className="jc-popover-anchor">
