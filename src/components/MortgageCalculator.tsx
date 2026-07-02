@@ -117,6 +117,7 @@ const MortgageCalculator = ({
   const [projectResults, setProjectResults] = useState<MortgageProject[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<MortgageProject | null>(null);
+  const [detailsExpanded, setDetailsExpanded] = useState(false);
   const isNavy = themeVariant === "navy";
 
   // Dark slider wrapper style — injects emerald CSS vars so every slider
