@@ -26,13 +26,6 @@ const staggerContainer = {
   },
 };
 
-/**
- * Premium full-viewport guide hero.
- * - 100dvh (true full screen, mobile-safe)
- * - Strong dark scrim → headline always readable on photo
- * - Unified white headline with white/emerald accent
- * - Two CTAs via locked primitives (.jj-cta-champagne / .jj-cta-outline)
- */
 export const GuideHero = ({
   badge,
   badgeIcon: BadgeIcon,
@@ -46,11 +39,13 @@ export const GuideHero = ({
   return (
     <section
       data-guide-hero
+      data-unified-hero
+      data-faq-hero
       data-hero-dark
+      data-surface="emerald"
       className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
-      style={{ minHeight: "clamp(520px, 68svh, 760px)" }}
     >
-      {/* Media background */}
+      <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" aria-hidden="true" />
       <div className="absolute inset-0 z-0">
         {videoSrc ? (
           <video
@@ -58,76 +53,56 @@ export const GuideHero = ({
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-30"
             poster={videoPoster}
           >
             <source src={videoSrc} type="video/mp4" />
           </video>
         ) : backgroundImage ? (
           <div
-            className="w-full h-full bg-cover bg-center"
+            className="w-full h-full bg-cover bg-center opacity-30"
             style={{ backgroundImage: `url(${backgroundImage})` }}
           />
         ) : (
-          <div className="w-full h-full bg-[image:var(--jj-emerald-ombre)]" />
+          null
         )}
-        {/* Two-layer scrim — readable headline guarantee */}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.45)_45%,rgba(0,0,0,0.78)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.35)_75%)]" />
       </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" aria-hidden="true" />
 
       <motion.div
-        className="relative z-10 w-full py-24"
+        className="relative z-10 w-full py-20 md:py-24"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
         <div className="max-w-4xl mx-auto text-center px-4">
-          {/* Badge */}
           <motion.div
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full mb-8"
-            style={{
-              background: "rgba(255,255,255,0.10)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255,255,255,0.38)",
-            }}
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-white/35"
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-3.5 h-3.5 text-white" />
-            <span className="text-white font-semibold text-[10px] md:text-xs uppercase tracking-[0.22em]">
+            <BadgeIcon className="w-4 h-4 text-white" />
+            <span className="text-white text-sm font-semibold tracking-wide uppercase">
               {badge}
             </span>
           </motion.div>
 
-          {/* Title — unified white, gold underline accent */}
           <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-            style={{ textShadow: "0 2px 24px rgba(0,0,0,0.55)" }}
+            data-no-contrast-guard
+            className="allow-white text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight"
+            style={{ color: "#F6FBF8", WebkitTextFillColor: "#F6FBF8" }}
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
-
-          {/* White hairline accent */}
-          <motion.div
-            variants={fadeInUp}
-            className="mx-auto mb-6 h-px w-24"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.82), transparent)",
-            }}
-          />
-
-          {/* Description */}
           <motion.p
-            className="text-lg md:text-xl text-white/90 font-light leading-relaxed max-w-3xl mx-auto mb-10"
-            style={{ textShadow: "0 1px 12px rgba(0,0,0,0.5)" }}
+            data-no-contrast-guard
+            className="allow-white text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            style={{ color: "rgba(246,251,248,0.85)", WebkitTextFillColor: "rgba(246,251,248,0.85)" }}
             variants={fadeInUp}
           >
             {description}
           </motion.p>
 
-          {/* Actions */}
           {actions && (
             <motion.div
               variants={fadeInUp}

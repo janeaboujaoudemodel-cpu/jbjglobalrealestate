@@ -25861,3 +25861,291 @@ html body #root [data-insights-page] .sticky {
 }
 
 /* END PASS 178 */
+
+/* ============================================================
+   PASS 179 — Hard lock: unified FAQ-style heroes, emerald navigators,
+   homepage-sized cards, and no legacy neon/gold contrast inside the
+   Insights / Guides / Services / Company / Legal route scope.
+   ============================================================ */
+html body #root [data-insights-page] {
+  --jj-insights-page: #010806;
+  --jj-insights-hero: var(--jj-emerald-ombre, linear-gradient(135deg,#064E3B 0%,#022C22 58%,#010806 100%));
+  --jj-insights-section: #F7F2EA;
+  --jj-insights-card: #FDFBF7;
+  --jj-insights-ink: #1A1A1A;
+  --jj-insights-muted: rgba(26,26,26,0.72);
+  background: var(--jj-insights-page) !important;
+  color: var(--jj-insights-ink) !important;
+}
+
+html body #root [data-insights-page] > div,
+html body #root [data-insights-page] [data-mi-page],
+html body #root [data-insights-page] [data-guides-page],
+html body #root [data-insights-page] [data-faq-page],
+html body #root [data-insights-page] [data-marketing-page],
+html body #root [data-insights-page] [data-brand-emerald-page] {
+  background: var(--jj-insights-page) !important;
+  min-height: 100vh !important;
+}
+
+/* Kill the rejected neon/purple layer whenever an old page still carries data-neon-page in this scope. */
+html body #root [data-insights-page] [data-neon-page],
+html body #root [data-insights-page] [data-neon-page]::before,
+html body #root [data-insights-page] [data-neon-page]::after {
+  background: var(--jj-insights-page) !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+html body #root [data-insights-page] .jj-neon-card,
+html body #root [data-insights-page] .jj-neon-tile {
+  background: var(--jj-insights-card) !important;
+  border-color: rgba(6,78,59,0.18) !important;
+  box-shadow: 0 18px 44px -36px rgba(1,8,6,0.48) !important;
+  color: var(--jj-insights-ink) !important;
+}
+
+/* Every page hero in the scoped branches uses the FAQ Hub hero contract. */
+html body #root [data-insights-page] :is(
+  [data-faq-hero],
+  [data-mi-hero],
+  [data-guide-hero],
+  [data-brand-hero],
+  [data-hero-dark],
+  .jj-hero-fullscreen,
+  section[class*="py-28"][class*="overflow-hidden"]:first-of-type,
+  section[class*="py-32"][class*="overflow-hidden"]:first-of-type,
+  section[class*="py-36"][class*="overflow-hidden"]:first-of-type
+) {
+  min-height: clamp(520px, 64svh, 760px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding-top: clamp(5rem, 9vw, 7.5rem) !important;
+  padding-bottom: clamp(5rem, 9vw, 7.5rem) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--jj-insights-hero) !important;
+  color: #F6FBF8 !important;
+  text-align: center !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen)::before,
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen)::after {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(h1,h2,h3,p,span,a,button,svg,path,circle,rect,line,polyline,polygon) {
+  color: #F6FBF8 !important;
+  -webkit-text-fill-color: #F6FBF8 !important;
+  stroke: currentColor !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(h1) {
+  font-size: clamp(2.5rem, 5vw, 4.5rem) !important;
+  line-height: 1.05 !important;
+  font-weight: 300 !important;
+  letter-spacing: -0.035em !important;
+  max-width: 980px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 1.5rem !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) p {
+  max-width: 780px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color: rgba(246,251,248,0.85) !important;
+  -webkit-text-fill-color: rgba(246,251,248,0.85) !important;
+  font-size: clamp(1.05rem, 1.65vw, 1.35rem) !important;
+  line-height: 1.7 !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.container, .mx-auto, [class*="max-w-"]) {
+  max-width: 980px !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a):where(:not([aria-label])) {
+  border-radius: 0.875rem !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) {
+  background: linear-gradient(135deg,#FDFBF7 0%,#F7F2EA 55%,#EFE6D6 100%) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow: 0 12px 30px -18px rgba(0,0,0,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"] *,
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+/* Page content bands: dark emerald page, champagne section layer, white/homepage-size cards. */
+html body #root [data-insights-page] :is(section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero]), .jj-section-champagne, .jj-layer-2) {
+  background: var(--jj-insights-section) !important;
+  color: var(--jj-insights-ink) !important;
+  border-color: rgba(6,78,59,0.14) !important;
+  box-shadow: none !important;
+}
+html body #root [data-insights-page] :is(.jj-layer-2, .jj-section-champagne) > * {
+  max-width: var(--jj-global-container-max, 1760px) !important;
+  width: min(100%, var(--jj-global-container-max, 1760px)) !important;
+  margin-inline: auto !important;
+}
+html body #root [data-insights-page] :is(
+  .jj-card-inner,
+  .jj-guide-card,
+  [data-marketing-card],
+  [data-mi-nav-card],
+  [data-guide-nav-card],
+  .card,
+  [data-slot="card"],
+  article[class*="rounded"],
+  div[class*="rounded-2xl"][class*="border"],
+  div[class*="rounded-xl"][class*="border"]
+):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) {
+  background: var(--jj-insights-card) !important;
+  background-image: none !important;
+  border: 1px solid rgba(6,78,59,0.18) !important;
+  box-shadow: 0 18px 44px -36px rgba(1,8,6,0.48) !important;
+  color: var(--jj-insights-ink) !important;
+}
+html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-slot="card"], .card, article, div[class*="rounded-2xl"][class*="border"], div[class*="rounded-xl"][class*="border"]):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,label,button) {
+  color: var(--jj-insights-ink) !important;
+  -webkit-text-fill-color: var(--jj-insights-ink) !important;
+}
+html body #root [data-insights-page] :is(.jj-card-inner, .jj-guide-card, [data-slot="card"], .card, article, div[class*="rounded-2xl"][class*="border"], div[class*="rounded-xl"][class*="border"]):not([data-surface="emerald"]):not([data-premium-navigator]):not([data-toc-state="active"]) :is(p,li,small,figcaption,dd,td) {
+  color: var(--jj-insights-muted) !important;
+  -webkit-text-fill-color: var(--jj-insights-muted) !important;
+}
+
+/* Remove side padding reservations that made MI/guide cards smaller than homepage cards. */
+@media (min-width: 1024px) {
+  html body #root [data-insights-page] .jj-guide-content,
+  html body #root [data-insights-page] .jj-section-champagne > div,
+  html body #root [data-insights-page] .jj-section-champagne > .container,
+  html body #root [data-insights-page] .jj-section-champagne > .max-w-5xl,
+  html body #root [data-insights-page] .jj-section-champagne > .max-w-4xl,
+  html body #root [data-insights-page] [class*="lg:pr-72"],
+  html body #root [data-insights-page] [class*="xl:pr-72"] {
+    padding-right: clamp(1rem, 4vw, 2.5rem) !important;
+    margin-right: auto !important;
+  }
+}
+
+/* Premium navigator: emerald shell only, white labels, contained local scroll, no beige/white panel. */
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) {
+  width: min(288px, calc(100vw - 32px)) !important;
+  right: 24px !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) > div,
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(nav, [class*="overflow-y-auto"]) {
+  background: var(--jj-insights-hero) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button,a,[data-toc-item]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button,a,[data-toc-item]):hover,
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) [data-toc-state="active"] {
+  background: rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(span,svg,path,circle,rect,line,polyline,polygon,h3,p,div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is([data-toc-number], button > span:first-child) {
+  background: rgba(0,0,0,0.16) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) input {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Inputs/selects in this branch: clean white fields, no highlight rings. */
+html body #root [data-insights-page] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]):not([data-premium-navigator] *) {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(6,78,59,0.18) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+html body #root [data-insights-page] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]):focus,
+html body #root [data-insights-page] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]):focus-visible {
+  border-color: rgba(6,78,59,0.18) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-width: 0px !important;
+}
+
+/* Emerald/icon tiles always white; no black text on emerald anywhere in scope. */
+html body #root [data-insights-page] :is([data-surface="emerald"], [data-premium-navigator], .jj-icon-box-active, .jj-icon-box, .jj-icon-tile-emerald, [class*="bg-[image:var(--jj-emerald-ombre)]"], [class*="bg-[#064E3B]"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,div,button,label,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+html body #root [data-insights-page] :is([class*="border-[#B89555]"], [class*="border-gold"], [class*="from-gold"], [class*="to-gold"], [class*="via-gold"], [class*="shadow-gold"], [class*="purple"], [class*="violet"], [class*="fuchsia"], [class*="pink"]) {
+  border-color: rgba(6,78,59,0.18) !important;
+  --tw-shadow-color: rgba(1,8,6,0.22) !important;
+}
+
+/* END PASS 179 */
+
+/* PASS 180 — hero champagne CTAs and legal/FAQ mobile TOCs after emerald lock. */
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) {
+  background: linear-gradient(135deg,#FDFBF7 0%,#F7F2EA 55%,#EFE6D6 100%) !important;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 12px 30px -18px rgba(0,0,0,0.55) !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"] :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"] :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) :is(span,svg,path,circle,rect,line,polyline,polygon) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden.mb-10, .lg\:hidden.sticky) {
+  background: var(--jj-insights-hero) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 18px 44px -30px rgba(1,8,6,0.55) !important;
+}
+html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden.mb-10, .lg\:hidden.sticky) :is(h1,h2,h3,h4,p,span,a,button,li,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+html body #root [data-insights-page] :is(aside .sticky, aside > div, .lg\:hidden.mb-10, .lg\:hidden.sticky) :is(button,a):hover {
+  background: rgba(255,255,255,0.12) !important;
+}
+
+/* END PASS 180 */

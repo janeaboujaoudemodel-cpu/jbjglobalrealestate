@@ -59,7 +59,7 @@ const Guides = () => {
   };
 
   return (
-    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
+    <div data-guides-page className="min-h-screen bg-[#FDFBF7]">
       <SEOHead 
         title="Guides Library | JBJ Global Real Estate"
         description="Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing."
