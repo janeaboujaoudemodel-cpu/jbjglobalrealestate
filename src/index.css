@@ -24746,3 +24746,12 @@ html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"]:is(:h
   stroke: #1A1A1A !important;
 }
 /* END PASS 168 */
+
+/* PASS 169 — AI HUB FAQ CLOSED STATE: title + chevron must be pure black on normal load */
+html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"],
+html body #root #ai-hub-faq [data-ai-hub-faq-trigger][data-state="closed"] :is(span, svg, path, circle, rect, line, polyline, polygon) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+/* END PASS 169 */
