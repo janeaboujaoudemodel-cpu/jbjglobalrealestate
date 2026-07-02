@@ -332,24 +332,24 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
 
       <AIShellCard padding="lg">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-4 w-full max-w-2xl mx-auto bg-[#EFE6D6] border border-[#B89555]/45 mb-8">
-            <TabsTrigger value="property" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full max-w-4xl mx-auto bg-[#EFE6D6] border border-[#B89555]/45 mb-8 h-auto p-1 gap-1">
+            <TabsTrigger value="property" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Property Details
             </TabsTrigger>
-            <TabsTrigger value="modifications" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="modifications" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Modifications
             </TabsTrigger>
-            <TabsTrigger value="owner" className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="owner" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Owner Info
             </TabsTrigger>
-            <TabsTrigger value="results" data-cta="dark" disabled={!evaluation} className="data-[state=active]:bg-[#0A0A0A] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="results" disabled={!evaluation} className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Results
             </TabsTrigger>
           </TabsList>
 
           {/* Property Details Tab */}
           <TabsContent value="property">
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid lg:grid-cols-2 gap-6">
               <Card className={blueCardPrimary}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
@@ -508,15 +508,15 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <Label className="text-[#1A1A1A]/70 text-sm">Bedrooms</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bedrooms</Label>
                       <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <Label className="text-[#1A1A1A]/70 text-sm">Bathrooms</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bathrooms</Label>
                       <Input type="number" value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                     <div>
-                      <Label className="text-[#1A1A1A]/70 text-sm">Parking</Label>
+                      <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Parking</Label>
                       <Input type="number" value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
                     </div>
                   </div>
@@ -886,7 +886,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 54 716 7107
                 </Card>
 
                 {/* Value Breakdown */}
-                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div className="grid lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
                   <Card className={blueCardSecondary}>
                     <CardHeader>
                       <CardTitle className="text-[#1A1A1A] text-lg flex items-center gap-2">
