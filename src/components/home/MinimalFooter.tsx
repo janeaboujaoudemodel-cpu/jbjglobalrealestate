@@ -51,7 +51,7 @@ const MinimalFooter = () => {
         </nav>
 
         <div
-          className="mx-auto mt-4 h-px w-40 max-w-full"
+          className="jj-footer-rule mx-auto mt-4 h-px w-40 max-w-full"
           style={{
             background:
               "linear-gradient(90deg, transparent, rgba(4,120,87,0.55), transparent)",

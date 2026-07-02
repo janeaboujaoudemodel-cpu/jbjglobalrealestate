@@ -27,9 +27,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     const viewport = window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
     const maxScroll = Math.max(docHeight - viewport, 0);
-    // Hide arrow while user is still inside the hero (first viewport).
-    // Reveal once they've scrolled past ~70% of the first screen.
-    const pastHero = scrollY > viewport * 0.7;
+    // Reveal early enough to be useful, while still staying clear of the first header view.
+    const pastHero = scrollY > Math.min(180, viewport * 0.18);
     setVisible(maxScroll > 120 && pastHero);
     setDirection(scrollY > maxScroll * 0.5 ? "up" : "down");
   }, []);

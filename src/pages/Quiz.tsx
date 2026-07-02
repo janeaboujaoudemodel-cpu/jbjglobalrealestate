@@ -253,14 +253,14 @@ const NATIONALITIES = getCountryList();
 // below, so we do NOT need to rewrite the JSX to flip the palette.
 const AIHF_STYLE = `
   .aihf-root {
-    background: linear-gradient(180deg, #062B1E 0%, #041A12 55%, #02120C 100%) !important;
+    background: linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%) !important;
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
   }
   /* Question hero band — full-bleed deep emerald */
   .aihf-root .aihf-hero {
-    background: linear-gradient(180deg, #064E3B 0%, #043828 60%, #032218 100%) !important;
-    border-bottom: 1px solid rgba(255,255,255,0.28) !important;
+    background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.18) !important;
     box-shadow: 0 10px 40px -20px rgba(0,0,0,0.6) !important;
   }
   .aihf-root, .aihf-root :is(h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,strong,em,a,small,time,dt,dd,th,td) {
@@ -286,21 +286,21 @@ const AIHF_STYLE = `
   .aihf-root [style*="#FDFBF7"],
   .aihf-root [style*="#EFE6D6"],
   .aihf-root .aihf-card {
-    background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
-    background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+    background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+    background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
     border-color: rgba(255,255,255,0.34) !important;
     box-shadow: none !important;
   }
 
   /* Header bar stays as full-bleed deep emerald band. */
   .aihf-root > div:first-of-type[class*="border-b"] {
-    background: linear-gradient(180deg, #064E3B 0%, #042c1c 100%) !important;
+    background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
     border-bottom-color: rgba(255,255,255,0.24) !important;
   }
 
   /* Option tiles */
   .aihf-root .aihf-option {
-    background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+    background: linear-gradient(135deg, #042c1c 0%, #031711 58%, #000000 100%) !important;
     border-color: rgba(255,255,255,0.34) !important;
   }
   .aihf-root .aihf-option:hover {
@@ -316,22 +316,22 @@ const AIHF_STYLE = `
         rgba(255,255,255,0.20) 58%,
         rgba(255,255,255,0.00) 100%
       ),
-      linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%) !important;
+      var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
     background-size: 250% 100%, 100% 100% !important;
     background-position: -50% 0, 0 0 !important;
     background-blend-mode: overlay, normal !important;
     animation: jj-metallic-sweep 4.5s ease-in-out infinite, jj-emerald-pulse 3.2s ease-in-out infinite !important;
     border-color: rgba(255,255,255,0.55) !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.22), 0 10px 32px rgba(16,185,129,0.35), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.22), 0 10px 32px rgba(6,78,59,0.38), inset 0 1px 0 rgba(255,255,255,0.18) !important;
   }
 
   /* CTAs */
   .aihf-root .aihf-cta, .aihf-root .aihf-cta:hover, .aihf-root .aihf-cta:focus-visible {
     min-width: 7rem;
-    background: linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%) !important;
-    background-image: linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%) !important;
+    background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+    background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
     border: 1px solid rgba(255,255,255,0.46) !important;
-    box-shadow: 0 0 28px rgba(16,185,129,0.45) !important;
+    box-shadow: 0 10px 28px -14px rgba(6,78,59,0.65) !important;
   }
   .aihf-root .aihf-cta, .aihf-root .aihf-cta * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; stroke: #FFFFFF !important; }
 
@@ -1168,7 +1168,7 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg, #063D2F 0%, #041F18 100%)" }}>
+      <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
         <style>{AIHF_STYLE}</style>
         {/* Header */}
         <div className="border-b border-[#B89555]/25 bg-[#F7F2EA]">
@@ -1313,11 +1313,11 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #063D2F 0%, #041F18 100%)" }}>
+    <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh+120px)] flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
       <style>{AIHF_STYLE}</style>
       {/* Hero Header — full-bleed deep emerald band with question inside */}
-      <div className="aihf-hero sticky top-[88px] z-10">
-        <div className="container mx-auto px-4 pt-5 pb-8 md:pt-6 md:pb-10">
+      <div className="aihf-hero relative z-10">
+        <div className="container mx-auto px-4 pt-6 pb-8 md:pt-8 md:pb-10">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
@@ -1351,7 +1351,7 @@ const Quiz = () => {
 
 
       {/* Question Content with optional Preferences Sidebar */}
-      <div className="flex-1 flex items-start justify-center px-4 pt-14 md:pt-20 pb-10 md:pb-14">
+      <div className="flex-1 flex items-start justify-center px-4 pt-12 md:pt-16 pb-20 md:pb-24">
         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18rem] gap-6 items-start">
           {/* Main Question Area */}
           <div className="w-full max-w-2xl mx-auto">

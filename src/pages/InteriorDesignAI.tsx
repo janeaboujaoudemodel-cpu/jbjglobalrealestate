@@ -274,7 +274,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       data-no-contrast-guard
       data-surface="dark"
       className="allow-white relative w-full min-h-screen overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #021610 0%, #010A07 60%, #000000 100%)", color: "#FFFFFF" }}
+      style={{ background: "linear-gradient(180deg, #031F17 0%, #021610 42%, #000000 100%)", color: "#FFFFFF" }}
     >
       <style>{`
         [data-interior-design-ai],
@@ -288,12 +288,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         }
         /* Cards: FULL emerald with white content */
         [data-interior-design-ai] .id-panel {
-          background: linear-gradient(140deg, #0A6B53 0%, #065F46 55%, #054E3A 100%) !important;
+          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
           border: 1px solid rgba(255,255,255,0.28) !important;
           box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55), inset 0 0 30px rgba(255,255,255,0.04) !important;
         }
         [data-interior-design-ai] .id-panel-soft {
-          background: linear-gradient(140deg, rgba(10,107,83,0.72) 0%, rgba(6,95,70,0.72) 55%, rgba(5,78,58,0.72) 100%) !important;
+          background: linear-gradient(135deg, rgba(4,44,28,0.96) 0%, rgba(3,23,17,0.96) 58%, rgba(0,0,0,0.94) 100%) !important;
           border: 1px solid rgba(255,255,255,0.30) !important;
         }
         [data-interior-design-ai] .id-input,
@@ -312,7 +312,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           opacity: 1 !important;
         }
         [data-interior-design-ai] .id-primary {
-          background-image: linear-gradient(135deg, #0A6B53 0%, #043024 58%, #000000 100%) !important;
+          background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           border: 1px solid rgba(255,255,255,0.42) !important;
@@ -348,9 +348,9 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           border-color: rgba(255,255,255,0.62) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: linear-gradient(135deg, #10B981 0%, #059669 55%, #064E3B 100%) !important;
+          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
           border-color: rgba(255,255,255,0.72) !important;
-          box-shadow: 0 0 22px rgba(16,185,129,0.42) !important;
+          box-shadow: 0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
         }
         /* Icons: line-art white, never filled block */
         [data-interior-design-ai] svg {
@@ -375,8 +375,8 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
       {!embedded && (
         <div className="relative py-16 md:py-24 overflow-hidden" data-hero-dark>
-          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #010604 0%, #020F0A 60%, #011008 100%)" }} />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_28%,rgba(255,255,255,0.06),transparent_42%),radial-gradient(circle_at_78%_68%,rgba(16,185,129,0.10),transparent_48%)]" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #031F17 0%, #02120D 46%, #000000 100%)" }} />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_32%_20%,rgba(255,255,255,0.06),transparent_42%),radial-gradient(circle_at_72%_38%,rgba(6,78,59,0.22),transparent_46%)]" />
 
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
@@ -627,7 +627,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               </div>
 
               <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.22)" }}>
-                <div className="flex gap-2">
+                <div className="flex items-stretch gap-2">
                   <Textarea
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
@@ -636,7 +636,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     className="id-input min-h-[44px] max-h-[90px] resize-none flex-1 text-xs rounded-xl"
                     disabled={isProcessing}
                   />
-                  <Button onClick={handleChatSend} disabled={isProcessing || !chatInput.trim()} size="icon" className="id-primary h-11 w-11 rounded-xl">
+                  <Button onClick={handleChatSend} disabled={isProcessing || !chatInput.trim()} size="icon" className="id-primary h-auto min-h-[44px] w-11 shrink-0 rounded-xl self-stretch">
                     {isProcessing ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4" />}
                   </Button>
                 </div>
