@@ -151,12 +151,41 @@ export default function CrmHome() {
   );
 }
 
-function KpiTile({ label, value, sub }: { label: string; value: string; sub: string }) {
+function KpiTile({
+  label,
+  value,
+  sub,
+  loading,
+  error,
+}: {
+  label: string;
+  value: number;
+  sub: string;
+  loading?: boolean;
+  error?: boolean;
+}) {
+  const isEmpty = !loading && !error && value === 0;
   return (
-    <article className="jc-kpi">
+    <article
+      className="jc-kpi"
+      data-state={loading ? "loading" : error ? "error" : isEmpty ? "empty" : "ready"}
+    >
       <header className="jc-kpi__head">{label}</header>
-      <div className="jc-kpi__value">{value}</div>
-      <div className="jc-kpi__sub">{sub}</div>
+      <div className="jc-kpi__value">
+        {loading ? (
+          <span className="jc-kpi__skeleton" aria-hidden="true" />
+        ) : error ? (
+          <span className="jc-kpi__error" title="Failed to load">—</span>
+        ) : (
+          formatKpi(value)
+        )}
+        <span className="sr-only">
+          {loading ? "Loading" : error ? "Error loading metric" : `${value} records`}
+        </span>
+      </div>
+      <div className="jc-kpi__sub">
+        {loading ? "Loading…" : error ? "Unable to load" : isEmpty ? "No records yet" : sub}
+      </div>
       <footer className="jc-kpi__foot" aria-hidden="true" />
     </article>
   );
