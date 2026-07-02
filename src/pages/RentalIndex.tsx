@@ -476,7 +476,7 @@ const RentalIndex = () => {
                      border: "1px solid rgba(255,255,255,0.34)",
                   }}
                 >
-                  <c.icon className="w-5 h-5" style={{ color: "#1A1A1A" }} />
+                  <c.icon className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </span>
                 <div>
                   <h3 className="font-semibold mb-1">{c.title}</h3>
