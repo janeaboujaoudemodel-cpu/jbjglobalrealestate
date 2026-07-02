@@ -33,18 +33,13 @@ const MortgageCalculatorPage = () => {
 
   return (
     <PremiumToolShell
-      theme={toolThemes.amber}
+      theme={toolThemes.emerald}
       eyebrowIcon={Calculator}
       eyebrow="AI-Powered Mortgage Tool"
-      title={
-        <>
-          Mortgage <span style={{ textShadow: `0 0 24px ${toolThemes.amber.accent}` }}>Calculator</span>
-        </>
-      }
+      title="Mortgage Calculator"
       subtitle={`${t('mortgage.subtitle')}. Get accurate estimates for monthly payments, total interest and find the right financing option for your UAE property purchase.`}
-      poweredBy
-      readMore={{ href: "/services", label: "Read more · Mortgage Advisory & Bank Partners" }}
     >
+
       <SEOHead {...pagesSEO.mortgageCalculator} />
       <div className="w-full">
 

@@ -153,7 +153,7 @@ const RequestValuation = () => {
       <div className="min-h-screen" style={{ background: '#FDFBF7' }}>
         {/* ── Premium navy hero ── */}
         <ToolHero
-          theme={toolThemes.navy}
+          theme={toolThemes.emerald}
           eyebrowIcon={Sparkles}
           eyebrow="Valuation Advisory"
           title={
