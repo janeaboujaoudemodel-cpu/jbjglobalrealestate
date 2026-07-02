@@ -100,10 +100,19 @@
   width: 40px; height: 40px; border-radius: 50%;
   display: grid; place-items: center;
   color: #F8F3E6; text-decoration: none;
-  background: radial-gradient(circle at 35% 20%, #1C1B17, #000 65%);
-  font-size: 12px; font-weight: 800;
-  border: 1px solid rgba(184, 149, 85, 0.45);
+  background: radial-gradient(circle at 35% 20%, #0B4A38, #010805 70%);
+  border: 1px solid rgba(255, 255, 255, 0.38);
   box-shadow: 0 0 0 2px rgba(15, 159, 103, 0.28);
+  overflow: hidden;
+  padding: 4px;
+}
+.jc-jbj-avatar img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+  user-select: none;
+  -webkit-user-drag: none;
 }
 .jc-grid-btn {
   width: 34px; height: 34px; border: 0; background: transparent;
