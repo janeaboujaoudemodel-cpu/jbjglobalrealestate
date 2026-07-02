@@ -413,7 +413,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           </div>
           <div className="id-panel rounded-2xl p-4">
             <p className="text-[11px] uppercase tracking-[0.22em] font-semibold mb-3">Design mode</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="flex flex-wrap gap-3">
               {modeConfig.map(m => {
                 const Icon = m.icon;
                 const active = mode === m.id;
