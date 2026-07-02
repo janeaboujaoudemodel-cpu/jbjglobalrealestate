@@ -229,7 +229,7 @@ const Developers = () => {
       
       <div data-marketing-page className="min-h-screen bg-[hsl(var(--premium-bg))]">
         {/* Hero Section - Full-width Video */}
-        <section className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
+        <section data-hero-dark data-on-dark className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
           {/* Video Background */}
           <div className="absolute inset-0 bg-[#1A1A1A]">
             <VideoBackground 
@@ -239,10 +239,6 @@ const Developers = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
           </div>
           
-          {/* Floating gold accent orbs */}
-          <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#EFE6D6]/15 rounded-full blur-[120px] pointer-events-none" />
-
           <div className="container mx-auto px-4 relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -258,11 +254,11 @@ const Developers = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
+              <h1 className="allow-white text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-[-0.02em]">
                 UAE's Premier Developers
               </h1>
               
-              <p className="text-[#1A1A1A]/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="allow-white text-white/90 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 Explore off-plan and ready properties directly from UAE's most trusted developers. 
                 No secondary market — only developer-direct listings.
               </p>
