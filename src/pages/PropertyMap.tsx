@@ -328,7 +328,7 @@ const PropertyMap = () => {
   ];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden" data-map-page>
+    <div className="relative flex flex-col h-[calc(100vh-88px)] overflow-hidden" data-map-page>
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
       <div className="jj-map-command-bar shrink-0 z-10">
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
@@ -397,7 +397,7 @@ const PropertyMap = () => {
       </div>
 
       {/* ── MAP CONTAINER ── */}
-      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" onClick={(e) => { if (e.target === e.currentTarget) { setSelectedProject(null); setHoveredProject(null); } }}>
+      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" data-map-main-stage onClick={(e) => { if (e.target === e.currentTarget) { setSelectedProject(null); setHoveredProject(null); } }}>
         <MapContainer
           center={center}
           zoom={11}
@@ -461,15 +461,15 @@ const PropertyMap = () => {
             className="absolute z-[1000] pointer-events-none"
             style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
           >
-            <Card className="shadow-lg border border-[#B89555]/30 pointer-events-auto">
+            <Card className="jj-map-hover-card pointer-events-auto">
               <CardContent className="p-0">
                 {hoveredProject.cover_image_url && (
                   <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" />
                 )}
                 <div className="p-2">
                   <h4 className="font-semibold text-xs truncate">{hoveredProject.name}</h4>
-                  <p data-developer-name className="text-[10px] text-muted-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
-                  <p className="text-xs font-bold text-foreground mt-1">{formatPrice(hoveredProject.price_from)}</p>
+                  <p data-developer-name className="text-[10px] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
+                  <p className="text-xs font-bold mt-1">{formatPrice(hoveredProject.price_from)}</p>
                 </div>
               </CardContent>
             </Card>
@@ -502,7 +502,7 @@ const PropertyMap = () => {
                 )}
                 <div className="p-3">
                   <h3 className="font-semibold text-base mb-1">{selectedProject.name}</h3>
-                  <p className="text-xs text-muted-foreground mb-2">
+                  <p className="text-xs mb-2">
                     {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
                   </p>
                   <div className="grid grid-cols-3 gap-2 mb-3">
@@ -521,8 +521,8 @@ const PropertyMap = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-[10px] text-muted-foreground">{t('map.startingFrom')}</p>
-                      <p className="text-lg font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
+                      <p className="text-[10px]">{t('map.startingFrom')}</p>
+                      <p className="text-lg font-bold">{formatPrice(selectedProject.price_from)}</p>
                     </div>
                     <Link to={`/project/${selectedProject.slug}`}>
                       <Button size="sm" className="jj-map-details-button gap-1.5" data-surface="emerald">
@@ -536,26 +536,25 @@ const PropertyMap = () => {
             </Card>
           </div>
         )}
-      </div>
 
-      {/* ── LIST / GRID PANEL (overlay on right, map still interactive) ── */}
-      {showPanel && (
-        <div className="fixed top-[132px] right-0 bottom-0 w-full sm:w-[420px] bg-background/98 backdrop-blur-sm border-l border-border z-[999] overflow-hidden flex flex-col">
+        {/* ── LIST / GRID PANEL — attached to map stage, never over the filter bar ── */}
+        {showPanel && (
+        <div data-map-list-panel className="absolute top-3 right-3 bottom-3 w-[min(420px,calc(100%-24px))] sm:w-[420px] z-[900] overflow-hidden flex flex-col">
           {/* Panel header with search */}
-          <div className="p-3 border-b border-border space-y-2">
+          <div className="p-3 border-b border-white/14 space-y-2">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-sm">{filteredProjects.length} {t('map.properties')}</h2>
-              <Button variant="ghost" size="sm" onClick={() => setViewMode("map")}>
+              <Button variant="ghost" size="sm" onClick={() => setViewMode("map")} className="jj-map-panel-close" data-surface="emerald" aria-label="Close map list panel">
                 <X className="h-4 w-4" />
               </Button>
             </div>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5" />
               <Input
                 placeholder="Search properties..."
                 value={listSearch}
                 onChange={(e) => setListSearch(e.target.value)}
-                className="pl-9 h-8 text-xs"
+                className="jj-map-search-input pl-9 h-8 text-xs"
               />
             </div>
           </div>
@@ -565,8 +564,9 @@ const PropertyMap = () => {
             {filteredProjects.slice(0, 100).map((project) => (
               <Card
                 key={project.id}
-                className="cursor-pointer hover:border-[#B89555]/50 transition-colors"
+                className="jj-map-list-card cursor-pointer transition-colors"
                 onClick={() => setSelectedProject(project)}
+                data-surface="emerald"
               >
                 <CardContent className="p-0">
                   {/* Image */}
@@ -580,18 +580,18 @@ const PropertyMap = () => {
                   </div>
                   <div className="p-2.5">
                     <h3 className="font-semibold text-xs truncate">{project.name}</h3>
-                    <p data-developer-name className="text-[11px] text-muted-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer_name}</p>
-                    <p className="text-[11px] text-muted-foreground truncate">{project.area_name || project.location}</p>
+                    <p data-developer-name className="text-[11px] whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{project.developer_name}</p>
+                    <p className="text-[11px] truncate">{project.area_name || project.location}</p>
                     <div className="flex items-center gap-1.5 mt-1.5">
-                      <span className="text-sm font-bold text-foreground">{formatPrice(project.price_from)}</span>
+                      <span className="text-sm font-bold">{formatPrice(project.price_from)}</span>
                       {project.bedrooms_min != null && (
-                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                        <Badge variant="secondary" className="jj-map-card-mini-badge text-[10px] px-1.5 py-0" data-surface="emerald">
                           {project.bedrooms_min}-{project.bedrooms_max} BR
                         </Badge>
                       )}
                     </div>
                     <Link to={`/project/${project.slug}`} onClick={(e) => e.stopPropagation()}>
-                      <Button size="sm" variant="outline" className="w-full mt-2 h-7 text-xs">
+                      <Button size="sm" className="jj-map-details-button w-full mt-2 h-7 text-xs" data-surface="emerald">
                         View Details <ExternalLink className="h-3 w-3 ml-1" />
                       </Button>
                     </Link>
@@ -601,7 +601,8 @@ const PropertyMap = () => {
             ))}
           </div>
         </div>
-      )}
+        )}
+      </div>
 
       </div>
   );

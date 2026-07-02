@@ -662,6 +662,26 @@ export default function GlobalVerticalNav() {
     }
   }, []);
 
+  // Warm the heavy Leaflet/property-map chunk after the chrome is idle so
+  // clicking Map in the vertical sidebar navigates immediately instead of
+  // waiting on a late lazy import.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const browserWindow = window as Window & typeof globalThis & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+
+    if (browserWindow.requestIdleCallback) {
+      const idleId = browserWindow.requestIdleCallback(() => prefetchAITool('/map'), { timeout: 2500 });
+      return () => browserWindow.cancelIdleCallback?.(idleId);
+    }
+
+    const timer = globalThis.setTimeout(() => prefetchAITool('/map'), 1200);
+    return () => globalThis.clearTimeout(timer);
+  }, []);
+
   const toggleCollapse = useCallback(() => {
     setCollapsed(prev => {
       const next = !prev;

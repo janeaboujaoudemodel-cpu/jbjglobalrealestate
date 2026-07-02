@@ -1,0 +1,13 @@
+import { chromium } from '@playwright/test';
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
+const page = await browser.newPage({ viewport: { width: 1440, height: 980 } });
+const errors=[]; page.on('console', msg => errors.push(`${msg.type()}: ${msg.text()}`)); page.on('pageerror', e=>errors.push(`pageerror: ${e.stack||e.message}`));
+await page.goto('http://127.0.0.1:8080/map', { waitUntil:'domcontentloaded', timeout: 60000 });
+await page.waitForTimeout(8000);
+await page.screenshot({path:'/mnt/documents/map-inspect.png', fullPage:true});
+console.log('url', page.url());
+console.log('title', await page.title());
+console.log('body', (await page.locator('body').innerText().catch(e=>'ERR '+e.message)).slice(0,1000));
+console.log('errors', errors.slice(0,20));
+console.log('html', (await page.content()).slice(0,1000));
+await browser.close();

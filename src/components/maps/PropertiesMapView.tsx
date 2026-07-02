@@ -53,7 +53,7 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
     if (layerRef.current) map.removeLayer(layerRef.current);
     const tiles = getMapTiles(language);
     const { url, attribution, subdomains } = tiles[mapView];
-    layerRef.current = L.tileLayer(url, {
+    const tileOptions: L.TileLayerOptions = {
       attribution,
       maxZoom: 18,
       minZoom: 5,
@@ -62,8 +62,9 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
       updateWhenZooming: false,
       detectRetina: false,
       crossOrigin: true,
-      subdomains,
-    });
+    };
+    if (subdomains) tileOptions.subdomains = subdomains;
+    layerRef.current = L.tileLayer(url, tileOptions);
     layerRef.current.addTo(map);
     return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
   }, [mapView, language, map]);
@@ -134,7 +135,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
 
   return (
     <MapErrorBoundary>
-      <div className="h-full w-full rounded-xl overflow-hidden border border-[#B89555]/30" style={{ touchAction: "pan-y" }}>
+      <div className="h-full w-full rounded-xl overflow-hidden border border-white/15" style={{ touchAction: "pan-y" }} data-map-page data-map-shell>
         <MapContainer
           center={center}
           zoom={11}
@@ -165,26 +166,26 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                 click: () => onProjectClick(project.id),
               }}
             >
-              <Popup>
-                <div className="min-w-[220px] max-w-[260px]">
+              <Popup className="jj-map-popup">
+                <div className="min-w-[220px] max-w-[260px] jj-map-popup-card">
                   {project.cover_image_url && (
                     <img src={project.cover_image_url} alt={project.name} className="w-full h-32 object-cover" loading="lazy"  decoding="async" />
                   )}
                   <div className="p-3">
-                    <Link to={`/project/${project.slug}`} className="font-bold text-sm text-blue-600 hover:underline block leading-tight mb-1">
+                    <Link to={`/project/${project.slug}`} className="font-bold text-sm block leading-tight mb-1">
                       {project.name}
                     </Link>
                     {project.developer_name && (
-                      <p className="text-[11px] text-[#1A1A1A]/70">{t('map.by')} {project.developer_name}</p>
+                      <p className="text-[11px]">{t('map.by')} {project.developer_name}</p>
                     )}
                     {project.price_from ? (
-                      <p className="text-xs font-semibold text-orange-600 mt-1">
+                      <p className="text-xs font-semibold mt-1">
                         {t('map.from')} AED {Math.round(Number(project.price_from)).toLocaleString()}
                       </p>
                     ) : (
-                      <p className="text-xs font-semibold text-orange-600 mt-1">{t('map.priceOnRequest')}</p>
+                      <p className="text-xs font-semibold mt-1">{t('map.priceOnRequest')}</p>
                     )}
-                    <div className="flex items-center gap-2 mt-1 text-[11px] text-[#1A1A1A]/70">
+                    <div className="flex items-center gap-2 mt-1 text-[11px]">
                       {(project.bedrooms_min != null || project.bedrooms_max != null) && (
                         <span>
                           {project.bedrooms_min === 0 ? 'Studio' : `${project.bedrooms_min ?? '?'}`}
@@ -196,7 +197,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                       )}
                     </div>
                     {project.handover_date && (
-                      <p className="text-[11px] text-orange-500 mt-0.5">
+                      <p className="text-[11px] mt-0.5">
                         {t('map.handover')}: {project.handover_date}
                       </p>
                     )}
