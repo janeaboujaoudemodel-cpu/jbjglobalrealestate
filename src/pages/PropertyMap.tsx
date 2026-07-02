@@ -25,7 +25,7 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
     if (layerRef.current) map.removeLayer(layerRef.current);
     const tiles = getMapTiles(language);
     const { url, attribution, subdomains } = tiles[mapView];
-    layerRef.current = L.tileLayer(url, {
+    const tileOptions: L.TileLayerOptions = {
       attribution,
       maxZoom: 18,
       minZoom: 5,
@@ -34,8 +34,15 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
       updateWhenZooming: false,
       detectRetina: false,
       crossOrigin: true,
-      subdomains,
-    });
+    };
+
+    // Do not pass `subdomains: undefined` into Leaflet. Doing so overrides
+    // Leaflet's default and crashes `_getSubdomain()` on satellite/street
+    // tile layers, which blanked the entire /map route before controls could
+    // render. Only attach it for providers that explicitly need it.
+    if (subdomains) tileOptions.subdomains = subdomains;
+
+    layerRef.current = L.tileLayer(url, tileOptions);
     layerRef.current.addTo(map);
     return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
   }, [mapView, language, map]);
