@@ -504,10 +504,11 @@ const PropertyMeasurement = () => {
                           <button
                             key={type.id}
                             type="button"
+                            data-contained-card
                             data-allow-dark-cta
                             data-no-contrast-guard
                             onClick={() => setPropertyType(type.id as PropertyType)}
-                            className="allow-white relative p-4 rounded-xl text-left transition-all duration-300"
+                            className="allow-white relative min-w-0 overflow-hidden p-4 rounded-xl text-center transition-all duration-300"
                             style={{
                               background: active
                                 ? "linear-gradient(135deg, #065F46 0%, #04231A 45%, #000000 100%)"
@@ -525,7 +526,7 @@ const PropertyMeasurement = () => {
                               style={{ color: active ? "#FFFFFF" : "rgba(255,255,255,0.85)" }}
                             />
                             <p
-                              className="text-sm font-medium text-center"
+                              className="text-sm font-medium text-center whitespace-normal break-words [overflow-wrap:anywhere]"
                               style={{ color: active ? "#D1FAE5" : "rgba(255,255,255,0.92)" }}
                             >
                               {type.label}
@@ -570,13 +571,14 @@ const PropertyMeasurement = () => {
                       ].map((unit) => {
                         const active = unitPreference === unit.id;
                         return (
-                          <button
+                            <button
                             key={unit.id}
                             type="button"
+                            data-contained-card
                             data-allow-dark-cta
                             data-no-contrast-guard
                             onClick={() => setUnitPreference(unit.id as UnitType)}
-                            className="allow-white px-4 py-2 rounded-lg text-sm font-semibold transition-all"
+                            className="allow-white min-w-0 max-w-full overflow-hidden px-4 py-2 rounded-lg text-sm font-semibold transition-all whitespace-normal break-words [overflow-wrap:anywhere]"
                             style={{
                               background: active
                                 ? "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)"

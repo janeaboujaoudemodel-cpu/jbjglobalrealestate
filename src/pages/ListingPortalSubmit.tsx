@@ -547,6 +547,7 @@ const ListingPortalSubmit = () => {
     return (
       <section
         data-ai-listing-shell
+        data-list-property-page
         className="min-h-screen pt-24 pb-16"
         style={{ background: EMERALD_OMBRE }}
       >
@@ -609,7 +610,8 @@ const ListingPortalSubmit = () => {
   return (
     <main
       data-ai-listing-shell
-      className="min-h-screen"
+      data-list-property-page
+      className="min-h-screen min-w-0 overflow-x-hidden"
       style={{ background: EMERALD_OMBRE }}
     >
       {/* Unified emerald-black header — edge to edge, no champagne layer */}
@@ -700,7 +702,7 @@ const ListingPortalSubmit = () => {
 
             {/* Horizontal step header — connected, no gap */}
             <div className="mt-8" data-no-contrast-guard data-allow-dark-cta>
-              <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
+              <div className="flex items-start justify-between overflow-x-auto pb-2 gap-2">
               {PHASES.map((step, i) => {
                 const Icon = PHASE_ICONS[i] || Sparkles;
                 const isActive = i === phaseIndex;
@@ -709,7 +711,7 @@ const ListingPortalSubmit = () => {
                   <div
                     key={step}
                     data-no-contrast-guard
-                    className="flex flex-col items-center min-w-[88px] transition-all"
+                    className="flex flex-col items-center min-w-[72px] max-w-[104px] transition-all"
                   >
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
@@ -730,7 +732,7 @@ const ListingPortalSubmit = () => {
                       {isDone ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                     </div>
                     <span
-                      className="text-xs text-center whitespace-nowrap"
+                      className="text-xs text-center leading-tight whitespace-normal break-words [overflow-wrap:anywhere] max-w-full"
                       style={{
                         color: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
                         WebkitTextFillColor: isActive ? '#FFFFFF' : 'rgba(255,255,255,0.75)',
@@ -775,7 +777,7 @@ const ListingPortalSubmit = () => {
                       {/* Category Selection */}
                       <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
                         <h2 className="text-white font-semibold mb-4">What type of listing?</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 min-w-0">
                           {listingCategories.map(cat => {
                             const Icon = cat.icon;
                             const isSelected = listingCategory === cat.id;
@@ -783,7 +785,8 @@ const ListingPortalSubmit = () => {
                               <button
                                 key={cat.id}
                                 onClick={() => setListingCategory(cat.id)}
-                                className={`relative flex flex-col items-start text-left p-4 pr-8 rounded-2xl border-2 transition-all w-full min-w-0 overflow-hidden ${
+                                data-listing-choice-card
+                                className={`relative flex min-h-[128px] w-full min-w-0 max-w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 p-4 pr-8 text-center transition-all ${
  isSelected
  ? 'bg-white/15 border-white text-white shadow-lg'
  : 'bg-white/[0.04] border-white/25 text-white/80 hover:border-white/70'
@@ -804,8 +807,8 @@ const ListingPortalSubmit = () => {
                                   </div>
                                 )}
                                 <Icon className="w-5 h-5 mb-2 shrink-0" style={{color: isSelected ? EMERALD : '#0A6B53'}} />
-                                <div className="font-medium text-sm leading-tight w-full break-words">{cat.label}</div>
-                                <div className="text-xs text-white/70 leading-tight w-full break-words mt-1">{cat.desc}</div>
+                                <div className="w-full max-w-full text-center text-sm font-medium leading-tight whitespace-normal break-words [overflow-wrap:anywhere]">{cat.label}</div>
+                                <div className="mt-1 w-full max-w-full text-center text-xs leading-tight text-white/70 whitespace-normal break-words [overflow-wrap:anywhere]">{cat.desc}</div>
                               </button>
                             );
                           })}
@@ -993,22 +996,22 @@ const ListingPortalSubmit = () => {
                         {/* Quick summary of extracted data */}
                         {extractedData && (
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                            <div data-contained-card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center min-w-0 overflow-hidden">
                               <MapPin className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Location</p>
-                              <p className="text-[#1A1A1A] text-sm font-medium truncate">{form.location || 'N/A'}</p>
+                              <p className="text-[#1A1A1A] text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere]">{form.location || 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                            <div data-contained-card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center min-w-0 overflow-hidden">
                               <Bed className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Bedrooms</p>
                               <p className="text-[#1A1A1A] text-sm font-medium">{form.bedrooms || 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                            <div data-contained-card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center min-w-0 overflow-hidden">
                               <Maximize className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Area</p>
                               <p className="text-[#1A1A1A] text-sm font-medium">{form.area_sqft ? `${parseInt(form.area_sqft).toLocaleString()} sqft` : 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center">
+                            <div data-contained-card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/20 rounded-lg p-3 text-center min-w-0 overflow-hidden">
                               <Building className="w-4 h-4 text-[#1A1A1A] mx-auto mb-1" />
                               <p className="text-xs text-[#1A1A1A]/70">Type</p>
                               <p className="text-[#1A1A1A] text-sm font-medium capitalize">{form.property_type || 'N/A'}</p>
@@ -1412,7 +1415,8 @@ const ListingPortalSubmit = () => {
                           {/* Direct Contact Option */}
                           <button
                             onClick={() => setContactMode('direct')}
-                            className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
+                            data-listing-choice-card
+                            className={`relative min-w-0 overflow-hidden text-left p-5 rounded-2xl border-2 transition-all ${
  contactMode === 'direct' 
  ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
  : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
@@ -1425,7 +1429,7 @@ const ListingPortalSubmit = () => {
                             )}
                             <div className="flex items-center gap-2 mb-2">
                               <Phone className="w-4 h-4 text-[#1A1A1A]" />
-                              <span className="text-[#1A1A1A] font-semibold text-sm">Direct Contact</span>
+                              <span className="text-[#1A1A1A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere]">Direct Contact</span>
                             </div>
                             <p className="text-[#1A1A1A] font-bold text-lg mb-1">{LISTING_FEES.direct.label}</p>
                             <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.direct.description}</p>
@@ -1437,7 +1441,8 @@ const ListingPortalSubmit = () => {
                           {/* Commission Option */}
                           <button
                             onClick={() => setContactMode('commission')}
-                            className={`relative text-left p-5 rounded-2xl border-2 transition-all ${
+                            data-listing-choice-card
+                            className={`relative min-w-0 overflow-hidden text-left p-5 rounded-2xl border-2 transition-all ${
  contactMode === 'commission' 
  ? 'bg-[#EFE6D6]/10 border-[#B89555]/50 shadow-lg shadow-gold/15' 
  : 'bg-[#FDFBF7]/60 border-[#B89555]/15 hover:border-[#B89555]/30'
@@ -1450,7 +1455,7 @@ const ListingPortalSubmit = () => {
                             )}
                             <div className="flex items-center gap-2 mb-2">
                               <Shield className="w-4 h-4 text-[#1A1A1A]" />
-                              <span className="text-[#1A1A1A] font-semibold text-sm">Commission-Based</span>
+                              <span className="text-[#1A1A1A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere]">Commission-Based</span>
                             </div>
                             <p className="text-[#1A1A1A] font-bold text-lg mb-1">{LISTING_FEES.commission.label}</p>
                             <p className="text-[#1A1A1A]/70 text-xs">{LISTING_FEES.commission.description}</p>

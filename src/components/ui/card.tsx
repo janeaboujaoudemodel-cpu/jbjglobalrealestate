@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
  * ============================================================ */
 
 const cardVariants = cva(
-  "rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] shadow-sm transition-all duration-300",
+  "min-w-0 max-w-full overflow-hidden rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A] shadow-sm transition-all duration-300",
   {
     variants: {
       surface: {
