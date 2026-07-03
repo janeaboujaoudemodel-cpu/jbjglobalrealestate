@@ -645,14 +645,8 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
       data-allow-dark-cta
       style={{ background: theme.sectionGradient }}
     >
-      {/* premium ombre shine */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: `radial-gradient(circle at 85% 12%, rgba(255,255,255,0.10) 0%, transparent 55%)`,
-        }}
-      />
+      {/* Solid emerald — no shine overlay */}
+
       <div className="relative max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
