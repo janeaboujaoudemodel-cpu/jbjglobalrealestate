@@ -127,13 +127,15 @@ const FeatureCard = ({
   description: string;
 }) => (
   <motion.div 
-    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1"
+    data-surface="emerald"
+    data-no-contrast-guard
+    className="jj-emerald-card rounded-xl p-6 md:p-8 transition-all duration-300 hover:-translate-y-1"
     variants={fadeInUp}
   >
-    <IconTile icon={Icon} tone="gold" size="lg" className="mb-5" />
+    <IconTile icon={Icon} tone="emerald" size="lg" className="mb-5" />
 
-    <h3 className="text-[#1A1A1A] text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-[#1A1A1A]/70 text-base leading-relaxed">{description}</p>
+    <h3 className="text-xl font-semibold mb-3" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{title}</h3>
+    <p className="text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.86)", WebkitTextFillColor: "rgba(255,255,255,0.86)" }}>{description}</p>
   </motion.div>
 );
 
@@ -147,9 +149,10 @@ const About = () => {
 
         {/* SECTION 1: HERO — clean cinematic video */}
         <section
-          className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden"
+          className="jj-hero-fullscreen jj-hero-compact jj-about-emerald-hero relative flex items-center justify-center overflow-hidden"
           data-surface="dark"
           data-hero-dark
+          style={{ background: "var(--jj-emerald-ombre)" }}
         >
           <div className="absolute inset-0">
             <video
@@ -160,23 +163,16 @@ const About = () => {
               loop
               playsInline
               preload="auto"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover opacity-0"
             />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(4,44,28,0.92) 0%, rgba(3,25,17,0.94) 45%, rgba(0,0,0,0.96) 100%)' }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/55" />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)' }} />
+            <div className="absolute inset-0 jj-company-hero-motion" />
             <motion.div
               aria-hidden
-              className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full blur-[120px] pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(20,120,80,0.55) 0%, rgba(6,78,59,0) 70%)' }}
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.05) 35%, transparent 58%)' }}
               animate={{ x: [0, 40, 0], y: [0, 30, 0], opacity: [0.6, 0.9, 0.6] }}
               transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <motion.div
-              aria-hidden
-              className="absolute -bottom-40 -right-32 w-[600px] h-[600px] rounded-full blur-[140px] pointer-events-none"
-              style={{ background: 'radial-gradient(circle, rgba(6,78,59,0.7) 0%, rgba(0,0,0,0) 70%)' }}
-              animate={{ x: [0, -30, 0], y: [0, -20, 0], opacity: [0.5, 0.85, 0.5] }}
-              transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
             />
           </div>
 
@@ -210,24 +206,25 @@ const About = () => {
               className="flex flex-wrap justify-center gap-3"
               variants={fadeInUp}
             >
-              {/* On dark hero: solid champagne primary + outlined secondary — both fully legible */}
               <Link
                 to="/services"
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full bg-[#FDFBF7] text-[#1A1A1A] border border-[#B89555] hover:bg-[#EFE6D6] transition-colors"
+                data-surface="emerald"
+                className="jj-emerald-metallic allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-colors"
               >
-                <span>Explore Our Services</span>
-                <ArrowUpRight className="w-4 h-4" />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Explore Our Services</span>
+                <ArrowUpRight className="w-4 h-4" style={{ color: "#FFFFFF" }} />
               </Link>
               <Link
                 to="/contact"
                 data-allow-dark-cta
                 data-no-contrast-guard
-                className="allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full bg-transparent text-white border border-white/70 hover:bg-white/10 transition-colors"
+                data-surface="emerald"
+                className="jj-emerald-metallic allow-white group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold rounded-full transition-colors"
               >
-                <span className="text-white">Contact Our Team</span>
-                <ArrowUpRight className="w-4 h-4 text-white" />
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Our Team</span>
+                <ArrowUpRight className="w-4 h-4" style={{ color: "#FFFFFF" }} />
               </Link>
             </motion.div>
           </motion.div>
@@ -250,8 +247,8 @@ const About = () => {
                   variants={fadeInUp}
                 >
                   <div className="relative">
-                    {/* Emerald→black gradient card for premium dark look */}
-                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#064E3B] via-[#052E22] to-black rounded-2xl border border-[#B89555]/40 shadow-[0_20px_60px_rgba(0,0,0,0.45)]" />
+                    {/* Single emerald square frame behind founder portrait */}
+                    <div className="absolute inset-0 -m-6 jj-emerald-card rounded-2xl" />
 
                     <div className="relative z-10">
                       <Link to="/founder" className="block group">
@@ -428,8 +425,7 @@ const About = () => {
                       data-allow-dark-cta
                       data-no-contrast-guard
                       data-surface="emerald"
-                      className="allow-white rounded-xl p-4 border border-white/15 shadow-[0_10px_24px_-12px_rgba(4,44,28,0.9),inset_0_1px_0_rgba(255,255,255,0.16)]"
-                      style={{ background: 'linear-gradient(135deg,#064E3B 0%,#053a2c 55%,#031f18 100%)' }}
+                      className="jj-emerald-card allow-white rounded-xl p-4 border border-white/15 shadow-[0_10px_24px_-12px_rgba(4,44,28,0.9),inset_0_1px_0_rgba(255,255,255,0.16)]"
                     >
                       <Icon className="w-6 h-6 mb-2" style={{ color: '#FFFFFF' }} strokeWidth={2} />
                       <p className="text-sm font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
