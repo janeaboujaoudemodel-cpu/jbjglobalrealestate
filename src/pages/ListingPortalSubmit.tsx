@@ -101,6 +101,7 @@ const EMERALD_DEEP = '#042C1C';
 const EMERALD_BLACK = '#000000';
 const EMERALD_OMBRE = 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)';
 const EMERALD_OMBRE_SOFT = 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 54%, #EAF7F1 100%)';
+const EMERALD_DARK_PANEL = 'linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.98) 58%, rgba(0,0,0,1) 100%)';
 const EMERALD_FIELD = 'bg-[#FDFBF7] border-2 border-[#064E3B]/45 focus:border-[#064E3B] focus-visible:ring-[#064E3B]/30 text-[#1A1A1A]';
 
 const ListingPortalSubmit = () => {
@@ -181,10 +182,10 @@ const ListingPortalSubmit = () => {
 
   if (!user) {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-[#1A1A1A] text-xl font-bold mb-4">Please sign in to submit a listing</h2>
-          <Button onClick={() => navigate('/auth')} className="bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] border-0">
+      <section data-ai-listing-shell className="min-h-screen flex items-center justify-center" style={{ background: EMERALD_OMBRE }}>
+        <div className="text-center rounded-3xl p-8 border border-white/35" style={{ background: EMERALD_DARK_PANEL }}>
+          <h2 className="text-white text-xl font-bold mb-4" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Please sign in to submit a listing</h2>
+          <Button onClick={() => navigate('/auth')} className="border-0" style={{ background: '#064E3B', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
             Sign In
           </Button>
         </div>
@@ -546,7 +547,8 @@ const ListingPortalSubmit = () => {
     return (
       <section
         data-ai-listing-shell
-        className="min-h-screen bg-gradient-to-br from-[#0b1c36] via-[#0A0A0A] to-[#1F1F1F] pt-24 pb-16"
+        className="min-h-screen pt-24 pb-16"
+        style={{ background: EMERALD_OMBRE }}
       >
         <div className="container mx-auto px-4">
           <motion.div
@@ -688,7 +690,7 @@ const ListingPortalSubmit = () => {
                     toast.info("New listing started");
                   }}
                   label="Listing"
-                  theme="gold"
+                  theme="emerald"
                 />
               </div>
             </div>
@@ -704,7 +706,7 @@ const ListingPortalSubmit = () => {
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(circle at 85% 12%, rgba(184,149,85,0.22) 0%, transparent 55%)" }}
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
         />
         <div className="container mx-auto px-4 relative">
           {/* Horizontal step header */}
