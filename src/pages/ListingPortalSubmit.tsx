@@ -98,10 +98,11 @@ const SESSION_KEY = 'jbj_listing_creator_state';
 const EMERALD = '#064E3B';
 const EMERALD_DEEP = '#042C1C';
 const EMERALD_BLACK = '#000000';
-const EMERALD_OMBRE = 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)';
+const EMERALD_OMBRE = 'linear-gradient(135deg, #042C1C 0%, #021611 55%, #000000 100%)';
 const EMERALD_OMBRE_SOFT = 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 54%, #EAF7F1 100%)';
-const EMERALD_DARK_PANEL = 'linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.98) 58%, rgba(0,0,0,1) 100%)';
-const EMERALD_FIELD = 'bg-[#FDFBF7] border-2 border-[#064E3B]/45 focus:border-[#064E3B] focus-visible:ring-[#064E3B]/30 text-[#1A1A1A]';
+const EMERALD_DARK_PANEL = 'linear-gradient(135deg, rgba(4,44,28,0.98) 0%, rgba(2,22,17,0.99) 58%, rgba(0,0,0,1) 100%)';
+// Dark emerald field: dark background with pure white text and placeholder
+const EMERALD_FIELD = 'bg-[#042C1C] border-2 border-white/25 focus:border-white/70 focus-visible:ring-white/30 text-white placeholder:text-white placeholder:opacity-100';
 
 const ListingPortalSubmit = () => {
   const navigate = useNavigate();
