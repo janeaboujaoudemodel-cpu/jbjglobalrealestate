@@ -4,7 +4,7 @@
  *   Price from                Payment plan ⓘ
  *   1,250,000 AED             60 / 40
  *
- * Left column = "From" eyebrow + orange price value (uses --price-orange via
+ * Left column = "From" eyebrow + dark price value.
  * price-pill tokens). Right column = "Payment Plan" eyebrow + plan summary
  * with an emerald info popover showing the milestone breakdown on
  * hover/click. Responsive: two columns scale gracefully on mobile.

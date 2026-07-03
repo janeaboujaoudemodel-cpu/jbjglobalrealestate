@@ -72,7 +72,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
           <div className="h-8 w-64 bg-[#1A1A1A] animate-pulse rounded mb-8" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="rounded-xl overflow-hidden border border-[#B89555]/20">
+              <div key={i} className="rounded-xl overflow-hidden border border-[#064E3B]/20">
                 <div className="aspect-[16/10] bg-[#1A1A1A] animate-pulse" />
                 <div className="p-4 bg-[#FDFBF7] space-y-2">
                   <div className="h-4 w-3/4 bg-[#1A1A1A] animate-pulse rounded" />

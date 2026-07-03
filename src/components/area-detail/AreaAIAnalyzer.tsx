@@ -45,10 +45,10 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
   const isPositive = growth >= 0;
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-[#B89555]" />
+          <BarChart3 className="w-5 h-5 text-[#064E3B]" />
           <h3 className="font-bold text-[#0A0A0A] text-lg">Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
@@ -66,12 +66,12 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#fff', border: '1px solid #B8955540', borderRadius: '12px', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: '#fff', border: '1px solid #064E3B40', borderRadius: '12px', fontSize: '12px' }}
               formatter={(value: number) => [`AED ${value.toLocaleString()}`, 'Price/sqft']}
             />
             <Bar dataKey="price" radius={[6, 6, 0, 0]}>
               {chartData.map((entry, index) => (
-                <Cell key={index} fill={index === chartData.length - 1 ? '#B8955580' : '#B89555'} stroke={index === chartData.length - 1 ? '#B89555' : 'none'} strokeWidth={1.5} strokeDasharray={index === chartData.length - 1 ? '4 2' : '0'} />
+                <Cell key={index} fill={index === chartData.length - 1 ? '#064E3B80' : '#064E3B'} stroke={index === chartData.length - 1 ? '#064E3B' : 'none'} strokeWidth={1.5} strokeDasharray={index === chartData.length - 1 ? '4 2' : '0'} />
               ))}
             </Bar>
           </BarChart>
@@ -79,12 +79,12 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       </div>
 
       <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/70 mb-3">
-        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#B89555' }} /> Historical</span>
-        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#B89555', backgroundColor: '#B8955530' }} /> Projected</span>
+        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#064E3B' }} /> Historical</span>
+        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#064E3B', backgroundColor: '#064E3B30' }} /> Projected</span>
       </div>
 
       {bullets.length > 0 && (
-        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#064E3B]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
             <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
@@ -104,14 +104,14 @@ function InvestmentMetricsChart({ text }: { text: string }) {
   const occupancy = metrics.find(m => m.name === 'Occupancy');
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-[#B89555]" />
+          <Shield className="w-5 h-5 text-[#064E3B]" />
           <h3 className="font-bold text-[#0A0A0A] text-lg">Investment Metrics</h3>
         </div>
         {occupancy && (
-          <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">
+          <div className="allow-white jj-pill-emerald-metallic flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full text-white">
             {occupancy.value}% Occupancy
           </div>
         )}
@@ -124,7 +124,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
             <XAxis type="number" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} domain={[0, 'auto']} />
             <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} width={90} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#fff', border: '1px solid #B8955540', borderRadius: '12px', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: '#fff', border: '1px solid #064E3B40', borderRadius: '12px', fontSize: '12px' }}
               formatter={(value: number) => [`${value}%`, '']}
             />
             <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={28}>
@@ -146,7 +146,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       </div>
 
       {bullets.length > 0 && (
-        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#064E3B]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
             <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
@@ -187,10 +187,10 @@ function parseInvestmentMetrics(text: string) {
   const occupancyMatch = text.match(/(\d+(?:\.\d+)?)%\s*(?:occupancy|occupied)/i);
 
   return [
-    { name: 'Rental Yield', value: roiMatch ? parseFloat(roiMatch[1]) : 6.5, fill: '#B89555' },
+    { name: 'Rental Yield', value: roiMatch ? parseFloat(roiMatch[1]) : 6.5, fill: '#064E3B' },
     { name: 'Cap Rate', value: capMatch ? parseFloat(capMatch[1]) : 5.8, fill: '#059669' },
-    { name: 'Appreciation', value: appreciationMatch ? parseFloat(appreciationMatch[1]) : 8.2, fill: '#6366f1' },
-    { name: 'Occupancy', value: occupancyMatch ? parseFloat(occupancyMatch[1]) : 88, fill: '#f59e0b' },
+    { name: 'Appreciation', value: appreciationMatch ? parseFloat(appreciationMatch[1]) : 8.2, fill: '#042C1C' },
+    { name: 'Occupancy', value: occupancyMatch ? parseFloat(occupancyMatch[1]) : 88, fill: '#010806' },
   ];
 }
 
@@ -239,14 +239,14 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-[#B89555]" />
+          <TrendingUp className="w-5 h-5 text-[#064E3B]" />
           <h3 className="font-bold text-[#0A0A0A] text-lg">Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
- ratio > 0.9 ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : ratio > 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-600'
+ ratio > 0.9 ? 'allow-white jj-pill-emerald-metallic text-white' : ratio > 0.7 ? 'allow-white jj-pill-emerald-metallic text-white' : 'allow-white jj-pill-emerald-metallic text-white'
  }`}>
           <StatusIcon className="w-3.5 h-3.5" />
           {marketStatus}
@@ -259,8 +259,8 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
           <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="supplyGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#B89555" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#B89555" stopOpacity={0.05} />
+                <stop offset="5%" stopColor="#064E3B" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#064E3B" stopOpacity={0.05} />
               </linearGradient>
               <linearGradient id="demandGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#059669" stopOpacity={0.3} />
@@ -271,10 +271,10 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v/1000).toFixed(1)}k` : v} />
             <Tooltip
-              contentStyle={{ backgroundColor: '#fff', border: '1px solid #B8955540', borderRadius: '12px', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: '#fff', border: '1px solid #064E3B40', borderRadius: '12px', fontSize: '12px' }}
               formatter={(value: number, name: string) => [value.toLocaleString() + ' units', name === 'supply' ? 'Supply' : 'Demand']}
             />
-            <Area type="monotone" dataKey="supply" stroke="#B89555" strokeWidth={2.5} fill="url(#supplyGradient)" dot={{ fill: '#B89555', r: 3 }} />
+            <Area type="monotone" dataKey="supply" stroke="#064E3B" strokeWidth={2.5} fill="url(#supplyGradient)" dot={{ fill: '#064E3B', r: 3 }} />
             <Area type="monotone" dataKey="demand" stroke="#059669" strokeWidth={2.5} fill="url(#demandGradient)" dot={{ fill: '#059669', r: 3 }} />
           </AreaChart>
         </ResponsiveContainer>
@@ -283,7 +283,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       {/* Legend */}
       <div className="flex items-center gap-4 mb-4 text-xs">
         <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#B89555' }} />
+          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#064E3B' }} />
           <span className="text-[#1A1A1A]/70">Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -294,7 +294,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
 
       {/* Key insights from AI text */}
       {bullets.length > 0 && (
-        <div className="border-t border-[#B89555]/10 pt-3 space-y-1.5">
+        <div className="border-t border-[#064E3B]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
             <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
           ))}
@@ -320,22 +320,22 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
   const totalDevs = stats?.developers?.length || devEntries.length;
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
+    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-[#B89555]" />
+          <Building2 className="w-5 h-5 text-[#064E3B]" />
           <h3 className="font-bold text-[#0A0A0A] text-lg">Developer Landscape</h3>
         </div>
-        <div className="flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-[#EFE6D6] text-[#0A0A0A] border border-[#B89555]/40">
+        <div className="allow-white jj-pill-emerald-metallic flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full text-white border-0">
           {totalDevs} Developers
         </div>
       </div>
 
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-[#0A0A0A] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0">
-              <span className="text-[#B89555] font-bold text-xs">{dev.name.charAt(0)}</span>
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#064E3B]/10 hover:border-[#064E3B]/30 transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-[#064E3B] border border-[#064E3B]/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
               <p data-developer-name className="text-[#0A0A0A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p>
@@ -343,7 +343,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
                 <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-[#B89555] flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-[#064E3B] flex-shrink-0 mt-1" />
           </div>
         ))}
       </div>
@@ -474,7 +474,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-[#B89555]" />
+          <Brain className="w-6 h-6 text-[#064E3B]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#0A0A0A]">
             JBJ AI Area Intelligence
           </h2>

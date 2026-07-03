@@ -176,11 +176,11 @@ const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
 // Sale status options with color dots
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
-  { value: "Announced", label: "Announced", dotClass: "bg-pink-400" },
+  { value: "Announced", label: "Announced", dotClass: "jj-pill-emerald-metallic" },
   { value: "Presale (EOI)", label: "Pre-sale (EOI)", dotClass: "jj-pill-emerald-metallic" },
-  { value: "Start of Sales", label: "Start of Sales", dotClass: "bg-yellow-400" },
-  { value: "On Sale", label: "On Sale", dotClass: "bg-blue-400" },
-  { value: "Sold Out", label: "Sold Out", dotClass: "bg-red-500" },
+  { value: "Start of Sales", label: "Start of Sales", dotClass: "jj-pill-emerald-metallic" },
+  { value: "On Sale", label: "On Sale", dotClass: "jj-pill-emerald-metallic" },
+  { value: "Sold Out", label: "Sold Out", dotClass: "jj-pill-emerald-metallic" },
 ];
 
 const INVESTMENT_TYPES = [
