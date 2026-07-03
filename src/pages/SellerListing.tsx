@@ -838,7 +838,7 @@ Requirements:
                             <label
                               key={option.value}
                               htmlFor={option.value}
-                              className="relative flex items-center gap-3 rounded-2xl px-4 py-4 cursor-pointer transition-all min-h-[72px]"
+                              className="relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 cursor-pointer transition-all min-h-[56px]"
                               style={{
                                 background: active
                                   ? "linear-gradient(135deg, #059669 0%, #047857 100%)"
@@ -858,14 +858,14 @@ Requirements:
                                 aria-hidden
                                 className="shrink-0 inline-flex items-center justify-center rounded-full"
                                 style={{
-                                  width: 44,
-                                  height: 44,
+                                  width: 34,
+                                  height: 34,
                                   aspectRatio: "1 / 1",
                                   background: active ? "rgba(255,255,255,0.22)" : "rgba(16,185,129,0.22)",
                                   border: active ? "1.5px solid rgba(255,255,255,0.55)" : "1.5px solid rgba(16,185,129,0.55)",
                                 }}
                               >
-                                <Icon style={{ width: 22, height: 22, color: "#FFFFFF" }} strokeWidth={2.25} />
+                                <Icon style={{ width: 18, height: 18, color: "#FFFFFF" }} strokeWidth={2.25} />
                               </span>
                               <span className="font-semibold text-sm md:text-base leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                                 {option.label}
