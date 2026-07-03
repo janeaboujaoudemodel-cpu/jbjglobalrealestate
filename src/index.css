@@ -27606,3 +27606,27 @@ html body #root [data-comp-analysis-form] textarea::placeholder {
   -webkit-text-fill-color: rgba(255,255,255,0.72) !important;
   opacity: 1 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PASS 204 — CTA SINGLE-CARD LOCK (site-wide, no exceptions)
+   The "Ready to Get Started" / "Not Sure Where to Start" / "Get in touch"
+   block (CombinedContactNewsletter) must render as ONE emerald card only —
+   never inside an outer champagne frame. Beats the insights-page
+   section-frame rule and any page-level Section wrapper.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html body #root section#ready-to-get-started,
+html body #root section[data-no-section-frame],
+html body #root [data-insights-page] section#ready-to-get-started,
+html body #root [data-insights-page] section[data-no-section-frame] {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
