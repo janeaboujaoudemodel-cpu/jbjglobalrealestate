@@ -800,7 +800,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               <Link to="/compare-manual">
                 <button
                   className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                  style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.30)", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
+                  style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "none", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
                   data-no-contrast-guard
                   data-allow-dark-cta
                 >
@@ -881,15 +881,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       <div className="container mx-auto px-4 py-10 md:py-14">
         <div
           data-compare-content-frame
-          data-surface="emerald"
-          data-on-dark="true"
+          data-surface="champagne"
           className="rounded-2xl p-5 md:p-7 flex flex-col gap-8"
-          style={{ background: PAGE_DARK, border: "1px solid rgba(255,255,255,0.14)", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72)" }}
+          style={{ background: CHAMPAGNE, border: "none", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)" }}
         >
           {/* Counter */}
-          <div data-allow-ink data-no-contrast-guard className="flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            <span data-allow-ink data-no-contrast-guard className="text-lg font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{projects.length}</span>
-            <span data-allow-ink data-no-contrast-guard className="text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>properties in comparison</span>
+          <div className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+            <span className="text-lg font-bold" style={{ color: "#064E3B" }}>{projects.length}</span>
+            <span className="text-sm" style={{ color: "rgba(26,26,26,0.72)" }}>properties in comparison</span>
           </div>
 
           {/* Comparison Table — premium champagne (restored) */}
@@ -899,7 +898,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             data-surface="champagne"
             data-no-contrast-guard
             className="overflow-x-auto rounded-2xl"
-            style={{ background: CHAMPAGNE, border: EMERALD_HAIRLINE, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.65), 0 12px 40px -20px rgba(0,0,0,0.35)" }}
+            style={{ background: "#FFFFFF", border: "none", boxShadow: "0 12px 40px -20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.65)" }}
           >
             <table className="w-full">
               <thead>
