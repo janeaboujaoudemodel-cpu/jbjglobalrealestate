@@ -573,7 +573,7 @@ function PickerCard({
       <div className="relative mt-5 w-full min-w-0 whitespace-normal">
         <div
           className="text-[10px] uppercase tracking-[0.22em] font-semibold"
-          style={{ color: GOLD, WebkitTextFillColor: GOLD }}
+          style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}
         >
           {eyebrow}
         </div>
