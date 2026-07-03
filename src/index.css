@@ -27663,7 +27663,7 @@ html body #root .jj-disclaimer-icon :is(svg, [data-lucide], [class*="lucide"]) *
   100% { transform: translate3d(14%, 0, 0); opacity: 0.32; }
 }
 
-html body #root main[data-company-legal-page="true"] :is(.jj-hero-fullscreen, [data-hero-dark], [data-brand-hero], section:first-of-type) {
+html body #root main[data-company-legal-page="true"] :is(.jj-hero-fullscreen, [data-hero-dark], [data-brand-hero]) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
