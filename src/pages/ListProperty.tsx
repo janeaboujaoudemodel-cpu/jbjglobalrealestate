@@ -427,16 +427,16 @@ function PremiumModePicker({ onPick, purpose = "sale" }: { onPick: (m: Mode) => 
 
   // Purpose-aware copy: sale → Seller, rent → Landlord
   const isRent = purpose === "rent";
-  const manualTitle = isRent ? "Landlord Listing Tool" : "Seller Listing Tool";
-  const manualEyebrow = isRent ? "Full Control · Landlord" : "Full Control · Seller";
+  const manualTitle = isRent ? "I'll Fill Rental Details Myself" : "I'll Fill Property Details Myself";
+  const manualEyebrow = "Manual · Full Control";
   const manualDesc = isRent
-    ? "Fill in every field yourself — rent, location, photos, amenities and tenant contact preferences. Best when you already have the full rental details ready."
-    : "Fill in every field yourself — price, location, photos, amenities and buyer contact preferences. Best when you already have the full property details ready.";
-  const aiTitle = isRent ? "Landlord Assistant (AI)" : "Seller Assistant (AI)";
-  const aiEyebrow = isRent ? "AI-Assisted · Landlord" : "AI-Assisted · Seller";
+    ? "You type every field yourself — monthly rent, location, photos, amenities and tenant preferences. Best when you already have the rental information ready."
+    : "You type every field yourself — price, location, photos, amenities and buyer preferences. Best when you already have the property information ready.";
+  const aiTitle = isRent ? "Let AI Fill My Rental for Me" : "Let AI Fill My Listing for Me";
+  const aiEyebrow = "AI-Assisted · Fastest";
   const aiDesc = isRent
-    ? "Paste any portal link, tenancy contract or short description. Our AI auto-fills the rental listing in seconds — you only review and confirm."
-    : "Paste any portal link, brochure or short description. Our AI auto-fills the listing in seconds — you only review and confirm before submitting.";
+    ? "Paste any portal link, tenancy contract or short description. AI auto-fills the rental listing in seconds — you just review, edit if needed, and submit."
+    : "Paste any portal link, brochure or short description. AI auto-fills the listing in seconds — you just review, edit if needed, and submit.";
 
   return (
     <div className="max-w-5xl mx-auto px-2 sm:px-0">
