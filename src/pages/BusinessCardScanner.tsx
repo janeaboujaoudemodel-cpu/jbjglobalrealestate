@@ -375,6 +375,7 @@ const BusinessCardScanner = () => {
   return (
     <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
+      data-business-card-scanner
       data-allow-dark-cta
       className="min-h-screen"
       style={{
