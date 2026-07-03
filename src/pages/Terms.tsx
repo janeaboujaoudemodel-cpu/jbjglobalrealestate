@@ -65,7 +65,7 @@ const Terms = () => {
       />
 
       {/* HERO */}
-      <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7E9CC] to-[#EFD9A3] border-b border-[#B89555]/20">
+      <section data-hero-dark data-surface="dark" className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7E9CC] to-[#EFD9A3] border-b border-[#B89555]/20">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FFD27A]/35 via-transparent to-transparent" />
         <div className="absolute top-20 right-20 w-72 h-72 bg-[#FFC56B]/30 rounded-full blur-[100px]" />
 

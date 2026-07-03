@@ -27656,3 +27656,108 @@ html body #root .jj-disclaimer-icon :is(svg, [data-lucide], [class*="lucide"]) *
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+@keyframes jj-company-hero-sheen {
+  0% { transform: translate3d(-14%, 0, 0); opacity: 0.32; }
+  50% { opacity: 0.72; }
+  100% { transform: translate3d(14%, 0, 0); opacity: 0.32; }
+}
+
+html body #root main[data-company-legal-page="true"] :is(.jj-hero-fullscreen, [data-hero-dark], [data-brand-hero]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) video,
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) img:not([alt*="Award"]):not([alt*="award"]) {
+  opacity: 0.08 !important;
+  filter: saturate(0.55) brightness(0.42) contrast(1.18) !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(112deg, transparent 0%, rgba(255,255,255,0.06) 31%, transparent 50%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.052) 0 1px, transparent 1px 20px);
+  animation: jj-company-hero-sheen 9s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) > :not(.absolute) {
+  position: relative;
+  z-index: 2;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) :is(h1, h2, p):not([data-surface="champagne"] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) :is(a, button)[data-allow-dark-cta],
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) :is(a, button):not([data-cta="champagne"]):not([data-surface="champagne"]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen) :is(a, button) :is(span, svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .jj-about-emerald-hero video { opacity: 0 !important; }
+
+html body #root .jj-company-hero-motion {
+  background:
+    linear-gradient(112deg, transparent 0%, rgba(255,255,255,0.055) 32%, transparent 52%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 20px) !important;
+  animation: jj-company-hero-sheen 9s ease-in-out infinite alternate;
+}
+
+html body #root .jj-newsletter-emerald,
+html body #root .jj-newsletter-emerald * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+html body #root .jj-newsletter-emerald {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.16),
+    0 16px 34px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+html body #root .jj-newsletter-emerald input,
+html body #root .jj-newsletter-emerald input:focus,
+html body #root .jj-newsletter-emerald input:active {
+  background: transparent !important;
+  background-color: transparent !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root .jj-newsletter-emerald button {
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.24) !important;
+}
+
+html body #root .jj-newsletter-emerald button:hover {
+  background: rgba(255,255,255,0.16) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen)::before,
+  html body #root .jj-company-hero-motion { animation: none !important; }
+}

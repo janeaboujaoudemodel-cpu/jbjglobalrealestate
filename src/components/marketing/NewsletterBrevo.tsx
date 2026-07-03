@@ -9,10 +9,10 @@ import NewsletterDetailModal from '@/components/marketing/NewsletterDetailModal'
 import { useTypewriter } from '@/hooks/useTypewriter';
 
 const NEWSLETTER_TYPEWRITER_PHRASES = [
-  'Enter your email address',
-  'Get new listings first',
-  'Market moves & insider insights',
-  'Free weekly intel — no spam',
+  'Enter your email for early listings',
+  'Get new launches before the market',
+  'Receive off-market listing alerts',
+  'Market moves & insider property intel',
 ];
 
 
@@ -143,13 +143,14 @@ export const NewsletterBrevo = ({
               no halo, no overflowing placeholder). */}
           <div
             data-no-contrast-guard
-            className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald animated-border relative flex items-stretch h-12 rounded-xl overflow-hidden"
+            data-surface="emerald"
+            className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald relative flex items-stretch h-14 rounded-full overflow-hidden"
             style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
           >
             <div className="relative flex-1 min-w-0 cursor-text">
               {!email && !isEmailFocused && (
                 <span
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap z-[1]"
+                  className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap z-[1]"
                   aria-hidden="true"
                   style={{ color: 'rgba(255,255,255,0.78)', WebkitTextFillColor: 'rgba(255,255,255,0.78)' }}
                 >
@@ -166,7 +167,7 @@ export const NewsletterBrevo = ({
                 aria-label="Email address"
                 required
                 disabled={isSubmitting}
-                className="relative z-10 w-full h-full px-4 text-sm font-semibold tracking-wide bg-transparent cursor-text"
+                className="relative z-10 w-full h-full px-5 pr-3 text-sm font-semibold tracking-wide bg-transparent cursor-text"
                 style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', pointerEvents: 'auto' }}
               />
             </div>
@@ -174,7 +175,7 @@ export const NewsletterBrevo = ({
               type="submit"
               disabled={isSubmitting}
               aria-label="Subscribe"
-              className="flex items-center justify-center px-5 transition-all duration-200 hover:brightness-110"
+              className="m-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all duration-200 hover:brightness-110"
               style={{
                 color: '#FFFFFF',
                 borderLeft: '1px solid rgba(255,255,255,0.14)',
