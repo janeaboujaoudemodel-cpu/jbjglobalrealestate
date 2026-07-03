@@ -367,6 +367,8 @@ const PropertyEvaluator = () => {
   const [savedReports, setSavedReports] = useState<SavedReportSnapshot[]>(initialDraftRef.current.savedReports);
   const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(initialDraftRef.current.areaUnit || 'sqft');
   const [isReportPreviewOpen, setIsReportPreviewOpen] = useState(false);
+  const [entryMode, setEntryMode] = useState<'manual' | 'titleDeed'>('manual');
+  const [isParsingTitleDeed, setIsParsingTitleDeed] = useState(false);
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const renovationPhotoRef = useRef<HTMLInputElement>(null);
