@@ -59,7 +59,7 @@ const IntellectualProperty = () => {
 
       <div className="min-h-screen bg-gradient-to-b from-[#151210] via-[#0F0D0B] to-[#0A0908]">
         {/* Hero */}
-        <section className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#B89555]/20">
+        <section data-hero-dark data-surface="dark" className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-b from-[#1a1714] to-[#151210] border-b border-[#B89555]/20">
           <div className="relative max-w-6xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EFE6D6]/10 border border-[#B89555]/25 rounded-full mb-6">
               <Shield className="w-4 h-4 text-[#B89555]" />

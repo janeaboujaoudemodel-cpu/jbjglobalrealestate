@@ -104,7 +104,7 @@ const Founder = () => {
       <SEOHead {...pagesSEO.founder} />
       
       {/* HERO - CINEMATIC FULL BLEED */}
-      <section className="relative min-h-screen flex items-end">
+      <section data-hero-dark data-surface="dark" className="relative min-h-screen flex items-end">
         {/* Background with parallax effect */}
         <motion.div 
           className="absolute inset-0"
