@@ -229,8 +229,8 @@ const About = () => {
                   variants={fadeInUp}
                 >
                   <div className="relative">
-                    {/* Champagne background card for premium look */}
-                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border border-[#B89555]/30 shadow-lg" />
+                    {/* Emerald→black gradient card for premium dark look */}
+                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#064E3B] via-[#052E22] to-black rounded-2xl border border-[#B89555]/40 shadow-[0_20px_60px_rgba(0,0,0,0.45)]" />
 
                     <div className="relative z-10">
                       <Link to="/founder" className="block group">
@@ -241,10 +241,12 @@ const About = () => {
                       <FounderPhotoEditOverlay />
                       <Link to="/founder" className="block mt-4">
                         <button
-                          className="group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                          data-allow-dark-cta
+                          data-no-contrast-guard
+                          className="allow-white group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-white/10 border border-[#B89555]/60 text-white hover:bg-white/20"
                         >
-                          <span>Know more about the founder</span>
-                          <span aria-hidden>↗</span>
+                          <span className="text-white">Know more about the founder</span>
+                          <span aria-hidden className="text-white">↗</span>
                         </button>
                       </Link>
                     </div>
