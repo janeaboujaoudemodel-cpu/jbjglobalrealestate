@@ -68,11 +68,10 @@ interface PricePrediction {
 }
 
 const listingCategories = [
-  { id: 'secondary_offplan', label: 'Secondary / Off-Plan', icon: Home, desc: 'Resale or under-construction property' },
+  { id: 'secondary_offplan', label: 'Secondary / Off-Plan', icon: Home, desc: 'Resale or under-construction' },
   { id: 'ready', label: 'Ready to Move', icon: Building, desc: 'Completed property' },
   { id: 'land', label: 'Land', icon: MapPin, desc: 'Plot or land for sale' },
-  { id: 'rental', label: 'Rental', icon: Key, desc: 'For rent' },
-  { id: 'holiday_home', label: 'Holiday Home', icon: Hotel, desc: 'Short-term rental' },
+  { id: 'rental', label: 'Rental', icon: Key, desc: 'Long or short-term rental' },
 ];
 
 const propertyTypes = ['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Studio', 'Duplex', 'Land', 'Office', 'Warehouse', 'Shop'];
@@ -774,7 +773,7 @@ const ListingPortalSubmit = () => {
                       {/* Category Selection */}
                       <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
                         <h2 className="text-white font-semibold mb-4">What type of listing?</h2>
-                        <div className="flex flex-wrap justify-center gap-3">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                           {listingCategories.map(cat => {
                             const Icon = cat.icon;
                             const isSelected = listingCategory === cat.id;
@@ -782,7 +781,7 @@ const ListingPortalSubmit = () => {
                               <button
                                 key={cat.id}
                                 onClick={() => setListingCategory(cat.id)}
-                                className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
+                                className={`relative flex flex-col items-start text-left p-4 pr-8 rounded-2xl border-2 transition-all w-full min-w-0 overflow-hidden ${
  isSelected
  ? 'bg-white/15 border-white text-white shadow-lg'
  : 'bg-white/[0.04] border-white/25 text-white/80 hover:border-white/70'
@@ -802,9 +801,9 @@ const ListingPortalSubmit = () => {
                                     />
                                   </div>
                                 )}
-                                <Icon className="w-5 h-5 mb-2" style={{color: isSelected ? EMERALD : '#0A6B53'}} />
-                                <div className="font-medium text-sm">{cat.label}</div>
-                                <div className="text-xs text-white/70">{cat.desc}</div>
+                                <Icon className="w-5 h-5 mb-2 shrink-0" style={{color: isSelected ? EMERALD : '#0A6B53'}} />
+                                <div className="font-medium text-sm leading-tight w-full break-words">{cat.label}</div>
+                                <div className="text-xs text-white/70 leading-tight w-full break-words mt-1">{cat.desc}</div>
                               </button>
                             );
                           })}
