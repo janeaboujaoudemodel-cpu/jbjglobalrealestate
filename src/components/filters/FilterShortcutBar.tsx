@@ -154,11 +154,11 @@ const BEDROOM_OPTIONS = [
 ];
 
 const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
-  { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
+  { value: 'Announced', label: 'Announced', dotClass: 'jj-pill-emerald-metallic' },
   { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-pill-emerald-metallic' },
-  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
-  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
-  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
+  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'jj-pill-emerald-metallic' },
+  { value: 'On Sale', label: 'On Sale', dotClass: 'jj-pill-emerald-metallic' },
+  { value: 'Sold Out', label: 'Sold Out', dotClass: 'jj-pill-emerald-metallic' },
 ];
 
 const CONSTRUCTION_OPTIONS = [
@@ -453,10 +453,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactiveCls)}>
               {t('filter.price')}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className="w-full mb-3 bg-[#FDFBF7]/60">
                 <TabsTrigger value="unit" className="flex-1 text-xs">{t('filter.perUnit')}</TabsTrigger>
@@ -479,7 +479,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     placeholder="0"
                     className={cn(filterInput, "pr-12")}
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
+                  <span className="allow-white absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-white font-bold">AED</span>
                 </div>
               </div>
               <div>
@@ -496,7 +496,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     placeholder="Any"
                     className={cn(filterInput, "pr-12")}
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
+                  <span className="allow-white absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-white font-bold">AED</span>
                 </div>
               </div>
             </div>
@@ -510,7 +510,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     "px-3 py-1 rounded-full text-xs font-medium border transition-colors",
                     draftPriceMax === p.value
                       ? "jj-pill-emerald-metallic text-white border-0 font-bold"
-                      : "bg-[#FDFBF7] text-[#1A1A1A] border-[#064E3B]/20 hover:border-[#064E3B]/20"
+                      : "allow-white bg-white/7 text-white border-white/28 hover:bg-white/14 hover:border-white/45"
                   )}
                 >
                   {p.label}
@@ -542,28 +542,29 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactiveCls)}>
               {t('filter.payments')}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
           <PopoverContent
+            data-filter-dropdown="true"
             data-no-contrast-guard
-            className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")}
+            className={cn("w-80 p-4", popoverClass, "text-white")}
             side="bottom"
             align="start"
             sideOffset={6}
             style={{
-              ['--slider-track-bg' as any]: '#E6DCC7',
+              ['--slider-track-bg' as any]: 'rgba(255,255,255,0.22)',
               ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
               ['--slider-thumb-bg' as any]: '#FFFFFF',
               ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
             }}
           >
-            <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.paymentsTitle')}</h4>
+            <h4 className="allow-white text-sm font-bold text-white mb-3">{t('filter.paymentsTitle')}</h4>
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-[#1A1A1A] font-semibold">{t('filter.maxPreHandover')}</span>
-                  <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7] px-2 py-0.5 rounded border border-[#064E3B]/20">{draftPaymentPlanMax}%</span>
+                  <span className="allow-white text-xs text-white font-semibold">{t('filter.maxPreHandover')}</span>
+                  <span className="allow-white text-xs font-bold text-white bg-white/7 px-2 py-0.5 rounded border border-white/28">{draftPaymentPlanMax}%</span>
                 </div>
                 <Slider
                   value={[draftPaymentPlanMax]}
@@ -588,7 +589,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#1A1A1A] font-semibold">{t('filter.postHandoverOnly')}</span>
+                <span className="allow-white text-xs text-white font-semibold">{t('filter.postHandoverOnly')}</span>
                 <Switch
                   checked={draftPostHandoverOnly}
                   onCheckedChange={(v) => setDraftPostHandoverOnly(v)}
@@ -620,11 +621,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactiveCls)}>
               {t('filter.handover')}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.handoverTitle')}</h4>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
+            <h4 className="allow-white text-sm font-bold text-white mb-3">{t('filter.handoverTitle')}</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={`${filterLabel} mb-2`}>{t('filter.from')}</label>
@@ -637,7 +638,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
                           ? "jj-pill-emerald-metallic text-white border-0 shadow-sm"
-                          : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
+                          : "allow-white bg-white/7 border border-white/28 text-white hover:bg-white/14 hover:border-white/45"
                       )}
                     >
                       {q}
@@ -647,7 +648,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverFrom.year}
                   onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                  className="allow-white w-full h-9 px-3 bg-[#021611]/82 border border-white/28 rounded-lg text-sm text-white font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -664,7 +665,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverTo.quarter === q
                           ? "jj-pill-emerald-metallic text-white border-0 shadow-sm"
-                          : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
+                          : "allow-white bg-white/7 border border-white/28 text-white hover:bg-white/14 hover:border-white/45"
                       )}
                     >
                       {q}
@@ -674,7 +675,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverTo.year}
                   onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                  className="allow-white w-full h-9 px-3 bg-[#021611]/82 border border-white/28 rounded-lg text-sm text-white font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -690,10 +691,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
               {getPropertyTypeLabel()}
               {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-72 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-72 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
             <Tabs
               value={filters.propertyCategory || 'residential'}
               onValueChange={(val) => {
@@ -726,10 +727,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.bedrooms')}
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-72 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-72 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
             <div className="flex flex-wrap gap-2">
               {BEDROOM_OPTIONS.map((opt) => (
                 <button
@@ -754,10 +755,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.status')}
               {filters.statuses.length > 0 && <CountBadge count={filters.statuses.length} />}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-64 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-64 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
             <div className="flex flex-wrap gap-2">
               {STATUS_OPTIONS.map((opt) => (
                 <button
@@ -787,10 +788,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.construction')}
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-64 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-64 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
             <div className="flex flex-wrap gap-2">
               {CONSTRUCTION_OPTIONS.map((opt) => (
                 <button
@@ -816,11 +817,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <Eye className="w-3.5 h-3.5" />
               {t('filter.views')}
               {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
-              <ChevronDown className="w-3 h-3 opacity-60" />
+              <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-[#1A1A1A]")} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.propertyViews')}</h4>
+          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
+            <h4 className="allow-white text-sm font-bold text-white mb-3">{t('filter.propertyViews')}</h4>
             <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
               {VIEWS_OPTIONS.map((opt) => (
                 <button
@@ -973,29 +974,30 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
       </PopoverTrigger>
       <PopoverContent
         data-no-contrast-guard
-        className="w-72 p-3 bg-[#FDFBF7] text-[#1A1A1A] border border-[#064E3B]/20 z-[10200] shadow-xl"
+        data-filter-dropdown="true"
+        className="w-72 p-3 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] text-white border border-white/24 z-[10200] shadow-xl"
         side="bottom"
         align="end"
         sideOffset={6}
       >
-        <h4 className="text-sm font-bold text-[#1A1A1A] mb-2">{t('filter.savedFilters')}</h4>
+        <h4 className="allow-white text-sm font-bold text-white mb-2">{t('filter.savedFilters')}</h4>
         {savedFilters.length === 0 ? (
-          <p className="text-xs text-[#1A1A1A] py-4 text-center">{t('filter.noSavedFilters')}</p>
+          <p className="allow-white text-xs text-white py-4 text-center">{t('filter.noSavedFilters')}</p>
         ) : (
           <div className="space-y-1 max-h-60 overflow-y-auto">
             {savedFilters.map((sf, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-[#FDFBF7]/60 cursor-pointer transition-colors group"
+                className="allow-white flex items-center justify-between gap-2 px-2.5 py-2 rounded-lg hover:bg-white/12 cursor-pointer transition-colors group"
                 onClick={() => applySavedFilter(sf)}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-semibold text-[#1A1A1A] truncate">{sf.name}</p>
-                  <p className="text-[10px] text-[#1A1A1A]">{new Date(sf.createdAt).toLocaleDateString()}</p>
+                  <p className="allow-white text-xs font-semibold text-white truncate">{sf.name}</p>
+                  <p className="allow-white text-[10px] text-white">{new Date(sf.createdAt).toLocaleDateString()}</p>
                 </div>
                 {confirmDeleteIndex === idx ? (
                   <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
-                    <span className="text-[10px] text-[#1A1A1A] font-semibold whitespace-nowrap">Delete?</span>
+                    <span className="allow-white text-[10px] text-white font-semibold whitespace-nowrap">Delete?</span>
                     <button
                       onClick={() => deleteSavedFilter(idx)}
                       className="px-1.5 py-0.5 rounded text-[10px] font-bold jj-pill-emerald-metallic text-white transition-colors"
@@ -1004,7 +1006,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
                     </button>
                     <button
                       onClick={() => setConfirmDeleteIndex(null)}
-                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#FDFBF7] border border-[#064E3B]/20 text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors"
+                      className="allow-white px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/7 border border-white/28 text-white hover:bg-white/14 transition-colors"
                     >
                       No
                     </button>
@@ -1012,7 +1014,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
                 ) : (
                   <button
                     onClick={(e) => { e.stopPropagation(); setConfirmDeleteIndex(idx); }}
-                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-[#F7F2EA] text-[#1A1A1A] transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-white/14 text-white transition-all"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

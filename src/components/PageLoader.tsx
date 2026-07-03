@@ -36,7 +36,7 @@ const TopProgressBar = () => (
       style={{
         height: "100%",
         width: "30%",
-        background: "linear-gradient(90deg, transparent, #B89555, transparent)",
+        background: "linear-gradient(90deg, transparent, #064E3B, transparent)",
         animation: "pageLoaderSlide 1.1s ease-in-out infinite",
       }}
     />
@@ -51,7 +51,7 @@ const TopProgressBar = () => (
 
 /**
  * PageLoader - Global loading fallback for lazy-loaded pages.
- * Now a thin gold progress bar — no monogram, no dark gradient, no min-h-screen.
+ * Now a thin emerald progress bar — no monogram, no dark gradient, no min-h-screen.
  */
 const PageLoader = () => (
   <DelayedLoader delay={400}>

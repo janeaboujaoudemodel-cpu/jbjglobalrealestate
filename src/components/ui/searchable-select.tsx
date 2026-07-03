@@ -115,8 +115,8 @@ export function SearchableSelect({
           aria-haspopup="dialog"
           data-searchable-trigger
           className={cn(
-            "jbj-form-field w-full h-12 rounded-lg min-w-0 inline-flex items-center justify-between gap-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
-            !value && "text-[#0A0A0A]/70",
+            "allow-white jbj-form-field w-full h-12 rounded-lg min-w-0 inline-flex items-center justify-between gap-3 px-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed",
+            !value && "text-white",
             triggerClassName
           )}
         >
@@ -124,12 +124,13 @@ export function SearchableSelect({
             {selectedFlag && <span className="text-xl leading-none shrink-0">{selectedFlag}</span>}
             <span className="truncate font-medium">{value || placeholder}</span>
           </span>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 text-[#064E3B]" />
+          <ChevronsUpDown className="h-4 w-4 shrink-0 text-white" />
         </button>
       </PopoverTrigger>
       <PopoverContent
+        data-filter-dropdown="true"
         className={cn(
-          "jbj-form-popover w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 shadow-xl z-[10210]",
+          "allow-white jbj-form-popover w-[var(--radix-popover-trigger-width)] min-w-[260px] p-0 shadow-xl z-[10210]",
           className
         )}
         align="start"
@@ -139,22 +140,22 @@ export function SearchableSelect({
         collisionPadding={12}
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
-        <div className="p-2 border-b border-[#0A0A0A]/15">
+        <div className="p-2 border-b border-white/18">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#064E3B]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white" />
             <Input
               ref={inputRef}
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="jbj-form-field h-11 rounded-lg pl-9 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="allow-white jbj-form-field h-11 rounded-lg pl-9 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
         </div>
 
         <div className="max-h-[280px] overflow-y-auto py-1 overscroll-contain">
           {filteredOptions.length === 0 ? (
-            <div className="py-6 text-center text-sm text-[#0A0A0A]/70">No results found</div>
+            <div className="allow-white py-6 text-center text-sm text-white">No results found</div>
           ) : (
             filteredOptions.map((option) => {
               const flag = getFlag(option);
@@ -168,13 +169,13 @@ export function SearchableSelect({
                     setOpen(false);
                   }}
                   className={cn(
-                    "jbj-form-option w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-[#0A0A0A] hover:bg-[#0A0A0A]/5",
+                    "allow-white jbj-form-option w-full flex items-center gap-3 px-3 py-3 text-left min-h-[46px] transition-colors text-white hover:bg-white/12",
                     isSelected && "font-semibold"
                   )}
                 >
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
-                  <span className="truncate text-sm sm:text-base flex-1 min-w-0 text-[#0A0A0A]">{option}</span>
-                  {isSelected && <Check className="h-4 w-4 shrink-0 text-[#064E3B]" strokeWidth={2.8} />}
+                  <span className="allow-white truncate text-sm sm:text-base flex-1 min-w-0 text-white">{option}</span>
+                  {isSelected && <Check className="h-4 w-4 shrink-0 text-white" strokeWidth={2.8} />}
                 </button>
               );
             })

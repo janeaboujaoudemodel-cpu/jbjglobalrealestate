@@ -565,7 +565,10 @@ const Properties = () => {
       >
         <div className="container mx-auto px-3 sm:px-4">
           {/* Active Champagne Layer with thin black contour visible at edges */}
-          <div className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "bg-transparent border border-white/12 rounded-2xl p-4 sm:p-5 shadow-lg"} style={{ overflow: 'visible' }}>
+            <div
+              className={isMapMode ? "jj-map-command-bar rounded-2xl p-4 sm:p-5" : "bg-transparent border border-white/18 rounded-2xl p-4 sm:p-5 shadow-lg"}
+              style={{ overflow: 'visible', borderColor: 'rgba(255,255,255,0.18)' }}
+            >
           {/* Active deep-link filter chips (status / category) */}
           <ActiveFilterIndicator
             transactionType={appliedFilters.transactionType}
@@ -624,15 +627,17 @@ const Properties = () => {
               <div data-no-contrast-guard className="flex items-center gap-2">
                 {/* Unified pill: Intent (left half) | Sort By (right half) */}
                   <div
-                    className={isMapMode ? "jj-map-segmented-control flex items-stretch h-11 rounded-xl overflow-hidden flex-shrink-0" : "flex items-stretch h-11 rounded-xl border border-white/18 bg-[#04241C] overflow-hidden flex-shrink-0"}
+                    className={isMapMode ? "allow-white jj-map-segmented-control flex items-stretch h-11 rounded-xl overflow-hidden flex-shrink-0" : "allow-white flex items-stretch h-11 rounded-xl border border-white/18 bg-[#04241C] overflow-hidden flex-shrink-0"}
+                    style={{ borderColor: 'rgba(255,255,255,0.18)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                   data-no-contrast-guard
                 >
                   <div className="flex-1 min-w-[110px]">
                     <Select value={intentValue} onValueChange={setIntent}>
                       <SelectTrigger
-                        className={isMapMode ? "jj-map-segment h-full w-full px-3 border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold" : "allow-white h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-white hover:bg-white/10 [&>svg]:text-white"}
+                        className={isMapMode ? "allow-white jj-map-segment h-full w-full px-3 border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-white [&>svg]:text-white" : "allow-white h-full w-full px-3 bg-transparent border-0 rounded-none shadow-none outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 focus:ring-offset-0 text-[13px] font-semibold text-white hover:bg-white/10 [&>svg]:text-white"}
                         aria-label="Transaction intent"
                         data-surface={isMapMode ? "emerald" : undefined}
+                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                       >
                         <SelectValue />
                       </SelectTrigger>
@@ -666,13 +671,14 @@ const Properties = () => {
                       type="button"
                       data-no-contrast-guard
                       aria-label="Search properties"
-                      className="inline-flex items-center justify-center h-11 w-11 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white transition-colors flex-shrink-0"
+                      className="allow-white inline-flex items-center justify-center h-11 w-11 rounded-xl jj-pill-emerald-metallic text-white transition-colors flex-shrink-0"
                       style={{ color: '#FFFFFF' }}
                     >
                       <Search className="w-4 h-4 allow-white" style={{ color: '#FFFFFF' }} strokeWidth={2.2} />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent
+                    data-filter-dropdown="true"
                     align="start"
                     sideOffset={8}
                     data-map-shell={isMapMode ? true : undefined}

@@ -33,11 +33,11 @@ const QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4'];
 const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
 
 const STATUS_OPTIONS = [
-  { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
+  { value: 'Announced', label: 'Announced', dotClass: 'jj-pill-emerald-metallic' },
   { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-pill-emerald-metallic' },
-  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
-  { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
-  { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
+  { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'jj-pill-emerald-metallic' },
+  { value: 'On Sale', label: 'On Sale', dotClass: 'jj-pill-emerald-metallic' },
+  { value: 'Sold Out', label: 'Sold Out', dotClass: 'jj-pill-emerald-metallic' },
 ];
 
 const CONSTRUCTION_OPTIONS = [
@@ -241,13 +241,13 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
   const togglePillOff =
-    "border-[#064E3B]/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55";
+    "allow-white border-white/28 text-white bg-white/7 hover:bg-white/14 hover:border-white/45";
   const togglePillOn =
     "allow-white jj-pill-emerald-metallic text-white border-0 font-bold";
-  const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
+  const sectionTitle = "allow-white text-sm font-bold text-white mb-3 tracking-tight";
   const inputClass = `${filterInput} h-10 rounded-xl font-medium`;
   const dropdownPanel =
-    "mt-2 rounded-2xl border border-[#064E3B]/25 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
+    "allow-white mt-2 rounded-2xl border border-white/24 bg-[#021611]/86 p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.65)]";
   const optionRow =
     "flex items-start gap-3 w-full min-h-12 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA] overflow-visible";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
