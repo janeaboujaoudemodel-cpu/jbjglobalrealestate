@@ -716,7 +716,6 @@ Requirements:
           <div className="max-w-3xl mx-auto px-2 sm:px-4">
             <div
               data-no-contrast-guard
-              data-tool-shell-root
               data-tool-emerald
               data-seller-form-scope
               className="rounded-2xl p-8 sm:p-10 md:p-12 lg:p-14 shadow-xl"
@@ -725,6 +724,8 @@ Requirements:
                 border: "1.5px solid rgba(16,185,129,0.35)",
                 boxShadow: "0 28px 70px -30px rgba(0,0,0,0.7)",
                 color: "#FFFFFF",
+                padding: "clamp(32px, 4vw, 56px)",
+                boxSizing: "border-box",
               }}
             >
               <style>{`
