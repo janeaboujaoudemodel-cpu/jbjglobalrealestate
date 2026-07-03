@@ -1046,6 +1046,72 @@ const PropertyEvaluator = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Entry mode toggle: fill manually OR auto-fill from Title Deed */}
+                  <div className="rounded-2xl border border-emerald-400/50 bg-black/15 p-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="flex-1">
+                      <p className="text-white font-semibold text-sm">How do you want to fill this valuation?</p>
+                      <p className="text-white/75 text-xs">Choose manual entry, or upload your Title Deed / Oqood and let AI auto-fill every field.</p>
+                    </div>
+                    <div className="inline-flex rounded-xl bg-black/30 border border-emerald-400/40 p-1">
+                      <button
+                        type="button"
+                        onClick={() => setEntryMode('manual')}
+                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${entryMode === 'manual' ? 'bg-emerald-500 text-white shadow' : 'text-white/80 hover:text-white'}`}
+                      >
+                        Fill manually
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEntryMode('titleDeed')}
+                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${entryMode === 'titleDeed' ? 'bg-emerald-500 text-white shadow' : 'text-white/80 hover:text-white'}`}
+                      >
+                        From Title Deed
+                      </button>
+                    </div>
+                  </div>
+
+                  {entryMode === 'titleDeed' && (
+                    <div className="rounded-2xl border border-emerald-400/60 p-4 bg-black/20 space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <Label className="text-white font-semibold">Upload Title Deed / Oqood</Label>
+                          <p className="text-xs text-white/80">PDF, JPG, PNG or WEBP. AI extracts community, tower, unit, size, floor, view, handover year and owner.</p>
+                        </div>
+                        <FileCheck className="w-6 h-6 text-emerald-300" />
+                      </div>
+                      <div
+                        onClick={() => titleDeedInputRef.current?.click()}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => { e.preventDefault(); handleAssetUpload(e.dataTransfer.files, 'titleDeed'); }}
+                        className="rounded-xl border-2 border-dashed border-emerald-400/60 cursor-pointer text-center p-5 hover:bg-black/25"
+                      >
+                        <Upload className="w-7 h-7 mx-auto mb-2 text-emerald-300" />
+                        <p className="text-white font-semibold text-sm">Drag & drop or click to upload</p>
+                        <p className="text-xs text-white/70">Multiple files supported</p>
+                      </div>
+                      {property.titleDeedFiles.length > 0 && (
+                        <div className="space-y-2">
+                          {property.titleDeedFiles.map((file, i) => (
+                            <div key={`${file.name}-${i}`} className="flex items-center justify-between gap-3 rounded-lg bg-black/30 border border-emerald-400/40 px-3 py-2">
+                              <span className="text-xs text-white truncate">{file.name}</span>
+                              <button type="button" onClick={() => removeTitleDeed(i)} className="text-white/80 hover:text-white"><X className="w-4 h-4" /></button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <Button
+                        type="button"
+                        onClick={parseTitleDeedNow}
+                        disabled={isParsingTitleDeed || property.titleDeedFiles.length === 0}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold disabled:opacity-50"
+                      >
+                        {isParsingTitleDeed ? (<><Sparkles className="w-4 h-4 mr-2 animate-pulse" /> Extracting fields…</>) : (<><Sparkles className="w-4 h-4 mr-2" /> Auto-fill all fields from Title Deed</>)}
+                      </Button>
+                      <p className="text-[11px] text-white/60 text-center">You can still edit any field below before generating the report.</p>
+                    </div>
+                  )}
+
+
                   <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/85 flex items-center gap-1">
