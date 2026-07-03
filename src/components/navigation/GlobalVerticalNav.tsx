@@ -782,6 +782,13 @@ export default function GlobalVerticalNav() {
     return pathname === hrefPath;
   };
 
+  const isItemActiveForSection = (item: NavItem, sectionKey?: string) => {
+    if (hrefPathname(item.href) === '/list-property') {
+      return isListPropertySourceActive(item, sectionKey);
+    }
+    return isRouteActive(item.href);
+  };
+
   // Group nav items by section (with consolidated aliases)
   const { highlightItems, sectionGroups } = useMemo(() => {
     const highlights: NavItem[] = [];
@@ -815,7 +822,7 @@ export default function GlobalVerticalNav() {
     closeMegaMenu();
     setMobileOpen(false);
     for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some(item => isRouteActive(item.href))) {
+      if (items.some(item => isItemActiveForSection(item, section))) {
         setOpenSection(section as SectionKey);
         return;
       }
@@ -1116,7 +1123,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {highlightItems.map((item, i) => {
               const hasMega = !!item.megaMenu;
               const isMenuOpen = activeMegaMenu === item.megaMenu;
-              const routeActive = isRouteActive(item.href);
+              const routeActive = isItemActiveForSection(item);
               const highlightActive = activeMegaMenu ? isMenuOpen : routeActive;
               const Icon = item.icon;
               return (
@@ -1160,7 +1167,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             const items = sectionGroups[sectionKey];
             if (!items || items.length === 0) return null;
             const isOpen = openSection === sectionKey;
-            const hasActiveChild = items.some(item => isRouteActive(item.href));
+            const hasActiveChild = items.some(item => isItemActiveForSection(item, sectionKey));
             const hasMegaActive = sectionHasActiveMega(sectionKey);
             const sectionHighlighted = false;
             const SectionIcon = SECTION_ICONS[sectionKey];
@@ -1253,7 +1260,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         const path = location.pathname;
                         const exactOnlyHubs = new Set(["/market-intelligence", "/guides"]);
                         const sectionMatches = items
-                          .map(it => it.href)
+                          .map(it => hrefPathname(it.href))
                           .filter(h => h && h !== '#' && (path === h || (!exactOnlyHubs.has(h) && path.startsWith(h + '/'))))
                           .sort((a, b) => b.length - a.length);
                         const mostSpecific = sectionMatches[0];
@@ -1266,12 +1273,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         return items.map((item, i) => {
                           const hasMega = !!item.megaMenu;
                           const isMenuOpen = activeMegaMenu === item.megaMenu;
-                          const routeMatchExclusive = !!item.href
-                            && item.href === mostSpecific
-                            && firstIndexByHref.get(item.href) === i
-                            // /list-property is owned by the top-level highlighted hub —
-                            // never light it up inside sections when the user is on that route.
-                            && item.href !== '/list-property';
+                          const routeMatchExclusive = hrefPathname(item.href) === '/list-property'
+                            ? isListPropertySourceActive(item, sectionKey)
+                            : !!item.href
+                              && hrefPathname(item.href) === mostSpecific
+                              && firstIndexByHref.get(item.href) === i;
                           const subitemActive = activeMegaMenu ? isMenuOpen : routeMatchExclusive;
                         const Icon = item.icon;
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
