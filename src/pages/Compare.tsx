@@ -898,7 +898,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             data-surface="champagne"
             data-no-contrast-guard
             className="overflow-x-auto rounded-2xl"
-            style={{ background: CHAMPAGNE, border: EMERALD_HAIRLINE, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.65), 0 12px 40px -20px rgba(0,0,0,0.35)" }}
+            style={{ background: "#FFFFFF", border: "none", boxShadow: "0 12px 40px -20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.65)" }}
           >
             <table className="w-full">
               <thead>
