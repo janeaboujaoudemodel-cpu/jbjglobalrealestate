@@ -269,9 +269,8 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-surface="emerald"
-              data-emerald-ok="button"
-              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap"
+              className="allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap border border-white/70 hover:border-white transition-colors bg-transparent hover:bg-white/[0.06]"
+              style={{ color: "#FFFFFF" }}
             >
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request a Service</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
@@ -279,14 +278,14 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-surface="emerald"
-              data-emerald-ok="button"
-              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap"
+              className="allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap border border-white/70 hover:border-white transition-colors bg-transparent hover:bg-white/[0.06]"
+              style={{ color: "#FFFFFF" }}
             >
               <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Support</span>
             </Link>
           </motion.div>
+
 
 
         </motion.div>
