@@ -48,18 +48,18 @@ export const AIToolRoutes = () => (
     <Route path="/ai-meeting-summarizer" element={<AIMeetingSummarizerPage />} />
     <Route path="/ai-translation-hub" element={<AITranslationHubPage />} />
     <Route path="/ai-video-tour-script" element={<Navigate to="/toolkit/video-suite" replace />} />
-    <Route path="/ai-contract-reviewer" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-document-generator" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-call-summarizer" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-client-matcher" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-email-generator" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-social-media" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-investment-report" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-description-writer" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-calendar" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-budget-planner" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-contract-reviewer" element={<AIContractReviewerPage />} />
+    <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
+    <Route path="/ai-call-summarizer" element={<AICallSummarizerPage />} />
+    <Route path="/ai-client-matcher" element={<AIClientMatcherPage />} />
+    <Route path="/ai-email-generator" element={<AIEmailGeneratorPage />} />
+    <Route path="/ai-social-media" element={<AISocialMediaPage />} />
+    <Route path="/ai-investment-report" element={<AIInvestmentReportPage />} />
+    <Route path="/ai-description-writer" element={<AIDescriptionWriterPage />} />
+    <Route path="/ai-calendar" element={<AICalendar />} />
+    <Route path="/ai-budget-planner" element={<AIFinancialAdvisor />} />
     <Route path="/ai-financial-advisor" element={<Navigate to="/ai-budget-planner" replace />} />
-    <Route path="/ai-personal-shopper" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-personal-shopper" element={<AIPersonalShopper />} />
     {/* /ai-home-finder is canonical (defined in PublicRoutes). /quiz no longer exists. */}
     <Route path="/tools-guide" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/my-ai-history" element={<MyAIHistory />} />
