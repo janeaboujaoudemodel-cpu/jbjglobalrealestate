@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Briefcase, Users, Building2, Key,
-  ArrowRight, CheckCircle, ChevronRight, MessageSquare, AlertCircle,
-  ClipboardCheck, Calendar, Coins, FileText, Calculator, Award
+import {
+  Briefcase, Building2, Key, ArrowRight, CheckCircle, ChevronRight,
+  MessageSquare, AlertCircle, Calendar, FileText, Award, GraduationCap,
+  Home, DollarSign, Globe, Megaphone, ClipboardCheck, Sparkles, Building,
+  Palmtree, Wrench, Package
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,168 +21,163 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 }
+    transition: { staggerChildren: 0.08 }
   }
 };
 
-// All 12 service cards as specified
+// JBJ Global Real Estate — full curated service catalog (2-per-row layout)
 const serviceCards = [
   {
+    icon: GraduationCap,
+    title: "Broker Academy",
+    description: "Structured training and continuous development program for brokers — covering compliance, negotiation, market intelligence, and premium client handling.",
+    includes: ["Curriculum modules", "Standards training", "Continuous education", "Certification pathway"],
+    cta: "Explore Academy",
+    link: "/broker-education"
+  },
+  {
+    icon: Home,
+    title: "Buy Property",
+    description: "End-to-end buying advisory — from shortlist and viewings to negotiation, DLD paperwork, and handover coordination.",
+    includes: ["Shortlist & viewings", "Negotiation support", "Offer & MOU handling", "Transfer coordination"],
+    cta: "Start Buying",
+    link: "/properties"
+  },
+  {
+    icon: Key,
+    title: "Rent Property",
+    description: "Guided rental advisory for tenants — matching your brief, verifying the listing, and structuring a clean tenancy contract.",
+    includes: ["Requirement briefing", "Listing verification", "Ejari & tenancy contract", "Move-in coordination"],
+    cta: "Find a Rental",
+    link: "/properties?type=rent"
+  },
+  {
+    icon: DollarSign,
+    title: "Sell Property",
+    description: "Full-service selling advisory — valuation, marketing, buyer qualification, and transfer coordination handled end-to-end.",
+    includes: ["Valuation & pricing", "Premium marketing", "Buyer qualification", "Transfer & DLD handling"],
+    cta: "List Your Property",
+    link: "/sell/valuation"
+  },
+  {
+    icon: Award,
+    title: "Golden Visa",
+    description: "Coordination pathway for UAE 10-year Golden Visa applications through licensed specialists — property-backed, investor, or professional routes.",
+    includes: ["Eligibility review", "Document preparation", "Application coordination", "Status tracking"],
+    cta: "Check Eligibility",
+    link: "/guides/golden-visa-uae"
+  },
+  {
+    icon: Globe,
+    title: "Schengen Visa",
+    description: "Structured Schengen visa coordination for UAE residents — appointment booking, documentation, and travel-insurance readiness.",
+    includes: ["Country routing", "Appointment booking", "Document checklist", "Travel insurance"],
+    cta: "Request Support",
+    link: "/contact"
+  },
+  {
+    icon: Building2,
+    title: "Company Setup",
+    description: "Coordination pathway for UAE company formation — mainland, free-zone, and offshore — through licensed corporate specialists.",
+    includes: ["Structure advisory", "License selection", "Documentation guidance", "Ongoing renewals"],
+    cta: "Start Setup",
+    link: "/partners/company-setup"
+  },
+  {
+    icon: Megaphone,
+    title: "Digital Marketing",
+    description: "Performance marketing and content workflows for developers, brokers, and premium clients — lead capture, funnel design, and reporting.",
+    includes: ["Paid media", "Content production", "Landing pages", "Weekly reporting"],
+    cta: "Request Proposal",
+    link: "/contact"
+  },
+  {
+    icon: Calendar,
+    title: "Event Management",
+    description: "End-to-end event production for launches, exclusive previews, investor gatherings, and community activations.",
+    includes: ["Venue sourcing", "Guest management", "Production & AV", "Post-event reporting"],
+    cta: "Plan an Event",
+    link: "/contact"
+  },
+  {
+    icon: Briefcase,
+    title: "Business Development",
+    description: "Structured business development for developers and enterprise clients — partnerships, channel building, and pipeline growth.",
+    includes: ["Market mapping", "Partnership outreach", "Deal pipelines", "Performance reporting"],
+    cta: "Request Meeting",
+    link: "/contact"
+  },
+  {
     icon: ClipboardCheck,
-    title: "Snagging & Handover Inspection",
-    description: "A structured, documented inspection to identify defects before you accept handover — with clear reporting and follow-up tracking.",
-    includes: [
-      "Unit inspection before handover",
-      "Defect identification & documentation",
-      "Snagging report packaging",
-      "Follow-up checklist tracking"
-    ],
-    cta: "Book Snagging",
-    link: "/services/snagging"
+    title: "Project Management",
+    description: "PMO-grade project management for real-estate initiatives — timelines, vendor coordination, and quality gates.",
+    includes: ["Scope & timelines", "Vendor coordination", "Quality gates", "Executive reporting"],
+    cta: "Request PMO",
+    link: "/contact"
+  },
+  {
+    icon: Sparkles,
+    title: "Brand Development",
+    description: "Brand identity and positioning for developers, family offices, and premium brokers — strategy, visual system, and rollout.",
+    includes: ["Brand strategy", "Visual system", "Guidelines", "Launch rollout"],
+    cta: "Start a Brand",
+    link: "/contact"
+  },
+  {
+    icon: MessageSquare,
+    title: "Public Relations (PR)",
+    description: "Editorial-grade PR and media relations — narrative building, journalist access, and reputation management.",
+    includes: ["Narrative & angles", "Media relations", "Press releases", "Reputation monitoring"],
+    cta: "Request PR",
+    link: "/contact"
+  },
+  {
+    icon: Building,
+    title: "Commercial Leasing",
+    description: "Commercial leasing advisory across Dubai — office, retail, F&B, and industrial — with tenant representation and negotiation.",
+    includes: ["Requirement briefing", "Shortlist & tours", "Head-of-terms drafting", "Fit-out coordination"],
+    cta: "Find Commercial Space",
+    link: "/contact"
   },
   {
     icon: Key,
     title: "Property Management",
     description: "Operational support to protect your asset, reduce tenant friction, and keep occupancy stable — with structured reporting.",
-    includes: [
-      "Tenant coordination",
-      "Maintenance coordination",
-      "Payment/renewal reminders",
-      "Issue logging & resolution"
-    ],
+    includes: ["Tenant coordination", "Maintenance handling", "Payment/renewal reminders", "Issue resolution"],
     cta: "Request Management",
     link: "/services/property-management"
   },
   {
-    icon: Calendar,
-    title: "Short-Term Rentals & Holiday Homes",
-    description: "A structured setup and operating workflow for short-term stays — from readiness checklist to performance monitoring.",
-    includes: [
-      "Eligibility & readiness checklist",
-      "Setup workflow coordination",
-      "Guest messaging & cleaning",
-      "Performance monitoring"
-    ],
-    cta: "Request Setup",
+    icon: Palmtree,
+    title: "Holiday Homes",
+    description: "Turnkey short-term rental operation — DTCM licensing, pricing, cleaning, guest messaging, and performance monitoring.",
+    includes: ["DTCM licensing", "Dynamic pricing", "Housekeeping & linen", "Guest messaging"],
+    cta: "Launch Holiday Home",
     link: "/services/short-term-rentals"
   },
   {
-    icon: Coins,
-    title: "Currency Exchange Support",
-    description: "Coordination support for buyers transferring funds across borders — with clear routing and documentation readiness.",
-    includes: [
-      "Transfer coordination",
-      "Partner introductions",
-      "Documentation guidance",
-      "Process transparency"
-    ],
-    cta: "Request Support",
-    link: "/services/currency-exchange"
-  },
-  {
-    icon: Briefcase,
-    title: "Concierge Convenience Services",
-    description: "Operational help around your property journey — scheduling, coordination, and time-saving logistics.",
-    includes: [
-      "Appointment scheduling",
-      "Document collection",
-      "Utility coordination",
-      "Move-in assistance"
-    ],
-    cta: "Request Concierge",
-    link: "/services/concierge"
-  },
-  {
-    icon: Building2,
-    title: "Company Setup Support",
-    description: "A coordination pathway for company setup through licensed specialists — structured, documented, and guided.",
-    includes: [
-      "Partner introductions",
-      "Documentation guidance",
-      "Process coordination",
-      "Status updates"
-    ],
-    cta: "Request Setup",
-    link: "/services/company-setup"
+    icon: Wrench,
+    title: "Snagging & Handover",
+    description: "Structured, documented inspection to identify defects before you accept handover — with clear reporting and developer follow-up.",
+    includes: ["Full unit inspection", "Defect documentation", "Snagging report", "Follow-up tracking"],
+    cta: "Book Snagging",
+    link: "/services/snagging"
   },
   {
     icon: FileText,
-    title: "Signature Collection (JBJ)",
-    description: "A controlled internal signature-request workflow for JBJ documents — tracked, timestamped, and auditable.",
-    includes: [
-      "Request submission",
-      "Status tracking",
-      "Document management",
-      "Audit trail"
-    ],
-    cta: "Submit Request",
-    link: "/services/signature-collection"
+    title: "Conveyancing",
+    description: "Independent conveyancing coordination for buyers and sellers — title checks, MOU, NOC, and DLD transfer handled cleanly.",
+    includes: ["Title & liability check", "MOU drafting", "NOC & DLD transfer", "Escrow coordination"],
+    cta: "Request Conveyancing",
+    link: "/partners/legal"
   },
   {
-    icon: Calculator,
-    title: "AI Calculators & Tools",
-    description: "Decision support tools designed for clarity — using structured inputs and transparent outputs.",
-    includes: [
-      "Mortgage calculator",
-      "Property evaluator",
-      "ROI calculator",
-      "AI-powered analysis"
-    ],
-    cta: "Open Tools",
-    link: "/ai-hub"
-  },
-  {
-    icon: Award,
-    title: "Broker Certification (Internal)",
-    description: "An internal training and standards program created by JBJ Global Real Estate for our broker partner network.",
-    includes: [
-      "Curriculum modules",
-      "Standards training",
-      "Certification issuance",
-      "Ongoing education"
-    ],
-    note: "This is an internal program and does not grant external licensing status.",
-    cta: "View Program",
-    link: "/services/broker-certification"
-  },
-  {
-    icon: AlertCircle,
-    title: "Complaint Procedures",
-    description: "A structured pathway to raise issues, track outcomes, and ensure accountability — with clear escalation steps.",
-    includes: [
-      "Issue submission",
-      "Ticket tracking",
-      "Escalation ladder",
-      "Resolution updates"
-    ],
-    cta: "Submit Complaint",
-    link: "/services/complaint-procedures"
-  },
-  {
-    icon: MessageSquare,
-    title: "Customer Happiness Center",
-    description: "Fast routing, clear answers, and structured support — with ticket tracking and direct contact options.",
-    includes: [
-      "Support ticket creation",
-      "Direct contact options",
-      "Response tracking",
-      "Resolution support"
-    ],
-    cta: "Create Ticket",
-    link: "/services/customer-happiness-center"
-  },
-  {
-    icon: Users,
-    title: "Testimonials",
-    description: "Verified client feedback and outcomes — presented with clarity and respect for privacy.",
-    includes: [
-      "Client testimonials",
-      "Video testimonials",
-      "Success stories",
-      "Feedback submission"
-    ],
-    cta: "Read Stories",
-    link: "/services/testimonials"
+    icon: Package,
+    title: "Full Turnkey Solutions",
+    description: "One coordinated program — buy, furnish, license, and operate — for investors who want a turnkey Dubai property experience.",
+    includes: ["Acquisition + handover", "Furniture & fit-out", "Licensing & compliance", "Ongoing operations"],
+    cta: "Request Turnkey",
+    link: "/contact"
   }
 ];
 
