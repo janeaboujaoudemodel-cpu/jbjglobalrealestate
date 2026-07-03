@@ -1150,7 +1150,7 @@ const Properties = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">
                 {showSkeletons ? (
                   [...Array(6)].map((_, i) => (
-                    <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[350px] animate-pulse border-2 border-[#B89555]/30" />
+                    <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[350px] animate-pulse border border-[#064E3B]/30" />
                   ))
                 ) : finalProjects.length > 0 ? (
                   finalProjects.map((project) => (
@@ -1173,7 +1173,7 @@ const Properties = () => {
                     <Search className="w-10 h-10 text-[#1A1A1A] mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-[#1A1A1A] mb-2">We Couldn't Find an Exact Match</h3>
                     <p className="text-[#1A1A1A]/70 mb-4">Try adjusting your filters to discover available properties</p>
-                    <Button onClick={clearFilters} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                    <Button onClick={clearFilters} variant="outline" className="border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                       <X className="w-4 h-4 mr-2" />
                       Clear All Filters
                     </Button>
@@ -1203,7 +1203,7 @@ const Properties = () => {
             <div className="flex">
               {/* Vertical nav handled globally by MainLayout */}
             {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
+            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#064E3B]/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
               
               {/* Header Section - Off-plan properties message */}
               {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
@@ -1245,7 +1245,7 @@ const Properties = () => {
               {showSkeletons ? (
                 <div data-projects-shell data-page-gutter className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 py-6 sm:py-8">
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-[#B89555]/30" />
+                    <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border border-[#064E3B]/30" />
                   ))}
                 </div>
               ) : finalProjects.length > 0 ? (
@@ -1297,7 +1297,7 @@ const Properties = () => {
                         type="button"
                         onClick={() => { setCurrentPage((p) => Math.max(1, p - 1)); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                         disabled={safePage === 1}
-                        className="h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        className="h-9 px-3 rounded-md border border-[#064E3B]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
                         Previous
                       </button>
@@ -1316,8 +1316,8 @@ const Properties = () => {
                               onClick={() => { setCurrentPage(p); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                               className={`h-9 min-w-[36px] px-2 rounded-md border text-[13px] font-semibold tabular-nums transition-colors ${
  p === safePage
- ? "bg-[#EFE6D6] border-[#B89555] text-[#1A1A1A]"
- : "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+ ? "allow-white jj-pill-emerald-metallic border-0 text-white"
+ : "bg-[#FDFBF7] border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
  }`}
                               aria-current={p === safePage ? "page" : undefined}
                             >
@@ -1329,7 +1329,7 @@ const Properties = () => {
                         type="button"
                         onClick={() => { setCurrentPage((p) => Math.min(totalPages, p + 1)); document.getElementById("properties-results")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}
                         disabled={safePage === totalPages}
-                        className="h-9 px-3 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                        className="h-9 px-3 rounded-md border border-[#064E3B]/40 bg-[#FDFBF7] text-[13px] font-medium text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
                         Next
                       </button>
@@ -1344,7 +1344,7 @@ const Properties = () => {
                   <div className="text-center mb-10">
                     {appliedFilters.developerId && developers?.find(d => d.id === appliedFilters.developerId) ? (
                       <>
-                        <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#B89555]/30">
+                        <div className="w-24 h-24 bg-gradient-to-br from-[#064E3B]/20 to-[#064E3B]/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#064E3B]/30">
                           <Building2 className="w-12 h-12 text-[#1A1A1A]" />
                         </div>
                         <h3 className="text-2xl font-semibold text-[#1A1A1A] mb-3">
@@ -1371,7 +1371,7 @@ const Properties = () => {
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }} 
                             variant="outline" 
-                            className="border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] h-12 px-6 cursor-pointer"
+                            className="border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] h-12 px-6 cursor-pointer"
                           >
                             Browse All Properties
                           </Button>
@@ -1379,8 +1379,8 @@ const Properties = () => {
                       </>
                     ) : (
                       <>
-                        <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#B89555]/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
-                          <Search className="w-10 h-10 text-[#1A1A1A] drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
+                        <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#064E3B]/30 shadow-[0_0_30px_rgba(6,78,59,0.18)]">
+                          <Search className="w-10 h-10 text-[#1A1A1A] drop-shadow-[0_0_8px_rgba(6,78,59,0.25)]" />
                         </div>
                         <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
                           We Couldn't Find an Exact Match
@@ -1394,7 +1394,7 @@ const Properties = () => {
                             window.scrollTo({ top: 0, behavior: 'smooth' });
                           }}
                           variant="outline"
-                          className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-11 px-6"
+                          className="border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10 h-11 px-6"
                         >
                           <X className="w-4 h-4 mr-2" />
                           Clear All Filters
@@ -1407,12 +1407,12 @@ const Properties = () => {
                   {projects && projects.length > 0 && (
                     <div className="mt-8">
                       <div className="flex items-center gap-3 mb-6">
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-                        <div className="flex items-center gap-2 px-4 py-2 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-full">
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#064E3B]/30 to-transparent" />
+                        <div className="flex items-center gap-2 px-4 py-2 bg-[#064E3B]/10 border border-[#064E3B]/30 rounded-full">
                           <Sparkles className="w-4 h-4 text-[#1A1A1A]" />
                           <span className="text-sm font-semibold text-[#1A1A1A]">Explore Other Properties</span>
                         </div>
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#064E3B]/30 to-transparent" />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
                         {projects.slice(0, 6).map((project) => (
@@ -1452,15 +1452,15 @@ const Properties = () => {
             </p>
             <ul className="grid sm:grid-cols-3 gap-4 text-sm text-[#1A1A1A]/80 mb-10 text-left sm:text-center">
               <li className="flex items-start sm:items-center sm:flex-col gap-2 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] mt-1.5 sm:mt-0 shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#064E3B] mt-1.5 sm:mt-0 shrink-0" />
                 Flexible payment plans tailored to your investment timeline
               </li>
               <li className="flex items-start sm:items-center sm:flex-col gap-2 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] mt-1.5 sm:mt-0 shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#064E3B] mt-1.5 sm:mt-0 shrink-0" />
                 Trusted developers: Emaar, Damac, Sobha, Nakheel &amp; more
               </li>
               <li className="flex items-start sm:items-center sm:flex-col gap-2 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] mt-1.5 sm:mt-0 shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#064E3B] mt-1.5 sm:mt-0 shrink-0" />
                 ROI projections and market insights included
               </li>
             </ul>
