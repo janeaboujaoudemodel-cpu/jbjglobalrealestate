@@ -9,8 +9,8 @@ for (const route of routes) {
   page.removeAllListeners('pageerror');
   page.on('pageerror', e=>errors.push(e.message));
   await page.goto('http://localhost:8080'+route, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  for (let i=0;i<30;i++) {
-    const ready = await page.evaluate(() => !!document.querySelector('[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen, section'));
+  for (let i=0;i<45;i++) {
+    const ready = await page.evaluate(() => !!document.querySelector('[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen'));
     if (ready) break;
     await page.waitForTimeout(300);
   }
