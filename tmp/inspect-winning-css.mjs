@@ -1,7 +1,8 @@
 import { chromium } from 'playwright';
 const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
-const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
-await page.goto('http://localhost:8080/interior-design-ai', { waitUntil: 'networkidle', timeout: 60000 });
+const page = await browser.newPage({ viewport: { width: 1440, height: 1400 } });
+await page.goto('http://localhost:8080/interior-design-ai', { waitUntil: 'domcontentloaded', timeout: 60000 });
+await page.waitForTimeout(3000);
 const out = await page.evaluate(() => {
   function matches(el, sel){ try { return el.matches(sel); } catch { return false; } }
   function collect(el){
@@ -15,11 +16,13 @@ const out = await page.evaluate(() => {
         }
       }
     }
-    return hits.slice(-20);
+    return hits.slice(-50);
   }
   const choice = document.querySelector('.id-choice');
-  const sweep = document.querySelector('.jj-sqtoggle-sweep');
-  return { choice: choice ? {style: getComputedStyle(choice).cssText, rules: collect(choice)} : null, sweep: sweep ? {style: getComputedStyle(sweep).cssText, rules: collect(sweep)} : null };
+  const footer = document.querySelector('footer');
+  const free = [...document.querySelectorAll('div,span')].find(e => e.textContent?.trim()==='Completely Free');
+  function info(el){ if(!el) return null; const cs=getComputedStyle(el); return {tag: el.tagName, cls: el.className, vals:{borderTopColor:cs.borderTopColor,borderRightColor:cs.borderRightColor,borderBottomColor:cs.borderBottomColor,borderLeftColor:cs.borderLeftColor,boxShadow:cs.boxShadow,background:cs.background}, rules: collect(el)}; }
+  return { choice: info(choice), footer: info(footer), free: info(free) };
 });
-console.log(JSON.stringify(out, null, 2).slice(0,20000));
+console.log(JSON.stringify(out, null, 2).slice(0,50000));
 await browser.close();
