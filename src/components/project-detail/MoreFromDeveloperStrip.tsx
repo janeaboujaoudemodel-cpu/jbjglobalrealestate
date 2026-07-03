@@ -98,7 +98,7 @@ export default function MoreFromDeveloperStrip({
   }, [all]);
   const typeOptions = useMemo(() => {
     const s = new Set<string>();
-    all.forEach((p: any) => p.property_type && s.add(p.property_type));
+    all.forEach((p: any) => p.property_type_label && s.add(p.property_type_label));
     return Array.from(s).sort();
   }, [all]);
   const statusOptions = useMemo(() => {
