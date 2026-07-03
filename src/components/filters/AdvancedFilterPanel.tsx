@@ -34,7 +34,7 @@ const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '
 
 const STATUS_OPTIONS = [
   { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
-  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
+  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-pill-emerald-metallic' },
   { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
   { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
   { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
@@ -301,7 +301,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   {projectCount.toLocaleString()} live projects
                 </span>
               ) : (
-                <span className="text-sm text-[#1A1A1A]/70">Loading...</span>
+                <span className="text-sm text-[#1A1A1A]">Loading...</span>
               )}
             </div>
           </div>
@@ -327,7 +327,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.emirates.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
+                <span className="text-[#1A1A1A]">
                   {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
                 </span>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", emiratesOpen && "rotate-180")} />
@@ -372,7 +372,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setAreasOpen(!areasOpen); setEmiratesOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
+                <span className="text-[#1A1A1A]">
                   {!localFilters.areas || localFilters.areas.length === 0
                     ? "All Areas"
                     : `${localFilters.areas.length} area${localFilters.areas.length > 1 ? 's' : ''} selected`}
@@ -389,15 +389,15 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
                   {allAreas.length === 0 ? (
-                    <div className="py-4 text-center text-xs text-[#1A1A1A]/70">Loading areas...</div>
+                    <div className="py-4 text-center text-xs text-[#1A1A1A]">Loading areas...</div>
                   ) : (
                     <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                       {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
-                            <span className="text-[10px] font-bold text-[#1A1A1A]/70 uppercase tracking-wider">{emirate}</span>
+                            <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wider">{emirate}</span>
                             <div className="flex-1 h-px bg-[#EFE6D6]/20" />
-                            <span className="text-[10px] text-[#1A1A1A]/70">{areaNames.length}</span>
+                            <span className="text-[10px] text-[#1A1A1A] font-semibold">{areaNames.length}</span>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                             {areaNames.map(areaName => {
@@ -434,7 +434,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setDevsOpen(!devsOpen); setEmiratesOpen(false); setAreasOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.developers.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
+                <span className="text-[#1A1A1A]">
                   {localFilters.developers.length === 0 ? "All Developers" : `${localFilters.developers.length} selected`}
                 </span>
                 <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", devsOpen && "rotate-180")} />
@@ -488,7 +488,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Projects Payment Plan</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A]/70">Maximum pre-handover</span>
+                  <span className="text-xs text-[#1A1A1A] font-semibold">Maximum pre-handover</span>
                   <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-[#064E3B]/25">
                     {localFilters.paymentPlanMax}%
                   </span>
@@ -501,7 +501,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   step={5}
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A]/70">Post handover plans only</span>
+                  <span className="text-xs text-[#1A1A1A] font-semibold">Post handover plans only</span>
                   <Switch
                     checked={localFilters.postHandoverOnly}
                     onCheckedChange={(v) => update({ postHandoverOnly: v })}
@@ -531,7 +531,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       placeholder="0"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
                   </div>
                 </div>
                 <div>
@@ -544,7 +544,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       placeholder="Any"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
                   </div>
                 </div>
               </div>
@@ -655,7 +655,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Project Handover By</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">From</label>
+                  <label className={`${filterLabel} mb-2`}>From</label>
                   <div className="flex gap-1 mb-2">
                     {QUARTERS.map(q => (
                       <button
