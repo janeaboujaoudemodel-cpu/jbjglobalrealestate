@@ -270,7 +270,7 @@ const Services = () => {
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-4">
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-12 md:mt-16">
             <PremiumHeroButton href="/contact" icon={ArrowRight}>
               Request a Service
             </PremiumHeroButton>
