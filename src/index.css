@@ -7063,18 +7063,28 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
  * ========================================================================= */
 
 
-/* Active / selected option inside any popper — faded gold gradient pill */
+/* Active / selected / highlighted option inside any popper — solid emerald
+   metallic pill with pure white ink. Never gold, never champagne. */
 [data-radix-popper-content-wrapper] [data-radix-select-item][data-state="checked"],
 [data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"],
 [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"],
-[data-radix-popper-content-wrapper] [role="option"][data-highlighted] {
-  background-image: linear-gradient(
-    135deg,
-    rgba(216, 184, 106, 0.35),
-    rgba(244, 227, 168, 0.50),
-    rgba(184, 149, 85, 0.35)
-  ) !important;
-  color: #3a2a08 !important;
+[data-radix-popper-content-wrapper] [role="option"][data-highlighted],
+[data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
+[data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-highlighted],
+[data-radix-popper-content-wrapper] [role="menuitemradio"][data-highlighted] {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  background-color: #042C1C !important;
+  color: #FFFFFF !important;
+}
+[data-radix-popper-content-wrapper] [data-radix-select-item][data-state="checked"] *,
+[data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"] *,
+[data-radix-popper-content-wrapper] [role="option"][aria-selected="true"] *,
+[data-radix-popper-content-wrapper] [role="option"][data-highlighted] *,
+[data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted] *,
+[data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-highlighted] *,
+[data-radix-popper-content-wrapper] [role="menuitemradio"][data-highlighted] * {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
 }
 
 /* ============================================================================
