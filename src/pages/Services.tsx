@@ -292,7 +292,7 @@ const Services = () => {
 
 
       {/* Service Cards Grid */}
-      <section id="services-grid" className="py-20 bg-[#F7F2EA]">
+      <section id="services-grid" data-surface="champagne" className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
