@@ -1912,6 +1912,7 @@ const PropertyEvaluator = () => {
             )}
           </TabsContent>
         </Tabs>
+        )}
 
         <Dialog open={isReportPreviewOpen} onOpenChange={setIsReportPreviewOpen}>
           <DialogContent className="max-w-5xl max-h-[86vh] overflow-y-auto bg-[#F7F2EA] text-[#1A1A1A] border-emerald-400/60">
