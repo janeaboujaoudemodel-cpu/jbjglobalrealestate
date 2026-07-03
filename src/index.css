@@ -28270,3 +28270,19 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-f
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: transparent !important;
 }
+
+/* Emerald dropdown scrollbar — gold accent on emerald panel */
+.jj-emerald-scroll::-webkit-scrollbar { width: 8px; }
+.jj-emerald-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 8px; }
+.jj-emerald-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #B89555 0%, #8B6F35 100%);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.jj-emerald-scroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #D4AF6C 0%, #A68440 100%);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+.jj-emerald-scroll { scrollbar-width: thin; scrollbar-color: #B89555 rgba(255,255,255,0.04); }
