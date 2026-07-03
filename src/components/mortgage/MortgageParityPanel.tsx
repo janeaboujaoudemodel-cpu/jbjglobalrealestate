@@ -296,6 +296,7 @@ export default function MortgageParityPanel({
                   <div
                     role="listbox"
                     aria-label={`${picker.label} bank options`}
+                    data-bank-picker-listbox
                     className="absolute left-0 right-0 top-[calc(100%+8px)] z-[80] max-h-72 overflow-y-auto rounded-xl p-1"
                     style={{
                       background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)",
@@ -314,22 +315,28 @@ export default function MortgageParityPanel({
                           aria-selected={selected}
                           disabled={disabled}
                           data-no-contrast-guard
+                          data-bank-picker-option
+                          data-selected={selected || undefined}
                           onClick={() => {
                             if (disabled) return;
                             picker.set(b.id);
                             setOpenBankPicker(null);
                           }}
-                          className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold leading-snug transition-colors disabled:cursor-not-allowed disabled:opacity-45"
+                          className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-semibold leading-snug transition-colors disabled:cursor-not-allowed disabled:opacity-45 whitespace-normal break-words"
                           style={{
-                            background: selected ? "#065F46" : "transparent",
+                            background: selected
+                              ? "linear-gradient(135deg,#0a6b53 0%,#064E3B 58%,#021b12 100%)"
+                              : "transparent",
                             color: "#FFFFFF",
                             WebkitTextFillColor: "#FFFFFF",
                           }}
                           onMouseEnter={(event) => {
-                            if (!selected && !disabled) event.currentTarget.style.background = "rgba(255,255,255,0.12)";
+                            if (!selected && !disabled) event.currentTarget.style.background = "rgba(6,78,59,0.45)";
                           }}
                           onMouseLeave={(event) => {
-                            event.currentTarget.style.background = selected ? "#065F46" : "transparent";
+                            event.currentTarget.style.background = selected
+                              ? "linear-gradient(135deg,#0a6b53 0%,#064E3B 58%,#021b12 100%)"
+                              : "transparent";
                           }}
                         >
                           {b.name} — {b.rate.toFixed(2)}%
@@ -338,6 +345,7 @@ export default function MortgageParityPanel({
                     })}
                   </div>
                 )}
+
               </div>
             </label>
           ))}
