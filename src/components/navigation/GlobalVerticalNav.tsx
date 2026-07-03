@@ -837,7 +837,12 @@ export default function GlobalVerticalNav() {
      Items without a megaMenu should NOT highlight based on route when a mega menu is open. */
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
-    const routeActive = isRouteActive(item.href);
+    let routeActive = isRouteActive(item.href);
+    // Dedupe: /list-property appears in multiple places (highlighted hub + sub-item).
+    // Only allow the "highlight:true" hub entry to reflect the active route.
+    if (item.href === '/list-property' && !item.highlight) {
+      routeActive = false;
+    }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
     if (
@@ -1236,7 +1241,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           const isMenuOpen = activeMegaMenu === item.megaMenu;
                           const routeMatchExclusive = !!item.href
                             && item.href === mostSpecific
-                            && firstIndexByHref.get(item.href) === i;
+                            && firstIndexByHref.get(item.href) === i
+                            // /list-property is owned by the top-level highlighted hub —
+                            // never light it up inside sections when the user is on that route.
+                            && item.href !== '/list-property';
                           const subitemActive = activeMegaMenu ? isMenuOpen : routeMatchExclusive;
                         const Icon = item.icon;
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);

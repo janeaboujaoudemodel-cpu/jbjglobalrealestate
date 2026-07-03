@@ -696,9 +696,9 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
-              border: `1.5px solid ${theme.badgeBorder}`,
-              boxShadow: `0 20px 40px -20px ${accent}66`,
+              background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%)",
+              border: `1.5px solid rgba(6,78,59,0.35)`,
+              boxShadow: `0 20px 40px -20px rgba(4,44,28,0.55)`,
             }}
           >
 
@@ -706,7 +706,7 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
                 background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
-                border: `1px solid ${theme.badgeBorder}`,
+                border: `1px solid rgba(6,78,59,0.35)`,
               }}
             >
               <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
@@ -714,8 +714,8 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             <h3
               className="text-xl md:text-2xl font-bold mb-2"
               style={{
-                color: theme.primaryDeep,
-                WebkitTextFillColor: theme.primaryDeep,
+                color: "#064E3B",
+                WebkitTextFillColor: "#064E3B",
                 letterSpacing: "-0.01em",
               }}
               data-no-contrast-guard
@@ -727,7 +727,7 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
               style={{
                 color: "#1A1A1A",
                 WebkitTextFillColor: "#1A1A1A",
-                opacity: 0.78,
+                opacity: 0.85,
               }}
               data-no-contrast-guard
             >
@@ -769,9 +769,9 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             className="rounded-2xl p-10 text-center"
             data-no-contrast-guard
             style={{
-              background: ombreSoft(theme),
-              border: `1.5px dashed ${theme.badgeBorder}`,
-              boxShadow: `0 20px 40px -20px ${accent}55`,
+              background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%)",
+              border: `1.5px dashed rgba(6,78,59,0.45)`,
+              boxShadow: `0 20px 40px -20px rgba(4,44,28,0.55)`,
             }}
           >
 
@@ -779,7 +779,7 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
                 background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
-                border: `1px solid ${theme.badgeBorder}`,
+                border: `1px solid rgba(6,78,59,0.35)`,
               }}
             >
               <Building2 className="w-7 h-7" style={{ color: "#FFFFFF" }} />
@@ -787,8 +787,8 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             <h3
               className="text-xl md:text-2xl font-bold mb-2"
               style={{
-                color: theme.primaryDeep,
-                WebkitTextFillColor: theme.primaryDeep,
+                color: "#064E3B",
+                WebkitTextFillColor: "#064E3B",
                 letterSpacing: "-0.01em",
               }}
               data-no-contrast-guard
@@ -800,7 +800,7 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
               style={{
                 color: "#1A1A1A",
                 WebkitTextFillColor: "#1A1A1A",
-                opacity: 0.78,
+                opacity: 0.85,
               }}
               data-no-contrast-guard
             >
@@ -808,6 +808,8 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
               status tracking.
             </p>
           </div>
+
+
 
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

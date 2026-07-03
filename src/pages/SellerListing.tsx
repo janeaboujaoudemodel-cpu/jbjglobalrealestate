@@ -703,9 +703,19 @@ Requirements:
             </div>
           </div>
 
-          {/* Form Content - ombre soft card on solid emerald */}
+          {/* Form Content - light champagne card on emerald backdrop */}
           <div className="max-w-3xl mx-auto">
-            <div className="rounded-2xl p-6 md:p-8 shadow-xl" style={{ background: "linear-gradient(135deg, #DCEFE3 0%, #FFFFFF 50%, #C8E2D0 100%)", border: "1.5px solid #0F5132", boxShadow: "0 24px 60px -28px rgba(15,81,50,0.45)" }}>
+            <div
+              data-surface="champagne"
+              data-no-contrast-guard
+              className="rounded-2xl p-6 md:p-8 shadow-xl"
+              style={{
+                background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)",
+                border: "1.5px solid rgba(6,78,59,0.35)",
+                boxShadow: "0 28px 70px -30px rgba(4,44,28,0.55)",
+                color: "#1A1A1A",
+              }}
+            >
 
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
@@ -718,9 +728,10 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>{party} Details</h2>
+                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",letterSpacing:"-0.01em"}}>{party} Details</h2>
                       <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about yourself so we can contact you</p>
                     </div>
+
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
