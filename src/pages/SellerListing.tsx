@@ -21,7 +21,7 @@ import {
   User, Building2, DollarSign, Home, Camera, FileText, 
   CheckCircle2, ArrowRight, ArrowLeft, Loader2, 
   Phone, Mail, MessageCircle, Upload, Sparkles, Shield,
-  Calculator, Plus, X, Wand2, AlertCircle
+  Calculator, Plus, X, Wand2, AlertCircle, Briefcase, TrendingUp, UserCheck, ScrollText
 } from "lucide-react";
 import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
@@ -806,18 +806,19 @@ Requirements:
                         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
                       >
                         {[
-                          { value: "owner", label: "Property Owner" },
-                          { value: "broker", label: "Broker" },
-                          { value: "investor", label: "Investor" },
-                          { value: "representative", label: "Representative" },
-                          { value: "poa", label: "Power of Attorney" },
+                          { value: "owner", label: "Property Owner", Icon: Home },
+                          { value: "broker", label: "Broker", Icon: Briefcase },
+                          { value: "investor", label: "Investor", Icon: TrendingUp },
+                          { value: "representative", label: "Representative", Icon: UserCheck },
+                          { value: "poa", label: "Power of Attorney", Icon: ScrollText },
                         ].map((option) => {
                           const active = form.watch("seller_type") === option.value;
+                          const Icon = option.Icon;
                           return (
                             <label
                               key={option.value}
                               htmlFor={option.value}
-                              className="flex items-center gap-3 rounded-full px-4 py-3 cursor-pointer transition-all"
+                              className="flex items-center gap-3 rounded-full pl-3 pr-4 py-3 cursor-pointer transition-all min-h-[56px]"
                               style={{
                                 background: active
                                   ? "linear-gradient(135deg, #059669 0%, #047857 100%)"
@@ -831,15 +832,29 @@ Requirements:
                               <RadioGroupItem
                                 value={option.value}
                                 id={option.value}
-                                className="border-white text-white data-[state=checked]:bg-white data-[state=checked]:text-emerald-700 h-5 w-5"
+                                className="shrink-0 h-5 w-5 rounded-full border-white text-emerald-700 data-[state=checked]:bg-white data-[state=checked]:border-white"
+                                style={{ aspectRatio: "1 / 1", flex: "0 0 20px" }}
                               />
-                              <span className="font-semibold text-sm whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                              <span
+                                className="shrink-0 inline-flex items-center justify-center rounded-full"
+                                style={{
+                                  width: 32,
+                                  height: 32,
+                                  aspectRatio: "1 / 1",
+                                  background: active ? "rgba(255,255,255,0.18)" : "rgba(16,185,129,0.18)",
+                                  border: active ? "1px solid rgba(255,255,255,0.35)" : "1px solid rgba(16,185,129,0.45)",
+                                }}
+                              >
+                                <Icon className="h-4 w-4" style={{ color: "#FFFFFF" }} strokeWidth={2.25} />
+                              </span>
+                              <span className="font-semibold text-sm truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                                 {option.label}
                               </span>
                             </label>
                           );
                         })}
                       </RadioGroup>
+
                     </div>
                   </motion.div>
                 )}
