@@ -67,6 +67,7 @@ const AICompetitorAnalysisPremium = () => {
       {/* Form Section */}
       <motion.div
         data-allow-color
+        data-comp-analysis-form
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
