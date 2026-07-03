@@ -35,13 +35,13 @@ const VoiceAgentSettings = lazy(() => import("@/pages/VoiceAgentSettings"));
 
 export const AIToolRoutes = () => (
   <>
-    <Route path="/ai-property-analyzer" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
     <Route path="/ai-lead-qualification" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
-    <Route path="/ai-neighborhood-insights" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-roi-calculator" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-neighborhood-insights" element={<AINeighborhoodInsightsPage />} />
+    <Route path="/ai-roi-calculator" element={<AIROICalculatorPage />} />
     <Route path="/ai-competitor-analysis" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-market-report" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-market-report" element={<AIMarketReportPage />} />
     <Route path="/ai-objection-handler" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-followup-scheduler" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-follow-up-scheduler" element={<Navigate to="/ai-followup-scheduler" replace />} />
