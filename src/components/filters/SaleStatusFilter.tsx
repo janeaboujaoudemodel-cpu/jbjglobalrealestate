@@ -247,7 +247,7 @@ export function SaleStatusSelect({
                   "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   "text-[#1A1A1A] hover:bg-[#F7F2EA]",
                   isSelected && "bg-[#F7F2EA]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
                 )}
               >
                 {optConfig && (
