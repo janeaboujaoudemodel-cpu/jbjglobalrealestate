@@ -609,25 +609,31 @@ const ListingPortalSubmit = () => {
   return (
     <main
       data-ai-listing-shell
-      className="min-h-screen pt-6 pb-12 md:pb-16"
-      style={{ background: EMERALD_OMBRE_SOFT }}
+      className="min-h-screen"
+      style={{ background: EMERALD_OMBRE }}
     >
-      {/* Layer 1 — champagne and emerald intro */}
-      <div style={{ background: EMERALD_OMBRE_SOFT }}>
-        <div className="container mx-auto px-4 py-10 md:py-12">
-          <div className="max-w-4xl mx-auto">
+      {/* Unified emerald-black header — edge to edge, no champagne layer */}
+      <div style={{ background: EMERALD_OMBRE }} className="relative">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
+        />
+        <div className="container mx-auto px-4 pt-8 pb-6 relative">
+          <div className="max-w-5xl mx-auto">
             <Button
               variant="ghost"
               onClick={() => navigate('/listing-portal')}
               data-no-contrast-guard
               data-back-to-portal
-                className="mb-4 hover:bg-[#064E3B]/10"
-                style={{ color: EMERALD, WebkitTextFillColor: EMERALD }}
+              data-allow-dark-cta
+              className="mb-4 hover:bg-white/10"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
-                <span className="jj-arrow-anim inline-flex mr-2" style={{ color: EMERALD }}>
-                  <ArrowLeft className="w-4 h-4" style={{ color: EMERALD, stroke: EMERALD }} />
+              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#FFFFFF' }}>
+                <ArrowLeft className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </span>
-                <span style={{ color: EMERALD, WebkitTextFillColor: EMERALD }}>Back to Portal</span>
+              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
             </Button>
 
             <div className="text-center">
@@ -635,11 +641,10 @@ const ListingPortalSubmit = () => {
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
                 data-no-contrast-guard
                 style={{
-                  background: EMERALD_OMBRE,
+                  background: 'rgba(255,255,255,0.08)',
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
-                  border: "1px solid rgba(255,255,255,0.45)",
-                  boxShadow: "0 6px 16px -8px rgba(6,78,59,0.75)",
+                  border: "1px solid rgba(255,255,255,0.35)",
                 }}
               >
                 <Wand2 className="w-3.5 h-3.5" /> AI-Powered · {party} Listing Tool
@@ -648,20 +653,18 @@ const ListingPortalSubmit = () => {
                 className="text-3xl md:text-4xl font-bold mb-3"
                 data-no-contrast-guard
                 style={{
-                  background: EMERALD_OMBRE,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  color: '#FFFFFF',
+                  WebkitTextFillColor: '#FFFFFF',
                   letterSpacing: "-0.02em",
                 }}
               >
-                Welcome, {firstName} — {party} Listing Studio for {actionNoun}
+                Welcome, {firstName} — {party} Listing Portal for {actionNoun}
               </h1>
-              <p className="text-[#1A1A1A]/80 mb-6">
-                {user ? `Glad to have you back, ${firstName}. ` : ""}Upload your documents and let AI create a professional {actionVerb} listing for you.
+              <p className="mb-6" style={{ color: 'rgba(255,255,255,0.82)' }}>
+                Upload your documents and let AI create a professional {actionVerb} listing for you.
               </p>
 
-              <div className="[&>div]:mb-0">
+              <div className="[&>div]:mb-0" data-no-contrast-guard data-allow-dark-cta>
                 <FormDraftBar
                   hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
                   onSaveDraft={() => {
@@ -690,30 +693,14 @@ const ListingPortalSubmit = () => {
                     toast.info("New listing started");
                   }}
                   label="Listing"
-                  theme="emerald"
+                  theme="dark"
                 />
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Layer 2 — emerald black band with horizontal step header + centered phase card */}
-      <div
-        className="pb-16 pt-8 relative"
-        style={{ background: EMERALD_OMBRE }}
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
-        />
-        <div className="container mx-auto px-4 relative">
-          {/* Horizontal step header */}
-          <div className="max-w-5xl mx-auto mb-8" data-no-contrast-guard data-allow-dark-cta>
-            <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
-
-
+            {/* Horizontal step header — connected, no gap */}
+            <div className="mt-8" data-no-contrast-guard data-allow-dark-cta>
+              <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
               {PHASES.map((step, i) => {
                 const Icon = PHASE_ICONS[i] || Sparkles;
                 const isActive = i === phaseIndex;
@@ -754,17 +741,22 @@ const ListingPortalSubmit = () => {
                   </div>
                 );
               })}
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Centered champagne card holding the active phase */}
+      {/* Phase content — same emerald black continuum */}
+      <div className="pb-16 pt-4 relative" style={{ background: EMERALD_OMBRE }}>
+        <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto">
             <div
               className="rounded-2xl p-6 md:p-8 shadow-xl"
               style={{
-                background: EMERALD_OMBRE_SOFT,
-                border: "1.5px solid rgba(6,78,59,0.72)",
-                boxShadow: "0 24px 60px -28px rgba(6,78,59,0.58)",
+                background: 'linear-gradient(135deg, rgba(6,78,59,0.55) 0%, rgba(4,44,28,0.75) 100%)',
+                border: "1.5px solid rgba(255,255,255,0.18)",
+                boxShadow: "0 24px 60px -28px rgba(0,0,0,0.75)",
               }}
             >
             <AnimatePresence mode="wait">
@@ -780,8 +772,8 @@ const ListingPortalSubmit = () => {
                   <div className="relative">
                     <div className="relative space-y-6">
                       {/* Category Selection */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-4">What type of listing?</h2>
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-4">What type of listing?</h2>
                         <div className="flex flex-wrap justify-center gap-3">
                           {listingCategories.map(cat => {
                             const Icon = cat.icon;
@@ -792,8 +784,8 @@ const ListingPortalSubmit = () => {
                                 onClick={() => setListingCategory(cat.id)}
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
  isSelected
- ? 'bg-[#064E3B]/10 border-[#064E3B] text-[#1A1A1A] shadow-lg'
- : 'bg-[#FDFBF7]/60 border-[#064E3B]/30 text-[#1A1A1A]/80 hover:border-[#064E3B]/70'
+ ? 'bg-white/15 border-white text-white shadow-lg'
+ : 'bg-white/[0.04] border-white/25 text-white/80 hover:border-white/70'
  }`}
                               >
                                 {isSelected && (
@@ -812,7 +804,7 @@ const ListingPortalSubmit = () => {
                                 )}
                                 <Icon className="w-5 h-5 mb-2" style={{color: isSelected ? EMERALD : '#0A6B53'}} />
                                 <div className="font-medium text-sm">{cat.label}</div>
-                                <div className="text-xs text-[#1A1A1A]/70">{cat.desc}</div>
+                                <div className="text-xs text-white/70">{cat.desc}</div>
                               </button>
                             );
                           })}
@@ -820,21 +812,21 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Upload Zone */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-2">Upload Documents</h2>
-                        <p className="text-[#1A1A1A]/70 text-xs mb-4">
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-2">Upload Documents</h2>
+                        <p className="text-white/70 text-xs mb-4">
                           Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
                         </p>
                         
                         <div
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                          className="border-2 border-dashed border-[#064E3B]/60 rounded-xl p-8 text-center hover:border-[#064E3B] transition-all cursor-pointer bg-[#FDFBF7]/50"
+                          className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer bg-white/[0.04]"
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
                           <Upload className="w-10 h-10 mx-auto mb-3" style={{color: EMERALD}} />
-                          <p className="text-[#1A1A1A] font-medium mb-1">Drop files here or click to browse</p>
-                          <p className="text-[#1A1A1A]/70 text-xs">
+                          <p className="text-white font-medium mb-1">Drop files here or click to browse</p>
+                          <p className="text-white/70 text-xs">
                             Any file — PDF, images, Word, Excel, PowerPoint, CSV, TXT, ZIP… up to 100MB each
                           </p>
                           <input
@@ -850,7 +842,7 @@ const ListingPortalSubmit = () => {
                         {uploadedDocs.length > 0 && (
                           <div className="mt-4 space-y-2">
                             {uploadedDocs.map(doc => (
-                              <div key={doc.id} className="flex items-center gap-3 bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-lg p-3">
+                              <div key={doc.id} className="flex items-center gap-3 bg-white/[0.08] border border-white/20 border border-white/20 rounded-lg p-3">
                                 {doc.preview ? (
                                   <img src={doc.preview} alt="" className="w-10 h-10 rounded object-cover"  loading="lazy" decoding="async" />
                                 ) : doc.type === 'pdf' ? (
@@ -863,13 +855,13 @@ const ListingPortalSubmit = () => {
                                   </div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-[#1A1A1A] text-sm truncate">{doc.name}</p>
-                                  <p className="text-[#1A1A1A]/70 text-xs">
+                                  <p className="text-white text-sm truncate">{doc.name}</p>
+                                  <p className="text-white/70 text-xs">
                                     {(doc.file.size / 1024 / 1024).toFixed(1)} MB
                                   </p>
                                 </div>
-                                <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-[#EFE6D6]/10 rounded-lg">
-                                  <X className="w-4 h-4 text-[#1A1A1A]/70" />
+                                <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-white/10 rounded-lg">
+                                  <X className="w-4 h-4 text-white/70" />
                                 </button>
                               </div>
                             ))}
@@ -878,12 +870,12 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Universal Link Input */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-2 flex items-center gap-2">
                           <Globe className="w-4 h-4" style={{color: EMERALD}} />
                           Paste Any Link
                         </h2>
-                        <p className="text-[#1A1A1A]/70 text-xs mb-3">
+                        <p className="text-white/70 text-xs mb-3">
                           Google Drive folders/files, property portals, PDFs, brochures, MOUs — AI extracts everything automatically
                         </p>
                         <Input
@@ -894,18 +886,18 @@ const ListingPortalSubmit = () => {
                         />
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
-                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-[#064E3B]/10 text-[#064E3B] border border-[#064E3B]/40 rounded-full">{tag}</span>
+                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-white/10 text-white border border-white/30 rounded-full">{tag}</span>
                           ))}
                         </div>
                       </div>
 
                       {/* Paste Text Input */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-2 flex items-center gap-2">
                           <FileTextIcon className="w-4 h-4" style={{color: EMERALD}} />
                           Paste Text / Description (Optional)
                         </h2>
-                        <p className="text-[#1A1A1A]/70 text-xs mb-3">
+                        <p className="text-white/70 text-xs mb-3">
                           Paste any property description, spec sheet, or text content for AI to analyze
                         </p>
                         <Textarea
