@@ -101,13 +101,14 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
       <DropdownMenuContent 
         data-currency-menu-content
         data-jbj-fast-dropdown="true"
+        data-surface="emerald"
+        data-no-contrast-guard
         align="end" 
         sideOffset={12}
-        className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border border-[#B89555]/30 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F1E6 100%)' }}
+        className="z-[9999] min-w-[280px] rounded-xl p-0 overflow-hidden border border-white/30 text-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] shadow-[0_18px_50px_rgba(0,0,0,0.42),0_0_28px_rgba(6,78,59,0.24)]"
       >
-        <div className="px-4 py-3">
-          <p className="text-xs font-semibold text-[#1A1A1A]/60 uppercase tracking-wider">Select Currency</p>
+        <div className="px-4 py-3 border-b border-white/15">
+          <p className="text-xs font-semibold text-white/70 uppercase tracking-wider">Select Currency</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
           {SUPPORTED_CURRENCIES.map((curr) => {
@@ -119,18 +120,19 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
                 active={active}
                 data-currency-row
                 data-currency-active={active ? "true" : "false"}
-                data-surface="champagne"
-                data-no-emerald-hover="true"
+                data-surface="emerald"
+                data-no-contrast-guard
                 onClick={() => setCurrency(curr.code)}
-                className="flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5"
+                unstyled
+                className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 text-white transition-colors ${active ? 'bg-white/15 font-semibold' : 'hover:bg-white/10'}`}
               >
-              <span className="flex items-center gap-3">
+              <span className="flex items-center gap-3 text-white">
                 <span className="text-lg">{curr.flag}</span>
-                <span className="text-sm font-semibold">{curr.name}</span>
+                <span className="text-sm font-semibold text-white">{curr.name}</span>
               </span>
-              <span className="flex items-center gap-2">
-                <span className="text-sm">{curr.symbol}</span>
-                {active && <Check className="w-4 h-4" />}
+              <span className="flex items-center gap-2 text-white">
+                <span className="text-sm text-white">{curr.symbol}</span>
+                {active && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
               </span>
               </DropdownMenuItem>
             );
