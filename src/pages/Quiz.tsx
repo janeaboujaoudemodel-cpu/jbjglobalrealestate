@@ -1109,7 +1109,7 @@ const Quiz = () => {
               style={{
                 background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
                 border: "1px solid rgba(255,255,255,0.42)",
-                boxShadow: "0 6px 18px -8px rgba(16,185,129,0.5)",
+                boxShadow: "none",
               }}
             >
               <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
