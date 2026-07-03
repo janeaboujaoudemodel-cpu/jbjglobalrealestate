@@ -21,7 +21,7 @@ const CCard = ({ children, className = "" }: { children: React.ReactNode; classN
 
 const SectionIcon = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div
-    className={`flex shrink-0 items-center justify-center rounded-full shadow-[0_16px_36px_rgba(6,78,59,0.22)] ${className || "h-10 w-10"}`}
+    className={`jj-disclaimer-icon flex shrink-0 items-center justify-center rounded-full shadow-[0_16px_36px_rgba(6,78,59,0.22)] ${className || "h-10 w-10"}`}
     style={{ background: "linear-gradient(135deg,#064E3B 0%,#053A2C 56%,#021A14 100%)" }}
   >
     {children}

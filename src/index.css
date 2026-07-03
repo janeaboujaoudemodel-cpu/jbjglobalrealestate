@@ -27647,3 +27647,12 @@ html body #root section#ready-to-get-started > .jj-content-track {
 @media (prefers-reduced-motion: reduce) {
   .jj-disclaimer-hero__motion { animation: none !important; }
 }
+
+html body #root .jj-disclaimer-icon,
+html body #root .jj-disclaimer-icon *,
+html body #root .jj-disclaimer-icon :is(svg, [data-lucide], [class*="lucide"]),
+html body #root .jj-disclaimer-icon :is(svg, [data-lucide], [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
