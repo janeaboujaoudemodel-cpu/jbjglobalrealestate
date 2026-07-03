@@ -26997,3 +26997,145 @@ html body #root .aihf-root .jj-pill-emerald-metallic,
 html body #root .aihf-root :is([class*="shadow"], [style*="16, 185, 129"], [style*="16,185,129"]) {
   box-shadow: none !important;
 }
+
+/* =========================================================================
+   PASS 200 — GUIDES / INSIGHTS / SERVICES BRAND CONTRACT (MASTER)
+   -------------------------------------------------------------------------
+   Scope: every page wrapped in <InsightsPageScope> (data-insights-page),
+   every GuideHero (data-guide-hero), and every /services/* route.
+   Enforces:
+     1. Emerald-only hero. No purple/pink/magenta drift.
+     2. Hero buttons: normalized champagne fill with EMERALD text/icons
+        (never white-on-champagne). Any hero button with data-primary or
+        the .jj-pill-emerald-metallic class becomes solid emerald with
+        WHITE text/icons.
+     3. Dark inner cards (comparison / MoU / step tiles) inside insights
+        pages get white text on every descendant.
+     4. Champagne surface baseline for the page body.
+   ========================================================================= */
+
+/* 1. Neutralize any residual purple/pink/magenta bleed inside hero */
+[data-guide-hero] [style*="rgb(139"],
+[data-guide-hero] [style*="rgb(147"],
+[data-guide-hero] [style*="rgb(168"],
+[data-guide-hero] [style*="purple"],
+[data-guide-hero] [style*="magenta"],
+[data-guide-hero] [style*="pink"] {
+  background-image: none !important;
+  background-color: transparent !important;
+}
+
+/* 2. Guide-hero buttons — one of two canonical variants */
+/* Default (secondary): champagne fill, EMERALD text/icons, gold hairline */
+[data-guide-hero-actions] > *,
+[data-guide-hero-actions] button,
+[data-guide-hero-actions] a > button,
+[data-guide-hero-actions] a[role="button"] {
+  background: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
+  color: #064E3B !important;
+  border: 1px solid rgba(184,149,85,0.55) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6) !important;
+  border-radius: 12px !important;
+  padding: 14px 24px !important;
+  font-weight: 600 !important;
+  transition: transform 200ms ease, box-shadow 200ms ease !important;
+}
+[data-guide-hero-actions] button *,
+[data-guide-hero-actions] a *,
+[data-guide-hero-actions] > * span,
+[data-guide-hero-actions] > * svg {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+[data-guide-hero-actions] > * svg {
+  stroke: #064E3B !important;
+}
+[data-guide-hero-actions] > *:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.7) !important;
+}
+/* Kill any pseudo-overlays inside these buttons that used to swap fills */
+[data-guide-hero-actions] > * > span[class*="absolute"] {
+  display: none !important;
+}
+
+/* Primary variant override — first child of actions becomes solid emerald */
+[data-guide-hero-actions] > *:first-child,
+[data-guide-hero-actions] > *:first-child button,
+[data-guide-hero-actions] > *:first-child a > button {
+  background: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%) !important;
+  background-image: linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #FFFFFF !important;
+}
+[data-guide-hero-actions] > *:first-child *,
+[data-guide-hero-actions] > *:first-child span,
+[data-guide-hero-actions] > *:first-child svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* 3. Dark inner cards inside insights pages get white text everywhere */
+[data-insights-page] .bg-\[\#0A0F1C\],
+[data-insights-page] .bg-\[\#0F1B2E\],
+[data-insights-page] .bg-\[\#111827\],
+[data-insights-page] .bg-\[\#1A1A1A\],
+[data-insights-page] .bg-\[\#0d1b2a\],
+[data-insights-page] .bg-\[\#0f172a\],
+[data-insights-page] [class*="bg-slate-9"],
+[data-insights-page] [class*="bg-gray-9"],
+[data-insights-page] [class*="bg-zinc-9"],
+[data-insights-page] [class*="bg-neutral-9"],
+[data-insights-page] [class*="bg-emerald-9"],
+[data-insights-page] [style*="background:#0"],
+[data-insights-page] [style*="background-color:#0"],
+[data-insights-page] [style*="background: #0"],
+[data-insights-page] [style*="background-color: #0"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+/* Force readable white on any dark card descendant */
+[data-insights-page] .bg-\[\#0A0F1C\] *,
+[data-insights-page] .bg-\[\#0F1B2E\] *,
+[data-insights-page] .bg-\[\#111827\] *,
+[data-insights-page] .bg-\[\#1A1A1A\] *,
+[data-insights-page] .bg-\[\#0d1b2a\] *,
+[data-insights-page] .bg-\[\#0f172a\] *,
+[data-insights-page] [class*="bg-slate-9"] *,
+[data-insights-page] [class*="bg-gray-9"] *,
+[data-insights-page] [class*="bg-zinc-9"] *,
+[data-insights-page] [class*="bg-neutral-9"] *,
+[data-insights-page] [class*="bg-emerald-9"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+[data-insights-page] .bg-\[\#0A0F1C\] svg,
+[data-insights-page] .bg-\[\#0F1B2E\] svg,
+[data-insights-page] .bg-\[\#111827\] svg,
+[data-insights-page] .bg-\[\#1A1A1A\] svg,
+[data-insights-page] [class*="bg-slate-9"] svg,
+[data-insights-page] [class*="bg-gray-9"] svg,
+[data-insights-page] [class*="bg-emerald-9"] svg {
+  color: #C9A84C !important;
+  stroke: #C9A84C !important;
+}
+
+/* 4. Services pages (/services/*) inherit the same contract via body attr */
+body[data-route^="/services"] {
+  background: #FDFBF7 !important;
+}
+
+/* 5. Kill "white text on champagne" hero button legacy pattern (buyer/seller/etc.) */
+[data-guide-hero] button [class*="text-white"],
+[data-guide-hero] a [class*="text-white"] {
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+/* END PASS 200 */
