@@ -22,6 +22,7 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { Input } from "@/components/ui/input";
 import { SEOHead } from "@/components/SEOHead";
+import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
