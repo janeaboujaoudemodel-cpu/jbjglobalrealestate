@@ -456,6 +456,14 @@ const Services = () => {
               <Card className="jj-card-inner">
                 <CardContent className="p-8">
                   <p className="text-[#1A1A1A]/80 text-lg mb-8 text-center">
+              <Card
+                data-surface="emerald"
+                data-no-contrast-guard
+                className="border-0 shadow-2xl overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%)" }}
+              >
+                <CardContent className="p-8" data-no-contrast-guard>
+                  <p className="text-lg mb-8 text-center allow-white" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
                     JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell, 
                     and rent properties in Dubai and the UAE.
                   </p>
@@ -463,14 +471,14 @@ const Services = () => {
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Our role includes */}
                     <div>
-                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-[#1A1A1A]" />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                        <CheckCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
                         Our role includes
                       </h3>
                       <ul className="space-y-3">
                         {scopeIncludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                            <span className="text-[#1A1A1A]">•</span>
+                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
+                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -479,14 +487,14 @@ const Services = () => {
                     
                     {/* We do not provide */}
                     <div>
-                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                        <AlertCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                            <span className="text-[#1A1A1A]">•</span>
+                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
+                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -494,14 +502,15 @@ const Services = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-[#B89555]/20 text-center">
-                    <p className="text-[#1A1A1A]/60 text-sm">
+                  <div className="mt-8 pt-6 border-t border-white/15 text-center">
+                    <p className="text-sm allow-white" style={{ color: "rgba(255,255,255,0.7)", WebkitTextFillColor: "rgba(255,255,255,0.7)" }}>
                       Where regulated services are required, we introduce independent licensed partners. 
                       Clients contract directly with those partners.
                     </p>
                   </div>
                 </CardContent>
               </Card>
+
             </motion.div>
           </motion.div>
         </div>
