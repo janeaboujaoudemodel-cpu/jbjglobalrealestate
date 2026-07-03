@@ -28123,7 +28123,7 @@ html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filte
   button[role="combobox"],
   [data-radix-select-trigger],
   [data-jbj-field]
-):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input) {
+):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input):not(.filter-search-pill-input) {
   border-color: rgba(6, 78, 59, 0.34) !important;
   --tw-ring-color: rgba(6, 78, 59, 0.34) !important;
   outline-color: rgba(6, 78, 59, 0.34) !important;
@@ -28136,11 +28136,93 @@ html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filte
   button[role="combobox"],
   [data-radix-select-trigger],
   [data-jbj-field]
-):is(:focus,:focus-visible):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input) {
+):is(:focus,:focus-visible):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input):not(.filter-search-pill-input) {
   border-color: rgba(6, 78, 59, 0.72) !important;
   --tw-ring-color: rgba(6, 78, 59, 0.24) !important;
   outline-color: rgba(6, 78, 59, 0.72) !important;
 }
 html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filter-clean="true"]) :is(label, h4, p, span, button, div):not(.allow-white):not(.allow-white *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
   opacity: 1 !important;
+}
+
+/* Final emerald-only filter contract: Developers / Projects / Areas filters and their dropdowns must never render champagne/gold labels. */
+html body [data-radix-dialog-content][data-filter-clean="true"],
+html body [data-filter-dropdown="true"],
+html body [data-filter-clean="true"] [data-filter-dropdown="true"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.24) !important;
+  box-shadow: 0 22px 58px rgba(0,0,0,0.48), 0 0 0 1px rgba(6,78,59,0.22) !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
+  h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,small,strong,
+  [class*="text-[#1A1A1A]"], [class*="text-[#0A0A0A]"], [class*="text-muted"]
+):not(.allow-ink):not(.allow-ink *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path):not(.allow-ink):not(.allow-ink *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select,
+  .jbj-form-field,
+  button[role="combobox"],
+  [data-radix-select-trigger],
+  [data-jbj-field]
+):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input):not(.filter-search-pill-input) {
+  background: rgba(2,22,17,0.82) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(input, textarea)::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) .filter-search-pill-input,
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) .filter-search-pill-input:focus,
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) .filter-search-pill-input:focus-visible {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#FEFCF9]"],
+  [class*="bg-[#FAF6EE]"], [class*="bg-[#F3EDD9]"], [class*="bg-champagne"],
+  [class*="border-[#B89555]"], [class*="border-[#064E3B]"]
+):not(.jj-pill-emerald-metallic):not(.jj-map-command-bar):not(.jj-map-segment):not(.jj-map-search-input) {
+  background: rgba(2,22,17,0.82) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.28) !important;
+}
+
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-state="active"],
+html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-filter-selected="true"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
 }

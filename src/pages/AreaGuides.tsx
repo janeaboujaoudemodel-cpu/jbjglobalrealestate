@@ -189,7 +189,7 @@ const AreaGuides = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.35em] mb-6 block font-medium"
-            style={{ color: "#D4B062" }}
+            style={{ color: "#FFFFFF" }}
           >
             Explore UAE
           </motion.span>
@@ -217,7 +217,7 @@ const AreaGuides = () => {
             transition={{ duration: 0.7, delay: 0.3 }}
             onClick={scrollToGrid}
             className="inline-flex items-center gap-2 px-8 py-4 border-2 font-medium rounded-xl transition-all"
-            style={{ borderColor: "#B89555", color: "#FFFFFF", background: "rgba(255,255,255,0.06)" }}
+            style={{ borderColor: "rgba(255,255,255,0.28)", color: "#FFFFFF", background: "linear-gradient(135deg,#064E3B 0%,#042C1C 56%,#010806 100%)" }}
           >
             Explore Areas
             <ChevronDown className="w-5 h-5" />
@@ -245,9 +245,9 @@ const AreaGuides = () => {
                 className="flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full transition-all cursor-pointer"
                 style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.22)" }}
               >
-                <MapPin className="w-3 h-3" style={{ color: "#D4B062" }} />
+                <MapPin className="w-3 h-3" style={{ color: "#FFFFFF" }} />
                 <span className="text-xs font-medium" style={{ color: "#FFFFFF" }}>{emirate}</span>
-                <span className="text-xs font-bold" style={{ color: "#D4B062" }}>{count}</span>
+                <span className="text-xs font-bold" style={{ color: "#FFFFFF" }}>{count}</span>
               </button>
             );
           })}
@@ -270,7 +270,11 @@ const AreaGuides = () => {
       {/* Emerald divider */}
       <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
 
-      <section data-filter-clean="true" className="relative z-40 py-4 border-y border-white/12 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black">
+      <section
+        data-filter-clean="true"
+        className="relative z-40 py-4 border-y border-white/12"
+        style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
+      >
         <div className="w-full px-3 sm:px-4">
           <FilterShortcutBar
             variant="dark"
