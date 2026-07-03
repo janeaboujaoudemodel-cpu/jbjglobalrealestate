@@ -383,7 +383,7 @@ const Services = () => {
       </section>
 
       {/* Service Request Strip */}
-      <section className="py-16 bg-[#F7F2EA]">
+      <section data-surface="champagne" className="py-16 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
