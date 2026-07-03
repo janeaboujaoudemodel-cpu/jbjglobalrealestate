@@ -713,13 +713,13 @@ Requirements:
           </div>
 
           {/* Form Content - light champagne card on emerald backdrop */}
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto px-2 sm:px-4">
             <div
               data-no-contrast-guard
               data-tool-shell-root
               data-tool-emerald
               data-seller-form-scope
-              className="rounded-2xl p-8 md:p-10 lg:p-12 shadow-xl"
+              className="rounded-2xl p-5 sm:p-6 md:p-8 shadow-xl"
               style={{
                 background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)",
                 border: "1.5px solid rgba(16,185,129,0.35)",
