@@ -27195,17 +27195,19 @@ html body #root [data-brand-emerald-page] #services-grid .max-w-\[1500px\] {
 html body #root [data-brand-emerald-page] #services-grid .grid {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-auto-rows: 1fr !important;
 }
 
 @media (min-width: 1024px) {
   html body #root [data-brand-emerald-page] #services-grid .grid {
-    grid-template-columns: repeat(2, minmax(300px, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(320px, 1fr)) !important;
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1536px) {
   html body #root [data-brand-emerald-page] #services-grid .grid {
-    grid-template-columns: repeat(3, minmax(280px, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(330px, 1fr)) !important;
   }
 }
 
