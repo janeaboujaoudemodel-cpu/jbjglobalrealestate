@@ -306,9 +306,28 @@ const MeetingConsentSection = ({
               </div>
             )}
           </div>
-          <div className="flex justify-end">
-            <Button variant="ghost" size="sm" onClick={clearSignature} className="text-xs text-[#1A1A1A]/70 hover:text-red-600">
-              Clear Signature
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={clearSignature}
+              disabled={!hasSigned}
+              className="h-9 border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-red-600 text-xs font-semibold"
+            >
+              <Trash2 className="h-3.5 w-3.5 mr-1.5" /> Clear Signature
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => {
+                if (!hasSigned) { toast.error("Please sign first"); return; }
+                toast.success("Signature adopted — ready to authorize");
+              }}
+              disabled={!hasSigned}
+              className="h-9 jj-cta-gold-metallic text-[#3a2a08] hover:opacity-95 text-xs font-semibold"
+            >
+              <Check className="h-3.5 w-3.5 mr-1.5" /> Adopt & Save
             </Button>
           </div>
         </div>
