@@ -822,7 +822,8 @@ const ListingPortalSubmit = () => {
                         <div
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                          className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer bg-white/[0.04]"
+                          className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer"
+                          style={{ background: EMERALD_OMBRE }}
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
                           <Upload className="w-10 h-10 mx-auto mb-3" style={{color: EMERALD}} />
