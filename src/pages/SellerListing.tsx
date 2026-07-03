@@ -497,14 +497,14 @@ Requirements:
           title="Listing Submitted | JBJ Global Real Estate"
           description="Your property listing has been submitted successfully."
         />
-        <main className="min-h-screen bg-[#FDFBF7] pt-12 pb-16">
+        <main data-no-contrast-guard className="min-h-screen pt-12 pb-16" style={{ background: "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)", color: "#FFFFFF" }}>
           <div className="container mx-auto px-4">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="max-w-2xl mx-auto text-center"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#B89555]/30">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: "linear-gradient(135deg, #065F46 0%, #042C1C 100%)", border: "1px solid rgba(255,255,255,0.35)" }}>
                 <CheckCircle2 className="w-10 h-10 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-4">Listing Submitted Successfully!</h1>
@@ -512,7 +512,7 @@ Requirements:
                 Thank you for submitting your property listing. Our team will review your submission and 
                 contact you within 24-48 hours to discuss next steps.
               </p>
-              <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6 mb-8 text-left">
+              <div className="rounded-xl p-6 mb-8 text-left" style={{ background: "linear-gradient(135deg, rgba(6,78,59,0.6), rgba(0,0,0,0.6))", border: "1px solid rgba(255,255,255,0.28)" }}>
                 <h3 className="text-white font-semibold mb-3">What Happens Next?</h3>
                 <ul className="space-y-2 text-white/70 text-sm">
                   <li className="flex items-start gap-2">
