@@ -74,14 +74,14 @@ const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
   { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, highlight: true },
-  { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
+  { label: "List Your Property", href: "/list-property?source=ai-home-finder", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "All Projects", href: "/properties", icon: Building },
-  { label: "List for Sale / Rent", href: "/list-property", icon: PlusCircle },
+  { label: "List for Sale / Rent", href: "/list-property?source=properties&purpose=sale", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Communities", href: "/communities", icon: Users },
@@ -324,8 +324,8 @@ const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
   { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
   { label: "Interior Design AI", href: "/interior-design-ai", icon: Palette },
   { label: "Business Card Scanner", href: "/business-card-scanner", icon: ScanLine },
-  { label: "List Property for Sale", href: "/list-property?purpose=sale", icon: ClipboardCheck },
-  { label: "List Property for Rent", href: "/list-property?purpose=rent", icon: Key },
+  { label: "List Property for Sale", href: "/list-property?source=tools&purpose=sale", icon: ClipboardCheck },
+  { label: "List Property for Rent", href: "/list-property?source=tools&purpose=rent", icon: Key },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
@@ -342,7 +342,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale' },
+    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/list-property?source=properties&purpose=sale' },
   ],
   rent: [
     { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
@@ -351,7 +351,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Property Management', icon: Shield, href: '/services/property-management' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
-    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/list-property?purpose=rent' },
+    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/list-property?source=properties&purpose=rent' },
   ],
   developers: [
     { label: 'All Developers', icon: Building, href: '/developers' },
@@ -415,8 +415,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Property Evaluator', icon: BarChart3, href: '/property-evaluator' },
-    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale' },
-    { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent' },
+    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?source=tools&purpose=sale' },
+    { label: 'List Property for Rent', icon: Key, href: '/list-property?source=tools&purpose=rent' },
   ],
   creative: [
     { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
@@ -424,8 +424,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Property Evaluator', icon: BarChart3, href: '/property-evaluator' },
-    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale' },
-    { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent' },
+    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?source=tools&purpose=sale' },
+    { label: 'List Property for Rent', icon: Key, href: '/list-property?source=tools&purpose=rent' },
   ],
   shortcuts: [
     { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
