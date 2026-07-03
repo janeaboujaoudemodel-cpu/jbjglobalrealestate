@@ -68,11 +68,10 @@ interface PricePrediction {
 }
 
 const listingCategories = [
-  { id: 'secondary_offplan', label: 'Secondary / Off-Plan', icon: Home, desc: 'Resale or under-construction property' },
+  { id: 'secondary_offplan', label: 'Secondary / Off-Plan', icon: Home, desc: 'Resale or under-construction' },
   { id: 'ready', label: 'Ready to Move', icon: Building, desc: 'Completed property' },
   { id: 'land', label: 'Land', icon: MapPin, desc: 'Plot or land for sale' },
-  { id: 'rental', label: 'Rental', icon: Key, desc: 'For rent' },
-  { id: 'holiday_home', label: 'Holiday Home', icon: Hotel, desc: 'Short-term rental' },
+  { id: 'rental', label: 'Rental', icon: Key, desc: 'Long or short-term rental' },
 ];
 
 const propertyTypes = ['Apartment', 'Villa', 'Townhouse', 'Penthouse', 'Studio', 'Duplex', 'Land', 'Office', 'Warehouse', 'Shop'];
