@@ -695,18 +695,20 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
           <div
             className="rounded-2xl p-8 text-center"
             data-no-contrast-guard
+            data-allow-dark-cta
             style={{
-              background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%)",
-              border: `1.5px solid rgba(6,78,59,0.35)`,
-              boxShadow: `0 20px 40px -20px rgba(4,44,28,0.55)`,
+              background: EMERALD_GRADIENT,
+              border: `1.5px solid rgba(255,255,255,0.26)`,
+              boxShadow: `0 24px 54px -24px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.18)`,
             }}
           >
 
             <div
               className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
               style={{
-                background: `linear-gradient(135deg, ${accent} 0%, ${theme.primaryDeep} 100%)`,
-                border: `1px solid rgba(6,78,59,0.35)`,
+                background: `linear-gradient(135deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)`,
+                border: `1px solid rgba(255,255,255,0.34)`,
+                boxShadow: `inset 0 1px 0 rgba(255,255,255,0.16)`,
               }}
             >
               <ShieldCheck className="w-7 h-7" style={{ color: "#FFFFFF" }} />
@@ -714,9 +716,10 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             <h3
               className="text-xl md:text-2xl font-bold mb-2"
               style={{
-                color: "#064E3B",
-                WebkitTextFillColor: "#064E3B",
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
                 letterSpacing: "-0.01em",
+                textShadow: "0 2px 12px rgba(0,0,0,0.32)",
               }}
               data-no-contrast-guard
             >
@@ -725,9 +728,9 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
             <p
               className="text-sm mb-5"
               style={{
-                color: "#1A1A1A",
-                WebkitTextFillColor: "#1A1A1A",
-                opacity: 0.85,
+                color: "rgba(255,255,255,0.9)",
+                WebkitTextFillColor: "rgba(255,255,255,0.9)",
+                opacity: 1,
               }}
               data-no-contrast-guard
             >
