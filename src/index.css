@@ -339,9 +339,23 @@ body {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
   overscroll-behavior-y: auto;
   overflow-anchor: none;
   min-height: 100dvh;
+}
+
+/* Any element scrolling horizontally must contain the x overscroll so a
+   two-finger swipe left/right on a filter/chip/tab strip never triggers
+   the browser's back/forward gesture. Applies to Tailwind's overflow-x-auto,
+   overflow-x-scroll, and generic overflow-auto/scroll containers. */
+.overflow-x-auto,
+.overflow-x-scroll,
+.overflow-auto,
+.overflow-scroll,
+[data-scroll-x],
+[class*="scrollbar-"][class*="-x"] {
+  overscroll-behavior-x: contain;
 }
 
 /* ════════════════════════════════════════════════════════════════
