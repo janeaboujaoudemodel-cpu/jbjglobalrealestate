@@ -655,7 +655,8 @@ const PropertyEvaluator = () => {
     setCustomViews([]);
     setReportSections(defaultReportSections);
     setActiveTab('property');
-    toast.success('Previous application saved. New property application started.');
+    resetEntryChoice();
+    toast.success('Previous application saved. Choose an evaluation method to begin.');
   };
 
   const shareReportWithClient = async () => {
