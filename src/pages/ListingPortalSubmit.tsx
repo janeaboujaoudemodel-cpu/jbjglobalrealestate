@@ -616,7 +616,7 @@ const ListingPortalSubmit = () => {
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(0,0,0,0.35) 0%, transparent 60%), linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 100%)" }}
         />
         <div className="container mx-auto px-4 pt-8 pb-6 relative">
           <div className="max-w-5xl mx-auto">
