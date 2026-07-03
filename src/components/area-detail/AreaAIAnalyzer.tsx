@@ -483,23 +483,23 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {/* Quick Stats */}
         {hasStats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
             </div>
-            <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
+            <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-[#0A0A0A]">{stats.developers.length}</div>
               <div className="text-[#1A1A1A]/70 text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
-              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-[#B89555]">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
+              <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
+                <div className="text-2xl font-bold text-[#064E3B]">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
                 <div className="text-[#1A1A1A]/70 text-xs mt-1">Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
-              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-[#B89555]">AED {stats.pricePerSqft.toLocaleString()}</div>
+              <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
+                <div className="text-2xl font-bold text-[#064E3B]">AED {stats.pricePerSqft.toLocaleString()}</div>
                 <div className="text-[#1A1A1A]/70 text-xs mt-1">Est. Price/sqft</div>
               </div>
             )}
@@ -510,7 +510,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         {errorMsg ? (
           <div className="text-center py-8 space-y-4">
             <p className="text-red-500 text-sm">{errorMsg}</p>
-            <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+            <Button onClick={handleRetry} variant="outline" className="border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#064E3B]/10">
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Analysis
             </Button>
@@ -520,7 +520,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             {hasTimedOut ? (
               <div className="space-y-4">
                 <p className="text-[#1A1A1A]/70 text-sm">Analysis is taking longer than expected.</p>
-                <Button onClick={handleRetry} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
+                <Button onClick={handleRetry} variant="outline" className="border-[#064E3B]/40 text-[#1A1A1A] hover:bg-[#064E3B]/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
                 </Button>
@@ -538,11 +538,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Overview Card - Enhanced */}
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl shadow-sm overflow-hidden">
+                <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl shadow-sm overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-9 h-9 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20 flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-[#B89555]" />
+                      <div className="w-9 h-9 rounded-xl bg-[#064E3B]/10 border border-[#064E3B]/20 flex items-center justify-center">
+                        <Building2 className="w-5 h-5 text-[#064E3B]" />
                       </div>
                       <div>
                         <h3 className="font-bold text-[#0A0A0A] text-lg">Area Overview</h3>
@@ -554,30 +554,30 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <Home className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <Home className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <Landmark className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <Landmark className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#0A0A0A]">{stats.developers.length}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <BarChart3 className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#B89555]">{stats.pricePerSqft.toLocaleString()}</div>
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <BarChart3 className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
+                          <div className="text-lg font-bold text-[#064E3B]">{stats.pricePerSqft.toLocaleString()}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#B89555]/15 text-center">
-                          <TrendingUp className="w-4 h-4 text-[#B89555] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#B89555]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <TrendingUp className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
+                          <div className="text-lg font-bold text-[#064E3B]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Avg Price</div>
                         </div>
                       )}
@@ -586,15 +586,15 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   
                   {/* Bottom insight bar */}
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
-                    <div className="border-t border-[#B89555]/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
+                    <div className="border-t border-[#064E3B]/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
                       <div className="flex items-center gap-4 flex-wrap">
                         <span className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-widest font-semibold">Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
- status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'jj-surface-emerald' : 
- status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
- status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-[#B89555]'
+ status.toLowerCase().includes('off') || status.toLowerCase().includes('launch') ? 'jj-pill-emerald-metallic' : 
+ status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'jj-pill-emerald-metallic' : 
+ status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'jj-pill-emerald-metallic' : 'jj-pill-emerald-metallic'
  }`} />
                             <span className="text-xs text-[#1A1A1A]/70">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
                           </div>
@@ -607,11 +607,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
               
               {/* Rating Card - Premium navy + gold champagne */}
               {ratingScore !== null && (
-                <div className="bg-gradient-to-br from-[#0A0A0A] via-[#0c1c30] to-[#0A0A0A] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden border border-[#B89555]/40">
-                  {/* Ambient gold glow */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#B89555]/20 rounded-full blur-[60px] pointer-events-none" />
+                <div className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden border border-white/18">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#064E3B]/20 rounded-full blur-[60px] pointer-events-none" />
                   
-                  <Star className="w-7 h-7 text-[#B89555] mb-3 relative z-10" fill="#B89555" />
+                  <Star className="w-7 h-7 text-white mb-3 relative z-10" fill="#FFFFFF" />
                   
                   {/* Radial gauge */}
                   <div className="relative w-32 h-32 mb-3">
@@ -619,7 +618,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       <PieChart>
                         <Pie
                           data={[
-                            { value: ratingScore, fill: '#B89555' },
+                            { value: ratingScore, fill: '#FFFFFF' },
                             { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.10)' },
                           ]}
                           cx="50%"
@@ -631,13 +630,13 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                           dataKey="value"
                           stroke="none"
                         >
-                          <Cell fill="#B89555" />
+                          <Cell fill="#FFFFFF" />
                           <Cell fill="rgba(255,255,255,0.10)" />
                         </Pie>
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-[#B89555]">{ratingScore}</span>
+                      <span className="text-4xl font-bold text-white">{ratingScore}</span>
                       <span className="text-white/60 text-[10px] font-medium">/10</span>
                     </div>
                   </div>
@@ -680,9 +679,9 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             {/* Row 4: Pros & Cons */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {sections?.pros && (
-                <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-2xl p-6 shadow-sm">
+                <div className="bg-[#F7F2EA] border border-[#064E3B]/30 rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <ThumbsUp className="w-5 h-5 text-[#B89555]" />
+                    <ThumbsUp className="w-5 h-5 text-[#064E3B]" />
                     <h3 className="font-bold text-[#0A0A0A] text-lg">Pros</h3>
                   </div>
                   <div className="text-[#1A1A1A] text-sm leading-relaxed whitespace-pre-line">
