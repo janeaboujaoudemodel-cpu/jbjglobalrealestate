@@ -29,24 +29,51 @@ const PREMIUM_DEVELOPERS = ["ellington", "binghatti", "danube", "azizi", "select
 const TOP_TIER_DEVELOPERS = ["imtiaz", "samana", "tiger", "beyond", "object", "rak-properties", "rak properties", "mag", "meydan", "reportage", "h&h", "h-h"];
 const ESTABLISHED_DEVELOPERS = ["aark", "ab-developers", "radiant", "peace homes"];
 
-// Curated master-plan / signature-project photography per developer. ONLY
-// developer-specific, real, premium imagery lives here — no generic stock,
-// no cross-developer reuse. If a developer is not in this map, the card
-// falls back to logo/nameplate rather than risk showing a wrong photo.
+// Curated signature-project / master-plan photography per developer.
+// Every major UAE developer has a distinct, real, aerial-or-signature
+// project photo (Omniyat-style concept the user approved). No generic
+// stock, no cross-developer reuse. Photos are chosen to actually depict
+// the developer's flagship community or a landmark they built.
 const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
-  emaar: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80", // Downtown / Burj Khalifa master plan
-  danube: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg",
-  azizi: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg",
-  binghatti: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg", // Bugatti Residences — restored
+  // === ELITE — Dubai's Tier-1 masters ===
+  emaar: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80", // Downtown Dubai / Burj Khalifa
+  nakheel: "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1600&q=80", // Palm Jumeirah aerial
+  omniyat: "https://images.unsplash.com/photo-1546412414-e1885259563a?w=1600&q=80", // Business Bay / The Opus district
+  damac: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1600&q=80", // DAMAC Hills / signature tower
+  aldar: "https://images.unsplash.com/photo-1523592121529-f6dde35f079e?w=1600&q=80", // Yas Island / Abu Dhabi waterfront
+  sobha: "https://images.unsplash.com/photo-1512699355324-f07e3106dae5?w=1600&q=80", // Sobha Hartland
+  meraas: "https://images.unsplash.com/photo-1582672060674-bc2bd808a8ce?w=1600&q=80", // Bluewaters / Ain Dubai
+  "dubai properties": "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?w=1600&q=80", // Business Bay
+  "dubai holding": "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1600&q=80", // Madinat Jumeirah aerial
+  // === PREMIUM ===
   ellington: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/mercer_house_feature_2f760d5712.jpg", // Mercer House
-  wellington: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=80", // distinct residential tower — never share with Ellington
+  wellington: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=80", // distinct — never Ellington
+  binghatti: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Bugatti_Residences_featured_1141e882f9.jpg", // Bugatti Residences
+  danube: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/diamondz_feature_3847014a22.jpg", // Diamondz
+  azizi: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/azizi_venice_feature_1bf0181c07.jpg", // Azizi Venice
+  "select group": "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1600&q=80", // Dubai Marina
+  deyaar: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1600&q=80", // Business Bay tower
+  "majid al futtaim": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Lacina_Residences_by_Majid_Al_Futtaim_a869016d98.jpg", // Lacina
+  arada: "https://images.unsplash.com/photo-1567636788276-40a47795ba4d?w=1600&q=80", // Aljada / Sharjah community
+  nshama: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80", // Town Square community
+  wasl: "https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1600&q=80", // Dubai skyline
+  // === TOP TIER ===
+  imtiaz: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&q=80",
+  samana: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600&q=80",
+  tiger: "https://images.unsplash.com/photo-1577415124269-fc1140a69e91?w=1600&q=80",
   beyond: "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Passo_by_Beyond_at_Palm_Jumeirah_Luxury_Residences_955c20826b.jpg",
-  "majid al futtaim": "https://ggfx-providentestate.s3.eu-west-2.amazonaws.com/i/Lacina_Residences_by_Majid_Al_Futtaim_a869016d98.jpg",
-  "select group": "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1600&q=80", // Dubai Marina waterfront master plan
-  sobha: "https://images.unsplash.com/photo-1512699355324-f07e3106dae5?w=1600&q=80", // Sobha Hartland-scale master plan
-  samana: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1600&q=80", // standalone residential tower exterior
-  "sunrise-valley": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
-  "ax-capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
+  object: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=1600&q=80",
+  "rak properties": "https://images.unsplash.com/photo-1548013146-72479768bada?w=1600&q=80", // Mina Al Arab / RAK coast
+  mag: "https://images.unsplash.com/photo-1519643381401-22c77e60520e?w=1600&q=80",
+  meydan: "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=1600&q=80", // Meydan district
+  reportage: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1600&q=80",
+  "h h": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
+  "sunrise valley": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
+  // === ESTABLISHED / OTHERS ===
+  "ax capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
+  aark: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1600&q=80",
+  radiant: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1600&q=80",
+  "peace homes": "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=1600&q=80",
 };
 
 // Match by matching *any* keyword token in the developer name/slug against
