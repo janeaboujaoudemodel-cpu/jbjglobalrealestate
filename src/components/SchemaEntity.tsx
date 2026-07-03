@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { COMMUNITIES, DEVELOPERS, CANONICAL_HOST, toPlaceNode, toDeveloperNode, type EntityRef } from "@/seo/entityRegistry";
+import { COMMUNITIES, DEVELOPERS, CANONICAL_HOST, toPlaceNode, toDeveloperNode, resolveDeveloperKey, resolveCommunityKey, type EntityRef } from "@/seo/entityRegistry";
 
 /**
  * Drop-in schema emitter for entity-scoped pages. When a page is about a
