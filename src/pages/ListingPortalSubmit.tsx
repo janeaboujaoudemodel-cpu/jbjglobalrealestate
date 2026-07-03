@@ -718,12 +718,13 @@ const ListingPortalSubmit = () => {
  ? 'border-white/80 text-white [&_svg]:!text-white'
  : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
  }`}
-                      style={isActive
-                        ? { background: 'linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #042C1C 100%)' }
-                        : isDone
-                          ? { backgroundColor: 'rgba(255,255,255,0.18)' }
-                          : { backgroundColor: 'rgba(255,255,255,0.08)' }
-                      }
+                      style={{
+                        background: 'var(--jj-official-emerald-surface, #064E3B)',
+                        backgroundColor: '#064E3B',
+                        boxShadow: isActive
+                          ? '0 8px 20px -8px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.18)'
+                          : 'inset 0 1px 0 rgba(255,255,255,0.10)',
+                      }}
                     >
                       {isDone ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                     </div>
