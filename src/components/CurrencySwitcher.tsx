@@ -92,7 +92,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           </HeaderControl>
         ) : (
-          <button className="h-11 px-4 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 flex items-center gap-2">
+          <button className="h-11 px-4 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#064E3B]/20 hover:border-[#064E3B]/50 hover:bg-[#064E3B]/10 flex items-center gap-2">
             <DollarSign className="w-4 h-4" />
             <span className="text-xs font-medium">{currentCurrency.code}</span>
           </button>
