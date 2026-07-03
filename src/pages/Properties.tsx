@@ -1113,7 +1113,7 @@ const Properties = () => {
           {/* Premium shortcut chip bar (same as header) */}
           <div className="mt-3">
             <FilterShortcutBar
-              variant="light"
+              variant="dark"
               filters={shortcutFilters}
               onFilterChange={setShortcutFilters}
               isMapMode={isMapMode}

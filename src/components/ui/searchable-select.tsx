@@ -83,7 +83,7 @@ export function SearchableSelect({
 
   useEffect(() => {
     if (open && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      requestAnimationFrame(() => inputRef.current?.focus());
     }
     if (!open) {
       setSearch("");

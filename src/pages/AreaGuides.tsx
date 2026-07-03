@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-nobuffer.png";
 import { Badge } from "@/components/ui/badge";
-import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 
 import { SEOHead } from "@/components/SEOHead";
@@ -269,6 +269,20 @@ const AreaGuides = () => {
 
       {/* Emerald divider */}
       <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
+
+      <section data-filter-clean="true" className="relative z-40 py-4 border-y border-white/12 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black">
+        <div className="w-full px-3 sm:px-4">
+          <FilterShortcutBar
+            variant="dark"
+            filters={shortcutFilters}
+            onFilterChange={setShortcutFilters}
+            priorityFilter="areas"
+            resultsCount={filteredAreas.length}
+            resultsLabel="Areas"
+            hideSort
+          />
+        </div>
+      </section>
 
       {/* Emirates Section — clickable cards grouped by emirate */}
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (

@@ -356,6 +356,8 @@ body {
 [data-scroll-x],
 [class*="scrollbar-"][class*="-x"] {
   overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -5399,9 +5401,9 @@ button[data-signout-action]:hover svg.jj-signout-icon * {
 [data-radix-popper-content-wrapper] > .jbj-form-popover {
   background-color: #F7F2EA !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 60%, #EFE6D6 100%) !important;
-  border: 1px solid rgba(184, 149, 85, 0.65) !important;
+  border: 1px solid rgba(6, 78, 59, 0.34) !important;
   color: #1A1A1A !important;
-  box-shadow: 0 16px 40px -12px rgba(26, 26, 26, 0.22), 0 4px 12px -4px rgba(184, 149, 85, 0.3) !important;
+  box-shadow: 0 16px 40px -12px rgba(26, 26, 26, 0.22), 0 4px 12px -4px rgba(6, 78, 59, 0.24) !important;
   padding: 6px !important;
 }
 /* Premium row sizing for option items inside any popper surface — flags and
