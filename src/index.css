@@ -604,17 +604,16 @@ All colors MUST be HSL.
     --jj-suit: 36 38% 88%;
     --jj-suit-dark: 40 35% 65%;
 
-    /* AI Theme — premium purple (unchanged) */
-    --ai-purple: 262 83% 58%;
-    --ai-purple-dark: 263 70% 50%;
-    --ai-fuchsia: 292 84% 61%;
-    --ai-cyan: 262 60% 70%;
-    /* NOTE: --ai-emerald historically held a purple value (legacy bug).
-       Now correctly aliased to the brand emerald primary so any consumer
-       gets the locked Emerald gradient color, not stray purple. */
+    /* AI Theme — locked JBJ emerald system.
+       Legacy variable names are kept for compatibility, but every value now
+       resolves to emerald/black — never purple, violet, pink, fuchsia or cyan. */
+    --ai-purple: 158 86% 16%;      /* #064E3B */
+    --ai-purple-dark: 157 84% 9%;  /* #042C1C */
+    --ai-fuchsia: 164 82% 22%;     /* #0A6B53 */
+    --ai-cyan: 158 64% 30%;        /* emerald accent */
     --ai-emerald: 158 86% 16%; /* #064E3B */
-    --ai-amber: 262 40% 60%;
-    --ai-rose: 280 60% 55%;
+    --ai-amber: 158 58% 24%;
+    --ai-rose: 158 54% 18%;
     --ai-glow: 0 0% 60%;
 
     /* Listing badges */
@@ -6284,11 +6283,11 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
 
 /* ──────────────────────────────────────────────────────────────
    List Your Property — animated white ring (used by hero
-   "View my submissions" + dashboard CTA on the navy/purple band).
+   "View my submissions" + dashboard CTA on the emerald band).
    ────────────────────────────────────────────────────────────── */
 @keyframes jj-white-ring-pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.85), 0 0 14px 0 rgba(168,85,247,0.35); }
-  50%     { box-shadow: 0 0 0 4px rgba(255,255,255,0.18), 0 0 22px 2px rgba(168,85,247,0.55); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.85), 0 0 14px 0 rgba(16,185,129,0.35); }
+  50%     { box-shadow: 0 0 0 4px rgba(255,255,255,0.18), 0 0 22px 2px rgba(16,185,129,0.55); }
 }
 .jj-white-ring {
   position: relative;
@@ -6305,27 +6304,26 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   List Your Property / List with AI — premium purple polish
+   List Your Property / List with AI — premium emerald polish
    ────────────────────────────────────────────────────────────── */
 
-/* Animated arrow that nudges right + shifts hue (vivid blue→pink→black) */
+/* Animated arrow that nudges right + shifts through emerald tones */
 @keyframes jj-arrow-nudge {
   0%,100% { transform: translateX(0); }
   50%     { transform: translateX(4px); }
 }
 @keyframes jj-arrow-hue {
-  0%   { color: #1D4ED8; }   /* blue   */
-  33%  { color: #EC4899; }   /* pink   */
-  66%  { color: #0B0B0B; }   /* black  */
-  100% { color: #1D4ED8; }
+  0%   { color: #064E3B; }
+  50%  { color: #0A6B53; }
+  100% { color: #064E3B; }
 }
 .jj-arrow-anim {
   animation: jj-arrow-nudge 1.4s ease-in-out infinite, jj-arrow-hue 3.6s ease-in-out infinite;
 }
 .jj-arrow-anim svg { stroke: currentColor !important; color: currentColor !important; }
 
-/* Animated purple gradient border ring (rotating conic) */
-@keyframes jj-purple-ring-spin {
+/* Animated emerald gradient border ring (rotating conic) */
+@keyframes jj-emerald-ring-spin {
   to { --jj-ring-angle: 360deg; }
 }
 @property --jj-ring-angle {
@@ -6333,10 +6331,12 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
   initial-value: 0deg;
   inherits: false;
 }
+.jj-emerald-anim-border,
 .jj-purple-anim-border {
   position: relative;
   isolation: isolate;
 }
+.jj-emerald-anim-border::before,
 .jj-purple-anim-border::before {
   content: '';
   position: absolute;
@@ -6344,40 +6344,44 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
   border-radius: inherit;
   padding: 1.5px;
   background: conic-gradient(from var(--jj-ring-angle, 0deg),
-    #A855F7, #C084FC, #7C3AED, #EC4899, #A855F7);
+    #064E3B, #10B981, #0A6B53, #042C1C, #064E3B);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
-  animation: jj-purple-ring-spin 5s linear infinite;
+  animation: jj-emerald-ring-spin 5s linear infinite;
   pointer-events: none;
   z-index: 0;
 }
+.jj-emerald-anim-border > *,
 .jj-purple-anim-border > * { position: relative; z-index: 1; }
 
 /* Pulse glow for dashboard CTA */
 @keyframes jj-dashboard-pulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(168,85,247,0.55), 0 10px 24px -10px rgba(168,85,247,0.6); }
-  50%     { box-shadow: 0 0 0 6px rgba(168,85,247,0.0),  0 14px 30px -10px rgba(168,85,247,0.85); }
+  0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55), 0 10px 24px -10px rgba(6,78,59,0.6); }
+  50%     { box-shadow: 0 0 0 6px rgba(16,185,129,0.0),  0 14px 30px -10px rgba(16,185,129,0.85); }
 }
 .jj-dashboard-pulse { animation: jj-dashboard-pulse 2.2s ease-in-out infinite; }
 
-/* Ombre purple shimmer fill (for "Extract with AI") */
-@keyframes jj-purple-shimmer {
+/* Ombre emerald shimmer fill (for "Extract with AI") */
+@keyframes jj-emerald-shimmer {
   0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
+.jj-emerald-ombre,
 .jj-purple-ombre {
-  background: linear-gradient(110deg, #2E1065 0%, #5B21B6 25%, #A855F7 50%, #5B21B6 75%, #2E1065 100%) !important;
+  background: linear-gradient(110deg, #000000 0%, #042C1C 24%, #064E3B 50%, #0A6B53 74%, #000000 100%) !important;
   background-size: 200% 100% !important;
-  animation: jj-purple-shimmer 3.5s linear infinite;
+  animation: jj-emerald-shimmer 3.5s linear infinite;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  border: 1px solid #A855F7 !important;
+  border: 1px solid rgba(255,255,255,0.45) !important;
 }
+.jj-emerald-ombre svg,
 .jj-purple-ombre svg { color: #FFFFFF !important; }
 
-/* Purple ghost button that flips to filled-purple-with-white-text on hover */
+/* Emerald ghost button that flips to filled emerald with white text on hover */
+.jj-emerald-ghost,
 .jj-purple-ghost {
   background: rgba(255,255,255,0.06) !important;
   border: 2px solid #FFFFFF !important;
@@ -6385,14 +6389,19 @@ section[data-ai-listing-shell] button.bg-white.text-\[\#0A0A0A\] * {
   -webkit-text-fill-color: #FFFFFF !important;
   transition: background-color .25s ease, color .25s ease, border-color .25s ease;
 }
+.jj-emerald-ghost svg,
 .jj-purple-ghost svg { color: #FFFFFF !important; }
+.jj-emerald-ghost:hover,
+.jj-emerald-ghost:focus-visible,
 .jj-purple-ghost:hover,
 .jj-purple-ghost:focus-visible {
-  background: linear-gradient(135deg, #5B21B6 0%, #A855F7 100%) !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: #FFFFFF !important;
 }
+.jj-emerald-ghost:hover svg,
+.jj-emerald-ghost:focus-visible svg,
 .jj-purple-ghost:hover svg,
 .jj-purple-ghost:focus-visible svg { color: #FFFFFF !important; }
 
