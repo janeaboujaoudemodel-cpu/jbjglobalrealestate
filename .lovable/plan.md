@@ -1,52 +1,76 @@
-# Unified AI-Tool Report System + Title Deed Auto-Fill
+## Problem
 
-## Goals
-1. Fix Property Evaluator so the Title Deed upload is an **entry-mode choice** ("Fill manually" vs "Auto-fill from Title Deed"), not a mandatory drop zone in the middle of the flow.
-2. Reuse AI Home Finder's `ReportEngine` (preview + branded PDF + share) as a **shared component** and wire every AI tool to it.
+`/ai-hub` lists 20+ AI tool cards, but almost every tool link (`/ai-price-predictor`, `/ai-property-analyzer`, `/ai-neighborhood-insights`, `/ai-roi-calculator`, `/ai-market-report`, `/ai-lead-qualification`, `/ai-competitor-analysis`, `/ai-objection-handler`, `/ai-followup-scheduler`, `/ai-meeting-summarizer`, `/ai-translation-hub`, `/ai-contract-reviewer`, `/ai-document-generator`, `/ai-call-summarizer`, `/ai-client-matcher`, `/ai-email-generator`, `/ai-social-media`, `/ai-investment-report`, `/ai-description-writer`, `/ai-calendar`, `/ai-budget-planner`, `/ai-personal-shopper`) currently redirects **back to `/ai-hub`** — clicking any card loops. The page files exist (`AIPricePredictorPage.tsx`, etc.) and their underlying tool components exist (`AIPricePredictorPremium`, etc.), but the routes are neutered.
 
-## Scope of tools receiving the unified report
-- Property Evaluator
-- Rental Index
-- Property Comparison (Compare Projects / Compare Units)
-- Mortgage Calculator
-- Interior Design AI
-- Property Measurement
-- AI Home Finder (already uses it — reference implementation)
+You want every tool to look and behave like `/mortgage-calculator` — same responsive shell, same emerald surfaces, same dropdown/pill/disclaimer rules.
 
-## Step 1 — Extract shared engine
-- Move `src/components/ai-home-finder/report/ReportEngine.tsx` into `src/components/shared/report/UnifiedReportEngine.tsx` (re-export from the old path to avoid breaking imports).
-- Generalize the props: `{ toolKey, title, subtitle, sections: ReportSection[], meta, brand }` where `ReportSection = { id, label, node, includeByDefault }`. Sections are toggleable in the preview builder (same pattern already present).
-- Keep JBJ branding header/footer, section selector, "Preview → Download PDF / Print / Share" actions.
+## Solution
 
-## Step 2 — Per-tool report adapters
-Create one small file per tool that maps its result state to `ReportSection[]`:
-```
-src/components/shared/report/adapters/
-  propertyEvaluatorReport.tsx
-  rentalIndexReport.tsx
-  propertyComparisonReport.tsx
-  mortgageCalculatorReport.tsx
-  interiorDesignReport.tsx
-  propertyMeasurementReport.tsx
-```
-Each adapter renders that tool's cards (valuation summary, DLD comps, DXP completion, rental yield, mortgage schedule, design boards, measurement plan, etc.) as report sections.
+For each AI tool: unblock its route, wrap its existing tool component in `PremiumToolShell` with `toolThemes.emerald` (the same shell Mortgage Calculator uses), and inherit the locked global CSS rules (PASS 203 / 204 / 205 — emerald hover, no blue, hover ≠ selected, disclaimer button parity).
 
-## Step 3 — Wire a "Report" action into each tool
-Replace ad-hoc download/print buttons with a single `<UnifiedReportButton toolKey=… data=… />` that opens the shared preview modal. Users pick sections → download PDF (via existing `renderReportToPdf`) / print / `navigator.share`.
+## Delivery approach — one tool per turn
 
-## Step 4 — Property Evaluator title-deed flow
-- Add a top-of-form **Entry Mode** switch: `Manual` | `From Title Deed`.
-- `From Title Deed` shows the drag/drop upload (PDF/JPG/PNG). On upload, call existing `property-evaluation` edge fn with an OCR pass (Tesseract via `pytesseract` is not available client-side — use the Lovable AI Gateway with an image-capable model to extract: community, sub-community, tower, unit, size, bedrooms, floor, view, handover). Pre-fill fields; user can review/edit; results generate as usual.
-- Move the current standalone Title Deed dropzone out of the middle of the specs grid.
+I will ship the tools in the order below, ONE per turn, with desktop + mobile screenshot proof each turn. This keeps each change reviewable and lets you redirect priorities between turns without waste.
 
-## Step 5 — QA
-- Playwright: for each tool, open results, click Report, verify preview renders, sections toggle, PDF downloads, share sheet fires. Screenshot each.
+### Batch A — Property intelligence (5 tools)
+1. AI Price Predictor
+2. AI Property Analyzer
+3. AI Neighborhood Insights
+4. AI ROI Calculator
+5. AI Market Report
 
-## Not in scope (this pass)
-- No visual redesign of tool result pages beyond adding the Report button.
-- No backend schema changes; adapters read existing state.
+### Batch B — Lead & CRM (5 tools)
+6. AI Lead Qualification
+7. AI Client Matcher
+8. AI Objection Handler
+9. AI Followup Scheduler
+10. AI Competitor Analysis
 
-## Technical notes
-- Reuse `renderReportToPdf.ts` unchanged; adapters must produce React nodes it can serialize.
-- Title-deed OCR: `supabase.functions.invoke('parse-title-deed', { body: { fileBase64 } })` — new edge fn that calls Lovable AI Gateway with vision model and returns structured JSON.
-- Persist entry-mode + parsed fields into the existing `jbj-property-evaluator-draft-v3` localStorage key so refresh survives.
+### Batch C — Content & Comms (6 tools)
+11. AI Description Writer
+12. AI Email Generator
+13. AI Social Media
+14. AI Translation Hub
+15. AI Meeting Summarizer
+16. AI Call Summarizer
+
+### Batch D — Legal & Docs (4 tools)
+17. AI Contract Reviewer
+18. AI Document Generator
+19. AI Investment Report
+20. AI Calendar
+
+### Kept as-is
+`/ai-video-tour-script` → `/toolkit/video-suite` (correct redirect, video suite is the canonical home).
+`/ai-financial-advisor` → `/ai-budget-planner` (correct alias).
+
+## Per-tool change per turn
+
+Two files touched per tool:
+
+1. `src/routes/AIToolRoutes.tsx` — replace `<Navigate to="/ai-hub" replace />` with the real element (`<AIPricePredictorPage />`, etc.).
+2. `src/pages/AI<Tool>Page.tsx` — wrap the underlying tool component in `<PremiumToolShell theme={toolThemes.emerald} eyebrowIcon={…} eyebrow="AI-Powered <Category>" title="<Tool Name>" subtitle="…"><SEOHead …/><ToolComponent /></PremiumToolShell>`.
+
+Global CSS locks already in place (from earlier passes) automatically apply:
+- Dropdowns: emerald hover, hover ≠ selected, no blue (PASS 203)
+- Disclaimer buttons: solid emerald + white ink (PASS 204)
+- Bank picker style: full text, white ink, no ellipsis (PASS 205)
+- Active pill: animated conic emerald ring (locked memory)
+
+## Verification per turn
+
+- Desktop 1280×1600 screenshot of the tool page hero + input card.
+- Mobile 390×1600 screenshot of the same page collapsed to single column.
+- Confirm no route loop, confirm the tool's own dropdowns/pills/buttons obey the global rules.
+
+## Out of scope for this plan (call out separately if needed)
+
+- Foldable phone / landscape tablet screenshots (would double the verification time per turn — flag if you want that added).
+- Rewriting the internal tool components themselves (e.g., `AIPricePredictorPremium`'s form fields) — this plan only re-shells them. If a specific tool's internal fields have alignment/hover bugs after re-shelling, we fix per-tool as a follow-up.
+- Backend admin calendar deep-dive — global calendar CSS is already updated, but a manual sweep of every admin page's inline `bg-blue-*` classes would be a separate cleanup task.
+
+## Effort
+
+20 tools × 1 turn each = ~20 turns to complete Batches A–D. Batch A alone (5 turns) restores the highest-value property-intelligence tools.
+
+**Awaiting your go-ahead** — approve this plan and I start with tool #1 (AI Price Predictor) on the next turn.
