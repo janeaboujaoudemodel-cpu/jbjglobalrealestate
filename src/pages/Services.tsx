@@ -209,46 +209,60 @@ const Services = () => {
         canonicalPath="/services"
       />
 
-      {/* Hero Section with Video */}
-      <section data-brand-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden" data-surface="emerald">
-        {/* Background Video */}
+      {/* Hero Section — pure emerald-black gradient */}
+      <section
+        data-brand-hero
+        data-hero-dark
+        data-surface="emerald"
+        data-no-contrast-guard
+        className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
+      >
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity"
         >
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/40 via-black/60 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
-        
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{ background: "linear-gradient(180deg, rgba(4,44,28,0.55) 0%, rgba(0,0,0,0.75) 100%)" }}
+        />
+
+        <motion.div
+          className="relative z-10 container mx-auto px-4 py-24 md:py-32 text-center max-w-4xl"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.div 
-            className="flex items-center justify-center gap-2 mb-6"
+          <motion.div
+            data-no-contrast-guard
+            className="allow-white flex items-center justify-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Briefcase className="w-6 h-6 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
+            <Briefcase className="w-6 h-6 allow-white" style={{ color: "#FFFFFF" }} />
+            <span className="text-sm uppercase tracking-[0.3em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Services
             </span>
           </motion.div>
 
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+          <motion.h1
+            data-no-contrast-guard
+            className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
             Explore JBJ Services
           </motion.h1>
 
-          <motion.p 
-            className="text-white/85 text-base md:text-lg max-w-3xl mx-auto mb-10"
+          <motion.p
+            data-no-contrast-guard
+            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-10"
+            style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
@@ -258,7 +272,7 @@ const Services = () => {
             <PremiumHeroButton href="/contact" icon={ArrowRight}>
               Request a Service
             </PremiumHeroButton>
-            <Link 
+            <Link
               to="/contact"
               data-no-contrast-guard
               data-allow-dark-cta
@@ -271,6 +285,7 @@ const Services = () => {
           </motion.div>
         </motion.div>
       </section>
+
 
       {/* Service Cards Grid */}
       <section id="services-grid" className="py-20 bg-[#1A1A1A]">
