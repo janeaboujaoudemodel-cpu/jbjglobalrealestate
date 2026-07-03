@@ -8,6 +8,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { PortraitImage } from "@/components/ui/portrait-image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FounderContent } from "@/components/FounderContent";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
@@ -155,7 +156,8 @@ const About = () => {
               preload="auto"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/85" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B]/85 via-black/80 to-black/95" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
           </div>
 
           <motion.div
@@ -228,8 +230,8 @@ const About = () => {
                   variants={fadeInUp}
                 >
                   <div className="relative">
-                    {/* Champagne background card for premium look */}
-                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border border-[#B89555]/30 shadow-lg" />
+                    {/* Emerald→black gradient card for premium dark look */}
+                    <div className="absolute inset-0 -m-6 bg-gradient-to-br from-[#064E3B] via-[#052E22] to-black rounded-2xl border border-[#B89555]/40 shadow-[0_20px_60px_rgba(0,0,0,0.45)]" />
 
                     <div className="relative z-10">
                       <Link to="/founder" className="block group">
@@ -240,10 +242,12 @@ const About = () => {
                       <FounderPhotoEditOverlay />
                       <Link to="/founder" className="block mt-4">
                         <button
-                          className="group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                          data-allow-dark-cta
+                          data-no-contrast-guard
+                          className="allow-white group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-white/10 border border-[#B89555]/60 text-white hover:bg-white/20"
                         >
-                          <span>Know more about the founder</span>
-                          <span aria-hidden>↗</span>
+                          <span className="text-white">Know more about the founder</span>
+                          <span aria-hidden className="text-white">↗</span>
                         </button>
                       </Link>
                     </div>
@@ -527,81 +531,11 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 9: CTA - 3-Layer System: Black > Active Champagne > Pearl */}
-        <section className="py-10 md:py-12 bg-[#F7F2EA]">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="max-w-[1100px] mx-auto">
-              {/* OUTER CARD - Active Champagne Layer */}
-              <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
-                {/* INNER CARD - Pearl Layer */}
-                <motion.div 
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl sm:rounded-2xl p-6 sm:p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  variants={staggerContainer}
-                >
-                  {/* Badge */}
-                  <motion.div variants={fadeInUp} className="mb-4 sm:mb-6">
-                    <SectionEyebrow icon={Sparkles}>Begin Your Journey</SectionEyebrow>
-                  </motion.div>
-
-                  {/* Title */}
-                  <motion.h2 
-                    className="text-[#1A1A1A] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-                    variants={fadeInUp}
-                  >
-                    Not Sure Where to Start?
-                  </motion.h2>
-                  <motion.p 
-                    className="text-[#1A1A1A]/70 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
-                    variants={fadeInUp}
-                  >
-                    Whether you are buying, renting, investing, or simply seeking clarity, our role is to guide you with precision, not pressure.
-                  </motion.p>
-
-                  {/* CTA Buttons */}
-                  <motion.div 
-                    className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4"
-                    variants={fadeInUp}
-                  >
-                    <Link 
-                      to="/contact" 
-                      className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
-                      style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #B89555 100%)',
-                        boxShadow: `
-                          0 10px 30px rgba(200,167,102,0.4),
-                          0 6px 15px rgba(0,0,0,0.2),
-                          inset 0 2px 4px rgba(255,255,255,0.9),
-                          inset 0 -2px 4px rgba(200,167,102,0.2),
-                          0 0 20px rgba(200,167,102,0.3)
-                        `,
-                      }}
-                    >
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
-                      <span className="relative flex items-center gap-1">
-                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Speak with</span>
-                        <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Our Team</span>
-                      </span>
-                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors relative z-10" />
-                    </Link>
-
-                    {/* Secondary Button - Browse Properties */}
-                    <Link 
-                      to="/services" 
-                      className="group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white"
-                    >
-                      Explore Our Services
-                      <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </Link>
-                  </motion.div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* SECTION 9: CTA — standardized "Ready to Get Started" block for site-wide consistency */}
+        <CombinedContactNewsletter
+          title="Not Sure Where to Start?"
+          subtitle="Whether you are buying, renting, investing, or simply seeking clarity, our role is to guide you with precision, not pressure."
+        />
       </div>
     </>
   );
