@@ -281,6 +281,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        data-filter-clean="true"
         className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border border-[#064E3B]/30 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(6,78,59,0.14)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
         style={{
           // Emerald slider override for this modal

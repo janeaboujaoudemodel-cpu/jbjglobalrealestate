@@ -28111,3 +28111,34 @@ html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-curr
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* Final filter/dropdown cleanup: no gold borders and no faded labels on Developers, Projects, Areas filter surfaces. */
+html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filter-clean="true"]) :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select,
+  .jbj-form-field,
+  button[role="combobox"],
+  [data-radix-select-trigger],
+  [data-jbj-field]
+):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input) {
+  border-color: rgba(6, 78, 59, 0.34) !important;
+  --tw-ring-color: rgba(6, 78, 59, 0.34) !important;
+  outline-color: rgba(6, 78, 59, 0.34) !important;
+}
+html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filter-clean="true"]) :is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select,
+  .jbj-form-field,
+  button[role="combobox"],
+  [data-radix-select-trigger],
+  [data-jbj-field]
+):is(:focus,:focus-visible):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input) {
+  border-color: rgba(6, 78, 59, 0.72) !important;
+  --tw-ring-color: rgba(6, 78, 59, 0.24) !important;
+  outline-color: rgba(6, 78, 59, 0.72) !important;
+}
+html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filter-clean="true"]) :is(label, h4, p, span, button, div):not(.allow-white):not(.allow-white *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  opacity: 1 !important;
+}

@@ -555,6 +555,7 @@ const Properties = () => {
 
       {/* Filters Section - sticks below the 88px header on scroll */}
       <section
+        data-filter-clean="true"
         data-map-shell={isMapMode ? true : undefined}
         className={`sticky top-[88px] z-40 py-3 md:py-4 ${isMapMode ? "jj-properties-map-filter" : "border-b border-white/12"}`}
         style={{
@@ -746,7 +747,7 @@ const Properties = () => {
                     </button>
                   </DialogTrigger>
 
-                  <DialogContent data-map-shell={isMapMode ? true : undefined} className={isMapMode ? "max-w-2xl jj-map-command-bar p-0" : "max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 text-[#1A1A1A] p-0"}>
+                  <DialogContent data-filter-clean="true" data-map-shell={isMapMode ? true : undefined} className={isMapMode ? "max-w-2xl jj-map-command-bar p-0" : "max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 text-[#1A1A1A] p-0"}>
                     <DialogHeader className={isMapMode ? "p-6 border-b border-white/14" : "p-6 border-b border-[#064E3B]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"}>
                       <DialogTitle className="text-xl font-semibold text-[#1A1A1A]">
                         Filters
