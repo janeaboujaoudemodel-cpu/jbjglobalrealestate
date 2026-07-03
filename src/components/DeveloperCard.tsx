@@ -117,6 +117,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
       <motion.div
         whileHover={{ y: -8, scale: 1.015, boxShadow: "0 26px 54px -14px rgba(0,0,0,0.36), 0 14px 28px -12px rgba(6,78,59,0.34)" }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
+        data-developer-card
         className="group relative rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full bg-[#FDFBF7]"
         style={{
           boxShadow: "0 6px 16px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)",

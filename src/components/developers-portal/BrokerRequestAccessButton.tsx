@@ -77,7 +77,7 @@ export default function BrokerRequestAccessButton({ developerId, developerName }
 
   if (existing?.status === "approved") {
     return (
-      <Button variant="outline" disabled className="border-[color:var(--emerald-1)]/30 text-[color:var(--emerald-1)] jj-emerald-soft">
+      <Button data-label-emerald-only variant="outline" disabled className="jj-pill-emerald-metallic allow-white border-0 text-white">
         <ShieldCheck className="w-4 h-4 mr-2" /> Access granted
       </Button>
     );
@@ -94,7 +94,7 @@ export default function BrokerRequestAccessButton({ developerId, developerName }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]">
+        <Button data-label-emerald-only variant="outline" className="jj-pill-emerald-metallic allow-white border-0 text-white">
           <ShieldCheck className="w-4 h-4 mr-2" />
           Request access to sales rep
         </Button>

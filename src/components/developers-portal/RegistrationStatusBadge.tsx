@@ -3,11 +3,11 @@ import { cn } from "@/lib/utils";
 type Status = "registered" | "pending" | "not_registered" | "active" | "inactive" | string | null | undefined;
 
 const MAP: Record<string, { label: string; cls: string }> = {
-  registered:     { label: "Registered",     cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" },
-  active:         { label: "Active",         cls: "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30" },
-  pending:        { label: "Pending",        cls: "bg-amber-50 text-amber-900 border-amber-300" },
-  not_registered: { label: "Not Registered", cls: "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40" },
-  inactive:       { label: "Inactive",       cls: "bg-red-50 text-red-900 border-red-300" },
+  registered:     { label: "Registered",     cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
+  active:         { label: "Active",         cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
+  pending:        { label: "Pending",        cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
+  not_registered: { label: "Not Registered", cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
+  inactive:       { label: "Inactive",       cls: "jj-pill-emerald-metallic allow-white text-white border-0" },
 };
 
 export default function RegistrationStatusBadge({ status, className }: { status: Status; className?: string }) {
@@ -15,9 +15,9 @@ export default function RegistrationStatusBadge({ status, className }: { status:
   const entry = MAP[key] ?? MAP.not_registered;
   return (
     <span
-      data-no-contrast-guard
+      data-label-emerald-only
       className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.12em] border",
+        "inline-flex items-center px-2 py-0.5 rounded-full text-[10.5px] font-extrabold uppercase tracking-[0.12em] border-0",
         entry.cls,
         className
       )}
