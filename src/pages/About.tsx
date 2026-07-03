@@ -404,10 +404,11 @@ const About = () => {
                       key={label}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white rounded-lg p-5 border border-[#B89555]/40"
-                      style={{ background: '#0A0A0A' }}
+                      data-surface="emerald"
+                      className="allow-white rounded-xl p-5 border border-white/15 shadow-[0_10px_24px_-12px_rgba(4,44,28,0.9),inset_0_1px_0_rgba(255,255,255,0.16)]"
+                      style={{ background: 'linear-gradient(135deg,#064E3B 0%,#053a2c 55%,#031f18 100%)' }}
                     >
-                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} />
+                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} strokeWidth={2} />
                       <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
                     </div>
                   ))}
