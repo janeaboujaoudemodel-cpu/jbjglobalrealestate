@@ -270,7 +270,7 @@ const Services = () => {
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-4">
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-12 md:mt-16">
             <PremiumHeroButton href="/contact" icon={ArrowRight}>
               Request a Service
             </PremiumHeroButton>
@@ -292,7 +292,7 @@ const Services = () => {
 
 
       {/* Service Cards Grid */}
-      <section id="services-grid" className="py-20 bg-[#F7F2EA]">
+      <section id="services-grid" data-surface="champagne" className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -383,7 +383,7 @@ const Services = () => {
       </section>
 
       {/* Service Request Strip */}
-      <section className="py-16 bg-[#F7F2EA]">
+      <section data-surface="champagne" className="py-16 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -422,7 +422,7 @@ const Services = () => {
       </section>
 
       {/* Service Scope Clarification */}
-      <section className="py-20 bg-[#F7F2EA]">
+      <section data-surface="champagne" className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
