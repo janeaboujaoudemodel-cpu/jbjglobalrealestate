@@ -706,14 +706,13 @@ Requirements:
           {/* Form Content - light champagne card on emerald backdrop */}
           <div className="max-w-3xl mx-auto">
             <div
-              data-surface="champagne"
               data-no-contrast-guard
               className="rounded-2xl p-6 md:p-8 shadow-xl"
               style={{
-                background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)",
-                border: "1.5px solid rgba(6,78,59,0.35)",
-                boxShadow: "0 28px 70px -30px rgba(4,44,28,0.55)",
-                color: "#1A1A1A",
+                background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)",
+                border: "1.5px solid rgba(16,185,129,0.35)",
+                boxShadow: "0 28px 70px -30px rgba(0,0,0,0.7)",
+                color: "#FFFFFF",
               }}
             >
 
