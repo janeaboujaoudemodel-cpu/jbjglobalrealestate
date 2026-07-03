@@ -921,7 +921,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%)' }}
               >
                 {/* Quick Actions Row */}
-                <div className="flex items-center justify-evenly px-4 py-3 border-b border-[#B89555]/30">
+                <div className="flex items-center justify-evenly px-4 py-3 border-b border-[#064E3B]/30">
                   <button
                     className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-[#1A1A1A] py-2 w-16 transition-colors"
                     onClick={() => {
@@ -950,31 +950,31 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <div className="px-4 pt-4 pb-2">
                   <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#1A1A1A] mb-2">My Shortcuts</p>
                   <div className="space-y-0.5">
-                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <Cpu className="w-4 h-4 text-[#1A1A1A]/70" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <ClipboardCheck className="w-4 h-4 text-[#1A1A1A]/70" />List Your Property
                     </Link>
-                    <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <GraduationCap className="w-4 h-4 text-[#1A1A1A]/70" />Careers
                     </Link>
-                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <Home className="w-4 h-4 text-[#1A1A1A]/70" />Resale Properties
                     </Link>
-                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <Heart className="w-4 h-4 text-[#1A1A1A]/70" />My Favorites
                     </Link>
-                    <Link to={modeDashboardHref} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to={modeDashboardHref} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <LayoutDashboard className="w-4 h-4 text-[#1A1A1A]/70" />{modeDashboardLabel}
                     </Link>
-                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <CalendarClock className="w-4 h-4 text-[#1A1A1A]/70" />AI Calendar
                     </Link>
-                    <Link to="/ai-home-finder" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/ai-home-finder" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <Sparkles className="w-4 h-4 text-[#1A1A1A]/70" />AI Home Finder
                     </Link>
-                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#B89555]/30">
+                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-[#1A1A1A]/70 hover:text-[#1A1A1A] bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-lg transition-colors border border-[#064E3B]/30">
                       <Calculator className="w-4 h-4 text-[#1A1A1A]/70" />Property Evaluator
                     </Link>
                   </div>
@@ -986,12 +986,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 <nav className="flex flex-col px-4 py-2">
                   {/* PROPERTIES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Properties</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {mobileBuyLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
@@ -1032,12 +1032,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* TOOLS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Tools</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {mobileToolkitLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
@@ -1051,12 +1051,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* INSIGHTS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Insights</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {mobileResourceLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
@@ -1070,12 +1070,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* GUIDES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Guides</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {mobileGuideLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
@@ -1089,12 +1089,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* SERVICES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Services</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {servicesLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
@@ -1114,12 +1114,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* COMPANY */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Company</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {mobileMoreLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
@@ -1133,12 +1133,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* MY ACCOUNT */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>My Account</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {user ? (
                           <>
                             <div className="flex items-center gap-3 px-3 py-2 bg-[#F7F2EA] rounded-lg mb-1">
@@ -1193,12 +1193,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                   {/* LEGAL & TRUST */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#B89555]/30">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors border border-transparent hover:border-[#064E3B]/30">
                       <span>Legal & Trust</span>
                       <ChevronDown className="w-4 h-4 text-[#1A1A1A] transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-[#B89555]/30 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-[#064E3B]/30 space-y-0.5 pb-1">
                         {mobileLegalLinks.map((link) => (
                           <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#1A1A1A]/80 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] rounded-lg transition-colors">
                             <link.icon className="w-4 h-4 text-[#1A1A1A]" />{link.label}
