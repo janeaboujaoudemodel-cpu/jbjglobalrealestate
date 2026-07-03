@@ -57,7 +57,7 @@ export default function MoreFromDeveloperStrip({
     queryKey: ["more-from-developer", developerId, developerName, currentProjectId],
     queryFn: async () => {
       const select =
-        "id, name, slug, location, area_name, emirate, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description, property_type, sale_status, developer_id, developer_name";
+        "id, name, slug, location, area_name, emirate, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description, property_type_label, sale_status, developer_id, developer_name";
 
       // Primary lookup by developer_id
       let rows: any[] = [];
@@ -98,7 +98,7 @@ export default function MoreFromDeveloperStrip({
   }, [all]);
   const typeOptions = useMemo(() => {
     const s = new Set<string>();
-    all.forEach((p: any) => p.property_type && s.add(p.property_type));
+    all.forEach((p: any) => p.property_type_label && s.add(p.property_type_label));
     return Array.from(s).sort();
   }, [all]);
   const statusOptions = useMemo(() => {
@@ -111,7 +111,7 @@ export default function MoreFromDeveloperStrip({
     return all.filter((p: any) => {
       if (fArea !== "all" && p.location !== fArea) return false;
       if (fStatus !== "all" && p.sale_status !== fStatus) return false;
-      if (fType !== "all" && p.property_type !== fType) return false;
+      if (fType !== "all" && p.property_type_label !== fType) return false;
       if (fHandover !== "all") {
         const y = handoverYear(p.handover_date);
         if (fHandover === "ready" && y !== 0) return false;
