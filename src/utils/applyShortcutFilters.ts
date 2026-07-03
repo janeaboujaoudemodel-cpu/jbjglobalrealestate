@@ -10,13 +10,10 @@ export function applyShortcutFilters<T extends Record<string, any>>(
 ): T[] {
   let result = [...projects];
 
-  // Hide Sold Out
-  if (sf.hideSoldOut) {
-    result = result.filter(p => {
-      const label = (p.status_label || p.sale_status || '').toLowerCase();
-      return !label.includes('sold') && !label.includes('out of stock') && !p.is_sold_out;
-    });
-  }
+  // Hide Sold Out — permanently disabled site-wide. Off-plan projects that
+  // sell out reappear via the secondary market, so this toggle no longer
+  // filters anything and is not surfaced in the UI.
+
 
   // Construction Status
   if (sf.constructionStatuses.length > 0) {
