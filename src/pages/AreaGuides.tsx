@@ -267,8 +267,8 @@ const AreaGuides = () => {
       {/* Vertical nav handled globally by MainLayout */}
 
 
-      {/* Gold divider */}
-      <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* Emerald divider */}
+      <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
 
       {/* Emirates Section — clickable cards grouped by emirate */}
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
@@ -288,7 +288,7 @@ const AreaGuides = () => {
                       setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                       scrollToGrid();
                     }}
-                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/20 transition-all"
+                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 hover:border-[#064E3B]/55 hover:shadow-lg hover:shadow-[#064E3B]/15 transition-all"
                   >
                     <MapPin className="w-5 h-5 text-[#1A1A1A]" />
                     <span className="text-[#1A1A1A] font-semibold text-sm">{emirate}</span>
@@ -299,7 +299,7 @@ const AreaGuides = () => {
             </div>
           </div>
           {/* Divider */}
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-4" />
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent mt-4" />
         </section>
       )}
 
@@ -356,9 +356,9 @@ const AreaGuides = () => {
                         transition={{ duration: 0.3 }}
                         className="group rounded-xl overflow-hidden cursor-pointer flex flex-col h-full"
                         style={{
-                          border: "3px solid hsl(42 45% 59%)",
+                          border: "1px solid rgba(6,78,59,0.30)",
                           boxShadow: `
-                            0 8px 32px rgba(200,167,102,0.25),
+                            0 8px 32px rgba(6,78,59,0.16),
                             0 4px 16px rgba(0,0,0,0.15),
                             inset 0 1px 0 rgba(255,255,255,0.1)
                           `,
@@ -405,7 +405,7 @@ const AreaGuides = () => {
 
                           {/* Emirate Label (normalized) */}
                           <div className="absolute top-3 left-3 z-10">
-                            <Badge className="bg-[#1A1A1A]/70 text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border border-[#B89555]/30">
+                            <Badge className="allow-white jj-pill-emerald-metallic text-white px-3 py-1 text-[10px] font-medium tracking-wider shadow-lg border-0">
                               <MapPin className="w-3 h-3 mr-1" />
                               {normalizeEmirate(area.emirate || "")}
                             </Badge>
@@ -436,7 +436,7 @@ const AreaGuides = () => {
                           </div>
 
                           {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-[#1A1A1A]/70 text-xs mt-3 pt-3 border-t border-[#B89555]/20">
+                          <div className="flex items-center gap-3 text-[#1A1A1A]/70 text-xs mt-3 pt-3 border-t border-[#064E3B]/20">
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
                                 <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
@@ -477,7 +477,7 @@ const AreaGuides = () => {
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#064E3B]/30 bg-[#FDFBF7]/60 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Previous
@@ -493,7 +493,7 @@ const AreaGuides = () => {
                         className={`w-10 h-10 rounded-lg text-sm font-medium transition-all ${
                           page === currentPage
                             ? "bg-[#EFE6D6] text-[#1A1A1A] shadow-md"
-                            : "bg-[#FDFBF7]/60 border border-[#B89555]/30 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/20"
+                            : "bg-[#FDFBF7]/60 border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/20"
                         }`}
                       >
                         {page}
@@ -504,7 +504,7 @@ const AreaGuides = () => {
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#B89555]/30 bg-[#FDFBF7]/60 text-[#1A1A1A]/70 hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                    className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg border border-[#064E3B]/30 bg-[#FDFBF7]/60 text-[#1A1A1A] hover:bg-[#EFE6D6] hover:text-[#1A1A1A] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
