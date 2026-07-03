@@ -49,16 +49,14 @@ const AreasWeCover = () => {
   return (
     <section id="top-areas-dubai" className="py-12 md:py-20">
       <ContentTrack>
-        {/* Premium champagne frame */}
-        <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-b from-[#FFFDF8] via-[#F7F2EA] to-[#EFE6D6] p-6 md:p-10 lg:p-12 border border-[#B89555]/45 shadow-[0_24px_70px_-32px_rgba(184,149,85,0.45)]">
-          {/* Corner gold flourishes */}
-          <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-12 w-12 border-t border-l border-[#B89555]/70 rounded-tl-[28px]" />
-          <span aria-hidden className="pointer-events-none absolute top-0 right-0 h-12 w-12 border-t border-r border-[#B89555]/70 rounded-tr-[28px]" />
-          <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-12 w-12 border-b border-l border-[#B89555]/70 rounded-bl-[28px]" />
-          <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r border-[#B89555]/70 rounded-br-[28px]" />
+        <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] p-6 md:p-10 lg:p-12 border border-white/18 shadow-[0_24px_70px_-32px_rgba(0,0,0,0.62)]">
+          <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-12 w-12 border-t border-l border-white/24 rounded-tl-[28px]" />
+          <span aria-hidden className="pointer-events-none absolute top-0 right-0 h-12 w-12 border-t border-r border-white/24 rounded-tr-[28px]" />
+          <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-12 w-12 border-b border-l border-white/24 rounded-bl-[28px]" />
+          <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r border-white/24 rounded-br-[28px]" />
 
           <div className="relative text-center mb-8 md:mb-10">
-            <h2 data-no-contrast-guard className="text-[#1A1A1A] text-2xl md:text-4xl font-bold tracking-tight">
+            <h2 data-no-contrast-guard className="allow-white text-white text-2xl md:text-4xl font-bold tracking-tight">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
           </div>
@@ -71,7 +69,7 @@ const AreasWeCover = () => {
             <Link
               key={area.slug}
               to={`/area/${area.slug}`}
-              className="group relative block h-[240px] md:h-[260px] rounded-2xl overflow-hidden border border-[#B89555]/30 bg-[#F7F2EA] transform-gpu will-change-transform transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(0,0,0,0.18)]"
+              className="group relative block h-[240px] md:h-[260px] rounded-2xl overflow-hidden border border-white/18 bg-[#042C1C] transform-gpu will-change-transform transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(0,0,0,0.30)]"
               style={{ contain: "layout paint" }}
             >
               {area.imageUrl ? (
@@ -94,7 +92,7 @@ const AreasWeCover = () => {
               {/* Subtle top gradient so badges read clearly without darkening the image */}
               <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
 
-              {/* Badges — cream + ink + thin gold border (No-Gold-Fills rule) */}
+              {/* Badges — emerald ombre + white */}
               <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
                 {area.isTrending && (
                   <span data-no-contrast-guard className="jj-emerald-chip jj-area-status-chip">
@@ -111,14 +109,13 @@ const AreasWeCover = () => {
               </div>
 
 
-              {/* Champagne caption bar — ink text, gold hairline (no dark fills) */}
-              <div className="absolute bottom-0 left-0 right-0 bg-[#FDFBF7]/95 backdrop-blur-md border-t border-[#B89555]/40 px-4 py-3">
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md border-t border-white/18 px-4 py-3">
                 <div className="flex items-end justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 data-no-contrast-guard className="text-[#1A1A1A] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                    <h3 data-no-contrast-guard className="allow-white text-white font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
                       {area.name}
                     </h3>
-                    <p className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1A1A1A]/70">
+                    <p className="allow-white mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white">
                       {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
                     </p>
                   </div>

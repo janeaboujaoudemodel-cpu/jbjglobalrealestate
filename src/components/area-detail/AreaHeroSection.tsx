@@ -50,7 +50,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
       {/* DLD Live Badge — top right */}
       {dldAreaData && (
         <motion.div
-          className="absolute top-6 right-6 z-20 hidden md:flex items-center gap-2 bg-[#1A1A1A]/60 backdrop-blur-md border border-[#B89555]/40 rounded-2xl px-4 py-2.5"
+          className="absolute top-6 right-6 z-20 hidden md:flex items-center gap-2 bg-[#1A1A1A]/60 backdrop-blur-md border border-white/24 rounded-2xl px-4 py-2.5"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 0.5 }}
@@ -72,16 +72,16 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
       >
         {/* Location + badges */}
         <motion.div className="flex items-center gap-2 mb-3 flex-wrap" variants={fadeInUp}>
-          <MapPin className="w-5 h-5 text-[#1A1A1A]" />
-          <span className="text-[#1A1A1A] text-sm uppercase tracking-wider">{area.emirate}, UAE</span>
+          <MapPin className="w-5 h-5 text-white" />
+          <span className="allow-white text-white text-sm uppercase tracking-wider">{area.emirate}, UAE</span>
           {area.is_trending && (
-            <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/20 text-[#1A1A1A] text-xs rounded-full">
+            <span className="allow-white jj-pill-emerald-metallic ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-white text-xs rounded-full">
               <TrendingUp className="w-3 h-3" />
               Trending
             </span>
           )}
           {area.is_high_demand && (
-            <span className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/20 text-red-400 text-xs rounded-full">
+            <span className="allow-white jj-pill-emerald-metallic ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-white text-xs rounded-full">
               <Flame className="w-3 h-3" />
               High Demand
             </span>
@@ -113,7 +113,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               onClick={() => scrollToId('projects-section')}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-[#B89555]/60 transition-all duration-200"
+              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-white/60 transition-all duration-200"
             >
               <Building2 className="w-5 h-5 text-white" />
               <div className="text-left">
@@ -129,7 +129,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               onClick={() => scrollToId('developers-section')}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-[#B89555]/60 transition-all duration-200"
+              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-white/60 transition-all duration-200"
             >
               <Users className="w-5 h-5 text-white" />
               <div className="text-left">
@@ -153,8 +153,8 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {/* DLD YTD Transactions */}
           {dldAreaData && (
             <>
-              <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-[#B89555]/50 rounded-xl px-5 py-3">
-                <Activity className="w-5 h-5 text-[#B89555]" />
+              <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3">
+                <Activity className="w-5 h-5 text-white" />
                 <div>
                   <div className="text-xl font-bold text-white leading-tight">{dldAreaData.transactions.toLocaleString()}</div>
                   <div className="text-white/80 text-xs">DLD Transactions (YTD)</div>
@@ -163,12 +163,12 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
               <div data-allow-dark-cta data-no-contrast-guard className={`allow-white flex items-center gap-2 backdrop-blur-md border rounded-xl px-5 py-3 ${
  isPositive
- ? 'jj-surface-emerald-soft border-[color:var(--emerald-1)]/30/40'
- : 'bg-red-500/20 border-red-400/40'
+ ? 'jj-pill-emerald-metallic border-0'
+ : 'jj-pill-emerald-metallic border-0'
  }`}>
-                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? 'text-[color:var(--emerald-on)]' : 'text-red-300 rotate-180'}`} />
+                <ArrowUpRight className={`w-5 h-5 text-white transition-transform ${isPositive ? '' : 'rotate-180'}`} />
                 <div>
-                  <div className={`text-xl font-bold leading-tight ${isPositive ? 'text-[color:var(--emerald-on)]' : 'text-red-300'}`}>
+                  <div className="allow-white text-xl font-bold leading-tight text-white">
                     {dldAreaData.change}
                   </div>
                   <div className="text-white/80 text-xs">YoY Growth</div>

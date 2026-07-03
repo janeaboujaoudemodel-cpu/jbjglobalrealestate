@@ -179,18 +179,18 @@ const AreaDetail = () => {
     <>
       {/* Search Input */}
       <div className="relative flex-1 min-w-[200px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white" />
         <input
           type="text"
           placeholder="Search projects or developers..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-10 pl-9 pr-8 rounded-xl bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/30 focus:outline-none focus:border-[#B89555]/60 transition-colors"
+          className="allow-white w-full h-10 pl-9 pr-8 rounded-xl bg-[#021611]/82 border border-white/28 text-white text-sm placeholder:text-white focus:outline-none focus:border-white/60 transition-colors"
           style={{ fontSize: '16px' }}
         />
         {searchQuery && (
           <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
-            <X className="w-4 h-4 text-[#1A1A1A]/40 hover:text-[#1A1A1A]" />
+            <X className="w-4 h-4 text-white hover:text-white" />
           </button>
         )}
       </div>
@@ -219,10 +219,10 @@ const AreaDetail = () => {
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#FDFBF7]/95 via-[#F7F2EA]/95 to-[#EFE6D6]/95 backdrop-blur-md py-3 px-4 md:px-6 border-b border-[#B89555]/20 shadow-[0_4px_20px_rgba(184,149,85,0.10)] transition-all duration-300">
+      <div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)] transition-all duration-300">
         <div className="container mx-auto">
-          <FilterShortcutBar
-            variant="light"
+            <FilterShortcutBar
+            variant="dark"
             filters={shortcutFilters}
             onFilterChange={setShortcutFilters}
             priorityFilter="areas"
@@ -257,35 +257,35 @@ const AreaDetail = () => {
       <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
-            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-[#B89555]/30 relative overflow-hidden bg-[#FDFBF7]/70 backdrop-blur-sm"
+            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border border-white/18 relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-sm"
             style={{
-              boxShadow: '0 30px 80px -20px rgba(200,167,102,0.15), 0 0 60px rgba(200,167,102,0.05)',
+              boxShadow: '0 30px 80px -20px rgba(0,0,0,0.42), 0 0 60px rgba(6,78,59,0.16)',
             }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
             
-            <div className="w-14 h-14 rounded-2xl bg-[#EFE6D6]/30 border border-[#B89555]/40 flex items-center justify-center mx-auto mb-6">
-              <MapPin className="w-7 h-7 text-[#B89555]" />
+            <div className="jj-pill-emerald-metallic w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <MapPin className="w-7 h-7 text-white" />
             </div>
-            <h2 className="text-[#1A1A1A] text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+            <h2 className="allow-white text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Properties in {area.name}
             </h2>
-            <p className="text-[#1A1A1A]/50 text-lg mb-10 max-w-2xl mx-auto">
+            <p className="allow-white text-white text-lg mb-10 max-w-2xl mx-auto">
               Browse our curated collection of verified properties in this premium neighborhood.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to={`/properties?area=${area.slug}`}>
-                <Button className="px-8 py-6 text-base bg-[#1A1A1A] text-white font-bold border border-[#1A1A1A] hover:bg-[#1A1A1A]/80 hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] hover:scale-105 transition-all duration-300 rounded-xl">
+                <Button className="allow-white jj-pill-emerald-metallic px-8 py-6 text-base text-white font-bold border-0 hover:scale-105 transition-all duration-300 rounded-xl">
                   View Properties
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button variant="secondary" className="border-2 border-[#1A1A1A]/20 text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-transparent">
-                  <Phone className="w-5 h-5 mr-2 text-[#B89555]" />
+                <Button variant="secondary" className="allow-white border border-white/28 text-white hover:bg-white/10 hover:text-white px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-white/7">
+                  <Phone className="w-5 h-5 mr-2 text-white" />
                   Contact Us
                 </Button>
               </Link>
@@ -301,9 +301,9 @@ const AreaDetail = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
               <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-                  <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]" />
-                  <span className="text-[#1A1A1A]">Similar Areas</span>
+                <span className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 px-4 py-2 border-0 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+                  <MapPin className="w-3.5 h-3.5 text-white" />
+                  <span className="text-white">Similar Areas</span>
                 </span>
                 <h2 className="text-white text-2xl md:text-3xl font-bold">
                   Explore More in {area.emirate}
@@ -323,7 +323,7 @@ const AreaDetail = () => {
                   >
                     <Link
                       to={`/area/${relatedArea.slug}`}
-                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border-[3px] border-transparent hover:border-[#B89555] transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.45)]"
+                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border border-white/18 hover:border-white/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
                     >
                       {/* Background photo or champagne fallback */}
                       {relatedArea.image_url ? (
@@ -332,7 +332,7 @@ const AreaDetail = () => {
                           style={{ backgroundImage: `url(${relatedArea.image_url})` }}
                         />
                       ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
+                         <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
                           <span className="text-6xl font-black text-[#1A1A1A] select-none" style={{ opacity: 0.1 }}>JBJ</span>
                         </div>
                       )}
@@ -343,12 +343,12 @@ const AreaDetail = () => {
                       {/* Badges */}
                       <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                         {relatedArea.is_trending && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#EFE6D6] to-[#ECE2D2] text-[#1A1A1A] text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                          <span className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
                             Trending
                           </span>
                         )}
                         {relatedArea.is_high_demand && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                          <span className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-white text-[9px] font-bold uppercase tracking-wider shadow-lg">
                             High Demand
                           </span>
                         )}
@@ -357,11 +357,11 @@ const AreaDetail = () => {
                       {/* Bottom info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[#1A1A1A]/60 text-[#1A1A1A] text-[9px] font-semibold tracking-wide border border-[#B89555]/30">
+                          <span className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-white text-[9px] font-semibold tracking-wide border border-white/20">
                             {relatedArea.property_count} Projects
                           </span>
                         )}
-                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-[#1A1A1A] transition-colors duration-300">
+                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-white transition-colors duration-300">
                           {relatedArea.name}
                         </h3>
                       </div>
@@ -374,11 +374,11 @@ const AreaDetail = () => {
               <div className="text-center mt-8">
                 <Link
                   to="/areas"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
-                  style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
+                  className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 px-6 py-3 border-0 rounded-xl text-white font-semibold text-sm hover:-translate-y-0.5 transition-all duration-300 group"
+                  style={{ boxShadow: "0 6px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.16)" }}
                 >
                   <span>View All Areas</span>
-                  <ArrowRight className="w-4 h-4 text-[#B89555] group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </motion.div>
