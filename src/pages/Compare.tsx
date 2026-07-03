@@ -875,46 +875,50 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         </div>
       </div>
 
-      {/* =============== BODY — DARK EMERALD WRAPPER + CHAMPAGNE COMPARISON TABLE =============== */}
+      {/* =============== BODY — DARK EMERALD WRAPPER + EMERALD COMPARISON TABLE =============== */}
       <div className="container mx-auto px-4 py-10 md:py-14">
         <div
           data-compare-content-frame
-          data-surface="champagne"
+          data-surface="emerald"
+          data-on-dark="true"
+          data-no-contrast-guard
           className="rounded-2xl p-5 md:p-7 flex flex-col gap-8"
-          style={{ background: CHAMPAGNE, border: "none", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)" }}
+          style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#031F18", border: "1px solid rgba(255,255,255,0.18)", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.55)" }}
         >
           {/* Counter */}
-          <div className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
-            <span className="text-lg font-bold" style={{ color: "#064E3B" }}>{projects.length}</span>
-            <span className="text-sm" style={{ color: "rgba(26,26,26,0.72)" }}>properties in comparison</span>
+          <div className="flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <span className="text-lg font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{projects.length}</span>
+            <span className="text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>properties in comparison</span>
           </div>
 
-          {/* Comparison Table — premium champagne (restored) */}
+          {/* Comparison Table — dark emerald with pure white ink */}
           <div
             ref={tableRef}
             data-compare-project-table
-            data-surface="champagne"
+            data-surface="emerald"
+            data-on-dark="true"
             data-no-contrast-guard
             className="overflow-x-auto rounded-2xl"
-            style={{ background: CHAMPAGNE, border: "none", boxShadow: "0 12px 40px -20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.65)" }}
+            style={{ background: "#052E24", border: "1px solid rgba(255,255,255,0.14)", boxShadow: "0 12px 40px -20px rgba(0,0,0,0.55)" }}
           >
             <table className="w-full">
               <thead>
-                <tr style={{ background: CHAMPAGNE_STRIPE }}>
+                <tr style={{ background: "#03231C" }}>
                   <th
                     className="text-left py-4 px-4 font-semibold text-sm sticky left-0 z-10"
-                    style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: CHAMPAGNE_STRIPE, borderBottom: "1px solid rgba(6,78,59,0.22)" }}
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: "#03231C", borderBottom: "1px solid rgba(255,255,255,0.18)" }}
                   >
                     Feature
                   </th>
                   {projects.map((project) => {
                     const badge = getBadge(project.id);
                     const isFav = shortlistIds.includes(project.id);
+                    const coverSrc = (project as any).cover_image_url || (project as any).image_url || (project as any).images?.[0]?.image_url || comparePropertyFallback;
                     return (
                       <th
                         key={project.id}
                         className="text-left py-4 px-4"
-                        style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: "1px solid rgba(6,78,59,0.22)" }}
+                        style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: "1px solid rgba(255,255,255,0.18)", background: "#03231C" }}
                       >
                         <div className="flex flex-col gap-2 rounded-xl p-3" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#064E3B", color: "#FFFFFF", boxShadow: "0 14px 30px -20px rgba(0,0,0,0.72)" }} data-compare-property-card data-on-dark="true" data-no-contrast-guard>
                           <div className="flex items-center justify-between gap-2">
@@ -939,19 +943,20 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                               {isFav ? 'In Favorites' : 'Not Saved'}
                             </span>
                           </div>
-                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "rgba(255,255,255,0.12)", border: "none" }}>
-                            <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-                              <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
-                            </div>
+                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "rgba(255,255,255,0.06)", border: "none" }}>
                             <img
-                              src={comparePropertyFallback}
+                              src={coverSrc}
                               alt={project.name}
                               className="relative z-10 w-full h-full object-cover"
                               loading="lazy" decoding="async" width={1024} height={576}
+                              onError={(e) => {
+                                const img = e.currentTarget as HTMLImageElement;
+                                if (img.src !== comparePropertyFallback) img.src = comparePropertyFallback;
+                              }}
                             />
                           </div>
                           <h3 className="font-bold text-base" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{project.name}</h3>
-                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>
+                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
                             {project.developer?.name}
                           </p>
                         </div>
@@ -998,21 +1003,25 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     if (Array.isArray(amenities) && amenities.length > 0) return amenities.slice(0, 5).join(", ");
                     return "See project page";
                   }},
-                ].map((row, idx) => (
-                  <tr key={row.label} style={{ background: idx % 2 === 0 ? CHAMPAGNE : CHAMPAGNE_STRIPE, borderBottom: "1px solid rgba(6,78,59,0.14)" }}>
-                    <td data-compare-feature-cell className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: idx % 2 === 0 ? CHAMPAGNE : CHAMPAGNE_STRIPE }}>
-                      {row.label}
-                    </td>
-                    {projects.map((project) => (
-                      <td key={project.id} className="py-3.5 px-4 text-sm" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", borderBottom: "1px solid rgba(255,255,255,0.12)" }}>
-                        {row.format(null, project)}
+                ].map((row, idx) => {
+                  const rowBg = idx % 2 === 0 ? "#052E24" : "#062F26";
+                  return (
+                    <tr key={row.label} style={{ background: rowBg, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                      <td data-compare-feature-cell className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: rowBg }}>
+                        {row.label}
                       </td>
-                    ))}
-                  </tr>
-                ))}
+                      {projects.map((project) => (
+                        <td key={project.id} className="py-3.5 px-4 text-sm" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", background: rowBg }}>
+                          {row.format(null, project)}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
+
 
           {/* AI Analysis Section */}
           {aiAnalysis ? (
@@ -1339,7 +1348,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         <div data-compare-powered-strip data-surface="emerald" data-on-dark="true" className="text-center text-sm py-6 rounded-2xl mt-6" style={{ background: EMERALD_INK, border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
           Powered &amp; Made by <span className="font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
-        <LegalDisclaimer variant="compact" className="pb-4" />
+        <LegalDisclaimer variant="compact" className="pt-8 pb-4" />
       </div>
 
       <PaymentModal
