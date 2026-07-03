@@ -57,7 +57,7 @@ export default function MoreFromDeveloperStrip({
     queryKey: ["more-from-developer", developerId, developerName, currentProjectId],
     queryFn: async () => {
       const select =
-        "id, name, slug, location, area_name, emirate, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description, property_type, sale_status, developer_id, developer_name";
+        "id, name, slug, location, area_name, emirate, price_from, cover_image_url, handover_date, expected_completion, construction_status, payment_plan, payment_breakdown, status_label, description, property_type_label, sale_status, developer_id, developer_name";
 
       // Primary lookup by developer_id
       let rows: any[] = [];
