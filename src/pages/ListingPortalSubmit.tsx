@@ -772,8 +772,8 @@ const ListingPortalSubmit = () => {
                   <div className="relative">
                     <div className="relative space-y-6">
                       {/* Category Selection */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-4">What type of listing?</h2>
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-4">What type of listing?</h2>
                         <div className="flex flex-wrap justify-center gap-3">
                           {listingCategories.map(cat => {
                             const Icon = cat.icon;
@@ -784,8 +784,8 @@ const ListingPortalSubmit = () => {
                                 onClick={() => setListingCategory(cat.id)}
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
  isSelected
- ? 'bg-[#064E3B]/10 border-[#064E3B] text-[#1A1A1A] shadow-lg'
- : 'bg-[#FDFBF7]/60 border-[#064E3B]/30 text-[#1A1A1A]/80 hover:border-[#064E3B]/70'
+ ? 'bg-white/15 border-white text-white shadow-lg'
+ : 'bg-white/[0.04] border-white/25 text-white/80 hover:border-white/70'
  }`}
                               >
                                 {isSelected && (
@@ -804,7 +804,7 @@ const ListingPortalSubmit = () => {
                                 )}
                                 <Icon className="w-5 h-5 mb-2" style={{color: isSelected ? EMERALD : '#0A6B53'}} />
                                 <div className="font-medium text-sm">{cat.label}</div>
-                                <div className="text-xs text-[#1A1A1A]/70">{cat.desc}</div>
+                                <div className="text-xs text-white/70">{cat.desc}</div>
                               </button>
                             );
                           })}
@@ -812,21 +812,21 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Upload Zone */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-2">Upload Documents</h2>
-                        <p className="text-[#1A1A1A]/70 text-xs mb-4">
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-2">Upload Documents</h2>
+                        <p className="text-white/70 text-xs mb-4">
                           Upload PDF brochures, floor plans, fact sheets, property photos, reservation forms, agreements — AI will extract everything
                         </p>
                         
                         <div
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                          className="border-2 border-dashed border-[#064E3B]/60 rounded-xl p-8 text-center hover:border-[#064E3B] transition-all cursor-pointer bg-[#FDFBF7]/50"
+                          className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer bg-white/[0.04]"
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
                           <Upload className="w-10 h-10 mx-auto mb-3" style={{color: EMERALD}} />
-                          <p className="text-[#1A1A1A] font-medium mb-1">Drop files here or click to browse</p>
-                          <p className="text-[#1A1A1A]/70 text-xs">
+                          <p className="text-white font-medium mb-1">Drop files here or click to browse</p>
+                          <p className="text-white/70 text-xs">
                             Any file — PDF, images, Word, Excel, PowerPoint, CSV, TXT, ZIP… up to 100MB each
                           </p>
                           <input
@@ -842,7 +842,7 @@ const ListingPortalSubmit = () => {
                         {uploadedDocs.length > 0 && (
                           <div className="mt-4 space-y-2">
                             {uploadedDocs.map(doc => (
-                              <div key={doc.id} className="flex items-center gap-3 bg-[#FDFBF7]/80 border border-[#B89555]/20 rounded-lg p-3">
+                              <div key={doc.id} className="flex items-center gap-3 bg-white/[0.08] border border-white/20 border border-white/20 rounded-lg p-3">
                                 {doc.preview ? (
                                   <img src={doc.preview} alt="" className="w-10 h-10 rounded object-cover"  loading="lazy" decoding="async" />
                                 ) : doc.type === 'pdf' ? (
@@ -855,13 +855,13 @@ const ListingPortalSubmit = () => {
                                   </div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-[#1A1A1A] text-sm truncate">{doc.name}</p>
-                                  <p className="text-[#1A1A1A]/70 text-xs">
+                                  <p className="text-white text-sm truncate">{doc.name}</p>
+                                  <p className="text-white/70 text-xs">
                                     {(doc.file.size / 1024 / 1024).toFixed(1)} MB
                                   </p>
                                 </div>
-                                <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-[#EFE6D6]/10 rounded-lg">
-                                  <X className="w-4 h-4 text-[#1A1A1A]/70" />
+                                <button onClick={() => removeDoc(doc.id)} className="p-1.5 hover:bg-white/10 rounded-lg">
+                                  <X className="w-4 h-4 text-white/70" />
                                 </button>
                               </div>
                             ))}
@@ -870,12 +870,12 @@ const ListingPortalSubmit = () => {
                       </div>
 
                       {/* Universal Link Input */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-2 flex items-center gap-2">
                           <Globe className="w-4 h-4" style={{color: EMERALD}} />
                           Paste Any Link
                         </h2>
-                        <p className="text-[#1A1A1A]/70 text-xs mb-3">
+                        <p className="text-white/70 text-xs mb-3">
                           Google Drive folders/files, property portals, PDFs, brochures, MOUs — AI extracts everything automatically
                         </p>
                         <Input
@@ -886,18 +886,18 @@ const ListingPortalSubmit = () => {
                         />
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {['Google Drive', 'Property Finder', 'Bayut', 'Dubizzle', 'Developer Sites', 'Any URL'].map(tag => (
-                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-[#064E3B]/10 text-[#064E3B] border border-[#064E3B]/40 rounded-full">{tag}</span>
+                            <span key={tag} className="text-[10px] px-2 py-0.5 bg-white/10 text-white border border-white/30 rounded-full">{tag}</span>
                           ))}
                         </div>
                       </div>
 
                       {/* Paste Text Input */}
-                      <div className="bg-[#FDFBF7]/70 rounded-2xl p-6 jj-emerald-anim-border">
-                        <h2 className="text-[#1A1A1A] font-semibold mb-2 flex items-center gap-2">
+                      <div className="bg-white/[0.06] border border-white/15 rounded-2xl p-6 jj-emerald-anim-border">
+                        <h2 className="text-white font-semibold mb-2 flex items-center gap-2">
                           <FileTextIcon className="w-4 h-4" style={{color: EMERALD}} />
                           Paste Text / Description (Optional)
                         </h2>
-                        <p className="text-[#1A1A1A]/70 text-xs mb-3">
+                        <p className="text-white/70 text-xs mb-3">
                           Paste any property description, spec sheet, or text content for AI to analyze
                         </p>
                         <Textarea
