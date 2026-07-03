@@ -51,7 +51,117 @@ Allow: /
 User-agent: TelegramBot
 Allow: /
 
+# ========================================
+# AI Search Engines & LLM Crawlers (GEO)
+# Explicitly allowed with no crawl-delay so JBJ content
+# is fully ingestible by ChatGPT, Claude, Gemini, Perplexity,
+# Copilot, Apple Intelligence, and open-web LLM training sets.
+# ========================================
+
+# OpenAI (ChatGPT, ChatGPT Search, GPT training)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google Gemini / AI Overviews training + grounding
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence / Siri / Spotlight
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Microsoft Copilot (Bing AI)
+User-agent: BingPreview
+Allow: /
+
+# Common Crawl (feeds most open-source LLMs incl. Mistral, LLaMA, DeepSeek)
+User-agent: CCBot
+Allow: /
+
+# ByteDance / Doubao
+User-agent: Bytespider
+Allow: /
+
+# Amazon / Alexa / Rufus
+User-agent: Amazonbot
+Allow: /
+
+# Meta AI / Llama grounding
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Diffbot (knowledge graph feeder for many AI systems)
+User-agent: Diffbot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# DuckDuckGo AI Assist
+User-agent: DuckAssistBot
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Phind
+User-agent: PhindBot
+Allow: /
+
+# Timpi / Kagi / Neeva-family
+User-agent: Timpibot
+Allow: /
+
+User-agent: Kagibot
+Allow: /
+
+# Petal (Huawei)
+User-agent: PetalBot
+Allow: /
+
 # Default for all other bots
+
 User-agent: *
 Allow: /
 Crawl-delay: 2
