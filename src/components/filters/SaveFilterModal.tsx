@@ -28,7 +28,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[440px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+      <DialogContent className="sm:max-w-[440px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A] text-lg font-bold">
             Give name for your saved filter
@@ -40,7 +40,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
               value={filterName}
               onChange={(e) => setFilterName(e.target.value)}
               placeholder="Enter filter name..."
-              className="h-12 pr-10 bg-[#FDFBF7] border-2 border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555]"
+              className="h-12 pr-10 bg-[#FDFBF7] border border-[#064E3B]/35 text-[#1A1A1A] placeholder:text-[#1A1A1A]/85 focus:border-[#064E3B]/70"
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
             {filterName && (
@@ -52,21 +52,21 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
               </button>
             )}
           </div>
-          <p className="text-xs text-[#1A1A1A]/50 leading-relaxed">
+          <p className="text-xs text-[#1A1A1A] leading-relaxed">
             Start with the customer's last name or first name or company name to easily identify who the filter is for.
           </p>
           <div className="flex items-center gap-3 pt-2">
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 h-11 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
+              className="flex-1 h-11 border-[#064E3B]/25 text-[#1A1A1A] hover:bg-[#FDFBF7]/50"
             >
               Cancel
             </Button>
             <Button
               onClick={handleSave}
               disabled={!filterName.trim()}
-              className="flex-1 h-11 bg-gradient-to-r from-gold to-gold-dark text-[#1A1A1A] font-bold hover:brightness-110 disabled:opacity-50"
+              className="allow-white flex-1 h-11 jj-pill-emerald-metallic text-white font-bold hover:brightness-110 disabled:opacity-50"
             >
               Save
             </Button>
