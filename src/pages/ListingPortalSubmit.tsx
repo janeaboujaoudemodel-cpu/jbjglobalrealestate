@@ -609,25 +609,31 @@ const ListingPortalSubmit = () => {
   return (
     <main
       data-ai-listing-shell
-      className="min-h-screen pt-6 pb-12 md:pb-16"
-      style={{ background: EMERALD_OMBRE_SOFT }}
+      className="min-h-screen"
+      style={{ background: EMERALD_OMBRE }}
     >
-      {/* Layer 1 — champagne and emerald intro */}
-      <div style={{ background: EMERALD_OMBRE_SOFT }}>
-        <div className="container mx-auto px-4 py-10 md:py-12">
-          <div className="max-w-4xl mx-auto">
+      {/* Unified emerald-black header — edge to edge, no champagne layer */}
+      <div style={{ background: EMERALD_OMBRE }} className="relative">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
+        />
+        <div className="container mx-auto px-4 pt-8 pb-6 relative">
+          <div className="max-w-5xl mx-auto">
             <Button
               variant="ghost"
               onClick={() => navigate('/listing-portal')}
               data-no-contrast-guard
               data-back-to-portal
-                className="mb-4 hover:bg-[#064E3B]/10"
-                style={{ color: EMERALD, WebkitTextFillColor: EMERALD }}
+              data-allow-dark-cta
+              className="mb-4 hover:bg-white/10"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             >
-                <span className="jj-arrow-anim inline-flex mr-2" style={{ color: EMERALD }}>
-                  <ArrowLeft className="w-4 h-4" style={{ color: EMERALD, stroke: EMERALD }} />
+              <span className="jj-arrow-anim inline-flex mr-2" style={{ color: '#FFFFFF' }}>
+                <ArrowLeft className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </span>
-                <span style={{ color: EMERALD, WebkitTextFillColor: EMERALD }}>Back to Portal</span>
+              <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Back to Portal</span>
             </Button>
 
             <div className="text-center">
@@ -635,11 +641,10 @@ const ListingPortalSubmit = () => {
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
                 data-no-contrast-guard
                 style={{
-                  background: EMERALD_OMBRE,
+                  background: 'rgba(255,255,255,0.08)',
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
-                  border: "1px solid rgba(255,255,255,0.45)",
-                  boxShadow: "0 6px 16px -8px rgba(6,78,59,0.75)",
+                  border: "1px solid rgba(255,255,255,0.35)",
                 }}
               >
                 <Wand2 className="w-3.5 h-3.5" /> AI-Powered · {party} Listing Tool
@@ -648,20 +653,18 @@ const ListingPortalSubmit = () => {
                 className="text-3xl md:text-4xl font-bold mb-3"
                 data-no-contrast-guard
                 style={{
-                  background: EMERALD_OMBRE,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  color: '#FFFFFF',
+                  WebkitTextFillColor: '#FFFFFF',
                   letterSpacing: "-0.02em",
                 }}
               >
-                Welcome, {firstName} — {party} Listing Studio for {actionNoun}
+                Welcome, {firstName} — {party} Listing Portal for {actionNoun}
               </h1>
-              <p className="text-[#1A1A1A]/80 mb-6">
-                {user ? `Glad to have you back, ${firstName}. ` : ""}Upload your documents and let AI create a professional {actionVerb} listing for you.
+              <p className="mb-6" style={{ color: 'rgba(255,255,255,0.82)' }}>
+                Upload your documents and let AI create a professional {actionVerb} listing for you.
               </p>
 
-              <div className="[&>div]:mb-0">
+              <div className="[&>div]:mb-0" data-no-contrast-guard data-allow-dark-cta>
                 <FormDraftBar
                   hasDraft={phase !== 'upload' || uploadedDocs.length > 0}
                   onSaveDraft={() => {
@@ -690,30 +693,14 @@ const ListingPortalSubmit = () => {
                     toast.info("New listing started");
                   }}
                   label="Listing"
-                  theme="emerald"
+                  theme="dark"
                 />
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Layer 2 — emerald black band with horizontal step header + centered phase card */}
-      <div
-        className="pb-16 pt-8 relative"
-        style={{ background: EMERALD_OMBRE }}
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
-        />
-        <div className="container mx-auto px-4 relative">
-          {/* Horizontal step header */}
-          <div className="max-w-5xl mx-auto mb-8" data-no-contrast-guard data-allow-dark-cta>
-            <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
-
-
+            {/* Horizontal step header — connected, no gap */}
+            <div className="mt-8" data-no-contrast-guard data-allow-dark-cta>
+              <div className="flex items-center justify-between overflow-x-auto pb-2 gap-2">
               {PHASES.map((step, i) => {
                 const Icon = PHASE_ICONS[i] || Sparkles;
                 const isActive = i === phaseIndex;
@@ -754,17 +741,22 @@ const ListingPortalSubmit = () => {
                   </div>
                 );
               })}
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Centered champagne card holding the active phase */}
+      {/* Phase content — same emerald black continuum */}
+      <div className="pb-16 pt-4 relative" style={{ background: EMERALD_OMBRE }}>
+        <div className="container mx-auto px-4 relative">
           <div className="max-w-3xl mx-auto">
             <div
               className="rounded-2xl p-6 md:p-8 shadow-xl"
               style={{
-                background: EMERALD_OMBRE_SOFT,
-                border: "1.5px solid rgba(6,78,59,0.72)",
-                boxShadow: "0 24px 60px -28px rgba(6,78,59,0.58)",
+                background: 'linear-gradient(135deg, rgba(6,78,59,0.55) 0%, rgba(4,44,28,0.75) 100%)',
+                border: "1.5px solid rgba(255,255,255,0.18)",
+                boxShadow: "0 24px 60px -28px rgba(0,0,0,0.75)",
               }}
             >
             <AnimatePresence mode="wait">
