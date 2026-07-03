@@ -1241,7 +1241,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           const isMenuOpen = activeMegaMenu === item.megaMenu;
                           const routeMatchExclusive = !!item.href
                             && item.href === mostSpecific
-                            && firstIndexByHref.get(item.href) === i;
+                            && firstIndexByHref.get(item.href) === i
+                            // /list-property is owned by the top-level highlighted hub —
+                            // never light it up inside sections when the user is on that route.
+                            && item.href !== '/list-property';
                           const subitemActive = activeMegaMenu ? isMenuOpen : routeMatchExclusive;
                         const Icon = item.icon;
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
