@@ -13,7 +13,7 @@ const routes = [
   '/disclaimers'
 ];
 const base = 'http://localhost:8080';
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1100 }, deviceScaleFactor: 1 });
 const results = [];
 for (const route of routes) {
