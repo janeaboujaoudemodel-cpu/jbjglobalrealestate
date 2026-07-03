@@ -383,8 +383,90 @@ const PropertyMap = () => {
 
   return (
     <div className="relative flex flex-col h-[calc(100vh-88px)] overflow-hidden" data-map-page>
+      <style>{`
+        /* ── Emerald contract lock — all map chrome: emerald fill + pure white ink ── */
+        html body #root [data-map-page] :is(
+          .jj-map-status-badge,
+          .jj-map-card-close,
+          .jj-map-panel-close,
+          .jj-map-square-control,
+          .jj-map-segment[data-active="true"],
+          .jj-map-layer-button[data-active="true"],
+          .jj-map-filter-toggle[data-active="true"],
+          .jj-map-details-button,
+          .jj-map-stat-tile,
+          .jj-map-count-pill,
+          .jj-map-loading-chip,
+          .jj-map-sort-trigger
+        ) {
+          background: linear-gradient(135deg, #065F46 0%, #064E3B 55%, #032A1E 100%) !important;
+          background-color: #064E3B !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          border: 1px solid rgba(255,255,255,0.28) !important;
+          box-shadow: 0 6px 18px -10px rgba(0,0,0,0.55) !important;
+        }
+        html body #root [data-map-page] :is(
+          .jj-map-status-badge,
+          .jj-map-card-close,
+          .jj-map-panel-close,
+          .jj-map-square-control,
+          .jj-map-segment[data-active="true"],
+          .jj-map-layer-button[data-active="true"],
+          .jj-map-filter-toggle[data-active="true"],
+          .jj-map-details-button,
+          .jj-map-stat-tile,
+          .jj-map-count-pill,
+          .jj-map-loading-chip,
+          .jj-map-sort-trigger
+        ) * {
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+        }
+        html body #root [data-map-page] :is(
+          .jj-map-status-badge,
+          .jj-map-card-close,
+          .jj-map-panel-close,
+          .jj-map-square-control,
+          .jj-map-segment[data-active="true"],
+          .jj-map-layer-button[data-active="true"],
+          .jj-map-filter-toggle[data-active="true"],
+          .jj-map-details-button,
+          .jj-map-stat-tile
+        ) :is(svg, path, line, rect, circle, polyline, polygon) {
+          color: #FFFFFF !important;
+          stroke: #FFFFFF !important;
+          fill: none !important;
+        }
+        /* Idle (unselected) segment/layer buttons: dark emerald ghost with white text */
+        html body #root [data-map-page] :is(
+          .jj-map-segment,
+          .jj-map-layer-button,
+          .jj-map-filter-toggle
+        ):not([data-active="true"]) {
+          background: rgba(6,78,59,0.35) !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          border: 1px solid rgba(255,255,255,0.22) !important;
+        }
+        html body #root [data-map-page] :is(
+          .jj-map-segment,
+          .jj-map-layer-button,
+          .jj-map-filter-toggle
+        ):not([data-active="true"]) :is(svg, path) {
+          color: #FFFFFF !important; stroke: #FFFFFF !important;
+        }
+        /* Close button: circular emerald with white X */
+        html body #root [data-map-page] :is(.jj-map-card-close, .jj-map-panel-close) {
+          width: 32px !important; height: 32px !important;
+          border-radius: 9999px !important;
+          display: inline-flex !important; align-items: center !important; justify-content: center !important;
+          padding: 0 !important;
+        }
+      `}</style>
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
       <div className="jj-map-command-bar shrink-0 z-10">
+
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
           {/* Left: count */}
           <Badge variant="secondary" className="jj-map-count-pill gap-1 shrink-0" data-surface="emerald">
