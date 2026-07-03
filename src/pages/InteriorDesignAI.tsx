@@ -176,7 +176,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           mode,
           propertyName: projectName,
           designStyle,
-          colorPalette,
+          colorPalette: colorLabel,
           customNotes: prompt,
           photos: photosData,
         },
