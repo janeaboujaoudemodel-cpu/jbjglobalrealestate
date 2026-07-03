@@ -149,7 +149,7 @@ const ContinueSearching = ({
 
   return (
     <section className={`jj-bleed-allow jj-fullbleed-band py-10 md:py-14 relative overflow-hidden w-full ${className}`} data-fullbleed-band>
-      {/* Premium champagne backdrop — full-bleed edge to edge */}
+      {/* Premium neutral backdrop — full-bleed edge to edge */}
       <div className="jj-bleed-allow absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#064E3B]/55 to-transparent z-[2]" />
@@ -250,8 +250,8 @@ const ContinueSearching = ({
 
         {isEmpty ? (
           <div className="px-4 md:px-8 lg:px-12 flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
-              <Home className="w-8 h-8 text-[#B89555]" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-[#064E3B]/45 flex items-center justify-center mb-4">
+              <Home className="w-8 h-8 text-white" />
             </div>
             <p className="text-[#1A1A1A] text-sm font-medium mb-1">You haven't viewed any properties yet.</p>
             <p className="text-[#1A1A1A]/70 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
