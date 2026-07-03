@@ -325,30 +325,36 @@ const PropertyMap = () => {
     return projectsWithCoords.filter((project) => visibleMarkerIds.has(project.id)).slice(0, 180);
   }, [projectsWithCoords, visibleMarkerIds]);
 
+  // Preload cover images for visible markers at LOW priority so tiles win
+  // the network. Runs only when the browser is idle; skips entirely on
+  // slow connections and Save-Data.
   useEffect(() => {
+    const conn = (navigator as any).connection;
+    if (conn?.saveData) return;
+    if (conn?.effectiveType && /2g/.test(conn.effectiveType)) return;
+
+    const srcs = visibleProjects
+      .slice(0, 18)
+      .map((project) => project.cover_image_url)
+      .filter(Boolean) as string[];
+    if (srcs.length === 0) return;
+
     const preload = () => {
-      visibleProjects
-        .slice(0, 36)
-        .map((project) => project.cover_image_url)
-        .filter(Boolean)
-        .forEach((src) => {
-          const image = new Image();
-          image.decoding = "async";
-          image.fetchPriority = "high";
-          image.src = src as string;
-        });
+      srcs.forEach((src) => {
+        const image = new Image();
+        image.decoding = "async";
+        (image as any).fetchPriority = "low";
+        image.loading = "lazy";
+        image.src = src;
+      });
     };
 
-    let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
     let idleId: number | null = null;
-
-    // Start immediately for visible cards so hover/click details are ready without a delay.
-    preload();
-
+    let timeoutId: ReturnType<typeof globalThis.setTimeout> | null = null;
     if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(preload, { timeout: 600 });
+      idleId = window.requestIdleCallback(preload, { timeout: 2000 });
     } else {
-      timeoutId = globalThis.setTimeout(preload, 120);
+      timeoutId = globalThis.setTimeout(preload, 800);
     }
 
     return () => {
@@ -356,6 +362,7 @@ const PropertyMap = () => {
       if (idleId !== null) window.cancelIdleCallback?.(idleId);
     };
   }, [visibleProjects]);
+
 
   const showPanel = viewMode === "list" || viewMode === "grid";
 
