@@ -26969,3 +26969,31 @@ html body #root .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
   mix-blend-mode: normal !important;
   filter: none !important;
 }
+
+/* PASS 192 — high-specificity side-color locks for the actual winning rules. */
+html body #root [data-interior-design-ai][data-interior-design-ai] :is(.id-choice, .id-choice-active, .id-outline, .id-primary, .id-panel, .id-panel-soft, .id-input, textarea, input, button, [role="progressbar"], [role="progressbar"] *).border,
+html body #root [data-interior-design-ai][data-interior-design-ai] :is(.id-choice, .id-choice-active, .id-outline, .id-primary, .id-panel, .id-panel-soft, .id-input, textarea, input, button, [role="progressbar"], [role="progressbar"] *) {
+  border-top-color: rgba(1, 8, 6, 0.72) !important;
+  border-right-color: rgba(1, 8, 6, 0.72) !important;
+  border-bottom-color: rgba(1, 8, 6, 0.72) !important;
+  border-left-color: rgba(1, 8, 6, 0.72) !important;
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  outline-color: transparent !important;
+  --tw-ring-color: rgba(1, 8, 6, 0.72) !important;
+}
+
+html body #root footer[data-jj-minimal-footer],
+html body #root footer[class*="border-[#B89555]"],
+html body #root footer[class*="border-\\[\\#B89555\\]"] {
+  border-top-color: rgba(1, 8, 6, 0.72) !important;
+  border-right-color: rgba(1, 8, 6, 0.72) !important;
+  border-bottom-color: rgba(1, 8, 6, 0.72) !important;
+  border-left-color: rgba(1, 8, 6, 0.72) !important;
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  box-shadow: none !important;
+}
+
+html body #root .aihf-root .jj-pill-emerald-metallic,
+html body #root .aihf-root :is([class*="shadow"], [style*="16, 185, 129"], [style*="16,185,129"]) {
+  box-shadow: none !important;
+}
