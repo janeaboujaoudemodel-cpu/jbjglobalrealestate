@@ -66,13 +66,13 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
               {dev.slug ? (
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border-2 border-[#B89555]/30 rounded-xl hover:border-[#B89555] hover:shadow-lg transition-all"
+                  className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border-0 rounded-xl hover:shadow-lg transition-all"
                 >
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-10 h-10" />
                   <span className="text-sm font-medium text-[#1A1A1A]">{dev.name}</span>
                 </Link>
               ) : (
-                <div className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border border-[#B89555]/20 rounded-xl">
+                <div className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border-0 rounded-xl">
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-10 h-10" />
                   <span className="text-sm font-medium text-[#1A1A1A]/70">{dev.name}</span>
                 </div>

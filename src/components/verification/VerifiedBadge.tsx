@@ -17,7 +17,7 @@ const VerifiedBadge = ({ size = "sm", className, showLabel = false }: VerifiedBa
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 text-emerald-500",
+        "inline-flex items-center gap-1 text-[color:var(--emerald-1)]",
         className
       )}
       title="Verified User"

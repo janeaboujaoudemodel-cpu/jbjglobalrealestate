@@ -642,11 +642,7 @@ export const DeveloperAIAnalyzer = ({
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
-                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 border ${
- ratingScore >= 8 ? 'bg-emerald-500/20 text-white border-emerald-400/40' :
- ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
- 'bg-amber-500/20 text-white border-amber-400/40'
- }`}>
+                  <div data-label-emerald-only className="mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 jj-pill-emerald-metallic allow-white text-white border-0">
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
                 </div>

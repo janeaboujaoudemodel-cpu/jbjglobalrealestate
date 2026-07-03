@@ -650,11 +650,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   )}
                   
                   {/* Rating quality label */}
-                  <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 border ${
- ratingScore >= 8 ? 'bg-[#B89555]/20 text-[#B89555] border-[#B89555]/50' :
- ratingScore >= 6 ? 'bg-white/10 text-white border-white/25' :
- 'bg-amber-500/20 text-amber-300 border-amber-500/40'
- }`}>
+                  <div data-label-emerald-only className="mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 jj-pill-emerald-metallic allow-white text-white border-0">
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
                 </div>

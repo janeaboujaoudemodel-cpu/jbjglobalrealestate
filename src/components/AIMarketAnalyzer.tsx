@@ -181,15 +181,15 @@ export const AIMarketAnalyzer = ({
 
   const getDemandColor = (score: number) => {
     if (score >= 8) return 'text-[color:var(--emerald-1)]';
-    if (score >= 6) return 'text-emerald-500';
-    if (score >= 4) return 'text-yellow-600';
+    if (score >= 6) return 'text-[color:var(--emerald-1)]';
+    if (score >= 4) return 'text-[color:var(--emerald-1)]';
     return 'text-red-500';
   };
 
   const getPriceComparisonColor = (percent: number) => {
     if (percent < -10) return 'text-[color:var(--emerald-1)]';
-    if (percent < 5) return 'text-emerald-500';
-    if (percent < 15) return 'text-yellow-600';
+    if (percent < 5) return 'text-[color:var(--emerald-1)]';
+    if (percent < 15) return 'text-[color:var(--emerald-1)]';
     return 'text-orange-500';
   };
 
@@ -357,7 +357,7 @@ export const AIMarketAnalyzer = ({
               <ul className="space-y-2">
                 {insights.keyInsights.map((insight, i) => (
                   <li key={i} className="text-sm text-[color:var(--emerald-1)] flex items-start gap-2">
-                    <span className="text-green-500 mt-1">•</span>
+                    <span className="text-[color:var(--emerald-1)] mt-1">•</span>
                     {insight}
                   </li>
                 ))}
