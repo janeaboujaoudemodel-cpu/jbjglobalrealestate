@@ -220,7 +220,7 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Select Area</Label>
               <Select value={area} onValueChange={setArea}>
-                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
+                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
                   <SelectValue placeholder="Choose an area" />
                 </SelectTrigger>
                 <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="max-h-60 bg-[#031F18] border-white/25 text-white">
@@ -239,7 +239,7 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Property Type</Label>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
+                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="bg-[#031F18] border-white/25 text-white">
@@ -281,7 +281,7 @@ DISCLAIMER: ${result.disclaimer}
               ))}
               {compareWith.length < 3 && (
                 <Select onValueChange={addCompareArea}>
-                  <SelectTrigger className="w-auto bg-white/10 border-white/30 text-white text-sm h-8 px-3 [&>svg]:!text-white">
+                  <SelectTrigger className="w-auto bg-[#064E3B] border-white/25 text-white text-sm h-8 px-3 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
                     <span>+ Add area</span>
                   </SelectTrigger>
                   <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="max-h-40 bg-[#031F18] border-white/25 text-white">
@@ -301,7 +301,7 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Measurement Unit</Label>
               <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
-                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
+                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="bg-[#031F18] border-white/25 text-white">
@@ -315,7 +315,7 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Currency</Label>
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
+                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
                   <SelectValue>
                     {(() => {
                       const c = ALL_CURRENCIES.find(x => x.code === currency) || ALL_CURRENCIES[0];
@@ -340,7 +340,7 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Report Language</Label>
               <Select value={language} onValueChange={(v: "en" | "ar" | "ru" | "zh" | "hi") => setLanguage(v)}>
-                <SelectTrigger className="bg-white/10 border-white/30 text-white mt-1 [&>svg]:!text-white">
+                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="bg-[#031F18] border-white/25 text-white">
