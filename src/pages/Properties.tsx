@@ -779,7 +779,7 @@ const Properties = () => {
                         <div>
                           <label className="text-sm text-[#1A1A1A] font-medium mb-2 block">Intent</label>
                           <Select value={intentValue} onValueChange={setIntent}>
-                            <SelectTrigger className="w-full h-auto min-h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="w-full h-auto min-h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -800,7 +800,7 @@ const Properties = () => {
                               value={filters.emirate || "all"}
                               onValueChange={(value) => updateFilter("emirate", value === "all" ? null : value)}
                             >
-                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                                 <MapPin className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                                 <SelectValue />
                               </SelectTrigger>
@@ -822,7 +822,7 @@ const Properties = () => {
                               value={filters.communityId || "all"}
                               onValueChange={(value) => updateFilter("communityId", value === "all" ? null : value)}
                             >
-                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                                 <Home className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                                 <SelectValue placeholder="All Areas" />
                               </SelectTrigger>
@@ -843,7 +843,7 @@ const Properties = () => {
                             value={filters.developerId || "all"}
                             onValueChange={(value) => updateFilter("developerId", value === "all" ? null : value)}
                           >
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <Building2 className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                               <SelectValue placeholder="All Developers" />
                             </SelectTrigger>
@@ -867,12 +867,12 @@ const Properties = () => {
                             value={filters.propertyType || "all"}
                             onValueChange={(value) => updateFilter("propertyType", value === "all" ? null : value)}
                           >
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {PROPERTY_TYPES.map((type) => (
-                                <SelectItem key={type.value} value={type.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                                <SelectItem key={type.value} value={type.value}>
                                   {type.label}
                                 </SelectItem>
                               ))}
@@ -892,13 +892,13 @@ const Properties = () => {
                                 else updateFilter("bedroomsMin", parseInt(value));
                               }}
                             >
-                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                                 <Bed className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
                                 {BEDROOM_OPTIONS.map((opt) => (
-                                  <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                                  <SelectItem key={opt.value} value={opt.value}>
                                     {opt.label}
                                   </SelectItem>
                                 ))}
@@ -911,13 +911,13 @@ const Properties = () => {
                               value={filters.bathroomsMin === null ? "all" : String(filters.bathroomsMin)}
                               onValueChange={(value) => updateFilter("bathroomsMin", value === "all" ? null : parseInt(value))}
                             >
-                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                              <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                                 <Bath className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
                                 {BATHROOM_OPTIONS.map((opt) => (
-                                  <SelectItem key={opt.value} value={opt.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                                  <SelectItem key={opt.value} value={opt.value}>
                                     {opt.label}
                                   </SelectItem>
                                 ))}
@@ -934,7 +934,7 @@ const Properties = () => {
                               value={filters.sizeUnit}
                               onValueChange={(value) => updateFilter("sizeUnit", value as 'sqft' | 'sqm')}
                             >
-                              <SelectTrigger className="w-[170px] h-9 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] text-xs">
+                              <SelectTrigger className="w-[170px] h-9 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A] text-xs">
                                 <Maximize2 className="w-3.5 h-3.5 mr-2 text-[#1A1A1A]" />
                                 <SelectValue />
                               </SelectTrigger>
@@ -950,14 +950,14 @@ const Properties = () => {
                               placeholder="Min"
                               value={filters.sizeMin || ""}
                               onChange={(e) => updateFilter("sizeMin", parseInt(e.target.value) || 0)}
-                              className="h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                              className="h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/85"
                             />
                             <Input
                               type="number"
                               placeholder="Max"
                               value={filters.sizeMax < 50000 ? filters.sizeMax : ""}
                               onChange={(e) => updateFilter("sizeMax", parseInt(e.target.value) || 50000)}
-                              className="h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                              className="h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/85"
                             />
                           </div>
                         </div>
@@ -970,7 +970,7 @@ const Properties = () => {
                               value={filters.currency}
                               onValueChange={(value) => updateFilter("currency", value as ExtendedCurrency)}
                             >
-                              <SelectTrigger className="w-[160px] h-9 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] text-xs">
+                              <SelectTrigger className="w-[160px] h-9 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A] text-xs">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -988,14 +988,14 @@ const Properties = () => {
                               placeholder="Min"
                               value={filters.priceMin > 0 ? filters.priceMin.toLocaleString() : ""}
                               onChange={(e) => updateFilter("priceMin", parseInt(e.target.value.replace(/,/g, '')) || 0)}
-                              className="h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                              className="h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/85"
                             />
                             <Input
                               type="text"
                               placeholder="Max"
                               value={filters.priceMax < 500000000 ? filters.priceMax.toLocaleString() : ""}
                               onChange={(e) => updateFilter("priceMax", parseInt(e.target.value.replace(/,/g, '')) || 500000000)}
-                              className="h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                              className="h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/85"
                             />
                           </div>
                         </div>
@@ -1007,13 +1007,13 @@ const Properties = () => {
                             value={filters.completionStatus || "all"}
                             onValueChange={(value) => updateFilter("completionStatus", value === "all" ? null : value)}
                           >
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <Calendar className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {COMPLETION_STATUS.map((status) => (
-                                <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                                <SelectItem key={status.value} value={status.value}>
                                   {status.label}
                                 </SelectItem>
                               ))}
@@ -1031,13 +1031,13 @@ const Properties = () => {
                               setAppliedFilters((prev) => ({ ...prev, saleStatus: value === "all" ? null : value }));
                             }}
                           >
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <CheckCircle className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {SALE_STATUS.map((status) => (
-                                <SelectItem key={status.value} value={status.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                                <SelectItem key={status.value} value={status.value}>
                                   {status.label}
                                 </SelectItem>
                               ))}
@@ -1052,13 +1052,13 @@ const Properties = () => {
                             value={filters.investmentType || "all"}
                             onValueChange={(value) => updateFilter("investmentType", value === "all" ? null : value)}
                           >
-                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A]">
+                            <SelectTrigger className="w-full h-12 bg-[#F7F2EA] border-[#064E3B]/30 text-[#1A1A1A]">
                               <Home className="w-4 h-4 mr-2 text-[#1A1A1A]" />
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {INVESTMENT_TYPES.map((type) => (
-                                <SelectItem key={type.value} value={type.value} className="text-[#1A1A1A] hover:bg-[#EFE6D6]/10 focus:bg-[#EFE6D6]/10 focus:text-[#1A1A1A]">
+                                <SelectItem key={type.value} value={type.value}>
                                   {type.label}
                                 </SelectItem>
                               ))}
@@ -1068,7 +1068,7 @@ const Properties = () => {
 
                         {/* Quick toggles: Premium + Hide Sold Out */}
                         <div className="grid grid-cols-2 gap-4 pt-2">
-                          <label className="flex items-center justify-between gap-2 h-12 px-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg cursor-pointer hover:border-[#B89555] transition-all">
+                          <label className="flex items-center justify-between gap-2 h-12 px-4 bg-[#F7F2EA] border border-[#064E3B]/30 rounded-lg cursor-pointer hover:border-[#064E3B]/55 transition-all">
                             <span className="flex items-center gap-2 text-sm text-[#1A1A1A] font-medium">
                               <Crown className="w-4 h-4" />
                               Premium Only
@@ -1087,7 +1087,7 @@ const Properties = () => {
                         </div>
                       </div>
                     </ScrollArea>
-                    <div className="p-6 border-t border-[#B89555]/20 flex justify-between bg-gradient-to-r from-[#F7F2EA] to-[#FBF8F3]">
+                    <div className="p-6 border-t border-[#064E3B]/20 flex justify-between bg-gradient-to-r from-[#F7F2EA] to-[#FBF8F3]">
                       <Button
                         variant="ghost"
                         onClick={clearFilters}
