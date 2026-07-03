@@ -1182,27 +1182,38 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
                     <div className="ml-5 pl-2.5 border-l border-[#010806]/70 space-y-1 pt-1 pb-1.5">
-                      {sectionKey === 'TOOLS & WORKSPACE' && (
-                        <SidebarItem
-                          preserveVisual
-                          to="/ai-hub"
-                          icon={Eye}
-                          label="View All Tools"
-                          onClick={collapseAfterNavigation}
-                          data-sidebar-subitem
-                          data-no-contrast-guard
-                          className="group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13px] font-medium transition-all duration-150 hover:bg-[#EFE6D6]/40"
-                          style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
-                          iconWrapperData={{ 'data-emerald-icon-surface': true }}
-                          iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}
-                          iconClassName="w-4 h-4"
-                          iconStrokeWidth={2.1}
-                          iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
-                          labelData={{ 'data-sidebar-subitem-label': true }}
-                          labelClassName="flex-1"
-                          labelStyle={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
-                        />
-                      )}
+                      {sectionKey === 'TOOLS & WORKSPACE' && (() => {
+                        const viewAllActive = location.pathname === '/ai-hub' && !activeMegaMenu;
+                        return (
+                          <SidebarItem
+                            preserveVisual
+                            to="/ai-hub"
+                            icon={Eye}
+                            label="View All Tools"
+                            active={viewAllActive}
+                            onClick={collapseAfterNavigation}
+                            data-sidebar-subitem
+                            data-active={viewAllActive ? 'true' : undefined}
+                            aria-current={viewAllActive ? 'page' : undefined}
+                            data-no-contrast-guard
+                            className={`group flex items-center gap-2.5 px-2.5 min-h-10 rounded-lg text-[13px] transition-all duration-150 ${viewAllActive ? 'font-semibold' : 'font-medium hover:bg-[#EFE6D6]/40'}`}
+                            style={viewAllActive
+                              ? { backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
+                              : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                            iconWrapperData={{ 'data-emerald-icon-surface': true }}
+                            iconWrapperClassName={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors duration-200 shrink-0 ${getIconTileClass()}`}
+                            iconClassName="w-4 h-4"
+                            iconStrokeWidth={2.1}
+                            iconStyle={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
+                            labelData={{ 'data-sidebar-subitem-label': true }}
+                            labelClassName="flex-1"
+                            labelStyle={viewAllActive
+                              ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
+                              : { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
+                          />
+                        );
+                      })()}
+
                       {(() => {
                         // Compute most-specific active href within this section so
                         // sibling links cannot both light up (e.g. /market-intelligence
