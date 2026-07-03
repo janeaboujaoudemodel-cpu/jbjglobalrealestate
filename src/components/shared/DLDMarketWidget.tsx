@@ -56,8 +56,8 @@ const TONE = {
   emerald: { text: "text-[#1E5F3F]", soft: "bg-[#1E5F3F]/8", border: "border-[#1E5F3F]/25", dot: "bg-[#1E5F3F]", bar: "bg-[#1E5F3F]" },
   navy:    { text: "text-[#1F3A5F]", soft: "bg-[#1F3A5F]/8", border: "border-[#1F3A5F]/25", dot: "bg-[#1F3A5F]", bar: "bg-[#1F3A5F]" },
   steel:   { text: "text-[#0A0A0A]", soft: "bg-[#0A0A0A]/8", border: "border-[#0A0A0A]/25", dot: "bg-[#0A0A0A]", bar: "bg-[#0A0A0A]" },
-  bronze:  { text: "text-[#B89555]", soft: "bg-[#B89555]/8", border: "border-[#B89555]/25", dot: "bg-[#B89555]", bar: "bg-[#B89555]" },
-  copper:  { text: "text-[#B89555]", soft: "bg-[#B89555]/8", border: "border-[#B89555]/25", dot: "bg-[#B89555]", bar: "bg-[#B89555]" },
+  bronze:  { text: "text-[#064E3B]", soft: "bg-[#064E3B]/8", border: "border-[#064E3B]/25", dot: "bg-[#064E3B]", bar: "bg-[#064E3B]" },
+  copper:  { text: "text-[#064E3B]", soft: "bg-[#064E3B]/8", border: "border-[#064E3B]/25", dot: "bg-[#064E3B]", bar: "bg-[#064E3B]" },
   ink:     { text: "text-[#1A1A1A]", soft: "bg-[#1A1A1A]/5",  border: "border-[#1A1A1A]/15", dot: "bg-[#1A1A1A]", bar: "bg-[#1A1A1A]" },
 } as const;
 
@@ -111,7 +111,7 @@ const DownloadReportDialog = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-[#FDFBF7] border border-[#B89555]/40">
+      <DialogContent className="bg-[#FDFBF7] border border-[#064E3B]/30">
         <DialogHeader>
           <DialogTitle className="text-[#1A1A1A]">Download Market Intelligence Report</DialogTitle>
         </DialogHeader>
@@ -121,10 +121,10 @@ const DownloadReportDialog = ({
               Quick range
             </p>
             <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={() => preset(sevenAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 7 days</button>
-              <button type="button" onClick={() => preset(thirtyAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 30 days</button>
-              <button type="button" onClick={() => preset(startOfMonth, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">This month</button>
-              <button type="button" onClick={() => preset(startOfYear, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">YTD</button>
+              <button type="button" onClick={() => preset(sevenAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#064E3B]/30 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 7 days</button>
+              <button type="button" onClick={() => preset(thirtyAgo, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#064E3B]/30 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">Last 30 days</button>
+              <button type="button" onClick={() => preset(startOfMonth, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#064E3B]/30 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">This month</button>
+              <button type="button" onClick={() => preset(startOfYear, now)} className="px-3 py-1.5 text-xs rounded-full border border-[#064E3B]/30 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]">YTD</button>
             </div>
           </div>
 
@@ -132,12 +132,12 @@ const DownloadReportDialog = ({
             <label className="text-xs text-[#1A1A1A]/80">
               From
               <input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)}
-                className="mt-1 w-full bg-[#F7F2EA] border border-[#B89555]/40 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
+                className="mt-1 w-full bg-[#F7F2EA] border border-[#064E3B]/30 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
             </label>
             <label className="text-xs text-[#1A1A1A]/80">
               To
               <input type="date" value={to} min={from} max={isoDate(now)} onChange={(e) => setTo(e.target.value)}
-                className="mt-1 w-full bg-[#F7F2EA] border border-[#B89555]/40 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
+                className="mt-1 w-full bg-[#F7F2EA] border border-[#064E3B]/30 rounded-md px-3 py-2 text-sm text-[#1A1A1A]" />
             </label>
           </div>
 
@@ -148,7 +148,7 @@ const DownloadReportDialog = ({
           </p>
         </div>
         <DialogFooter>
-          <Button variant="gold" onClick={handleDownload} className="gap-2">
+          <Button data-emerald-action="true" onClick={handleDownload} className="jj-emerald-action gap-2">
             <Download className="w-4 h-4" /> Generate PDF
           </Button>
         </DialogFooter>
@@ -177,10 +177,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   // ─── Compact variant (sidebar) ────────────────────────────────────
   if (compact) {
     return (
-      <div className="bg-[#FDFBF7] rounded-2xl border border-[#B89555]/30 p-5 space-y-4">
+      <div className="bg-[#FDFBF7] rounded-2xl border border-[#064E3B]/30 p-5 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-[#1A1A1A] font-semibold text-sm flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-[#B89555]" />
+            <TrendingUp className="w-4 h-4 text-[#064E3B]" />
             Dubai Market Pulse
           </h3>
           <span className="text-[10px] text-[#1A1A1A]/60">As of {today}</span>
@@ -199,7 +199,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           ))}
         </div>
         {matchedArea && (
-          <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-3">
+          <div className="bg-[#F7F2EA] border border-[#064E3B]/30 rounded-lg p-3">
             <p className="text-[10px] text-[#1A1A1A]/65 uppercase tracking-wider mb-1">This Area</p>
             <div className="flex items-center justify-between">
               <span className="text-[#1A1A1A] text-sm font-medium">{matchedArea.transactions.toLocaleString()} transactions</span>
@@ -209,7 +209,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
         )}
         <p className="text-[9px] text-[#1A1A1A]/60 leading-relaxed">
           Sources: DLD, RERA, DXB Interact. For informational purposes only.{" "}
-          <Link to="/contact" className="text-[#B89555] hover:underline">Contact our team</Link> for professional guidance.
+          <Link to="/contact" className="text-[#064E3B] hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </div>
     );
@@ -266,7 +266,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
 
           {/* Growth Banner */}
-          <div className="bg-[#F7F2EA] border border-[#B89555]/40 rounded-2xl p-5 mb-8 flex items-center justify-between">
+          <div className="bg-[#F7F2EA] border border-[#064E3B]/30 rounded-2xl p-5 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div data-emerald-action="true" className="jj-emerald-action w-12 h-12 rounded-xl flex items-center justify-center">
                 <ArrowUpRight className="w-6 h-6" style={{ color: '#FFFFFF' }} />
@@ -298,13 +298,13 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction split bars */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Off-Plan vs Secondary */}
-            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
+            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#064E3B]/30">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-4 h-4 text-[#B89555]" />
+                <TrendingUp className="w-4 h-4 text-[#064E3B]" />
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
 
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#B89555]">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]">
                 <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
@@ -321,24 +321,24 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   <p className="text-[#1E5F3F] text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
-                <div className="bg-[#B89555]/8 border border-[#B89555]/25 rounded-lg p-3">
+                <div className="bg-[#064E3B]/8 border border-[#064E3B]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#B89555]" />
-                    <span className="text-[#B89555] text-[10px] uppercase tracking-wider font-bold">Secondary</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#064E3B]" />
+                    <span className="text-[#064E3B] text-[10px] uppercase tracking-wider font-bold">Secondary</span>
                   </div>
-                  <p className="text-[#B89555] text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
+                  <p className="text-[#064E3B] text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{secondaryPct}% of total</p>
                 </div>
               </div>
             </div>
 
             {/* Cash vs Mortgage */}
-            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
+            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#064E3B]/30">
               <div className="flex items-center gap-2 mb-4">
-                <Banknote className="w-4 h-4 text-[#B89555]" />
+                <Banknote className="w-4 h-4 text-[#064E3B]" />
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#B89555]">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]">
                 <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{cashPct}%</span>
                 </div>
@@ -356,12 +356,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   <p className="text-white text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
                   <p className="text-white/70 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
-                <div className="bg-[#B89555]/8 border border-[#B89555]/25 rounded-lg p-3">
+                <div className="bg-[#064E3B]/8 border border-[#064E3B]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#B89555]" />
-                    <span className="text-[#B89555] text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#064E3B]" />
+                    <span className="text-[#064E3B] text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
                   </div>
-                  <p className="text-[#B89555] text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
+                  <p className="text-[#064E3B] text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
                   <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{mortgagePct}% of total</p>
                 </div>
               </div>
@@ -372,9 +372,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Top 10 Areas — single muted gold accent, expandable for nationalities */}
-            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
+            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#064E3B]/30">
               <div className="flex items-center gap-2 mb-5">
-                <MapPin className="w-4 h-4 text-[#B89555]" />
+                <MapPin className="w-4 h-4 text-[#064E3B]" />
                 <h3 className="text-[#0A0A0A] text-sm font-bold">Top 10 Areas by Transactions</h3>
               </div>
 
@@ -390,19 +390,19 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   return (
                     <div
                       key={area.area}
-                      className={`relative rounded-lg overflow-hidden border ${isHighlighted ? "border-[#B89555]/60" : "border-[#B89555]/15"} bg-[#FDFBF7]`}
+                      className={`relative rounded-lg overflow-hidden border ${isHighlighted ? "border-[#064E3B]/55" : "border-[#064E3B]/15"} bg-[#FDFBF7]`}
                     >
-                      <div className="absolute inset-y-0 left-0 bg-[#B89555]/10" style={{ width: `${barWidth}%` }} />
+                      <div className="absolute inset-y-0 left-0 bg-[#064E3B]/10" style={{ width: `${barWidth}%` }} />
                       <button
                         type="button"
                         onClick={() => setExpandedArea(isExpanded ? null : area.area)}
                         className="relative w-full flex items-center justify-between px-3 py-2.5 hover:bg-[#EFE6D6]/40 transition-colors"
                       >
                         <div className="flex items-center gap-2.5">
-                          <span className="text-[#1A1A1A] text-[10px] font-extrabold w-6 text-center bg-[#EFE6D6] border border-[#B89555]/40 rounded py-1">
+                          <span className="text-[#1A1A1A] text-[10px] font-extrabold w-6 text-center bg-[#EFE6D6] border border-[#064E3B]/30 rounded py-1">
                             {i + 1}
                           </span>
-                          <span className={`text-sm font-semibold ${isHighlighted ? "text-[#B89555]" : "text-[#1A1A1A]"}`}>
+                          <span className={`text-sm font-semibold ${isHighlighted ? "text-[#064E3B]" : "text-[#1A1A1A]"}`}>
                             {area.area}
                           </span>
                         </div>
@@ -413,16 +413,16 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                           </span>
                           {nats.length > 0 &&
                             (isExpanded ? (
-                              <ChevronUp className="w-3.5 h-3.5 text-[#B89555]" strokeWidth={2.5} />
+                              <ChevronUp className="w-3.5 h-3.5 text-[#064E3B]" strokeWidth={2.5} />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5 text-[#B89555]" strokeWidth={2.5} />
+                              <ChevronDown className="w-3.5 h-3.5 text-[#064E3B]" strokeWidth={2.5} />
                             ))}
 
                         </div>
                       </button>
 
                       {isExpanded && nats.length > 0 && (
-                        <div className="relative bg-[#FDFBF7] border-t border-[#B89555]/20 px-3 py-3">
+                        <div className="relative bg-[#FDFBF7] border-t border-[#064E3B]/20 px-3 py-3">
                           <p className="text-[10px] uppercase tracking-[0.15em] text-[#1A1A1A]/55 font-bold mb-2">
                             Top 5 Buyer Nationalities
                           </p>
@@ -435,7 +435,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                                 </div>
                                 <div className="flex items-center gap-2 flex-1 max-w-[140px]">
                                   <div className="flex-1 h-1.5 rounded-full bg-[#EFE6D6] overflow-hidden">
-                                    <div className="h-full bg-[#B89555]" style={{ width: `${Math.min(n.percentage * 3, 100)}%` }} />
+                                    <div className="h-full bg-[#064E3B]" style={{ width: `${Math.min(n.percentage * 3, 100)}%` }} />
                                   </div>
                                   <span className="text-[#1A1A1A] text-[11px] font-bold w-7 text-right">{n.percentage}%</span>
                                 </div>
@@ -451,9 +451,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Top 10 Nationalities — single bronze accent */}
-            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#B89555]/30">
+            <div className="bg-[#F7F2EA] rounded-2xl p-6 border border-[#064E3B]/30">
               <div className="flex items-center gap-2 mb-5">
-                <Globe className="w-4 h-4 text-[#B89555]" />
+                <Globe className="w-4 h-4 text-[#064E3B]" />
                 <h3 className="text-[#0A0A0A] text-sm font-bold">Top 10 Buyer Nationalities</h3>
               </div>
 
@@ -462,8 +462,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   const maxPct = topNationalities[0]?.percentage || 1;
                   const barWidth = Math.max((nat.percentage / maxPct) * 100, 8);
                   return (
-                    <div key={nat.country} className="relative rounded-lg overflow-hidden border border-[#B89555]/15 bg-[#FDFBF7]">
-                      <div className="absolute inset-y-0 left-0 bg-[#B89555]/10" style={{ width: `${barWidth}%` }} />
+                    <div key={nat.country} className="relative rounded-lg overflow-hidden border border-[#064E3B]/15 bg-[#FDFBF7]">
+                      <div className="absolute inset-y-0 left-0 bg-[#064E3B]/10" style={{ width: `${barWidth}%` }} />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg leading-none">{nat.flag}</span>
@@ -471,7 +471,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="w-24 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
-                            <div className="h-full bg-[#B89555] rounded-full" style={{ width: `${nat.percentage * 4}%` }} />
+                            <div className="h-full bg-[#064E3B] rounded-full" style={{ width: `${nat.percentage * 4}%` }} />
                           </div>
                           <span className="text-[#1A1A1A] text-xs font-extrabold w-8 text-right">{nat.percentage}%</span>
                         </div>
@@ -485,9 +485,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Gifts row — champagne+gold premium treatment */}
           {ytd2026.gifts && ytd2026.gifts > 0 && (
-            <div className="mt-6 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-4 flex items-center justify-between shadow-sm">
+            <div className="mt-6 bg-[#F7F2EA] border border-[#064E3B]/30 rounded-xl p-4 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#B89555]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#064E3B]" />
                 <span className="text-[#1A1A1A] text-xs uppercase tracking-wider font-extrabold">Gift Transactions</span>
               </div>
               <div className="flex items-center gap-3">

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Building, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
-import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
+import { getHighResImageUrl } from "@/lib/imageUtils";
+import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 
 interface RecommendedDevelopersProps {
   currentDeveloperSlug: string;
@@ -69,8 +70,8 @@ export default function RecommendedDevelopers({
       style={{
         background:
           "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
-        borderTop: "1px solid rgba(184,149,85,0.25)",
-        borderBottom: "1px solid rgba(184,149,85,0.25)",
+        borderTop: "1px solid rgba(6,78,59,0.22)",
+        borderBottom: "1px solid rgba(6,78,59,0.22)",
       }}
     >
       <div className="container mx-auto px-4">
@@ -81,9 +82,9 @@ export default function RecommendedDevelopers({
         >
           {/* Header */}
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#FDFBF7] border border-[#B89555]/60 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-              <Sparkles className="w-3.5 h-3.5 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A]">Explore Developers</span>
+            <span className="jj-pill-emerald-metallic allow-white inline-flex items-center gap-2 px-4 py-2 border-0 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+              <Sparkles className="w-3.5 h-3.5 text-white" />
+              <span className="text-white">Explore Developers</span>
             </span>
             <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold">
               Similar Developers
@@ -103,44 +104,31 @@ export default function RecommendedDevelopers({
               >
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="group block rounded-xl border-2 border-[#B89555]/20 hover:border-[#B89555]/60 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
+                  className="group block rounded-xl border border-[#064E3B]/24 hover:border-[#064E3B]/55 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(6,78,59,0.18)]"
                 >
-                  {/* Logo — full-fit, real logo only; name fallback when missing */}
-                  <div className="h-28 flex items-center justify-center p-4 bg-white text-[#1A1A1A]">
-                    {getDeveloperLogoOverride(dev.name).forceNameplate ? (
-                      <span className="text-[#1A1A1A] font-bold text-lg tracking-tight text-center px-2">
-                        {dev.name}
-                      </span>
-                    ) : dev.logo_url ? (
-                      <img
-                        src={dev.logo_url}
-                        alt={`${dev.name} logo`}
-                        loading="lazy"
-                        className="block max-h-full max-w-full w-auto h-auto object-contain"
-                        style={{
-                          filter: getDeveloperLogoOverride(dev.name).invert
-                            ? "invert(1) brightness(1)"
-                            : "contrast(1.08) saturate(1.1)",
-                        }}
-                       decoding="async" />
-                    ) : (
-                      <span className="text-[#1A1A1A] font-bold text-base text-center px-2">
-                        {dev.name}
-                      </span>
-                    )}
+                  {/* Photo only — no logo/nameplate in the visual card area */}
+                  <div className="h-32 relative overflow-hidden bg-[#064E3B]/10">
+                    <img
+                      src={dev.feature_image_url ? getHighResImageUrl(dev.feature_image_url) : ammarCreekHarbourMasterplan}
+                      alt={`${dev.name} featured development`}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                      decoding="async"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                   </div>
 
                   {/* Info */}
-                  <div className="p-3 border-t border-[#B89555]/20">
+                  <div className="p-3 border-t border-[#064E3B]/18">
                     <h3 className="text-[#1A1A1A] font-bold text-sm leading-tight group-hover:text-[#1A1A1A] transition-colors line-clamp-1">
                       {dev.name}
                     </h3>
                     <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]">
                       {dev.completed_projects != null && dev.completed_projects > 0 && (
-                        <span>{dev.completed_projects} Completed</span>
+                        <span>{Number(dev.completed_projects).toLocaleString()} Completed</span>
                       )}
                       {dev.offplan_projects != null && dev.offplan_projects > 0 && (
-                        <span>{dev.offplan_projects} Off-Plan</span>
+                        <span>{Number(dev.offplan_projects).toLocaleString()} Off-Plan</span>
                       )}
                     </div>
                   </div>
@@ -153,10 +141,10 @@ export default function RecommendedDevelopers({
           <div className="text-center mt-8">
             <Link
               to="/developers"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#B89555] rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#064E3B]/35 rounded-xl text-[#1A1A1A] font-semibold text-sm hover:shadow-[0_4px_20px_rgba(6,78,59,0.18)] hover:-translate-y-0.5 transition-all duration-150 group"
               style={{
                 boxShadow:
-                  "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)",
+                  "0 6px 20px rgba(6,78,59,0.14), inset 0 2px 4px rgba(255,255,255,0.8)",
               }}
             >
               <span>View All Developers</span>

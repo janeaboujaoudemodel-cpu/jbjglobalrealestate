@@ -419,7 +419,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             WebkitOverflowScrolling: 'touch',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
-            touchAction: 'pan-x',
+            touchAction: 'pan-x pan-y',
           } as React.CSSProperties}
         >
 
@@ -967,7 +967,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
           <button className={cn(filterPillBase, pillInactive(variant), "px-3.5 py-1.5")} title="View saved filters">
-          <Bookmark className="w-3.5 h-3.5 text-[#1A1A1A] fill-black" />
+          <Bookmark className={cn("w-3.5 h-3.5", variant === 'dark' ? "text-white fill-white" : "text-[#064E3B] fill-[#064E3B]")} />
           <span className="hidden sm:inline">{t('filter.savedFilters')}</span>
         </button>
       </PopoverTrigger>

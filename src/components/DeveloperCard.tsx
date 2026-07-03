@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import type { Developer } from "@/hooks/useProjects";
+import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 
 interface DeveloperCardProps {
   developer: Developer;
@@ -54,6 +55,8 @@ const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
   "sunrise valley": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
   "h h": "https://a.storyblok.com/f/209096/1360x1020/62128e6c6b/sunrise-valley-by-h-h-in-nad-al-sheba.jpg",
   "ax capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
+  ammar: ammarCreekHarbourMasterplan,
+  amar: ammarCreekHarbourMasterplan,
 };
 
 // Match by matching *any* keyword token in the developer name/slug against
