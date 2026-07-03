@@ -220,6 +220,7 @@ const DeveloperDetail = () => {
         canonicalPath={`/developer/${slug}`}
         ogImage={developer.feature_image_url || developer.logo_url}
       />
+      <SchemaEntity kind="developer" slug={slug || ""} pageTitle={`${developer.name} — Live Projects in the UAE`} />
       {/* Hero section - always visible */}
       <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
         {developer.feature_image_url ? (
