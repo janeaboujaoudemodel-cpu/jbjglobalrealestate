@@ -251,7 +251,8 @@ export default function SupportLauncher() {
               >
                 Contact Us
               </span>
-              <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+              <span className="pointer-events-none absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]" />
+
             </>
           )}
         </motion.button>
