@@ -155,7 +155,8 @@ const About = () => {
               preload="auto"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black/85" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B]/85 via-black/80 to-black/95" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
           </div>
 
           <motion.div
