@@ -575,7 +575,7 @@ function PickerCard({
           <span
             className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
             style={{
-              backgroundColor: "rgba(184,149,85,0.18)",
+              backgroundColor: "rgba(255,255,255,0.10)",
               color: WHITE,
               WebkitTextFillColor: WHITE,
               border: `1px solid ${GOLD}`,
@@ -614,7 +614,7 @@ function PickerCard({
             backgroundColor: "rgba(255,255,255,0.10)",
             color: "rgba(255,255,255,0.88)",
             WebkitTextFillColor: "rgba(255,255,255,0.88)",
-            border: `1px solid rgba(184,149,85,0.65)`,
+            border: `1px solid rgba(255,255,255,0.28)`,
           }}
         >
           {tag}

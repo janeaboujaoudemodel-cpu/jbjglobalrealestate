@@ -179,7 +179,7 @@ const BusinessCardPrivacyNotice = ({
               }}
               data-no-contrast-guard
               data-allow-dark-cta
-              className="bcs-consent-box peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
+              className="bcs-consent-box peer h-5 w-5 shrink-0 rounded-[5px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07101F]"
               style={{
                 backgroundColor: agreed ? "#FFFFFF" : "rgba(255,255,255,0.06)",
                 border: `1.5px solid ${agreed ? "#FFFFFF" : ACCENT_BORDER}`,

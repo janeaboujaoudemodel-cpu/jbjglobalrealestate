@@ -381,6 +381,14 @@ const AIHF_STYLE = `
   }
   .aihf-root input::placeholder { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
 
+  /* Absolute lock: no gold borders/text inside AI Home Finder, including lead form states. */
+  .aihf-root :is([class*="B89555"], [class*="border-gold"], [class*="ring-gold"], [style*="#B89555"], [style*="184,149,85"]) {
+    border-color: rgba(255,255,255,0.28) !important;
+    --tw-ring-color: rgba(255,255,255,0.28) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+
   /* Popover keeps light surface so lists are readable */
   .aihf-popover, .aihf-popover * { background-color: #041610 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
   .aihf-popover { border: 1px solid rgba(255,255,255,0.34) !important; }
