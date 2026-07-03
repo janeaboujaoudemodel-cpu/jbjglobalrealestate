@@ -377,7 +377,7 @@ const BusinessCardCamera = ({
       case "processing":
         return <Loader2 className="h-4 w-4 animate-spin allow-white" style={{ color: ACCENT }} />;
       case "success":
-        return <CheckCircle className="h-4 w-4 allow-white" style={{ color: "#34d399" }} />;
+        return <CheckCircle className="h-4 w-4 allow-white" style={{ color: WHITE }} />;
       case "error":
         return <AlertCircle className="h-4 w-4 allow-white" style={{ color: "#f87171" }} />;
       default:

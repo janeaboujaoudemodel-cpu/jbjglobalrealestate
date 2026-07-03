@@ -354,9 +354,15 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           border-color: rgba(255,255,255,0.28) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: linear-gradient(135deg, #0a6e52 0%, #064E3B 58%, #01110b 100%) !important;
+          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%)) !important;
           border-color: rgba(255,255,255,0.30) !important;
           box-shadow: 0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+        }
+        [data-interior-design-ai] [role="progressbar"] {
+          background: rgba(255,255,255,0.12) !important;
+        }
+        [data-interior-design-ai] [role="progressbar"] > div {
+          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%)) !important;
         }
         [data-interior-design-ai] svg {
           background: transparent !important;

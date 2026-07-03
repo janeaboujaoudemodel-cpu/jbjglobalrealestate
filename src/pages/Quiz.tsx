@@ -1359,7 +1359,7 @@ const Quiz = () => {
           <div className="h-2 rounded-full overflow-hidden mb-6" style={{ background: "rgba(255,255,255,0.14)" }}>
             <div
               className="h-full rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }}
+              style={{ width: `${progress}%`, background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%))" }}
             />
           </div>
         </div>
