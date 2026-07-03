@@ -27374,3 +27374,81 @@ html body #root .jj-emerald-border-animated::before {
   }
 }
 /* END PASS 201 */
+
+/* ============================================================
+   PASS 202 — GLOBAL "ACTIVE PILL" ANIMATED EMERALD RING
+   Locked rule: every active pill / active section / active tab
+   / active toggle site-wide (frontend + backend admin) uses the
+   same emerald conic animated border introduced on the
+   AI Home Finder intro card.
+
+   Apply by adding any of:
+     - class="jj-active-ring"
+     - data-active-pill="true"
+     - inside a segmented control: [data-active="true"]
+     - aria-selected="true" on TabsTrigger
+   ============================================================ */
+
+@property --jj-active-ring-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes jj-active-ring-spin {
+  0%   { --jj-active-ring-angle: 0deg;   }
+  100% { --jj-active-ring-angle: 360deg; }
+}
+
+html body #root .jj-active-ring,
+html body #root [data-active-pill="true"],
+html body #root [data-jjds-segmented] [data-active="true"],
+html body #root [role="tab"][aria-selected="true"][data-jj-emerald-tab],
+html body #root [data-jj-active-emerald="true"] {
+  position: relative;
+  isolation: isolate;
+}
+
+html body #root .jj-active-ring::before,
+html body #root [data-active-pill="true"]::before,
+html body #root [data-jjds-segmented] [data-active="true"]::before,
+html body #root [role="tab"][aria-selected="true"][data-jj-emerald-tab]::before,
+html body #root [data-jj-active-emerald="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--jj-active-ring-angle),
+    #10B981 0%,
+    #34D399 15%,
+    rgba(255,255,255,0.9) 28%,
+    #059669 45%,
+    #064E3B 60%,
+    #34D399 78%,
+    #10B981 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  animation: jj-active-ring-spin 6s linear infinite;
+  z-index: 1;
+}
+
+/* Segmented children need to sit above the ring's ::before */
+html body #root [data-jjds-segmented] [data-active="true"] > * {
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body #root .jj-active-ring::before,
+  html body #root [data-active-pill="true"]::before,
+  html body #root [data-jjds-segmented] [data-active="true"]::before,
+  html body #root [role="tab"][aria-selected="true"][data-jj-emerald-tab]::before,
+  html body #root [data-jj-active-emerald="true"]::before {
+    animation: none !important;
+  }
+}
+/* END PASS 202 */
