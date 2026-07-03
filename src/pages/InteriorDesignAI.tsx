@@ -38,12 +38,12 @@ const designStyles = [
 ];
 
 const colorPalettes = [
-  { id: 'neutral', name: 'Neutral & Warm', colors: ['#F5F5DC', '#D2B48C', '#8A7356'] },
-  { id: 'cool', name: 'Cool & Serene', colors: ['#E0E5EC', '#B0C4DE', '#708090'] },
-  { id: 'bold', name: 'Bold & Vibrant', colors: ['#FF6B6B', '#4ECDC4', '#45B7D1'] },
-  { id: 'earthy', name: 'Earthy & Natural', colors: ['#8B7765', '#6B8E23', '#DEB887'] },
-  { id: 'monochrome', name: 'Monochrome', colors: ['#2C2C2C', '#808080', '#F0F0F0'] },
-  { id: 'luxury', name: 'Luxury Gold', colors: ['#A8925A', '#1C1C1C', '#F5F5F5'] },
+  { id: 'neutral', name: 'Neutral & Warm', colors: ['#F5F5DC', '#E8D9BE', '#D2B48C', '#A8875F', '#8A7356'] },
+  { id: 'cool', name: 'Cool & Serene', colors: ['#F0F4F8', '#E0E5EC', '#B0C4DE', '#8AA0B8', '#708090'] },
+  { id: 'bold', name: 'Bold & Vibrant', colors: ['#FF6B6B', '#FFB84D', '#4ECDC4', '#45B7D1', '#5D5FEF'] },
+  { id: 'earthy', name: 'Earthy & Natural', colors: ['#DEB887', '#B89A6B', '#8B7765', '#6B8E23', '#3F5323'] },
+  { id: 'monochrome', name: 'Monochrome', colors: ['#F0F0F0', '#C0C0C0', '#808080', '#4A4A4A', '#1C1C1C'] },
+  { id: 'luxury', name: 'Luxury Gold', colors: ['#F5F0E1', '#E4D3A6', '#A8925A', '#6E5A2E', '#1C1C1C'] },
 ];
 
 type DesignMode = 'concept' | 'redesign' | 'staging';
