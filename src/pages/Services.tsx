@@ -270,21 +270,28 @@ const Services = () => {
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-12 md:mt-16">
-            <PremiumHeroButton href="/contact" icon={ArrowRight}>
-              Request a Service
-            </PremiumHeroButton>
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-3 sm:gap-4 mt-12 md:mt-16 w-full">
             <Link
               to="/contact"
               data-no-contrast-guard
               data-allow-dark-cta
-              className="allow-white inline-flex items-center gap-2 px-6 py-3 border-2 border-white/40 !text-white font-semibold rounded-lg hover:bg-white/10 transition-colors"
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              className="jj-services-black-cta allow-white inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap"
             >
-              <MessageSquare className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request a Service</span>
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
+            </Link>
+            <Link
+              to="/contact"
+              data-no-contrast-guard
+              data-allow-dark-cta
+              className="jj-services-black-cta allow-white inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap"
+            >
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Support</span>
             </Link>
           </motion.div>
+
+
         </motion.div>
       </section>
 
@@ -325,7 +332,7 @@ const Services = () => {
               </p>
             </motion.div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link} className="block h-full">
@@ -382,44 +389,8 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Service Request Strip */}
-      <section data-surface="champagne" className="py-16 bg-[#F7F2EA]">
-        <div className="jj-layer-2">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="w-full px-4 sm:px-6 lg:px-8"
-          >
-            <Card className="jj-card-inner max-w-4xl mx-auto">
-              <CardContent className="p-8 text-center">
-                <motion.div variants={fadeInUp}>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#1A1A1A]">
-                    Not sure which service you need?
-                  </h2>
-                  <p className="text-[#1A1A1A]/70 max-w-xl mx-auto mb-6">
-                    Send one request and our team will route it to the right department.
-                  </p>
-                  <div className="flex flex-wrap justify-center gap-4">
-                    <Button variant="primary" size="lg" asChild>
-                      <Link to="/contact">
-                        <MessageSquare className="w-5 h-5 mr-2" />
-                        Open Service Request
-                      </Link>
-                    </Button>
-                    <Button variant="outline" size="lg" asChild>
-                      <Link to="/contact">
-                        Speak to Support
-                      </Link>
-                    </Button>
-                  </div>
-                </motion.div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
+
+
 
       {/* Service Scope Clarification */}
       <section data-surface="champagne" className="py-20 bg-[#F7F2EA]">
@@ -513,7 +484,7 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Footer Disclaimer — champagne band, ink text (section bg is auto-remapped on marketing pages) */}
+      {/* Footer Disclaimer — champagne band, ink text */}
       <section className="bg-[#F7F2EA] py-8 border-t border-[#1A1A1A]/10">
         <div className="container mx-auto px-4 text-center">
           <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
@@ -522,6 +493,87 @@ const Services = () => {
           </p>
         </div>
       </section>
+
+      {/* Not sure which service — emerald ombré card, matches "Ready to Get Started" (moved BELOW disclaimer per request) */}
+      <section data-surface="champagne" className="py-16 bg-[#F7F2EA]">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="max-w-4xl mx-auto"
+          >
+            <div
+              data-ink-emerald
+              data-surface="emerald"
+              data-emerald="true"
+              data-no-contrast-guard
+              className="jj-emerald-card jj-loop-block relative w-full rounded-[28px] p-6 md:p-10 lg:p-12 overflow-hidden text-center"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%)" }}
+            >
+              <span
+                data-no-contrast-guard
+                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-3 border"
+                style={{
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  borderColor: "rgba(255,255,255,0.35)",
+                  backgroundColor: "rgba(255,255,255,0.08)",
+                }}
+              >
+                Service Request
+              </span>
+              <h2
+                data-no-contrast-guard
+                className="text-xl md:text-2xl font-bold mb-2 uppercase tracking-[0.14em]"
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+              >
+                Not Sure Which Service You Need?
+              </h2>
+              <div className="mx-auto mt-1 mb-3 flex items-center justify-center gap-2">
+                <span className="h-px w-12 bg-white/40" />
+                <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
+                <span className="h-px w-12 bg-white/40" />
+              </div>
+              <p
+                data-no-contrast-guard
+                className="text-xs md:text-sm max-w-lg mx-auto mb-6"
+                style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
+              >
+                Send one request and our team will route it to the right department.
+              </p>
+              <div className="flex flex-row flex-nowrap items-center justify-center gap-3 sm:gap-4">
+                <Link
+                  to="/contact"
+                  data-no-contrast-guard
+                  data-surface="emerald"
+                  data-emerald-ok="button"
+                  className="jj-emerald-metallic inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap"
+                >
+                  <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Open Service Request</span>
+                </Link>
+                <Link
+                  to="/contact"
+                  data-no-contrast-guard
+                  data-allow-dark-cta
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
+                  style={{
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.35)",
+                    color: "#FFFFFF",
+                    WebkitTextFillColor: "#FFFFFF",
+                  }}
+                >
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Speak to Support</span>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
     </div>
   );
 };
