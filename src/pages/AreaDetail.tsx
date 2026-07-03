@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
+import { SchemaEntity } from "@/components/SchemaEntity";
 import { Button } from "@/components/ui/button";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
 import { AreaHeroSection } from "@/components/area-detail/AreaHeroSection";
