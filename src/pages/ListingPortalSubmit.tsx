@@ -98,10 +98,11 @@ const SESSION_KEY = 'jbj_listing_creator_state';
 const EMERALD = '#064E3B';
 const EMERALD_DEEP = '#042C1C';
 const EMERALD_BLACK = '#000000';
-const EMERALD_OMBRE = 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)';
+const EMERALD_OMBRE = 'linear-gradient(135deg, #042C1C 0%, #021611 55%, #000000 100%)';
 const EMERALD_OMBRE_SOFT = 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 54%, #EAF7F1 100%)';
-const EMERALD_DARK_PANEL = 'linear-gradient(135deg, rgba(6,78,59,0.96) 0%, rgba(4,44,28,0.98) 58%, rgba(0,0,0,1) 100%)';
-const EMERALD_FIELD = 'bg-[#FDFBF7] border-2 border-[#064E3B]/45 focus:border-[#064E3B] focus-visible:ring-[#064E3B]/30 text-[#1A1A1A]';
+const EMERALD_DARK_PANEL = 'linear-gradient(135deg, rgba(4,44,28,0.98) 0%, rgba(2,22,17,0.99) 58%, rgba(0,0,0,1) 100%)';
+// Dark emerald field: dark background with pure white text and placeholder
+const EMERALD_FIELD = 'bg-[#042C1C] border-2 border-white/25 focus:border-white/70 focus-visible:ring-white/30 text-white placeholder:text-white placeholder:opacity-100';
 
 const ListingPortalSubmit = () => {
   const navigate = useNavigate();
@@ -616,7 +617,7 @@ const ListingPortalSubmit = () => {
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
-          style={{ background: "radial-gradient(circle at 85% 12%, rgba(16,185,129,0.18) 0%, transparent 55%)" }}
+          style={{ background: "radial-gradient(circle at 85% 12%, rgba(0,0,0,0.35) 0%, transparent 60%), linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 100%)" }}
         />
         <div className="container mx-auto px-4 pt-8 pb-6 relative">
           <div className="max-w-5xl mx-auto">
@@ -718,12 +719,13 @@ const ListingPortalSubmit = () => {
  ? 'border-white/80 text-white [&_svg]:!text-white'
  : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
  }`}
-                      style={isActive
-                        ? { background: 'linear-gradient(135deg, #0A6B53 0%, #064E3B 55%, #042C1C 100%)' }
-                        : isDone
-                          ? { backgroundColor: 'rgba(255,255,255,0.18)' }
-                          : { backgroundColor: 'rgba(255,255,255,0.08)' }
-                      }
+                      style={{
+                        background: 'var(--jj-official-emerald-surface, #064E3B)',
+                        backgroundColor: '#064E3B',
+                        boxShadow: isActive
+                          ? '0 8px 20px -8px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.18)'
+                          : 'inset 0 1px 0 rgba(255,255,255,0.10)',
+                      }}
                     >
                       {isDone ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                     </div>
@@ -820,12 +822,13 @@ const ListingPortalSubmit = () => {
                         <div
                           onDragOver={(e) => e.preventDefault()}
                           onDrop={handleFileDrop}
-                          className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer bg-white/[0.04]"
+                          className="border-2 border-dashed border-white/40 rounded-xl p-8 text-center hover:border-white transition-all cursor-pointer"
+                          style={{ background: EMERALD_OMBRE }}
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
-                          <Upload className="w-10 h-10 mx-auto mb-3" style={{color: EMERALD}} />
+                          <Upload className="w-10 h-10 mx-auto mb-3" style={{color: '#FFFFFF'}} />
                           <p className="text-white font-medium mb-1">Drop files here or click to browse</p>
-                          <p className="text-white/70 text-xs">
+                          <p className="text-white text-xs" style={{ color: '#FFFFFF', opacity: 0.95 }}>
                             Any file — PDF, images, Word, Excel, PowerPoint, CSV, TXT, ZIP… up to 100MB each
                           </p>
                           <input
