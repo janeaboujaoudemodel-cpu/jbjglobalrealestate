@@ -201,10 +201,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     <div
       data-surface="champagne"
         className={
-        "surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/60 transition-all duration-300 flex flex-col " +
+        "surface-champagne group relative overflow-hidden rounded-2xl border border-[#064E3B]/45 transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-        "shadow-[0_0_18px_hsl(var(--gold)/0.14),0_18px_55px_hsl(0_0%_0%/0.16)] hover:border-[#B89555] " +
-        "hover:shadow-[0_0_26px_hsl(var(--gold)/0.18),0_26px_75px_hsl(0_0%_0%/0.20)]"
+        "shadow-[0_18px_55px_rgba(0,0,0,0.16),0_0_18px_rgba(6,78,59,0.12)] hover:border-[#064E3B] " +
+        "hover:shadow-[0_26px_75px_rgba(0,0,0,0.20),0_0_26px_rgba(6,78,59,0.18)]"
       }
     >
       {/* Top-right project actions — hidden until card hover/focus.
@@ -365,13 +365,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="p-5 pt-10 flex-1 flex flex-col gap-2">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1">
-            <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#B89555] transition-colors">
+            <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#064E3B] transition-colors">
               {project.name}
             </h4>
             <div className="flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium min-h-[1.25rem]">
               {project.location && (
                 <>
-                  <MapPin className="w-3.5 h-3.5 text-[#B89555] flex-shrink-0" aria-hidden="true" />
+                  <MapPin className="w-3.5 h-3.5 text-[#064E3B] flex-shrink-0" aria-hidden="true" />
                   <span className="truncate">{project.location}</span>
                 </>
               )}
@@ -390,7 +390,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               <span className="font-semibold truncate !text-[#1A1A1A]">{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
-              <span className="text-[#B89555] flex-shrink-0" aria-hidden="true">|</span>
+              <span className="text-[#064E3B] flex-shrink-0" aria-hidden="true">|</span>
             )}
             {getSizeText() && <span className="truncate !text-[#1A1A1A]">{getSizeText()}</span>}
           </div>
@@ -416,7 +416,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               every card regardless of content length above. */}
           <div className="mt-auto flex flex-col gap-3 pt-1">
             {/* Thin gold hairline — separates description from bottom row */}
-            <div className="w-full border-t border-[#B89555]/45" />
+            <div className="w-full border-t border-[#064E3B]/35" />
 
             {/* Bottom row — price only. Handover lives beside EOI on the photo. */}
             <CardPricePaymentRow
@@ -445,7 +445,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
       <div className="px-4 pb-4">
-        <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/40 pt-3">
+        <div className="grid grid-cols-3 gap-2 border-t border-[#064E3B]/35 pt-3">
           <a
             href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
             onClick={(e) => e.stopPropagation()}

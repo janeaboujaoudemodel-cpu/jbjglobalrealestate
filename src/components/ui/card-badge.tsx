@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils';
 /**
  * CardBadge — single reusable overlay badge for property/project cards.
  *
- * Enforces consistent gold/white contrast + typography across
+ * Enforces consistent emerald/white contrast + typography across
  * FeaturedListings, ProjectCard, and ReellyProjectCard.
  *
  * Variants:
- *  - "status" (default): crystal glass + gold hairline + ink text.
+ *  - "status" (default): emerald ombre + white text.
  *      Use for On Sale / Announced / Presale, etc. Never use for property-type
  *      labels on public project cards; top-left card identity is developer logo/nameplate only.
  *  - "sold": ink-red fill + white text (always high-contrast).
@@ -52,7 +52,7 @@ export const CardBadge = React.forwardRef<HTMLDivElement, CardBadgeProps>(
     }
 
     if (variant === 'status-frame') {
-      // Rectangular gold-bordered frame — matches price-pill geometry.
+      // Rectangular emerald frame — matches price-pill geometry.
       // Used for the owner-opt-in sale-status badge on cards.
       return (
         <div
@@ -63,7 +63,7 @@ export const CardBadge = React.forwardRef<HTMLDivElement, CardBadgeProps>(
             'px-2.5 py-1 rounded-sm',
             "font-['Inter'] font-bold uppercase leading-none",
             'text-[10.5px] tracking-[0.14em]',
-            'bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]',
+            'allow-white jj-pill-emerald-metallic text-white border-0',
             'shadow-[0_2px_8px_rgba(0,0,0,0.10)]',
             className,
           )}
@@ -74,7 +74,7 @@ export const CardBadge = React.forwardRef<HTMLDivElement, CardBadgeProps>(
       );
     }
 
-    // status (default) — crystal glass + gold hairline + ink text
+    // status (default) — emerald ombre + white text
     return (
       <div
         ref={ref}

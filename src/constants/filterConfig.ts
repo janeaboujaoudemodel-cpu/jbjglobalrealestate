@@ -7,38 +7,38 @@
 export const SALE_STATUS_CONFIG = {
   "Announced": { 
     label: "Announced", 
-    dotClass: "bg-pink-400", 
-    textClass: "text-pink-400",
-    bgClass: "bg-pink-400/10",
-    borderClass: "border-pink-400/30"
+    dotClass: "jj-pill-emerald-metallic", 
+    textClass: "text-white",
+    bgClass: "jj-pill-emerald-metallic",
+    borderClass: "border-transparent"
   },
   "Presale (EOI)": { 
     label: "Pre-sale (EOI)", 
-    dotClass: "jj-surface-emerald", 
-    textClass: "text-green-400",
-    bgClass: "jj-surface-emerald-soft",
-    borderClass: "border-[color:var(--emerald-1)]/30/30"
+    dotClass: "jj-pill-emerald-metallic", 
+    textClass: "text-white",
+    bgClass: "jj-pill-emerald-metallic",
+    borderClass: "border-transparent"
   },
   "Start of Sales": { 
     label: "Start of Sales", 
-    dotClass: "bg-yellow-400", 
-    textClass: "text-yellow-400",
-    bgClass: "bg-yellow-400/10",
-    borderClass: "border-yellow-400/30"
+    dotClass: "jj-pill-emerald-metallic", 
+    textClass: "text-white",
+    bgClass: "jj-pill-emerald-metallic",
+    borderClass: "border-transparent"
   },
   "On Sale": { 
     label: "On Sale", 
-    dotClass: "bg-blue-400", 
-    textClass: "text-blue-400",
-    bgClass: "bg-blue-400/10",
-    borderClass: "border-blue-400/30"
+    dotClass: "jj-pill-emerald-metallic", 
+    textClass: "text-white",
+    bgClass: "jj-pill-emerald-metallic",
+    borderClass: "border-transparent"
   },
   "Sold Out": { 
     label: "Sold Out", 
-    dotClass: "bg-red-500", 
-    textClass: "text-red-500",
-    bgClass: "bg-red-500/10",
-    borderClass: "border-red-500/30"
+    dotClass: "jj-pill-emerald-metallic", 
+    textClass: "text-white",
+    bgClass: "jj-pill-emerald-metallic",
+    borderClass: "border-transparent"
   },
 } as const;
 

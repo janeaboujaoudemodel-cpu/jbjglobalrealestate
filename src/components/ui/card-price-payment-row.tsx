@@ -6,7 +6,7 @@
  *
  * Left column = "From" eyebrow + orange price value (uses --price-orange via
  * price-pill tokens). Right column = "Payment Plan" eyebrow + plan summary
- * with a champagne info popover showing the milestone breakdown on
+ * with an emerald info popover showing the milestone breakdown on
  * hover/click. Responsive: two columns scale gracefully on mobile.
  */
 
@@ -206,7 +206,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
                     "inline-flex h-5 w-5 items-center justify-center rounded-full",
                     "text-[#1A1A1A]/70 hover:text-[#1A1A1A]",
                     "hover:bg-[#EFE6D6] transition-colors",
-                    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#B89555]/60",
+                    "focus:outline-none focus-visible:ring-1 focus-visible:ring-[#064E3B]/60",
                   )}
                   data-no-contrast-guard
                 >
@@ -220,17 +220,17 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
                 sideOffset={6}
                 className={cn(
                   "w-60 p-0 overflow-hidden",
-                  "bg-[#FDFBF7] border border-[#B89555]/45",
+                  "bg-[#FDFBF7] border border-[#064E3B]/45",
                   "shadow-[0_18px_50px_rgba(0,0,0,0.18)] rounded-xl",
                 )}
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="px-3.5 py-2.5 border-b border-[#B89555]/30 bg-[#F7F2EA]">
+                <div className="px-3.5 py-2.5 border-b border-[#064E3B]/30 bg-[#F7F2EA]">
                   <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-[#1A1A1A]">
                     Payment plan {summary ? `· ${summary}` : ""}
                   </span>
                 </div>
-                <ul className="divide-y divide-[#B89555]/15">
+                <ul className="divide-y divide-[#064E3B]/15">
                   {breakdown.map((row, i) => (
                     <li
                       key={`${row.label}-${i}`}

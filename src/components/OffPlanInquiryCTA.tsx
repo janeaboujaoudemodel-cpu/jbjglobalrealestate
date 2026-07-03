@@ -59,7 +59,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
 
   if (variant === "compact") {
     return (
-      <Card className={`bg-card border-2 border-[#B89555] shadow-lg ${className}`}>
+      <Card className={`bg-card border border-[#064E3B]/45 shadow-lg ${className}`}>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-lg text-foreground">
             <HelpCircle className="w-5 h-5 text-[#1A1A1A]" />
@@ -79,7 +79,7 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
               required
               className="flex-1"
             />
-            <Button type="submit" disabled={isSubmitting} className="bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90">
+            <Button type="submit" disabled={isSubmitting} className="allow-white jj-pill-emerald-metallic text-white">
               {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Get Advice"}
             </Button>
           </form>
@@ -91,37 +91,37 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
   return (
     <section className={`py-12 md:py-16 ${className}`}>
       <div className="container mx-auto px-4">
-        <Card className="bg-gradient-to-br from-card via-card to-gold/5 border-2 border-[#B89555] shadow-[0_8px_40px_rgba(200,167,102,0.2)] overflow-hidden">
+        <Card className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18 shadow-[0_8px_40px_rgba(0,0,0,0.28)] overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Left side - Content */}
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 rounded-xl bg-[#EFE6D6]/20">
-                  <Building2 className="w-8 h-8 text-[#1A1A1A]" />
+                <div className="jj-pill-emerald-metallic p-3 rounded-xl">
+                  <Building2 className="w-8 h-8 text-white" />
                 </div>
-                <HelpCircle className="w-6 h-6 text-[#1A1A1A]/70" />
+                <HelpCircle className="w-6 h-6 text-white" />
               </div>
               
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              <h2 className="allow-white text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
                 Confused About Where to Buy or Invest in Dubai?
               </h2>
               
-              <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-6">
+              <p className="allow-white text-white text-base md:text-lg leading-relaxed mb-6">
                 Dubai's off-plan market offers incredible opportunities—from premium beachfront residences to high-yield investment properties. 
                 Our expert advisors will guide you through the best developers, locations, and payment plans tailored to your goals.
               </p>
               
-              <ul className="space-y-2 text-sm text-muted-foreground mb-6">
+              <ul className="allow-white space-y-2 text-sm text-white mb-6">
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
                   Flexible payment plans tailored to your investment timeline
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
                   Trusted developers: Emaar, Damac, Sobha, Nakheel & more
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white" />
                   ROI projections and market insights included
                 </li>
               </ul>
@@ -168,10 +168,10 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
                   className="bg-card border-border resize-none"
                 />
                 
-                <Button 
+              <Button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-[#EFE6D6] hover:bg-[#EFE6D6]/90 text-[#1A1A1A] font-semibold py-6"
+                  className="allow-white w-full jj-pill-emerald-metallic text-white font-semibold py-6"
                 >
                   {isSubmitting ? (
                     <>
