@@ -718,6 +718,7 @@ Requirements:
               data-no-contrast-guard
               data-tool-shell-root
               data-tool-emerald
+              data-seller-form-scope
               className="rounded-2xl p-6 md:p-8 shadow-xl"
               style={{
                 background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)",
@@ -726,6 +727,14 @@ Requirements:
                 color: "#FFFFFF",
               }}
             >
+              <style>{`
+                [data-seller-form-scope] input::placeholder,
+                [data-seller-form-scope] textarea::placeholder {
+                  color: #FFFFFF !important;
+                  -webkit-text-fill-color: #FFFFFF !important;
+                  opacity: 0.85 !important;
+                }
+              `}</style>
 
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
