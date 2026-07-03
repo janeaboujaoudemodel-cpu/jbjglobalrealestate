@@ -26950,3 +26950,22 @@ html body :is([data-list-property-page], [data-business-card-scanner], .aihf-roo
   border-color: rgba(1, 8, 6, 0.72) !important;
   box-shadow: none !important;
 }
+
+/* PASS 191 — direct property override for square-toggle bright-green image. */
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep,
+html body #root [data-jj-utility-bar] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep,
+html body #root .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
+  background-image: linear-gradient(115deg,
+    rgba(3,20,15,0) 0%,
+    rgba(3,20,15,0) 24%,
+    rgba(4,47,34,0.58) 38%,
+    rgba(6,78,59,0.72) 46%,
+    rgba(6,78,59,0.95) 50%,
+    rgba(6,78,59,0.72) 54%,
+    rgba(4,47,34,0.58) 62%,
+    rgba(3,20,15,0) 78%,
+    rgba(3,20,15,0) 100%) !important;
+  background-color: transparent !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
