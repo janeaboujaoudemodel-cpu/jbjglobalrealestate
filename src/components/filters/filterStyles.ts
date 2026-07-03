@@ -56,16 +56,16 @@ export const togglePillOn = "allow-white jj-filter-emerald-control jj-chip-emera
 // Popover surface — same as Price/Handover (bright champagne, no faded ink)
 export const filterPopoverSurface = "bg-[#FDFBF7] border border-[#064E3B]/25 shadow-xl z-[10200]";
 
-// Inputs inside popovers
+// Inputs inside popovers — full-ink placeholder + label so nothing looks faded on champagne
 export const filterInput = [
-  "w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/25 rounded-lg text-sm",
-  "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70",
-  "focus:border-[#064E3B]/55 focus:outline-none focus:ring-0",
+  "w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/35 rounded-lg text-sm",
+  "text-[#0A0A0A] placeholder:text-[#1A1A1A]/85",
+  "focus:border-[#064E3B]/70 focus:outline-none focus:ring-0",
 ].join(" ");
 
-export const filterLabel = "text-[10px] font-semibold uppercase tracking-[0.12em] text-[#1A1A1A]/70 mb-1 block";
+export const filterLabel = "text-[10px] font-bold uppercase tracking-[0.12em] text-[#0A0A0A] mb-1 block";
 
-export const filterHelpText = "text-xs text-[#1A1A1A]/70";
+export const filterHelpText = "text-xs text-[#1A1A1A]";
 
 export const filterPrimaryButton = [
   "allow-white h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg",
