@@ -37,7 +37,7 @@ export const AIToolRoutes = () => (
   <>
     <Route path="/ai-property-analyzer" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-lead-qualification" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-price-predictor" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
     <Route path="/ai-neighborhood-insights" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-roi-calculator" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-competitor-analysis" element={<Navigate to="/ai-hub" replace />} />
