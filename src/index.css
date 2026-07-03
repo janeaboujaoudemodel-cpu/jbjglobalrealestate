@@ -26668,3 +26668,63 @@ html body #root [data-insights-page] section:first-of-type:not([data-hero-dark])
 }
 
 /* END PASS 185 */
+
+/* ============================================================
+   PASS 186 — Emerald-only label/badge lock.
+   Labels, badges, pills, chips and hero eyebrows must never render
+   with gold borders or flat/light green fills. They use the canonical
+   emerald→black ombre, no border, white text/icons.
+   ============================================================ */
+html body #root :is(
+  [data-label-emerald-only],
+  [data-jj-badge="default"],
+  [data-jj-badge="destructive"],
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  [class*="bg-green-"][class*="rounded-full"],
+  [class*="bg-emerald-"][class*="rounded-full"],
+  [class*="border-[#B89555]"][class*="rounded-full"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+html body #root :is(
+  [data-label-emerald-only],
+  [data-jj-badge="default"],
+  [data-jj-badge="destructive"],
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  [class*="bg-green-"][class*="rounded-full"],
+  [class*="bg-emerald-"][class*="rounded-full"],
+  [class*="border-[#B89555]"][class*="rounded-full"]
+) :is(span, p, strong, small, svg, path, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root :is(
+  [data-label-emerald-only],
+  [data-jj-badge="default"],
+  [data-jj-badge="destructive"],
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  [class*="bg-green-"][class*="rounded-full"],
+  [class*="bg-emerald-"][class*="rounded-full"],
+  [class*="border-[#B89555]"][class*="rounded-full"]
+):hover {
+  background: var(--jj-emerald-ombre-hover) !important;
+  background-image: var(--jj-emerald-ombre-hover) !important;
+  border: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* END PASS 186 */
