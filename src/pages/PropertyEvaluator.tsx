@@ -1362,15 +1362,15 @@ const PropertyEvaluator = () => {
                   <div className="grid grid-cols-3 gap-4 pe-spec-compact">
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bedrooms</Label>
-                      <Input type="number" value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" min={0} value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} placeholder="e.g., 2" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bathrooms</Label>
-                      <Input type="number" value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" min={0} value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} placeholder="e.g., 2" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Parking</Label>
-                      <Input type="number" value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" min={0} value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} placeholder="e.g., 1" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
                     </div>
                   </div>
 
@@ -1380,18 +1380,27 @@ const PropertyEvaluator = () => {
                         Internal Size ({areaUnit === 'sqft' ? 'sq ft' : 'sq m'}) <span className="text-[#B89555]">*</span>
                       </Label>
                       <div className="flex gap-2 mb-2">
-                        {[{ key: 'sqft', label: 'sq ft' }, { key: 'sqm', label: 'sq m' }].map(unit => (
-                          <button
-                            key={unit.key}
-                            type="button"
-                            onClick={() => handleAreaUnitChange(unit.key as 'sqft' | 'sqm')}
-                            className={`px-3 py-1 rounded-full border border-emerald-400/60 text-xs text-white ${areaUnit === unit.key ? 'pe-active-pill bg-[#064E3B]' : 'bg-black/20'}`}
-                          >
-                            {unit.label}
-                          </button>
-                        ))}
+                        {[{ key: 'sqft', label: 'sq ft' }, { key: 'sqm', label: 'sq m' }].map(unit => {
+                          const isActive = areaUnit === unit.key;
+                          return (
+                            <button
+                              key={unit.key}
+                              type="button"
+                              onClick={() => handleAreaUnitChange(unit.key as 'sqft' | 'sqm')}
+                              data-active-pill={isActive || undefined}
+                              className={`px-3 py-1 rounded-full text-xs text-white transition-colors ${
+                                isActive
+                                  ? 'bg-[#064E3B] border-0'
+                                  : 'bg-black/20 border border-white/25 hover:bg-white/10'
+                              }`}
+                              style={isActive ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+                            >
+                              {unit.label}
+                            </button>
+                          );
+                        })}
                       </div>
-                      <Input type="number" value={property.sizeInternal || ''} onChange={(e) => updateProperty('sizeInternal', parseInt(e.target.value) || 0)} placeholder="e.g., 1200" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
+                      <Input type="number" value={property.sizeInternal || ''} onChange={(e) => updateProperty('sizeInternal', parseInt(e.target.value) || 0)} placeholder="e.g., 1,200" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Balcony (sq ft)</Label>
@@ -1402,24 +1411,25 @@ const PropertyEvaluator = () => {
                   <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Carpet Area (sq ft)</Label>
-                      <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} placeholder="e.g., 1,050" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} placeholder="e.g., 1,050" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Floor Level</Label>
-                      <Input type="number" value={property.floor || ''} onChange={(e) => updateProperty('floor', parseInt(e.target.value) || 0)} placeholder="e.g., 25" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.floor || ''} onChange={(e) => updateProperty('floor', parseInt(e.target.value) || 0)} placeholder="e.g., 25" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4" data-pe-field-grid data-pe-equal-fields>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Service Charge (AED/sq ft)</Label>
-                      <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} placeholder="e.g., 18" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} placeholder="e.g., 18" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Handover Year</Label>
-                      <Input type="number" value={property.handoverYear} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 2020)} className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A]" />
+                      <Input type="number" value={property.handoverYear} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 2020)} placeholder="e.g., 2020" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                   </div>
+
 
                   <div>
                     <Label className="text-[#1A1A1A]/70 text-sm">Furnished Status</Label>
