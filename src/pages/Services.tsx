@@ -209,13 +209,13 @@ const Services = () => {
         canonicalPath="/services"
       />
 
-      {/* Hero Section — pure emerald-black gradient */}
+      {/* Hero Section — pure emerald-black gradient, fullscreen */}
       <section
         data-brand-hero
         data-hero-dark
         data-surface="emerald"
         data-no-contrast-guard
-        className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
+        className="relative flex items-center justify-center overflow-hidden min-h-screen w-full"
         style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
       >
         <video
@@ -229,7 +229,6 @@ const Services = () => {
         >
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
-
         <div
           className="absolute inset-0"
           aria-hidden="true"
@@ -237,7 +236,7 @@ const Services = () => {
         />
 
         <motion.div
-          className="relative z-10 container mx-auto px-4 py-24 md:py-32 text-center max-w-4xl"
+          className="relative z-10 container mx-auto px-4 py-16 text-center max-w-4xl flex flex-col items-center justify-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -264,14 +263,14 @@ const Services = () => {
 
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-10"
+            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-16 md:mb-20"
             style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-10 md:mt-14">
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-4">
             <PremiumHeroButton href="/contact" icon={ArrowRight}>
               Request a Service
             </PremiumHeroButton>
@@ -290,8 +289,10 @@ const Services = () => {
       </section>
 
 
+
+
       {/* Service Cards Grid */}
-      <section id="services-grid" className="py-20 bg-[#1A1A1A]">
+      <section id="services-grid" className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -331,11 +332,14 @@ const Services = () => {
                     <Card className="jj-card-inner transition-all group h-full flex flex-col">
                       <CardContent className="p-6 flex flex-col flex-1">
                         <div
+                          data-surface="emerald"
+                          data-no-contrast-guard
                           className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
                           style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}
                         >
-                          <service.icon className="w-6 h-6" style={{ color: "#FFFFFF" }} />
+                          <service.icon className="w-6 h-6 allow-white" style={{ color: "#FFFFFF" }} />
                         </div>
+
                         <h3 className="font-semibold text-lg mb-2" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
@@ -379,7 +383,7 @@ const Services = () => {
       </section>
 
       {/* Service Request Strip */}
-      <section className="py-16 bg-[#1A1A1A]">
+      <section className="py-16 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -418,7 +422,7 @@ const Services = () => {
       </section>
 
       {/* Service Scope Clarification */}
-      <section className="py-20 bg-[#1A1A1A]">
+      <section className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -449,9 +453,14 @@ const Services = () => {
               className="max-w-4xl mx-auto"
               variants={fadeInUp}
             >
-              <Card className="jj-card-inner">
-                <CardContent className="p-8">
-                  <p className="text-[#1A1A1A]/80 text-lg mb-8 text-center">
+              <Card
+                data-surface="emerald"
+                data-no-contrast-guard
+                className="border-0 shadow-2xl overflow-hidden"
+                style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%)" }}
+              >
+                <CardContent className="p-8" data-no-contrast-guard>
+                  <p className="text-lg mb-8 text-center allow-white" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
                     JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell, 
                     and rent properties in Dubai and the UAE.
                   </p>
@@ -459,14 +468,14 @@ const Services = () => {
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Our role includes */}
                     <div>
-                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-[#1A1A1A]" />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                        <CheckCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
                         Our role includes
                       </h3>
                       <ul className="space-y-3">
                         {scopeIncludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                            <span className="text-[#1A1A1A]">•</span>
+                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
+                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -475,14 +484,14 @@ const Services = () => {
                     
                     {/* We do not provide */}
                     <div>
-                      <h3 className="text-[#1A1A1A] font-semibold text-lg mb-4 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                        <AlertCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-[#1A1A1A]/70">
-                            <span className="text-[#1A1A1A]">•</span>
+                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
+                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -490,21 +499,22 @@ const Services = () => {
                     </div>
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-[#B89555]/20 text-center">
-                    <p className="text-[#1A1A1A]/60 text-sm">
+                  <div className="mt-8 pt-6 border-t border-white/15 text-center">
+                    <p className="text-sm allow-white" style={{ color: "rgba(255,255,255,0.7)", WebkitTextFillColor: "rgba(255,255,255,0.7)" }}>
                       Where regulated services are required, we introduce independent licensed partners. 
                       Clients contract directly with those partners.
                     </p>
                   </div>
                 </CardContent>
               </Card>
+
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* Footer Disclaimer — champagne band, ink text (section bg is auto-remapped on marketing pages) */}
-      <section className="bg-[#1A1A1A] py-8 border-t border-[#B89555]/30">
+      <section className="bg-[#F7F2EA] py-8 border-t border-[#1A1A1A]/10">
         <div className="container mx-auto px-4 text-center">
           <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
