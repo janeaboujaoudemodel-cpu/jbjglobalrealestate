@@ -26903,3 +26903,50 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] :is([data-sidebar-mode-
   border-color: rgba(1, 8, 6, 0.72) !important;
   box-shadow: none !important;
 }
+
+/* PASS 190 — live-audit exact fixes: no gold hairlines, no bright-green sweep on reported tools. */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] :is([data-sidebar-bottom-cta], a[href="/contact"], a[href="/support"]) {
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  border-top-color: rgba(1, 8, 6, 0.72) !important;
+  border-right-color: rgba(1, 8, 6, 0.72) !important;
+  border-bottom-color: rgba(1, 8, 6, 0.72) !important;
+  border-left-color: rgba(1, 8, 6, 0.72) !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle .jj-sqtoggle-sweep,
+html body #root [data-jj-utility-bar] .jj-sqtoggle .jj-sqtoggle-sweep,
+html body .jj-sqtoggle-sweep {
+  background: linear-gradient(115deg,
+    rgba(3, 20, 15, 0) 0%,
+    rgba(3, 20, 15, 0) 24%,
+    rgba(4, 47, 34, 0.58) 38%,
+    rgba(6, 78, 59, 0.72) 46%,
+    rgba(6, 78, 59, 0.95) 50%,
+    rgba(6, 78, 59, 0.72) 54%,
+    rgba(4, 47, 34, 0.58) 62%,
+    rgba(3, 20, 15, 0) 78%,
+    rgba(3, 20, 15, 0) 100%) !important;
+  background-size: 220% 100% !important;
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  box-shadow: none !important;
+}
+
+html body :is(.aihf-root, [data-list-property-page], [data-interior-design-ai], [data-business-card-scanner]) :is(.jj-pill-emerald-metallic, .jj-official-emerald, .jj-cta-emerald, .jj-emerald-ombre, [data-surface="emerald"], [data-progress-indicator]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  box-shadow: none !important;
+}
+
+html body [data-interior-design-ai] :is(.id-choice, .id-choice-active, .id-outline, .id-primary, .id-panel, .id-panel-soft, .id-input, textarea, input, button, [role="progressbar"], [role="progressbar"] *) {
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  outline-color: transparent !important;
+  --tw-ring-color: rgba(1, 8, 6, 0.72) !important;
+}
+
+html body :is([data-list-property-page], [data-business-card-scanner], .aihf-root, [data-interior-design-ai]) footer,
+html body :is([data-list-property-page], [data-business-card-scanner], .aihf-root, [data-interior-design-ai]) footer * {
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  box-shadow: none !important;
+}
