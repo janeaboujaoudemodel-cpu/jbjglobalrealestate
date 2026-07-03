@@ -318,6 +318,9 @@ html {
   min-width: 100vw;
   overflow-x: hidden;
   overflow-anchor: none;
+  /* Kill browser back/forward swipe globally so horizontal drags inside
+     filter chip bars, tab strips, and tables never trigger history navigation. */
+  overscroll-behavior-x: none;
   /* Keep native wheel/trackpad scrolling instant and responsive.
      Smooth scrolling must only be used by explicit button/anchor actions;
      a global smooth rule throttles real user wheel input on long pages. */
