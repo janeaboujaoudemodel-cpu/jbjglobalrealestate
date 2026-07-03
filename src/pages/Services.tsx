@@ -298,56 +298,69 @@ const Services = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span
+                data-no-contrast-guard
+                className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Our Service Library
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
+              <h2
+                data-no-contrast-guard
+                className="text-3xl md:text-4xl font-bold mb-4"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Select a Service
               </h2>
-              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
+              <p
+                data-no-contrast-guard
+                className="max-w-2xl mx-auto"
+                style={{ color: "rgba(26,26,26,0.75)", WebkitTextFillColor: "rgba(26,26,26,0.75)" }}
+              >
                 Select a service to view the full process, requirements, and timelines.
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link} className="block h-full">
-                    <Card className="jj-card-inner hover:border-[#B89555] transition-all group h-full flex flex-col">
+                    <Card className="jj-card-inner transition-all group h-full flex flex-col">
                       <CardContent className="p-6 flex flex-col flex-1">
-                        <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
-                          <service.icon className="w-6 h-6" />
+                        <div
+                          className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
+                          style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}
+                        >
+                          <service.icon className="w-6 h-6" style={{ color: "#FFFFFF" }} />
                         </div>
-                        <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2 group-hover:text-[#1A1A1A] transition-colors">
+                        <h3 className="font-semibold text-lg mb-2" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
-                        <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
+                        <p className="text-sm mb-4 flex-1" style={{ color: "rgba(26,26,26,0.75)" }}>
                           {service.description}
                         </p>
-                        
-                        {/* Includes list */}
+
                         <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4">
-                          <p className="text-xs text-[#1A1A1A]/50 uppercase tracking-wider mb-2 font-medium">Includes</p>
+                          <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "rgba(26,26,26,0.6)" }}>Includes</p>
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-xs text-[#1A1A1A]/80">
-                                <CheckCircle className="w-3 h-3 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
+                              <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: "rgba(26,26,26,0.85)" }}>
+                                <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: "#064E3B" }} />
                                 <span>{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        
-                        {/* Partner note if applicable */}
+
                         {service.note && (
-                          <div className="bg-[#EFE6D6]/10 rounded-lg p-2 mb-4 border border-[#B89555]/20">
-                            <p className="text-xs text-[#1A1A1A]/60 italic">
+                          <div className="bg-[#EFE6D6]/40 rounded-lg p-2 mb-4">
+                            <p className="text-xs italic" style={{ color: "rgba(26,26,26,0.65)" }}>
                               {service.note}
                             </p>
                           </div>
                         )}
-                        
-                        <div className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-auto pt-4 border-t border-[#B89555]/20">
+
+                        <div className="flex items-center gap-1 text-sm font-semibold mt-auto pt-4 border-t border-[#1A1A1A]/10" style={{ color: "#064E3B" }}>
                           {service.cta}
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -357,6 +370,7 @@ const Services = () => {
                 </motion.div>
               ))}
             </div>
+
           </motion.div>
         </div>
       </section>
