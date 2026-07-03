@@ -20,7 +20,8 @@ for (const route of routes) {
   const errors = [];
   page.removeAllListeners('pageerror');
   page.on('pageerror', e => errors.push(String(e.message || e)));
-  await page.goto(base + route, { waitUntil: 'networkidle', timeout: 45000 });
+  console.log('ROUTE', route);
+  await page.goto(base + route, { waitUntil: 'domcontentloaded', timeout: 45000 });
   await page.waitForSelector('section, [data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen', { timeout: 45000 }).catch(() => {});
   await page.waitForTimeout(900);
   const metrics = await page.evaluate(() => {
