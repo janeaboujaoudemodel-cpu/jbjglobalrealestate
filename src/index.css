@@ -26893,3 +26893,13 @@ html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner
   box-shadow: none !important;
   outline-color: transparent !important;
 }
+
+/* PASS 189 — sidebar border-left direct override (beats older .border-l pass). */
+html body [data-chrome="sidebar"] [data-sidebar-emerald] .border-l,
+html body [data-chrome="sidebar"] [data-sidebar-emerald] [class*="border-l"] {
+  border-left-color: rgba(1, 8, 6, 0.72) !important;
+}
+html body [data-chrome="sidebar"] [data-sidebar-emerald] :is([data-sidebar-mode-portal], [data-sidebar-bottom-cta]):not([data-active="true"]) {
+  border-color: rgba(1, 8, 6, 0.72) !important;
+  box-shadow: none !important;
+}
