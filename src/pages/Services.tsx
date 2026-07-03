@@ -328,7 +328,7 @@ const Services = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 max-w-[1500px] mx-auto items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 max-w-[1280px] mx-auto items-stretch">
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp} className="h-full">
                   <Link to={service.link} className="block h-full">
