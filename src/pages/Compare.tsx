@@ -952,7 +952,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             </div>
                             {primaryImageUrl ? (
                               <img
-                                src={String(primaryImageUrl).trim().startsWith("data:image") ? comparePropertyFallback : primaryImageUrl === comparePropertyFallback ? primaryImageUrl : getHighResImageUrl(primaryImageUrl)}
+                                src={comparePropertyFallback}
                                 alt={project.name}
                                 className="relative z-10 w-full h-full object-cover"
                                 loading="lazy" decoding="async" width={1024} height={576}
