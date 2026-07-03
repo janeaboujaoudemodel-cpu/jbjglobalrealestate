@@ -175,7 +175,7 @@ export function SettingsDropdown({
                   </div>
                   <div className={cn(
                     "text-xs",
-                    isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/60"
+                    isDark ? "text-white" : "text-[#1A1A1A]"
                   )}>
                     {mode.description}
                   </div>

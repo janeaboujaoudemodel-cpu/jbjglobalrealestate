@@ -306,7 +306,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             </div>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#064E3B]" />
             <input
               type="text"
               value={localFilters.searchQuery}
@@ -330,7 +330,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <span className="text-[#1A1A1A]">
                   {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", emiratesOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", emiratesOpen && "rotate-180")} />
               </button>
               {emiratesOpen && (
                 <div className={dropdownPanel}>
@@ -377,7 +377,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     ? "All Areas"
                     : `${localFilters.areas.length} area${localFilters.areas.length > 1 ? 's' : ''} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", areasOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", areasOpen && "rotate-180")} />
               </button>
               {areasOpen && (
                 <div className={dropdownPanel}>
@@ -437,7 +437,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 <span className="text-[#1A1A1A]">
                   {localFilters.developers.length === 0 ? "All Developers" : `${localFilters.developers.length} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", devsOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", devsOpen && "rotate-180")} />
               </button>
               {devsOpen && (
                 <div className={dropdownPanel}>

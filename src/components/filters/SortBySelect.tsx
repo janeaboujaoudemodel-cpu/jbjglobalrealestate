@@ -68,7 +68,7 @@ export function SortBySelect({
               <span className="font-semibold">{current?.label ?? "Newest"}</span>
             ) : (
               <>
-                <span className="text-[#1A1A1A]/70 font-medium">Sort by:</span>{" "}
+                <span className="text-[#1A1A1A] font-medium">Sort by:</span>{" "}
                 <span className="font-semibold">{current?.label ?? "Newest"}</span>
               </>
             )}

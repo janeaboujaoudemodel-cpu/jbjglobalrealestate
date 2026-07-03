@@ -210,7 +210,7 @@ export function EmiratesMultiSelect({
         )}>
           <span className={cn(
             "text-xs",
-            isDark ? "text-[#1A1A1A]/70" : "text-[#1A1A1A]/60"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             {selectedCount} selected
           </span>
@@ -221,8 +221,8 @@ export function EmiratesMultiSelect({
               className={cn(
                 "text-xs px-2 py-1 rounded transition-colors",
                 isDark 
-                  ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne"
+                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne"
               )}
             >
               Clear
