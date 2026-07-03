@@ -26346,3 +26346,325 @@ html body #root [data-insights-page] [data-guide-toc] :is([data-guide-tooltip], 
 }
 
 /* END PASS 182 */
+
+/* ============================================================
+   PASS 183 — Final vertical-sidebar page layer contract.
+   Applies to every Insights, Guides, Services, Company, and Legal route
+   wrapped by InsightsPageScope: FAQ-style emerald hero, emerald hero CTAs,
+   champagne page/section layer, homepage-width card gutters, and no rejected
+   black page background behind the lower/last sections.
+   ============================================================ */
+html body #root [data-insights-page] {
+  --jj-insights-page: #F7F2EA !important;
+  --jj-insights-section: #F7F2EA !important;
+  --jj-insights-card: #FDFBF7 !important;
+  --jj-insights-hero: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+
+html body #root main.jj-main-shell,
+html body #root main.jj-main-shell [data-insights-page],
+html body #root [data-insights-page] > div,
+html body #root [data-insights-page] :is([data-mi-page], [data-guides-page], [data-faq-page], [data-marketing-page], [data-brand-emerald-page], [data-neon-page]) {
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) {
+  background: var(--jj-insights-hero) !important;
+  background-image: var(--jj-insights-hero) !important;
+  min-height: clamp(520px, 64svh, 760px) !important;
+  padding: clamp(5rem, 9vw, 7.5rem) clamp(1.5rem, 4vw, 3rem) !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* Market/guide/company heroes must breathe before the first champagne section. */
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) + * {
+  margin-top: clamp(1.25rem, 2.8vw, 2.75rem) !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.container, .mx-auto, [class*="max-w-"]) {
+  max-width: 980px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(h1, p) {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+/* The two hero actions are emerald buttons with white content — never champagne. */
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"],
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) {
+  min-height: 3.25rem !important;
+  min-width: min(100%, 15rem) !important;
+  padding: 0.875rem 1.5rem !important;
+  border-radius: 0.95rem !important;
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 16px 36px -22px rgba(0,0,0,0.92), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  transform: none !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-width: 0px !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"]:hover,
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"]:hover,
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary):hover {
+  background: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 18px 40px -22px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"] :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"] :is(span,svg,path,circle,rect,line,polyline,polygon),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) :is(span,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Champagne is the main content layer. Kill black bands on all scoped branches. */
+html body #root [data-insights-page] :is(
+  section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero]),
+  .surface-light,
+  [data-surface="light"],
+  .jj-section-champagne,
+  .jj-layer-2
+) {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  border-color: rgba(6,78,59,0.14) !important;
+  padding-left: clamp(1rem, 3.5vw, 3rem) !important;
+  padding-right: clamp(1rem, 3.5vw, 3rem) !important;
+}
+
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero]) :is([class*="bg-[#1A1A1A]"], [class*="bg-black"], [class*="from-black"], [class*="via-black"], [class*="via-zinc"], [class*="to-black"]):not([data-surface="emerald"]):not([data-emerald="true"]):not([data-ink-emerald]),
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero])[class*="bg-[#1A1A1A]"],
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero])[class*="bg-black"] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-faq-hero]):not([data-mi-hero]):not([data-guide-hero]):not([data-brand-hero]) > :is(.container, .jj-content-track, [class*="container"], div[class*="mx-auto"], div[class*="px-"]) {
+  width: min(100%, var(--jj-global-container-max, 1760px)) !important;
+  max-width: var(--jj-global-container-max, 1760px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Cards: homepage-sized visual rhythm inside the champagne layer. */
+html body #root [data-insights-page] :is(
+  .jj-card-inner,
+  .jj-guide-card,
+  [data-marketing-card],
+  [data-mi-nav-card],
+  [data-guide-nav-card],
+  .card,
+  [data-slot="card"],
+  article[class*="rounded"],
+  div[class*="rounded-2xl"][class*="border"],
+  div[class*="rounded-xl"][class*="border"]
+):not([data-surface="emerald"]):not([data-emerald="true"]):not([data-ink-emerald]):not([data-premium-navigator]):not([data-mi-toc] *):not([data-guide-toc] *):not([data-faq-toc] *):not([data-toc-state="active"]) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border: 1px solid rgba(6,78,59,0.18) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 18px 44px -36px rgba(1,8,6,0.48) !important;
+}
+
+@media (min-width: 1024px) {
+  html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) {
+    padding-left: clamp(3rem, 6vw, 5rem) !important;
+    padding-right: clamp(3rem, 6vw, 5rem) !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  html body #root [data-insights-page] [data-guide-hero] > div.relative > div.max-w-4xl {
+    max-width: min(56rem, calc(100vw - 25rem)) !important;
+    margin-left: auto !important;
+    margin-right: 22rem !important;
+  }
+}
+
+/* END PASS 183 */
+
+/* ============================================================
+   PASS 184 — Vertical-sidebar final visual contract.
+   One rule-set for Insights, Guides, Services, Company, and Legal:
+   FAQ-style emerald heroes, emerald hero buttons, champagne page layer,
+   content cards inset from the edges, and no black lower-page bands.
+   ============================================================ */
+html body #root [data-insights-page],
+html body #root [data-insights-page] > *,
+html body #root [data-insights-page] > :is(div, main),
+html body #root [data-insights-page] :is([data-mi-page], [data-guides-page], [data-faq-page], [data-marketing-page], [data-brand-emerald-page], [data-neon-page]) {
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: clamp(540px, 68svh, 760px) !important;
+  padding: clamp(5.25rem, 9vw, 7.75rem) clamp(1.5rem, 5vw, 4.5rem) !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.container, [class*="max-w-"], .mx-auto) {
+  max-width: 980px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(h1, h2, p, span, strong, a, button, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Hero actions: both buttons match FAQ help buttons but in full emerald, never champagne. */
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(a, button, [role="button"]):not([aria-label="Close"]):not([data-radix-collection-item]) {
+  min-width: min(100%, 15rem) !important;
+  min-height: 3.25rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  padding: 0.875rem 1.5rem !important;
+  border-radius: 0.95rem !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  background: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0A6B53 0%, #064E3B 56%, #010806 100%) !important;
+  box-shadow: 0 16px 34px -22px rgba(0,0,0,0.95), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  transform: none !important;
+  outline: none !important;
+  --tw-ring-color: transparent !important;
+  --tw-ring-offset-width: 0px !important;
+}
+
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(a, button, [role="button"]):not([aria-label="Close"]):hover {
+  background: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Clear separation after every hero before the first content/card section. */
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) + *,
+html body #root [data-insights-page] [data-mi-hero] + #overview {
+  margin-top: clamp(1.5rem, 3vw, 3rem) !important;
+}
+
+/* Champagne main layer with homepage-card rhythm and real gutters. */
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not(.jj-hero-fullscreen):not([data-no-section-frame]),
+html body #root [data-insights-page] :is(#overview, #faq-content) > section:not([data-hero-dark]) {
+  width: min(calc(100% - clamp(2rem, 5vw, 6rem)), 1240px) !important;
+  max-width: 1240px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: clamp(1.5rem, 3vw, 3rem) !important;
+  padding: clamp(1.5rem, 3.5vw, 3rem) !important;
+  border-radius: 1.75rem !important;
+  border: 1px solid rgba(6,78,59,0.14) !important;
+  background: #F7F2EA !important;
+  background-image: none !important;
+  box-shadow: 0 22px 56px -42px rgba(1,8,6,0.45) !important;
+  color: #1A1A1A !important;
+}
+
+html body #root [data-insights-page] section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not(.jj-hero-fullscreen) :is(.card, [data-slot="card"], .jj-card-inner, .jj-guide-card, article[class*="rounded"], div[class*="rounded-2xl"][class*="border"]):not([data-surface="emerald"]):not([data-emerald="true"]):not([data-ink-emerald]) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border-color: rgba(6,78,59,0.16) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 0 16px 40px -34px rgba(1,8,6,0.5) !important;
+}
+
+/* Remove the rejected black lower-page backgrounds without touching hero overlays or emerald CTA cards. */
+html body #root [data-insights-page] :is(section, div, main)[class*="bg-black"]:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not([data-surface="emerald"]):not([data-emerald="true"]),
+html body #root [data-insights-page] :is(section, div, main)[class*="from-black"]:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not([data-surface="emerald"]):not([data-emerald="true"]),
+html body #root [data-insights-page] :is(section, div, main)[class*="to-black"]:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not([data-surface="emerald"]):not([data-emerald="true"]) {
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+
+@media (max-width: 767px) {
+  html body #root [data-insights-page] section:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not(.jj-hero-fullscreen):not([data-no-section-frame]) {
+    width: min(calc(100% - 1rem), 100%) !important;
+    padding: 1.25rem !important;
+    border-radius: 1.25rem !important;
+  }
+}
+
+/* END PASS 184 */
+
+/* PASS 185 — Company/Legal hero parity.
+   Some Company and Legal pages still use an untagged first <section>. Treat it
+   as the same FAQ-style emerald hero, then keep all following sections on the
+   champagne content layer. */
+html body #root [data-insights-page] > section:first-of-type,
+html body #root [data-insights-page] > div > section:first-of-type:not([data-no-section-frame]),
+html body #root [data-insights-page] > main > section:first-of-type:not([data-no-section-frame]) {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: clamp(540px, 68svh, 760px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: clamp(5.25rem, 9vw, 7.75rem) clamp(1.5rem, 5vw, 4.5rem) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  text-align: center !important;
+}
+
+html body #root [data-insights-page] > section:first-of-type :is(div, h1, h2, h3, p, span, strong, svg, path),
+html body #root [data-insights-page] > div > section:first-of-type :is(div, h1, h2, h3, p, span, strong, svg, path),
+html body #root [data-insights-page] > main > section:first-of-type :is(div, h1, h2, h3, p, span, strong, svg, path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+html body #root [data-insights-page] > section:first-of-type + *,
+html body #root [data-insights-page] > div > section:first-of-type + *,
+html body #root [data-insights-page] > main > section:first-of-type + * {
+  margin-top: clamp(1.5rem, 3vw, 3rem) !important;
+}
+
+html body #root [data-insights-page] section:first-of-type:not([data-hero-dark]):not([data-mi-hero]):not([data-guide-hero]):not([data-faq-hero]):not([data-brand-hero]):not(.jj-hero-fullscreen) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* END PASS 185 */
