@@ -368,7 +368,7 @@ export const PublicRoutes = () => (
     <Route path="/terms" element={<InsightsPageScope><Terms /></InsightsPageScope>} />
     <Route path="/privacy" element={<InsightsPageScope><Privacy /></InsightsPageScope>} />
     <Route path="/cookies" element={<InsightsPageScope><Cookies /></InsightsPageScope>} />
-    <Route path="/disclaimers" element={<InsightsPageScope><Disclaimers /></InsightsPageScope>} />
+    <Route path="/disclaimers" element={<Disclaimers />} />
 
     <Route path="/aml-kyc" element={<InsightsPageScope><AmlKycPolicy /></InsightsPageScope>} />
     <Route path="/intellectual-property" element={<InsightsPageScope><IntellectualProperty /></InsightsPageScope>} />
