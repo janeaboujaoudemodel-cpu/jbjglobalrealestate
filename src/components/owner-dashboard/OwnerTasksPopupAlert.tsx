@@ -107,7 +107,7 @@ export function OwnerTasksPopupAlert() {
     navigate("/owner#tasks");
   };
 
-  if (suppressed || !loaded || hiddenThisSession || (pendingCount === 0 && !((window as any).__FORCE_TASK_POPUP__))) return null;
+  if (suppressed || !loaded || hiddenThisSession || pendingCount === 0) return null;
 
   return (
     <div
