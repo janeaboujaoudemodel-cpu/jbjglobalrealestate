@@ -8,6 +8,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { PortraitImage } from "@/components/ui/portrait-image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FounderContent } from "@/components/FounderContent";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
