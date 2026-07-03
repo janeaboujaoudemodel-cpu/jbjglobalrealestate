@@ -18222,11 +18222,14 @@ body [data-careers-job-card] :where(svg,[class*="lucide"],[data-lucide],path,cir
 /* Button sizing: natural width, readable height, no label clipping; segmented sq unit remains compact. */
 body :where([data-jbj-button], button, a[role="button"]):not(:where(.jj-header-icon-control, .jj-sqtoggle, [data-jj-utility-pill] button, [role="tab"], [role="checkbox"], [role="radio"], [role="switch"], [data-radix-collection-item], [data-sidebar-collapse-control], [data-sidebar-bottom-cta], [data-signout-action])) {
   min-height: 44px !important;
-  min-width: max-content;
+  min-width: 0 !important;
   width: auto;
-  white-space: nowrap;
+  max-width: 100% !important;
+  white-space: normal !important;
   line-height: 1.18 !important;
-  overflow: visible !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
 }
 
 
@@ -22859,14 +22862,90 @@ html body #root [data-list-property-page] [data-listing-choice-card],
 html body #root [data-list-property-page] [data-listing-choice-card] * {
   white-space: normal !important;
   max-width: 100% !important;
-  overflow-wrap: break-word !important;
+  overflow-wrap: anywhere !important;
   word-break: normal !important;
+  text-overflow: clip !important;
 }
 
 html body #root [data-list-property-page] [data-listing-choice-card] {
   width: 100% !important;
   min-width: 0 !important;
   overflow: hidden !important;
+}
+
+/* PASS 153 — GLOBAL CONTENT CONTAINMENT LOCK
+   Buttons, cards, dropdowns, tabs, badges and form controls must contain their
+   labels at every viewport. This permanently overrides older max-content /
+   nowrap rules that pushed text outside cards on squeezed preview widths. */
+html body #root :where(
+  [data-contained-card],
+  [data-jbj-card],
+  .jj-card,
+  .jj-card-inner,
+  .card,
+  [role="button"],
+  [data-jbj-button],
+  button:not(.jj-header-icon-control):not([data-icon-only]):not([role="checkbox"]):not([role="radio"]):not([role="switch"]),
+  a[role="button"],
+  [role="tab"],
+  [role="listbox"],
+  [role="option"],
+  [data-radix-select-trigger],
+  [data-radix-select-content],
+  [data-jj-badge],
+  input,
+  textarea,
+  select,
+  form,
+  fieldset
+) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+html body #root :where(
+  [data-contained-card],
+  [data-jbj-card],
+  .jj-card,
+  .jj-card-inner,
+  .card,
+  [data-listing-choice-card],
+  [data-jbj-button],
+  button:not(.jj-header-icon-control):not([data-icon-only]):not([role="checkbox"]):not([role="radio"]):not([role="switch"]),
+  a[role="button"],
+  [role="tab"],
+  [role="option"],
+  [data-radix-select-trigger],
+  [data-jj-badge]
+) :where(span, p, div, label, strong, em, small, b, i, h1, h2, h3, h4, h5, h6) {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  text-overflow: clip !important;
+}
+
+html body #root :where(
+  [data-contained-card],
+  [data-jbj-card],
+  .jj-card,
+  .jj-card-inner,
+  .card,
+  [data-listing-choice-card],
+  [data-jbj-button],
+  button:not(.jj-header-icon-control):not([data-icon-only]):not([role="checkbox"]):not([role="radio"]):not([role="switch"]),
+  a[role="button"],
+  [role="tab"],
+  [role="option"],
+  [data-radix-select-trigger],
+  [data-jj-badge]
+):not(.jj-header-icon-control):not([data-icon-only]) {
+  overflow: hidden !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
 }
 
 /* =====================================================================

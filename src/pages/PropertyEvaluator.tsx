@@ -1048,6 +1048,7 @@ const PropertyEvaluator = () => {
                 <div
                   key={key}
                   role="button"
+                  data-contained-card
                   tabIndex={0}
                   onClick={() => chooseEntry(key)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); chooseEntry(key); } }}
@@ -1061,8 +1062,8 @@ const PropertyEvaluator = () => {
                     <div className="w-14 h-14 rounded-2xl bg-emerald-500/25 flex items-center justify-center mb-5">
                       <Icon className="w-7 h-7 text-emerald-200" />
                     </div>
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-emerald-300 font-bold mb-2">{eyebrow}</div>
-                    <div className="text-xl sm:text-2xl font-bold text-white leading-tight mb-3">{title}</div>
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-emerald-300 font-bold mb-2 whitespace-normal break-words [overflow-wrap:anywhere]">{eyebrow}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-white leading-tight mb-3 whitespace-normal break-words [overflow-wrap:anywhere]">{title}</div>
                     <p className="text-white/85 text-sm leading-relaxed break-words">{desc}</p>
                   </div>
                   <div className="mt-5">
@@ -1085,16 +1086,16 @@ const PropertyEvaluator = () => {
         ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="pe-tabs-list w-full mb-8 h-auto">
-            <TabsTrigger value="property" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="property" className="whitespace-normal break-words [overflow-wrap:anywhere] text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Property Details
             </TabsTrigger>
-            <TabsTrigger value="modifications" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="modifications" className="whitespace-normal break-words [overflow-wrap:anywhere] text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Modifications
             </TabsTrigger>
-            <TabsTrigger value="owner" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="owner" className="whitespace-normal break-words [overflow-wrap:anywhere] text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Owner Info
             </TabsTrigger>
-            <TabsTrigger value="results" disabled={!evaluation} className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
+            <TabsTrigger value="results" disabled={!evaluation} className="whitespace-normal break-words [overflow-wrap:anywhere] text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
               Results
             </TabsTrigger>
           </TabsList>
