@@ -21,7 +21,7 @@ import {
   User, Building2, DollarSign, Home, Camera, FileText, 
   CheckCircle2, ArrowRight, ArrowLeft, Loader2, 
   Phone, Mail, MessageCircle, Upload, Sparkles, Shield,
-  Calculator, Plus, X, Wand2, AlertCircle
+  Calculator, Plus, X, Wand2, AlertCircle, Briefcase, TrendingUp, UserCheck, ScrollText
 } from "lucide-react";
 import { FormDraftBar } from "@/components/shared/FormDraftBar";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
