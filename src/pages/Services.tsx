@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Briefcase, Users, Building2, Key,
-  ArrowRight, CheckCircle, ChevronRight, MessageSquare, AlertCircle,
-  ClipboardCheck, Calendar, Coins, FileText, Calculator, Award
+import {
+  Briefcase, Building2, Key, ArrowRight, CheckCircle, ChevronRight,
+  MessageSquare, AlertCircle, Calendar, FileText, Award, GraduationCap,
+  Home, DollarSign, Globe, Megaphone, ClipboardCheck, Sparkles, Building,
+  Palmtree, Wrench, Package
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,168 +21,163 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 }
+    transition: { staggerChildren: 0.08 }
   }
 };
 
-// All 12 service cards as specified
+// JBJ Global Real Estate — full curated service catalog (2-per-row layout)
 const serviceCards = [
   {
+    icon: GraduationCap,
+    title: "Broker Academy",
+    description: "Structured training and continuous development program for brokers — covering compliance, negotiation, market intelligence, and premium client handling.",
+    includes: ["Curriculum modules", "Standards training", "Continuous education", "Certification pathway"],
+    cta: "Explore Academy",
+    link: "/broker-education"
+  },
+  {
+    icon: Home,
+    title: "Buy Property",
+    description: "End-to-end buying advisory — from shortlist and viewings to negotiation, DLD paperwork, and handover coordination.",
+    includes: ["Shortlist & viewings", "Negotiation support", "Offer & MOU handling", "Transfer coordination"],
+    cta: "Start Buying",
+    link: "/properties"
+  },
+  {
+    icon: Key,
+    title: "Rent Property",
+    description: "Guided rental advisory for tenants — matching your brief, verifying the listing, and structuring a clean tenancy contract.",
+    includes: ["Requirement briefing", "Listing verification", "Ejari & tenancy contract", "Move-in coordination"],
+    cta: "Find a Rental",
+    link: "/properties?type=rent"
+  },
+  {
+    icon: DollarSign,
+    title: "Sell Property",
+    description: "Full-service selling advisory — valuation, marketing, buyer qualification, and transfer coordination handled end-to-end.",
+    includes: ["Valuation & pricing", "Premium marketing", "Buyer qualification", "Transfer & DLD handling"],
+    cta: "List Your Property",
+    link: "/sell/valuation"
+  },
+  {
+    icon: Award,
+    title: "Golden Visa",
+    description: "Coordination pathway for UAE 10-year Golden Visa applications through licensed specialists — property-backed, investor, or professional routes.",
+    includes: ["Eligibility review", "Document preparation", "Application coordination", "Status tracking"],
+    cta: "Check Eligibility",
+    link: "/guides/golden-visa-uae"
+  },
+  {
+    icon: Globe,
+    title: "Schengen Visa",
+    description: "Structured Schengen visa coordination for UAE residents — appointment booking, documentation, and travel-insurance readiness.",
+    includes: ["Country routing", "Appointment booking", "Document checklist", "Travel insurance"],
+    cta: "Request Support",
+    link: "/contact"
+  },
+  {
+    icon: Building2,
+    title: "Company Setup",
+    description: "Coordination pathway for UAE company formation — mainland, free-zone, and offshore — through licensed corporate specialists.",
+    includes: ["Structure advisory", "License selection", "Documentation guidance", "Ongoing renewals"],
+    cta: "Start Setup",
+    link: "/partners/company-setup"
+  },
+  {
+    icon: Megaphone,
+    title: "Digital Marketing",
+    description: "Performance marketing and content workflows for developers, brokers, and premium clients — lead capture, funnel design, and reporting.",
+    includes: ["Paid media", "Content production", "Landing pages", "Weekly reporting"],
+    cta: "Request Proposal",
+    link: "/contact"
+  },
+  {
+    icon: Calendar,
+    title: "Event Management",
+    description: "End-to-end event production for launches, exclusive previews, investor gatherings, and community activations.",
+    includes: ["Venue sourcing", "Guest management", "Production & AV", "Post-event reporting"],
+    cta: "Plan an Event",
+    link: "/contact"
+  },
+  {
+    icon: Briefcase,
+    title: "Business Development",
+    description: "Structured business development for developers and enterprise clients — partnerships, channel building, and pipeline growth.",
+    includes: ["Market mapping", "Partnership outreach", "Deal pipelines", "Performance reporting"],
+    cta: "Request Meeting",
+    link: "/contact"
+  },
+  {
     icon: ClipboardCheck,
-    title: "Snagging & Handover Inspection",
-    description: "A structured, documented inspection to identify defects before you accept handover — with clear reporting and follow-up tracking.",
-    includes: [
-      "Unit inspection before handover",
-      "Defect identification & documentation",
-      "Snagging report packaging",
-      "Follow-up checklist tracking"
-    ],
-    cta: "Book Snagging",
-    link: "/services/snagging"
+    title: "Project Management",
+    description: "PMO-grade project management for real-estate initiatives — timelines, vendor coordination, and quality gates.",
+    includes: ["Scope & timelines", "Vendor coordination", "Quality gates", "Executive reporting"],
+    cta: "Request PMO",
+    link: "/contact"
+  },
+  {
+    icon: Sparkles,
+    title: "Brand Development",
+    description: "Brand identity and positioning for developers, family offices, and premium brokers — strategy, visual system, and rollout.",
+    includes: ["Brand strategy", "Visual system", "Guidelines", "Launch rollout"],
+    cta: "Start a Brand",
+    link: "/contact"
+  },
+  {
+    icon: MessageSquare,
+    title: "Public Relations (PR)",
+    description: "Editorial-grade PR and media relations — narrative building, journalist access, and reputation management.",
+    includes: ["Narrative & angles", "Media relations", "Press releases", "Reputation monitoring"],
+    cta: "Request PR",
+    link: "/contact"
+  },
+  {
+    icon: Building,
+    title: "Commercial Leasing",
+    description: "Commercial leasing advisory across Dubai — office, retail, F&B, and industrial — with tenant representation and negotiation.",
+    includes: ["Requirement briefing", "Shortlist & tours", "Head-of-terms drafting", "Fit-out coordination"],
+    cta: "Find Commercial Space",
+    link: "/contact"
   },
   {
     icon: Key,
     title: "Property Management",
     description: "Operational support to protect your asset, reduce tenant friction, and keep occupancy stable — with structured reporting.",
-    includes: [
-      "Tenant coordination",
-      "Maintenance coordination",
-      "Payment/renewal reminders",
-      "Issue logging & resolution"
-    ],
+    includes: ["Tenant coordination", "Maintenance handling", "Payment/renewal reminders", "Issue resolution"],
     cta: "Request Management",
     link: "/services/property-management"
   },
   {
-    icon: Calendar,
-    title: "Short-Term Rentals & Holiday Homes",
-    description: "A structured setup and operating workflow for short-term stays — from readiness checklist to performance monitoring.",
-    includes: [
-      "Eligibility & readiness checklist",
-      "Setup workflow coordination",
-      "Guest messaging & cleaning",
-      "Performance monitoring"
-    ],
-    cta: "Request Setup",
+    icon: Palmtree,
+    title: "Holiday Homes",
+    description: "Turnkey short-term rental operation — DTCM licensing, pricing, cleaning, guest messaging, and performance monitoring.",
+    includes: ["DTCM licensing", "Dynamic pricing", "Housekeeping & linen", "Guest messaging"],
+    cta: "Launch Holiday Home",
     link: "/services/short-term-rentals"
   },
   {
-    icon: Coins,
-    title: "Currency Exchange Support",
-    description: "Coordination support for buyers transferring funds across borders — with clear routing and documentation readiness.",
-    includes: [
-      "Transfer coordination",
-      "Partner introductions",
-      "Documentation guidance",
-      "Process transparency"
-    ],
-    cta: "Request Support",
-    link: "/services/currency-exchange"
-  },
-  {
-    icon: Briefcase,
-    title: "Concierge Convenience Services",
-    description: "Operational help around your property journey — scheduling, coordination, and time-saving logistics.",
-    includes: [
-      "Appointment scheduling",
-      "Document collection",
-      "Utility coordination",
-      "Move-in assistance"
-    ],
-    cta: "Request Concierge",
-    link: "/services/concierge"
-  },
-  {
-    icon: Building2,
-    title: "Company Setup Support",
-    description: "A coordination pathway for company setup through licensed specialists — structured, documented, and guided.",
-    includes: [
-      "Partner introductions",
-      "Documentation guidance",
-      "Process coordination",
-      "Status updates"
-    ],
-    cta: "Request Setup",
-    link: "/services/company-setup"
+    icon: Wrench,
+    title: "Snagging & Handover",
+    description: "Structured, documented inspection to identify defects before you accept handover — with clear reporting and developer follow-up.",
+    includes: ["Full unit inspection", "Defect documentation", "Snagging report", "Follow-up tracking"],
+    cta: "Book Snagging",
+    link: "/services/snagging"
   },
   {
     icon: FileText,
-    title: "Signature Collection (JBJ)",
-    description: "A controlled internal signature-request workflow for JBJ documents — tracked, timestamped, and auditable.",
-    includes: [
-      "Request submission",
-      "Status tracking",
-      "Document management",
-      "Audit trail"
-    ],
-    cta: "Submit Request",
-    link: "/services/signature-collection"
+    title: "Conveyancing",
+    description: "Independent conveyancing coordination for buyers and sellers — title checks, MOU, NOC, and DLD transfer handled cleanly.",
+    includes: ["Title & liability check", "MOU drafting", "NOC & DLD transfer", "Escrow coordination"],
+    cta: "Request Conveyancing",
+    link: "/partners/legal"
   },
   {
-    icon: Calculator,
-    title: "AI Calculators & Tools",
-    description: "Decision support tools designed for clarity — using structured inputs and transparent outputs.",
-    includes: [
-      "Mortgage calculator",
-      "Property evaluator",
-      "ROI calculator",
-      "AI-powered analysis"
-    ],
-    cta: "Open Tools",
-    link: "/ai-hub"
-  },
-  {
-    icon: Award,
-    title: "Broker Certification (Internal)",
-    description: "An internal training and standards program created by JBJ Global Real Estate for our broker partner network.",
-    includes: [
-      "Curriculum modules",
-      "Standards training",
-      "Certification issuance",
-      "Ongoing education"
-    ],
-    note: "This is an internal program and does not grant external licensing status.",
-    cta: "View Program",
-    link: "/services/broker-certification"
-  },
-  {
-    icon: AlertCircle,
-    title: "Complaint Procedures",
-    description: "A structured pathway to raise issues, track outcomes, and ensure accountability — with clear escalation steps.",
-    includes: [
-      "Issue submission",
-      "Ticket tracking",
-      "Escalation ladder",
-      "Resolution updates"
-    ],
-    cta: "Submit Complaint",
-    link: "/services/complaint-procedures"
-  },
-  {
-    icon: MessageSquare,
-    title: "Customer Happiness Center",
-    description: "Fast routing, clear answers, and structured support — with ticket tracking and direct contact options.",
-    includes: [
-      "Support ticket creation",
-      "Direct contact options",
-      "Response tracking",
-      "Resolution support"
-    ],
-    cta: "Create Ticket",
-    link: "/services/customer-happiness-center"
-  },
-  {
-    icon: Users,
-    title: "Testimonials",
-    description: "Verified client feedback and outcomes — presented with clarity and respect for privacy.",
-    includes: [
-      "Client testimonials",
-      "Video testimonials",
-      "Success stories",
-      "Feedback submission"
-    ],
-    cta: "Read Stories",
-    link: "/services/testimonials"
+    icon: Package,
+    title: "Full Turnkey Solutions",
+    description: "One coordinated program — buy, furnish, license, and operate — for investors who want a turnkey Dubai property experience.",
+    includes: ["Acquisition + handover", "Furniture & fit-out", "Licensing & compliance", "Ongoing operations"],
+    cta: "Request Turnkey",
+    link: "/contact"
   }
 ];
 
@@ -273,9 +269,8 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-surface="emerald"
-              data-emerald-ok="button"
-              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap"
+              className="allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap border border-white/70 hover:border-white transition-colors bg-transparent hover:bg-white/[0.06]"
+              style={{ color: "#FFFFFF" }}
             >
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request a Service</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
@@ -283,14 +278,14 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-surface="emerald"
-              data-emerald-ok="button"
-              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap"
+              className="allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap border border-white/70 hover:border-white transition-colors bg-transparent hover:bg-white/[0.06]"
+              style={{ color: "#FFFFFF" }}
             >
               <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Support</span>
             </Link>
           </motion.div>
+
 
 
         </motion.div>
@@ -300,7 +295,7 @@ const Services = () => {
 
 
       {/* Service Cards Grid */}
-      <section id="services-grid" data-surface="champagne" data-no-section-frame className="py-20 bg-[#F7F2EA]">
+      <section id="services-grid" data-surface="champagne" data-no-section-frame className="pt-16 pb-10 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -333,7 +328,7 @@ const Services = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 max-w-[1500px] mx-auto items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 max-w-[1280px] mx-auto items-stretch">
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp} className="h-full">
                   <Link to={service.link} className="block h-full">
@@ -367,15 +362,8 @@ const Services = () => {
                           </ul>
                         </div>
 
-                        {service.note ? (
-                          <div className="bg-[#EFE6D6]/40 rounded-lg p-2 mb-4 min-h-[3rem]">
-                            <p className="text-xs italic" style={{ color: "rgba(26,26,26,0.65)" }}>
-                              {service.note}
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="mb-4 min-h-[3rem]" aria-hidden="true" />
-                        )}
+                        <div className="mb-4 min-h-[1rem]" aria-hidden="true" />
+
 
                         <div className="flex items-center gap-1 text-sm font-semibold mt-auto pt-4 border-t border-[#1A1A1A]/10" style={{ color: "#064E3B" }}>
                           {service.cta}
@@ -395,8 +383,8 @@ const Services = () => {
 
 
 
-      {/* Service Scope Clarification */}
-      <section data-surface="champagne" data-no-section-frame className="py-20 bg-[#F7F2EA]">
+      {/* Service Scope Clarification — light champagne card, ink text, emerald icons */}
+      <section data-surface="champagne" data-no-section-frame className="pt-6 pb-10 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -405,7 +393,7 @@ const Services = () => {
             variants={staggerContainer}
             className="w-full px-4 sm:px-6 lg:px-8"
           >
-            <motion.div className="text-center mb-12" variants={fadeInUp}>
+            <motion.div className="text-center mb-8" variants={fadeInUp}>
               <span
                 data-no-contrast-guard
                 className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold"
@@ -422,73 +410,81 @@ const Services = () => {
               </h2>
             </motion.div>
 
-
-            <motion.div 
+            <motion.div
               className="max-w-4xl mx-auto"
               variants={fadeInUp}
             >
               <Card
-                data-surface="emerald"
                 data-no-contrast-guard
-                className="border-0 shadow-2xl overflow-hidden"
-                style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%)" }}
+                className="border shadow-xl overflow-hidden"
+                style={{
+                  background: "#FDFBF7",
+                  borderColor: "rgba(6,78,59,0.15)",
+                }}
               >
                 <CardContent className="p-8" data-no-contrast-guard>
-                  <p className="text-lg mb-8 text-center allow-white" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
-                    JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell, 
+                  <p className="text-lg mb-8 text-center" style={{ color: "#1A1A1A" }}>
+                    JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell,
                     and rent properties in Dubai and the UAE.
                   </p>
-                  
+
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Our role includes */}
                     <div>
-                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                        <CheckCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                        <CheckCircle className="w-5 h-5" style={{ color: "#064E3B" }} />
                         Our role includes
                       </h3>
                       <ul className="space-y-3">
                         {scopeIncludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
-                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
+                          <li key={idx} className="flex items-start gap-3" style={{ color: "rgba(26,26,26,0.85)" }}>
+                            <CheckCircle className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: "#064E3B" }} />
                             <span>{item}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
-                    
+
                     {/* We do not provide */}
                     <div>
-                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                        <AlertCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                        <AlertCircle className="w-5 h-5" style={{ color: "#064E3B" }} />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
-                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
+                          <li key={idx} className="flex items-start gap-3" style={{ color: "rgba(26,26,26,0.85)" }}>
+                            <AlertCircle className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: "#064E3B" }} />
                             <span>{item}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   </div>
-                  
-                  <div className="mt-8 pt-6 border-t border-white/15 text-center">
-                    <p className="text-sm allow-white" style={{ color: "rgba(255,255,255,0.7)", WebkitTextFillColor: "rgba(255,255,255,0.7)" }}>
-                      Where regulated services are required, we introduce independent licensed partners. 
+
+                  <div className="mt-8 pt-6 border-t text-center" style={{ borderColor: "rgba(6,78,59,0.15)" }}>
+                    <p className="text-sm" style={{ color: "rgba(26,26,26,0.7)" }}>
+                      Where regulated services are required, we introduce independent licensed partners.
                       Clients contract directly with those partners.
                     </p>
                   </div>
                 </CardContent>
               </Card>
-
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Footer Disclaimer — champagne band, ink text */}
-      <section data-surface="champagne" data-no-section-frame className="bg-[#F7F2EA] py-10">
+      {/* Not Sure Which Service — matches Ready to Get Started card exactly (same component) */}
+      <CombinedContactNewsletter
+        id="not-sure-which-service"
+        title="Not Sure Which Service You Need?"
+        subtitle="Send one request and our team will route it to the right department."
+        className="jj-band bg-[#F7F2EA] pt-6 pb-14"
+      />
+
+      {/* Footer Disclaimer — moved to the very end */}
+      <section data-surface="champagne" data-no-section-frame className="bg-[#F7F2EA] pt-2 pb-10">
         <div className="container mx-auto px-4 text-center">
           <p
             data-no-contrast-guard
@@ -501,12 +497,6 @@ const Services = () => {
         </div>
       </section>
 
-      <CombinedContactNewsletter
-        id="ready-to-get-started"
-        title="Not Sure Which Service You Need?"
-        subtitle="Send one request and our team will route it to the right department."
-        className="jj-band bg-[#F7F2EA]"
-      />
 
     </div>
   );
