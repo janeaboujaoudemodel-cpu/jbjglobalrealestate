@@ -716,6 +716,9 @@ Requirements:
           <div className="max-w-3xl mx-auto">
             <div
               data-no-contrast-guard
+              data-tool-shell-root
+              data-tool-emerald
+              data-seller-form-scope
               className="rounded-2xl p-6 md:p-8 shadow-xl"
               style={{
                 background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)",
@@ -724,6 +727,14 @@ Requirements:
                 color: "#FFFFFF",
               }}
             >
+              <style>{`
+                [data-seller-form-scope] input::placeholder,
+                [data-seller-form-scope] textarea::placeholder {
+                  color: #FFFFFF !important;
+                  -webkit-text-fill-color: #FFFFFF !important;
+                  opacity: 0.85 !important;
+                }
+              `}</style>
 
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
@@ -827,7 +838,7 @@ Requirements:
                             <label
                               key={option.value}
                               htmlFor={option.value}
-                              className="flex items-center gap-3 rounded-full pl-3 pr-4 py-3 cursor-pointer transition-all min-h-[56px]"
+                              className="relative flex items-center gap-3 rounded-2xl px-4 py-4 cursor-pointer transition-all min-h-[72px]"
                               style={{
                                 background: active
                                   ? "linear-gradient(135deg, #059669 0%, #047857 100%)"
@@ -835,30 +846,44 @@ Requirements:
                                 border: active
                                   ? "1.5px solid #10B981"
                                   : "1.5px solid rgba(255,255,255,0.28)",
-                                boxShadow: active ? "0 8px 20px -10px rgba(16,185,129,0.55)" : "none",
+                                boxShadow: active ? "0 10px 24px -12px rgba(16,185,129,0.65)" : "none",
                               }}
                             >
                               <RadioGroupItem
                                 value={option.value}
                                 id={option.value}
-                                className="shrink-0 h-5 w-5 rounded-full border-white text-emerald-700 data-[state=checked]:bg-white data-[state=checked]:border-white"
-                                style={{ aspectRatio: "1 / 1", flex: "0 0 20px" }}
+                                className="sr-only"
                               />
                               <span
+                                aria-hidden
                                 className="shrink-0 inline-flex items-center justify-center rounded-full"
                                 style={{
-                                  width: 32,
-                                  height: 32,
+                                  width: 44,
+                                  height: 44,
                                   aspectRatio: "1 / 1",
-                                  background: active ? "rgba(255,255,255,0.18)" : "rgba(16,185,129,0.18)",
-                                  border: active ? "1px solid rgba(255,255,255,0.35)" : "1px solid rgba(16,185,129,0.45)",
+                                  background: active ? "rgba(255,255,255,0.22)" : "rgba(16,185,129,0.22)",
+                                  border: active ? "1.5px solid rgba(255,255,255,0.55)" : "1.5px solid rgba(16,185,129,0.55)",
                                 }}
                               >
-                                <Icon className="h-4 w-4" style={{ color: "#FFFFFF" }} strokeWidth={2.25} />
+                                <Icon style={{ width: 22, height: 22, color: "#FFFFFF" }} strokeWidth={2.25} />
                               </span>
-                              <span className="font-semibold text-sm truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                              <span className="font-semibold text-sm md:text-base leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                                 {option.label}
                               </span>
+                              {active && (
+                                <span
+                                  aria-hidden
+                                  className="ml-auto inline-flex items-center justify-center rounded-full"
+                                  style={{
+                                    width: 22,
+                                    height: 22,
+                                    background: "#FFFFFF",
+                                    color: "#047857",
+                                  }}
+                                >
+                                  <CheckCircle2 style={{ width: 16, height: 16, color: "#047857" }} strokeWidth={2.5} />
+                                </span>
+                              )}
                             </label>
                           );
                         })}
