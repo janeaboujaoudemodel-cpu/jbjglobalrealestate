@@ -743,19 +743,43 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
+  const hrefPathname = (href: string) => href.split('?')[0].split('#')[0];
+  const hrefParam = (href: string, key: string) => new URLSearchParams(href.split('?')[1]?.split('#')[0] || '').get(key);
+  const currentParam = (key: string) => new URLSearchParams(location.search).get(key);
+
+  const isListPropertySourceActive = (item: Pick<NavItem, 'href' | 'highlight'>, sectionKey?: string) => {
+    if (location.pathname !== '/list-property' || hrefPathname(item.href) !== '/list-property') return false;
+
+    const activeSource = currentParam('source') || 'ai-home-finder';
+    const itemSource = hrefParam(item.href, 'source') || (item.highlight ? 'ai-home-finder' : sectionKey === 'PROPERTIES' ? 'properties' : sectionKey === 'TOOLS & WORKSPACE' ? 'tools' : null);
+    if (itemSource !== activeSource) return false;
+
+    if (activeSource === 'tools') {
+      const itemPurpose = hrefParam(item.href, 'purpose');
+      return itemPurpose ? itemPurpose === (currentParam('purpose') || 'sale') : true;
+    }
+
+    return true;
+  };
+
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
     const pathname = location.pathname;
+    const hrefPath = hrefPathname(href);
+
+    if (hrefPath === '/list-property') {
+      return pathname === '/list-property';
+    }
 
     // The Insights tree has parent and child routes side-by-side in the same
     // expanded group. Keep parent hubs exact-only so a child like
     // /market-intelligence/areas cannot also light up /market-intelligence.
-    if (href === "/market-intelligence" || href === "/guides") return pathname === href;
+    if (hrefPath === "/market-intelligence" || hrefPath === "/guides") return pathname === hrefPath;
 
-    if (href === "/properties") return pathname === "/properties" || pathname.startsWith("/properties/");
+    if (hrefPath === "/properties") return pathname === "/properties" || pathname.startsWith("/properties/");
     // Prefix matching for toolkit sub-routes (stamp-generator, corporate-suite, etc.)
-    if (href.startsWith("/toolkit/")) return pathname === href || pathname.startsWith(href + "/");
-    return pathname === href;
+    if (hrefPath.startsWith("/toolkit/")) return pathname === hrefPath || pathname.startsWith(hrefPath + "/");
+    return pathname === hrefPath;
   };
 
   // Group nav items by section (with consolidated aliases)
@@ -840,7 +864,10 @@ export default function GlobalVerticalNav() {
     let routeActive = isRouteActive(item.href);
     // Dedupe: /list-property appears in multiple places (highlighted hub + sub-item).
     // Only allow the "highlight:true" hub entry to reflect the active route.
-    if (item.href === '/list-property' && !item.highlight) {
+      if (hrefPathname(item.href) === '/list-property') {
+        routeActive = isListPropertySourceActive(item, sectionKey);
+      }
+      if (item.href === '/list-property' && !item.highlight) {
       routeActive = false;
     }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
@@ -848,7 +875,7 @@ export default function GlobalVerticalNav() {
     if (
       item.href === '/join' ||
       item.href === '/ai-home-finder' ||
-      (item.href === '/list-property' && item.highlight) ||
+      (hrefPathname(item.href) === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
       return shouldHighlight ? "font-bold text-[#1A1A1A]" : "font-semibold text-[#1A1A1A]";
