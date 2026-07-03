@@ -46,7 +46,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
             {filterName && (
               <button
                 onClick={() => setFilterName("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1A1A1A] hover:text-[#1A1A1A] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
