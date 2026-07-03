@@ -837,7 +837,12 @@ export default function GlobalVerticalNav() {
      Items without a megaMenu should NOT highlight based on route when a mega menu is open. */
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
-    const routeActive = isRouteActive(item.href);
+    let routeActive = isRouteActive(item.href);
+    // Dedupe: /list-property appears in multiple places (highlighted hub + sub-item).
+    // Only allow the "highlight:true" hub entry to reflect the active route.
+    if (item.href === '/list-property' && !item.highlight) {
+      routeActive = false;
+    }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
     if (
