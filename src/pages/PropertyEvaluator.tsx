@@ -367,6 +367,8 @@ const PropertyEvaluator = () => {
   const [savedReports, setSavedReports] = useState<SavedReportSnapshot[]>(initialDraftRef.current.savedReports);
   const [areaUnit, setAreaUnit] = useState<'sqft' | 'sqm'>(initialDraftRef.current.areaUnit || 'sqft');
   const [isReportPreviewOpen, setIsReportPreviewOpen] = useState(false);
+  const [entryMode, setEntryMode] = useState<'manual' | 'titleDeed'>('manual');
+  const [isParsingTitleDeed, setIsParsingTitleDeed] = useState(false);
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const renovationPhotoRef = useRef<HTMLInputElement>(null);
@@ -508,6 +510,49 @@ const PropertyEvaluator = () => {
     });
     toast.success(`${fileArray.length} file(s) added and auto-saved`);
   };
+
+  const parseTitleDeedNow = async () => {
+    const deeds = property.titleDeedFiles;
+    if (!deeds.length) {
+      toast.error('Upload a title deed file first');
+      return;
+    }
+    setIsParsingTitleDeed(true);
+    try {
+      const files = deeds.slice(0, 3).map((f) => {
+        const base64 = (f.dataUrl || '').split(',')[1] || '';
+        return { name: f.name, mime_type: f.type || 'application/octet-stream', base64 };
+      });
+      const { data, error } = await supabase.functions.invoke('parse-title-deed', { body: { files } });
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Parsing failed');
+      const d = data.data as Record<string, any>;
+      setProperty((prev) => {
+        const next = { ...prev };
+        if (d.community) { next.community = String(d.community); setCommunitySearch(String(d.community)); }
+        if (d.subCommunity) next.subCommunity = String(d.subCommunity);
+        if (d.tower) next.buildingName = String(d.tower);
+        if (d.unitNumber) next.unitNumber = String(d.unitNumber);
+        if (typeof d.bedrooms === 'number') next.bedrooms = d.bedrooms;
+        if (typeof d.bathrooms === 'number') next.bathrooms = d.bathrooms;
+        if (typeof d.sizeSqft === 'number') next.sizeInternal = areaUnit === 'sqm' ? Math.round(d.sizeSqft / 10.7639) : d.sizeSqft;
+        if (typeof d.floor === 'number') next.floor = d.floor;
+        if (typeof d.handoverYear === 'number') next.handoverYear = d.handoverYear;
+        if (d.view) next.views = Array.from(new Set([...prev.views, String(d.view)]));
+        if (d.propertyType) next.propertyType = String(d.propertyType).toLowerCase() as any;
+        if (d.ownerName) next.ownerName = String(d.ownerName);
+        if (d.developerName) next.developer = String(d.developerName);
+        return next;
+      });
+      toast.success(`Title deed parsed — fields auto-filled (confidence ${d.confidence ?? '—'}%)`);
+    } catch (err: any) {
+      console.error('parseTitleDeed error', err);
+      toast.error(err?.message || 'Could not parse title deed. Please fill fields manually.');
+    } finally {
+      setIsParsingTitleDeed(false);
+    }
+  };
+
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'property' | 'renovation') => {
     handleAssetUpload(e.target.files, type);
@@ -1001,6 +1046,72 @@ const PropertyEvaluator = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Entry mode toggle: fill manually OR auto-fill from Title Deed */}
+                  <div className="rounded-2xl border border-emerald-400/50 bg-black/15 p-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="flex-1">
+                      <p className="text-white font-semibold text-sm">How do you want to fill this valuation?</p>
+                      <p className="text-white/75 text-xs">Choose manual entry, or upload your Title Deed / Oqood and let AI auto-fill every field.</p>
+                    </div>
+                    <div className="inline-flex rounded-xl bg-black/30 border border-emerald-400/40 p-1">
+                      <button
+                        type="button"
+                        onClick={() => setEntryMode('manual')}
+                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${entryMode === 'manual' ? 'bg-emerald-500 text-white shadow' : 'text-white/80 hover:text-white'}`}
+                      >
+                        Fill manually
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEntryMode('titleDeed')}
+                        className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${entryMode === 'titleDeed' ? 'bg-emerald-500 text-white shadow' : 'text-white/80 hover:text-white'}`}
+                      >
+                        From Title Deed
+                      </button>
+                    </div>
+                  </div>
+
+                  {entryMode === 'titleDeed' && (
+                    <div className="rounded-2xl border border-emerald-400/60 p-4 bg-black/20 space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <Label className="text-white font-semibold">Upload Title Deed / Oqood</Label>
+                          <p className="text-xs text-white/80">PDF, JPG, PNG or WEBP. AI extracts community, tower, unit, size, floor, view, handover year and owner.</p>
+                        </div>
+                        <FileCheck className="w-6 h-6 text-emerald-300" />
+                      </div>
+                      <div
+                        onClick={() => titleDeedInputRef.current?.click()}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => { e.preventDefault(); handleAssetUpload(e.dataTransfer.files, 'titleDeed'); }}
+                        className="rounded-xl border-2 border-dashed border-emerald-400/60 cursor-pointer text-center p-5 hover:bg-black/25"
+                      >
+                        <Upload className="w-7 h-7 mx-auto mb-2 text-emerald-300" />
+                        <p className="text-white font-semibold text-sm">Drag & drop or click to upload</p>
+                        <p className="text-xs text-white/70">Multiple files supported</p>
+                      </div>
+                      {property.titleDeedFiles.length > 0 && (
+                        <div className="space-y-2">
+                          {property.titleDeedFiles.map((file, i) => (
+                            <div key={`${file.name}-${i}`} className="flex items-center justify-between gap-3 rounded-lg bg-black/30 border border-emerald-400/40 px-3 py-2">
+                              <span className="text-xs text-white truncate">{file.name}</span>
+                              <button type="button" onClick={() => removeTitleDeed(i)} className="text-white/80 hover:text-white"><X className="w-4 h-4" /></button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <Button
+                        type="button"
+                        onClick={parseTitleDeedNow}
+                        disabled={isParsingTitleDeed || property.titleDeedFiles.length === 0}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold disabled:opacity-50"
+                      >
+                        {isParsingTitleDeed ? (<><Sparkles className="w-4 h-4 mr-2 animate-pulse" /> Extracting fields…</>) : (<><Sparkles className="w-4 h-4 mr-2" /> Auto-fill all fields from Title Deed</>)}
+                      </Button>
+                      <p className="text-[11px] text-white/60 text-center">You can still edit any field below before generating the report.</p>
+                    </div>
+                  )}
+
+
                   <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/85 flex items-center gap-1">
@@ -1139,46 +1250,15 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-emerald-400/60 p-4 bg-black/15">
-                    <div className="flex items-center justify-between gap-3 mb-3">
-                      <div>
-                        <Label className="text-white font-semibold">Title Deed / Oqood Upload</Label>
-                        <p className="text-xs text-white/80">Upload PDF/JPG/PNG title deed. The draft is auto-saved and the filename is used to pre-fill known area/building clues; manual entry remains available.</p>
-                      </div>
-                      <FileCheck className="w-6 h-6 text-emerald-300" />
-                    </div>
-                    <input
-                      ref={titleDeedInputRef}
-                      type="file"
-                      accept="application/pdf,image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.pdf,.webp"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => { handleAssetUpload(e.target.files, 'titleDeed'); e.target.value = ''; }}
-                    />
-                    <div
-                      data-pe-upload-zone
-                      onClick={() => titleDeedInputRef.current?.click()}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => { e.preventDefault(); handleAssetUpload(e.dataTransfer.files, 'titleDeed'); }}
-                      className="rounded-xl border-2 border-dashed cursor-pointer text-center p-5"
-                    >
-                      <div>
-                        <Upload className="w-7 h-7 mx-auto mb-2 text-emerald-300" />
-                        <p className="text-white font-semibold">Drag title deed here or click to upload</p>
-                        <p className="text-xs text-white/70">PDF, JPG, JPEG, PNG, WEBP</p>
-                      </div>
-                    </div>
-                    {property.titleDeedFiles.length > 0 && (
-                      <div className="mt-3 space-y-2">
-                        {property.titleDeedFiles.map((file, i) => (
-                          <div key={`${file.name}-${i}`} className="flex items-center justify-between gap-3 rounded-lg bg-black/20 border border-emerald-400/35 px-3 py-2">
-                            <span className="text-xs text-white truncate">{file.name}</span>
-                            <button type="button" onClick={() => removeTitleDeed(i)} className="text-white/80 hover:text-white"><X className="w-4 h-4" /></button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  {/* Hidden file input reused by the top Title Deed uploader */}
+                  <input
+                    ref={titleDeedInputRef}
+                    type="file"
+                    accept="application/pdf,image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.pdf,.webp"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => { handleAssetUpload(e.target.files, 'titleDeed'); e.target.value = ''; }}
+                  />
                 </CardContent>
               </Card>
 

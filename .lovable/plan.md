@@ -1,57 +1,52 @@
-## Goal
-Unify card sizing across every non-hero section in Insights & Guides, Company & Legal, and Services so they match the homepage standard (JBJ Royal Tools Hub, AI Property Comparison, Mortgage Calculator, Ready to Get Started, Top Areas in Dubai). Give each page a unique hero video/photo that matches its title and content. Heroes themselves are not resized.
+# Unified AI-Tool Report System + Title Deed Auto-Fill
 
-## Homepage Card Standard (source of truth)
-- Wrapper: `<PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">`
-- `width="contained"` = centered, `max-width: 1500px`, `px-4 md:px-6`
-- Vertical rhythm: `py-4` between sections; hero/first section keeps its own padding
-- Inner grids: `max-w-[1500px] mx-auto` with `gap-4 md:gap-6`
-- Corners: 28px premium radius via PremiumSectionCard
+## Goals
+1. Fix Property Evaluator so the Title Deed upload is an **entry-mode choice** ("Fill manually" vs "Auto-fill from Title Deed"), not a mandatory drop zone in the middle of the flow.
+2. Reuse AI Home Finder's `ReportEngine` (preview + branded PDF + share) as a **shared component** and wire every AI tool to it.
 
-## Pages In Scope (heroes untouched)
+## Scope of tools receiving the unified report
+- Property Evaluator
+- Rental Index
+- Property Comparison (Compare Projects / Compare Units)
+- Mortgage Calculator
+- Interior Design AI
+- Property Measurement
+- AI Home Finder (already uses it — reference implementation)
 
-**Insights & Guides (17)**
-- Market Intelligence: MarketOverview, AreaIntelligence, AreaDetail, MarketReports, Methodology, MonthlyMarketBrief, QuarterlyMarketReview, AnnualMarketSummary
-- Guides Library + BuyerGuide, SellerGuide, InvestorGuide, RenterGuide, ExpatGuide, GoldenVisaGuide, MortgageGuide
-- FAQ Hub
+## Step 1 — Extract shared engine
+- Move `src/components/ai-home-finder/report/ReportEngine.tsx` into `src/components/shared/report/UnifiedReportEngine.tsx` (re-export from the old path to avoid breaking imports).
+- Generalize the props: `{ toolKey, title, subtitle, sections: ReportSection[], meta, brand }` where `ReportSection = { id, label, node, includeByDefault }`. Sections are toggleable in the preview builder (same pattern already present).
+- Keep JBJ branding header/footer, section selector, "Preview → Download PDF / Print / Share" actions.
 
-**Company & Legal (~10)**
-- About, CompanyProfile, Contact, Careers, AcademyGraduates, Awards
-- Legal: Terms, Privacy, Cookies, AmlKycPolicy, Disclaimer
+## Step 2 — Per-tool report adapters
+Create one small file per tool that maps its result state to `ReportSection[]`:
+```
+src/components/shared/report/adapters/
+  propertyEvaluatorReport.tsx
+  rentalIndexReport.tsx
+  propertyComparisonReport.tsx
+  mortgageCalculatorReport.tsx
+  interiorDesignReport.tsx
+  propertyMeasurementReport.tsx
+```
+Each adapter renders that tool's cards (valuation summary, DLD comps, DXP completion, rental yield, mortgage schedule, design boards, measurement plan, etc.) as report sections.
 
-**Services (~12)**
-- Royal Tools Hub, AI Home Finder (Quiz), Compare Projects, Compare Units (CompareManual), Mortgage Calculator, Property Evaluator, Interior Design AI, Deep Area Analysis, Developers, Communities, AI Hub, Concierge
+## Step 3 — Wire a "Report" action into each tool
+Replace ad-hoc download/print buttons with a single `<UnifiedReportButton toolKey=… data=… />` that opens the shared preview modal. Users pick sections → download PDF (via existing `renderReportToPdf`) / print / `navigator.share`.
 
-## Approach
+## Step 4 — Property Evaluator title-deed flow
+- Add a top-of-form **Entry Mode** switch: `Manual` | `From Title Deed`.
+- `From Title Deed` shows the drag/drop upload (PDF/JPG/PNG). On upload, call existing `property-evaluation` edge fn with an OCR pass (Tesseract via `pytesseract` is not available client-side — use the Lovable AI Gateway with an image-capable model to extract: community, sub-community, tower, unit, size, bedrooms, floor, view, handover). Pre-fill fields; user can review/edit; results generate as usual.
+- Move the current standalone Title Deed dropzone out of the middle of the specs grid.
 
-1. **New shared wrapper `InsightsPageBody`** (or extend `InsightsPageScope`) that forces every direct child section to:
-   - `max-width: 1500px`
-   - `margin-inline: auto`
-   - `padding: 16px` vertical, `16-24px` horizontal
-   - 28px radius on top-level cards
-   - No edge-touching (min side gutter 16px mobile, 24px desktop)
-2. Convert every page above to wrap its non-hero content in this component and replace ad-hoc `container`/`max-w-*` classes on top-level sections with the standard.
-3. Add CSS pass in `index.css` (PASS 175) as a safety net keyed on `[data-standard-body] > section, > div.section` for pages that still have legacy structure.
-4. Swap each hero to a page-specific asset:
-   - Use existing curated Unsplash/videos already in the repo where available
-   - For pages without one, add a matched still image (photo) via existing hero components — no new generation unless required
-   - Titles/subtitles left as-is
-5. Validate with Playwright: script iterates all listed routes at 1280×1800, screenshots hero + first 3 sections, asserts:
-   - top-level section width ≤ 1500 and ≥ 960 on desktop
-   - left/right gutter ≥ 16px
-   - no black-on-emerald contrast violations
-   - hero has a `<video>` or `<img>` with a unique `src`
-   Screenshots saved under `/tmp/browser/standardize/`.
-6. Iterate per page group (Insights → Guides → Company/Legal → Services), fixing regressions before moving to next group.
+## Step 5 — QA
+- Playwright: for each tool, open results, click Report, verify preview renders, sections toggle, PDF downloads, share sheet fires. Screenshot each.
 
-## Technical Notes
-- Do not modify `PremiumSectionCard` API; reuse `width="contained"` + `wrapperClassName="cv-auto py-4"`.
-- Keep `InsightsPageScope` for palette; add layout via new `data-standard-body` attribute.
-- Hero components already read `data-mi-hero-variant` / `data-guide-hero`; extend those maps with new image/video srcs per route.
-- No business-logic changes; presentation only.
+## Not in scope (this pass)
+- No visual redesign of tool result pages beyond adding the Report button.
+- No backend schema changes; adapters read existing state.
 
-## Deliverables
-- Updated pages (list above) with standardized card widths
-- New/updated wrapper component + `index.css` PASS 175
-- Per-page hero asset map
-- Playwright validation script + saved screenshots proving parity with homepage cards
+## Technical notes
+- Reuse `renderReportToPdf.ts` unchanged; adapters must produce React nodes it can serialize.
+- Title-deed OCR: `supabase.functions.invoke('parse-title-deed', { body: { fileBase64 } })` — new edge fn that calls Lovable AI Gateway with vision model and returns structured JSON.
+- Persist entry-mode + parsed fields into the existing `jbj-property-evaluator-draft-v3` localStorage key so refresh survives.
