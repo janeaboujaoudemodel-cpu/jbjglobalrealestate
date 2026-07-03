@@ -209,46 +209,60 @@ const Services = () => {
         canonicalPath="/services"
       />
 
-      {/* Hero Section with Video */}
-      <section data-brand-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden" data-surface="emerald">
-        {/* Background Video */}
+      {/* Hero Section — pure emerald-black gradient */}
+      <section
+        data-brand-hero
+        data-hero-dark
+        data-surface="emerald"
+        data-no-contrast-guard
+        className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
+      >
         <video
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity"
         >
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/40 via-black/60 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/5 via-transparent to-transparent" />
-        
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-32 text-center max-w-4xl"
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{ background: "linear-gradient(180deg, rgba(4,44,28,0.55) 0%, rgba(0,0,0,0.75) 100%)" }}
+        />
+
+        <motion.div
+          className="relative z-10 container mx-auto px-4 py-24 md:py-32 text-center max-w-4xl"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.div 
-            className="flex items-center justify-center gap-2 mb-6"
+          <motion.div
+            data-no-contrast-guard
+            className="allow-white flex items-center justify-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <Briefcase className="w-6 h-6 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
+            <Briefcase className="w-6 h-6 allow-white" style={{ color: "#FFFFFF" }} />
+            <span className="text-sm uppercase tracking-[0.3em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               Services
             </span>
           </motion.div>
 
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+          <motion.h1
+            data-no-contrast-guard
+            className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
             Explore JBJ Services
           </motion.h1>
 
-          <motion.p 
-            className="text-white/85 text-base md:text-lg max-w-3xl mx-auto mb-10"
+          <motion.p
+            data-no-contrast-guard
+            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-10"
+            style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
@@ -258,7 +272,7 @@ const Services = () => {
             <PremiumHeroButton href="/contact" icon={ArrowRight}>
               Request a Service
             </PremiumHeroButton>
-            <Link 
+            <Link
               to="/contact"
               data-no-contrast-guard
               data-allow-dark-cta
@@ -272,6 +286,7 @@ const Services = () => {
         </motion.div>
       </section>
 
+
       {/* Service Cards Grid */}
       <section id="services-grid" className="py-20 bg-[#1A1A1A]">
         <div className="jj-layer-2">
@@ -283,56 +298,69 @@ const Services = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span
+                data-no-contrast-guard
+                className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Our Service Library
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
+              <h2
+                data-no-contrast-guard
+                className="text-3xl md:text-4xl font-bold mb-4"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Select a Service
               </h2>
-              <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
+              <p
+                data-no-contrast-guard
+                className="max-w-2xl mx-auto"
+                style={{ color: "rgba(26,26,26,0.75)", WebkitTextFillColor: "rgba(26,26,26,0.75)" }}
+              >
                 Select a service to view the full process, requirements, and timelines.
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp}>
                   <Link to={service.link} className="block h-full">
-                    <Card className="jj-card-inner hover:border-[#B89555] transition-all group h-full flex flex-col">
+                    <Card className="jj-card-inner transition-all group h-full flex flex-col">
                       <CardContent className="p-6 flex flex-col flex-1">
-                        <div className="jj-icon-box-active w-12 h-12 mb-4 group-hover:scale-110 transition-transform">
-                          <service.icon className="w-6 h-6" />
+                        <div
+                          className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
+                          style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}
+                        >
+                          <service.icon className="w-6 h-6" style={{ color: "#FFFFFF" }} />
                         </div>
-                        <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2 group-hover:text-[#1A1A1A] transition-colors">
+                        <h3 className="font-semibold text-lg mb-2" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
-                        <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-1">
+                        <p className="text-sm mb-4 flex-1" style={{ color: "rgba(26,26,26,0.75)" }}>
                           {service.description}
                         </p>
-                        
-                        {/* Includes list */}
+
                         <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4">
-                          <p className="text-xs text-[#1A1A1A]/50 uppercase tracking-wider mb-2 font-medium">Includes</p>
+                          <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "rgba(26,26,26,0.6)" }}>Includes</p>
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-xs text-[#1A1A1A]/80">
-                                <CheckCircle className="w-3 h-3 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
+                              <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: "rgba(26,26,26,0.85)" }}>
+                                <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: "#064E3B" }} />
                                 <span>{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        
-                        {/* Partner note if applicable */}
+
                         {service.note && (
-                          <div className="bg-[#EFE6D6]/10 rounded-lg p-2 mb-4 border border-[#B89555]/20">
-                            <p className="text-xs text-[#1A1A1A]/60 italic">
+                          <div className="bg-[#EFE6D6]/40 rounded-lg p-2 mb-4">
+                            <p className="text-xs italic" style={{ color: "rgba(26,26,26,0.65)" }}>
                               {service.note}
                             </p>
                           </div>
                         )}
-                        
-                        <div className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-auto pt-4 border-t border-[#B89555]/20">
+
+                        <div className="flex items-center gap-1 text-sm font-semibold mt-auto pt-4 border-t border-[#1A1A1A]/10" style={{ color: "#064E3B" }}>
                           {service.cta}
                           <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -342,6 +370,7 @@ const Services = () => {
                 </motion.div>
               ))}
             </div>
+
           </motion.div>
         </div>
       </section>
@@ -396,13 +425,22 @@ const Services = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span
+                data-no-contrast-guard
+                className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Service Scope
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
+              <h2
+                data-no-contrast-guard
+                className="text-3xl md:text-4xl font-bold mb-4"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 How Our Services Work
               </h2>
             </motion.div>
+
 
             <motion.div 
               className="max-w-4xl mx-auto"
