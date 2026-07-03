@@ -716,7 +716,6 @@ Requirements:
           <div className="max-w-3xl mx-auto px-2 sm:px-4">
             <div
               data-no-contrast-guard
-              data-tool-shell-root
               data-tool-emerald
               data-seller-form-scope
               className="rounded-2xl p-8 sm:p-10 md:p-12 lg:p-14 shadow-xl"
