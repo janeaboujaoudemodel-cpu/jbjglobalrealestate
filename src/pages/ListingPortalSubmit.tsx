@@ -913,7 +913,7 @@ const ListingPortalSubmit = () => {
                         />
                       </div>
 
-                      <div className="flex gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <Button
                           onClick={runAIExtraction}
                           disabled={uploadedDocs.length === 0 && !sourceUrl.trim() && !sourceText.trim()}
@@ -926,7 +926,7 @@ const ListingPortalSubmit = () => {
                             WebkitTextFillColor: '#FFFFFF',
                             boxShadow: '0 10px 28px -12px rgba(6,78,59,0.75)',
                           }}
-                          className="flex-1 h-12 text-base font-semibold rounded-md disabled:opacity-50 hover:brightness-110 transition-all"
+                          className="flex-1 min-h-12 h-auto py-3 text-base font-semibold rounded-md disabled:opacity-50 hover:brightness-110 transition-all"
                         >
                           <Sparkles className="w-5 h-5 mr-2 !text-white" style={{ color: '#FFFFFF' }} data-no-contrast-guard />
                           <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
@@ -936,7 +936,7 @@ const ListingPortalSubmit = () => {
                         <Button
                           onClick={() => setPhase('pricing_ai')}
                           data-allow-dark-cta
-                          className="jj-emerald-ghost h-12 px-6 font-semibold rounded-md transition-all duration-300"
+                          className="jj-emerald-ghost min-h-12 h-auto px-6 py-3 font-semibold rounded-md transition-all duration-300"
                         >
                           Skip — Fill Manually
                         </Button>
