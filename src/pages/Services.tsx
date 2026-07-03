@@ -453,9 +453,6 @@ const Services = () => {
               className="max-w-4xl mx-auto"
               variants={fadeInUp}
             >
-              <Card className="jj-card-inner">
-                <CardContent className="p-8">
-                  <p className="text-[#1A1A1A]/80 text-lg mb-8 text-center">
               <Card
                 data-surface="emerald"
                 data-no-contrast-guard
