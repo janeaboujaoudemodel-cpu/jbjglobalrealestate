@@ -4,6 +4,56 @@
 
 JBJ Global Real Estate, founded by Jane Bou Jaoude, is a Dubai-headquartered brokerage serving investors, end-users, and developers across the United Arab Emirates. The platform combines a curated property portfolio with AI-powered tools, market intelligence, and concierge services for buyers, sellers, tenants, landlords, and brokers.
 
+## Entities
+
+Canonical entity graph — every route below has JSON-LD (`@context: schema.org`) that references these `@id` nodes. Consumable by ChatGPT, Perplexity, Gemini, Claude, Google AI Overviews, Microsoft Copilot, and Apple Intelligence.
+
+### Organization
+- JBJ Global Real Estate (`RealEstateAgent`, `LocalBusiness`, `ProfessionalService`) — https://www.jbj.ae/#organization
+- Founded 2016, Business Bay, Dubai, UAE — RERA-licensed brokerage
+- Founder / CEO: Jane Bou Jaoude — https://www.jbj.ae/founder#person
+
+### Places (Wikidata-linked)
+- United Arab Emirates — Q878
+- Dubai — Q612
+- Abu Dhabi — Q31866
+- Sharjah — Q45079
+- Ras Al Khaimah — Q212666
+
+### Communities served (Wikidata-linked where public)
+- Palm Jumeirah — Q334515
+- Downtown Dubai — Q1245187
+- Dubai Marina — Q1093254
+- Business Bay — Q2937847
+- Dubai Hills Estate
+- Jumeirah Beach Residence (JBR) — Q6307030
+- Emirates Hills — Q5371555
+- Jumeirah Golf Estates
+- Arabian Ranches — Q4784550
+- Mohammed Bin Rashid City
+
+### Developer partners (Wikidata-linked)
+- Emaar Properties — Q727373
+- DAMAC Properties — Q5205420
+- Sobha Realty — Q26722193
+- Meraas — Q18401378
+- Nakheel Properties — Q911837
+- Aldar Properties — Q4726645
+- Dubai Holding — Q1264320
+- Ellington Properties
+- Select Group
+- Omniyat — Q17071018
+- Binghatti Developers
+- Danube Properties
+- Azizi Developments
+- Meydan Group — Q6825144
+- Tiger Group
+
+### Landmarks (Wikidata-linked)
+- Burj Khalifa — Q12495 (Downtown Dubai)
+- Burj Al Arab — Q83125
+- Atlantis, The Palm — Q799770 (Palm Jumeirah)
+
 ## Pages
 
 - [Home](/): Brokerage overview, featured listings, and entry points for buyers, sellers, and renters.
@@ -29,10 +79,18 @@ JBJ Global Real Estate, founded by Jane Bou Jaoude, is a Dubai-headquartered bro
 - [Company Profile](/company-profile): Detailed institutional company profile.
 - [Contact](/contact): Contact details and inquiry form.
 
+## Services (first-class Schema.org Service entities)
+- [Buy Property in Dubai](/properties)
+- [Sell Property in Dubai](/sell)
+- [Rent Property in Dubai](/rent)
+- [Off-Plan Investment](/off-plan)
+- [Golden Visa Consultancy](/golden-visa-guide)
+- [Mortgage Advisory](/mortgage-calculator)
+- [Property Management](/services/property-management)
+
 ## Optional
 
 - [FAQ](/faq): Frequently asked questions about Dubai real estate.
-
 - [Customer Happiness](/customer-happiness): Service quality and feedback program.
 - [Privacy Policy](/privacy): How we collect, use, and protect personal information.
 - [Terms of Service](/terms): Terms and conditions for using the website.
