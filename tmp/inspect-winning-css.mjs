@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const browser = await chromium.launch({ headless: true, executablePath: '/usr/bin/chromium', args: ['--no-sandbox'] });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 } });
 await page.goto('http://localhost:8080/interior-design-ai', { waitUntil: 'networkidle', timeout: 60000 });
 const out = await page.evaluate(() => {
