@@ -1177,113 +1177,128 @@ const Quiz = () => {
         </div>
 
 
-        <div className="flex-1 flex items-center justify-center px-4 py-6">
-          <AIShellCard
-            as="div"
-            data-surface="dark"
-            padding="lg"
-            className="w-full max-w-2xl text-center border border-white/24 shadow-[0_18px_55px_rgba(0,0,0,0.28)]"
-          >
-            {/* Centered emerald identity tile */}
-            <div
-              data-surface="emerald"
-              data-emerald-ok="icon"
-              className="jj-surface-emerald mx-auto mb-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+        <div className="relative flex-1 flex items-center justify-center px-4 py-6">
+          {/* Animated emerald orbs behind the card */}
+          <div className="aihf-orbs" aria-hidden="true">
+            <div className="aihf-orb aihf-orb-1" />
+            <div className="aihf-orb aihf-orb-2" />
+            <div className="aihf-orb aihf-orb-3" />
+            <div className="aihf-orb aihf-orb-4" />
+          </div>
+
+          {/* Animated emerald border wrapper (replaces gold outline) */}
+          <div className="aihf-emerald-ring aihf-emerald-ring-strong rounded-2xl w-full max-w-2xl aihf-intro-card">
+            <AIShellCard
+              as="div"
+              data-surface="dark"
+              padding="lg"
+              noOrbs
+              className="w-full text-center border-0 shadow-[0_18px_55px_rgba(0,0,0,0.35)]"
             >
-              <Wand2 className="w-8 h-8" />
-            </div>
+              {/* Centered emerald identity tile */}
+              <div
+                data-surface="emerald"
+                data-emerald-ok="icon"
+                className="aihf-hero-icon jj-surface-emerald mx-auto mb-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+              >
+                <Wand2 className="w-8 h-8" />
+              </div>
 
-            {/* Label pill */}
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
-              style={{
-                background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
-                border: "1px solid rgba(255,255,255,0.42)",
-                boxShadow: "none",
-              }}
-            >
-              <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>Completely Free</span>
-            </div>
-
-            <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
-              AI Home Finder
-            </h1>
-            <p className="text-[#1A1A1A]/70 max-w-lg mx-auto mb-2">
-              Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
-              <span className="font-semibold text-[#1A1A1A]">FREE</span>.
-            </p>
-            <p className="text-[#1A1A1A]/60 text-sm mb-8">
-              Powered by JBJ Global Real Estate
-            </p>
-
-            {/* Vertical tick list */}
-            <ul className="text-left max-w-md mx-auto space-y-2.5 mb-6">
-              {[
-                { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
-                { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
-                { label: "Download Excel Report", description: "Take your matches with you" },
-              ].map((f) => (
-                <li
-                  key={f.label}
-                  className="flex items-start gap-3 p-3 bg-white/5 border border-white/18 rounded-xl"
-                >
-                  <div
-                    data-surface="emerald"
-                    data-emerald-ok="icon"
-                    className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                  >
-                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
-                  </div>
-                  <div>
-                    <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
-                    <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            {/* Meta row — matches the feature card style above */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-              {[
-                { Icon: Clock,        label: "~60 seconds" },
-                { Icon: Sparkles,     label: "AI-Powered"  },
-                { Icon: CheckCircle2, label: "100% Free"   },
-              ].map(({ Icon, label }) => (
+              {/* Label pill wrapped in animated emerald ring (no gold) */}
+              <div className="aihf-emerald-ring rounded-full inline-block mb-4">
                 <div
-                  key={label}
-                  className="flex items-center gap-2.5 px-3.5 py-2 bg-white/5 border border-white/18 rounded-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                    border: "0",
+                    boxShadow: "none",
+                  }}
                 >
-                  <div
-                    data-surface="emerald"
-                    data-emerald-ok="icon"
-                    className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                  >
-                    <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
-                  </div>
-                  <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
+                  <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>Completely Free</span>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            {/* Primary CTA */}
-            <Button
-              onClick={() => setStarted(true)}
-              data-surface="emerald"
-              className="aihf-cta jj-pill-emerald-metallic font-semibold px-10 py-6 text-base rounded-xl"
-            >
-              <span>Find My Property</span>
-              <ArrowUpRight className="w-5 h-5 ml-2" />
-            </Button>
+              <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                AI Home Finder
+              </h1>
+              <p className="text-[#1A1A1A]/70 max-w-lg mx-auto mb-2">
+                Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
+                <span className="font-semibold text-[#1A1A1A]">FREE</span>.
+              </p>
+              <p className="text-[#1A1A1A]/60 text-sm mb-8">
+                Powered by JBJ Global Real Estate
+              </p>
 
-            <p className="text-xs mt-5 text-[#1A1A1A]/60">
-              Save money by choosing the right property the first time.
-            </p>
-          </AIShellCard>
+              {/* Vertical tick list */}
+              <ul className="text-left max-w-md mx-auto space-y-2.5 mb-6">
+                {[
+                  { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
+                  { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
+                  { label: "Download Excel Report", description: "Take your matches with you" },
+                ].map((f) => (
+                  <li
+                    key={f.label}
+                    className="flex items-start gap-3 p-3 bg-white/5 border border-white/18 rounded-xl"
+                  >
+                    <div
+                      data-surface="emerald"
+                      data-emerald-ok="icon"
+                      className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                    >
+                      <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                    </div>
+                    <div>
+                      <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Meta row — matches the feature card style above */}
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+                {[
+                  { Icon: Clock,        label: "~60 seconds" },
+                  { Icon: Sparkles,     label: "AI-Powered"  },
+                  { Icon: CheckCircle2, label: "100% Free"   },
+                ].map(({ Icon, label }) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-2.5 px-3.5 py-2 bg-white/5 border border-white/18 rounded-xl"
+                  >
+                    <div
+                      data-surface="emerald"
+                      data-emerald-ok="icon"
+                      className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                    >
+                      <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+                    </div>
+                    <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Primary CTA */}
+              <Button
+                onClick={() => setStarted(true)}
+                data-surface="emerald"
+                className="aihf-cta jj-pill-emerald-metallic font-semibold px-10 py-6 text-base rounded-xl"
+              >
+                <span>Find My Property</span>
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
+
+              <p className="text-xs mt-5 text-[#1A1A1A]/60">
+                Save money by choosing the right property the first time.
+              </p>
+            </AIShellCard>
+          </div>
         </div>
       </section>
     );
   }
+
 
 
   // Form Screen after completing questions
