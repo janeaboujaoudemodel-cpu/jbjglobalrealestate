@@ -169,17 +169,8 @@ const ListProperty = () => {
         data-no-contrast-guard
         style={{ background: theme.heroGradient }}
       >
-        <div
-          className="absolute inset-x-0 bottom-0 h-px"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: ombreShine }}
-        />
+        {/* Hero is intentionally clean emerald — no gold hairline, no radial glow */}
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
           <motion.div
             key={purpose}
