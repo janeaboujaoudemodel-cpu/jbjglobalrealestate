@@ -26698,9 +26698,7 @@ html body #root :is(
   [class*="rounded-full"][class*="px-"][class*="text-emerald-"],
   [class*="rounded-full"][class*="px-"][class*="jj-surface-emerald-soft"],
   [class*="rounded-full"][class*="px-"][class*="jj-emerald-soft"],
-  [class*="bg-green-"][class*="rounded-full"],
-  [class*="bg-emerald-"][class*="rounded-full"],
-  [class*="border-[#B89555]"][class*="rounded-full"]
+  [class*="rounded-full"][class*="px-"][class*="border-[#B89555]"]
 ) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
@@ -26735,9 +26733,7 @@ html body #root :is(
   [class*="rounded-full"][class*="px-"][class*="text-emerald-"],
   [class*="rounded-full"][class*="px-"][class*="jj-surface-emerald-soft"],
   [class*="rounded-full"][class*="px-"][class*="jj-emerald-soft"],
-  [class*="bg-green-"][class*="rounded-full"],
-  [class*="bg-emerald-"][class*="rounded-full"],
-  [class*="border-[#B89555]"][class*="rounded-full"]
+  [class*="rounded-full"][class*="px-"][class*="border-[#B89555]"]
 ) :is(span, p, strong, small, svg, path, [class*="lucide"]) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -26767,9 +26763,7 @@ html body #root :is(
   [class*="rounded-full"][class*="px-"][class*="text-emerald-"],
   [class*="rounded-full"][class*="px-"][class*="jj-surface-emerald-soft"],
   [class*="rounded-full"][class*="px-"][class*="jj-emerald-soft"],
-  [class*="bg-green-"][class*="rounded-full"],
-  [class*="bg-emerald-"][class*="rounded-full"],
-  [class*="border-[#B89555]"][class*="rounded-full"]
+  [class*="rounded-full"][class*="px-"][class*="border-[#B89555]"]
 ):hover {
   background: var(--jj-emerald-ombre-hover) !important;
   background-image: var(--jj-emerald-ombre-hover) !important;
