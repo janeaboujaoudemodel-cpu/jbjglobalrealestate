@@ -21,7 +21,7 @@ interface BusinessCardPrivacyNoticeProps {
 const ACCENT = "#FFFFFF";
 const CTA_GRADIENT = "linear-gradient(135deg, #065F46 0%, #04231A 58%, #022c1c 100%)";
 const ACCENT_SOFT = "rgba(255,255,255,0.14)";
-const ACCENT_BORDER = "rgba(255,255,255,0.45)";
+const ACCENT_BORDER = "rgba(1,8,6,0.72)";
 const ACCENT_GLOW =
   "0 0 0 1px rgba(255,255,255,0.35), 0 18px 60px -22px rgba(255,255,255,0.55)";
 

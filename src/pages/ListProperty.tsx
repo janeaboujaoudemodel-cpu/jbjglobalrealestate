@@ -56,7 +56,7 @@ const EMERALD_DEEP = "#042C1C";
 const EMERALD_BLACK = "#000000";
 const EMERALD_GRADIENT = "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))";
 const EMERALD_GRADIENT_HOVER = "var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%))";
-const GOLD = "rgba(255,255,255,0.28)";
+const GOLD = "rgba(1,8,6,0.72)";
 /* PASS 152 — no champagne inside AI tool shells. Constants below map to emerald ombré. */
 const CHAMPAGNE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
 const CHAMPAGNE_SURFACE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
@@ -614,7 +614,7 @@ function PickerCard({
             backgroundColor: "rgba(255,255,255,0.10)",
             color: "rgba(255,255,255,0.88)",
             WebkitTextFillColor: "rgba(255,255,255,0.88)",
-            border: `1px solid rgba(255,255,255,0.28)`,
+            border: `1px solid rgba(1,8,6,0.72)`,
           }}
         >
           {tag}
