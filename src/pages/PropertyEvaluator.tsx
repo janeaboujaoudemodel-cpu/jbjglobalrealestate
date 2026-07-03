@@ -1250,46 +1250,15 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-emerald-400/60 p-4 bg-black/15">
-                    <div className="flex items-center justify-between gap-3 mb-3">
-                      <div>
-                        <Label className="text-white font-semibold">Title Deed / Oqood Upload</Label>
-                        <p className="text-xs text-white/80">Upload PDF/JPG/PNG title deed. The draft is auto-saved and the filename is used to pre-fill known area/building clues; manual entry remains available.</p>
-                      </div>
-                      <FileCheck className="w-6 h-6 text-emerald-300" />
-                    </div>
-                    <input
-                      ref={titleDeedInputRef}
-                      type="file"
-                      accept="application/pdf,image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.pdf,.webp"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => { handleAssetUpload(e.target.files, 'titleDeed'); e.target.value = ''; }}
-                    />
-                    <div
-                      data-pe-upload-zone
-                      onClick={() => titleDeedInputRef.current?.click()}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => { e.preventDefault(); handleAssetUpload(e.dataTransfer.files, 'titleDeed'); }}
-                      className="rounded-xl border-2 border-dashed cursor-pointer text-center p-5"
-                    >
-                      <div>
-                        <Upload className="w-7 h-7 mx-auto mb-2 text-emerald-300" />
-                        <p className="text-white font-semibold">Drag title deed here or click to upload</p>
-                        <p className="text-xs text-white/70">PDF, JPG, JPEG, PNG, WEBP</p>
-                      </div>
-                    </div>
-                    {property.titleDeedFiles.length > 0 && (
-                      <div className="mt-3 space-y-2">
-                        {property.titleDeedFiles.map((file, i) => (
-                          <div key={`${file.name}-${i}`} className="flex items-center justify-between gap-3 rounded-lg bg-black/20 border border-emerald-400/35 px-3 py-2">
-                            <span className="text-xs text-white truncate">{file.name}</span>
-                            <button type="button" onClick={() => removeTitleDeed(i)} className="text-white/80 hover:text-white"><X className="w-4 h-4" /></button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  {/* Hidden file input reused by the top Title Deed uploader */}
+                  <input
+                    ref={titleDeedInputRef}
+                    type="file"
+                    accept="application/pdf,image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.pdf,.webp"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => { handleAssetUpload(e.target.files, 'titleDeed'); e.target.value = ''; }}
+                  />
                 </CardContent>
               </Card>
 
