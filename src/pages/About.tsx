@@ -402,20 +402,21 @@ const About = () => {
           >
             <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
               {/* LEFT: Visual Panel */}
-              <motion.div 
+              <motion.div
                 className="relative"
                 variants={fadeInUp}
               >
-                <img 
-                  src={luxuryVilla2} 
-                  alt="Market Intelligence Analysis" 
-                  className="w-full h-[420px] object-cover rounded-2xl"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent rounded-2xl" />
-                
-                <div className="absolute bottom-6 left-6 right-6 grid grid-cols-2 gap-4">
+                <div className="relative overflow-hidden rounded-2xl">
+                  <img
+                    src={luxuryVilla2}
+                    alt="Market Intelligence Analysis"
+                    className="w-full h-[240px] sm:h-[300px] lg:h-[260px] object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                </div>
+                <div className="grid grid-cols-2 gap-3 mt-4">
                   {[
                     { Icon: BarChart3, label: "Government Data" },
                     { Icon: Building2, label: "Infrastructure" },
@@ -427,15 +428,14 @@ const About = () => {
                       data-allow-dark-cta
                       data-no-contrast-guard
                       data-surface="emerald"
-                      className="allow-white rounded-xl p-5 border border-white/15 shadow-[0_10px_24px_-12px_rgba(4,44,28,0.9),inset_0_1px_0_rgba(255,255,255,0.16)]"
+                      className="allow-white rounded-xl p-4 border border-white/15 shadow-[0_10px_24px_-12px_rgba(4,44,28,0.9),inset_0_1px_0_rgba(255,255,255,0.16)]"
                       style={{ background: 'linear-gradient(135deg,#064E3B 0%,#053a2c 55%,#031f18 100%)' }}
                     >
-                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} strokeWidth={2} />
-                      <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
+                      <Icon className="w-6 h-6 mb-2" style={{ color: '#FFFFFF' }} strokeWidth={2} />
+                      <p className="text-sm font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
                     </div>
                   ))}
                 </div>
-
               </motion.div>
 
               {/* RIGHT: Text Content */}
