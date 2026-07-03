@@ -169,17 +169,8 @@ const ListProperty = () => {
         data-no-contrast-guard
         style={{ background: theme.heroGradient }}
       >
-        <div
-          className="absolute inset-x-0 bottom-0 h-px"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ background: ombreShine }}
-        />
+        {/* Hero is intentionally clean emerald — no gold hairline, no radial glow */}
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-12 md:pt-16 pb-12 md:pb-16">
           <motion.div
             key={purpose}
@@ -547,26 +538,18 @@ function PickerCard({
       className="group relative flex w-full min-w-0 min-h-[306px] flex-col text-left rounded-2xl p-6 md:p-7 transition-all hover:brightness-110 whitespace-normal overflow-hidden"
       style={{
         background: cardGradient,
-        border: `1px solid ${GOLD}`,
+        border: `1px solid rgba(255,255,255,0.10)`,
         boxShadow: `0 18px 40px -18px rgba(6,78,59,0.68)`,
         color: WHITE,
         WebkitTextFillColor: WHITE,
       }}
     >
-      {/* shimmer ombre glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-2xl"
-        style={{
-          background: `radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 60%)`,
-        }}
-      />
       <div className="relative flex w-full min-w-0 items-start justify-between gap-4">
         <div
           className="w-12 h-12 rounded-xl grid place-items-center"
           style={{
-            backgroundColor: "rgba(255,255,255,0.10)",
-            border: `1px solid ${GOLD}`,
+            backgroundColor: "rgba(255,255,255,0.08)",
+            border: `1px solid rgba(255,255,255,0.14)`,
           }}
         >
           {icon}
@@ -575,10 +558,10 @@ function PickerCard({
           <span
             className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
             style={{
-              backgroundColor: "rgba(255,255,255,0.10)",
+              backgroundColor: "rgba(255,255,255,0.08)",
               color: WHITE,
               WebkitTextFillColor: WHITE,
-              border: `1px solid ${GOLD}`,
+              border: `1px solid rgba(255,255,255,0.14)`,
             }}
           >
             <Sparkles className="w-3 h-3" style={{ color: WHITE }} /> Recommended
@@ -586,10 +569,11 @@ function PickerCard({
         )}
       </div>
 
+
       <div className="relative mt-5 w-full min-w-0 whitespace-normal">
         <div
           className="text-[10px] uppercase tracking-[0.22em] font-semibold"
-          style={{ color: GOLD, WebkitTextFillColor: GOLD }}
+          style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}
         >
           {eyebrow}
         </div>
@@ -626,7 +610,7 @@ function PickerCard({
             background: CHAMPAGNE,
             color: EMERALD_DEEP,
             WebkitTextFillColor: EMERALD_DEEP,
-            border: `1px solid ${GOLD}`,
+            border: `1px solid rgba(255,255,255,0.14)`,
             boxShadow: `0 6px 18px -8px rgba(0,0,0,0.55)`,
           }}
         >
@@ -661,14 +645,8 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
       data-allow-dark-cta
       style={{ background: theme.sectionGradient }}
     >
-      {/* premium ombre shine */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: `radial-gradient(circle at 85% 12%, rgba(255,255,255,0.10) 0%, transparent 55%)`,
-        }}
-      />
+      {/* Solid emerald — no shine overlay */}
+
       <div className="relative max-w-6xl mx-auto">
         <div className="flex items-end justify-between flex-wrap gap-3 mb-6">
           <div>
