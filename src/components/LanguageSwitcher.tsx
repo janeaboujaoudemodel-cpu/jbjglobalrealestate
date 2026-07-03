@@ -65,40 +65,36 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
       <DropdownMenuContent 
         align="end" 
         sideOffset={1}
-        className="z-[9999] min-w-[280px] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] p-0 overflow-hidden border-2 border-[#B89555]/40"
-        style={{
-          background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
-        }}
+        data-surface="emerald"
+        data-no-contrast-guard
+        className="z-[9999] min-w-[280px] rounded-xl p-0 overflow-hidden border border-white/30 text-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] shadow-[0_18px_50px_rgba(0,0,0,0.42),0_0_28px_rgba(6,78,59,0.24)]"
       >
-        {/* Top gold accent line */}
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+        <div className="px-4 py-3 border-b border-white/15">
+          <p className="text-xs font-semibold text-white/70 uppercase tracking-wider">{t('header.language')}</p>
+        </div>
         <ScrollArea className="h-[320px]">
-          <div className="p-3">
-            {SUPPORTED_LANGUAGES.map((lang) => (
-              <DropdownMenuItem 
-                key={lang.code}
-                onClick={() => setLanguage(lang.code)}
-                className={`flex items-center justify-between cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 group ${
-                  language === lang.code 
-                    ? 'bg-[#EFE6D6]/15 border border-[#B89555]/30' 
-                    : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
-                }`}
-              >
-                <span className="flex items-center gap-3">
-                  <span className="text-lg">{lang.flag}</span>
-                  <span className={`text-sm font-semibold transition-colors ${
-                    language === lang.code ? 'text-[#1A1A1A]' : 'text-[#1A1A1A] group-hover:text-[#1A1A1A]'
-                  }`}>{lang.nativeName}</span>
-                </span>
-                {language === lang.code && (
-                  <Check className="w-4 h-4 text-[#1A1A1A]" />
-                )}
-              </DropdownMenuItem>
-            ))}
+          <div className="p-2">
+            {SUPPORTED_LANGUAGES.map((lang) => {
+              const active = language === lang.code;
+              return (
+                <DropdownMenuItem 
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code)}
+                  unstyled
+                  data-surface="emerald"
+                  data-no-contrast-guard
+                  className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 text-white transition-colors ${active ? 'bg-white/15 font-semibold' : 'hover:bg-white/10'}`}
+                >
+                  <span className="flex items-center gap-3 text-white">
+                    <span className="text-lg">{lang.flag}</span>
+                    <span className="text-sm font-semibold text-white">{lang.nativeName}</span>
+                  </span>
+                  {active && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
+                </DropdownMenuItem>
+              );
+            })}
           </div>
         </ScrollArea>
-        {/* Bottom gold accent line */}
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
       </DropdownMenuContent>
     </DropdownMenu>
   );

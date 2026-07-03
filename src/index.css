@@ -27882,3 +27882,189 @@ html body #root .jj-newsletter-emerald button:hover {
   html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen)::before,
   html body #root .jj-company-hero-motion { animation: none !important; }
 }
+
+/* ============================================================
+   Emerald Dropdown Standard — force emerald+white for
+   currency / language / mode header pickers when the panel is
+   marked data-surface="emerald". Overrides legacy champagne rules.
+   ============================================================ */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"].mode-switcher-panel {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 50%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 50%, #010806 100%) !important;
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255,255,255,0.30) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] :is(p,span,div,button,a,label,strong,em,li,small),
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] :is(p,span,div,button,a,label,strong,em,li,small),
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] :is(svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor;
+}
+/* Mode row card recolor on emerald surface (override champagne backgrounds) */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"] {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.20) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"]:is(:hover,:focus,[data-highlighted]) {
+  background: rgba(255,255,255,0.10) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] {
+  background: rgba(255,255,255,0.15) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.55) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-icon-tile] {
+  background: rgba(255,255,255,0.10) !important;
+  background-image: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-active-pill] {
+  background: rgba(255,255,255,0.18) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.65) !important;
+  color: #FFFFFF !important;
+}
+/* Currency rows on emerald panel */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row][data-currency-active="true"] {
+  background: rgba(255,255,255,0.15) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:hover {
+  background: rgba(255,255,255,0.10) !important;
+}
+
+/* Emerald mode-switcher panel — override legacy idle text/tile/pill colors */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"] :is(p, span, div, svg, path, circle, rect, line, polyline, polygon),
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] :is(p, span, div, svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-icon-tile="idle"],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-icon-tile="active"] {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,0.30) !important;
+}
+html body [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] [data-mode-active-pill],
+html body [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] [data-mode-active-pill] * ,
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill] * {
+  background: rgba(255,255,255,0.20) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.70) !important;
+}
+
+/* Emerald mode-switcher — max-specificity BG override to beat legacy PASS 101/103 rules */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="idle"] {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.20) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="idle"]:is(:hover,:focus,[data-highlighted]) {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.12) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="active"] {
+  background: rgba(255,255,255,0.18) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.18) !important;
+  border-color: rgba(255,255,255,0.55) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card] [data-mode-icon-tile] {
+  background: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.14) !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+}
+
+/* Emerald currency panel — force rows dark, transparent by default */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row],
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted]) {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.05) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted]) {
+  background: rgba(255,255,255,0.12) !important;
+  background-color: rgba(255,255,255,0.12) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-active="true"] {
+  background: rgba(255,255,255,0.18) !important;
+  background-color: rgba(255,255,255,0.18) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row] :is(span,p,div,svg,path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Emerald currency panel — max specificity beats legacy triple-attr rule */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row] {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.05) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted]) {
+  background: rgba(255,255,255,0.12) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.12) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"] {
+  background: rgba(255,255,255,0.20) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.20) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row] :is(span,p,div,svg,path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Emerald pickers — beat PASS 154 ID-hack specificity (3+ IDs) */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.05) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:is(:hover,:focus,[data-highlighted]):not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) {
+  background: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.14) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row][data-currency-active="true"]:not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) {
+  background: rgba(255,255,255,0.22) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.22) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) :is(span,p,div,svg,path) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
