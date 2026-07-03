@@ -881,15 +881,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       <div className="container mx-auto px-4 py-10 md:py-14">
         <div
           data-compare-content-frame
-          data-surface="emerald"
-          data-on-dark="true"
+          data-surface="champagne"
           className="rounded-2xl p-5 md:p-7 flex flex-col gap-8"
-          style={{ background: PAGE_DARK, border: "1px solid rgba(255,255,255,0.14)", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.72)" }}
+          style={{ background: CHAMPAGNE, border: "none", boxShadow: "0 24px 60px -30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.6)" }}
         >
           {/* Counter */}
-          <div data-allow-ink data-no-contrast-guard className="flex items-center gap-2" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            <span data-allow-ink data-no-contrast-guard className="text-lg font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{projects.length}</span>
-            <span data-allow-ink data-no-contrast-guard className="text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>properties in comparison</span>
+          <div className="flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+            <span className="text-lg font-bold" style={{ color: "#064E3B" }}>{projects.length}</span>
+            <span className="text-sm" style={{ color: "rgba(26,26,26,0.72)" }}>properties in comparison</span>
           </div>
 
           {/* Comparison Table — premium champagne (restored) */}
