@@ -301,11 +301,11 @@ const AIHF_STYLE = `
   /* Option tiles */
   .aihf-root .aihf-option {
     background: linear-gradient(135deg, #042c1c 0%, #031711 58%, #000000 100%) !important;
-    border-color: rgba(255,255,255,0.34) !important;
+    border: 0 !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06) !important;
   }
   .aihf-root .aihf-option:hover {
-    border-color: rgba(255,255,255,0.55) !important;
-    box-shadow: 0 10px 24px -16px rgba(16,185,129,0.55) !important;
+    box-shadow: inset 0 0 0 1px rgba(16,185,129,0.28), 0 10px 24px -16px rgba(16,185,129,0.55) !important;
   }
   .aihf-root .aihf-option[aria-pressed="true"] {
     background-image:
@@ -321,9 +321,10 @@ const AIHF_STYLE = `
     background-position: -50% 0, 0 0 !important;
     background-blend-mode: overlay, normal !important;
     animation: jj-metallic-sweep 4.5s ease-in-out infinite, jj-emerald-pulse 3.2s ease-in-out infinite !important;
-    border-color: rgba(255,255,255,0.55) !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.22), 0 10px 32px rgba(6,78,59,0.38), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+    border: 0 !important;
+    box-shadow: 0 10px 32px rgba(6,78,59,0.38), inset 0 1px 0 rgba(255,255,255,0.18) !important;
   }
+
 
   .aihf-root .aihf-question-card,
   .aihf-root .aihf-preferences-card {
