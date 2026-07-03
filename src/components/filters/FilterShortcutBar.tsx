@@ -155,7 +155,7 @@ const BEDROOM_OPTIONS = [
 
 const STATUS_OPTIONS: { value: string; label: string; dotClass: string }[] = [
   { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
-  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
+  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-pill-emerald-metallic' },
   { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
   { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
   { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
@@ -381,7 +381,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const CountBadge = ({ count }: { count: number }) =>
     count > 0 ? (
-      <span className="ml-1 w-5 h-5 rounded-full jj-surface-emerald text-white text-[10px] font-bold flex items-center justify-center">
+      <span className="ml-1 w-5 h-5 rounded-full jj-pill-emerald-metallic text-white text-[10px] font-bold flex items-center justify-center">
         +{count}
       </span>
     ) : null;
@@ -466,7 +466,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">{t('filter.minPrice')}</label>
+                <label className={filterLabel}>{t('filter.minPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -477,13 +477,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     onChange={(e) => setDraftPriceMin(e.target.value.replace(/[^0-9]/g, ''))}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPrice(); } }}
                     placeholder="0"
-                    className="w-full h-9 px-3 pr-12 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-lg text-sm text-[#1A1A1A] focus:border-[#064E3B]/45 focus:outline-none focus:ring-0"
+                    className={cn(filterInput, "pr-12")}
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">{t('filter.maxPrice')}</label>
+                <label className={filterLabel}>{t('filter.maxPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -494,9 +494,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     onChange={(e) => setDraftPriceMax(e.target.value.replace(/[^0-9]/g, ''))}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPrice(); } }}
                     placeholder="Any"
-                    className="w-full h-9 px-3 pr-12 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-lg text-sm text-[#1A1A1A] focus:border-[#064E3B]/45 focus:outline-none focus:ring-0"
+                    className={cn(filterInput, "pr-12")}
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
                 </div>
               </div>
             </div>
@@ -509,7 +509,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-colors",
                     draftPriceMax === p.value
-                      ? "jj-surface-emerald text-white border-0 font-bold"
+                      ? "jj-pill-emerald-metallic text-white border-0 font-bold"
                       : "bg-[#FDFBF7] text-[#1A1A1A] border-[#064E3B]/20 hover:border-[#064E3B]/20"
                   )}
                 >
@@ -562,7 +562,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-[#1A1A1A]/70">{t('filter.maxPreHandover')}</span>
+                  <span className="text-xs text-[#1A1A1A] font-semibold">{t('filter.maxPreHandover')}</span>
                   <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7] px-2 py-0.5 rounded border border-[#064E3B]/20">{draftPaymentPlanMax}%</span>
                 </div>
                 <Slider
@@ -574,7 +574,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div>
-                <label className="text-xs text-[#1A1A1A]/70 mb-1 block">{t('filter.afterHandover')}</label>
+                <label className={filterLabel}>{t('filter.afterHandover')}</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -584,11 +584,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   onChange={(e) => setDraftAfterHandover(e.target.value.replace(/[^0-9]/g, ''))}
                   onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPayments(); } }}
                   placeholder="e.g. 30"
-                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-lg text-sm text-[#1A1A1A] focus:border-[#064E3B]/45 focus:outline-none focus:ring-0"
+                  className={filterInput}
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#1A1A1A]/70">{t('filter.postHandoverOnly')}</span>
+                <span className="text-xs text-[#1A1A1A] font-semibold">{t('filter.postHandoverOnly')}</span>
                 <Switch
                   checked={draftPostHandoverOnly}
                   onCheckedChange={(v) => setDraftPostHandoverOnly(v)}
@@ -627,7 +627,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.handoverTitle')}</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">{t('filter.from')}</label>
+                <label className={`${filterLabel} mb-2`}>{t('filter.from')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
@@ -636,8 +636,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
-                          ? "jj-surface-emerald text-white border-0 shadow-sm"
-                          : "bg-[#FDFBF7] border border-[#064E3B]/20 text-[#1A1A1A]/70 hover:bg-[#F7F2EA] hover:border-[#064E3B]/20"
+                          ? "jj-pill-emerald-metallic text-white border-0 shadow-sm"
+                          : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
                       )}
                     >
                       {q}
@@ -647,14 +647,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverFrom.year}
                   onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">{t('filter.to')}</label>
+                <label className={`${filterLabel} mb-2`}>{t('filter.to')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
@@ -663,8 +663,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverTo.quarter === q
-                          ? "jj-surface-emerald text-white border-0 shadow-sm"
-                          : "bg-[#FDFBF7] border border-[#064E3B]/20 text-[#1A1A1A]/70 hover:bg-[#F7F2EA] hover:border-[#064E3B]/20"
+                          ? "jj-pill-emerald-metallic text-white border-0 shadow-sm"
+                          : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
                       )}
                     >
                       {q}
@@ -674,7 +674,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverTo.year}
                   onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                  className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -901,7 +901,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               key={resultsCount}
               className={cn(
                 "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
-                "jj-surface-emerald text-white border-0 shadow-sm"
+                "jj-pill-emerald-metallic text-white border-0 shadow-sm"
               )}
             >
               <Activity className="w-3.5 h-3.5 text-white" />
@@ -980,7 +980,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
       >
         <h4 className="text-sm font-bold text-[#1A1A1A] mb-2">{t('filter.savedFilters')}</h4>
         {savedFilters.length === 0 ? (
-          <p className="text-xs text-[#1A1A1A]/70 py-4 text-center">{t('filter.noSavedFilters')}</p>
+          <p className="text-xs text-[#1A1A1A] py-4 text-center">{t('filter.noSavedFilters')}</p>
         ) : (
           <div className="space-y-1 max-h-60 overflow-y-auto">
             {savedFilters.map((sf, idx) => (
@@ -991,14 +991,14 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold text-[#1A1A1A] truncate">{sf.name}</p>
-                  <p className="text-[10px] text-[#1A1A1A]/70">{new Date(sf.createdAt).toLocaleDateString()}</p>
+                  <p className="text-[10px] text-[#1A1A1A]">{new Date(sf.createdAt).toLocaleDateString()}</p>
                 </div>
                 {confirmDeleteIndex === idx ? (
                   <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                     <span className="text-[10px] text-[#1A1A1A] font-semibold whitespace-nowrap">Delete?</span>
                     <button
                       onClick={() => deleteSavedFilter(idx)}
-                      className="px-1.5 py-0.5 rounded text-[10px] font-bold jj-surface-emerald text-white transition-colors"
+                      className="px-1.5 py-0.5 rounded text-[10px] font-bold jj-pill-emerald-metallic text-white transition-colors"
                     >
                       Yes
                     </button>
