@@ -26815,3 +26815,81 @@ html body #root :is(
 }
 
 /* END PASS 187 */
+
+/* ============================================================
+   PASS 188 — HARD STOP: no gold borders or bright green fills on
+   reported tool pages + global vertical sidebar.
+   Contract: emerald-black ombré, dark emerald/black hairlines, white ink.
+   ============================================================ */
+:root {
+  --jj-emerald-ombre: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%);
+  --jj-emerald-hairline: rgba(1, 8, 6, 0.72);
+}
+
+html body [data-sidebar-emerald] .border-l,
+html body [data-sidebar-emerald] [class*="border-[#B89555]"] {
+  border-color: var(--jj-emerald-hairline) !important;
+  border-left-color: var(--jj-emerald-hairline) !important;
+}
+
+html body [data-sidebar-emerald] :is([data-sidebar-section-label], a.group > span.flex-1, a[data-sidebar-subitem]:hover [data-sidebar-subitem-label]) {
+  background: var(--jj-emerald-ombre) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+html body [data-sidebar-emerald] :is(a.group > span.w-5.h-5, [data-sidebar-section] > div.w-5.h-5, a[data-sidebar-subitem] > span.w-5.h-5, a[href="/ai-hub"] > span.w-5.h-5) {
+  background: var(--jj-emerald-ombre) !important;
+  border-color: var(--jj-emerald-hairline) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 10px 22px -18px rgba(0,0,0,0.85) !important;
+}
+
+html body [data-sidebar-emerald] :is(a.group > svg.lucide-chevron-right, [data-sidebar-section] > svg.lucide-chevron-down, a[href="/ai-hub"] > svg.lucide-chevron-right) {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+html body [data-sidebar-emerald] :is(a.group:hover > span.w-5.h-5, [data-sidebar-section]:hover > div.w-5.h-5, a[data-sidebar-subitem]:hover > span.w-5.h-5) {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 12px 24px -18px rgba(0,0,0,0.95) !important;
+}
+
+html body [data-sidebar-emerald] :is(a.group span::after, [data-sidebar-section-label]::after) {
+  background: var(--jj-emerald-ombre) !important;
+}
+
+html body [data-sidebar-emerald] span.bg-\[\#B89555\].animate-pulse {
+  background: #064E3B !important;
+}
+
+html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner], [data-list-property-page], [data-surface="dark"]) :is(
+  [class*="border-[#B89555]"],
+  [class*="border-gold"],
+  [class*="border-amber"],
+  [class*="border-yellow"],
+  [class*="ring-gold"],
+  [style*="#B89555"],
+  [style*="184,149,85"],
+  [style*="rgb(184, 149, 85)"]
+) {
+  border-color: var(--jj-emerald-hairline) !important;
+  --tw-ring-color: var(--jj-emerald-hairline) !important;
+  outline-color: var(--jj-emerald-hairline) !important;
+  box-shadow: none !important;
+}
+
+html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner], [data-list-property-page]) :is(
+  [style*="#10B981"], [style*="#34D399"], [style*="16, 185, 129"], [style*="52, 211, 153"],
+  [class*="bg-green-"], [class*="bg-emerald-400"], [class*="bg-emerald-500"],
+  [data-progress-indicator]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: var(--jj-emerald-hairline) !important;
+}
+
+html body :is(.aihf-root, [data-interior-design-ai], [data-business-card-scanner], [data-list-property-page]) :is(input, textarea, select, button, [role="tab"], [role="combobox"], [data-searchable-trigger]) {
+  box-shadow: none !important;
+  outline-color: transparent !important;
+}
