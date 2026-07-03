@@ -38,12 +38,12 @@ const designStyles = [
 ];
 
 const colorPalettes = [
-  { id: 'neutral', name: 'Neutral & Warm', colors: ['#F5F5DC', '#D2B48C', '#8A7356'] },
-  { id: 'cool', name: 'Cool & Serene', colors: ['#E0E5EC', '#B0C4DE', '#708090'] },
-  { id: 'bold', name: 'Bold & Vibrant', colors: ['#FF6B6B', '#4ECDC4', '#45B7D1'] },
-  { id: 'earthy', name: 'Earthy & Natural', colors: ['#8B7765', '#6B8E23', '#DEB887'] },
-  { id: 'monochrome', name: 'Monochrome', colors: ['#2C2C2C', '#808080', '#F0F0F0'] },
-  { id: 'luxury', name: 'Luxury Gold', colors: ['#A8925A', '#1C1C1C', '#F5F5F5'] },
+  { id: 'neutral', name: 'Neutral & Warm', colors: ['#F5F5DC', '#E8D9BE', '#D2B48C', '#A8875F', '#8A7356'] },
+  { id: 'cool', name: 'Cool & Serene', colors: ['#F0F4F8', '#E0E5EC', '#B0C4DE', '#8AA0B8', '#708090'] },
+  { id: 'bold', name: 'Bold & Vibrant', colors: ['#FF6B6B', '#FFB84D', '#4ECDC4', '#45B7D1', '#5D5FEF'] },
+  { id: 'earthy', name: 'Earthy & Natural', colors: ['#DEB887', '#B89A6B', '#8B7765', '#6B8E23', '#3F5323'] },
+  { id: 'monochrome', name: 'Monochrome', colors: ['#F0F0F0', '#C0C0C0', '#808080', '#4A4A4A', '#1C1C1C'] },
+  { id: 'luxury', name: 'Luxury Gold', colors: ['#F5F0E1', '#E4D3A6', '#A8925A', '#6E5A2E', '#1C1C1C'] },
 ];
 
 type DesignMode = 'concept' | 'redesign' | 'staging';
@@ -80,6 +80,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   const [mode, setMode] = useState<DesignMode>('concept');
   const [designStyle, setDesignStyle] = useState('');
   const [colorPalette, setColorPalette] = useState('');
+  const [customColors, setCustomColors] = useState<string[]>(['#F5F5DC', '#D2B48C', '#8A7356', '#4A4A4A', '#1C1C1C']);
   const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -151,7 +152,9 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       setProgress(20);
 
       const styleLabel = designStyles.find(s => s.id === designStyle)?.label || designStyle || 'modern';
-      const colorLabel = colorPalettes.find(p => p.id === colorPalette)?.name || colorPalette || 'neutral';
+      const colorLabel = colorPalette === 'custom'
+        ? `custom palette (${customColors.join(', ')})`
+        : colorPalettes.find(p => p.id === colorPalette)?.name || colorPalette || 'neutral';
 
       let prompt = chatPrompt || '';
       if (!chatPrompt) {
@@ -173,7 +176,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           mode,
           propertyName: projectName,
           designStyle,
-          colorPalette,
+          colorPalette: colorLabel,
           customNotes: prompt,
           photos: photosData,
         },
@@ -572,31 +575,98 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   <Palette className="w-4 h-4 flex-shrink-0" />
                   <span className="text-sm font-semibold">Color Palette</span>
                   {colorPalette && (
-                    <Badge className="id-outline rounded-full text-xs truncate max-w-[150px]">
-                      {colorPalettes.find(p => p.id === colorPalette)?.name}
+                    <Badge className="id-outline rounded-full text-xs truncate max-w-[200px]">
+                      {colorPalette === 'custom' ? 'Custom Palette' : colorPalettes.find(p => p.id === colorPalette)?.name}
                     </Badge>
                   )}
                 </div>
                 {paletteOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="px-4 pb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+                <div className="px-4 pb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                   {colorPalettes.map(palette => (
                     <button
                       key={palette.id}
                       type="button"
                       onClick={() => setColorPalette(palette.id)}
-                      className={`id-choice ${colorPalette === palette.id ? "id-choice-active" : ""} min-h-[78px] rounded-xl border p-3 transition-all`}
+                      className={`id-choice ${colorPalette === palette.id ? "id-choice-active" : ""} min-h-[110px] rounded-xl border p-4 transition-all flex flex-col items-center justify-center gap-3`}
                     >
-                      <div className="flex gap-1 mb-2 justify-center">
+                      <div className="flex gap-2 justify-center items-center">
                         {palette.colors.map((c, i) => (
-                          <div key={i} className="w-5 h-5 rounded-full border" style={{ backgroundColor: c, borderColor: "rgba(255,255,255,0.72)" }} />
+                          <div
+                            key={i}
+                            className="w-8 h-8 rounded-full border-2 shadow-sm"
+                            style={{ backgroundColor: c, borderColor: "rgba(255,255,255,0.9)" }}
+                          />
                         ))}
                       </div>
-                      <span className="block text-[10px] font-semibold leading-tight">{palette.name}</span>
+                      <span className="block text-xs font-semibold leading-tight text-center">{palette.name}</span>
                     </button>
                   ))}
+
+                  {/* Custom palette tile */}
+                  <button
+                    type="button"
+                    onClick={() => setColorPalette('custom')}
+                    className={`id-choice ${colorPalette === 'custom' ? "id-choice-active" : ""} min-h-[110px] rounded-xl border p-4 transition-all flex flex-col items-center justify-center gap-3`}
+                  >
+                    <div className="flex gap-2 justify-center items-center">
+                      {customColors.map((c, i) => (
+                        <div
+                          key={i}
+                          className="w-8 h-8 rounded-full border-2 shadow-sm"
+                          style={{ backgroundColor: c, borderColor: "rgba(255,255,255,0.9)" }}
+                        />
+                      ))}
+                    </div>
+                    <span className="block text-xs font-semibold leading-tight text-center">Custom Palette</span>
+                  </button>
                 </div>
+
+                {colorPalette === 'custom' && (
+                  <div className="px-4 pb-5">
+                    <div className="rounded-xl border p-4" style={{ borderColor: "rgba(255,255,255,0.22)", background: "rgba(255,255,255,0.04)" }}>
+                      <p className="text-[11px] uppercase tracking-[0.22em] font-semibold mb-3 text-center">
+                        Pick your 5 colors — click the circle or type a hex code
+                      </p>
+                      <div className="grid grid-cols-5 gap-3">
+                        {customColors.map((c, i) => (
+                          <div key={i} className="flex flex-col items-center gap-2">
+                            <label className="relative cursor-pointer">
+                              <div
+                                className="w-14 h-14 rounded-full border-2 shadow-md transition-transform hover:scale-105"
+                                style={{ backgroundColor: c, borderColor: "rgba(255,255,255,0.9)" }}
+                              />
+                              <input
+                                type="color"
+                                value={c}
+                                onChange={(e) => {
+                                  const next = [...customColors];
+                                  next[i] = e.target.value;
+                                  setCustomColors(next);
+                                }}
+                                className="absolute inset-0 opacity-0 cursor-pointer"
+                                aria-label={`Custom color ${i + 1}`}
+                              />
+                            </label>
+                            <Input
+                              value={c}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                const next = [...customColors];
+                                next[i] = v;
+                                setCustomColors(next);
+                              }}
+                              placeholder="#RRGGBB"
+                              maxLength={7}
+                              className="id-input h-8 rounded-md text-[11px] text-center font-mono px-1"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CollapsibleContent>
             </div>
           </Collapsible>
