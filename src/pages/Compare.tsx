@@ -24,7 +24,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
-import { getHighResImageUrl } from "@/lib/imageUtils";
 import comparePropertyFallback from "@/assets/compare-property-fallback.jpg";
 // Founder block removed — replaced by "Powered by JBJ Global Real Estate" lockup
 
@@ -911,12 +910,6 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   {projects.map((project) => {
                     const badge = getBadge(project.id);
                     const isFav = shortlistIds.includes(project.id);
-                    const primaryImageUrl =
-                      project.images?.find((img: any) => !!img?.image_url && !String(img.image_url).trim().startsWith("data:image/svg"))?.image_url ||
-                      (project.cover_image_url && !String(project.cover_image_url).trim().startsWith("data:image/svg") ? project.cover_image_url : "") ||
-                      ((project as any).card_image_url && !String((project as any).card_image_url).trim().startsWith("data:image/svg") ? (project as any).card_image_url : "") ||
-                      ((project as any).hero_image_url && !String((project as any).hero_image_url).trim().startsWith("data:image/svg") ? (project as any).hero_image_url : "") ||
-                      comparePropertyFallback;
                     return (
                       <th
                         key={project.id}
@@ -950,22 +943,12 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
                               <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                             </div>
-                            {primaryImageUrl ? (
-                              <img
-                                src={comparePropertyFallback}
-                                alt={project.name}
-                                className="relative z-10 w-full h-full object-cover"
-                                loading="lazy" decoding="async" width={1024} height={576}
-                                onError={(event) => {
-                                  event.currentTarget.style.display = "none";
-                                  event.currentTarget.parentElement?.setAttribute("data-image-missing", "true");
-                                }}
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center" aria-label={`${project.name} image pending`} style={{ backgroundImage: EMERALD_CARD }}>
-                                <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
-                              </div>
-                            )}
+                            <img
+                              src={comparePropertyFallback}
+                              alt={project.name}
+                              className="relative z-10 w-full h-full object-cover"
+                              loading="lazy" decoding="async" width={1024} height={576}
+                            />
                           </div>
                           <h3 className="font-bold text-base" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{project.name}</h3>
                           <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>
