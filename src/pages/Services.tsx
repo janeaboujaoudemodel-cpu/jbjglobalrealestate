@@ -360,7 +360,7 @@ const Services = () => {
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: "rgba(26,26,26,0.85)" }}>
-                                <CheckCircle className="jj-service-check w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: "#064E3B" }} />
+                                <CheckCircle data-no-contrast-guard className="jj-service-check w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: "#064E3B" }} />
                                 <span>{item}</span>
                               </li>
                             ))}
