@@ -28068,3 +28068,29 @@ html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-curr
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* Emerald pickers — beat PASS 154 with 5 IDs */
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.05) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:is(:hover,:focus,[data-highlighted]):not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
+  background: rgba(255,255,255,0.14) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.14) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row][data-currency-active="true"]:not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
+  background: rgba(255,255,255,0.22) !important;
+  background-image: none !important;
+  background-color: rgba(255,255,255,0.22) !important;
+}
+html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row] :is(*,span,p,small,strong,em,b,svg,path):not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
