@@ -397,6 +397,96 @@ const AIHF_STYLE = `
 
   /* Progress track (champagne rail) */
   .aihf-root [class*="bg-[#EFE6D6]"].h-2 { background: rgba(255,255,255,0.12) !important; }
+
+  /* ---------- Animated emerald borders + orbs (no gold anywhere) ---------- */
+  @keyframes aihf-border-spin {
+    0%   { --aihf-angle: 0deg; }
+    100% { --aihf-angle: 360deg; }
+  }
+  @property --aihf-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @keyframes aihf-orb-drift-a {
+    0%   { transform: translate(0,0) scale(1); opacity: 0.55; }
+    50%  { transform: translate(-40px, 30px) scale(1.15); opacity: 0.85; }
+    100% { transform: translate(0,0) scale(1); opacity: 0.55; }
+  }
+  @keyframes aihf-orb-drift-b {
+    0%   { transform: translate(0,0) scale(1); opacity: 0.5; }
+    50%  { transform: translate(50px, -35px) scale(1.2); opacity: 0.8; }
+    100% { transform: translate(0,0) scale(1); opacity: 0.5; }
+  }
+  @keyframes aihf-orb-drift-c {
+    0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.35; }
+    50%  { transform: translate(-52%, -48%) scale(1.08); opacity: 0.55; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.35; }
+  }
+  @keyframes aihf-icon-float {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%     { transform: translateY(-6px) rotate(-3deg); }
+  }
+  @keyframes aihf-sparkle {
+    0%,100% { opacity: 0.15; transform: scale(0.9); }
+    50%     { opacity: 0.9;  transform: scale(1.15); }
+  }
+
+  /* Animated emerald ring wrapper — replaces any gold border */
+  .aihf-emerald-ring {
+    position: relative;
+    border-radius: inherit;
+    background:
+      conic-gradient(from var(--aihf-angle),
+        #10B981 0%,
+        #34D399 15%,
+        rgba(255,255,255,0.85) 28%,
+        #059669 45%,
+        #064E3B 60%,
+        #34D399 78%,
+        #10B981 100%);
+    animation: aihf-border-spin 6s linear infinite;
+    padding: 1.5px;
+  }
+  .aihf-emerald-ring > * {
+    border-radius: inherit;
+    background-clip: padding-box;
+  }
+  .aihf-emerald-ring-strong { padding: 2px; animation-duration: 7s; }
+
+  /* Animated background orbs behind the intro card */
+  .aihf-orbs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .aihf-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(60px);
+    will-change: transform, opacity;
+  }
+  .aihf-orb-1 {
+    top: -80px; right: -60px; width: 380px; height: 380px;
+    background: radial-gradient(circle at 30% 30%, rgba(52,211,153,0.55), rgba(6,78,59,0.0) 70%);
+    animation: aihf-orb-drift-a 9s ease-in-out infinite;
+  }
+  .aihf-orb-2 {
+    bottom: -100px; left: -80px; width: 420px; height: 420px;
+    background: radial-gradient(circle at 60% 60%, rgba(16,185,129,0.5), rgba(2,44,32,0.0) 70%);
+    animation: aihf-orb-drift-b 11s ease-in-out infinite;
+  }
+  .aihf-orb-3 {
+    top: 50%; left: 50%; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(5,150,105,0.35), rgba(0,0,0,0.0) 65%);
+    animation: aihf-orb-drift-c 13s ease-in-out infinite;
+  }
+  .aihf-orb-4 {
+    top: 20%; left: 10%; width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(110,231,183,0.35), rgba(0,0,0,0.0) 70%);
+    animation: aihf-orb-drift-a 14s ease-in-out infinite reverse;
+  }
+
+  .aihf-hero-icon { animation: aihf-icon-float 4.5s ease-in-out infinite; }
+
+  /* Ensure the intro card sits above the animated orbs */
+  .aihf-root .aihf-intro-card { position: relative; z-index: 1; }
 `;
 
 const Quiz = () => {
