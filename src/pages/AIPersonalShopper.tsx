@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Plane, MapPin, Calendar, Building2, Send, Loader2, Sparkles,
@@ -19,6 +20,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
+import { useProjectsListing } from "@/hooks/useProjects";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 
 interface TripPlan {
   id: string;
@@ -73,6 +76,13 @@ const AIPersonalShopper = () => {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { data: featuredProjects } = useProjectsListing();
+  const shopperListings = useMemo(() => (featuredProjects || []).slice(0, 3), [featuredProjects]);
+  const heroPhoto = getHighResImageUrl(
+    (shopperListings[0] as any)?.images?.[0]?.image_url ||
+    (shopperListings[0] as any)?.cover_image_url ||
+    "https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Mercedes_Benz_Places_2_16c6f5cada.webp"
+  );
 
   // Load saved plans
   useEffect(() => {
@@ -230,28 +240,57 @@ const AIPersonalShopper = () => {
 
   return (
     <ToolAnimatedFrame theme={toolThemes.emerald}>
-    <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
-      {/* Header */}
-      <div className="bg-gradient-to-r /30 /20 /30 border-b border-[color:var(--emerald-1)]/30/20">
-        <div className="container mx-auto px-4 py-8 md:py-12">
+    <section className="min-h-screen bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+      {/* Hero */}
+      <div className="relative min-h-[560px] overflow-hidden border-b border-white/18">
+        <img
+          src={heroPhoto}
+          alt="Curated UAE property listing"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-[#042C1C]/78 to-black/38" />
+        <div className="container relative z-10 mx-auto px-4 py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center"
+            className="max-w-4xl"
           >
-            <div className="inline-flex items-center gap-2 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
-              <Plane className="w-4 h-4 text-emerald-400" />
-              <span className="text-[color:var(--emerald-on)] text-sm font-medium">AI Travel & Property Concierge</span>
+            <div className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 rounded-full px-4 py-2 mb-5">
+              <Plane className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-medium">AI Travel & Property Concierge</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Your Personal <span className="text-[#B89555]">UAE Concierge</span>
+            <h1 className="allow-white text-4xl md:text-6xl font-bold text-white mb-5 leading-tight">
+              Your Personal UAE Property Concierge
             </h1>
-            <p className="text-white/70 max-w-2xl mx-auto text-sm md:text-base">
+            <p className="allow-white text-white max-w-2xl text-base md:text-lg leading-relaxed">
               Tell me about your trip to UAE and I'll create a complete personalized itinerary — 
               property viewings, hotels, activities, dining, and everything in between.
             </p>
-            <p className="text-xs text-[#1A1A1A] mt-2">Powered by JBJ Global Real Estate</p>
+            <p className="allow-white text-xs text-white mt-3 uppercase tracking-[0.18em] font-semibold">Powered by JBJ Global Real Estate</p>
           </motion.div>
+
+          {shopperListings.length > 0 && (
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl">
+              {shopperListings.map((project: any) => {
+                const image = getHighResImageUrl(project.images?.[0]?.image_url || project.cover_image_url || heroPhoto);
+                return (
+                  <Link
+                    key={project.id}
+                    to={`/project/${project.slug}`}
+                    className="group overflow-hidden rounded-2xl border border-white/18 bg-black/40 backdrop-blur-md shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
+                  >
+                    <img src={image} alt={project.name} className="h-36 w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+                    <div className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] p-4">
+                      <p className="allow-white text-white text-sm font-bold truncate">{project.name}</p>
+                      <p className="allow-white text-white text-xs mt-1 truncate">{project.area_name || project.location || "UAE"}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
