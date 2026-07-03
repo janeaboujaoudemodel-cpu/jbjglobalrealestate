@@ -68,7 +68,8 @@ const MarketIntelligence = lazy(() => import("@/pages/MarketIntelligence"));
 const MarketOverview = lazy(() => import("@/pages/market-intelligence/MarketOverview"));
 const AreaIntelligence = lazy(() => import("@/pages/market-intelligence/AreaIntelligence"));
 const MarketAreaDetail = lazy(() => import("@/pages/market-intelligence/AreaDetail"));
-const MarketReportsPage = lazy(() => import("@/pages/market-intelligence/MarketReports"));
+// Eager-imported: this page was showing a blank flash long enough to look like a redirect to the previous route (map/area).
+import MarketReportsPage from "@/pages/market-intelligence/MarketReports";
 const MonthlyMarketBrief = lazy(() => import("@/pages/market-intelligence/MonthlyMarketBrief"));
 const QuarterlyMarketReview = lazy(() => import("@/pages/market-intelligence/QuarterlyMarketReview"));
 const AnnualMarketSummary = lazy(() => import("@/pages/market-intelligence/AnnualMarketSummary"));
