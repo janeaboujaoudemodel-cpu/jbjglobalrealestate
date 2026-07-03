@@ -30,6 +30,27 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Static images (public/) — hash-free but content-stable; 30d browser + SWR
+/*.webp
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.avif
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.jpg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.jpeg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+/*.svg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+# Fonts
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+
 # Digital Business Card - Noindex for search engines
 /card
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet
