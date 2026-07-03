@@ -656,7 +656,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const isActive = (path: string) => location.pathname === path;
 
   // Render dropdown menu helper - Premium styling with pill background
-  // When fully transparent, remove pill backgrounds and use white/gold text
+  // When fully transparent, remove pill backgrounds and use white/emerald text
   const renderDropdown = (label: React.ReactNode, links: typeof propertiesLinks, isActiveCheck?: () => boolean) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -667,8 +667,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 ? 'text-[#1A1A1A] bg-transparent' 
                 : 'text-white hover:text-[#1A1A1A] bg-transparent'
               : isActiveCheck?.() 
-                ? 'text-[#1A1A1A] bg-transparent underline decoration-[#B89555] decoration-1 underline-offset-[6px]' 
-                : 'text-[#1A1A1A] hover:text-[#1A1A1A] bg-transparent hover:underline hover:decoration-[#B89555] hover:decoration-1 hover:underline-offset-[6px]'
+                ? 'text-[#1A1A1A] bg-transparent underline decoration-[#064E3B] decoration-1 underline-offset-[6px]' 
+                : 'text-[#1A1A1A] hover:text-[#1A1A1A] bg-transparent hover:underline hover:decoration-[#064E3B] hover:decoration-1 hover:underline-offset-[6px]'
           }`}
           style={{ letterSpacing: '0.01em' }}
         >
@@ -679,7 +679,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       <DropdownMenuContent 
         align="center" 
         sideOffset={16}
-        className="bg-[#FDFBF7] border border-[#B89555]/30 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
+        className="bg-[#FDFBF7] border border-[#064E3B]/30 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
         style={{
           boxShadow: '0 25px 60px -15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
         }}
@@ -701,7 +701,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-[#F7F2EA] rounded-xl">
                 <Link to={link.href} className="flex items-center gap-4 text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA] py-2.5 px-4 transition-all w-full group rounded-xl">
                   <div
-                    className="w-9 h-9 rounded-lg bg-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center transition-all group-hover:bg-[#EFE6D6] group-hover:border-[#B89555]/30"
+                    className="w-9 h-9 rounded-lg bg-[#F7F2EA] border border-[#064E3B]/30 flex items-center justify-center transition-all group-hover:bg-[#EFE6D6] group-hover:border-[#064E3B]/30"
                     style={{ boxShadow: '0 2px 4px -2px rgba(0,0,0,0.06)' }}
                   >
                     <link.icon className="w-4 h-4 text-[#1A1A1A] transition-colors" />
@@ -854,7 +854,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           {/* MOBILE HEADER: touch devices OR when desktop can't fit */}
           {shouldUseMobileHeader && (
             <div className="flex items-center gap-2 shrink-0">
-              {/* Mobile Menu Trigger - Bare 3-line hamburger (no circle), premium gold with 3D sheen */}
+              {/* Mobile Menu Trigger - Bare 3-line hamburger (no circle), emerald with 3D sheen */}
               <button
                 type="button"
                 className="inline-flex h-10 w-10 items-center justify-center appearance-none bg-transparent border-0 p-0 focus:outline-none shrink-0 group"
@@ -866,7 +866,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   <span
                     className="text-2xl font-light leading-none"
                     style={{
-                      background: 'linear-gradient(135deg, #E8C887 0%, #B89555 45%, #8A6E3E 100%)',
+                      background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
@@ -892,7 +892,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                           width: `${w}px`,
                           height: '2.5px',
                           background:
-                            'linear-gradient(180deg, #F4DDA6 0%, #D9B26B 35%, #B89555 65%, #8A6E3E 100%)',
+                            'linear-gradient(180deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
                           boxShadow:
                             'inset 0 1px 0 rgba(255,245,215,0.85), inset 0 -1px 0 rgba(90,65,25,0.55), 0 1px 2px rgba(0,0,0,0.35)',
                         }}
@@ -1274,7 +1274,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {showWalkthrough && (
                   <div className="fixed inset-0 z-[10070] flex items-center justify-center bg-[#1A1A1A]/70 p-4">
                     <div 
-                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-[#B89555]/30 shadow-2xl"
+                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-[#064E3B]/30 shadow-2xl"
                       style={{ background: '#FFFFFF' }}
                     >
                       <button
@@ -1331,7 +1331,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   "min-w-0 flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-3 lg:px-5 xl:px-7 py-2 lg:py-2.5 transition-all duration-300",
                   isFullyTransparent
                     ? 'bg-transparent border-transparent max-w-full'
-                    : 'border-2 border border-[#B89555]/30 w-full max-w-[900px]'
+                    : 'border-2 border border-[#064E3B]/30 w-full max-w-[900px]'
                 )}
                 style={!isFullyTransparent ? {
                   background: 'rgba(255,255,255,0.95)',
@@ -1491,14 +1491,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 data-tour-target="search"
               >
                 <Search
-                  className={`w-5 h-5 transition-colors duration-100 text-[#B89555] group-hover:text-[#8E6E36] ${activeMegaMenu === 'search' ? '!text-[#8E6E36]' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-100 text-[#064E3B] group-hover:text-[#042C1C] ${activeMegaMenu === 'search' ? '!text-[#042C1C]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
               </button>
 
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#B89555]/30'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#064E3B]/30'} to-transparent`} />
 
               {/* Language Icon - triggers mega menu on hover (desktop only) */}
               <button
@@ -1509,13 +1509,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 data-tour-target="language"
               >
                 <Globe
-                  className={`w-5 h-5 transition-colors duration-100 text-[#B89555] group-hover:text-[#8E6E36] ${activeMegaMenu === 'language' ? '!text-[#8E6E36]' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-100 text-[#064E3B] group-hover:text-[#042C1C] ${activeMegaMenu === 'language' ? '!text-[#042C1C]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
               </button>
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#B89555]/30'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#064E3B]/30'} to-transparent`} />
 
               {/* Notification Bell Icon - triggers mega menu */}
               <ListingNotificationBell
@@ -1527,7 +1527,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#B89555]/30'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-[#064E3B]/30'} to-transparent`} />
 
               {/* Account Icon - triggers mega menu on hover (desktop only) */}
               <button
@@ -1538,7 +1538,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 data-tour-target="account"
               >
                 <User
-                  className={`w-5 h-5 transition-colors duration-100 text-[#B89555] group-hover:text-[#8E6E36] ${activeMegaMenu === 'account' ? '!text-[#8E6E36]' : ''}`}
+                  className={`w-5 h-5 transition-colors duration-100 text-[#064E3B] group-hover:text-[#042C1C] ${activeMegaMenu === 'account' ? '!text-[#042C1C]' : ''}`}
                   style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
                 {totalUserAlerts > 0 && (
@@ -1587,8 +1587,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     className="w-[620px] max-w-[calc(100vw-32px)] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
                     style={{ background: '#F7F2EA', maxHeight: 'calc(100vh - 140px)' }}
                   >
-                    {/* Gold border overlay */}
-                    <div className="absolute inset-0 rounded-xl border border-[#B89555]/40 pointer-events-none z-10" />
+                    <div className="absolute inset-0 rounded-xl border border-[#064E3B]/40 pointer-events-none z-10" />
                     <div className="p-4">
                       <GlobalSearchModal
                         isOpen={true}
@@ -1597,8 +1596,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         embedded
                       />
                     </div>
-                    {/* Bottom champagne hairline accent */}
-                    <div className="h-[1px] bg-[#B89555]/40" />
+                    <div className="h-[1px] bg-[#064E3B]/40" />
                   </div>
                 )}
 
