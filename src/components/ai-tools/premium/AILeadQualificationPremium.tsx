@@ -327,8 +327,8 @@ const AILeadQualificationPremium = () => {
               animate={{ opacity: 1 }}
               className="flex flex-col items-center justify-center py-12 text-center"
             >
-              <div className="p-6 rounded-full bg-purple-500/10 mb-4">
-                <UserCheck className="h-12 w-12 text-purple-400/50" />
+              <div className="p-6 rounded-full bg-emerald-800 shadow-lg shadow-emerald-900/40 mb-4">
+                <UserCheck className="h-12 w-12 text-white" strokeWidth={2.25} />
               </div>
               <h3 className="text-lg font-semibold text-white/70">Ready to Qualify</h3>
               <p className="text-sm text-white/90 mt-2 max-w-sm">
