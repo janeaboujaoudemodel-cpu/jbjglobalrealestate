@@ -348,13 +348,13 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-[#0A0A0A]/8 border border-[#0A0A0A]/25 rounded-lg p-3">
+                <div className="bg-[#0A0A0A] rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#0A0A0A]" />
-                    <span className="text-[#0A0A0A] text-[10px] uppercase tracking-wider font-bold">Cash</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                    <span className="text-white text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
-                  <p className="text-[#0A0A0A] text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
-                  <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{cashPct}% of total</p>
+                  <p className="text-white text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
+                  <p className="text-white/70 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
                 <div className="bg-[#B89555]/8 border border-[#B89555]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
