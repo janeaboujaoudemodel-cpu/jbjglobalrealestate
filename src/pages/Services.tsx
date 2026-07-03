@@ -223,10 +223,13 @@ const Services = () => {
           loop
           muted
           playsInline
+          preload="auto"
+          poster="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'><rect width='16' height='9' fill='%23042c1c'/></svg>"
           className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity"
         >
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
+
         <div
           className="absolute inset-0"
           aria-hidden="true"
