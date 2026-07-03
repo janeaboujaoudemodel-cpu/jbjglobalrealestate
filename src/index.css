@@ -8565,8 +8565,8 @@ html body section#ready-to-get-started {
   padding-bottom: 0 !important;
 }
 html body section#ready-to-get-started > div {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: max(var(--page-gutter, 24px), env(safe-area-inset-left)) !important;
+  padding-right: max(var(--page-gutter, 24px), env(safe-area-inset-right)) !important;
 }
 
 /* 5) jj-pill-emerald — re-assert white text/icons (covers Email/Call/Chat
@@ -27615,9 +27615,7 @@ html body #root [data-comp-analysis-form] textarea::placeholder {
    section-frame rule and any page-level Section wrapper.
    ═══════════════════════════════════════════════════════════════════════════ */
 html body #root section#ready-to-get-started,
-html body #root section[data-no-section-frame],
-html body #root [data-insights-page] section#ready-to-get-started,
-html body #root [data-insights-page] section[data-no-section-frame] {
+html body #root [data-insights-page] section#ready-to-get-started {
   background: transparent !important;
   background-image: none !important;
   border: 0 !important;
@@ -27625,9 +27623,27 @@ html body #root [data-insights-page] section[data-no-section-frame] {
   border-radius: 0 !important;
 }
 /* Keep the inner emerald card sized like every other section card — never edge-to-edge. */
-html body #root section#ready-to-get-started > .jj-content-track,
-html body #root section[data-no-section-frame] > .jj-content-track {
-  width: min(calc(100% - clamp(2rem, 5vw, 6rem)), 1100px) !important;
-  max-width: 1100px !important;
+html body #root section#ready-to-get-started > .jj-content-track {
+  width: 100% !important;
+  max-width: var(--jj-global-container-max) !important;
   margin-inline: auto !important;
+  padding-left: max(var(--page-gutter, 24px), env(safe-area-inset-left)) !important;
+  padding-right: max(var(--page-gutter, 24px), env(safe-area-inset-right)) !important;
+}
+
+@keyframes disclaimer-emerald-sheen {
+  0% { transform: translate3d(-18%, 0, 0); opacity: 0.42; }
+  50% { opacity: 0.78; }
+  100% { transform: translate3d(18%, 0, 0); opacity: 0.42; }
+}
+
+.jj-disclaimer-hero__motion {
+  background:
+    linear-gradient(112deg, transparent 0%, rgba(255,255,255,0.08) 28%, transparent 46%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 18px);
+  animation: disclaimer-emerald-sheen 8s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jj-disclaimer-hero__motion { animation: none !important; }
 }
