@@ -62,24 +62,20 @@ export function HandoverDateRange({
           variant="outline"
           className={cn(
             "justify-between min-w-[160px] h-11",
-            isDark 
-              ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A] hover:bg-champagne-light",
+            "allow-white jj-pill-emerald-metallic border-0 text-white hover:text-white",
             className
           )}
         >
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 opacity-60" />
+            <Calendar className="w-4 h-4 opacity-100 text-white" />
             <span>{displayText}</span>
           </div>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-100 text-white" />
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className={cn(
-          "w-[280px] p-4",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#064E3B]/20"
-        )}
+        data-filter-dropdown="true"
+        className="allow-white w-[280px] p-4 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 text-white"
         align="start"
         sideOffset={8}
         avoidCollisions={true}
@@ -88,7 +84,7 @@ export function HandoverDateRange({
         <div className="space-y-4">
           <h4 className={cn(
             "text-sm font-medium",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             Project Handover By
           </h4>
@@ -98,7 +94,7 @@ export function HandoverDateRange({
             <div className="space-y-1.5">
               <label className={cn(
                 "text-xs",
-                isDark ? "text-white" : "text-[#1A1A1A]"
+                "allow-white text-white"
               )}>
                 From
               </label>
@@ -108,21 +104,19 @@ export function HandoverDateRange({
               >
                 <SelectTrigger className={cn(
                   "h-10 w-full",
-                  isDark 
-                    ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
-                    : "bg-champagne-light border-[#064E3B]/30 text-[#1A1A1A]"
+                  "allow-white bg-[#021611]/82 border-white/28 text-white"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7]")}>
-                  <SelectItem value="any" className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}>
+                <SelectContent position="popper" className="z-[10600]">
+                  <SelectItem value="any">
                     Any
                   </SelectItem>
                   {HANDOVER_YEAR_OPTIONS.map((year) => (
                     <SelectItem 
                       key={year.value} 
                       value={year.value.toString()}
-                      className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}
+                      className=""
                     >
                       {year.label}
                     </SelectItem>
@@ -135,7 +129,7 @@ export function HandoverDateRange({
             <div className="space-y-1.5">
               <label className={cn(
                 "text-xs",
-                isDark ? "text-white" : "text-[#1A1A1A]"
+                "allow-white text-white"
               )}>
                 To
               </label>
@@ -145,21 +139,19 @@ export function HandoverDateRange({
               >
                 <SelectTrigger className={cn(
                   "h-10 w-full",
-                  isDark 
-                    ? "bg-[#2a2a2a] border-[#3a3a3a] text-white"
-                    : "bg-champagne-light border-[#064E3B]/30 text-[#1A1A1A]"
+                  "allow-white bg-[#021611]/82 border-white/28 text-white"
                 )}>
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent position="popper" className={cn("z-[10600]", isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7]")}>
-                  <SelectItem value="any" className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}>
+                <SelectContent position="popper" className="z-[10600]">
+                  <SelectItem value="any">
                     Any
                   </SelectItem>
                   {HANDOVER_YEAR_OPTIONS.map((year) => (
                     <SelectItem 
                       key={year.value} 
                       value={year.value.toString()}
-                      className={isDark ? "text-white hover:bg-[#2a2a2a]" : ""}
+                      className=""
                       disabled={fromYear !== null && year.value < fromYear}
                     >
                       {year.label}
@@ -177,9 +169,7 @@ export function HandoverDateRange({
               onClick={clearSelection}
               className={cn(
                 "w-full",
-                isDark 
-                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne-light"
+                  "allow-white text-white hover:text-white hover:bg-white/12"
               )}
             >
               Clear Selection
@@ -220,22 +210,22 @@ export function HandoverDateInline({
         <SelectTrigger className={cn(
           "h-10 w-24",
           isDark 
-            ? "bg-[#1a1a1a] border-[#2a2a2a] text-white"
-            : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A]"
+            ? "allow-white bg-[#021611]/82 border-white/28 text-white"
+            : "allow-white bg-[#021611]/82 border-white/28 text-white"
         )}>
           <SelectValue placeholder="From" />
         </SelectTrigger>
-        <SelectContent className={isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : ""}>
-          <SelectItem value="any" className={isDark ? "text-white" : ""}>Any</SelectItem>
+        <SelectContent>
+          <SelectItem value="any">Any</SelectItem>
           {HANDOVER_YEAR_OPTIONS.map((year) => (
-            <SelectItem key={year.value} value={year.value.toString()} className={isDark ? "text-white" : ""}>
+            <SelectItem key={year.value} value={year.value.toString()}>
               {year.label}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
       
-      <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>–</span>
+      <span className="allow-white text-white">–</span>
       
       <Select
         value={toYear?.toString() ?? "any"}
@@ -244,18 +234,18 @@ export function HandoverDateInline({
         <SelectTrigger className={cn(
           "h-10 w-24",
           isDark 
-            ? "bg-[#1a1a1a] border-[#2a2a2a] text-white"
-            : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A]"
+            ? "allow-white bg-[#021611]/82 border-white/28 text-white"
+            : "allow-white bg-[#021611]/82 border-white/28 text-white"
         )}>
           <SelectValue placeholder="To" />
         </SelectTrigger>
-        <SelectContent className={isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : ""}>
-          <SelectItem value="any" className={isDark ? "text-white" : ""}>Any</SelectItem>
+        <SelectContent>
+          <SelectItem value="any">Any</SelectItem>
           {HANDOVER_YEAR_OPTIONS.map((year) => (
             <SelectItem 
               key={year.value} 
               value={year.value.toString()} 
-              className={isDark ? "text-white" : ""}
+              className=""
               disabled={fromYear !== null && year.value < fromYear}
             >
               {year.label}

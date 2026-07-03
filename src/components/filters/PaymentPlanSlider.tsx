@@ -57,9 +57,7 @@ export function PaymentPlanSlider({
             onClick={handleReset}
             className={cn(
               "h-7 px-2 text-xs gap-1",
-              isDark 
-                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne-light"
+              "allow-white text-white hover:text-white hover:bg-white/12"
             )}
           >
             <RotateCcw className="w-3 h-3" />

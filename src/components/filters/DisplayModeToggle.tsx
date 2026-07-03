@@ -44,9 +44,7 @@ export function DisplayModeToggle({
     <div 
       className={cn(
         "inline-flex rounded-xl p-1",
-        isDark 
-          ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-[#064E3B]/30",
+        "allow-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18",
         className
       )}
     >
@@ -62,10 +60,8 @@ export function DisplayModeToggle({
               "flex items-center gap-2 rounded-lg transition-all",
               isSmall ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm",
               isActive
-                ? "bg-[#EFE6D6] text-[#1A1A1A] font-medium shadow-sm"
-                : isDark
-                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne-light"
+                ? "allow-white jj-pill-emerald-metallic text-white font-medium shadow-sm"
+                : "allow-white text-white hover:text-white hover:bg-white/12"
             )}
           >
             <Icon className={cn(
@@ -101,9 +97,7 @@ export function DisplayModeIconToggle({
     <div 
       className={cn(
         "inline-flex rounded-lg p-0.5",
-        isDark 
-          ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-[#064E3B]/30",
+        "allow-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18",
         className
       )}
     >
@@ -112,10 +106,8 @@ export function DisplayModeIconToggle({
         className={cn(
           "p-2 rounded-md transition-all",
           value === 'investor'
-            ? "bg-[#EFE6D6] text-[#1A1A1A]"
-            : isDark
-              ? "text-white hover:text-white"
-              : "text-[#1A1A1A] hover:text-[#1A1A1A]"
+            ? "allow-white jj-pill-emerald-metallic text-white"
+            : "allow-white text-white hover:text-white hover:bg-white/12"
         )}
         title="Investor View — See investment-focused content like ROI, yields & capital growth"
       >
@@ -126,10 +118,8 @@ export function DisplayModeIconToggle({
         className={cn(
           "p-2 rounded-md transition-all",
           value === 'broker'
-            ? "bg-[#EFE6D6] text-[#1A1A1A]"
-            : isDark
-              ? "text-white hover:text-white"
-              : "text-[#1A1A1A] hover:text-[#1A1A1A]"
+            ? "allow-white jj-pill-emerald-metallic text-white"
+            : "allow-white text-white hover:text-white hover:bg-white/12"
         )}
         title="Broker View — See broker tools, commissions & deal registration"
       >
