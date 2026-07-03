@@ -407,6 +407,7 @@ export const PublicRoutes = () => (
     <Route path="/my-dashboard/progress" element={<AuthRequiredRoute><MyDashboardProgress /></AuthRequiredRoute>} />
     <Route path="/my-dashboard/activity" element={<AuthRequiredRoute><MyDashboardActivity /></AuthRequiredRoute>} />
     <Route path="/my-activity" element={<Navigate to="/my-dashboard/activity" replace />} />
+    <Route path="/my-calendar" element={<MyCalendarRedirect />} />
     <Route path="/investor-dashboard" element={<AuthRequiredRoute><InvestorDashboard /></AuthRequiredRoute>} />
     <Route path="/investor-dashboard/portfolio" element={<AuthRequiredRoute><PortfolioViews /></AuthRequiredRoute>} />
     <Route path="/investor-dashboard/reports" element={<AuthRequiredRoute><ReportAccess /></AuthRequiredRoute>} />
