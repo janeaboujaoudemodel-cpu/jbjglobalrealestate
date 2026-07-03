@@ -111,7 +111,7 @@ export default function MoreFromDeveloperStrip({
     return all.filter((p: any) => {
       if (fArea !== "all" && p.location !== fArea) return false;
       if (fStatus !== "all" && p.sale_status !== fStatus) return false;
-      if (fType !== "all" && p.property_type !== fType) return false;
+      if (fType !== "all" && p.property_type_label !== fType) return false;
       if (fHandover !== "all") {
         const y = handoverYear(p.handover_date);
         if (fHandover === "ready" && y !== 0) return false;
