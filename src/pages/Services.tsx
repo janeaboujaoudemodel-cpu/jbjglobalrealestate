@@ -422,7 +422,7 @@ const Services = () => {
       </section>
 
       {/* Service Scope Clarification */}
-      <section className="py-20 bg-[#F7F2EA]">
+      <section data-surface="champagne" className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
