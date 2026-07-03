@@ -340,8 +340,8 @@ const Developers = () => {
                   </SelectContent>
                 </Select>
 
-                <div className="flex-1 text-white/80 text-sm">
-                  {filteredDevelopers.length} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
+                <div className="allow-white flex-1 text-white text-sm font-semibold" style={{ color: '#FFFFFF' }}>
+                  {filteredDevelopers.length.toLocaleString()} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
                   {totalPages > 1 && ` · Page ${currentPage} of ${totalPages}`}
                 </div>
 
