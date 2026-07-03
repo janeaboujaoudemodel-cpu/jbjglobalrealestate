@@ -484,7 +484,17 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Not sure which service — emerald ombré card, matches "Ready to Get Started" */}
+      {/* Footer Disclaimer — champagne band, ink text */}
+      <section className="bg-[#F7F2EA] py-8 border-t border-[#1A1A1A]/10">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
+            JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
+            within brokerage scope. Partner services are delivered independently under partner licenses.
+          </p>
+        </div>
+      </section>
+
+      {/* Not sure which service — emerald ombré card, matches "Ready to Get Started" (moved BELOW disclaimer per request) */}
       <section data-surface="champagne" className="py-16 bg-[#F7F2EA]">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -564,17 +574,6 @@ const Services = () => {
         </div>
       </section>
 
-
-
-      {/* Footer Disclaimer — champagne band, ink text (section bg is auto-remapped on marketing pages) */}
-      <section className="bg-[#F7F2EA] py-8 border-t border-[#1A1A1A]/10">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
-            JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
-            within brokerage scope. Partner services are delivered independently under partner licenses.
-          </p>
-        </div>
-      </section>
     </div>
   );
 };
