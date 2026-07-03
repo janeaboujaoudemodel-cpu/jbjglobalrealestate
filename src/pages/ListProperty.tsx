@@ -146,10 +146,20 @@ const ListProperty = () => {
     <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
       className="min-h-screen"
-      style={{ color: WHITE }}
+      style={{ color: WHITE, background: "linear-gradient(180deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}
       data-listing-mode={theme.name}
       data-list-property-page
+      data-surface="dark"
+      data-no-contrast-guard
     >
+      <style>{`
+        [data-list-property-page], [data-list-property-page] * { border-color: rgba(255,255,255,0.22) !important; }
+        [data-list-property-page] [style*="#FDFBF7" i],
+        [data-list-property-page] .bg-\\[\\#FDFBF7\\],
+        [data-list-property-page] [class*="from-gold"],
+        [data-list-property-page] [class*="border-\\[\\#B89555"] { background: transparent !important; }
+        [data-list-property-page] [data-manual-listing-shell] { background: linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%) !important; }
+      `}</style>
       <SEOHead
         title={purpose === "rent" ? "List Your Property for Rent — JBJ Global Real Estate" : "List Your Property for Sale — JBJ Global Real Estate"}
         description="List your property for sale or rent with JBJ Global Real Estate. Use AI to auto-generate your listing, or fill in manually. Track approval status from your dashboard."
@@ -157,7 +167,8 @@ const ListProperty = () => {
       />
 
       {/* Full-bleed: no outer chrome — every <section> below renders edge-to-edge */}
-      <div className="w-full" style={{ backgroundColor: CHAMPAGNE }}>
+      <div className="w-full" style={{ background: "linear-gradient(180deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
+
 
 
 
