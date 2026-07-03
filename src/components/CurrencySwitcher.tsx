@@ -104,13 +104,24 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
         data-surface="emerald"
         data-no-contrast-guard
         align="end" 
+        side="bottom"
         sideOffset={12}
-        className="z-[9999] min-w-[280px] rounded-xl p-0 overflow-hidden border border-white/30 text-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] shadow-[0_18px_50px_rgba(0,0,0,0.42),0_0_28px_rgba(6,78,59,0.24)]"
+        collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
+        avoidCollisions={false}
+        sticky="always"
+        updatePositionStrategy="always"
+        onWheel={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        className="z-[120001] w-[300px] max-w-[calc(100vw-32px)] rounded-xl p-0 overflow-hidden border border-white/30 text-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] shadow-[0_18px_50px_rgba(0,0,0,0.42),0_0_28px_rgba(6,78,59,0.24)]"
       >
-        <div className="px-4 py-3 border-b border-white/15">
-          <p className="text-xs font-semibold text-white/70 uppercase tracking-wider">Select Currency</p>
+        <div className="px-4 py-3 border-b border-white/15 bg-white/[0.03]">
+          <p className="text-xs font-semibold text-white/80 uppercase tracking-wider">Select Currency</p>
         </div>
-        <div className="p-2 max-h-80 overflow-y-auto">
+        <div
+          className="p-2 max-h-[360px] overflow-y-auto overscroll-contain jj-emerald-scroll"
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
           {SUPPORTED_CURRENCIES.map((curr) => {
             const active = currency === curr.code;
 
@@ -124,14 +135,14 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
                 data-no-contrast-guard
                 onClick={() => setCurrency(curr.code)}
                 unstyled
-                className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 text-white transition-colors ${active ? 'bg-white/15 font-semibold' : 'hover:bg-white/10'}`}
+                className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-2.5 my-0.5 text-white transition-colors outline-none ${active ? 'bg-white/20 font-semibold ring-1 ring-white/25' : 'hover:bg-white/15 focus:bg-white/15'}`}
               >
               <span className="flex items-center gap-3 text-white">
-                <span className="text-lg">{curr.flag}</span>
+                <span className="text-lg leading-none">{curr.flag}</span>
                 <span className="text-sm font-semibold text-white">{curr.name}</span>
               </span>
               <span className="flex items-center gap-2 text-white">
-                <span className="text-sm text-white">{curr.symbol}</span>
+                <span className="text-sm text-white/85">{curr.symbol}</span>
                 {active && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
               </span>
               </DropdownMenuItem>
