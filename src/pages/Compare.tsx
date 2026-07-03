@@ -662,12 +662,13 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   // Solid dark emerald used for the page background — matches the footer band
   // so the whole page reads as one continuous dark surface (no gradient).
   const PAGE_DARK = "#010806";
-  // Hero: short brighter emerald → quickly down to the same PAGE_DARK so the
-  // hero doesn't feel "light green" for too long.
-  const HERO_EMERALD = "linear-gradient(180deg, #065F46 0%, #054C39 10%, #032820 32%, #010806 100%)";
+  // Hero: FULL dark emerald matching the sidebar active pill (jj-emerald-ombre),
+  // no light-green top edge.
+  const HERO_EMERALD = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%)";
   const CHAMPAGNE = "#F7F2EA";
   const CHAMPAGNE_STRIPE = "#EFE6D6";
-  const EMERALD_HAIRLINE = "1px solid rgba(6,78,59,0.24)";
+  const EMERALD_HAIRLINE = "1px solid rgba(255,255,255,0.18)";
+
 
   return (
     <section data-compare-page data-surface="emerald" data-on-dark="true" className="min-h-screen" style={{ background: PAGE_DARK }}>
