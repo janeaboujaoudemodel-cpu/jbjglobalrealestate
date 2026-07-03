@@ -747,7 +747,7 @@ Requirements:
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/90 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
                         />
                       </div>
                       <div>
@@ -755,7 +755,7 @@ Requirements:
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/90 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
                         />
                       </div>
                     </div>
@@ -766,7 +766,7 @@ Requirements:
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                        className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/90 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
                       />
                     </div>
 
@@ -908,7 +908,7 @@ Requirements:
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}
+                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/90 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}
                         />
                       </div>
                     </div>
