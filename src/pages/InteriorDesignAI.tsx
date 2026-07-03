@@ -152,7 +152,9 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
       setProgress(20);
 
       const styleLabel = designStyles.find(s => s.id === designStyle)?.label || designStyle || 'modern';
-      const colorLabel = colorPalettes.find(p => p.id === colorPalette)?.name || colorPalette || 'neutral';
+      const colorLabel = colorPalette === 'custom'
+        ? `custom palette (${customColors.join(', ')})`
+        : colorPalettes.find(p => p.id === colorPalette)?.name || colorPalette || 'neutral';
 
       let prompt = chatPrompt || '';
       if (!chatPrompt) {
