@@ -369,6 +369,18 @@ const PropertyEvaluator = () => {
   const [isReportPreviewOpen, setIsReportPreviewOpen] = useState(false);
   const [entryMode, setEntryMode] = useState<'manual' | 'titleDeed'>('manual');
   const [isParsingTitleDeed, setIsParsingTitleDeed] = useState(false);
+  const [entryChosen, setEntryChosen] = useState<boolean>(() => {
+    try { return localStorage.getItem('jbj-pe-entry-chosen-v1') === '1'; } catch { return false; }
+  });
+  const chooseEntry = (mode: 'manual' | 'titleDeed') => {
+    setEntryMode(mode);
+    setEntryChosen(true);
+    try { localStorage.setItem('jbj-pe-entry-chosen-v1', '1'); } catch {}
+  };
+  const resetEntryChoice = () => {
+    setEntryChosen(false);
+    try { localStorage.removeItem('jbj-pe-entry-chosen-v1'); } catch {}
+  };
   
   const photoInputRef = useRef<HTMLInputElement>(null);
   const renovationPhotoRef = useRef<HTMLInputElement>(null);
