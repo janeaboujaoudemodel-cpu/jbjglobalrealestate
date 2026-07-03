@@ -1230,27 +1230,28 @@ const Quiz = () => {
                 Powered by JBJ Global Real Estate
               </p>
 
-              {/* Vertical tick list */}
               <ul className="text-left max-w-md mx-auto space-y-2.5 mb-6">
                 {[
                   { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
                   { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
                   { label: "Download Excel Report", description: "Take your matches with you" },
                 ].map((f) => (
-                  <li
-                    key={f.label}
-                    className="flex items-start gap-3 p-3 bg-white/5 border border-white/18 rounded-xl"
-                  >
+                  <li key={f.label} className="aihf-emerald-ring rounded-2xl block">
                     <div
-                      data-surface="emerald"
-                      data-emerald-ok="icon"
-                      className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                      className="flex items-start gap-3 p-3 rounded-2xl"
+                      style={{ background: "linear-gradient(135deg, rgba(6,78,59,0.55) 0%, rgba(4,35,26,0.85) 100%)" }}
                     >
-                      <Check className="w-3.5 h-3.5" strokeWidth={3} />
-                    </div>
-                    <div>
-                      <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
-                      <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
+                      <div
+                        data-surface="emerald"
+                        data-emerald-ok="icon"
+                        className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                      >
+                        <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                      </div>
+                      <div>
+                        <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
+                        <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -1263,21 +1264,24 @@ const Quiz = () => {
                   { Icon: Sparkles,     label: "AI-Powered"  },
                   { Icon: CheckCircle2, label: "100% Free"   },
                 ].map(({ Icon, label }) => (
-                  <div
-                    key={label}
-                    className="flex items-center gap-2.5 px-3.5 py-2 bg-white/5 border border-white/18 rounded-xl"
-                  >
+                  <div key={label} className="aihf-emerald-ring rounded-full">
                     <div
-                      data-surface="emerald"
-                      data-emerald-ok="icon"
-                      className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                      className="flex items-center gap-2.5 px-3.5 py-2 rounded-full"
+                      style={{ background: "linear-gradient(135deg, rgba(6,78,59,0.6) 0%, rgba(4,35,26,0.9) 100%)" }}
                     >
-                      <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+                      <div
+                        data-surface="emerald"
+                        data-emerald-ok="icon"
+                        className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                      >
+                        <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+                      </div>
+                      <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
                     </div>
-                    <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
                   </div>
                 ))}
               </div>
+
 
               {/* Primary CTA */}
               <Button
