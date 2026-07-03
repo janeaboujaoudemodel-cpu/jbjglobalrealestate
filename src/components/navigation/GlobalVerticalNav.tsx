@@ -827,7 +827,7 @@ export default function GlobalVerticalNav() {
         return;
       }
     }
-  }, [location.pathname, closeMegaMenu, sectionGroups]);
+  }, [location.pathname, location.search, closeMegaMenu, sectionGroups]);
 
   // Auto-open is now handled by the route-change effect above
 
@@ -869,13 +869,10 @@ export default function GlobalVerticalNav() {
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     let routeActive = isRouteActive(item.href);
-    // Dedupe: /list-property appears in multiple places (highlighted hub + sub-item).
-    // Only allow the "highlight:true" hub entry to reflect the active route.
-      if (hrefPathname(item.href) === '/list-property') {
-        routeActive = isListPropertySourceActive(item, sectionKey);
-      }
-      if (item.href === '/list-property' && !item.highlight) {
-      routeActive = false;
+    // Dedupe: /list-property appears in multiple places. Highlight only the
+    // clicked/source-matched shortcut (AI Home Finder, Properties, or Tools).
+    if (hrefPathname(item.href) === '/list-property') {
+      routeActive = isListPropertySourceActive(item, sectionKey);
     }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
