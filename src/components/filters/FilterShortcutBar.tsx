@@ -458,10 +458,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </PopoverTrigger>
           <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass, "text-white")} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
-              <TabsList className="w-full mb-3 bg-[#FDFBF7]/60">
-                <TabsTrigger value="unit" className="flex-1 text-xs">{t('filter.perUnit')}</TabsTrigger>
-                <TabsTrigger value="sqft" className="flex-1 text-xs">{t('filter.perSqft')}</TabsTrigger>
-                <TabsTrigger value="sqm" className="flex-1 text-xs">{t('filter.perSqm')}</TabsTrigger>
+              <TabsList className="w-full mb-3 bg-white/7 border border-white/18">
+                <TabsTrigger value="unit" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">{t('filter.perUnit')}</TabsTrigger>
+                <TabsTrigger value="sqft" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">{t('filter.perSqft')}</TabsTrigger>
+                <TabsTrigger value="sqm" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">{t('filter.perSqm')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -702,9 +702,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 update({ propertyCategory: category, propertyTypes: [] });
               }}
             >
-              <TabsList className="w-full mb-3 bg-[#FDFBF7]/60">
-                <TabsTrigger value="residential" className="flex-1 text-xs">{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" className="flex-1 text-xs">{t('filter.commercial')}</TabsTrigger>
+              <TabsList className="w-full mb-3 bg-white/7 border border-white/18">
+                <TabsTrigger value="residential" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">

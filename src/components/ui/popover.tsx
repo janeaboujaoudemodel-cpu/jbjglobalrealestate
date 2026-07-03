@@ -20,21 +20,24 @@ PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName;
 const PopoverContent = React.forwardRef<
   React.ElementRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
-  <PopoverPrimitive.Portal>
-    <PopoverPrimitive.Content
-      ref={ref}
-      align={align}
-      sideOffset={sideOffset}
-      data-surface="light"
-      className={cn(
-        "z-[120000] w-72 rounded-xl border border-[#064E3B]/25 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 text-[#1A1A1A] shadow-[0_16px_40px_-18px_rgba(6,78,59,0.35)] outline-none duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
-        className,
-      )}
-      {...props}
-    />
-  </PopoverPrimitive.Portal>
-));
+>(({ className, align = "center", sideOffset = 4, ...props }, ref) => {
+  const isFilterDropdown = Boolean((props as Record<string, unknown>)["data-filter-dropdown"]);
+  return (
+    <PopoverPrimitive.Portal>
+      <PopoverPrimitive.Content
+        ref={ref}
+        align={align}
+        sideOffset={sideOffset}
+        data-surface={isFilterDropdown ? "emerald" : "light"}
+        className={cn(
+          "z-[120000] w-72 rounded-xl border border-[#064E3B]/25 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 text-[#1A1A1A] shadow-[0_16px_40px_-18px_rgba(6,78,59,0.35)] outline-none duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
+          className,
+        )}
+        {...props}
+      />
+    </PopoverPrimitive.Portal>
+  );
+});
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
 export { Popover, PopoverTrigger, PopoverContent };
