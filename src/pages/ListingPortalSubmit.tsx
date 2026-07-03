@@ -826,9 +826,9 @@ const ListingPortalSubmit = () => {
                           style={{ background: EMERALD_OMBRE }}
                           onClick={() => document.getElementById('file-input')?.click()}
                         >
-                          <Upload className="w-10 h-10 mx-auto mb-3" style={{color: EMERALD}} />
+                          <Upload className="w-10 h-10 mx-auto mb-3" style={{color: '#FFFFFF'}} />
                           <p className="text-white font-medium mb-1">Drop files here or click to browse</p>
-                          <p className="text-white/70 text-xs">
+                          <p className="text-white text-xs" style={{ color: '#FFFFFF', opacity: 0.95 }}>
                             Any file — PDF, images, Word, Excel, PowerPoint, CSV, TXT, ZIP… up to 100MB each
                           </p>
                           <input
