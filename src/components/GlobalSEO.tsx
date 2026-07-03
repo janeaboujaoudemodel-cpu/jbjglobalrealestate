@@ -1,21 +1,43 @@
 import { useEffect } from "react";
 import { COMPANY_NAP } from "@/config/companyNAP";
+import {
+  CANONICAL_HOST,
+  PLACES,
+  COMMUNITIES,
+  DEVELOPERS,
+  LANDMARKS,
+  toPlaceNode,
+  toDeveloperNode,
+} from "@/seo/entityRegistry";
 
 /**
- * GlobalSEO — single source of structured-data emission.
+ * GlobalSEO — the single source of structured-data emission for every route.
  *
- * Emits ONE consolidated Organization graph (RealEstateAgent + LocalBusiness
- * + ProfessionalService merged via @type array on one @id node), a Founder
- * Person entity, WebSite with SearchAction, a SiteNavigation ItemList, a
- * Service catalog (buy/sell/rent/off-plan/mortgage/golden-visa), and a
- * SpeakableSpecification so AI voice/answer engines can quote the brand
- * consistently.
+ * Emits a fully connected @graph so Google Knowledge Graph, Google AI
+ * Overviews, ChatGPT, Gemini, Perplexity, Claude, Microsoft Copilot, and
+ * Apple Intelligence all see one consistent entity model:
  *
- * Per-page schemas (BreadcrumbList, FAQPage, RealEstateListing, Article) are
- * emitted by the route-level components — never duplicated here.
+ *   Organization (RealEstateAgent + LocalBusiness + ProfessionalService)
+ *     ├── founder / employee → Person (Jane Bou Jaoude)
+ *     ├── areaServed         → Place (Dubai, Abu Dhabi, Sharjah, RAK)
+ *     ├── serviceArea        → GeoCircle (Dubai HQ, 150 km radius)
+ *     ├── hasOfferCatalog    → 7 first-class Service entities
+ *     ├── knowsAbout         → Communities + Landmarks (Wikidata-linked)
+ *     └── memberOf           → RERA / Dubai Land Department
  *
- * All NAP values are consumed from src/config/companyNAP.ts so the entire
- * Google + AI-search identity for the business is centrally consistent.
+ *   WebSite   (with SearchAction, publisher → Organization)
+ *   WebPage   (SpeakableSpecification for AI voice engines)
+ *   ItemList  (Main navigation)
+ *   Places    (Dubai, UAE, Palm Jumeirah, Downtown, Marina, Business Bay …)
+ *   Developers (Emaar, Damac, Sobha, Meraas, Nakheel, Aldar, Dubai Holding …)
+ *   Landmarks (Burj Khalifa, Burj Al Arab, Atlantis)
+ *
+ * Every entity carries Wikidata + Wikipedia sameAs where a public entity
+ * exists — this is the strongest single signal for Knowledge Graph joins.
+ *
+ * Per-route schemas (BreadcrumbList, FAQPage, RealEstateListing, Article,
+ * Product) are still emitted by page-level components. They reference the
+ * @id nodes below instead of duplicating them.
  */
 export const GlobalSEO = () => {
   useEffect(() => {
@@ -40,38 +62,52 @@ export const GlobalSEO = () => {
       { name: "Property Management", url: "/services/property-management", desc: "Institutional-grade property management and facility services." },
     ];
 
+    // ── Place nodes ─────────────────────────────────────────────────────
+    const placeNodes = [
+      toPlaceNode(PLACES.uae, "Country"),
+      toPlaceNode(PLACES.dubai, "City"),
+      toPlaceNode(PLACES.abuDhabi, "City"),
+      toPlaceNode(PLACES.sharjah, "City"),
+      toPlaceNode(PLACES.rak, "City"),
+    ];
+    const communityNodes = Object.values(COMMUNITIES).map((c) =>
+      toPlaceNode(c, "AdministrativeArea"),
+    );
+    const landmarkNodes = Object.values(LANDMARKS).map((l) =>
+      toPlaceNode(l, "LandmarksOrHistoricalBuildings"),
+    );
+
+    // ── Developer Organization nodes ────────────────────────────────────
+    const developerNodes = Object.values(DEVELOPERS).map((d) => toDeveloperNode(d));
+
+    // ── Core Organization ───────────────────────────────────────────────
     const organization = {
-      "@context": "https://schema.org",
       "@type": ["RealEstateAgent", "LocalBusiness", "ProfessionalService"],
       "@id": orgId,
       name: COMPANY_NAP.name,
       legalName: COMPANY_NAP.legalName,
       alternateName: COMPANY_NAP.alternateNames,
       url: host,
-      logo: {
-        "@type": "ImageObject",
-        url: COMPANY_NAP.logoUrl,
-        width: 512,
-        height: 512,
-      },
+      logo: { "@type": "ImageObject", url: COMPANY_NAP.logoUrl, width: 512, height: 512 },
       image: COMPANY_NAP.ogImageUrl,
       description: COMPANY_NAP.description,
       slogan: "Dubai's premier RERA-licensed luxury real estate brokerage.",
       foundingDate: "2016",
+      foundingLocation: { "@id": PLACES.dubai.id },
       knowsLanguage: ["en", "ar", "fr"],
       knowsAbout: [
+        // Topical entities
         "Dubai real estate",
-        "Luxury properties",
-        "Off-plan investment",
+        "Luxury property investment",
+        "Off-plan property Dubai",
         "Golden Visa property investment",
-        "Palm Jumeirah villas",
-        "Downtown Dubai apartments",
-        "Dubai Marina penthouses",
-        "Business Bay properties",
         "UAE property market",
         "RERA brokerage",
         "Property management Dubai",
         "Mortgage advisory UAE",
+        // Community entity references (@id joins for KG traversal)
+        ...Object.values(COMMUNITIES).map((c) => ({ "@id": c.id })),
+        ...Object.values(LANDMARKS).map((l) => ({ "@id": l.id })),
       ],
       telephone: COMPANY_NAP.phoneE164,
       email: COMPANY_NAP.email,
@@ -92,11 +128,13 @@ export const GlobalSEO = () => {
         longitude: COMPANY_NAP.geo.longitude,
       },
       hasMap: `https://www.google.com/maps?q=${COMPANY_NAP.geo.latitude},${COMPANY_NAP.geo.longitude}`,
-      areaServed: COMPANY_NAP.areaServed.map((name) => ({
-        "@type": "City",
-        name,
-        containedInPlace: { "@type": "Country", name: "United Arab Emirates" },
-      })),
+      areaServed: [
+        { "@id": PLACES.dubai.id },
+        { "@id": PLACES.abuDhabi.id },
+        { "@id": PLACES.sharjah.id },
+        { "@id": PLACES.rak.id },
+        { "@id": PLACES.uae.id },
+      ],
       serviceArea: {
         "@type": "GeoCircle",
         geoMidpoint: {
@@ -134,6 +172,15 @@ export const GlobalSEO = () => {
           availableLanguage: ["English", "Arabic", "French"],
         },
       ],
+      // Regulator + industry affiliations — Knowledge Graph loves these.
+      memberOf: [
+        {
+          "@type": "Organization",
+          name: "Real Estate Regulatory Agency (RERA) — Dubai Land Department",
+          url: "https://dubailand.gov.ae/en/eservices/rera-services/",
+          sameAs: ["https://en.wikipedia.org/wiki/Dubai_Land_Department"],
+        },
+      ],
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Real Estate Services",
@@ -142,18 +189,27 @@ export const GlobalSEO = () => {
           position: i + 1,
           itemOffered: {
             "@type": "Service",
+            "@id": `${host}${s.url}#service`,
             name: s.name,
             description: s.desc,
             url: `${host}${s.url}`,
             provider: { "@id": orgId },
-            areaServed: { "@type": "Country", name: "United Arab Emirates" },
+            areaServed: [
+              { "@id": PLACES.dubai.id },
+              { "@id": PLACES.uae.id },
+            ],
           },
         })),
       },
+      // Explicit graph joins so AI engines can enumerate JBJ's operating context.
+      subjectOf: [
+        { "@id": `${host}/#website` },
+        { "@id": `${host}/about#webpage` },
+        { "@id": `${host}/founder#webpage` },
+      ],
     };
 
     const founderPerson = {
-      "@context": "https://schema.org",
       "@type": "Person",
       "@id": founderId,
       name: COMPANY_NAP.founder.name,
@@ -162,6 +218,9 @@ export const GlobalSEO = () => {
       worksFor: { "@id": orgId },
       affiliation: { "@id": orgId },
       nationality: { "@type": "Country", name: COMPANY_NAP.founder.nationality },
+      birthPlace: { "@type": "Country", name: COMPANY_NAP.founder.nationality },
+      homeLocation: { "@id": PLACES.dubai.id },
+      workLocation: { "@id": PLACES.dubai.id },
       knowsAbout: [
         "Dubai real estate",
         "Luxury property investment",
@@ -169,6 +228,7 @@ export const GlobalSEO = () => {
         "UAE property market",
         "Golden Visa strategy",
         "High-net-worth advisory",
+        ...Object.values(COMMUNITIES).map((c) => ({ "@id": c.id })),
       ],
       knowsLanguage: ["en", "ar", "fr"],
       url: `${host}/founder`,
@@ -177,7 +237,6 @@ export const GlobalSEO = () => {
     };
 
     const website = {
-      "@context": "https://schema.org",
       "@type": "WebSite",
       "@id": `${host}/#website`,
       url: host,
@@ -187,6 +246,11 @@ export const GlobalSEO = () => {
       inLanguage: ["en", "ar"],
       publisher: { "@id": orgId },
       copyrightHolder: { "@id": orgId },
+      about: { "@id": orgId },
+      mentions: [
+        ...Object.values(COMMUNITIES).map((c) => ({ "@id": c.id })),
+        ...Object.values(DEVELOPERS).map((d) => ({ "@id": d.id })),
+      ],
       potentialAction: [
         {
           "@type": "SearchAction",
@@ -200,8 +264,8 @@ export const GlobalSEO = () => {
     };
 
     const siteNavigation = {
-      "@context": "https://schema.org",
       "@type": "ItemList",
+      "@id": `${host}/#site-navigation`,
       name: "Main Navigation",
       itemListElement: [
         { "@type": "SiteNavigationElement", position: 1, name: "Buy Property", url: `${host}/properties` },
@@ -217,9 +281,7 @@ export const GlobalSEO = () => {
       ],
     };
 
-    // Speakable — helps AI voice/answer engines quote consistent brand facts.
     const speakable = {
-      "@context": "https://schema.org",
       "@type": "WebPage",
       "@id": `${host}/#speakable`,
       speakable: {
@@ -230,20 +292,30 @@ export const GlobalSEO = () => {
       about: { "@id": orgId },
     };
 
-    const schemas = [organization, founderPerson, website, siteNavigation, speakable];
+    // Everything ships as ONE @graph so KG parsers can traverse @id joins.
+    const graph = {
+      "@context": "https://schema.org",
+      "@graph": [
+        organization,
+        founderPerson,
+        website,
+        siteNavigation,
+        speakable,
+        ...placeNodes,
+        ...communityNodes,
+        ...landmarkNodes,
+        ...developerNodes,
+      ],
+    };
 
-    const injected: HTMLScriptElement[] = [];
-    schemas.forEach((schema, i) => {
-      const s = document.createElement("script");
-      s.type = "application/ld+json";
-      s.setAttribute("data-global-seo", `schema-${i}`);
-      s.textContent = JSON.stringify(schema);
-      document.head.appendChild(s);
-      injected.push(s);
-    });
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-global-seo", "graph");
+    script.textContent = JSON.stringify(graph);
+    document.head.appendChild(script);
 
     return () => {
-      injected.forEach((s) => s.remove());
+      script.remove();
     };
   }, []);
 
@@ -251,3 +323,8 @@ export const GlobalSEO = () => {
 };
 
 export default GlobalSEO;
+
+// Silences unused-import warnings when tree-shaking is aggressive; the
+// entity registry is intentionally re-exported so route-level pages can
+// pull individual @id nodes when they need to reference them.
+export { PLACES, COMMUNITIES, DEVELOPERS, LANDMARKS, CANONICAL_HOST };
