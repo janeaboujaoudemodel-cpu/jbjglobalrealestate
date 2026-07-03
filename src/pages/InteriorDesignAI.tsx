@@ -80,6 +80,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   const [mode, setMode] = useState<DesignMode>('concept');
   const [designStyle, setDesignStyle] = useState('');
   const [colorPalette, setColorPalette] = useState('');
+  const [customColors, setCustomColors] = useState<string[]>(['#F5F5DC', '#D2B48C', '#8A7356', '#4A4A4A', '#1C1C1C']);
   const [uploadedPhoto, setUploadedPhoto] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
