@@ -46,7 +46,7 @@ export function DisplayModeToggle({
         "inline-flex rounded-xl p-1",
         isDark 
           ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-[#B89555]/30",
+          : "bg-[#FDFBF7]/80 border border-[#064E3B]/30",
         className
       )}
     >
@@ -64,8 +64,8 @@ export function DisplayModeToggle({
               isActive
                 ? "bg-[#EFE6D6] text-[#1A1A1A] font-medium shadow-sm"
                 : isDark
-                  ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
+                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne-light"
             )}
           >
             <Icon className={cn(
@@ -103,7 +103,7 @@ export function DisplayModeIconToggle({
         "inline-flex rounded-lg p-0.5",
         isDark 
           ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-[#B89555]/30",
+          : "bg-[#FDFBF7]/80 border border-[#064E3B]/30",
         className
       )}
     >
@@ -114,8 +114,8 @@ export function DisplayModeIconToggle({
           value === 'investor'
             ? "bg-[#EFE6D6] text-[#1A1A1A]"
             : isDark
-              ? "text-[#1A1A1A]/70 hover:text-white"
-              : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+              ? "text-white hover:text-white"
+              : "text-[#1A1A1A] hover:text-[#1A1A1A]"
         )}
         title="Investor View — See investment-focused content like ROI, yields & capital growth"
       >
@@ -128,8 +128,8 @@ export function DisplayModeIconToggle({
           value === 'broker'
             ? "bg-[#EFE6D6] text-[#1A1A1A]"
             : isDark
-              ? "text-[#1A1A1A]/70 hover:text-white"
-              : "text-[#1A1A1A]/60 hover:text-[#1A1A1A]"
+              ? "text-white hover:text-white"
+              : "text-[#1A1A1A] hover:text-[#1A1A1A]"
         )}
         title="Broker View — See broker tools, commissions & deal registration"
       >

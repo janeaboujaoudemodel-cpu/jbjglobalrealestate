@@ -124,7 +124,7 @@ export function SearchableSelect({
             {selectedFlag && <span className="text-xl leading-none shrink-0">{selectedFlag}</span>}
             <span className="truncate font-medium">{value || placeholder}</span>
           </span>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 text-[#B89555]" />
+          <ChevronsUpDown className="h-4 w-4 shrink-0 text-[#064E3B]" />
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -141,7 +141,7 @@ export function SearchableSelect({
       >
         <div className="p-2 border-b border-[#0A0A0A]/15">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#B89555]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#064E3B]" />
             <Input
               ref={inputRef}
               placeholder={searchPlaceholder}
@@ -174,7 +174,7 @@ export function SearchableSelect({
                 >
                   {flag && <span className="text-xl leading-none shrink-0">{flag}</span>}
                   <span className="truncate text-sm sm:text-base flex-1 min-w-0 text-[#0A0A0A]">{option}</span>
-                  {isSelected && <Check className="h-4 w-4 shrink-0 text-[#B89555]" strokeWidth={2.8} />}
+                  {isSelected && <Check className="h-4 w-4 shrink-0 text-[#064E3B]" strokeWidth={2.8} />}
                 </button>
               );
             })

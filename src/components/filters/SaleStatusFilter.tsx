@@ -135,7 +135,7 @@ export function SaleStatusFilter({
                   "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   "text-[#1A1A1A] hover:bg-[#F7F2EA]",
                   isSelected && "bg-[#F7F2EA]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
                 )}
               >
                 <span
@@ -158,10 +158,10 @@ export function SaleStatusFilter({
         </div>
 
         {selectedCount > 0 && (
-          <div className="mt-2 pt-2 border-t border-[#B89555]/30">
+          <div className="mt-2 pt-2 border-t border-[#064E3B]/20">
             <button
               onClick={clearAll}
-              className="w-full text-center text-xs font-semibold py-1.5 rounded text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555]"
+              className="w-full text-center text-xs font-semibold py-1.5 rounded text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#F7F2EA] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]"
             >
               Clear Selection
             </button>
@@ -247,7 +247,7 @@ export function SaleStatusSelect({
                   "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   "text-[#1A1A1A] hover:bg-[#F7F2EA]",
                   isSelected && "bg-[#F7F2EA]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
                 )}
               >
                 {optConfig && (

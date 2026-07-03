@@ -15,6 +15,12 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import type { ShortcutFilterState } from "./FilterShortcutBar";
 import { defaultShortcutFilters } from "./FilterShortcutBar";
+import {
+  filterInput,
+  filterLabel,
+  filterPrimaryButton,
+  filterSecondaryButton,
+} from "./filterStyles";
 
 interface AdvancedFilterPanelProps {
   open: boolean;
@@ -28,7 +34,7 @@ const YEARS = ['2025', '2026', '2027', '2028', '2029', '2030', '2031', '2032', '
 
 const STATUS_OPTIONS = [
   { value: 'Announced', label: 'Announced', dotClass: 'bg-[#064E3B]' },
-  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-surface-emerald' },
+  { value: 'Presale (EOI)', label: 'Presale EOI', dotClass: 'jj-pill-emerald-metallic' },
   { value: 'Start of Sales', label: 'Start of Sales', dotClass: 'bg-[#064E3B]' },
   { value: 'On Sale', label: 'On Sale', dotClass: 'bg-[#064E3B]' },
   { value: 'Sold Out', label: 'Sold Out', dotClass: 'bg-[#064E3B]' },
@@ -235,19 +241,16 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "px-3.5 py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer " +
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]";
   const togglePillOff =
-    "border-[#B89555]/60 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#B89555]";
+    "border-[#064E3B]/30 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55";
   const togglePillOn =
-    "allow-white jj-filter-emerald-control jj-chip-emerald font-bold";
+    "allow-white jj-pill-emerald-metallic text-white border-0 font-bold";
   const sectionTitle = "text-sm font-bold text-[#1A1A1A] mb-3 tracking-tight";
-  const inputClass =
-    "w-full h-10 px-3 bg-[#FDFBF7] border border-[#B89555]/50 rounded-xl text-sm " +
-    "text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 " +
-    "focus:outline-none focus:border-[color:var(--emerald-1)] focus:ring-2 focus:ring-[color:var(--emerald-1)]/25 transition-all";
+  const inputClass = `${filterInput} h-10 rounded-xl font-medium`;
   const dropdownPanel =
-    "mt-2 rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
+    "mt-2 rounded-2xl border border-[#064E3B]/25 bg-[#FDFBF7] p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.55)]";
   const optionRow =
     "flex items-start gap-3 w-full min-h-12 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA] overflow-visible";
-  const selectedBox = "allow-white jj-filter-emerald-control jj-chip-emerald border-0";
+  const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
@@ -278,7 +281,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border-2 border-[#B89555]/50 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(200,167,102,0.2)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
+        data-filter-clean="true"
+        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border border-[#064E3B]/30 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(6,78,59,0.14)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
         style={{
           // Emerald slider override for this modal
           ['--slider-track-bg' as any]: '#E6DCC7',
@@ -289,7 +293,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       >
 
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-[#B89555]/30 flex-shrink-0 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
+        <div className="px-6 pt-6 pb-4 border-b border-[#064E3B]/18 flex-shrink-0 bg-gradient-to-r from-transparent via-[#064E3B]/[0.04] to-transparent">
           <div className="flex items-center justify-between mb-3">
             <div>
               <DialogTitle className="text-xl font-bold text-[#1A1A1A] tracking-tight">New Off Plan Projects</DialogTitle>
@@ -298,12 +302,12 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   {projectCount.toLocaleString()} live projects
                 </span>
               ) : (
-                <span className="text-sm text-[#1A1A1A]/70">Loading...</span>
+                <span className="text-sm text-[#1A1A1A]">Loading...</span>
               )}
             </div>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/40" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#064E3B]" />
             <input
               type="text"
               value={localFilters.searchQuery}
@@ -324,10 +328,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.emirates.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
+                <span className="text-[#1A1A1A]">
                   {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", emiratesOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", emiratesOpen && "rotate-180")} />
               </button>
               {emiratesOpen && (
                 <div className={dropdownPanel}>
@@ -349,7 +353,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-[#064E3B]/35 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -369,12 +373,12 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setAreasOpen(!areasOpen); setEmiratesOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.areas && localFilters.areas.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
+                <span className="text-[#1A1A1A]">
                   {!localFilters.areas || localFilters.areas.length === 0
                     ? "All Areas"
                     : `${localFilters.areas.length} area${localFilters.areas.length > 1 ? 's' : ''} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", areasOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", areasOpen && "rotate-180")} />
               </button>
               {areasOpen && (
                 <div className={dropdownPanel}>
@@ -386,15 +390,15 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
                   {allAreas.length === 0 ? (
-                    <div className="py-4 text-center text-xs text-[#1A1A1A]/70">Loading areas...</div>
+                    <div className="py-4 text-center text-xs text-[#1A1A1A]">Loading areas...</div>
                   ) : (
                     <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                       {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
-                            <span className="text-[10px] font-bold text-[#1A1A1A]/70 uppercase tracking-wider">{emirate}</span>
+                            <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wider">{emirate}</span>
                             <div className="flex-1 h-px bg-[#EFE6D6]/20" />
-                            <span className="text-[10px] text-[#1A1A1A]/70">{areaNames.length}</span>
+                            <span className="text-[10px] text-[#1A1A1A] font-semibold">{areaNames.length}</span>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                             {areaNames.map(areaName => {
@@ -407,7 +411,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
+                                    isSelected ? selectedBox : "border-[#064E3B]/35 bg-[#FDFBF7]"
                                   )}>
                                     {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
@@ -431,10 +435,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setDevsOpen(!devsOpen); setEmiratesOpen(false); setAreasOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className={localFilters.developers.length > 0 ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70"}>
+                <span className="text-[#1A1A1A]">
                   {localFilters.developers.length === 0 ? "All Developers" : `${localFilters.developers.length} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#1A1A1A]/40 transition-transform", devsOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", devsOpen && "rotate-180")} />
               </button>
               {devsOpen && (
                 <div className={dropdownPanel}>
@@ -457,7 +461,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? selectedBox : "border-[#B89555]/60 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-[#064E3B]/35 bg-[#FDFBF7]"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -485,8 +489,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Projects Payment Plan</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A]/70">Maximum pre-handover</span>
-                  <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-[#B89555]/30">
+                  <span className="text-xs text-[#1A1A1A] font-semibold">Maximum pre-handover</span>
+                  <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-[#064E3B]/25">
                     {localFilters.paymentPlanMax}%
                   </span>
                 </div>
@@ -498,7 +502,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   step={5}
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A]/70">Post handover plans only</span>
+                  <span className="text-xs text-[#1A1A1A] font-semibold">Post handover plans only</span>
                   <Switch
                     checked={localFilters.postHandoverOnly}
                     onCheckedChange={(v) => update({ postHandoverOnly: v })}
@@ -519,7 +523,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               </Tabs>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Min Price</label>
+                  <label className={filterLabel}>Min Price</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -528,11 +532,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       placeholder="0"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
                   </div>
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Max Price</label>
+                  <label className={filterLabel}>Max Price</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -541,7 +545,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       placeholder="Any"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A]/70 font-medium">AED</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
                   </div>
                 </div>
               </div>
@@ -552,7 +556,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Property Size</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Min sqft</label>
+                  <label className={filterLabel}>Min sqft</label>
                   <input
                     type="text"
                     value={localFilters.sizeMin}
@@ -562,7 +566,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-1 block">Max sqft</label>
+                  <label className={filterLabel}>Max sqft</label>
                   <input
                     type="text"
                     value={localFilters.sizeMax}
@@ -652,7 +656,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Project Handover By</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">From</label>
+                  <label className={`${filterLabel} mb-2`}>From</label>
                   <div className="flex gap-1 mb-2">
                     {QUARTERS.map(q => (
                       <button
@@ -661,8 +665,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
-                            ? "allow-white jj-filter-emerald-control jj-chip-emerald font-bold"
-                            : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
+                            ? "allow-white jj-pill-emerald-metallic text-white border-0 font-bold"
+                            : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
                         )}
                       >
                         {q}
@@ -672,14 +676,14 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <select
                     value={localFilters.handoverFrom.year}
                     onChange={(e) => update({ handoverFrom: { ...localFilters.handoverFrom, year: e.target.value } })}
-                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
                     style={{ WebkitAppearance: 'none' }}
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-[10px] font-semibold text-[#1A1A1A]/70 uppercase mb-2 block">To</label>
+                  <label className={`${filterLabel} mb-2`}>To</label>
                   <div className="flex gap-1 mb-2">
                     {QUARTERS.map(q => (
                       <button
@@ -688,8 +692,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         className={cn(
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
-                            ? "allow-white jj-filter-emerald-control jj-chip-emerald font-bold"
-                            : "bg-[#FDFBF7] border border-[#B89555]/60 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555]"
+                            ? "allow-white jj-pill-emerald-metallic text-white border-0 font-bold"
+                            : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
                         )}
                       >
                         {q}
@@ -699,7 +703,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <select
                     value={localFilters.handoverTo.year}
                     onChange={(e) => update({ handoverTo: { ...localFilters.handoverTo, year: e.target.value } })}
-                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#B89555]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
                     style={{ WebkitAppearance: 'none' }}
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -728,17 +732,17 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         </ScrollArea>
 
         {/* Sticky Footer */}
-        <div className="px-6 py-4 border-t border-[#B89555]/30 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-gold/[0.04] to-transparent">
+        <div className="px-6 py-4 border-t border-[#064E3B]/18 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-[#064E3B]/[0.04] to-transparent">
           <button
             onClick={handleClearAll}
-            className="px-5 py-2.5 rounded-full border border-[#B89555]/60 bg-[#FDFBF7] text-xs font-bold text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]"
+            className={filterSecondaryButton.replace("h-9 px-3", "px-5 py-2.5 rounded-full")}
           >
             Clear all
           </button>
           <button
             aria-label="Save to favourites"
             data-emerald-ok="icon"
-            className="allow-white jj-filter-emerald-control jj-chip-emerald p-2.5 rounded-full inline-flex items-center justify-center"
+            className="allow-white jj-pill-emerald-metallic p-2.5 rounded-full inline-flex items-center justify-center"
           >
             <Heart className="w-4 h-4" fill="currentColor" />
           </button>

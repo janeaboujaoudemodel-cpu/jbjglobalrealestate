@@ -58,8 +58,8 @@ export function PaymentPlanSlider({
             className={cn(
               "h-7 px-2 text-xs gap-1",
               isDark 
-                ? "text-[#1A1A1A]/70 hover:text-white hover:bg-[#2a2a2a]"
-                : "text-[#1A1A1A]/60 hover:text-[#1A1A1A] hover:bg-champagne-light"
+                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne-light"
             )}
           >
             <RotateCcw className="w-3 h-3" />
@@ -70,10 +70,10 @@ export function PaymentPlanSlider({
       
       {/* Labels */}
       <div className="flex justify-between text-xs">
-        <span className={isDark ? "text-[#1A1A1A]/70" : "text-[#1A1A1A]/60"}>
+        <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
           Pre-Handover
         </span>
-        <span className={isDark ? "text-[#1A1A1A]/70" : "text-[#1A1A1A]/60"}>
+        <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
           Post-Handover
         </span>
       </div>
@@ -113,15 +113,15 @@ export function PaymentPlanSlider({
           checked={hasPostHandover}
           onCheckedChange={(checked) => onHasPostHandoverChange(checked === true)}
           className={cn(
-            isDark ? "border-[#1A1A1A]" : "border-[#B89555]/40",
-            "data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555]"
+            isDark ? "border-white/40" : "border-[#064E3B]/40",
+            "data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#064E3B]"
           )}
         />
         <label 
           htmlFor="post-handover" 
           className={cn(
             "text-sm cursor-pointer",
-            isDark ? "text-[#1A1A1A]/70" : "text-[#1A1A1A]/80"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}
         >
           Only show projects with post-handover payments
@@ -150,7 +150,7 @@ export function PaymentPlanCompact({
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between text-xs">
-        <span className={isDark ? "text-[#1A1A1A]/70" : "text-[#1A1A1A]/60"}>
+        <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
           Payment Plan: {value[0]}% - {value[1]}%
         </span>
       </div>

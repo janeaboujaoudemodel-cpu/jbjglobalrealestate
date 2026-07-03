@@ -49,26 +49,26 @@ export function SortBySelect({
   const h = size === "compact" ? "h-10" : "h-11";
   const width = iconOnly ? "w-auto" : hideLabel ? "w-[140px]" : "w-[200px]";
   const frame = borderless
-    ? "bg-transparent border-0 shadow-none hover:bg-[#EFE6D6]/40"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl shadow-sm hover:border-[#B89555]";
+    ? "allow-white bg-transparent border-0 shadow-none text-white hover:bg-white/10 [&>svg]:text-white"
+    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 rounded-xl shadow-sm hover:border-[#064E3B]/55";
   // In iconOnly mode, hide the trailing Radix chevron
   const chevronOff = iconOnly ? "[&_.lucide-chevron-down]:hidden" : "";
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger
-        className={`${width} ${h} px-3 ${frame} text-[#1A1A1A] text-sm transition-colors ${chevronOff} ${className}`}
+        className={`${width} ${h} px-3 ${frame} ${borderless ? "text-white" : "text-[#1A1A1A]"} text-sm transition-colors ${chevronOff} ${className}`}
         aria-label="Sort by"
       >
-        <ArrowUpDown className="w-4 h-4 mr-1.5 text-[#B89555] flex-shrink-0" />
+        <ArrowUpDown className={`w-4 h-4 mr-1.5 ${borderless ? "text-white" : "text-[#064E3B]"} flex-shrink-0`} />
         {iconOnly ? (
-          <span className="font-semibold text-[13px] text-[#1A1A1A]">Sort by</span>
+          <span className={`font-semibold text-[13px] ${borderless ? "text-white" : "text-[#1A1A1A]"}`}>Sort by</span>
         ) : (
           <span className="truncate text-left flex-1">
             {hideLabel ? (
               <span className="font-semibold">{current?.label ?? "Newest"}</span>
             ) : (
               <>
-                <span className="text-[#1A1A1A]/70 font-medium">Sort by:</span>{" "}
+                <span className="text-[#1A1A1A] font-medium">Sort by:</span>{" "}
                 <span className="font-semibold">{current?.label ?? "Newest"}</span>
               </>
             )}

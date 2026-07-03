@@ -34,7 +34,7 @@ export const filterPillInactiveDark = [
 
 // Active (filter has a value) — solid emerald metallic + white label
 export const filterPillActive = [
-  "allow-white jj-filter-emerald-control jj-pill-emerald-metallic text-white border-0 font-bold shadow-md",
+  "allow-white jj-pill-emerald-metallic text-white border-0 font-bold shadow-md",
   "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 
@@ -51,7 +51,7 @@ export const togglePillBase = [
 
 export const togglePillOff = "border-[#064E3B]/25 text-[#1A1A1A] bg-[#FDFBF7] hover:bg-[#F7F2EA] hover:border-[#064E3B]/45";
 
-export const togglePillOn = "allow-white jj-filter-emerald-control jj-chip-emerald text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)]";
+export const togglePillOn = "allow-white jj-pill-emerald-metallic text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)]";
 
 // Popover surface — same as Price/Handover (bright champagne, no faded ink)
 export const filterPopoverSurface = "bg-[#FDFBF7] border border-[#064E3B]/25 shadow-xl z-[10200]";
@@ -78,7 +78,7 @@ export const filterSecondaryButton = [
 ].join(" ");
 
 export const filterCheckBox = "w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors";
-export const filterCheckBoxOn = "allow-white jj-filter-emerald-control jj-chip-emerald border-0";
+export const filterCheckBoxOn = "allow-white jj-pill-emerald-metallic border-0";
 export const filterCheckBoxOff = "border-[#064E3B]/30 bg-[#FDFBF7]";
 
 // Search pill on emerald rail — single-layer, NO inset ring, NO double border
@@ -89,7 +89,7 @@ export const activeChipBase = [
   "group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full text-xs font-semibold",
   "bg-[#FDFBF7] border border-[#064E3B]/25 text-[#1A1A1A] hover:border-[#064E3B]/45",
 ].join(" ");
-export const activeChipPrimary = "allow-white inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-filter-emerald-control jj-chip-emerald text-white text-xs font-semibold";
+export const activeChipPrimary = "allow-white inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-pill-emerald-metallic text-white text-xs font-semibold";
 export const activeChipDismissDot = "ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#1A1A1A]/10 group-hover:bg-[#1A1A1A]/25 transition-colors";
 
 export const filterDivider = "w-px h-5 bg-white/25 flex-shrink-0";

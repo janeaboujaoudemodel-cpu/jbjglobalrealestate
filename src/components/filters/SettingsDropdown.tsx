@@ -55,7 +55,7 @@ export function SettingsDropdown({
             "h-11 w-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-[#B89555]/30 text-[#1A1A1A] hover:bg-champagne-light",
+              : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -65,7 +65,7 @@ export function SettingsDropdown({
       <PopoverContent 
         className={cn(
           "w-[280px] p-0",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#B89555]/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#064E3B]/20"
         )}
         align="end"
       >
@@ -73,7 +73,7 @@ export function SettingsDropdown({
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/50"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             Measure Unit
           </h4>
@@ -98,13 +98,13 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-[#1A1A1A]" : "border-[#B89555]/20")} />
+        <div className={cn("border-t", isDark ? "border-white/20" : "border-[#064E3B]/20")} />
         
         {/* Currency */}
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/50"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             Currency
           </h4>
@@ -130,13 +130,13 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-[#1A1A1A]" : "border-[#B89555]/20")} />
+        <div className={cn("border-t", isDark ? "border-white/20" : "border-[#064E3B]/20")} />
         
         {/* Display Mode */}
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/50"
+            isDark ? "text-white" : "text-[#1A1A1A]"
           )}>
             Display Mode
           </h4>
@@ -149,8 +149,8 @@ export function SettingsDropdown({
                   "w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left",
                   displayMode === mode.value
                     ? isDark 
-                      ? "bg-[#EFE6D6]/20 border border-[#B89555]/40"
-                      : "bg-[#EFE6D6]/10 border border-[#B89555]/30"
+                      ? "bg-[#064E3B]/20 border border-[#064E3B]/40"
+                      : "bg-[#064E3B]/10 border border-[#064E3B]/30"
                     : isDark 
                       ? "bg-[#2a2a2a] hover:bg-[#333]"
                       : "bg-champagne-light hover:bg-champagne"
@@ -159,8 +159,8 @@ export function SettingsDropdown({
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center",
                   displayMode === mode.value
-                    ? "border-[#B89555] bg-[#EFE6D6]"
-                    : isDark ? "border-[#B89555]/30" : "border-[#B89555]/40"
+                    ? "border-[#064E3B] bg-[#064E3B]"
+                    : isDark ? "border-white/40" : "border-[#064E3B]/40"
                 )}>
                   {displayMode === mode.value && (
                     <Check className="w-3 h-3 text-[#1A1A1A]" />
@@ -175,7 +175,7 @@ export function SettingsDropdown({
                   </div>
                   <div className={cn(
                     "text-xs",
-                    isDark ? "text-[#EFE6D6]" : "text-[#1A1A1A]/60"
+                    isDark ? "text-white" : "text-[#1A1A1A]"
                   )}>
                     {mode.description}
                   </div>
@@ -188,11 +188,11 @@ export function SettingsDropdown({
         {/* Apply Button */}
         <div className={cn(
           "p-3 border-t",
-          isDark ? "border-[#1A1A1A] bg-[#151515]" : "border-[#B89555]/20 bg-champagne-light/50"
+          isDark ? "border-white/20 bg-[#151515]" : "border-[#064E3B]/20 bg-champagne-light/50"
         )}>
           <Button
             onClick={() => setOpen(false)}
-            className="w-full bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
+            className="allow-white w-full jj-pill-emerald-metallic text-white hover:brightness-110"
           >
             Apply Settings
           </Button>
