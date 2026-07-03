@@ -800,10 +800,10 @@ Requirements:
 
                     <div>
                       <Label className="font-semibold mb-3 block" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>{party} Type <span style={{color:"#B91C1C"}}>*</span></Label>
-                      <RadioGroup 
-                        value={form.watch("seller_type")} 
+                      <RadioGroup
+                        value={form.watch("seller_type")}
                         onValueChange={(v) => form.setValue("seller_type", v)}
-                        className="grid grid-cols-2 md:grid-cols-3 gap-3"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
                       >
                         {[
                           { value: "owner", label: "Property Owner" },
@@ -811,18 +811,34 @@ Requirements:
                           { value: "investor", label: "Investor" },
                           { value: "representative", label: "Representative" },
                           { value: "poa", label: "Power of Attorney" },
-                        ].map((option) => (
-                          <div key={option.value} className="flex items-center">
-                            <RadioGroupItem 
-                              value={option.value} 
-                              id={option.value}
-                              className="border-[#0F5132]" style={{borderWidth:"1.5px"}}
-                            />
-                            <Label htmlFor={option.value} className="ml-2 cursor-pointer font-medium" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF"}}>
-                              {option.label}
-                            </Label>
-                          </div>
-                        ))}
+                        ].map((option) => {
+                          const active = form.watch("seller_type") === option.value;
+                          return (
+                            <label
+                              key={option.value}
+                              htmlFor={option.value}
+                              className="flex items-center gap-3 rounded-full px-4 py-3 cursor-pointer transition-all"
+                              style={{
+                                background: active
+                                  ? "linear-gradient(135deg, #059669 0%, #047857 100%)"
+                                  : "rgba(255,255,255,0.06)",
+                                border: active
+                                  ? "1.5px solid #10B981"
+                                  : "1.5px solid rgba(255,255,255,0.28)",
+                                boxShadow: active ? "0 8px 20px -10px rgba(16,185,129,0.55)" : "none",
+                              }}
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                                className="border-white text-white data-[state=checked]:bg-white data-[state=checked]:text-emerald-700 h-5 w-5"
+                              />
+                              <span className="font-semibold text-sm whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                                {option.label}
+                              </span>
+                            </label>
+                          );
+                        })}
                       </RadioGroup>
                     </div>
                   </motion.div>
