@@ -11,6 +11,7 @@ import {
   AIMarketInsights,
   MarketReports,
   DataSourcesPanel,
+  MarketIntelligenceHero,
 } from "@/components/market-intelligence";
 import DLDDailySnapshot from "@/components/market-intelligence/DLDDailySnapshot";
 import {
@@ -131,47 +132,15 @@ const MarketIntelligence = () => {
         canonicalPath="/market-intelligence"
       />
 
-      {/* Hero — full-screen Market Intelligence data scene, no video */}
-      <section data-mi-hero data-hero-dark data-no-compare-frame data-no-section-frame data-surface="dark" className="mi-hero-scene relative flex min-h-[100svh] w-full items-end overflow-hidden">
-        <div className="mi-hero-grid" aria-hidden="true" />
-        <div className="mi-hero-orbit mi-hero-orbit-one" aria-hidden="true" />
-        <div className="mi-hero-orbit mi-hero-orbit-two" aria-hidden="true" />
-        <div className="mi-hero-data-stack" aria-hidden="true">
-          <span>TRANSACTIONS</span>
-          <span>PRICE INDEX</span>
-          <span>RENT INDEX</span>
-          <span>DLD SOURCE</span>
-        </div>
-
-        <motion.div
-          className="relative z-10 w-full px-5 pb-16 md:px-10 md:pb-24 lg:px-16 lg:pb-28"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-        >
-          <motion.div className="mi-hero-kicker" variants={fadeInUp}>Official Market Desk</motion.div>
-          <motion.h1
-            data-no-contrast-guard
-            className="allow-white max-w-4xl text-left text-5xl font-bold leading-[0.95] !text-white md:text-7xl lg:text-8xl"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-            variants={fadeInUp}
-          >
-            Market Intelligence
-          </motion.h1>
-
-          <motion.p
-            data-no-contrast-guard
-            className="allow-white mt-6 max-w-2xl text-left text-lg leading-relaxed !text-white md:text-xl"
-            style={{ color: "rgba(255,255,255,0.96)", WebkitTextFillColor: "rgba(255,255,255,0.96)" }}
-            variants={fadeInUp}
-          >
-            Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
-          </motion.p>
-
-          <motion.div
-            className="mt-8 flex flex-wrap gap-3"
-            variants={fadeInUp}
-          >
+      {/* Unified FAQ-style hero */}
+      <MarketIntelligenceHero
+        badge="Official Market Desk"
+        badgeIcon={Info}
+        title="Market Intelligence"
+        description="Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review."
+        backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2200&q=85"
+        actions={
+          <>
             <a
               href="#overview"
               data-no-contrast-guard
@@ -192,9 +161,9 @@ const MarketIntelligence = () => {
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View Daily Reports</span>
               <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </Link>
-          </motion.div>
-        </motion.div>
-      </section>
+          </>
+        }
+      />
 
 
       {/* Market Overview Dashboard - Edge to Edge */}
