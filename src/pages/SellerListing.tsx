@@ -1544,15 +1544,23 @@ Requirements:
 
               {/* Navigation Buttons - Primary Style */}
               <div className="flex justify-between items-center mt-8 pt-6 border-t border-[#0F5132]/25">
-                <Button
+                <button
                   type="button"
-                  variant="secondary"
                   onClick={goToPrevStep}
                   disabled={currentStep === 1}
+                  data-no-contrast-guard
+                  className="inline-flex items-center gap-2 px-6 h-11 rounded-md text-sm font-bold transition-all hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed"
+                  style={{
+                    background: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+                    color: "#FFFFFF",
+                    WebkitTextFillColor: "#FFFFFF",
+                    border: "1.5px solid #10B981",
+                    boxShadow: "0 10px 24px -12px rgba(16,185,129,0.55)",
+                  }}
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Previous
-                </Button>
+                  <ArrowLeft className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Previous</span>
+                </button>
 
                 {currentStep < 7 ? (
                   <button
@@ -1561,11 +1569,11 @@ Requirements:
                     data-no-contrast-guard
                     className="inline-flex items-center gap-2 px-6 h-11 rounded-md text-sm font-bold transition-all hover:brightness-110"
                     style={{
-                      background: "linear-gradient(135deg, #0F5132 0%, #064E3B 100%)",
+                      background: "linear-gradient(135deg, #059669 0%, #047857 100%)",
                       color: "#FFFFFF",
                       WebkitTextFillColor: "#FFFFFF",
-                      border: "1.5px solid #0F5132",
-                      boxShadow: "0 10px 24px -12px rgba(15,81,50,0.55)",
+                      border: "1.5px solid #10B981",
+                      boxShadow: "0 10px 24px -12px rgba(16,185,129,0.55)",
                     }}
                   >
                     <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Next Step</span>
