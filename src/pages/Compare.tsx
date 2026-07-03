@@ -1348,7 +1348,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         <div data-compare-powered-strip data-surface="emerald" data-on-dark="true" className="text-center text-sm py-6 rounded-2xl mt-6" style={{ background: EMERALD_INK, border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
           Powered &amp; Made by <span className="font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
-        <LegalDisclaimer variant="compact" className="pb-4" />
+        <LegalDisclaimer variant="compact" className="pt-8 pb-4" />
       </div>
 
       <PaymentModal
