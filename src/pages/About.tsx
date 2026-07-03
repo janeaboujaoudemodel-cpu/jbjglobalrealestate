@@ -49,8 +49,7 @@ const staggerContainer = {
   }
 };
 
-// Section wrapper with 3-layer system: Black page > Active Champagne section > Pearl content
-// Thin black contour on sides (~0.75rem / mx-3)
+// Section wrapper: one contained card per section, no nested/double frames.
 const Section = ({ 
   children, 
   className = "", 
@@ -64,7 +63,6 @@ const Section = ({
   light?: boolean;
   id?: string;
 }) => {
-  // Cleaner, tighter section: single champagne band, one thin gold hairline
   return (
     <section
       id={id}
@@ -73,14 +71,8 @@ const Section = ({
       className={`py-8 md:py-10 lg:py-12 ${className}`}
     >
       <div className="jj-section-gutter">
-        <div
-          data-surface="light"
-          data-no-contrast-guard
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]"
-        >
-          <div className="max-w-[1100px] mx-auto">
-            {children}
-          </div>
+        <div className="max-w-[1100px] mx-auto">
+          {children}
         </div>
       </div>
     </section>

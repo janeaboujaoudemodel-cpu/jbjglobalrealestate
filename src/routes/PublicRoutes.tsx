@@ -347,13 +347,13 @@ export const PublicRoutes = () => (
     <Route path="/partners/company-setup" element={<PartnerCompanySetup />} />
     <Route path="/partners/visa-services" element={<PartnerVisaServices />} />
 
-    {/* ── Company ── (wrapped in InsightsPageScope for MI brand contract) */}
-    <Route path="/contact" element={<InsightsPageScope><Contact /></InsightsPageScope>} />
+    {/* ── Company ── */}
+    <Route path="/contact" element={<Contact />} />
     <Route path="/about" element={<About />} />
-    <Route path="/founder" element={<InsightsPageScope><Founder /></InsightsPageScope>} />
-    <Route path="/awards" element={<InsightsPageScope><Awards /></InsightsPageScope>} />
+    <Route path="/founder" element={<Founder />} />
+    <Route path="/awards" element={<Awards />} />
     <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
-    <Route path="/company-profile" element={<InsightsPageScope><CompanyProfile /></InsightsPageScope>} />
+    <Route path="/company-profile" element={<CompanyProfile />} />
     <Route path="/news" element={<InsightsPageScope><News /></InsightsPageScope>} />
     <Route path="/news/:id" element={<InsightsPageScope><NewsDetail /></InsightsPageScope>} />
     <Route path="/team" element={<TeamRouteGate />} />
@@ -364,14 +364,14 @@ export const PublicRoutes = () => (
     <Route path="/thank-you" element={<ThankYou />} />
     <Route path="/blog" element={<Navigate to="/news" replace />} />
 
-    {/* ── Legal ── (wrapped in InsightsPageScope for MI brand contract) */}
-    <Route path="/terms" element={<InsightsPageScope><Terms /></InsightsPageScope>} />
-    <Route path="/privacy" element={<InsightsPageScope><Privacy /></InsightsPageScope>} />
-    <Route path="/cookies" element={<InsightsPageScope><Cookies /></InsightsPageScope>} />
+    {/* ── Legal ── */}
+    <Route path="/terms" element={<Terms />} />
+    <Route path="/privacy" element={<Privacy />} />
+    <Route path="/cookies" element={<Cookies />} />
     <Route path="/disclaimers" element={<Disclaimers />} />
 
-    <Route path="/aml-kyc" element={<InsightsPageScope><AmlKycPolicy /></InsightsPageScope>} />
-    <Route path="/intellectual-property" element={<InsightsPageScope><IntellectualProperty /></InsightsPageScope>} />
+    <Route path="/aml-kyc" element={<AmlKycPolicy />} />
+    <Route path="/intellectual-property" element={<IntellectualProperty />} />
 
     {/* ── User / Account (Tier 2 — login required) ── */}
     <Route path="/mortgage" element={<Navigate to="/mortgage-calculator" replace />} />
