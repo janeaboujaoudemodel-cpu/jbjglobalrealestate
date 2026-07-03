@@ -383,8 +383,8 @@ const Services = () => {
 
 
 
-      {/* Service Scope Clarification */}
-      <section data-surface="champagne" data-no-section-frame className="py-20 bg-[#F7F2EA]">
+      {/* Service Scope Clarification — light champagne card, ink text, emerald icons */}
+      <section data-surface="champagne" data-no-section-frame className="pt-6 pb-10 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -393,7 +393,7 @@ const Services = () => {
             variants={staggerContainer}
             className="w-full px-4 sm:px-6 lg:px-8"
           >
-            <motion.div className="text-center mb-12" variants={fadeInUp}>
+            <motion.div className="text-center mb-8" variants={fadeInUp}>
               <span
                 data-no-contrast-guard
                 className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold"
@@ -410,73 +410,81 @@ const Services = () => {
               </h2>
             </motion.div>
 
-
-            <motion.div 
+            <motion.div
               className="max-w-4xl mx-auto"
               variants={fadeInUp}
             >
               <Card
-                data-surface="emerald"
                 data-no-contrast-guard
-                className="border-0 shadow-2xl overflow-hidden"
-                style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%)" }}
+                className="border shadow-xl overflow-hidden"
+                style={{
+                  background: "#FDFBF7",
+                  borderColor: "rgba(6,78,59,0.15)",
+                }}
               >
                 <CardContent className="p-8" data-no-contrast-guard>
-                  <p className="text-lg mb-8 text-center allow-white" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
-                    JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell, 
+                  <p className="text-lg mb-8 text-center" style={{ color: "#1A1A1A" }}>
+                    JBJ Global Real Estate is a licensed real estate brokerage authorized to buy, sell,
                     and rent properties in Dubai and the UAE.
                   </p>
-                  
+
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Our role includes */}
                     <div>
-                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                        <CheckCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                        <CheckCircle className="w-5 h-5" style={{ color: "#064E3B" }} />
                         Our role includes
                       </h3>
                       <ul className="space-y-3">
                         {scopeIncludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
-                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
+                          <li key={idx} className="flex items-start gap-3" style={{ color: "rgba(26,26,26,0.85)" }}>
+                            <CheckCircle className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: "#064E3B" }} />
                             <span>{item}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
-                    
+
                     {/* We do not provide */}
                     <div>
-                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                        <AlertCircle className="w-5 h-5 allow-white" style={{ color: "#FFFFFF" }} />
+                      <h3 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: "#1A1A1A" }}>
+                        <AlertCircle className="w-5 h-5" style={{ color: "#064E3B" }} />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
-                          <li key={idx} className="flex items-start gap-3 allow-white" style={{ color: "rgba(255,255,255,0.8)", WebkitTextFillColor: "rgba(255,255,255,0.8)" }}>
-                            <span className="allow-white" style={{ color: "#FFFFFF" }}>•</span>
+                          <li key={idx} className="flex items-start gap-3" style={{ color: "rgba(26,26,26,0.85)" }}>
+                            <AlertCircle className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: "#064E3B" }} />
                             <span>{item}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                   </div>
-                  
-                  <div className="mt-8 pt-6 border-t border-white/15 text-center">
-                    <p className="text-sm allow-white" style={{ color: "rgba(255,255,255,0.7)", WebkitTextFillColor: "rgba(255,255,255,0.7)" }}>
-                      Where regulated services are required, we introduce independent licensed partners. 
+
+                  <div className="mt-8 pt-6 border-t text-center" style={{ borderColor: "rgba(6,78,59,0.15)" }}>
+                    <p className="text-sm" style={{ color: "rgba(26,26,26,0.7)" }}>
+                      Where regulated services are required, we introduce independent licensed partners.
                       Clients contract directly with those partners.
                     </p>
                   </div>
                 </CardContent>
               </Card>
-
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Footer Disclaimer — champagne band, ink text */}
-      <section data-surface="champagne" data-no-section-frame className="bg-[#F7F2EA] py-10">
+      {/* Not Sure Which Service — matches Ready to Get Started card exactly (same component) */}
+      <CombinedContactNewsletter
+        id="not-sure-which-service"
+        title="Not Sure Which Service You Need?"
+        subtitle="Send one request and our team will route it to the right department."
+        className="jj-band bg-[#F7F2EA] pt-6 pb-14"
+      />
+
+      {/* Footer Disclaimer — moved to the very end */}
+      <section data-surface="champagne" data-no-section-frame className="bg-[#F7F2EA] pt-2 pb-10">
         <div className="container mx-auto px-4 text-center">
           <p
             data-no-contrast-guard
@@ -489,12 +497,6 @@ const Services = () => {
         </div>
       </section>
 
-      <CombinedContactNewsletter
-        id="ready-to-get-started"
-        title="Not Sure Which Service You Need?"
-        subtitle="Send one request and our team will route it to the right department."
-        className="jj-band bg-[#F7F2EA]"
-      />
 
     </div>
   );
