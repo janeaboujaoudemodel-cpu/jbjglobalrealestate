@@ -454,15 +454,13 @@ const PropertyMeasurement = () => {
           <div className="flex items-center gap-4">
             {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
- step >= s 
- ? "jj-surface-emerald text-white shadow-[0_0_16px_rgba(16,185,129,0.55)]" 
- : "bg-white/10 text-white/70 border border-white/15"
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all jj-surface-emerald text-white border border-white/25 ${
+ step >= s ? "shadow-[0_8px_20px_-8px_rgba(0,0,0,0.55)] ring-2 ring-white/70" : "opacity-90"
  }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
                 {s < 5 && (
-                  <div className={`w-8 md:w-12 h-1 rounded-full ${step > s ? "jj-surface-emerald" : "bg-white/10"}`} />
+                  <div className="w-8 md:w-12 h-1 rounded-full jj-surface-emerald" />
                 )}
               </div>
             ))}
