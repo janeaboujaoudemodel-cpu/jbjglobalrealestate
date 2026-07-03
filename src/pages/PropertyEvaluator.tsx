@@ -511,6 +511,49 @@ const PropertyEvaluator = () => {
     toast.success(`${fileArray.length} file(s) added and auto-saved`);
   };
 
+  const parseTitleDeedNow = async () => {
+    const deeds = property.titleDeedFiles;
+    if (!deeds.length) {
+      toast.error('Upload a title deed file first');
+      return;
+    }
+    setIsParsingTitleDeed(true);
+    try {
+      const files = deeds.slice(0, 3).map((f) => {
+        const base64 = (f.dataUrl || '').split(',')[1] || '';
+        return { name: f.name, mime_type: f.type || 'application/octet-stream', base64 };
+      });
+      const { data, error } = await supabase.functions.invoke('parse-title-deed', { body: { files } });
+      if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Parsing failed');
+      const d = data.data as Record<string, any>;
+      setProperty((prev) => {
+        const next = { ...prev };
+        if (d.community) { next.community = String(d.community); setCommunitySearch(String(d.community)); }
+        if (d.subCommunity) next.subCommunity = String(d.subCommunity);
+        if (d.tower) next.buildingName = String(d.tower);
+        if (d.unitNumber) next.unitNumber = String(d.unitNumber);
+        if (typeof d.bedrooms === 'number') next.bedrooms = d.bedrooms;
+        if (typeof d.bathrooms === 'number') next.bathrooms = d.bathrooms;
+        if (typeof d.sizeSqft === 'number') next.sizeInternal = areaUnit === 'sqm' ? Math.round(d.sizeSqft / 10.7639) : d.sizeSqft;
+        if (typeof d.floor === 'number') next.floor = d.floor;
+        if (typeof d.handoverYear === 'number') next.handoverYear = d.handoverYear;
+        if (d.view) next.views = Array.from(new Set([...prev.views, String(d.view)]));
+        if (d.propertyType) next.propertyType = String(d.propertyType).toLowerCase() as any;
+        if (d.ownerName) next.ownerName = String(d.ownerName);
+        if (d.developerName) next.developer = String(d.developerName);
+        return next;
+      });
+      toast.success(`Title deed parsed — fields auto-filled (confidence ${d.confidence ?? '—'}%)`);
+    } catch (err: any) {
+      console.error('parseTitleDeed error', err);
+      toast.error(err?.message || 'Could not parse title deed. Please fill fields manually.');
+    } finally {
+      setIsParsingTitleDeed(false);
+    }
+  };
+
+
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'property' | 'renovation') => {
     handleAssetUpload(e.target.files, type);
     e.target.value = '';
