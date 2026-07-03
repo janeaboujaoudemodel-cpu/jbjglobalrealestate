@@ -34,7 +34,9 @@ interface Props {
 export function SchemaEntity({ kind, slug, pageTitle, pageUrl }: Props) {
   useEffect(() => {
     const registry = kind === "developer" ? DEVELOPERS : COMMUNITIES;
-    const entity: EntityRef | undefined = registry[slug];
+    const resolvedKey =
+      (kind === "developer" ? resolveDeveloperKey(slug) : resolveCommunityKey(slug)) ?? slug;
+    const entity: EntityRef | undefined = registry[resolvedKey];
     if (!entity) return;
 
     const url = pageUrl || entity.url || (typeof window !== "undefined" ? window.location.href : CANONICAL_HOST);
