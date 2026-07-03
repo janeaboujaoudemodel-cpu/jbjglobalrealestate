@@ -774,9 +774,19 @@ function AIHubFaqSection() {
             <AccordionTrigger
               data-ai-hub-faq-trigger
               data-allow-ink
-              className="w-full text-left text-[#1A1A1A] hover:text-[#1A1A1A] hover:no-underline py-4 px-5 transition-colors"
+              className="w-full text-left text-[#1A1A1A] hover:text-[#1A1A1A] hover:no-underline min-h-[64px] py-4 pl-5 pr-4 gap-4 transition-colors [&>svg:last-child]:hidden"
             >
-              <span className="font-semibold group-data-[state=open]:text-white">{faq.question}</span>
+              <span className="flex-1 text-[15px] md:text-base font-semibold leading-snug group-data-[state=open]:text-white">
+                {faq.question}
+              </span>
+              <span
+                aria-hidden
+                className="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#064E3B] transition-all duration-200 group-data-[state=open]:rotate-180 group-data-[state=open]:border-white/40 group-data-[state=open]:bg-white/10 group-data-[state=open]:text-white"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </span>
             </AccordionTrigger>
             <AccordionContent
               data-ai-hub-faq-content
