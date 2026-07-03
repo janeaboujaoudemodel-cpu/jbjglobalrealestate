@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium', args: ['--no-sandbox'] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1400 } });
 await page.goto('http://localhost:8080/interior-design-ai', { waitUntil: 'domcontentloaded', timeout: 60000 });
-await page.waitForTimeout(3000);
+await page.waitForSelector('.id-choice', { timeout: 15000 }).catch(() => {}); await page.waitForTimeout(1000);
 const out = await page.evaluate(() => {
   function matches(el, sel){ try { return el.matches(sel); } catch { return false; } }
   function collect(el){
