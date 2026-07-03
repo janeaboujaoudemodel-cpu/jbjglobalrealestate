@@ -373,7 +373,7 @@ const Developers = () => {
             rendered into #root so the .jj-utility-shell sidebar-safe left
             offset applies and the bar stops before the vertical sidebar. */}
         {isFilterFixed && createPortal(
-          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/10 shadow-lg" style={{ background: "#010806" }}>
+          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/12 shadow-lg" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}>
             <div className="w-full px-3 sm:px-4">
               <div className="p-0">
                 <FilterShortcutBar
