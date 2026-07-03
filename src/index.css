@@ -318,6 +318,9 @@ html {
   min-width: 100vw;
   overflow-x: hidden;
   overflow-anchor: none;
+  /* Kill browser back/forward swipe globally so horizontal drags inside
+     filter chip bars, tab strips, and tables never trigger history navigation. */
+  overscroll-behavior-x: none;
   /* Keep native wheel/trackpad scrolling instant and responsive.
      Smooth scrolling must only be used by explicit button/anchor actions;
      a global smooth rule throttles real user wheel input on long pages. */
@@ -336,9 +339,23 @@ body {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: none;
   overscroll-behavior-y: auto;
   overflow-anchor: none;
   min-height: 100dvh;
+}
+
+/* Any element scrolling horizontally must contain the x overscroll so a
+   two-finger swipe left/right on a filter/chip/tab strip never triggers
+   the browser's back/forward gesture. Applies to Tailwind's overflow-x-auto,
+   overflow-x-scroll, and generic overflow-auto/scroll containers. */
+.overflow-x-auto,
+.overflow-x-scroll,
+.overflow-auto,
+.overflow-scroll,
+[data-scroll-x],
+[class*="scrollbar-"][class*="-x"] {
+  overscroll-behavior-x: contain;
 }
 
 /* ════════════════════════════════════════════════════════════════

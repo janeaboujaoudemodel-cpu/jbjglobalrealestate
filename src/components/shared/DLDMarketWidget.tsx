@@ -304,11 +304,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
 
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div data-emerald-action="true" className="jj-emerald-action h-full rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#B89555]">
+                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
-                <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
+                <div className="h-full flex-1 flex items-center justify-center">
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
                 </div>
               </div>
@@ -338,23 +338,23 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-4 h-4 text-[#B89555]" />
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div data-emerald-action="true" className="jj-emerald-action h-full rounded-l-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#B89555]">
+                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{cashPct}%</span>
                 </div>
-                <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
+                <div className="h-full flex-1 flex items-center justify-center">
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{mortgagePct}%</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-[#0A0A0A]/8 border border-[#0A0A0A]/25 rounded-lg p-3">
+                <div className="bg-[#0A0A0A] rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#0A0A0A]" />
-                    <span className="text-[#0A0A0A] text-[10px] uppercase tracking-wider font-bold">Cash</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                    <span className="text-white text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
-                  <p className="text-[#0A0A0A] text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
-                  <p className="text-[#1A1A1A]/55 text-[10px] font-medium">{cashPct}% of total</p>
+                  <p className="text-white text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
+                  <p className="text-white/70 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
                 <div className="bg-[#B89555]/8 border border-[#B89555]/25 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
