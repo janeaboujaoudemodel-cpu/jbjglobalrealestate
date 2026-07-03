@@ -28286,3 +28286,54 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-f
   border: 2px solid transparent;
 }
 .jj-emerald-scroll { scrollbar-width: thin; scrollbar-color: #B89555 rgba(255,255,255,0.04); }
+
+/* ============================================================
+   GLOBAL EMERALD TILE CONTRAST LOCK — ALL PAGES
+   Applies to every emerald-filled icon tile / button / chip
+   across Insights & Guides, Services, Company & Legal, etc.
+   Wins over champagne surface rules via placement at end of
+   cascade + explicit high-specificity #root selector.
+   ============================================================ */
+html body #root :is(
+  .jj-icon-box-active,
+  .jj-icon-box,
+  .jj-icon-tile-emerald,
+  .jj-cta-emerald,
+  .mi-cta-emerald,
+  .jj-surface-emerald,
+  .jj-pill-emerald,
+  .jj-chip-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  [data-icon-tone="emerald"],
+  [data-emerald-icon-surface],
+  [data-surface="emerald"],
+  [data-emerald="true"]
+):not([data-no-contrast-guard]) {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg,#064E3B 0%,#022C22 58%,#010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+html body #root :is(
+  .jj-icon-box-active,
+  .jj-icon-box,
+  .jj-icon-tile-emerald,
+  .jj-cta-emerald,
+  .mi-cta-emerald,
+  .jj-surface-emerald,
+  .jj-pill-emerald,
+  .jj-chip-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  [data-icon-tone="emerald"],
+  [data-emerald-icon-surface],
+  [data-surface="emerald"],
+  [data-emerald="true"]
+):not([data-no-contrast-guard])
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,li,small,strong,em,b,div,button,label,svg,[class*="lucide"],path,circle,rect,line,polyline,polygon,ellipse,use,g) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
