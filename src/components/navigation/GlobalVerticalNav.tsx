@@ -1225,10 +1225,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           .filter(h => h && h !== '#' && (path === h || (!exactOnlyHubs.has(h) && path.startsWith(h + '/'))))
                           .sort((a, b) => b.length - a.length);
                         const mostSpecific = sectionMatches[0];
+                        // First index of each href — only that one may highlight,
+                        // so sibling links pointing to the same URL don't both light up.
+                        const firstIndexByHref = new Map<string, number>();
+                        items.forEach((it, idx) => {
+                          if (it.href && !firstIndexByHref.has(it.href)) firstIndexByHref.set(it.href, idx);
+                        });
                         return items.map((item, i) => {
                           const hasMega = !!item.megaMenu;
                           const isMenuOpen = activeMegaMenu === item.megaMenu;
-                          const routeMatchExclusive = !!item.href && item.href === mostSpecific;
+                          const routeMatchExclusive = !!item.href
+                            && item.href === mostSpecific
+                            && firstIndexByHref.get(item.href) === i;
                           const subitemActive = activeMegaMenu ? isMenuOpen : routeMatchExclusive;
                         const Icon = item.icon;
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
