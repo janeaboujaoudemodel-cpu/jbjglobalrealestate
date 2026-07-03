@@ -26773,3 +26773,45 @@ html body #root :is(
 }
 
 /* END PASS 186 */
+
+/* ============================================================
+   PASS 187 — Final label-shape override for missed rounded-lg/xl
+   micro labels. Any compact badge/pill using gold/amber/flat green
+   tokens is forced to emerald→black ombre with no border.
+   ============================================================ */
+html body #root :is(
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="B89555"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="brand-gold"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="amber"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="bg-green-"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="bg-emerald-"],
+  [class*="rounded-lg"][class*="text-xs"][class*="px-"][class*="B89555"],
+  [class*="rounded-lg"][class*="text-xs"][class*="px-"][class*="amber"],
+  [class*="rounded-xl"][class*="text-xs"][class*="px-"][class*="B89555"],
+  [class*="rounded-xl"][class*="text-xs"][class*="px-"][class*="amber"],
+  [class*="rounded-lg"][class*="text-[10px]"][class*="px-"][class*="B89555"],
+  [class*="rounded-xl"][class*="text-[10px]"][class*="px-"][class*="B89555"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 0 !important;
+  outline: 0 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -14px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.14) !important;
+}
+
+html body #root :is(
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="B89555"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="brand-gold"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="amber"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="bg-green-"],
+  [class*="inline-flex"][class*="px-"][class*="py-"][class*="bg-emerald-"]
+) :is(span, p, strong, small, svg, path, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* END PASS 187 */
