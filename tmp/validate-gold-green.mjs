@@ -9,7 +9,7 @@ const routes = [
   ['/interior-design-ai','interior-design-ai'],
   ['/business-card-scanner','business-card-scanner'],
 ];
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium' });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1200 }, deviceScaleFactor: 1 });
 const results = [];
 for (const [route, name] of routes) {
