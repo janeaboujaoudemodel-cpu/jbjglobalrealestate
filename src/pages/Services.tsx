@@ -209,13 +209,13 @@ const Services = () => {
         canonicalPath="/services"
       />
 
-      {/* Hero Section — pure emerald-black gradient */}
+      {/* Hero Section — pure emerald-black gradient, fullscreen */}
       <section
         data-brand-hero
         data-hero-dark
         data-surface="emerald"
         data-no-contrast-guard
-        className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
+        className="relative flex items-center justify-center overflow-hidden min-h-screen w-full"
         style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
       >
         <video
@@ -229,7 +229,6 @@ const Services = () => {
         >
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
-
         <div
           className="absolute inset-0"
           aria-hidden="true"
@@ -237,7 +236,7 @@ const Services = () => {
         />
 
         <motion.div
-          className="relative z-10 container mx-auto px-4 py-24 md:py-32 text-center max-w-4xl"
+          className="relative z-10 container mx-auto px-4 py-16 text-center max-w-4xl flex flex-col items-center justify-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -264,14 +263,14 @@ const Services = () => {
 
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-10"
+            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-16 md:mb-20"
             style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-10 md:mt-14">
+          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4 mt-4">
             <PremiumHeroButton href="/contact" icon={ArrowRight}>
               Request a Service
             </PremiumHeroButton>
@@ -288,6 +287,8 @@ const Services = () => {
           </motion.div>
         </motion.div>
       </section>
+
+
 
 
       {/* Service Cards Grid */}
