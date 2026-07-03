@@ -1456,9 +1456,9 @@ const Quiz = () => {
   return (
       <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
       <style>{AIHF_STYLE}</style>
-      {/* Header — compact progress band only; question sits separately below it */}
-      <div className="aihf-hero relative z-10">
-        <div className="container mx-auto px-4 pt-6 pb-6 md:pt-8 md:pb-7">
+      {/* Header — pushed below fixed site header (88–128px) */}
+      <div className="aihf-hero relative z-10" style={{ paddingTop: "calc(var(--responsive-header-height, 96px) + 24px)" }}>
+        <div className="container mx-auto px-4 pb-6 md:pb-7">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
@@ -1474,22 +1474,23 @@ const Quiz = () => {
             </div>
           </div>
           {/* Emerald progress bar */}
-          <div className="h-2 rounded-full overflow-hidden mb-6" style={{ background: "rgba(255,255,255,0.14)" }}>
+          <div className="h-2 rounded-full overflow-hidden mb-2" style={{ background: "rgba(255,255,255,0.14)" }}>
             <div
               className="h-full rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress}%`, background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%))" }}
+              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #10B981 0%, #059669 45%, #064E3B 100%)" }}
             />
           </div>
         </div>
       </div>
 
 
-      {/* Question Content */}
-      <div className="flex-1 flex items-start justify-center px-4 pt-8 md:pt-10 pb-20 md:pb-24">
+      {/* Question Content — vertically centered */}
+      <div className="flex-1 flex items-center justify-center px-4 py-10 md:py-14">
         <div className="w-full max-w-3xl mx-auto">
           <div className="w-full">
 
             <div className="aihf-question-card rounded-2xl px-5 py-5 md:px-8 md:py-6 mb-5 text-center">
+
               <h2
                 className="text-2xl md:text-4xl font-bold tracking-tight max-w-3xl mx-auto"
                 style={{ color: "#FFFFFF" }}
