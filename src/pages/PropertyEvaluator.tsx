@@ -1104,6 +1104,7 @@ const PropertyEvaluator = () => {
             <div className="flex flex-wrap gap-2">
               <Button type="button" variant="outline" onClick={resetEntryChoice} className="border-emerald-400/70 text-white hover:bg-emerald-500/15">
                 <ChevronRight className="w-4 h-4 mr-2 rotate-180" /> Change method
+              </Button>
               <Button type="button" variant="outline" onClick={saveCurrentReport} className="border-emerald-400/70 text-white hover:bg-emerald-500/15">
                 <Save className="w-4 h-4 mr-2" /> Save Application
               </Button>
