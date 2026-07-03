@@ -35,9 +35,9 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
   // Get tier badge based on rank
   const getTierBadge = (rank: number | null) => {
     if (!rank) return null;
-    if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-[#1A1A1A] bg-[#EFE6D6]/10 border-[#B89555]/30" };
-    if (rank <= 10) return { icon: Award, label: "Premier", color: "text-[#1A1A1A] bg-amber-400/10 border-amber-400/30" };
-    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-[#E5D9C4]/10 border-[#B89555]/30" };
+    if (rank <= 3) return { icon: Crown, label: "Elite", color: "jj-pill-emerald-metallic allow-white text-white border-0" };
+    if (rank <= 10) return { icon: Award, label: "Premier", color: "jj-pill-emerald-metallic allow-white text-white border-0" };
+    if (rank <= 20) return { icon: Star, label: "Established", color: "jj-pill-emerald-metallic allow-white text-white border-0" };
     return null;
   };
 
@@ -108,7 +108,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                         {developer.name}
                       </h4>
                       {tier && (
-                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full border ${tier.color}`}>
+                        <span data-label-emerald-only className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium rounded-full ${tier.color}`}>
                           <tier.icon className="w-3 h-3" />
                           {tier.label}
                         </span>

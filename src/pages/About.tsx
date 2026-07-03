@@ -512,7 +512,7 @@ const About = () => {
               </p>
             </ContentText>
             
-            <div className="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto my-6" />
+            <div className="w-20 h-px bg-gradient-to-r from-transparent via-[#064E3B] to-transparent mx-auto my-6" />
             
             <ContentText className="mx-auto text-center text-sm">
               <p>
@@ -521,7 +521,7 @@ const About = () => {
             </ContentText>
             
             {/* Initials */}
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1A1A1A] border-2 border-[#B89555] mt-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full jj-pill-emerald-metallic border-0 mt-4">
               <span className="text-white text-xl font-bold">JBJ</span>
             </div>
           </motion.div>

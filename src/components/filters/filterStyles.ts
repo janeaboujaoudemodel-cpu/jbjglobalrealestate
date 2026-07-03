@@ -28,8 +28,8 @@ export const filterPillInactiveLight = [
 
 // Inactive on dark emerald rail — pure white ink, white/18 border (NEVER gold)
 export const filterPillInactiveDark = [
-  "allow-white bg-[#04241C] border border-white/25 text-white",
-  "hover:bg-[#064E3B] hover:border-white/45 hover:shadow-[0_4px_12px_rgba(0,0,0,0.25)]",
+  "allow-white jj-pill-emerald-metallic border-0 text-white",
+  "hover:shadow-[0_10px_24px_rgba(0,0,0,0.28)]",
 ].join(" ");
 
 // Active (filter has a value) — solid emerald metallic + white label
@@ -82,7 +82,7 @@ export const filterCheckBoxOn = "allow-white jj-filter-emerald-control jj-chip-e
 export const filterCheckBoxOff = "border-[#064E3B]/30 bg-[#FDFBF7]";
 
 // Search pill on emerald rail — single-layer, NO inset ring, NO double border
-export const filterSearchPillWrapper = "allow-white min-w-0 flex-shrink-0 flex items-center px-3 border-0 rounded-full bg-[#04241C] shadow-none";
+export const filterSearchPillWrapper = "allow-white jj-pill-emerald-metallic min-w-0 flex-shrink-0 flex items-center px-3 border-0 rounded-full shadow-none";
 export const filterSearchPillInput = "w-full py-1.5 bg-transparent text-xs text-white placeholder:text-white/75 outline-none border-0 focus:outline-none focus:ring-0 focus:border-0";
 
 export const activeChipBase = [
@@ -97,7 +97,7 @@ export const filterDivider = "w-px h-5 bg-white/25 flex-shrink-0";
 // Reset-all pill — emerald + white; NEVER gold; icon inherits white
 export const resetAllPill = [
   "allow-white inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold",
-  "bg-[#04241C] border border-white/25 text-white hover:bg-[#064E3B] hover:border-white/45 shadow-none",
+  "jj-pill-emerald-metallic border-0 text-white shadow-none",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/55 focus-visible:ring-offset-2 focus-visible:ring-offset-[#03170F]",
   "transition-colors duration-75 flex-shrink-0 [&_svg]:text-white [&_svg]:opacity-100",
 ].join(" ");

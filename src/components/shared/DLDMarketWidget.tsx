@@ -239,7 +239,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Header */}
           <div className="text-center mb-10">
-            <div data-allow-dark-cta data-no-contrast-guard className="allow-white inline-flex items-center gap-2 bg-[#0A0A0A] hover:bg-[#1F1F1F] border border-[#B89555]/60 rounded-full px-4 py-1.5 mb-4 transition-colors">
+            <div data-label-emerald-only data-allow-dark-cta data-no-contrast-guard className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 border-0 rounded-full px-4 py-1.5 mb-4 transition-colors">
               <Banknote className="w-4 h-4 text-white" />
               <span className="text-white text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>

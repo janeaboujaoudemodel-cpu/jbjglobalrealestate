@@ -58,7 +58,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
     return (
       <div className={`bg-[#FDFBF7]/80 backdrop-blur-md border border-[#1A1A1A] rounded-xl p-6 ${className}`}>
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 jj-pill-emerald-metallic border-0 rounded-lg flex items-center justify-center">
             <Shield className="w-5 h-5 text-[#1A1A1A]" />
           </div>
           <div>

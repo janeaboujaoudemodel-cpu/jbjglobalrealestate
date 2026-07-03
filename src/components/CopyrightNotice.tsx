@@ -34,7 +34,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
   if (variant === "floating") {
     return (
       <div className={`fixed bottom-4 left-4 z-40 max-w-xs ${className}`}>
-        <div className="bg-[#1A1A1A]/90 backdrop-blur-xl border border-[#B89555]/30 rounded-lg px-4 py-3 shadow-2xl shadow-black/50">
+        <div className="bg-[#1A1A1A]/90 backdrop-blur-xl border-0 rounded-lg px-4 py-3 shadow-2xl shadow-black/50">
           <div className="flex items-start gap-2">
             <Shield className="w-4 h-4 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
             <div>

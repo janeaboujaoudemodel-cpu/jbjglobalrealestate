@@ -309,7 +309,7 @@ const ServicesSection = () => {
       <div className="container mx-auto px-4 relative z-10" id="services">
         {/* How We Help Section */}
         <div className="text-center mb-16">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-6 backdrop-blur-sm">
+          <span data-label-emerald-only className="inline-block px-5 py-2 jj-pill-emerald-metallic allow-white border-0 rounded-full text-white text-sm font-medium mb-6 backdrop-blur-sm">
             JBJ Global Real Estate
           </span>
           <h2 
@@ -360,7 +360,7 @@ const ServicesSection = () => {
 
         {/* Services Section Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-full text-[#1A1A1A] text-sm font-medium mb-6 backdrop-blur-sm">
+          <span data-label-emerald-only className="inline-block px-5 py-2 jj-pill-emerald-metallic allow-white border-0 rounded-full text-white text-sm font-medium mb-6 backdrop-blur-sm">
             Partner Network
           </span>
           <h2 
