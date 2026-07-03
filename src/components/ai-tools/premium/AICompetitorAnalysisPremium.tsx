@@ -66,6 +66,7 @@ const AICompetitorAnalysisPremium = () => {
     >
       {/* Form Section */}
       <motion.div
+        data-allow-color
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -141,9 +142,10 @@ const AICompetitorAnalysisPremium = () => {
         </div>
 
         <Button
+          data-allow-color
           onClick={handleSubmit}
           disabled={loading || !formData.projectName}
-          className="w-full font-bold py-6 text-lg rounded-xl bg-gradient-to-r from-yellow-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-300 text-[#1A1A1A]"
+          className="w-full font-bold py-6 text-lg rounded-xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-950 hover:from-emerald-600 hover:via-emerald-500 hover:to-emerald-900 text-white"
         >
           {loading ? (
             <>
@@ -169,7 +171,7 @@ const AICompetitorAnalysisPremium = () => {
             className="space-y-6"
           >
             {/* Main Result Card */}
-            <div className="bg-gradient-to-br from-emerald-500/15 to-yellow-600/10 border border-emerald-500/40 rounded-3xl p-8 md:p-10">
+            <div data-allow-color className="bg-gradient-to-br from-emerald-950/80 via-emerald-900/40 to-black border border-emerald-500/40 rounded-3xl p-8 md:p-10">
               <div className="flex items-center gap-3 mb-6">
                 <Award className="w-8 h-8 text-emerald-300" />
                 <div>
