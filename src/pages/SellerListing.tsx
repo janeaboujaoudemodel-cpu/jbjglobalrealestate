@@ -561,20 +561,20 @@ Requirements:
         description={`Submit your property to ${actionVerbCap.toLowerCase()} with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful ${actionNoun.toLowerCase()}.`}
       />
       
-      <main data-manual-listing-shell className="min-h-screen pt-6 pb-12 md:pb-16" style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
+      <main data-manual-listing-shell className="min-h-screen pt-6 pb-12 md:pb-16" style={{ background: "linear-gradient(135deg, #022C22 0%, #064E3B 50%, #0B0B0B 100%)" }}>
         {/* Layer 2: Emerald ombre hero */}
-        <div style={{ background: "linear-gradient(135deg, #E8F3EC 0%, #FFFFFF 55%, #D4E9DB 100%)" }}>
+        <div style={{ background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)" }}>
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
               <span
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
                 data-no-contrast-guard
                 style={{
-                  background: "linear-gradient(135deg, #0F5132 0%, #064E3B 100%)",
+                  background: "rgba(255,255,255,0.10)",
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
-                  border: "1px solid #0F5132",
-                  boxShadow: "0 6px 16px -8px rgba(15,81,50,0.55)",
+                  border: "1px solid rgba(255,255,255,0.35)",
+                  boxShadow: "0 6px 16px -8px rgba(0,0,0,0.35)",
                 }}
               >
                 {party} Listing Tool
@@ -583,16 +583,15 @@ Requirements:
                 className="text-3xl md:text-4xl font-bold mb-3"
                 data-no-contrast-guard
                 style={{
-                  background: "linear-gradient(135deg, #022C22 0%, #0F5132 45%, #064E3B 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  textShadow: "0 2px 18px rgba(0,0,0,0.35)",
                   letterSpacing: "-0.02em",
                 }}
               >
                 Welcome, {firstName} — List Your Property for {actionNoun}
               </h1>
-              <p className="text-[#1A1A1A]/80 mb-6">
+              <p className="mb-6" data-no-contrast-guard style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
                 {user ? `Glad to have you back, ${firstName}. ` : ""}Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
               <FormDraftBar
