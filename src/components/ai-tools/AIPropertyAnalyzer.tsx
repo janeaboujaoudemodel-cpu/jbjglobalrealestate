@@ -47,6 +47,10 @@ const PROPERTY_TYPES = [
   { value: "commercial", label: "Commercial" },
 ];
 
+const emeraldSelectTrigger = "bg-[#064E3B] !border-transparent !border-0 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none focus-visible:outline-none [&>svg]:!text-white hover:bg-[#053b2c]";
+const emeraldSelectContent = "bg-[#031F18] border-transparent text-white shadow-[0_18px_42px_rgba(0,0,0,0.36)]";
+const emeraldSelectItem = "text-white bg-transparent focus:bg-transparent focus:text-white data-[highlighted]:bg-transparent data-[highlighted]:text-white data-[state=checked]:bg-transparent hover:bg-white/10 hover:text-white";
+
 interface AnalysisResult {
   success: boolean;
   area: string;
@@ -220,16 +224,16 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Select Area</Label>
               <Select value={area} onValueChange={setArea}>
-                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
+                <SelectTrigger className={emeraldSelectTrigger}>
                   <SelectValue placeholder="Choose an area" />
                 </SelectTrigger>
-                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="max-h-60 bg-[#031F18] border-white/25 text-white">
+                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className={`max-h-60 ${emeraldSelectContent}`}>
                   {DUBAI_AREAS.map((a) => (
-                    <SelectItem key={a} value={a} className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">
+                    <SelectItem key={a} value={a} className={emeraldSelectItem}>
                       {a}
                     </SelectItem>
                   ))}
-                  <SelectItem value="custom" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">
+                  <SelectItem value="custom" className={emeraldSelectItem}>
                     ✏️ Enter Custom Area
                   </SelectItem>
                 </SelectContent>
@@ -239,12 +243,12 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Property Type</Label>
               <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
+                <SelectTrigger className={emeraldSelectTrigger}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="bg-[#031F18] border-white/25 text-white">
+                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className={emeraldSelectContent}>
                   {PROPERTY_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value} className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">
+                    <SelectItem key={t.value} value={t.value} className={emeraldSelectItem}>
                       {t.label}
                     </SelectItem>
                   ))}
@@ -281,12 +285,12 @@ DISCLAIMER: ${result.disclaimer}
               ))}
               {compareWith.length < 3 && (
                 <Select onValueChange={addCompareArea}>
-                  <SelectTrigger className="w-auto bg-[#064E3B] border-white/25 text-white text-sm h-8 px-3 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
+                  <SelectTrigger className={`w-auto text-sm h-8 px-3 ${emeraldSelectTrigger.replace("mt-1 ", "")}`}>
                     <span>+ Add area</span>
                   </SelectTrigger>
-                  <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="max-h-40 bg-[#031F18] border-white/25 text-white">
+                  <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className={`max-h-40 ${emeraldSelectContent}`}>
                     {DUBAI_AREAS.filter(a => a !== area && !compareWith.includes(a)).map((a) => (
-                      <SelectItem key={a} value={a} className="text-white text-sm bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">
+                      <SelectItem key={a} value={a} className={`${emeraldSelectItem} text-sm`}>
                         {a}
                       </SelectItem>
                     ))}
@@ -301,13 +305,13 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Measurement Unit</Label>
               <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
-                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
+                <SelectTrigger className={emeraldSelectTrigger}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="bg-[#031F18] border-white/25 text-white">
-                  <SelectItem value="sqft" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">Square Feet (sq ft)</SelectItem>
-                  <SelectItem value="sqm" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">Square Meters (m²)</SelectItem>
-                  <SelectItem value="both" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">Both (sq ft & m²)</SelectItem>
+                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className={emeraldSelectContent}>
+                  <SelectItem value="sqft" className={emeraldSelectItem}>Square Feet (sq ft)</SelectItem>
+                  <SelectItem value="sqm" className={emeraldSelectItem}>Square Meters (m²)</SelectItem>
+                  <SelectItem value="both" className={emeraldSelectItem}>Both (sq ft & m²)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -315,7 +319,7 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Currency</Label>
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
+                <SelectTrigger className={emeraldSelectTrigger}>
                   <SelectValue>
                     {(() => {
                       const c = ALL_CURRENCIES.find(x => x.code === currency) || ALL_CURRENCIES[0];
@@ -323,9 +327,9 @@ DISCLAIMER: ${result.disclaimer}
                     })()}
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="max-h-60 bg-[#031F18] border-white/25 text-white">
+                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className={`max-h-60 ${emeraldSelectContent}`}>
                   {ALL_CURRENCIES.map((c) => (
-                    <SelectItem key={c.code} value={c.code} className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">
+                    <SelectItem key={c.code} value={c.code} className={emeraldSelectItem}>
                       <span className="flex items-center gap-2">
                         <span>{c.flag}</span>
                         <span className="font-medium">{c.code}</span>
@@ -340,15 +344,15 @@ DISCLAIMER: ${result.disclaimer}
             <div>
               <Label className="text-white/90">Report Language</Label>
               <Select value={language} onValueChange={(v: "en" | "ar" | "ru" | "zh" | "hi") => setLanguage(v)}>
-                <SelectTrigger className="bg-[#064E3B] border-white/25 text-white mt-1 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 [&>svg]:!text-white hover:bg-[#053b2c]">
+                <SelectTrigger className={emeraldSelectTrigger}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className="bg-[#031F18] border-white/25 text-white">
-                  <SelectItem value="en" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">English</SelectItem>
-                  <SelectItem value="ar" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">العربية (Arabic)</SelectItem>
-                  <SelectItem value="ru" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">Русский (Russian)</SelectItem>
-                  <SelectItem value="zh" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">中文 (Chinese)</SelectItem>
-                  <SelectItem value="hi" className="text-white bg-transparent focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white data-[state=checked]:bg-transparent">हिन्दी (Hindi)</SelectItem>
+                <SelectContent data-ai-analyzer-select-content data-surface="emerald" data-on-dark="true" className={emeraldSelectContent}>
+                  <SelectItem value="en" className={emeraldSelectItem}>English</SelectItem>
+                  <SelectItem value="ar" className={emeraldSelectItem}>العربية (Arabic)</SelectItem>
+                  <SelectItem value="ru" className={emeraldSelectItem}>Русский (Russian)</SelectItem>
+                  <SelectItem value="zh" className={emeraldSelectItem}>中文 (Chinese)</SelectItem>
+                  <SelectItem value="hi" className={emeraldSelectItem}>हिन्दी (Hindi)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
