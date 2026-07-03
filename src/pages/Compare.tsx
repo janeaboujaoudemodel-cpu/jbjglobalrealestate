@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import comparePropertyFallback from "@/assets/compare-property-fallback.jpg";
 // Founder block removed — replaced by "Powered by JBJ Global Real Estate" lockup
 
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
@@ -915,7 +916,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                       (project.cover_image_url && !project.cover_image_url.startsWith("data:image/svg") ? project.cover_image_url : "") ||
                       (project as any).card_image_url ||
                       (project as any).hero_image_url ||
-                      "";
+                      comparePropertyFallback;
                     return (
                       <th
                         key={project.id}
@@ -951,10 +952,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             </div>
                             {primaryImageUrl ? (
                               <img
-                                src={getHighResImageUrl(primaryImageUrl)}
+                                src={primaryImageUrl === comparePropertyFallback ? primaryImageUrl : getHighResImageUrl(primaryImageUrl)}
                                 alt={project.name}
                                 className="relative z-10 w-full h-full object-cover"
-                                loading="lazy" decoding="async"
+                                loading="lazy" decoding="async" width={1024} height={576}
                                 onError={(event) => {
                                   event.currentTarget.style.display = "none";
                                   event.currentTarget.parentElement?.setAttribute("data-image-missing", "true");
