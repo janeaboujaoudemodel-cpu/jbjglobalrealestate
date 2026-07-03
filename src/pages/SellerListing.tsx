@@ -725,6 +725,8 @@ Requirements:
                 border: "1.5px solid rgba(16,185,129,0.35)",
                 boxShadow: "0 28px 70px -30px rgba(0,0,0,0.7)",
                 color: "#FFFFFF",
+                padding: "clamp(32px, 4vw, 56px)",
+                boxSizing: "border-box",
               }}
             >
               <style>{`
