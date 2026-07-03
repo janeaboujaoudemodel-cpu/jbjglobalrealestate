@@ -75,24 +75,20 @@ export function EmiratesMultiSelect({
           aria-expanded={open}
           className={cn(
             "justify-between min-w-[160px] h-11",
-            isDark 
-              ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A] hover:bg-champagne-light",
+            "allow-white jj-pill-emerald-metallic border-0 text-white hover:text-white",
             className
           )}
         >
           <div className="flex items-center gap-2 truncate">
-            <MapPin className="w-4 h-4 opacity-60" />
+            <MapPin className="w-4 h-4 opacity-100 text-white" />
             <span className="truncate">{displayText}</span>
           </div>
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-100 text-white" />
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className={cn(
-          "w-[260px] p-0",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#064E3B]/20"
-        )}
+        data-filter-dropdown="true"
+        className="allow-white w-[260px] p-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 text-white"
         align="start"
       >
         <div className="max-h-[320px] overflow-y-auto">
@@ -102,9 +98,7 @@ export function EmiratesMultiSelect({
               onClick={() => selectAll('UAE')}
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
-                isDark 
-                  ? "text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:bg-champagne-light"
+                "allow-white text-white hover:bg-white/12"
               )}
             >
               <span>UAE Emirates</span>
@@ -123,21 +117,19 @@ export function EmiratesMultiSelect({
                     onClick={() => toggleEmirate(emirate.value)}
                     className={cn(
                       "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-                      isDark 
-                        ? "hover:bg-[#2a2a2a]"
-                        : "hover:bg-champagne-light",
-                      isSelected && (isDark ? "bg-[#2a2a2a]" : "bg-champagne-light")
+                      "allow-white text-white hover:bg-white/12",
+                      isSelected && "bg-white/12"
                     )}
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-white/40" : "border-[#064E3B]/40",
+                      "border-white/40",
                       isSelected && "allow-white jj-pill-emerald-metallic border-0"
                     )}>
                       {isSelected && <Check className="w-3 h-3 text-white" />}
                     </div>
                     
-                    <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
+                    <span className="allow-white text-white">
                       {emirate.label}
                     </span>
                   </button>
@@ -149,7 +141,7 @@ export function EmiratesMultiSelect({
           {/* Divider */}
           <div className={cn(
             "mx-3 border-t",
-            isDark ? "border-white/20" : "border-[#064E3B]/20"
+            "border-white/20"
           )} />
           
           {/* International Section */}
@@ -158,9 +150,7 @@ export function EmiratesMultiSelect({
               onClick={() => selectAll('International')}
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
-                isDark 
-                  ? "text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:bg-champagne-light"
+                "allow-white text-white hover:bg-white/12"
               )}
             >
               <span>International</span>
@@ -179,21 +169,19 @@ export function EmiratesMultiSelect({
                     onClick={() => toggleEmirate(location.value)}
                     className={cn(
                       "flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm transition-colors",
-                      isDark 
-                        ? "hover:bg-[#2a2a2a]"
-                        : "hover:bg-champagne-light",
-                      isSelected && (isDark ? "bg-[#2a2a2a]" : "bg-champagne-light")
+                      "allow-white text-white hover:bg-white/12",
+                      isSelected && "bg-white/12"
                     )}
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-white/40" : "border-[#064E3B]/40",
+                      "border-white/40",
                       isSelected && "allow-white jj-pill-emerald-metallic border-0"
                     )}>
                       {isSelected && <Check className="w-3 h-3 text-white" />}
                     </div>
                     
-                    <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
+                    <span className="allow-white text-white">
                       {location.label}
                     </span>
                   </button>
@@ -206,11 +194,11 @@ export function EmiratesMultiSelect({
         {/* Footer */}
         <div className={cn(
           "p-2 border-t flex items-center justify-between",
-          isDark ? "border-white/20 bg-[#151515]" : "border-[#064E3B]/20 bg-champagne-light/50"
+          "border-white/20 bg-black/12"
         )}>
           <span className={cn(
             "text-xs",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             {selectedCount} selected
           </span>
@@ -220,9 +208,7 @@ export function EmiratesMultiSelect({
               onClick={clearAll}
               className={cn(
                 "text-xs px-2 py-1 rounded transition-colors",
-                isDark 
-                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne"
+                "allow-white text-white hover:text-white hover:bg-white/12"
               )}
             >
               Clear
