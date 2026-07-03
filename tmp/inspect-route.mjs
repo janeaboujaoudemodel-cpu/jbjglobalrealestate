@@ -1,0 +1,13 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch({ headless: true, executablePath: '/bin/chromium' });
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+page.on('console', msg => console.log('CONSOLE', msg.type(), msg.text()));
+page.on('pageerror', err => console.log('PAGEERR', err.message));
+page.on('requestfailed', req => console.log('REQFAIL', req.url(), req.failure()?.errorText));
+await page.goto('http://localhost:8080/market-intelligence', { waitUntil: 'domcontentloaded', timeout: 30000 });
+await page.waitForTimeout(5000);
+console.log('url', page.url());
+console.log('text', (await page.locator('body').innerText()).slice(0,1000));
+console.log('html snippet', await page.evaluate(() => document.querySelector('main')?.innerHTML.slice(0,2000)));
+console.log('scripts', await page.evaluate(() => Array.from(document.scripts).map(s=>s.src).filter(Boolean).slice(-10)));
+await browser.close();
