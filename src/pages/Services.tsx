@@ -6,9 +6,8 @@ import {
   ClipboardCheck, Calendar, Coins, FileText, Calculator, Award
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
-import { Button } from "@/components/ui/button";
-import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import servicesHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
 const servicesHeroVideo = servicesHeroVideoAsset.url;
 
@@ -215,7 +214,7 @@ const Services = () => {
         data-hero-dark
         data-surface="emerald"
         data-no-contrast-guard
-        className="relative flex items-center justify-center overflow-hidden min-h-screen w-full"
+        className="relative grid place-items-center overflow-hidden min-h-[100svh] h-[100svh] w-full"
         style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
       >
         <video
@@ -236,7 +235,7 @@ const Services = () => {
         />
 
         <motion.div
-          className="relative z-10 container mx-auto px-4 py-16 text-center max-w-4xl flex flex-col items-center justify-center"
+          className="relative z-10 mx-auto w-full max-w-5xl px-5 py-20 text-center flex min-h-[100svh] flex-col items-center justify-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -254,7 +253,7 @@ const Services = () => {
 
           <motion.h1
             data-no-contrast-guard
-            className="allow-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+            className="allow-white mx-auto text-center text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
@@ -263,19 +262,20 @@ const Services = () => {
 
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-16 md:mb-20"
+            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-0"
             style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-3 sm:gap-4 mt-12 md:mt-16 w-full">
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2.5 sm:gap-4 mt-28 md:mt-32 w-full">
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-allow-dark-cta
-              className="jj-services-black-cta allow-white inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap"
+              data-surface="emerald"
+              data-emerald-ok="button"
+              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap"
             >
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request a Service</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
@@ -283,8 +283,9 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              data-allow-dark-cta
-              className="jj-services-black-cta allow-white inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap"
+              data-surface="emerald"
+              data-emerald-ok="button"
+              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap"
             >
               <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Support</span>
@@ -299,7 +300,7 @@ const Services = () => {
 
 
       {/* Service Cards Grid */}
-      <section id="services-grid" data-surface="champagne" className="py-20 bg-[#F7F2EA]">
+      <section id="services-grid" data-surface="champagne" data-no-section-frame className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -332,12 +333,12 @@ const Services = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 max-w-[1500px] mx-auto items-stretch">
               {serviceCards.map((service) => (
-                <motion.div key={service.title} variants={fadeInUp}>
+                <motion.div key={service.title} variants={fadeInUp} className="h-full">
                   <Link to={service.link} className="block h-full">
-                    <Card className="jj-card-inner transition-all group h-full flex flex-col">
-                      <CardContent className="p-6 flex flex-col flex-1">
+                    <Card className="jj-service-card-animated jj-card-inner transition-all group h-full min-h-[510px] flex flex-col">
+                      <CardContent className="relative z-10 p-5 lg:p-6 flex h-full flex-col flex-1">
                         <div
                           data-surface="emerald"
                           data-no-contrast-guard
@@ -347,31 +348,33 @@ const Services = () => {
                           <service.icon className="w-6 h-6 allow-white" style={{ color: "#FFFFFF" }} />
                         </div>
 
-                        <h3 className="font-semibold text-lg mb-2" style={{ color: "#1A1A1A" }}>
+                        <h3 className="font-semibold text-lg mb-2 min-h-[3.25rem] flex items-start" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
-                        <p className="text-sm mb-4 flex-1" style={{ color: "rgba(26,26,26,0.75)" }}>
+                        <p className="text-sm mb-4 min-h-[5.25rem]" style={{ color: "rgba(26,26,26,0.75)" }}>
                           {service.description}
                         </p>
 
-                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4">
+                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4 min-h-[9.25rem]">
                           <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "rgba(26,26,26,0.6)" }}>Includes</p>
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-2 text-xs" style={{ color: "rgba(26,26,26,0.85)" }}>
-                                <CheckCircle className="w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: "#064E3B" }} />
+                                <CheckCircle className="jj-service-check w-3 h-3 flex-shrink-0 mt-0.5" style={{ color: "#064E3B" }} />
                                 <span>{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
-                        {service.note && (
-                          <div className="bg-[#EFE6D6]/40 rounded-lg p-2 mb-4">
+                        {service.note ? (
+                          <div className="bg-[#EFE6D6]/40 rounded-lg p-2 mb-4 min-h-[3rem]">
                             <p className="text-xs italic" style={{ color: "rgba(26,26,26,0.65)" }}>
                               {service.note}
                             </p>
                           </div>
+                        ) : (
+                          <div className="mb-4 min-h-[3rem]" aria-hidden="true" />
                         )}
 
                         <div className="flex items-center gap-1 text-sm font-semibold mt-auto pt-4 border-t border-[#1A1A1A]/10" style={{ color: "#064E3B" }}>
@@ -393,7 +396,7 @@ const Services = () => {
 
 
       {/* Service Scope Clarification */}
-      <section data-surface="champagne" className="py-20 bg-[#F7F2EA]">
+      <section data-surface="champagne" data-no-section-frame className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -485,94 +488,25 @@ const Services = () => {
       </section>
 
       {/* Footer Disclaimer — champagne band, ink text */}
-      <section className="bg-[#F7F2EA] py-8 border-t border-[#1A1A1A]/10">
+      <section data-surface="champagne" data-no-section-frame className="bg-[#F7F2EA] py-10">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
+          <p
+            data-no-contrast-guard
+            className="jj-disclaimer-card jj-emerald-border-animated text-sm max-w-3xl mx-auto rounded-2xl px-5 py-5"
+            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: "#FDFBF7" }}
+          >
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
             within brokerage scope. Partner services are delivered independently under partner licenses.
           </p>
         </div>
       </section>
 
-      {/* Not sure which service — emerald ombré card, matches "Ready to Get Started" (moved BELOW disclaimer per request) */}
-      <section data-surface="champagne" className="py-16 bg-[#F7F2EA]">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="max-w-4xl mx-auto"
-          >
-            <div
-              data-ink-emerald
-              data-surface="emerald"
-              data-emerald="true"
-              data-no-contrast-guard
-              className="jj-emerald-card jj-loop-block relative w-full rounded-[28px] p-6 md:p-10 lg:p-12 overflow-hidden text-center"
-              style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #010806 100%)" }}
-            >
-              <span
-                data-no-contrast-guard
-                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] uppercase tracking-[0.22em] font-semibold mb-3 border"
-                style={{
-                  color: "#FFFFFF",
-                  WebkitTextFillColor: "#FFFFFF",
-                  borderColor: "rgba(255,255,255,0.35)",
-                  backgroundColor: "rgba(255,255,255,0.08)",
-                }}
-              >
-                Service Request
-              </span>
-              <h2
-                data-no-contrast-guard
-                className="text-xl md:text-2xl font-bold mb-2 uppercase tracking-[0.14em]"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              >
-                Not Sure Which Service You Need?
-              </h2>
-              <div className="mx-auto mt-1 mb-3 flex items-center justify-center gap-2">
-                <span className="h-px w-12 bg-white/40" />
-                <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
-                <span className="h-px w-12 bg-white/40" />
-              </div>
-              <p
-                data-no-contrast-guard
-                className="text-xs md:text-sm max-w-lg mx-auto mb-6"
-                style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
-              >
-                Send one request and our team will route it to the right department.
-              </p>
-              <div className="flex flex-row flex-nowrap items-center justify-center gap-3 sm:gap-4">
-                <Link
-                  to="/contact"
-                  data-no-contrast-guard
-                  data-surface="emerald"
-                  data-emerald-ok="button"
-                  className="jj-emerald-metallic inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap"
-                >
-                  <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
-                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Open Service Request</span>
-                </Link>
-                <Link
-                  to="/contact"
-                  data-no-contrast-guard
-                  data-allow-dark-cta
-                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 rounded-xl font-semibold text-sm sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
-                  style={{
-                    background: "rgba(255,255,255,0.08)",
-                    border: "1px solid rgba(255,255,255,0.35)",
-                    color: "#FFFFFF",
-                    WebkitTextFillColor: "#FFFFFF",
-                  }}
-                >
-                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Speak to Support</span>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <CombinedContactNewsletter
+        id="ready-to-get-started"
+        title="Not Sure Which Service You Need?"
+        subtitle="Send one request and our team will route it to the right department."
+        className="jj-band bg-[#F7F2EA]"
+      />
 
     </div>
   );
