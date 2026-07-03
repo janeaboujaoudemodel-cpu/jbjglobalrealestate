@@ -108,7 +108,7 @@ const AICompetitorAnalysisPremium = () => {
               placeholder="Dubai Marina"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="bg-emerald-950/40 border-emerald-500/30 text-white h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-300 transition-colors"
+              className="bg-emerald-950/40 border-emerald-500/30 text-white placeholder:text-white placeholder:opacity-100 h-12 rounded-xl hover:border-emerald-500/50 focus:border-emerald-300 transition-colors"
             />
           </div>
         </div>
