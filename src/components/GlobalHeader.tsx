@@ -311,7 +311,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   }, [forceSolid]);
 
   // Deterministic body-attribute toggle: on the homepage, paint the mobile
-  // header fiberglass while at-rest, switch to champagne once scrolled.
+  // header fiberglass while at-rest, switch to the light chrome once scrolled.
   // CSS in index.css keys off body[data-home-hero-state] so we never rely
   // on React-state propagation to win against other style sources.
   useEffect(() => {
@@ -383,7 +383,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             background: champagneFiberglassBackground,
             backdropFilter: 'blur(18px) saturate(160%)',
             WebkitBackdropFilter: 'blur(18px) saturate(160%)',
-            boxShadow: 'inset 0 -1px 0 rgba(184,149,85,0.28), 0 6px 18px rgba(26,26,26,0.06)',
+            boxShadow: 'inset 0 -1px 0 rgba(6,78,59,0.28), 0 6px 18px rgba(26,26,26,0.06)',
           }
         : {}),
   } as React.CSSProperties;
@@ -739,7 +739,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
         aria-hidden="true"
       />
-      {/* Solid champagne bar — desktop only on scroll. */}
+      {/* Solid light bar — desktop only on scroll. */}
       <div
         className={`hidden lg:block absolute inset-0 transition-opacity duration-300 ${showSolidBackground ? "opacity-100" : "opacity-0"}`}
         style={{ background: '#FDFBF7' }}
@@ -748,7 +748,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
       {/* ─── MOBILE / TABLET (< lg) ────────────────────────────────── */}
       {/* At rest over the home dark hero: fully transparent so the Burj
-          video shows through. Champagne/fiberglass only on other routes. */}
+          video shows through. Light/fiberglass only on other routes. */}
       <div
         className={`lg:hidden absolute inset-0 pointer-events-none transition-opacity duration-300 ${(showMobileFiberglass && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{
@@ -760,7 +760,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         aria-hidden="true"
       />
 
-      {/* On scroll OR non-transparent routes: champagne to match desktop chrome. */}
+      {/* On scroll OR non-transparent routes: light chrome to match desktop. */}
       <div
         className={`lg:hidden absolute inset-0 transition-opacity duration-300 ${(showMobileChampagne && !homeMobileFiberglassActive) ? "opacity-100" : "opacity-0"}`}
         style={{ background: '#FDFBF7' }}
@@ -776,7 +776,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
       />
       
-      {/* Mobile-only clean gold hairline under header */}
+      {/* Mobile-only clean hairline under header */}
       <div
         aria-hidden="true"
        className="jj-header-mobile-divider lg:hidden absolute left-0 right-0 bottom-0 h-px pointer-events-none"
