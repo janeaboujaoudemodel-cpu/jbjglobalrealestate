@@ -716,6 +716,8 @@ Requirements:
           <div className="max-w-3xl mx-auto">
             <div
               data-no-contrast-guard
+              data-tool-shell-root
+              data-tool-emerald
               className="rounded-2xl p-6 md:p-8 shadow-xl"
               style={{
                 background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)",
