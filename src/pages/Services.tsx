@@ -292,7 +292,7 @@ const Services = () => {
 
 
       {/* Service Cards Grid */}
-      <section id="services-grid" className="py-20 bg-[#1A1A1A]">
+      <section id="services-grid" className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -332,11 +332,14 @@ const Services = () => {
                     <Card className="jj-card-inner transition-all group h-full flex flex-col">
                       <CardContent className="p-6 flex flex-col flex-1">
                         <div
+                          data-surface="emerald"
+                          data-no-contrast-guard
                           className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform"
                           style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}
                         >
-                          <service.icon className="w-6 h-6" style={{ color: "#FFFFFF" }} />
+                          <service.icon className="w-6 h-6 allow-white" style={{ color: "#FFFFFF" }} />
                         </div>
+
                         <h3 className="font-semibold text-lg mb-2" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
@@ -380,7 +383,7 @@ const Services = () => {
       </section>
 
       {/* Service Request Strip */}
-      <section className="py-16 bg-[#1A1A1A]">
+      <section className="py-16 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -419,7 +422,7 @@ const Services = () => {
       </section>
 
       {/* Service Scope Clarification */}
-      <section className="py-20 bg-[#1A1A1A]">
+      <section className="py-20 bg-[#F7F2EA]">
         <div className="jj-layer-2">
           <motion.div
             initial="hidden"
@@ -505,7 +508,7 @@ const Services = () => {
       </section>
 
       {/* Footer Disclaimer — champagne band, ink text (section bg is auto-remapped on marketing pages) */}
-      <section className="bg-[#1A1A1A] py-8 border-t border-[#B89555]/30">
+      <section className="bg-[#F7F2EA] py-8 border-t border-[#1A1A1A]/10">
         <div className="container mx-auto px-4 text-center">
           <p className="text-[#1A1A1A]/80 text-sm max-w-3xl mx-auto">
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
