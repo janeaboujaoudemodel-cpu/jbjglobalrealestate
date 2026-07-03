@@ -68,10 +68,16 @@ const Section = ({
   return (
     <section
       id={id}
-      className={`py-8 md:py-10 lg:py-12 bg-[#1A1A1A] ${className}`}
+      data-surface="light"
+      data-no-contrast-guard
+      className={`py-8 md:py-10 lg:py-12 ${className}`}
     >
       <div className="jj-section-gutter">
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]">
+        <div
+          data-surface="light"
+          data-no-contrast-guard
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]"
+        >
           <div className="max-w-[1100px] mx-auto">
             {children}
           </div>
