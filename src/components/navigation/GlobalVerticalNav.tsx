@@ -74,14 +74,14 @@ const NAV_ITEMS: NavItem[] = [
   // ── Highlighted Hubs ──
   
   { label: "AI Home Finder", href: "/ai-home-finder", icon: Home, highlight: true },
-  { label: "List Your Property", href: "/list-property", icon: ClipboardCheck, highlight: true },
+  { label: "List Your Property", href: "/list-property?source=ai-home-finder", icon: ClipboardCheck, highlight: true },
   { label: "Careers", href: "/join", icon: GraduationCap, highlight: true },
   { label: "Resale Properties", href: "/resale-properties", icon: DollarSign, highlight: true },
 
   // ── Properties ──
   { label: "Buy / Off-Plan", href: "/properties", icon: Building2, section: "PROPERTIES", megaMenu: 'buy' },
   { label: "All Projects", href: "/properties", icon: Building },
-  { label: "List for Sale / Rent", href: "/list-property", icon: PlusCircle },
+  { label: "List for Sale / Rent", href: "/list-property?source=properties&purpose=sale", icon: PlusCircle },
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' },
   { label: "Communities", href: "/communities", icon: Users },
@@ -324,8 +324,8 @@ const PUBLIC_TOOLS_WORKSPACE_ITEMS: NavItem[] = [
   { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
   { label: "Interior Design AI", href: "/interior-design-ai", icon: Palette },
   { label: "Business Card Scanner", href: "/business-card-scanner", icon: ScanLine },
-  { label: "List Property for Sale", href: "/list-property?purpose=sale", icon: ClipboardCheck },
-  { label: "List Property for Rent", href: "/list-property?purpose=rent", icon: Key },
+  { label: "List Property for Sale", href: "/list-property?source=tools&purpose=sale", icon: ClipboardCheck },
+  { label: "List Property for Rent", href: "/list-property?source=tools&purpose=rent", icon: Key },
 ];
 
 /* ─── MEGA MENU LINK SETS ─── */
@@ -342,7 +342,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Seller's Guide", icon: FileText, href: '/seller-guide' },
     { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
-    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale' },
+    { label: 'List Your Property for Sale', icon: ClipboardCheck, href: '/list-property?source=properties&purpose=sale' },
   ],
   rent: [
     { label: 'Apartments for Rent', icon: Building2, href: '/properties?type=apartment&transaction=rent' },
@@ -351,7 +351,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: "Landlord Guide", icon: FileText, href: '/landlord-guide' },
     { label: 'Property Management', icon: Shield, href: '/services/property-management' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
-    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/list-property?purpose=rent' },
+    { label: 'List Your Property for Rent', icon: ClipboardCheck, href: '/list-property?source=properties&purpose=rent' },
   ],
   developers: [
     { label: 'All Developers', icon: Building, href: '/developers' },
@@ -415,8 +415,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Property Evaluator', icon: BarChart3, href: '/property-evaluator' },
-    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale' },
-    { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent' },
+    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?source=tools&purpose=sale' },
+    { label: 'List Property for Rent', icon: Key, href: '/list-property?source=tools&purpose=rent' },
   ],
   creative: [
     { label: 'AI Home Finder', icon: Home, href: '/ai-home-finder' },
@@ -424,8 +424,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'Mortgage Calculator', icon: Calculator, href: '/mortgage-calculator' },
     { label: 'Rental Index', icon: TrendingUp, href: '/rental-index' },
     { label: 'Property Evaluator', icon: BarChart3, href: '/property-evaluator' },
-    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?purpose=sale' },
-    { label: 'List Property for Rent', icon: Key, href: '/list-property?purpose=rent' },
+    { label: 'List Property for Sale', icon: ClipboardCheck, href: '/list-property?source=tools&purpose=sale' },
+    { label: 'List Property for Rent', icon: Key, href: '/list-property?source=tools&purpose=rent' },
   ],
   shortcuts: [
     { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
@@ -743,19 +743,50 @@ export default function GlobalVerticalNav() {
 
   const closeMegaMenu = useCallback(() => setActiveMegaMenu(null), []);
 
+  const hrefPathname = (href: string) => href.split('?')[0].split('#')[0];
+  const hrefParam = (href: string, key: string) => new URLSearchParams(href.split('?')[1]?.split('#')[0] || '').get(key);
+  const currentParam = (key: string) => new URLSearchParams(location.search).get(key);
+
+  const isListPropertySourceActive = (item: Pick<NavItem, 'href' | 'highlight'>, sectionKey?: string) => {
+    if (location.pathname !== '/list-property' || hrefPathname(item.href) !== '/list-property') return false;
+
+    const activeSource = currentParam('source') || 'ai-home-finder';
+    const itemSource = hrefParam(item.href, 'source') || (item.highlight ? 'ai-home-finder' : sectionKey === 'PROPERTIES' ? 'properties' : sectionKey === 'TOOLS & WORKSPACE' ? 'tools' : null);
+    if (itemSource !== activeSource) return false;
+
+    if (activeSource === 'tools') {
+      const itemPurpose = hrefParam(item.href, 'purpose');
+      return itemPurpose ? itemPurpose === (currentParam('purpose') || 'sale') : true;
+    }
+
+    return true;
+  };
+
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
     const pathname = location.pathname;
+    const hrefPath = hrefPathname(href);
+
+    if (hrefPath === '/list-property') {
+      return pathname === '/list-property';
+    }
 
     // The Insights tree has parent and child routes side-by-side in the same
     // expanded group. Keep parent hubs exact-only so a child like
     // /market-intelligence/areas cannot also light up /market-intelligence.
-    if (href === "/market-intelligence" || href === "/guides") return pathname === href;
+    if (hrefPath === "/market-intelligence" || hrefPath === "/guides") return pathname === hrefPath;
 
-    if (href === "/properties") return pathname === "/properties" || pathname.startsWith("/properties/");
+    if (hrefPath === "/properties") return pathname === "/properties" || pathname.startsWith("/properties/");
     // Prefix matching for toolkit sub-routes (stamp-generator, corporate-suite, etc.)
-    if (href.startsWith("/toolkit/")) return pathname === href || pathname.startsWith(href + "/");
-    return pathname === href;
+    if (hrefPath.startsWith("/toolkit/")) return pathname === hrefPath || pathname.startsWith(hrefPath + "/");
+    return pathname === hrefPath;
+  };
+
+  const isItemActiveForSection = (item: NavItem, sectionKey?: string) => {
+    if (hrefPathname(item.href) === '/list-property') {
+      return isListPropertySourceActive(item, sectionKey);
+    }
+    return isRouteActive(item.href);
   };
 
   // Group nav items by section (with consolidated aliases)
@@ -791,12 +822,12 @@ export default function GlobalVerticalNav() {
     closeMegaMenu();
     setMobileOpen(false);
     for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some(item => isRouteActive(item.href))) {
+      if (items.some(item => isItemActiveForSection(item, section))) {
         setOpenSection(section as SectionKey);
         return;
       }
     }
-  }, [location.pathname, closeMegaMenu, sectionGroups]);
+  }, [location.pathname, location.search, closeMegaMenu, sectionGroups]);
 
   // Auto-open is now handled by the route-change effect above
 
@@ -838,17 +869,17 @@ export default function GlobalVerticalNav() {
   const getItemStyle = (item: NavItem, sectionKey?: string) => {
     const isThisMenuOpen = item.megaMenu ? activeMegaMenu === item.megaMenu : false;
     let routeActive = isRouteActive(item.href);
-    // Dedupe: /list-property appears in multiple places (highlighted hub + sub-item).
-    // Only allow the "highlight:true" hub entry to reflect the active route.
-    if (item.href === '/list-property' && !item.highlight) {
-      routeActive = false;
+    // Dedupe: /list-property appears in multiple places. Highlight only the
+    // clicked/source-matched shortcut (AI Home Finder, Properties, or Tools).
+    if (hrefPathname(item.href) === '/list-property') {
+      routeActive = isListPropertySourceActive(item, sectionKey);
     }
     const shouldHighlight = activeMegaMenu ? isThisMenuOpen : routeActive;
 
     if (
       item.href === '/join' ||
       item.href === '/ai-home-finder' ||
-      (item.href === '/list-property' && item.highlight) ||
+      (hrefPathname(item.href) === '/list-property' && item.highlight) ||
       item.href === '/resale-properties'
     ) {
       return shouldHighlight ? "font-bold text-[#1A1A1A]" : "font-semibold text-[#1A1A1A]";
@@ -1089,7 +1120,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {highlightItems.map((item, i) => {
               const hasMega = !!item.megaMenu;
               const isMenuOpen = activeMegaMenu === item.megaMenu;
-              const routeActive = isRouteActive(item.href);
+              const routeActive = isItemActiveForSection(item);
               const highlightActive = activeMegaMenu ? isMenuOpen : routeActive;
               const Icon = item.icon;
               return (
@@ -1133,7 +1164,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             const items = sectionGroups[sectionKey];
             if (!items || items.length === 0) return null;
             const isOpen = openSection === sectionKey;
-            const hasActiveChild = items.some(item => isRouteActive(item.href));
+            const hasActiveChild = items.some(item => isItemActiveForSection(item, sectionKey));
             const hasMegaActive = sectionHasActiveMega(sectionKey);
             const sectionHighlighted = false;
             const SectionIcon = SECTION_ICONS[sectionKey];
@@ -1226,7 +1257,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         const path = location.pathname;
                         const exactOnlyHubs = new Set(["/market-intelligence", "/guides"]);
                         const sectionMatches = items
-                          .map(it => it.href)
+                          .map(it => hrefPathname(it.href))
                           .filter(h => h && h !== '#' && (path === h || (!exactOnlyHubs.has(h) && path.startsWith(h + '/'))))
                           .sort((a, b) => b.length - a.length);
                         const mostSpecific = sectionMatches[0];
@@ -1239,12 +1270,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         return items.map((item, i) => {
                           const hasMega = !!item.megaMenu;
                           const isMenuOpen = activeMegaMenu === item.megaMenu;
-                          const routeMatchExclusive = !!item.href
-                            && item.href === mostSpecific
-                            && firstIndexByHref.get(item.href) === i
-                            // /list-property is owned by the top-level highlighted hub —
-                            // never light it up inside sections when the user is on that route.
-                            && item.href !== '/list-property';
+                          const routeMatchExclusive = hrefPathname(item.href) === '/list-property'
+                            ? isListPropertySourceActive(item, sectionKey)
+                            : !!item.href
+                              && hrefPathname(item.href) === mostSpecific
+                              && firstIndexByHref.get(item.href) === i;
                           const subitemActive = activeMegaMenu ? isMenuOpen : routeMatchExclusive;
                         const Icon = item.icon;
                         const needsAccountDivider = sectionKey === 'MY ACCOUNT' && ['Favorites', 'Shortlisted', 'My Design'].includes(item.label);
