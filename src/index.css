@@ -35,6 +35,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Area / off-plan filter dialog lock: emerald-black surfaces, pure white copy. */
+html body [data-filter-clean][role="dialog"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.24) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-filter-clean][role="dialog"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,button,li,dt,dd) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-filter-clean][role="dialog"] :is(svg,[data-lucide]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-filter-clean][role="dialog"] :is(input,textarea,select,button[role="combobox"]) {
+  background: rgba(2,22,17,0.82) !important;
+  border-color: rgba(255,255,255,0.28) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-filter-clean][role="dialog"] :is(input,textarea)::placeholder {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body [data-filter-clean][role="dialog"] [data-state="checked"],
+html body [data-filter-clean][role="dialog"] [data-state="active"],
+html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
+  background: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+
 
 /* =====================================================================
    PASS 55 — DOCUMENT STUDIO SURFACE CONTRACT (scoped)

@@ -249,7 +249,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const dropdownPanel =
     "allow-white mt-2 rounded-2xl border border-white/24 bg-[#021611]/86 p-3 shadow-[0_18px_45px_-30px_rgba(10,10,10,0.65)]";
   const optionRow =
-    "flex items-start gap-3 w-full min-h-12 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-[#F7F2EA] overflow-visible";
+    "allow-white flex items-start gap-3 w-full min-h-12 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-white/12 overflow-visible text-white";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
 
@@ -282,10 +282,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         data-filter-clean="true"
-        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#FEFCF9] via-[#FAF6EE] to-[#F3EDD9] border border-[#064E3B]/30 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.35),0_0_0_1px_rgba(6,78,59,0.14)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
+        className="allow-white max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
         style={{
           // Emerald slider override for this modal
-          ['--slider-track-bg' as any]: '#E6DCC7',
+          ['--slider-track-bg' as any]: 'rgba(255,255,255,0.24)',
           ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
           ['--slider-thumb-bg' as any]: '#FFFFFF',
           ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
@@ -293,21 +293,21 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       >
 
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-[#064E3B]/18 flex-shrink-0 bg-gradient-to-r from-transparent via-[#064E3B]/[0.04] to-transparent">
+        <div className="px-6 pt-6 pb-4 border-b border-white/18 flex-shrink-0 bg-black/10">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <DialogTitle className="text-xl font-bold text-[#1A1A1A] tracking-tight">New Off Plan Projects</DialogTitle>
+              <DialogTitle className="allow-white text-xl font-bold text-white tracking-tight">New Off Plan Projects</DialogTitle>
               {projectCount !== null ? (
-                <span className="text-sm font-bold text-[#1A1A1A]">
+                <span className="allow-white text-sm font-bold text-white">
                   {projectCount.toLocaleString()} live projects
                 </span>
               ) : (
-                <span className="text-sm text-[#1A1A1A]">Loading...</span>
+                <span className="allow-white text-sm text-white">Loading...</span>
               )}
             </div>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#064E3B]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white" />
             <input
               type="text"
               value={localFilters.searchQuery}
@@ -328,10 +328,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setEmiratesOpen(!emiratesOpen); setAreasOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className="text-[#1A1A1A]">
+                <span className="allow-white text-white">
                   {localFilters.emirates.length === 0 ? "All Emirates" : `${localFilters.emirates.length} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", emiratesOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-white transition-transform", emiratesOpen && "rotate-180")} />
               </button>
               {emiratesOpen && (
                 <div className={dropdownPanel}>
@@ -353,11 +353,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? selectedBox : "border-[#064E3B]/35 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-white/35 bg-white/7"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          <span className="text-sm text-[#1A1A1A]">{em.label}</span>
+                          <span className="allow-white text-sm text-white">{em.label}</span>
                         </button>
                       );
                     })}
@@ -373,12 +373,12 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setAreasOpen(!areasOpen); setEmiratesOpen(false); setDevsOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className="text-[#1A1A1A]">
+                <span className="allow-white text-white">
                   {!localFilters.areas || localFilters.areas.length === 0
                     ? "All Areas"
                     : `${localFilters.areas.length} area${localFilters.areas.length > 1 ? 's' : ''} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", areasOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-white transition-transform", areasOpen && "rotate-180")} />
               </button>
               {areasOpen && (
                 <div className={dropdownPanel}>
@@ -390,15 +390,15 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                     className={cn(inputClass, "mb-2 h-9 text-xs")}
                   />
                   {allAreas.length === 0 ? (
-                    <div className="py-4 text-center text-xs text-[#1A1A1A]">Loading areas...</div>
+                    <div className="allow-white py-4 text-center text-xs text-white">Loading areas...</div>
                   ) : (
                     <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
                       {Object.entries(areasGroupedByEmirate).sort(([a], [b]) => a.localeCompare(b)).map(([emirate, areaNames]) => (
                         <div key={emirate}>
                           <div className="flex items-center gap-2 mb-1 px-1">
-                            <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wider">{emirate}</span>
-                            <div className="flex-1 h-px bg-[#EFE6D6]/20" />
-                            <span className="text-[10px] text-[#1A1A1A] font-semibold">{areaNames.length}</span>
+                            <span className="allow-white text-[10px] font-bold text-white uppercase tracking-wider">{emirate}</span>
+                            <div className="flex-1 h-px bg-white/20" />
+                            <span className="allow-white text-[10px] text-white font-semibold">{areaNames.length}</span>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                             {areaNames.map(areaName => {
@@ -411,11 +411,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                                 >
                                   <div className={cn(
                                     "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                                    isSelected ? selectedBox : "border-[#064E3B]/35 bg-[#FDFBF7]"
+                                    isSelected ? selectedBox : "border-white/35 bg-white/7"
                                   )}>
                                     {isSelected && <Check className="w-3 h-3 text-white" />}
                                   </div>
-                                  <span className="text-sm text-[#1A1A1A] text-left">{areaName}</span>
+                                  <span className="allow-white text-sm text-white text-left">{areaName}</span>
                                 </button>
                               );
                             })}
@@ -435,10 +435,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                 onClick={() => { setDevsOpen(!devsOpen); setEmiratesOpen(false); setAreasOpen(false); }}
                 className={cn(inputClass, "flex items-center justify-between cursor-pointer text-left")}
               >
-                <span className="text-[#1A1A1A]">
+                <span className="allow-white text-white">
                   {localFilters.developers.length === 0 ? "All Developers" : `${localFilters.developers.length} selected`}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#064E3B] transition-transform", devsOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-white transition-transform", devsOpen && "rotate-180")} />
               </button>
               {devsOpen && (
                 <div className={dropdownPanel}>
@@ -461,7 +461,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         >
                           <div className={cn(
                             "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0",
-                            isSelected ? selectedBox : "border-[#064E3B]/35 bg-[#FDFBF7]"
+                            isSelected ? selectedBox : "border-white/35 bg-white/7"
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
@@ -473,7 +473,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                             className="!w-12 !h-12 !rounded-lg !p-[3px] flex-shrink-0"
                             renderFallback
                           />
-                          <span data-developer-name className="text-sm leading-snug text-[#1A1A1A] text-left whitespace-normal break-words [overflow-wrap:anywhere] flex-1 min-w-0 overflow-visible" title={dev.name}>
+                          <span data-developer-name className="allow-white text-sm leading-snug text-white text-left whitespace-normal break-words [overflow-wrap:anywhere] flex-1 min-w-0 overflow-visible" title={dev.name}>
                             {dev.name}
                           </span>
                         </button>
@@ -489,8 +489,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
               <h4 className={sectionTitle}>Projects Payment Plan</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A] font-semibold">Maximum pre-handover</span>
-                  <span className="text-xs font-bold text-[#1A1A1A] bg-[#FDFBF7]/80 px-2 py-0.5 rounded border border-[#064E3B]/25">
+                  <span className="allow-white text-xs text-white font-semibold">Maximum pre-handover</span>
+                  <span className="allow-white text-xs font-bold text-white bg-white/7 px-2 py-0.5 rounded border border-white/28">
                     {localFilters.paymentPlanMax}%
                   </span>
                 </div>
@@ -502,7 +502,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   step={5}
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-[#1A1A1A] font-semibold">Post handover plans only</span>
+                  <span className="allow-white text-xs text-white font-semibold">Post handover plans only</span>
                   <Switch
                     checked={localFilters.postHandoverOnly}
                     onCheckedChange={(v) => update({ postHandoverOnly: v })}
@@ -515,10 +515,10 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
             <section>
               <h4 className={sectionTitle}>Property Price</h4>
               <Tabs value={localFilters.priceMode} onValueChange={(v) => update({ priceMode: v as any })}>
-                <TabsList className="w-full mb-3 bg-[#FDFBF7]/60">
-                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'unit' ? 'emerald' : undefined} value="unit" className="flex-1 text-xs">Per unit</TabsTrigger>
-                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'sqft' ? 'emerald' : undefined} value="sqft" className="flex-1 text-xs">Per sqft</TabsTrigger>
-                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'sqm' ? 'emerald' : undefined} value="sqm" className="flex-1 text-xs">Per sqm</TabsTrigger>
+                <TabsList className="w-full mb-3 bg-white/7 border border-white/18">
+                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'unit' ? 'emerald' : undefined} value="unit" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">Per unit</TabsTrigger>
+                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'sqft' ? 'emerald' : undefined} value="sqft" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">Per sqft</TabsTrigger>
+                  <TabsTrigger data-filter-price-mode data-surface={localFilters.priceMode === 'sqm' ? 'emerald' : undefined} value="sqm" className="allow-white flex-1 text-xs text-white data-[state=active]:jj-pill-emerald-metallic data-[state=active]:text-white">Per sqm</TabsTrigger>
                 </TabsList>
               </Tabs>
               <div className="grid grid-cols-2 gap-3">
@@ -532,7 +532,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       placeholder="0"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
+                    <span className="allow-white absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-white font-bold">AED</span>
                   </div>
                 </div>
                 <div>
@@ -545,7 +545,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       placeholder="Any"
                       className={cn(inputClass, "h-9 pr-12")}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-[#1A1A1A] font-bold">AED</span>
+                    <span className="allow-white absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-white font-bold">AED</span>
                   </div>
                 </div>
               </div>
@@ -666,7 +666,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverFrom.quarter === q
                             ? "allow-white jj-pill-emerald-metallic text-white border-0 font-bold"
-                            : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
+                            : "allow-white bg-white/7 border border-white/28 text-white hover:bg-white/14 hover:border-white/45"
                         )}
                       >
                         {q}
@@ -676,7 +676,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <select
                     value={localFilters.handoverFrom.year}
                     onChange={(e) => update({ handoverFrom: { ...localFilters.handoverFrom, year: e.target.value } })}
-                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                    className="allow-white w-full h-9 px-3 bg-[#021611]/82 border border-white/28 rounded-lg text-sm text-white font-medium appearance-none cursor-pointer"
                     style={{ WebkitAppearance: 'none' }}
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -693,7 +693,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                           "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                           localFilters.handoverTo.quarter === q
                             ? "allow-white jj-pill-emerald-metallic text-white border-0 font-bold"
-                            : "bg-[#FDFBF7] border border-[#064E3B]/30 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55"
+                            : "allow-white bg-white/7 border border-white/28 text-white hover:bg-white/14 hover:border-white/45"
                         )}
                       >
                         {q}
@@ -703,7 +703,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                   <select
                     value={localFilters.handoverTo.year}
                     onChange={(e) => update({ handoverTo: { ...localFilters.handoverTo, year: e.target.value } })}
-                    className="w-full h-9 px-3 bg-[#FDFBF7] border border-[#064E3B]/30 rounded-lg text-sm text-[#1A1A1A] font-medium appearance-none cursor-pointer"
+                    className="allow-white w-full h-9 px-3 bg-[#021611]/82 border border-white/28 rounded-lg text-sm text-white font-medium appearance-none cursor-pointer"
                     style={{ WebkitAppearance: 'none' }}
                   >
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -732,7 +732,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         </ScrollArea>
 
         {/* Sticky Footer */}
-        <div className="px-6 py-4 border-t border-[#064E3B]/18 flex-shrink-0 flex items-center gap-3 bg-gradient-to-r from-transparent via-[#064E3B]/[0.04] to-transparent">
+        <div className="px-6 py-4 border-t border-white/18 flex-shrink-0 flex items-center gap-3 bg-black/12">
           <button
             onClick={handleClearAll}
             className={filterSecondaryButton.replace("h-9 px-3", "px-5 py-2.5 rounded-full")}

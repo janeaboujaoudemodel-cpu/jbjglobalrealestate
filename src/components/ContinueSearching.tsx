@@ -140,7 +140,7 @@ const ContinueSearching = ({
   const displayItems = hasUserHistory ? uniqueItems.slice(0, limit) : popularProjects;
 
   const sectionTitle = hasUserHistory
-    ? (title || t("home.continueSearching", "Continue Searching for Your Dream Property"))
+    ? (title || (type === "area" ? "Recently Viewed Areas & Communities" : t("home.continueSearching", "Continue Searching for Your Dream Property")))
     : "Trending Projects in Dubai";
 
   const isEmpty = displayItems.length === 0;
@@ -149,11 +149,11 @@ const ContinueSearching = ({
 
   return (
     <section className={`jj-bleed-allow jj-fullbleed-band py-10 md:py-14 relative overflow-hidden w-full ${className}`} data-fullbleed-band>
-      {/* Premium champagne backdrop — full-bleed edge to edge */}
+      {/* Premium neutral backdrop — full-bleed edge to edge */}
       <div className="jj-bleed-allow absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#FDFBF7] z-[1]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#B89555]/40 to-transparent z-[2]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#064E3B]/55 to-transparent z-[2]" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#064E3B]/55 to-transparent z-[2]" />
       </div>
 
       <div className="jj-bleed-allow relative z-20">
@@ -190,12 +190,12 @@ const ContinueSearching = ({
 
                 <PopoverContent
                   align="end"
-                  className="w-80 p-0 bg-[#FDFBF7] border border-[#B89555]/40 shadow-[0_18px_48px_-18px_rgba(0,0,0,0.35)] rounded-xl overflow-hidden"
+                  className="allow-white w-80 p-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 shadow-[0_18px_48px_-18px_rgba(0,0,0,0.55)] rounded-xl overflow-hidden"
                 >
-                  <div className="flex items-center justify-between px-4 py-3 border-b border-[#B89555]/25 bg-gradient-to-r from-[#F7F2EA] to-[#EFE6D6]">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-white/18 bg-black/10">
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-[#B89555]" />
-                      <span className="text-[12px] font-bold tracking-[0.14em] uppercase text-[#1A1A1A]">Your Searches</span>
+                      <Clock className="w-4 h-4 text-white" />
+                      <span className="text-[12px] font-bold tracking-[0.14em] uppercase text-white">Your Searches</span>
                     </div>
                     {recentQueries.length > 0 && (
                       <button
@@ -209,11 +209,11 @@ const ContinueSearching = ({
                   <div className="max-h-72 overflow-y-auto">
                     {recentQueries.length === 0 ? (
                       <div className="px-4 py-8 text-center">
-                        <Search className="w-6 h-6 text-[#B89555] mx-auto mb-2" />
-                        <p className="text-[12px] text-[#1A1A1A]/70">No searches yet. Start exploring to build your history.</p>
+                        <Search className="w-6 h-6 text-white mx-auto mb-2" />
+                        <p className="text-[12px] text-white">No searches yet. Start exploring to build your history.</p>
                       </div>
                     ) : (
-                      <ul className="divide-y divide-[#B89555]/15">
+                      <ul className="divide-y divide-white/15">
                         {recentQueries.map((q) => (
                           <li key={q}>
                             <button
@@ -221,11 +221,11 @@ const ContinueSearching = ({
                                 setHistoryOpen(false);
                                 navigate(`/properties?q=${encodeURIComponent(q)}`);
                               }}
-                              className="w-full text-left px-4 py-2.5 flex items-center gap-2.5 hover:bg-[#EFE6D6]/60 transition-colors group"
+                              className="w-full text-left px-4 py-2.5 flex items-center gap-2.5 hover:bg-white/12 transition-colors group"
                             >
-                              <Search className="w-3.5 h-3.5 text-[#B89555] shrink-0 group-hover:text-[#1A1A1A]" />
-                              <span className="flex-1 text-[13px] text-[#1A1A1A] truncate">{q}</span>
-                              <ChevronRight className="w-3.5 h-3.5 text-[#1A1A1A]/50 group-hover:text-[#B89555]" />
+                              <Search className="w-3.5 h-3.5 text-white shrink-0" />
+                              <span className="flex-1 text-[13px] text-white truncate">{q}</span>
+                              <ChevronRight className="w-3.5 h-3.5 text-white" />
                             </button>
                           </li>
                         ))}
@@ -237,9 +237,9 @@ const ContinueSearching = ({
               <button
                 onClick={clearAll}
                 aria-label="Clear browsing history"
-                className="px-3 h-9 rounded-lg bg-[#FDFBF7] border border-[#B89555]/40 text-[#1A1A1A] text-xs font-semibold tracking-wide flex items-center gap-1.5 hover:bg-[#EFE6D6] hover:border-[#B89555] transition-all duration-300"
+                className="allow-white jj-pill-emerald-metallic px-3 h-9 rounded-lg border-0 text-white text-xs font-semibold tracking-wide flex items-center gap-1.5 transition-all duration-300"
               >
-                <X className="w-3.5 h-3.5 text-[#B33B3B]" />
+                <X className="w-3.5 h-3.5 text-white" />
                 Clear
               </button>
             </div>
@@ -250,14 +250,14 @@ const ContinueSearching = ({
 
         {isEmpty ? (
           <div className="px-4 md:px-8 lg:px-12 flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#EFE6D6] to-[#F7F2EA] border border-[#B89555]/30 flex items-center justify-center mb-4">
-              <Home className="w-8 h-8 text-[#B89555]" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-[#064E3B]/45 flex items-center justify-center mb-4">
+              <Home className="w-8 h-8 text-white" />
             </div>
             <p className="text-[#1A1A1A] text-sm font-medium mb-1">You haven't viewed any properties yet.</p>
             <p className="text-[#1A1A1A]/70 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
             <Link
               to="/properties"
-              className="jj-cta-champagne px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300"
+              className="allow-white jj-pill-emerald-metallic px-6 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-300"
             >
               Explore Now
             </Link>
@@ -423,11 +423,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           transformStyle: "preserve-3d",
         }}
       >
-        {/* Gold shimmer border */}
-        <div className="absolute inset-0 rounded-xl border border-[#B89555]/20 group-hover:border-[#B89555]/60 transition-all duration-500 z-20 pointer-events-none" />
+        <div className="absolute inset-0 rounded-xl border border-[#064E3B]/35 group-hover:border-[#064E3B]/70 transition-all duration-500 z-20 pointer-events-none" />
         <div className="absolute -inset-[1px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10"
           style={{
-            background: "linear-gradient(135deg, transparent 30%, rgba(200,167,102,0.3) 50%, transparent 70%)",
+            background: "linear-gradient(135deg, transparent 30%, rgba(6,78,59,0.32) 50%, transparent 70%)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s ease-in-out infinite",
           }}
@@ -440,8 +439,8 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             style={{ backgroundImage: `url(${item.imageUrl})` }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F7F2EA] via-[#EFE6D6] to-[#B89555]/40 flex items-center justify-center">
-            <Icon className="w-12 h-12 text-[#B89555]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
+            <Icon className="w-12 h-12 text-white" />
           </div>
         )}
 
@@ -452,7 +451,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
           style={{
-            background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(200,167,102,0.05) 100%)",
+            background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(6,78,59,0.16) 100%)",
             transform: "translateZ(20px)",
           }}
         />
@@ -506,10 +505,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
               {item.type === "property" ? (
                 <>
                   <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>by </span>
-                  <span style={{ color: "#B89555", WebkitTextFillColor: "#B89555" }}>{item.subtitle}</span>
+                  <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{item.subtitle}</span>
                 </>
               ) : (
-                <span style={{ color: "#B89555", WebkitTextFillColor: "#B89555" }}>{item.subtitle}</span>
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{item.subtitle}</span>
               )}
             </span>
           )}

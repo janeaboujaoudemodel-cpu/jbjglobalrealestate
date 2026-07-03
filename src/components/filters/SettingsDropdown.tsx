@@ -53,9 +53,7 @@ export function SettingsDropdown({
           size="icon"
           className={cn(
             "h-11 w-11",
-            isDark 
-              ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A] hover:bg-champagne-light",
+            "allow-white jj-pill-emerald-metallic border-0 text-white hover:text-white",
             className
           )}
         >
@@ -63,17 +61,15 @@ export function SettingsDropdown({
         </Button>
       </PopoverTrigger>
       <PopoverContent 
-        className={cn(
-          "w-[280px] p-0",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#064E3B]/20"
-        )}
+        data-filter-dropdown="true"
+        className="allow-white w-[280px] p-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 text-white"
         align="end"
       >
         {/* Measure Unit */}
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             Measure Unit
           </h4>
@@ -85,10 +81,8 @@ export function SettingsDropdown({
                 className={cn(
                   "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors",
                   areaUnit === unit.value
-                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                    : isDark 
-                      ? "bg-[#2a2a2a] text-white hover:bg-[#333]"
-                      : "bg-champagne-light text-[#1A1A1A] hover:bg-champagne"
+                    ? "allow-white jj-pill-emerald-metallic text-white"
+                    : "allow-white bg-white/7 text-white hover:bg-white/12"
                 )}
               >
                 {unit.shortLabel}
@@ -98,13 +92,13 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-white/20" : "border-[#064E3B]/20")} />
+        <div className="border-t border-white/20" />
         
         {/* Currency */}
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             Currency
           </h4>
@@ -116,10 +110,8 @@ export function SettingsDropdown({
                 className={cn(
                   "py-2 px-1 rounded-lg text-xs font-medium transition-colors text-center",
                   currency === cur.code
-                    ? "bg-[#EFE6D6] text-[#1A1A1A]"
-                    : isDark 
-                      ? "bg-[#2a2a2a] text-white hover:bg-[#333]"
-                      : "bg-champagne-light text-[#1A1A1A] hover:bg-champagne"
+                    ? "allow-white jj-pill-emerald-metallic text-white"
+                    : "allow-white bg-white/7 text-white hover:bg-white/12"
                 )}
                 title={cur.label}
               >
@@ -130,13 +122,13 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-white/20" : "border-[#064E3B]/20")} />
+        <div className="border-t border-white/20" />
         
         {/* Display Mode */}
         <div className="p-4 space-y-3">
           <h4 className={cn(
             "text-xs font-semibold uppercase tracking-wider",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             Display Mode
           </h4>
@@ -148,34 +140,30 @@ export function SettingsDropdown({
                 className={cn(
                   "w-full flex items-center gap-3 p-3 rounded-lg transition-colors text-left",
                   displayMode === mode.value
-                    ? isDark 
-                      ? "bg-[#064E3B]/20 border border-[#064E3B]/40"
-                      : "bg-[#064E3B]/10 border border-[#064E3B]/30"
-                    : isDark 
-                      ? "bg-[#2a2a2a] hover:bg-[#333]"
-                      : "bg-champagne-light hover:bg-champagne"
+                    ? "allow-white jj-pill-emerald-metallic text-white border-0"
+                    : "allow-white bg-white/7 text-white hover:bg-white/12"
                 )}
               >
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center",
                   displayMode === mode.value
                     ? "border-[#064E3B] bg-[#064E3B]"
-                    : isDark ? "border-white/40" : "border-[#064E3B]/40"
+                    : "border-white/40"
                 )}>
                   {displayMode === mode.value && (
-                    <Check className="w-3 h-3 text-[#1A1A1A]" />
+                    <Check className="w-3 h-3 text-white" />
                   )}
                 </div>
                 <div className="flex-1">
                   <div className={cn(
                     "text-sm font-medium",
-                    isDark ? "text-white" : "text-[#1A1A1A]"
+                    "allow-white text-white"
                   )}>
                     {mode.label}
                   </div>
                   <div className={cn(
                     "text-xs",
-                    isDark ? "text-white" : "text-[#1A1A1A]"
+                    "allow-white text-white"
                   )}>
                     {mode.description}
                   </div>
@@ -188,7 +176,7 @@ export function SettingsDropdown({
         {/* Apply Button */}
         <div className={cn(
           "p-3 border-t",
-          isDark ? "border-white/20 bg-[#151515]" : "border-[#064E3B]/20 bg-champagne-light/50"
+          "border-white/20 bg-black/12"
         )}>
           <Button
             onClick={() => setOpen(false)}

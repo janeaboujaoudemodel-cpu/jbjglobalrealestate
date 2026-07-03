@@ -46,7 +46,7 @@ export function PaymentPlanSlider({
       <div className="flex items-center justify-between">
         <label className={cn(
           "text-sm font-medium",
-          isDark ? "text-white" : "text-[#1A1A1A]"
+          "allow-white text-white"
         )}>
           Payment Plan
         </label>
@@ -57,9 +57,7 @@ export function PaymentPlanSlider({
             onClick={handleReset}
             className={cn(
               "h-7 px-2 text-xs gap-1",
-              isDark 
-                  ? "text-white hover:text-white hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-champagne-light"
+              "allow-white text-white hover:text-white hover:bg-white/12"
             )}
           >
             <RotateCcw className="w-3 h-3" />
@@ -70,10 +68,10 @@ export function PaymentPlanSlider({
       
       {/* Labels */}
       <div className="flex justify-between text-xs">
-        <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
+        <span className="allow-white text-white">
           Pre-Handover
         </span>
-        <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
+        <span className="allow-white text-white">
           Post-Handover
         </span>
       </div>
@@ -93,13 +91,13 @@ export function PaymentPlanSlider({
         <div className="flex justify-between mt-2">
           <div className={cn(
             "text-sm font-medium tabular-nums",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             {preHandoverMin}%
           </div>
           <div className={cn(
             "text-sm font-medium tabular-nums",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}>
             {preHandoverMax}%
           </div>
@@ -121,7 +119,7 @@ export function PaymentPlanSlider({
           htmlFor="post-handover" 
           className={cn(
             "text-sm cursor-pointer",
-            isDark ? "text-white" : "text-[#1A1A1A]"
+            "allow-white text-white"
           )}
         >
           Only show projects with post-handover payments
@@ -150,7 +148,7 @@ export function PaymentPlanCompact({
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between text-xs">
-        <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
+        <span className="allow-white text-white">
           Payment Plan: {value[0]}% - {value[1]}%
         </span>
       </div>

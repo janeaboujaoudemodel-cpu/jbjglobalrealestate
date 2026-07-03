@@ -14,7 +14,6 @@ import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } f
 
 import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
-import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 import ContinueSearching from "@/components/ContinueSearching";
 
@@ -87,6 +86,17 @@ const AreaGuides = () => {
   }, [areas]);
 
   const heroEmiratesOrder = ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Ajman", "Fujairah", "Umm Al Quwain"];
+
+  const areaIntelligence = useMemo(() => {
+    const list = areas || [];
+    return {
+      topProjectAreas: [...list].sort((a, b) => (b.property_count ?? 0) - (a.property_count ?? 0)).slice(0, 8),
+      highDemand: list.filter((a) => a.is_high_demand).slice(0, 6),
+      trending: list.filter((a) => a.is_trending).slice(0, 6),
+      totalProjects: list.reduce((sum, a) => sum + (a.property_count ?? 0), 0),
+      totalDevelopers: list.reduce((sum, a) => sum + (a.developer_count ?? 0), 0),
+    };
+  }, [areas]);
 
   // Filter and sort areas from database
   const filteredAreas = useMemo(() => {
@@ -242,8 +252,7 @@ const AreaGuides = () => {
                   setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                   scrollToGrid();
                 }}
-                className="flex items-center gap-2 px-4 py-2 backdrop-blur-sm rounded-full transition-all cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.22)" }}
+                className="allow-white jj-pill-emerald-metallic flex items-center gap-2 px-4 py-2 rounded-full transition-all cursor-pointer border-0 shadow-[0_10px_24px_rgba(0,0,0,0.34)] hover:shadow-[0_14px_30px_rgba(0,0,0,0.42)]"
               >
                 <MapPin className="w-3 h-3" style={{ color: "#FFFFFF" }} />
                 <span className="text-xs font-medium" style={{ color: "#FFFFFF" }}>{emirate}</span>
@@ -267,12 +276,11 @@ const AreaGuides = () => {
       {/* Vertical nav handled globally by MainLayout */}
 
 
-      {/* Emerald divider */}
-      <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
+      <div ref={gridRef} className="w-full h-px bg-[#064E3B]" />
 
       <section
         data-filter-clean="true"
-        className="relative z-40 py-4 border-y border-white/12"
+        className="relative z-40 py-4 border-y-0"
         style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
       >
         <div className="w-full px-3 sm:px-4">
@@ -287,39 +295,6 @@ const AreaGuides = () => {
           />
         </div>
       </section>
-
-      {/* Emirates Section — clickable cards grouped by emirate */}
-      {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
-        <section className="pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
-          <div className="px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">
-              Browse by Emirate
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-2">
-              {heroEmiratesOrder.map(emirate => {
-                const count = emirateCounts[emirate];
-                if (!count) return null;
-                return (
-                  <button
-                    key={emirate}
-                    onClick={() => {
-                      setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
-                      scrollToGrid();
-                    }}
-                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 hover:border-[#064E3B]/55 hover:shadow-lg hover:shadow-[#064E3B]/15 transition-all"
-                  >
-                    <MapPin className="w-5 h-5 text-[#1A1A1A]" />
-                    <span className="text-[#1A1A1A] font-semibold text-sm">{emirate}</span>
-                    <span className="text-[#1A1A1A] text-xs font-bold">{count} Areas</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-          {/* Divider */}
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent mt-4" />
-        </section>
-      )}
 
       {/* Areas Grid */}
       <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen">
@@ -400,8 +375,8 @@ const AreaGuides = () => {
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
-                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10"  loading="lazy" decoding="async" />
+                            <div className="w-full h-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
+                              <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-35"  loading="lazy" decoding="async" />
                             </div>
                           )}
 
@@ -534,25 +509,78 @@ const AreaGuides = () => {
         </div>
       </section>
 
-      {/* DLD Market Intelligence */}
-      <div className="py-8">
+      {/* Area Intelligence */}
+      <section className="py-10 md:py-14 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
         <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
-          <DLDMarketWidget />
+          <div className="text-center mb-8">
+            <div className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 border-0 rounded-full px-4 py-1.5 mb-4">
+              <MapPin className="w-4 h-4 text-white" />
+              <span className="text-white text-xs uppercase tracking-[0.2em] font-semibold">Community Facts</span>
+            </div>
+            <h2 className="allow-white text-white text-2xl md:text-3xl font-bold mb-2">UAE Area Intelligence</h2>
+            <p className="allow-white text-white text-sm font-medium max-w-2xl mx-auto">
+              Live community coverage by emirate, development depth, project activity, and demand signals.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[
+              { label: "Areas Covered", value: (areas?.length || 0).toLocaleString() },
+              { label: "Active Projects", value: areaIntelligence.totalProjects.toLocaleString() },
+              { label: "Developer Presence", value: areaIntelligence.totalDevelopers.toLocaleString() },
+              { label: "Emirates", value: Object.keys(emirateCounts).length.toLocaleString() },
+            ].map((stat) => (
+              <div key={stat.label} className="rounded-xl border border-white/18 bg-white/8 p-5">
+                <p className="allow-white text-white text-[10px] uppercase tracking-[0.16em] font-bold mb-2">{stat.label}</p>
+                <p className="allow-white text-white text-2xl md:text-3xl font-extrabold">{stat.value}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {[
+              { title: "Top Areas by Projects", items: areaIntelligence.topProjectAreas, icon: Building2 },
+              { title: "High Demand Communities", items: areaIntelligence.highDemand, icon: Flame },
+              { title: "Trending Areas", items: areaIntelligence.trending, icon: TrendingUp },
+            ].map((group) => {
+              const Icon = group.icon;
+              return (
+                <div key={group.title} className="rounded-2xl border border-white/18 bg-white/8 p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="jj-pill-emerald-metallic inline-flex w-9 h-9 items-center justify-center rounded-lg">
+                      <Icon className="w-4 h-4 text-white" />
+                    </span>
+                    <h3 className="allow-white text-white font-bold text-sm">{group.title}</h3>
+                  </div>
+                  <div className="space-y-2">
+                    {group.items.length > 0 ? group.items.map((area) => (
+                      <Link key={area.id} to={`/area/${area.slug}`} className="group flex items-center justify-between gap-3 rounded-lg bg-black/22 border border-white/12 px-3 py-2.5 hover:bg-white/10 transition-colors">
+                        <span className="allow-white text-white text-sm font-semibold truncate">{area.name}</span>
+                        <span className="allow-white text-white text-xs font-bold shrink-0">{(area.property_count ?? area.developer_count ?? 0).toLocaleString()}</span>
+                      </Link>
+                    )) : (
+                      <p className="allow-white text-white text-sm">No active signals yet.</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* CTA Section */}
-      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
         <div className="px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
+          <h2 className="allow-white text-2xl md:text-3xl font-bold text-white mb-4">
             Can't Find What You're Looking For?
           </h2>
-          <p className="text-[#1A1A1A]/70 mb-6 max-w-xl mx-auto">
+          <p className="allow-white text-white mb-6 max-w-xl mx-auto">
             Our team can help you discover the perfect area based on your lifestyle and investment goals.
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white font-semibold rounded-xl border-2 border-[#1A1A1A] hover:bg-[#FDFBF7] hover:text-[#1A1A1A] transition-all"
+            className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-xl border-0 transition-all"
           >
             Contact Our Team
             <ArrowRight className="w-4 h-4" />

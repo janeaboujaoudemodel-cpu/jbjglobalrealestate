@@ -671,7 +671,7 @@ const Properties = () => {
                       type="button"
                       data-no-contrast-guard
                       aria-label="Search properties"
-                      className="allow-white inline-flex items-center justify-center h-11 w-11 rounded-xl jj-pill-emerald-metallic text-white transition-colors flex-shrink-0"
+                      className="allow-white inline-flex items-center justify-center h-11 w-11 rounded-xl jj-pill-emerald-metallic text-white transition-colors flex-shrink-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)]"
                       style={{ color: '#FFFFFF' }}
                     >
                       <Search className="w-4 h-4 allow-white" style={{ color: '#FFFFFF' }} strokeWidth={2.2} />
@@ -682,15 +682,15 @@ const Properties = () => {
                     align="start"
                     sideOffset={8}
                     data-map-shell={isMapMode ? true : undefined}
-                    className={isMapMode ? "w-[320px] sm:w-[380px] p-3 jj-map-command-bar" : "w-[320px] sm:w-[380px] p-3 bg-white border border-[#064E3B]/25"}
+                    className={isMapMode ? "allow-white w-[320px] sm:w-[380px] p-3 jj-map-command-bar" : "allow-white w-[320px] sm:w-[380px] p-3 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 text-white"}
                   >
                     <form
                       onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
                       role="search"
                       className="flex items-center gap-2"
                     >
-                      <div className={isMapMode ? "flex flex-1 items-center px-3 h-10 rounded-lg jj-map-search-input" : "flex flex-1 items-center px-3 h-10 rounded-lg border border-[#064E3B]/30 bg-white"}>
-                        <Search className="w-4 h-4 mr-2 text-[#1A1A1A]/60" strokeWidth={2} />
+                      <div className={isMapMode ? "flex flex-1 items-center px-3 h-10 rounded-lg jj-map-search-input" : "allow-white flex flex-1 items-center px-3 h-10 rounded-lg border border-white/28 bg-[#021611]/82"}>
+                        <Search className="w-4 h-4 mr-2 text-white" strokeWidth={2} />
                         <input
                           type="text"
                           autoFocus
@@ -702,14 +702,14 @@ const Properties = () => {
                             setAppliedFilters((prev) => ({ ...prev, search: next }));
                           }}
                           data-no-contrast-guard
-                          className="flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] tracking-[-0.005em] font-normal"
-                          style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                          className="allow-white flex-1 min-w-0 h-full bg-transparent border-0 outline-none text-[14px] tracking-[-0.005em] font-normal text-white placeholder:text-white"
+                          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                         />
                       </div>
                       <button
                         type="submit"
                         data-no-contrast-guard
-                        className={isMapMode ? "jj-map-details-button h-10 px-4 rounded-lg text-[13px] font-semibold flex-shrink-0 allow-white" : "h-10 px-4 rounded-lg bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] font-semibold flex-shrink-0 allow-white"}
+                        className={isMapMode ? "jj-map-details-button h-10 px-4 rounded-lg text-[13px] font-semibold flex-shrink-0 allow-white" : "h-10 px-4 rounded-lg jj-pill-emerald-metallic text-white text-[13px] font-semibold flex-shrink-0 allow-white"}
                         style={{ color: '#FFFFFF' }}
                       >
                         Search
@@ -725,7 +725,7 @@ const Properties = () => {
                       type="button"
                       data-no-contrast-guard
                       aria-label="Open all filters"
-                      className={isMapMode ? "jj-map-details-button inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white" : "inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white"}
+                      className={isMapMode ? "jj-map-details-button inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white" : "inline-flex items-center justify-center gap-2 h-11 px-4 sm:px-5 rounded-xl jj-pill-emerald-metallic text-white text-[13px] sm:text-sm font-semibold transition-colors flex-shrink-0 allow-white shadow-[0_10px_24px_rgba(0,0,0,0.28)]"}
                       style={{ color: '#FFFFFF' }}
                     >
                       <SlidersHorizontal
@@ -1209,8 +1209,8 @@ const Properties = () => {
           <div className="container mx-auto px-3 sm:px-4">
             <div className="flex">
               {/* Vertical nav handled globally by MainLayout */}
-            {/* OUTER LAYER - Active Champagne with thin black contour visible at edges */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#064E3B]/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
+            {/* OUTER LAYER - clean emerald contour */}
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/30 rounded-2xl p-4 sm:p-5 flex-1 min-w-0">
               
               {/* Header Section - Off-plan properties message */}
               {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
@@ -1219,9 +1219,9 @@ const Properties = () => {
                     Off-plan properties for sale in Dubai
                   </h2>
                   <p className="text-[#1A1A1A] text-sm md:text-base flex items-start gap-2 font-medium">
-                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#1A1A1A] text-white text-xs flex-shrink-0 mt-0.5 font-bold">i</span>
+                    <span className="allow-white jj-pill-emerald-metallic inline-flex items-center justify-center w-5 h-5 rounded-full text-white text-xs flex-shrink-0 mt-0.5 font-bold">i</span>
                     <span>
-                      Looking for off-plan properties for sale in Dubai? Contact <span className="font-bold text-[#A68444]">JBJ Global Real Estate</span> in Dubai to find the right property for you.
+                      Looking for off-plan properties for sale in Dubai? Contact <span className="font-bold text-[#064E3B]">JBJ Global Real Estate</span> in Dubai to find the right property for you.
                     </span>
                   </p>
                 </div>
@@ -1446,8 +1446,8 @@ const Properties = () => {
         <div className="container mx-auto px-4">
           {/* Top: centered content */}
           <div className="max-w-3xl mx-auto text-center">
-            <div className="jj-cta-gold-metallic inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-5">
-              <HelpCircle className="w-3 h-3" />
+            <div className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-5 text-white">
+              <HelpCircle className="w-3 h-3 text-white" />
               Get Expert Guidance
             </div>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A1A] mb-4">
