@@ -11,34 +11,32 @@ interface FormDraftBarProps {
   onReset: () => void;
   onNew?: () => void;
   label?: string;
-  /** Theme: 'gold' | 'blue' | 'purple' | 'dark' */
-  theme?: 'gold' | 'blue' | 'purple' | 'dark';
+  /** Theme: legacy names are retained, but AI/listing tools must resolve to JBJ emerald/black — never purple. */
+  theme?: 'gold' | 'blue' | 'purple' | 'dark' | 'emerald';
 }
+
+const emeraldTheme = {
+  bar: 'bg-[#FDFBF7]/70 border border-[#064E3B]/35 rounded-xl',
+  icon: 'text-[#064E3B]',
+  save: 'bg-[#064E3B] text-white hover:bg-[#042C1C] rounded-md',
+  newBtn: 'border-[#064E3B]/50 text-[#064E3B] hover:bg-[#064E3B]/10 rounded-md',
+};
 
 const themeMap = {
   gold: {
-    bar: 'bg-[#FDFBF7]/40 border border-[#B89555]/30',
+    bar: 'bg-[#FDFBF7]/40 border border-[#064E3B]/30',
     icon: 'text-[#1A1A1A]',
-    save: 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90',
-    newBtn: 'border-[#B89555]/40 text-foreground hover:bg-[#EFE6D6]/10',
+    save: 'bg-[#064E3B] text-white hover:bg-[#042C1C]',
+    newBtn: 'border-[#064E3B]/40 text-[#064E3B] hover:bg-[#064E3B]/10',
   },
-  blue: {
-    bar: 'bg-[#0A0A0A]/15 border border-[#0A0A0A]/30 rounded-xl',
-    icon: 'text-[#0A0A0A]',
-    save: 'bg-[#0A0A0A] text-white hover:bg-[#1F1F1F] rounded-md',
-    newBtn: 'border-[#0A0A0A]/40 text-[#0A0A0A] hover:bg-[#0A0A0A]/10 rounded-md',
-  },
-  purple: {
-    bar: 'bg-[#FDFBF7]/40 border border-purple-300/30',
-    icon: 'text-purple-600',
-    save: 'bg-purple-600 text-white hover:bg-purple-700',
-    newBtn: 'border-purple-400/40 text-foreground hover:bg-purple-50',
-  },
+  blue: emeraldTheme,
+  purple: emeraldTheme,
+  emerald: emeraldTheme,
   dark: {
-    bar: 'bg-[#FDFBF7]/60 border border-[#1A1A1A]/50',
-    icon: 'text-[#1A1A1A]',
-    save: 'bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90',
-    newBtn: 'border-[#1A1A1A] text-[#1A1A1A]/70 hover:bg-[#1A1A1A]',
+    bar: 'bg-[#042C1C]/60 border border-white/35 rounded-xl',
+    icon: 'text-white',
+    save: 'bg-[#064E3B] text-white hover:bg-[#042C1C] rounded-md',
+    newBtn: 'border-white/45 text-white hover:bg-white/10 rounded-md',
   },
 };
 
@@ -68,9 +66,9 @@ export function FormDraftBar({
           data-on-dark
           data-allow-dark-cta
           className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors ${t.save}`}
-          style={theme === 'blue' || theme === 'purple' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
+          style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}
         >
-          <Save className="w-3.5 h-3.5" style={theme === 'blue' || theme === 'purple' ? { color: '#FFFFFF' } : undefined} /> <span style={theme === 'blue' || theme === 'purple' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>Save Draft</span>
+          <Save className="w-3.5 h-3.5" style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF' } : undefined} /> <span style={theme === 'blue' || theme === 'purple' || theme === 'emerald' || theme === 'dark' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } : undefined}>Save Draft</span>
         </button>
         <button
           type="button"
