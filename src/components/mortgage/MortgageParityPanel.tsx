@@ -222,7 +222,7 @@ export default function MortgageParityPanel({
       </Card>
 
       {/* Fees breakdown */}
-      <Card title="One-time Fees & Closing Costs">
+      <Card title="One-time Fees & Closing Costs" className="lg:col-span-2">
         <div className={`space-y-1.5 text-sm ${inkClass}`}>
           {[
             ["DLD Transfer (4%)", fees.dld],
