@@ -397,6 +397,96 @@ const AIHF_STYLE = `
 
   /* Progress track (champagne rail) */
   .aihf-root [class*="bg-[#EFE6D6]"].h-2 { background: rgba(255,255,255,0.12) !important; }
+
+  /* ---------- Animated emerald borders + orbs (no gold anywhere) ---------- */
+  @keyframes aihf-border-spin {
+    0%   { --aihf-angle: 0deg; }
+    100% { --aihf-angle: 360deg; }
+  }
+  @property --aihf-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @keyframes aihf-orb-drift-a {
+    0%   { transform: translate(0,0) scale(1); opacity: 0.55; }
+    50%  { transform: translate(-40px, 30px) scale(1.15); opacity: 0.85; }
+    100% { transform: translate(0,0) scale(1); opacity: 0.55; }
+  }
+  @keyframes aihf-orb-drift-b {
+    0%   { transform: translate(0,0) scale(1); opacity: 0.5; }
+    50%  { transform: translate(50px, -35px) scale(1.2); opacity: 0.8; }
+    100% { transform: translate(0,0) scale(1); opacity: 0.5; }
+  }
+  @keyframes aihf-orb-drift-c {
+    0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.35; }
+    50%  { transform: translate(-52%, -48%) scale(1.08); opacity: 0.55; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.35; }
+  }
+  @keyframes aihf-icon-float {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%     { transform: translateY(-6px) rotate(-3deg); }
+  }
+  @keyframes aihf-sparkle {
+    0%,100% { opacity: 0.15; transform: scale(0.9); }
+    50%     { opacity: 0.9;  transform: scale(1.15); }
+  }
+
+  /* Animated emerald ring wrapper — replaces any gold border */
+  .aihf-emerald-ring {
+    position: relative;
+    border-radius: inherit;
+    background:
+      conic-gradient(from var(--aihf-angle),
+        #10B981 0%,
+        #34D399 15%,
+        rgba(255,255,255,0.85) 28%,
+        #059669 45%,
+        #064E3B 60%,
+        #34D399 78%,
+        #10B981 100%);
+    animation: aihf-border-spin 6s linear infinite;
+    padding: 1.5px;
+  }
+  .aihf-emerald-ring > * {
+    border-radius: inherit;
+    background-clip: padding-box;
+  }
+  .aihf-emerald-ring-strong { padding: 2px; animation-duration: 7s; }
+
+  /* Animated background orbs behind the intro card */
+  .aihf-orbs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .aihf-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(60px);
+    will-change: transform, opacity;
+  }
+  .aihf-orb-1 {
+    top: -80px; right: -60px; width: 380px; height: 380px;
+    background: radial-gradient(circle at 30% 30%, rgba(52,211,153,0.55), rgba(6,78,59,0.0) 70%);
+    animation: aihf-orb-drift-a 9s ease-in-out infinite;
+  }
+  .aihf-orb-2 {
+    bottom: -100px; left: -80px; width: 420px; height: 420px;
+    background: radial-gradient(circle at 60% 60%, rgba(16,185,129,0.5), rgba(2,44,32,0.0) 70%);
+    animation: aihf-orb-drift-b 11s ease-in-out infinite;
+  }
+  .aihf-orb-3 {
+    top: 50%; left: 50%; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(5,150,105,0.35), rgba(0,0,0,0.0) 65%);
+    animation: aihf-orb-drift-c 13s ease-in-out infinite;
+  }
+  .aihf-orb-4 {
+    top: 20%; left: 10%; width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(110,231,183,0.35), rgba(0,0,0,0.0) 70%);
+    animation: aihf-orb-drift-a 14s ease-in-out infinite reverse;
+  }
+
+  .aihf-hero-icon { animation: aihf-icon-float 4.5s ease-in-out infinite; }
+
+  /* Ensure the intro card sits above the animated orbs */
+  .aihf-root .aihf-intro-card { position: relative; z-index: 1; }
 `;
 
 const Quiz = () => {
@@ -1087,113 +1177,128 @@ const Quiz = () => {
         </div>
 
 
-        <div className="flex-1 flex items-center justify-center px-4 py-6">
-          <AIShellCard
-            as="div"
-            data-surface="dark"
-            padding="lg"
-            className="w-full max-w-2xl text-center border border-white/24 shadow-[0_18px_55px_rgba(0,0,0,0.28)]"
-          >
-            {/* Centered emerald identity tile */}
-            <div
-              data-surface="emerald"
-              data-emerald-ok="icon"
-              className="jj-surface-emerald mx-auto mb-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+        <div className="relative flex-1 flex items-center justify-center px-4 py-6">
+          {/* Animated emerald orbs behind the card */}
+          <div className="aihf-orbs" aria-hidden="true">
+            <div className="aihf-orb aihf-orb-1" />
+            <div className="aihf-orb aihf-orb-2" />
+            <div className="aihf-orb aihf-orb-3" />
+            <div className="aihf-orb aihf-orb-4" />
+          </div>
+
+          {/* Animated emerald border wrapper (replaces gold outline) */}
+          <div className="aihf-emerald-ring aihf-emerald-ring-strong rounded-2xl w-full max-w-2xl aihf-intro-card">
+            <AIShellCard
+              as="div"
+              data-surface="dark"
+              padding="lg"
+              noOrbs
+              className="w-full text-center border-0 shadow-[0_18px_55px_rgba(0,0,0,0.35)]"
             >
-              <Wand2 className="w-8 h-8" />
-            </div>
+              {/* Centered emerald identity tile */}
+              <div
+                data-surface="emerald"
+                data-emerald-ok="icon"
+                className="aihf-hero-icon jj-surface-emerald mx-auto mb-4 w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
+              >
+                <Wand2 className="w-8 h-8" />
+              </div>
 
-            {/* Label pill */}
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4"
-              style={{
-                background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
-                border: "1px solid rgba(255,255,255,0.42)",
-                boxShadow: "none",
-              }}
-            >
-              <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>Completely Free</span>
-            </div>
-
-            <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
-              AI Home Finder
-            </h1>
-            <p className="text-[#1A1A1A]/70 max-w-lg mx-auto mb-2">
-              Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
-              <span className="font-semibold text-[#1A1A1A]">FREE</span>.
-            </p>
-            <p className="text-[#1A1A1A]/60 text-sm mb-8">
-              Powered by JBJ Global Real Estate
-            </p>
-
-            {/* Vertical tick list */}
-            <ul className="text-left max-w-md mx-auto space-y-2.5 mb-6">
-              {[
-                { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
-                { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
-                { label: "Download Excel Report", description: "Take your matches with you" },
-              ].map((f) => (
-                <li
-                  key={f.label}
-                  className="flex items-start gap-3 p-3 bg-white/5 border border-white/18 rounded-xl"
-                >
-                  <div
-                    data-surface="emerald"
-                    data-emerald-ok="icon"
-                    className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                  >
-                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
-                  </div>
-                  <div>
-                    <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
-                    <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            {/* Meta row — matches the feature card style above */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
-              {[
-                { Icon: Clock,        label: "~60 seconds" },
-                { Icon: Sparkles,     label: "AI-Powered"  },
-                { Icon: CheckCircle2, label: "100% Free"   },
-              ].map(({ Icon, label }) => (
+              {/* Label pill wrapped in animated emerald ring (no gold) */}
+              <div className="aihf-emerald-ring rounded-full inline-block mb-4">
                 <div
-                  key={label}
-                  className="flex items-center gap-2.5 px-3.5 py-2 bg-white/5 border border-white/18 rounded-xl"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
+                  style={{
+                    background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
+                    border: "0",
+                    boxShadow: "none",
+                  }}
                 >
-                  <div
-                    data-surface="emerald"
-                    data-emerald-ok="icon"
-                    className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                  >
-                    <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
-                  </div>
-                  <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
+                  <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                  <span className="text-xs font-bold uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>Completely Free</span>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            {/* Primary CTA */}
-            <Button
-              onClick={() => setStarted(true)}
-              data-surface="emerald"
-              className="aihf-cta jj-pill-emerald-metallic font-semibold px-10 py-6 text-base rounded-xl"
-            >
-              <span>Find My Property</span>
-              <ArrowUpRight className="w-5 h-5 ml-2" />
-            </Button>
+              <h1 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                AI Home Finder
+              </h1>
+              <p className="text-[#1A1A1A]/70 max-w-lg mx-auto mb-2">
+                Find your perfect home with our AI — it searches every project on JBJ and matches them to your exact requirements. Completely{" "}
+                <span className="font-semibold text-[#1A1A1A]">FREE</span>.
+              </p>
+              <p className="text-[#1A1A1A]/60 text-sm mb-8">
+                Powered by JBJ Global Real Estate
+              </p>
 
-            <p className="text-xs mt-5 text-[#1A1A1A]/60">
-              Save money by choosing the right property the first time.
-            </p>
-          </AIShellCard>
+              {/* Vertical tick list */}
+              <ul className="text-left max-w-md mx-auto space-y-2.5 mb-6">
+                {[
+                  { label: "Unlimited AI Home Matches", description: "No cap — across every project on JBJ" },
+                  { label: "AI Comparison Reports", description: "Side-by-side analysis & insights" },
+                  { label: "Download Excel Report", description: "Take your matches with you" },
+                ].map((f) => (
+                  <li
+                    key={f.label}
+                    className="flex items-start gap-3 p-3 bg-white/5 border border-white/18 rounded-xl"
+                  >
+                    <div
+                      data-surface="emerald"
+                      data-emerald-ok="icon"
+                      className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                    >
+                      <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                    </div>
+                    <div>
+                      <p className="text-[#1A1A1A] font-medium text-sm leading-tight">{f.label}</p>
+                      <p className="text-[#1A1A1A]/70 text-xs mt-0.5">{f.description}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Meta row — matches the feature card style above */}
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+                {[
+                  { Icon: Clock,        label: "~60 seconds" },
+                  { Icon: Sparkles,     label: "AI-Powered"  },
+                  { Icon: CheckCircle2, label: "100% Free"   },
+                ].map(({ Icon, label }) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-2.5 px-3.5 py-2 bg-white/5 border border-white/18 rounded-xl"
+                  >
+                    <div
+                      data-surface="emerald"
+                      data-emerald-ok="icon"
+                      className="jj-surface-emerald w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                    >
+                      <Icon className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} strokeWidth={2.5} />
+                    </div>
+                    <span className="text-[#1A1A1A] font-medium text-sm leading-none">{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Primary CTA */}
+              <Button
+                onClick={() => setStarted(true)}
+                data-surface="emerald"
+                className="aihf-cta jj-pill-emerald-metallic font-semibold px-10 py-6 text-base rounded-xl"
+              >
+                <span>Find My Property</span>
+                <ArrowUpRight className="w-5 h-5 ml-2" />
+              </Button>
+
+              <p className="text-xs mt-5 text-[#1A1A1A]/60">
+                Save money by choosing the right property the first time.
+              </p>
+            </AIShellCard>
+          </div>
         </div>
       </section>
     );
   }
+
 
 
   // Form Screen after completing questions
