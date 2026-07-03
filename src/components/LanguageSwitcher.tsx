@@ -55,7 +55,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
           <Button
             variant="ghost"
             size="sm"
-            className="h-10 lg:h-11 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#B89555]/20 hover:border-[#B89555]/50 hover:bg-[#EFE6D6]/10 transition-all duration-300 group gap-2"
+            className="h-10 lg:h-11 px-3 text-[#1A1A1A] hover:text-[#1A1A1A]-light rounded-full border border-[#064E3B]/20 hover:border-[#064E3B]/50 hover:bg-[#064E3B]/10 transition-all duration-300 group gap-2"
           >
             <Globe className="w-4 h-4 group-hover:scale-110 transition-transform" />
             <span className="hidden sm:inline text-xs font-medium tracking-wide">{currentLang.flag} {currentLang.code.toUpperCase()}</span>

@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Plane, MapPin, Calendar, Building2, Send, Loader2, Sparkles,
@@ -19,6 +20,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
+import { useProjectsListing } from "@/hooks/useProjects";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 
 interface TripPlan {
   id: string;
@@ -73,6 +76,13 @@ const AIPersonalShopper = () => {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [inquiryForm, setInquiryForm] = useState({ name: '', email: '', phone: '' });
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { data: featuredProjects } = useProjectsListing();
+  const shopperListings = useMemo(() => (featuredProjects || []).slice(0, 3), [featuredProjects]);
+  const heroPhoto = getHighResImageUrl(
+    (shopperListings[0] as any)?.images?.[0]?.image_url ||
+    (shopperListings[0] as any)?.cover_image_url ||
+    "https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Mercedes_Benz_Places_2_16c6f5cada.webp"
+  );
 
   // Load saved plans
   useEffect(() => {
@@ -230,36 +240,65 @@ const AIPersonalShopper = () => {
 
   return (
     <ToolAnimatedFrame theme={toolThemes.emerald}>
-    <section className="min-h-screen bg-gradient-to-br from-zinc-950 via-black to-zinc-950">
-      {/* Header */}
-      <div className="bg-gradient-to-r /30 /20 /30 border-b border-[color:var(--emerald-1)]/30/20">
-        <div className="container mx-auto px-4 py-8 md:py-12">
+    <section className="min-h-screen bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+      {/* Hero */}
+      <div className="relative min-h-[560px] overflow-hidden border-b border-white/18">
+        <img
+          src={heroPhoto}
+          alt="Curated UAE property listing"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-[#042C1C]/78 to-black/38" />
+        <div className="container relative z-10 mx-auto px-4 py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center"
+            className="max-w-4xl"
           >
-            <div className="inline-flex items-center gap-2 jj-surface-emerald-soft border border-[color:var(--emerald-1)]/30/30 rounded-full px-4 py-1 mb-4">
-              <Plane className="w-4 h-4 text-emerald-400" />
-              <span className="text-[color:var(--emerald-on)] text-sm font-medium">AI Travel & Property Concierge</span>
+            <div className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 rounded-full px-4 py-2 mb-5">
+              <Plane className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-medium">AI Travel & Property Concierge</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-              Your Personal <span className="text-[#B89555]">UAE Concierge</span>
+            <h1 className="allow-white text-4xl md:text-6xl font-bold text-white mb-5 leading-tight">
+              Your Personal UAE Property Concierge
             </h1>
-            <p className="text-white/70 max-w-2xl mx-auto text-sm md:text-base">
+            <p className="allow-white text-white max-w-2xl text-base md:text-lg leading-relaxed">
               Tell me about your trip to UAE and I'll create a complete personalized itinerary — 
               property viewings, hotels, activities, dining, and everything in between.
             </p>
-            <p className="text-xs text-[#1A1A1A] mt-2">Powered by JBJ Global Real Estate</p>
+            <p className="allow-white text-xs text-white mt-3 uppercase tracking-[0.18em] font-semibold">Powered by JBJ Global Real Estate</p>
           </motion.div>
+
+          {shopperListings.length > 0 && (
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl">
+              {shopperListings.map((project: any) => {
+                const image = getHighResImageUrl(project.images?.[0]?.image_url || project.cover_image_url || heroPhoto);
+                return (
+                  <Link
+                    key={project.id}
+                    to={`/project/${project.slug}`}
+                    className="group overflow-hidden rounded-2xl border border-white/18 bg-black/40 backdrop-blur-md shadow-[0_18px_40px_rgba(0,0,0,0.35)]"
+                  >
+                    <img src={image} alt={project.name} className="h-36 w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+                    <div className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] p-4">
+                      <p className="allow-white text-white text-sm font-bold truncate">{project.name}</p>
+                      <p className="allow-white text-white text-xs mt-1 truncate">{project.area_name || project.location || "UAE"}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6">
         {/* Action Bar */}
-        <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl">
+        <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18 rounded-xl">
           <div className="flex items-center gap-2">
-            <FolderOpen className="w-5 h-5 text-emerald-400" />
+            <FolderOpen className="w-5 h-5 text-white" />
             <span className="text-white font-medium text-sm">
               {currentPlan ? currentPlan.name : "New Trip Plan"}
             </span>
@@ -281,18 +320,18 @@ const AIPersonalShopper = () => {
                     <Save className="w-3 h-3 mr-1" /> Save Plan
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
+                <DialogContent data-filter-clean="true" className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24">
                   <DialogHeader>
                     <DialogTitle className="text-white">Save Trip Plan</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-white/70">Plan Name</Label>
+                      <Label className="text-white">Plan Name</Label>
                       <Input
                         value={planName}
                         onChange={(e) => setPlanName(e.target.value)}
                         placeholder="My Dubai Investment Trip"
-                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
+                        className="allow-white bg-[#021611]/82 border-white/28 text-white placeholder:text-white"
                       />
                     </div>
                     <Button onClick={savePlan} variant="primary" className="w-full">
@@ -308,40 +347,40 @@ const AIPersonalShopper = () => {
                     <Mail className="w-3 h-3 mr-1" /> Submit to Team
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A]">
+                <DialogContent data-filter-clean="true" className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24">
                   <DialogHeader>
                     <DialogTitle className="text-white">Submit Your Trip Plan</DialogTitle>
                   </DialogHeader>
-                  <p className="text-white/70 text-sm">
+                  <p className="text-white text-sm">
                     Our concierge team will review your plan and contact you to finalize all arrangements.
                   </p>
                   <div className="space-y-4 mt-4">
                     <div>
-                      <Label className="text-white/70">Full Name</Label>
+                      <Label className="text-white">Full Name</Label>
                       <Input
                         value={inquiryForm.name}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
                         placeholder="John Smith"
-                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
+                        className="allow-white bg-[#021611]/82 border-white/28 text-white placeholder:text-white"
                       />
                     </div>
                     <div>
-                      <Label className="text-white/70">Email *</Label>
+                      <Label className="text-white">Email *</Label>
                       <Input
                         type="email"
                         value={inquiryForm.email}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, email: e.target.value }))}
                         placeholder="john@example.com"
-                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
+                        className="allow-white bg-[#021611]/82 border-white/28 text-white placeholder:text-white"
                       />
                     </div>
                     <div>
-                      <Label className="text-white/70">Phone (WhatsApp preferred)</Label>
+                      <Label className="text-white">Phone (WhatsApp preferred)</Label>
                       <Input
                         value={inquiryForm.phone}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
                         placeholder="+1 234 567 8900"
-                        className="bg-[#F7F2EA] border-[#1A1A1A] text-white"
+                        className="allow-white bg-[#021611]/82 border-white/28 text-white placeholder:text-white"
                       />
                     </div>
                     <Button onClick={submitInquiry} variant="primary" className="w-full">
@@ -358,10 +397,10 @@ const AIPersonalShopper = () => {
               const plan = savedPlans.find(p => p.id === id);
               if (plan) loadPlan(plan);
             }}>
-              <SelectTrigger className="w-36 bg-[#F7F2EA] border-[#1A1A1A] text-sm text-white">
+              <SelectTrigger className="allow-white w-36 bg-[#021611]/82 border-white/28 text-sm text-white">
                 <SelectValue placeholder="Load Plan" />
               </SelectTrigger>
-              <SelectContent className="bg-[#F7F2EA] border-[#1A1A1A]">
+              <SelectContent className="allow-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border-white/24">
                 {savedPlans.map(p => (
                   <SelectItem key={p.id} value={p.id} className="text-white">
                     {p.name}
@@ -375,10 +414,10 @@ const AIPersonalShopper = () => {
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Quick Prompts Sidebar */}
           <div className="lg:col-span-1 space-y-4">
-            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
+            <Card className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-sm flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-400" />
+                  <Sparkles className="w-4 h-4 text-white" />
                   Quick Start
                 </CardTitle>
               </CardHeader>
@@ -389,13 +428,13 @@ const AIPersonalShopper = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => useQuickPrompt(prompt.prompt)}
-                    className="w-full p-3 text-left bg-[#F7F2EA]/50 hover:bg-[#1A1A1A] border border-[#1A1A1A] hover:border-[color:var(--emerald-1)]/30/50 rounded-lg transition-all group"
+                    className="allow-white w-full p-3 text-left bg-black/24 hover:bg-white/10 border border-white/18 hover:border-white/32 rounded-lg transition-all group"
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <prompt.icon className="w-4 h-4 text-emerald-400" />
+                      <prompt.icon className="w-4 h-4 text-white" />
                       <span className="text-white text-sm font-medium">{prompt.title}</span>
                     </div>
-                    <p className="text-white/90 text-xs line-clamp-2 group-hover:text-white/70">
+                    <p className="text-white text-xs line-clamp-2 group-hover:text-white">
                       {prompt.prompt.substring(0, 80)}...
                     </p>
                   </motion.button>
@@ -404,7 +443,7 @@ const AIPersonalShopper = () => {
             </Card>
 
             {/* What I Can Do */}
-            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A]">
+            <Card className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-sm">What I Can Plan</CardTitle>
               </CardHeader>
@@ -417,8 +456,8 @@ const AIPersonalShopper = () => {
                   { icon: Calendar, text: "Daily Itineraries" },
                   { icon: Compass, text: "Activities & Experiences" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 text-white/70 text-sm">
-                    <item.icon className="w-4 h-4 text-emerald-400" />
+                  <div key={i} className="allow-white flex items-center gap-2 text-white text-sm">
+                    <item.icon className="w-4 h-4 text-white" />
                     {item.text}
                   </div>
                 ))}
@@ -428,10 +467,10 @@ const AIPersonalShopper = () => {
 
           {/* Chat Area */}
           <div className="lg:col-span-3">
-            <Card className="bg-[#FDFBF7]/50 border-[#1A1A1A] h-[600px] flex flex-col">
-              <CardHeader className="border-b border-[#1A1A1A] pb-3">
+            <Card className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/18 h-[600px] flex flex-col">
+              <CardHeader className="border-b border-white/18 pb-3">
                 <CardTitle className="text-white flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-emerald-400" />
+                  <MessageSquare className="w-5 h-5 text-white" />
                   Plan Your UAE Journey
                 </CardTitle>
               </CardHeader>
@@ -444,25 +483,25 @@ const AIPersonalShopper = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       className="space-y-4"
                     >
-                      <div className="w-20 h-20 mx-auto bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl flex items-center justify-center">
-                        <Plane className="w-10 h-10 text-[#B89555]" />
+                      <div className="jj-pill-emerald-metallic w-20 h-20 mx-auto rounded-2xl flex items-center justify-center">
+                        <Plane className="w-10 h-10 text-white" />
                       </div>
                       <h3 className="text-xl font-semibold text-white">Welcome to Your Personal Concierge</h3>
-                      <p className="text-white/70 max-w-md">
+                      <p className="text-white max-w-md">
                         Tell me about your upcoming trip to the UAE. Whether you're an investor, 
                         relocating family, or luxury traveler — I'll create a complete personalized itinerary for you.
                       </p>
                       <div className="flex flex-wrap justify-center gap-2 mt-4">
-                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
+                        <Badge variant="outline" className="allow-white jj-pill-emerald-metallic border-0 text-white">
                           <Clock className="w-3 h-3 mr-1" /> Full Schedules
                         </Badge>
-                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
+                        <Badge variant="outline" className="allow-white jj-pill-emerald-metallic border-0 text-white">
                           <Hotel className="w-3 h-3 mr-1" /> Hotels
                         </Badge>
-                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
+                        <Badge variant="outline" className="allow-white jj-pill-emerald-metallic border-0 text-white">
                           <Building2 className="w-3 h-3 mr-1" /> Properties
                         </Badge>
-                        <Badge variant="outline" className="border-[color:var(--emerald-1)]/30/50 text-emerald-400">
+                        <Badge variant="outline" className="allow-white jj-pill-emerald-metallic border-0 text-white">
                           <Star className="w-3 h-3 mr-1" /> Experiences
                         </Badge>
                       </div>
@@ -482,12 +521,12 @@ const AIPersonalShopper = () => {
                           <div
                             className={`max-w-[85%] p-4 rounded-2xl ${
  message.role === 'user'
- ? 'jj-surface-emerald text-white'
- : 'bg-[#F7F2EA] text-gray-100 border border-[#1A1A1A]'
+ ? 'jj-pill-emerald-metallic text-white'
+ : 'bg-black/34 text-white border border-white/18'
  }`}
                           >
                             {message.role === 'assistant' && (
-                              <div className="flex items-center gap-2 mb-2 text-emerald-400 text-xs font-medium">
+                              <div className="flex items-center gap-2 mb-2 text-white text-xs font-medium">
                                 <Sparkles className="w-3 h-3" />
                                 Concierge
                               </div>
@@ -506,8 +545,8 @@ const AIPersonalShopper = () => {
                         animate={{ opacity: 1 }}
                         className="flex justify-start"
                       >
-                        <div className="bg-[#F7F2EA] border border-[#1A1A1A] p-4 rounded-2xl">
-                          <div className="flex items-center gap-2 text-emerald-400">
+                        <div className="bg-black/34 border border-white/18 p-4 rounded-2xl">
+                          <div className="flex items-center gap-2 text-white">
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span className="text-sm">Creating your personalized plan...</span>
                           </div>
@@ -520,7 +559,7 @@ const AIPersonalShopper = () => {
               </ScrollArea>
 
               {/* Input Area */}
-              <div className="p-4 border-t border-[#1A1A1A]">
+              <div className="p-4 border-t border-white/18">
                 <div className="flex gap-2">
                   <Textarea
                     value={inputMessage}
@@ -532,7 +571,7 @@ const AIPersonalShopper = () => {
                       }
                     }}
                     placeholder="Describe your ideal UAE trip... (e.g., I'm visiting Dubai for 7 days as a property investor looking at luxury penthouses...)"
-                    className="flex-1 bg-[#F7F2EA] border-[#1A1A1A] text-white resize-none min-h-[60px]"
+                    className="allow-white flex-1 bg-[#021611]/82 border-white/28 text-white placeholder:text-white resize-none min-h-[60px]"
                     rows={2}
                   />
                   <Button
@@ -547,7 +586,7 @@ const AIPersonalShopper = () => {
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-white/90 mt-2 text-center">
+                <p className="text-xs text-white mt-2 text-center">
                   Press Enter to send • Your plan can be saved and submitted to our concierge team
                 </p>
               </div>

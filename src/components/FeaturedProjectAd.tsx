@@ -39,9 +39,9 @@ export const FeaturedProjectAd = ({
         <div
           data-on-dark
           data-no-contrast-guard
-          className="allow-white relative overflow-hidden rounded-2xl border-2 border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] hover:shadow-[0_12px_40px_rgba(200,167,102,0.35)] transition-all duration-500"
+          className="allow-white relative overflow-hidden rounded-2xl border border-white/18 shadow-[0_8px_30px_rgba(0,0,0,0.28)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.36)] transition-all duration-500"
           style={{
-            background: 'linear-gradient(135deg, #181818 0%, #0d0d0d 100%)'
+            background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)'
           }}
         >
           {/* Image Section */}
@@ -55,14 +55,13 @@ export const FeaturedProjectAd = ({
               }}
             />
             {/* Fallback gradient behind image */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-black to-black -z-10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B]/30 via-black to-black -z-10" />
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/20" />
             
             {/* Content overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              {/* Subtitle / Tagline — gold on dark for hierarchy */}
-              <p className="text-[#E8D5A3] text-sm md:text-base font-semibold tracking-[0.15em] mb-2 uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+              <p className="text-white text-sm md:text-base font-semibold tracking-[0.15em] mb-2 uppercase drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {subtitle}
               </p>
               

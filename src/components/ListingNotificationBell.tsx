@@ -152,12 +152,12 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
 
   if (!user) return null;
 
-  // Panel mode - unified consistent icon: gold headset in gold circle
+  // Panel mode - unified consistent emerald styling
   if (panelMode) {
     return (
-      <div className="w-80 bg-[#FDFBF7] border-2 border-[#B89555]/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
-        <div className="p-3 border-b border-[#B89555]/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex items-center justify-between">
-          <h3 className="font-semibold text-sm text-[hsl(var(--gold))]">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</h3>
+      <div className="w-80 bg-[#FDFBF7] border-2 border-[#064E3B]/40 rounded-xl shadow-xl overflow-hidden">
+        <div className="p-3 border-b border-[#064E3B]/20 bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-between">
+          <h3 className="allow-white font-semibold text-sm text-white">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</h3>
           {unreadCount > 0 && (
             <button onClick={markAllRead} className="text-xs text-[#1A1A1A] hover:text-[#1A1A1A] font-medium transition-colors">
               Mark all read
@@ -176,7 +176,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
               <button
                 key={`${n.source_table}-${n.id}`}
                 onClick={() => handleNotifClick(n)}
-                className={`w-full text-left p-3 border-b border-[#B89555]/10 hover:bg-[#EFE6D6]/5 transition-colors ${
+                className={`w-full text-left p-3 border-b border-[#064E3B]/10 hover:bg-[#064E3B]/5 transition-colors ${
                   !n.is_read ? 'bg-[#EFE6D6]/[0.04]' : ''
                 }`}
               >
@@ -186,12 +186,11 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
                     <span className="w-2 h-2 rounded-full bg-red-500 mt-2 flex-shrink-0" />
                   )}
                   {n.is_read && <span className="w-2 flex-shrink-0" />}
-                  {/* Consistent gold headset icon in gold circle */}
-                  <div className="w-8 h-8 rounded-full border border-[#B89555]/50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-full border border-[#064E3B]/50 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <Headphones className="w-4 h-4 text-[#1A1A1A]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[hsl(var(--gold))] truncate">{n.title}</p>
+                    <p className="text-sm font-medium text-[#064E3B] truncate">{n.title}</p>
                     {n.message && (
                       <p className="text-xs text-[#1A1A1A]/70 mt-0.5 line-clamp-2">{n.message}</p>
                     )}
@@ -205,7 +204,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           )}
         </div>
 
-        <div className="p-2 border-t border-[#B89555]/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex gap-2">
+        <div className="p-2 border-t border-[#064E3B]/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex gap-2">
           <button
             onClick={() => { navigate('/my-tickets'); onClose?.(); }}
             className="flex-1 text-center text-xs text-[#1A1A1A] hover:text-[#1A1A1A] font-semibold py-1.5 transition-colors"

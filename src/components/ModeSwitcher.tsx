@@ -29,8 +29,7 @@ type ModePalette = {
   shortLabel: string;
   icon: typeof User;
   description: string;
-  // Hard-coded hex colors so the global Tailwind grayscale remap of
-  // orange/blue/green/purple cannot wash out the mode identity.
+  // Hard-coded emerald/ink colors so the global Tailwind remap cannot wash out the mode identity.
   base: string;     // primary mode color (saturated chip + accent)
   baseDark: string; // darker mode color for gradients / rims
   rowFrom: string;  // row card gradient start (clearly tinted)
@@ -39,31 +38,24 @@ type ModePalette = {
   dark: string;     // text color on light surfaces
   /** Foreground color used on top of `base` (icon badge fill + Selected pill). */
   onBase: string;
-  surface: 'gold' | 'ink' | 'espresso';
+  surface: 'emerald' | 'ink';
 };
 
-// Per-mode palette (locked):
-//   Investor          -> orange
-//   Broker            -> blue
-//   Investor + Broker -> green
-//   Developer         -> purple
-// Classy champagne/ink palette — refined to feel premium instead of loud.
-// Each mode shares the brand champagne surface; only the accent rail + icon
-// tone shifts subtly so the dropdown reads cohesive and editorial.
+// Per-mode palette (locked to emerald/black/white only).
 const MODE_CONFIG: Record<UserMode, ModePalette> = {
   investor: {
     label: 'Mode: Investor',
     shortLabel: 'I',
     icon: User,
     description: 'Browse properties, ROI tools, listings, guides & market insights',
-    base: '#B89555',      // champagne gold accent
-    baseDark: '#8A6E3D',
+    base: '#064E3B',
+    baseDark: '#042C1C',
     rowFrom: '#FDFBF7',
     rowTo: '#F7F2EA',
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
-    onBase: '#1A1A1A',    // ink on gold for legibility
-    surface: 'gold',
+    onBase: '#FFFFFF',
+    surface: 'emerald',
   },
   broker: {
     label: 'Mode: Broker',
@@ -85,14 +77,14 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     shortLabel: 'D',
     icon: Building2,
     description: 'Submit projects, upload documents, manage launches & event calendar',
-    base: '#3A2D1D',      // espresso
-    baseDark: '#1F1810',
+    base: '#064E3B',
+    baseDark: '#042C1C',
     rowFrom: '#FDFBF7',
     rowTo: '#F7F2EA',
     rowHover: '#EFE6D6',
     dark: '#1A1A1A',
     onBase: '#FFFFFF',
-    surface: 'espresso',
+    surface: 'emerald',
   },
   owner: {
     label: 'Mode: Owner',

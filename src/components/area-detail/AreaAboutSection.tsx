@@ -82,7 +82,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           {/* Quick highlights */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
             {(area.property_count ?? 0) > 0 && (
-              <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20 shadow-sm">
+              <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#064E3B]/20 shadow-sm">
                 <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                 <div>
                   <div className="text-sm font-bold text-[#1A1A1A]">{area.property_count}</div>
@@ -91,7 +91,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               </div>
             )}
             {(area.developer_count ?? 0) > 0 && (
-              <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20 shadow-sm">
+              <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#064E3B]/20 shadow-sm">
                 <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                 <div>
                   <div className="text-sm font-bold text-[#1A1A1A]">{area.developer_count}</div>
@@ -99,7 +99,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/20 shadow-sm">
+            <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#064E3B]/20 shadow-sm">
               <MapPin className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
               <div>
                 <div className="text-sm font-bold text-[#1A1A1A]">{area.emirate}</div>
@@ -110,7 +110,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
 
           <Button
             onClick={handleScrollToProjects}
-            className="px-5 py-2.5 text-sm bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] font-bold border border-[#B89555] hover:from-gold hover:to-amber-500 hover:text-[#1A1A1A] transition-all"
+            className="allow-white jj-pill-emerald-metallic px-5 py-2.5 text-sm text-white font-bold border-0 transition-all"
           >
             Properties
             <ArrowDown className="w-4 h-4 ml-1.5" />

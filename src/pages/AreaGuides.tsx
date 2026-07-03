@@ -383,13 +383,13 @@ const AreaGuides = () => {
                           {/* Trending + High Demand Badges */}
                           <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 items-end">
                             {area.is_trending && (
-                              <Badge className="bg-gradient-to-r from-amber-500 to-amber-400 text-[#1A1A1A] px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
+                              <Badge className="allow-white jj-pill-emerald-metallic text-white px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg border-0">
                                 <TrendingUp className="w-3 h-3 mr-1" />
                                 TRENDING
                               </Badge>
                             )}
                             {area.is_high_demand && (
-                              <Badge className="bg-gradient-to-r from-red-600 to-orange-500 text-white px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg">
+                              <Badge className="allow-white jj-pill-emerald-metallic text-white px-3 py-1 text-[10px] font-bold tracking-wider shadow-lg border-0">
                                 <Flame className="w-3 h-3 mr-1" />
                                 HIGH DEMAND
                               </Badge>
@@ -443,14 +443,14 @@ const AreaGuides = () => {
                             )}
                             {area.is_trending && (
                               <div className="flex items-center gap-1">
-                                <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
-                                <span className="text-amber-600">Trending</span>
+                                <TrendingUp className="w-3.5 h-3.5 text-[#064E3B]" />
+                                <span className="text-[#064E3B] font-semibold">Trending</span>
                               </div>
                             )}
                             {area.is_high_demand && (
                               <div className="flex items-center gap-1">
-                                <Flame className="w-3.5 h-3.5 text-red-500" />
-                                <span className="text-red-500">High Demand</span>
+                                <Flame className="w-3.5 h-3.5 text-[#064E3B]" />
+                                <span className="text-[#064E3B] font-semibold">High Demand</span>
                               </div>
                             )}
                             {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
