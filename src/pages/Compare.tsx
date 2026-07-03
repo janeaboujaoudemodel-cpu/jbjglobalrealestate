@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Badge } from "@/components/ui/badge";
+import comparePropertyFallback from "@/assets/compare-property-fallback.jpg";
 // Founder block removed — replaced by "Powered by JBJ Global Real Estate" lockup
 
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
@@ -659,26 +660,23 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   // ============================================================
   const EMERALD_INK = "linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%)";
   const EMERALD_CARD = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)";
-  // Solid dark emerald used for the page background — matches the footer band
-  // so the whole page reads as one continuous dark surface (no gradient).
-  const PAGE_DARK = "#010806";
-  // Hero: FULL dark emerald matching the sidebar active pill (jj-emerald-ombre),
-  // no light-green top edge.
-  const HERO_EMERALD = "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%)";
+  const EMERALD_DEEP = "linear-gradient(135deg, #042c1c 0%, #021611 58%, #000000 100%)";
+  const PAGE_DARK = "linear-gradient(180deg, #042c1c 0%, #010806 54%, #000000 100%)";
+  const HERO_EMERALD = EMERALD_DEEP;
   const CHAMPAGNE = "#F7F2EA";
   const CHAMPAGNE_STRIPE = "#EFE6D6";
   const EMERALD_HAIRLINE = "1px solid rgba(255,255,255,0.18)";
 
 
   return (
-    <section data-compare-page data-surface="emerald" data-on-dark="true" className="min-h-screen" style={{ background: PAGE_DARK }}>
+    <section data-compare-page data-on-dark="true" className="min-h-screen" style={{ background: PAGE_DARK, backgroundColor: "#021611" }}>
       {/* =============== HERO — EMERALD OMBRÉ =============== */}
       <div
         data-compare-hero
         data-ink-emerald
         data-no-contrast-guard
         className="relative overflow-hidden"
-        style={{ backgroundImage: HERO_EMERALD, backgroundColor: "#065F46" }}
+        style={{ backgroundImage: HERO_EMERALD, backgroundColor: "#021611" }}
       >
         <div className="container mx-auto px-4 py-14 md:py-16 relative z-10">
           <button
@@ -800,7 +798,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               <Link to="/compare-manual">
                 <button
                   className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                  style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "none", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
+                   style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "none", outline: "none", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
                   data-no-contrast-guard
                   data-allow-dark-cta
                 >
@@ -898,7 +896,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             data-surface="champagne"
             data-no-contrast-guard
             className="overflow-x-auto rounded-2xl"
-            style={{ background: "#FFFFFF", border: "none", boxShadow: "0 12px 40px -20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.65)" }}
+            style={{ background: CHAMPAGNE, border: "none", boxShadow: "0 12px 40px -20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.65)" }}
           >
             <table className="w-full">
               <thead>
@@ -918,12 +916,12 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                         className="text-left py-4 px-4"
                         style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: "1px solid rgba(6,78,59,0.22)" }}
                       >
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 rounded-xl p-3" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#064E3B", color: "#FFFFFF", boxShadow: "0 14px 30px -20px rgba(0,0,0,0.72)" }} data-compare-property-card data-on-dark="true" data-no-contrast-guard>
                           <div className="flex items-center justify-between gap-2">
                             {badge && (
                               <span
                                 className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wide"
-                                style={{ background: "#064E3B", color: "#FFFFFF" }}
+                                style={{ background: "rgba(255,255,255,0.14)", color: "#FFFFFF", border: "none" }}
                               >
                                 {badge === 'top1' ? 'Top 1' : badge === 'top2' ? 'Top 2' : 'Top 3'}
                               </span>
@@ -931,39 +929,29 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                             <span
                               className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold"
                               style={{
-                                background: "rgba(6,78,59,0.10)",
-                                color: "#064E3B",
-                                WebkitTextFillColor: "#064E3B",
-                                border: "1px solid rgba(6,78,59,0.28)",
+                                background: "rgba(255,255,255,0.14)",
+                                color: "#FFFFFF",
+                                WebkitTextFillColor: "#FFFFFF",
+                                border: "none",
                               }}
                             >
                               <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
                               {isFav ? 'In Favorites' : 'Not Saved'}
                             </span>
                           </div>
-                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "linear-gradient(135deg, #EFE6D6, #E6D9BF)", border: "1px solid rgba(6,78,59,0.20)" }}>
+                          <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "rgba(255,255,255,0.12)", border: "none" }}>
                             <div className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
                               <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                             </div>
-                            {(project.cover_image_url || project.images?.[0]?.image_url) ? (
-                              <img
-                                src={project.cover_image_url || project.images?.[0]?.image_url}
-                                alt={project.name}
-                                className="relative z-10 w-full h-full object-cover"
-                                loading="lazy" decoding="async"
-                                onError={(event) => {
-                                  event.currentTarget.style.display = "none";
-                                  event.currentTarget.parentElement?.setAttribute("data-image-missing", "true");
-                                }}
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center" aria-label={`${project.name} image pending`}>
-                                <Building className="w-9 h-9" style={{ color: "#064E3B", stroke: "#064E3B" }} />
-                              </div>
-                            )}
+                            <img
+                              src={comparePropertyFallback}
+                              alt={project.name}
+                              className="relative z-10 w-full h-full object-cover"
+                              loading="lazy" decoding="async" width={1024} height={576}
+                            />
                           </div>
-                          <h3 className="font-bold text-base" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{project.name}</h3>
-                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(26,26,26,0.72)", WebkitTextFillColor: "rgba(26,26,26,0.72)" }}>
+                          <h3 className="font-bold text-base" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{project.name}</h3>
+                          <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>
                             {project.developer?.name}
                           </p>
                         </div>
@@ -1011,12 +999,12 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     return "See project page";
                   }},
                 ].map((row, idx) => (
-                  <tr key={row.label} style={{ background: idx % 2 === 0 ? "#FFFFFF" : CHAMPAGNE, borderBottom: "1px solid rgba(6,78,59,0.14)" }}>
-                    <td className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: idx % 2 === 0 ? "#FFFFFF" : CHAMPAGNE }}>
+                  <tr key={row.label} style={{ background: idx % 2 === 0 ? CHAMPAGNE : CHAMPAGNE_STRIPE, borderBottom: "1px solid rgba(6,78,59,0.14)" }}>
+                    <td data-compare-feature-cell className="py-3.5 px-4 text-sm font-semibold sticky left-0" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: idx % 2 === 0 ? CHAMPAGNE : CHAMPAGNE_STRIPE }}>
                       {row.label}
                     </td>
                     {projects.map((project) => (
-                      <td key={project.id} className="py-3.5 px-4 text-sm" style={{ color: "rgba(26,26,26,0.88)", WebkitTextFillColor: "rgba(26,26,26,0.88)" }}>
+                      <td key={project.id} className="py-3.5 px-4 text-sm" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", borderBottom: "1px solid rgba(255,255,255,0.12)" }}>
                         {row.format(null, project)}
                       </td>
                     ))}

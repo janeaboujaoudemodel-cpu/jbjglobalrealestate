@@ -62,6 +62,58 @@
   color: #FFFFFF !important;
   stroke: currentColor !important;
 }
+
+/* Compare page final visual lock: dark emerald shell, champagne frame, emerald cards. */
+html body [data-compare-page] {
+  background: linear-gradient(180deg, #042c1c 0%, #010806 54%, #000000 100%) !important;
+  background-image: linear-gradient(180deg, #042c1c 0%, #010806 54%, #000000 100%) !important;
+  background-color: #021611 !important;
+}
+html body [data-compare-hero] {
+  background: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+  background-color: #021611 !important;
+}
+html body [data-compare-content-frame] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: initial !important;
+}
+html body [data-compare-content-frame] > :not([data-surface="emerald"]):not([data-compare-project-table]):not([data-ai-tools-disclaimer]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: initial !important;
+}
+html body [data-compare-project-table] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+html body [data-compare-project-table] [data-compare-feature-cell],
+html body [data-compare-project-table] th:first-child {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-ai-property-analyzer] button[role="combobox"] {
+  background: #064E3B !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-ai-property-analyzer] button[role="combobox"]:hover {
+  background: #053b2c !important;
+}
+html body [data-ai-analyzer-select-content] [role="option"] {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-ai-analyzer-select-content] [role="option"]:hover,
+html body [data-ai-analyzer-select-content] [role="option"][data-highlighted] {
+  background: rgba(255,255,255,0.10) !important;
+}
 /* CTA primitives keep their own foreground (emerald-fill buttons stay white). */
 [data-studio-surface] [data-jbj-button][data-surface="emerald"],
 [data-studio-surface] [data-jbj-button][data-surface="emerald"] * {
@@ -27644,6 +27696,73 @@ html body #root section#ready-to-get-started > .jj-content-track {
     linear-gradient(112deg, transparent 0%, rgba(255,255,255,0.08) 28%, transparent 46%),
     repeating-linear-gradient(135deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 18px);
   animation: disclaimer-emerald-sheen 8s ease-in-out infinite alternate;
+}
+
+/* Compare page final visual lock — appended late to beat global emerald guards. */
+html body #root [data-compare-page] {
+  background: linear-gradient(180deg, #042c1c 0%, #010806 54%, #000000 100%) !important;
+  background-image: linear-gradient(180deg, #042c1c 0%, #010806 54%, #000000 100%) !important;
+  background-color: #021611 !important;
+}
+html body #root [data-compare-hero] {
+  background: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #021611 0%, #010806 58%, #000000 100%) !important;
+  background-color: #021611 !important;
+}
+html body #root [data-compare-content-frame] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: initial !important;
+  border: 0 !important;
+}
+html body #root [data-compare-content-frame] > :not([data-surface="emerald"]):not([data-compare-project-table]):not([data-ai-tools-disclaimer]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: initial !important;
+}
+html body #root [data-compare-project-table] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  border: 0 !important;
+}
+html body #root [data-compare-project-table] [data-compare-feature-cell],
+html body #root [data-compare-project-table] th:first-child,
+html body #root [data-compare-project-table] thead th:first-child {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-compare-project-table] th:not(:first-child) > div {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+}
+html body #root [data-compare-project-table] tbody td:not([data-compare-feature-cell]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-ai-property-analyzer] button[role="combobox"] {
+  background: #064E3B !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-ai-property-analyzer] button[role="combobox"]:hover {
+  background: #053b2c !important;
+}
+html body #root [data-ai-analyzer-select-content] [role="option"] {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-ai-analyzer-select-content] [role="option"]:hover,
+html body #root [data-ai-analyzer-select-content] [role="option"][data-highlighted] {
+  background: rgba(255,255,255,0.10) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
