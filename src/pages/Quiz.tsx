@@ -1569,15 +1569,17 @@ const Quiz = () => {
                     onClick={() => handleAnswer(option.value)}
                     aria-pressed={isSelected}
                     data-no-contrast-guard
-                    className={`aihf-option relative p-4 md:p-5 rounded-xl border transition-all text-center group ${centerLastOption ? "aihf-option--center-last" : ""} ${
+                    data-active-pill={isSelected ? "true" : undefined}
+                    className={`aihf-option relative p-4 md:p-5 rounded-xl transition-all text-center group ${centerLastOption ? "aihf-option--center-last" : ""} ${
                       isSelected
-                        ? "jj-surface-emerald border-transparent"
-                        : "border-white/28 bg-white/5 hover:border-white/55"
+                        ? "jj-surface-emerald"
+                        : "bg-white/5 hover:bg-white/10"
                     }`}
+                    style={{ border: "none" }}
                   >
                     {currentQuestion.type === "multiple" && (
-                      <div className={`absolute top-3 right-3 w-5 h-5 rounded border-2 flex items-center justify-center ${
-                        isSelected ? "jj-surface-emerald border-transparent" : "border-white/35"
+                      <div className={`absolute top-3 right-3 w-5 h-5 rounded flex items-center justify-center ${
+                        isSelected ? "jj-surface-emerald" : "bg-white/10"
                       }`}>
                         {isSelected && <CheckCircle2 className="w-3 h-3" />}
                       </div>
@@ -1588,6 +1590,7 @@ const Quiz = () => {
                     </span>
                   </button>
                 );
+
               })}
             </div>
 
