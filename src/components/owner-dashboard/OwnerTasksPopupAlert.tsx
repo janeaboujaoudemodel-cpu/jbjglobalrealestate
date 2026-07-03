@@ -137,7 +137,9 @@ export function OwnerTasksPopupAlert() {
             className="w-5 h-5"
             data-no-contrast-guard
             strokeWidth={2.5}
-            style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }}
+            color="#FFFFFF"
+            stroke="#FFFFFF"
+            style={{ color: "#FFFFFF !important" as any, stroke: "#FFFFFF", opacity: 1 } as React.CSSProperties}
           />
         </button>
 
