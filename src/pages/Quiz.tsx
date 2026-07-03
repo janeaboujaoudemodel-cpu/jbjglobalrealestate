@@ -1187,14 +1187,15 @@ const Quiz = () => {
           </div>
 
           {/* Animated emerald border wrapper (replaces gold outline) */}
-          <div className="aihf-emerald-ring aihf-emerald-ring-strong rounded-2xl w-full max-w-2xl aihf-intro-card">
+          <div className="aihf-emerald-ring aihf-emerald-ring-strong rounded-[28px] w-full max-w-2xl aihf-intro-card">
             <AIShellCard
               as="div"
               data-surface="dark"
               padding="lg"
               noOrbs
-              className="w-full text-center border-0 shadow-[0_18px_55px_rgba(0,0,0,0.35)]"
+              className="w-full text-center border-0 rounded-[26px] shadow-[0_18px_55px_rgba(0,0,0,0.35)]"
             >
+
               {/* Centered emerald identity tile */}
               <div
                 data-surface="emerald"
