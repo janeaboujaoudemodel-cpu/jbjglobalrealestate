@@ -89,18 +89,20 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
 
   if (variant === "ai-tools") {
     return (
-      <div className={`bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black border border-white/30 rounded-xl p-5 shadow-[0_18px_48px_rgba(0,0,0,0.34)] ${className}`} data-ai-tools-disclaimer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
+      <div className={`border border-white/30 rounded-xl p-5 shadow-[0_18px_48px_rgba(0,0,0,0.34)] ${className}`} style={{ backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%)", backgroundColor: "#064E3B" }} data-ai-tools-disclaimer data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
         <div className="flex items-start gap-3 mb-4">
           <div
+            data-no-contrast-guard
+            data-allow-dark-cta
             className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
             style={{
-              backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%)",
+              background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%)",
               backgroundColor: "#064E3B",
-              border: "1px solid rgba(255,255,255,0.28)",
+              border: "1px solid rgba(255,255,255,0.35)",
               boxShadow: "0 6px 18px -8px rgba(4,120,87,0.65), inset 0 1px 0 rgba(255,255,255,0.20)",
             }}
           >
-            <Shield className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
+            <Shield className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} strokeWidth={2.25} />
           </div>
 
           <div>
