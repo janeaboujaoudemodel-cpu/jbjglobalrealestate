@@ -304,11 +304,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
 
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#EFE6D6] border border-[#B89555]/30">
-                <div data-emerald-action="true" className="jj-emerald-action h-full rounded-l-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#B89555]">
+                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
-                <div className="h-full bg-[#B89555] flex-1 rounded-r-full flex items-center justify-center">
+                <div className="h-full flex-1 flex items-center justify-center">
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
                 </div>
               </div>
