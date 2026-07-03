@@ -5,6 +5,7 @@ import"./styles/theme-tokens.css";
 import"./index.css";
 import { installWhatsAppGuard } from"@/utils/whatsappGuard";
 import { installImageRecoveryGuard } from"@/utils/imageRecoveryGuard";
+import { installLazyImageEnforcer } from"@/utils/lazyImageEnforcer";
 
 // Site-wide guard: every WhatsApp link is normalized to wa.me with sanitized
 // digits.
@@ -13,6 +14,10 @@ installWhatsAppGuard();
 // Site-wide guard: every broken <img loading="lazy" decoding="async"> is recovered with a high-res retry then
 // a branded champagne-initials fallback. Opt out per-image via `data-no-fallback`.
 installImageRecoveryGuard();
+
+// Site-wide perf guard: every <img> without an explicit eager/high hint is
+// forced to loading="lazy" + decoding="async". Opt out via `data-eager`.
+installLazyImageEnforcer();
 
 // ---------------------------------------------------------------------------
 // Global diagnostics + chunk-error auto-recovery (added with user approval).
