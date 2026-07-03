@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { ArrowUpRight, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
@@ -20,12 +19,6 @@ import {
 } from "@/components/market-intelligence/MarketIntelligenceTypography";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { IconTile } from "@/components/ui/icon-tile";
-
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-};
 
 // Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
 // matches the other dark hero sections. NO champagne fill, NO ink-guard classes.
