@@ -84,7 +84,7 @@ const DialogContent = React.forwardRef<
         ref={ref}
         data-surface="light"
         className={cn(
-          "fixed left-[50%] top-[50%] z-[120001] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
+          "fixed left-[50%] top-[50%] z-[120001] grid w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border border-[#064E3B]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 sm:p-6 shadow-lg duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none rounded-lg sm:rounded-lg max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg",
           className,
         )}
         onPointerDownOutside={handlePointerDownOutside}
@@ -92,7 +92,7 @@ const DialogContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full w-8 h-8 flex items-center justify-center bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/30 opacity-90 ring-offset-background transition-all duration-200 hover:opacity-100 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 disabled:pointer-events-none z-20">
+        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full w-8 h-8 flex items-center justify-center bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#064E3B]/30 opacity-100 ring-offset-background transition-all duration-200 hover:shadow-[0_4px_15px_rgba(6,78,59,0.2)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#064E3B]/45 focus:ring-offset-2 disabled:pointer-events-none z-20">
           <X className="h-4 w-4 text-[#1A1A1A]" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
