@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
+import { SchemaEntity } from "@/components/SchemaEntity";
 import { Button } from "@/components/ui/button";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
 import { AreaHeroSection } from "@/components/area-detail/AreaHeroSection";
@@ -206,6 +207,7 @@ const AreaDetail = () => {
         keywords={`${area.name} properties, ${area.emirate} real estate`}
         canonicalPath={`/area/${area.slug}`}
       />
+      <SchemaEntity kind="community" slug={area.slug || slug || ""} pageTitle={`${area.name} — Properties in ${area.emirate}`} />
 
       {/* Full-Screen Hero with Real Photo */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />

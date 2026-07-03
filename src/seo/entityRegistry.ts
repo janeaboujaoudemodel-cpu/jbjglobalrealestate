@@ -329,3 +329,30 @@ export function toDeveloperNode(e: EntityRef) {
     ...(sameAs.length ? { sameAs } : {}),
   };
 }
+
+/** Slug helpers — resolve a URL slug (e.g. "palm-jumeirah", "emaar") to a
+ * registry key so pages can pass their route slug through without knowing
+ * the registry's internal camelCase keys. Match order:
+ *   1. exact registry key
+ *   2. last URL segment of entity.url
+ *   3. slugified entity.name
+ *   4. slugified alias
+ */
+const slugify = (s: string) =>
+  s.toLowerCase().normalize("NFKD").replace(/[^\w\s-]/g, "").trim().replace(/[\s_]+/g, "-").replace(/-+/g, "-");
+
+function resolve(registry: Record<string, EntityRef>, slug?: string): string | undefined {
+  if (!slug) return undefined;
+  const s = slug.toLowerCase();
+  if (registry[slug]) return slug;
+  for (const [key, e] of Object.entries(registry)) {
+    const urlTail = e.url?.split("/").pop()?.toLowerCase();
+    if (urlTail === s) return key;
+    if (slugify(e.name) === s) return key;
+    if (e.aliases?.some((a) => slugify(a) === s)) return key;
+  }
+  return undefined;
+}
+
+export const resolveDeveloperKey = (slug?: string) => resolve(DEVELOPERS, slug);
+export const resolveCommunityKey = (slug?: string) => resolve(COMMUNITIES, slug);
