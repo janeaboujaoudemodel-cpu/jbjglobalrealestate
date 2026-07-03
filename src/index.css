@@ -12737,7 +12737,7 @@ html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="t
 html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]) {
   background-image: none !important;
   background-color: transparent !important;
-  border: 1px solid rgba(184,149,85,0.28) !important;
+  border: 1px solid rgba(1,8,6,0.72) !important;
   box-shadow: none !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
@@ -12754,9 +12754,9 @@ html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="t
 html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover {
   background-image: none !important;
   background-color: rgba(239, 230, 214, 0.65) !important;
-  border-color: rgba(184,149,85,0.40) !important;
+   border-color: rgba(1,8,6,0.72) !important;
   transform: none !important;
-  box-shadow: 0 2px 8px -4px rgba(184,149,85,0.20) !important;
+   box-shadow: none !important;
 }
 html body [data-chrome="sidebar"] [data-sidebar-mode-portal]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *),
 html body [data-chrome="sidebar"] [data-sidebar-bottom-cta]:not([data-active="true"]):hover *:not([data-emerald-icon-surface]):not([data-emerald-icon-surface] *) {
