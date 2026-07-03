@@ -113,8 +113,8 @@ export function PaymentPlanSlider({
           checked={hasPostHandover}
           onCheckedChange={(checked) => onHasPostHandoverChange(checked === true)}
           className={cn(
-            isDark ? "border-[#1A1A1A]" : "border-[#B89555]/40",
-            "data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555]"
+            isDark ? "border-white/40" : "border-[#064E3B]/40",
+            "data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#064E3B]"
           )}
         />
         <label 

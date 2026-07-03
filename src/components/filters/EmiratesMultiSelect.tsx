@@ -77,7 +77,7 @@ export function EmiratesMultiSelect({
             "justify-between min-w-[160px] h-11",
             isDark 
               ? "bg-[#1a1a1a] border-[#2a2a2a] text-white hover:bg-[#2a2a2a]"
-              : "bg-[#FDFBF7]/90 border-[#B89555]/30 text-[#1A1A1A] hover:bg-champagne-light",
+              : "bg-[#FDFBF7]/90 border-[#064E3B]/30 text-[#1A1A1A] hover:bg-champagne-light",
             className
           )}
         >
@@ -91,7 +91,7 @@ export function EmiratesMultiSelect({
       <PopoverContent 
         className={cn(
           "w-[260px] p-0",
-          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#B89555]/20"
+          isDark ? "bg-[#1a1a1a] border-[#2a2a2a]" : "bg-[#FDFBF7] border-[#064E3B]/20"
         )}
         align="start"
       >
@@ -103,8 +103,8 @@ export function EmiratesMultiSelect({
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
                 isDark 
-                  ? "text-[#1A1A1A]/70 hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A]/50 hover:bg-champagne-light"
+                  ? "text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A] hover:bg-champagne-light"
               )}
             >
               <span>UAE Emirates</span>
@@ -131,10 +131,10 @@ export function EmiratesMultiSelect({
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-[#1A1A1A]" : "border-[#B89555]/40",
-                      isSelected && "bg-[#EFE6D6] border-[#B89555]"
+                      isDark ? "border-white/40" : "border-[#064E3B]/40",
+                      isSelected && "allow-white jj-pill-emerald-metallic border-0"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
+                      {isSelected && <Check className="w-3 h-3 text-white" />}
                     </div>
                     
                     <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
@@ -149,7 +149,7 @@ export function EmiratesMultiSelect({
           {/* Divider */}
           <div className={cn(
             "mx-3 border-t",
-            isDark ? "border-[#1A1A1A]" : "border-[#B89555]/20"
+            isDark ? "border-white/20" : "border-[#064E3B]/20"
           )} />
           
           {/* International Section */}
@@ -159,8 +159,8 @@ export function EmiratesMultiSelect({
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
                 isDark 
-                  ? "text-[#1A1A1A]/70 hover:bg-[#2a2a2a]"
-                  : "text-[#1A1A1A]/50 hover:bg-champagne-light"
+                  ? "text-white hover:bg-[#2a2a2a]"
+                  : "text-[#1A1A1A] hover:bg-champagne-light"
               )}
             >
               <span>International</span>
@@ -187,10 +187,10 @@ export function EmiratesMultiSelect({
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-[#1A1A1A]" : "border-[#B89555]/40",
-                      isSelected && "bg-[#EFE6D6] border-[#B89555]"
+                      isDark ? "border-white/40" : "border-[#064E3B]/40",
+                      isSelected && "allow-white jj-pill-emerald-metallic border-0"
                     )}>
-                      {isSelected && <Check className="w-3 h-3 text-[#1A1A1A]" />}
+                      {isSelected && <Check className="w-3 h-3 text-white" />}
                     </div>
                     
                     <span className={isDark ? "text-white" : "text-[#1A1A1A]"}>
@@ -206,7 +206,7 @@ export function EmiratesMultiSelect({
         {/* Footer */}
         <div className={cn(
           "p-2 border-t flex items-center justify-between",
-          isDark ? "border-[#1A1A1A] bg-[#151515]" : "border-[#B89555]/20 bg-champagne-light/50"
+          isDark ? "border-white/20 bg-[#151515]" : "border-[#064E3B]/20 bg-champagne-light/50"
         )}>
           <span className={cn(
             "text-xs",

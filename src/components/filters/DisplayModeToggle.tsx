@@ -46,7 +46,7 @@ export function DisplayModeToggle({
         "inline-flex rounded-xl p-1",
         isDark 
           ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-[#B89555]/30",
+          : "bg-[#FDFBF7]/80 border border-[#064E3B]/30",
         className
       )}
     >
@@ -103,7 +103,7 @@ export function DisplayModeIconToggle({
         "inline-flex rounded-lg p-0.5",
         isDark 
           ? "bg-[#1a1a1a] border border-[#2a2a2a]"
-          : "bg-[#FDFBF7]/80 border border-[#B89555]/30",
+          : "bg-[#FDFBF7]/80 border border-[#064E3B]/30",
         className
       )}
     >
