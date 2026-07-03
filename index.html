@@ -58,7 +58,8 @@
     <!-- Open Graph (homepage fallback for JS-blind crawlers) -->
     <meta property="og:title" content="JBJ Global Real Estate | Dubai Property Brokerage" />
     <meta property="og:description" content="Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties across UAE." />
-    <meta property="og:image" content="https://www.jbj.ae/og-image.jpg" />
+    <meta property="og:image" content="https://www.jbj.ae/og-image.webp" />
+    <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
@@ -71,12 +72,14 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="JBJ Global Real Estate | Dubai Property Brokerage" />
     <meta name="twitter:description" content="Dubai's premier real estate brokerage. Buy, sell, or rent luxury properties across UAE." />
-    <meta name="twitter:image" content="https://www.jbj.ae/og-image.jpg" />
+    <meta name="twitter:image" content="https://www.jbj.ae/og-image.webp" />
 
-    <!-- Favicon & Icons -->
+    <!-- Favicon & Icons (WebP-first, PNG fallback for legacy) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/webp" sizes="32x32" href="/favicon.webp" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <meta name="theme-color" content="#FDFBF7" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#064E3B" media="(prefers-color-scheme: dark)" />
     <meta name="format-detection" content="telephone=no" />
