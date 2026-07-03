@@ -59,6 +59,9 @@ const emptyProject = (): ProjectSession => ({
 });
 
 const OWNER_ID = '4944592b-93f1-4e05-ab59-4ebe1fee54f1';
+const EMERALD_LABEL = "jj-pill-emerald-metallic allow-white text-white border-0";
+const EMERALD_LABEL_SM = `${EMERALD_LABEL} text-[10px]`;
+const EMERALD_NOTICE = "allow-white jj-pill-emerald-metallic text-white border-0 shadow-[0_10px_24px_-14px_rgba(0,0,0,0.85)]";
 
 const DeveloperPortal = () => {
   const [searchParams] = useSearchParams();
@@ -767,14 +770,14 @@ const DeveloperPortal = () => {
 
   const statusBadge = (status: string) => {
     const config: Record<string, string> = {
-      pending_review: "bg-amber-500/20 text-amber-700",
-      received: "bg-blue-500/20 text-blue-700",
-      under_review: "bg-amber-500/20 text-amber-700",
-      approved: "jj-surface-emerald-soft text-[color:var(--emerald-1)]",
-      rejected: "bg-red-500/20 text-red-700",
-      restricted: "bg-red-500/20 text-red-700",
+      pending_review: EMERALD_LABEL,
+      received: EMERALD_LABEL,
+      under_review: EMERALD_LABEL,
+      approved: EMERALD_LABEL,
+      rejected: EMERALD_LABEL,
+      restricted: EMERALD_LABEL,
     };
-    return <Badge className={config[status] || "bg-muted text-muted-foreground"}>{status?.replace(/_/g, " ") || "Pending"}</Badge>;
+    return <Badge data-label-emerald-only className={config[status] || EMERALD_LABEL}>{status?.replace(/_/g, " ") || "Pending"}</Badge>;
   };
 
   const isRepApproved = repProfile?.status === 'approved';
@@ -1069,7 +1072,7 @@ const DeveloperPortal = () => {
                             </div>
                             <div className="flex items-center gap-2">
                               {statusBadge(p.status)}
-                              {p.auto_approved && <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] text-[10px]">Auto-Approved</Badge>}
+                              {p.auto_approved && <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>Auto-Approved</Badge>}
                             </div>
                           </div>
                         ))}
@@ -1093,7 +1096,7 @@ const DeveloperPortal = () => {
               {devName && <ExistingProjectsReview developerName={devName} />}
               
               {sessionProjects.length > 0 && (
-                <div className="mb-4 p-3 rounded-xl jj-emerald-soft border border-[color:var(--emerald-1)]/30 flex items-center gap-2 text-sm text-[color:var(--emerald-1)]">
+                <div data-label-emerald-only className={`mb-4 p-3 rounded-xl flex items-center gap-2 text-sm ${EMERALD_NOTICE}`}>
                   <CheckCircle className="w-4 h-4" />
                   {sessionProjects.length} project(s) submitted this session: {sessionProjects.join(", ")}
                 </div>
@@ -1333,10 +1336,10 @@ const DeveloperPortal = () => {
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                   <h4 className="font-semibold text-foreground">{event.event_title}</h4>
-                                  <Badge className={event.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'}>
+                                  <Badge data-label-emerald-only className={EMERALD_LABEL}>
                                     {event.submission_subtype === 'launch' ? 'Launch' : 'Event'}
                                   </Badge>
-                                  {registered && <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] text-[10px]">Registered</Badge>}
+                                  {registered && <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>Registered</Badge>}
                                 </div>
                                 <p className="text-xs text-[#1A1A1A] font-medium">{event.developer_name}</p>
                                 {event.event_date && (
@@ -1361,7 +1364,7 @@ const DeveloperPortal = () => {
                                   setInterestModalOpen(true);
                                 }}
                                 className={registered
-                                  ? "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
+                                  ? EMERALD_LABEL
                                   : "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#EFE6D6]/90"
                                 }
                               >
@@ -1398,11 +1401,7 @@ const DeveloperPortal = () => {
                             <h4 className="font-semibold text-sm text-foreground">{i.event_title}</h4>
                             <p className="text-xs text-muted-foreground">{i.developer_name} · {format(new Date(i.created_at), "MMM d, yyyy")}</p>
                           </div>
-                          <Badge className={
-                            i.interest_type === 'eoi' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
-                            i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
-                            'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                          }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
+                          <Badge data-label-emerald-only className={EMERALD_LABEL}>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
                         </div>
                       ))}
                     </div>
@@ -1540,7 +1539,7 @@ const DeveloperPortal = () => {
                           </div>
                           <div>
                             <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
-                            <Badge className={repProfile?.auto_approve_uploads ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' : 'bg-muted text-muted-foreground'}>
+                            <Badge data-label-emerald-only className={EMERALD_LABEL}>
                               {repProfile?.auto_approve_uploads ? 'Enabled' : 'Disabled'}
                             </Badge>
                           </div>
@@ -1694,12 +1693,7 @@ const DeveloperPortal = () => {
                               <h4 className="font-semibold text-foreground">{a.title}</h4>
                               <p className="text-xs text-muted-foreground">{format(new Date(a.created_at), "MMM d, yyyy")}</p>
                             </div>
-                            <Badge className={
-                              a.status === 'completed' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
-                              a.status === 'pending' ? 'bg-amber-500/20 text-amber-700' :
-                              a.status === 'voided' ? 'bg-red-500/20 text-red-700' :
-                              'bg-muted text-muted-foreground'
-                            }>{a.status}</Badge>
+                            <Badge data-label-emerald-only className={EMERALD_LABEL}>{a.status}</Badge>
                           </div>
                         ))}
                       </div>
@@ -1733,8 +1727,8 @@ const DeveloperPortal = () => {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
                                 <h4 className="font-semibold text-foreground truncate">{t.title}</h4>
-                                {t.priority === 'high' && <Badge className="bg-red-500/20 text-red-700 text-[10px]">High</Badge>}
-                                {t.priority === 'urgent' && <Badge className="bg-red-600/20 text-red-800 text-[10px]">Urgent</Badge>}
+                                {t.priority === 'high' && <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>High</Badge>}
+                                {t.priority === 'urgent' && <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>Urgent</Badge>}
                               </div>
                               {t.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{t.description}</p>}
                               <p className="text-[10px] text-muted-foreground mt-1">
@@ -1742,12 +1736,7 @@ const DeveloperPortal = () => {
                                 {t.due_date && ` · Due: ${format(new Date(t.due_date), "MMM d")}`}
                               </p>
                             </div>
-                            <Badge className={
-                              t.status === 'completed' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
-                              t.status === 'in_progress' ? 'bg-blue-500/20 text-blue-700' :
-                              t.status === 'pending' ? 'bg-amber-500/20 text-amber-700' :
-                              'bg-muted text-muted-foreground'
-                            }>{t.status?.replace(/_/g, ' ') || 'Pending'}</Badge>
+                            <Badge data-label-emerald-only className={EMERALD_LABEL}>{t.status?.replace(/_/g, ' ') || 'Pending'}</Badge>
                           </div>
                         ))}
                       </div>
@@ -1808,10 +1797,10 @@ const DeveloperPortal = () => {
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1">
                                     <h4 className="font-semibold text-foreground text-sm">{s.event_title}</h4>
-                                    <Badge className={s.submission_subtype === 'launch' ? 'bg-blue-500/20 text-blue-700' : 'bg-[#EFE6D6]/20 text-[#1A1A1A]'}>
+                                    <Badge data-label-emerald-only className={EMERALD_LABEL}>
                                       {s.submission_subtype === 'launch' ? 'Launch' : 'Event'}
                                     </Badge>
-                                    {s.is_hidden && <Badge className="bg-muted text-muted-foreground text-[10px]">Hidden</Badge>}
+                                    {s.is_hidden && <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>Hidden</Badge>}
                                   </div>
                                   <p className="text-xs text-[#1A1A1A] font-medium">{s.developer_name}</p>
                                   {s.event_date && (
@@ -1888,10 +1877,10 @@ const DeveloperPortal = () => {
                                   <div className="flex items-center gap-2 mt-1">
                                     {statusBadge(rep.status || 'pending_review')}
                                     {rep.auto_approve_uploads && (
-                                      <Badge className="jj-surface-emerald-soft text-[color:var(--emerald-1)] text-[10px]">Auto-Approve</Badge>
+                                      <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>Auto-Approve</Badge>
                                     )}
                                     {rep.is_on_leave && (
-                                      <Badge className="bg-amber-500/20 text-amber-700 text-[10px]">On Leave</Badge>
+                                      <Badge data-label-emerald-only className={EMERALD_LABEL_SM}>On Leave</Badge>
                                     )}
                                   </div>
                                 </div>
@@ -1945,7 +1934,7 @@ const DeveloperPortal = () => {
                           <span className="flex items-center gap-2">
                             <Star className="w-5 h-5 text-[#1A1A1A]" /> Launch Interests
                             {allInterests && allInterests.length > 0 && (
-                              <Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A] ml-2">{allInterests.length}</Badge>
+                              <Badge data-label-emerald-only className={`${EMERALD_LABEL} ml-2`}>{allInterests.length}</Badge>
                             )}
                           </span>
                           <span className="text-xs text-muted-foreground">{interestExpanded ? 'Collapse' : 'Expand'}</span>
@@ -1970,11 +1959,7 @@ const DeveloperPortal = () => {
                                       {i.notes && <p className="text-xs text-muted-foreground mt-1 italic">"{i.notes}"</p>}
                                       <p className="text-[10px] text-muted-foreground mt-1">{format(new Date(i.created_at), "MMM d, yyyy 'at' h:mm a")}</p>
                                     </div>
-                                    <Badge className={
-                                      i.interest_type === 'eoi' ? 'jj-surface-emerald-soft text-[color:var(--emerald-1)]' :
-                                      i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
-                                      'bg-[#EFE6D6]/20 text-[#1A1A1A]'
-                                    }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
+                                    <Badge data-label-emerald-only className={EMERALD_LABEL}>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
                                   </div>
                                 </div>
                               ))}
