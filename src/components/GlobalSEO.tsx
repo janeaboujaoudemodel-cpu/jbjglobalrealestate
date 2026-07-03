@@ -5,18 +5,20 @@ import { COMPANY_NAP } from "@/config/companyNAP";
  * GlobalSEO — single source of structured-data emission.
  *
  * Emits ONE consolidated Organization graph (RealEstateAgent + LocalBusiness
- * merged via @type array on one @id node), plus Founder Person, WebSite
- * with SearchAction, and SiteNavigation ItemList.
+ * + ProfessionalService merged via @type array on one @id node), a Founder
+ * Person entity, WebSite with SearchAction, a SiteNavigation ItemList, a
+ * Service catalog (buy/sell/rent/off-plan/mortgage/golden-visa), and a
+ * SpeakableSpecification so AI voice/answer engines can quote the brand
+ * consistently.
  *
- * Per-page schemas (BreadcrumbList, FAQPage, RealEstateListing) are emitted
- * by the route-level components — never duplicated here.
+ * Per-page schemas (BreadcrumbList, FAQPage, RealEstateListing, Article) are
+ * emitted by the route-level components — never duplicated here.
  *
  * All NAP values are consumed from src/config/companyNAP.ts so the entire
- * Google identity for the business is centrally consistent.
+ * Google + AI-search identity for the business is centrally consistent.
  */
 export const GlobalSEO = () => {
   useEffect(() => {
-    // Hide boot fallback once React mounts (backup — main.tsx also hides it)
     try {
       const bootFallback = document.getElementById("boot-fallback");
       if (bootFallback) bootFallback.style.display = "none";
@@ -26,10 +28,21 @@ export const GlobalSEO = () => {
 
     const host = COMPANY_NAP.canonicalHost;
     const orgId = `${host}/#organization`;
+    const founderId = `${host}/founder#person`;
+
+    const serviceCatalog = [
+      { name: "Buy Property in Dubai", url: "/properties", desc: "Ready and off-plan apartments, villas, penthouses across the UAE." },
+      { name: "Sell Property in Dubai", url: "/sell", desc: "RERA-licensed brokerage services for UAE property owners." },
+      { name: "Rent Property in Dubai", url: "/rent", desc: "Long-term residential and commercial leasing across Dubai." },
+      { name: "Off-Plan Investment", url: "/off-plan", desc: "Curated off-plan launches from Emaar, Damac, Sobha, Meraas and more." },
+      { name: "Golden Visa Consultancy", url: "/golden-visa-guide", desc: "UAE Golden Visa qualification through property investment." },
+      { name: "Mortgage Advisory", url: "/mortgage-calculator", desc: "Bank-partnered mortgage structuring for residents and non-residents." },
+      { name: "Property Management", url: "/services/property-management", desc: "Institutional-grade property management and facility services." },
+    ];
 
     const organization = {
       "@context": "https://schema.org",
-      "@type": ["RealEstateAgent", "LocalBusiness"],
+      "@type": ["RealEstateAgent", "LocalBusiness", "ProfessionalService"],
       "@id": orgId,
       name: COMPANY_NAP.name,
       legalName: COMPANY_NAP.legalName,
@@ -43,6 +56,23 @@ export const GlobalSEO = () => {
       },
       image: COMPANY_NAP.ogImageUrl,
       description: COMPANY_NAP.description,
+      slogan: "Dubai's premier RERA-licensed luxury real estate brokerage.",
+      foundingDate: "2016",
+      knowsLanguage: ["en", "ar", "fr"],
+      knowsAbout: [
+        "Dubai real estate",
+        "Luxury properties",
+        "Off-plan investment",
+        "Golden Visa property investment",
+        "Palm Jumeirah villas",
+        "Downtown Dubai apartments",
+        "Dubai Marina penthouses",
+        "Business Bay properties",
+        "UAE property market",
+        "RERA brokerage",
+        "Property management Dubai",
+        "Mortgage advisory UAE",
+      ],
       telephone: COMPANY_NAP.phoneE164,
       email: COMPANY_NAP.email,
       priceRange: COMPANY_NAP.priceRange,
@@ -61,10 +91,21 @@ export const GlobalSEO = () => {
         latitude: COMPANY_NAP.geo.latitude,
         longitude: COMPANY_NAP.geo.longitude,
       },
+      hasMap: `https://www.google.com/maps?q=${COMPANY_NAP.geo.latitude},${COMPANY_NAP.geo.longitude}`,
       areaServed: COMPANY_NAP.areaServed.map((name) => ({
         "@type": "City",
         name,
+        containedInPlace: { "@type": "Country", name: "United Arab Emirates" },
       })),
+      serviceArea: {
+        "@type": "GeoCircle",
+        geoMidpoint: {
+          "@type": "GeoCoordinates",
+          latitude: COMPANY_NAP.geo.latitude,
+          longitude: COMPANY_NAP.geo.longitude,
+        },
+        geoRadius: 150000,
+      },
       openingHoursSpecification: [
         {
           "@type": "OpeningHoursSpecification",
@@ -74,12 +115,8 @@ export const GlobalSEO = () => {
         },
       ],
       sameAs: COMPANY_NAP.sameAs,
-      founder: {
-        "@type": "Person",
-        name: COMPANY_NAP.founder.name,
-        jobTitle: COMPANY_NAP.founder.jobTitle,
-        nationality: { "@type": "Country", name: COMPANY_NAP.founder.nationality },
-      },
+      founder: { "@id": founderId },
+      employee: { "@id": founderId },
       contactPoint: [
         {
           "@type": "ContactPoint",
@@ -89,26 +126,54 @@ export const GlobalSEO = () => {
           areaServed: "AE",
           availableLanguage: ["English", "Arabic", "French"],
         },
+        {
+          "@type": "ContactPoint",
+          telephone: COMPANY_NAP.phoneE164,
+          contactType: "sales",
+          areaServed: ["AE", "SA", "KW", "QA", "BH", "OM", "GB", "US", "FR", "DE"],
+          availableLanguage: ["English", "Arabic", "French"],
+        },
       ],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Real Estate Services",
+        itemListElement: serviceCatalog.map((s, i) => ({
+          "@type": "Offer",
+          position: i + 1,
+          itemOffered: {
+            "@type": "Service",
+            name: s.name,
+            description: s.desc,
+            url: `${host}${s.url}`,
+            provider: { "@id": orgId },
+            areaServed: { "@type": "Country", name: "United Arab Emirates" },
+          },
+        })),
+      },
     };
 
     const founderPerson = {
       "@context": "https://schema.org",
       "@type": "Person",
-      "@id": `${host}/founder#person`,
+      "@id": founderId,
       name: COMPANY_NAP.founder.name,
-      alternateName: ["Jane", "Jane Lebanese", "Jane Dubai"],
+      alternateName: ["Jane", "Jane Bou Jaoude"],
       jobTitle: COMPANY_NAP.founder.jobTitle,
       worksFor: { "@id": orgId },
+      affiliation: { "@id": orgId },
       nationality: { "@type": "Country", name: COMPANY_NAP.founder.nationality },
       knowsAbout: [
-        "Dubai Real Estate",
-        "Luxury Properties",
-        "Property Brokerage",
-        "Off-plan Investment",
-        "UAE Property Market",
+        "Dubai real estate",
+        "Luxury property investment",
+        "Off-plan development",
+        "UAE property market",
+        "Golden Visa strategy",
+        "High-net-worth advisory",
       ],
+      knowsLanguage: ["en", "ar", "fr"],
       url: `${host}/founder`,
+      image: `${host}/og-image.webp`,
+      sameAs: COMPANY_NAP.sameAs,
     };
 
     const website = {
@@ -119,15 +184,19 @@ export const GlobalSEO = () => {
       name: COMPANY_NAP.name,
       alternateName: "JBJ",
       description: COMPANY_NAP.shortDescription,
+      inLanguage: ["en", "ar"],
       publisher: { "@id": orgId },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: {
-          "@type": "EntryPoint",
-          urlTemplate: `${host}/properties?search={search_term_string}`,
+      copyrightHolder: { "@id": orgId },
+      potentialAction: [
+        {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${host}/properties?search={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
         },
-        "query-input": "required name=search_term_string",
-      },
+      ],
     };
 
     const siteNavigation = {
@@ -148,7 +217,20 @@ export const GlobalSEO = () => {
       ],
     };
 
-    const schemas = [organization, founderPerson, website, siteNavigation];
+    // Speakable — helps AI voice/answer engines quote consistent brand facts.
+    const speakable = {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": `${host}/#speakable`,
+      speakable: {
+        "@type": "SpeakableSpecification",
+        cssSelector: ["h1", "h2", "[data-speakable]", "meta[name='description']"],
+      },
+      isPartOf: { "@id": `${host}/#website` },
+      about: { "@id": orgId },
+    };
+
+    const schemas = [organization, founderPerson, website, siteNavigation, speakable];
 
     const injected: HTMLScriptElement[] = [];
     schemas.forEach((schema, i) => {
