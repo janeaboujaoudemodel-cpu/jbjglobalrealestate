@@ -1014,6 +1014,72 @@ const PropertyEvaluator = () => {
 
 
       <AIShellCard padding="lg" noOrbs data-property-evaluator>
+        {!entryChosen ? (
+          <div className="max-w-5xl mx-auto py-6">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-black/25 px-4 py-1.5 text-xs font-semibold text-white mb-4">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> Start your valuation
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">How would you like to evaluate your property?</h2>
+              <p className="text-white/80 mt-2 text-sm sm:text-base">Choose one option. You can review and edit every field before generating the report.</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-5">
+              <button
+                type="button"
+                onClick={() => chooseEntry('titleDeed')}
+                className="pe-card text-left p-6 rounded-3xl hover:scale-[1.01] transition-transform focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/25 border border-emerald-400/60 flex items-center justify-center">
+                    <FileCheck className="w-6 h-6 text-emerald-200" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] uppercase tracking-widest text-emerald-200 font-bold">Fastest · AI-Assisted</div>
+                    <div className="text-lg font-bold text-white">Evaluate with Title Deed</div>
+                  </div>
+                </div>
+                <p className="text-white/85 text-sm leading-relaxed">
+                  Upload your Title Deed or Oqood (PDF / JPG / PNG). AI extracts community, tower, unit, size, floor, view, handover year and owner — every field is pre-filled automatically.
+                </p>
+                <ul className="mt-4 space-y-1.5 text-xs text-white/85">
+                  <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-300" /> Auto-fills all property details</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-300" /> You review and edit before evaluating</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-300" /> Guided upload with instant preview</li>
+                </ul>
+                <div className="mt-5 inline-flex items-center gap-2 text-emerald-200 font-semibold text-sm">
+                  Start with Title Deed <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => chooseEntry('manual')}
+                className="pe-card text-left p-6 rounded-3xl hover:scale-[1.01] transition-transform focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/25 border border-emerald-400/60 flex items-center justify-center">
+                    <Building className="w-6 h-6 text-emerald-200" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] uppercase tracking-widest text-emerald-200 font-bold">Full control · Manual</div>
+                    <div className="text-lg font-bold text-white">Fill Details Manually</div>
+                  </div>
+                </div>
+                <p className="text-white/85 text-sm leading-relaxed">
+                  Enter your property specifications yourself — building, community, size, view, upgrades and photos. Best when you don't have the Title Deed handy.
+                </p>
+                <ul className="mt-4 space-y-1.5 text-xs text-white/85">
+                  <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-300" /> Type every field yourself</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-300" /> Full control over specifications</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-3.5 h-3.5 text-emerald-300" /> Switch to Title Deed later anytime</li>
+                </ul>
+                <div className="mt-5 inline-flex items-center gap-2 text-emerald-200 font-semibold text-sm">
+                  Fill manually <ChevronRight className="w-4 h-4" />
+                </div>
+              </button>
+            </div>
+          </div>
+        ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="pe-tabs-list w-full mb-8 h-auto">
             <TabsTrigger value="property" className="whitespace-nowrap text-[11px] sm:text-xs px-2 py-2 data-[state=active]:bg-[#064E3B] data-[state=active]:!text-white text-[#1A1A1A]/70">
