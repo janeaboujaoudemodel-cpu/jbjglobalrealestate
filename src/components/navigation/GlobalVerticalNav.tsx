@@ -1169,7 +1169,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       <>
                         <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} style={{ color: sectionHighlighted ? '#FFFFFF' : '#1A1A1A', stroke: sectionHighlighted ? '#FFFFFF' : '#1A1A1A' }} />
                         {!isOpen && hasActiveChild && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] animate-pulse" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#064E3B] animate-pulse" />
                         )}
                       </>
                     )}
@@ -1181,7 +1181,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   <div
                     className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
-                    <div className="ml-5 pl-2.5 border-l border-[#B89555]/15 space-y-1 pt-1 pb-1.5">
+                    <div className="ml-5 pl-2.5 border-l border-[#010806]/70 space-y-1 pt-1 pb-1.5">
                       {sectionKey === 'TOOLS & WORKSPACE' && (
                         <SidebarItem
                           preserveVisual
