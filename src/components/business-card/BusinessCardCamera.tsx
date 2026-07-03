@@ -46,7 +46,7 @@ const EMERALD_DEEP = "#04231A";
 const EMERALD_INK = "#022c1c";
 const ACCENT = WHITE;
 const ACCENT_SOFT = "rgba(255,255,255,0.14)";
-const ACCENT_BORDER = "rgba(255,255,255,0.45)";
+const ACCENT_BORDER = "rgba(1,8,6,0.72)";
 const CTA_GRADIENT = `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DEEP} 58%, ${EMERALD_INK} 100%)`;
 const CTA_SHADOW = "0 14px 36px -14px rgba(6,95,70,0.88)";
 const PANEL_BG =
@@ -377,7 +377,7 @@ const BusinessCardCamera = ({
       case "processing":
         return <Loader2 className="h-4 w-4 animate-spin allow-white" style={{ color: ACCENT }} />;
       case "success":
-        return <CheckCircle className="h-4 w-4 allow-white" style={{ color: "#34d399" }} />;
+        return <CheckCircle className="h-4 w-4 allow-white" style={{ color: WHITE }} />;
       case "error":
         return <AlertCircle className="h-4 w-4 allow-white" style={{ color: "#f87171" }} />;
       default:
@@ -478,7 +478,7 @@ const BusinessCardCamera = ({
                 animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.1, 0.4] }}
                 transition={{ duration: 2.2, repeat: Infinity }}
                 className="absolute inset-0 rounded-2xl"
-                style={{ border: `1px solid rgba(255,255,255,0.45)` }}
+                style={{ border: `1px solid rgba(1,8,6,0.72)` }}
               />
             </div>
 

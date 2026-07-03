@@ -375,6 +375,7 @@ const BusinessCardScanner = () => {
   return (
     <ToolAnimatedFrame theme={toolThemes.emerald}>
     <div
+      data-business-card-scanner
       data-allow-dark-cta
       className="min-h-screen"
       style={{
@@ -388,7 +389,7 @@ const BusinessCardScanner = () => {
         style={{
           background:
             "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
-          borderBottom: "1px solid rgba(255,255,255,0.22)",
+          borderBottom: "1px solid rgba(1,8,6,0.72)",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 60px -30px rgba(0,0,0,0.55)",
         }}
@@ -406,7 +407,7 @@ const BusinessCardScanner = () => {
             className="inline-flex items-center gap-2 rounded-full px-4 py-1 mb-4"
             style={{
               background: "rgba(255,255,255,0.10)",
-              border: "1px solid rgba(255,255,255,0.28)",
+              border: "1px solid rgba(1,8,6,0.72)",
               color: "#FFFFFF",
             }}
           >
@@ -435,7 +436,7 @@ const BusinessCardScanner = () => {
                 className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
                 style={{
                   background: "rgba(255,255,255,0.10)",
-                  border: "1px solid rgba(255,255,255,0.28)",
+                  border: "1px solid rgba(1,8,6,0.72)",
                   color: "#FFFFFF",
                 }}
               >
@@ -453,7 +454,7 @@ const BusinessCardScanner = () => {
           className="mb-6"
           style={{
             background: "linear-gradient(135deg, rgba(6,95,70,0.18), rgba(0,0,0,0.65))",
-            border: "1px solid rgba(255,255,255,0.28)",
+            border: "1px solid rgba(1,8,6,0.72)",
           }}
         >
           <Info className="h-4 w-4" style={{ color: "#FFFFFF" }} />
@@ -469,7 +470,7 @@ const BusinessCardScanner = () => {
           <Card
             style={{
               background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
-              border: "1px solid rgba(255,255,255,0.28)",
+              border: "1px solid rgba(1,8,6,0.72)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
           >
@@ -488,7 +489,7 @@ const BusinessCardScanner = () => {
                   className="grid w-full grid-cols-2 mb-4 h-auto p-1 gap-1 rounded-lg"
                   style={{
                     background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.24)",
+                    border: "1px solid rgba(1,8,6,0.72)",
                   }}
                 >
                   {[
@@ -507,7 +508,7 @@ const BusinessCardScanner = () => {
                             ? "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)"
                             : "transparent",
                           color: "#FFFFFF",
-                          border: active ? "1px solid rgba(255,255,255,0.46)" : "1px solid transparent",
+                          border: active ? "1px solid rgba(1,8,6,0.72)" : "1px solid transparent",
                         }}
                       >
                         <Icon className="h-4 w-4" style={{ color: "#FFFFFF" }} />
@@ -544,7 +545,7 @@ const BusinessCardScanner = () => {
           <Card
             style={{
               background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
-              border: "1px solid rgba(255,255,255,0.28)",
+              border: "1px solid rgba(1,8,6,0.72)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 60px -22px rgba(0,0,0,0.55)",
             }}
           >
@@ -558,7 +559,7 @@ const BusinessCardScanner = () => {
                       <Badge
                         style={{
                           background: "rgba(255,255,255,0.14)",
-                          border: "1px solid rgba(255,255,255,0.32)",
+                          border: "1px solid rgba(1,8,6,0.72)",
                           color: "#FFFFFF",
                         }}
                       >
@@ -601,7 +602,7 @@ const BusinessCardScanner = () => {
             className="mt-6"
             style={{
               background: "linear-gradient(135deg, #0a1a12 0%, #04120a 55%, #000000 100%)",
-              border: "1px solid rgba(255,255,255,0.28)",
+              border: "1px solid rgba(1,8,6,0.72)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
             }}
           >
@@ -632,7 +633,7 @@ const BusinessCardScanner = () => {
                       onClick={onClick}
                       style={{
                         background: "linear-gradient(135deg, #065F46 0%, #04231A 55%, #022c1c 100%)",
-                        border: "1px solid rgba(255,255,255,0.46)",
+                        border: "1px solid rgba(1,8,6,0.72)",
                         color: "#FFFFFF",
                       }}
                     >

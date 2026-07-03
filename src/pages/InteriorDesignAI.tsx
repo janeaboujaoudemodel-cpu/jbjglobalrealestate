@@ -289,11 +289,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-panel,
         [data-interior-design-ai] .id-panel-soft {
           background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
-          border: 1px solid rgba(255,255,255,0.16) !important;
+          border: 1px solid rgba(1,8,6,0.72) !important;
           box-shadow: 0 22px 60px -30px rgba(0,0,0,0.55) !important;
         }
         [data-interior-design-ai] :is([style*="#B89555"], [style*="rgb(184, 149, 85)"], [class*="border-[#B89555]"], [class*="border-gold"], [class*="ring-gold"]) {
-          border-color: rgba(255,255,255,0.16) !important;
+          border-color: rgba(1,8,6,0.72) !important;
           --tw-ring-color: rgba(255,255,255,0.28) !important;
         }
         /* Dropzone: no border at all */
@@ -306,7 +306,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-input:focus,
         [data-interior-design-ai] .id-input:focus-visible {
           background: rgba(0,0,0,0.28) !important;
-          border: 1px solid rgba(255,255,255,0.20) !important;
+          border: 1px solid rgba(1,8,6,0.72) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
           caret-color: #FFFFFF !important;
@@ -321,7 +321,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
-          border: 1px solid rgba(255,255,255,0.18) !important;
+          border: 1px solid rgba(1,8,6,0.72) !important;
         }
         [data-interior-design-ai] .id-primary > * {
           background-image: none !important;
@@ -333,7 +333,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         }
         [data-interior-design-ai] .id-outline {
           background: rgba(255,255,255,0.06) !important;
-          border: 1px solid rgba(255,255,255,0.18) !important;
+          border: 1px solid rgba(1,8,6,0.72) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
         }
@@ -346,17 +346,23 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
           min-width: 0 !important;
           overflow-wrap: anywhere !important;
           background: rgba(255,255,255,0.04) !important;
-          border: 1px solid rgba(255,255,255,0.14) !important;
+          border: 1px solid rgba(1,8,6,0.72) !important;
         }
         [data-interior-design-ai] .id-outline:hover,
         [data-interior-design-ai] .id-choice:hover {
           background: rgba(255,255,255,0.10) !important;
-          border-color: rgba(255,255,255,0.28) !important;
+          border-color: rgba(1,8,6,0.72) !important;
         }
         [data-interior-design-ai] .id-choice-active {
-          background: linear-gradient(135deg, #0a6e52 0%, #064E3B 58%, #01110b 100%) !important;
-          border-color: rgba(255,255,255,0.30) !important;
+          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%)) !important;
+          border-color: rgba(1,8,6,0.72) !important;
           box-shadow: 0 10px 24px -14px rgba(6,78,59,0.72), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+        }
+        [data-interior-design-ai] [role="progressbar"] {
+          background: rgba(255,255,255,0.12) !important;
+        }
+        [data-interior-design-ai] [role="progressbar"] > div {
+          background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #01110b 100%)) !important;
         }
         [data-interior-design-ai] svg {
           background: transparent !important;
@@ -376,6 +382,11 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
         [data-interior-design-ai] .id-panel-soft,
         [data-interior-design-ai] .id-dropzone { min-width: 0 !important; }
         [data-interior-design-ai] .id-panel * { min-width: 0; }
+        [data-interior-design-ai] :is(.id-choice, .id-choice-active, .id-outline, .id-primary, .id-panel, .id-panel-soft, .id-input, textarea, input, button, [role="progressbar"], [role="progressbar"] *) {
+          border-color: rgba(1,8,6,0.72) !important;
+          outline-color: transparent !important;
+          --tw-ring-color: rgba(1,8,6,0.72) !important;
+        }
       `}</style>
 
 

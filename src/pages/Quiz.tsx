@@ -381,6 +381,14 @@ const AIHF_STYLE = `
   }
   .aihf-root input::placeholder { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
 
+  /* Absolute lock: no gold borders/text inside AI Home Finder, including lead form states. */
+  .aihf-root :is([class*="B89555"], [class*="border-gold"], [class*="ring-gold"], [style*="#B89555"], [style*="184,149,85"]) {
+    border-color: rgba(255,255,255,0.28) !important;
+    --tw-ring-color: rgba(255,255,255,0.28) !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+
   /* Popover keeps light surface so lists are readable */
   .aihf-popover, .aihf-popover * { background-color: #041610 !important; color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
   .aihf-popover { border: 1px solid rgba(255,255,255,0.34) !important; }
@@ -1101,7 +1109,7 @@ const Quiz = () => {
               style={{
                 background: "linear-gradient(135deg, #065F46 0%, #04231A 100%)",
                 border: "1px solid rgba(255,255,255,0.42)",
-                boxShadow: "0 6px 18px -8px rgba(16,185,129,0.5)",
+                boxShadow: "none",
               }}
             >
               <Sparkles className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
@@ -1194,7 +1202,7 @@ const Quiz = () => {
       <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-screen flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
         <style>{AIHF_STYLE}</style>
         {/* Header */}
-        <div className="border-b border-[#B89555]/25 bg-[#F7F2EA]">
+        <div className="border-b border-white/20 bg-[#041610]">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <button
@@ -1205,7 +1213,7 @@ const Quiz = () => {
                 <ChevronLeft className="w-5 h-5" />
                 Back to Questions
               </button>
-              <div className="flex items-center gap-3 text-[#B89555]">
+                <div className="flex items-center gap-3 text-white">
                 <CheckCircle2 className="w-4 h-4" />
                 <span className="text-sm">Almost there!</span>
               </div>
@@ -1217,8 +1225,8 @@ const Quiz = () => {
         <div className="flex-1 flex items-center justify-center px-4 py-12">
           <div className="w-full max-w-lg">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-[#EFE6D6] border border-[#B89555]/60 mx-auto mb-4 flex items-center justify-center">
-                <Sparkles className="w-8 h-8 text-[#B89555]" />
+              <div className="w-16 h-16 rounded-full bg-white/10 border border-white/30 mx-auto mb-4 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-white" />
               </div>
                <h2 className="text-[#1A1A1A] text-3xl font-bold mb-2">
                 Get Your AI Analysis
@@ -1228,7 +1236,7 @@ const Quiz = () => {
               </p>
             </div>
 
-            <div className="bg-[#F7F2EA] border border-[#B89555]/55 rounded-2xl p-6 md:p-8">
+            <div className="aihf-card border border-white/30 rounded-2xl p-6 md:p-8">
               <div className="space-y-5">
                 <div>
                   <Label className="text-[#1A1A1A] mb-2 block">Full Name *</Label>
@@ -1236,7 +1244,7 @@ const Quiz = () => {
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     placeholder="Enter your full name"
-                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
+                    className="aihf-input border-white/30 text-white placeholder:text-white/55 focus:border-white/45"
                   />
                 </div>
                 <div>
@@ -1246,7 +1254,7 @@ const Quiz = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Enter your email"
-                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
+                    className="aihf-input border-white/30 text-white placeholder:text-white/55 focus:border-white/45"
                   />
                 </div>
                 <div>
@@ -1256,7 +1264,7 @@ const Quiz = () => {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+971 XX XXX XXXX"
-                    className="bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus:border-[#B89555]"
+                    className="aihf-input border-white/30 text-white placeholder:text-white/55 focus:border-white/45"
                   />
                 </div>
                 <div>
@@ -1268,8 +1276,8 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
-                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
+                    triggerClassName="aihf-input border-white/30 text-white hover:text-white"
+                    className="aihf-popover border-white/30"
                   />
                 </div>
                 <div>
@@ -1281,8 +1289,8 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="aihf-input bg-[#FDFBF7] border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:text-[#1A1A1A]"
-                    className="aihf-popover bg-[#FDFBF7] border-[#B89555]/55"
+                    triggerClassName="aihf-input border-white/30 text-white hover:text-white"
+                    className="aihf-popover border-white/30"
                   />
                 </div>
               </div>
@@ -1311,13 +1319,13 @@ const Quiz = () => {
               </Button>
 
               {!needsPayment && (
-                <p className="text-[#B89555] text-base font-semibold text-center mt-4">
+                <p className="text-white text-base font-semibold text-center mt-4">
                   Your first AI Property Match & Analysis is FREE!
                 </p>
               )}
 
               {needsPayment && (
-                <p className="text-[#B89555] text-sm font-medium text-center mt-4">
+                <p className="text-white text-sm font-medium text-center mt-4">
                   You've used your free trial. Upgrade to VIP for unlimited access.
                 </p>
               )}
@@ -1359,7 +1367,7 @@ const Quiz = () => {
           <div className="h-2 rounded-full overflow-hidden mb-6" style={{ background: "rgba(255,255,255,0.14)" }}>
             <div
               className="h-full rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress}%`, background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }}
+              style={{ width: `${progress}%`, background: "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #010806 100%))" }}
             />
           </div>
         </div>

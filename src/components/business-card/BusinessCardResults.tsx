@@ -198,7 +198,7 @@ const BusinessCardResults = ({
                     </div>
                     <div className="flex items-center gap-1">
                       {needsReview && (
-                          <Badge variant="outline" className="text-[10px] border-emerald-500/70 bg-transparent text-emerald-50 allow-white" data-no-contrast-guard>
+                          <Badge variant="outline" className="text-[10px] border-0 jj-pill-emerald-metallic allow-white text-white" data-no-contrast-guard>
                           Needs Review
                         </Badge>
                       )}
@@ -210,7 +210,7 @@ const BusinessCardResults = ({
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-7 w-7 rounded-full border border-emerald-700/45 bg-transparent text-white hover:bg-emerald-700/15 hover:text-white allow-white"
+                        className="h-7 w-7 rounded-full border-0 bg-transparent text-white hover:bg-white/10 hover:text-white allow-white"
                         data-no-contrast-guard
                         data-allow-dark-cta
                         aria-label="Edit scanned contact"

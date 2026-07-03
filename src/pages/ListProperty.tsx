@@ -56,7 +56,7 @@ const EMERALD_DEEP = "#042C1C";
 const EMERALD_BLACK = "#000000";
 const EMERALD_GRADIENT = "var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%))";
 const EMERALD_GRADIENT_HOVER = "var(--jj-emerald-ombre-hover, linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #042c1c 100%))";
-const GOLD = "#B89555";
+const GOLD = "rgba(1,8,6,0.72)";
 /* PASS 152 — no champagne inside AI tool shells. Constants below map to emerald ombré. */
 const CHAMPAGNE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
 const CHAMPAGNE_SURFACE = "linear-gradient(135deg, #065F46 0%, #04231A 55%, #000000 100%)";
@@ -81,11 +81,11 @@ const THEME_EMERALD: ModeTheme = {
   primary: EMERALD,
   primaryDeep: EMERALD_DEEP,
   badgeBorder: GOLD,
-  badgeBg: "rgba(184,149,85,0.18)",
+  badgeBg: "rgba(255,255,255,0.10)",
   heroGradient: EMERALD_GRADIENT,
   sectionGradient: `linear-gradient(180deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_SURFACE} 100%)`,
   ctaText: WHITE,
-  iconAccent: GOLD,
+  iconAccent: WHITE,
 };
 const THEME_BRAND = THEME_EMERALD;
 const themeForMode = (_m: Mode): ModeTheme => THEME_BRAND;
@@ -140,7 +140,7 @@ const ListProperty = () => {
 
   const theme = themeForMode(mode);
   const ombreShine =
-    `radial-gradient(circle at 18% 18%, ${theme.iconAccent}33 0%, transparent 60%)`;
+    `radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 60%)`;
 
   return (
     <ToolAnimatedFrame theme={toolThemes.emerald}>
@@ -558,7 +558,7 @@ function PickerCard({
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-2xl"
         style={{
-          background: `radial-gradient(circle at 18% 18%, rgba(184,149,85,0.22) 0%, transparent 60%)`,
+          background: `radial-gradient(circle at 18% 18%, rgba(255,255,255,0.12) 0%, transparent 60%)`,
         }}
       />
       <div className="relative flex w-full min-w-0 items-start justify-between gap-4">
@@ -575,7 +575,7 @@ function PickerCard({
           <span
             className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] font-bold px-2 py-0.5 rounded-full"
             style={{
-              backgroundColor: "rgba(184,149,85,0.18)",
+              backgroundColor: "rgba(255,255,255,0.10)",
               color: WHITE,
               WebkitTextFillColor: WHITE,
               border: `1px solid ${GOLD}`,
@@ -614,7 +614,7 @@ function PickerCard({
             backgroundColor: "rgba(255,255,255,0.10)",
             color: "rgba(255,255,255,0.88)",
             WebkitTextFillColor: "rgba(255,255,255,0.88)",
-            border: `1px solid rgba(184,149,85,0.65)`,
+            border: `1px solid rgba(1,8,6,0.72)`,
           }}
         >
           {tag}
@@ -627,7 +627,7 @@ function PickerCard({
             color: EMERALD_DEEP,
             WebkitTextFillColor: EMERALD_DEEP,
             border: `1px solid ${GOLD}`,
-            boxShadow: `0 6px 18px -8px rgba(184,149,85,0.55)`,
+            boxShadow: `0 6px 18px -8px rgba(0,0,0,0.55)`,
           }}
         >
           <span style={{ color: EMERALD_DEEP, WebkitTextFillColor: EMERALD_DEEP, fontWeight: 800 }}>Start</span>
@@ -666,7 +666,7 @@ function MySubmissionsSection({ theme = THEME_BRAND }: { theme?: ModeTheme }) {
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 85% 12%, rgba(184,149,85,0.18) 0%, transparent 55%)`,
+          background: `radial-gradient(circle at 85% 12%, rgba(255,255,255,0.10) 0%, transparent 55%)`,
         }}
       />
       <div className="relative max-w-6xl mx-auto">
