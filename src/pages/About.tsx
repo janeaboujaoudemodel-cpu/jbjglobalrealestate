@@ -162,8 +162,22 @@ const About = () => {
               preload="auto"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B]/85 via-black/80 to-black/95" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(4,44,28,0.92) 0%, rgba(3,25,17,0.94) 45%, rgba(0,0,0,0.96) 100%)' }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/55" />
+            <motion.div
+              aria-hidden
+              className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full blur-[120px] pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(20,120,80,0.55) 0%, rgba(6,78,59,0) 70%)' }}
+              animate={{ x: [0, 40, 0], y: [0, 30, 0], opacity: [0.6, 0.9, 0.6] }}
+              transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.div
+              aria-hidden
+              className="absolute -bottom-40 -right-32 w-[600px] h-[600px] rounded-full blur-[140px] pointer-events-none"
+              style={{ background: 'radial-gradient(circle, rgba(6,78,59,0.7) 0%, rgba(0,0,0,0) 70%)' }}
+              animate={{ x: [0, -30, 0], y: [0, -20, 0], opacity: [0.5, 0.85, 0.5] }}
+              transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+            />
           </div>
 
           <motion.div
@@ -250,10 +264,12 @@ const About = () => {
                         <button
                           data-allow-dark-cta
                           data-no-contrast-guard
-                          className="allow-white group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full bg-white/10 border border-[#B89555]/60 text-white hover:bg-white/20"
+                          data-surface="emerald"
+                          className="allow-white group/btn relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 w-full border border-[#B89555]/60 hover:brightness-110"
+                          style={{ background: 'linear-gradient(135deg,#064E3B 0%,#053a2c 55%,#031f18 100%)', color: '#FFFFFF' }}
                         >
-                          <span className="text-white">Know more about the founder</span>
-                          <span aria-hidden className="text-white">↗</span>
+                          <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Know more about the founder</span>
+                          <span aria-hidden style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>↗</span>
                         </button>
                       </Link>
                     </div>
@@ -356,7 +372,7 @@ const About = () => {
             </motion.div>
 
             {/* 3 Card Grid */}
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <FeatureCard 
                 icon={Building2}
                 title="Property Buying & Selling"
