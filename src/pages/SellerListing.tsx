@@ -594,14 +594,23 @@ Requirements:
               <p className="mb-6" data-no-contrast-guard style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
                 {user ? `Glad to have you back, ${firstName}. ` : ""}Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
+            </div>
+          </div>
+          {/* Full edge-to-edge draft bar */}
+          <div className="w-full px-0">
+            <div className="w-full [&>div]:rounded-none [&>div]:border-x-0 [&>div]:px-4 md:[&>div]:px-8">
               <FormDraftBar
                 hasDraft={hasDraft}
                 onSaveDraft={() => { /* auto-save handles this */ toast.success("Draft auto-saved"); }}
                 onReset={() => { clearDraft(); form.reset(); setHighlights([]); setPhotoFiles([]); setVideoFiles([]); setFloorPlanFiles([]); setTitleDeedFile(null); setPassportFile(null); setPoaFile(null); setAdditionalDocs([]); setCurrentStep(1); }}
                 onNew={() => { clearDraft(); form.reset(); setHighlights([]); setPhotoFiles([]); setVideoFiles([]); setFloorPlanFiles([]); setTitleDeedFile(null); setPassportFile(null); setPoaFile(null); setAdditionalDocs([]); setCurrentStep(1); }}
                 label={`${party} Listing`}
-                theme="gold"
+                theme="dark"
               />
+            </div>
+          </div>
+          <div className="container mx-auto px-4 pb-8">
+            <div className="max-w-4xl mx-auto text-center">
 
               {/* Seller Assistant CTA — emerald ombre primary */}
               <div className="mt-6">
