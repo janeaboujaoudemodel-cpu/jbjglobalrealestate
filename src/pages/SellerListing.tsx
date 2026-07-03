@@ -686,12 +686,11 @@ Requirements:
  ? 'border-white/80 text-white [&_svg]:!text-white'
  : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
  }`}
-                   style={currentStep === step.number
-                    ? { background: 'var(--jj-official-emerald-surface, #064E3B)', backgroundColor: '#064E3B' }
-                    : currentStep > step.number
-                      ? { background: 'var(--jj-official-emerald-surface, #064E3B)', backgroundColor: '#064E3B' }
-                      : { backgroundColor: 'rgba(255,255,255,0.08)' }
-                  }>
+                   style={{
+                    background: 'var(--jj-official-emerald-surface, #064E3B)',
+                    backgroundColor: '#064E3B',
+                    boxShadow: currentStep === step.number ? '0 8px 20px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18)' : 'inset 0 1px 0 rgba(255,255,255,0.10)',
+                  }}>
 
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
