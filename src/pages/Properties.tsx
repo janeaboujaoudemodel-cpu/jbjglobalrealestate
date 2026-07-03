@@ -1078,19 +1078,9 @@ const Properties = () => {
                               }}
                             />
                           </label>
-                          <label className="flex items-center justify-between gap-2 h-12 px-4 bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg cursor-pointer hover:border-[#B89555] transition-all">
-                            <span className="flex items-center gap-2 text-sm text-[#1A1A1A] font-medium">
-                              <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
-                              Hide Sold Out
-                            </span>
-                            <Switch
-                              checked={appliedFilters.hideSoldOut}
-                              onCheckedChange={(checked) => {
-                                updateFilter("hideSoldOut", checked);
-                                setAppliedFilters((prev) => ({ ...prev, hideSoldOut: checked }));
-                              }}
-                            />
-                          </label>
+                          {/* Hide Sold Out toggle removed site-wide — resale
+                              always covers stock that leaves the primary market. */}
+
                         </div>
                       </div>
                     </ScrollArea>
