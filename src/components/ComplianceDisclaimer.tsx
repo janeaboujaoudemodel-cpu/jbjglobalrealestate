@@ -129,21 +129,26 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
 
   if (variant === "partners-intro") {
     return (
-      <div className={`bg-blue-500/10 border border-blue-500/30 rounded-lg p-5 ${className}`}>
-        <div className="flex items-start gap-3">
-          <Users className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-blue-200 text-sm font-medium mb-2">
+      <div className={`bg-[#064E3B]/5 border border-[#064E3B]/20 rounded-xl p-6 md:p-8 ${className}`}>
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-lg bg-[#064E3B] flex items-center justify-center flex-shrink-0">
+            <Users className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[#064E3B] text-base font-semibold mb-2">
               {language === "ar" ? "دليل الشركاء" : "Partner Directory"}
             </p>
-            <p className="text-blue-200/70 text-xs leading-relaxed mb-3">
+            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-4">
               {language === "ar"
                 ? "نقدم لك متخصصين مستقلين ومرخصين لخدمات خارج نطاق الوساطة. يعمل الشركاء بشكل مستقل ويتعاقدون مباشرة مع العملاء. جي بي جي تسهل التقديمات فقط."
                 : "We introduce independent licensed professionals for services outside brokerage scope. Partners operate independently and contract directly with clients. JBJ facilitates introductions only."}
             </p>
             <div className="flex flex-wrap gap-2">
               {["Law Firms", "Mortgage Specialists", "Property Managers", "Conveyancers"].map((partner) => (
-                <span key={partner} className="text-xs text-blue-300/80 bg-blue-500/20 px-2 py-1 rounded-full">
+                <span
+                  key={partner}
+                  className="text-xs font-medium text-[#064E3B] bg-[#064E3B]/10 border border-[#064E3B]/20 px-3 py-1.5 rounded-full"
+                >
                   {partner}
                 </span>
               ))}

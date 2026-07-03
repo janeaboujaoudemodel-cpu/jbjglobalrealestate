@@ -257,8 +257,8 @@ const PartnerLegal = () => {
             <div className="max-w-2xl mx-auto">
               <Card className="border-[#B89555]/30 bg-[#FDFBF7] shadow-sm">
                 <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="w-8 h-8 text-[#1A1A1A]" />
+                  <div className="w-16 h-16 bg-[#064E3B] rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-white" />
                   </div>
                   <CardTitle className="text-2xl text-[#1A1A1A]">Request Partner Introduction</CardTitle>
                 </CardHeader>
@@ -270,12 +270,13 @@ const PartnerLegal = () => {
 
                   {/* Consent Checkbox */}
                   <div className="flex items-start gap-3 p-4 bg-[#F7F2EA] rounded-lg border border-[#B89555]/30">
-                    <Checkbox 
-                      id="legal-consent" 
+                    <Checkbox
+                      id="legal-consent"
                       checked={consentChecked}
                       onCheckedChange={(checked) => setConsentChecked(checked as boolean)}
+                      className="mt-0.5 border-[#064E3B] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#064E3B] data-[state=checked]:text-white [&_svg]:text-white"
                     />
-                    <Label htmlFor="legal-consent" className="text-sm text-[#1A1A1A]/70 cursor-pointer">
+                    <Label htmlFor="legal-consent" className="text-sm text-[#1A1A1A]/80 cursor-pointer leading-relaxed">
                       I understand this service is provided by an independent licensed law firm. 
                       JBJ GLOBAL REAL ESTATE facilitates introductions only and does not provide legal services directly.
                     </Label>
