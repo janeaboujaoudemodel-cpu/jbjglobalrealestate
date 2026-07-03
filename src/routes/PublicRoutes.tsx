@@ -141,6 +141,7 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const MyDashboard = lazy(() => import("@/pages/MyDashboard"));
 const MyDashboardProgress = lazy(() => import("@/pages/MyDashboardProgress"));
 const MyDashboardActivity = lazy(() => import("@/pages/MyDashboardActivity"));
+const MyCalendarRedirect = lazy(() => import("@/pages/MyCalendarRedirect"));
 const AccountBilling = lazy(() => import("@/pages/AccountBilling"));
 const InvestorDashboard = lazy(() => import("@/pages/InvestorDashboard"));
 const PortfolioViews = lazy(() => import("@/pages/investor/PortfolioViews"));
@@ -406,6 +407,7 @@ export const PublicRoutes = () => (
     <Route path="/my-dashboard/progress" element={<AuthRequiredRoute><MyDashboardProgress /></AuthRequiredRoute>} />
     <Route path="/my-dashboard/activity" element={<AuthRequiredRoute><MyDashboardActivity /></AuthRequiredRoute>} />
     <Route path="/my-activity" element={<Navigate to="/my-dashboard/activity" replace />} />
+    <Route path="/my-calendar" element={<MyCalendarRedirect />} />
     <Route path="/investor-dashboard" element={<AuthRequiredRoute><InvestorDashboard /></AuthRequiredRoute>} />
     <Route path="/investor-dashboard/portfolio" element={<AuthRequiredRoute><PortfolioViews /></AuthRequiredRoute>} />
     <Route path="/investor-dashboard/reports" element={<AuthRequiredRoute><ReportAccess /></AuthRequiredRoute>} />
