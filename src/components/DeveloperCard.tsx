@@ -119,12 +119,15 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
   const tier = getDeveloperTier(developer.slug || "", developer.name || "", developer.rank);
   const isEager = index < 8;
   const override = getDeveloperLogoOverride(developer.name);
-  // Only use a photo when we have a curated developer-specific image.
-  // DB feature_image_url and the passed-in heroImageUrl are NOT trusted for
-  // developer cards because they routinely leak stock/unrelated imagery
-  // (e.g. Amal → Downtown, Samana → interior, 971 ≈ AAA reuse). Falling
-  // back to logo/nameplate is safer than showing a wrong photo.
-  const cardHeroImageUrl = getIconicDeveloperImage(developer.slug || "", developer.name || "");
+  // Prefer curated developer-specific photo, then fall back to the
+  // caller-provided hero photo (e.g. their signature project cover from
+  // the DB), and only then to logo/nameplate. This restores the
+  // aerial/signature-project look the user approved on Omniyat while
+  // still guarding against known-bad DB leaks via the curated map.
+  const cardHeroImageUrl =
+    getIconicDeveloperImage(developer.slug || "", developer.name || "") ||
+    heroImageUrl ||
+    undefined;
 
   const hasHero = !!cardHeroImageUrl;
   const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
