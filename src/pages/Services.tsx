@@ -363,15 +363,8 @@ const Services = () => {
                           </ul>
                         </div>
 
-                        {service.note ? (
-                          <div className="bg-[#EFE6D6]/40 rounded-lg p-2 mb-4 min-h-[3rem]">
-                            <p className="text-xs italic" style={{ color: "rgba(26,26,26,0.65)" }}>
-                              {service.note}
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="mb-4 min-h-[3rem]" aria-hidden="true" />
-                        )}
+                        <div className="mb-4 min-h-[1rem]" aria-hidden="true" />
+
 
                         <div className="flex items-center gap-1 text-sm font-semibold mt-auto pt-4 border-t border-[#1A1A1A]/10" style={{ color: "#064E3B" }}>
                           {service.cta}
