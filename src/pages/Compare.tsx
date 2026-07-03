@@ -670,7 +670,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
 
   return (
-    <section data-compare-page data-surface="emerald" data-on-dark="true" className="min-h-screen" style={{ background: PAGE_DARK, backgroundColor: "#021611" }}>
+    <section data-compare-page data-on-dark="true" className="min-h-screen" style={{ background: PAGE_DARK, backgroundColor: "#021611" }}>
       {/* =============== HERO — EMERALD OMBRÉ =============== */}
       <div
         data-compare-hero
@@ -912,10 +912,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     const badge = getBadge(project.id);
                     const isFav = shortlistIds.includes(project.id);
                     const primaryImageUrl =
-                      project.images?.find((img: any) => !!img?.image_url && !img.image_url.startsWith("data:image/svg"))?.image_url ||
-                      (project.cover_image_url && !project.cover_image_url.startsWith("data:image/svg") ? project.cover_image_url : "") ||
-                      (project as any).card_image_url ||
-                      (project as any).hero_image_url ||
+                      project.images?.find((img: any) => !!img?.image_url && !String(img.image_url).trim().startsWith("data:image/svg"))?.image_url ||
+                      (project.cover_image_url && !String(project.cover_image_url).trim().startsWith("data:image/svg") ? project.cover_image_url : "") ||
+                      ((project as any).card_image_url && !String((project as any).card_image_url).trim().startsWith("data:image/svg") ? (project as any).card_image_url : "") ||
+                      ((project as any).hero_image_url && !String((project as any).hero_image_url).trim().startsWith("data:image/svg") ? (project as any).hero_image_url : "") ||
                       comparePropertyFallback;
                     return (
                       <th
@@ -923,7 +923,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                         className="text-left py-4 px-4"
                         style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px', borderBottom: "1px solid rgba(6,78,59,0.22)" }}
                       >
-                        <div className="flex flex-col gap-2 rounded-xl p-3" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#064E3B", color: "#FFFFFF", boxShadow: "0 14px 30px -20px rgba(0,0,0,0.72)" }} data-surface="emerald" data-on-dark="true" data-no-contrast-guard>
+                        <div className="flex flex-col gap-2 rounded-xl p-3" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#064E3B", color: "#FFFFFF", boxShadow: "0 14px 30px -20px rgba(0,0,0,0.72)" }} data-compare-property-card data-on-dark="true" data-no-contrast-guard>
                           <div className="flex items-center justify-between gap-2">
                             {badge && (
                               <span
