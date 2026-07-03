@@ -36,17 +36,17 @@ const VoiceAgentSettings = lazy(() => import("@/pages/VoiceAgentSettings"));
 export const AIToolRoutes = () => (
   <>
     <Route path="/ai-property-analyzer" element={<AIPropertyAnalyzerPage />} />
-    <Route path="/ai-lead-qualification" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-lead-qualification" element={<AILeadQualificationPage />} />
     <Route path="/ai-price-predictor" element={<AIPricePredictorPage />} />
     <Route path="/ai-neighborhood-insights" element={<AINeighborhoodInsightsPage />} />
     <Route path="/ai-roi-calculator" element={<AIROICalculatorPage />} />
-    <Route path="/ai-competitor-analysis" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-competitor-analysis" element={<AICompetitorAnalysisPage />} />
     <Route path="/ai-market-report" element={<AIMarketReportPage />} />
-    <Route path="/ai-objection-handler" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-followup-scheduler" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-objection-handler" element={<AIObjectionHandlerPage />} />
+    <Route path="/ai-followup-scheduler" element={<AIFollowupSchedulerPage />} />
     <Route path="/ai-follow-up-scheduler" element={<Navigate to="/ai-followup-scheduler" replace />} />
-    <Route path="/ai-meeting-summarizer" element={<Navigate to="/ai-hub" replace />} />
-    <Route path="/ai-translation-hub" element={<Navigate to="/ai-hub" replace />} />
+    <Route path="/ai-meeting-summarizer" element={<AIMeetingSummarizerPage />} />
+    <Route path="/ai-translation-hub" element={<AITranslationHubPage />} />
     <Route path="/ai-video-tour-script" element={<Navigate to="/toolkit/video-suite" replace />} />
     <Route path="/ai-contract-reviewer" element={<Navigate to="/ai-hub" replace />} />
     <Route path="/ai-document-generator" element={<Navigate to="/ai-hub" replace />} />
