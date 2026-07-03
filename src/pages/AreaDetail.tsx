@@ -207,6 +207,7 @@ const AreaDetail = () => {
         keywords={`${area.name} properties, ${area.emirate} real estate`}
         canonicalPath={`/area/${area.slug}`}
       />
+      <SchemaEntity kind="community" slug={area.slug || slug || ""} pageTitle={`${area.name} — Properties in ${area.emirate}`} />
 
       {/* Full-Screen Hero with Real Photo */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
