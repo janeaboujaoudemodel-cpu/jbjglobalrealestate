@@ -610,7 +610,7 @@ function PickerCard({
             background: CHAMPAGNE,
             color: EMERALD_DEEP,
             WebkitTextFillColor: EMERALD_DEEP,
-            border: `1px solid ${GOLD}`,
+            border: `1px solid rgba(255,255,255,0.14)`,
             boxShadow: `0 6px 18px -8px rgba(0,0,0,0.55)`,
           }}
         >
