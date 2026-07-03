@@ -614,11 +614,11 @@ Requirements:
                   }}
                   className="inline-flex items-center gap-2 px-8 py-3.5 rounded-md text-sm font-bold transition-all hover:brightness-110"
                   style={{
-                    background: "linear-gradient(135deg, #0F5132 0%, #064E3B 100%)",
+                    background: "linear-gradient(135deg, #059669 0%, #047857 100%)",
                     color: "#FFFFFF",
                     WebkitTextFillColor: "#FFFFFF",
-                    border: "1.5px solid #0F5132",
-                    boxShadow: "0 10px 28px -12px rgba(15,81,50,0.55)",
+                    border: "1.5px solid #10B981",
+                    boxShadow: "0 10px 28px -12px rgba(16,185,129,0.55)",
                   }}
                 >
                   <svg
