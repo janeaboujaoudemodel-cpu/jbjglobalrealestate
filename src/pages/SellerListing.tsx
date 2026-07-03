@@ -505,26 +505,26 @@ Requirements:
               className="max-w-2xl mx-auto text-center"
             >
               <div className="w-20 h-20 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-[#B89555]/30">
-                <CheckCircle2 className="w-10 h-10 text-[#1A1A1A]" />
+                <CheckCircle2 className="w-10 h-10 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-4">Listing Submitted Successfully!</h1>
-              <p className="text-[#1A1A1A]/70 mb-8">
+              <p className="text-white/70 mb-8">
                 Thank you for submitting your property listing. Our team will review your submission and 
                 contact you within 24-48 hours to discuss next steps.
               </p>
               <div className="bg-[#FDFBF7]/50 border border-[#1A1A1A] rounded-xl p-6 mb-8 text-left">
-                <h3 className="text-[#1A1A1A] font-semibold mb-3">What Happens Next?</h3>
-                <ul className="space-y-2 text-[#1A1A1A]/70 text-sm">
+                <h3 className="text-white font-semibold mb-3">What Happens Next?</h3>
+                <ul className="space-y-2 text-white/70 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
                     <span>Our team will review your listing details and documents</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
                     <span>We'll contact you via your preferred method to discuss pricing strategy</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-white mt-0.5 flex-shrink-0" />
                     <span>Once approved, your property will be marketed to qualified buyers</span>
                   </li>
                 </ul>
@@ -728,48 +728,48 @@ Requirements:
                     className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",letterSpacing:"-0.01em"}}>{party} Details</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about yourself so we can contact you</p>
+                      <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",letterSpacing:"-0.01em"}}>{party} Details</h2>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>Tell us about yourself so we can contact you</p>
                     </div>
 
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Full Name <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Full Name <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
                         />
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Phone Number <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Phone Number <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Email Address <span style={{color:"#B91C1C"}}>*</span></Label>
+                      <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Email Address <span style={{color:"#B91C1C"}}>*</span></Label>
                       <Input
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
+                        className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)",textShadow:"none"}}
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Language</Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Language</Label>
                         <Select 
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
+                          <SelectTrigger className="mt-1 bg-white/10 border border-white/25 text-white" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#065F46]/40">
@@ -782,12 +782,12 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Contact Method</Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Preferred Contact Method</Label>
                         <Select 
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
+                          <SelectTrigger className="mt-1 bg-white/10 border border-white/25 text-white" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#065F46]/40">
@@ -800,7 +800,7 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{party} Type <span style={{color:"#B91C1C"}}>*</span></Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>{party} Type <span style={{color:"#B91C1C"}}>*</span></Label>
                       <RadioGroup 
                         value={form.watch("seller_type")} 
                         onValueChange={(v) => form.setValue("seller_type", v)}
@@ -819,7 +819,7 @@ Requirements:
                               id={option.value}
                               className="border-[#0F5132]" style={{borderWidth:"1.5px"}}
                             />
-                            <Label htmlFor={option.value} className="ml-2 cursor-pointer font-medium" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B"}}>
+                            <Label htmlFor={option.value} className="ml-2 cursor-pointer font-medium" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF"}}>
                               {option.label}
                             </Label>
                           </div>
@@ -840,17 +840,17 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Property Details</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about your property</p>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Property Type <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Property Type <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Select
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
+                          <SelectTrigger className="mt-1 bg-white/10 border border-white/25 text-white" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#065F46]/40">
@@ -865,32 +865,32 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Location / Area <span style={{color:"#B91C1C"}}>*</span></Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Location / Area <span style={{color:"#B91C1C"}}>*</span></Label>
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="mt-1 bg-white text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}
+                          className="mt-1 bg-white/10 border border-white/25 text-white placeholder:text-white/50 focus-visible:ring-2 focus-visible:ring-[#0F5132] focus-visible:border-[#0F5132]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Community / Building Name</Label>
+                      <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Community / Building Name</Label>
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
+                        className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1"
                       />
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Bedrooms</Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Bedrooms</Label>
                         <Select
                           value={form.watch("bedrooms")?.toString()}
                           onValueChange={(v) => form.setValue("bedrooms", parseInt(v))}
                         >
-                          <SelectTrigger className="mt-1 bg-white text-[#1A1A1A]" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
+                          <SelectTrigger className="mt-1 bg-white/10 border border-white/25 text-white" style={{border:"1.5px solid rgba(16,185,129,0.45)"}}>
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
                           <SelectContent className="bg-white border-[#065F46]/40">
@@ -907,18 +907,18 @@ Requirements:
                         </Select>
                       </div>
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Size (sq.ft)</Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Size (sq.ft)</Label>
                         <Input
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
                           placeholder="e.g., 1500"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
+                          className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Property Status</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Property Status</Label>
                       <RadioGroup
                         value={form.watch("property_status")}
                         onValueChange={(v) => form.setValue("property_status", v)}
@@ -938,7 +938,7 @@ Requirements:
                             />
                             <Label
                               htmlFor={`status-${option.value}`}
-                              className="ml-2 text-[#1A1A1A]/70 cursor-pointer text-sm"
+                              className="ml-2 text-white/70 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -948,11 +948,11 @@ Requirements:
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Additional Notes</Label>
+                      <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Additional Notes</Label>
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1 min-h-[100px]"
+                        className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1 min-h-[100px]"
                       />
                     </div>
                   </motion.div>
@@ -969,42 +969,42 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>{pricingHeading}</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>{isRent ? "Help us understand your rental expectations" : "Help us understand your pricing expectations"}</p>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>{isRent ? "Help us understand your rental expectations" : "Help us understand your pricing expectations"}</p>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{purchasePriceLabel}</Label>
+                      <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>{purchasePriceLabel}</Label>
                       <Input
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
                         placeholder={isRent ? "Estimated current value" : "Original purchase price"}
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
+                        className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1"
                       />
-                      <p className="text-[#1A1A1A]/70 text-xs mt-1">{isRent ? "Approximate current market value" : "What you paid for the property"}</p>
+                      <p className="text-white/70 text-xs mt-1">{isRent ? "Approximate current market value" : "What you paid for the property"}</p>
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{priceFieldLabel}</Label>
+                      <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>{priceFieldLabel}</Label>
                       <Input
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
                         placeholder={isRent ? "Your desired monthly rent" : "Your desired selling price"}
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
+                        className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{minPriceLabel}</Label>
+                      <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>{minPriceLabel}</Label>
                       <Input
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
                         placeholder={isRent ? "Lowest monthly rent you'd accept" : "Lowest price you'd accept"}
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1"
+                        className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1"
                       />
                     </div>
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>{urgencyLabel}</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>{urgencyLabel}</Label>
                       <RadioGroup
                         value={form.watch("selling_urgency")}
                         onValueChange={(v) => form.setValue("selling_urgency", v)}
@@ -1023,7 +1023,7 @@ Requirements:
                             />
                             <Label
                               htmlFor={`urgency-${option.value}`}
-                              className="ml-2 text-[#1A1A1A]/70 cursor-pointer text-sm"
+                              className="ml-2 text-white/70 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -1035,16 +1035,16 @@ Requirements:
                     {/* Property Evaluator Integration */}
                     <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
-                        <Calculator className="w-5 h-5 text-[#1A1A1A]" />
-                        <span className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Need help with pricing?</span>
+                        <Calculator className="w-5 h-5 text-white" />
+                        <span className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Need help with pricing?</span>
                       </div>
-                      <p className="text-[#1A1A1A]/70 text-sm mb-3">
+                      <p className="text-white/70 text-sm mb-3">
                         Run our Property Evaluator to get an informational estimate based on market data.
                       </p>
                       <Button
                         type="button"
                         variant="outline"
-                        className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
+                        className="border-[#B89555] text-white hover:bg-[#EFE6D6]/10"
                         onClick={() => setShowEvaluator(true)}
                         disabled={!form.getValues("property_type") || !form.getValues("property_location")}
                       >
@@ -1055,11 +1055,11 @@ Requirements:
                       {/* Show estimate if available */}
                       {form.watch("estimated_range_min") && form.watch("estimated_range_max") && (
                         <div className="mt-4 p-3 bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg">
-                          <p className="text-[#1A1A1A] text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
-                          <p className="text-[#1A1A1A]">
+                          <p className="text-white text-sm font-medium mb-1">AI Estimate (Informational Only)</p>
+                          <p className="text-white">
                             AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
                           </p>
-                          <p className="text-[#1A1A1A]/70 text-xs mt-1">{form.watch("estimated_note")}</p>
+                          <p className="text-white/70 text-xs mt-1">{form.watch("estimated_note")}</p>
                         </div>
                       )}
                     </div>
@@ -1077,7 +1077,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Condition & Upgrades</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Tell us about the property's condition and any improvements</p>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>Tell us about the property's condition and any improvements</p>
                     </div>
 
                     <div className="space-y-4">
@@ -1088,7 +1088,7 @@ Requirements:
                           onCheckedChange={(checked) => form.setValue("is_furnished", checked as boolean)}
                           className="border-[#B89555]/30"
                         />
-                        <Label htmlFor="is_furnished" className="text-[#1A1A1A] cursor-pointer">
+                        <Label htmlFor="is_furnished" className="text-white cursor-pointer">
                           Property is furnished
                         </Label>
                       </div>
@@ -1100,7 +1100,7 @@ Requirements:
                           onCheckedChange={(checked) => form.setValue("has_upgrades", checked as boolean)}
                           className="border-[#B89555]/30"
                         />
-                        <Label htmlFor="has_upgrades" className="text-[#1A1A1A] cursor-pointer">
+                        <Label htmlFor="has_upgrades" className="text-white cursor-pointer">
                           Property has upgrades/renovations
                         </Label>
                       </div>
@@ -1108,23 +1108,23 @@ Requirements:
 
                     {form.watch("has_upgrades") && (
                       <div>
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Upgrade Details</Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Upgrade Details</Label>
                         <Textarea
                           {...form.register("upgrade_details")}
                           placeholder="Describe any upgrades, renovations, or improvements..."
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1 min-h-[100px]"
+                          className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1 min-h-[100px]"
                         />
                       </div>
                     )}
 
                     <div>
-                      <Label className="font-semibold mb-3 block" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Key Highlights (up to 10)</Label>
+                      <Label className="font-semibold mb-3 block" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Key Highlights (up to 10)</Label>
                       <div className="flex gap-2 mb-3">
                         <Input
                           value={newHighlight}
                           onChange={(e) => setNewHighlight(e.target.value)}
                           placeholder="e.g., Sea view, Private pool, Smart home"
-                          className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70"
+                          className="bg-white/10 border border-white/25 text-white placeholder:text-white/70"
                           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addHighlight())}
                         />
                         <Button 
@@ -1140,7 +1140,7 @@ Requirements:
                         {highlights.map((highlight, index) => (
                           <span 
                             key={index}
-                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#EFE6D6]/10 text-[#1A1A1A] rounded-full text-sm border border-[#B89555]/20"
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-[#EFE6D6]/10 text-white rounded-full text-sm border border-[#B89555]/20"
                           >
                             {highlight}
                             <button 
@@ -1158,14 +1158,14 @@ Requirements:
                     {/* Listing Description with AI Generator */}
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <Label className="font-semibold" style={{color:"#064E3B",WebkitTextFillColor:"#064E3B",fontSize:"13px",letterSpacing:"0.01em"}}>Listing Description</Label>
+                        <Label className="font-semibold" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",fontSize:"13px",letterSpacing:"0.01em"}}>Listing Description</Label>
                         <Button
                           type="button"
                           variant="outline"
                           size="sm"
                           onClick={generateListingDescription}
                           disabled={isGeneratingDescription || !form.getValues("property_type")}
-                          className="border-[#B89555] text-[#1A1A1A] hover:bg-[#EFE6D6]/10 text-xs"
+                          className="border-[#B89555] text-white hover:bg-[#EFE6D6]/10 text-xs"
                         >
                           {isGeneratingDescription ? (
                             <Loader2 className="w-3 h-3 mr-1 animate-spin" />
@@ -1178,9 +1178,9 @@ Requirements:
                       <Textarea
                         {...form.register("listing_description")}
                         placeholder="Describe your property or use AI to generate a professional description..."
-                        className="bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 mt-1 min-h-[150px]"
+                        className="bg-white/10 border border-white/25 text-white placeholder:text-white/70 mt-1 min-h-[150px]"
                       />
-                      <p className="text-[#1A1A1A]/70 text-xs mt-1">
+                      <p className="text-white/70 text-xs mt-1">
                         This description will be used in marketing materials (you can edit it)
                       </p>
                     </div>
@@ -1198,13 +1198,13 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Media Uploads</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Upload photos and videos of your property</p>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>Upload photos and videos of your property</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* Photos */}
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium mb-2 block">Property Photos</Label>
+                        <Label className="text-white font-medium mb-2 block">Property Photos</Label>
                         <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
@@ -1215,19 +1215,19 @@ Requirements:
                             id="photo-upload"
                           />
                           <label htmlFor="photo-upload" className="cursor-pointer">
-                            <Camera className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                            <p className="text-[#1A1A1A]/70">Click to upload photos</p>
-                            <p className="text-[#1A1A1A]/70 text-xs mt-1">JPG, PNG up to 10MB each</p>
+                            <Camera className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                            <p className="text-white/70">Click to upload photos</p>
+                            <p className="text-white/70 text-xs mt-1">JPG, PNG up to 10MB each</p>
                           </label>
                         </div>
                         {photoFiles.length > 0 && (
-                          <p className="text-[#1A1A1A] text-sm mt-2">{photoFiles.length} photo(s) selected</p>
+                          <p className="text-white text-sm mt-2">{photoFiles.length} photo(s) selected</p>
                         )}
                       </div>
 
                       {/* Videos */}
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium mb-2 block">Property Videos (optional)</Label>
+                        <Label className="text-white font-medium mb-2 block">Property Videos (optional)</Label>
                         <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
@@ -1238,19 +1238,19 @@ Requirements:
                             id="video-upload"
                           />
                           <label htmlFor="video-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                            <p className="text-[#1A1A1A]/70">Click to upload videos</p>
-                            <p className="text-[#1A1A1A]/70 text-xs mt-1">MP4, MOV up to 100MB each</p>
+                            <Upload className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                            <p className="text-white/70">Click to upload videos</p>
+                            <p className="text-white/70 text-xs mt-1">MP4, MOV up to 100MB each</p>
                           </label>
                         </div>
                         {videoFiles.length > 0 && (
-                          <p className="text-[#1A1A1A] text-sm mt-2">{videoFiles.length} video(s) selected</p>
+                          <p className="text-white text-sm mt-2">{videoFiles.length} video(s) selected</p>
                         )}
                       </div>
 
                       {/* Floor Plans */}
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium mb-2 block">Floor Plans (optional)</Label>
+                        <Label className="text-white font-medium mb-2 block">Floor Plans (optional)</Label>
                         <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
@@ -1261,13 +1261,13 @@ Requirements:
                             id="floorplan-upload"
                           />
                           <label htmlFor="floorplan-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                            <p className="text-[#1A1A1A]/70">Click to upload floor plans</p>
-                            <p className="text-[#1A1A1A]/70 text-xs mt-1">PDF, JPG, PNG</p>
+                            <FileText className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                            <p className="text-white/70">Click to upload floor plans</p>
+                            <p className="text-white/70 text-xs mt-1">PDF, JPG, PNG</p>
                           </label>
                         </div>
                         {floorPlanFiles.length > 0 && (
-                          <p className="text-[#1A1A1A] text-sm mt-2">{floorPlanFiles.length} floor plan(s) selected</p>
+                          <p className="text-white text-sm mt-2">{floorPlanFiles.length} floor plan(s) selected</p>
                         )}
                       </div>
                     </div>
@@ -1285,12 +1285,12 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Documents Vault</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Upload required documents securely. These are only visible to you and our team.</p>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>Upload required documents securely. These are only visible to you and our team.</p>
                     </div>
 
                     <div className="bg-[#EFE6D6]/10 border border-[#B89555]/30 rounded-lg p-4 flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
-                      <p className="text-[#1A1A1A] text-sm">
+                      <Shield className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
+                      <p className="text-white text-sm">
                         Your documents are encrypted and stored securely. Only authorized team members can access them.
                       </p>
                     </div>
@@ -1298,7 +1298,7 @@ Requirements:
                     <div className="space-y-6">
                       {/* Title Deed - REQUIRED */}
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium mb-2 flex items-center gap-2">
+                        <Label className="text-white font-medium mb-2 flex items-center gap-2">
                           Title Deed <span className="text-red-500">*</span>
                           {!titleDeedFile && (
                             <span className="text-red-500 text-xs flex items-center gap-1">
@@ -1317,8 +1317,8 @@ Requirements:
                             id="titledeed-upload"
                           />
                           <label htmlFor="titledeed-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                            <p className="text-[#1A1A1A]/70">Upload Title Deed</p>
+                            <FileText className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                            <p className="text-white/70">Upload Title Deed</p>
                           </label>
                         </div>
                         {titleDeedFile && (
@@ -1331,7 +1331,7 @@ Requirements:
 
                       {/* Passport/Emirates ID */}
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium mb-2 block">Passport / Emirates ID</Label>
+                        <Label className="text-white font-medium mb-2 block">Passport / Emirates ID</Label>
                         <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
@@ -1341,8 +1341,8 @@ Requirements:
                             id="passport-upload"
                           />
                           <label htmlFor="passport-upload" className="cursor-pointer">
-                            <User className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                            <p className="text-[#1A1A1A]/70">Upload ID Document</p>
+                            <User className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                            <p className="text-white/70">Upload ID Document</p>
                           </label>
                         </div>
                         {passportFile && (
@@ -1356,7 +1356,7 @@ Requirements:
                       {/* POA (Required if seller type is POA) */}
                       {form.watch("seller_type") === "poa" && (
                         <div>
-                          <Label className="text-[#1A1A1A] font-medium mb-2 flex items-center gap-2">
+                          <Label className="text-white font-medium mb-2 flex items-center gap-2">
                             Power of Attorney <span className="text-red-500">*</span>
                             {!poaFile && (
                               <span className="text-red-500 text-xs flex items-center gap-1">
@@ -1375,8 +1375,8 @@ Requirements:
                               id="poa-upload"
                             />
                             <label htmlFor="poa-upload" className="cursor-pointer">
-                              <FileText className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                              <p className="text-[#1A1A1A]/70">Upload POA Document</p>
+                              <FileText className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                              <p className="text-white/70">Upload POA Document</p>
                             </label>
                           </div>
                           {poaFile && (
@@ -1390,7 +1390,7 @@ Requirements:
 
                       {/* Additional Documents */}
                       <div>
-                        <Label className="text-[#1A1A1A] font-medium mb-2 block">Additional Documents (optional)</Label>
+                        <Label className="text-white font-medium mb-2 block">Additional Documents (optional)</Label>
                         <div className="border-2 border-dashed border-[#B89555]/30 rounded-lg p-6 text-center hover:border-[#B89555] transition-colors bg-[#F7F2EA]">
                           <input
                             type="file"
@@ -1401,12 +1401,12 @@ Requirements:
                             id="additional-upload"
                           />
                           <label htmlFor="additional-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-[#1A1A1A]/70 mx-auto mb-2" />
-                            <p className="text-[#1A1A1A]/70">Upload any other documents</p>
+                            <Upload className="w-8 h-8 text-white/70 mx-auto mb-2" />
+                            <p className="text-white/70">Upload any other documents</p>
                           </label>
                         </div>
                         {additionalDocs.length > 0 && (
-                          <p className="text-[#1A1A1A] text-sm mt-2">{additionalDocs.length} additional document(s) selected</p>
+                          <p className="text-white text-sm mt-2">{additionalDocs.length} additional document(s) selected</p>
                         )}
                       </div>
                     </div>
@@ -1424,49 +1424,49 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold mb-2" data-no-contrast-guard style={{background:"linear-gradient(135deg,#022C22 0%,#0F5132 50%,#064E3B 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",letterSpacing:"-0.01em"}}>Review & Submit</h2>
-                      <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>Please review your information before submitting</p>
+                      <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>Please review your information before submitting</p>
                     </div>
 
                     <div className="space-y-4">
                       {/* Party Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                           <User className="w-4 h-4" />
                           {party} Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-[#1A1A1A]/70">Name:</p>
-                          <p className="text-[#1A1A1A]">{form.getValues("seller_full_name")}</p>
-                          <p className="text-[#1A1A1A]/70">Phone:</p>
-                          <p className="text-[#1A1A1A]">{form.getValues("seller_phone")}</p>
-                          <p className="text-[#1A1A1A]/70">Email:</p>
-                          <p className="text-[#1A1A1A]">{form.getValues("seller_email")}</p>
-                          <p className="text-[#1A1A1A]/70">Type:</p>
-                          <p className="text-[#1A1A1A] capitalize">{form.getValues("seller_type")}</p>
+                          <p className="text-white/70">Name:</p>
+                          <p className="text-white">{form.getValues("seller_full_name")}</p>
+                          <p className="text-white/70">Phone:</p>
+                          <p className="text-white">{form.getValues("seller_phone")}</p>
+                          <p className="text-white/70">Email:</p>
+                          <p className="text-white">{form.getValues("seller_email")}</p>
+                          <p className="text-white/70">Type:</p>
+                          <p className="text-white capitalize">{form.getValues("seller_type")}</p>
                         </div>
                       </div>
 
                       {/* Property Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                           <Building2 className="w-4 h-4" />
                           Property Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-[#1A1A1A]/70">Type:</p>
-                          <p className="text-[#1A1A1A] capitalize">{form.getValues("property_type")}</p>
-                          <p className="text-[#1A1A1A]/70">Location:</p>
-                          <p className="text-[#1A1A1A]">{form.getValues("property_location")}</p>
+                          <p className="text-white/70">Type:</p>
+                          <p className="text-white capitalize">{form.getValues("property_type")}</p>
+                          <p className="text-white/70">Location:</p>
+                          <p className="text-white">{form.getValues("property_location")}</p>
                           {form.getValues("bedrooms") !== undefined && (
                             <>
-                              <p className="text-[#1A1A1A]/70">Bedrooms:</p>
-                              <p className="text-[#1A1A1A]">{form.getValues("bedrooms") === 0 ? "Studio" : form.getValues("bedrooms")}</p>
+                              <p className="text-white/70">Bedrooms:</p>
+                              <p className="text-white">{form.getValues("bedrooms") === 0 ? "Studio" : form.getValues("bedrooms")}</p>
                             </>
                           )}
                           {form.getValues("property_size_sqft") && (
                             <>
-                              <p className="text-[#1A1A1A]/70">Size:</p>
-                              <p className="text-[#1A1A1A]">{form.getValues("property_size_sqft")?.toLocaleString()} sq.ft</p>
+                              <p className="text-white/70">Size:</p>
+                              <p className="text-white">{form.getValues("property_size_sqft")?.toLocaleString()} sq.ft</p>
                             </>
                           )}
                         </div>
@@ -1474,32 +1474,32 @@ Requirements:
 
                       {/* Pricing Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                           <DollarSign className="w-4 h-4" />
                           Pricing
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-[#1A1A1A]/70">Target Price:</p>
-                          <p className="text-[#1A1A1A]">AED {form.getValues("target_selling_price")?.toLocaleString()}</p>
-                          <p className="text-[#1A1A1A]/70">Urgency:</p>
-                          <p className="text-[#1A1A1A]">{form.getValues("selling_urgency")} days</p>
+                          <p className="text-white/70">Target Price:</p>
+                          <p className="text-white">AED {form.getValues("target_selling_price")?.toLocaleString()}</p>
+                          <p className="text-white/70">Urgency:</p>
+                          <p className="text-white">{form.getValues("selling_urgency")} days</p>
                         </div>
                       </div>
 
                       {/* Files Summary */}
                       <div className="bg-[#F7F2EA] border border-[#B89555]/30 rounded-lg p-4">
-                        <h3 className="text-[#1A1A1A] font-semibold mb-3 flex items-center gap-2">
+                        <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                           <FileText className="w-4 h-4" />
                           Uploaded Files
                         </h3>
                         <div className="text-sm space-y-1">
-                          <p className="text-[#1A1A1A]/70">{photoFiles.length} photos uploaded</p>
-                          <p className="text-[#1A1A1A]/70">{videoFiles.length} videos uploaded</p>
+                          <p className="text-white/70">{photoFiles.length} photos uploaded</p>
+                          <p className="text-white/70">{videoFiles.length} videos uploaded</p>
                           <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-[color:var(--emerald-1)]' : 'text-red-500'}`}>
                             {titleDeedFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                             Title Deed {titleDeedFile ? '✓' : '(Required)'}
                           </p>
-                          <p className="text-[#1A1A1A]/70">{passportFile ? "✓" : "✗"} ID Document</p>
+                          <p className="text-white/70">{passportFile ? "✓" : "✗"} ID Document</p>
                           {form.getValues("seller_type") === 'poa' && (
                             <p className={`flex items-center gap-1 ${poaFile ? 'text-[color:var(--emerald-1)]' : 'text-red-500'}`}>
                               {poaFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
@@ -1518,7 +1518,7 @@ Requirements:
                         onCheckedChange={(checked) => form.setValue("submission_confirmed", checked as boolean)}
                         className="mt-1 border-[#B89555]/30"
                       />
-                      <Label htmlFor="submission_confirmed" className="text-[#1A1A1A] cursor-pointer text-sm leading-relaxed">
+                      <Label htmlFor="submission_confirmed" className="text-white cursor-pointer text-sm leading-relaxed">
                         I confirm that all the information provided above is accurate and complete. I understand that 
                         JBJ Global Real Estate will review my submission and contact me to discuss next steps.
                       </Label>
@@ -1608,22 +1608,22 @@ Requirements:
       <Dialog open={showEvaluator} onOpenChange={setShowEvaluator}>
         <DialogContent className="bg-[#FDFBF7] border-[#1A1A1A] text-white">
           <DialogHeader>
-            <DialogTitle className="text-[#1A1A1A] flex items-center gap-2">
+            <DialogTitle className="text-white flex items-center gap-2">
               <Calculator className="w-5 h-5" />
               Property Evaluator
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-sm" style={{color:"#1A1A1A",WebkitTextFillColor:"#1A1A1A",opacity:0.85}}>
+            <p className="text-sm" style={{color:"#FFFFFF",WebkitTextFillColor:"#FFFFFF",opacity:0.85}}>
               Run our AI-powered evaluator to get an informational estimate for your property based on current market data.
             </p>
             <div className="bg-[#F7F2EA]/50 rounded-lg p-4 space-y-2 text-sm">
-              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
-              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
-              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
-              <p className="text-[#1A1A1A]/70"><span className="text-[#1A1A1A]/70">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
+              <p className="text-white/70"><span className="text-white/70">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
+              <p className="text-white/70"><span className="text-white/70">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
+              <p className="text-white/70"><span className="text-white/70">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
+              <p className="text-white/70"><span className="text-white/70">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
             </div>
-            <p className="text-[#1A1A1A]/70 text-xs">
+            <p className="text-white/70 text-xs">
               Note: This is an AI-generated informational estimate only and should not be relied upon for pricing decisions.
             </p>
             <div className="flex gap-3 justify-end">
