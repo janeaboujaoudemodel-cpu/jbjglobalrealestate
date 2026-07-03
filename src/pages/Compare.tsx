@@ -799,13 +799,15 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
               <Link to="/compare-manual">
                 <button
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
-                  style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "0", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
+                  className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                  style={{ backgroundImage: EMERALD_CARD, color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.30)", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.82), inset 0 1px 0 rgba(255,255,255,0.16)" }}
                   data-no-contrast-guard
+                  data-allow-dark-cta
                 >
-                  <span className="allow-white" style={{ color: "#FFFFFF" }}>Compare manually</span>
+                  <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Compare manually</span>
                 </button>
               </Link>
+
 
               {aiAnalysis && (
                 <>
