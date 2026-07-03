@@ -68,10 +68,16 @@ const Section = ({
   return (
     <section
       id={id}
-      className={`py-8 md:py-10 lg:py-12 bg-[#1A1A1A] ${className}`}
+      data-surface="light"
+      data-no-contrast-guard
+      className={`py-8 md:py-10 lg:py-12 ${className}`}
     >
       <div className="jj-section-gutter">
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]">
+        <div
+          data-surface="light"
+          data-no-contrast-guard
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]"
+        >
           <div className="max-w-[1100px] mx-auto">
             {children}
           </div>
@@ -404,10 +410,11 @@ const About = () => {
                       key={label}
                       data-allow-dark-cta
                       data-no-contrast-guard
-                      className="allow-white rounded-lg p-5 border border-[#B89555]/40"
-                      style={{ background: '#0A0A0A' }}
+                      data-surface="emerald"
+                      className="allow-white rounded-xl p-5 border border-white/15 shadow-[0_10px_24px_-12px_rgba(4,44,28,0.9),inset_0_1px_0_rgba(255,255,255,0.16)]"
+                      style={{ background: 'linear-gradient(135deg,#064E3B 0%,#053a2c 55%,#031f18 100%)' }}
                     >
-                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} />
+                      <Icon className="w-7 h-7 mb-3" style={{ color: '#FFFFFF' }} strokeWidth={2} />
                       <p className="text-base font-semibold" style={{ color: '#FFFFFF' }}>{label}</p>
                     </div>
                   ))}

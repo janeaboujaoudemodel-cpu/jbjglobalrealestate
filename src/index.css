@@ -27623,10 +27623,11 @@ html body #root [data-insights-page] section[data-no-section-frame] {
   border: 0 !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+}
+/* Keep the inner emerald card sized like every other section card — never edge-to-edge. */
+html body #root section#ready-to-get-started > .jj-content-track,
+html body #root section[data-no-section-frame] > .jj-content-track {
+  width: min(calc(100% - clamp(2rem, 5vw, 6rem)), 1100px) !important;
+  max-width: 1100px !important;
+  margin-inline: auto !important;
 }

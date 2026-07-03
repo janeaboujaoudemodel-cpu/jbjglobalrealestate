@@ -349,7 +349,7 @@ export const PublicRoutes = () => (
 
     {/* ── Company ── (wrapped in InsightsPageScope for MI brand contract) */}
     <Route path="/contact" element={<InsightsPageScope><Contact /></InsightsPageScope>} />
-    <Route path="/about" element={<InsightsPageScope><About /></InsightsPageScope>} />
+    <Route path="/about" element={<About />} />
     <Route path="/founder" element={<InsightsPageScope><Founder /></InsightsPageScope>} />
     <Route path="/awards" element={<InsightsPageScope><Awards /></InsightsPageScope>} />
     <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
