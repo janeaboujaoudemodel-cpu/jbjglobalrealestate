@@ -686,10 +686,10 @@ Requirements:
  ? 'border-white/80 text-white [&_svg]:!text-white'
  : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
  }`}
-                  style={currentStep === step.number
-                    ? { background: 'linear-gradient(135deg, #065F46 0%, #0F5132 100%)' }
+                   style={currentStep === step.number
+                    ? { background: 'var(--jj-official-emerald-surface, #064E3B)', backgroundColor: '#064E3B' }
                     : currentStep > step.number
-                      ? { backgroundColor: 'rgba(255,255,255,0.18)' }
+                      ? { background: 'var(--jj-official-emerald-surface, #064E3B)', backgroundColor: '#064E3B' }
                       : { backgroundColor: 'rgba(255,255,255,0.08)' }
                   }>
 
