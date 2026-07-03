@@ -298,10 +298,13 @@ const Developers = () => {
         </section>
 
         {/* Scroll sentinel for two-phase filter fix */}
-        <div ref={filterSentinelRef} className="h-0 bg-[#010806]" />
+        <div ref={filterSentinelRef} className="h-0" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }} />
 
-        {/* Filters Section — separated below the hero, full-width within the main shell, no gold/double borders */}
-        <section className="relative z-40 bg-[#010806] pt-8 pb-5 border-y border-white/10">
+        {/* Filters Section — emerald rail (never near-black), no gold/double borders */}
+        <section
+          className="relative z-40 pt-8 pb-5 border-y border-white/12"
+          style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
+        >
           <div className="w-full px-3 sm:px-4">
             <div className="p-0">
               <FilterShortcutBar
