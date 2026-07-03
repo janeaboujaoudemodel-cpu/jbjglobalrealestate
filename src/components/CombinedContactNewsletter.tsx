@@ -46,7 +46,9 @@ const CombinedContactNewsletter = ({
   return (
     <section
       id={id}
-      className={`w-full py-12 md:py-20 ${className}`}
+      data-no-section-frame
+      className={`w-full py-12 md:py-20 bg-transparent border-0 shadow-none ${className}`}
+      style={{ background: "transparent", border: 0, boxShadow: "none", padding: undefined }}
     >
       <ContentTrack>
         <div
