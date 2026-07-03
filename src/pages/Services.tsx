@@ -425,13 +425,22 @@ const Services = () => {
             className="w-full px-4 sm:px-6 lg:px-8"
           >
             <motion.div className="text-center mb-12" variants={fadeInUp}>
-              <span className="text-[#1A1A1A] text-xs uppercase tracking-[0.3em] mb-4 block">
+              <span
+                data-no-contrast-guard
+                className="text-xs uppercase tracking-[0.3em] mb-4 block font-semibold"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 Service Scope
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1A1A1A]">
+              <h2
+                data-no-contrast-guard
+                className="text-3xl md:text-4xl font-bold mb-4"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
                 How Our Services Work
               </h2>
             </motion.div>
+
 
             <motion.div 
               className="max-w-4xl mx-auto"
