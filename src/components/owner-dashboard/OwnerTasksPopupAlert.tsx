@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { X, AlertTriangle, ArrowRight } from "lucide-react";
@@ -134,10 +134,20 @@ export function OwnerTasksPopupAlert() {
           className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
         >
           <X
+            ref={(el) => {
+              if (!el) return;
+              el.style.setProperty("color", "#FFFFFF", "important");
+              el.style.setProperty("stroke", "#FFFFFF", "important");
+              el.style.setProperty("opacity", "1", "important");
+              el.querySelectorAll("path").forEach((p) => {
+                p.style.setProperty("stroke", "#FFFFFF", "important");
+              });
+            }}
             className="w-5 h-5"
             data-no-contrast-guard
             strokeWidth={2.5}
-            style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }}
+            color="#FFFFFF"
+            stroke="#FFFFFF"
           />
         </button>
 
