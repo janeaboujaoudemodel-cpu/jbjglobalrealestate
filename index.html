@@ -89,22 +89,58 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
 
-    <!-- JSON-LD: SiteNavigationElement -->
+    <!-- JSON-LD: WebSite + Organization (static fallback for JS-blind crawlers) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Main Navigation",
-      "itemListElement": [
-        { "@type": "SiteNavigationElement", "position": 1, "name": "Buy Property", "url": "https://jbj.ae/properties" },
-        { "@type": "SiteNavigationElement", "position": 2, "name": "Sell Property", "url": "https://jbj.ae/sell" },
-        { "@type": "SiteNavigationElement", "position": 3, "name": "Rent Property", "url": "https://jbj.ae/rent" },
-        { "@type": "SiteNavigationElement", "position": 4, "name": "Areas Guide", "url": "https://jbj.ae/areas" },
-        { "@type": "SiteNavigationElement", "position": 5, "name": "Developers", "url": "https://jbj.ae/developers" },
-        { "@type": "SiteNavigationElement", "position": 6, "name": "Mortgage Calculator", "url": "https://jbj.ae/mortgage-calculator" },
-        { "@type": "SiteNavigationElement", "position": 7, "name": "Golden Visa Guide", "url": "https://jbj.ae/golden-visa-guide" },
-        { "@type": "SiteNavigationElement", "position": 8, "name": "About Us", "url": "https://jbj.ae/about" },
-        { "@type": "SiteNavigationElement", "position": 9, "name": "Contact", "url": "https://jbj.ae/contact" }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.jbj.ae/#website",
+          "url": "https://www.jbj.ae/",
+          "name": "JBJ Global Real Estate",
+          "description": "Dubai's premier RERA-licensed real estate brokerage.",
+          "publisher": { "@id": "https://www.jbj.ae/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": { "@type": "EntryPoint", "urlTemplate": "https://www.jbj.ae/properties?q={search_term_string}" },
+            "query-input": "required name=search_term_string"
+          },
+          "inLanguage": "en"
+        },
+        {
+          "@type": "RealEstateAgent",
+          "@id": "https://www.jbj.ae/#organization",
+          "name": "JBJ Global Real Estate",
+          "url": "https://www.jbj.ae/",
+          "logo": "https://www.jbj.ae/logo.png",
+          "image": "https://www.jbj.ae/og-image.webp",
+          "telephone": "+971547167107",
+          "email": "contact@jbj.ae",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dubai",
+            "addressRegion": "Dubai",
+            "addressCountry": "AE"
+          },
+          "areaServed": ["Dubai", "Abu Dhabi", "Sharjah", "United Arab Emirates"],
+          "founder": { "@type": "Person", "name": "Jane Bou Jaoude" }
+        },
+        {
+          "@type": "ItemList",
+          "name": "Main Navigation",
+          "itemListElement": [
+            { "@type": "SiteNavigationElement", "position": 1, "name": "Buy Property", "url": "https://www.jbj.ae/properties" },
+            { "@type": "SiteNavigationElement", "position": 2, "name": "Sell Property", "url": "https://www.jbj.ae/sell" },
+            { "@type": "SiteNavigationElement", "position": 3, "name": "Rent Property", "url": "https://www.jbj.ae/rent" },
+            { "@type": "SiteNavigationElement", "position": 4, "name": "Areas Guide", "url": "https://www.jbj.ae/areas" },
+            { "@type": "SiteNavigationElement", "position": 5, "name": "Developers", "url": "https://www.jbj.ae/developers" },
+            { "@type": "SiteNavigationElement", "position": 6, "name": "Mortgage Calculator", "url": "https://www.jbj.ae/mortgage-calculator" },
+            { "@type": "SiteNavigationElement", "position": 7, "name": "Golden Visa Guide", "url": "https://www.jbj.ae/golden-visa-guide" },
+            { "@type": "SiteNavigationElement", "position": 8, "name": "About Us", "url": "https://www.jbj.ae/about" },
+            { "@type": "SiteNavigationElement", "position": 9, "name": "Contact", "url": "https://www.jbj.ae/contact" }
+          ]
+        }
       ]
     }
     </script>
