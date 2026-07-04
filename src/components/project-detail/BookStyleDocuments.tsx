@@ -87,7 +87,8 @@ export default function BookStyleDocuments({
           <button
             onClick={() => scroll("left")}
             aria-label="Scroll left"
-            className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-[#1A1A1A] rounded-full p-2 text-[#F7F2EA] ring-1 ring-[#B89555]/60 shadow-lg hover:bg-[#1A1A1A]/90 transition-colors"
+            data-icon-circle="true"
+            className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 bg-[#1A1A1A] rounded-full w-9 h-9 min-w-9 min-h-9 aspect-square p-0 inline-grid place-items-center text-[#F7F2EA] ring-1 ring-[#B89555]/60 shadow-lg hover:bg-[#1A1A1A]/90 transition-colors overflow-hidden"
             data-no-contrast-guard
           >
             <ChevronLeft className="w-4 h-4 allow-white" />
@@ -95,7 +96,8 @@ export default function BookStyleDocuments({
           <button
             onClick={() => scroll("right")}
             aria-label="Scroll right"
-            className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 bg-[#1A1A1A] rounded-full p-2 text-[#F7F2EA] ring-1 ring-[#B89555]/60 shadow-lg hover:bg-[#1A1A1A]/90 transition-colors"
+            data-icon-circle="true"
+            className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 bg-[#1A1A1A] rounded-full w-9 h-9 min-w-9 min-h-9 aspect-square p-0 inline-grid place-items-center text-[#F7F2EA] ring-1 ring-[#B89555]/60 shadow-lg hover:bg-[#1A1A1A]/90 transition-colors overflow-hidden"
             data-no-contrast-guard
           >
             <ChevronRight className="w-4 h-4 allow-white" />
@@ -145,9 +147,9 @@ export default function BookStyleDocuments({
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
               {/* Top-right type chip — approved emerald label, pure white content */}
-              <div data-emerald-action="true" className="jj-emerald-action absolute top-3 right-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full shadow-sm">
-                <span className="text-white">{icon}</span>
-                <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-white">{typeLabel}</span>
+              <div data-emerald-action="true" className="jj-emerald-action absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full shadow-sm max-w-[112px]">
+                <span className="text-white [&>svg]:w-3 [&>svg]:h-3">{icon}</span>
+                <span className="text-[8px] uppercase tracking-[0.12em] font-bold text-white truncate">{typeLabel}</span>
               </div>
 
               {/* Bottom label panel — emerald fill, pure white text */}
