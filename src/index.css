@@ -29655,8 +29655,8 @@ html body :is(.form-checkbox-row, [data-checkbox-row], .items-start:has([data-em
   -webkit-text-fill-color: currentColor !important;
 }
 
-html body [data-account-menu-content],
-html body [data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-surface="emerald"], [data-surface="emerald"] *, [data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .jj-surface-emerald, .jj-surface-emerald *, .jj-official-emerald, .jj-official-emerald *, .jj-emerald-action, .jj-emerald-action *, .jj-pill-emerald, .jj-pill-emerald *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *, .jj-chip-emerald, .jj-chip-emerald *, .jj-header-premium-control, .jj-header-premium-control *, .allow-white, .allow-white *)) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
@@ -29664,20 +29664,21 @@ html body [data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,smal
 
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"], [role="menuitem"], [cmdk-item], .jbj-form-option, [data-radix-select-item], [data-radix-dropdown-menu-item]
-):is(:hover,[data-highlighted],[aria-selected="true"],[data-selected="true"]):not(:where([data-surface="emerald"], [data-surface="emerald"] *)) {
-  background: rgba(6,78,59,0.10) !important;
-  background-image: none !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
+):is(:hover,[data-highlighted],[aria-selected="true"],[data-selected="true"],[data-state="checked"],[data-jbj-dropdown-selected="true"]):not([data-mode-card]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  background-color: #042C1C !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   border-radius: 8px !important;
 }
 
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"], [role="menuitem"], [cmdk-item], .jbj-form-option, [data-radix-select-item], [data-radix-dropdown-menu-item]
-):is(:hover,[data-highlighted],[aria-selected="true"],[data-selected="true"]):not(:where([data-surface="emerald"], [data-surface="emerald"] *)) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
+):is(:hover,[data-highlighted],[aria-selected="true"],[data-selected="true"],[data-state="checked"],[data-jbj-dropdown-selected="true"]):not([data-mode-card]) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
 
 html body :is([data-icon-circle="true"], .jj-icon-circle-lock, .jj-floating-action, [data-floating-action], [aria-label*="Scroll" i]) {
