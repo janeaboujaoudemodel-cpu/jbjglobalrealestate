@@ -28711,3 +28711,131 @@ html body :is(
   border-color: rgba(255,255,255,0.32) !important;
   box-shadow: 0 0 0 2px rgba(255,255,255,0.08) !important;
 }
+
+/* ============================================================================
+ * PASS 220 — GLOBAL DROPDOWN CHAMPAGNE SURFACE + EMERALD ACCENT LOCK
+ *
+ * Site-wide rule (locked):
+ *   - All dropdowns (Select, Popover, Combobox, DropdownMenu, Command palette)
+ *     render on a champagne/gold luxury surface with dark ink text.
+ *   - Hover / active / selected row = emerald→black metallic gradient with
+ *     pure white text + white icons.
+ *
+ * Exceptions (opt-out):
+ *   - [data-account-menu-content]  → user account dropdown in the horizontal
+ *                                     header stays emerald (per spec).
+ *   - [data-preserve-surface]      → escape hatch for calendars / custom UI.
+ *
+ * Non-popper surfaces (the emerald filter search bar, the Contact Us CTA) are
+ * NOT affected by these rules — they're inputs/buttons, not popper content.
+ * ============================================================================ */
+
+/* Champagne surface for every popper container we don't explicitly exclude. */
+html body [data-radix-popper-content-wrapper] > *:not([data-account-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]) {
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-color: #FDFBF7 !important;
+  border: 1px solid rgba(184, 149, 85, 0.42) !important;
+  box-shadow:
+    0 18px 48px -18px rgba(26, 26, 26, 0.35),
+    0 2px 8px rgba(184, 149, 85, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  color: #1A1A1A !important;
+}
+
+/* Row resting state = dark ink on champagne. */
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  [cmdk-item],
+  [data-radix-select-item],
+  [data-radix-dropdown-menu-item]
+) {
+  color: #1A1A1A !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"],
+  [role="menuitem"],
+  [cmdk-item],
+  [data-radix-select-item]
+) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"],
+  [role="menuitem"],
+  [cmdk-item],
+  [data-radix-select-item]
+) svg {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+/* Hover / active / selected = emerald→black metallic with white ink+icons. */
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"]:hover,
+  [role="option"][data-highlighted],
+  [role="option"][aria-selected="true"],
+  [role="option"][data-state="checked"],
+  [role="menuitem"]:hover,
+  [role="menuitem"][data-highlighted],
+  [role="menuitemcheckbox"][data-highlighted],
+  [role="menuitemradio"][data-highlighted],
+  [cmdk-item]:hover,
+  [cmdk-item][data-selected="true"],
+  [data-radix-select-item][data-state="checked"],
+  [data-radix-select-item][data-highlighted],
+  [data-radix-dropdown-menu-item][data-highlighted]
+) {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  background-color: #042C1C !important;
+  color: #FFFFFF !important;
+  border-radius: 8px !important;
+}
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"]:hover,
+  [role="option"][data-highlighted],
+  [role="option"][aria-selected="true"],
+  [role="option"][data-state="checked"],
+  [role="menuitem"]:hover,
+  [role="menuitem"][data-highlighted],
+  [cmdk-item]:hover,
+  [cmdk-item][data-selected="true"],
+  [data-radix-select-item][data-state="checked"],
+  [data-radix-select-item][data-highlighted]
+) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"]:hover,
+  [role="option"][data-highlighted],
+  [role="option"][aria-selected="true"],
+  [role="option"][data-state="checked"],
+  [role="menuitem"]:hover,
+  [role="menuitem"][data-highlighted],
+  [cmdk-item]:hover,
+  [cmdk-item][data-selected="true"],
+  [data-radix-select-item][data-state="checked"],
+  [data-radix-select-item][data-highlighted]
+) svg {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
+/* Group labels / separators inside champagne popovers stay muted-ink. */
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="group"] > [role="presentation"],
+  [role="separator"],
+  [data-radix-select-label],
+  [cmdk-group-heading]
+) {
+  color: rgba(26, 26, 26, 0.55) !important;
+  border-color: rgba(184, 149, 85, 0.28) !important;
+}
