@@ -478,15 +478,7 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Not Sure Which Service — matches Ready to Get Started card exactly (same component) */}
-      <CombinedContactNewsletter
-        id="not-sure-which-service"
-        title="Not Sure Which Service You Need?"
-        subtitle="Send one request and our team will route it to the right department."
-        className="jj-band bg-[#F7F2EA] pt-6 pb-14"
-      />
-
-      {/* Footer Disclaimer — moved to the very end */}
+      {/* Footer Disclaimer — sits directly under the scope card */}
       <section data-surface="champagne" data-no-section-frame className="bg-[#F7F2EA] pt-2 pb-10">
         <div className="container mx-auto px-4 text-center">
           <p
@@ -499,6 +491,15 @@ const Services = () => {
           </p>
         </div>
       </section>
+
+      {/* Not Sure Which Service — pushed to the very end, under the licensed-brokerage disclaimer */}
+      <CombinedContactNewsletter
+        id="not-sure-which-service"
+        title="Not Sure Which Service You Need?"
+        subtitle="Send one request and our team will route it to the right department."
+        className="jj-band bg-[#F7F2EA] pt-6 pb-14"
+      />
+
 
 
     </div>
