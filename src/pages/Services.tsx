@@ -323,14 +323,15 @@ const Services = () => {
               </h2>
               <p
                 data-no-contrast-guard
-                className="max-w-2xl mx-auto"
-                style={{ color: "rgba(26,26,26,0.75)", WebkitTextFillColor: "rgba(26,26,26,0.75)" }}
+                className="max-w-2xl mx-auto text-center"
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
               >
                 Select a service to view the full process, requirements, and timelines.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 max-w-[1280px] mx-auto items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 max-w-[1280px] mx-auto items-stretch">
+
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp} className="h-full">
                   <Link to={service.link} className="block h-full">
