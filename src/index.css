@@ -29062,14 +29062,15 @@ html body[data-ai-tools-scope="true"] [data-radix-popper-content-wrapper] :is(
 }
 
 /* =====================================================================
-   FINAL HERO + EMERALD CONTRAST LOCK — project-wide runtime proof target.
-   - Project hero photo starts at the post-sidebar content edge and spans to
-     the post-sidebar right edge without any inner gutter.
-   - Any own-emerald surface/control renders pure white text and icons only.
-   Keep this last so older champagne/ink guards cannot repaint emerald UI.
+   FINAL NON-HOMEPAGE HERO + SURFACE CONTRAST LOCK.
+   Scope guard: homepage/header/sidebar/footer stay untouched.
    ===================================================================== */
-html body #root main.jj-main-shell section.jj-project-hero {
+html body:not([data-homepage]) #root main.jj-main-shell:not(.jj-main-shell--standalone) [data-content-gutter="1"] > :is(section.jj-project-hero, .jj-hero-fullscreen, [data-hero-dark]),
+html body:not([data-homepage]) #root main.jj-main-shell:not(.jj-main-shell--standalone) [data-content-gutter="1"] :is(section.jj-project-hero, .jj-hero-fullscreen, [data-hero-dark]):not(.jj-content-track *):not(.jj-project-shell *):not(.jj-global-container *) {
   display: block !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
   width: 100% !important;
   max-width: 100% !important;
   margin-left: 0 !important;
@@ -29081,15 +29082,81 @@ html body #root main.jj-main-shell section.jj-project-hero {
   box-sizing: border-box !important;
 }
 
-html body #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0,
-html body #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0 :is(img, picture, video) {
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
+html body:not([data-homepage]) #root main.jj-main-shell section.jj-project-hero,
+html body:not([data-homepage]) #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0,
+html body:not([data-homepage]) #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0 :is(img, picture, video),
+html body:not([data-homepage]) #root main.jj-main-shell .jj-hero-fullscreen > :is(img, picture, video),
+html body:not([data-homepage]) #root main.jj-main-shell [data-hero-dark] > :is(img, picture, video) {
   border-radius: 0 !important;
 }
 
+html body:not([data-homepage]) #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0,
+html body:not([data-homepage]) #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0 :is(img, picture, video) {
+  inset-inline: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Champagne/gold surfaces: black ink only. */
+html body :is(
+  .jj-premium-shell,
+  .surface-champagne,
+  .surface-gold,
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  [data-studio-surface="champagne"],
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#fdfbf7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#f7f2ea]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#efe6d6]"],
+  [class~="from-[#FDFBF7]"],
+  [class~="from-[#fdfbf7]"],
+  [class~="via-[#F7F2EA]"],
+  [class~="via-[#f7f2ea]"],
+  [class~="to-[#EFE6D6]"],
+  [class~="to-[#efe6d6]"],
+  [class~="from-gold"],
+  [class~="via-gold-light"],
+  [class~="to-gold"]
+) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body :is(
+  .jj-premium-shell,
+  .surface-champagne,
+  .surface-gold,
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  [data-studio-surface="champagne"],
+  [class~="bg-[#FDFBF7]"],
+  [class~="bg-[#fdfbf7]"],
+  [class~="bg-[#F7F2EA]"],
+  [class~="bg-[#f7f2ea]"],
+  [class~="bg-[#EFE6D6]"],
+  [class~="bg-[#efe6d6]"],
+  [class~="from-[#FDFBF7]"],
+  [class~="from-[#fdfbf7]"],
+  [class~="via-[#F7F2EA]"],
+  [class~="via-[#f7f2ea]"],
+  [class~="to-[#EFE6D6]"],
+  [class~="to-[#efe6d6]"],
+  [class~="from-gold"],
+  [class~="via-gold-light"],
+  [class~="to-gold"]
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"]):not([data-surface="emerald"]):not([data-surface="emerald"] *):not(.jj-surface-emerald):not(.jj-surface-emerald *):not(.jj-emerald-action):not(.jj-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not(.jj-header-premium-control):not(.jj-header-premium-control *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* Emerald surfaces: pure white ink/icons only. */
 html body :is(
   .jj-surface-emerald,
   .jj-official-emerald,
