@@ -244,12 +244,21 @@ const SUB_NAV_TABS = [
 
 const normalizeDocType = (value: string) => value.toLowerCase().trim().replace(/[\s-]+/g, "_");
 
-export default function ProjectDetailLayout({
+export default function ProjectDetailLayout(props: ProjectDetailLayoutProps) {
+  return (
+    <ProjectEditModeProvider>
+      <ProjectDetailLayoutInner {...props} />
+    </ProjectEditModeProvider>
+  );
+}
+
+function ProjectDetailLayoutInner({
   project,
   adminBar,
   onRequestReport,
   showFooter = true,
 }: ProjectDetailLayoutProps) {
+  const { editMode: projectEditMode, toggle: toggleProjectEditMode } = useProjectEditMode();
   const { formatPrice: formatPriceUtil } = useCurrency();
   const { formatSize, convertSize, unitLabel } = useAreaUnit();
   const [activeTab, setActiveTab] = useState("details");
