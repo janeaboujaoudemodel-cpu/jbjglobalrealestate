@@ -159,7 +159,6 @@ Allow: /
 
 User-agent: *
 Allow: /
-Crawl-delay: 2
 
 # Sitemap location
 Sitemap: https://jbj.ae/sitemap.xml
