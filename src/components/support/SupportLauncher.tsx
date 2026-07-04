@@ -233,11 +233,13 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           whileTap={{ scale: 0.96 }}
-          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center gap-2 h-11 w-11 sm:w-11 sm:px-0 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
+          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center h-11 w-11 sm:w-11 px-0 gap-0 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
           style={{
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
             borderColor: "rgba(52,211,153,0.55)",
+            padding: 0,
+            gap: 0,
           }}
         >
           {open ? (
