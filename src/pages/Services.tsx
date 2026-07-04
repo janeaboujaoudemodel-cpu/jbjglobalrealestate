@@ -210,7 +210,7 @@ const Services = () => {
         data-hero-dark
         data-surface="emerald"
         data-no-contrast-guard
-        className="relative grid place-items-center overflow-hidden min-h-[100svh] h-[100svh] w-full"
+        className="relative left-1/2 grid min-h-[100svh] h-[100svh] w-screen max-w-none -translate-x-1/2 place-items-center overflow-hidden"
         style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
       >
         <video
@@ -265,11 +265,12 @@ const Services = () => {
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2.5 sm:gap-4 mt-28 md:mt-32 w-full">
+          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2.5 sm:gap-4 mt-32 md:mt-40 w-full">
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="jj-btn-ink-black inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
+              data-surface="emerald"
+              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
             >
               <span>Request a Service</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -277,7 +278,8 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="jj-btn-ink-black inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
+              data-surface="emerald"
+              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
             >
               <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Contact Support</span>
@@ -328,13 +330,13 @@ const Services = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 max-w-[1280px] mx-auto items-stretch">
+            <div className="jj-services-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-6 max-w-[1500px] mx-auto items-stretch">
 
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp} className="h-full">
                   <Link to={service.link} className="block h-full">
-                    <Card className="jj-service-card-animated jj-card-inner transition-all group h-full min-h-[510px] flex flex-col">
-                      <CardContent className="relative z-10 p-5 lg:p-6 flex h-full flex-col flex-1">
+                    <Card className="jj-service-card-animated jj-card-inner transition-all group h-full min-h-[430px] flex flex-col rounded-2xl">
+                      <CardContent className="jj-service-card-content relative z-10 p-5 lg:p-6 flex h-full flex-col flex-1">
                         <div
                           data-surface="emerald"
                           data-no-contrast-guard
@@ -344,14 +346,14 @@ const Services = () => {
                           <service.icon className="w-6 h-6 allow-white" style={{ color: "#FFFFFF" }} />
                         </div>
 
-                        <h3 className="font-semibold text-lg mb-2 min-h-[3.25rem] flex items-start" style={{ color: "#1A1A1A" }}>
+                        <h3 className="font-semibold text-lg mb-2 min-h-[2rem] flex items-start" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
-                        <p className="text-sm mb-4 min-h-[5.25rem]" style={{ color: "rgba(26,26,26,0.75)" }}>
+                        <p className="text-sm mb-4 min-h-[5rem]" style={{ color: "rgba(26,26,26,0.75)" }}>
                           {service.description}
                         </p>
 
-                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4 min-h-[9.25rem]">
+                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4 min-h-[8.75rem]">
                           <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "rgba(26,26,26,0.6)" }}>Includes</p>
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
@@ -362,9 +364,6 @@ const Services = () => {
                             ))}
                           </ul>
                         </div>
-
-                        <div className="mb-4 min-h-[1rem]" aria-hidden="true" />
-
 
                         <div className="flex items-center gap-1 text-sm font-semibold mt-auto pt-4 border-t border-[#1A1A1A]/10" style={{ color: "#064E3B" }}>
                           {service.cta}
@@ -417,7 +416,7 @@ const Services = () => {
             >
               <Card
                 data-no-contrast-guard
-                className="border shadow-xl overflow-hidden"
+                className="jj-scope-card jj-emerald-border-animated border shadow-xl overflow-hidden rounded-2xl"
                 style={{
                   background: "#FDFBF7",
                   borderColor: "rgba(6,78,59,0.15)",
@@ -481,6 +480,7 @@ const Services = () => {
         <div className="container mx-auto px-4 text-center">
           <p
             data-no-contrast-guard
+            data-service-disclaimer
             className="jj-disclaimer-card jj-emerald-border-animated text-sm max-w-3xl mx-auto rounded-2xl px-5 py-5"
             style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: "#FDFBF7" }}
           >
@@ -495,7 +495,7 @@ const Services = () => {
         id="not-sure-which-service"
         title="Not Sure Which Service You Need?"
         subtitle="Send one request and our team will route it to the right department."
-        className="jj-band bg-[#F7F2EA] pt-6 pb-14"
+        className="jj-services-final-cta bg-[#F7F2EA]"
       />
 
 
