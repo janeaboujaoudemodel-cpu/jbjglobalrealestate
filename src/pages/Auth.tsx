@@ -189,8 +189,15 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         case "signup": {
           const { error } = await signUp(email, password);
           if (error) {
-            if (error.message.includes("already registered")) {
+            const msg = (error.message || "").toLowerCase();
+            if (msg.includes("already registered")) {
               toast.error("This email is already registered. Please sign in instead.");
+            } else if (msg.includes("pwned") || msg.includes("compromised") || msg.includes("weak_password") || msg.includes("data breach")) {
+              setPasswordSafe(false);
+              setErrors((prev) => ({ ...prev, password: "This password appears in public breach lists. Choose a stronger, unique password." }));
+              toast.error("Password found in public breach lists", {
+                description: "For your safety we can't accept it. Try a longer passphrase, or let a password manager generate one.",
+              });
             } else {
               toast.error(error.message);
             }
