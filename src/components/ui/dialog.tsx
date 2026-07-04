@@ -80,7 +80,7 @@ const DialogContent = React.forwardRef<
 
   return (
     <DialogPortal>
-      <DialogOverlay />
+      {!isAdvancedFilterPanel && <DialogOverlay />}
       <DialogPrimitive.Content
         ref={ref}
         data-surface="light"
