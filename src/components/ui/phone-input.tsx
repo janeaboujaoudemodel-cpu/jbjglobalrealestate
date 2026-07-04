@@ -556,7 +556,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // Flat — no per-row backgrounds, no hover/selected tint. Whole list shares
     // one uniform champagne surface so there are no visible "highlight" boxes
     // around each row.
-    const commandItemStyles = "text-[#1A1A1A] bg-transparent hover:bg-transparent data-[selected=true]:bg-transparent data-[selected=true]:text-[#1A1A1A] aria-selected:bg-transparent";
+    const commandItemStyles = "text-[#1A1A1A] bg-transparent transition-colors duration-75 hover:bg-[#064E3B]/10 hover:text-[#1A1A1A] data-[selected=true]:bg-[#064E3B]/10 data-[selected=true]:text-[#1A1A1A] aria-selected:bg-[#064E3B]/10";
     const commandEmptyStyles = isLight
       ? "text-[#1A1A1A]/70"
       : "text-[#1A1A1A]/70";
