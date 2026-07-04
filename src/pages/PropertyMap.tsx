@@ -445,16 +445,17 @@ const PropertyMap = () => {
           stroke: #FFFFFF !important;
           fill: none !important;
         }
-        /* Idle (unselected) segment/layer buttons: dark emerald ghost with white text */
+        /* Idle (unselected) segment/layer buttons: ink-emerald gradient with white text (no flat green) */
         html body #root [data-map-page] :is(
           .jj-map-segment,
           .jj-map-layer-button,
           .jj-map-filter-toggle
         ):not([data-active="true"]) {
-          background: rgba(6,78,59,0.35) !important;
+          background: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+          background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
           color: #FFFFFF !important;
           -webkit-text-fill-color: #FFFFFF !important;
-          border: 1px solid rgba(255,255,255,0.22) !important;
+          border: 1px solid rgba(184,149,85,0.42) !important;
         }
         html body #root [data-map-page] :is(
           .jj-map-segment,
@@ -463,6 +464,7 @@ const PropertyMap = () => {
         ):not([data-active="true"]) :is(svg, path) {
           color: #FFFFFF !important; stroke: #FFFFFF !important;
         }
+
         /* Close button: circular emerald with white X */
         html body #root [data-map-page] :is(.jj-map-card-close, .jj-map-panel-close) {
           width: 32px !important; height: 32px !important;

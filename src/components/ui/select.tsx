@@ -124,17 +124,17 @@ const SelectContent = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
-      data-surface="emerald"
       data-no-contrast-guard
       className={cn(
         "jbj-form-popover relative z-[120000] max-h-96 min-w-[8rem] overflow-hidden rounded-xl max-w-[calc(100vw-2rem)] duration-0",
-        "text-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/30",
-        "shadow-[0_18px_50px_rgba(0,0,0,0.42),0_0_28px_rgba(6,78,59,0.24)]",
+        "text-[#1A1A1A] border border-[#B89555]/40",
+        "shadow-[0_18px_48px_-18px_rgba(26,26,26,0.35),0_2px_8px_rgba(184,149,85,0.18)]",
         "data-[state=open]:animate-none data-[state=closed]:animate-none",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className,
       )}
+
       position={position}
       {...props}
     >
@@ -217,13 +217,13 @@ const SelectItem = React.forwardRef<
     ref={ref}
       data-no-contrast-guard
     className={cn(
-      "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-white outline-none transition-colors duration-150 whitespace-normal overflow-visible",
+      "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#1A1A1A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:bg-white/12 hover:text-white",
-      "focus:bg-transparent focus:text-white",
-      "data-[highlighted]:bg-transparent data-[highlighted]:text-white data-[highlighted]:hover:bg-white/12",
+      "hover:text-white",
+      "focus:text-white",
+      "data-[highlighted]:text-white",
       "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
-      "data-[state=checked]:bg-transparent data-[state=checked]:text-white data-[state=checked]:font-semibold",
+      "data-[state=checked]:text-white data-[state=checked]:font-semibold",
       className,
     )}
     {...props}
@@ -233,9 +233,10 @@ const SelectItem = React.forwardRef<
     </SelectPrimitive.ItemText>
     <span className="absolute right-2 flex h-4 w-4 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4 text-white" strokeWidth={3} />
+        <Check className="h-4 w-4" strokeWidth={3} />
       </SelectPrimitive.ItemIndicator>
     </span>
+
   </SelectPrimitive.Item>
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
