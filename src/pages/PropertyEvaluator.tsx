@@ -1197,7 +1197,7 @@ const PropertyEvaluator = () => {
                   )}
 
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/85 flex items-center gap-1">
                         Building Name <span className="text-[#B89555]">*</span>
@@ -1226,7 +1226,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 flex items-center gap-1">
                         Community <span className="text-[#B89555]">*</span>
@@ -1275,7 +1275,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70">Property Type</Label>
                       <Select value={property.propertyType} onValueChange={(v: any) => updateProperty('propertyType', v)}>
@@ -1374,7 +1374,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1">
                         Internal Size ({areaUnit === 'sqft' ? 'sq ft' : 'sq m'}) <span className="text-[#B89555]">*</span>
@@ -1408,7 +1408,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Carpet Area (sq ft)</Label>
                       <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} placeholder="e.g., 1,050" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
@@ -1419,7 +1419,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid data-pe-equal-fields>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid data-pe-equal-fields>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Service Charge (AED/sq ft)</Label>
                       <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} placeholder="e.g., 18" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
