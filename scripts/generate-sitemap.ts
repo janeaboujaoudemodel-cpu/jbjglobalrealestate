@@ -67,6 +67,7 @@ const staticEntries: SitemapEntry[] = [
   { path: "/mortgage-calculator", changefreq: "monthly", priority: "0.80" },
   { path: "/golden-visa-guide", changefreq: "monthly", priority: "0.78" },
   { path: "/guides/dubai-rental-yield", changefreq: "monthly", priority: "0.85" },
+  { path: "/insights/future-of-real-estate-2026", changefreq: "monthly", priority: "0.90" },
   { path: "/communities/palm-jumeirah-guide", changefreq: "monthly", priority: "0.85" },
   { path: "/communities/downtown-dubai-guide", changefreq: "monthly", priority: "0.85" },
   { path: "/communities/dubai-marina-guide", changefreq: "monthly", priority: "0.85" },
