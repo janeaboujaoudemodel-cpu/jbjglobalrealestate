@@ -40,7 +40,7 @@ const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
   // developer's real DB signature-project photo (heroImageUrl) — that's
   // the Omniyat-style aerial the user approved and it must not be
   // replaced by a guessed stock photo.
-  emaar: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80", // Downtown Dubai (verified)
+  emaar: ammarCreekHarbourMasterplan, // Dubai Creek Harbour masterplan render (premium)
   damac: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1600&q=80", // Dubai skyline sunset (verified)
   sobha: "https://images.unsplash.com/photo-1512699355324-f07e3106dae5?w=1600&q=80", // aerial residential (verified)
   "select group": "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1600&q=80", // Dubai Marina (verified)
@@ -57,8 +57,6 @@ const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
   "ax capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
   ammar: ammarCreekHarbourMasterplan,
   amar: ammarCreekHarbourMasterplan,
-  // Emaar's flagship Dubai Creek Harbour masterplan render
-  emaar: ammarCreekHarbourMasterplan,
 };
 
 // Match by matching *any* keyword token in the developer name/slug against
