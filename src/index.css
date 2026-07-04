@@ -30166,3 +30166,35 @@ html body :is(.form-checkbox-row, [data-checkbox-row]) :is([data-emerald-ok="che
   background-color: #064E3B !important;
   border-color: #064E3B !important;
 }
+
+/* Validation close-out: nearby map filter chips + DLD split labels. */
+html body #root .jj-map-filter-toggle[data-active="true"],
+html body #root .jj-map-filter-toggle[data-active="true"] * {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .jj-map-filter-toggle[data-active="false"] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root .jj-map-filter-toggle[data-active="false"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body #root [data-dld-split-bar],
+html body #root [data-dld-split-bar] > div,
+html body #root [data-dld-split-bar] span {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+  text-align: center !important;
+}
