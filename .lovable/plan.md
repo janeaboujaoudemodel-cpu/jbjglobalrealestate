@@ -1,68 +1,34 @@
+I will make the requested visual corrections only on non-homepage content and validate them with screenshots before making any completion claim.
 
-## Current state (from audit)
+Scope locks:
+- Do not touch the homepage.
+- Do not touch the vertical sidebar.
+- Do not touch the horizontal header.
+- Do not touch the footer.
+- Keep existing card/content padding rules intact; only hero media bands go edge-to-edge.
 
-The project already has strong perf foundations:
+Implementation plan:
+1. Fix the project hero width source
+   - Update the winning CSS that currently neutralizes full-bleed behavior at the end of `src/index.css`.
+   - The issue is that the final `section.jj-project-hero` rule overrides the earlier full-bleed breakout by forcing `width: 100%` and `margin: 0`, so the hero stays inset inside the content area instead of expanding to the post-sidebar viewport edge.
+   - Replace it with a higher-specificity rule that uses the existing sidebar-aware gutter variables: negative left/right margins and `width: auto`, so the photo starts immediately after the sidebar and reaches the right edge.
+   - Apply the same final lock to `jj-hero-fullscreen` / hero-marked sections on non-homepage pages, without changing normal cards.
 
-- All routes lazy-loaded via `React.lazy` + Suspense across 8 route files
-- Vite `manualChunks` splits react/motion/icons/radix/react-query/supabase/recharts/leaflet/pdf/excel/canvas/parse/voice into separate vendor bundles
-- Fonts preloaded with `display=optional` (no FOIT blocking)
-- 607 raster images (399 PNG + 208 JPG), **0 WebP, 0 AVIF** — biggest remaining opportunity
+2. Fix only contrast rules that are still winning incorrectly
+   - Add a final, explicit surface contract in `src/index.css`:
+     - Emerald backgrounds/surfaces/buttons/tabs/badges: pure white text and icons.
+     - Champagne/gold backgrounds/surfaces/cards: black ink text and icons.
+   - Make the selectors target surfaces and their children so black text inside emerald controls and white text inside champagne/gold cards cannot win from older Tailwind/component classes.
+   - Preserve dark/photo hero white text and opt-out attributes already used in the project hero.
 
-A "Performance ≥95 sitewide" claim requires per-page Lighthouse runs, which I cannot execute for 200+ pages in one turn. I'll do it in phases and measure the deltas honestly.
+3. Scan affected non-homepage pages/components for direct broken classes
+   - Search for remaining `text-white` on champagne/gold surfaces and black/ink text on emerald surfaces.
+   - Patch only clear offenders related to the requested contrast issue.
+   - Do not refactor unrelated UI or change navigation/footer/homepage code.
 
-## Phase 1 — Baseline & measurement infrastructure (this turn)
-
-1. Run production `npm run build` and capture per-chunk sizes
-2. Add `rollup-plugin-visualizer` (dev-only) so you can open `stats.html` to see what's fat
-3. Playwright + Lighthouse against `/`, `/properties`, `/ai-hub`, `/developers`, `/contact` on the built preview — capture LCP, CLS, INP, TTFB, TBT, total transfer size
-4. Report the actual numbers so we can prioritize by impact
-
-## Phase 2 — Image pipeline (biggest LCP win)
-
-1. Install `vite-imagetools` for build-time WebP/AVIF conversion of images imported from `src/assets/`
-2. Add a `<Picture>` helper that emits `<picture><source type=image/avif><source type=image/webp><img></picture>`
-3. Convert LCP images first (hero on `/`, `/properties`, `/services`, `/ai-hub`), then the top ~30 by size
-4. For static `public/` images, batch-convert with `sharp` and keep originals as fallback
-5. Ensure LCP `<img>` gets `fetchpriority="high"` + `loading="eager"`; everything below-the-fold `loading="lazy"` + `decoding="async"`
-6. Add explicit `width`/`height` on every `<img>` to lock CLS to 0
-
-## Phase 3 — JS bundle & INP
-
-1. Analyze `stats.html`; identify any dep pulled in by first-paint that shouldn't be (common culprits: full lodash, moment, unused radix modules, framer-motion in above-fold marketing)
-2. Convert any static `import` in first-paint routes to `import()` where the module is only used on interaction
-3. Audit `<MainLayoutWrapper>` and `GlobalHeader`/sidebar for expensive synchronous work (heavy context providers, map init, chart init) — defer non-critical
-4. Debounce/throttle scroll+resize handlers to protect INP
-
-## Phase 4 — CSS
-
-1. Confirm Tailwind purge is on (default in v3) — check `content` globs in `tailwind.config.ts`
-2. `index.css` is 4300+ lines; measure post-purge output. If large: split page-scoped CSS into per-route stylesheets or convert to Tailwind utilities
-3. Remove unused `@font-face` fallbacks and any dead selectors flagged by build stats
-
-## Phase 5 — Fonts
-
-1. Currently loading 3 families × 8 weights from Google Fonts (~14 files). Subset to the weights actually used (grep JSX for `font-weight`/`font-*` classes) and drop unused weights from the Google URL
-2. Consider self-hosting the used subset (`@fontsource/*`) — removes 2 extra DNS hops
-3. Keep `display=optional` to prevent FOUT blocking LCP
-
-## Phase 6 — Caching & network
-
-1. Confirm Lovable's edge caches static assets under `/assets/*` with immutable+long-max-age (Lovable default — verify)
-2. Add `<link rel="preconnect">` to the Supabase URL + Cloudflare CDN
-3. `preload` the LCP image after Phase 2 lands
-4. Verify Brotli/gzip on responses
-
-## Phase 7 — Validation
-
-1. Re-run Lighthouse on the 5 key pages after each phase, report deltas
-2. If Performance ≥95 not hit on a page, drill in with a per-page recommendation (usually a specific image or a specific chart lib)
-
-## Non-goals (call out explicitly)
-
-- **TTFB is Lovable's edge/SSG concern** — this is a client-rendered SPA, so TTFB improvements are bounded by hosting. Real TTFB wins would require SSR/SSG, which is a separate large project.
-- **Not touching backend / RLS / features** — pure frontend perf pass
-- **Not converting every asset immediately** — will target highest-impact first, then iterate
-
-## What I need from you
-
-Confirm scope: **(A)** do all 7 phases now (I estimate ~4–6 tool-heavy turns before Phase 7 validation), **(B)** just Phase 1 baseline + Phase 2 images (biggest visible win, safer), or **(C)** a different priority ordering. I'll proceed on your signal.
+4. Visual validation before reporting
+   - Use Playwright at the requested route `/project/elwood-sobha-realty-dubailand` and at least one additional non-homepage hero route.
+   - Capture screenshots for desktop/laptop/tablet/phone sizes.
+   - Check the rendered DOM measurements: hero left edge equals the post-sidebar content edge, hero right edge equals viewport right edge, and no card sections were expanded edge-to-edge.
+   - Check contrast samples from emerald and champagne/gold surfaces using computed styles.
+   - If any screenshot still shows inset hero media or wrong contrast, continue patching before reporting.
