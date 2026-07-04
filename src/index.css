@@ -29763,6 +29763,52 @@ html body [data-account-menu-content][data-account-menu-content] :is(a,button,[r
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
+/* Final website-dropdown contrast contract — excludes AI tool scope.
+   Emerald dropdown/picker panels keep pure white foreground; champagne account/search menus stay ink via their own surface rules. */
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-filter-clean][role="dialog"],
+  [data-filter-dropdown],
+  [data-mode-switcher-panel="true"]
+) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
+  background-color: #042C1C !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.24) !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-filter-clean][role="dialog"],
+  [data-filter-dropdown],
+  [data-mode-switcher-panel="true"]
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-filter-clean][role="dialog"],
+  [data-filter-dropdown]
+) :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
+  background: rgba(1, 8, 6, 0.72) !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.32) !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-filter-clean][role="dialog"],
+  [data-filter-dropdown]
+) :is(input, textarea)::placeholder {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
 /* Validation close-out: nearby map filter chips + DLD split labels. */
 html body #root .jj-map-filter-toggle[data-active="true"],
 html body #root .jj-map-filter-toggle[data-active="true"] * {
