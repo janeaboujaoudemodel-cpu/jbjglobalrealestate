@@ -105,6 +105,7 @@ const App = () => {
                     <PrintModeBoundary />
                     <PrintBlockerGuard />
                     <ScrollToTopOnMount />
+                  <AIToolsScopeMarker />
                   <RouteResume />
                   <SEOBreadcrumbs />
                   <CanonicalAndHreflang />
