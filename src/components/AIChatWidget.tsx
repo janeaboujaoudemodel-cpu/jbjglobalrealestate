@@ -625,6 +625,29 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
       const noteContent = `🚨 SUPPORT ESCALATION\n\n👤 User: ${fullName}\n📧 Email: ${userInfo.email}\n📞 Phone: ${userInfo.phone || 'Not provided'}\n🌍 Nationality: ${userInfo.nationality || 'Not specified'}\n🗣️ Language: ${userInfo.language || 'English'}\n📍 Location: ${userInfo.currentLocation || 'Not specified'}\n🏠 Service: ${serviceName}\n📄 Page: ${window.location.pathname}\n\n${inquirySummary ? `📝 User Summary: ${inquirySummary}\n\n` : ''}💬 FULL CONVERSATION TRANSCRIPT:\n${'─'.repeat(40)}\n${transcript}\n${'─'.repeat(40)}\n\n✅ SUGGESTED ACTION: Follow up with ${fullName} regarding ${serviceName.toLowerCase()} inquiry. Contact via ${userInfo.phone || userInfo.email}.`;
 
+      await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: userInfo.email,
+          fullName,
+          phone: userInfo.phone?.replace(/[\s\-\(\)]/g, '') || null,
+          nationality: userInfo.nationality,
+          language: userInfo.language || 'English',
+          currentLocation: userInfo.currentLocation,
+          ageRange: userInfo.ageRange,
+          source: 'ai_chat_escalation',
+          pageSource: window.location.pathname,
+          subSource: `Submitted to team - ${serviceName}`,
+          contactType: 'client',
+          message: inquirySummary || transcript.slice(-1000),
+          context: {
+            serviceName,
+            conversationId,
+            transcript,
+            messageCount: messages.length,
+          },
+        },
+      });
+
       // 3) Save to owner's AI Notes system (best-effort, non-blocking)
       try {
         // Find owner user ID from profiles (crm_role = 'owner')

@@ -589,6 +589,31 @@ export default function JoinApplication() {
 
       if (appError) throw appError;
 
+      await supabase.functions.invoke("capture-lead", {
+        body: {
+          email: user.email!,
+          fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+          phone: formData.phone,
+          nationality: formData.nationality,
+          language: formData.preferredLanguage,
+          currentLocation: [formData.city, formData.country].filter(Boolean).join(", "),
+          source: "career_application",
+          pageSource: window.location.pathname,
+          subSource: positionLabel,
+          contactType: "client",
+          message: `Career application submitted for ${positionLabel}.`,
+          context: {
+            positionApplied: positionLabel,
+            cvUrl: cvPath,
+            qualification: qualKind,
+            dealsClosed: formData.dealsClosed || null,
+            totalDealValue: formData.totalDealValue || null,
+            portfolioLink: formData.portfolioLink || null,
+            githubLink: formData.githubLink || null,
+          },
+        },
+      });
+
       // Notifications & confirmation email
       await Promise.allSettled([
         supabase.functions.invoke("send-cv-status-email", {
@@ -1293,7 +1318,7 @@ export default function JoinApplication() {
                 <div className={currentStep === 4 ? "space-y-7 animate-in fade-in slide-in-from-bottom-2 duration-300" : "hidden"}>
                 {/* Consent */}
                 <div className="space-y-4">
-                  <div className="flex items-start gap-3">
+                  <div className="form-checkbox-row flex items-start gap-3">
                     <Checkbox
                       id="consentAccurate"
                       checked={formData.consentAccurate}
@@ -1307,7 +1332,7 @@ export default function JoinApplication() {
                     </Label>
                   </div>
                   <FieldError id="consentAccurate-err" message={fieldErr("consentAccurate")} />
-                  <div className="flex items-start gap-3">
+                  <div className="form-checkbox-row flex items-start gap-3">
                     <Checkbox
                       id="consentTerms"
                       checked={formData.consentTerms}

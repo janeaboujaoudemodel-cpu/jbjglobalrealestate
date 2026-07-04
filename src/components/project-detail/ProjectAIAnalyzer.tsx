@@ -430,18 +430,18 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Supply vs Demand */}
-              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
+              <div data-surface="emerald" className="jj-market-emerald-card border rounded-2xl p-6 shadow-sm" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)", borderColor: "rgba(184,149,85,0.45)" }}>
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="w-5 h-5" style={{ color: "#064E3B" }} />
-                  <h3 className="font-bold text-[#1A1A1A] text-lg">Supply vs Demand</h3>
+                  <TrendingUp className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+                  <h3 className="font-bold text-lg" style={{ color: "#FFFFFF" }}>Supply vs Demand</h3>
                 </div>
 
                 {absorptionRate !== null ? (
                   <>
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
-                        <span className="text-3xl font-bold" style={{ color: "#064E3B" }}>{absorptionRate}%</span>
-                        <span className="text-sm text-[#1A1A1A] font-semibold mb-0.5">absorption rate</span>
+                        <span className="text-3xl font-bold" style={{ color: "#FFFFFF" }}>{absorptionRate}%</span>
+                        <span className="text-sm font-semibold mb-0.5" style={{ color: "#FFFFFF" }}>absorption rate</span>
                       </div>
                       <div className="relative h-2.5 w-full overflow-hidden rounded-full" style={{ background: "#EFE6D6" }}>
                         <div
@@ -449,19 +449,19 @@ export const ProjectAIAnalyzer = ({
                           style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #B89555, #064E3B)` }}
                         />
                       </div>
-                      <div className="flex justify-between text-[10px] text-[#1A1A1A]/90 font-semibold mt-1">
+                      <div className="flex justify-between text-[10px] font-semibold mt-1" style={{ color: "#FFFFFF" }}>
                         <span>Low Demand</span>
                         <span>High Demand</span>
                       </div>
                     </div>
                     {sections?.supplyDemand && (
-                      <p className="text-[#1A1A1A]/90 text-xs leading-relaxed line-clamp-4 mt-2">
+                      <p className="text-xs leading-relaxed line-clamp-4 mt-2" style={{ color: "#FFFFFF" }}>
                         {cleanMarkdown(sections.supplyDemand)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-[#1A1A1A]/90 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "#FFFFFF" }}>
                     {sections?.supplyDemand ? cleanMarkdown(sections.supplyDemand) : <span className="text-red-600 font-medium">Issue: Supply/demand data not available.</span>}
                   </div>
                 )}
@@ -513,17 +513,17 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Developer Landscape */}
-              <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm">
+              <div data-surface="emerald" className="jj-market-emerald-card border rounded-2xl p-6 shadow-sm" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)", borderColor: "rgba(184,149,85,0.45)" }}>
                 <div className="flex items-center gap-2 mb-3">
-                  <Building2 className="w-5 h-5 text-[#1A1A1A]" />
-                  <h3 className="font-bold text-[#1A1A1A] text-lg">Developer Landscape</h3>
+                  <Building2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
+                  <h3 className="font-bold text-lg" style={{ color: "#FFFFFF" }}>Developer Landscape</h3>
                 </div>
                 {sections?.developers ? (
-                  <div className="text-[#1A1A1A]/90 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "#FFFFFF" }}>
                     {cleanMarkdown(sections.developers)}
                   </div>
                 ) : (
-                  <p className="text-red-600 text-sm font-medium">Issue: Developer data not available.</p>
+                <p className="text-sm font-medium" style={{ color: "#FFFFFF" }}>Issue: Developer data not available.</p>
                 )}
               </div>
             </div>
@@ -539,9 +539,9 @@ export const ProjectAIAnalyzer = ({
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">
                     {prosList.map((item, i) => (
-                      <li key={i} className="jj-project-pros-item flex items-start gap-2.5 bg-[#FDFBF7] rounded-lg px-3 py-2.5 border border-[color:var(--emerald-1)]/30">
-                        <CheckCircle2 className="w-4 h-4 text-[color:var(--emerald-1)] mt-0.5 flex-shrink-0" />
-                        <span className="text-[#1A1A1A] text-sm leading-snug">{item}</span>
+                      <li key={i} data-surface="emerald" className="jj-project-pros-item flex items-start gap-2.5 rounded-lg px-3 py-2.5 border border-[#B89555]/35" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
+                        <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                        <span className="text-sm leading-snug" style={{ color: "#FFFFFF" }}>{item}</span>
                       </li>
                     ))}
                   </ul>

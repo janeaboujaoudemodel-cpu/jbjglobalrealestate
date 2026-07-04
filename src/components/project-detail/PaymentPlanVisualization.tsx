@@ -212,7 +212,7 @@ export default function PaymentPlanVisualization({
             <div className="mb-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
               <div className="flex items-center gap-4">
                 <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-14 h-14 rounded-full flex items-center justify-center ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', ['--jj-icon-lock-size' as any]: '3.5rem' }}>
-                  <Percent className="w-6 h-6" />
+                  <Percent className="w-6 h-6" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-[#1A1A1A]">{paymentPlan}</p>

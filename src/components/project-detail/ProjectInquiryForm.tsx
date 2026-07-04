@@ -252,22 +252,34 @@ export function ProjectInquiryForm({
         .filter(Boolean)
         .join("\n\n");
 
-      // Insert into CRM leads table
-      const { error } = await supabase.from("crm_leads").insert({
-        full_name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        source: "project_inquiry",
-        source_details: projectName,
-        source_page: window.location.pathname,
-        preferred_bedrooms: formData.bedrooms || null,
-        preferred_size_sqft: parsedSizeMin,
-        preferred_developer: finalDeveloper || null,
-        preferred_location: finalLocation || null,
-        notes: composedNotes,
-        status: "new",
-        lead_score: 80 // High intent lead from project page
-      } as any);
+      // Unified CRM capture: creates/updates lead, owner notification, task,
+      // email alert and AI-prepared first response draft.
+      const { error } = await supabase.functions.invoke("capture-lead", {
+        body: {
+          email: formData.email,
+          fullName: formData.name,
+          phone: formData.phone,
+          source: "project_inquiry",
+          pageSource: window.location.pathname,
+          contactType: "client",
+          message: composedNotes,
+          context: {
+            projectId,
+            projectName,
+            projectLocation,
+            developerName,
+            intent,
+            preferredBedrooms: formData.bedrooms || null,
+            preferredSizeSqft: parsedSizeMin,
+            preferredSizeBuckets: sizeRange || null,
+            preferredDeveloper: finalDeveloper || null,
+            preferredLocation: finalLocation || null,
+            timeline: timelineLabel || null,
+            contactTime: contactTimeLabel || null,
+            contactMethod: contactMethodLabel || null,
+          },
+        },
+      });
 
       if (error) throw error;
 
@@ -338,7 +350,7 @@ export function ProjectInquiryForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className={cn("space-y-4", compact ? "w-full" : "max-w-md mx-auto")}>
+      <form onSubmit={handleSubmit} className={cn("space-y-4", compact ? "w-full" : "max-w-md mx-auto")} data-form-shell>
 
         {/* Name */}
         <div className="space-y-2">
@@ -398,7 +410,7 @@ export function ProjectInquiryForm({
               setFormData({ ...formData, bedrooms: next.join(",") });
             };
             return (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 rounded-xl border border-[#B89555]/30 p-4" data-field-group>
                 {BEDROOM_OPTIONS.map((b) => {
                   const active = selected.includes(b.value);
                   return (
@@ -406,10 +418,10 @@ export function ProjectInquiryForm({
                       key={b.value}
                       type="button"
                       onClick={() => toggle(b.value)}
-                      data-cta={active ? "champagne-active" : undefined}
+                      data-emerald-action={active ? "true" : undefined}
                       className={
                         active
-                          ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] transition-all"
+                          ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border transition-all"
                           : "h-10 px-4 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60 transition-all"
                       }
                     >
@@ -465,7 +477,7 @@ export function ProjectInquiryForm({
               void minNum;
             };
             return (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 rounded-xl border border-[#B89555]/30 p-4" data-field-group>
                 {SIZE_BUCKETS.map((b) => {
                   const active = selectedKeys.includes(b.key);
                   return (
@@ -473,10 +485,10 @@ export function ProjectInquiryForm({
                       key={b.key}
                       type="button"
                       onClick={() => toggle(b.key)}
-                      data-cta={active ? "champagne-active" : undefined}
+                      data-emerald-action={active ? "true" : undefined}
                       className={
                         active
-                          ? "h-10 px-4 rounded-full text-sm font-medium bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555] transition-all"
+                          ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border transition-all"
                           : "h-10 px-4 rounded-full text-sm font-medium bg-transparent text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60 transition-all"
                       }
                     >
@@ -745,7 +757,8 @@ export function ProjectInquiryForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="jj-cta-gold-metallic w-full h-16 text-lg font-semibold inline-flex items-center justify-center gap-2"
+          data-emerald-action="true"
+          className="jj-emerald-action w-full h-14 text-base font-semibold inline-flex items-center justify-center gap-2 rounded-lg"
         >
           {isSubmitting ? (
             <>
