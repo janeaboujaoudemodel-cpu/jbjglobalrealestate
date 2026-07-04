@@ -33,7 +33,7 @@ const serviceCards = [
     description: "Structured training and continuous development program for brokers — covering compliance, negotiation, market intelligence, and premium client handling.",
     includes: ["Curriculum modules", "Standards training", "Continuous education", "Certification pathway"],
     cta: "Explore Academy",
-    link: "/broker-education"
+    link: "/jbj-academy"
   },
   {
     icon: Home,
