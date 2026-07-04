@@ -26609,9 +26609,9 @@ html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [dat
 }
 
 /* The two hero actions are emerald buttons with white content — never champagne. */
-html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"],
-html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"],
-html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary) {
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-6"]:not(.jj-btn-ink-black),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(button, a)[class*="px-8"]:not(.jj-btn-ink-black),
+html body #root [data-insights-page] :is([data-faq-hero], [data-mi-hero], [data-guide-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(.jj-cta-champagne, .jj-cta-outline, .jj-cta-primary):not(.jj-btn-ink-black) {
   min-height: 3.25rem !important;
   min-width: min(100%, 15rem) !important;
   padding: 0.875rem 1.5rem !important;
