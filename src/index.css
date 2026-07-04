@@ -30158,3 +30158,75 @@ html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-w
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-color: #064E3B !important;
 }
+
+/* ============================================================
+   PASS 240 — Advanced Filter Panel: champagne + ink standard
+   Site-wide dropdown standard. AI tools excluded via scope.
+   ============================================================ */
+
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) {
+  color: #1A1A1A !important;
+}
+
+/* All descendant text defaults to ink black */
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(
+  h1, h2, h3, h4, p, span, div, label, button, a, li, small, strong, em
+) {
+  color: #1A1A1A !important;
+}
+
+/* All icons default to ink */
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(svg) {
+  color: #1A1A1A !important;
+  stroke: currentColor;
+}
+
+/* EXCEPTION 1 — emerald metallic pills keep pure white text/icons */
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic *,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* EXCEPTION 2 — inputs on champagne need white background + ink text */
+html body [role="dialog"][data-advanced-filter-panel="true"] input,
+html body [role="dialog"][data-advanced-filter-panel="true"] select,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+}
+
+/* Convert dark emerald surface panels to champagne cards */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-\[\#021611\]"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/7"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/12"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/14"] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Borders: convert white-on-emerald borders to gold hairline */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white\/"] {
+  border-color: rgba(184,149,85,0.50) !important;
+}
+
+/* Section-title bottom border */
+html body [role="dialog"][data-advanced-filter-panel="true"] .bg-black\/10 {
+  background-color: rgba(255,255,255,0.40) !important;
+}
+
+/* Hover rows inside developer/area popovers */
+html body [role="dialog"][data-advanced-filter-panel="true"] button:hover:not(.jj-pill-emerald-metallic) {
+  background-color: rgba(6,78,59,0.06) !important;
+}
