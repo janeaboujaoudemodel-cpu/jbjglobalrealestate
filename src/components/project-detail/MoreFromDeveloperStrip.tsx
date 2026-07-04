@@ -137,7 +137,7 @@ export default function MoreFromDeveloperStrip({
     fArea !== "all" || fStatus !== "all" || fType !== "all" || fHandover !== "all" || fPrice !== "all";
 
   return (
-    <div className="mt-10">
+    <section className="my-10 md:my-12 clear-both isolate rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-4 md:p-5 shadow-sm overflow-hidden">
       <div className="flex items-end justify-between mb-4 gap-3 flex-wrap">
         <h3 className="text-lg md:text-xl font-semibold text-foreground">
           More projects by <span className="text-[#B89555]">{developerName || "this developer"}</span>
@@ -160,7 +160,8 @@ export default function MoreFromDeveloperStrip({
           {developerSlug && (
             <Link
               to={`/developer/${developerSlug}`}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#1A1A1A] border border-[#B89555]/50 bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-full px-4 py-2 transition-colors"
+              data-emerald-action="true"
+              className="jj-emerald-action inline-flex items-center gap-1.5 text-sm font-semibold border rounded-full px-4 py-2 transition-colors"
             >
               View developer page
               <ArrowRight className="w-4 h-4" />
@@ -257,14 +258,15 @@ export default function MoreFromDeveloperStrip({
         <div className="mt-5 flex justify-center">
           <button
             onClick={() => setExpanded((e) => !e)}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#1A1A1A] border border-[#B89555]/50 bg-[#F7F2EA] hover:bg-[#EFE6D6] rounded-full px-5 py-2 transition-colors"
+            data-emerald-action="true"
+            className="jj-emerald-action inline-flex items-center gap-1.5 text-sm font-semibold border rounded-full px-5 py-2 transition-colors"
           >
             {expanded ? "Show less" : `View more (${filtered.length - INITIAL_VISIBLE})`}
             <ArrowRight className={`w-4 h-4 transition-transform ${expanded ? "rotate-90" : ""}`} />
           </button>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 

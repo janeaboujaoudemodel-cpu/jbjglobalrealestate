@@ -51,7 +51,9 @@ function MapViewToggle({
             onClick={() => onViewChange(view)}
             className="jj-map-layer-button"
             data-active={mapView === view ? "true" : "false"}
-            data-surface={mapView === view ? "emerald" : "champagne"}
+            data-surface="emerald"
+            data-emerald-action="true"
+            data-no-contrast-guard
           >
             {t(`map.${view}`)}
           </button>
@@ -179,7 +181,7 @@ export default function ProjectLocationMap({
           className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
           onClick={() => setScrollZoomEnabled(true)}
         >
-          <div className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
+          <div data-surface="emerald" data-emerald-action="true" data-no-contrast-guard className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
             <MousePointer className="w-4 h-4" />
             {t('map.clickToEnable')}
           </div>

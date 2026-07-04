@@ -22,52 +22,52 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="w-full flex flex-wrap h-auto gap-1 bg-transparent border-b border-[#B89555]/30 rounded-none p-0">
+      <TabsList className="w-full flex flex-nowrap h-auto gap-1 overflow-x-auto overflow-y-hidden bg-transparent border-b border-[#B89555]/30 rounded-none p-0 [-webkit-overflow-scrolling:touch]">
         <TabsTrigger 
           value="details" 
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <Home className="w-4 h-4" />
           Details
         </TabsTrigger>
         <TabsTrigger 
           value="gallery"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <ImageIcon className="w-4 h-4" />
           Gallery
         </TabsTrigger>
         <TabsTrigger 
           value="floor-plans"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <Layers className="w-4 h-4" />
           Floor Plans
         </TabsTrigger>
         <TabsTrigger 
           value="amenities"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <Home className="w-4 h-4" />
           Amenities
         </TabsTrigger>
         <TabsTrigger 
           value="location"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <MapPin className="w-4 h-4" />
           Location
         </TabsTrigger>
         <TabsTrigger 
           value="payment-plan"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <CreditCard className="w-4 h-4" />
           Payment Plan
         </TabsTrigger>
         <TabsTrigger 
           value="brochure"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
+          className="flex shrink-0 items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-[#1A1A1A]/70 font-medium data-[state=active]:text-primary"
         >
           <FileText className="w-4 h-4" />
           Brochure

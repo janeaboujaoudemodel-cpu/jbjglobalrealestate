@@ -130,6 +130,24 @@ const ChatCVSubmission = ({
         throw new Error('Failed to submit CV. Please try again.');
       }
 
+      await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: userInfo.email.toLowerCase().trim(),
+          fullName: `${userInfo.firstName} ${userInfo.lastName}`.trim(),
+          phone: userInfo.phone,
+          source: 'chat_cv_submission',
+          pageSource: window.location.pathname,
+          subSource: 'CV submitted from chat support',
+          contactType: 'client',
+          message: 'Candidate submitted a CV through the chat widget.',
+          context: {
+            cvUrl,
+            chatSessionId: conversationId,
+            status: 'pending_review',
+          },
+        },
+      });
+
       // Notify the submitter if logged in
       if (user?.id) {
         await supabase.from('user_notifications').insert({

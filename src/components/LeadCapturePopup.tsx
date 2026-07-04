@@ -81,16 +81,24 @@ const LeadCapturePopup = () => {
 
     setIsSubmitting(true);
     try {
-      await supabase.from("crm_leads").insert({
-        full_name: formData.name,
-        email_lower: formData.email.toLowerCase(),
-        phone_e164: formData.phone || null,
-        source: "smart_popup",
-        pipeline_stage: "new",
-        nationality: formData.nationality || null,
-        preferred_language: formData.language || null,
-        notes: `Service: ${formData.service}${formData.contactTime ? ` | Contact: ${formData.contactTime}` : ""}`,
+      const { error } = await supabase.functions.invoke("capture-lead", {
+        body: {
+          email: formData.email,
+          fullName: formData.name,
+          phone: formData.phone || undefined,
+          nationality: formData.nationality || undefined,
+          language: formData.language || undefined,
+          source: "smart_popup",
+          pageSource: window.location.pathname,
+          contactType: "client",
+          message: `Service: ${formData.service}${formData.contactTime ? ` | Contact: ${formData.contactTime}` : ""}`,
+          context: {
+            service: formData.service,
+            preferredContactTime: formData.contactTime || null,
+          },
+        },
       });
+      if (error) throw error;
 
       toast.success("Welcome! You now have full access to all features.");
       dismiss();

@@ -532,13 +532,13 @@ const MortgageCalculator = ({
 
 
   return (
-    <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg">
+    <div className="bg-card border border-[#B89555]/30 rounded-2xl overflow-hidden shadow-lg">
       {/* Header - Gold Premium Style - Centered & Bigger */}
       {!compact && (
         <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 border-b border-[#B89555]/30 p-6 lg:p-8">
           <div className="flex flex-col items-center text-center">
-            <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-14 h-14 lg:w-16 lg:h-16 min-w-14 min-h-14 lg:min-w-16 lg:min-h-16 aspect-square rounded-xl grid place-items-center mb-4 p-0 overflow-hidden">
-              <Calculator className="w-7 h-7 lg:w-8 lg:h-8" style={{ color: '#FFFFFF' }} />
+            <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-11 h-11 lg:w-12 lg:h-12 min-w-11 min-h-11 lg:min-w-12 lg:min-h-12 aspect-square rounded-xl grid place-items-center mb-4 p-0 overflow-hidden">
+              <Calculator className="w-5 h-5 lg:w-6 lg:h-6" style={{ color: '#FFFFFF' }} />
             </div>
             <h3 className="text-2xl lg:text-3xl font-bold text-foreground">
               Mortgage Calculator
@@ -551,7 +551,7 @@ const MortgageCalculator = ({
       <div className="p-4 lg:p-6">
         <div className="grid xl:grid-cols-[minmax(0,1.05fr)_minmax(0,1.35fr)] gap-6 lg:gap-8 items-start">
           {/* Input Section */}
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
             {/* Property Price */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -565,7 +565,8 @@ const MortgageCalculator = ({
                 type="text"
                 value={formatNumberWithCommas(propertyPrice)}
                 onChange={(e) => handlePriceChange(parseFormattedNumber(e.target.value))}
-                className="bg-[#FDFBF7] border border-[#B89555]/55 text-[#1A1A1A] focus:border-[#B89555]"
+                data-surface="emerald"
+                className="jj-emerald-action bg-[#064E3B] border border-[#B89555]/55 text-white focus:border-[#B89555]"
               />
 
               <div className="py-4">
@@ -670,47 +671,47 @@ const MortgageCalculator = ({
             <div className={detailsExpanded ? "space-y-4 lg:space-y-6" : "hidden md:block space-y-4 lg:space-y-6"}>
             {/* 6 Champagne Summary Cards - 3x2 Grid */}
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-10 h-10 min-w-10 min-h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg grid place-items-center p-0 overflow-hidden">
                   <Building2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
-                <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Property Price (100%)</p>
-                <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(propertyPrice)}</p>
+                <p className="text-[10px] lg:text-xs mb-2 uppercase tracking-wider" style={{ color: "#FFFFFF" }}>Property Price (100%)</p>
+                <p className="font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ color: "#FFFFFF" }}>{formatCurrency(propertyPrice)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-10 h-10 min-w-10 min-h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg grid place-items-center p-0 overflow-hidden">
                   <Percent className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
-                <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Down Payment ({downPaymentPercent}%)</p>
-                <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.downPayment)}</p>
+                <p className="text-[10px] lg:text-xs mb-2 uppercase tracking-wider" style={{ color: "#FFFFFF" }}>Down Payment ({downPaymentPercent}%)</p>
+                <p className="font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ color: "#FFFFFF" }}>{formatCurrency(calculations.downPayment)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-10 h-10 min-w-10 min-h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg grid place-items-center p-0 overflow-hidden">
                   <DollarSign className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
-                <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Loan Amount ({100 - downPaymentPercent}%)</p>
-                <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.loanAmount)}</p>
+                <p className="text-[10px] lg:text-xs mb-2 uppercase tracking-wider" style={{ color: "#FFFFFF" }}>Loan Amount ({100 - downPaymentPercent}%)</p>
+                <p className="font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ color: "#FFFFFF" }}>{formatCurrency(calculations.loanAmount)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-10 h-10 min-w-10 min-h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg grid place-items-center p-0 overflow-hidden">
                   <Calculator className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
-                <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Monthly Payment</p>
-                <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.monthlyPayment)}</p>
+                <p className="text-[10px] lg:text-xs mb-2 uppercase tracking-wider" style={{ color: "#FFFFFF" }}>Monthly Payment</p>
+                <p className="font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ color: "#FFFFFF" }}>{formatCurrency(calculations.monthlyPayment)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-10 h-10 min-w-10 min-h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg grid place-items-center p-0 overflow-hidden">
                   <TrendingUp className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
-                <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Interest ({interestRate}% · {loanTermYears}yr)</p>
-                <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalInterest)}</p>
+                <p className="text-[10px] lg:text-xs mb-2 uppercase tracking-wider" style={{ color: "#FFFFFF" }}>Interest ({interestRate}% · {loanTermYears}yr)</p>
+                <p className="font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ color: "#FFFFFF" }}>{formatCurrency(calculations.totalInterest)}</p>
               </div>
-              <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
+              <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div data-emerald-action="true" data-icon-square="true" className="jj-emerald-action w-10 h-10 min-w-10 min-h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg grid place-items-center p-0 overflow-hidden">
                   <Wallet className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
-                <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Total Cost (All-In)</p>
-                <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalPayment)}</p>
+                <p className="text-[10px] lg:text-xs mb-2 uppercase tracking-wider" style={{ color: "#FFFFFF" }}>Total Cost (All-In)</p>
+                <p className="font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ color: "#FFFFFF" }}>{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 

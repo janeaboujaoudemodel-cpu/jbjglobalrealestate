@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Video, VideoOff, Mic, MicOff, Settings, Shield, User, Mail, Phone, Globe } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface PreJoinData {
   firstName: string;
@@ -72,8 +73,28 @@ const PreJoinForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateForm()) {
+      try {
+        await supabase.functions.invoke('capture-lead', {
+          body: {
+            email: formData.email,
+            fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+            phone: formData.phone,
+            nationality: formData.nationality,
+            source: 'video_meeting',
+            pageSource: window.location.pathname,
+            contactType: 'client',
+            message: 'Video meeting pre-join registration',
+            context: {
+              cameraEnabled: videoEnabled,
+              micEnabled: audioEnabled,
+            },
+          },
+        });
+      } catch (error) {
+        console.warn('Video meeting lead capture failed:', error);
+      }
       onJoin({
         ...formData,
         cameraEnabled: videoEnabled,

@@ -236,7 +236,7 @@ export const ConsultationRequestForm = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
         data-form-shell
-        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/45 rounded-2xl p-5 sm:p-6 md:p-7 shadow-[0_18px_46px_rgba(184,149,85,0.20),0_2px_8px_rgba(0,0,0,0.08)] max-w-3xl mx-auto ${className}`}
+        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-5 sm:p-6 md:p-7 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-3xl mx-auto ${className}`}
       style={{ transform: 'perspective(1200px) rotateX(1deg)' }}
     >
       {/* Header */}
@@ -581,7 +581,8 @@ export const ConsultationRequestForm = ({
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                      className="mt-0.5"
+                    className="mt-0.5"
+                    data-no-contrast-guard
                     />
                   </FormControl>
                   <div className="flex-1 min-w-0 space-y-1">

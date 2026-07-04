@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Upload, Loader2, Trash2, Star, StarOff, GripVertical } from "lucide-react";
+import { Upload, Loader2, Trash2, Star, StarOff, GripVertical, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
@@ -26,6 +26,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
   const [dragOver, setDragOver] = useState(false);
   const [order, setOrder] = useState<ImageRow[]>([]);
   const [dragId, setDragId] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   const { data: images = [] } = useQuery({
     queryKey: ["owner-project-images", projectId],
@@ -126,11 +127,25 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
   if (!canEdit) return null;
 
   return (
-    <div className="mt-4 rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] p-4">
-      <div className="flex items-center justify-between mb-3">
+    <div className="mt-4 rounded-xl border border-[#B89555]/35 bg-[#F7F2EA] p-4">
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        className="flex w-full items-center justify-between gap-3 text-left"
+        aria-expanded={expanded}
+      >
         <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70">
           Owner · Photos
         </p>
+        <span className="inline-flex items-center gap-2 text-[11px] text-[#1A1A1A]/55">
+          {expanded ? "Hide photo manager" : `${order.length} photos · expand to manage`}
+          <ChevronDown className={expanded ? "h-4 w-4 rotate-180 transition-transform" : "h-4 w-4 transition-transform"} />
+        </span>
+      </button>
+
+      {expanded && (
+      <div className="mt-3">
+      <div className="flex items-center justify-end mb-3">
         <span className="text-[11px] text-[#1A1A1A]/55">Drag to reorder · click ⭐ to set cover · 🗑 to delete</span>
       </div>
 
@@ -179,7 +194,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
                 onDragEnd={() => setDragId(null)}
                 className={`relative group rounded-lg overflow-hidden border border-[#B89555]/30 bg-[#FDFBF7] aspect-square cursor-move ${isDragging ? "opacity-40 ring-2 ring-[#B89555]" : ""}`}
               >
-                <img src={img.image_url} alt={img.alt_text ?? ""} className="w-full h-full object-cover" loading="lazy"  decoding="async" />
+                <img src={img.image_url} alt={img.alt_text ?? ""} className="w-full h-full object-cover" loading="eager" decoding="async" />
                 <span className="absolute top-1 right-1 text-[10px] font-bold px-1 py-0.5 rounded bg-black/50 text-white inline-flex items-center" data-no-contrast-guard>
                   <GripVertical className="w-3 h-3" />
                 </span>
@@ -208,6 +223,8 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
             );
           })}
         </div>
+      )}
+      </div>
       )}
     </div>
   );

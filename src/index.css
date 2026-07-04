@@ -29549,23 +29549,22 @@ html body:not([data-ai-tools-scope="true"]) :is(
    Scope excludes AI tools exactly as requested.
    ===================================================================== */
 
-/* Header account menu is an emerald dropdown exception to the global
-   champagne popper rule. Keep the surface and every row pure white. */
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content],
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content][data-surface="emerald"] {
-  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-color: #042C1C !important;
-  border-color: rgba(255,255,255,0.25) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+/* Header account menu is a champagne/light dropdown. It must never inherit
+   white text from CTA locks unless a child explicitly opts into emerald. */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-color: #F7F2EA !important;
+  border-color: rgba(184,149,85,0.42) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,[role="menuitem"]),
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,[role="menuitem"]):not(:where([data-emerald-action] *, .jj-emerald-action *, [data-surface="emerald"] *)),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-emerald-action] *, .jj-emerald-action *, [data-surface="emerald"] *)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
 
@@ -29959,13 +29958,142 @@ html body:not([data-ai-tools-scope="true"]) :is(
   opacity: 1 !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) [data-account-menu-content],
-html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] * {
+html body :is([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option, [cmdk-item]) {
+  transition-duration: 60ms !important;
+}
+
+/* PASS 227 — final site-wide form, checkbox, dropdown and shape lock.
+   This is the current terminal contract used for visual validation. */
+html body :is(.jbj-form-shell, [data-form-shell], [role="dialog"]:has(form), .form-panel, .lead-form, .contact-form) {
+  box-sizing: border-box !important;
+  padding: clamp(1.25rem, 2.2vw, 2rem) !important;
+  border-width: 1px !important;
+  border-color: rgba(184,149,85,0.34) !important;
+}
+
+html body :is(.jbj-form-shell, [data-form-shell], [role="dialog"]:has(form)) form {
+  padding: 0 !important;
+}
+
+html body :is(.jbj-form-shell, [data-form-shell]) :is(.rounded-xl.border, .rounded-2xl.border, [data-field-group], .form-field-group):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
+  padding: clamp(1rem, 1.8vw, 1.35rem) !important;
+  border-width: 1px !important;
+  border-color: rgba(184,149,85,0.30) !important;
+}
+
+html body :is(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]) {
+  border-width: 1px !important;
+  border-color: rgba(184,149,85,0.34) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.58), 0 1px 0 rgba(184,149,85,0.08) !important;
+  transition: border-color 60ms ease, box-shadow 60ms ease, background-color 60ms ease, color 60ms ease !important;
+}
+
+html body :is(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]):is(:hover,:focus,:focus-visible) {
+  border-color: rgba(184,149,85,0.70) !important;
+  box-shadow: 0 0 0 2px rgba(184,149,85,0.10), inset 0 1px 0 rgba(255,255,255,0.72) !important;
+}
+
+html body :is(input[type="checkbox"], [data-emerald-ok="checkbox"], [data-radix-checkbox-root]) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  accent-color: #064E3B !important;
+  inline-size: 18px !important;
+  block-size: 18px !important;
+  min-inline-size: 18px !important;
+  min-block-size: 18px !important;
+  flex: 0 0 18px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(184,149,85,0.78) !important;
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), 0 1px 2px rgba(184,149,85,0.16) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transform: none !important;
+}
+
+html body :is(input[type="checkbox"]:checked, [data-emerald-ok="checkbox"][data-state="checked"], [data-radix-checkbox-root][data-state="checked"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border-color: #064E3B !important;
+}
+
+html body :is([data-emerald-ok="checkbox"], [data-radix-checkbox-root]) :is(svg, path, polyline, line) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-width: 3.4px !important;
+}
+
+html body input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #FFFFFF;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+html body :is(label, .form-checkbox-row, [data-checkbox-row], .items-start:has([role="checkbox"]), .items-start:has(input[type="checkbox"])) {
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html body input[type="checkbox"]:checked + *,
+html body :is(.form-checkbox-row, [data-checkbox-row], .items-start:has([data-emerald-ok="checkbox"]), .items-start:has(input[type="checkbox"])):has(:is([data-emerald-ok="checkbox"][data-state="checked"], input[type="checkbox"]:checked)) {
+  background: transparent !important;
+  background-image: none !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html body [data-account-menu-content],
+html body [data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
 }
 
-html body :is([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option, [cmdk-item]) {
-  transition-duration: 60ms !important;
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"], [role="menuitem"], [cmdk-item], .jbj-form-option, [data-radix-select-item], [data-radix-dropdown-menu-item]
+):is(:hover,[data-highlighted],[aria-selected="true"],[data-selected="true"]):not(:where([data-surface="emerald"], [data-surface="emerald"] *)) {
+  background: rgba(6,78,59,0.10) !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-radius: 8px !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"], [role="menuitem"], [cmdk-item], .jbj-form-option, [data-radix-select-item], [data-radix-dropdown-menu-item]
+):is(:hover,[data-highlighted],[aria-selected="true"],[data-selected="true"]):not(:where([data-surface="emerald"], [data-surface="emerald"] *)) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body :is([data-icon-circle="true"], .jj-icon-circle-lock, .jj-floating-action, [data-floating-action], [aria-label*="Scroll" i]) {
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 9999px !important;
+  min-width: var(--jj-icon-lock-size, 2.5rem) !important;
+  min-height: var(--jj-icon-lock-size, 2.5rem) !important;
+  width: var(--jj-icon-lock-size, 2.5rem) !important;
+  height: var(--jj-icon-lock-size, 2.5rem) !important;
+  padding: 0 !important;
+  display: inline-grid !important;
+  place-items: center !important;
+}
+
+html body :is([data-surface="emerald"], [data-emerald-action="true"], [data-emerald="true"], .jj-emerald-action, .jj-surface-emerald, .jj-cta-emerald, .jj-pill-emerald-metallic, .jj-project-pros-panel, .jj-project-pros-item, .jj-market-emerald-card, .jj-market-emerald-row):not([data-preserve-surface]) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-surface="light"] *, [data-surface="champagne"] *, [data-surface="gold"] *, .surface-light *, .surface-champagne *)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
 }
