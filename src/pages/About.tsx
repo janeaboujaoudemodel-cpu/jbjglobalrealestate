@@ -308,22 +308,22 @@ const About = () => {
                 </ContentText>
                 
                 {/* Feature Cards - champagne style to match founder card */}
-                <div className="grid sm:grid-cols-2 gap-4 mt-8">
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
-                    <BarChart3 className="w-6 h-6 text-[#1A1A1A] mb-3" />
-                    <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Market Intelligence from Official Data</p>
+                  <div className="grid sm:grid-cols-2 gap-4 mt-8">
+                  <div data-surface="emerald" data-no-contrast-guard className="jj-emerald-card rounded-lg p-5 shadow-sm">
+                    <BarChart3 className="w-6 h-6 mb-3" style={{ color: '#FFFFFF' }} />
+                    <p className="text-base font-semibold leading-snug" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Market Intelligence from Official Data</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
-                    <FileCheck className="w-6 h-6 text-[#1A1A1A] mb-3" />
-                    <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Clear Process Mapping</p>
+                  <div data-surface="emerald" data-no-contrast-guard className="jj-emerald-card rounded-lg p-5 shadow-sm">
+                    <FileCheck className="w-6 h-6 mb-3" style={{ color: '#FFFFFF' }} />
+                    <p className="text-base font-semibold leading-snug" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Clear Process Mapping</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
-                    <Target className="w-6 h-6 text-[#1A1A1A] mb-3" />
-                    <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Disciplined Transaction Management</p>
+                  <div data-surface="emerald" data-no-contrast-guard className="jj-emerald-card rounded-lg p-5 shadow-sm">
+                    <Target className="w-6 h-6 mb-3" style={{ color: '#FFFFFF' }} />
+                    <p className="text-base font-semibold leading-snug" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Disciplined Transaction Management</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30 rounded-lg p-5 shadow-sm">
-                    <Shield className="w-6 h-6 text-[#1A1A1A] mb-3" />
-                    <p className="text-[#1A1A1A] text-base font-semibold leading-snug">Defined Compliance Boundaries</p>
+                  <div data-surface="emerald" data-no-contrast-guard className="jj-emerald-card rounded-lg p-5 shadow-sm">
+                    <Shield className="w-6 h-6 mb-3" style={{ color: '#FFFFFF' }} />
+                    <p className="text-base font-semibold leading-snug" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Defined Compliance Boundaries</p>
                   </div>
                 </div>
               </motion.div>
