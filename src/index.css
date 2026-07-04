@@ -15640,8 +15640,8 @@ html body #root [data-state="checked"][role="switch"] {
   background-image: var(--jj-emerald-ombre) !important;
 }
 
-html body #root [data-radix-popper-content-wrapper] [data-radix-select-content],
-html body #root [data-radix-popper-content-wrapper] [data-radix-popover-content] {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-radix-select-content],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-radix-popover-content] {
   animation-duration: 0ms !important;
 }
 
@@ -27463,33 +27463,33 @@ html body #root [data-jjds-segmented] [data-active="true"] > * {
    ============================================================ */
 
 /* Kill the shadcn default `accent` blue hover on every menu item */
-html body #root [data-radix-popper-content-wrapper] [role="option"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitem"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"]:hover,
-html body #root [data-radix-popper-content-wrapper] [cmdk-item]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitem"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [cmdk-item]:hover,
 html body #root [data-radix-select-content] [role="option"]:hover,
 html body #root [data-radix-dropdown-menu-content] [role="menuitem"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="option"][data-highlighted],
-html body #root [data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
-html body #root [data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"] {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][data-highlighted],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"] {
   background: rgba(6,78,59,0.14) !important;     /* soft emerald wash — NOT the active fill */
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* SELECTED (checked / current value) — solid emerald, white ink */
-html body #root [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"],
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"],
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"],
 html body #root [data-radix-select-content] [role="option"][data-state="checked"] {
   background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body #root [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"] :is(svg, span, div),
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"] :is(svg, span, div),
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"] :is(svg, span, div),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"] :is(svg, span, div),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"] :is(svg, span, div),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"] :is(svg, span, div),
 html body #root [data-radix-select-content] [role="option"][data-state="checked"] :is(svg, span, div) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -27497,9 +27497,9 @@ html body #root [data-radix-select-content] [role="option"][data-state="checked"
 }
 
 /* SELECTED + HOVER — keep emerald but shift tone so hover ≠ resting selected */
-html body #root [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"]:hover,
 html body #root [data-radix-select-content] [role="option"][data-state="checked"]:hover {
   background: linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #021b12 100%) !important;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28) !important;
@@ -27530,8 +27530,8 @@ html body #root .rdp-day_today:not([aria-selected="true"]) {
 }
 
 /* Any inline blue focus ring on inputs across popovers → emerald */
-html body #root [data-radix-popper-content-wrapper] :is(input,textarea):focus-visible,
-html body #root [data-radix-popper-content-wrapper] :is(input,textarea):focus {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus-visible,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus {
   outline: none !important;
   box-shadow: 0 0 0 2px rgba(6,78,59,0.55) !important;
   border-color: rgba(6,78,59,0.55) !important;
@@ -30104,33 +30104,33 @@ html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-cu
 }
 
 /* PASS 230e — ID-prefixed win over all previous white-ink rules for mode/currency */
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]),
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) *,
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child,
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child * {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) *,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg,
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg path {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg path {
   fill: none !important;
 }
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) {
   background: transparent !important;
   background-image: none !important;
   background-color: transparent !important;
   border-color: rgba(184,149,85,0.35) !important;
 }
 /* Hover idle → emerald + white */
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]),
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) * {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-color: #064E3B !important;
@@ -30138,22 +30138,22 @@ html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="t
 }
 
 /* Currency ink for non-active rows */
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) *,
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child,
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child * {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) *,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]),
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) * {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-color: #064E3B !important;
