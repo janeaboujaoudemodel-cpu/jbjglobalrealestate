@@ -22,7 +22,7 @@ export const FeaturedProjectAd = ({
   description,
   imageUrl,
   projectSlug,
-  ctaText = "Learn More"
+  ctaText = "View Project Details"
 }: FeaturedProjectAdProps) => {
   return (
     <motion.div

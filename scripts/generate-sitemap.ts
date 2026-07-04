@@ -68,6 +68,8 @@ const staticEntries: SitemapEntry[] = [
   { path: "/golden-visa-guide", changefreq: "monthly", priority: "0.78" },
   { path: "/faq", changefreq: "monthly", priority: "0.75" },
   { path: "/ai-home-finder", changefreq: "monthly", priority: "0.78" },
+  { path: "/interior-design-ai", changefreq: "monthly", priority: "0.72" },
+  { path: "/property-evaluator", changefreq: "monthly", priority: "0.72" },
   { path: "/cv-builder", changefreq: "monthly", priority: "0.70" },
   // Hubs
   { path: "/investor-hub", changefreq: "weekly", priority: "0.82" },
