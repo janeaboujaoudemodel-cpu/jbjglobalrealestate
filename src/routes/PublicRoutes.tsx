@@ -48,6 +48,7 @@ const SellerGuide = lazy(() => import("@/pages/SellerGuide"));
 const SellerListing = lazy(() => import("@/pages/SellerListing"));
 const GoldenVisaGuide = lazy(() => import("@/pages/guides/GoldenVisaGuide"));
 const DubaiRentalYieldGuide = lazy(() => import("@/pages/guides/DubaiRentalYieldGuide"));
+const FutureOfRealEstate2026 = lazy(() => import("@/pages/insights/FutureOfRealEstate2026"));
 const Guides = lazy(() => import("@/pages/Guides"));
 const RentGuide = lazy(() => import("@/pages/RentGuide"));
 const TenantGuide = lazy(() => import("@/pages/TenantGuide"));
@@ -285,6 +286,9 @@ export const PublicRoutes = () => (
     <Route path="/guides/dubai-rental-yield" element={<InsightsPageScope><DubaiRentalYieldGuide /></InsightsPageScope>} />
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/dubai-rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
+    <Route path="/insights/future-of-real-estate-2026" element={<InsightsPageScope><FutureOfRealEstate2026 /></InsightsPageScope>} />
+    <Route path="/news/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
+    <Route path="/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
     <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
     {/* Books Library consolidated into Guides Library — single canonical hub. */}
     <Route path="/education-hub" element={<Navigate to="/guides" replace />} />
