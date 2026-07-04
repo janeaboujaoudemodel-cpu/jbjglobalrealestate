@@ -28730,8 +28730,11 @@ html body :is(
  * NOT affected by these rules — they're inputs/buttons, not popper content.
  * ============================================================================ */
 
-/* Champagne surface for every popper container we don't explicitly exclude. */
-html body [data-radix-popper-content-wrapper] > *:not([data-account-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]) {
+/* Champagne surface for every popper container we don't explicitly exclude.
+   :not(#\a) chain boosts specificity so we beat every existing
+   [data-surface="emerald"] rule that paints these popovers today. */
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) > *:not([data-account-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-color: #FDFBF7 !important;
   border: 1px solid rgba(184, 149, 85, 0.42) !important;
@@ -28740,6 +28743,17 @@ html body [data-radix-popper-content-wrapper] > *:not([data-account-menu-content
     0 2px 8px rgba(184, 149, 85, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
   color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+/* Same lock for descendant panel wrappers Radix inserts between the popper
+   wrapper and the menu content (some components wrap in an extra div). */
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) :is([role="menu"], [role="listbox"], [role="dialog"], [data-radix-menu-content], [data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content], [data-currency-menu-content], [data-mode-switcher-panel="true"]):not([data-account-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-color: #FDFBF7 !important;
+  border: 1px solid rgba(184, 149, 85, 0.42) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* Row resting state = dark ink on champagne. */
