@@ -369,6 +369,12 @@ const AICalendar = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="AI Property Viewing Calendar | JBJ Dubai Real Estate"
+        description="Schedule and manage Dubai property viewings with JBJ's AI-powered calendar — smart reminders, agent coordination, and multi-channel notifications."
+        canonicalPath="/ai-calendar"
+      />
     <section data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       {/* Header */}
       <div className="bg-[#F7F2EA] border-b border-[#B89555]/40">
