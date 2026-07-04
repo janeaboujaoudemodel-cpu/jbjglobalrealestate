@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
 import AIToolGuide from "@/components/ai-tools/AIToolGuide";
+import { AIToolStartGate } from "@/components/ai-tools/AIToolStartGate";
+import { Wand2, Sliders } from "lucide-react";
 
 interface MatchResult {
   clientProfile?: {
@@ -119,6 +121,13 @@ export default function AIClientMatcherPage() {
   };
 
   return (
+    <AIToolStartGate
+      headline="How would you like to match clients?"
+      methods={[
+        { key: "ai", eyebrow: "Fastest · AI-Assisted", title: "AI Match from Preferences", Icon: Wand2, desc: "Enter buyer preferences — AI ranks the best-fit listings from your inventory.", bullets: ["Ranked matches", "Fit scores", "Ready to share"], cta: "Match with AI" },
+        { key: "manual", eyebrow: "Full Control · Manual", title: "Manual Filters", Icon: Sliders, desc: "Set community, size and budget filters yourself for full control.", bullets: ["Custom filters", "Edit criteria", "Save preset"], cta: "Filter manually" },
+      ]}
+    >
     <AIToolPremiumLayout
       title="AI Client Matcher"
       subtitle="Match clients to ideal properties using AI-powered preferences analysis"
@@ -445,5 +454,6 @@ export default function AIClientMatcherPage() {
         )}
       </div>
     </AIToolPremiumLayout>
+    </AIToolStartGate>
   );
 }

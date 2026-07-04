@@ -15,6 +15,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
 import AIToolGuide from "@/components/ai-tools/AIToolGuide";
+import { AIToolStartGate } from "@/components/ai-tools/AIToolStartGate";
+import { Wand2, Sliders } from "lucide-react";
 
 interface DescriptionResult {
   headline?: string;
@@ -97,6 +99,13 @@ export default function AIDescriptionWriterPage() {
   };
 
   return (
+    <AIToolStartGate
+      headline="How would you like to write the description?"
+      methods={[
+        { key: "ai", eyebrow: "Fastest · AI-Assisted", title: "AI Draft from Property", Icon: Wand2, desc: "Enter a few details — AI writes a polished, SEO-ready listing description.", bullets: ["One-click draft", "SEO-optimised", "Multiple headlines"], cta: "Draft with AI" },
+        { key: "manual", eyebrow: "Full Control · Manual", title: "Write with Guided Fields", Icon: Sliders, desc: "Fill every field yourself for full control over tone and structure.", bullets: ["Custom tone", "Field-by-field", "Editable output"], cta: "Fill manually" },
+      ]}
+    >
     <AIToolPremiumLayout
       title="AI Description Writer"
       subtitle="Write compelling property descriptions that sell"
@@ -357,5 +366,6 @@ export default function AIDescriptionWriterPage() {
         )}
       </div>
     </AIToolPremiumLayout>
+    </AIToolStartGate>
   );
 }
