@@ -657,6 +657,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                     </button>
                   </div>
                   {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                  {mode === "signup" && (
+                    <PasswordStrengthMeter password={password} onValidityChange={setPasswordSafe} />
+                  )}
                 </div>
               )}
 
@@ -673,6 +676,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                       </button>
                     </div>
                     {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                    <PasswordStrengthMeter password={password} onValidityChange={setPasswordSafe} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword" className="text-[#1A1A1A] font-medium">Confirm New Password</Label>
