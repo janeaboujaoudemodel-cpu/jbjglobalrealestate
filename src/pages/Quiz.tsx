@@ -1455,6 +1455,12 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
+    <>
+      <SEOHead
+        title="AI Home Finder — Dubai Property Matching Quiz | JBJ"
+        description="Answer 10 quick questions and get an AI-curated shortlist of Dubai apartments, villas, and off-plan projects matching your budget, lifestyle, and investment goals."
+        canonicalPath="/ai-home-finder"
+      />
       <section data-allow-dark-cta data-no-contrast-guard data-surface="dark" className="aihf-root min-h-[calc(100dvh-88px)] flex flex-col" style={{ background: "linear-gradient(180deg, #041F18 0%, #031711 55%, #000000 100%)" }}>
       <style>{AIHF_STYLE}</style>
       {/* Header — pushed below fixed site header (88–128px) */}
