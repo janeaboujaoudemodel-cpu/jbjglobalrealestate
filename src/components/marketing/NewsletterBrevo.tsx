@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, CheckCircle, Loader2, Bell } from 'lucide-react';
+import { Search, Send, CheckCircle, Loader2, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
