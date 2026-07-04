@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -35,6 +36,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-market-analyzer");
+  if (waf.blocked) return waf.response!;
+
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");

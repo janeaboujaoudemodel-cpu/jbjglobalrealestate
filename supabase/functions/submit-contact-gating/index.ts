@@ -172,11 +172,8 @@ Deno.serve(async (req) => {
         email_verified: true,
         // Store hashes for de-duplication/lookup
         email_hash: emailHash,
-        // Legacy plaintext fields set to masked values
-        full_name: '[ENCRYPTED]',
-        email: '[ENCRYPTED]',
-        phone: '[ENCRYPTED]',
       });
+
 
     if (insertError) {
       console.error('[Error] Failed to insert contact submission:', insertError);
