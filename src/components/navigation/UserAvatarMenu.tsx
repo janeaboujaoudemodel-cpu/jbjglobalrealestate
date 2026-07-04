@@ -134,17 +134,16 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     return (
       <DropdownMenuItem
         data-account-menu-row="true"
-        data-no-emerald-hover="true"
         asChild={!!to}
+        unstyled
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-[#1A1A1A] hover:bg-[#064E3B] hover:text-white focus:bg-[#064E3B] focus:text-white data-[highlighted]:bg-[#064E3B] data-[highlighted]:text-white"
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-[#1A1A1A]"
         style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
       >
         {to ? (
           <Link
             to={to}
             data-account-menu-row="true"
-            data-no-emerald-hover="true"
             style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
           >
             {inner}
@@ -236,8 +235,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           onSelect={handleSignOut}
           data-account-signout-row="true"
           data-account-menu-row="true"
-          data-no-emerald-hover="true"
-          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-[#1A1A1A] hover:bg-[#064E3B] hover:text-white focus:bg-[#064E3B] focus:text-white data-[highlighted]:bg-[#064E3B] data-[highlighted]:text-white"
+          unstyled
+          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-[#1A1A1A]"
           style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
         >
           <span className="flex items-center gap-2.5 w-full" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>

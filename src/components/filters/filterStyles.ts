@@ -44,7 +44,7 @@ export const togglePillBase = [
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
 ].join(" ");
 
-export const togglePillOff = "border-[#B89555]/45 text-[#1A1A1A] bg-white hover:border-[#064E3B]/55 hover:bg-[#064E3B]/6";
+export const togglePillOff = "border-[#B89555]/45 text-[#1A1A1A] bg-white hover:border-[#064E3B]/55";
 
 export const togglePillOn = "jj-pill-emerald-metallic text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)] allow-white";
 
@@ -75,7 +75,7 @@ export const filterPrimaryButton = [
 
 export const filterSecondaryButton = [
   "h-9 px-3 text-xs rounded-lg border border-[#B89555]/50 bg-white text-[#1A1A1A]",
-  "hover:border-[#064E3B]/55 hover:bg-[#064E3B]/6",
+  "hover:border-[#064E3B]/55",
 ].join(" ");
 
 // ── CHECKBOX ──────────────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ export const filterDivider = "w-px h-5 bg-[#B89555]/40 flex-shrink-0";
 export const resetAllPill = [
   "inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold",
   "border border-[#B89555]/50 bg-white text-[#1A1A1A] shadow-none",
-  "hover:border-[#064E3B]/55 hover:bg-[#064E3B]/6",
+  "hover:border-[#064E3B]/55",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
   "transition-colors duration-100 flex-shrink-0 [&_svg]:text-[#1A1A1A] [&_svg]:opacity-100",
 ].join(" ");

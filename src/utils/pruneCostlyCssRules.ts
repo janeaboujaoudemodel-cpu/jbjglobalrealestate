@@ -5,13 +5,14 @@ const KEEP_MARKERS = [
   "data-mode-switcher-panel",
   "data-account-menu-content",
   "data-global-search-modal",
-  "role=\"switch\"",
-  "role='switch'",
 ];
 
 const shouldPruneSelector = (selector: string, cssText: string) => {
-  if (!selector.includes("html body")) return false;
   if (KEEP_MARKERS.some((marker) => selector.includes(marker))) return false;
+  if (selector.includes(":has(")) return true;
+  if (selector.length > 1200 && COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker))) return true;
+  if (selector.length > 1800) return true;
+  if (!selector.includes("html body")) return false;
   if (cssText.length < 520) return false;
   return COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker));
 };
@@ -47,6 +48,9 @@ const pruneRuleList = (owner: any): number => {
 
 export const installInteractionCssPruner = () => {
   if (typeof document === "undefined") return;
+  const win = window as unknown as { __JBJ_CSS_PRUNER_INSTALLED__?: boolean; __JBJ_CSS_PRUNED__?: number };
+  if (win.__JBJ_CSS_PRUNER_INSTALLED__) return;
+  win.__JBJ_CSS_PRUNER_INSTALLED__ = true;
 
   const run = () => {
     let removed = 0;
@@ -59,13 +63,7 @@ export const installInteractionCssPruner = () => {
 
   run();
   requestAnimationFrame(run);
-  window.addEventListener("load", run, { once: true });
-  window.setTimeout(run, 750);
-  window.setTimeout(run, 2000);
-  let ticks = 0;
-  const interval = window.setInterval(() => {
-    ticks += 1;
-    run();
-    if (ticks >= 8) window.clearInterval(interval);
-  }, 1000);
+  window.setTimeout(run, 250);
+  window.setTimeout(run, 1000);
+  window.setTimeout(run, 2500);
 };
