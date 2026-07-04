@@ -15,7 +15,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 
-const BASE_URL = "https://www.jbj.ae";
+const BASE_URL = "https://jbj.ae";
 const SUPABASE_URL = "https://mdafrewypkkrildjgtey.supabase.co";
 const SUPABASE_ANON =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0";
@@ -68,6 +68,8 @@ const staticEntries: SitemapEntry[] = [
   { path: "/golden-visa-guide", changefreq: "monthly", priority: "0.78" },
   { path: "/faq", changefreq: "monthly", priority: "0.75" },
   { path: "/ai-home-finder", changefreq: "monthly", priority: "0.78" },
+  { path: "/interior-design-ai", changefreq: "monthly", priority: "0.72" },
+  { path: "/property-evaluator", changefreq: "monthly", priority: "0.72" },
   { path: "/cv-builder", changefreq: "monthly", priority: "0.70" },
   // Hubs
   { path: "/investor-hub", changefreq: "weekly", priority: "0.82" },

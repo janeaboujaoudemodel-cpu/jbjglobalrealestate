@@ -168,12 +168,37 @@ const NewsDetail = () => {
   const keyStats = (article.key_stats || []) as { label: string; value: string }[];
   const keyTakeaways = (article.key_takeaways || []) as string[];
 
+  const articleUrl = `https://jbj.ae/news/${article.id}`;
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.excerpt,
+    image: [heroImage],
+    datePublished: article.published_date,
+    dateModified: article.published_date,
+    author: { "@type": "Organization", name: "JBJ Global Real Estate", url: "https://jbj.ae" },
+    publisher: {
+      "@type": "Organization",
+      name: "JBJ Global Real Estate",
+      logo: { "@type": "ImageObject", url: "https://jbj.ae/logo.png" },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
+    articleSection: article.category,
+  };
+
   return (
     <>
       <SEOHead
         title={`${article.title} | JBJ Global Real Estate News`}
         description={article.excerpt}
       />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+
       <article className="min-h-screen bg-[#FDFBF7]">
         {/* Full-Screen Hero Image */}
         <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
