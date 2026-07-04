@@ -257,7 +257,7 @@ export default function SupportLauncher() {
                 className="pointer-events-none flex items-center justify-center"
                 style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
               >
-                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
+                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", transform: "translate(0.5px, -0.5px)" }} />
               </span>
               <span
                 className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
