@@ -102,7 +102,9 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
         <div className="flex items-start gap-3 mb-4">
           <span
             data-emerald-action="true"
+            data-icon-square="true"
             className="jj-emerald-action inline-flex w-9 h-9 items-center justify-center rounded-lg"
+            style={{ ['--jj-icon-lock-size' as any]: '2.25rem' }}
           >
             {icon}
           </span>
@@ -145,14 +147,14 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
         {card(
           projectName,
           "Top 5 buyers · This project",
-          <Building2 className="w-4 h-4 text-[#1A1A1A]" />,
+          <Building2 className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />,
           projectRows,
           showAreaProxy ? "Dubai proxy" : undefined,
         )}
         {card(
           areaRows?.key || areaName || "Dubai · all areas",
           "Top 5 buyers · Surrounding area",
-          <MapPin className="w-4 h-4 text-[#1A1A1A]" />,
+          <MapPin className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />,
           (areaRows?.rows || topRows).slice(0, 5),
           !areaRows && areaName ? "Dubai proxy" : undefined,
         )}

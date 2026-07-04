@@ -30107,3 +30107,62 @@ html body :is([data-surface="emerald"], [data-emerald-action="true"], [data-emer
 html[data-project-edit-mode="off"] [data-owner-pencil] {
   display: none !important;
 }
+
+/* =====================================================================
+   PASS 228 — PROJECT PAGE WINNING-RULE CONTRAST ROOT
+   Final high-specificity lock for the user-reported project-page defects:
+   emerald surfaces = white ink/icons, champagne account dropdown = ink,
+   payment/pros/house/detail chips cannot be repainted by older guards.
+   ===================================================================== */
+html body #root :is(.jj-house-detail-card, .jj-house-inclusion-pill, .jj-project-pros-panel, .jj-project-pros-item, .jj-market-emerald-card, .jj-market-emerald-row, [data-payment-progress-bar] > div)[data-surface="emerald"],
+html body #root :is(.jj-house-detail-card, .jj-house-inclusion-pill, .jj-project-pros-panel, .jj-project-pros-item, .jj-market-emerald-card, .jj-market-emerald-row, [data-payment-progress-bar] > div) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html body #root .jj-project-pros-panel .jj-project-pros-item,
+html body #root .jj-project-pros-panel .jj-project-pros-item :is(*,span,div,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-section="payment"] [data-payment-progress-bar] > div,
+html body #root [data-section="payment"] [data-payment-progress-bar] > div :is(span,svg,path,line,polyline,polygon,rect,circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.55) !important;
+}
+
+html body #root [data-section="payment"] [role="tab"][data-state="active"] {
+  height: 100% !important;
+  min-height: 3rem !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-radius: 0 !important;
+}
+
+html body [data-account-menu-content][data-account-menu-content],
+html body [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([class*="bg-red"] *, [data-notification-badge] *)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+html body [data-account-menu-content][data-account-menu-content] :is(a,button,[role="menuitem"]):is(:hover,:focus,[data-highlighted]) {
+  background: rgba(6,78,59,0.10) !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body :is(.form-checkbox-row, [data-checkbox-row]) :is([data-emerald-ok="checkbox"], [data-radix-checkbox-root], input[type="checkbox"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border-color: #064E3B !important;
+}

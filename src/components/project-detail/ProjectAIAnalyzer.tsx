@@ -88,7 +88,6 @@ function extractAppreciation(text: string): number | null {
 }
 
 const CHAMPAGNE_GOLD = "#B89555";
-const CHAMPAGNE_GOLD_LIGHT = "#E8D08A";
 const DUBAI_AVG = 1400;
 
 export const ProjectAIAnalyzer = ({
