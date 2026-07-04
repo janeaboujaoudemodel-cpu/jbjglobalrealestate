@@ -155,7 +155,8 @@ export default function OwnerSectionEditor({
           <button
             type="button"
             aria-label={`Edit ${config.title}`}
-            className="inline-flex items-center justify-center w-7 h-7 rounded-md border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6] transition shadow-sm"
+            data-emerald-action="true"
+            className="allow-white inline-flex items-center justify-center w-7 h-7 rounded-md border border-transparent bg-[#064E3B] text-white hover:bg-[#064E3B] transition shadow-sm"
             title={`Edit ${config.title}`}
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -163,7 +164,8 @@ export default function OwnerSectionEditor({
         ) : (
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#B89555]/50 bg-[#F7F2EA] text-[#1A1A1A] text-xs font-semibold hover:bg-[#EFE6D6] transition shadow-sm"
+            data-emerald-action="true"
+            className="allow-white inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-transparent bg-[#064E3B] text-white text-xs font-semibold hover:bg-[#064E3B] transition shadow-sm"
             title={`Edit ${config.title}`}
           >
             <Pencil className="w-3 h-3" />

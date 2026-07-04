@@ -970,10 +970,12 @@ export default function ProjectDetailLayout({
                   <button
                     key={tab.id}
                     data-tab={tab.id}
+                    data-filter-selected={activeTab === tab.id ? "true" : undefined}
+                    data-surface={activeTab === tab.id ? "emerald" : undefined}
                     onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap shrink-0 min-w-fit transition-all relative ${
                       activeTab === tab.id
-                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] text-[#1A1A1A] border-2 border-[#B89555] font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
+                        ? "allow-white jj-pill-emerald-metallic text-white border-0 font-bold shadow-[0_10px_24px_-12px_rgba(4,44,28,0.86)]"
                         : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent"
                     }`}
                   >
