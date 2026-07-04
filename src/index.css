@@ -28184,6 +28184,36 @@ html body #root main[data-company-legal-page="true"] :is(section.min-h-screen > 
   margin-right: 0 !important;
 }
 
+html body #root main[data-company-legal-page="true"] .jj-layer-active {
+  width: min(100%, 1100px) !important;
+  max-width: 1100px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow: hidden !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active > * {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active :is(.jj-card-inner, [data-surface="champagne"], [data-surface="champagne"] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active :is(.jj-card-inner, [data-surface="champagne"]) {
+  background: rgba(255,255,255,0.08) !important;
+  background-image: none !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen)::before,
   html body #root .jj-company-hero-motion { animation: none !important; }
