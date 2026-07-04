@@ -63,4 +63,7 @@ export const installInteractionCssPruner = () => {
 
   run();
   requestAnimationFrame(run);
+  window.setTimeout(run, 250);
+  window.setTimeout(run, 1000);
+  window.setTimeout(run, 2500);
 };
