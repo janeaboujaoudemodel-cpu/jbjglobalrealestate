@@ -283,6 +283,34 @@ const Properties = () => {
     const saleStatusParam = searchParams.get('saleStatus');
     const communityParam = searchParams.get('community');
     const sortParam = searchParams.get('sort');
+    const shortcutSortParam = searchParams.get('sortBy') as ShortcutFilterState['sortBy'] | null;
+    const shortcutFiltersFromUrl: ShortcutFilterState = {
+      ...defaultShortcutFilters,
+      searchQuery: keywordParam || "",
+      priceMin: priceMinParam || "",
+      priceMax: priceMaxParam || "",
+      bedrooms: searchParams.get('bedrooms')?.split(',').filter(Boolean) || (bedsParam ? [bedsParam] : []),
+      emirates: searchParams.get('emirates')?.split(',').filter(Boolean) || (emirateParam ? [emirateParam] : []),
+      areas: searchParams.get('areas')?.split(',').filter(Boolean) || (areaParam ? [areaParam.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())] : []),
+      developers: searchParams.get('developers')?.split(',').filter(Boolean) || [],
+      propertyTypes: searchParams.get('propertyTypes')?.split(',').filter(Boolean) || (typeParam && typeParam !== 'all' ? [typeParam] : []),
+      statuses: searchParams.get('statuses')?.split(',').filter(Boolean) || (saleStatusParam && saleStatusParam !== 'all' ? [saleStatusParam] : []),
+      constructionStatuses: searchParams.get('constructionStatuses')?.split(',').filter(Boolean) || (newStatus ? [newStatus] : []),
+      sortBy: shortcutSortParam,
+      hideSoldOut: searchParams.get('hideSoldOut') === '1',
+      sizeMin: sizeMinParam || "",
+      sizeMax: sizeMaxParam || "",
+      views: searchParams.get('views')?.split(',').filter(Boolean) || [],
+      paymentPlanMax: searchParams.get('paymentPlanMax') ? Number(searchParams.get('paymentPlanMax')) : defaultShortcutFilters.paymentPlanMax,
+      postHandoverOnly: searchParams.get('postHandoverOnly') === '1',
+      handoverFrom: searchParams.get('handoverFrom')
+        ? { quarter: searchParams.get('handoverFrom')!.split('-')[0] || 'Q1', year: searchParams.get('handoverFrom')!.split('-')[1] || '2025' }
+        : defaultShortcutFilters.handoverFrom,
+      handoverTo: searchParams.get('handoverTo')
+        ? { quarter: searchParams.get('handoverTo')!.split('-')[0] || 'Q4', year: searchParams.get('handoverTo')!.split('-')[1] || '2035' }
+        : defaultShortcutFilters.handoverTo,
+      propertyCategory: (searchParams.get('category') as 'residential' | 'commercial') || null,
+    };
 
     const hasDeveloperParam = !!developerParam;
     const developersLoaded = !!developers && developers.length > 0;
@@ -332,7 +360,11 @@ const Properties = () => {
 
     const hasAnyParam = newTransaction || newStatus || developerParam || keywordParam || areaParam ||
       bedsParam || typeParam || priceMinParam || priceMaxParam || sizeMinParam || sizeMaxParam ||
-      currencyParam || emirateParam || saleStatusParam || communityIdFromUrl || sortParam;
+      currencyParam || emirateParam || saleStatusParam || communityIdFromUrl || sortParam || shortcutSortParam ||
+      searchParams.get('developers') || searchParams.get('emirates') || searchParams.get('areas') ||
+      searchParams.get('propertyTypes') || searchParams.get('statuses') || searchParams.get('constructionStatuses') ||
+      searchParams.get('views') || searchParams.get('paymentPlanMax') || searchParams.get('postHandoverOnly') ||
+      searchParams.get('handoverFrom') || searchParams.get('handoverTo') || searchParams.get('category');
 
     // Apply filters if any URL params exist
     if (hasAnyParam) {
@@ -359,11 +391,16 @@ const Properties = () => {
       };
       setFilters(updated);
       setAppliedFilters(updated);
+      setShortcutFilters(shortcutFiltersFromUrl);
       if (sortParam) setSortBy(sortParam);
+      if (shortcutSortParam === 'price_asc') setSortBy('price-low');
+      if (shortcutSortParam === 'price_desc') setSortBy('price-high');
+      if (shortcutSortParam === 'newest') setSortBy('newest');
     } else if (searchParams.toString() === '') {
       // No URL params at all — ensure defaults show all projects
       setFilters(defaultExtendedFilters);
       setAppliedFilters(defaultExtendedFilters);
+      setShortcutFilters(defaultShortcutFilters);
     }
   }, [searchParams, developers, communities, areas]);
   

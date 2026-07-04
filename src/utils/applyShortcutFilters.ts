@@ -10,6 +10,19 @@ export function applyShortcutFilters<T extends Record<string, any>>(
 ): T[] {
   let result = [...projects];
 
+  const normalize = (value: unknown) => String(value ?? '').toLowerCase().replace(/[_-]+/g, ' ').trim();
+  const handoverOrder = (handover: unknown): number | null => {
+    const text = normalize(handover);
+    if (!text) return null;
+    if (/\b(ready|complete|completed|delivered)\b/.test(text)) return 202400;
+    const year = text.match(/20\d{2}/)?.[0];
+    if (!year) return null;
+    const qMatch = text.match(/\bq([1-4])\b/);
+    return Number(year) * 10 + (qMatch ? Number(qMatch[1]) : 4);
+  };
+  const rangeStart = Number(sf.handoverFrom.year) * 10 + Number(sf.handoverFrom.quarter.replace('Q', '') || 1);
+  const rangeEnd = Number(sf.handoverTo.year) * 10 + Number(sf.handoverTo.quarter.replace('Q', '') || 4);
+
   // Hide Sold Out — permanently disabled site-wide. Off-plan projects that
   // sell out reappear via the secondary market, so this toggle no longer
   // filters anything and is not surfaced in the UI.
@@ -18,8 +31,16 @@ export function applyShortcutFilters<T extends Record<string, any>>(
   // Construction Status
   if (sf.constructionStatuses.length > 0) {
     result = result.filter(p => {
-      const cs = (p.construction_status || '').toLowerCase();
-      return sf.constructionStatuses.some(s => cs.includes(s.toLowerCase()));
+      const cs = `${normalize(p.construction_status)} ${normalize(p.status)} ${normalize(p.availability_status)} ${normalize(p.handover_date)}`;
+      return sf.constructionStatuses.some(s => {
+        const needle = normalize(s);
+        if (needle === 'completed') return /\b(ready|complete|completed|delivered)\b/.test(cs);
+        if (needle === 'under construction') return cs.includes('under construction') || cs.includes('construction');
+        if (needle === 'presale') return cs.includes('presale') || cs.includes('pre sale') || cs.includes('eoi');
+        if (needle === 'ready resale') return cs.includes('ready resale') || (cs.includes('ready') && cs.includes('resale'));
+        if (needle === 'resale off plan') return cs.includes('resale off plan') || (cs.includes('resale') && !cs.includes('ready'));
+        return cs.includes(needle);
+      });
     });
   }
 
@@ -34,8 +55,8 @@ export function applyShortcutFilters<T extends Record<string, any>>(
   // Property Types
   if (sf.propertyTypes.length > 0) {
     result = result.filter(p => {
-      const type = (p.property_type_label || '').toLowerCase();
-      return sf.propertyTypes.some(t => type.includes(t.toLowerCase()));
+      const type = `${normalize(p.property_type_label)} ${normalize(p.unit_types)} ${normalize(p.name)} ${normalize(p.description)}`;
+      return sf.propertyTypes.some(t => type.includes(normalize(t).replace(/s$/, '')));
     });
   }
 
@@ -67,6 +88,27 @@ export function applyShortcutFilters<T extends Record<string, any>>(
     const min = Number(sf.priceMin);
     if (!isNaN(min)) result = result.filter(p => (p.price_from || 0) >= min);
   }
+
+  if (sf.paymentPlanMax < 100) {
+    result = result.filter(p => {
+      const down = Number(p.down_payment_percent ?? p.pre_handover_percent ?? NaN);
+      if (!Number.isNaN(down)) return down <= sf.paymentPlanMax;
+      const plan = normalize(p.payment_plan);
+      const firstPercent = plan.match(/\b(\d{1,3})\s*%/)?.[1];
+      return firstPercent ? Number(firstPercent) <= sf.paymentPlanMax : true;
+    });
+  }
+
+  if (sf.postHandoverOnly) {
+    result = result.filter(p => normalize(p.payment_plan).includes('post'));
+  }
+
+  if (sf.handoverFrom.year !== '2025' || sf.handoverFrom.quarter !== 'Q1' || sf.handoverTo.year !== '2035' || sf.handoverTo.quarter !== 'Q4') {
+    result = result.filter(p => {
+      const order = handoverOrder(p.handover_date ?? p.expected_completion ?? p.construction_status);
+      return order === null ? false : order >= rangeStart && order <= rangeEnd;
+    });
+  }
   if (sf.priceMax) {
     const max = Number(sf.priceMax);
     if (!isNaN(max)) result = result.filter(p => (p.price_from || Infinity) <= max);
@@ -75,11 +117,11 @@ export function applyShortcutFilters<T extends Record<string, any>>(
   // Size range
   if (sf.sizeMin) {
     const min = Number(sf.sizeMin);
-    if (!isNaN(min)) result = result.filter(p => (p.size_sqft || p.area_sqft || 0) >= min);
+    if (!isNaN(min)) result = result.filter(p => (p.size_min || p.size_sqft || p.area_sqft || 0) >= min);
   }
   if (sf.sizeMax) {
     const max = Number(sf.sizeMax);
-    if (!isNaN(max)) result = result.filter(p => (p.size_sqft || p.area_sqft || Infinity) <= max);
+    if (!isNaN(max)) result = result.filter(p => (p.size_max || p.size_min || p.size_sqft || p.area_sqft || Infinity) <= max);
   }
 
   // Emirates
@@ -109,9 +151,9 @@ export function applyShortcutFilters<T extends Record<string, any>>(
   // Views
   if (sf.views && sf.views.length > 0) {
     result = result.filter(p => {
-      const projectViews = p.views || p.property_views || p.view || '';
-      const viewStr = Array.isArray(projectViews) ? projectViews.join(' ').toLowerCase() : String(projectViews).toLowerCase();
-      return sf.views.some(v => viewStr.includes(v.replace(/_/g, ' ').toLowerCase()) || viewStr.includes(v.toLowerCase()));
+      const projectViews = p.views || p.property_views || p.view || p.description || '';
+      const viewStr = Array.isArray(projectViews) ? projectViews.join(' ').toLowerCase() : normalize(projectViews);
+      return sf.views.some(v => viewStr.includes(normalize(v)));
     });
   }
 

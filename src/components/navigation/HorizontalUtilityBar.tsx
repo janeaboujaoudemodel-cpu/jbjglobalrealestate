@@ -30,6 +30,14 @@ function encodeFiltersToURL(f: ShortcutFilterState): URLSearchParams {
   if (f.sizeMin) p.set("sizeMin", f.sizeMin);
   if (f.sizeMax) p.set("sizeMax", f.sizeMax);
   if (f.views.length) p.set("views", f.views.join(","));
+  if (f.paymentPlanMax < 100) p.set("paymentPlanMax", String(f.paymentPlanMax));
+  if (f.postHandoverOnly) p.set("postHandoverOnly", "1");
+  if (f.handoverFrom.year !== "2025" || f.handoverFrom.quarter !== "Q1") {
+    p.set("handoverFrom", `${f.handoverFrom.quarter}-${f.handoverFrom.year}`);
+  }
+  if (f.handoverTo.year !== "2035" || f.handoverTo.quarter !== "Q4") {
+    p.set("handoverTo", `${f.handoverTo.quarter}-${f.handoverTo.year}`);
+  }
   if (f.propertyCategory) p.set("category", f.propertyCategory);
   return p;
 }
@@ -52,6 +60,14 @@ function decodeFiltersFromURL(p: URLSearchParams): ShortcutFilterState {
     sizeMin: p.get("sizeMin") || "",
     sizeMax: p.get("sizeMax") || "",
     views: p.get("views")?.split(",").filter(Boolean) || [],
+    paymentPlanMax: p.get("paymentPlanMax") ? Number(p.get("paymentPlanMax")) : defaultShortcutFilters.paymentPlanMax,
+    postHandoverOnly: p.get("postHandoverOnly") === "1",
+    handoverFrom: p.get("handoverFrom")
+      ? { quarter: p.get("handoverFrom")!.split("-")[0] || "Q1", year: p.get("handoverFrom")!.split("-")[1] || "2025" }
+      : defaultShortcutFilters.handoverFrom,
+    handoverTo: p.get("handoverTo")
+      ? { quarter: p.get("handoverTo")!.split("-")[0] || "Q4", year: p.get("handoverTo")!.split("-")[1] || "2035" }
+      : defaultShortcutFilters.handoverTo,
     propertyCategory: (p.get("category") as "residential" | "commercial") || null,
   };
 }
@@ -88,6 +104,7 @@ export default function HorizontalUtilityBar() {
 
   const handleFilterChange = (newFilters: ShortcutFilterState) => {
     setFilterState(newFilters);
+    window.dispatchEvent(new CustomEvent('globalFilterChange', { detail: newFilters }));
     const p = encodeFiltersToURL(newFilters);
     const qs = p.toString();
     navigate(`/properties${qs ? `?${qs}` : ''}`);

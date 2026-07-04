@@ -127,12 +127,11 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             return (
               <DropdownMenuItem 
                 key={curr.code}
-                active={active}
                 data-currency-row
-                data-currency-active={active ? "true" : "false"}
+                data-currency-active="false"
                 onClick={() => setCurrency(curr.code)}
                 unstyled
-                className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-2.5 my-0.5 transition-colors outline-none ${active ? 'font-semibold' : ''}`}
+                className="flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none"
               >
               <span className="flex items-center gap-3">
                 <span className="text-lg leading-none">{curr.flag}</span>
