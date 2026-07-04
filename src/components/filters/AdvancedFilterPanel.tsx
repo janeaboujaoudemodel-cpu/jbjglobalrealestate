@@ -124,16 +124,29 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const [devsOpen, setDevsOpen] = useState(false);
   const [areasOpen, setAreasOpen] = useState(false);
   const [hoveredOption, setHoveredOption] = useState<string | null>(null);
+  const [contentReady, setContentReady] = useState(false);
 
   // Sync local filters when panel opens
   useEffect(() => {
     if (open) setLocalFilters(filters);
   }, [open, filters]);
 
+  // Open the panel shell immediately, then mount the heavier controls on the
+  // next tick so the header button click is never blocked by filter rendering.
+  useEffect(() => {
+    if (!open) {
+      setContentReady(false);
+      return;
+    }
+    setContentReady(false);
+    const timer = window.setTimeout(() => setContentReady(true), 40);
+    return () => window.clearTimeout(timer);
+  }, [open]);
+
   // Fetch canonical developer identities only. Logos must come from developers.logo_url;
   // project photos or generated initials are never used as logo fallbacks.
   useEffect(() => {
-    if (!open) return;
+    if (!open || !contentReady) return;
     supabase
       .from('developers')
       .select('name, slug, logo_url')
@@ -160,11 +173,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           setDevelopers(Array.from(byName.values()));
         }
       });
-  }, [open]);
+  }, [open, contentReady]);
 
   // Fetch all active areas grouped by emirate
   useEffect(() => {
-    if (!open) return;
+    if (!open || !contentReady) return;
     supabase
       .from('areas')
       .select('name, emirate')
@@ -173,13 +186,13 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       .then(({ data }) => {
         if (data) setAllAreas(data as AreaEntry[]);
       });
-  }, [open]);
+  }, [open, contentReady]);
 
   // Fetch one lightweight listing snapshot for instant, accurate local counts.
   // This avoids a backend round-trip on every chip/slider click and lets views,
   // handover range, post-handover and local search all affect the visible count.
   useEffect(() => {
-    if (!open) return;
+    if (!open || !contentReady) return;
     let cancelled = false;
     supabase
       .from('projects')
@@ -191,11 +204,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
         if (!cancelled) setCountRows((data || []) as Record<string, unknown>[]);
       });
     return () => { cancelled = true; };
-  }, [open]);
+  }, [open, contentReady]);
 
   // Live count with a short debounce — computed locally for immediate feedback.
   useEffect(() => {
-    if (!open) return;
+    if (!open || !contentReady) return;
     const timer = setTimeout(async () => {
       try {
         if (countRows.length === 0) return;
@@ -205,7 +218,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       }
     }, 90);
     return () => clearTimeout(timer);
-  }, [open, localFilters, countRows]);
+  }, [open, contentReady, localFilters, countRows]);
 
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
     setLocalFilters(prev => ({ ...prev, ...partial }));
@@ -274,7 +287,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   }, {});
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog modal={false} open={open} onOpenChange={onOpenChange}>
       <DialogContent
         data-advanced-filter-panel="true"
         data-filter-clean="true"
@@ -310,6 +323,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </div>
         </div>
 
+        {contentReady ? (
+        <>
         {/* Scrollable body */}
         <ScrollArea className="flex-1 overflow-y-auto">
           <div className="px-5 py-4 space-y-6">
@@ -749,6 +764,17 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </button>
 
         </div>
+        </>
+        ) : (
+          <div className="flex-1 min-h-[420px] px-5 py-5 space-y-4" aria-busy="true">
+            <div className="h-3 w-24 rounded-full bg-[#B89555]/20" />
+            <div className="h-11 rounded-xl border border-[#B89555]/35 bg-white" />
+            <div className="h-3 w-20 rounded-full bg-[#B89555]/20" />
+            <div className="h-11 rounded-xl border border-[#B89555]/35 bg-white" />
+            <div className="h-3 w-32 rounded-full bg-[#B89555]/20" />
+            <div className="h-24 rounded-xl border border-[#B89555]/35 bg-white" />
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
