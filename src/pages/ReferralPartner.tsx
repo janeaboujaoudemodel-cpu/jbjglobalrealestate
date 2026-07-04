@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Handshake, Users, Building2, ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT_INFO } from "@/constants/stats";
+import { SEOHead } from "@/components/SEOHead";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -11,6 +12,12 @@ const fadeInUp = {
 
 const ReferralPartner = () => {
   return (
+    <>
+      <SEOHead
+        title="Dubai Real Estate Referral Partner Program | JBJ"
+        description="Earn commission by referring buyers, sellers, and investors to JBJ Global Real Estate. Transparent payouts, RERA-licensed brokerage, dedicated partner support."
+        canonicalPath="/referral-partner"
+      />
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
