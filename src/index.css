@@ -24589,37 +24589,10 @@ html body #root [data-map-page] .jj-map-search-target {
   white-space: nowrap !important;
 }
 
-html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) {
-  background: linear-gradient(145deg, rgba(5,43,35,0.995) 0%, rgba(3,37,31,0.998) 100%) !important;
-  background-image: linear-gradient(145deg, rgba(5,43,35,0.995) 0%, rgba(3,37,31,0.998) 100%) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 26px 64px -34px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.14) !important;
-}
+/* Map sort dropdown — now follows PASS 220 champagne+emerald standard.
+   Legacy dark-emerald override kept commented for history:
+   html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) { … } */
 
-html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) :is([role="option"], .jj-map-sort-option) {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: none !important;
-}
-
-html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) :is([role="option"]:hover, [role="option"][data-highlighted], .jj-map-sort-option:hover, .jj-map-sort-option[data-highlighted]) {
-  background: rgba(255,255,255,0.12) !important;
-  background-color: rgba(255,255,255,0.12) !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-
-html body [data-radix-popper-content-wrapper] :is(.jj-map-sort-content, [data-map-shell]) :is([role="option"], .jj-map-sort-option) :where(span,svg,path,line,rect,circle,polyline,polygon) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
 
 @media (max-width: 768px) {
   html body #root [data-map-page] {
@@ -28733,7 +28706,7 @@ html body :is(
 /* Champagne surface for every popper container we don't explicitly exclude.
    :not(#\a) chain boosts specificity so we beat every existing
    [data-surface="emerald"] rule that paints these popovers today. */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) > *:not([data-account-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) > *:not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
   background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-color: #FDFBF7 !important;
@@ -28747,7 +28720,7 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) > *:not
 }
 /* Same lock for descendant panel wrappers Radix inserts between the popper
    wrapper and the menu content (some components wrap in an extra div). */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) :is([role="menu"], [role="listbox"], [role="dialog"], [data-radix-menu-content], [data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content], [data-currency-menu-content], [data-mode-switcher-panel="true"]):not([data-account-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) :is([role="menu"], [role="listbox"], [role="dialog"], [data-radix-menu-content], [data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content], [data-currency-menu-content], [data-mode-switcher-panel="true"]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
   background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-color: #FDFBF7 !important;
@@ -28758,7 +28731,8 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) :is([ro
 
 /* Row resting state = dark ink on champagne (high-spec chain to beat
    tailwind text-white utilities baked into radix items). */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+
   [role="option"],
   [role="menuitem"],
   [role="menuitemcheckbox"],
@@ -28774,7 +28748,7 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:ha
   background: transparent !important;
   background-image: none !important;
 }
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"],
   [role="menuitem"],
   [cmdk-item],
@@ -28785,7 +28759,7 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:ha
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"],
   [role="menuitem"],
   [cmdk-item],
@@ -28801,7 +28775,7 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:ha
 /* Hover / active / selected = emerald→black metallic with white ink+icons.
    Explicitly opts out of the currency + account "active" rows so PASS 98/99
    keep their existing emerald treatment untouched. */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28821,7 +28795,7 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:ha
   color: #FFFFFF !important;
   border-radius: 8px !important;
 }
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28836,7 +28810,7 @@ html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-cont
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28854,7 +28828,7 @@ html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-cont
 }
 
 /* Group labels / separators inside champagne popovers stay muted-ink. */
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="group"] > [role="presentation"],
   [role="separator"],
   [data-radix-select-label],
@@ -29284,3 +29258,237 @@ html body :is(
   color: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* =====================================================================
+   PASS 223 — TERMINAL EMERALD SURFACE GRADIENT LOCK
+   Any element that opts into an emerald surface (via data attribute,
+   .jj-* class, Tailwind bg-emerald-{700,800,900}/bg-green-{800,900} or
+   an explicit brand hex utility) must render the ink-emerald ombre
+   gradient (never a flat translucent green) with a gold hairline.
+   Scope guard: excludes homepage, header, sidebar, footer, AI-tool
+   scope, opt-outs (data-ink-emerald-opt-out, data-preserve-surface),
+   images/video/svg, and dropdown poppers (owned by PASS 220/221).
+   ===================================================================== */
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  .jj-filter-emerald-control,
+  [data-surface="emerald"]:not([data-radix-popper-content-wrapper] *):not([data-filter-dropdown]),
+  [data-emerald-surface="true"],
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#064e3b]"],
+  [class~="bg-[#065F46]"],
+  [class~="bg-[#065f46]"],
+  [class~="bg-[#042C1C]"],
+  [class~="bg-[#042c1c]"],
+  [class~="bg-[#022C22]"],
+  [class~="bg-[#022c22]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"],
+  [class~="bg-green-800"],
+  [class~="bg-green-900"]
+):not(header):not(header *):not(footer):not(footer *):not(aside):not(aside *):not([data-app-chrome]):not([data-app-chrome] *):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *):not([data-preserve-surface]):not([data-preserve-surface] *):not(img):not(picture):not(video):not(svg):not([data-radix-popper-content-wrapper]):not([data-radix-popper-content-wrapper] *) {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  background-color: #042C1C !important;
+  border-color: rgba(184, 149, 85, 0.42) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Descendant text/icons on those emerald surfaces = pure white */
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  .jj-filter-emerald-control,
+  [data-surface="emerald"]:not([data-radix-popper-content-wrapper] *):not([data-filter-dropdown]),
+  [data-emerald-surface="true"],
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#064e3b]"],
+  [class~="bg-[#065F46]"],
+  [class~="bg-[#065f46]"],
+  [class~="bg-[#042C1C]"],
+  [class~="bg-[#042c1c]"],
+  [class~="bg-[#022C22]"],
+  [class~="bg-[#022c22]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"],
+  [class~="bg-green-800"],
+  [class~="bg-green-900"]
+):not(header):not(footer):not(aside):not([data-app-chrome]):not([data-ink-emerald-opt-out]):not([data-preserve-surface])
+  :where(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,i,time,dt,dd):not([data-surface="page"]):not([data-surface="light"]):not([data-surface="champagne"]):not([data-surface="cream"]):not(.surface-page):not(.surface-light):not(.surface-champagne):not(.surface-cream):not(.jj-card-inner):not(.jj-layer-2):not([data-preserve-ink]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  .jj-filter-emerald-control,
+  [data-surface="emerald"]:not([data-radix-popper-content-wrapper] *):not([data-filter-dropdown]),
+  [data-emerald-surface="true"],
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#064e3b]"],
+  [class~="bg-[#065F46]"],
+  [class~="bg-[#065f46]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"],
+  [class~="bg-green-800"],
+  [class~="bg-green-900"]
+):not(header):not(footer):not(aside):not([data-app-chrome]):not([data-ink-emerald-opt-out]):not([data-preserve-surface])
+  :is(svg, [class*="lucide"]),
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  [data-surface="emerald"]:not([data-radix-popper-content-wrapper] *):not([data-filter-dropdown]),
+  [data-emerald-surface="true"],
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#064e3b]"],
+  [class~="bg-[#065F46]"],
+  [class~="bg-[#065f46]"],
+  [class~="bg-emerald-700"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-900"],
+  [class~="bg-green-800"],
+  [class~="bg-green-900"]
+):not(header):not(footer):not(aside):not([data-app-chrome])
+  :is(svg *, path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Map card surfaces — reinforce ink-emerald gradient (never flat translucent green) */
+html body #root [data-map-page] :is(
+  .jj-map-list-card,
+  .jj-map-hover-card,
+  .jj-map-project-card,
+  .jj-map-popup-card,
+  .jj-map-count-pill
+) {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%) !important;
+  background-color: #042C1C !important;
+  border-color: rgba(184, 149, 85, 0.42) !important;
+  color: #FFFFFF !important;
+}
+html body #root [data-map-page] :is(
+  .jj-map-list-card,
+  .jj-map-hover-card,
+  .jj-map-project-card,
+  .jj-map-popup-card,
+  .jj-map-count-pill
+) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,path,line,polyline,polygon,rect,circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* =====================================================================
+   PASS 224 — DROPDOWN OPTION INK FINAL LOCK
+   Champagne dropdown option rows are BLACK by default and WHITE on
+   hover / highlighted / selected (emerald active row). Beats baked-in
+   Tailwind `text-white` utilities on Radix items via ID-boosted :not()
+   specificity + !important. Scope: any Radix popper NOT inside
+   [data-ai-tools-scope="true"] and NOT an opt-out surface.
+   ===================================================================== */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  [cmdk-item],
+  .jbj-form-option,
+  [data-radix-select-item],
+  [data-radix-dropdown-menu-item]
+):not([data-highlighted]):not([data-state="checked"]):not([data-selected="true"]):not([aria-selected="true"]):not(:hover):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background-image: none !important;
+  background-color: transparent !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"],
+  [role="menuitem"],
+  [cmdk-item],
+  .jbj-form-option,
+  [data-radix-select-item],
+  [data-radix-dropdown-menu-item]
+):not([data-highlighted]):not([data-state="checked"]):not([data-selected="true"]):not([aria-selected="true"]):not(:hover) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"]:hover,
+  [role="option"][data-highlighted],
+  [role="option"][aria-selected="true"],
+  [role="option"][data-state="checked"],
+  [role="menuitem"]:hover,
+  [role="menuitem"][data-highlighted],
+  [cmdk-item]:hover,
+  [cmdk-item][data-selected="true"],
+  .jbj-form-option:hover,
+  .jbj-form-option[data-highlighted],
+  .jbj-form-option[data-state="checked"],
+  [data-radix-select-item][data-highlighted],
+  [data-radix-select-item][data-state="checked"],
+  [data-radix-dropdown-menu-item][data-highlighted]
+) {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  background-color: #042C1C !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-radius: 8px !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"]:hover,
+  [role="option"][data-highlighted],
+  [role="option"][aria-selected="true"],
+  [role="option"][data-state="checked"],
+  [role="menuitem"]:hover,
+  [role="menuitem"][data-highlighted],
+  [cmdk-item]:hover,
+  [cmdk-item][data-selected="true"],
+  .jbj-form-option:hover,
+  .jbj-form-option[data-highlighted],
+  .jbj-form-option[data-state="checked"],
+  [data-radix-select-item][data-highlighted],
+  [data-radix-select-item][data-state="checked"],
+  [data-radix-dropdown-menu-item][data-highlighted]
+) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
