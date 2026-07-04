@@ -47,11 +47,12 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                 <li key={item} className="flex items-center gap-3">
                   <span
                     data-emerald-action="true"
-                    className="jj-emerald-action inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0"
+                    className="jj-emerald-action inline-flex w-8 h-8 aspect-square rounded-full items-center justify-center shrink-0"
                     aria-hidden="true"
                   >
-                    <Sparkles className="w-3 h-3" style={{ color: '#FFFFFF' }} />
+                    <Sparkles className="w-4 h-4 allow-white" style={{ color: '#FFFFFF' }} strokeWidth={2.5} />
                   </span>
+
                   <span className="text-[#1A1A1A]/90">{item}</span>
                 </li>
               ))}

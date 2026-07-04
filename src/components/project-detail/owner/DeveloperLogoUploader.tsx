@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, Pencil } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -44,7 +44,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
   return (
     <div
       data-keep-gold
-      className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative group"
+      className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative"
     >
       {isValidDeveloperLogoUrl(logoUrl) ? (
         <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
@@ -65,15 +65,16 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
           <button
             onClick={() => fileRef.current?.click()}
             disabled={busy}
-            className="absolute inset-0 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 text-xs font-semibold"
+            aria-label="Change logo"
             title="Change logo"
             data-no-contrast-guard
+            className="absolute -top-2 -right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] shadow-sm"
           >
-            {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
-            <span>{busy ? "Uploading…" : "Change logo"}</span>
+            {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Pencil className="w-3.5 h-3.5" />}
           </button>
         </>
       )}
     </div>
   );
 }
+

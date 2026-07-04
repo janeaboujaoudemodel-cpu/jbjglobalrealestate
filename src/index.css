@@ -29496,3 +29496,67 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][
 }
 
 
+
+/* =====================================================================
+   PASS FINAL — Emerald action surface white-only contrast lock
+   Any element with data-emerald-action, .jj-emerald-action,
+   .jj-surface-emerald, [data-surface="emerald"], .jj-cta-emerald
+   forces pure white text + icons for ALL descendants. Excludes AI tools.
+   ===================================================================== */
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-emerald-action="true"],
+  [data-emerald-action="true"][data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  [data-surface="emerald"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]),
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  [data-surface="emerald"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]) *:not([data-preserve-surface]):not([data-keep-gold] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  [data-surface="emerald"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]) svg,
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-emerald-action="true"],
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  [data-surface="emerald"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]) svg :is(path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* PASS FINAL+ — map layer buttons + enable-chip: pure white text/icons */
+html body #root .jj-map-layer-switcher,
+html body #root .jj-map-layer-switcher .jj-map-layer-button,
+html body #root .jj-map-enable-chip {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root .jj-map-layer-switcher .jj-map-layer-button,
+html body #root .jj-map-enable-chip {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
+  border: 1px solid rgba(0,0,0,0.28) !important;
+}
+html body #root .jj-map-layer-switcher .jj-map-layer-button *,
+html body #root .jj-map-layer-switcher .jj-map-layer-button :is(svg,path,line,rect,circle,polyline,polygon),
+html body #root .jj-map-enable-chip *,
+html body #root .jj-map-enable-chip :is(svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}

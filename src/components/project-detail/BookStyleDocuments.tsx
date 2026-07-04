@@ -150,21 +150,30 @@ export default function BookStyleDocuments({
                 <span className="text-[10px] uppercase tracking-[0.16em] font-bold text-white">{typeLabel}</span>
               </div>
 
-              {/* Bottom label panel — solid champagne for guaranteed legibility */}
-              <div className="absolute inset-x-0 bottom-0 h-[40%] bg-[#F7F2EA] border-t border-[#B89555]/60 px-3.5 py-3 flex flex-col justify-between">
+              {/* Bottom label panel — emerald fill, pure white text */}
+              <div
+                data-no-contrast-guard
+                data-on-dark
+                className="absolute inset-x-0 bottom-0 h-[40%] border-t border-black/30 px-3.5 py-3 flex flex-col justify-between allow-white"
+                style={{
+                  background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+                  color: "#FFFFFF",
+                }}
+              >
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/75 font-bold mb-1.5 line-clamp-1">
+                  <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-1.5 line-clamp-1 allow-white" style={{ color: "#FFFFFF" }}>
                     {projectName}
                   </p>
-                  <p className="text-[#1A1A1A] font-bold text-[14px] leading-tight line-clamp-2">
+                  <p className="font-bold text-[14px] leading-tight line-clamp-2 allow-white" style={{ color: "#FFFFFF" }}>
                     {title}
                   </p>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#1A1A1A] font-bold">View</span>
-                  <Eye className="w-3.5 h-3.5 text-[#1A1A1A] transition-colors" />
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold allow-white" style={{ color: "#FFFFFF" }}>View</span>
+                  <Eye className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF" }} />
                 </div>
               </div>
+
 
 
               {/* Page edges effect — right side, simulates paper stack */}

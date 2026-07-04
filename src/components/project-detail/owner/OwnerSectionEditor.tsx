@@ -151,28 +151,17 @@ export default function OwnerSectionEditor({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        {variant === "icon" ? (
-          <button
-            type="button"
-            aria-label={`Edit ${config.title}`}
-            data-emerald-action="true"
-            className="allow-white inline-flex items-center justify-center w-7 h-7 rounded-md border border-transparent bg-[#064E3B] text-white hover:bg-[#064E3B] transition shadow-sm"
-            title={`Edit ${config.title}`}
-          >
-            <Pencil className="w-3.5 h-3.5" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            data-emerald-action="true"
-            className="allow-white inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-transparent bg-[#064E3B] text-white text-xs font-semibold hover:bg-[#064E3B] transition shadow-sm"
-            title={`Edit ${config.title}`}
-          >
-            <Pencil className="w-3 h-3" />
-            {label || "Edit section"}
-          </button>
-        )}
+        <button
+          type="button"
+          aria-label={`Edit ${config.title}`}
+          title={`Edit ${config.title}`}
+          data-no-contrast-guard
+          className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] transition shadow-sm"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+        </button>
       </SheetTrigger>
+
 
       <SheetContent side="right" className="w-full sm:max-w-xl overflow-y-auto bg-[#FDFBF7]">
         <SheetHeader>
