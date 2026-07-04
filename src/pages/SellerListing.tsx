@@ -915,22 +915,16 @@ Requirements:
                               >
                                 <Icon style={{ width: 18, height: 18, color: "#FFFFFF" }} strokeWidth={2.25} />
                               </span>
-                              <span className="font-semibold text-sm md:text-base leading-tight whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                              <span className="font-semibold text-sm md:text-base leading-tight whitespace-nowrap flex-1 min-w-0 truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                                 {option.label}
                               </span>
                               {active && (
-                                <span
+                                <CheckCircle2
                                   aria-hidden
-                                  className="ml-auto inline-flex items-center justify-center rounded-full"
-                                  style={{
-                                    width: 22,
-                                    height: 22,
-                                    background: "#FFFFFF",
-                                    color: "#047857",
-                                  }}
-                                >
-                                  <CheckCircle2 style={{ width: 16, height: 16, color: "#047857" }} strokeWidth={2.5} />
-                                </span>
+                                  className="shrink-0 ml-1"
+                                  style={{ width: 18, height: 18, color: "#FFFFFF" }}
+                                  strokeWidth={2.5}
+                                />
                               )}
                             </label>
                           );
