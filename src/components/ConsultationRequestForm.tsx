@@ -3,7 +3,7 @@
  * Enhanced with lead qualification fields: nationality, language, preferred time, contact method
  */
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -114,6 +114,8 @@ export const ConsultationRequestForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
+  const countryList = useMemo(() => getCountryList(), []);
+  const languageList = useMemo(() => getLanguageList(), []);
 
   const form = useForm<ConsultationFormData>({
     resolver: zodResolver(consultationSchema),
@@ -221,7 +223,8 @@ export const ConsultationRequestForm = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[3px] border-[#B89555] rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_4px_6px_rgba(0,0,0,0.1)] max-w-3xl mx-auto ${className}`}
+        data-form-shell
+        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/45 rounded-2xl p-5 sm:p-6 md:p-7 shadow-[0_18px_46px_rgba(184,149,85,0.20),0_2px_8px_rgba(0,0,0,0.08)] max-w-3xl mx-auto ${className}`}
       style={{ transform: 'perspective(1200px) rotateX(1deg)' }}
     >
       {/* Header */}
@@ -241,7 +244,7 @@ export const ConsultationRequestForm = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" data-form-shell>
           <FormField
             control={form.control}
             name="fullName"
@@ -286,7 +289,7 @@ export const ConsultationRequestForm = ({
             )}
           />
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <FormField
               control={form.control}
               name="serviceNeeded"
@@ -349,7 +352,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div className="rounded-xl border border-[#B89555]/35 p-4 md:p-5">
+              <div className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
                     <div className="flex flex-wrap gap-2">
                       {BEDROOM_OPTIONS.map((b) => {
                         const active = selected.includes(b.value);
@@ -399,7 +402,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div className="rounded-xl border border-[#B89555]/35 p-4 md:p-5">
+                  <div className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
                     <div className="flex flex-wrap gap-2">
                       {SIZE_BUCKETS.map((b) => {
                         const active =
@@ -443,7 +446,7 @@ export const ConsultationRequestForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
-                      {getCountryList().map((n) => (
+                      {countryList.map((n) => (
                         <SelectItem key={n} value={n}>{COUNTRY_FLAGS[n] ? `${COUNTRY_FLAGS[n]} ${n}` : n}</SelectItem>
                       ))}
                     </SelectContent>
@@ -464,7 +467,7 @@ export const ConsultationRequestForm = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
-                      {getLanguageList().map((l) => (
+                      {languageList.map((l) => (
                         <SelectItem key={l} value={l}>{LANGUAGE_FLAGS[l] ? `${LANGUAGE_FLAGS[l]} ${l}` : l}</SelectItem>
                       ))}
                     </SelectContent>
@@ -474,7 +477,7 @@ export const ConsultationRequestForm = ({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <FormField
               control={form.control}
               name="preferredTime"
@@ -556,12 +559,12 @@ export const ConsultationRequestForm = ({
             )}
           />
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-3 border-t border-[#B89555]/20">
             <FormField
               control={form.control}
               name="agreeTerms"
               render={({ field }) => (
-                <FormItem className="flex items-start gap-3 space-y-0 flex-1 min-w-0">
+                <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 pr-1">
                   <FormControl>
                     <Checkbox
                       checked={field.value}

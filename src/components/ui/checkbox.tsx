@@ -11,9 +11,9 @@ const Checkbox = React.forwardRef<
   <CheckboxPrimitive.Root
     ref={ref}
     data-emerald-ok="checkbox"
-    style={{ width: 16, height: 16, minWidth: 16, minHeight: 16, flex: "0 0 16px" }}
+    style={{ width: 18, height: 18, minWidth: 18, minHeight: 18, flex: "0 0 18px" }}
     className={cn(
-      "peer relative aspect-square self-start shrink-0 rounded-[4px] border border-[#B89555]/70 bg-[#FDFBF7] ring-offset-background transition-all",
+      "peer relative aspect-square self-start shrink-0 rounded-[4px] border border-[#B89555]/70 bg-[#FDFBF7] ring-offset-background transition-colors select-none",
       "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_1px_2px_rgba(184,149,85,0.18)]",
       "data-[state=checked]:border-[#064E3B] data-[state=checked]:bg-[image:var(--jj-emerald-ombre)]",
       "data-[state=checked]:shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_2px_6px_rgba(6,78,59,0.4)]",
@@ -31,14 +31,14 @@ const Checkbox = React.forwardRef<
       <Check
         className="!text-white !stroke-white"
         style={{
-          width: "78%",
-          height: "78%",
+          width: "82%",
+          height: "82%",
           color: "#FFFFFF",
           stroke: "#FFFFFF",
           strokeLinecap: "round",
           strokeLinejoin: "round",
         }}
-        strokeWidth={3}
+        strokeWidth={3.4}
       />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
