@@ -749,7 +749,14 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   );
 
   return embedded ? body : (
-    <ToolAnimatedFrame theme={toolThemes.emerald}>{body}</ToolAnimatedFrame>
+    <>
+      <SEOHead
+        title="AI Interior Design for Dubai Properties | JBJ"
+        description="Reimagine Dubai apartments and villas with AI interior design — instant renders, curated styles, and material palettes tailored to UAE living."
+        canonicalPath="/interior-design-ai"
+      />
+      <ToolAnimatedFrame theme={toolThemes.emerald}>{body}</ToolAnimatedFrame>
+    </>
   );
 };
 
