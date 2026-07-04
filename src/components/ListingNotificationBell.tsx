@@ -58,7 +58,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         .limit(10),
       supabase
         .from('notifications')
-        .select('id, title, body, is_read, created_at, notification_type')
+        .select('id, title, body, is_read, created_at, notification_type, action_url, metadata')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(5),
@@ -85,7 +85,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
       is_read: n.is_read,
       created_at: n.created_at,
       type: n.notification_type || 'system',
-      metadata: null,
+      metadata: { ...(n.metadata || {}), action_url: n.action_url },
       source_table: 'notifications' as const,
     }));
 
