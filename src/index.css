@@ -30289,3 +30289,53 @@ html body [role="dialog"][data-advanced-filter-panel="true"] > div:first-child {
   background-image: none !important;
   border-bottom-color: rgba(184,149,85,0.35) !important;
 }
+
+/* PASS 243 — Header filter modal final row contract.
+   Champagne rows idle with ink; only the row being hovered/focused turns emerald
+   with pure white text/icons, matching the account dropdown. */
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:not(:hover):not(:focus):not(:focus-visible),
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:not(:hover):not(:focus):not(:focus-visible) :is(span, div, svg, path, line, polyline, polygon, rect, circle) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option-row="true"]:is(:hover,:focus,:focus-visible) :is(span, div, svg, path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* PASS 244 — Header poppers align to header divider and stay out of sidebar. */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:has(:is([data-currency-menu-content], [data-mode-switcher-panel="true"], [data-account-menu-content])) {
+  z-index: 120000 !important;
+  top: var(--app-content-top, 88px) !important;
+}
+html body [data-global-search-modal] {
+  left: max(calc(var(--app-content-left, 0px) + 10px), calc(var(--jj-content-gutter-l, 0px) + 10px)) !important;
+  right: 10px !important;
+  width: auto !important;
+  max-width: none !important;
+  transform: none !important;
+}
+@media (min-width: 640px) {
+  html body [data-global-search-modal] {
+    left: max(calc(var(--app-content-left, 0px) + 16px), calc(var(--jj-content-gutter-l, 0px) + 16px)) !important;
+    right: 16px !important;
+  }
+}
+
+/* PASS 245 — Search modal hover ink correction: emerald hover = pure white. */
+html body [data-global-search-modal] .jj-hover-emerald:is(:hover,:focus,:focus-visible),
+html body [data-global-search-modal] .jj-hover-emerald:is(:hover,:focus,:focus-visible) :is(p, span, div, svg, path, line, polyline, polygon, rect, circle) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
