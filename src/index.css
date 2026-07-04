@@ -15640,8 +15640,8 @@ html body #root [data-state="checked"][role="switch"] {
   background-image: var(--jj-emerald-ombre) !important;
 }
 
-html body #root [data-radix-popper-content-wrapper] [data-radix-select-content],
-html body #root [data-radix-popper-content-wrapper] [data-radix-popover-content] {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-radix-select-content],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-radix-popover-content] {
   animation-duration: 0ms !important;
 }
 
@@ -27463,33 +27463,33 @@ html body #root [data-jjds-segmented] [data-active="true"] > * {
    ============================================================ */
 
 /* Kill the shadcn default `accent` blue hover on every menu item */
-html body #root [data-radix-popper-content-wrapper] [role="option"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitem"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"]:hover,
-html body #root [data-radix-popper-content-wrapper] [cmdk-item]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitem"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [cmdk-item]:hover,
 html body #root [data-radix-select-content] [role="option"]:hover,
 html body #root [data-radix-dropdown-menu-content] [role="menuitem"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="option"][data-highlighted],
-html body #root [data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
-html body #root [data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"] {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][data-highlighted],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [cmdk-item][data-selected="true"] {
   background: rgba(6,78,59,0.14) !important;     /* soft emerald wash — NOT the active fill */
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
 /* SELECTED (checked / current value) — solid emerald, white ink */
-html body #root [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"],
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"],
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"],
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"],
 html body #root [data-radix-select-content] [role="option"][data-state="checked"] {
   background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body #root [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"] :is(svg, span, div),
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"] :is(svg, span, div),
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"] :is(svg, span, div),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"] :is(svg, span, div),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"] :is(svg, span, div),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"] :is(svg, span, div),
 html body #root [data-radix-select-content] [role="option"][data-state="checked"] :is(svg, span, div) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -27497,9 +27497,9 @@ html body #root [data-radix-select-content] [role="option"][data-state="checked"
 }
 
 /* SELECTED + HOVER — keep emerald but shift tone so hover ≠ resting selected */
-html body #root [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"]:hover,
-html body #root [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="option"][aria-selected="true"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemcheckbox"][data-state="checked"]:hover,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [role="menuitemradio"][data-state="checked"]:hover,
 html body #root [data-radix-select-content] [role="option"][data-state="checked"]:hover {
   background: linear-gradient(135deg, #0a6b53 0%, #064E3B 58%, #021b12 100%) !important;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.28) !important;
@@ -27530,8 +27530,8 @@ html body #root .rdp-day_today:not([aria-selected="true"]) {
 }
 
 /* Any inline blue focus ring on inputs across popovers → emerald */
-html body #root [data-radix-popper-content-wrapper] :is(input,textarea):focus-visible,
-html body #root [data-radix-popper-content-wrapper] :is(input,textarea):focus {
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus-visible,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] :is(input,textarea):focus {
   outline: none !important;
   box-shadow: 0 0 0 2px rgba(6,78,59,0.55) !important;
   border-color: rgba(6,78,59,0.55) !important;
@@ -29918,23 +29918,243 @@ html body #root [data-dld-split-segment] span {
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-/* PASS 222 — ModeSwitcher header + card readability lock (emerald surface → white text) */
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] :is(p, span, div, label, small, h1, h2, h3, h4, h5, h6) {
+/* PASS 222 REMOVED — replaced by champagne unification in PASS 230 below */
+
+/* ══════════════════════════════════════════════════════════════════
+   PASS 230 — GLOBAL DROPDOWN CHAMPAGNE UNIFICATION (final)
+   Every site-wide dropdown surface (except body[data-ai-tools-scope="true"])
+   MUST render champagne with ink text — matching the account menu.
+   Hover / active / selected row = emerald ombre with pure white text/icons.
+   AI tool routes keep their emerald skin (handled elsewhere).
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Champagne surface for currency + mode panels */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content], [data-mode-switcher-panel="true"]) {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
+  background-color: #FDFBF7 !important;
+  border: 1px solid rgba(184,149,85,0.42) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 22px 58px rgba(0,0,0,0.18), 0 0 0 1px rgba(184,149,85,0.22) !important;
+}
+
+/* Ink text on champagne — headers, descriptions, labels, icons */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content], [data-mode-switcher-panel="true"])
+  :is(h1,h2,h3,h4,h5,h6,p,span,label,a,li,small,strong,em,b,div,button):not([data-mode-row="active"]):not([data-mode-row="active"] *):not([data-currency-active="true"]):not([data-currency-active="true"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content], [data-mode-switcher-panel="true"])
+  :is(svg, path, circle, rect, line, polyline, polygon):not([data-mode-row="active"] *):not([data-currency-active="true"] *) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+/* Row/card idle style on champagne — subtle gold hairline */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content] [data-currency-row], [data-mode-switcher-panel="true"] [data-mode-card], [data-mode-switcher-panel="true"] .mode-switcher-item) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+
+/* Hover row = emerald ombre + pure white ink */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content] [data-currency-row], [data-mode-switcher-panel="true"] [data-mode-card], [data-mode-switcher-panel="true"] .mode-switcher-item):is(:hover, :focus, [data-highlighted], [data-state="checked"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(6,78,59,0.4) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -18px rgba(6,78,59,.78) !important;
 }
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] :is(svg, path, circle, rect, line, polyline, polygon) {
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content] [data-currency-row], [data-mode-switcher-panel="true"] [data-mode-card], [data-mode-switcher-panel="true"] .mode-switcher-item):is(:hover, :focus, [data-highlighted], [data-state="checked"]) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div) {
   color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+  opacity: 1 !important;
 }
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] :is(p, span, div).opacity-70,
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [class*="opacity-70"] {
-  opacity: 0.9 !important;
+
+/* Active/selected row = emerald ombre + pure white ink */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content] [data-currency-row][data-currency-active="true"], [data-mode-switcher-panel="true"] [data-mode-row="active"], [data-mode-switcher-panel="true"] .mode-switcher-item[data-mode-row="active"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(6,78,59,0.5) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16) !important;
 }
-/* Selected pill inside emerald mode panel keeps ink-on-champagne for the check */
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-active-pill],
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-active-pill] * {
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content] [data-currency-row][data-currency-active="true"], [data-mode-switcher-panel="true"] [data-mode-row="active"], [data-mode-switcher-panel="true"] .mode-switcher-item[data-mode-row="active"]) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Icon tile inside active mode card — champagne pill with emerald ink */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-row="active"] .mode-switcher-icon-tile,
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-row="active"] .mode-switcher-selected-pill {
+  background: linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%) !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-row="active"] .mode-switcher-icon-tile :is(svg,path),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-row="active"] .mode-switcher-selected-pill :is(svg,path,span) {
   color: #064E3B !important;
   -webkit-text-fill-color: #064E3B !important;
   stroke: #064E3B !important;
+}
+
+/* Divider between currency header and rows on champagne */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child {
+  border-bottom-color: rgba(184,149,85,0.3) !important;
+}
+
+/* PASS 230b — force opacity 1 on all descriptions inside the champagne dropdowns
+   (mode + currency) so ink text is not diluted to grey by opacity-70 utility. */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] :is([data-currency-menu-content], [data-mode-switcher-panel="true"]) *:not([data-mode-row="active"] *):not([data-currency-active="true"] *):not(:hover):not(:focus) {
+  opacity: 1 !important;
+}
+/* Undo faded white overlay on idle mode cards so champagne shows through */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: rgba(184,149,85,0.35) !important;
+}
+
+/* PASS 230c — ink text on idle mode cards; win over doubled-attr rules */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) :is(p, span, small, strong, em, b, div, label, svg, path, circle, rect, line, polyline, polygon) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) svg,
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]) svg path {
+  fill: none !important;
+}
+/* Hover on idle mode card → emerald with white text (matches account menu) */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) :is(p, span, small, strong, em, b, div, label, svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] .mode-switcher-item:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+}
+
+/* Currency idle row — ink; hover/active → emerald+white (win over triple-attr rules) */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row]:is(:hover, :focus, [data-highlighted], [data-state="checked"]),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(6,78,59,0.55) !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row]:is(:hover, :focus, [data-highlighted], [data-state="checked"]) :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"] :is(*, span, p, small, strong, em, b, svg, path, circle, rect, line, polyline, polygon, label, div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* PASS 230d — nuclear ink override for idle mode/currency rows */
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] .mode-switcher-item:not([data-mode-row="active"]),
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] .mode-switcher-item:not([data-mode-row="active"]) p,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] .mode-switcher-item:not([data-mode-row="active"]) span,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] .mode-switcher-item:not([data-mode-row="active"]) div,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] .mode-switcher-item:not([data-mode-row="active"]) svg,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] .mode-switcher-item:not([data-mode-row="active"]) path {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Header block of mode panel (Select your mode + Choose how...) */
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] > div:first-child,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel][data-mode-switcher-panel] > div:first-child :is(p, span, div, small) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Currency non-active rows ink */
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) :is(p, span, div, svg, path, small, strong) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* PASS 230e — ID-prefixed win over all previous white-ink rules for mode/currency */
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) *,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg path {
+  fill: none !important;
+}
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: rgba(184,149,85,0.35) !important;
+}
+/* Hover idle → emerald + white */
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(6,78,59,0.5) !important;
+}
+
+/* Currency ink for non-active rows */
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) *,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child,
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]),
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
 }
