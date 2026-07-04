@@ -28136,6 +28136,7 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg
   opacity: 1 !important;
 }
 
+/* Champagne + ink for filter panel inputs/comboboxes (matches user account menu). */
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   textarea,
@@ -28145,18 +28146,18 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   [data-radix-select-trigger],
   [data-jbj-field]
 ):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input):not(.filter-search-pill-input) {
-  background: rgba(2,22,17,0.82) !important;
+  background: #FFFFFF !important;
   background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.28) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.50) !important;
   box-shadow: none !important;
   opacity: 1 !important;
 }
 
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(input, textarea)::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
   opacity: 1 !important;
 }
 
@@ -28168,20 +28169,21 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) .filter
   border: 0 !important;
   box-shadow: none !important;
   outline: 0 !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
+/* Cards inside champagne panel stay white */
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#FEFCF9]"],
-  [class*="bg-[#FAF6EE]"], [class*="bg-[#F3EDD9]"], [class*="bg-champagne"],
-  [class*="border-[#B89555]"], [class*="border-[#064E3B]"]
+  [class*="bg-[#FAF6EE]"], [class*="bg-[#F3EDD9]"], [class*="bg-champagne"]
 ):not(.jj-pill-emerald-metallic):not(.jj-map-command-bar):not(.jj-map-segment):not(.jj-map-search-input) {
-  background: rgba(2,22,17,0.82) !important;
+  background: #FFFFFF !important;
   background-image: none !important;
-  border-color: rgba(255,255,255,0.28) !important;
+  border-color: rgba(184,149,85,0.40) !important;
 }
 
+/* Active/selected chips keep emerald + white */
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-state="active"],
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-filter-selected="true"] {
   background: var(--jj-emerald-ombre) !important;
@@ -28190,6 +28192,7 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-f
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: transparent !important;
 }
+
 
 /* Root filter/menu contrast closure: every emerald filter picker surface owns
    pure-white text/icons. This removes the remaining champagne/light descendant
