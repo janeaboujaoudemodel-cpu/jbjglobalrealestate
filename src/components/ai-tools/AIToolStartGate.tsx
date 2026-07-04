@@ -50,7 +50,7 @@ export const AIToolStartGate = ({
 
   if (active) {
     return (
-      <div className="w-full min-w-0">
+      <div className="w-full min-w-0" data-on-dark data-surface="dark">
         <div className="flex justify-end mb-4">
           <button
             type="button"
@@ -68,11 +68,11 @@ export const AIToolStartGate = ({
   return (
     <div className="max-w-5xl mx-auto py-6 w-full">
       <div className="text-center mb-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-black/25 px-4 py-1.5 text-xs font-semibold text-white mb-4">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-300" /> Get started
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-700/40 bg-emerald-950/10 px-4 py-1.5 text-xs font-semibold text-emerald-900 mb-4">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-700" /> Get started
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-white break-words">{headline}</h2>
-        <p className="text-white/80 mt-2 text-sm sm:text-base break-words">{subhead}</p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] break-words">{headline}</h2>
+        <p className="text-[#1A1A1A]/70 mt-2 text-sm sm:text-base break-words">{subhead}</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         {methods.map(({ key, eyebrow, title, Icon, desc, bullets, cta }) => (
@@ -80,6 +80,8 @@ export const AIToolStartGate = ({
             key={key}
             role="button"
             data-contained-card
+            data-on-dark
+            data-surface="dark"
             tabIndex={0}
             onClick={() => setActive(key)}
             onKeyDown={(e) => {
