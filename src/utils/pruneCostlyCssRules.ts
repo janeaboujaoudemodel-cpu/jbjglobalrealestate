@@ -10,8 +10,9 @@ const KEEP_MARKERS = [
 ];
 
 const shouldPruneSelector = (selector: string, cssText: string) => {
-  if (!selector.includes("html body")) return false;
   if (KEEP_MARKERS.some((marker) => selector.includes(marker))) return false;
+  if (selector.includes(":has(")) return true;
+  if (!selector.includes("html body")) return false;
   if (cssText.length < 520) return false;
   return COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker));
 };
