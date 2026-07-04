@@ -16,6 +16,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
+import { SEOHead } from "@/components/SEOHead";
 
 interface CalendarEvent {
   id: string;
@@ -369,6 +370,12 @@ const AICalendar = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="AI Property Viewing Calendar | JBJ Dubai Real Estate"
+        description="Schedule and manage Dubai property viewings with JBJ's AI-powered calendar — smart reminders, agent coordination, and multi-channel notifications."
+        canonicalPath="/ai-calendar"
+      />
     <section data-marketing-page className="min-h-screen bg-[#FDFBF7]">
       {/* Header */}
       <div className="bg-[#F7F2EA] border-b border-[#B89555]/40">
@@ -848,6 +855,7 @@ const AICalendar = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

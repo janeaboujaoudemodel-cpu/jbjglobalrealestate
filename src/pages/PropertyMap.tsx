@@ -17,6 +17,7 @@ import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
+import { SEOHead } from "@/components/SEOHead";
 
 function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
@@ -389,6 +390,12 @@ const PropertyMap = () => {
         : "Search projects, developers, locations...";
 
   return (
+    <>
+      <SEOHead
+        title="Dubai Property Map — Live Listings by Area | JBJ"
+        description="Explore Dubai apartments, villas, and off-plan projects on an interactive map. Filter by area, price, bedrooms, and developer across every JBJ listing."
+        canonicalPath="/map"
+      />
     <div className="relative flex flex-col h-[calc(100vh-88px)] overflow-hidden" data-map-page>
       <style>{`
         /* ── Emerald contract lock — all map chrome: emerald fill + pure white ink ── */
@@ -840,6 +847,7 @@ const PropertyMap = () => {
       </div>
 
       </div>
+    </>
   );
 };
 

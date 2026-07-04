@@ -25,6 +25,7 @@ import { ToolHero } from "@/components/tools/ToolHero";
 import { PremiumToolShell } from "@/components/tools/PremiumToolShell";
 import { toolThemes, TOOL_GOLD, TOOL_PAGE_BG } from "@/components/tools/toolThemes";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
+import { SEOHead } from "@/components/SEOHead";
 
 interface PropertyDetails {
   buildingName: string;
@@ -798,6 +799,12 @@ const PropertyEvaluator = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Free Dubai Property Valuation & Evaluator | JBJ"
+        description="Get an instant Dubai property valuation. JBJ's evaluator uses DLD transaction data, comparable sales, and yield benchmarks to price apartments and villas across the UAE."
+        canonicalPath="/property-evaluator"
+      />
     <PremiumToolShell
       theme={toolThemes.emerald}
       eyebrowIcon={Sparkles}
@@ -1955,6 +1962,7 @@ const PropertyEvaluator = () => {
       </AIShellCard>
 
     </PremiumToolShell>
+    </>
   );
 };
 

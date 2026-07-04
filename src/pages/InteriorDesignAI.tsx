@@ -22,6 +22,7 @@ import { useInteriorDesignHistory, DesignInput, DesignResult, DesignHistoryItem 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
+import { SEOHead } from "@/components/SEOHead";
 
 // Data arrays
 const designStyles = [
@@ -749,7 +750,14 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
   );
 
   return embedded ? body : (
-    <ToolAnimatedFrame theme={toolThemes.emerald}>{body}</ToolAnimatedFrame>
+    <>
+      <SEOHead
+        title="AI Interior Design for Dubai Properties | JBJ"
+        description="Reimagine Dubai apartments and villas with AI interior design — instant renders, curated styles, and material palettes tailored to UAE living."
+        canonicalPath="/interior-design-ai"
+      />
+      <ToolAnimatedFrame theme={toolThemes.emerald}>{body}</ToolAnimatedFrame>
+    </>
   );
 };
 
