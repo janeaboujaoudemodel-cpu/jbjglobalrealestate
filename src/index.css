@@ -27847,6 +27847,50 @@ html body #root section#ready-to-get-started > .jj-content-track {
   animation: disclaimer-emerald-sheen 8s ease-in-out infinite alternate;
 }
 
+html body #root .jj-disclaimer-content {
+  width: 100% !important;
+  max-width: 1100px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+html body #root .jj-disclaimer-action {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 48px !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  box-shadow: 0 16px 32px -22px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease !important;
+}
+
+html body #root .jj-disclaimer-action::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%);
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.22) 45%, transparent 70%);
+  transition: transform 520ms ease;
+  pointer-events: none;
+}
+
+html body #root .jj-disclaimer-action:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 22px 40px -24px rgba(0,0,0,0.72), inset 0 1px 0 rgba(255,255,255,0.24) !important;
+}
+
+html body #root .jj-disclaimer-action:hover::before {
+  transform: translateX(120%);
+}
+
+html body #root .jj-disclaimer-action--primary {
+  background: rgba(255,255,255,0.10) !important;
+}
+
+html body #root .jj-disclaimer-action--secondary {
+  background: #F7F2EA !important;
+  border-color: rgba(184,149,85,0.48) !important;
+}
+
 /* Compare page final visual lock — appended late to beat global emerald guards. */
 html body #root [data-compare-page] {
   background: linear-gradient(180deg, #042c1c 0%, #010806 54%, #000000 100%) !important;
