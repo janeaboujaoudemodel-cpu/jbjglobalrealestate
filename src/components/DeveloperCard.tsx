@@ -57,6 +57,8 @@ const ICONIC_DEVELOPER_IMAGES: Record<string, string> = {
   "ax capital": "https://fnst.axflare.com/community/WEBP/mnWCpcuCse.webp",
   ammar: ammarCreekHarbourMasterplan,
   amar: ammarCreekHarbourMasterplan,
+  // Emaar's flagship Dubai Creek Harbour masterplan render
+  emaar: ammarCreekHarbourMasterplan,
 };
 
 // Match by matching *any* keyword token in the developer name/slug against
