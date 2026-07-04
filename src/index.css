@@ -29788,8 +29788,9 @@ html body [data-account-menu-content][data-account-menu-content] :is(a,button,[r
 
 /* Final website-dropdown contrast contract — excludes AI tool scope.
    Emerald dropdown/picker panels keep pure white foreground; champagne account/search menus stay ink via their own surface rules. */
+/* Header emerald dropdowns keep white foreground; the property-filter panel now
+   uses the champagne + ink site-wide dropdown standard (rules above). */
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
   [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) {
@@ -29802,7 +29803,6 @@ html body:not([data-ai-tools-scope="true"]) :is(
 }
 
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
   [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)) {
@@ -29812,10 +29812,7 @@ html body:not([data-ai-tools-scope="true"]) :is(
   opacity: 1 !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
-  [data-filter-dropdown]
-) :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
+html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
   background: rgba(1, 8, 6, 0.72) !important;
   background-image: none !important;
   color: #FFFFFF !important;
@@ -29823,14 +29820,12 @@ html body:not([data-ai-tools-scope="true"]) :is(
   border-color: rgba(255,255,255,0.32) !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
-  [data-filter-dropdown]
-) :is(input, textarea)::placeholder {
+html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea)::placeholder {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
+
 
 /* Terminal validation rule: header website dropdowns only, AI scope excluded. */
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content],
