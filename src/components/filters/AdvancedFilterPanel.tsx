@@ -323,6 +323,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </div>
         </div>
 
+        {contentReady ? (
+        <>
         {/* Scrollable body */}
         <ScrollArea className="flex-1 overflow-y-auto">
           <div className="px-5 py-4 space-y-6">
@@ -762,6 +764,17 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
           </button>
 
         </div>
+        </>
+        ) : (
+          <div className="flex-1 min-h-[420px] px-5 py-5 space-y-4" aria-busy="true">
+            <div className="h-3 w-24 rounded-full bg-[#B89555]/20" />
+            <div className="h-11 rounded-xl border border-[#B89555]/35 bg-white" />
+            <div className="h-3 w-20 rounded-full bg-[#B89555]/20" />
+            <div className="h-11 rounded-xl border border-[#B89555]/35 bg-white" />
+            <div className="h-3 w-32 rounded-full bg-[#B89555]/20" />
+            <div className="h-24 rounded-xl border border-[#B89555]/35 bg-white" />
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
