@@ -127,9 +127,8 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             return (
               <DropdownMenuItem 
                 key={curr.code}
-                active={active}
                 data-currency-row
-                data-currency-active={active ? "true" : "false"}
+                data-currency-active="false"
                 onClick={() => setCurrency(curr.code)}
                 unstyled
                 className="flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none"
