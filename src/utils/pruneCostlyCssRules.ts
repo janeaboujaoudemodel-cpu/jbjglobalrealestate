@@ -47,6 +47,9 @@ const pruneRuleList = (owner: any): number => {
 
 export const installInteractionCssPruner = () => {
   if (typeof document === "undefined") return;
+  const win = window as unknown as { __JBJ_CSS_PRUNER_INSTALLED__?: boolean; __JBJ_CSS_PRUNED__?: number };
+  if (win.__JBJ_CSS_PRUNER_INSTALLED__) return;
+  win.__JBJ_CSS_PRUNER_INSTALLED__ = true;
 
   const run = () => {
     let removed = 0;
@@ -59,13 +62,4 @@ export const installInteractionCssPruner = () => {
 
   run();
   requestAnimationFrame(run);
-  window.addEventListener("load", run, { once: true });
-  window.setTimeout(run, 750);
-  window.setTimeout(run, 2000);
-  let ticks = 0;
-  const interval = window.setInterval(() => {
-    ticks += 1;
-    run();
-    if (ticks >= 8) window.clearInterval(interval);
-  }, 1000);
 };

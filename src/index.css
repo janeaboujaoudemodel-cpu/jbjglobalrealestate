@@ -30554,3 +30554,160 @@ html body [role="switch"][data-state="unchecked"] {
   animation-delay: 0ms !important;
   transition-duration: 0ms !important;
 }
+
+/* ============================================================
+   PASS 261 — Contrast repair after dropdown speed work.
+   Restore the locked surface contract without reintroducing slow
+   global selectors: champagne surfaces use ink; only real hovered,
+   active, selected emerald controls use white foreground.
+   ============================================================ */
+
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  background-color: #F7F2EA !important;
+  border: 1px solid rgba(184,149,85,0.42) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:not(:hover):not(:focus-visible):not([data-highlighted]),
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:not(:hover):not(:focus-visible):not([data-highlighted]) span:not([data-jbj-notification-badge]):not([data-jbj-notification-badge] *),
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:not(:hover):not(:focus-visible):not([data-highlighted]) svg,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:not(:hover):not(:focus-visible):not([data-highlighted]) path,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:not(:hover):not(:focus-visible):not([data-highlighted]) line,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:not(:hover):not(:focus-visible):not([data-highlighted]) polyline {
+  background: transparent !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:is(:hover,:focus-visible,[data-highlighted]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:is(:hover,:focus-visible,[data-highlighted]) span,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:is(:hover,:focus-visible,[data-highlighted]) svg,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:is(:hover,:focus-visible,[data-highlighted]) path,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:is(:hover,:focus-visible,[data-highlighted]) line,
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-menu-row="true"]:is(:hover,:focus-visible,[data-highlighted]) polyline {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-role-label],
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] [data-account-role-label] *,
+html body [data-jbj-notification-badge],
+html body [data-jbj-notification-badge] * {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:not(:hover):not(:focus-visible):not([data-highlighted]),
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:not(:hover):not(:focus-visible):not([data-highlighted]) p,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:not(:hover):not(:focus-visible):not([data-highlighted]) span,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:not(:hover):not(:focus-visible):not([data-highlighted]) svg {
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="active"],
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:is(:hover,:focus-visible,[data-highlighted]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="active"] p,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="active"] span,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="active"] svg,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:is(:hover,:focus-visible,[data-highlighted]) p,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:is(:hover,:focus-visible,[data-highlighted]) span,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-row="idle"]:is(:hover,:focus-visible,[data-highlighted]) svg {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill],
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill] svg {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"],
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h1,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h2,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h3,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] h4,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] label {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible),
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) div,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.jj-pill-emerald-metallic):not([role="switch"]):not([data-state="active"]):not(:hover):not(:focus-visible) svg {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"],
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] svg {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"][data-state="checked"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"] > span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch"] > span[data-state] {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-jj-utility-bar] .jj-header-premium-control,
+html body #root [data-jj-utility-bar] .jj-header-premium-control *,
+html body #root [data-jj-utility-bar] [data-mode-trigger="header"],
+html body #root [data-jj-utility-bar] [data-mode-trigger="header"] * {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%));
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
