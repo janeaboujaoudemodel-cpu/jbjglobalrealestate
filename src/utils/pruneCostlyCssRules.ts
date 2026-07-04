@@ -16,32 +16,26 @@ const shouldPruneSelector = (selector: string, cssText: string) => {
   return COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker));
 };
 
-const pruneRuleList = (owner: CSSStyleSheet | CSSGroupingRule): number => {
-  const mutableOwner = owner as unknown as {
-    cssRules?: CSSRuleList;
-    deleteRule?: (index: number) => void;
-  };
-  let rules: CSSRuleList;
+const pruneRuleList = (owner: any): number => {
+  let removed = 0;
+  let rules: CSSRule[] = [];
   try {
-    rules = mutableOwner.cssRules as CSSRuleList;
+    rules = Array.from(owner.cssRules || []);
   } catch {
     return 0;
   }
-  if (!rules || typeof mutableOwner.deleteRule !== "function") return 0;
 
-  let removed = 0;
   for (let index = rules.length - 1; index >= 0; index -= 1) {
-    const rule = rules[index] as CSSStyleRule & CSSGroupingRule;
-
-    if ("cssRules" in rule && rule.cssRules) {
+    const rule: any = rules[index];
+    if (rule?.cssRules) {
       removed += pruneRuleList(rule);
-      continue;
     }
 
-    const selector = "selectorText" in rule ? rule.selectorText || "" : "";
-    if (selector && shouldPruneSelector(selector, rule.cssText || "")) {
+    const selector = String(rule?.selectorText || "");
+    const cssText = String(rule?.cssText || "");
+    if (selector && shouldPruneSelector(selector, cssText)) {
       try {
-        mutableOwner.deleteRule(index);
+        owner.deleteRule(index);
         removed += 1;
       } catch {
         // Ignore stylesheet mutation races during HMR/dev injection.
