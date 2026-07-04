@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
 import AIToolGuide from "@/components/ai-tools/AIToolGuide";
+import { AIToolStartGate } from "@/components/ai-tools/AIToolStartGate";
+import { Wand2, Sliders } from "lucide-react";
 
 interface InvestmentResult {
   title?: string;
@@ -85,6 +87,13 @@ export default function AIInvestmentReportPage() {
   };
 
   return (
+    <AIToolStartGate
+      headline="How would you like to build the investment report?"
+      methods={[
+        { key: "ai", eyebrow: "Fastest · AI-Assisted", title: "AI Report from Area", Icon: Wand2, desc: "Pick a community — AI compiles yield, appreciation and risk into a client-ready report.", bullets: ["Live DLD data", "Yield & appreciation", "Client-ready PDF"], cta: "Generate report" },
+        { key: "manual", eyebrow: "Full Control · Manual", title: "Custom Report Builder", Icon: Sliders, desc: "Pick every section and assumption yourself for a fully bespoke report.", bullets: ["Choose sections", "Custom assumptions", "Own branding"], cta: "Build manually" },
+      ]}
+    >
     <AIToolPremiumLayout
       title="AI Investment Report"
       subtitle="Generate detailed investment analysis reports for Dubai real estate"

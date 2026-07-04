@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
 import AIToolGuide from "@/components/ai-tools/AIToolGuide";
+import { AIToolStartGate } from "@/components/ai-tools/AIToolStartGate";
+import { Wand2, Sliders } from "lucide-react";
 
 interface SocialResult {
   mainPost?: string;
@@ -109,6 +111,13 @@ export default function AISocialMediaPage() {
   const PlatformIcon = platforms.find(p => p.value === platform)?.icon || Share2;
 
   return (
+    <AIToolStartGate
+      headline="How would you like to create the post?"
+      methods={[
+        { key: "ai", eyebrow: "Fastest · AI-Assisted", title: "AI Post from Property", Icon: Wand2, desc: "Give AI a property and network — it writes captions, hashtags and CTAs.", bullets: ["Platform-aware", "Hashtag set", "Multiple variants"], cta: "Generate posts" },
+        { key: "manual", eyebrow: "Full Control · Manual", title: "Write Post Manually", Icon: Sliders, desc: "Compose your own copy with AI suggestions on hooks and hashtags.", bullets: ["Custom copy", "Suggested hashtags", "Save template"], cta: "Write manually" },
+      ]}
+    >
     <AIToolPremiumLayout
       title="AI Social Media"
       subtitle="Generate engaging social media content for property listings and more"

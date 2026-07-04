@@ -15,6 +15,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
 import AIToolGuide from "@/components/ai-tools/AIToolGuide";
+import { AIToolStartGate } from "@/components/ai-tools/AIToolStartGate";
+import { Wand2, Sliders } from "lucide-react";
 
 interface EmailResult {
   subject?: string;
@@ -95,6 +97,13 @@ export default function AIEmailGeneratorPage() {
   };
 
   return (
+    <AIToolStartGate
+      headline="How would you like to write the email?"
+      methods={[
+        { key: "ai", eyebrow: "Fastest · AI-Assisted", title: "AI Draft from Context", Icon: Wand2, desc: "Give AI the recipient and goal — it drafts a natural, on-brand email in seconds.", bullets: ["One-click draft", "Tone-aware", "Ready to send"], cta: "Draft with AI" },
+        { key: "manual", eyebrow: "Full Control · Manual", title: "Write with Guided Fields", Icon: Sliders, desc: "Choose template, tone and CTA yourself for full control.", bullets: ["Pick template", "Custom tone", "Editable output"], cta: "Fill manually" },
+      ]}
+    >
     <AIToolPremiumLayout
       title="AI Email Generator"
       subtitle="Generate professional real estate emails instantly with AI"
