@@ -30248,3 +30248,23 @@ html body [role="dialog"][data-advanced-filter-panel="true"] .bg-black\/10 {
 html body [role="dialog"][data-advanced-filter-panel="true"] button:hover:not(.jj-pill-emerald-metallic) {
   background-color: rgba(6,78,59,0.06) !important;
 }
+
+/* PASS 241 — refine champagne conversion for Advanced Filter Panel header/labels */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-black/10"] {
+  background-color: rgba(184,149,85,0.10) !important;
+  background-image: none !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white/"] {
+  border-color: rgba(184,149,85,0.40) !important;
+}
+/* Force all text (including .text-white and .allow-white spans) to ink, EXCEPT
+   emerald-metallic pills, active/checked chips, and lucide icons inside dark triggers */
+html body [role="dialog"][data-advanced-filter-panel="true"] :where(h1,h2,h3,h4,p,span,label,button,div,li,dt,dd,small,strong,em,b):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *):not([role="combobox"]):not([role="combobox"] *):not([data-radix-select-trigger]):not([data-radix-select-trigger] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] :where(svg):not(.jj-pill-emerald-metallic svg):not([data-state="active"] svg):not([role="combobox"] svg):not([data-radix-select-trigger] svg) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
