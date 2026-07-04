@@ -60,6 +60,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     }
     return 'AED';
   });
+  const [hoveredCurrency, setHoveredCurrency] = useState<string | null>(null);
 
   const setCurrency = (code: string) => {
     setCurrencyState(code);
@@ -130,16 +131,48 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
                 data-currency-row
                 data-currency-active={active ? "true" : "false"}
                 onClick={() => setCurrency(curr.code)}
+                onMouseEnter={() => setHoveredCurrency(curr.code)}
+                onMouseLeave={() => setHoveredCurrency((prev) => (prev === curr.code ? null : prev))}
+                onFocus={() => setHoveredCurrency(curr.code)}
+                onBlur={() => setHoveredCurrency((prev) => (prev === curr.code ? null : prev))}
                 unstyled
                 className="jbj-currency-row flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none border border-transparent bg-transparent shadow-none"
+                style={
+                  active
+                    ? {
+                        background: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))',
+                        backgroundImage: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))',
+                        color: '#FFFFFF',
+                        WebkitTextFillColor: '#FFFFFF',
+                        borderColor: 'transparent',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -18px rgba(6,78,59,.78)',
+                      }
+                    : hoveredCurrency === curr.code
+                      ? {
+                          background: 'rgba(184,149,85,0.14)',
+                          backgroundImage: 'none',
+                          color: '#1A1A1A',
+                          WebkitTextFillColor: '#1A1A1A',
+                          borderColor: 'transparent',
+                          boxShadow: 'none',
+                        }
+                      : {
+                          background: 'transparent',
+                          backgroundImage: 'none',
+                          color: '#1A1A1A',
+                          WebkitTextFillColor: '#1A1A1A',
+                          borderColor: 'transparent',
+                          boxShadow: 'none',
+                        }
+                }
               >
               <span className="flex items-center gap-3">
-                <span className="text-lg leading-none">{curr.flag}</span>
-                <span className="text-sm font-semibold">{curr.name}</span>
+                <span className="text-lg leading-none" style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{curr.flag}</span>
+                <span className="text-sm font-semibold" style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{curr.name}</span>
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-sm opacity-85">{curr.symbol}</span>
-                {active && <Check className="w-4 h-4" strokeWidth={3} />}
+                <span className="text-sm opacity-85" style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{curr.symbol}</span>
+                {active && <Check className="w-4 h-4" strokeWidth={3} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
               </span>
               </DropdownMenuItem>
             );
