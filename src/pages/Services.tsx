@@ -210,7 +210,7 @@ const Services = () => {
         data-hero-dark
         data-surface="emerald"
         data-no-contrast-guard
-        className="relative left-1/2 grid min-h-[100svh] h-[100svh] w-screen max-w-none -translate-x-1/2 place-items-center overflow-hidden"
+        className="jj-services-hero relative grid min-h-[100svh] h-[100svh] w-full max-w-none place-items-center overflow-hidden"
         style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
       >
         <video
@@ -231,7 +231,7 @@ const Services = () => {
         />
 
         <motion.div
-          className="relative z-10 mx-auto w-full max-w-5xl px-5 py-20 text-center flex min-h-[100svh] flex-col items-center justify-center"
+          className="jj-services-hero-inner relative z-10 mx-auto w-full max-w-5xl px-5 py-20 text-center flex min-h-[100svh] flex-col items-center justify-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
@@ -335,7 +335,7 @@ const Services = () => {
               {serviceCards.map((service) => (
                 <motion.div key={service.title} variants={fadeInUp} className="h-full">
                   <Link to={service.link} className="block h-full">
-                    <Card className="jj-service-card-animated jj-card-inner transition-all group h-full min-h-[430px] flex flex-col rounded-2xl">
+                    <Card className="jj-service-card-animated jj-card-inner transition-all group h-full min-h-[390px] flex flex-col rounded-2xl">
                       <CardContent className="jj-service-card-content relative z-10 p-5 lg:p-6 flex h-full flex-col flex-1">
                         <div
                           data-surface="emerald"
@@ -349,11 +349,11 @@ const Services = () => {
                         <h3 className="font-semibold text-lg mb-2 min-h-[2rem] flex items-start" style={{ color: "#1A1A1A" }}>
                           {service.title}
                         </h3>
-                        <p className="text-sm mb-4 min-h-[5rem]" style={{ color: "rgba(26,26,26,0.75)" }}>
+                        <p className="text-sm mb-4 min-h-[4.5rem]" style={{ color: "rgba(26,26,26,0.75)" }}>
                           {service.description}
                         </p>
 
-                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4 min-h-[8.75rem]">
+                        <div className="bg-[#1A1A1A]/5 rounded-lg p-3 mb-4 min-h-[8rem]">
                           <p className="text-xs uppercase tracking-wider mb-2 font-semibold" style={{ color: "rgba(26,26,26,0.6)" }}>Includes</p>
                           <ul className="space-y-1">
                             {service.includes.map((item, idx) => (
