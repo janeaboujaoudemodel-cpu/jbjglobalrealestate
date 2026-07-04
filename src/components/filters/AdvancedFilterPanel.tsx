@@ -1,7 +1,7 @@
 /**
  * AdvancedFilterPanel - Centered dialog with all filter sections, developer logos, UAE-only locations
  */
-import { useState, useEffect, useCallback, forwardRef } from "react";
+import { useState, useEffect, useCallback, forwardRef, type CSSProperties } from "react";
 import { X, Search, Heart, Check, ChevronDown } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -257,7 +257,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
       ['--slider-thumb-bg' as any]: '#FFFFFF',
       ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
-    } as React.CSSProperties;
+    } as CSSProperties;
   })();
 
 
