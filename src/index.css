@@ -26773,7 +26773,7 @@ html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [dat
   --tw-ring-offset-width: 0px !important;
 }
 
-html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(a, button, [role="button"]):not([aria-label="Close"]):hover {
+html body #root [data-insights-page] :is([data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero], [data-hero-dark], .jj-hero-fullscreen) :is(a, button, [role="button"]):not([aria-label="Close"]):not(.jj-btn-ink-black):hover {
   background: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
   background-image: linear-gradient(135deg, #0C7B60 0%, #075C46 56%, #010806 100%) !important;
   color: #FFFFFF !important;
