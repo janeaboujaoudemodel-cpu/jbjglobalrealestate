@@ -29975,7 +29975,7 @@ html body :is(.jbj-form-shell, [data-form-shell], [role="dialog"]:has(form)) for
   padding: 0 !important;
 }
 
-html body :is(.jbj-form-shell, [data-form-shell], form) :is(.rounded-xl.border, .rounded-2xl.border, [data-field-group], .form-field-group):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
+html body :is(.jbj-form-shell, [data-form-shell]) :is(.rounded-xl.border, .rounded-2xl.border, [data-field-group], .form-field-group):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
   padding: clamp(1rem, 1.8vw, 1.35rem) !important;
   border-width: 1px !important;
   border-color: rgba(184,149,85,0.30) !important;
@@ -29993,7 +29993,7 @@ html body :is(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):no
   box-shadow: 0 0 0 2px rgba(184,149,85,0.10), inset 0 1px 0 rgba(255,255,255,0.72) !important;
 }
 
-html body :is([role="checkbox"], button[role="checkbox"], input[type="checkbox"]) {
+html body :is(input[type="checkbox"], [data-emerald-ok="checkbox"], [data-radix-checkbox-root]) {
   appearance: none !important;
   -webkit-appearance: none !important;
   accent-color: #064E3B !important;
@@ -30014,13 +30014,13 @@ html body :is([role="checkbox"], button[role="checkbox"], input[type="checkbox"]
   transform: none !important;
 }
 
-html body :is([role="checkbox"][data-state="checked"], button[role="checkbox"][aria-checked="true"], input[type="checkbox"]:checked) {
+html body :is(input[type="checkbox"]:checked, [data-emerald-ok="checkbox"][data-state="checked"], [data-radix-checkbox-root][data-state="checked"]) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   background-color: #064E3B !important;
   border-color: #064E3B !important;
 }
 
-html body :is([role="checkbox"], button[role="checkbox"]) :is(svg, path, polyline, line) {
+html body :is([data-emerald-ok="checkbox"], [data-radix-checkbox-root]) :is(svg, path, polyline, line) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -30047,11 +30047,18 @@ html body :is(label, .form-checkbox-row, [data-checkbox-row], .items-start:has([
 }
 
 html body input[type="checkbox"]:checked + *,
-html body :is(.form-checkbox-row, [data-checkbox-row], .items-start:has([role="checkbox"]), .items-start:has(input[type="checkbox"])):has(:is([role="checkbox"][data-state="checked"], input[type="checkbox"]:checked)) {
+html body :is(.form-checkbox-row, [data-checkbox-row], .items-start:has([data-emerald-ok="checkbox"]), .items-start:has(input[type="checkbox"])):has(:is([data-emerald-ok="checkbox"][data-state="checked"], input[type="checkbox"]:checked)) {
   background: transparent !important;
   background-image: none !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+html body [data-account-menu-content],
+html body [data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
 }
 
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
