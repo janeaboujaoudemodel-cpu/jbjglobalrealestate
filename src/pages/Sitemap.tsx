@@ -350,8 +350,8 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
       
       {/* Links List */}
       <ul className="space-y-1.5">
-        {filteredLinks.map((link) => (
-          <li key={link.href}>
+        {filteredLinks.map((link, index) => (
+          <li key={`${link.href}-${link.label}-${index}`}>
             <Link
               to={link.href}
               className="group flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[#EFE6D6]/10 transition-colors"
