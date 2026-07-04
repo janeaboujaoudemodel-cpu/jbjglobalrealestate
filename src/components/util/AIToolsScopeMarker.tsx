@@ -10,15 +10,20 @@ import { useLocation } from "react-router-dom";
  * plus a few first-party aliases.
  */
 const AI_TOOL_PATH_PREFIXES = [
-  // AI tools
+  // AI tools (catches every /ai-* route)
   "/ai-",
   "/ai-hub",
   "/my-ai-history",
   "/meeting-center",
   "/voice-settings",
-  // Workspace / toolkit
+  // Workspace / toolkit / suites / studio
   "/toolkit",
-  // Individual tools (canonical routes.json)
+  "/suites",
+  "/business-suite",
+  "/studio",
+  "/virtual-staging-ai",
+  "/e-signature",
+  // Individual tools
   "/rental-index",
   "/property-evaluator",
   "/property-measurement",
@@ -26,6 +31,7 @@ const AI_TOOL_PATH_PREFIXES = [
   "/business-card-scanner",
   "/mortgage-calculator",
   "/compare",
+  "/home-finder",
   // Listing tools + first-party aliases
   "/list-property",
   "/listing-portal",

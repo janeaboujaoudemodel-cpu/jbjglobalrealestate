@@ -28961,3 +28961,102 @@ html body[data-ai-tools-scope="true"] [data-radix-popper-content-wrapper]:not(#\
   border-color: rgba(255, 255, 255, 0.16) !important;
 }
 
+
+/* ============================================================================
+ * PASS 222 — AI TOOLS SURFACE + RESPONSIVE + DROPDOWN SPEED LOCK
+ *
+ * Scope: body[data-ai-tools-scope="true"] only. Does NOT affect non-AI pages.
+ *
+ * Locks:
+ *  1. All AI tool cards/panels render on dark emerald→black gradient
+ *     (no light/bright green fade, no champagne, no gold border).
+ *  2. All ink on those dark surfaces is pure white.
+ *  3. All Radix poppers open/close fast (80ms) — no laggy animation.
+ *  4. On viewports ≤640px every grid in the AI scope collapses to 1 column
+ *     so text never leaves cards and no field is squeezed into a thin column.
+ *  5. Chips/buttons on dark AI surfaces drop gold borders in favour of
+ *     rgba(255,255,255,0.22).
+ * ============================================================================ */
+
+/* 1 + 2 — dark emerald card surfaces + white ink */
+html body[data-ai-tools-scope="true"] :is(
+  [data-slot="card"],
+  .card,
+  [class*="rounded-2xl"][class*="border"],
+  [class*="rounded-xl"][class*="border"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-surface="light"]):not(header):not(nav):not(footer) {
+  background-image: linear-gradient(135deg, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.86) 46%, rgba(1,8,6,0.96) 100%) !important;
+  background-color: #042C1C !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 18px 44px -18px rgba(0,0,0,0.55) !important;
+}
+
+html body[data-ai-tools-scope="true"] :is(
+  [data-slot="card"],
+  .card
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-surface="light"])
+  :is(h1,h2,h3,h4,h5,h6,p,span,label,strong,em,small,li,dt,dd,button,a):not([data-allow-ink]):not([data-preserve-ink]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body[data-ai-tools-scope="true"] :is(
+  [data-slot="card"],
+  .card
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-ai-tools-disclaimer]):not([data-surface="light"])
+  :is(svg,path,circle,rect,line,polyline,polygon):not([data-allow-ink]):not([data-preserve-ink]) {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* 5 — kill gold/champagne borders on chips + buttons inside AI cards */
+html body[data-ai-tools-scope="true"] :is([data-slot="card"], .card) :is(button, .chip, [role="tab"], [data-chip])[class*="border"] {
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+/* 3 — fast dropdown animations (no more laggy open) */
+html body[data-ai-tools-scope="true"] [data-radix-popper-content-wrapper] > *,
+html body[data-ai-tools-scope="true"] [data-radix-popper-content-wrapper] :is(
+  [data-radix-select-content],
+  [data-radix-popover-content],
+  [data-radix-dropdown-menu-content],
+  [data-radix-menu-content]
+) {
+  animation-duration: 80ms !important;
+  transition-duration: 80ms !important;
+}
+
+/* 4 — responsive collapse for AI tool routes so nothing overflows on mobile */
+@media (max-width: 640px) {
+  html body[data-ai-tools-scope="true"] .grid.grid-cols-2,
+  html body[data-ai-tools-scope="true"] .grid.grid-cols-3,
+  html body[data-ai-tools-scope="true"] .grid.grid-cols-4,
+  html body[data-ai-tools-scope="true"] .grid[class*="md:grid-cols-2"],
+  html body[data-ai-tools-scope="true"] .grid[class*="md:grid-cols-3"],
+  html body[data-ai-tools-scope="true"] .grid[class*="md:grid-cols-4"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  html body[data-ai-tools-scope="true"] :is([data-slot="card"], .card) {
+    min-width: 0 !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+  /* Prevent writing-mode/rotation regressions */
+  html body[data-ai-tools-scope="true"] :is([data-slot="card"], .card) * {
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+  }
+}
+
+/* iPad portrait — stop 2xl grids from forcing two thin columns */
+@media (min-width: 641px) and (max-width: 1024px) {
+  html body[data-ai-tools-scope="true"] .grid.grid-cols-4,
+  html body[data-ai-tools-scope="true"] .grid[class*="lg:grid-cols-4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  html body[data-ai-tools-scope="true"] :is([data-slot="card"], .card) {
+    min-width: 0 !important;
+  }
+}
