@@ -9071,6 +9071,38 @@ html body [data-jj-utility-bar] button[aria-label="Currency"] svg * {
   stroke: #FFFFFF !important;
 }
 
+/* Currency menu contract: hover stays champagne/ink; emerald is selected only. */
+html body [data-currency-menu-content] [data-currency-row],
+html body [data-currency-menu-content] [data-currency-row] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html body [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]) {
+  background: rgba(184,149,85,0.14) !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+html body [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+html body [data-currency-menu-content] [data-currency-row][data-currency-active="true"],
+html body [data-currency-menu-content] [data-currency-row][data-currency-active="true"]:is(:hover, :focus, [data-highlighted]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-currency-menu-content] [data-currency-row][data-currency-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* Mode switcher chip + sign-in — emerald pill, white text/icons */
 html body [data-jj-utility-bar] button[data-mode-trigger="header"],
 html body [data-jj-utility-bar] button[data-mode-trigger="header"]:hover,
