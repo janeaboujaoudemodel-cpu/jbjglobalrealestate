@@ -87,8 +87,8 @@ function extractAppreciation(text: string): number | null {
   return null;
 }
 
-const GOLD = "#B8860B";
-const GOLD_LIGHT = "#D4AF37";
+const CHAMPAGNE_GOLD = "#B89555";
+const CHAMPAGNE_GOLD_LIGHT = "#E8D08A";
 const DUBAI_AVG = 1400;
 
 export const ProjectAIAnalyzer = ({
@@ -199,7 +199,7 @@ export const ProjectAIAnalyzer = ({
   const priceChartData = areaPriceSqft
     ? [
         { name: areaName, value: areaPriceSqft, fill: "#064E3B" },
-        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#B89555" },
+        { name: "Dubai Avg", value: DUBAI_AVG, fill: CHAMPAGNE_GOLD },
       ]
     : null;
 
@@ -405,7 +405,7 @@ export const ProjectAIAnalyzer = ({
                             formatter={(v: number) => [`AED ${v.toLocaleString()}/sqft`, ""]}
                             contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e7eb" }}
                           />
-                          <ReferenceLine x={DUBAI_AVG} stroke="#B89555" strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: "#B89555" }} />
+                          <ReferenceLine x={DUBAI_AVG} stroke={CHAMPAGNE_GOLD} strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: CHAMPAGNE_GOLD }} />
                           <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={28}>
                             {priceChartData.map((entry, i) => (
                               <Cell key={i} fill={entry.fill} />
@@ -446,7 +446,7 @@ export const ProjectAIAnalyzer = ({
                       <div className="relative h-2.5 w-full overflow-hidden rounded-full" style={{ background: "#EFE6D6" }}>
                         <div
                           className="h-full rounded-full transition-all"
-                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #B89555, #064E3B)` }}
+                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #064E3B 0%, #042C1C 58%, #000000 100%)` }}
                         />
                       </div>
                       <div className="flex justify-between text-[10px] font-semibold mt-1" style={{ color: "#FFFFFF" }}>
@@ -485,7 +485,7 @@ export const ProjectAIAnalyzer = ({
                           className="rounded-xl p-5 text-center shadow-sm"
                           style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.35)" }}
                         >
-                          <div className="text-4xl font-extrabold" style={{ color: "#B89555" }}>{rentalYield}%</div>
+                          <div className="text-4xl font-extrabold" style={{ color: CHAMPAGNE_GOLD }}>{rentalYield}%</div>
                           <div className="text-[#1A1A1A] text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}

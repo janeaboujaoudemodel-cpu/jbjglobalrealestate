@@ -115,17 +115,19 @@ export default function HouseDetailsSection({
       {details.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
           {details.map((detail, idx) => (
-            <div 
+            <div
               key={idx}
-              className="p-4 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 transition-all"
+              data-surface="emerald"
+              className="jj-house-detail-card p-4 rounded-xl border border-[#B89555]/35 transition-all"
+              style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}
             >
-              <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center mb-3">
-                <detail.icon className="w-5 h-5 text-[#1A1A1A]" />
+              <div data-icon-circle="true" className="w-10 h-10 rounded-full bg-white/12 border border-white/25 flex items-center justify-center mb-3" style={{ ['--jj-icon-lock-size' as any]: '2.5rem' }}>
+                <detail.icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
               </div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "rgba(255,255,255,0.76)", WebkitTextFillColor: "rgba(255,255,255,0.76)" }}>
                 {detail.label}
               </p>
-              <p className="text-lg font-semibold text-foreground">
+              <p className="text-lg font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                 {detail.value}
               </p>
             </div>
@@ -161,12 +163,14 @@ export default function HouseDetailsSection({
           </h4>
           <div className="flex flex-wrap gap-3">
             {standardFeatures.map((feature, idx) => (
-              <div 
+              <div
                 key={idx}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#B89555]/30 bg-[#EFE6D6]/5"
+                data-surface="emerald"
+                className="jj-house-inclusion-pill flex items-center gap-2 px-4 py-2 rounded-full border border-[#B89555]/35"
+                style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}
               >
-                <feature.icon className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-sm font-medium text-foreground">{feature.label}</span>
+                <feature.icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{feature.label}</span>
               </div>
             ))}
           </div>
