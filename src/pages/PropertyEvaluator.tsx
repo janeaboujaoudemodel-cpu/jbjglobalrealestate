@@ -1362,15 +1362,15 @@ const PropertyEvaluator = () => {
                   <div className="grid grid-cols-3 gap-4 pe-spec-compact">
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bedrooms</Label>
-                      <Input type="number" min={0} value={property.bedrooms} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} placeholder="e.g., 2" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
+                      <Input type="number" min={0} value={property.bedrooms || ''} onChange={(e) => updateProperty('bedrooms', parseInt(e.target.value) || 0)} placeholder="e.g., 2" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Bathrooms</Label>
-                      <Input type="number" min={0} value={property.bathrooms} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} placeholder="e.g., 2" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
+                      <Input type="number" min={0} value={property.bathrooms || ''} onChange={(e) => updateProperty('bathrooms', parseInt(e.target.value) || 0)} placeholder="e.g., 2" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm whitespace-nowrap">Parking</Label>
-                      <Input type="number" min={0} value={property.parkingSpaces} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} placeholder="e.g., 1" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
+                      <Input type="number" min={0} value={property.parkingSpaces || ''} onChange={(e) => updateProperty('parkingSpaces', parseInt(e.target.value) || 0)} placeholder="e.g., 1" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] text-center tabular-nums placeholder:text-[#1A1A1A]/50 placeholder:text-center" />
                     </div>
                   </div>
 
@@ -1426,7 +1426,7 @@ const PropertyEvaluator = () => {
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Handover Year</Label>
-                      <Input type="number" value={property.handoverYear} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 2020)} placeholder="e.g., 2020" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
+                      <Input type="number" value={property.handoverYear || ''} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 0)} placeholder="e.g., 2020" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                   </div>
 
