@@ -331,7 +331,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       style={{ minHeight: '440px' }}
     >
       {/* Fixed dimensions container to prevent layout shift */}
-      <div className="p-6" style={{ minHeight: '420px', minWidth: '600px' }}>
+      <div data-account-menu-content className="p-6" style={{ minHeight: '420px', minWidth: '600px' }}>
         {user ? (
           <>
             {/* Premium User Header - Horizontal Layout */}

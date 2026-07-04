@@ -32,18 +32,22 @@ export function OffPlanInquiryCTA({ variant = "full", className = "" }: OffPlanI
     try {
       const sourcePage = window.location.pathname;
       const sourceContext = sourcePage.split('/').filter(Boolean).join(' > ');
-      const { error } = await supabase.from("crm_leads").insert({
-        full_name: formData.name,
-        email: formData.email,
-        phone: formData.phone || null,
-        notes: formData.message 
-          ? `${formData.message}\n\n[Source: ${sourcePage} | Context: ${sourceContext}]` 
-          : `Off-plan investment inquiry\n\n[Source: ${sourcePage} | Context: ${sourceContext}]`,
-        source: "offplan_cta",
-        source_page: sourcePage,
-        status: "new",
-        interest_level: "medium",
-      } as any);
+      const { error } = await supabase.functions.invoke("capture-lead", {
+        body: {
+          email: formData.email,
+          fullName: formData.name,
+          phone: formData.phone || undefined,
+          source: "offplan_cta",
+          pageSource: sourcePage,
+          contactType: "client",
+          message: formData.message || "Off-plan investment inquiry",
+          context: {
+            sourceContext,
+            interestLevel: "medium",
+            product: "off-plan",
+          },
+        },
+      });
 
       if (error) throw error;
 

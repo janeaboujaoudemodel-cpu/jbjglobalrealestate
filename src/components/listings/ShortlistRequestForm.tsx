@@ -81,14 +81,24 @@ export const ShortlistRequestForm = ({
         referrer: document.referrer || null,
       };
 
-      // Submit to crm_leads table (using correct column names)
-      const { error } = await supabase.from('crm_leads').insert({
-        full_name: formData.name,
-        phone_raw: formData.phone,
-        email_lower: null,
-        source: transactionType === 'buy' ? 'buy_shortlist' : 'rent_shortlist',
-        lead_source_type: 'website',
-        tags: [`${transactionType}_shortlist`, formData.timeline || 'unspecified_timeline'].filter(Boolean),
+      const leadEmail = `phone-${formData.phone.replace(/\D/g, '').slice(-14) || Date.now()}@lead.jbj.local`;
+      const { error } = await supabase.functions.invoke('capture-lead', {
+        body: {
+          email: leadEmail,
+          fullName: formData.name,
+          phone: formData.phone,
+          source: transactionType === 'buy' ? 'buy_shortlist' : 'rent_shortlist',
+          pageSource: window.location.pathname,
+          contactType: 'client',
+          message: `${transactionType === 'buy' ? 'Buy' : 'Rent'} shortlist request`,
+          context: {
+            budget: formData.budget || null,
+            bedrooms: formData.bedrooms || null,
+            preferredAreas: formData.preferredAreas || null,
+            timeline: formData.timeline || null,
+            marketingOptIn: formData.marketingOptIn,
+          },
+        },
       });
 
       if (error) throw error;

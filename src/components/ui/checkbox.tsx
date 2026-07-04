@@ -11,6 +11,7 @@ const Checkbox = React.forwardRef<
   <CheckboxPrimitive.Root
     ref={ref}
     data-emerald-ok="checkbox"
+    data-radix-checkbox-root
     style={{ width: 18, height: 18, minWidth: 18, minHeight: 18, flex: "0 0 18px" }}
     className={cn(
       "peer relative aspect-square self-start shrink-0 rounded-[4px] border border-[#B89555]/70 bg-[#FDFBF7] ring-offset-background transition-colors select-none",
