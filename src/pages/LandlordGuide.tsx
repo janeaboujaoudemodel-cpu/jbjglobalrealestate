@@ -192,29 +192,21 @@ const LandlordGuide = () => {
         backgroundImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80"
         actions={
           <>
-            <button 
+            <button
               onClick={() => document.getElementById('rental-market')?.scrollIntoView({ behavior: 'smooth' })}
-              className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-              style={{
-                border: '2px solid rgba(255,255,255,0.8)',
-                boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-              }}
+              data-surface="emerald"
+              className="jj-cta-emerald inline-flex items-center justify-center gap-2 px-7 md:px-9 py-3 md:py-4 text-sm md:text-base font-bold rounded-xl text-white transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_10px_28px_rgba(6,78,59,0.35)]"
             >
-              <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-              <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Read the Full Guide</span>
-              <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+              <ArrowDown className="w-4 h-4 text-white" />
+              <span className="text-white">Read the Full Guide</span>
             </button>
             <Link to="/landlord-portal">
-              <button 
-                className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-                style={{
-                  border: '2px solid rgba(255,255,255,0.8)',
-                  boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                }}
+              <button
+                data-surface="emerald"
+                className="jj-cta-emerald inline-flex items-center justify-center gap-2 px-7 md:px-9 py-3 md:py-4 text-sm md:text-base font-bold rounded-xl text-white transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_10px_28px_rgba(6,78,59,0.35)]"
               >
-                <span className="text-white group-hover:text-[#1A1A1A] transition-colors">List Your Property</span>
-                <ArrowUpRight className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="text-white">List Your Property</span>
+                <ArrowUpRight className="w-4 h-4 text-white" />
               </button>
             </Link>
           </>
