@@ -37,7 +37,29 @@ export const GuideTableOfContents = ({
   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const isScrollingRef = useRef(false);
+
+  useEffect(() => {
+    const hero = document.querySelector('[data-guide-hero]') as HTMLElement | null;
+    if (!hero) {
+      setPastHero(true);
+      return;
+    }
+    const check = () => {
+      const rect = hero.getBoundingClientRect();
+      // Reveal only once the hero is mostly scrolled past (bottom edge above ~120px from top)
+      setPastHero(rect.bottom < 120);
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+    };
+  }, []);
+
 
   const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
     const target = event.currentTarget;
@@ -114,7 +136,16 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-guide-toc data-surface="emerald" data-premium-navigator>
+    <div
+      className={cn(
+        "fixed right-4 top-28 z-[80] hidden w-60 lg:block xl:right-6 xl:w-64 transition-opacity duration-300",
+        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      )}
+      aria-hidden={!pastHero}
+      data-guide-toc
+      data-surface="emerald"
+      data-premium-navigator
+    >
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (

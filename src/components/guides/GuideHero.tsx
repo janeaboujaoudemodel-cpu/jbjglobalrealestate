@@ -41,15 +41,14 @@ export const GuideHero = ({
       data-guide-hero
       data-unified-hero
       data-faq-hero
-      data-hero-dark
-      data-surface="emerald"
-      className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden"
+      data-surface="champagne"
+      className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden w-screen left-1/2 -translate-x-1/2"
     >
-      {/* Pure emerald ombre base — no purple/pink drift */}
+      {/* Champagne cream base — light hero with black text */}
       <div
         className="absolute inset-0"
         aria-hidden="true"
-        style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)" }}
+        style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)" }}
       />
       <div className="absolute inset-0 z-0">
         {videoSrc ? (
@@ -58,23 +57,23 @@ export const GuideHero = ({
             loop
             muted
             playsInline
-            className="w-full h-full object-cover opacity-20 mix-blend-luminosity"
+            className="w-full h-full object-cover opacity-25 mix-blend-multiply"
             poster={videoPoster}
           >
             <source src={videoSrc} type="video/mp4" />
           </video>
         ) : backgroundImage ? (
           <div
-            className="w-full h-full bg-cover bg-center opacity-20 mix-blend-luminosity"
+            className="w-full h-full bg-cover bg-center opacity-20 mix-blend-multiply"
             style={{ backgroundImage: `url(${backgroundImage})` }}
           />
         ) : null}
       </div>
-      {/* Emerald tint overlay to kill any warm/purple cast from the image */}
+      {/* Soft champagne wash to keep text on black readable */}
       <div
         className="absolute inset-0"
         aria-hidden="true"
-        style={{ background: "linear-gradient(180deg, rgba(4,44,28,0.55) 0%, rgba(0,0,0,0.75) 100%)" }}
+        style={{ background: "linear-gradient(180deg, rgba(253,251,247,0.55) 0%, rgba(239,230,214,0.65) 100%)" }}
       />
 
       <motion.div
@@ -83,30 +82,30 @@ export const GuideHero = ({
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto text-center px-4 lg:max-w-[min(56rem,calc(100vw-25rem))] lg:ml-auto lg:mr-[22rem]">
+        <div className="max-w-4xl mx-auto text-center px-4">
           <motion.div
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg"
-            style={{ background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.35)" }}
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-sm"
+            style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(26,26,26,0.18)" }}
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-            <span className="text-sm font-semibold tracking-wide uppercase" style={{ color: "#FFFFFF" }}>
+            <BadgeIcon className="w-4 h-4" style={{ color: "#1A1A1A" }} />
+            <span className="text-sm font-semibold tracking-wide uppercase" style={{ color: "#1A1A1A" }}>
               {badge}
             </span>
           </motion.div>
 
           <motion.h1
             data-no-contrast-guard
-            className="allow-white text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight [&_*]:!text-white"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight [&_*]:!text-[#1A1A1A]"
+            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10"
-            style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
+            className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
             variants={fadeInUp}
           >
             {description}
