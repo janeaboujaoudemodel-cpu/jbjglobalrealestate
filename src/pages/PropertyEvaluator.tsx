@@ -1119,7 +1119,7 @@ const PropertyEvaluator = () => {
 
           {/* Property Details Tab */}
           <TabsContent value="property">
-            <div className="grid 2xl:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-6">
               <Card className={blueCardPrimary}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
@@ -1132,7 +1132,7 @@ const PropertyEvaluator = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Entry mode toggle: fill manually OR auto-fill from Title Deed */}
-                  <div className="rounded-2xl border border-emerald-400/50 bg-black/15 p-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <div className="rounded-2xl border border-emerald-400/50 bg-black/15 p-3 flex flex-col xl:flex-row items-stretch xl:items-center gap-2">
                     <div className="flex-1">
                       <p className="text-white font-semibold text-sm">How do you want to fill this valuation?</p>
                       <p className="text-white/75 text-xs">Choose manual entry, or upload your Title Deed / Oqood and let AI auto-fill every field.</p>
@@ -1197,7 +1197,7 @@ const PropertyEvaluator = () => {
                   )}
 
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/85 flex items-center gap-1">
                         Building Name <span className="text-[#B89555]">*</span>
@@ -1226,7 +1226,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 flex items-center gap-1">
                         Community <span className="text-[#B89555]">*</span>
@@ -1275,7 +1275,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70">Property Type</Label>
                       <Select value={property.propertyType} onValueChange={(v: any) => updateProperty('propertyType', v)}>
@@ -1374,7 +1374,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div className="space-y-1">
                       <Label className="text-[#1A1A1A]/70 text-sm flex items-center gap-1">
                         Internal Size ({areaUnit === 'sqft' ? 'sq ft' : 'sq m'}) <span className="text-[#B89555]">*</span>
@@ -1408,7 +1408,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Carpet Area (sq ft)</Label>
                       <Input type="number" value={property.carpetArea || ''} onChange={(e) => updateProperty('carpetArea', parseInt(e.target.value) || 0)} placeholder="e.g., 1,050" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
@@ -1419,7 +1419,7 @@ const PropertyEvaluator = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4" data-pe-field-grid data-pe-equal-fields>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" data-pe-field-grid data-pe-equal-fields>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Service Charge (AED/sq ft)</Label>
                       <Input type="number" value={property.serviceCharge || ''} onChange={(e) => updateProperty('serviceCharge', parseInt(e.target.value) || 0)} placeholder="e.g., 18" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
@@ -1448,7 +1448,7 @@ const PropertyEvaluator = () => {
               </Card>
 
               {/* Property Photos */}
-              <Card className={`${blueCardSecondary} md:col-span-2`}>
+              <Card className={`${blueCardSecondary} 2xl:col-span-2`}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <ImageIcon className="w-5 h-5 text-[#B89555]" />
