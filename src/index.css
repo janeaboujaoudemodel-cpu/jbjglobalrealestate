@@ -28071,6 +28071,149 @@ html body #root .jj-newsletter-emerald button:hover {
   background: rgba(255,255,255,0.16) !important;
 }
 
+/* Company & Legal final emerald lock: hero only is edge-to-edge; content cards stay padded/contained. */
+html body #root main[data-company-legal-page="true"] {
+  background: #F7F2EA !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) > .absolute.inset-0,
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) > .absolute.inset-0 > .absolute.inset-0,
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) > .absolute.inset-0 > div[class*="gradient"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) :is(video, img) {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) :is(h1,h2,h3,p,span,a,button,svg,[class*="lucide"]):not([data-surface="champagne"] *):not(.bg-\[\#F7F2EA\] *):not(.bg-\[\#FDFBF7\] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor;
+}
+
+html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen, [data-brand-hero]) :is(a,button):not([data-cta="champagne"]),
+html body #root main[data-company-legal-page="true"] .jj-about-emerald-hero :is(a,button) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  box-shadow: 0 14px 30px -18px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-section-gutter > div,
+html body #root main[data-company-legal-page="true"] :is(.jj-layer-2, .container.mx-auto, .max-w-\[1100px\].mx-auto, .max-w-\[1200px\].mx-auto) {
+  padding-left: max(var(--page-gutter, 24px), env(safe-area-inset-left)) !important;
+  padding-right: max(var(--page-gutter, 24px), env(safe-area-inset-right)) !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-2 {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is(.jj-layer-active, .jj-card-inner),
+html body #root main[data-company-legal-page="true"] :is(article.group, .jj-disclaimer-content > div[id] > div),
+html body #root main[data-company-legal-page="true"] [data-surface="emerald"].jj-emerald-card {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  box-shadow: 0 18px 42px -28px rgba(4,44,28,0.72), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is(.jj-layer-active, .jj-card-inner, article.group, .jj-disclaimer-content > div[id] > div, .jj-emerald-card) :is(h1,h2,h3,h4,p,span,li,strong,em,a,small,div,svg,[class*="lucide"]):not(img):not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor;
+}
+
+html body #root main[data-company-legal-page="true"] :is(.jj-layer-active, .jj-card-inner, article.group, .jj-disclaimer-content > div[id] > div, .jj-emerald-card) :is([data-icon-tile], .jj-icon-tile-emerald, .jj-disclaimer-icon),
+html body #root main[data-company-legal-page="true"] :is(.jj-layer-active, .jj-card-inner, article.group, .jj-disclaimer-content > div[id] > div, .jj-emerald-card) :is([data-icon-tile], .jj-icon-tile-emerald, .jj-disclaimer-icon) * {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .jj-newsletter-emerald .jj-hero-search-bar {
+  min-height: 64px !important;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.25) !important;
+}
+
+html body #root .jj-newsletter-emerald .jj-hero-search-action {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border: 0 !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is(section:not([data-hero-dark]) > div > div, section:not([data-hero-dark]) > div > div > div, section:not([data-hero-dark]) article, section:not([data-hero-dark]) main > div, section:not([data-hero-dark]) main > div > div, section:not([data-hero-dark]) main section > div, section:not([data-hero-dark]) main section > .relative.overflow-hidden, section:not([data-hero-dark]) main section > div.relative.overflow-hidden):where([class*="rounded"]):not([data-surface="light"]):not([data-no-section-frame]):not([data-no-section-frame] *):not(.jj-loop-block):not(.jj-loop-block *) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  box-shadow: 0 18px 42px -28px rgba(4,44,28,0.72), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+html body #root main[data-company-legal-page="true"] :is(section:not([data-hero-dark]) > div > div, section:not([data-hero-dark]) > div > div > div, section:not([data-hero-dark]) article, section:not([data-hero-dark]) main > div, section:not([data-hero-dark]) main > div > div, section:not([data-hero-dark]) main section > div, section:not([data-hero-dark]) main section > .relative.overflow-hidden, section:not([data-hero-dark]) main section > div.relative.overflow-hidden):where([class*="rounded"]):not([data-surface="light"]):not([data-no-section-frame]):not([data-no-section-frame] *):not(.jj-loop-block):not(.jj-loop-block *) :is(h1,h2,h3,h4,p,span,li,strong,em,a,small,div,svg,[class*="lucide"]):not(img):not([data-allow-ink]):not([data-allow-ink] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor;
+}
+
+html body #root main[data-company-legal-page="true"] :is(section.min-h-screen > section[data-hero-dark], section.min-h-screen > [data-hero-dark]) {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active {
+  width: min(100%, 1100px) !important;
+  max-width: 1100px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  overflow: hidden !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active > * {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active :is(.jj-card-inner, [data-surface="champagne"], [data-surface="champagne"] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active :is(.jj-card-inner, [data-surface="champagne"]) {
+  background: rgba(255,255,255,0.08) !important;
+  background-image: none !important;
+}
+
+html body #root main[data-company-legal-page="true"] .jj-layer-active :is(svg, [class*="lucide"], path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html body #root main[data-company-legal-page="true"] :is([data-hero-dark], .jj-hero-fullscreen)::before,
   html body #root .jj-company-hero-motion { animation: none !important; }

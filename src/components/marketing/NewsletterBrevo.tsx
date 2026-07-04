@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, CheckCircle, Loader2 } from 'lucide-react';
+import { Search, Send, CheckCircle, Loader2, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -141,18 +141,26 @@ export const NewsletterBrevo = ({
           {/* ONE unified emerald pill — input + button share the SAME surface,
               wrapped by a single 1px emerald hairline (no triple borders,
               no halo, no overflowing placeholder). */}
+          <div className="jj-emerald-glow-wrap jj-emerald-pill jj-hero-search-premium jj-newsletter-emerald relative rounded-[28px]">
           <div
             data-no-contrast-guard
-            data-surface="emerald"
-            className="jj-emerald-pill jj-emerald-glow-wrap jj-newsletter-emerald relative flex items-stretch h-14 rounded-full overflow-hidden"
+            data-surface="dark"
+            data-ink-emerald
+            className="allow-white jj-hero-search-bar relative flex items-stretch h-16 sm:h-[68px] rounded-[28px] overflow-hidden pl-1 pr-1.5 sm:pr-2 gap-1.5 sm:gap-2"
             style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
           >
-            <div className="relative flex-1 min-w-0 cursor-text">
+            <div role="search" className="relative flex flex-1 items-center pl-5 sm:pl-6 pr-3 min-w-0 cursor-text">
+              <Search
+                aria-hidden="true"
+                className="hidden sm:block absolute left-5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] opacity-80 pointer-events-none"
+                style={{ color: '#FFFFFF' }}
+                strokeWidth={2.2}
+              />
               {!email && !isEmailFocused && (
                 <span
-                  className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-sm font-semibold tracking-wide whitespace-nowrap z-[1]"
+                  className="allow-white pointer-events-none absolute left-5 sm:left-[52px] top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] font-normal tracking-[-0.005em] whitespace-nowrap overflow-hidden z-[1]"
                   aria-hidden="true"
-                  style={{ color: 'rgba(255,255,255,0.78)', WebkitTextFillColor: 'rgba(255,255,255,0.78)' }}
+                  style={{ color: 'rgba(255,255,255,0.78)', WebkitTextFillColor: 'rgba(255,255,255,0.78)', maxWidth: 'calc(100% - 16px)' }}
                 >
                   {animatedPlaceholder}
                   <span className="jj-type-caret" aria-hidden="true">|</span>
@@ -167,26 +175,34 @@ export const NewsletterBrevo = ({
                 aria-label="Email address"
                 required
                 disabled={isSubmitting}
-                className="relative z-10 w-full h-full px-5 pr-3 text-sm font-semibold tracking-wide bg-transparent cursor-text"
-                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', pointerEvents: 'auto' }}
+                className="allow-white jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] tracking-[-0.005em] font-normal cursor-text sm:pl-[34px]"
+                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', caretColor: '#FFFFFF', pointerEvents: 'auto', border: 'none', outline: 'none', boxShadow: 'none', background: 'transparent' }}
               />
             </div>
             <button
               type="submit"
               disabled={isSubmitting}
-              aria-label="Subscribe"
-              className="m-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all duration-200 hover:brightness-110"
+              aria-label="Get listing alerts"
+              data-variant="primary"
+              className="allow-white jj-hero-search-action relative self-center flex items-center justify-center gap-2 h-[44px] py-0 leading-none rounded-full px-5 sm:px-6 text-[13.5px] sm:text-sm font-semibold tracking-[-0.005em] flex-shrink-0 disabled:cursor-wait transition-all duration-200 hover:brightness-[1.06] active:scale-[0.98]"
               style={{
                 color: '#FFFFFF',
-                borderLeft: '1px solid rgba(255,255,255,0.14)',
+                WebkitTextFillColor: '#FFFFFF',
+                border: 0,
+                backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)',
+                boxShadow: '0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)',
               }}
             >
               {isSubmitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" style={{ color: '#FFFFFF' }} />
               ) : (
-                <Send className="w-4 h-4" style={{ color: '#FFFFFF' }} />
+                <Bell className="w-4 h-4" style={{ color: '#FFFFFF' }} />
               )}
+              <span className="hidden sm:inline" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+                {isSubmitting ? 'Joining…' : 'Get Alerts'}
+              </span>
             </button>
+          </div>
           </div>
         </form>
         <NewsletterDetailModal
