@@ -29749,8 +29749,8 @@ html body #root [data-section="payment"] [role="tab"][data-state="active"] {
   border-radius: 0 !important;
 }
 
-html body [data-account-menu-content][data-account-menu-content],
-html body [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([class*="bg-red"] *, [data-notification-badge] *)) {
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content][data-account-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([class*="bg-red"] *, [data-jbj-notification-badge], [data-jbj-notification-badge] *, [data-notification-badge], [data-notification-badge] *, [data-surface="emerald"], [data-surface="emerald"] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .allow-white, .allow-white *)) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
