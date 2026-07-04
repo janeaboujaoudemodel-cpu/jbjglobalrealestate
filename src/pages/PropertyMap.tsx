@@ -17,6 +17,7 @@ import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
+import { SEOHead } from "@/components/SEOHead";
 
 function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
