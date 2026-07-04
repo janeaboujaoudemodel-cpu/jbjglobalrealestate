@@ -29833,13 +29833,13 @@ html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not(
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not([data-currency-row]):not(:has([data-currency-row])) *,
 html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child,
 html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child *,
-html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown], button):not([data-state="checked"]):not([data-state="active"]),
-html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown], button):not([data-state="checked"]):not([data-state="active"]) * {
+html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown]):not([data-state="checked"]):not([data-state="active"]) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
   opacity: 1 !important;
 }
+
 
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) * {
