@@ -123,6 +123,7 @@ const ReferralPartner = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 
