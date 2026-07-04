@@ -122,6 +122,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const [emiratesOpen, setEmiratesOpen] = useState(false);
   const [devsOpen, setDevsOpen] = useState(false);
   const [areasOpen, setAreasOpen] = useState(false);
+  const [hoveredOption, setHoveredOption] = useState<string | null>(null);
 
   // Sync local filters when panel opens
   useEffect(() => {
@@ -234,7 +235,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   const dropdownPanel =
     "mt-2 rounded-xl border border-[#B89555]/45 bg-white p-3 shadow-[0_14px_35px_-24px_rgba(26,26,26,0.35)]";
   const optionRow =
-    "group flex items-center gap-3 w-full min-h-11 rounded-md px-3 py-2 text-left transition-none hover:bg-[#064E3B] focus:bg-[#064E3B] overflow-visible text-[#1A1A1A] hover:text-white focus:text-white";
+    "group flex items-center gap-3 w-full min-h-11 rounded-md px-3 py-2 text-left transition-none hover:bg-[#064E3B] focus:bg-[#064E3B] overflow-visible text-[#1A1A1A] hover:text-white focus:text-white data-[state=active]:bg-[#064E3B] data-[state=active]:text-white";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
 
