@@ -59,6 +59,13 @@ export const installInteractionCssPruner = () => {
 
   run();
   requestAnimationFrame(run);
+  window.addEventListener("load", run, { once: true });
   window.setTimeout(run, 750);
   window.setTimeout(run, 2000);
+  let ticks = 0;
+  const interval = window.setInterval(() => {
+    ticks += 1;
+    run();
+    if (ticks >= 8) window.clearInterval(interval);
+  }, 1000);
 };
