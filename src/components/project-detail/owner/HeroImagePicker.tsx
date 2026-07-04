@@ -122,7 +122,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
     <>
       {/* Trigger pill — absolute inside the hero section so it scrolls with
           the hero and never overlaps the fixed header (88px) or sidebar (88px). */}
-      <div className="absolute top-4 right-4 z-20">
+      <div className="absolute top-4 right-4 z-20" data-owner-pencil>
         <button
           onClick={() => setOpen(true)}
           className="inline-flex items-center gap-1.5 bg-[#F7F2EA]/95 text-[#1A1A1A] px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-[0.2em] shadow-lg border border-[#B89555]/60 backdrop-blur-sm hover:bg-[#EFE6D6] transition-colors"
