@@ -281,11 +281,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        data-advanced-filter-panel="true"
         data-filter-clean="true"
-        className="allow-white max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] border border-white/24 flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.12)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
+        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border border-[#B89555]/55 text-[#1A1A1A] flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.20),0_0_0_1px_rgba(184,149,85,0.18)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
         style={{
-          // Emerald slider override for this modal
-          ['--slider-track-bg' as any]: 'rgba(255,255,255,0.24)',
+          ['--slider-track-bg' as any]: 'rgba(6,78,59,0.14)',
           ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
           ['--slider-thumb-bg' as any]: '#FFFFFF',
           ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
@@ -293,7 +293,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       >
 
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-white/18 flex-shrink-0 bg-black/10">
+        <div className="px-6 pt-6 pb-4 border-b border-[#B89555]/40 flex-shrink-0 bg-white/40">
+
           <div className="flex items-center justify-between mb-3">
             <div>
               <DialogTitle className="allow-white text-xl font-bold text-white tracking-tight">New Off Plan Projects</DialogTitle>

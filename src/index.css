@@ -35,31 +35,33 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Area / off-plan filter dialog lock: emerald-black surfaces, pure white copy. */
+/* Advanced Filter Panel — champagne + ink standard (matches user account dropdown).
+   Emerald reserved for active pills/hovers via jj-pill-emerald-metallic. */
 html body [data-filter-clean][role="dialog"] {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
-  border-color: rgba(255,255,255,0.24) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body [data-filter-clean][role="dialog"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,button,li,dt,dd) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body [data-filter-clean][role="dialog"] :is(svg,[data-lucide]) {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
 }
 html body [data-filter-clean][role="dialog"] :is(input,textarea,select,button[role="combobox"]) {
-  background: rgba(2,22,17,0.82) !important;
-  border-color: rgba(255,255,255,0.28) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body [data-filter-clean][role="dialog"] :is(input,textarea)::placeholder {
-  color: #FFFFFF !important;
+  color: rgba(26,26,26,0.55) !important;
   opacity: 1 !important;
 }
+/* Active/selected chips + emerald metallic pills keep pure white text + emerald bg */
 html body [data-filter-clean][role="dialog"] [data-state="checked"],
 html body [data-filter-clean][role="dialog"] [data-state="active"],
 html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
@@ -68,6 +70,26 @@ html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: transparent !important;
 }
+html body [data-filter-clean][role="dialog"] [data-state="checked"] :is(svg,span,p,div),
+html body [data-filter-clean][role="dialog"] [data-state="active"] :is(svg,span,p,div),
+html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic :is(svg,span,p,div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Convert dark emerald surface cards to white cards on the champagne panel */
+html body [data-filter-clean][role="dialog"] [class*="bg-\[\#021611\]"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/7"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/12"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/14"],
+html body [data-filter-clean][role="dialog"] [class*="bg-black\/10"] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+html body [data-filter-clean][role="dialog"] [class*="border-white\/"] {
+  border-color: rgba(184,149,85,0.50) !important;
+}
+
 
 
 /* =====================================================================
@@ -28086,26 +28108,27 @@ html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filte
   opacity: 1 !important;
 }
 
-/* Final emerald-only filter contract: Developers / Projects / Areas filters and their dropdowns must never render champagne/gold labels. */
+/* Filter panel + dropdowns — champagne + ink (site-wide dropdown standard). */
 html body [data-radix-dialog-content][data-filter-clean="true"],
 html body [data-filter-dropdown="true"],
 html body [data-filter-clean="true"] [data-filter-dropdown="true"] {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.24) !important;
-  box-shadow: 0 22px 58px rgba(0,0,0,0.48), 0 0 0 1px rgba(6,78,59,0.22) !important;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  box-shadow: 0 22px 58px rgba(0,0,0,0.18), 0 0 0 1px rgba(184,149,85,0.20) !important;
 }
 
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,small,strong,
   [class*="text-[#1A1A1A]"], [class*="text-[#0A0A0A]"], [class*="text-muted"]
-):not(.allow-ink):not(.allow-ink *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+):not(.allow-ink):not(.allow-ink *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
 
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path):not(.allow-ink):not(.allow-ink *) {
   color: #FFFFFF !important;
@@ -28113,6 +28136,7 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg
   opacity: 1 !important;
 }
 
+/* Champagne + ink for filter panel inputs/comboboxes (matches user account menu). */
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   textarea,
@@ -28122,18 +28146,18 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   [data-radix-select-trigger],
   [data-jbj-field]
 ):not(.jj-pill-emerald-metallic):not(.jj-map-segment):not(.jj-map-search-input):not(.filter-search-pill-input) {
-  background: rgba(2,22,17,0.82) !important;
+  background: #FFFFFF !important;
   background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.28) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.50) !important;
   box-shadow: none !important;
   opacity: 1 !important;
 }
 
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(input, textarea)::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
   opacity: 1 !important;
 }
 
@@ -28145,20 +28169,21 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) .filter
   border: 0 !important;
   box-shadow: none !important;
   outline: 0 !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 
+/* Cards inside champagne panel stay white */
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#FEFCF9]"],
-  [class*="bg-[#FAF6EE]"], [class*="bg-[#F3EDD9]"], [class*="bg-champagne"],
-  [class*="border-[#B89555]"], [class*="border-[#064E3B]"]
+  [class*="bg-[#FAF6EE]"], [class*="bg-[#F3EDD9]"], [class*="bg-champagne"]
 ):not(.jj-pill-emerald-metallic):not(.jj-map-command-bar):not(.jj-map-segment):not(.jj-map-search-input) {
-  background: rgba(2,22,17,0.82) !important;
+  background: #FFFFFF !important;
   background-image: none !important;
-  border-color: rgba(255,255,255,0.28) !important;
+  border-color: rgba(184,149,85,0.40) !important;
 }
 
+/* Active/selected chips keep emerald + white */
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-state="active"],
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-filter-selected="true"] {
   background: var(--jj-emerald-ombre) !important;
@@ -28168,24 +28193,25 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-f
   border-color: transparent !important;
 }
 
-/* Root filter/menu contrast closure: every emerald filter picker surface owns
-   pure-white text/icons. This removes the remaining champagne/light descendant
-   rules that were winning on select labels, chevrons, chips and nested spans. */
+
+/* Root filter/menu contrast closure — champagne + ink for the panel body.
+   Active/checked chips and jj-pill-emerald-metallic keep white via later rules. */
 html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,small,strong,em,b,
   [class*="text-[#1A1A1A]"], [class*="text-[#0A0A0A]"], [class*="text-muted"]
-):not(.allow-ink):not(.allow-ink *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+):not(.allow-ink):not(.allow-ink *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
 
-html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path, circle, rect, line, polyline, polygon):not(.allow-ink):not(.allow-ink *) {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path, circle, rect, line, polyline, polygon):not(.allow-ink):not(.allow-ink *):not(.jj-pill-emerald-metallic svg):not(.jj-pill-emerald-metallic svg *):not([data-state="active"] svg):not([data-state="active"] svg *) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
   stroke-opacity: 1 !important;
   opacity: 1 !important;
 }
+
 
 /* Emerald dropdown scrollbar — gold accent on emerald panel */
 .jj-emerald-scroll::-webkit-scrollbar { width: 8px; }
@@ -29765,8 +29791,9 @@ html body [data-account-menu-content][data-account-menu-content] :is(a,button,[r
 
 /* Final website-dropdown contrast contract — excludes AI tool scope.
    Emerald dropdown/picker panels keep pure white foreground; champagne account/search menus stay ink via their own surface rules. */
+/* Header emerald dropdowns keep white foreground; the property-filter panel now
+   uses the champagne + ink site-wide dropdown standard (rules above). */
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
   [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) {
@@ -29779,7 +29806,6 @@ html body:not([data-ai-tools-scope="true"]) :is(
 }
 
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
   [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)) {
@@ -29789,10 +29815,7 @@ html body:not([data-ai-tools-scope="true"]) :is(
   opacity: 1 !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
-  [data-filter-dropdown]
-) :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
+html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
   background: rgba(1, 8, 6, 0.72) !important;
   background-image: none !important;
   color: #FFFFFF !important;
@@ -29800,14 +29823,12 @@ html body:not([data-ai-tools-scope="true"]) :is(
   border-color: rgba(255,255,255,0.32) !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-clean][role="dialog"],
-  [data-filter-dropdown]
-) :is(input, textarea)::placeholder {
+html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea)::placeholder {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
 }
+
 
 /* Terminal validation rule: header website dropdowns only, AI scope excluded. */
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content],
@@ -29815,13 +29836,13 @@ html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not(
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not([data-currency-row]):not(:has([data-currency-row])) *,
 html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child,
 html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child *,
-html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown], button):not([data-state="checked"]):not([data-state="active"]),
-html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown], button):not([data-state="checked"]):not([data-state="active"]) * {
+html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown]):not([data-state="checked"]):not([data-state="active"]) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
   opacity: 1 !important;
 }
+
 
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
 html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) * {
@@ -30157,4 +30178,114 @@ html body:not(#no-op-a):not(#no-op-b):not(#no-op-c) [data-radix-popper-content-w
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
   background-color: #064E3B !important;
+}
+
+/* ============================================================
+   PASS 240 — Advanced Filter Panel: champagne + ink standard
+   Site-wide dropdown standard. AI tools excluded via scope.
+   ============================================================ */
+
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) {
+  color: #1A1A1A !important;
+}
+
+/* All descendant text defaults to ink black */
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(
+  h1, h2, h3, h4, p, span, div, label, button, a, li, small, strong, em
+) {
+  color: #1A1A1A !important;
+}
+
+/* All icons default to ink */
+html body [role="dialog"][data-advanced-filter-panel="true"]:not([data-ai-tools-scope="true"]) :where(svg) {
+  color: #1A1A1A !important;
+  stroke: currentColor;
+}
+
+/* EXCEPTION 1 — emerald metallic pills keep pure white text/icons */
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic *,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
+html body [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"].jj-pill-emerald-metallic svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* EXCEPTION 2 — inputs on champagne need white background + ink text */
+html body [role="dialog"][data-advanced-filter-panel="true"] input,
+html body [role="dialog"][data-advanced-filter-panel="true"] select,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea {
+  background-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+}
+
+/* Convert dark emerald surface panels to champagne cards */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-\[\#021611\]"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/7"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/12"],
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-white\/14"] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+
+/* Borders: convert white-on-emerald borders to gold hairline */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white\/"] {
+  border-color: rgba(184,149,85,0.50) !important;
+}
+
+/* Section-title bottom border */
+html body [role="dialog"][data-advanced-filter-panel="true"] .bg-black\/10 {
+  background-color: rgba(255,255,255,0.40) !important;
+}
+
+/* Hover rows inside developer/area popovers */
+html body [role="dialog"][data-advanced-filter-panel="true"] button:hover:not(.jj-pill-emerald-metallic) {
+  background-color: rgba(6,78,59,0.06) !important;
+}
+
+/* PASS 241 — refine champagne conversion for Advanced Filter Panel header/labels */
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="bg-black/10"] {
+  background-color: rgba(184,149,85,0.10) !important;
+  background-image: none !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] [class*="border-white/"] {
+  border-color: rgba(184,149,85,0.40) !important;
+}
+/* Force all text (including .text-white and .allow-white spans) to ink, EXCEPT
+   emerald-metallic pills, active/checked chips, and lucide icons inside dark triggers */
+html body [role="dialog"][data-advanced-filter-panel="true"] :where(h1,h2,h3,h4,p,span,label,button,div,li,dt,dd,small,strong,em,b):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *):not([role="combobox"]):not([role="combobox"] *):not([data-radix-select-trigger]):not([data-radix-select-trigger] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] :where(svg):not(.jj-pill-emerald-metallic svg):not([data-state="active"] svg):not([role="combobox"] svg):not([data-radix-select-trigger] svg) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+/* PASS 242 — Final ink override for Advanced Filter Panel: any text-white / allow-white
+   inside the champagne panel must render as ink. Emerald pills keep their own white. */
+html body [role="dialog"][data-advanced-filter-panel="true"] *:not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
+}
+/* Header top strip: light champagne tint, not dark */
+html body [role="dialog"][data-advanced-filter-panel="true"] > div:first-child {
+  background-color: rgba(184,149,85,0.08) !important;
+  background-image: none !important;
+  border-bottom-color: rgba(184,149,85,0.35) !important;
 }
