@@ -28756,42 +28756,52 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) :is([ro
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-/* Row resting state = dark ink on champagne. */
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+/* Row resting state = dark ink on champagne (high-spec chain to beat
+   tailwind text-white utilities baked into radix items). */
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"],
   [role="menuitem"],
   [role="menuitemcheckbox"],
   [role="menuitemradio"],
   [cmdk-item],
   [data-radix-select-item],
-  [data-radix-dropdown-menu-item]
-) {
+  [data-radix-dropdown-menu-item],
+  [data-currency-row],
+  [data-jbj-dropdown-item]
+):not(#\a):not(#\b):not(#\c):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) {
   color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   background: transparent !important;
   background-image: none !important;
 }
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"],
   [role="menuitem"],
   [cmdk-item],
-  [data-radix-select-item]
-) * {
+  [data-radix-select-item],
+  [data-currency-row],
+  [data-jbj-dropdown-item]
+):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) :is(*, span, p, small, strong, div, li):not(#\a):not(#\b) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"],
   [role="menuitem"],
   [cmdk-item],
-  [data-radix-select-item]
-) svg {
+  [data-radix-select-item],
+  [data-currency-row],
+  [data-jbj-dropdown-item]
+):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) :is(svg, path, circle, rect, line, polyline, polygon):not(#\a):not(#\b) {
   color: #1A1A1A !important;
-  stroke: currentColor !important;
-  fill: none !important;
+  stroke: #1A1A1A !important;
+  stroke-opacity: 1 !important;
 }
 
-/* Hover / active / selected = emerald→black metallic with white ink+icons. */
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+/* Hover / active / selected = emerald→black metallic with white ink+icons.
+   Explicitly opts out of the currency + account "active" rows so PASS 98/99
+   keep their existing emerald treatment untouched. */
+html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-account-menu-content])):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28805,7 +28815,7 @@ html body [data-radix-popper-content-wrapper]:not(:has(> [data-account-menu-cont
   [data-radix-select-item][data-state="checked"],
   [data-radix-select-item][data-highlighted],
   [data-radix-dropdown-menu-item][data-highlighted]
-) {
+):not([data-currency-row]):not([data-jbj-dropdown-item]):not(#\a):not(#\b) {
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
   background-color: #042C1C !important;
   color: #FFFFFF !important;
