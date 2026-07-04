@@ -245,6 +245,7 @@ export const PublicRoutes = () => (
     <Route path="/project/:slug" element={<ProjectDetail />} />
     <Route path="/communities" element={<Communities />} />
     <Route path="/community/:slug" element={<CommunityDetail />} />
+    <Route path="/communities/:slug-guide" element={<CommunityLandingPage />} />
     <Route path="/developers" element={<Developers />} />
     <Route path="/developer/:slug" element={<DeveloperDetail />} />
     <Route path="/developers/:slug" element={<RedirectWithParams to="/developer" />} />
