@@ -243,10 +243,16 @@ export default function SupportLauncher() {
           }}
         >
           {open ? (
-            <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <X
+              className="allow-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }}
+            />
           ) : (
             <>
-              <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <Phone
+                className="allow-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }}
+              />
               <span
                 className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
@@ -254,7 +260,6 @@ export default function SupportLauncher() {
                 Contact Us
               </span>
               <span className="pointer-events-none absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]" />
-
             </>
           )}
         </motion.button>
