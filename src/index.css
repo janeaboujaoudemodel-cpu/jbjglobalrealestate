@@ -29044,7 +29044,7 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:
   .jbj-form-option,
   [data-radix-select-item],
   [data-radix-dropdown-menu-item]
-):not([data-highlighted]):not([data-state="checked"]):not([data-selected="true"]):not([aria-selected="true"]):not(:hover) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
+):not([data-highlighted]):not([data-state="checked"]):not([data-selected="true"]):not([aria-selected="true"]):not(:hover) :is(*, span, svg, path, line, polyline, polygon, rect, circle):not(:where([data-surface="emerald"], [data-surface="emerald"] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, [data-jbj-notification-badge], [data-jbj-notification-badge] *, .allow-white, .allow-white *, .jj-surface-emerald, .jj-surface-emerald *, .jj-official-emerald, .jj-official-emerald *, .jj-pill-emerald, .jj-pill-emerald *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *, .jj-chip-emerald, .jj-chip-emerald *)) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
