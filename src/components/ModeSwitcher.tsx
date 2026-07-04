@@ -249,6 +249,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           align="end"
           side={side}
           data-mode-switcher-panel="true"
+          data-preserve-surface
           className="mode-switcher-panel w-[360px] mr-3 rounded-2xl p-3 z-[10001]"
           sideOffset={10}
           collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
