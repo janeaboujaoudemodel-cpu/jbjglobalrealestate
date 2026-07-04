@@ -29809,6 +29809,34 @@ html body:not([data-ai-tools-scope="true"]) :is(
   opacity: 1 !important;
 }
 
+/* Terminal validation rule: header website dropdowns only, AI scope excluded. */
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not([data-currency-row]):not(:has([data-currency-row])),
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] > :not([data-currency-row]):not(:has([data-currency-row])) *,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] > div:first-child *,
+html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown], button):not([data-state="checked"]):not([data-state="active"]),
+html body:not([data-ai-tools-scope="true"]) [data-filter-clean][role="dialog"] :is([role="combobox"], [data-radix-select-trigger], [data-filter-dropdown], button):not([data-state="checked"]):not([data-state="active"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: currentColor !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row][data-currency-active="true"],
+html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content] [data-currency-row][data-currency-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
 /* Validation close-out: nearby map filter chips + DLD split labels. */
 html body #root .jj-map-filter-toggle[data-active="true"],
 html body #root .jj-map-filter-toggle[data-active="true"] * {
