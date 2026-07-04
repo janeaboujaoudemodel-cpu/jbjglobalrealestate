@@ -136,7 +136,16 @@ export const GuideTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-guide-toc data-surface="emerald" data-premium-navigator>
+    <div
+      className={cn(
+        "fixed right-4 top-28 z-[80] hidden w-60 lg:block xl:right-6 xl:w-64 transition-opacity duration-300",
+        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      )}
+      aria-hidden={!pastHero}
+      data-guide-toc
+      data-surface="emerald"
+      data-premium-navigator
+    >
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
