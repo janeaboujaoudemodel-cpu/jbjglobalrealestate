@@ -657,18 +657,18 @@ const MortgageCalculator = ({
               <p className="text-muted-foreground text-[10px] lg:text-xs mt-1 lg:mt-2">per month for {loanTermYears} years</p>
             </div>
 
-            {/* Mobile-only toggle to expand the detailed breakdown */}
+            {/* Stage toggle: keep the calculator compact until the user opens the detailed stage. */}
             <button
               type="button"
               onClick={() => setDetailsExpanded((v) => !v)}
               aria-expanded={detailsExpanded}
-              className="md:hidden w-full h-11 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-semibold flex items-center justify-center gap-2"
+              className="w-full h-11 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-semibold flex items-center justify-center gap-2"
             >
               {detailsExpanded ? "Hide detailed breakdown" : "Show detailed breakdown"}
               <span aria-hidden className={detailsExpanded ? "rotate-180 transition-transform" : "transition-transform"}>▾</span>
             </button>
 
-            <div className={detailsExpanded ? "space-y-4 lg:space-y-6" : "hidden md:block space-y-4 lg:space-y-6"}>
+            <div className={detailsExpanded ? "space-y-4 lg:space-y-6" : "hidden"}>
             {/* 6 Champagne Summary Cards - 3x2 Grid */}
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
               <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
@@ -782,7 +782,7 @@ const MortgageCalculator = ({
         </div>
 
         {showAssistant && (
-          <div className={detailsExpanded ? "mt-6" : "mt-6 hidden md:block"}>
+          <div className={detailsExpanded ? "mt-6" : "mt-6 hidden"}>
             <MortgageAIAssistant
               context={{
                 propertyPrice,

@@ -688,7 +688,7 @@ function ProjectDetailLayoutInner({
             on this project page. On → every pencil reappears in its original
             spot. This button itself stays visible in both states. */}
         {isOwner && (
-          <div className="absolute top-4 right-4 z-30">
+          <div className="absolute top-[176px] right-4 md:right-8 z-30">
             <button
               type="button"
               onClick={toggleProjectEditMode}

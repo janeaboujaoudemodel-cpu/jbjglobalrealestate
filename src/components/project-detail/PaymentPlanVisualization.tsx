@@ -182,12 +182,12 @@ export default function PaymentPlanVisualization({
 
 
       <Tabs defaultValue="installment" className="w-full">
-        <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30">
-          <TabsTrigger value="installment" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
+        <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-0 overflow-hidden rounded-lg">
+          <TabsTrigger value="installment" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <CreditCard className="w-4 h-4 mr-2" />
             Payment Plan {paymentPlan && `(${paymentPlan})`}
           </TabsTrigger>
-          <TabsTrigger value="full" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
+          <TabsTrigger value="full" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <Wallet className="w-4 h-4 mr-2" />
             100% Payment
           </TabsTrigger>
@@ -246,7 +246,7 @@ export default function PaymentPlanVisualization({
           {/* Visual Timeline with Progress Bar */}
           {total > 0 && (
             <div className="mb-8">
-              <div className="h-6 rounded-full bg-[#F7F2EA] overflow-hidden flex shadow-inner relative">
+              <div data-payment-progress-bar className="h-6 rounded-full bg-[#F7F2EA] overflow-hidden flex shadow-inner relative">
                 {bookingPct > 0 && (
                   <div
                     data-emerald="true" data-no-contrast-guard className="h-full transition-all flex items-center justify-center"

@@ -304,11 +304,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
 
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]">
-                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%` }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]" data-dld-split-bar>
+                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%`, minWidth: offPlanPct > 0 ? 44 : 0 }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
-                <div className="h-full flex-1 flex items-center justify-center">
+                <div className="h-full flex-1 flex items-center justify-center" style={{ minWidth: secondaryPct > 0 ? 44 : 0 }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
                 </div>
               </div>
@@ -338,11 +338,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-4 h-4 text-[#064E3B]" />
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]">
-                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%` }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]" data-dld-split-bar>
+                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%`, minWidth: cashPct > 0 ? 44 : 0 }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{cashPct}%</span>
                 </div>
-                <div className="h-full flex-1 flex items-center justify-center">
+                <div className="h-full flex-1 flex items-center justify-center" style={{ minWidth: mortgagePct > 0 ? 44 : 0 }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{mortgagePct}%</span>
                 </div>
               </div>
@@ -437,7 +437,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                                 </div>
                                 <div className="flex items-center gap-2 flex-1 max-w-[140px]">
                                   <div className="flex-1 h-1.5 rounded-full bg-[#EFE6D6] overflow-hidden">
-                                    <div className="h-full bg-[#064E3B]" style={{ width: `${Math.min(n.percentage * 3, 100)}%` }} />
+                            <div className="h-full bg-[#064E3B] origin-left" style={{ width: `${Math.min(n.percentage * 3, 100)}%` }} />
                                   </div>
                                   <span className="text-[#1A1A1A] text-[11px] font-bold w-7 text-right">{n.percentage}%</span>
                                 </div>
@@ -473,7 +473,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="w-24 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
-                            <div className="h-full bg-[#064E3B] rounded-full" style={{ width: `${nat.percentage * 4}%` }} />
+                            <div className="h-full bg-[#064E3B] rounded-full origin-left" style={{ width: `${nat.percentage * 4}%` }} />
                           </div>
                           <span className="text-xs font-extrabold w-8 text-right" style={{ color: "#FFFFFF" }}>{nat.percentage}%</span>
                         </div>

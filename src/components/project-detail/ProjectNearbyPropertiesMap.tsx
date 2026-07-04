@@ -257,12 +257,12 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`jj-map-filter-toggle inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
+        className={`jj-map-filter-toggle inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
         data-active={isActive ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
         data-emerald-action={isActive ? "true" : undefined}
       >
-        <span>{label}</span>
+        <span className="min-w-0 truncate">{label}</span>
         <span className="text-[10px] tabular-nums">
           {count}
         </span>
@@ -272,7 +272,7 @@ export default function ProjectNearbyPropertiesMap({
 
   return (
     <div className={className}>
-      <div data-map-shell className="mb-2 flex items-center gap-2 flex-nowrap overflow-x-auto overflow-y-hidden pb-1 [-webkit-overflow-scrolling:touch]">
+      <div data-map-shell className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full pb-1">
         {chip("all", "All nearby", allMarkers.length)}
         {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
         {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
