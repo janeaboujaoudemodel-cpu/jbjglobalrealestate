@@ -384,7 +384,7 @@ const FutureOfRealEstate2026 = () => {
 
           <h3 className="text-xl font-serif font-bold text-[#1A1A1A] mb-3 mt-6">Call to Action for Investors and Homebuyers</h3>
           <p className="text-[#3D3D3D] leading-relaxed">
-            For investors, the 2026 playbook is to combine 6–8% yield-focused apartment districts with a prestige capital-appreciation anchor. For first-time homebuyers, engage a RERA-licensed brokerage early, get mortgage pre-approval, and prioritise green-certified stock in walkable communities. If you'd like help mapping any of this to specific properties or a portfolio, our team of real estate consultants is ready to run bespoke DLD-grounded numbers within 24 hours.
+            For investors weighing property investment options across the region, the 2026 playbook is to combine 6–8% yield-focused apartment districts with a prestige capital-appreciation anchor — a two-bucket approach to investment properties that balances immediate cash flow with long-term upside. For first-time homebuyers, engage a RERA-licensed brokerage early, get mortgage pre-approval, and prioritise green-certified stock in walkable communities. If you'd like help mapping any of this to specific properties or a portfolio, our team of real estate consultants is ready to run bespoke DLD-grounded numbers within 24 hours.
           </p>
         </div>
       </section>
