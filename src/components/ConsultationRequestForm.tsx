@@ -150,6 +150,18 @@ export const ConsultationRequestForm = ({
         phone: data.phone,
         nationality: data.nationality,
         language: data.preferredLanguage,
+        message: data.message,
+        context: {
+          serviceNeeded: data.serviceNeeded,
+          timeline: data.timeline,
+          preferredTime: data.preferredTime,
+          contactMethod: data.contactMethod,
+          budgetRange: data.budgetRange,
+          bedrooms: data.bedrooms,
+          sizeBucket: data.sizeBucket,
+          projectName,
+          projectId,
+        },
       }, source, "client");
 
       if (!leadCaptured) {
