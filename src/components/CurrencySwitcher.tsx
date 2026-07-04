@@ -61,6 +61,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     return 'AED';
   });
   const [hoveredCurrency, setHoveredCurrency] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const setCurrency = (code: string) => {
     setCurrencyState(code);
@@ -99,7 +100,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
         child.style.setProperty('background-image', 'none', 'important');
       });
     });
-  }, [currency, hoveredCurrency]);
+  }, [currency, hoveredCurrency, menuOpen]);
 
   const currentCurrency = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
   const isMobile = variant === 'mobile';
@@ -107,7 +108,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
   const isFlag = variant === 'flag';
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
       <DropdownMenuTrigger asChild>
         {isMobile ? (
           <button className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-[#1A1A1A] py-2 w-16 transition-colors">
