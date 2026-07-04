@@ -1,98 +1,40 @@
 # JBJ Global Real Estate
 
-> Dubai's premier RERA-licensed property brokerage. Buy, sell, or rent luxury apartments, villas, and off-plan properties across the UAE.
+> Dubai's RERA-licensed real estate brokerage. Buy, sell, rent, and invest in luxury apartments, villas, and off-plan properties across the UAE. Founded by Jane Bou Jaoude.
 
-JBJ Global Real Estate, founded by Jane Bou Jaoude, is a Dubai-headquartered brokerage serving investors, end-users, and developers across the United Arab Emirates. The platform combines a curated property portfolio with AI-powered tools, market intelligence, and concierge services for buyers, sellers, tenants, landlords, and brokers.
+## About
 
-## Entities
+- Full-service brokerage covering Dubai, Abu Dhabi, and Sharjah
+- Specializations: luxury real estate, off-plan investment, property management, Golden Visa advisory
+- Licensed by RERA (Real Estate Regulatory Agency, Dubai Land Department)
+- Contact: contact@jbj.ae · +971 54 716 7107
 
-Canonical entity graph — every route below has JSON-LD (`@context: schema.org`) that references these `@id` nodes. Consumable by ChatGPT, Perplexity, Gemini, Claude, Google AI Overviews, Microsoft Copilot, and Apple Intelligence.
+## Core pages
 
-### Organization
-- JBJ Global Real Estate (`RealEstateAgent`, `LocalBusiness`, `ProfessionalService`) — https://www.jbj.ae/#organization
-- Founded 2016, Business Bay, Dubai, UAE — RERA-licensed brokerage
-- Founder / CEO: Jane Bou Jaoude — https://www.jbj.ae/founder#person
+- [Home](https://www.jbj.ae/): brokerage overview and featured listings
+- [Properties for sale & rent](https://www.jbj.ae/properties): searchable listings across Dubai
+- [Areas guide](https://www.jbj.ae/areas): community intelligence for Palm Jumeirah, Downtown, Marina, Business Bay, and more
+- [Developers](https://www.jbj.ae/developers): profiles of Emaar, Damac, Sobha, Nakheel, Meraas, Ellington, Binghatti, Danube, Majid Al Futtaim, Select Group
+- [Buyer guide](https://www.jbj.ae/buyer-guide): end-to-end Dubai purchase process (DLD, Oqood, RERA)
+- [Investor hub](https://www.jbj.ae/investor-hub): portfolio, yield, and Golden Visa tools
+- [Market intelligence](https://www.jbj.ae/market-intelligence): DLD-sourced pricing and yield analytics
+- [News & insights](https://www.jbj.ae/news): market commentary and trend reporting
+- [Contact](https://www.jbj.ae/contact): consultation booking
 
-### Places (Wikidata-linked)
-- United Arab Emirates — Q878
-- Dubai — Q612
-- Abu Dhabi — Q31866
-- Sharjah — Q45079
-- Ras Al Khaimah — Q212666
+## Pillar insights
 
-### Communities served (Wikidata-linked where public)
-- Palm Jumeirah — Q334515
-- Downtown Dubai — Q1245187
-- Dubai Marina — Q1093254
-- Business Bay — Q2937847
-- Dubai Hills Estate
-- Jumeirah Beach Residence (JBR) — Q6307030
-- Emirates Hills — Q5371555
-- Jumeirah Golf Estates
-- Arabian Ranches — Q4784550
-- Mohammed Bin Rashid City
+- [The Future of Real Estate: 5 Trends to Watch in 2026](https://www.jbj.ae/insights/future-of-real-estate-2026): sustainability, luxury demand, PropTech, commercial emerging markets, remote-work impact
 
-### Developer partners (Wikidata-linked)
-- Emaar Properties — Q727373
-- DAMAC Properties — Q5205420
-- Sobha Realty — Q26722193
-- Meraas — Q18401378
-- Nakheel Properties — Q911837
-- Aldar Properties — Q4726645
-- Dubai Holding — Q1264320
-- Ellington Properties
-- Select Group
-- Omniyat — Q17071018
-- Binghatti Developers
-- Danube Properties
-- Azizi Developments
-- Meydan Group — Q6825144
-- Tiger Group
+## Tools
 
-### Landmarks (Wikidata-linked)
-- Burj Khalifa — Q12495 (Downtown Dubai)
-- Burj Al Arab — Q83125
-- Atlantis, The Palm — Q799770 (Palm Jumeirah)
+- [Mortgage calculator](https://www.jbj.ae/mortgage-calculator)
+- [Property evaluator](https://www.jbj.ae/property-evaluator)
+- [AI home finder](https://www.jbj.ae/ai-home-finder)
+- [Interior design AI](https://www.jbj.ae/interior-design-ai)
 
-## Pages
+## Legal & compliance
 
-- [Home](/): Brokerage overview, featured listings, and entry points for buyers, sellers, and renters.
-- [Properties](/properties): Searchable catalog of apartments, villas, penthouses, and off-plan projects for sale and rent.
-- [Resale Properties](/resale-properties): Verified secondary-market listings across Dubai and the UAE.
-- [Communities](/communities): Profiles of premier residential communities in Dubai.
-- [Areas](/areas): In-depth area guides for Dubai neighborhoods.
-- [Developers](/developers): Directory of UAE master developers and their active projects.
-- [Sell with JBJ](/sell): Process and valuation tools for owners listing a property.
-- [Buyer Guide](/buyer-guide): Step-by-step guide to purchasing property in Dubai.
-- [Seller Guide](/seller-guide): Pricing, marketing, and transfer process for property sellers.
-- [Rent Guide](/rent-guide): Tenant guidance for renting in the UAE.
-- [Landlord Guide](/landlord-guide): Resources for property owners leasing units.
-- [Mortgage Calculator](/mortgage-calculator): Free Dubai mortgage and affordability calculator.
-- [Golden Visa Guide](/guides/golden-visa-uae): UAE Golden Visa eligibility and application overview.
-- [Market Intelligence](/market-intelligence): Dubai property market data, reports, and methodology.
-- [News](/news): Real estate news and market commentary.
-- [About](/about): Company background, leadership, and credentials.
-- [Founder](/founder): Profile of founder and CEO Jane Bou Jaoude.
-- [Team](/team): Meet the JBJ Global Real Estate team.
-- [Awards](/awards): Industry recognition and awards.
-- [Services](/services): Brokerage, leasing, off-plan, and advisory services.
-- [Company Profile](/company-profile): Detailed institutional company profile.
-- [Contact](/contact): Contact details and inquiry form.
-
-## Services (first-class Schema.org Service entities)
-- [Buy Property in Dubai](/properties)
-- [Sell Property in Dubai](/sell)
-- [Rent Property in Dubai](/rent)
-- [Off-Plan Investment](/off-plan)
-- [Golden Visa Consultancy](/golden-visa-guide)
-- [Mortgage Advisory](/mortgage-calculator)
-- [Property Management](/services/property-management)
-
-## Optional
-
-- [FAQ](/faq): Frequently asked questions about Dubai real estate.
-- [Customer Happiness](/customer-happiness): Service quality and feedback program.
-- [Privacy Policy](/privacy): How we collect, use, and protect personal information.
-- [Terms of Service](/terms): Terms and conditions for using the website.
-- [Cookie Policy](/cookies): Information about cookies used on this site.
-- [Sitemap](/sitemap): Human-readable site index.
+- [Privacy policy](https://www.jbj.ae/privacy)
+- [Terms of service](https://www.jbj.ae/terms)
+- [AML / KYC policy](https://www.jbj.ae/aml-kyc)
+- [Disclaimers](https://www.jbj.ae/disclaimers)
