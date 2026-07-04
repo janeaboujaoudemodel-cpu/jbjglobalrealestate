@@ -30507,9 +30507,14 @@ html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d):not(#jj-e):not(#jj-f):not(
    ============================================================ */
 
 /* Switch thumb: force white contrast dot regardless of state */
+html body [data-filter-clean][role="dialog"] [role="switch"] > span,
+html body [data-filter-clean][role="dialog"] [role="switch"] > span[data-state],
 html body [role="switch"] > span,
+html body [role="switch"] > span[data-state],
 html body [role="switch"] > span:first-child,
 html body button[role="switch"] > span,
+html body button[role="switch"] > span[data-state="checked"],
+html body button[role="switch"] > span[data-state="unchecked"],
 html body [role="switch"] [data-radix-switch-thumb] {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
@@ -30517,7 +30522,9 @@ html body [role="switch"] [data-radix-switch-thumb] {
   box-shadow: 0 2px 6px rgba(0,0,0,0.28) !important;
   border-color: transparent !important;
   opacity: 1 !important;
+  color: #FFFFFF !important;
 }
+
 
 /* Switch off (unchecked): gold/champagne track so gold + white dot reads */
 html body [role="switch"][data-state="unchecked"] {
