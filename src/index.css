@@ -28108,26 +28108,27 @@ html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filte
   opacity: 1 !important;
 }
 
-/* Final emerald-only filter contract: Developers / Projects / Areas filters and their dropdowns must never render champagne/gold labels. */
+/* Filter panel + dropdowns — champagne + ink (site-wide dropdown standard). */
 html body [data-radix-dialog-content][data-filter-clean="true"],
 html body [data-filter-dropdown="true"],
 html body [data-filter-clean="true"] [data-filter-dropdown="true"] {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.24) !important;
-  box-shadow: 0 22px 58px rgba(0,0,0,0.48), 0 0 0 1px rgba(6,78,59,0.22) !important;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  box-shadow: 0 22px 58px rgba(0,0,0,0.18), 0 0 0 1px rgba(184,149,85,0.20) !important;
 }
 
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,small,strong,
   [class*="text-[#1A1A1A]"], [class*="text-[#0A0A0A]"], [class*="text-muted"]
-):not(.allow-ink):not(.allow-ink *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+):not(.allow-ink):not(.allow-ink *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
+
 
 html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path):not(.allow-ink):not(.allow-ink *) {
   color: #FFFFFF !important;
