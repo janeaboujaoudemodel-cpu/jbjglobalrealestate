@@ -30102,3 +30102,59 @@ html body:not([data-ai-tools-scope="true"]) [data-currency-menu-content][data-cu
   stroke: #1A1A1A !important;
   opacity: 1 !important;
 }
+
+/* PASS 230e — ID-prefixed win over all previous white-ink rules for mode/currency */
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]),
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) *,
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child,
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] > div:first-child * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg,
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) svg path {
+  fill: none !important;
+}
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: rgba(184,149,85,0.35) !important;
+}
+/* Hover idle → emerald + white */
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]),
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [role="menuitem"]:not([data-mode-row="active"]):is(:hover, :focus, [data-highlighted]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+  border-color: rgba(6,78,59,0.5) !important;
+}
+
+/* Currency ink for non-active rows */
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]),
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:not([data-currency-active="true"]) *,
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child,
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] > div:first-child * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]),
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover, :focus, [data-highlighted]):not([data-currency-active="true"]) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-color: #064E3B !important;
+}
