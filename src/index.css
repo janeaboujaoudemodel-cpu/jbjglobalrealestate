@@ -29161,8 +29161,8 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] 
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,[role="menuitem"]):not(:where([data-emerald-action] *, .jj-emerald-action *, [data-surface="emerald"] *)),
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-emerald-action] *, .jj-emerald-action *, [data-surface="emerald"] *)) {
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,[role="menuitem"]):not(:where([data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .jj-emerald-action, .jj-emerald-action *, [data-surface="emerald"], [data-surface="emerald"] *, .allow-white, .allow-white *)),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-ok], [data-emerald-ok] *, .jj-emerald-action, .jj-emerald-action *, [data-surface="emerald"], [data-surface="emerald"] *, .allow-white, .allow-white *)) {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
