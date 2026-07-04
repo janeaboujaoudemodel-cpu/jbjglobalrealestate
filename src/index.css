@@ -30473,3 +30473,27 @@ html body:not(#jj-currency-a):not(#jj-currency-b):not(#jj-currency-c):not([data-
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 249 — absolute final currency idle reset (beats old 4-ID highlighted rule). */
+html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d):not(#jj-e):not(#jj-f):not([data-ai-tools-scope="true"])
+  [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-row]:not(:hover):not(:focus-visible) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d):not(#jj-e):not(#jj-f):not([data-ai-tools-scope="true"])
+  [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row][data-currency-row]:not(:hover):not(:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
