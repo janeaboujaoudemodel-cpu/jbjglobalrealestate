@@ -27407,17 +27407,43 @@ html body #root [data-brand-emerald-page] #services-grid .grid {
   padding-right: 0 !important;
   grid-template-columns: minmax(0, 1fr) !important;
   grid-auto-rows: 1fr !important;
+  align-items: stretch !important;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 760px) {
   html body #root [data-brand-emerald-page] #services-grid .grid {
-    grid-template-columns: repeat(2, minmax(320px, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(300px, 1fr)) !important;
   }
 }
 
-@media (min-width: 1536px) {
+@media (min-width: 1240px) {
   html body #root [data-brand-emerald-page] #services-grid .grid {
-    grid-template-columns: repeat(3, minmax(330px, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(340px, 1fr)) !important;
+  }
+}
+
+html body #root [data-brand-emerald-page] #services-grid .jj-services-grid > * {
+  min-width: 0 !important;
+  height: 100% !important;
+}
+
+html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
+  min-height: 430px !important;
+  height: 100% !important;
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border-radius: 16px !important;
+}
+
+html body #root [data-brand-emerald-page] #services-grid .jj-service-card-content {
+  display: flex !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+@media (max-width: 759px) {
+  html body #root [data-brand-emerald-page] #services-grid .jj-service-card-animated {
+    min-height: 0 !important;
   }
 }
 
@@ -27453,10 +27479,31 @@ html body #root .jj-disclaimer-card {
   box-shadow: 0 14px 30px -24px rgba(4,44,28,0.58), inset 0 1px 0 rgba(255,255,255,0.78) !important;
 }
 
+html body #root .jj-scope-card {
+  border: 1px solid rgba(6,78,59,0.34) !important;
+  box-shadow: 0 14px 34px -24px rgba(4,44,28,0.62), inset 0 1px 0 rgba(255,255,255,0.78) !important;
+}
+
 html body #root .jj-disclaimer-card,
-html body #root .jj-disclaimer-card * {
+html body #root .jj-disclaimer-card *,
+html body #root [data-service-disclaimer],
+html body #root [data-service-disclaimer] * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root section.jj-services-final-cta {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  padding-top: 24px !important;
+  padding-bottom: 56px !important;
+}
+
+html body #root section.jj-services-final-cta .jj-emerald-card {
+  width: 100% !important;
+  max-width: 1100px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 html body #root .jj-emerald-border-animated {
