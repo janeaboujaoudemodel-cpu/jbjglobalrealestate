@@ -354,9 +354,10 @@ const DeveloperDetail = () => {
     },
   ].filter(s => s.value !== null);
 
-  const heroImageUrl = isAmmarDeveloper(developer.name, developer.slug)
-    ? ammarCreekHarbourMasterplan
-    : developer.feature_image_url;
+  const heroImageUrl =
+    isAmmarDeveloper(developer.name, developer.slug) || isEmaarDeveloper(developer.name, developer.slug)
+      ? ammarCreekHarbourMasterplan
+      : developer.feature_image_url;
 
   const competitorDevelopers = (allDevelopers || [])
     .filter((d) => d.id !== developer.id)
