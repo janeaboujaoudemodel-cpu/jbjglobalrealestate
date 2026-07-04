@@ -249,12 +249,11 @@ const Services = () => {
 
           <motion.h1
             data-no-contrast-guard
-            className="allow-white mx-auto text-center text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight"
+            className="allow-white mx-auto text-center text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight whitespace-nowrap"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
-            <span className="block">Explore JBJ</span>
-            <span className="block">Services</span>
+            Explore JBJ Services
           </motion.h1>
 
           <motion.p
