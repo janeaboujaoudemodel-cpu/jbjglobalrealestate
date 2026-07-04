@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { visualizer } from "rollup-plugin-visualizer";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
+
 
 export default defineConfig(({ mode }) => {
   const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://mdafrewypkkrildjgtey.supabase.co";
@@ -29,6 +31,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
+      mcpPlugin(),
       mode === "development" && componentTagger(),
       mode !== "development" && visualizer({
         filename: "dist/stats.html",

@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "jbj-global-mcp",
+      "version": "0.1.0",
+      "title": "JBJ Global Real Estate"
+    },
+    "tools": [
+      {
+        "name": "echo",
+        "title": "Echo",
+        "description": "Echo the input text back to the caller. Useful for verifying MCP connectivity.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Text to echo back."
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_properties",
+        "title": "Search JBJ properties",
+        "description": "Search JBJ Global Real Estate's published property listings by keyword, city, or price range. Returns up to 20 matching listings with name, city, price, bedrooms, and a public URL.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Free-text keyword matched against property name and description."
+            },
+            "city": {
+              "type": "string",
+              "description": "City or emirate filter (e.g. 'Dubai')."
+            },
+            "min_price": {
+              "type": "number",
+              "description": "Minimum listing price in AED."
+            },
+            "max_price": {
+              "type": "number",
+              "description": "Maximum listing price in AED."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "description": "Max results (1-20, default 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
