@@ -748,6 +748,22 @@ Requirements:
                   color: #FFFFFF !important;
                   opacity: 1 !important;
                 }
+                /* Force typed value + autofill to solid white too */
+                [data-seller-form-scope] input,
+                [data-seller-form-scope] textarea,
+                [data-seller-form-scope] select {
+                  color: #FFFFFF !important;
+                  -webkit-text-fill-color: #FFFFFF !important;
+                  caret-color: #FFFFFF !important;
+                }
+                [data-seller-form-scope] input:-webkit-autofill,
+                [data-seller-form-scope] input:-webkit-autofill:hover,
+                [data-seller-form-scope] input:-webkit-autofill:focus,
+                [data-seller-form-scope] textarea:-webkit-autofill {
+                  -webkit-text-fill-color: #FFFFFF !important;
+                  -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.08) inset !important;
+                  caret-color: #FFFFFF !important;
+                }
               `}</style>
 
 
