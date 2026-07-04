@@ -85,7 +85,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
       is_read: n.is_read,
       created_at: n.created_at,
       type: n.notification_type || 'system',
-      metadata: { ...(n.metadata || {}), action_url: n.action_url },
+      metadata: { ...((n.metadata && typeof n.metadata === 'object') ? n.metadata : {}), action_url: n.action_url },
       source_table: 'notifications' as const,
     }));
 
