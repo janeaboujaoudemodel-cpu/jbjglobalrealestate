@@ -62,9 +62,10 @@ html body [data-filter-clean][role="dialog"] :is(input,textarea)::placeholder {
   opacity: 1 !important;
 }
 /* Active/selected chips + emerald metallic pills keep pure white text + emerald bg */
-html body [data-filter-clean][role="dialog"] [data-state="checked"]:not([role="switch"] > *):not([data-radix-switch-thumb]):not([role="switch"]),
-html body [data-filter-clean][role="dialog"] [data-state="active"]:not([role="switch"] > *):not([data-radix-switch-thumb]):not([role="switch"]),
+html body [data-filter-clean][role="dialog"] [data-state="checked"],
+html body [data-filter-clean][role="dialog"] [data-state="active"],
 html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
+
 
   background: var(--jj-emerald-ombre) !important;
   color: #FFFFFF !important;
