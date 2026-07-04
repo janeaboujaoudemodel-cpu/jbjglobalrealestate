@@ -196,7 +196,7 @@ const NewsDetail = () => {
         breadcrumbItems={[
           { name: 'Home', path: '/' },
           { name: 'News', path: '/news' },
-          { name: article.title, path: `/news/${article.slug}` },
+          { name: article.title, path: `/news/${id}` },
         ]}
       />
       <script
