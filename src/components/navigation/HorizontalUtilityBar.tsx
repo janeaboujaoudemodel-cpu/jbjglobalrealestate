@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, Heart } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
@@ -75,6 +75,10 @@ function decodeFiltersFromURL(p: URLSearchParams): ShortcutFilterState {
 export default function HorizontalUtilityBar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const searchTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const filterTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const [searchAnchor, setSearchAnchor] = useState<DOMRect | null>(null);
+  const [filterAnchor, setFilterAnchor] = useState<DOMRect | null>(null);
   const [filterState, setFilterState] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -123,10 +127,14 @@ export default function HorizontalUtilityBar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <HeaderControl
+                ref={searchTriggerRef}
                 shape="circle"
                 tone="emerald"
                 aria-label="Search"
-                onClick={() => setSearchOpen(true)}
+                onClick={() => {
+                  setSearchAnchor(searchTriggerRef.current?.getBoundingClientRect() ?? null);
+                  setSearchOpen(true);
+                }}
               >
                 <Search />
               </HeaderControl>
@@ -141,10 +149,14 @@ export default function HorizontalUtilityBar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <HeaderControl
+                ref={filterTriggerRef}
                 shape="circle"
                 tone="emerald"
                 aria-label="Filter"
-                onClick={() => setFilterOpen(true)}
+                onClick={() => {
+                  setFilterAnchor(filterTriggerRef.current?.getBoundingClientRect() ?? null);
+                  setFilterOpen(true);
+                }}
               >
                 <SlidersHorizontal />
               </HeaderControl>
@@ -207,13 +219,14 @@ export default function HorizontalUtilityBar() {
       </div>
 
 
-      <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
+      <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} anchorRect={searchAnchor} />
 
       <AdvancedFilterPanel
         open={filterOpen}
         onOpenChange={setFilterOpen}
         filters={filterState}
         onFilterChange={handleFilterChange}
+        anchorRect={filterAnchor}
       />
     </>
   );

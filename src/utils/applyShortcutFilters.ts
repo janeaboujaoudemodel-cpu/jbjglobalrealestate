@@ -11,6 +11,52 @@ export function applyShortcutFilters<T extends Record<string, any>>(
   let result = [...projects];
 
   const normalize = (value: unknown) => String(value ?? '').toLowerCase().replace(/[_-]+/g, ' ').trim();
+  const parseNumericRange = (p: Record<string, any>) => {
+    const minRaw = p.bedrooms_min ?? p.bedroom_min ?? p.min_bedrooms;
+    const maxRaw = p.bedrooms_max ?? p.bedroom_max ?? p.max_bedrooms;
+    const min = Number(minRaw);
+    const max = Number(maxRaw);
+    return {
+      min: Number.isFinite(min) ? min : null,
+      max: Number.isFinite(max) ? max : null,
+    };
+  };
+  const bedroomTextMatches = (p: Record<string, any>, target: number, plus: boolean) => {
+    const text = normalize([
+      p.bedrooms,
+      p.bedroom,
+      p.bedroom_count,
+      p.unit_types,
+      p.unit_type,
+      p.configuration,
+      p.description,
+      p.property_type_label,
+      p.name,
+    ].filter(Boolean).join(' '));
+    if (!text) return false;
+    const numericHits = Array.from(text.matchAll(/\b(\d+)\s*(?:br|bed|bedroom|bedrooms)?\b/g)).map((m) => Number(m[1]));
+    if (numericHits.some((n) => plus ? n >= target : n === target)) return true;
+    if (target === 0 && /\bstudio\b/.test(text)) return true;
+    if (plus && target >= 5 && /\b(villa|villas|mansion|mansions)\b/.test(text) && numericHits.length === 0) return true;
+    return false;
+  };
+  const bedroomMatches = (p: Record<string, any>, raw: string) => {
+    if (raw === 'studio') {
+      const { min, max } = parseNumericRange(p);
+      if (min !== null || max !== null) return (min ?? max ?? -1) === 0;
+      return bedroomTextMatches(p, 0, false);
+    }
+    const plus = raw.endsWith('+');
+    const target = Number.parseInt(raw, 10);
+    if (!Number.isFinite(target)) return false;
+    const { min, max } = parseNumericRange(p);
+    if (plus) {
+      if (min !== null || max !== null) return (max ?? min ?? -1) >= target || (min ?? -1) >= target;
+      return bedroomTextMatches(p, target, true);
+    }
+    if (min !== null || max !== null) return target >= (min ?? max ?? target) && target <= (max ?? min ?? target);
+    return bedroomTextMatches(p, target, false);
+  };
   const handoverOrder = (handover: unknown): number | null => {
     const text = normalize(handover);
     if (!text) return null;
@@ -74,12 +120,7 @@ export function applyShortcutFilters<T extends Record<string, any>>(
   // Bedrooms
   if (sf.bedrooms.length > 0) {
     result = result.filter(p => {
-      return sf.bedrooms.some(b => {
-        if (b === 'studio') return (p.bedrooms_min ?? 0) === 0;
-        const num = parseInt(b);
-        if (b === '7+') return (p.bedrooms_max ?? 0) >= 7 || (p.bedrooms_min ?? 0) >= 7;
-        return num >= (p.bedrooms_min ?? 0) && num <= (p.bedrooms_max ?? 99);
-      });
+      return sf.bedrooms.some(b => bedroomMatches(p, b));
     });
   }
 

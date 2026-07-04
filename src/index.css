@@ -30314,20 +30314,87 @@ html body [role="dialog"][data-advanced-filter-panel="true"] [data-filter-option
 /* PASS 244 — Header poppers align to header divider and stay out of sidebar. */
 html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:has(:is([data-currency-menu-content], [data-mode-switcher-panel="true"], [data-account-menu-content])) {
   z-index: 120000 !important;
-  top: var(--app-content-top, 88px) !important;
 }
 html body [data-global-search-modal] {
-  left: max(calc(var(--app-content-left, 0px) + 10px), calc(var(--jj-content-gutter-l, 0px) + 10px)) !important;
-  right: 10px !important;
-  width: auto !important;
-  max-width: none !important;
-  transform: none !important;
+  right: auto !important;
 }
 @media (min-width: 640px) {
   html body [data-global-search-modal] {
-    left: max(calc(var(--app-content-left, 0px) + 16px), calc(var(--jj-content-gutter-l, 0px) + 16px)) !important;
-    right: 16px !important;
+    right: auto !important;
   }
+}
+
+/* PASS 247 — locked header-dropdown attachment + fast form poppers.
+   Header poppers use Radix's trigger positioning only: no forced hero-section top.
+   They open from the header bottom line via sideOffset=22 in the components.
+   Currency rows match account-menu rows: transparent on load, emerald only on real hover/focus. */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] {
+  z-index: 130000 !important;
+}
+
+html body [data-radix-popper-content-wrapper] :is([data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content], [role="listbox"], [role="menu"], .jbj-form-popover) {
+  z-index: 130001 !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+html body [data-radix-popper-content-wrapper] :is([data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content], [role="listbox"], [role="menu"], .jbj-form-popover) *,
+html body :is([data-state="open"], [data-state="closed"])[data-jbj-fast-dropdown="true"] {
+  transition-duration: 0ms !important;
+  animation-duration: 0ms !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row],
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row][data-highlighted]:not(:hover):not(:focus-visible),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row][data-currency-active="true"]:not(:hover):not(:focus-visible) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row][data-highlighted]:not(:hover):not(:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row][data-currency-active="true"]:not(:hover):not(:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover,:focus-visible) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row]:is(:hover,:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body [role="dialog"][data-advanced-filter-panel="true"] > button {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 9999px !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 0 !important;
+}
+
+html body [role="dialog"][data-advanced-filter-panel="true"] > button :is(svg, path, line, polyline) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body [role="dialog"][data-advanced-filter-panel="true"][data-header-anchored-panel="true"] {
+  max-height: calc(100dvh - var(--app-content-top, 88px) - 16px) !important;
 }
 
 /* PASS 245 — Search modal hover ink correction: emerald hover = pure white. */
