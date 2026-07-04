@@ -28464,3 +28464,63 @@ html body #root [data-insights-page] [data-brand-hero] button.jj-btn-ink-black *
   stroke: #FFFFFF !important;
 }
 
+
+/* ============================================================
+   GLOBAL GOLD-BORDER-ON-EMERALD KILL SWEEP
+   Any element carrying a gold/champagne/amber/yellow border
+   that lives inside an emerald surface gets its border
+   downgraded to translucent white so gold never bleeds
+   onto emerald anywhere in the app.
+   ============================================================ */
+html body :is(
+  [data-surface="emerald"],
+  [data-on-dark],
+  [data-hero-dark],
+  .surface-dark,
+  .jj-surface-emerald,
+  .jj-hero-fullscreen,
+  [data-cta="primary"],
+  [data-cta="dark"],
+  [data-sidebar-emerald],
+  [data-brand-hero]
+) :is(
+  [class*="border-[#B89555]"],
+  [class*="border-gold"],
+  [class*="border-amber"],
+  [class*="border-yellow"],
+  [class*="border-champagne"],
+  [class*="border-[#C9A961]"],
+  [class*="border-[#D4AF37]"],
+  [class*="border-[#DAA520]"]
+):not([data-allow-bright-gold]):not(.jj-pill-emerald-metallic) {
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+/* Focus / hover states on emerald: soft white lift, never gold */
+html body :is(
+  [data-surface="emerald"], [data-on-dark], [data-hero-dark],
+  .surface-dark, .jj-surface-emerald, .jj-hero-fullscreen,
+  [data-cta="primary"], [data-cta="dark"], [data-sidebar-emerald], [data-brand-hero]
+) :is(
+  [class*="border-[#B89555]"], [class*="border-gold"],
+  [class*="border-amber"], [class*="border-yellow"], [class*="border-champagne"]
+):not([data-allow-bright-gold]):not(.jj-pill-emerald-metallic):hover,
+html body :is(
+  [data-surface="emerald"], [data-on-dark], [data-hero-dark],
+  .surface-dark, .jj-surface-emerald, .jj-hero-fullscreen,
+  [data-cta="primary"], [data-cta="dark"], [data-sidebar-emerald], [data-brand-hero]
+) :is(
+  [class*="border-[#B89555]"], [class*="border-gold"],
+  [class*="border-amber"], [class*="border-yellow"], [class*="border-champagne"]
+):not([data-allow-bright-gold]):not(.jj-pill-emerald-metallic):focus,
+html body :is(
+  [data-surface="emerald"], [data-on-dark], [data-hero-dark],
+  .surface-dark, .jj-surface-emerald, .jj-hero-fullscreen,
+  [data-cta="primary"], [data-cta="dark"], [data-sidebar-emerald], [data-brand-hero]
+) :is(
+  [class*="border-[#B89555]"], [class*="border-gold"],
+  [class*="border-amber"], [class*="border-yellow"], [class*="border-champagne"]
+):not([data-allow-bright-gold]):not(.jj-pill-emerald-metallic):focus-visible {
+  border-color: rgba(255,255,255,0.32) !important;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.08) !important;
+}
