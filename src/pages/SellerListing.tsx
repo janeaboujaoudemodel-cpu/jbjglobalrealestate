@@ -729,12 +729,27 @@ Requirements:
             >
               <style>{`
                 [data-seller-form-scope] input::placeholder,
-                [data-seller-form-scope] textarea::placeholder {
+                [data-seller-form-scope] textarea::placeholder,
+                [data-seller-form-scope] select::placeholder,
+                [data-seller-form-scope] [data-placeholder],
+                [data-seller-form-scope] [data-radix-select-value][data-placeholder] {
                   color: #FFFFFF !important;
                   -webkit-text-fill-color: #FFFFFF !important;
-                  opacity: 0.85 !important;
+                  opacity: 1 !important;
+                }
+                [data-seller-form-scope] input::-webkit-input-placeholder,
+                [data-seller-form-scope] textarea::-webkit-input-placeholder {
+                  color: #FFFFFF !important;
+                  -webkit-text-fill-color: #FFFFFF !important;
+                  opacity: 1 !important;
+                }
+                [data-seller-form-scope] input::-moz-placeholder,
+                [data-seller-form-scope] textarea::-moz-placeholder {
+                  color: #FFFFFF !important;
+                  opacity: 1 !important;
                 }
               `}</style>
+
 
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
