@@ -29449,46 +29449,50 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: currentColor !important;
 }
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
-  [role="option"]:hover,
-  [role="option"][data-highlighted],
-  [role="option"][aria-selected="true"],
-  [role="option"][data-state="checked"],
-  [role="menuitem"]:hover,
-  [role="menuitem"][data-highlighted],
-  [cmdk-item]:hover,
-  [cmdk-item][data-selected="true"],
-  .jbj-form-option:hover,
-  .jbj-form-option[data-highlighted],
-  .jbj-form-option[data-state="checked"],
-  [data-radix-select-item][data-highlighted],
-  [data-radix-select-item][data-state="checked"],
-  [data-radix-dropdown-menu-item][data-highlighted]
+/* Ultra-high-specificity checked/hover paint — beats every prior !important
+   emerald/gold/champagne rule via tripled attribute selectors. */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"][role="option"][role="option"]:hover,
+  [role="option"][role="option"][role="option"][data-highlighted],
+  [role="option"][role="option"][role="option"][aria-selected="true"],
+  [role="option"][role="option"][role="option"][data-state="checked"],
+  [role="menuitem"][role="menuitem"][role="menuitem"]:hover,
+  [role="menuitem"][role="menuitem"][role="menuitem"][data-highlighted],
+  [cmdk-item][cmdk-item][cmdk-item]:hover,
+  [cmdk-item][cmdk-item][cmdk-item][data-selected="true"],
+  .jbj-form-option.jbj-form-option.jbj-form-option:hover,
+  .jbj-form-option.jbj-form-option.jbj-form-option[data-highlighted],
+  .jbj-form-option.jbj-form-option.jbj-form-option[data-state="checked"],
+  [data-radix-select-item][data-radix-select-item][data-radix-select-item][data-highlighted],
+  [data-radix-select-item][data-radix-select-item][data-radix-select-item][data-state="checked"],
+  [data-radix-dropdown-menu-item][data-radix-dropdown-menu-item][data-radix-dropdown-menu-item][data-highlighted]
 ) {
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
   background-color: #042C1C !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border-radius: 8px !important;
 }
-html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
-  [role="option"]:hover,
-  [role="option"][data-highlighted],
-  [role="option"][aria-selected="true"],
-  [role="option"][data-state="checked"],
-  [role="menuitem"]:hover,
-  [role="menuitem"][data-highlighted],
-  [cmdk-item]:hover,
-  [cmdk-item][data-selected="true"],
-  .jbj-form-option:hover,
-  .jbj-form-option[data-highlighted],
-  .jbj-form-option[data-state="checked"],
-  [data-radix-select-item][data-highlighted],
-  [data-radix-select-item][data-state="checked"],
-  [data-radix-dropdown-menu-item][data-highlighted]
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+  [role="option"][role="option"][role="option"]:hover,
+  [role="option"][role="option"][role="option"][data-highlighted],
+  [role="option"][role="option"][role="option"][aria-selected="true"],
+  [role="option"][role="option"][role="option"][data-state="checked"],
+  [role="menuitem"][role="menuitem"][role="menuitem"]:hover,
+  [role="menuitem"][role="menuitem"][role="menuitem"][data-highlighted],
+  [cmdk-item][cmdk-item][cmdk-item]:hover,
+  [cmdk-item][cmdk-item][cmdk-item][data-selected="true"],
+  .jbj-form-option.jbj-form-option.jbj-form-option:hover,
+  .jbj-form-option.jbj-form-option.jbj-form-option[data-highlighted],
+  .jbj-form-option.jbj-form-option.jbj-form-option[data-state="checked"],
+  [data-radix-select-item][data-radix-select-item][data-radix-select-item][data-highlighted],
+  [data-radix-select-item][data-radix-select-item][data-radix-select-item][data-state="checked"],
+  [data-radix-dropdown-menu-item][data-radix-dropdown-menu-item][data-radix-dropdown-menu-item][data-highlighted]
 ) :is(*, span, svg, path, line, polyline, polygon, rect, circle) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
 
