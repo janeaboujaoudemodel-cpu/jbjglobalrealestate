@@ -1,5 +1,5 @@
 # JBJ Global Real Estate - Robots.txt
-# https://www.jbj.ae
+# https://jbj.ae
 # Founder: Jane Bou Jaoude
 
 # Allow all major search engines
@@ -167,7 +167,7 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemap location
-Sitemap: https://www.jbj.ae/sitemap.xml
+Sitemap: https://jbj.ae/sitemap.xml
 
 # Disallow admin and internal pages
 Disallow: /admin

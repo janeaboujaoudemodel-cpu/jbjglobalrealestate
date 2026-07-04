@@ -173,19 +173,19 @@ export const pagesSEO = {
   },
   founder: {
     title: 'Jane Bou Jaoude - Founder & CEO',
-    description: 'Meet Jane Bou Jaoude, Lebanese entrepreneur and Founder of JBJ Global Real Estate Dubai. Visionary leader in UAE real estate with award-winning brokerage services.',
+    description: 'Meet Jane Bou Jaoude, Lebanese entrepreneur and Founder of JBJ Global Real Estate Dubai — an award-winning UAE brokerage leader.',
     keywords: 'Jane Bou Jaoude, Jane Lebanese Dubai, Jane Dubai real estate, JBJ founder, Lebanese entrepreneur Dubai, UAE real estate leader, JBJ Global Real Estate founder, Jane CEO Dubai',
     canonicalPath: '/founder',
   },
   about: {
-    title: 'About JBJ Global Real Estate Dubai',
-    description: 'JBJ Global Real Estate is UAE\'s trusted property brokerage founded by Founder & CEO Jane Bou Jaoude. Expert services for buying, selling, and renting properties across Dubai and UAE.',
+    title: 'About JBJ Global Real Estate',
+    description: 'JBJ Global Real Estate is UAE\'s trusted property brokerage founded by Jane Bou Jaoude — buy, sell, and rent across Dubai and the UAE.',
     keywords: 'about JBJ, JBJ Global Real Estate company, UAE real estate brokerage, Dubai property company, Jane Bou Jaoude company, real estate services Dubai, trusted property agent Dubai',
     canonicalPath: '/about',
   },
   services: {
-    title: 'Real Estate Services - Buy, Sell, Rent Dubai',
-    description: 'Comprehensive real estate services by JBJ Global Real Estate. Buy properties, sell your home, rent apartments, holiday homes, off-plan investments in Dubai UAE.',
+    title: 'Dubai Real Estate Services',
+    description: 'Full-service Dubai real estate by JBJ: buy, sell, rent, holiday homes, off-plan, and property management across the UAE.',
     keywords: 'buy property Dubai, sell property Dubai, rent apartment Dubai, holiday homes Dubai, off-plan investment UAE, property management Dubai, real estate services UAE, JBJ services',
     canonicalPath: '/services',
   },
@@ -238,7 +238,7 @@ export const pagesSEO = {
     canonicalPath: '/seller-guide',
   },
   mortgageCalculator: {
-    title: 'Dubai Mortgage Calculator - Property Payments',
+    title: 'Dubai Mortgage Calculator',
     description: 'Free Dubai mortgage calculator by JBJ Global Real Estate. Calculate monthly payments, interest rates, and affordability for UAE property purchases.',
     keywords: 'Dubai mortgage calculator, UAE home loan calculator, property payment calculator, mortgage rates Dubai, home loan Dubai, property finance UAE, JBJ mortgage tool',
     canonicalPath: '/mortgage-calculator',
@@ -251,7 +251,7 @@ export const pagesSEO = {
     noIndex: false,
   },
   faq: {
-    title: 'Frequently Asked Questions - Dubai Real Estate',
+    title: 'Dubai Real Estate FAQ',
     description: 'Find answers to common questions about buying, selling, and renting property in Dubai. Expert guidance from JBJ Global Real Estate.',
     keywords: 'Dubai real estate FAQ, property questions Dubai, buying property FAQ UAE, renting Dubai questions, real estate answers, JBJ FAQ, Dubai property help',
     canonicalPath: '/faq',
