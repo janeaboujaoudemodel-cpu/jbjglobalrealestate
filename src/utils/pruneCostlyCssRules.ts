@@ -17,12 +17,17 @@ const shouldPruneSelector = (selector: string, cssText: string) => {
 };
 
 const pruneRuleList = (owner: CSSStyleSheet | CSSGroupingRule): number => {
+  const mutableOwner = owner as unknown as {
+    cssRules?: CSSRuleList;
+    deleteRule?: (index: number) => void;
+  };
   let rules: CSSRuleList;
   try {
-    rules = owner.cssRules;
+    rules = mutableOwner.cssRules as CSSRuleList;
   } catch {
     return 0;
   }
+  if (!rules || typeof mutableOwner.deleteRule !== "function") return 0;
 
   let removed = 0;
   for (let index = rules.length - 1; index >= 0; index -= 1) {
@@ -36,7 +41,7 @@ const pruneRuleList = (owner: CSSStyleSheet | CSSGroupingRule): number => {
     const selector = "selectorText" in rule ? rule.selectorText || "" : "";
     if (selector && shouldPruneSelector(selector, rule.cssText || "")) {
       try {
-        owner.deleteRule(index);
+        mutableOwner.deleteRule(index);
         removed += 1;
       } catch {
         // Ignore stylesheet mutation races during HMR/dev injection.
@@ -61,4 +66,5 @@ export const installInteractionCssPruner = () => {
   run();
   requestAnimationFrame(run);
   window.setTimeout(run, 750);
+  window.setTimeout(run, 2000);
 };
