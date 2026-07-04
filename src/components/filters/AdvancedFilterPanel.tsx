@@ -258,7 +258,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     if (typeof window === 'undefined' || !anchorRect) return undefined;
     const margin = 16;
     const width = Math.min(PANEL_WIDTH, window.innerWidth - margin * 2);
-    return Math.max(margin, Math.min(anchorRect.right - width, window.innerWidth - width - margin));
+    const triggerCenter = anchorRect.left + anchorRect.width / 2;
+    return Math.max(margin, Math.min(triggerCenter - width / 2, window.innerWidth - width - margin));
   })();
 
   // Header filter panel: attached below the horizontal header divider and aligned
@@ -272,6 +273,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       ? {
           left: `${panelLeft}px`,
           top: `${HEADER_BOTTOM_Y}px`,
+          width: `min(${PANEL_WIDTH}px, calc(100vw - 32px))`,
           transform: 'none',
           maxHeight: `calc(100dvh - ${HEADER_BOTTOM_Y + 16}px)`,
         }
