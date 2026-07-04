@@ -364,6 +364,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                       return (
                         <button
                           key={em.value}
+                          data-filter-option-row="true"
                           onClick={() => update({ emirates: toggleArray(localFilters.emirates, em.value) })}
                           className={optionRow}
                         >
@@ -422,6 +423,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                               return (
                                 <button
                                   key={areaName}
+                                  data-filter-option-row="true"
                                   onClick={() => update({ areas: toggleArray(localFilters.areas || [], areaName) })}
                                   className={optionRow}
                                 >
@@ -472,6 +474,7 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
                         <button
                           key={dev.name}
                           data-developer-option
+                          data-filter-option-row="true"
                           onClick={() => update({ developers: toggleArray(localFilters.developers, dev.name) })}
                           className={optionRow}
                         >
