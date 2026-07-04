@@ -49,6 +49,8 @@ import OwnerImageManager from "@/components/project-detail/owner/OwnerImageManag
 import HeroImagePicker from "@/components/project-detail/owner/HeroImagePicker";
 
 import OwnerSectionEditor from "@/components/project-detail/owner/OwnerSectionEditor";
+import { ProjectEditModeProvider, useProjectEditMode } from "@/contexts/ProjectEditModeContext";
+import { Pencil as PencilIcon, PencilOff } from "lucide-react";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
