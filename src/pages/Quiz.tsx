@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getCountryList, getLanguageList } from "@/constants/localeOptions";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { SEOHead } from "@/components/SEOHead";
 import {
   readMatchmakerSession,
   writeMatchmakerSession,
