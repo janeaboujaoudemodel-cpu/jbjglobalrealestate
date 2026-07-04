@@ -19550,185 +19550,11 @@ html body [data-radix-popper-content-wrapper]
 
 
 /* ============================================================
-   PASS 102 — DROPDOWN HOVER RULE BY TYPE (FINAL)
-   - Dropdowns WITH an active/selected row (Currency, Mode):
-       Inactive row hover = CHAMPAGNE lift + ink text (never emerald),
-       so the single emerald active row stays unmistakable.
-   - Dropdowns WITHOUT an active row (Account/User menu):
-       Keep the existing emerald metallic hover with white text.
-   This block is appended last so it wins the cascade for the
-   inactive-row champagne hover on Currency. The account-menu
-   emerald hover from PASS 100/101 remains untouched.
-============================================================ */
-
-/* Currency: inactive row hover/focus/highlight = champagne lift + ink.
-   Uses the same :not(#id#id#id#id) specificity trick as PASS 101 so this
-   block out-specifies the global emerald hover applied earlier. */
-html body [data-radix-popper-content-wrapper]
-  [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]):not(#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne) {
-  background: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
-  background-color: #F2EADB !important;
-  background-image: linear-gradient(180deg, #F7F2EA 0%, #EFE6D6 100%) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184, 149, 85, 0.32) !important;
-  box-shadow:
-    0 10px 22px -16px rgba(184,149,85,0.55),
-    0 4px 10px -8px rgba(0,0,0,0.18),
-    inset 0 1px 0 rgba(255,255,255,0.55) !important;
-  transform: translateY(-1px) scale(1.012) !important;
-  filter: none !important;
-}
-
-html body [data-radix-popper-content-wrapper]
-  [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]):not(#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne) *,
-html body [data-radix-popper-content-wrapper]
-  [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-active="false"]:is(:hover, :focus, [data-highlighted]):not(#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne#jj-currency-champagne) :is(span, p, small, strong, em, b, label, svg, path, circle, rect, line, polyline, polygon) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  stroke-opacity: 1 !important;
-  text-shadow: none !important;
-  background: transparent !important;
-  background-image: none !important;
-}
-
-/* Mode picker idle hover already champagne-lift via PASS 95/100 — no change. */
-
-/* Account menu hover remains emerald (PASS 100/101) — no override here. */
-
-/* PASS 103 — Account role label (Owner/Broker/etc.) — force WHITE on emerald */
-html body [data-radix-popper-content-wrapper] [data-account-menu-content]
-  [data-account-role-label]:not(#jj-role-label#jj-role-label#jj-role-label#jj-role-label),
-html body [data-radix-popper-content-wrapper] [data-account-menu-content]
-  [data-account-role-label]:not(#jj-role-label#jj-role-label#jj-role-label#jj-role-label) * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
-  text-shadow: none !important;
-  opacity: 1 !important;
-}
-html body [data-radix-popper-content-wrapper] [data-account-menu-content]
-  [data-account-role-label]:not(#jj-role-label#jj-role-label#jj-role-label#jj-role-label) * {
-  background: transparent !important;
-  background-image: none !important;
-}
-
-/* PASS 104 — Kill nested background rectangles inside dropdown rows.
-   Inner spans/divs must never paint their own background — only the row
-   itself carries the emerald (active/hover) or champagne (hover) fill. */
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content] [data-currency-row] *:not([data-account-role-label]):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon),
-html body [data-radix-popper-content-wrapper] [data-account-menu-content] [data-jbj-dropdown-item] *:not([data-account-role-label]):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon),
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card] *:not([data-mode-icon-tile]):not([data-mode-active-pill]):not([data-mode-select-pill]):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon) {
-  background: transparent !important;
-  background-color: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
-
-/* Active currency/account row: force WHITE on every descendant text node */
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
-  [data-currency-row][data-currency-active="true"],
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
-  [data-currency-row][data-currency-active="true"] *,
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
-  [data-currency-row]:is(:hover, :focus, [data-highlighted])[data-currency-active="true"],
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content]
-  [data-currency-row]:is(:hover, :focus, [data-highlighted])[data-currency-active="true"] * {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* PASS 106 — Header dropdown restoration: champagne menus + emerald account panel.
-   Currency and mode picker rows are champagne/ink at rest and on hover; selected
-   state uses only an emerald hairline/check. Account menu stays emerald, with no
-   active row fill on initial load — rows highlight only while hovered/focused. */
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-row],
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-row]:is(:hover, :focus, [data-highlighted], [data-state="checked"]):not(#jj-header-champagne-restore#jj-header-champagne-restore#jj-header-champagne-restore#jj-header-champagne-restore) {
-  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
-  background-color: #F7F2EA !important;
-  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  border-color: rgba(184,149,85,0.24) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.64) !important;
-  filter: none !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-row][data-currency-active="true"]:not(#jj-header-champagne-restore#jj-header-champagne-restore#jj-header-champagne-restore#jj-header-champagne-restore) {
-  border-color: rgba(6,78,59,0.62) !important;
-  box-shadow: inset 0 0 0 1px rgba(6,78,59,0.34), inset 0 1px 0 rgba(255,255,255,0.64) !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-row] *,
-html body [data-radix-popper-content-wrapper] [data-currency-menu-content][data-currency-menu-content]
-  [data-currency-row][data-currency-row] :is(svg, path, circle, rect, line, polyline, polygon) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #064E3B !important;
-  stroke-opacity: 1 !important;
-  text-shadow: none !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card][data-mode-card],
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card][data-mode-card]:is(:hover, :focus, [data-highlighted]) {
-  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
-  background-color: #F7F2EA !important;
-  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="active"] {
-  border-color: #064E3B !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-card][data-mode-card] :is(p, span, svg, path, circle, rect, line, polyline, polygon) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  stroke: #064E3B !important;
-  stroke-opacity: 1 !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content]
-  [data-jbj-dropdown-item][data-jbj-dropdown-item],
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content]
-  [data-jbj-dropdown-item][data-jbj-dropdown-item][data-jbj-dropdown-selected="true"] {
-  background: transparent !important;
-  background-image: none !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content]
-  [data-jbj-dropdown-item][data-jbj-dropdown-item]:is(:hover, :focus, [data-highlighted]) {
-  background: rgba(255,255,255,0.12) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.18) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12) !important;
-}
-
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content]
-  [data-jbj-dropdown-item][data-jbj-dropdown-item] *,
-html body [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content]
-  [data-jbj-dropdown-item][data-jbj-dropdown-item] :is(svg, path, circle, rect, line, polyline, polygon) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  stroke-opacity: 1 !important;
-  text-shadow: none !important;
-}
+   PASS 102–106 — HEADER DROPDOWN CONFLICTS REMOVED
+   These blocks previously re-painted Currency and Mode rows champagne/ink
+   after the surface contract. Header dropdowns now inherit the single
+   surface-token system above.
+   ============================================================ */
 
 /* ============================================================
    PASS 105 — GLOBAL EMERALD-SURFACE WHITE-INK LOCK
@@ -28192,215 +28018,41 @@ html body #root main[data-company-legal-page="true"] .jj-layer-active :is(svg, [
 }
 
 /* ============================================================
-   Emerald Dropdown Standard — force emerald+white for
-   currency / language / mode header pickers when the panel is
-   marked data-surface="emerald". Overrides legacy champagne rules.
+   Header popper surface contract — token driven, no specificity hacks.
+   Root cause removed: old duplicate/id-hack header dropdown rules competed
+   with PASS 220 and repainted emerald header pickers champagne/ink.
    ============================================================ */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"].mode-switcher-panel {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 50%, #010806 100%) !important;
-  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 50%, #010806 100%) !important;
-  background-color: transparent !important;
-  color: #FFFFFF !important;
-  border: 1px solid rgba(255,255,255,0.30) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] :is(p,span,div,button,a,label,strong,em,li,small),
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] :is(p,span,div,button,a,label,strong,em,li,small),
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] :is(svg,path,circle,rect,line,polyline,polygon) {
+html body [data-radix-popper-content-wrapper] :is([data-currency-menu-content], [data-mode-switcher-panel="true"]) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%)) !important;
+  background-color: #042C1C !important;
+  border-color: rgba(255,255,255,0.24) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  stroke: currentColor;
-}
-/* Mode row card recolor on emerald surface (override champagne backgrounds) */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"] {
-  background: rgba(255,255,255,0.05) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.20) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"]:is(:hover,:focus,[data-highlighted]) {
-  background: rgba(255,255,255,0.10) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.35) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] {
-  background: rgba(255,255,255,0.15) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.55) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-icon-tile] {
-  background: rgba(255,255,255,0.10) !important;
-  background-image: none !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-active-pill] {
-  background: rgba(255,255,255,0.18) !important;
-  background-image: none !important;
-  border-color: rgba(255,255,255,0.65) !important;
-  color: #FFFFFF !important;
-}
-/* Currency rows on emerald panel */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row][data-currency-active="true"] {
-  background: rgba(255,255,255,0.15) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:hover {
-  background: rgba(255,255,255,0.10) !important;
 }
 
-/* Emerald mode-switcher panel — override legacy idle text/tile/pill colors */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="idle"] :is(p, span, div, svg, path, circle, rect, line, polyline, polygon),
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] :is(p, span, div, svg, path, circle, rect, line, polyline, polygon) {
+html body [data-radix-popper-content-wrapper] :is([data-currency-menu-content], [data-mode-switcher-panel="true"])
+  :is(h1,h2,h3,h4,h5,h6,p,span,label,button,a,li,small,strong,em,b,div,svg,path,circle,rect,line,polyline,polygon) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+  stroke: currentColor !important;
   opacity: 1 !important;
 }
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-icon-tile="idle"],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-icon-tile="active"] {
-  background: rgba(255,255,255,0.12) !important;
+
+html body [data-radix-popper-content-wrapper] :is([data-currency-row], [data-mode-card]) {
+  background: rgba(255,255,255,0.06) !important;
   background-image: none !important;
-  border: 1px solid rgba(255,255,255,0.30) !important;
-}
-html body [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] [data-mode-active-pill],
-html body [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-row="active"] [data-mode-active-pill] * ,
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-mode-switcher-panel="true"] [data-mode-card] [data-mode-active-pill] * {
-  background: rgba(255,255,255,0.20) !important;
-  background-image: none !important;
+  border-color: rgba(255,255,255,0.22) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.70) !important;
 }
 
-/* Emerald mode-switcher — max-specificity BG override to beat legacy PASS 101/103 rules */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="idle"] {
-  background: rgba(255,255,255,0.05) !important;
+html body [data-radix-popper-content-wrapper] :is([data-currency-row], [data-mode-card]):is(:hover,:focus,[data-highlighted],[data-state="checked"],[data-currency-active="true"],[data-mode-row="active"]) {
+  background: rgba(255,255,255,0.16) !important;
   background-image: none !important;
-  background-color: rgba(255,255,255,0.05) !important;
-  border-color: rgba(255,255,255,0.20) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="idle"]:is(:hover,:focus,[data-highlighted]) {
-  background: rgba(255,255,255,0.12) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.12) !important;
-  border-color: rgba(255,255,255,0.35) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card][data-mode-row="active"] {
-  background: rgba(255,255,255,0.18) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.18) !important;
-  border-color: rgba(255,255,255,0.55) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-mode-switcher-panel="true"][data-mode-switcher-panel="true"] [data-mode-card][data-mode-card] [data-mode-icon-tile] {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.14) !important;
-  border: 1px solid rgba(255,255,255,0.35) !important;
-}
-
-/* Emerald currency panel — force rows dark, transparent by default */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row],
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted]) {
-  background: rgba(255,255,255,0.05) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.42) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted]) {
-  background: rgba(255,255,255,0.12) !important;
-  background-color: rgba(255,255,255,0.12) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-active="true"] {
-  background: rgba(255,255,255,0.18) !important;
-  background-color: rgba(255,255,255,0.18) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row] :is(span,p,div,svg,path) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* Emerald currency panel — max specificity beats legacy triple-attr rule */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row] {
-  background: rgba(255,255,255,0.05) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.05) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row]:is(:hover,:focus,[data-highlighted]) {
-  background: rgba(255,255,255,0.12) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.12) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row][data-currency-row][data-currency-row][data-currency-active="true"] {
-  background: rgba(255,255,255,0.20) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.20) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-surface="emerald"][data-surface="emerald"][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content][data-currency-menu-content] [data-currency-row] :is(span,p,div,svg,path) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* Emerald pickers — beat PASS 154 ID-hack specificity (3+ IDs) */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) {
-  background: rgba(255,255,255,0.05) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.05) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:is(:hover,:focus,[data-highlighted]):not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.14) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row][data-currency-active="true"]:not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) {
-  background: rgba(255,255,255,0.22) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.22) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:not(#jjZa):not(#jjZb):not(#jjZc):not(#jjZd) :is(span,p,div,svg,path) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
-}
-
-/* Emerald pickers — beat PASS 154 with 5 IDs */
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
-  background: rgba(255,255,255,0.05) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.05) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row]:is(:hover,:focus,[data-highlighted]):not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
-  background: rgba(255,255,255,0.14) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.14) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row][data-currency-active="true"]:not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
-  background: rgba(255,255,255,0.22) !important;
-  background-image: none !important;
-  background-color: rgba(255,255,255,0.22) !important;
-}
-html body [data-radix-popper-content-wrapper] [data-surface="emerald"][data-currency-menu-content] [data-currency-row] :is(*,span,p,small,strong,em,b,svg,path):not(#jjZ1):not(#jjZ2):not(#jjZ3):not(#jjZ4):not(#jjZ5) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
 }
 
 /* Final filter/dropdown cleanup: no gold borders and no faded labels on Developers, Projects, Areas filter surfaces. */
@@ -28514,6 +28166,25 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-f
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: transparent !important;
+}
+
+/* Root filter/menu contrast closure: every emerald filter picker surface owns
+   pure-white text/icons. This removes the remaining champagne/light descendant
+   rules that were winning on select labels, chevrons, chips and nested spans. */
+html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
+  h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,small,strong,em,b,
+  [class*="text-[#1A1A1A]"], [class*="text-[#0A0A0A]"], [class*="text-muted"]
+):not(.allow-ink):not(.allow-ink *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path, circle, rect, line, polyline, polygon):not(.allow-ink):not(.allow-ink *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
 }
 
 /* Emerald dropdown scrollbar — gold accent on emerald panel */
@@ -28685,27 +28356,14 @@ html body :is(
 }
 
 /* ============================================================================
- * PASS 220 — GLOBAL DROPDOWN CHAMPAGNE SURFACE + EMERALD ACCENT LOCK
+ * PASS 220 — GLOBAL DROPDOWN SURFACE CONTRACT (REFACTORED)
  *
- * Site-wide rule (locked):
- *   - All dropdowns (Select, Popover, Combobox, DropdownMenu, Command palette)
- *     render on a champagne/gold luxury surface with dark ink text.
- *   - Hover / active / selected row = emerald→black metallic gradient with
- *     pure white text + white icons.
- *
- * Exceptions (opt-out):
- *   - [data-account-menu-content]  → user account dropdown in the horizontal
- *                                     header stays emerald (per spec).
- *   - [data-preserve-surface]      → escape hatch for calendars / custom UI.
- *
- * Non-popper surfaces (the emerald filter search bar, the Contact Us CTA) are
- * NOT affected by these rules — they're inputs/buttons, not popper content.
+ * Removed the previous high-specificity :not(#\a):not(#\b):not(#\c)
+ * champagne override. That was the winning rule repainting emerald pickers,
+ * badges, menus and row foregrounds. Surface tokens now control contrast.
  * ============================================================================ */
-
-/* Champagne surface for every popper container we don't explicitly exclude.
-   :not(#\a) chain boosts specificity so we beat every existing
-   [data-surface="emerald"] rule that paints these popovers today. */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) > *:not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
+html body [data-radix-popper-content-wrapper] > *:not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-surface="emerald"]),
+html body [data-radix-popper-content-wrapper] :is([role="menu"], [role="listbox"], [data-radix-menu-content], [data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not([data-surface="emerald"]) {
   background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
   background-color: #FDFBF7 !important;
@@ -28717,64 +28375,7 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) > *:not
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
-/* Same lock for descendant panel wrappers Radix inserts between the popper
-   wrapper and the menu content (some components wrap in an extra div). */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c) :is([role="menu"], [role="listbox"], [role="dialog"], [data-radix-menu-content], [data-radix-select-content], [data-radix-popover-content], [data-radix-dropdown-menu-content], [data-currency-menu-content], [data-mode-switcher-panel="true"]):not([data-preserve-surface]):not([data-jbj-preserve-surface]):not(#\a):not(#\b):not(#\c) {
-  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
-  background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%) !important;
-  background-color: #FDFBF7 !important;
-  border: 1px solid rgba(184, 149, 85, 0.42) !important;
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-
-/* Row resting state = dark ink on champagne (high-spec chain to beat
-   tailwind text-white utilities baked into radix items). */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
-
-  [role="option"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [cmdk-item],
-  [data-radix-select-item],
-  [data-radix-dropdown-menu-item],
-  [data-currency-row],
-  [data-jbj-dropdown-item]
-):not(#\a):not(#\b):not(#\c):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  background: transparent !important;
-  background-image: none !important;
-}
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
-  [role="option"],
-  [role="menuitem"],
-  [cmdk-item],
-  [data-radix-select-item],
-  [data-currency-row],
-  [data-jbj-dropdown-item]
-):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) :is(*, span, p, small, strong, div, li):not(#\a):not(#\b) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
-  [role="option"],
-  [role="menuitem"],
-  [cmdk-item],
-  [data-radix-select-item],
-  [data-currency-row],
-  [data-jbj-dropdown-item]
-):not([data-currency-active="true"]):not([data-jbj-dropdown-selected="true"]) :is(svg, path, circle, rect, line, polyline, polygon):not(#\a):not(#\b) {
-  color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-  stroke-opacity: 1 !important;
-}
-
-/* Hover / active / selected = emerald→black metallic with white ink+icons.
-   Explicitly opts out of the currency + account "active" rows so PASS 98/99
-   keep their existing emerald treatment untouched. */
-html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper] :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28788,13 +28389,13 @@ html body [data-radix-popper-content-wrapper]:not(#\a):not(#\b):not(#\c):not(:ha
   [data-radix-select-item][data-state="checked"],
   [data-radix-select-item][data-highlighted],
   [data-radix-dropdown-menu-item][data-highlighted]
-):not([data-currency-row]):not([data-jbj-dropdown-item]):not(#\a):not(#\b) {
+):not([data-currency-row]):not([data-mode-card]) {
   background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%) !important;
   background-color: #042C1C !important;
   color: #FFFFFF !important;
   border-radius: 8px !important;
 }
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper] :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28809,7 +28410,7 @@ html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface]
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper] :is(
   [role="option"]:hover,
   [role="option"][data-highlighted],
   [role="option"][aria-selected="true"],
@@ -28827,7 +28428,7 @@ html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface]
 }
 
 /* Group labels / separators inside champagne popovers stay muted-ink. */
-html body [data-radix-popper-content-wrapper]:not(:has(> [data-preserve-surface])):not(:has(> [data-jbj-preserve-surface])) :is(
+html body [data-radix-popper-content-wrapper] :is(
   [role="group"] > [role="presentation"],
   [role="separator"],
   [data-radix-select-label],
