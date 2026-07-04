@@ -39,6 +39,13 @@ const isAmmarDeveloper = (name?: string | null, slug?: string | null) => {
   return /\bammar\b|\bamar\b/.test(text);
 };
 
+// Emaar's flagship Dubai Creek Harbour masterplan render — used as a premium
+// hero cover when no curated feature image is set upstream.
+const isEmaarDeveloper = (name?: string | null, slug?: string | null) => {
+  const text = `${name || ""} ${slug || ""}`.toLowerCase();
+  return /\bemaar\b/.test(text);
+};
+
 const fmtNumber = (value?: number | null) => Number(value || 0).toLocaleString("en-US");
 
 const fmtAED = (value: number) => {
@@ -347,9 +354,10 @@ const DeveloperDetail = () => {
     },
   ].filter(s => s.value !== null);
 
-  const heroImageUrl = isAmmarDeveloper(developer.name, developer.slug)
-    ? ammarCreekHarbourMasterplan
-    : developer.feature_image_url;
+  const heroImageUrl =
+    isAmmarDeveloper(developer.name, developer.slug) || isEmaarDeveloper(developer.name, developer.slug)
+      ? ammarCreekHarbourMasterplan
+      : developer.feature_image_url;
 
   const competitorDevelopers = (allDevelopers || [])
     .filter((d) => d.id !== developer.id)
