@@ -21,6 +21,7 @@ import {
   filterPrimaryButton,
   filterSecondaryButton,
 } from "./filterStyles";
+import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 
 interface AdvancedFilterPanelProps {
   open: boolean;
@@ -112,6 +113,7 @@ interface AreaEntry {
 const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>(function AdvancedFilterPanel({ open, onOpenChange, filters, onFilterChange }, _ref) {
   const [localFilters, setLocalFilters] = useState<ShortcutFilterState>(filters);
   const [projectCount, setProjectCount] = useState<number | null>(null);
+  const [countRows, setCountRows] = useState<Record<string, unknown>[]>([]);
   const [developers, setDevelopers] = useState<DeveloperEntry[]>([]);
   const [allAreas, setAllAreas] = useState<AreaEntry[]>([]);
   const [devSearch, setDevSearch] = useState('');
@@ -171,69 +173,37 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       });
   }, [open]);
 
-  // Live count with a short debounce — reflects current filters without the
-  // repeated "Loading..." flash that made the panel feel slow while typing.
+  // Fetch one lightweight listing snapshot for instant, accurate local counts.
+  // This avoids a backend round-trip on every chip/slider click and lets views,
+  // handover range, post-handover and local search all affect the visible count.
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    supabase
+      .from('projects')
+      .select('id,name,description,price_from,bedrooms_min,bedrooms_max,size_min,size_max,handover_date,payment_plan,status,construction_status,availability_status,property_type_label,status_label,sale_status,emirate,area_name,developer_name,views,down_payment_percent,expected_completion')
+      .eq('is_published', true)
+      .or('listing_kind.is.null,listing_kind.neq.leasing')
+      .limit(1500)
+      .then(({ data }) => {
+        if (!cancelled) setCountRows((data || []) as Record<string, unknown>[]);
+      });
+    return () => { cancelled = true; };
+  }, [open]);
+
+  // Live count with a short debounce — computed locally for immediate feedback.
   useEffect(() => {
     if (!open) return;
     const timer = setTimeout(async () => {
       try {
-        let query = supabase
-          .from('projects')
-          .select('*', { count: 'exact', head: true })
-          .eq('is_published', true)
-          .or('listing_kind.is.null,listing_kind.neq.leasing');
-
-        if (localFilters.searchQuery?.trim()) {
-          query = query.or(`name.ilike.%${localFilters.searchQuery.trim()}%,developer_name.ilike.%${localFilters.searchQuery.trim()}%,area_name.ilike.%${localFilters.searchQuery.trim()}%`);
-        }
-        if (localFilters.emirates.length > 0) {
-          query = query.in('emirate', localFilters.emirates);
-        }
-        if (localFilters.developers.length > 0) {
-          query = query.in('developer_name', localFilters.developers);
-        }
-        if (localFilters.areas && localFilters.areas.length > 0) {
-          query = query.in('area_name', localFilters.areas);
-        }
-        if (localFilters.priceMin) {
-          query = query.gte('price_from', Number(localFilters.priceMin));
-        }
-        if (localFilters.priceMax) {
-          query = query.lte('price_from', Number(localFilters.priceMax));
-        }
-        if (localFilters.constructionStatuses.length > 0) {
-          query = query.in('construction_status', localFilters.constructionStatuses);
-        }
-        if (localFilters.statuses.length > 0) {
-          query = query.in('status_label', localFilters.statuses);
-        }
-        if (localFilters.propertyTypes.length > 0) {
-          query = query.in('property_type_label', localFilters.propertyTypes);
-        }
-        if (localFilters.views && localFilters.views.length > 0) {
-          const viewTerms = localFilters.views
-            .flatMap((v) => [v, v.replace(/_/g, ' ')])
-            .map((v) => v.trim())
-            .filter(Boolean);
-          if (viewTerms.length > 0) {
-            query = query.or(viewTerms.map((v) => `views.cs.{"${v}"}`).join(','));
-          }
-        }
-        if (localFilters.postHandoverOnly) {
-          query = query.ilike('payment_plan', '%post%');
-        }
-        if (localFilters.paymentPlanMax < 100) {
-          query = query.lte('down_payment_percent', localFilters.paymentPlanMax);
-        }
-
-        const { count } = await query;
-        setProjectCount(count ?? 0);
+        if (countRows.length === 0) return;
+        setProjectCount(applyShortcutFilters(countRows, localFilters).length);
       } catch {
         setProjectCount(null);
       }
     }, 90);
     return () => clearTimeout(timer);
-  }, [open, localFilters]);
+  }, [open, localFilters, countRows]);
 
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
     setLocalFilters(prev => ({ ...prev, ...partial }));
