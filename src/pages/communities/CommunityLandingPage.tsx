@@ -16,8 +16,9 @@ import { useEffect } from "react";
  * Route: /communities/<slug>-guide
  * Complements the dynamic DB-driven /community/:slug listing pages.
  */
-const CommunityLandingPage = () => {
-  const { slug } = useParams<{ slug: string }>();
+const CommunityLandingPage = ({ slug: propSlug }: { slug?: string } = {}) => {
+  const params = useParams<{ slug: string }>();
+  const slug = propSlug ?? params.slug;
   const community = slug ? getCommunityLanding(slug) : undefined;
 
   // Inject BreadcrumbList + Place JSON-LD for this specific community
