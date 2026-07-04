@@ -137,7 +137,7 @@ export default function MoreFromDeveloperStrip({
     fArea !== "all" || fStatus !== "all" || fType !== "all" || fHandover !== "all" || fPrice !== "all";
 
   return (
-    <div className="mt-10 rounded-2xl border border-[#B89555]/30 bg-[#FDFBF7] p-4 md:p-5 shadow-sm">
+    <section className="my-10 md:my-12 clear-both isolate rounded-2xl border border-[#B89555]/40 bg-[#FDFBF7] p-4 md:p-5 shadow-sm overflow-hidden">
       <div className="flex items-end justify-between mb-4 gap-3 flex-wrap">
         <h3 className="text-lg md:text-xl font-semibold text-foreground">
           More projects by <span className="text-[#B89555]">{developerName || "this developer"}</span>
@@ -266,7 +266,7 @@ export default function MoreFromDeveloperStrip({
           </button>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
