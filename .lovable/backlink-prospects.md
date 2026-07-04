@@ -1,5 +1,7 @@
 # JBJ Global Real Estate — Backlink Outreach Prospect List
 
+**Anchor asset (pillar article for outreach):** [`/insights/future-of-real-estate-2026`](https://www.jbj.ae/insights/future-of-real-estate-2026) — "The Future of Real Estate: 5 Trends to Watch in 2026". Use this URL as the linked target in every Tier-2 press pitch, guest post, and citation request below.
+
 **Current backlink profile (Semrush, July 2026):** AS 2/100 · 18 backlinks · 15 referring domains · only 5 dofollow. The 3 competitors we benchmark against (fam-properties, providentestate, remdubai) rank higher not because their profiles are cleaner — Semrush shows most of *their* links are also spam directories, PBN farms, and Telegram-seller link schemes — but because they have volume from a handful of real citations we can also earn.
 
 **Strategy:** ignore competitor spam. Target 4 tiers of *legitimate* Dubai real-estate authority sites. Priority = (Authority Score) × (relevance) ÷ (effort to earn).
