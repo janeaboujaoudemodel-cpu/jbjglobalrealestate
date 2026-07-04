@@ -16,40 +16,46 @@ const shouldPruneSelector = (selector: string, cssText: string) => {
   return COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker));
 };
 
-const pruneSheet = (sheet: CSSStyleSheet) => {
+const pruneRuleList = (owner: CSSStyleSheet | CSSGroupingRule): number => {
   let rules: CSSRuleList;
   try {
-    rules = sheet.cssRules;
+    rules = owner.cssRules;
   } catch {
-    return;
+    return 0;
   }
 
+  let removed = 0;
   for (let index = rules.length - 1; index >= 0; index -= 1) {
     const rule = rules[index] as CSSStyleRule & CSSGroupingRule;
 
     if ("cssRules" in rule && rule.cssRules) {
-      pruneSheet(rule as unknown as CSSStyleSheet);
+      removed += pruneRuleList(rule);
       continue;
     }
 
     const selector = "selectorText" in rule ? rule.selectorText || "" : "";
     if (selector && shouldPruneSelector(selector, rule.cssText || "")) {
       try {
-        sheet.deleteRule(index);
+        owner.deleteRule(index);
+        removed += 1;
       } catch {
         // Ignore stylesheet mutation races during HMR/dev injection.
       }
     }
   }
+  return removed;
 };
 
 export const installInteractionCssPruner = () => {
   if (typeof document === "undefined") return;
 
   const run = () => {
+    let removed = 0;
     for (const sheet of Array.from(document.styleSheets)) {
-      pruneSheet(sheet as CSSStyleSheet);
+      removed += pruneRuleList(sheet as CSSStyleSheet);
     }
+    (window as unknown as { __JBJ_CSS_PRUNED__?: number }).__JBJ_CSS_PRUNED__ =
+      ((window as unknown as { __JBJ_CSS_PRUNED__?: number }).__JBJ_CSS_PRUNED__ || 0) + removed;
   };
 
   run();
