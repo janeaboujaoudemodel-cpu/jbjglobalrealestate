@@ -323,7 +323,16 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           });
 
           if (resetError || data?.error) {
-            toast.error(data?.error || resetError?.message || "Failed to reset password");
+            const msg = (data?.error || resetError?.message || "").toLowerCase();
+            if (msg.includes("pwned") || msg.includes("compromised") || msg.includes("weak_password") || msg.includes("data breach")) {
+              setPasswordSafe(false);
+              setErrors((prev) => ({ ...prev, password: "This password appears in public breach lists. Please choose a new one." }));
+              toast.error("Password found in public breach lists", {
+                description: "Choose a unique password of 12+ characters, or let a password manager generate one.",
+              });
+            } else {
+              toast.error(data?.error || resetError?.message || "Failed to reset password");
+            }
           } else {
             toast.success("Password updated! You can now sign in.");
             // Send confirmation email
