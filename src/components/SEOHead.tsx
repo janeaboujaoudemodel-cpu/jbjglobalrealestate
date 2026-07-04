@@ -46,6 +46,7 @@ export const SEOHead = ({
   ogType = 'website',
   noIndex = false,
   faqItems,
+  breadcrumbItems,
 }: SEOHeadProps) => {
   const { isFounderVisible } = useFounderVisibility();
   
