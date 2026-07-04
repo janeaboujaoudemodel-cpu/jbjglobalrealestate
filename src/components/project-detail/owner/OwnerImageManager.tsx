@@ -28,7 +28,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
 
-  const { data: images = [] } = useQuery({
+  const { data: images } = useQuery({
     queryKey: ["owner-project-images", projectId],
     enabled: !!projectId && canEdit,
     queryFn: async (): Promise<ImageRow[]> => {
@@ -42,7 +42,7 @@ export default function OwnerImageManager({ projectId, coverImageUrl }: Props) {
     },
   });
 
-  useEffect(() => { setOrder(images); }, [images]);
+  useEffect(() => { if (images) setOrder(images); }, [images]);
 
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["owner-project-images", projectId] });
