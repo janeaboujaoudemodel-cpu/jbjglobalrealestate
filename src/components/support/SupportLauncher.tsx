@@ -233,26 +233,42 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           whileTap={{ scale: 0.96 }}
-          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center gap-2 h-11 w-11 sm:w-11 sm:px-0 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
+          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center h-11 w-11 sm:w-11 px-0 gap-0 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
           style={{
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
             borderColor: "rgba(52,211,153,0.55)",
+            padding: 0,
+            gap: 0,
           }}
         >
           {open ? (
-            <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span
+              aria-hidden
+              className="pointer-events-none flex items-center justify-center"
+              style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
+            >
+              <X style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
+            </span>
           ) : (
             <>
-              <Phone className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span
+                aria-hidden
+                className="pointer-events-none flex items-center justify-center"
+                style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
+              >
+                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
+              </span>
               <span
                 className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
                 Contact Us
               </span>
-              <span className="pointer-events-none absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]" />
-
+              <span
+                className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
+                style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8 }}
+              />
             </>
           )}
         </motion.button>
