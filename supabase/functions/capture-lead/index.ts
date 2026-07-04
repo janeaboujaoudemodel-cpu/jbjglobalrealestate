@@ -369,6 +369,8 @@ serve(async (req: Request): Promise<Response> => {
     const sanitizedAgeRange = sanitizeString(data.ageRange, 20);
     const sanitizedPageSource = sanitizeString(data.pageSource, 100);
     const sanitizedSubSource = sanitizeString(data.subSource, 100);
+    const sanitizedMessage = sanitizeString(data.message, 1000);
+    const sanitizedContext = safeContext(data.context);
 
     // Validate contact type
     const validContactTypes = ['client', 'broker', 'investor', 'visitor'];
@@ -452,6 +454,16 @@ serve(async (req: Request): Promise<Response> => {
           current_location_country: locationCountry,
           current_location_city: locationCity,
           age_range: sanitizedAgeRange,
+          pipeline_stage: 'qualified',
+          priority: sanitizedPhone ? 'high' : 'normal',
+          notes: sanitizedMessage || undefined,
+          raw_import: {
+            ...(sanitizedContext ?? {}),
+            source: sanitizedSource,
+            page_source: sanitizedPageSource,
+            message: sanitizedMessage,
+            last_capture_at: new Date().toISOString(),
+          },
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingLead.id);
@@ -477,6 +489,16 @@ serve(async (req: Request): Promise<Response> => {
           owner_type: 'company_assigned',
           lead_source_type: 'website',
           contact_type: contactType,
+          pipeline_stage: 'qualified',
+          priority: sanitizedPhone ? 'high' : 'normal',
+          notes: sanitizedMessage,
+          raw_import: {
+            ...sanitizedContext,
+            source: sanitizedSource,
+            page_source: sanitizedPageSource,
+            message: sanitizedMessage,
+            captured_at: new Date().toISOString(),
+          },
           tags: tags.slice(0, 10), // Limit tags
         })
         .select('id')
@@ -493,6 +515,27 @@ serve(async (req: Request): Promise<Response> => {
 
       resolvedLeadId = newLead?.id ?? null;
       console.log('Created new CRM lead:', newLead?.id);
+    }
+
+    if (resolvedLeadId) {
+      const suggestedResponse = buildSuggestedResponse({
+        name: sanitizedFullName,
+        source: sanitizedSource,
+        phone: sanitizedPhone,
+        message: sanitizedMessage,
+        context: sanitizedContext,
+      });
+      await notifyOwnersAboutLead(supabase, {
+        leadId: resolvedLeadId,
+        name: sanitizedFullName || normalizedEmail.split('@')[0],
+        email: normalizedEmail,
+        phone: sanitizedPhone,
+        source: sanitizedSource,
+        pageSource: sanitizedPageSource,
+        message: sanitizedMessage,
+        context: sanitizedContext,
+        suggestedResponse,
+      });
     }
 
     // SECURITY: do NOT return leadId or any internal identifier. Returning
