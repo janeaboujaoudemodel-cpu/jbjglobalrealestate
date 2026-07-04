@@ -272,7 +272,7 @@ export default function ProjectNearbyPropertiesMap({
 
   return (
     <div className={className}>
-      <div data-map-shell className="mb-2 flex items-center gap-2 flex-wrap">
+      <div data-map-shell className="mb-2 flex items-center gap-2 flex-nowrap overflow-x-auto overflow-y-hidden pb-1 [-webkit-overflow-scrolling:touch]">
         {chip("all", "All nearby", allMarkers.length)}
         {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
         {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
