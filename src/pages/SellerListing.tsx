@@ -687,9 +687,11 @@ Requirements:
  : 'border-white/40 text-white/70 [&_svg]:!text-white/70'
  }`}
                    style={{
-                    background: 'var(--jj-official-emerald-surface, #064E3B)',
-                    backgroundColor: '#064E3B',
-                    boxShadow: currentStep === step.number ? '0 8px 20px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18)' : 'inset 0 1px 0 rgba(255,255,255,0.10)',
+                    background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)',
+                    backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #000000 100%)',
+                    boxShadow: currentStep === step.number
+                      ? '0 10px 24px -10px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.22)'
+                      : 'inset 0 1px 0 rgba(255,255,255,0.10)',
                   }}>
 
                     {currentStep > step.number ? (
