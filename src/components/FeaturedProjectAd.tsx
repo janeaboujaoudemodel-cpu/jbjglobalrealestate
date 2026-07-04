@@ -111,7 +111,7 @@ export const FEATURED_ADS = [
     description: "Find your home in the world's first Mercedes-Benz-branded city located in the heart of Meydan.",
     imageUrl: 'https://d3h330vgpwpjr8.cloudfront.net/x/1128x/Mercedes_Benz_Places_2_16c6f5cada.webp',
     projectSlug: 'mercedes-benz-places-binghatti-meydan',
-    ctaText: 'Learn More'
+    ctaText: 'View Project Details'
   },
   {
     id: 'expo-city',
