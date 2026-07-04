@@ -30097,3 +30097,13 @@ html body :is([data-surface="emerald"], [data-emerald-action="true"], [data-emer
   stroke: currentColor !important;
   opacity: 1 !important;
 }
+
+/* ==========================================================================
+   Project page — master edit-mode gate
+   The project detail page exposes a single "Edit page" toggle in the hero.
+   When OFF, every owner pencil is hidden site-wide on this page. When ON,
+   they all reappear in-place. Buttons opt in with `data-owner-pencil`.
+   ========================================================================== */
+html[data-project-edit-mode="off"] [data-owner-pencil] {
+  display: none !important;
+}
