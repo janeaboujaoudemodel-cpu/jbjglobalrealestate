@@ -239,26 +239,13 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "group flex items-center gap-3 w-full min-h-11 rounded-md px-3 py-2 text-left transition-none hover:bg-[#064E3B] focus:bg-[#064E3B] overflow-visible text-[#1A1A1A] hover:text-white focus:text-white data-[state=active]:bg-[#064E3B] data-[state=active]:text-white";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
-  const anchoredPanelStyle = (() => {
-    if (!anchorRect || typeof window === 'undefined') {
-      return undefined;
-    }
-    const sidebar = Math.max(0, Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--jj-shell-sidebar-w')) || 0);
-    const width = Math.min(520, window.innerWidth - sidebar - 32);
-    const desiredLeft = anchorRect.left + anchorRect.width / 2 - width / 2;
-    const left = Math.max(sidebar + 16, Math.min(desiredLeft, window.innerWidth - width - 16));
-    return {
-      left: `${left}px`,
-      top: 'var(--app-content-top, 88px)',
-      width: `${width}px`,
-      maxWidth: `calc(100vw - ${sidebar + 32}px)`,
-      transform: 'none',
-      ['--slider-track-bg' as any]: 'rgba(6,78,59,0.14)',
-      ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
-      ['--slider-thumb-bg' as any]: '#FFFFFF',
-      ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
-    } as CSSProperties;
-  })();
+  // Filter panel is always CENTERED on screen (user requested — do not anchor to trigger).
+  const centeredPanelStyle = {
+    ['--slider-track-bg' as any]: 'rgba(6,78,59,0.14)',
+    ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
+    ['--slider-thumb-bg' as any]: '#FFFFFF',
+    ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
+  } as CSSProperties;
 
 
   const filteredEmirates = UAE_EMIRATES.filter(e =>
@@ -290,16 +277,11 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         data-advanced-filter-panel="true"
-        data-header-anchored-panel={anchorRect ? "true" : undefined}
         data-filter-clean="true"
         className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border border-[#B89555]/55 text-[#1A1A1A] flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.20),0_0_0_1px_rgba(184,149,85,0.18)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
-        style={anchoredPanelStyle ?? {
-          ['--slider-track-bg' as any]: 'rgba(6,78,59,0.14)',
-          ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
-          ['--slider-thumb-bg' as any]: '#FFFFFF',
-          ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
-        }}
+        style={centeredPanelStyle}
       >
+
 
         {/* Header */}
         <div className="px-6 pt-6 pb-4 border-b border-[#B89555]/40 flex-shrink-0 bg-white/40">
