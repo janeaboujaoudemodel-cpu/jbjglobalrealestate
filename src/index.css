@@ -28338,9 +28338,16 @@ html body #root :is(
   stroke: #FFFFFF !important;
 }
 
-/* Services hero — dark black graded buttons (override any emerald autopaint) */
-html body a.jj-btn-ink-black,
-html body button.jj-btn-ink-black {
+/* Services hero — dark black graded buttons (override the insights-page emerald autopaint) */
+html body #root a.jj-btn-ink-black,
+html body #root button.jj-btn-ink-black,
+html body #root [data-insights-page] a.jj-btn-ink-black,
+html body #root [data-insights-page] button.jj-btn-ink-black,
+html body #root [data-insights-page] [data-brand-hero] a.jj-btn-ink-black,
+html body #root [data-insights-page] [data-brand-hero] button.jj-btn-ink-black,
+html body #root [data-insights-page] .jj-hero-fullscreen a.jj-btn-ink-black,
+html body #root [data-insights-page] .jj-hero-fullscreen button.jj-btn-ink-black {
+  background: linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 55%, #000000 100%) !important;
   background-image: linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 55%, #000000 100%) !important;
   background-color: #000000 !important;
   color: #FFFFFF !important;
@@ -28348,10 +28355,26 @@ html body button.jj-btn-ink-black {
   border: 1px solid rgba(255,255,255,0.10) !important;
   box-shadow: 0 10px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06) !important;
   animation: none !important;
+  min-width: auto !important;
+  min-height: 0 !important;
+  padding: 0.75rem 1.75rem !important;
+  border-radius: 0.75rem !important;
 }
-html body a.jj-btn-ink-black *,
-html body button.jj-btn-ink-black * {
+html body #root [data-insights-page] [data-brand-hero] a.jj-btn-ink-black:hover,
+html body #root [data-insights-page] [data-brand-hero] button.jj-btn-ink-black:hover,
+html body #root [data-insights-page] .jj-hero-fullscreen a.jj-btn-ink-black:hover,
+html body #root [data-insights-page] .jj-hero-fullscreen button.jj-btn-ink-black:hover {
+  background: linear-gradient(135deg, #262626 0%, #141414 55%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #262626 0%, #141414 55%, #000000 100%) !important;
+}
+html body #root a.jj-btn-ink-black *,
+html body #root button.jj-btn-ink-black *,
+html body #root [data-insights-page] a.jj-btn-ink-black *,
+html body #root [data-insights-page] button.jj-btn-ink-black *,
+html body #root [data-insights-page] [data-brand-hero] a.jj-btn-ink-black *,
+html body #root [data-insights-page] [data-brand-hero] button.jj-btn-ink-black * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
