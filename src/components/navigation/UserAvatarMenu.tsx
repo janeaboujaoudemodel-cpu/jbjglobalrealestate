@@ -108,9 +108,8 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
     onClick?: () => void;
   }) => {
     const active = isRowActive(to);
-    // Always white text/icons; hover state handled by DropdownMenuItem CSS unchanged.
-    const inkStyle = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" };
-    const iconStyle = { color: "#FFFFFF", stroke: "#FFFFFF" };
+    const inkStyle = { color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" };
+    const iconStyle = { color: "#064E3B", stroke: "#064E3B" };
 
     const inner = (
       <span className="flex items-center gap-2.5 w-full" style={inkStyle}>
@@ -136,10 +135,9 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuItem
         data-account-menu-row="true"
         data-no-emerald-hover="true"
-        data-on-dark="true"
         asChild={!!to}
         onSelect={onClick ? () => onClick() : undefined}
-        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-white hover:bg-white/10 focus:bg-white/10 data-[highlighted]:bg-white/10"
+        className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none duration-0 text-[#1A1A1A] hover:bg-[#064E3B] hover:text-white focus:bg-[#064E3B] focus:text-white data-[highlighted]:bg-[#064E3B] data-[highlighted]:text-white"
         style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
       >
         {to ? (
@@ -147,7 +145,6 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             to={to}
             data-account-menu-row="true"
             data-no-emerald-hover="true"
-            data-on-dark="true"
             style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
           >
             {inner}
@@ -181,31 +178,29 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
       <DropdownMenuContent
         data-account-menu-content
         data-jbj-fast-dropdown="true"
-        data-surface="emerald"
-        data-on-dark="true"
+        data-surface="champagne"
         align="end"
         sideOffset={12}
-        className="z-[10100] w-[280px] p-2 rounded-xl border border-white/25 shadow-2xl text-white"
+        className="z-[10100] w-[280px] p-2 rounded-xl border border-[#B89555]/40 shadow-2xl text-[#1A1A1A]"
         style={{
-          backgroundImage: "linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)",
-          color: "#FFFFFF",
-          WebkitTextFillColor: "#FFFFFF",
+          backgroundImage: "linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%)",
+          color: "#1A1A1A",
+          WebkitTextFillColor: "#1A1A1A",
         }}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 px-2 py-2.5" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+        <div className="flex items-center gap-3 px-2 py-2.5" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
           <JbjAvatar initials={initials} size="sm" />
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold truncate" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{displayName}</div>
-            <div className="text-[11px] truncate" style={{ color: "rgba(255,255,255,0.75)", WebkitTextFillColor: "rgba(255,255,255,0.75)" }}>JBJ account</div>
+            <div className="text-sm font-semibold truncate" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{displayName}</div>
+            <div className="text-[11px] truncate" style={{ color: "rgba(26,26,26,0.72)", WebkitTextFillColor: "rgba(26,26,26,0.72)" }}>JBJ account</div>
             {roleLabel && (
               <span
                 data-account-role-label
                 data-surface="emerald"
-                data-on-dark="true"
                 className="inline-flex items-center mt-1 px-2 py-[2px] rounded-full text-[10px] font-semibold uppercase tracking-[0.08em] border border-white/40"
                 style={{
-                  background: "rgba(255,255,255,0.10)",
+                  background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                   color: "#FFFFFF",
                   WebkitTextFillColor: "#FFFFFF",
                 }}
@@ -215,7 +210,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
             )}
           </div>
         </div>
-        <DropdownMenuSeparator className="bg-white/15 my-1" />
+        <DropdownMenuSeparator className="bg-[#B89555]/25 my-1" />
 
         {/* Dashboard — direct link to user's role/mode-aware dashboard */}
         <Row to={dashboardHref} icon={LayoutDashboard} label="Dashboard" badge={activityCount} />
@@ -228,27 +223,26 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         )}
         <Row to="/profile?tab=settings" icon={Settings} label="Settings" />
 
-        <div className="h-px mx-2 my-1 bg-white/15" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
         <Row to="/favorites" icon={Heart} label="Favorites" />
-        <div className="h-px mx-2 my-1 bg-white/15" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
         <Row to="/favorites?tab=shortlist" icon={Star} label="Shortlist" />
-        <div className="h-px mx-2 my-1 bg-white/15" aria-hidden="true" />
+        <div className="h-px mx-2 my-1 bg-[#B89555]/25" aria-hidden="true" />
         <Row to="/favorites?tab=designs" icon={PenTool} label="My Design" />
 
 
-        <DropdownMenuSeparator className="bg-white/15 my-1" />
+        <DropdownMenuSeparator className="bg-[#B89555]/25 my-1" />
         <DropdownMenuItem
           onSelect={handleSignOut}
           data-account-signout-row="true"
           data-account-menu-row="true"
           data-no-emerald-hover="true"
-          data-on-dark="true"
-          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-white focus:bg-white/10 data-[highlighted]:bg-white/10"
+          className="cursor-pointer rounded-md px-2.5 py-2 my-0.5 text-[#1A1A1A] hover:bg-[#064E3B] hover:text-white focus:bg-[#064E3B] focus:text-white data-[highlighted]:bg-[#064E3B] data-[highlighted]:text-white"
           style={{ background: "transparent", backgroundImage: "none", borderColor: "transparent", boxShadow: "none" }}
         >
-          <span className="flex items-center gap-2.5 w-full" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-            <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Sign out</span>
+          <span className="flex items-center gap-2.5 w-full" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+            <LogOut className="w-5 h-5" strokeWidth={2.25} style={{ color: "#064E3B", stroke: "#064E3B" }} />
+            <span className="text-sm font-medium" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Sign out</span>
           </span>
         </DropdownMenuItem>
       </DropdownMenuContent>
