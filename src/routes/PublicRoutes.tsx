@@ -46,6 +46,7 @@ const BuyerGuide = lazy(() => import("@/pages/BuyerGuide"));
 const SellerGuide = lazy(() => import("@/pages/SellerGuide"));
 const SellerListing = lazy(() => import("@/pages/SellerListing"));
 const GoldenVisaGuide = lazy(() => import("@/pages/guides/GoldenVisaGuide"));
+const DubaiRentalYieldGuide = lazy(() => import("@/pages/guides/DubaiRentalYieldGuide"));
 const Guides = lazy(() => import("@/pages/Guides"));
 const RentGuide = lazy(() => import("@/pages/RentGuide"));
 const TenantGuide = lazy(() => import("@/pages/TenantGuide"));
