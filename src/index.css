@@ -29788,6 +29788,10 @@ html body :is([data-icon-circle="true"], .jj-icon-circle-lock) {
   place-items: center !important;
   flex: 0 0 auto !important;
   padding: 0 !important;
+  min-width: var(--jj-icon-lock-size, 2rem) !important;
+  min-height: var(--jj-icon-lock-size, 2rem) !important;
+  width: var(--jj-icon-lock-size, 2rem) !important;
+  height: var(--jj-icon-lock-size, 2rem) !important;
   line-height: 1 !important;
   overflow: hidden !important;
 }
@@ -29798,6 +29802,10 @@ html body :is([data-icon-square="true"], .jj-icon-square-lock) {
   place-items: center !important;
   flex: 0 0 auto !important;
   padding: 0 !important;
+  min-width: var(--jj-icon-lock-size, 2.5rem) !important;
+  min-height: var(--jj-icon-lock-size, 2.5rem) !important;
+  width: var(--jj-icon-lock-size, 2.5rem) !important;
+  height: var(--jj-icon-lock-size, 2.5rem) !important;
   line-height: 1 !important;
   overflow: hidden !important;
 }
