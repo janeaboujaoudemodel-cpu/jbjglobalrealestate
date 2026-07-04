@@ -243,16 +243,20 @@ export default function SupportLauncher() {
           }}
         >
           {open ? (
-            <X
-              className="allow-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }}
-            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 flex items-center justify-center"
+            >
+              <X style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }} />
+            </span>
           ) : (
             <>
-              <Phone
-                className="allow-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }}
-              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 flex items-center justify-center"
+              >
+                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }} />
+              </span>
               <span
                 className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
                 style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
