@@ -56,6 +56,7 @@ const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, onPointerDownOutside, onInteractOutside, ...props }, ref) => {
+  const isAdvancedFilterPanel = (props as Record<string, unknown>)['data-advanced-filter-panel'] === 'true';
   // Guard: prevent dialog from closing when clicking inside Radix Popper portals (Select, Popover, etc.)
   const handlePointerDownOutside: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>['onPointerDownOutside'] = (e) => {
     const target = e.target as HTMLElement;
@@ -92,8 +93,13 @@ const DialogContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full w-8 h-8 flex items-center justify-center bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#064E3B]/30 opacity-100 ring-offset-background transition-all duration-200 hover:shadow-[0_4px_15px_rgba(6,78,59,0.2)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#064E3B]/45 focus:ring-offset-2 disabled:pointer-events-none z-20">
-          <X className="h-4 w-4 text-[#1A1A1A]" />
+        <DialogPrimitive.Close className={cn(
+          "absolute right-4 top-4 rounded-full w-8 h-8 flex items-center justify-center opacity-100 ring-offset-background transition-none focus:outline-none focus:ring-2 focus:ring-[#064E3B]/45 focus:ring-offset-2 disabled:pointer-events-none z-20",
+          isAdvancedFilterPanel
+            ? "allow-white jj-pill-emerald-metallic border-0 text-white"
+            : "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#064E3B]/30 hover:shadow-[0_4px_15px_rgba(6,78,59,0.2)]"
+        )}>
+          <X className={cn("h-4 w-4", isAdvancedFilterPanel ? "text-white" : "text-[#1A1A1A]")} />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>

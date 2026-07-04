@@ -49,6 +49,7 @@ interface GlobalSearchModalProps {
   initialQuery?: string;
   onClose: () => void;
   embedded?: boolean;
+  anchorRect?: DOMRect | null;
 }
 
 // Universal quick shortcuts — always visible (kept lean, role extras added below)
@@ -124,7 +125,7 @@ interface DbResult {
   image?: string | null;
 }
 
-const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false }: GlobalSearchModalProps) => {
+const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false, anchorRect = null }: GlobalSearchModalProps) => {
   const [query, setQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>(() => getRecentSearches());
   const [shortcuts, setShortcuts] = useState<string[]>(() => getSearchShortcuts());
@@ -320,6 +321,29 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     clearRecentSearches();
     setRecentSearches([]);
   };
+
+  const anchoredStyle = (() => {
+    if (typeof window === 'undefined') {
+      return {
+        left: 'calc(var(--jj-shell-sidebar-w, var(--app-content-left, 0px)) + 16px)',
+        width: 'min(34rem, calc(100vw - var(--jj-shell-sidebar-w, var(--app-content-left, 0px)) - 32px))',
+        transform: 'none',
+        maxWidth: 'calc(100vw - var(--jj-shell-sidebar-w, var(--app-content-left, 0px)) - 32px)',
+        top: 'var(--app-content-top, 88px)',
+      } as const;
+    }
+    const sidebar = Math.max(0, Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--jj-shell-sidebar-w')) || 0);
+    const width = Math.min(544, window.innerWidth - sidebar - 32);
+    const desiredLeft = (anchorRect?.left ?? sidebar + 16);
+    const left = Math.max(sidebar + 16, Math.min(desiredLeft, window.innerWidth - width - 16));
+    return {
+      left: `${left}px`,
+      width: `${width}px`,
+      transform: 'none',
+      maxWidth: `calc(100vw - ${sidebar + 32}px)`,
+      top: 'var(--app-content-top, 88px)',
+    } as const;
+  })();
 
   const handleTogglePin = (e: React.MouseEvent, search: string) => {
     e.stopPropagation();
@@ -556,15 +580,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
               have transform-based centering overridden by animation libraries. */}
           <div
             data-global-search-modal
-            className="fixed z-[10001] left-1/2"
-            style={{
-              width: "min(48rem, calc(100vw - 20px))",
-              transform: "translateX(-50%)",
-              maxWidth: "calc(100vw - 20px)",
-              top: "calc(var(--app-content-top, 88px) + 12px)",
-            }}
+            className="fixed z-[10001]"
+            style={anchoredStyle}
           >
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(720px, calc(100dvh - clamp(44px, 18dvh, 176px)))' }}>
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/45 rounded-xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'min(620px, calc(100dvh - var(--app-content-top, 88px) - 16px))' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-[#B89555]/30 flex-shrink-0">
                 <IconTile icon={Search} tone="emerald" size="sm" className="absolute left-4 top-1/2 -translate-y-1/2" />
@@ -574,18 +593,18 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search by keyword... Search anything"
-                  className="w-full h-16 pl-16 pr-14 bg-transparent border-0 text-[#1A1A1A] text-xl placeholder:text-[#1A1A1A]/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="w-full h-12 pl-14 pr-12 bg-transparent border-0 text-[#1A1A1A] text-sm placeholder:text-[#1A1A1A]/60 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
                 <button
                   onClick={onClose}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/80 hover:border-[#B89555]/60 hover:bg-[#EFE6D6] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 inline-flex items-center justify-center rounded-full jj-pill-emerald-metallic text-white border-0 transition-none"
                 >
-                  <X className="w-6 h-6 text-[#1A1A1A]" />
+                  <X className="w-4 h-4 text-white" />
                 </button>
               </div>
 
               {/* Main Content - Scrollable */}
-              <div className="overflow-y-auto p-4 flex-1" style={{ maxHeight: 'min(640px, calc(100dvh - clamp(124px, 28dvh, 256px)))' }}>
+              <div className="overflow-y-auto p-3 flex-1" style={{ maxHeight: 'min(560px, calc(100dvh - var(--app-content-top, 88px) - 72px))' }}>
                 {/* Show search results when typing */}
                 {query.trim() ? (
                   <div className="space-y-4">

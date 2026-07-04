@@ -104,20 +104,20 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
         data-preserve-surface
         align="end" 
         side="bottom"
-        sideOffset={12}
+        sideOffset={22}
         collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
         avoidCollisions={false}
         sticky="always"
         updatePositionStrategy="always"
         onWheel={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
-        className="z-[120001] w-[300px] max-w-[calc(100vw-32px)] rounded-xl p-0 overflow-hidden"
+        className="z-[120001] w-[280px] max-w-[calc(100vw-32px)] rounded-xl p-2 overflow-hidden"
       >
-        <div className="px-4 py-3 border-b border-[#064E3B]/15">
+        <div className="px-2.5 py-2.5 border-b border-[#B89555]/25">
           <p className="text-xs font-semibold uppercase tracking-wider">Select Currency</p>
         </div>
         <div
-          className="p-2 max-h-[360px] overflow-y-auto overscroll-contain"
+          className="pt-1 max-h-[360px] overflow-y-auto overscroll-contain"
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
         >
@@ -131,7 +131,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
                 data-currency-active="false"
                 onClick={() => setCurrency(curr.code)}
                 unstyled
-                className="flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none"
+                className="flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none border border-transparent bg-transparent shadow-none"
               >
               <span className="flex items-center gap-3">
                 <span className="text-lg leading-none">{curr.flag}</span>

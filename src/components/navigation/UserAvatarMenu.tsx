@@ -180,7 +180,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
         data-jbj-fast-dropdown="true"
         data-surface="champagne"
         align="end"
-        sideOffset={12}
+        sideOffset={22}
         className="z-[10100] w-[280px] p-2 rounded-xl border border-[#B89555]/40 shadow-2xl text-[#1A1A1A]"
         style={{
           backgroundImage: "linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%)",
