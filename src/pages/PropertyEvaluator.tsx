@@ -1119,7 +1119,7 @@ const PropertyEvaluator = () => {
 
           {/* Property Details Tab */}
           <TabsContent value="property">
-            <div className="grid 2xl:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 2xl:grid-cols-2 gap-6">
               <Card className={blueCardPrimary}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
