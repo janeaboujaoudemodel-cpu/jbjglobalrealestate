@@ -596,9 +596,9 @@ Requirements:
               </p>
             </div>
           </div>
-          {/* Full edge-to-edge draft bar */}
-          <div className="w-full px-0">
-            <div className="w-full [&>div]:rounded-none [&>div]:border-x-0 [&>div]:px-4 md:[&>div]:px-8">
+          {/* Full edge-to-edge draft bar — breaks out of any parent container */}
+          <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen max-w-[100vw]">
+            <div className="w-full [&>div]:rounded-none [&>div]:border-x-0 [&>div]:mb-0 [&>div]:px-4 md:[&>div]:px-8 [&>div]:py-3">
               <FormDraftBar
                 hasDraft={hasDraft}
                 onSaveDraft={() => { /* auto-save handles this */ toast.success("Draft auto-saved"); }}
