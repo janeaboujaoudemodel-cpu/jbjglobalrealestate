@@ -5819,17 +5819,17 @@ export type Database = {
       contact_gating_submissions: {
         Row: {
           created_at: string
-          email: string
+          email: string | null
           email_encrypted: string | null
           email_hash: string | null
           email_verified: boolean | null
-          full_name: string
+          full_name: string | null
           full_name_encrypted: string | null
           honeypot_field: string | null
           id: string
           location: string | null
           nationality: string | null
-          phone: string
+          phone: string | null
           phone_encrypted: string | null
           phone_verified: boolean | null
           preferred_language: string | null
@@ -5838,17 +5838,17 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email: string
+          email?: string | null
           email_encrypted?: string | null
           email_hash?: string | null
           email_verified?: boolean | null
-          full_name: string
+          full_name?: string | null
           full_name_encrypted?: string | null
           honeypot_field?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
-          phone: string
+          phone?: string | null
           phone_encrypted?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
@@ -5857,17 +5857,17 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string
+          email?: string | null
           email_encrypted?: string | null
           email_hash?: string | null
           email_verified?: boolean | null
-          full_name?: string
+          full_name?: string | null
           full_name_encrypted?: string | null
           honeypot_field?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
-          phone?: string
+          phone?: string | null
           phone_encrypted?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
