@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { Building2, Scale, BarChart3, Globe, Cpu, ExternalLink, ShieldCheck, UserCheck, Landmark, ArrowDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEOHead from '@/components/SEOHead';
@@ -12,7 +12,7 @@ const GoldDivider = () => (
 );
 
 const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`relative overflow-hidden bg-[#F7F2EA] rounded-2xl p-6 ${className}`}>
+  <div className={`relative overflow-hidden bg-[#F7F2EA] rounded-2xl p-5 sm:p-6 md:p-8 border border-[#064E3B]/25 shadow-[0_18px_42px_-32px_rgba(4,44,28,0.58)] ${className}`}>
     <div className="pointer-events-none absolute top-0 right-0 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
     <div className="pointer-events-none absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
     <div className="relative z-10">{children}</div>
@@ -34,37 +34,7 @@ const BulletList = ({ items }: { items: string[] }) => (
   </ul>
 );
 
-const tocItems = [
-  { id: "s1", label: "Licensed Brokerage Scope", icon: Building2 },
-  { id: "s2", label: "Scope Boundaries", icon: Scale },
-  { id: "s3", label: "Data & Market Information", icon: BarChart3 },
-  { id: "s4", label: "Residency & Golden Visa", icon: Globe },
-  { id: "s5", label: "Digital & AI Advisory Tools", icon: Cpu },
-  { id: "s6", label: "External Platforms", icon: ExternalLink },
-  { id: "s7", label: "Liability Clarification", icon: ShieldCheck },
-  { id: "s8", label: "Client Responsibility", icon: UserCheck },
-  { id: "s9", label: "Regulatory Position", icon: Landmark },
-];
-
 const Disclaimers = () => {
-  const [activeSection, setActiveSection] = useState("s1");
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible.length > 0) setActiveSection(visible[0].target.id);
-      },
-      { rootMargin: "-20% 0px -60% 0px", threshold: 0.1 }
-    );
-    tocItems.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observerRef.current?.observe(el);
-    });
-    return () => observerRef.current?.disconnect();
-  }, []);
-
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -94,7 +64,7 @@ const Disclaimers = () => {
               <button
                 type="button"
                 onClick={() => scrollTo("s1")}
-                className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] transition-all hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/45"
+                className="jj-disclaimer-action jj-disclaimer-action--primary group inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] focus:outline-none focus:ring-2 focus:ring-white/45"
                 style={{ color: "#FFFFFF" }}
               >
                 Review Scope
@@ -103,7 +73,7 @@ const Disclaimers = () => {
               <button
                 type="button"
                 onClick={() => scrollTo("s8")}
-                className="inline-flex items-center justify-center rounded-full border border-[#B89555]/45 bg-[#F7F2EA] px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] transition-all hover:bg-[#FDFBF7] focus:outline-none focus:ring-2 focus:ring-[#B89555]/45"
+                className="jj-disclaimer-action jj-disclaimer-action--secondary inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold uppercase tracking-[0.14em] focus:outline-none focus:ring-2 focus:ring-[#B89555]/45"
                 style={{ color: "#064E3B" }}
               >
                 Client Responsibility
@@ -112,36 +82,9 @@ const Disclaimers = () => {
           </div>
         </section>
 
-        {/* 2-column layout */}
-        <div className="max-w-6xl mx-auto px-6 pb-16 pt-10 flex gap-10">
-          {/* Sidebar TOC — desktop */}
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <div className="sticky top-24 space-y-2 bg-[#FDFBF7] border border-[#B89555]/25 rounded-xl p-3">
-              <p className="text-xs uppercase tracking-widest text-[#1A1A1A]/65 font-bold mb-3 px-3">Table of Contents</p>
-              {tocItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => scrollTo(item.id)}
-                    className={`w-full text-left flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-all ${
-                      activeSection === item.id
-                        ? "text-white font-semibold border-l-2 border-[#064E3B] bg-[#064E3B] shadow-[0_12px_28px_rgba(6,78,59,0.18)]"
-                        : "text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#F7F2EA]/60 border-l-2 border-transparent"
-                    }`}
-                  >
-                    <SectionIcon className="h-7 w-7">
-                      <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#FFFFFF" }} strokeWidth={2.2} />
-                    </SectionIcon>
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </aside>
-
-          {/* Main content */}
-          <div className="flex-1 space-y-8 min-w-0">
+        {/* Main content */}
+        <div className="jj-content-track pb-16 pt-10">
+          <div className="jj-disclaimer-content space-y-8 min-w-0">
             <div id="s1">
               <CCard>
                 <div className="flex items-center gap-3 mb-4">
