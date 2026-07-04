@@ -72,34 +72,43 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
 
   useEffect(() => {
     if (typeof document === 'undefined') return;
-    const rows = document.querySelectorAll<HTMLElement>('[data-currency-row]');
-    rows.forEach((row) => {
-      const active = row.dataset.currencyActive === 'true';
-      const hovered = row.dataset.currencyCode === hoveredCurrency;
-      const foreground = active ? '#FFFFFF' : '#1A1A1A';
-      const background = active
-        ? 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))'
-        : hovered
-          ? 'rgba(184,149,85,0.14)'
-          : 'transparent';
+    const applyCurrencyRowLock = () => {
+      const rows = document.querySelectorAll<HTMLElement>('[data-currency-row]');
+      rows.forEach((row) => {
+        const active = row.dataset.currencyActive === 'true';
+        const hovered = row.dataset.currencyCode === hoveredCurrency;
+        const foreground = active ? '#FFFFFF' : '#1A1A1A';
+        const background = active
+          ? 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))'
+          : hovered
+            ? 'rgba(184,149,85,0.14)'
+            : 'transparent';
 
-      row.style.setProperty('background', background, 'important');
-      row.style.setProperty('background-image', active ? background : 'none', 'important');
-      row.style.setProperty('background-color', active ? '#064E3B' : background, 'important');
-      row.style.setProperty('color', foreground, 'important');
-      row.style.setProperty('-webkit-text-fill-color', foreground, 'important');
-      row.style.setProperty('border-color', 'transparent', 'important');
-      row.style.setProperty('box-shadow', active ? 'inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -18px rgba(6,78,59,.78)' : 'none', 'important');
-      row.style.setProperty('transform', 'none', 'important');
-      row.style.setProperty('filter', 'none', 'important');
-      row.querySelectorAll<HTMLElement>('span, svg, path, circle, rect, line, polyline, polygon').forEach((child) => {
-        child.style.setProperty('color', foreground, 'important');
-        child.style.setProperty('-webkit-text-fill-color', foreground, 'important');
-        child.style.setProperty('stroke', foreground, 'important');
-        child.style.setProperty('background', 'transparent', 'important');
-        child.style.setProperty('background-image', 'none', 'important');
+        row.style.setProperty('background', background, 'important');
+        row.style.setProperty('background-image', active ? background : 'none', 'important');
+        row.style.setProperty('background-color', active ? '#064E3B' : background, 'important');
+        row.style.setProperty('color', foreground, 'important');
+        row.style.setProperty('-webkit-text-fill-color', foreground, 'important');
+        row.style.setProperty('border-color', 'transparent', 'important');
+        row.style.setProperty('box-shadow', active ? 'inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -18px rgba(6,78,59,.78)' : 'none', 'important');
+        row.style.setProperty('transform', 'none', 'important');
+        row.style.setProperty('filter', 'none', 'important');
+        row.querySelectorAll<HTMLElement>('span, svg, path, circle, rect, line, polyline, polygon').forEach((child) => {
+          child.style.setProperty('color', foreground, 'important');
+          child.style.setProperty('-webkit-text-fill-color', foreground, 'important');
+          child.style.setProperty('stroke', foreground, 'important');
+          child.style.setProperty('background', 'transparent', 'important');
+          child.style.setProperty('background-image', 'none', 'important');
+        });
       });
-    });
+    };
+    applyCurrencyRowLock();
+    const frame = window.requestAnimationFrame(applyCurrencyRowLock);
+    const timer = window.setTimeout(applyCurrencyRowLock, 0);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
   }, [currency, hoveredCurrency, menuOpen]);
 
   const currentCurrency = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
