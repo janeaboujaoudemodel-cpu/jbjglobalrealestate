@@ -302,5 +302,6 @@ export default function AIEmailGeneratorPage() {
         )}
       </div>
     </AIToolPremiumLayout>
+    </AIToolStartGate>
   );
 }

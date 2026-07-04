@@ -407,5 +407,6 @@ export default function AISocialMediaPage() {
         )}
       </div>
     </AIToolPremiumLayout>
+    </AIToolStartGate>
   );
 }

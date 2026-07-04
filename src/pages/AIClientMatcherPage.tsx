@@ -454,5 +454,6 @@ export default function AIClientMatcherPage() {
         )}
       </div>
     </AIToolPremiumLayout>
+    </AIToolStartGate>
   );
 }
