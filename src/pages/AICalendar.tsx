@@ -854,6 +854,7 @@ const AICalendar = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
