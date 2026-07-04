@@ -23,6 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useUserModeContext, type UserMode as PlatformUserMode } from "@/contexts/UserModeContext";
+import PasswordStrengthMeter from "@/components/auth/PasswordStrengthMeter";
 
 const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'developer'];
 const isValidPreselect = (v: string | null): v is PlatformUserMode =>
@@ -62,6 +63,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [reactivationPassword, setReactivationPassword] = useState("");
   const [reactivating, setReactivating] = useState(false);
   const [isReactivationPreview, setIsReactivationPreview] = useState(false);
+  const [passwordSafe, setPasswordSafe] = useState(true);
 
   // Resend cooldown
   const [resendCooldown, setResendCooldown] = useState(0);
@@ -132,6 +134,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
+    if ((mode === "signup" || mode === "reset") && !passwordSafe) {
+      newErrors.password = "This password appears in public breach lists. Choose a stronger, unique one.";
+    }
+
     if (mode === "verify-otp" && (!/^\d{6}$/.test(otpCode))) {
       newErrors.otp = "Enter the 6-digit code from your email";
     }
@@ -183,8 +189,15 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         case "signup": {
           const { error } = await signUp(email, password);
           if (error) {
-            if (error.message.includes("already registered")) {
+            const msg = (error.message || "").toLowerCase();
+            if (msg.includes("already registered")) {
               toast.error("This email is already registered. Please sign in instead.");
+            } else if (msg.includes("pwned") || msg.includes("compromised") || msg.includes("weak_password") || msg.includes("data breach")) {
+              setPasswordSafe(false);
+              setErrors((prev) => ({ ...prev, password: "This password appears in public breach lists. Choose a stronger, unique password." }));
+              toast.error("Password found in public breach lists", {
+                description: "For your safety we can't accept it. Try a longer passphrase, or let a password manager generate one.",
+              });
             } else {
               toast.error(error.message);
             }
@@ -310,7 +323,16 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           });
 
           if (resetError || data?.error) {
-            toast.error(data?.error || resetError?.message || "Failed to reset password");
+            const msg = (data?.error || resetError?.message || "").toLowerCase();
+            if (msg.includes("pwned") || msg.includes("compromised") || msg.includes("weak_password") || msg.includes("data breach")) {
+              setPasswordSafe(false);
+              setErrors((prev) => ({ ...prev, password: "This password appears in public breach lists. Please choose a new one." }));
+              toast.error("Password found in public breach lists", {
+                description: "Choose a unique password of 12+ characters, or let a password manager generate one.",
+              });
+            } else {
+              toast.error(data?.error || resetError?.message || "Failed to reset password");
+            }
           } else {
             toast.success("Password updated! You can now sign in.");
             // Send confirmation email
@@ -651,6 +673,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                     </button>
                   </div>
                   {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                  {mode === "signup" && (
+                    <PasswordStrengthMeter password={password} onValidityChange={setPasswordSafe} />
+                  )}
                 </div>
               )}
 
@@ -667,6 +692,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                       </button>
                     </div>
                     {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                    <PasswordStrengthMeter password={password} onValidityChange={setPasswordSafe} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword" className="text-[#1A1A1A] font-medium">Confirm New Password</Label>
