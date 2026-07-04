@@ -28194,24 +28194,24 @@ html body :is([data-filter-clean="true"], [data-filter-dropdown="true"]) [data-f
 }
 
 
-/* Root filter/menu contrast closure: every emerald filter picker surface owns
-   pure-white text/icons. This removes the remaining champagne/light descendant
-   rules that were winning on select labels, chevrons, chips and nested spans. */
+/* Root filter/menu contrast closure — champagne + ink for the panel body.
+   Active/checked chips and jj-pill-emerald-metallic keep white via later rules. */
 html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(
   h1,h2,h3,h4,h5,h6,p,span,label,button,div,li,small,strong,em,b,
   [class*="text-[#1A1A1A]"], [class*="text-[#0A0A0A]"], [class*="text-muted"]
-):not(.allow-ink):not(.allow-ink *) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+):not(.allow-ink):not(.allow-ink *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
   opacity: 1 !important;
 }
 
-html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path, circle, rect, line, polyline, polygon):not(.allow-ink):not(.allow-ink *) {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+html body #root :is([data-filter-clean="true"], [data-filter-dropdown="true"]) :is(svg, [data-lucide], path, circle, rect, line, polyline, polygon):not(.allow-ink):not(.allow-ink *):not(.jj-pill-emerald-metallic svg):not(.jj-pill-emerald-metallic svg *):not([data-state="active"] svg):not([data-state="active"] svg *) {
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
   stroke-opacity: 1 !important;
   opacity: 1 !important;
 }
+
 
 /* Emerald dropdown scrollbar — gold accent on emerald panel */
 .jj-emerald-scroll::-webkit-scrollbar { width: 8px; }
