@@ -253,12 +253,13 @@ const Services = () => {
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
-            Explore JBJ Services
+            <span className="block">Explore JBJ</span>
+            <span className="block">Services</span>
           </motion.h1>
 
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-0"
+            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-0 text-center"
             style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
             variants={fadeInUp}
           >
@@ -269,22 +270,23 @@ const Services = () => {
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap border border-white/70 hover:border-white transition-colors bg-transparent hover:bg-white/[0.06]"
-              style={{ color: "#FFFFFF" }}
+              className="inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap text-white transition-transform hover:-translate-y-0.5 shadow-[0_10px_28px_rgba(0,0,0,0.45)]"
+              style={{ background: "linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 60%, #000000 100%)", border: "1px solid rgba(255,255,255,0.10)", color: "#FFFFFF" }}
             >
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Request a Service</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "#FFFFFF" }} />
             </Link>
             <Link
               to="/contact"
               data-no-contrast-guard
-              className="allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap border border-white/70 hover:border-white transition-colors bg-transparent hover:bg-white/[0.06]"
-              style={{ color: "#FFFFFF" }}
+              className="inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap text-white transition-transform hover:-translate-y-0.5 shadow-[0_10px_28px_rgba(0,0,0,0.45)]"
+              style={{ background: "linear-gradient(135deg, #1A1A1A 0%, #0A0A0A 60%, #000000 100%)", border: "1px solid rgba(255,255,255,0.10)", color: "#FFFFFF" }}
             >
-              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 allow-white" style={{ color: "#FFFFFF" }} />
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: "#FFFFFF" }} />
               <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Support</span>
             </Link>
           </motion.div>
+
 
 
 
