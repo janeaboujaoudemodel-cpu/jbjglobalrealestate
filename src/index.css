@@ -29917,3 +29917,24 @@ html body #root [data-dld-split-segment] span {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* PASS 222 — ModeSwitcher header + card readability lock (emerald surface → white text) */
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] :is(p, span, div, label, small, h1, h2, h3, h4, h5, h6) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] :is(svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] :is(p, span, div).opacity-70,
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [class*="opacity-70"] {
+  opacity: 0.9 !important;
+}
+/* Selected pill inside emerald mode panel keeps ink-on-champagne for the check */
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-active-pill],
+html body [data-radix-popper-content-wrapper] [data-mode-switcher-panel="true"] [data-mode-active-pill] * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
