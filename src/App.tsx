@@ -31,6 +31,7 @@ import PrintModeBoundary from "@/components/PrintModeBoundary";
 import PrintBlockerGuard from "@/components/PrintBlockerGuard";
 import GlobalSupportMount from "@/components/support/GlobalSupportMount";
 import AIToolsScopeMarker from "@/components/util/AIToolsScopeMarker";
+import OwnerLeadNotificationListener from "@/components/OwnerLeadNotificationListener";
 
 // BrandIntroSplash disabled until further notice
 // import BrandIntroSplash from "@/components/BrandIntroSplash";
@@ -106,6 +107,7 @@ const App = () => {
                     <PrintBlockerGuard />
                     <ScrollToTopOnMount />
                   <AIToolsScopeMarker />
+                  <OwnerLeadNotificationListener />
                   <RouteResume />
                   <SEOBreadcrumbs />
                   <CanonicalAndHreflang />
