@@ -1426,7 +1426,7 @@ const PropertyEvaluator = () => {
                     </div>
                     <div>
                       <Label className="text-[#1A1A1A]/70 text-sm">Handover Year</Label>
-                      <Input type="number" value={property.handoverYear} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 2020)} placeholder="e.g., 2020" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
+                      <Input type="number" value={property.handoverYear || ''} onChange={(e) => updateProperty('handoverYear', parseInt(e.target.value) || 0)} placeholder="e.g., 2020" className="bg-[#F7F2EA] border-[#B89555]/45 text-[#1A1A1A] placeholder:text-[#1A1A1A]/60" />
                     </div>
                   </div>
 
