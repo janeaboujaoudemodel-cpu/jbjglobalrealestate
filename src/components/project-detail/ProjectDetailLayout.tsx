@@ -992,12 +992,16 @@ export default function ProjectDetailLayout({
                     setCaptureDocUrl(undefined);
                     setLeadCaptureOpen(true);
                   }}
-                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit shrink-0 transition-all bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] text-[#1A1A1A] border-2 border-[#B89555]/50 hover:brightness-105"
-                  style={{ boxShadow: '0 0 15px rgba(200,167,102,0.3)' }}
+                  data-surface="emerald"
+                  data-emerald-action="true"
+                  data-no-contrast-guard
+                  className="allow-white flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit shrink-0 transition-all border border-black/25 hover:brightness-110"
+                  style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)', color: '#FFFFFF', boxShadow: '0 10px 24px -12px rgba(4,44,28,0.86)' }}
                 >
-                  <UserPlus className="w-3.5 h-3.5" />
-                  <span>Register Interest</span>
+                  <UserPlus className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+                  <span style={{ color: '#FFFFFF' }}>Register Interest</span>
                 </button>
+
 
               </div>
             </div>
@@ -1515,17 +1519,16 @@ export default function ProjectDetailLayout({
                       <li key={item} className="flex items-center gap-3">
                         <span
                           data-emerald-action="true"
-                          className="jj-emerald-action inline-flex w-6 h-6 rounded-full items-center justify-center shrink-0"
+                          className="jj-emerald-action inline-flex w-8 h-8 aspect-square rounded-full items-center justify-center shrink-0"
                           aria-hidden="true"
                         >
-                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 allow-white" fill="none" stroke="#FFFFFF" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#FFFFFF" }}>
-                            <path d="M5 12.5l4.5 4.5L19 7.5" />
-                          </svg>
+                          <FileText className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} strokeWidth={2.5} />
                         </span>
                         <span className="text-[#1A1A1A]/90">{item}</span>
                       </li>
                     ))}
                   </ul>
+
                 </div>
                 <div className="flex justify-center">
                   <PremiumBrochureCard

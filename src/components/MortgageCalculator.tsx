@@ -671,43 +671,43 @@ const MortgageCalculator = ({
             {/* 6 Champagne Summary Cards - 3x2 Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-5">
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
-                <div data-emerald-action="true" className="jj-emerald-action w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center">
-                  <Building2 className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <div data-emerald-action="true" className="jj-emerald-action w-10 h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg flex items-center justify-center">
+                  <Building2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Property Price (100%)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(propertyPrice)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
-                <div data-emerald-action="true" className="jj-emerald-action w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center">
-                  <Percent className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <div data-emerald-action="true" className="jj-emerald-action w-10 h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg flex items-center justify-center">
+                  <Percent className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Down Payment ({downPaymentPercent}%)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.downPayment)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
-                <div data-emerald-action="true" className="jj-emerald-action w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center">
-                  <DollarSign className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <div data-emerald-action="true" className="jj-emerald-action w-10 h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg flex items-center justify-center">
+                  <DollarSign className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Loan Amount ({100 - downPaymentPercent}%)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.loanAmount)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
-                <div data-emerald-action="true" className="jj-emerald-action w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center">
-                  <Calculator className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <div data-emerald-action="true" className="jj-emerald-action w-10 h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg flex items-center justify-center">
+                  <Calculator className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Monthly Payment</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.monthlyPayment)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
-                <div data-emerald-action="true" className="jj-emerald-action w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <div data-emerald-action="true" className="jj-emerald-action w-10 h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Interest ({interestRate}% · {loanTermYears}yr)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalInterest)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
-                <div data-emerald-action="true" className="jj-emerald-action w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center">
-                  <Wallet className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+                <div data-emerald-action="true" className="jj-emerald-action w-10 h-10 aspect-square shrink-0 mx-auto mb-2 rounded-lg flex items-center justify-center">
+                  <Wallet className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                 </div>
                 <p className="text-[#1A1A1A]/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Total Cost (All-In)</p>
                 <p className="text-[#1A1A1A] font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalPayment)}</p>
