@@ -1132,7 +1132,7 @@ const PropertyEvaluator = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Entry mode toggle: fill manually OR auto-fill from Title Deed */}
-                  <div className="rounded-2xl border border-emerald-400/50 bg-black/15 p-3 flex flex-col md:flex-row items-stretch md:items-center gap-2">
+                  <div className="rounded-2xl border border-emerald-400/50 bg-black/15 p-3 flex flex-col xl:flex-row items-stretch xl:items-center gap-2">
                     <div className="flex-1">
                       <p className="text-white font-semibold text-sm">How do you want to fill this valuation?</p>
                       <p className="text-white/75 text-xs">Choose manual entry, or upload your Title Deed / Oqood and let AI auto-fill every field.</p>
