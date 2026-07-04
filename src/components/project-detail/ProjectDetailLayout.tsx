@@ -684,6 +684,29 @@ function ProjectDetailLayoutInner({
           cardImageUrl={(project as any).card_image_url}
         />
 
+        {/* Owner-only master edit toggle. Off → all pencils hidden site-wide
+            on this project page. On → every pencil reappears in its original
+            spot. This button itself stays visible in both states. */}
+        {isOwner && (
+          <div className="absolute top-4 right-[168px] z-30">
+            <button
+              type="button"
+              onClick={toggleProjectEditMode}
+              data-no-contrast-guard
+              aria-pressed={projectEditMode}
+              title={projectEditMode ? "Exit edit mode" : "Edit this page"}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-[0.2em] shadow-lg border backdrop-blur-sm transition-colors ${
+                projectEditMode
+                  ? "bg-[#1E5F3F] text-white border-[#B89555]/60 hover:bg-[#194f35]"
+                  : "bg-[#F7F2EA]/95 text-[#1A1A1A] border-[#B89555]/60 hover:bg-[#EFE6D6]"
+              }`}
+            >
+              {projectEditMode ? <PencilOff className="w-3.5 h-3.5" /> : <PencilIcon className="w-3.5 h-3.5" />}
+              {projectEditMode ? "Done editing" : "Edit page"}
+            </button>
+          </div>
+        )}
+
         <div className="absolute inset-0">
           {heroImage?.url ? (
             <SafeImage
