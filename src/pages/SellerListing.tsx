@@ -899,7 +899,7 @@ Requirements:
                               >
                                 <Icon style={{ width: 18, height: 18, color: "#FFFFFF" }} strokeWidth={2.25} />
                               </span>
-                              <span className="font-semibold text-sm md:text-base leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                              <span className="font-semibold text-sm md:text-base leading-tight whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                                 {option.label}
                               </span>
                               {active && (
