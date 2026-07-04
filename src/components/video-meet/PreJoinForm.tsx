@@ -75,22 +75,26 @@ const PreJoinForm = ({
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      await supabase.functions.invoke('capture-lead', {
-        body: {
-          email: formData.email,
-          fullName: `${formData.firstName} ${formData.lastName}`.trim(),
-          phone: formData.phone,
-          nationality: formData.nationality,
-          source: 'video_meeting',
-          pageSource: window.location.pathname,
-          contactType: 'client',
-          message: 'Video meeting pre-join registration',
-          context: {
-            cameraEnabled: videoEnabled,
-            micEnabled: audioEnabled,
+      try {
+        await supabase.functions.invoke('capture-lead', {
+          body: {
+            email: formData.email,
+            fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+            phone: formData.phone,
+            nationality: formData.nationality,
+            source: 'video_meeting',
+            pageSource: window.location.pathname,
+            contactType: 'client',
+            message: 'Video meeting pre-join registration',
+            context: {
+              cameraEnabled: videoEnabled,
+              micEnabled: audioEnabled,
+            },
           },
-        },
-      });
+        });
+      } catch (error) {
+        console.warn('Video meeting lead capture failed:', error);
+      }
       onJoin({
         ...formData,
         cameraEnabled: videoEnabled,
