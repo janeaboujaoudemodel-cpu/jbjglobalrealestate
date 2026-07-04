@@ -30677,13 +30677,20 @@ html body #root [role="dialog"][data-advanced-filter-panel="true"] button:not(.j
 }
 
 html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic span,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"],
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] span,
-html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] svg {
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] {
   background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] .jj-pill-emerald-metallic svg,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] span,
+html body #root [role="dialog"][data-advanced-filter-panel="true"] [data-state="active"] svg {
+  background: transparent !important;
+  background-image: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -30703,10 +30710,14 @@ html body #root [role="dialog"][data-advanced-filter-panel="true"] [role="switch
 }
 
 html body #root [data-jj-utility-bar] .jj-header-premium-control,
+html body #root [data-jj-utility-bar] [data-mode-trigger="header"] {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%));
+}
+
+html body #root [data-jj-utility-bar] .jj-header-premium-control,
 html body #root [data-jj-utility-bar] .jj-header-premium-control *,
 html body #root [data-jj-utility-bar] [data-mode-trigger="header"],
 html body #root [data-jj-utility-bar] [data-mode-trigger="header"] * {
-  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%));
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
