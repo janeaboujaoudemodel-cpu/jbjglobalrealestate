@@ -11403,7 +11403,6 @@ select:focus-visible,
 /* --- Checkbox / Radio: emerald when checked --- */
 [role="checkbox"][data-state="checked"],
 [role="radio"][data-state="checked"],
-input[type="checkbox"]:checked + *,
 button[role="checkbox"][aria-checked="true"] {
   background-image: var(--gradient-emerald) !important;
   background-color: var(--emerald-1) !important;
@@ -29834,4 +29833,139 @@ html body #root .jj-map-enable-chip :is(svg,path,line,rect,circle,polyline,polyg
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+
+/* =====================================================================
+   PASS 226 — TRUE TERMINAL FORM / CHECKBOX / CONTRAST CONTRACT
+   This is intentionally last. It fixes the reported winning-rule failures:
+   - no blue/duplicate native checkbox ticks
+   - no emerald highlight painted onto checkbox labels
+   - form controls never touch panel borders
+   - thin premium gold hairlines instead of thick borders
+   - light/champagne dropdowns stay ink; emerald controls stay white
+   ===================================================================== */
+
+html body :is(form, [data-form-shell], .jbj-form-shell, [role="dialog"] form) {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+html body :is(form, [data-form-shell], .jbj-form-shell) :is(.jbj-form-field, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]) {
+  border-width: 1px !important;
+  border-color: rgba(184,149,85,0.36) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.58), 0 1px 0 rgba(184,149,85,0.08) !important;
+  transition: border-color 80ms ease, box-shadow 80ms ease, background-color 80ms ease, color 80ms ease !important;
+}
+
+html body :is(form, [data-form-shell], .jbj-form-shell) :is(.jbj-form-field, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]), textarea, select, [role="combobox"], [data-radix-select-trigger]):is(:hover,:focus,:focus-visible) {
+  border-color: rgba(184,149,85,0.72) !important;
+  box-shadow: 0 0 0 2px rgba(184,149,85,0.12), inset 0 1px 0 rgba(255,255,255,0.7) !important;
+}
+
+html body :is(form, [data-form-shell], .jbj-form-shell) :is(.rounded-xl.border, .rounded-2xl.border):has(:is(button,input,textarea,[role="combobox"],[role="checkbox"])) {
+  padding: max(1rem, var(--jj-form-inner-pad, 1rem)) !important;
+}
+
+html body :is([role="checkbox"], button[role="checkbox"], input[type="checkbox"]) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  accent-color: #064E3B !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  flex: 0 0 18px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(184,149,85,0.75) !important;
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.75), 0 1px 2px rgba(184,149,85,0.16) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
+  vertical-align: middle !important;
+}
+
+html body :is([role="checkbox"][data-state="checked"], button[role="checkbox"][aria-checked="true"], input[type="checkbox"]:checked) {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  background-color: #064E3B !important;
+  border-color: #064E3B !important;
+}
+
+html body :is([role="checkbox"], button[role="checkbox"]) :is(svg, path, polyline, line) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-width: 3.25px !important;
+}
+
+html body input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #FFFFFF;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+html body :is(label, .form-checkbox-row, [data-checkbox-row], .items-start:has([role="checkbox"]), .items-start:has(input[type="checkbox"])) {
+  -webkit-tap-highlight-color: transparent !important;
+  user-select: none !important;
+}
+
+html body input[type="checkbox"]:checked + * {
+  background: transparent !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-surface="champagne"], [data-surface="gold"], [data-surface="light"], [data-surface="page"], [data-surface="pearl"],
+  .surface-champagne, .surface-gold, .surface-light, .surface-page, .surface-pearl,
+  .jj-card-inner, .jj-layer-2, .jbj-form-popover, [cmdk-root], [role="menu"], [role="listbox"],
+  [data-radix-dropdown-menu-content], [data-radix-select-content], [data-radix-popover-content],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#fdfbf7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#f7f2ea]"], [class*="bg-[#EFE6D6]"], [class*="bg-[#efe6d6]"]
+):not([data-account-menu-content]):not([data-account-menu-content] *) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,[role="menuitem"],[role="option"]):not(:where(
+  [data-surface="emerald"], [data-surface="emerald"] *, [data-surface="dark"], [data-surface="dark"] *, [data-on-dark], [data-on-dark] *, [data-hero-dark], [data-hero-dark] *,
+  [data-emerald-action], [data-emerald-action] *, [data-emerald="true"], [data-emerald="true"] *, [data-emerald-surface="true"], [data-emerald-surface="true"] *,
+  .jj-emerald-action, .jj-emerald-action *, .jj-surface-emerald, .jj-surface-emerald *, .jj-cta-emerald, .jj-cta-emerald *, .jj-cta-primary, .jj-cta-primary *,
+  .jj-pill-emerald, .jj-pill-emerald *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *, .jj-chip-emerald, .jj-chip-emerald *, .jj-header-premium-control, .jj-header-premium-control *
+)) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  [data-surface="emerald"], [data-surface="dark"], [data-surface="ink"], [data-on-dark], [data-hero-dark],
+  [data-emerald-action], [data-emerald="true"], [data-emerald-surface="true"], [data-allow-dark-cta],
+  .jj-emerald-action, .jj-surface-emerald, .jj-cta-emerald, .jj-cta-primary, .jj-cta-dark, .jj-navy-cta,
+  .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-header-premium-control, .jj-filter-emerald-control,
+  .jj-map-layer-button, .jj-map-enable-chip, .jj-map-sort-content,
+  [data-section="payment"] .h-6.rounded-full > div,
+  [class*="bg-[#064E3B]"], [class*="bg-[#064e3b]"], [class*="bg-[#042C1C]"], [class*="bg-[#042c1c]"], [class*="bg-[#022C22]"], [class*="bg-[#022c22]"],
+  [class*="bg-emerald-900"], [class*="bg-emerald-800"], [class*="bg-emerald-700"], [class*="bg-green-900"], [class*="bg-green-800"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(
+  [data-surface="champagne"] *, [data-surface="gold"] *, [data-surface="light"] *, [data-surface="page"] *, [data-surface="pearl"] *, .surface-champagne *, .surface-gold *, .surface-light *, .jj-card-inner *, .jj-layer-2 *
+)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-account-menu-content] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+html body :is([role="menuitem"], [role="option"], [data-radix-collection-item], .jbj-form-option, [cmdk-item]) {
+  transition-duration: 60ms !important;
 }
