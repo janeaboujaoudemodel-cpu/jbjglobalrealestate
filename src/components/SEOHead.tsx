@@ -6,6 +6,11 @@ interface FAQItem {
   answer: string;
 }
 
+interface BreadcrumbItem {
+  name: string;
+  path: string;
+}
+
 interface SEOHeadProps {
   title: string;
   description?: string;
@@ -16,6 +21,8 @@ interface SEOHeadProps {
   noIndex?: boolean;
   /** Pass FAQ items to inject FAQPage JSON-LD for Google rich snippets */
   faqItems?: FAQItem[];
+  /** Pass ordered breadcrumb trail (Home -> current) to inject BreadcrumbList JSON-LD */
+  breadcrumbItems?: BreadcrumbItem[];
 }
 
 const BASE_URL = 'https://www.jbj.ae';
