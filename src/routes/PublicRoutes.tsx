@@ -25,6 +25,7 @@ const Properties = lazy(() => import("@/pages/Properties"));
 const ProjectDetail = lazy(() => import("@/pages/ProjectDetail"));
 const Communities = lazy(() => import("@/pages/Communities"));
 const CommunityDetail = lazy(() => import("@/pages/CommunityDetail"));
+const CommunityLandingPage = lazy(() => import("@/pages/communities/CommunityLandingPage"));
 const Developers = lazy(() => import("@/pages/Developers"));
 const DeveloperDetail = lazy(() => import("@/pages/DeveloperDetail"));
 const AreaGuides = lazy(() => import("@/pages/AreaGuides"));
