@@ -30271,3 +30271,21 @@ html body [role="dialog"][data-advanced-filter-panel="true"] :where(svg):not(.jj
   color: #1A1A1A !important;
   stroke: currentColor !important;
 }
+
+/* PASS 242 — Final ink override for Advanced Filter Panel: any text-white / allow-white
+   inside the champagne panel must render as ink. Emerald pills keep their own white. */
+html body [role="dialog"][data-advanced-filter-panel="true"] *:not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="active"]):not([data-state="active"] *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [role="dialog"][data-advanced-filter-panel="true"] input::placeholder,
+html body [role="dialog"][data-advanced-filter-panel="true"] textarea::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+  -webkit-text-fill-color: rgba(26,26,26,0.55) !important;
+}
+/* Header top strip: light champagne tint, not dark */
+html body [role="dialog"][data-advanced-filter-panel="true"] > div:first-child {
+  background-color: rgba(184,149,85,0.08) !important;
+  background-image: none !important;
+  border-bottom-color: rgba(184,149,85,0.35) !important;
+}
