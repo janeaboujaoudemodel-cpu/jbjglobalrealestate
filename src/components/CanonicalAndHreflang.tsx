@@ -128,25 +128,23 @@ const upsertOgUrl = (href: string | null) => {
 const injectHreflangTags = (canonicalHref: string) => {
   removeManagedTags();
 
-  // One alternate per supported language. Because content is served at the
-  // same URL regardless of selected language, every alternate points at the
-  // canonical URL. This is Google-compliant for single-URL multilingual sites.
-  SUPPORTED_LANGUAGES.forEach((lang) => {
+  // Content is served in English at a single URL (in-app language switching
+  // does not change the URL). To avoid Semrush / Google "hreflang conflict"
+  // warnings (same URL claimed for multiple distinct languages), emit only
+  // `en` + `x-default`. Both point to the canonical.
+  const codes: Array<[string, string]> = [
+    ["en", canonicalHref],
+    ["x-default", canonicalHref],
+  ];
+
+  codes.forEach(([code, href]) => {
     const link = document.createElement("link");
     link.setAttribute("rel", "alternate");
-    link.setAttribute("hreflang", lang.code);
-    link.setAttribute("href", canonicalHref);
+    link.setAttribute("hreflang", code);
+    link.setAttribute("href", href);
     link.setAttribute(HREFLANG_MARKER, "1");
     document.head.appendChild(link);
   });
-
-  // x-default — fallback for any locale not explicitly listed.
-  const xDefault = document.createElement("link");
-  xDefault.setAttribute("rel", "alternate");
-  xDefault.setAttribute("hreflang", "x-default");
-  xDefault.setAttribute("href", canonicalHref);
-  xDefault.setAttribute(HREFLANG_MARKER, "1");
-  document.head.appendChild(xDefault);
 };
 
 export const CanonicalAndHreflang = () => {

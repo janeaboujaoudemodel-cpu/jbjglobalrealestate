@@ -1,90 +1,58 @@
 
 ## Goal
+Resolve every failing check in the Semrush Site Audit for `jbj.ae` (Jul 4 2026 export), verify visually + technically with Playwright + curl, and finish the two loose ends from the last pillar-article turn (BuyerGuide related-reading link + hub links landed correctly).
 
-Implement the Semrush On-Page SEO Checker brief for primary keyword **"real estate"** (UAE) by shipping a new pillar article and applying every actionable On-Page idea Semrush surfaces across its seven categories: Strategy, SERP Features, Content, Semantic, Backlinks, Technical, User Experience.
+## Failing issues to fix (from `jbj.ae_issues_20260704.csv`)
 
-## 1. New pillar article
+| Priority | Issue | Failed | Fix |
+|---|---|---|---|
+| P0 | **Pages not crawled (80/98)** | 80 | Add prerendering (`vite-plugin-prerender-spa` or static route snapshots) for top public routes so bots get HTML, not empty `#root`. If not viable this turn, at minimum ship a machine-readable `/sitemap.xml` + `llms.txt` + rich static `<head>` fallbacks per route class. |
+| P0 | **Hreflang conflicts (51)** | 51 | Audit `CanonicalAndHreflang.tsx` — remove duplicate `x-default` + duplicate `en/ar` emission when both index.html static tags and Helmet inject. Keep only Helmet-emitted set. |
+| P0 | **Structured data markup errors (7)** | 7 | Validate each JSON-LD block (Article, FAQPage, BreadcrumbList, HowTo, Organization, LocalBusiness) with `schema.org` validator; fix missing required fields (`author.@type`, `image`, `datePublished`, `publisher.logo.url`). |
+| P0 | **JSON-LD absent on all crawled pages** (Semrush structured-data export shows 0 across 80 URLs) | 80 | Root cause: Helmet injects client-side; Semrush's crawler doesn't execute JS. Emit critical schema (Organization, WebSite, BreadcrumbList) in **static `index.html`** already (kept) and add per-route static snapshots via prerender for Article/FAQ pages. |
+| P1 | **Duplicate title tag (4)** + **Duplicate meta description (4)** | 4+4 | Identify the 4 URL pairs from the mega-export and give each a unique `<title>`/`meta description` in its page component's `SEOHead`. |
+| P1 | **Duplicate content (4)** | 4 | Same 4 URLs — add unique intro paragraph + canonical self-reference. |
+| P1 | **Incorrect pages found in sitemap.xml (1)** | 1 | Remove disallowed/private route from `scripts/generate-sitemap.ts` and regenerate `public/sitemap.xml`. |
+| P1 | **Issues with incorrect hreflang links (2)** | 2 | Fix the 2 broken hreflang target URLs (likely stale slugs). |
+| P1 | **Title element too long (1)** | 1 | Trim to ≤60 chars in the offending page component. |
+| P2 | **Multiple h1 tags (7)** | 7 | Audit 7 pages, demote extra `<h1>` to `<h2>`. |
+| P2 | **Low text-to-HTML ratio (7)** + **Low word count (4)** | 7+4 | Add real content (≥400 words) to the 4 thin pages; identified from mega-export. |
+| P2 | **Uncached JS/CSS (7)** + **Unminified JS/CSS (7)** | 7+7 | Add Vite `build.minify: 'esbuild'` (default already), add long-lived `Cache-Control` headers for hashed assets via a small `public/_headers`-equivalent note (Lovable hosting handles automatically — verify by curl and mark N/A if already served with immutable headers). |
+| P2 | **Temporary redirects (2)** | 2 | Convert two 302s to 301 via router `<Navigate replace>` (already replace, but Semrush treats client-side redirects as 302 — add server-side note or accept). |
+| P2 | **Blocked from crawling (7 NOTICE)** | 7 | Review `robots.txt` disallow list; ensure no accidentally blocked public URL. |
 
-**Route:** `/insights/future-of-real-estate-2026` (also aliased via `/news/future-of-real-estate-2026` redirect so news-hub linking still works).
+## Previous-turn loose ends
+1. Re-verify with Playwright that:
+   - `/news` shows the new pillar-insight gold-emerald strip at top.
+   - `/investor-hub` shows "New: The Future of Real Estate…" sub-line.
+   - `/buyer-guide` Next-Step card shows "Related reading:" link.
+2. Confirm `/insights/future-of-real-estate-2026` renders with all 4 JSON-LD blocks (Article, FAQPage, BreadcrumbList, HowTo) and canonical `https://www.jbj.ae/…`.
+3. If any of the 3 hub links didn't render (component structure moved), reinsert.
 
-**File:** `src/pages/insights/FutureOfRealEstate2026.tsx` (lazy-loaded in `PublicRoutes.tsx`).
+## Google Search Console
+- Run URL Inspection API on the pillar article + homepage to confirm indexing eligibility, mobile usability, and rich-results validity.
+- Submit `/insights/future-of-real-estate-2026` to GSC via curl (`urlNotifications:publish` is deprecated; instead confirm site is verified and pillar is in sitemap — Google will crawl within days).
 
-**Head (via `SEOHead`):**
-- Title: `The Future of Real Estate: 5 Trends to Watch in 2026 | JBJ`
-- Meta description (verbatim from brief, 155 chars): "Discover the future of real estate with key trends for 2026, including sustainable practices and the growth of luxury properties. Learn more!"
-- Canonical: `https://jbj.ae/insights/future-of-real-estate-2026`
-- OG + Twitter card, article-type
-- Breadcrumb items: Home → Insights → Future of Real Estate 2026
+## Files to touch
+- `src/components/CanonicalAndHreflang.tsx` — dedupe hreflang emission.
+- `src/pages/insights/FutureOfRealEstate2026.tsx` — validate JSON-LD schemas, add missing fields.
+- `src/pages/{4-duplicate-urls}.tsx` — unique titles/descriptions/intro paragraph (URLs identified from mega-export in build phase).
+- `src/pages/{7-multi-h1-urls}.tsx` — demote extra h1.
+- `src/pages/{4-thin-content-urls}.tsx` — expand copy to 400+ words each.
+- `scripts/generate-sitemap.ts` + `public/sitemap.xml` — remove 1 incorrect entry, regenerate.
+- `public/robots.txt` — no changes unless a public route is blocked.
+- `index.html` — add static `WebSite` + `BreadcrumbList` JSON-LD fallback for crawler visibility (if not already present via `GlobalSEO`).
+- `public/llms.txt` — create (Semrush notice; helps AI crawlers).
 
-**Body structure** (matches brief exactly — single H1, five H2 trends, two H3 sub-sections each, intro + conclusion):
+## Validation (Playwright + curl, before sign-off)
+1. `curl -s https://www.jbj.ae/insights/future-of-real-estate-2026 | grep -c "application/ld+json"` → ≥4.
+2. Playwright: visit `/news`, `/investor-hub`, `/buyer-guide`, `/insights/future-of-real-estate-2026`; screenshot each; assert hub links present, no console errors, correct h1/title.
+3. For each of the 4 duplicate-title URLs, curl the rendered HTML and assert `<title>` is unique.
+4. Fetch `/sitemap.xml`, assert entry count matches generator, no disallowed paths present.
+5. GSC URL Inspection API on pillar + homepage → assert `verdict: PASS` on rich results.
+6. Re-run `seo_chat--list_findings` after edits; mark all addressed findings fixed.
 
-```
-H1  The Future of Real Estate: 5 Trends to Watch in 2026
-    Introduction
-H2  Trend 1: Rise of Sustainable Real Estate
-  H3  Importance of Green Building Practices
-  H3  Impact on Property Values
-H2  Trend 2: Growth of Luxury Real Estate
-  H3  Market Analysis
-  H3  Demographic Shifts Driving Luxury Demand
-H2  Trend 3: Increase in Digital Real Estate Brokerage
-  H3  Technology in Real Estate Transactions
-  H3  Virtual Tours and AI in Property Management
-H2  Trend 4: Emerging Markets in Commercial Real Estate
-  H3  Opportunities in Untapped Areas
-  H3  Future of Retail Spaces in Urban Areas
-H2  Trend 5: Shift Towards Remote Work & Residential Impact
-  H3  Demand for Larger Homes
-  H3  Transformation of Urban and Suburban Living
-H2  Conclusion
-  H3  Summary of Key Trends
-  H3  Call to Action for Investors & Homebuyers
-H2  FAQ (8 questions, powers FAQPage schema)
-```
-
-**Word count target:** 1,800–2,200 words (Semrush Content ideas typically recommend matching top-10 SERP average, which sits ~1,900 for this term).
-
-**Secondary-keyword coverage:** naturally weave in every keyword from the brief (real estate, dubai real estate, real estate companies in dubai, real estate agents in dubai, luxury real estate, sustainable real estate, commercial real estate, property management services, property investment, investment properties, real estate valuation, real estate development, real estate brokerage, residential properties, first-time homebuyers, real estate consultants, dubai real estate news, dubai real estate centre + registration-trustee terms cited in context of DLD flow).
-
-## 2. Semrush On-Page ideas — the 7 categories
-
-| Category | Action |
-|---|---|
-| **Strategy** | Pillar article targets one high-intent head term ("real estate") plus 24 secondaries. Internal link hub from `/news`, `/buyer-guide`, `/investor-hub`, and homepage insights strip. |
-| **SERP Features** | FAQPage JSON-LD (8 Q&A), Article JSON-LD with `author`, `datePublished`, `image`, `publisher`. BreadcrumbList JSON-LD. HowTo-worthy sub-section for "How to buy Dubai real estate in 2026" → HowTo schema. |
-| **Content** | 1,800+ words, ≥1 image per H2, semantic keyword coverage, TL;DR box at top, jump-to-section TOC, updated `datePublished` = 2026-07-05. |
-| **Semantic** | Include LSI terms: RERA, DLD, Oqood, off-plan, freehold, yield, cap rate, ROI, Golden Visa, PropTech. |
-| **Backlinks** | Article is the anchor asset for the Tier-2 press pitches already listed in `.lovable/backlink-prospects.md`. Note the URL in that file. |
-| **Technical** | Preload hero image, `loading="lazy"` on below-fold images, `<link rel="canonical">`, hreflang via existing `CanonicalAndHreflang`, add to `scripts/generate-sitemap.ts` (priority 0.9, changefreq monthly), regenerate `public/sitemap.xml`. |
-| **User Experience** | Sticky TOC on desktop, reading progress bar, 60ch line length, champagne/ink palette per design system (no new tokens), CTA card to `/contact` and `/properties`. |
-
-## 3. Files to change
-
-- **Create** `src/pages/insights/FutureOfRealEstate2026.tsx` — full article component
-- **Create** `src/data/insights/futureOfRealEstate2026.ts` — content + FAQ + HowTo data (keeps component lean)
-- **Edit** `src/routes/PublicRoutes.tsx` — lazy route + `/news/future-of-real-estate-2026` redirect alias
-- **Edit** `scripts/generate-sitemap.ts` — add new entry
-- **Edit** `public/sitemap.xml` — regenerate
-- **Edit** `.lovable/backlink-prospects.md` — reference the pillar URL as anchor asset
-
-## 4. Validation (E2E before signing off)
-
-Playwright script (`/tmp/browser/rank/`) will:
-1. Visit `http://localhost:8080/insights/future-of-real-estate-2026`
-2. Screenshot hero + mid-article + FAQ
-3. Assert:
-   - single `<h1>` matches brief title
-   - `<title>` and `meta[name=description]` match brief
-   - `link[rel=canonical]` = `https://jbj.ae/insights/future-of-real-estate-2026`
-   - JSON-LD blocks: `Article`, `FAQPage`, `BreadcrumbList`, `HowTo` all parse and pass `@type` checks
-   - Every secondary keyword from the brief appears at least once in visible text
-   - No console errors, no broken images
-4. Fetch `/sitemap.xml`, assert the new URL is present.
-
-Only mark complete after all assertions pass and screenshots are visually verified.
-
-## 5. Out of scope
-
-- No changes to unrelated pages, routing, or design tokens
-- No new components beyond the article + data file
-- No AI-generated hero image unless the user asks — will use an existing dubai-skyline asset already in `src/assets`
+## Out of scope
+- Full SSR migration (would fix "Pages not crawled" definitively but is multi-day). Instead we ship static-head + JSON-LD fallbacks in `index.html` and per-route prerender where cheap.
+- Semrush Position Tracking PDF ideas (separate content-marketing effort).
+- New pages beyond thin-content expansion of existing 4 URLs.
