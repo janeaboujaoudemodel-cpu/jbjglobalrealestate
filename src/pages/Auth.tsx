@@ -134,6 +134,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
+    if ((mode === "signup" || mode === "reset") && !passwordSafe) {
+      newErrors.password = "This password appears in public breach lists. Choose a stronger, unique one.";
+    }
+
     if (mode === "verify-otp" && (!/^\d{6}$/.test(otpCode))) {
       newErrors.otp = "Enter the 6-digit code from your email";
     }
