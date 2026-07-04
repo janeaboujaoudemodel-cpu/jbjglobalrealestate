@@ -853,7 +853,7 @@ Requirements:
                             <label
                               key={option.value}
                               htmlFor={option.value}
-                              className="relative flex items-center gap-2.5 rounded-xl px-3 py-2.5 cursor-pointer transition-all min-h-[56px]"
+                              className="relative flex items-center gap-3 rounded-xl px-4 py-3 cursor-pointer transition-all min-h-[64px]"
                               style={{
                                 background: active
                                   ? "linear-gradient(135deg, #059669 0%, #047857 100%)"
