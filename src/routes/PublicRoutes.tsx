@@ -245,7 +245,10 @@ export const PublicRoutes = () => (
     <Route path="/project/:slug" element={<ProjectDetail />} />
     <Route path="/communities" element={<Communities />} />
     <Route path="/community/:slug" element={<CommunityDetail />} />
-    <Route path="/communities/:slug-guide" element={<CommunityLandingPage />} />
+    <Route path="/communities/palm-jumeirah-guide" element={<CommunityLandingPage slug="palm-jumeirah" />} />
+    <Route path="/communities/downtown-dubai-guide" element={<CommunityLandingPage slug="downtown-dubai" />} />
+    <Route path="/communities/dubai-marina-guide" element={<CommunityLandingPage slug="dubai-marina" />} />
+    <Route path="/communities/business-bay-guide" element={<CommunityLandingPage slug="business-bay" />} />
     <Route path="/developers" element={<Developers />} />
     <Route path="/developer/:slug" element={<DeveloperDetail />} />
     <Route path="/developers/:slug" element={<RedirectWithParams to="/developer" />} />
