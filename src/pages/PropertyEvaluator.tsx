@@ -1448,7 +1448,7 @@ const PropertyEvaluator = () => {
               </Card>
 
               {/* Property Photos */}
-              <Card className={`${blueCardSecondary} md:col-span-2`}>
+              <Card className={`${blueCardSecondary} 2xl:col-span-2`}>
                 <CardHeader>
                   <CardTitle className="text-[#1A1A1A] flex items-center gap-2">
                     <ImageIcon className="w-5 h-5 text-[#B89555]" />
