@@ -30436,3 +30436,40 @@ html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d) [data-global-search-modal]
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 248 — terminal currency field lock.
+   Beats old highlighted/checked currency rules: no highlight on open/selected;
+   only actual pointer hover/focus-visible paints emerald. */
+html body:not(#jj-currency-a):not(#jj-currency-b):not(#jj-currency-c):not([data-ai-tools-scope="true"])
+  [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row]:not(:hover):not(:focus-visible),
+html body:not(#jj-currency-a):not(#jj-currency-b):not(#jj-currency-c):not([data-ai-tools-scope="true"])
+  [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row]:not(:hover):not(:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
+  background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body:not(#jj-currency-a):not(#jj-currency-b):not(#jj-currency-c):not([data-ai-tools-scope="true"])
+  [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row]:is(:hover,:focus-visible),
+html body:not(#jj-currency-a):not(#jj-currency-b):not(#jj-currency-c):not([data-ai-tools-scope="true"])
+  [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
+  [data-currency-menu-content][data-currency-menu-content]
+  [data-currency-row][data-currency-row]:is(:hover,:focus-visible) :is(*, span, div, p, small, strong, em, b, svg, path, line, polyline, polygon, rect, circle) {
+  background-color: #064E3B !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
