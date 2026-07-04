@@ -188,20 +188,20 @@ const Founder = () => {
 
       {/* SECTION 1: FOUNDER - 3-Layer System */}
       <section id="leadership" className="py-10 md:py-14 bg-[#FDFBF7] relative overflow-hidden">
-        <div className="jj-layer-2" data-surface="champagne">
-          <div className="jj-layer-active rounded-2xl p-4 sm:p-6 md:p-8" data-surface="champagne">
+        <div className="jj-content-track">
+          <div className="jj-emerald-card rounded-2xl p-4 sm:p-6 md:p-8 max-w-[1100px] mx-auto overflow-hidden" data-surface="emerald" data-no-contrast-guard>
             <motion.div 
-              className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-center"
+              className="grid lg:grid-cols-[minmax(260px,380px)_minmax(0,1fr)] gap-8 lg:gap-10 items-center min-w-0"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
             >
               {/* Premium Single Photo - Left */}
-              <motion.div className="lg:col-span-5 order-2 lg:order-1" variants={scaleIn}>
-                <div className="relative">
+              <motion.div className="order-2 lg:order-1 min-w-0" variants={scaleIn}>
+                <div className="relative max-w-[340px] mx-auto">
                   {/* Premium Gold frame accent */}
-                  <div className="absolute -inset-3 bg-gradient-to-br from-gold/15 via-transparent to-gold/10 rounded-3xl" />
+                  <div className="absolute -inset-3 rounded-3xl" style={{ background: 'rgba(255,255,255,0.10)' }} />
                   <div className="absolute -top-1 -left-1 w-16 h-16 border-l-[3px] border-t-[3px] border-[#B89555] rounded-tl-3xl" />
                   <div className="absolute -bottom-1 -right-1 w-16 h-16 border-r-[3px] border-b-[3px] border-[#B89555] rounded-br-3xl" />
                   
@@ -230,9 +230,9 @@ const Founder = () => {
               </motion.div>
               
               {/* Text Content - Right */}
-              <motion.div className="lg:col-span-7 order-1 lg:order-2 space-y-6" variants={fadeInUp}>
+              <motion.div className="order-1 lg:order-2 space-y-6 min-w-0" variants={fadeInUp}>
                 <div className="mb-8">
-                  <span className="inline-flex items-center gap-2 text-[#1A1A1A] text-sm uppercase tracking-[0.4em]">
+                  <span className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.4em]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                     <Award className="w-4 h-4" />
                     Founder
                   </span>
@@ -240,54 +240,55 @@ const Founder = () => {
                 </div>
                 
                 <h2 
-                  className="text-[#1A1A1A] text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
+                  style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                 >
                   Jane Bou
                   <br />
-                  <span className="text-[#1A1A1A]">Jaoude</span>
+                  <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Jaoude</span>
                 </h2>
                 
-                <p className="text-[#1A1A1A]/70 text-lg mb-2">جاين بو جودة</p>
+                <p className="text-lg mb-2" style={{ color: 'rgba(255,255,255,0.82)', WebkitTextFillColor: 'rgba(255,255,255,0.82)' }}>جاين بو جودة</p>
                 
-                <p className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em] mb-6 font-medium">
+                <p className="text-sm uppercase tracking-[0.3em] mb-6 font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                   Founder & Chief Executive Officer
                 </p>
                 
                 {/* Bio Card - Champagne Inner */}
-                <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-6 space-y-4" data-surface="champagne">
-                  <p className="text-lg md:text-xl font-light text-[#1A1A1A]">
+                <div className="border border-white/20 rounded-xl p-6 space-y-4 bg-white/10" data-surface="emerald" data-no-contrast-guard>
+                  <p className="text-lg md:text-xl font-light" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                     Jane Bou Jaoude is the Founder and Chief Executive Officer of JBJ Global Real Estate, a Dubai mainland licensed real estate brokerage authorized to BUY, SELL, and RENT properties across the UAE.
                   </p>
-                  <p className="text-base text-[#1A1A1A]/70">
+                  <p className="text-base" style={{ color: 'rgba(255,255,255,0.82)', WebkitTextFillColor: 'rgba(255,255,255,0.82)' }}>
                     As Founder & CEO, she oversees the company's strategic direction, regulatory compliance, operational governance, partner relationships, and market positioning. All brokerage activities, advisory frameworks, and platform standards operate under executive oversight to ensure professionalism, transparency, and client protection.
                   </p>
                 </div>
                 
                 {/* Role Focus Cards */}
                 <div className="grid grid-cols-2 gap-3 md:gap-4 mt-6">
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
-                      <Globe className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
+                  <div className="border border-white/20 rounded-xl p-3 md:p-4 text-center transition-all hover:-translate-y-1 bg-white/10" data-surface="emerald">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border border-white/20" data-surface="emerald">
+                      <Globe className="w-4 h-4 md:w-5 md:h-5" style={{ color: '#FFFFFF' }} />
                     </div>
-                    <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Strategic Leadership</p>
+                    <p className="text-[10px] md:text-xs font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Strategic Leadership</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
-                      <Shield className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
+                  <div className="border border-white/20 rounded-xl p-3 md:p-4 text-center transition-all hover:-translate-y-1 bg-white/10" data-surface="emerald">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border border-white/20" data-surface="emerald">
+                      <Shield className="w-4 h-4 md:w-5 md:h-5" style={{ color: '#FFFFFF' }} />
                     </div>
-                    <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Regulatory Alignment</p>
+                    <p className="text-[10px] md:text-xs font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Regulatory Alignment</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
-                      <Scale className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
+                  <div className="border border-white/20 rounded-xl p-3 md:p-4 text-center transition-all hover:-translate-y-1 bg-white/10" data-surface="emerald">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border border-white/20" data-surface="emerald">
+                      <Scale className="w-4 h-4 md:w-5 md:h-5" style={{ color: '#FFFFFF' }} />
                     </div>
-                    <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Internal Controls</p>
+                    <p className="text-[10px] md:text-xs font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Internal Controls</p>
                   </div>
-                  <div className="jj-card-inner border-2 border-[#B89555] rounded-xl p-3 md:p-4 text-center transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1" data-surface="champagne">
-                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border-2 border-[#B89555] bg-gradient-to-br from-champagne-light to-champagne" data-surface="champagne">
-                      <Users className="w-4 h-4 md:w-5 md:h-5 text-[#1A1A1A]" />
+                  <div className="border border-white/20 rounded-xl p-3 md:p-4 text-center transition-all hover:-translate-y-1 bg-white/10" data-surface="emerald">
+                    <div className="w-8 h-8 md:w-10 md:h-10 mx-auto mb-2 md:mb-3 rounded-lg md:rounded-xl flex items-center justify-center border border-white/20" data-surface="emerald">
+                      <Users className="w-4 h-4 md:w-5 md:h-5" style={{ color: '#FFFFFF' }} />
                     </div>
-                    <p className="text-[#1A1A1A] text-[10px] md:text-xs font-medium">Partner Coordination</p>
+                    <p className="text-[10px] md:text-xs font-medium" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Partner Coordination</p>
                   </div>
                 </div>
               </motion.div>
