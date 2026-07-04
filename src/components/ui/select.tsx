@@ -212,34 +212,73 @@ SelectLabelDark.displayName = "SelectLabelDark";
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Item
-    ref={ref}
-      data-no-contrast-guard
-    className={cn(
-      "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#1A1A1A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
-      "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      "hover:text-white",
-      "focus:text-white",
-      "data-[highlighted]:text-white",
-      "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
-      "data-[state=checked]:text-white data-[state=checked]:font-semibold",
-      className,
-    )}
-    {...props}
-  >
-    <SelectPrimitive.ItemText className="min-w-0 w-full flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug text-left overflow-visible">
-      {children}
-    </SelectPrimitive.ItemText>
-    <span className="absolute right-2 flex h-4 w-4 items-center justify-center">
-      <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4" strokeWidth={3} />
-      </SelectPrimitive.ItemIndicator>
-    </span>
+>(({ className, children, ...props }, ref) => {
+  const innerRef = React.useRef<HTMLDivElement | null>(null);
+  const setRef = React.useCallback((node: HTMLDivElement | null) => {
+    innerRef.current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+  }, [ref]);
 
-  </SelectPrimitive.Item>
-));
+  React.useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    const EMERALD = "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)";
+    const paint = () => {
+      const active =
+        el.getAttribute("data-state") === "checked" ||
+        el.hasAttribute("data-highlighted") ||
+        el.getAttribute("aria-selected") === "true";
+      if (active) {
+        el.style.setProperty("background-image", EMERALD, "important");
+        el.style.setProperty("background-color", "#042C1C", "important");
+        el.style.setProperty("color", "#FFFFFF", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+        el.style.setProperty("border-radius", "8px", "important");
+      } else {
+        el.style.removeProperty("background-image");
+        el.style.removeProperty("background-color");
+        el.style.removeProperty("color");
+        el.style.removeProperty("-webkit-text-fill-color");
+        el.style.removeProperty("border-radius");
+      }
+    };
+    paint();
+    const mo = new MutationObserver(paint);
+    mo.observe(el, { attributes: true, attributeFilter: ["data-state", "data-highlighted", "aria-selected"] });
+    return () => mo.disconnect();
+  }, []);
+
+  return (
+    <SelectPrimitive.Item
+      ref={setRef}
+      data-no-contrast-guard
+      data-jbj-active-paint="true"
+      className={cn(
+        "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#1A1A1A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
+        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "hover:text-white",
+        "focus:text-white",
+        "data-[highlighted]:text-white",
+        "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
+        "data-[state=checked]:text-white data-[state=checked]:font-semibold",
+        className,
+      )}
+      {...props}
+    >
+      <SelectPrimitive.ItemText className="min-w-0 w-full flex-1 whitespace-normal break-words [overflow-wrap:anywhere] leading-snug text-left overflow-visible">
+        {children}
+      </SelectPrimitive.ItemText>
+      <span className="absolute right-2 flex h-4 w-4 items-center justify-center">
+        <SelectPrimitive.ItemIndicator>
+          <Check className="h-4 w-4" strokeWidth={3} />
+        </SelectPrimitive.ItemIndicator>
+      </span>
+    </SelectPrimitive.Item>
+  );
+});
 SelectItem.displayName = SelectPrimitive.Item.displayName;
+
 
 // === DARK SelectItem ===
 const SelectItemDark = React.forwardRef<
