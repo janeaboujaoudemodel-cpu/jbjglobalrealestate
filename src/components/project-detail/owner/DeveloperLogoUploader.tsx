@@ -70,6 +70,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
             aria-label="Change logo"
             title="Change logo"
             data-no-contrast-guard
+            data-owner-pencil
             className="absolute -top-5 -right-5 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] shadow-sm"
           >
             {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Pencil className="w-3.5 h-3.5" />}
