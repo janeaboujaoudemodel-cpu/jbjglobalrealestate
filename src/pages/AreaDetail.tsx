@@ -206,6 +206,11 @@ const AreaDetail = () => {
         description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
         keywords={`${area.name} properties, ${area.emirate} real estate`}
         canonicalPath={`/area/${area.slug}`}
+        breadcrumbItems={[
+          { name: 'Home', path: '/' },
+          { name: 'Areas', path: '/areas' },
+          { name: area.name, path: `/area/${area.slug}` },
+        ]}
       />
       <SchemaEntity kind="community" slug={area.slug || slug || ""} pageTitle={`${area.name} — Properties in ${area.emirate}`} />
 
