@@ -371,6 +371,11 @@ const DeveloperDetail = () => {
         description={(developer.description || `Explore ${developer.name} property projects in Dubai and the UAE. ${developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+ units delivered. ` : ""}Off-plan and ready properties on JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
         canonicalPath={`/developer/${slug}`}
         ogImage={developer.feature_image_url || developer.logo_url}
+        breadcrumbItems={[
+          { name: 'Home', path: '/' },
+          { name: 'Developers', path: '/developers' },
+          { name: developer.name, path: `/developer/${slug}` },
+        ]}
       />
       <SchemaEntity kind="developer" slug={slug || ""} pageTitle={`${developer.name} — Live Projects in the UAE`} />
       {/* Hero section - always visible */}
