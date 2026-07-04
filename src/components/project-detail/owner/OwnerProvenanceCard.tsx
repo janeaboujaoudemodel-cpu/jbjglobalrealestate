@@ -163,7 +163,7 @@ export default function OwnerProvenanceCard({
           <span className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70">
             Owner · Provenance
           </span>
-          <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-semibold text-[#1A1A1A]/70 bg-[#EFE6D6] px-2 py-0.5 rounded-md border border-[#B89555]/40">
+          <span data-emerald-action="true" className="allow-white ml-auto inline-flex items-center gap-1 text-[10px] font-semibold text-white bg-[#064E3B] px-2 py-0.5 rounded-md border border-transparent">
             <Database className="w-3 h-3" /> Private
           </span>
         </div>

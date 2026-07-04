@@ -29060,3 +29060,160 @@ html body[data-ai-tools-scope="true"] [data-radix-popper-content-wrapper] :is(
     min-width: 0 !important;
   }
 }
+
+/* =====================================================================
+   FINAL HERO + EMERALD CONTRAST LOCK — project-wide runtime proof target.
+   - Project hero photo starts at the post-sidebar content edge and spans to
+     the post-sidebar right edge without any inner gutter.
+   - Any own-emerald surface/control renders pure white text and icons only.
+   Keep this last so older champagne/ink guards cannot repaint emerald UI.
+   ===================================================================== */
+html body #root main.jj-main-shell section.jj-project-hero {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+html body #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0,
+html body #root main.jj-main-shell section.jj-project-hero > .absolute.inset-0 :is(img, picture, video) {
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 0 !important;
+}
+
+html body :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-header-premium-control,
+  .jj-filter-emerald-control,
+  .jj-emerald-action,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#064e3b]"],
+  [class~="bg-[#065F46]"],
+  [class~="bg-[#065f46]"],
+  [class~="bg-[#042C1C]"],
+  [class~="bg-[#042c1c]"],
+  [class~="bg-[#022C22]"],
+  [class~="bg-[#022c22]"],
+  [class~="bg-emerald-900"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-700"],
+  [class~="bg-green-900"],
+  [class~="bg-green-800"],
+  [style*="background" i][style*="#064E3B" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#065F46" i],
+  [style*="background" i][style*="#065f46" i],
+  [style*="background" i][style*="#042C1C" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022C22" i],
+  [style*="background" i][style*="#022c22" i]
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-header-premium-control,
+  .jj-filter-emerald-control,
+  .jj-emerald-action,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [class~="bg-[#064E3B]"],
+  [class~="bg-[#064e3b]"],
+  [class~="bg-[#065F46]"],
+  [class~="bg-[#065f46]"],
+  [class~="bg-[#042C1C]"],
+  [class~="bg-[#042c1c]"],
+  [class~="bg-[#022C22]"],
+  [class~="bg-[#022c22]"],
+  [class~="bg-emerald-900"],
+  [class~="bg-emerald-800"],
+  [class~="bg-emerald-700"],
+  [class~="bg-green-900"],
+  [class~="bg-green-800"],
+  [style*="background" i][style*="#064E3B" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#065F46" i],
+  [style*="background" i][style*="#065f46" i],
+  [style*="background" i][style*="#042C1C" i],
+  [style*="background" i][style*="#042c1c" i],
+  [style*="background" i][style*="#022C22" i],
+  [style*="background" i][style*="#022c22" i]
+) :where(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,svg,[class*="lucide"]):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-layer-2):not(.jj-layer-2 *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body :is(
+  .jj-surface-emerald,
+  .jj-official-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-header-premium-control,
+  .jj-filter-emerald-control,
+  .jj-emerald-action,
+  [data-surface="emerald"],
+  [data-cta="primary"],
+  [data-filter-selected="true"],
+  [data-emerald-action="true"],
+  [data-emerald-ok="button"],
+  [data-emerald-ok="pill"],
+  [data-emerald-ok="icon"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"]
+) :where(svg *, path, line, polyline, polygon, rect, circle, ellipse) {
+  stroke: #FFFFFF !important;
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
