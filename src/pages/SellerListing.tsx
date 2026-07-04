@@ -867,7 +867,24 @@ Requirements:
                               <RadioGroupItem
                                 value={option.value}
                                 id={option.value}
+                                aria-label={option.label}
                                 className="sr-only"
+                                style={{
+                                  position: "absolute",
+                                  width: 1,
+                                  height: 1,
+                                  padding: 0,
+                                  margin: -1,
+                                  overflow: "hidden",
+                                  clip: "rect(0 0 0 0)",
+                                  clipPath: "inset(50%)",
+                                  whiteSpace: "nowrap",
+                                  border: 0,
+                                  minWidth: 0,
+                                  minHeight: 0,
+                                  opacity: 0,
+                                  pointerEvents: "none",
+                                }}
                               />
                               <span
                                 aria-hidden
