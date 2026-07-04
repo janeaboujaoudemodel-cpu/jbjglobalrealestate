@@ -10,6 +10,8 @@ interface LeadData {
   birthday?: string;
   currentLocation?: string;
   ageRange?: string;
+  message?: string;
+  context?: Record<string, unknown>;
 }
 
 interface UseLeadCaptureResult {
@@ -80,6 +82,8 @@ export const useLeadCapture = (): UseLeadCaptureResult => {
           birthday: data.birthday,
           currentLocation: data.currentLocation,
           ageRange: data.ageRange,
+          message: data.message,
+          context: data.context,
           source: source,
           pageSource: typeof window !== 'undefined' ? window.location.pathname : null,
           contactType: contactType,

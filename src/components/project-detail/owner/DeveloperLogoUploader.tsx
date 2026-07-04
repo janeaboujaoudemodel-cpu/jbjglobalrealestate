@@ -42,15 +42,17 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
   };
 
   return (
-    <div
-      data-keep-gold
-      className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 relative"
-    >
-      {isValidDeveloperLogoUrl(logoUrl) ? (
-        <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
-      ) : (
-        <span className="text-[#1A1A1A] font-bold text-base text-center px-2">{developerName}</span>
-      )}
+    <div className="relative flex-shrink-0 w-36 h-36">
+      <div
+        data-keep-gold
+        className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden"
+      >
+        {isValidDeveloperLogoUrl(logoUrl) ? (
+          <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
+        ) : (
+          <span className="text-[#1A1A1A] font-bold text-base text-center px-3 leading-snug w-full">{developerName}</span>
+        )}
+      </div>
 
 
       {canEdit && (
@@ -68,7 +70,7 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
             aria-label="Change logo"
             title="Change logo"
             data-no-contrast-guard
-            className="absolute -top-2 -right-2 z-10 inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] shadow-sm"
+            className="absolute -top-3 -right-3 z-10 inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/50 text-[#1A1A1A] shadow-sm"
           >
             {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Pencil className="w-3.5 h-3.5" />}
           </button>

@@ -36,6 +36,153 @@ interface LeadCaptureRequest {
   intent?: LeadIntent;
   partnerServiceType?: PartnerServiceType;
   partnerConsentGiven?: boolean;
+  message?: string;
+  context?: Record<string, unknown>;
+}
+
+function escapeHtml(input: string | null | undefined): string {
+  return String(input ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function safeContext(input: unknown): Record<string, unknown> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(input as Record<string, unknown>).slice(0, 30)) {
+    const cleanKey = sanitizeString(key, 60);
+    if (!cleanKey) continue;
+    if (typeof value === "string") out[cleanKey] = sanitizeString(value, 300);
+    else if (typeof value === "number" || typeof value === "boolean") out[cleanKey] = value;
+    else if (value == null) out[cleanKey] = null;
+    else out[cleanKey] = sanitizeString(JSON.stringify(value), 500);
+  }
+  return out;
+}
+
+function buildSuggestedResponse(params: {
+  name: string | null;
+  source: string;
+  phone: string | null;
+  message: string | null;
+  context: Record<string, unknown>;
+}): string {
+  const firstName = (params.name || "there").split(/\s+/)[0];
+  const projectName = typeof params.context.projectName === "string" ? params.context.projectName : null;
+  const service = typeof params.context.serviceNeeded === "string" ? params.context.serviceNeeded : null;
+  const timeline = typeof params.context.timeline === "string" ? params.context.timeline : null;
+  const budget = typeof params.context.budgetRange === "string" ? params.context.budgetRange : null;
+  const preferred = typeof params.context.contactMethod === "string" ? params.context.contactMethod : "WhatsApp";
+  const details = [
+    projectName ? `project: ${projectName}` : null,
+    service ? `service: ${service}` : null,
+    timeline ? `timeline: ${timeline}` : null,
+    budget ? `budget: ${budget}` : null,
+  ].filter(Boolean).join(", ");
+  return [
+    `Hi ${firstName}, thank you for contacting JBJ Global Real Estate${projectName ? ` about ${projectName}` : ""}.`,
+    details ? `I saw your request details (${details}) and I can help you with the next best options.` : `I received your enquiry and I can help you with the next best options.`,
+    params.message ? `I also noted: “${params.message}”.` : null,
+    `Would you prefer that I continue by ${preferred}, or should I send you the key details here first?`,
+  ].filter(Boolean).join("\n\n");
+}
+
+async function notifyOwnersAboutLead(supabase: any, params: {
+  leadId: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  source: string;
+  pageSource: string | null;
+  message: string | null;
+  context: Record<string, unknown>;
+  suggestedResponse: string;
+}) {
+  const { data: ownerRoles, error: ownerError } = await supabase
+    .from("user_roles")
+    .select("user_id")
+    .eq("role", "owner");
+
+  if (ownerError) {
+    console.error("Owner lookup failed:", ownerError);
+    return;
+  }
+
+  const ownerIds = Array.from(new Set((ownerRoles ?? []).map((r: any) => r.user_id).filter(Boolean)));
+  if (!ownerIds.length) return;
+
+  const actionUrl = `/owner/crm/leads/${params.leadId}`;
+  const dueAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+  const notificationRows = ownerIds.map((user_id: string) => ({
+    user_id,
+    title: "New lead received",
+    body: `${params.name} submitted ${params.source}${params.phone ? ` · ${params.phone}` : ""}`,
+    notification_type: "new_lead",
+    action_url: actionUrl,
+    metadata: {
+      lead_id: params.leadId,
+      source: params.source,
+      page_source: params.pageSource,
+      email: params.email,
+      phone: params.phone,
+      sound: "lead-pop",
+      suggested_response: params.suggestedResponse,
+    },
+  }));
+  await supabase.from("notifications").insert(notificationRows);
+
+  const taskRows = ownerIds.map((user_id: string) => ({
+    user_id,
+    lead_id: params.leadId,
+    title: `Follow up with ${params.name}`,
+    notes: `New website lead from ${params.source}. Phone: ${params.phone || "not provided"}. Suggested opener:\n\n${params.suggestedResponse}`,
+    due_at: dueAt,
+    status: "open",
+  }));
+  await supabase.from("crm_tasks").insert(taskRows);
+
+  await supabase.from("crm_ai_drafts").insert({
+    lead_id: params.leadId,
+    draft_type: "first_response",
+    subject: `First response for ${params.name}`,
+    content: params.suggestedResponse,
+    status: "draft",
+    metadata: { source: params.source, page_source: params.pageSource, context: params.context },
+  });
+
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("email")
+    .in("id", ownerIds);
+  const ownerEmails = Array.from(new Set((profiles ?? []).map((p: any) => String(p.email || "").toLowerCase()).filter(Boolean)));
+  const notifyEmails = ownerEmails.length ? ownerEmails : ["contact@jbj.ae"];
+  const resendKey = Deno.env.get("RESEND_API_KEY");
+  if (!resendKey) return;
+
+  const contextRows = Object.entries(params.context)
+    .filter(([, v]) => v !== null && v !== undefined && v !== "")
+    .slice(0, 12)
+    .map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid #EFE6D6;color:#1A1A1A;font-weight:700;">${escapeHtml(k)}</td><td style="padding:6px 10px;border-bottom:1px solid #EFE6D6;color:#1A1A1A;">${escapeHtml(String(v))}</td></tr>`)
+    .join("");
+
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${resendKey}` },
+      body: JSON.stringify({
+        from: "JBJ CRM <contact@jbj.ae>",
+        to: notifyEmails,
+        reply_to: params.email,
+        subject: `New lead: ${params.name} · ${params.source}`,
+        html: `<div style="font-family:Arial,sans-serif;background:#fff;padding:24px;color:#1A1A1A;"><div style="max-width:680px;margin:0 auto;border:1px solid #B89555;border-radius:14px;overflow:hidden;"><div style="background:linear-gradient(135deg,#064E3B,#042C1C,#000);padding:18px 22px;color:#fff;"><h1 style="margin:0;font-size:22px;color:#fff;">New lead received</h1><p style="margin:6px 0 0;color:#fff;">${escapeHtml(params.source)}</p></div><div style="padding:22px;background:#FDFBF7;"><p><strong>Name:</strong> ${escapeHtml(params.name)}</p><p><strong>Email:</strong> <a href="mailto:${escapeHtml(params.email)}">${escapeHtml(params.email)}</a></p><p><strong>Phone:</strong> ${params.phone ? `<a href="https://wa.me/${escapeHtml(params.phone.replace(/\D/g, ""))}">${escapeHtml(params.phone)}</a>` : "Not provided"}</p><p><strong>CRM:</strong> <a href="https://www.jbj.ae${actionUrl}">Open lead in CRM</a></p>${params.message ? `<p><strong>Message:</strong><br>${escapeHtml(params.message)}</p>` : ""}${contextRows ? `<table style="border-collapse:collapse;width:100%;margin-top:14px;">${contextRows}</table>` : ""}<div style="margin-top:18px;padding:14px;border-left:4px solid #064E3B;background:#fff;"><strong>Prepared response</strong><pre style="white-space:pre-wrap;font-family:Arial,sans-serif;color:#1A1A1A;">${escapeHtml(params.suggestedResponse)}</pre></div></div></div></div>`,
+      }),
+    });
+  } catch (err) {
+    console.error("Owner email notification failed:", err);
+  }
 }
 
 function getClientIp(req: Request): string {
@@ -222,6 +369,8 @@ serve(async (req: Request): Promise<Response> => {
     const sanitizedAgeRange = sanitizeString(data.ageRange, 20);
     const sanitizedPageSource = sanitizeString(data.pageSource, 100);
     const sanitizedSubSource = sanitizeString(data.subSource, 100);
+    const sanitizedMessage = sanitizeString(data.message, 1000);
+    const sanitizedContext = safeContext(data.context);
 
     // Validate contact type
     const validContactTypes = ['client', 'broker', 'investor', 'visitor'];
@@ -305,6 +454,16 @@ serve(async (req: Request): Promise<Response> => {
           current_location_country: locationCountry,
           current_location_city: locationCity,
           age_range: sanitizedAgeRange,
+          pipeline_stage: 'qualified',
+          priority: sanitizedPhone ? 'high' : 'normal',
+          notes: sanitizedMessage || undefined,
+          raw_import: {
+            ...(sanitizedContext ?? {}),
+            source: sanitizedSource,
+            page_source: sanitizedPageSource,
+            message: sanitizedMessage,
+            last_capture_at: new Date().toISOString(),
+          },
           updated_at: new Date().toISOString(),
         })
         .eq('id', existingLead.id);
@@ -330,6 +489,16 @@ serve(async (req: Request): Promise<Response> => {
           owner_type: 'company_assigned',
           lead_source_type: 'website',
           contact_type: contactType,
+          pipeline_stage: 'qualified',
+          priority: sanitizedPhone ? 'high' : 'normal',
+          notes: sanitizedMessage,
+          raw_import: {
+            ...sanitizedContext,
+            source: sanitizedSource,
+            page_source: sanitizedPageSource,
+            message: sanitizedMessage,
+            captured_at: new Date().toISOString(),
+          },
           tags: tags.slice(0, 10), // Limit tags
         })
         .select('id')
@@ -346,6 +515,27 @@ serve(async (req: Request): Promise<Response> => {
 
       resolvedLeadId = newLead?.id ?? null;
       console.log('Created new CRM lead:', newLead?.id);
+    }
+
+    if (resolvedLeadId) {
+      const suggestedResponse = buildSuggestedResponse({
+        name: sanitizedFullName,
+        source: sanitizedSource,
+        phone: sanitizedPhone,
+        message: sanitizedMessage,
+        context: sanitizedContext,
+      });
+      await notifyOwnersAboutLead(supabase, {
+        leadId: resolvedLeadId,
+        name: sanitizedFullName || normalizedEmail.split('@')[0],
+        email: normalizedEmail,
+        phone: sanitizedPhone,
+        source: sanitizedSource,
+        pageSource: sanitizedPageSource,
+        message: sanitizedMessage,
+        context: sanitizedContext,
+        suggestedResponse,
+      });
     }
 
     // SECURITY: do NOT return leadId or any internal identifier. Returning

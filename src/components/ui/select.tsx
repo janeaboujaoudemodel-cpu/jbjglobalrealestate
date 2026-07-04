@@ -213,55 +213,18 @@ const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => {
-  const innerRef = React.useRef<HTMLDivElement | null>(null);
-  const setRef = React.useCallback((node: HTMLDivElement | null) => {
-    innerRef.current = node;
-    if (typeof ref === "function") ref(node);
-    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-  }, [ref]);
-
-  React.useEffect(() => {
-    const el = innerRef.current;
-    if (!el) return;
-    const EMERALD = "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)";
-    const paint = () => {
-      const active =
-        el.getAttribute("data-state") === "checked" ||
-        el.hasAttribute("data-highlighted") ||
-        el.getAttribute("aria-selected") === "true";
-      if (active) {
-        el.style.setProperty("background-image", EMERALD, "important");
-        el.style.setProperty("background-color", "#042C1C", "important");
-        el.style.setProperty("color", "#FFFFFF", "important");
-        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
-        el.style.setProperty("border-radius", "8px", "important");
-      } else {
-        el.style.removeProperty("background-image");
-        el.style.removeProperty("background-color");
-        el.style.removeProperty("color");
-        el.style.removeProperty("-webkit-text-fill-color");
-        el.style.removeProperty("border-radius");
-      }
-    };
-    paint();
-    const mo = new MutationObserver(paint);
-    mo.observe(el, { attributes: true, attributeFilter: ["data-state", "data-highlighted", "aria-selected"] });
-    return () => mo.disconnect();
-  }, []);
-
   return (
     <SelectPrimitive.Item
-      ref={setRef}
+      ref={ref}
       data-no-contrast-guard
       data-jbj-active-paint="true"
       className={cn(
-        "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#1A1A1A] outline-none transition-colors duration-150 whitespace-normal overflow-visible",
+        "jbj-form-option relative flex h-auto min-h-10 w-full min-w-0 cursor-pointer select-none items-start rounded-lg py-2 pl-3 pr-8 text-sm text-[#1A1A1A] outline-none transition-colors duration-75 whitespace-normal overflow-visible",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-        "hover:text-white",
-        "focus:text-white",
-        "data-[highlighted]:text-white",
-        "data-[highlighted]:[&_svg]:text-white data-[highlighted]:[&_*]:text-white",
-        "data-[state=checked]:text-white data-[state=checked]:font-semibold",
+        "hover:bg-[#064E3B]/10 hover:text-[#1A1A1A]",
+        "focus:bg-[#064E3B]/10 focus:text-[#1A1A1A]",
+        "data-[highlighted]:bg-[#064E3B]/10 data-[highlighted]:text-[#1A1A1A]",
+        "data-[state=checked]:bg-[image:var(--jj-emerald-ombre)] data-[state=checked]:text-white data-[state=checked]:font-semibold data-[state=checked]:[&_*]:text-white data-[state=checked]:[&_svg]:text-white",
         className,
       )}
       {...props}

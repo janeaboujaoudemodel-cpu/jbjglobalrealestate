@@ -1441,16 +1441,17 @@ export default function ProjectDetailLayout({
 
            {/* PAYMENT PLAN VISUALIZATION (Order B: Payment first) */}
            {(true) && (
-           <div ref={paymentRef} id="payment" data-section="payment" className="mb-14 scroll-mt-40 relative">
-              <div className="absolute right-0 -top-2 z-10 flex items-center gap-1.5">
+           <div ref={paymentRef} id="payment" data-section="payment" className="mb-14 scroll-mt-40 relative pt-10">
+              <div className="absolute right-0 top-0 z-10 flex items-center gap-1.5">
                 {isOwner && (
                   <button
                     type="button"
                     onClick={() => setPaymentEnrichOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-purple-400/60 bg-purple-50 text-purple-800 text-xs font-semibold hover:bg-purple-100 transition shadow-sm"
+                    aria-label="Describe payment plan with AI"
+                    className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-[#B89555]/50 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6] transition shadow-sm"
                     title="Describe the payment plan with AI"
                   >
-                    <Sparkles className="w-3 h-3" /> Describe with AI
+                    <Sparkles className="w-3.5 h-3.5" />
                   </button>
                 )}
                 <OwnerSectionEditor projectId={project.id} section="payment" initial={project as any} />

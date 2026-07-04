@@ -1,62 +1,123 @@
-# Fixes — Project Detail Page Pass
+## Implementation plan
 
-All work is CSS + presentation. No behavior, no colors, no layout sizes change. Every task ends with a Playwright screenshot in `/mnt/documents/`.
+### 1) First pass: capture proof before touching code
+- Use Playwright on the current broken pages and forms to capture before screenshots:
+  - Project Register Interest / Expert Consultation form
+  - Header account dropdown
+  - Project Location map controls
+  - Payment Plan section
+  - Mortgage Calculator / JBJ Mortgage Assistant
+  - Brochure / document cards
+  - Generate Presentation controls
+  - Career/CV, contact, chat/support, broker/developer lead forms where reachable
+- Run a computed-style audit that flags:
+  - white text/icon on champagne, pearl, white, or gold surfaces
+  - black/dark text/icon on emerald, black, or dark surfaces
+  - form children touching borders
+  - checkbox rows showing duplicate/blue/weak checks
+  - non-square/non-circle icon controls
 
-## Task 1 — Developer logo card
-File: `src/components/project-detail/owner/DeveloperLogoUploader.tsx`
-- Remove the full-card black overlay "Change logo" button.
-- Keep the logo image centered as-is (no size / frame / animation change).
-- Replace with a small pencil icon floated **outside** the top-right of the card (same pattern as the pencil next to "Majid Al Futtaim Properties"): 24px round, champagne bg, gold hairline, black pencil. Clicking still opens the file picker.
-- Hidden `<input type="file">` stays.
+### 2) Root CSS contrast repair, not one-by-one patching
+- Identify the winning global CSS rules in `src/index.css` that override foreground color after component styles.
+- Replace the conflicting terminal rules with a clear surface contract:
+  - emerald/dark/black surfaces and all descendants: pure white text/icons, unless inside a nested light surface
+  - champagne/pearl/white/gold/light surfaces and all descendants: ink-black text/icons, unless inside a nested emerald CTA/pill/control
+  - dropdown/menu/select/popover content on champagne must never force white text
+  - emerald CTAs, pills, map buttons, mortgage assistant buttons, payment labels, document buttons, and project-location controls must always remain white-on-emerald
+- Add regression checks for the exact reported cases: account dropdown, project location controls, payment plan percentages, mortgage assistant buttons, document pills, “View Developer Projects”, “View More”, pros/intelligence cards.
 
-## Task 2 — Replace all "Edit section" buttons with a pencil-only affordance
-Scope: every `Edit section` / `Edit …` button on the project detail page (Owner Portal sections: About Developer, Project Location, Payment Plan, Brochure, Mortgage, etc.).
-- Grep for `Edit section` and any large owner edit buttons in `src/components/project-detail/**` and swap the button rendering to the same pencil primitive used by `InlineEditable` (24px, champagne bg, gold border, black pencil). No label text.
-- Keep onClick handler intact.
+### 3) Global form spacing and premium gold border system
+- Add a global form shell/field contract so content cannot touch a form border:
+  - form panels/dialogs/cards get consistent inner padding on desktop and mobile
+  - field groups and multi-select pill groups get minimum internal padding
+  - form inputs/selects/textarea use a thinner premium gold hairline, not the thick gold border
+  - hover/focus transitions are instant enough to feel responsive and do not lag between fields
+- Apply this globally to all form containers, then make small component edits only where a form has local classes fighting the global system.
+- Specifically fix the Expert Consultation form shown in the screenshots: thinner border, better inner spacing, smaller pill content, balanced lower checkbox row, and no touching edges.
 
-## Task 3 — Emerald contrast: force pure white text + icons on remaining offenders
-File: `src/index.css` (extend the existing terminal PASS)
-Targets that still render dark ink on emerald:
-- Map layer buttons "Satellite / Street / Terrain"
-- "Click to enable map interaction" overlay pill
-- Payment Plan tab pill (`Payment Plan (…)` active row) + icon
-- "Register Interest" tab pill + icon
-- "Visible" toggle button (brochure row) + eye icon
-- Any `.jj-surface-emerald`, `[data-surface="emerald"]`, `.bg-emerald-*` button/pill/tab descendant
+### 4) Checkbox/tick repair everywhere
+- Fix the shared checkbox primitive and native checkbox fallback globally:
+  - no browser-blue checkbox or duplicate tick
+  - checked state is emerald fill with one thick pure-white tick
+  - unchecked state is pearl/champagne with thin gold border
+  - no emerald highlight bar behind the label when checking
+  - no text-selection highlight on checkbox labels/rows during click
+  - checkbox stays inside the form and aligns with its label
+- Audit all checkbox usages: terms/privacy, content terms, broker forms, career/CV forms, document/signature forms, filters, notification toggles.
 
-Add a single ultra-high-specificity block:
-```
-html body :is(button,a,[role="tab"],[role="option"],.jj-surface-emerald,[data-surface="emerald"]):where(.bg-emerald-900,.bg-emerald-800,.jj-surface-emerald,[data-surface="emerald"],[data-state="active"].jj-tab-emerald) ,
-html body :is(...) * {
-  color:#FFFFFF !important;
-}
-html body :is(...) svg { color:#FFFFFF !important; stroke:#FFFFFF !important; }
-```
-Exclude `body[data-ai-tools-scope="true"]` and `[data-preserve-surface]`.
+### 5) Lead/CRM integration for every lead entry point
+- Inventory every real lead-submission route/component, including:
+  - register interest / expert consultation
+  - contact/inquiry/lead popups
+  - meeting booking
+  - mortgage introduction
+  - AI chat/support lead forms
+  - career portal CV/contact submissions
+  - broker/developer registration and visit/deal request forms
+  - document/signature/public fill submissions that collect contact details
+- Route all lead submissions through one backend capture function so every entry creates/updates a CRM contact with:
+  - source, page URL, service/project context, contact details, message/details
+  - pipeline stage, health score/status, lead status
+  - next follow-up task/reminder
+  - AI-prepared first response / suggested outreach based on submitted data
+- Keep sensitive contact details handled server-side; do not expose internal CRM IDs to anonymous visitors.
 
-## Task 4 — Brochure "Project Documents" card
-File: brochure/documents card component under `src/components/project-detail/**`
-- The lower half of the card currently shows a champagne band with "DISTRIKT / Brochure / VIEW".
-- Fill the entire lower band with the same ink-emerald gradient used by the "BROCHURE" chip, with pure white text.
-- For every additional document (floor plan, payment plan, etc.) render the same card style: hero image on top, ink-emerald band on bottom with the doc type label + VIEW.
+### 6) Owner notifications for new leads
+- Extend the lead capture backend so each new/updated lead can trigger:
+  - CRM notification record for real-time owner pop-up
+  - browser/website notification sound in owner CRM/header when signed in
+  - owner email with direct contact details and safe internal CRM link
+  - suggested response text to start WhatsApp/email follow-up
+- Add a CRM notification listener in the owner CRM shell/header.
+- Use the existing email backend path where possible; if a missing secret/connector blocks email delivery, I will wire the function and surface the required backend configuration without exposing secrets.
 
-## Task 5 — Brochure bullet circles (Full floor plan / Detailed specs / Payment plan breakdown)
-File: `src/components/project-detail/brochure/*` (bullet list)
-- Circles are currently squished ovals with no icon.
-- Enforce `w-8 h-8 rounded-full shrink-0 grid place-items-center` + `aspect-square`.
-- Add the matching Lucide icon (`FileText`, `ClipboardList`, `Wallet`) in pure white.
+### 7) Project-page UI fixes requested after the root pass
+- Payment Plan:
+  - fix percentage/icon contrast to pure white on emerald
+  - remove the duplicate three cards for down payment / during construction / on handover
+  - keep the timeline strap and make it balanced
+  - move edit/AI controls so they do not cover section headers; pencil-only where applicable
+- Developer logo:
+  - center developer name inside the existing card
+  - lift pencil above the card at the top-right; do not alter card size/color/edges/animation
+- Owner photos/gallery:
+  - default Owner Photos collapsed/minimized until expanded
+  - improve rendered image quality where the current thumbnails are using low-quality sizing/cropping
+- Icon/button shapes:
+  - enforce true circle for icon-only controls and true square where square tiles are intended
+  - fix compressed arrows and vertical pills in brochure/generate presentation/market intelligence/filters
+- Mortgage Calculator:
+  - restyle into a more balanced phased layout while preserving all information
+  - shrink oversized mortgage icon
+  - use emerald-filled premium controls matching the mortgage AI tool style
+  - fix long broken buttons such as Request Mortgage Introduction and Amortization
+- Market/Project Intelligence:
+  - convert ugly pale green blocks to rich emerald surfaces
+  - force pure white content in cash vs mortgage, off-plan vs secondary, buyer metrics, top areas/nationalities, pros, supply/demand, developer landscape
+  - fix vertical centering of numbers inside pills
+- More Projects / Notice Incorrect:
+  - add clean section containment and padding so pills/buttons do not touch or cross neighboring content.
 
-Same treatment for "Generate Presentation" bullets (currently emerald circles with sparkle icons but squished on some viewports) — enforce `aspect-square` + white icon.
+### 8) Project page sticky header/filter behavior
+- On project detail pages only:
+  - avoid stacking three horizontal bars at once
+  - hide the main horizontal header when the section navigation/filter stack is active during project scrolling
+  - keep search, sq ft/sq m, currency, favorite, and filter controls in the project filter bar where appropriate
+  - section tabs scroll to their target sections cleanly
+- Lock this as the reusable project-page rule without changing unrelated pages.
 
-## Task 6 — Mortgage stat tile icons
-File: mortgage calculator stat tiles component
-- The small icon badges on Property Price / Down Payment / Loan Amount / Monthly Payment / Interest / Total Cost render vertically squished.
-- Enforce `w-10 h-10 aspect-square rounded-lg` (square, not oval), keep ink-emerald bg, white icon.
+### 9) Performance pass
+- Profile the slow loading and dropdown lag with Playwright/network timing.
+- Optimize the country/phone picker and heavy dropdown lists by memoizing lists, reducing unnecessary animations/transitions, and avoiding expensive hover repaint rules.
+- Check project detail loading path for unnecessary waits/refetches causing “Loading project” to last too long.
 
-## Verification
-For each task, Playwright at 1440 + 820 widths, screenshots to `/mnt/documents/pass-final-taskN-*.png`, and view them before claiming done.
-
-## Out of scope (do not touch)
-- Colors, gradients, spacing, animations, box sizes, card edges
-- AI Tools scope (`body[data-ai-tools-scope="true"]`)
-- Any behavior/handlers
+### 10) Validation and proof package
+- After each step, run the technical audit again and capture after screenshots before moving to the next step.
+- Deliver screenshot proof paths and a short before/after matrix for every fixed class of issue:
+  - forms/padding
+  - checkbox/ticks
+  - contrast light-on-light and dark-on-dark
+  - CRM lead creation/notification path
+  - project payment/mortgage/intelligence/document/icon sections
+  - sticky header/filter behavior
+- I will not mark a step complete unless the computed-style checks and screenshots confirm it.

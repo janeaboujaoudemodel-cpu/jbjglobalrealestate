@@ -211,8 +211,8 @@ export default function PaymentPlanVisualization({
           {paymentPlan && (
             <div className="mb-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-[#1A1A1A]/10 flex items-center justify-center ring-4 ring-black/5">
-                  <Percent className="w-7 h-7 text-[#1A1A1A]" />
+                <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-14 h-14 rounded-full flex items-center justify-center ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', ['--jj-icon-lock-size' as any]: '3.5rem' }}>
+                  <Percent className="w-6 h-6" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-[#1A1A1A]">{paymentPlan}</p>
@@ -293,29 +293,6 @@ export default function PaymentPlanVisualization({
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-
-          {/* Payment Milestones Cards */}
-          {milestones.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {milestones.map((milestone, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] hover:shadow-md transition-all text-center"
-                >
-                  <div
-                    data-emerald="true" data-no-contrast-guard className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ring-4 ring-white/60"
-                    style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }}
-                  >
-                    <span className="text-xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
-                      {getPercentageValue(milestone.value)}%
-                    </span>
-                  </div>
-                  <milestone.icon className="w-5 h-5 mx-auto mb-2 text-[#064E3B]" />
-                  <p className="text-sm font-medium text-[#1A1A1A]/80">{milestone.label}</p>
-                </div>
-              ))}
             </div>
           )}
 
