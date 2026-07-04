@@ -30497,3 +30497,51 @@ html body:not(#jj-a):not(#jj-b):not(#jj-c):not(#jj-d):not(#jj-e):not(#jj-f):not(
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* ============================================================
+   PASS 260 — Switch thumb white lock + global popper speed
+   User: switch dot must stay white on emerald; dropdowns must
+   open/close instantly (no delay).
+   ============================================================ */
+
+/* Switch thumb: force white contrast dot regardless of state */
+html body [role="switch"] > span,
+html body [role="switch"] > span:first-child,
+html body button[role="switch"] > span,
+html body [role="switch"] [data-radix-switch-thumb] {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.28) !important;
+  border-color: transparent !important;
+  opacity: 1 !important;
+}
+
+/* Switch off (unchecked): gold/champagne track so gold + white dot reads */
+html body [role="switch"][data-state="unchecked"] {
+  background: #B89555 !important;
+  background-image: none !important;
+}
+
+
+/* Global popper: instant open/close — no animation delay anywhere */
+[data-radix-popper-content-wrapper] > *,
+[data-radix-popper-content-wrapper] [data-radix-select-content],
+[data-radix-popper-content-wrapper] [data-radix-popover-content],
+[data-radix-popper-content-wrapper] [data-radix-dropdown-menu-content],
+[data-radix-popper-content-wrapper] [data-radix-menu-content],
+[data-radix-popper-content-wrapper] [data-radix-combobox-content] {
+  animation-duration: 0ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0ms !important;
+  transition-delay: 0ms !important;
+}
+
+/* Dialog content instant open/close */
+[data-state="open"][role="dialog"],
+[data-state="closed"][role="dialog"],
+[data-radix-dialog-overlay] {
+  animation-duration: 0ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0ms !important;
+}
