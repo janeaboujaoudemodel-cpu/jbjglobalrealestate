@@ -248,27 +248,24 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         <DropdownMenuContent
           align="end"
           side={side}
-          data-surface="emerald"
           data-mode-switcher-panel="true"
-          data-no-contrast-guard
-          style={{ color: '#FFFFFF' }}
-          className="mode-switcher-panel w-[360px] mr-3 border border-white/30 text-white bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] shadow-[0_18px_50px_rgba(0,0,0,0.42),0_0_28px_rgba(6,78,59,0.24)] rounded-2xl p-3 z-[10001]"
+          className="mode-switcher-panel w-[360px] mr-3 rounded-2xl p-3 z-[10001]"
           sideOffset={10}
           collisionPadding={{ top: 104, bottom: 16, left: 16, right: 16 }}
           avoidCollisions
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 pt-1 pb-3 mb-2 border-b border-white/15">
+          <div className="px-3 pt-1 pb-3 mb-2 border-b border-[#064E3B]/15">
             <span
-              className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-[0.18em] border border-white/30"
-              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255,255,255,0.08)' }}
+              className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-[0.18em] border border-[#064E3B]/25"
+              style={{ backgroundColor: 'rgba(6,78,59,0.06)' }}
             >
               MODE
             </span>
-            <p className="text-[14px] font-bold mt-1.5 leading-tight text-white" style={{ color: '#FFFFFF' }}>
+            <p className="text-[14px] font-bold mt-1.5 leading-tight">
               Select your mode
             </p>
-            <p className="text-[11px] mt-0.5 leading-snug text-white/75" style={{ color: 'rgba(255,255,255,0.75)' }}>
+            <p className="text-[11px] mt-0.5 leading-snug opacity-70">
               Choose how you want to use the platform
             </p>
           </div>
@@ -281,19 +278,6 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               const Icon = config.icon;
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;
-
-              const rowStyle: CSSProperties = {
-                background: isActive ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)',
-                borderColor: isActive ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.20)',
-                borderWidth: isActive ? 1.5 : 1,
-                color: '#FFFFFF',
-                boxShadow: isActive
-                  ? '0 10px 24px -16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.16)'
-                  : isHovered
-                  ? '0 12px 26px -16px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.12)'
-                  : '0 6px 18px -14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08)',
-                transform: isHovered ? 'translateY(-1px)' : 'translateY(0)',
-              };
 
               return (
                 <DropdownMenuItem
@@ -309,73 +293,43 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   onMouseLeave={() => setHoveredMode(null)}
                   onFocus={() => setHoveredMode(modeKey)}
                   onBlur={() => setHoveredMode(null)}
-                  style={rowStyle}
                   unstyled
-                  data-no-contrast-guard
-                  data-no-emerald-hover
                   data-mode-row={isActive ? 'active' : 'idle'}
-                  data-mode-card="true"
-                  data-surface="emerald"
                   className={cn(
                     "mode-switcher-item",
                     "mode-switcher-equal-card relative flex items-start gap-3 pl-4 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-150 border w-full min-h-[92px]",
                     "focus:outline-none",
+                    isActive
+                      ? "border-[#064E3B]/50 bg-[#064E3B]/[0.08]"
+                      : "border-[#064E3B]/20 bg-[#FFFFFF]/40 hover:bg-[#064E3B]/[0.06]",
                   )}
                 >
                   <div
-                    data-no-contrast-guard
-                    data-mode-icon-tile={isActive ? 'active' : 'idle'}
-                    data-surface="emerald"
-                    className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{
-                      background: 'rgba(255,255,255,0.10)',
-                      boxShadow: isActive
-                        ? '0 0 0 1px rgba(255,255,255,0.55)'
-                        : '0 0 0 1px rgba(255,255,255,0.22)',
-                    }}
+                    className="mode-switcher-icon-tile w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-[#064E3B]/25"
+                    style={{ background: 'rgba(6,78,59,0.06)' }}
                   >
                     <Icon
-                      data-no-contrast-guard
                       className="w-[18px] h-[18px]"
-                      style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
                       strokeWidth={2}
                     />
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p
-                      className="text-[13px] font-bold leading-tight break-words"
-                      style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-                    >
+                    <p className="text-[13px] font-bold leading-tight break-words">
                       {config.label}
                     </p>
-                    <p
-                      className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal"
-                      style={{ color: 'rgba(255,255,255,0.80)', WebkitTextFillColor: 'rgba(255,255,255,0.80)' }}
-                    >
+                    <p className="text-[11px] leading-snug mt-0.5 break-words whitespace-normal opacity-70">
                       {config.description}
                     </p>
                   </div>
 
                   {isActive ? (
                     <span
-                      data-no-contrast-guard
                       data-mode-active-pill=""
-                      data-surface="emerald"
-                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 h-8 w-8 rounded-full text-[10px] font-bold shrink-0 border"
-                      style={{
-                        background: 'rgba(255,255,255,0.18)',
-                        color: '#FFFFFF',
-                        WebkitTextFillColor: '#FFFFFF',
-                        borderColor: 'rgba(255,255,255,0.65)',
-                      }}
+                      className="mode-switcher-selected-pill ml-2 inline-flex items-center justify-center gap-1 h-8 w-8 rounded-full text-[10px] font-bold shrink-0 border border-[#064E3B]/50"
+                      style={{ background: 'rgba(6,78,59,0.12)' }}
                     >
-                      <Check
-                        data-no-contrast-guard
-                        className="w-3 h-3 shrink-0"
-                        style={{ color: '#FFFFFF', stroke: '#FFFFFF' }}
-                        strokeWidth={3}
-                      />
+                      <Check className="w-3 h-3 shrink-0" strokeWidth={3} />
                     </span>
                   ) : null}
 
@@ -384,6 +338,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             })}
           </div>
         </DropdownMenuContent>
+
       </DropdownMenu>
     </div>
   );
