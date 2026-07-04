@@ -252,12 +252,32 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
     "group flex items-center gap-3 w-full min-h-11 rounded-md px-3 py-2 text-left transition-none overflow-visible text-[#1A1A1A]";
   const selectedBox = "allow-white jj-pill-emerald-metallic border-0";
 
-  // Filter panel is always CENTERED on screen (user requested — do not anchor to trigger).
-  const centeredPanelStyle = {
+  const PANEL_WIDTH = 768;
+  const HEADER_BOTTOM_Y = 88;
+  const panelLeft = (() => {
+    if (typeof window === 'undefined' || !anchorRect) return undefined;
+    const margin = 16;
+    const width = Math.min(PANEL_WIDTH, window.innerWidth - margin * 2);
+    const triggerCenter = anchorRect.left + anchorRect.width / 2;
+    return Math.max(margin, Math.min(triggerCenter - width / 2, window.innerWidth - width - margin));
+  })();
+
+  // Header filter panel: attached below the horizontal header divider and aligned
+  // to the clicked filter control, matching the AED dropdown origin behavior.
+  const headerAnchoredPanelStyle = {
     ['--slider-track-bg' as any]: 'rgba(6,78,59,0.14)',
     ['--slider-range-bg' as any]: 'var(--jj-emerald-ombre)',
     ['--slider-thumb-bg' as any]: '#FFFFFF',
     ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
+    ...(panelLeft !== undefined
+      ? {
+          left: `${panelLeft}px`,
+          top: `${HEADER_BOTTOM_Y}px`,
+          width: `min(${PANEL_WIDTH}px, calc(100vw - 32px))`,
+          transform: 'none',
+          maxHeight: `calc(100dvh - ${HEADER_BOTTOM_Y + 16}px)`,
+        }
+      : {}),
   } as CSSProperties;
 
 
@@ -291,8 +311,8 @@ const AdvancedFilterPanel = forwardRef<HTMLDivElement, AdvancedFilterPanelProps>
       <DialogContent
         data-advanced-filter-panel="true"
         data-filter-clean="true"
-        className="max-w-3xl w-[calc(100vw-3rem)] max-h-[calc(100dvh-4rem)] p-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border border-[#B89555]/55 text-[#1A1A1A] flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.20),0_0_0_1px_rgba(184,149,85,0.18)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
-        style={centeredPanelStyle}
+        className="max-w-3xl w-[calc(100vw-3rem)] p-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] border border-[#B89555]/55 text-[#1A1A1A] flex flex-col overflow-hidden shadow-[0_25px_80px_-12px_rgba(0,0,0,0.20),0_0_0_1px_rgba(184,149,85,0.18)] duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none"
+        style={headerAnchoredPanelStyle}
       >
 
 

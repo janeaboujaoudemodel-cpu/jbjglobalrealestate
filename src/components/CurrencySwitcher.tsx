@@ -60,6 +60,8 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     }
     return 'AED';
   });
+  const [hoveredCurrency, setHoveredCurrency] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const setCurrency = (code: string) => {
     setCurrencyState(code);
@@ -68,13 +70,54 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
     window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
   };
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const applyCurrencyRowLock = () => {
+      const rows = document.querySelectorAll<HTMLElement>('[data-currency-row]');
+      rows.forEach((row) => {
+        const active = row.dataset.currencyActive === 'true';
+        const hovered = row.dataset.currencyCode === hoveredCurrency;
+        const foreground = active ? '#FFFFFF' : '#1A1A1A';
+        const background = active
+          ? 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))'
+          : hovered
+            ? 'rgba(184,149,85,0.14)'
+            : 'transparent';
+
+        row.style.setProperty('background', background, 'important');
+        row.style.setProperty('background-image', active ? background : 'none', 'important');
+        row.style.setProperty('background-color', active ? '#064E3B' : background, 'important');
+        row.style.setProperty('color', foreground, 'important');
+        row.style.setProperty('-webkit-text-fill-color', foreground, 'important');
+        row.style.setProperty('border-color', 'transparent', 'important');
+        row.style.setProperty('box-shadow', active ? 'inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -18px rgba(6,78,59,.78)' : 'none', 'important');
+        row.style.setProperty('transform', 'none', 'important');
+        row.style.setProperty('filter', 'none', 'important');
+        row.querySelectorAll<HTMLElement>('span, svg, path, circle, rect, line, polyline, polygon').forEach((child) => {
+          child.style.setProperty('color', foreground, 'important');
+          child.style.setProperty('-webkit-text-fill-color', foreground, 'important');
+          child.style.setProperty('stroke', foreground, 'important');
+          child.style.setProperty('background', 'transparent', 'important');
+          child.style.setProperty('background-image', 'none', 'important');
+        });
+      });
+    };
+    applyCurrencyRowLock();
+    const frame = window.requestAnimationFrame(applyCurrencyRowLock);
+    const timer = window.setTimeout(applyCurrencyRowLock, 0);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
+  }, [currency, hoveredCurrency, menuOpen]);
+
   const currentCurrency = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
   const isMobile = variant === 'mobile';
   const isIconOnly = variant === 'icon-only';
   const isFlag = variant === 'flag';
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
       <DropdownMenuTrigger asChild>
         {isMobile ? (
           <button className="flex flex-col items-center justify-center gap-1.5 text-[#1A1A1A] hover:text-[#1A1A1A] py-2 w-16 transition-colors">
@@ -128,18 +171,51 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
               <DropdownMenuItem 
                 key={curr.code}
                 data-currency-row
-                data-currency-active="false"
+                data-currency-code={curr.code}
+                data-currency-active={active ? "true" : "false"}
                 onClick={() => setCurrency(curr.code)}
+                onMouseEnter={() => setHoveredCurrency(curr.code)}
+                onMouseLeave={() => setHoveredCurrency((prev) => (prev === curr.code ? null : prev))}
+                onFocus={() => setHoveredCurrency(curr.code)}
+                onBlur={() => setHoveredCurrency((prev) => (prev === curr.code ? null : prev))}
                 unstyled
-                className="flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none border border-transparent bg-transparent shadow-none"
+                className="jbj-currency-row flex items-center justify-between cursor-pointer rounded-md px-2.5 py-2 my-0.5 transition-none outline-none border border-transparent bg-transparent shadow-none"
+                style={
+                  active
+                    ? {
+                        background: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))',
+                        backgroundImage: 'var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%))',
+                        color: '#FFFFFF',
+                        WebkitTextFillColor: '#FFFFFF',
+                        borderColor: 'transparent',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -18px rgba(6,78,59,.78)',
+                      }
+                    : hoveredCurrency === curr.code
+                      ? {
+                          background: 'rgba(184,149,85,0.14)',
+                          backgroundImage: 'none',
+                          color: '#1A1A1A',
+                          WebkitTextFillColor: '#1A1A1A',
+                          borderColor: 'transparent',
+                          boxShadow: 'none',
+                        }
+                      : {
+                          background: 'transparent',
+                          backgroundImage: 'none',
+                          color: '#1A1A1A',
+                          WebkitTextFillColor: '#1A1A1A',
+                          borderColor: 'transparent',
+                          boxShadow: 'none',
+                        }
+                }
               >
               <span className="flex items-center gap-3">
-                <span className="text-lg leading-none">{curr.flag}</span>
-                <span className="text-sm font-semibold">{curr.name}</span>
+                <span className="text-lg leading-none" style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{curr.flag}</span>
+                <span className="text-sm font-semibold" style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{curr.name}</span>
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-sm opacity-85">{curr.symbol}</span>
-                {active && <Check className="w-4 h-4" strokeWidth={3} />}
+                <span className="text-sm opacity-85" style={{ color: active ? '#FFFFFF' : '#1A1A1A', WebkitTextFillColor: active ? '#FFFFFF' : '#1A1A1A' }}>{curr.symbol}</span>
+                {active && <Check className="w-4 h-4" strokeWidth={3} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
               </span>
               </DropdownMenuItem>
             );
