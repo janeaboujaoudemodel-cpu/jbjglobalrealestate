@@ -1519,7 +1519,8 @@ export default function ProjectDetailLayout({
                       <li key={item} className="flex items-center gap-3">
                         <span
                           data-emerald-action="true"
-                          className="jj-emerald-action inline-flex w-8 h-8 aspect-square rounded-full items-center justify-center shrink-0"
+                          data-icon-circle="true"
+                          className="jj-emerald-action inline-grid w-8 h-8 min-w-8 min-h-8 aspect-square rounded-full place-items-center shrink-0 p-0 overflow-hidden"
                           aria-hidden="true"
                         >
                           <FileText className="w-4 h-4 allow-white" style={{ color: "#FFFFFF" }} strokeWidth={2.5} />

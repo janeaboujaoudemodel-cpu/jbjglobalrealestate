@@ -115,12 +115,14 @@ export default function MortgageAIAssistant({ context }: MortgageAIAssistantProp
           </Button>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           {quickPrompts.map((p) => (
             <button
               key={p}
               type="button"
-              className="rounded-full border border-[#B89555]/30 px-3 py-1 text-xs text-foreground hover:border-[#B89555]/60"
+              data-emerald-action="true"
+              data-surface="emerald"
+              className="jj-emerald-action min-h-11 rounded-full border border-transparent px-3 py-2 text-xs font-semibold leading-snug text-center inline-flex items-center justify-center"
               onClick={() => {
                 setQuestion(p);
                 void submit(p);

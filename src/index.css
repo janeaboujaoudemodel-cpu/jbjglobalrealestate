@@ -29539,6 +29539,281 @@ html body:not([data-ai-tools-scope="true"]) :is(
   stroke: #FFFFFF !important;
 }
 
+/* =====================================================================
+   PASS 225 — TERMINAL SITE-WIDE CONTRAST CONTRACT
+   Root cause found: the global champagne popper pass was still winning on
+   the horizontal-header account menu, leaving white row text on a champagne
+   surface. This terminal pass restores the locked surface contract:
+   - champagne / pearl / gold surfaces = ink-black text + icons
+   - emerald / dark / ink surfaces = pure white text + icons
+   - account dropdown stays emerald, not champagne
+   Scope excludes AI tools exactly as requested.
+   ===================================================================== */
+
+/* Header account menu is an emerald dropdown exception to the global
+   champagne popper rule. Keep the surface and every row pure white. */
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content],
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content][data-surface="emerald"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-color: #042C1C !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,[role="menuitem"]),
+html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper] [data-account-menu-content][data-account-menu-content] :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Light/champagne/gold/mother-of-pearl surfaces: never allow white ink.
+   Emerald descendants are excluded so icon tiles/active pills remain white. */
+html body:not([data-ai-tools-scope="true"]) :is(
+  .surface-champagne,
+  .surface-gold,
+  .surface-light,
+  .jj-card-inner,
+  .jj-layer-2,
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  [data-surface="light"],
+  [data-surface="page"],
+  [data-studio-surface="champagne"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"],
+  [class*="from-[#FDFBF7]"],
+  [class*="from-[#fdfbf7]"],
+  [class*="via-[#F7F2EA]"],
+  [class*="via-[#f7f2ea]"],
+  [class*="to-[#EFE6D6]"],
+  [class*="to-[#efe6d6]"],
+  [class*="from-gold"],
+  [class*="via-gold"],
+  [class*="to-gold"]
+):not([data-account-menu-content]):not([data-account-menu-content] *)
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td):not(:where(
+    [data-surface="emerald"], [data-surface="emerald"] *,
+    [data-surface="dark"], [data-surface="dark"] *,
+    [data-on-dark], [data-on-dark] *,
+    [data-hero-dark], [data-hero-dark] *,
+    [data-emerald-action], [data-emerald-action] *,
+    [data-emerald="true"], [data-emerald="true"] *,
+    .jj-emerald-action, .jj-emerald-action *,
+    .jj-surface-emerald, .jj-surface-emerald *,
+    .jj-cta-emerald, .jj-cta-emerald *,
+    .jj-pill-emerald, .jj-pill-emerald *,
+    .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *,
+    .jj-header-premium-control, .jj-header-premium-control *
+  )) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  .surface-champagne,
+  .surface-gold,
+  .surface-light,
+  .jj-card-inner,
+  .jj-layer-2,
+  [data-surface="champagne"],
+  [data-surface="gold"],
+  [data-surface="light"],
+  [data-surface="page"],
+  [class*="bg-[#FDFBF7]"],
+  [class*="bg-[#fdfbf7]"],
+  [class*="bg-[#F7F2EA]"],
+  [class*="bg-[#f7f2ea]"],
+  [class*="bg-[#EFE6D6]"],
+  [class*="bg-[#efe6d6]"],
+  [class*="from-gold"],
+  [class*="via-gold"],
+  [class*="to-gold"]
+):not([data-account-menu-content]):not([data-account-menu-content] *)
+  :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(
+    [data-surface="emerald"] *, [data-surface="dark"] *, [data-on-dark] *, [data-hero-dark] *,
+    [data-emerald-action] *, [data-emerald="true"] *, .jj-emerald-action *, .jj-surface-emerald *,
+    .jj-cta-emerald *, .jj-pill-emerald *, .jj-pill-emerald-metallic *, .jj-header-premium-control *
+  )) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+/* Emerald/dark/ink surfaces: never allow black or faded ink. This intentionally
+   includes header controls, project-map controls, owner document visibility
+   buttons, brochure bands, quick-prompt active rows and any explicit brand hex
+   surfaces. Light descendants stay ink-black via their own surface token. */
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-header-premium-control,
+  .jj-filter-emerald-control,
+  .jj-map-layer-button,
+  .jj-map-enable-chip,
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-emerald-action="true"],
+  [data-emerald="true"],
+  [data-emerald-surface="true"],
+  [data-filter-selected="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#042C1C]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022C22]"],
+  [class*="bg-[#022c22]"],
+  [class*="bg-emerald-900"],
+  [class*="bg-emerald-800"],
+  [class*="bg-emerald-700"],
+  [class*="bg-green-900"],
+  [class*="bg-green-800"],
+  [style*="background" i][style*="#064E3B" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#042C1C" i],
+  [style*="background" i][style*="#042c1c" i]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-header-premium-control,
+  .jj-filter-emerald-control,
+  .jj-map-layer-button,
+  .jj-map-enable-chip,
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-emerald-action="true"],
+  [data-emerald="true"],
+  [data-emerald-surface="true"],
+  [data-filter-selected="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [class*="bg-[#064E3B]"],
+  [class*="bg-[#064e3b]"],
+  [class*="bg-[#042C1C]"],
+  [class*="bg-[#042c1c]"],
+  [class*="bg-[#022C22]"],
+  [class*="bg-[#022c22]"],
+  [class*="bg-emerald-900"],
+  [class*="bg-emerald-800"],
+  [class*="bg-emerald-700"],
+  [class*="bg-green-900"],
+  [class*="bg-green-800"],
+  [style*="background" i][style*="#064E3B" i],
+  [style*="background" i][style*="#064e3b" i],
+  [style*="background" i][style*="#042C1C" i],
+  [style*="background" i][style*="#042c1c" i]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface])
+  :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td):not(:where(
+    [data-surface="light"], [data-surface="light"] *,
+    [data-surface="champagne"], [data-surface="champagne"] *,
+    [data-surface="gold"], [data-surface="gold"] *,
+    [data-surface="page"], [data-surface="page"] *,
+    .surface-light, .surface-light *, .surface-champagne, .surface-champagne *,
+    .jj-card-inner, .jj-card-inner *, .jj-layer-2, .jj-layer-2 *
+  )) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body:not([data-ai-tools-scope="true"]) :is(
+  .jj-emerald-action,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-header-premium-control,
+  .jj-filter-emerald-control,
+  .jj-map-layer-button,
+  .jj-map-enable-chip,
+  [data-surface="emerald"],
+  [data-surface="dark"],
+  [data-surface="ink"],
+  [data-on-dark],
+  [data-hero-dark],
+  [data-emerald-action="true"],
+  [data-emerald="true"],
+  [data-emerald-surface="true"],
+  [data-filter-selected="true"],
+  [role="tab"][data-state="active"],
+  [data-jj-segmented-trigger][data-state="active"]
+):not([data-preserve-surface]):not([data-jbj-preserve-surface])
+  :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Shape lock: icon-only circles/squares must never collapse into vertical pins. */
+html body :is([data-icon-circle="true"], .jj-icon-circle-lock) {
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 9999px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  min-width: var(--jj-icon-lock-size, 2rem) !important;
+  min-height: var(--jj-icon-lock-size, 2rem) !important;
+  width: var(--jj-icon-lock-size, 2rem) !important;
+  height: var(--jj-icon-lock-size, 2rem) !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+}
+
+html body :is([data-icon-square="true"], .jj-icon-square-lock) {
+  aspect-ratio: 1 / 1 !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  min-width: var(--jj-icon-lock-size, 2.5rem) !important;
+  min-height: var(--jj-icon-lock-size, 2.5rem) !important;
+  width: var(--jj-icon-lock-size, 2.5rem) !important;
+  height: var(--jj-icon-lock-size, 2.5rem) !important;
+  line-height: 1 !important;
+  overflow: hidden !important;
+}
+
+html body :is([data-icon-circle="true"], [data-icon-square="true"], .jj-icon-circle-lock, .jj-icon-square-lock) > :is(svg,[class*="lucide"]) {
+  flex: 0 0 auto !important;
+}
+
 /* PASS FINAL+ — map layer buttons + enable-chip: pure white text/icons */
 html body #root .jj-map-layer-switcher,
 html body #root .jj-map-layer-switcher .jj-map-layer-button,

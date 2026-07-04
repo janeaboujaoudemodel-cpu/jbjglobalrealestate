@@ -172,14 +172,20 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
                 </span>
                 <button
                   onClick={() => toggleVisibility(d)}
-                  className="ml-auto inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs border border-[#B89555]/40 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A]"
+                  data-emerald-action={visible ? "true" : undefined}
+                  data-surface={visible ? "emerald" : "champagne"}
+                  className={visible
+                    ? "jj-emerald-action ml-auto inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs border border-transparent"
+                    : "ml-auto inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs border border-[#B89555]/40 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A]"
+                  }
                 >
                   {visible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
                   {visible ? "Visible" : "Hidden"}
                 </button>
                 <button
                   onClick={() => remove(d)}
-                  className="inline-flex items-center justify-center w-7 h-7 rounded-md border border-[#B91C1C]/30 text-[#B91C1C] hover:bg-[#FCE8E8]"
+                  data-icon-circle="true"
+                  className="inline-grid place-items-center w-7 h-7 min-w-7 min-h-7 aspect-square rounded-full border border-[#B91C1C]/30 text-[#B91C1C] hover:bg-[#FCE8E8] p-0 overflow-hidden"
                   aria-label="Delete"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
