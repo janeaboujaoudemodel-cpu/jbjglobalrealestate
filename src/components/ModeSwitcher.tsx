@@ -277,7 +277,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               .map(([modeKey, config]) => {
               const Icon = config.icon;
               const isActive = mode === modeKey;
-              const isHovered = hoveredMode === modeKey;
+              void hoveredMode;
 
               return (
                 <DropdownMenuItem
