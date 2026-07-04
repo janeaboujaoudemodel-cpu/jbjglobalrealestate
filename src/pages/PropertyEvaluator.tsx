@@ -798,6 +798,12 @@ const PropertyEvaluator = () => {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Free Dubai Property Valuation & Evaluator | JBJ"
+        description="Get an instant Dubai property valuation. JBJ's evaluator uses DLD transaction data, comparable sales, and yield benchmarks to price apartments and villas across the UAE."
+        canonicalPath="/property-evaluator"
+      />
     <PremiumToolShell
       theme={toolThemes.emerald}
       eyebrowIcon={Sparkles}
