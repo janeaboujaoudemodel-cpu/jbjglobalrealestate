@@ -728,8 +728,11 @@ const BuyerGuide = () => {
           <div className="max-w-3xl mx-auto">
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 text-center border-2 border-[#B89555]/50">
               <GuideSectionHeader icon={Sparkles} title="Next Step" centered />
-              <p className="text-lg text-[#1A1A1A]/70 mb-10 max-w-2xl mx-auto">
+              <p className="text-lg text-[#1A1A1A]/70 mb-6 max-w-2xl mx-auto">
                 If you are considering purchasing property in Dubai, the next step is a structured consultation to align your objective, budget, and market opportunities.
+              </p>
+              <p className="text-sm text-[#1A1A1A]/60 mb-10">
+                Related reading: <Link to="/insights/future-of-real-estate-2026" className="text-[#064E3B] hover:text-[#B89555] underline underline-offset-4 font-medium">The Future of Real Estate — 5 Trends to Watch in 2026</Link>
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

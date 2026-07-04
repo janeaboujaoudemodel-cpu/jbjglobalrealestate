@@ -295,6 +295,23 @@ const News = () => {
       {/* News Grid */}
       {!isLoading && (
         <div className="max-w-[1200px] mx-auto px-6 py-12 md:py-16">
+          {/* Pillar Insight Strip — SEO hub link */}
+          <div className="mb-10">
+            <a
+              href="/insights/future-of-real-estate-2026"
+              className="block rounded-2xl border border-[#B89555]/50 bg-gradient-to-br from-[#064E3B] via-[#042c1c] to-black px-6 py-5 md:px-8 md:py-6 text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(6,78,59,0.55)]"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-[#B89555]">Pillar Insight · 2026</div>
+                  <div className="mt-1 text-lg md:text-xl font-semibold">The Future of Real Estate: 5 Trends to Watch in 2026</div>
+                  <div className="mt-1 text-sm text-white/70">Sustainable builds, luxury demand, PropTech, commercial emerging markets & remote-work impact.</div>
+                </div>
+                <span className="hidden md:inline text-[#B89555] text-sm whitespace-nowrap">Read the guide →</span>
+              </div>
+            </a>
+          </div>
+
           {/* Featured Article */}
           {filteredNews.length > 0 && (
             <div className="mb-12">
