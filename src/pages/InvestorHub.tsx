@@ -101,6 +101,9 @@ const InvestorHub = () => {
               Welcome{user?.email ? `, ${user.email.split('@')[0]}` : ''}
             </h1>
             <p className="text-white/70">Your central hub for property investment tools, insights, and portfolio management.</p>
+            <p className="mt-3 text-sm text-white/60">
+              New: <Link to="/insights/future-of-real-estate-2026" className="text-[#B89555] hover:text-[#d4b06a] underline underline-offset-4">The Future of Real Estate — 5 trends to watch in 2026</Link>
+            </p>
             {/* Favorites & Shortlist */}
             <div className="flex items-center justify-center gap-3 mt-5">
               <Link
