@@ -245,17 +245,19 @@ export default function SupportLauncher() {
           {open ? (
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 flex items-center justify-center"
+              className="pointer-events-none flex items-center justify-center"
+              style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
             >
-              <X style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }} />
+              <X style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
             </span>
           ) : (
             <>
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                className="pointer-events-none flex items-center justify-center"
+                style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
               >
-                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18 }} />
+                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
               </span>
               <span
                 className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
@@ -263,7 +265,10 @@ export default function SupportLauncher() {
               >
                 Contact Us
               </span>
-              <span className="pointer-events-none absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]" />
+              <span
+                className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
+                style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8 }}
+              />
             </>
           )}
         </motion.button>
