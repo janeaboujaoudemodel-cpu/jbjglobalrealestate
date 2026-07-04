@@ -74,12 +74,12 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
         </span>
         <div>
           <p className="text-[14px] font-semibold text-[#1A1A1A] leading-tight">{row.country}</p>
-          <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#EFE6D6] overflow-hidden">
+          <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#010806] overflow-hidden">
             <div
               className="h-full rounded-full"
               style={{
                 width: `${widthPct}%`,
-                background: "linear-gradient(90deg, #B89555 0%, #D8B871 100%)",
+                background: "linear-gradient(90deg, #064E3B 0%, #042C1C 100%)",
               }}
             />
           </div>
@@ -146,14 +146,14 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {card(
           projectName,
-          "Top 5 buyers · This project",
+          "Top 5 buyers in this project",
           <Building2 className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />,
           projectRows,
           showAreaProxy ? "Dubai proxy" : undefined,
         )}
         {card(
           areaRows?.key || areaName || "Dubai · all areas",
-          "Top 5 buyers · Surrounding area",
+          "Top 5 buyers in surrounding area",
           <MapPin className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />,
           (areaRows?.rows || topRows).slice(0, 5),
           !areaRows && areaName ? "Dubai proxy" : undefined,

@@ -236,8 +236,7 @@ export const ConsultationRequestForm = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
         data-form-shell
-        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-5 sm:p-6 md:p-7 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-3xl mx-auto ${className}`}
-      style={{ transform: 'perspective(1200px) rotateX(1deg)' }}
+        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-6 sm:p-7 md:p-8 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-3xl mx-auto ${className}`}
     >
       {/* Header */}
       <div className="text-center mb-6">
@@ -364,7 +363,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-              <div className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
+              <div data-field-group className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
                     <div className="flex flex-wrap gap-2">
                       {BEDROOM_OPTIONS.map((b) => {
                         const active = selected.includes(b.value);
@@ -414,7 +413,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
+                  <div data-field-group className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
                     <div className="flex flex-wrap gap-2">
                       {SIZE_BUCKETS.map((b) => {
                         const active =
@@ -571,16 +570,16 @@ export const ConsultationRequestForm = ({
             )}
           />
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-3 border-t border-[#B89555]/20">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-4 border-t border-[#B89555]/20">
             <FormField
               control={form.control}
               name="agreeTerms"
               render={({ field }) => (
-                <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 pr-1">
+                <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/35 p-3 md:p-4">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      onCheckedChange={field.onChange}
+                      onCheckedChange={(checked) => field.onChange(checked === true)}
                     className="mt-0.5"
                     data-no-contrast-guard
                     />

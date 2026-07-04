@@ -1,6 +1,6 @@
 ---
 name: Global Dropdown Champagne + Emerald Accent Lock
-description: Site-wide dropdown standard — champagne luxury surface, emerald→black accent with pure white ink on hover/active/selected. Locked by PASS 220 in src/index.css.
+description: Site-wide dropdown standard — champagne luxury surface with ink text; emerald→black accent with pure white ink on hover/active/selected. Account dropdown follows this too.
 type: constraint
 ---
 
@@ -22,7 +22,7 @@ border: 1px solid rgba(184,149,85,0.42);
 
 ## Exceptions (opt-out)
 
-- `[data-account-menu-content]` — user account dropdown in the horizontal header stays emerald.
+- The horizontal-header user account dropdown also follows the champagne luxury surface with ink text. It is not an emerald exception.
 - `body[data-ai-tools-scope="true"]` — ALL AI tool routes (`/ai-*`, `/rental-index`, `/toolkit/*`, `/ai-hub`, `/meeting-center`, `/voice-settings`, `/my-ai-history`) render every popper in the emerald account-menu skin, NO champagne. Enforced by PASS 221 in `src/index.css` and driven by `<AIToolsScopeMarker />` in `src/App.tsx`.
 - `[data-preserve-surface]` / `[data-jbj-preserve-surface]` — escape hatch for calendars or custom UI.
 - **Non-popper elements are NOT affected**: the emerald filter search bar (input) and the Contact Us CTA (button) keep their existing emerald styling.

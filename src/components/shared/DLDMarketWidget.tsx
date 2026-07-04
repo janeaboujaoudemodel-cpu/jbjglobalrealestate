@@ -304,11 +304,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
 
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]" data-dld-split-bar>
-                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%`, minWidth: offPlanPct > 0 ? 44 : 0 }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#010806]" data-dld-split-bar>
+                <div data-dld-split-segment="left" data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${offPlanPct}%`, minWidth: offPlanPct > 0 ? 44 : 0 }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{offPlanPct}%</span>
                 </div>
-                <div className="h-full flex-1 flex items-center justify-center" style={{ minWidth: secondaryPct > 0 ? 44 : 0 }}>
+                <div data-dld-split-segment="right" className="h-full flex-1 flex items-center justify-center" style={{ minWidth: secondaryPct > 0 ? 44 : 0, background: "linear-gradient(135deg,#042C1C 0%,#010806 100%)" }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{secondaryPct}%</span>
                 </div>
               </div>
@@ -338,11 +338,11 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-4 h-4 text-[#064E3B]" />
                 <h3 className="text-[#0A0A0A] font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#064E3B]" data-dld-split-bar>
-                <div data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%`, minWidth: cashPct > 0 ? 44 : 0 }}>
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex bg-[#010806]" data-dld-split-bar>
+                <div data-dld-split-segment="left" data-emerald-action="true" className="jj-emerald-action h-full flex items-center justify-center" style={{ width: `${cashPct}%`, minWidth: cashPct > 0 ? 44 : 0 }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{cashPct}%</span>
                 </div>
-                <div className="h-full flex-1 flex items-center justify-center" style={{ minWidth: mortgagePct > 0 ? 44 : 0 }}>
+                <div data-dld-split-segment="right" className="h-full flex-1 flex items-center justify-center" style={{ minWidth: mortgagePct > 0 ? 44 : 0, background: "linear-gradient(135deg,#042C1C 0%,#010806 100%)" }}>
                   <span style={{ color: '#FFFFFF' }} className="text-[11px] font-bold">{mortgagePct}%</span>
                 </div>
               </div>
@@ -392,9 +392,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       key={area.area}
                       data-surface="emerald"
                       className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-[#B89555]/35"
-                      style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}
+                      style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}
                     >
-                      <div className="absolute inset-y-0 left-0 bg-white/10" style={{ width: `${barWidth}%` }} />
+                      <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
                       <button
                         type="button"
                         onClick={() => setExpandedArea(isExpanded ? null : area.area)}
@@ -415,9 +415,9 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                           </span>
                           {nats.length > 0 &&
                             (isExpanded ? (
-                              <ChevronUp className="w-3.5 h-3.5 text-[#064E3B]" strokeWidth={2.5} />
+                              <ChevronUp className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5 text-[#064E3B]" strokeWidth={2.5} />
+                              <ChevronDown className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
                             ))}
 
                         </div>
@@ -464,8 +464,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   const maxPct = topNationalities[0]?.percentage || 1;
                   const barWidth = Math.max((nat.percentage / maxPct) * 100, 8);
                   return (
-                    <div key={nat.country} data-surface="emerald" className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-[#B89555]/35" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
-                      <div className="absolute inset-y-0 left-0 bg-white/10" style={{ width: `${barWidth}%` }} />
+                    <div key={nat.country} data-surface="emerald" className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-[#B89555]/35" style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}>
+                      <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg leading-none">{nat.flag}</span>

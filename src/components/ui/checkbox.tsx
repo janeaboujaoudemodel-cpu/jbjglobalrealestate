@@ -27,7 +27,6 @@ const Checkbox = React.forwardRef<
   >
     <CheckboxPrimitive.Indicator
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
-      forceMount={undefined}
     >
       <Check
         className="!text-white !stroke-white"
