@@ -156,6 +156,7 @@ export default function OwnerSectionEditor({
           aria-label={`Edit ${config.title}`}
           title={`Edit ${config.title}`}
           data-no-contrast-guard
+          data-owner-pencil
           className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-[#F7F2EA] hover:bg-[#EFE6D6] border border-[#B89555]/40 text-[#1A1A1A] transition shadow-sm"
         >
           <Pencil className="w-3.5 h-3.5" />

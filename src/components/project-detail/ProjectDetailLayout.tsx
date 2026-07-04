@@ -49,6 +49,8 @@ import OwnerImageManager from "@/components/project-detail/owner/OwnerImageManag
 import HeroImagePicker from "@/components/project-detail/owner/HeroImagePicker";
 
 import OwnerSectionEditor from "@/components/project-detail/owner/OwnerSectionEditor";
+import { ProjectEditModeProvider, useProjectEditMode } from "@/contexts/ProjectEditModeContext";
+import { Pencil as PencilIcon, PencilOff } from "lucide-react";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
 import ProjectBreadcrumb from "@/components/project-detail/ProjectBreadcrumb";
 import CallToActionSection from "@/components/project-detail/CallToActionSection";
@@ -242,12 +244,21 @@ const SUB_NAV_TABS = [
 
 const normalizeDocType = (value: string) => value.toLowerCase().trim().replace(/[\s-]+/g, "_");
 
-export default function ProjectDetailLayout({
+export default function ProjectDetailLayout(props: ProjectDetailLayoutProps) {
+  return (
+    <ProjectEditModeProvider>
+      <ProjectDetailLayoutInner {...props} />
+    </ProjectEditModeProvider>
+  );
+}
+
+function ProjectDetailLayoutInner({
   project,
   adminBar,
   onRequestReport,
   showFooter = true,
 }: ProjectDetailLayoutProps) {
+  const { editMode: projectEditMode, toggle: toggleProjectEditMode } = useProjectEditMode();
   const { formatPrice: formatPriceUtil } = useCurrency();
   const { formatSize, convertSize, unitLabel } = useAreaUnit();
   const [activeTab, setActiveTab] = useState("details");
@@ -672,6 +683,29 @@ export default function ProjectDetailLayout({
           coverImageUrl={project.cover_image_url}
           cardImageUrl={(project as any).card_image_url}
         />
+
+        {/* Owner-only master edit toggle. Off → all pencils hidden site-wide
+            on this project page. On → every pencil reappears in its original
+            spot. This button itself stays visible in both states. */}
+        {isOwner && (
+          <div className="absolute top-4 right-4 z-30">
+            <button
+              type="button"
+              onClick={toggleProjectEditMode}
+              data-no-contrast-guard
+              aria-pressed={projectEditMode}
+              title={projectEditMode ? "Exit edit mode" : "Edit this page"}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-[0.2em] shadow-lg border backdrop-blur-sm transition-colors ${
+                projectEditMode
+                  ? "bg-[#1E5F3F] text-white border-[#B89555]/60 hover:bg-[#194f35]"
+                  : "bg-[#F7F2EA]/95 text-[#1A1A1A] border-[#B89555]/60 hover:bg-[#EFE6D6]"
+              }`}
+            >
+              {projectEditMode ? <PencilOff className="w-3.5 h-3.5" /> : <PencilIcon className="w-3.5 h-3.5" />}
+              {projectEditMode ? "Done editing" : "Edit page"}
+            </button>
+          </div>
+        )}
 
         <div className="absolute inset-0">
           {heroImage?.url ? (

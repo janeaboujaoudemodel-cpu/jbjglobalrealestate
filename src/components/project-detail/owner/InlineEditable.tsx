@@ -173,6 +173,7 @@ export default function InlineEditable({
         aria-label={label ?? `Edit ${field}`}
         title={label ?? `Edit ${field}`}
         data-no-contrast-guard
+        data-owner-pencil
       >
         <Pencil className="w-3 h-3" />
       </button>
