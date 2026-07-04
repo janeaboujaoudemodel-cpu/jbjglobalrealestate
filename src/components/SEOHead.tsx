@@ -6,6 +6,11 @@ interface FAQItem {
   answer: string;
 }
 
+interface BreadcrumbItem {
+  name: string;
+  path: string;
+}
+
 interface SEOHeadProps {
   title: string;
   description?: string;
@@ -16,6 +21,8 @@ interface SEOHeadProps {
   noIndex?: boolean;
   /** Pass FAQ items to inject FAQPage JSON-LD for Google rich snippets */
   faqItems?: FAQItem[];
+  /** Pass ordered breadcrumb trail (Home -> current) to inject BreadcrumbList JSON-LD */
+  breadcrumbItems?: BreadcrumbItem[];
 }
 
 const BASE_URL = 'https://www.jbj.ae';
@@ -39,6 +46,7 @@ export const SEOHead = ({
   ogType = 'website',
   noIndex = false,
   faqItems,
+  breadcrumbItems,
 }: SEOHeadProps) => {
   const { isFounderVisible } = useFounderVisibility();
   
@@ -145,14 +153,38 @@ export const SEOHead = ({
       faqScript.textContent = JSON.stringify(faqSchema);
     }
 
+    // BreadcrumbList structured data (JSON-LD for Google breadcrumb rich results)
+    const breadcrumbScriptId = 'jbj-breadcrumb-jsonld';
+    if (breadcrumbItems && breadcrumbItems.length > 0) {
+      let bcScript = document.getElementById(breadcrumbScriptId) as HTMLScriptElement | null;
+      if (!bcScript) {
+        bcScript = document.createElement('script');
+        bcScript.id = breadcrumbScriptId;
+        bcScript.type = 'application/ld+json';
+        document.head.appendChild(bcScript);
+      }
+      const bcSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbItems.map((item, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": item.name,
+          "item": item.path.startsWith('http') ? item.path : `${BASE_URL}${item.path}`,
+        })),
+      };
+      bcScript.textContent = JSON.stringify(bcSchema);
+    }
+
     // Cleanup on unmount - restore defaults
     return () => {
       document.title = `${BRAND_NAME} | Dubai Property Brokerage | Buy, Sell, Rent`;
-      // Remove FAQ schema on unmount
       const existingFaqScript = document.getElementById(faqScriptId);
       if (existingFaqScript) existingFaqScript.remove();
+      const existingBcScript = document.getElementById(breadcrumbScriptId);
+      if (existingBcScript) existingBcScript.remove();
     };
-  }, [fullTitle, finalDescription, finalKeywords, coreKeywords, isFounderVisible, canonicalPath, ogImage, ogType, noIndex, faqItems]);
+  }, [fullTitle, finalDescription, finalKeywords, coreKeywords, isFounderVisible, canonicalPath, ogImage, ogType, noIndex, faqItems, breadcrumbItems]);
 
   return null; // This component doesn't render anything
 };

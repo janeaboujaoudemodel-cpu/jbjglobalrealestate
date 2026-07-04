@@ -362,6 +362,11 @@ const ProjectDetail = () => {
         canonicalPath={`/project/${slug}`}
         ogImage={seoImage}
         ogType="product"
+        breadcrumbItems={[
+          { name: 'Home', path: '/' },
+          { name: 'Projects', path: '/projects' },
+          { name: mapped.name || 'Project', path: `/project/${slug}` },
+        ]}
       />
       <ProjectStructuredData project={mapped} slug={slug || ""} />
       <ProjectDetailLayout project={mapped} onRequestReport={() => setShowReportModal(true)} />

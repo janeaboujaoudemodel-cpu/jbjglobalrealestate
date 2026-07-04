@@ -192,6 +192,12 @@ const NewsDetail = () => {
       <SEOHead
         title={`${article.title} | JBJ Global Real Estate News`}
         description={article.excerpt}
+        ogType="article"
+        breadcrumbItems={[
+          { name: 'Home', path: '/' },
+          { name: 'News', path: '/news' },
+          { name: article.title, path: `/news/${id}` },
+        ]}
       />
       <script
         type="application/ld+json"
