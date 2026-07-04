@@ -22,6 +22,7 @@ import { useInteriorDesignHistory, DesignInput, DesignResult, DesignHistoryItem 
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
+import { SEOHead } from "@/components/SEOHead";
 
 // Data arrays
 const designStyles = [
