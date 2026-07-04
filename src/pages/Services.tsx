@@ -196,7 +196,7 @@ const scopeExcludes = [
 
 const Services = () => {
   return (
-    <div data-brand-emerald-page data-marketing-page className="min-h-screen" style={{ background: "#010806" }}>
+    <div data-brand-emerald-page data-services-page data-marketing-page className="min-h-screen" style={{ background: "#010806" }}>
       <SEOHead 
         title="Real Estate Services | JBJ Global Real Estate"
         description="A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards."
