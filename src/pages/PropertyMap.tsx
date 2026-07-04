@@ -846,6 +846,7 @@ const PropertyMap = () => {
       </div>
 
       </div>
+    </>
   );
 };
 
