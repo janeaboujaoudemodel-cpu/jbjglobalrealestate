@@ -35,31 +35,33 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Area / off-plan filter dialog lock: emerald-black surfaces, pure white copy. */
+/* Advanced Filter Panel — champagne + ink standard (matches user account dropdown).
+   Emerald reserved for active pills/hovers via jj-pill-emerald-metallic. */
 html body [data-filter-clean][role="dialog"] {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
-  border-color: rgba(255,255,255,0.24) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body [data-filter-clean][role="dialog"] :is(h1,h2,h3,h4,h5,h6,p,span,label,div,button,li,dt,dd) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body [data-filter-clean][role="dialog"] :is(svg,[data-lucide]) {
-  color: #FFFFFF !important;
-  stroke: #FFFFFF !important;
+  color: #1A1A1A !important;
+  stroke: currentColor !important;
 }
 html body [data-filter-clean][role="dialog"] :is(input,textarea,select,button[role="combobox"]) {
-  background: rgba(2,22,17,0.82) !important;
-  border-color: rgba(255,255,255,0.28) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }
 html body [data-filter-clean][role="dialog"] :is(input,textarea)::placeholder {
-  color: #FFFFFF !important;
+  color: rgba(26,26,26,0.55) !important;
   opacity: 1 !important;
 }
+/* Active/selected chips + emerald metallic pills keep pure white text + emerald bg */
 html body [data-filter-clean][role="dialog"] [data-state="checked"],
 html body [data-filter-clean][role="dialog"] [data-state="active"],
 html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
@@ -68,6 +70,26 @@ html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic {
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: transparent !important;
 }
+html body [data-filter-clean][role="dialog"] [data-state="checked"] :is(svg,span,p,div),
+html body [data-filter-clean][role="dialog"] [data-state="active"] :is(svg,span,p,div),
+html body [data-filter-clean][role="dialog"] .jj-pill-emerald-metallic :is(svg,span,p,div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* Convert dark emerald surface cards to white cards on the champagne panel */
+html body [data-filter-clean][role="dialog"] [class*="bg-\[\#021611\]"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/7"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/12"],
+html body [data-filter-clean][role="dialog"] [class*="bg-white\/14"],
+html body [data-filter-clean][role="dialog"] [class*="bg-black\/10"] {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+}
+html body [data-filter-clean][role="dialog"] [class*="border-white\/"] {
+  border-color: rgba(184,149,85,0.50) !important;
+}
+
 
 
 /* =====================================================================
