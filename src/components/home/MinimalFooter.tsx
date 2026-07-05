@@ -14,17 +14,23 @@ const links = [
 const MinimalFooter = () => {
   return (
     <footer
-      className={[
-        "w-full bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC]",
-        "border-t border-[#B89555]/35",
-      ].join(" ")}
+      className="w-full bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] relative"
       data-surface="champagne"
       data-jj-minimal-footer
     >
-      <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6 transition-[padding-left] duration-100 ease-out [body.jj-vertical-nav-active_&]:sm:pl-[200px] [body.jj-vertical-nav-collapsed_&]:sm:pl-[48px]">
+      {/* Top gold hairline — same treatment as the sidebar divider */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 6%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 94%, transparent 100%)",
+        }}
+      />
+      <div className="max-w-[1600px] mx-auto px-5 md:px-10 py-5 md:py-6">
         <nav
           aria-label="Footer"
-          className="flex flex-wrap items-center justify-center gap-x-5 md:gap-x-7 gap-y-2"
+          className="flex flex-wrap items-center justify-center gap-x-5 md:gap-x-7 gap-y-2 text-center"
         >
           {links.map((l, i) => (
             <span key={l.href} className="inline-flex items-center gap-x-5 md:gap-x-7">
