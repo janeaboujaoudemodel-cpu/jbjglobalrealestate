@@ -5,6 +5,7 @@ import { Layers, AlertTriangle, RefreshCw } from "lucide-react";
 import { MapNavigationControlsStandalone } from "@/components/maps/MapNavigationControls";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
+import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyDisposeMap, safelyRemoveLayer } from "@/utils/leafletSafety";
 import "leaflet/dist/leaflet.css";
 
 interface DeveloperProject {
@@ -117,6 +118,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         : [25.2048, 55.2708];
 
       const map = L.map(mapContainerRef.current, {
+        ...SAFE_LEAFLET_MAP_OPTIONS,
         center,
         zoom: 11,
         // Keep scroll wheel disabled until user opts in (prevents page hijack),
@@ -128,7 +130,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         dragging: true,
         keyboard: true,
         zoomControl: false,
-        zoomAnimation: true,
+        zoomAnimation: false,
         zoomSnap: 0.5,
         wheelDebounceTime: 20,
         fadeAnimation: false,
@@ -141,7 +143,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
 
       const tiles = getMapTiles(language);
       const initialTileConfig = tiles.satellite;
-      const initialTileOptions: L.TileLayerOptions = { attribution: initialTileConfig.attribution };
+      const initialTileOptions: L.TileLayerOptions = { ...SAFE_TILE_LAYER_OPTIONS, attribution: initialTileConfig.attribution, maxZoom: 19 };
       if (initialTileConfig.subdomains) initialTileOptions.subdomains = initialTileConfig.subdomains;
       const initialTileLayer = L.tileLayer(initialTileConfig.url, initialTileOptions);
       initialTileLayer.addTo(map);
@@ -181,7 +183,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
 
     return () => {
       if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
+        safelyDisposeMap(mapInstanceRef.current);
         mapInstanceRef.current = null;
         tileLayerRef.current = null;
         markersRef.current = [];
@@ -194,11 +196,13 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
     if (!mapInstanceRef.current || !tileLayerRef.current) return;
 
     try {
-      tileLayerRef.current.remove();
+      safelyRemoveLayer(mapInstanceRef.current, tileLayerRef.current);
       const tiles = getMapTiles(language);
       const tileConfig = tiles[tileLayer];
       const tileOptions: L.TileLayerOptions = {
+        ...SAFE_TILE_LAYER_OPTIONS,
         attribution: tileConfig.attribution,
+        maxZoom: 19,
       };
       if (tileConfig.subdomains) tileOptions.subdomains = tileConfig.subdomains;
       const newTileLayer = L.tileLayer(tileConfig.url, tileOptions);
@@ -213,7 +217,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const handleRetry = useCallback(() => {
     setMapError(null);
     if (mapInstanceRef.current) {
-      mapInstanceRef.current.remove();
+      safelyDisposeMap(mapInstanceRef.current);
       mapInstanceRef.current = null;
       tileLayerRef.current = null;
       markersRef.current = [];

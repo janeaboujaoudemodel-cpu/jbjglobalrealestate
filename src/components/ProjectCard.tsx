@@ -284,7 +284,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       <Link to={projectHref} className="flex-1 flex flex-col">
         {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
-          <div className="surface-ink aspect-[16/10] overflow-hidden relative" data-surface="ink">
+          <div className="surface-ink aspect-[16/10] overflow-hidden relative bg-[#021611]" data-surface="ink">
           <VerifiedMedia
             src={primaryImageUrl}
             alt={
@@ -293,7 +293,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 .filter(Boolean)
                 .join(' — ') || project.name
             }
-            className="object-cover object-center w-full h-full group-hover:scale-[1.04] transition-transform duration-300"
+            className="object-cover object-center w-[calc(100%+4px)] h-[calc(100%+4px)] max-w-none -m-[2px] group-hover:scale-[1.04] transition-transform duration-300"
             placeholderLabel=""
             priority={priority}
             loggerComponent="ProjectCard"

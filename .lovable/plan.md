@@ -1,51 +1,38 @@
-I will complete the pending items one by one and only mark each item done after browser validation.
+I’ll fix only the issues you listed, then validate them visually with Playwright screenshots and interaction timing.
 
-1. Restore metallic animation on CTA buttons/cards
-- Re-apply the continuous emerald metallic sweep to Email / Call / Chat buttons in ProjectCard, including the Handpicked For You section because it uses ProjectCard.
-- Re-apply the same continuous metallic animation to the Ready to Get Started contact tiles in CombinedContactNewsletter and any matching global CTA tiles using DirectContactCTA where applicable.
-- Ensure icons/text remain pure white on emerald.
+Plan:
 
-2. Restore developer-name underline in cards
-- Add back the gold underline/border under the developer name in ProjectCard / DeveloperLink only where project cards need it.
-- Keep the separate developer detail page title/link underline removal unchanged unless it is part of the card display.
+1. Reproduce and capture the current failures first
+   - Homepage: hero/filter white border, “Choose your category” section, Handpicked For You card count, project card image fit, CTA animation visibility.
+   - Developer pages: /developer/damac and /developer/kingdom-by-mag filter dropdowns, payment dropdown, project card buttons, developer-name shine, map behavior.
+   - Sidebar: collapsed Sign In / Sign Out button shape compared with Collapse.
 
-3. Fix filter search pill and dropdown contrast from the root
-- Remove the faded/inner-filter look from the “Search area, project…” pill so it is one clean emerald pill with pure white text/placeholder and no internal extra border.
-- Replace fragile contrast overrides with a single root-level filter dropdown contract:
-  - Champagne dropdown surface = black text.
-  - Emerald selected/active pills = pure white text/icons.
-  - No black text on emerald and no faded white text on champagne.
-- Apply this to Price, Payments, Handover, Property Type, Bedrooms, and advanced filter dropdowns.
+2. Fix slow filter dropdown open/close at the root
+   - Simplify the filter popover rendering path so Price, Payments, Property Type, and other dropdowns open/close instantly.
+   - Remove conflicting/duplicated heavy contrast override blocks that are causing style recalculation and broken text colors.
+   - Keep dropdown surfaces champagne with black text, and active emerald selections with pure white text.
 
-4. Make dropdown opening fast site-wide
-- Remove any popover animations/transitions and expensive effects used by filter dropdowns.
-- Keep popovers mounted/positioned with minimal collision work where safe.
-- Reduce heavy CSS/box-shadow/layout-thrashing on filter rails/dropdowns.
-- Validate click-to-open timing in browser by opening Price, Payments, Handover, and Property Type and recording elapsed times.
+3. Fix homepage section and border issues
+   - Remove the “Choose your category” section completely from the homepage render path.
+   - Remove the white border/gap above the homepage filter/hero area without changing unrelated hero content.
+   - Ensure homepage/project card photos fill the image area with no visible white empty strip.
 
-5. Fix slow scroll and heavy card behavior
-- Remove expensive hover/prefetch behavior from every ProjectCard that triggers detail-page imports on hover/focus.
-- Reduce costly always-running shadows/animations where they hurt scroll performance, while keeping the requested metallic CTA/card animations.
-- Validate scroll responsiveness in browser on home, developer detail, and project detail pages.
+4. Restore metallic animation everywhere requested
+   - Restore visible continuous metallic sweep on ProjectCard Email / Call / Chat buttons everywhere ProjectCard appears, including Handpicked For You and developer/project grids.
+   - Restore the same animated effect on Ready to Get Started WhatsApp / Call Us / Email tiles wherever that shared CTA appears.
+   - Add the shine/metallic effect back to developer names on project cards without reintroducing unwanted underlines.
 
-6. Fix mortgage calculator duplicate Property Price control
-- Remove the emerald Property Price input/button in the full mortgage calculator layout.
-- Keep only the Property Price title/value and slider.
-- Align the four pickers/sliders together: Property Price, Down Payment, Interest Rate, Loan Term.
+5. Restore six Handpicked cards on desktop
+   - Ensure Handpicked For You renders six project cards on desktop while keeping mobile/tablet behavior intact.
+   - Verify the grid visually at desktop width.
 
-7. Match developer page logo frame animation to project page developer frame
-- Make the developer page logo/frame use the same metallic frame treatment as the project page developer frame.
-- Validate on `/developer/majid-al-futtaim` with screenshot.
+6. Fix map loading/runtime issue
+   - Address the Leaflet `_leaflet_pos` runtime error by hardening map mount/unmount and disabling the unstable zoom transition path where needed.
+   - Make developer/project maps feel faster and avoid delayed/broken map interactions.
 
-8. Speed up brochure monogram logo loading
-- Audit brochure/logo usage and replace delayed-loading logo behavior with eager/preloaded inline/local asset behavior where the brochure renders the JBJ monogram.
-- Validate that the brochure view shows the monogram immediately after opening.
+7. Fix collapsed sidebar Sign In / Sign Out shape
+   - Make Sign In and Sign Out match the Collapse button size, border radius, border treatment, and edge alignment in the vertical sidebar.
 
-Validation proof I will produce after implementation
-- Screenshot: Handpicked For You cards showing Email/Call/Chat metallic CTA buttons and restored developer underline.
-- Screenshot: Ready to Get Started card showing metallic animated contact tiles.
-- Screenshot: Project detail filter bar showing clean emerald search pill with white text/no inner border.
-- Screenshot: Price, Payments, Handover, and Property Type dropdowns showing correct contrast.
-- Screenshot: Mortgage calculator with four aligned sliders and no duplicate Property Price emerald input.
-- Screenshot: Developer detail page showing matching metallic developer logo frame.
-- Timing logs from browser validation for dropdown opening and scroll checks.
+8. Validate visually and technically
+   - Use Playwright as a user: navigate, click dropdowns open/close, click payment/property type filters, inspect homepage, developer pages, cards, CTA section, sidebar, and maps.
+   - Save screenshots for proof of: dropdown contrast/open state, no homepage category section, no white hero/filter border, six desktop cards, animated CTA/developer-name surfaces, sidebar button match, and map loaded without runtime error.

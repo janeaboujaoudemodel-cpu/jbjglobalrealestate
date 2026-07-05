@@ -262,6 +262,21 @@ async function tierEliteFallback(mode: string | null): Promise<Project[]> {
   return result;
 }
 
+async function tierPublishedFallback(): Promise<Project[]> {
+  const { data } = await supabase
+    .from("projects")
+    .select(SELECT)
+    .eq("is_published", true)
+    .not("cover_image_url", "is", null)
+    .neq("cover_image_url", "")
+    .order("is_premium", { ascending: false, nullsFirst: false })
+    .order("is_featured", { ascending: false, nullsFirst: false })
+    .order("updated_at", { ascending: false, nullsFirst: false })
+    .limit(24);
+
+  return (data || []) as unknown as Project[];
+}
+
 export function useHandpickedProjects() {
   const { user } = useAuth();
   const { mode } = useUserModeContext() as any;
@@ -302,6 +317,18 @@ export function useHandpickedProjects() {
         try {
           const elite = await tierEliteFallback(mode ?? null);
           dedupePush(out, seen, elite);
+        } catch {}
+      }
+
+      if (out.length < TARGET) {
+        try {
+          const published = await tierPublishedFallback();
+          for (const p of published) {
+            if (out.length >= TARGET) break;
+            if (!p?.id || seen.has(p.id)) continue;
+            seen.add(p.id);
+            out.push(p);
+          }
         } catch {}
       }
 

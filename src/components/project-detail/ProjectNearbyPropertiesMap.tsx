@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles } from "@/constants/mapTiles";
+import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS } from "@/utils/leafletSafety";
 import { PricePill } from "@/components/ui/price-pill";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { pushBackStack } from "@/lib/browsingHistory";
@@ -301,8 +302,9 @@ export default function ProjectNearbyPropertiesMap({
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
         attributionControl={false}
+        {...SAFE_LEAFLET_MAP_OPTIONS}
       >
-        <TileLayer url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
+        <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
         <MapNavigationControls latitude={center[0]} longitude={center[1]} />
 
         {/* Current project marker (red) — only when we have real coords */}

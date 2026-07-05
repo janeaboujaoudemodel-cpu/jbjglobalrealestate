@@ -9,10 +9,10 @@ interface MapNavigationControlsProps {
 export function MapNavigationControls({ latitude, longitude }: MapNavigationControlsProps) {
   const map = useMap();
 
-  const handleZoomIn = () => map.zoomIn();
-  const handleZoomOut = () => map.zoomOut();
+  const handleZoomIn = () => map.zoomIn(1, { animate: false });
+  const handleZoomOut = () => map.zoomOut(1, { animate: false });
   const handleRecenter = () => {
-    map.setView([latitude, longitude], map.getZoom(), { animate: true });
+    map.setView([latitude, longitude], map.getZoom(), { animate: false });
   };
   const handleOpen3D = () => {
     const zoom = map.getZoom();
@@ -54,10 +54,10 @@ export function MapNavigationControlsStandalone({
 }) {
   if (!mapInstance) return null;
 
-  const handleZoomIn = () => mapInstance.zoomIn();
-  const handleZoomOut = () => mapInstance.zoomOut();
+  const handleZoomIn = () => mapInstance.zoomIn(1, { animate: false });
+  const handleZoomOut = () => mapInstance.zoomOut(1, { animate: false });
   const handleRecenter = () => {
-    mapInstance.setView([latitude, longitude], mapInstance.getZoom(), { animate: true });
+    mapInstance.setView([latitude, longitude], mapInstance.getZoom(), { animate: false });
   };
   const handleOpen3D = () => {
     const zoom = mapInstance.getZoom();
