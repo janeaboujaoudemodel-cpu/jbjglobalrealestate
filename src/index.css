@@ -31781,3 +31781,10 @@ html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surfac
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+html body [data-filter-dropdown="true"] [data-filter-ink-label][data-filter-ink-label],
+html body [data-filter-dropdown="true"] [data-filter-ink-label][data-filter-ink-label] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
