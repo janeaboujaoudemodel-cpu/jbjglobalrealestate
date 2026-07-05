@@ -75,7 +75,8 @@ async function upsertFromZoho(z: ZohoLead) {
   const name = [first, last].filter(Boolean).join(" ").trim() || "Unnamed lead";
   const email = z.Email ?? null;
   const phone = z.Phone ?? z.Mobile ?? null;
-  const status = z.Lead_Status ?? null;
+  const rawStatus = z.Lead_Status ?? null;
+  const jbjStatus = mapZohoStatusToJbj(rawStatus);
   const notes = z.Description ?? null;
   const source = z.Lead_Source ?? null;
 
