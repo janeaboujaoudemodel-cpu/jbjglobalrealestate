@@ -119,13 +119,23 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       const map = L.map(mapContainerRef.current, {
         center,
         zoom: 11,
+        // Keep scroll wheel disabled until user opts in (prevents page hijack),
+        // but allow touch/drag/keyboard + programmatic zoom so +/- controls
+        // respond instantly with no perceived lag.
         scrollWheelZoom: false,
-        touchZoom: false,
+        touchZoom: true,
+        doubleClickZoom: true,
         dragging: true,
+        keyboard: true,
         zoomControl: false,
+        zoomAnimation: true,
+        zoomSnap: 0.5,
+        wheelDebounceTime: 20,
       });
 
       mapInstanceRef.current = map;
+      // Force re-render so the standalone nav controls receive the real map instance
+      setMapReadyTick((n) => n + 1);
 
       const tiles = getMapTiles(language);
       const initialTileConfig = tiles.satellite;
