@@ -32494,6 +32494,107 @@ export type Database = {
         }
         Relationships: []
       }
+      sync_conflicts: {
+        Row: {
+          created_at: string
+          crm_lead_id: string | null
+          crm_value: string | null
+          detected_at: string
+          field: string
+          final_value: string | null
+          id: string
+          jbj_lead_id: string | null
+          jbj_value: string | null
+          resolution: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          zoho_lead_id: string | null
+          zoho_value: string | null
+        }
+        Insert: {
+          created_at?: string
+          crm_lead_id?: string | null
+          crm_value?: string | null
+          detected_at?: string
+          field: string
+          final_value?: string | null
+          id?: string
+          jbj_lead_id?: string | null
+          jbj_value?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          zoho_lead_id?: string | null
+          zoho_value?: string | null
+        }
+        Update: {
+          created_at?: string
+          crm_lead_id?: string | null
+          crm_value?: string | null
+          detected_at?: string
+          field?: string
+          final_value?: string | null
+          id?: string
+          jbj_lead_id?: string | null
+          jbj_value?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          zoho_lead_id?: string | null
+          zoho_value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sync_conflicts_crm_lead_id_fkey"
+            columns: ["crm_lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sync_conflicts_crm_lead_id_fkey"
+            columns: ["crm_lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sync_conflicts_crm_lead_id_fkey"
+            columns: ["crm_lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sync_conflicts_crm_lead_id_fkey"
+            columns: ["crm_lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_broker_pre_invite_leads"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "sync_conflicts_crm_lead_id_fkey"
+            columns: ["crm_lead_id"]
+            isOneToOne: false
+            referencedRelation: "vw_crm_database_row_status"
+            referencedColumns: ["lead_id"]
+          },
+          {
+            foreignKeyName: "sync_conflicts_jbj_lead_id_fkey"
+            columns: ["jbj_lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sync_conflicts_jbj_lead_id_fkey"
+            columns: ["jbj_lead_id"]
+            isOneToOne: false
+            referencedRelation: "jbj_leads_secure"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sync_job_pages: {
         Row: {
           created_at: string | null

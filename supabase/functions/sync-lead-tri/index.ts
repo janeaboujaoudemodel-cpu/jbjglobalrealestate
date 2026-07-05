@@ -279,17 +279,28 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const payload = (await req.json()) as Payload & { id?: string; force?: boolean };
+    const payload = (await req.json()) as Payload & { id?: string; zoho_lead_id?: string; force?: boolean };
 
-    // Force-sync path: caller passes { source, id, force:true } — load the record ourselves.
-    if (payload.force && payload.id && payload.source) {
+    // Force-sync path: caller passes { source, id|zoho_lead_id, force:true } — load the record ourselves.
+    if (payload.force && payload.source) {
       let record: any = null;
-      if (payload.source === "jbj") {
+      if (payload.source === "jbj" && payload.id) {
         const { data } = await admin.from("jbj_leads").select("*").eq("id", payload.id).maybeSingle();
         record = data;
-      } else if (payload.source === "crm") {
+      } else if (payload.source === "crm" && payload.id) {
         const { data } = await admin.from("crm_leads").select("*").eq("id", payload.id).maybeSingle();
         record = data;
+      } else if (payload.source === "zoho" && payload.zoho_lead_id) {
+        const res = await fetch(`${ZOHO_GATEWAY}/Leads/${payload.zoho_lead_id}`, {
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": ZOHO_CRM_API_KEY,
+          },
+        });
+        if (res.ok) {
+          const j = await res.json();
+          record = j?.data?.[0] ?? null;
+        }
       }
       if (!record) {
         return new Response(JSON.stringify({ error: "record not found" }), {

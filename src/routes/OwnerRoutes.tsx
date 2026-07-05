@@ -48,6 +48,8 @@ const GlobalRecommendationsHub = lazy(() => import("@/pages/owner/GlobalRecommen
 const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagement"));
 const Documents = lazy(() => import("@/pages/Documents"));
 const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
+const CRMSyncDeadLetters = lazy(() => import("@/pages/CRMSyncDeadLetters"));
+const CRMSyncConflicts = lazy(() => import("@/pages/CRMSyncConflicts"));
 const CRMTasks = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
@@ -219,6 +221,8 @@ export const OwnerRoutes = () => (
     <Route path="crm/academy" element={<OwnerAcademyApprovals />} />
     <Route path="hr/employee/:userId" element={<EmployeeProfile />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
+    <Route path="crm/sync-errors" element={<CRMSyncDeadLetters />} />
+    <Route path="crm/sync-conflicts" element={<CRMSyncConflicts />} />
     <Route path="crm/leads" element={<Navigate to="/owner/crm?entity=leads&view=all" replace />} />
     <Route path="crm/tasks" element={<Navigate to="/owner/crm?entity=leads&view=tasks" replace />} />
     <Route path="crm/calendar" element={<Navigate to="/owner/crm?entity=leads&view=calendar" replace />} />
