@@ -1526,11 +1526,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               );
             })}
 
-            <div className="h-2 shrink-0" />
+            {/* Push the 4 bottom icons (Contact · Support · Sign Out · Expand)
+                all the way down to the footer of the collapsed rail. */}
+            <div className="flex-1 min-h-4" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1 pt-1 w-full">
+            <div className="flex flex-col items-center gap-1.5 pt-1 pb-1 w-full">
               <div className="h-px w-7 mb-2 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
+
 
               <Tooltip>
                 <TooltipTrigger asChild>
