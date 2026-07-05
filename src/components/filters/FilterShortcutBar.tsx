@@ -375,6 +375,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const filterTabsList = "w-full mb-3 rounded-xl border border-[#B89555]/60 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EADBB6] p-1";
   const filterTabTrigger = "flex-1 rounded-lg text-xs font-bold text-[#1A1A1A] data-[state=active]:bg-[#FDFBF7] data-[state=active]:text-[#1A1A1A] data-[state=active]:shadow-sm";
   const dropdownGhostChip = "bg-white border border-[#B89555]/55 text-[#1A1A1A] hover:bg-[#F7F2EA] hover:border-[#064E3B]/55";
+  const selectedTabStyle = {
+    backgroundImage: 'var(--jj-emerald-ombre)',
+    color: '#FFFFFF',
+    WebkitTextFillColor: '#FFFFFF',
+    borderColor: 'transparent',
+  } as React.CSSProperties;
+  const inactiveTabStyle = {
+    color: '#1A1A1A',
+    WebkitTextFillColor: '#1A1A1A',
+  } as React.CSSProperties;
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -470,9 +480,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className={filterTabsList}>
-                <TabsTrigger value="unit" className={filterTabTrigger}>{t('filter.perUnit')}</TabsTrigger>
-                <TabsTrigger value="sqft" className={filterTabTrigger}>{t('filter.perSqft')}</TabsTrigger>
-                <TabsTrigger value="sqm" className={filterTabTrigger}>{t('filter.perSqm')}</TabsTrigger>
+                <TabsTrigger value="unit" data-filter-selected={filters.priceMode === 'unit' ? "true" : undefined} style={filters.priceMode === 'unit' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.perUnit')}</TabsTrigger>
+                <TabsTrigger value="sqft" data-filter-selected={filters.priceMode === 'sqft' ? "true" : undefined} style={filters.priceMode === 'sqft' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.perSqft')}</TabsTrigger>
+                <TabsTrigger value="sqm" data-filter-selected={filters.priceMode === 'sqm' ? "true" : undefined} style={filters.priceMode === 'sqm' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.perSqm')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -674,6 +684,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     <button
                       key={q}
                       onClick={() => update({ handoverTo: { ...filters.handoverTo, quarter: q } })}
+                  data-filter-selected={filters.handoverTo.quarter === q ? "true" : undefined}
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverTo.quarter === q
@@ -716,8 +727,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className={filterTabsList}>
-                <TabsTrigger value="residential" className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
+                <TabsTrigger value="residential" data-filter-selected={(filters.propertyCategory || 'residential') === 'residential' ? "true" : undefined} style={(filters.propertyCategory || 'residential') === 'residential' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" data-filter-selected={filters.propertyCategory === 'commercial' ? "true" : undefined} style={filters.propertyCategory === 'commercial' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
@@ -725,6 +736,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ propertyTypes: toggleArray(filters.propertyTypes, opt.value) })}
+                  data-filter-selected={filters.propertyTypes.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.propertyTypes.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
@@ -749,6 +761,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ bedrooms: toggleArray(filters.bedrooms, opt.value) })}
+                  data-filter-selected={filters.bedrooms.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.bedrooms.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
@@ -777,6 +790,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ statuses: toggleArray(filters.statuses, opt.value) })}
+                  data-filter-selected={filters.statuses.includes(opt.value) ? "true" : undefined}
                   className={cn(
                     togglePillBase,
                     filters.statuses.includes(opt.value) ? togglePillOn : togglePillOff,
@@ -810,6 +824,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ constructionStatuses: toggleArray(filters.constructionStatuses, opt.value) })}
+                  data-filter-selected={filters.constructionStatuses.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.constructionStatuses.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
@@ -840,6 +855,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ views: toggleArray(filters.views, opt.value) })}
+                  data-filter-selected={filters.views.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.views.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
