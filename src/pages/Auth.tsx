@@ -24,6 +24,7 @@ import { lovable } from "@/integrations/lovable";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useUserModeContext, type UserMode as PlatformUserMode } from "@/contexts/UserModeContext";
 import PasswordStrengthMeter from "@/components/auth/PasswordStrengthMeter";
+import PasskeyButton from "@/components/auth/PasskeyButton";
 
 const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'developer'];
 const isValidPreselect = (v: string | null): v is PlatformUserMode =>
