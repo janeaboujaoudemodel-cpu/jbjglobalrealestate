@@ -31348,3 +31348,12 @@ html body [data-filter-dropdown="true"][data-surface] .jj-pill-emerald-metallic 
   stroke: #FFFFFF !important;
 }
 
+
+/* Filter dropdown final ink lock — children marked .allow-white / .text-white
+   were built for the old emerald surface. On the champagne surface force ink. */
+html body [data-filter-dropdown="true"][data-surface] .allow-white,
+html body [data-filter-dropdown="true"][data-surface] .text-white,
+html body [data-filter-dropdown="true"][data-surface] [class*="text-white"]:not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
