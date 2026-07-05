@@ -1382,7 +1382,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; }}
               >
                 <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 !text-white allow-white shrink-0" color="#FFFFFF" stroke="#FFFFFF" strokeWidth={2.4} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span data-signout-label className="allow-white !text-white whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
+                <span data-signout-label className="allow-white !text-white whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>{"Sign\u00A0Out"}</span>
               </button>
             ) : (
               <Link
