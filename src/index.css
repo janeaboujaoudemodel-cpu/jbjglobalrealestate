@@ -32049,3 +32049,131 @@ html body [data-radix-popper-content-wrapper][data-radix-popper-content-wrapper]
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 206 — final execution closure for pending UI fixes. */
+html body #root .developer-name-gold {
+  text-decoration-line: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 3px !important;
+  text-decoration-color: rgba(184,149,85,0.86) !important;
+}
+
+html body #root .jj-card-cta-metallic::after,
+html body #root .jj-ready-cta-metallic::after,
+html body #root .jj-filter-search-pill::after {
+  animation: jj-emerald-metallic-sweep 4.8s linear infinite !important;
+}
+
+html body #root .jj-filter-search-pill,
+html body #root [data-project-detail-filterbar="true"] .jj-filter-search-pill,
+html body #root [data-filter-clean] .jj-filter-search-pill {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: 0 9px 22px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+html body #root .jj-filter-search-pill input,
+html body #root .jj-filter-search-pill input:focus,
+html body #root .jj-filter-search-pill input:focus-visible,
+html body #root .jj-filter-search-pill .filter-search-pill-input,
+html body #root .jj-filter-search-pill .filter-search-pill-input:focus,
+html body #root .jj-filter-search-pill .filter-search-pill-input:focus-visible {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body #root .jj-filter-search-pill input::placeholder,
+html body #root .jj-filter-search-pill .filter-search-pill-input::placeholder {
+  color: rgba(255,255,255,0.88) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.88) !important;
+  opacity: 1 !important;
+}
+
+html body [data-radix-popper-content-wrapper] {
+  transition: none !important;
+  animation: none !important;
+}
+html body [data-filter-dropdown="true"] {
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12) !important;
+  transform: translate3d(0,0,0) !important;
+  transition: none !important;
+  animation: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,label,small,strong,em,li,div,span):not([data-filter-selected="true"]):not([data-filter-selected="true"] *):not(.filter-primary-action):not(.filter-primary-action *):not(.filter-emerald-action):not(.filter-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] :is(input,select,textarea) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+}
+html body [data-filter-dropdown="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]),
+html body [data-filter-dropdown="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]) * {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] :is([data-filter-selected="true"],[data-filter-selected="true"] *,[data-state="checked"],[data-state="checked"] *,[role="tab"][data-state="active"],[role="tab"][data-state="active"] *,.filter-primary-action,.filter-primary-action *,.filter-emerald-action,.filter-emerald-action *,.jj-pill-emerald-metallic,.jj-pill-emerald-metallic *) {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body #root [data-keep-gold].jj-developer-logo-metallic,
+html body #root [data-keep-gold].jj-cta-gold-metallic.jj-developer-logo-metallic {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background-color: #c89a48 !important;
+  background-image: linear-gradient(155deg, #8e6e36 0%, #d8b86a 18%, #fff1c2 34%, #b89555 50%, #fff1c2 66%, #d8b86a 82%, #8e6e36 100%) !important;
+  border: 1px solid rgba(142,110,54,0.85) !important;
+  box-shadow: inset 0 2px 0 rgba(255,250,225,0.9), inset 0 -2px 0 rgba(70,48,14,0.6), inset 0 -14px 22px rgba(70,48,14,0.45), inset 0 14px 22px rgba(255,244,210,0.32), 0 18px 36px -12px rgba(142,110,54,0.75), 0 2px 6px rgba(0,0,0,0.20) !important;
+}
+html body #root [data-keep-gold].jj-developer-logo-metallic::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -20% !important;
+  background: linear-gradient(115deg, rgba(255,255,255,0) 40%, rgba(255,250,225,0.55) 47%, rgba(255,255,255,0.95) 50%, rgba(255,250,225,0.55) 53%, rgba(255,255,255,0) 60%) !important;
+  transform: translateX(-100%) !important;
+  animation: jj-dev-logo-shine 2.6s linear infinite !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  mix-blend-mode: screen !important;
+}
+html body #root [data-keep-gold].jj-developer-logo-metallic::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(120% 80% at 30% 0%, rgba(255,250,225,0.55) 0%, rgba(255,250,225,0) 55%) !important;
+  animation: jj-dev-logo-drift 5.5s ease-in-out infinite alternate !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+html body #root [data-keep-gold].jj-developer-logo-metallic > * {
+  position: relative !important;
+  z-index: 3 !important;
+}

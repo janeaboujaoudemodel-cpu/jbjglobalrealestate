@@ -178,14 +178,14 @@ const AreaDetail = () => {
   const filterBarContent = (
     <>
       {/* Search Input */}
-      <div className="relative flex-1 min-w-[200px]">
+      <div className="relative flex-1 min-w-[200px] jj-filter-search-pill jj-emerald-metallic rounded-full overflow-hidden">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white" />
         <input
           type="text"
           placeholder="Search projects or developers..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="allow-white w-full h-10 pl-9 pr-8 rounded-xl bg-[#021611]/82 border border-white/28 text-white text-sm placeholder:text-white focus:outline-none focus:border-white/60 transition-colors"
+          className="allow-white w-full h-10 pl-9 pr-8 rounded-full bg-transparent border-0 text-white text-sm placeholder:text-white focus:outline-none focus:ring-0 transition-colors"
           style={{ fontSize: '16px' }}
         />
         {searchQuery && (

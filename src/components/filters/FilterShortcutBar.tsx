@@ -443,20 +443,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </div>
 
           ) : (
-            <div className={cn(
-              isDark
-                ? "min-w-0 flex-shrink-0 flex items-center px-3 rounded-full bg-[#021611]/82 border border-white/28 shadow-sm"
-                : filterSearchPillWrapper,
-              "w-[160px]"
-            )}>
+            <div className={cn(filterSearchPillWrapper, "w-[160px]")}>
               <input
                 type="text"
                 value={filters.searchQuery}
                 onChange={(e) => update({ searchQuery: e.target.value })}
                 placeholder={t('filter.searchPlaceholder')}
                 className={cn(
-                  filterSearchPillInput,
-                  isDark && "allow-white text-white placeholder:text-white/70"
+                  filterSearchPillInput
                 )}
               />
             </div>
