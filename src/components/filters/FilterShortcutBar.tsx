@@ -674,6 +674,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     <button
                       key={q}
                       onClick={() => update({ handoverTo: { ...filters.handoverTo, quarter: q } })}
+                  data-filter-selected={filters.handoverTo.quarter === q ? "true" : undefined}
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverTo.quarter === q
@@ -725,6 +726,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ propertyTypes: toggleArray(filters.propertyTypes, opt.value) })}
+                  data-filter-selected={filters.propertyTypes.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.propertyTypes.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
@@ -749,6 +751,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ bedrooms: toggleArray(filters.bedrooms, opt.value) })}
+                  data-filter-selected={filters.bedrooms.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.bedrooms.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
@@ -777,6 +780,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ statuses: toggleArray(filters.statuses, opt.value) })}
+                  data-filter-selected={filters.statuses.includes(opt.value) ? "true" : undefined}
                   className={cn(
                     togglePillBase,
                     filters.statuses.includes(opt.value) ? togglePillOn : togglePillOff,
@@ -810,6 +814,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ constructionStatuses: toggleArray(filters.constructionStatuses, opt.value) })}
+                  data-filter-selected={filters.constructionStatuses.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.constructionStatuses.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
@@ -840,6 +845,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <button
                   key={opt.value}
                   onClick={() => update({ views: toggleArray(filters.views, opt.value) })}
+                  data-filter-selected={filters.views.includes(opt.value) ? "true" : undefined}
                   className={cn(togglePillBase, filters.views.includes(opt.value) ? togglePillOn : togglePillOff)}
                 >
                   {opt.label}
