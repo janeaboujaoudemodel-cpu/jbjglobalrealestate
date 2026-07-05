@@ -32177,3 +32177,137 @@ html body #root [data-keep-gold].jj-developer-logo-metallic > * {
   position: relative !important;
   z-index: 3 !important;
 }
+
+/* PASS 207 — current execution closure: fast filter menus, restored shimmer,
+   no category block, no hero/search white seam, and matching sidebar auth tile. */
+html body #root #category-selector {
+  display: none !important;
+}
+
+html body #root .jj-home-hero,
+html body #root .jj-home-hero::before,
+html body #root .jj-home-hero::after,
+html body #root .jj-hero-search-premium,
+html body #root .jj-hero-search-premium::before,
+html body #root .jj-hero-search-premium::after,
+html body #root .jj-hero-search-premium .jj-hero-search-bar {
+  border-top: 0 !important;
+  outline: 0 !important;
+}
+html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before,
+html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::after {
+  content: none !important;
+  display: none !important;
+}
+
+html body [data-filter-menu="true"] {
+  contain: layout paint !important;
+  transform: translate3d(0,0,0) !important;
+  transition: none !important;
+  animation: none !important;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 52%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 52%, #EFE6D6 100%) !important;
+  border: 1px solid rgba(184,149,85,0.62) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12) !important;
+}
+html body [data-filter-menu="true"] :is(h1,h2,h3,h4,h5,h6,p,label,small,strong,em,li,div,span):not([data-filter-selected="true"]):not([data-filter-selected="true"] *):not(.filter-primary-action):not(.filter-primary-action *):not(.filter-emerald-action):not(.filter-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body [data-filter-menu="true"] :is(input,select,textarea) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+}
+html body [data-filter-menu="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]),
+html body [data-filter-menu="true"] :is(button,[role="tab"]):not([data-filter-selected="true"]):not([data-state="checked"]):not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([role="switch"]):not([role="slider"]) * {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body [data-filter-menu="true"] :is([data-filter-selected="true"],[data-filter-selected="true"] *,[data-state="checked"],[data-state="checked"] *,[role="tab"][data-state="active"],[role="tab"][data-state="active"] *,.filter-primary-action,.filter-primary-action *,.filter-emerald-action,.filter-emerald-action *,.jj-pill-emerald-metallic,.jj-pill-emerald-metallic *) {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body #root .jj-card-cta-metallic,
+html body #root .jj-ready-cta-metallic,
+html body #root .developer-name-shine {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+}
+html body #root .jj-card-cta-metallic::after,
+html body #root .jj-ready-cta-metallic::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background-image: linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 34%, rgba(4,78,59,0.38) 45%, rgba(255,255,255,0.74) 51%, rgba(4,78,59,0.38) 57%, rgba(255,255,255,0) 72%, rgba(255,255,255,0) 100%) !important;
+  background-size: 240% 100% !important;
+  background-repeat: no-repeat !important;
+  mix-blend-mode: screen !important;
+  animation: jj-emerald-metallic-sweep 4.8s linear infinite !important;
+}
+html body #root .jj-card-cta-metallic > *,
+html body #root .jj-ready-cta-metallic > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+html body #root .developer-name-gold,
+html body #root .developer-name-gold * {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
+}
+html body #root .developer-name-shine {
+  display: inline-block !important;
+  background-image: linear-gradient(100deg, #B89555 0%, #D8B86A 22%, #FFF1C2 44%, #B89555 62%, #8E6E36 100%) !important;
+  background-size: 240% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: jj-developer-name-shine 3.6s linear infinite !important;
+}
+@keyframes jj-developer-name-shine {
+  0% { background-position: 220% 0; }
+  100% { background-position: -120% 0; }
+}
+
+html body #root .jj-side-auth-tile {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.75rem !important;
+  padding: 0 !important;
+}
+
+html body #root .surface-champagne [data-surface="ink"] img,
+html body #root .surface-champagne [data-surface="ink"] picture,
+html body #root .surface-champagne [data-surface="ink"] video {
+  object-fit: cover !important;
+  object-position: center center !important;
+  width: calc(100% + 4px) !important;
+  height: calc(100% + 4px) !important;
+  max-width: none !important;
+  margin: -2px !important;
+}
