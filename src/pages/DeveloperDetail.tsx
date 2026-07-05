@@ -179,9 +179,9 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
             </div>
             <div className="space-y-2">
               {topAreas.length > 0 ? topAreas.map(([area, count], i) => (
-                <div key={area} className="flex items-center justify-between gap-3 rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] px-3 py-2">
-                  <span className="text-[#1A1A1A] text-sm font-semibold truncate">{i + 1}. {area}</span>
-                  <span className="text-[#064E3B] text-xs font-bold">{count} projects</span>
+                <div key={area} className="flex items-center justify-between gap-3 rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] px-3 py-2 min-w-0">
+                  <span className="text-[#1A1A1A] text-sm font-semibold truncate min-w-0 flex-1">{i + 1}. {area}</span>
+                  <span className="text-[#064E3B] text-xs font-bold whitespace-nowrap shrink-0">{count} {count === 1 ? 'project' : 'projects'}</span>
                 </div>
               )) : (
                 <p className="text-[#1A1A1A]/70 text-sm">Area data will appear when published projects are mapped.</p>
@@ -505,25 +505,36 @@ const DeveloperDetail = () => {
               </div>
             )}
 
-            {/* Stats - Aligned consistent layout (labels wrap, values bottom-align) */}
+            {/* Stats — icons + labels + values all on the same baseline
+                across every card (identical structure = perfect alignment). */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 items-stretch">
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-xl border border-[#B89555]/45 p-4 flex flex-col justify-between min-h-[112px]"
+                  className="rounded-xl border border-[#B89555]/45 p-4 flex flex-col min-h-[118px]"
                   style={{
                     background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                     boxShadow: '0 0 15px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.4)',
                   }}
                 >
-                  <div className="flex items-center gap-2 text-[#1A1A1A]/75 text-[11px] font-semibold uppercase tracking-wide leading-tight min-h-[32px]">
-                    <stat.icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
-                    <span className="whitespace-normal break-words">{stat.label}</span>
+                  <div className="flex items-center gap-2 h-6">
+                    <stat.icon className="w-4 h-4 text-[#1A1A1A] shrink-0" />
+                    <span
+                      className="text-[#1A1A1A]/75 text-[11px] font-semibold uppercase tracking-wide leading-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0"
+                      title={stat.label}
+                    >
+                      {stat.label}
+                    </span>
                   </div>
-                  <p className="text-[#1A1A1A] text-xl font-bold leading-tight mt-2 whitespace-nowrap">{stat.value}</p>
+                  <div className="flex-1 flex items-end">
+                    <p className="text-[#1A1A1A] text-xl font-bold leading-tight whitespace-normal break-words">
+                      {stat.value}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
+
 
             {/* Identity actions — View all projects + (broker-only) request rep access */}
             <div className="mt-5 flex flex-wrap items-center gap-3">
