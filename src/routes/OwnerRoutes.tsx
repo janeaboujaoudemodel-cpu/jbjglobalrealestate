@@ -49,6 +49,7 @@ const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagemen
 const Documents = lazy(() => import("@/pages/Documents"));
 const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
 const CRMSyncDeadLetters = lazy(() => import("@/pages/CRMSyncDeadLetters"));
+const CRMSyncConflicts = lazy(() => import("@/pages/CRMSyncConflicts"));
 const CRMTasks = lazy(() => import("@/pages/CRMTasks"));
 const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
