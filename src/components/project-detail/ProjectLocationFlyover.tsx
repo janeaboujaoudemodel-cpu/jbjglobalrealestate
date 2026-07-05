@@ -5,6 +5,7 @@ import { Play, RotateCcw } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { motion, AnimatePresence } from "framer-motion";
+import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS } from "@/utils/leafletSafety";
 
 // Premium gold/red SVG pin icon
 const PREMIUM_PIN_SVG = `
@@ -264,8 +265,10 @@ export default function ProjectLocationFlyover({
           zoomControl={false}
           attributionControl={false}
           style={{ height: "100%", width: "100%" }}
+          {...SAFE_LEAFLET_MAP_OPTIONS}
         >
           <TileLayer
+            {...SAFE_TILE_LAYER_OPTIONS}
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             attribution="Tiles &copy; Esri"
             maxZoom={19}
