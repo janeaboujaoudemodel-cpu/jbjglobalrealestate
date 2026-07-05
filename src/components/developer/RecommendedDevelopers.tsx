@@ -66,7 +66,35 @@ export default function RecommendedDevelopers({
 
   if (recommended.length === 0) return null;
 
-  return (
+  const recommendedIds = recommended.map((d: any) => d.id).filter(Boolean);
+
+  // Fetch one real project cover image per recommended developer, so cards
+  // never fall back to a text/wordmark logo (e.g. "DPF") when feature_image_url
+  // is missing.
+  const { data: projectImageByDev } = useQuery({
+    queryKey: ["recommended-dev-project-images", recommendedIds],
+    enabled: recommendedIds.length > 0,
+    staleTime: 10 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("developer_id, cover_image_url, created_at")
+        .in("developer_id", recommendedIds)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      const map: Record<string, string> = {};
+      (data || []).forEach((row: any) => {
+        if (row.developer_id && row.cover_image_url && !map[row.developer_id]) {
+          map[row.developer_id] = row.cover_image_url;
+        }
+      });
+      return map;
+    },
+  });
+
     <section
       className="py-14 jj-band"
       style={{
