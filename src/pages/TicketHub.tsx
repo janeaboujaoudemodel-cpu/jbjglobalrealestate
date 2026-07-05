@@ -719,7 +719,20 @@ const TicketHub = () => {
                                 className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                 <Copy className="w-3.5 h-3.5" />
                               </button>
-                              <Badge className={statusConfig[selectedTicket.status]?.className}>{statusConfig[selectedTicket.status]?.label}</Badge>
+                              {(() => {
+                                const s = statusConfig[selectedTicket.status] || statusConfig.open;
+                                const SIcon = s.icon;
+                                return (
+                                  <span
+                                    data-ticket-status-pill
+                                    className="inline-flex items-center gap-1 rounded-full text-[11px] font-semibold px-2.5 py-0.5 border"
+                                    style={{ background: s.bg, color: s.fg, borderColor: s.border, whiteSpace: 'nowrap', wordBreak: 'keep-all', overflowWrap: 'normal', flexShrink: 0 }}
+                                  >
+                                    <SIcon className="w-3 h-3" style={{ color: s.fg, stroke: s.fg, flexShrink: 0 }} />
+                                    <span style={{ whiteSpace: 'nowrap', color: s.fg }}>{s.label}</span>
+                                  </span>
+                                );
+                              })()}
                             </div>
                             <h3 className="font-semibold text-foreground mt-2 truncate">{selectedTicket.subject}</h3>
                             <p className="text-xs text-muted-foreground mt-1">{format(new Date(selectedTicket.created_at), "MMM d, yyyy h:mm a")} · {selectedTicket.service_category}</p>
