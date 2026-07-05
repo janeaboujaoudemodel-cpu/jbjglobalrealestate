@@ -31111,11 +31111,12 @@ html body [data-sidebar-collapse-control]:has(> span) {
   white-space: nowrap !important;
   overflow: visible !important;
 }
-/* Collapsed rail sign-out — match sibling 40x40 icon tiles exactly. */
+/* Collapsed rail sign-out — match sibling 32x32 jj-side-tile footprint. */
 html body [data-signout-action]:not(:has([data-signout-label])) {
-  width: 40px !important;
-  height: 40px !important;
-  min-height: 40px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  min-width: 32px !important;
   border-radius: 0.75rem !important; /* rounded-xl */
   padding: 0 !important;
   display: inline-flex !important;
