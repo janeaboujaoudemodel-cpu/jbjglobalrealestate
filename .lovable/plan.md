@@ -1,58 +1,114 @@
+## Passkey / Biometric Sign-In (WebAuthn) — Plan
 
-## Goal
-Resolve every failing check in the Semrush Site Audit for `jbj.ae` (Jul 4 2026 export), verify visually + technically with Playwright + curl, and finish the two loose ends from the last pillar-article turn (BuyerGuide related-reading link + hub links landed correctly).
+Adds true biometric login (Face ID, Touch ID, Windows Hello, Android fingerprint) using the WebAuthn standard on top of the current Supabase (Lovable Cloud) auth. Existing email+password and Google sign-in stay intact — passkeys are an additional method.
 
-## Failing issues to fix (from `jbj.ae_issues_20260704.csv`)
+### 1. What the user will get
 
-| Priority | Issue | Failed | Fix |
-|---|---|---|---|
-| P0 | **Pages not crawled (80/98)** | 80 | Add prerendering (`vite-plugin-prerender-spa` or static route snapshots) for top public routes so bots get HTML, not empty `#root`. If not viable this turn, at minimum ship a machine-readable `/sitemap.xml` + `llms.txt` + rich static `<head>` fallbacks per route class. |
-| P0 | **Hreflang conflicts (51)** | 51 | Audit `CanonicalAndHreflang.tsx` — remove duplicate `x-default` + duplicate `en/ar` emission when both index.html static tags and Helmet inject. Keep only Helmet-emitted set. |
-| P0 | **Structured data markup errors (7)** | 7 | Validate each JSON-LD block (Article, FAQPage, BreadcrumbList, HowTo, Organization, LocalBusiness) with `schema.org` validator; fix missing required fields (`author.@type`, `image`, `datePublished`, `publisher.logo.url`). |
-| P0 | **JSON-LD absent on all crawled pages** (Semrush structured-data export shows 0 across 80 URLs) | 80 | Root cause: Helmet injects client-side; Semrush's crawler doesn't execute JS. Emit critical schema (Organization, WebSite, BreadcrumbList) in **static `index.html`** already (kept) and add per-route static snapshots via prerender for Article/FAQ pages. |
-| P1 | **Duplicate title tag (4)** + **Duplicate meta description (4)** | 4+4 | Identify the 4 URL pairs from the mega-export and give each a unique `<title>`/`meta description` in its page component's `SEOHead`. |
-| P1 | **Duplicate content (4)** | 4 | Same 4 URLs — add unique intro paragraph + canonical self-reference. |
-| P1 | **Incorrect pages found in sitemap.xml (1)** | 1 | Remove disallowed/private route from `scripts/generate-sitemap.ts` and regenerate `public/sitemap.xml`. |
-| P1 | **Issues with incorrect hreflang links (2)** | 2 | Fix the 2 broken hreflang target URLs (likely stale slugs). |
-| P1 | **Title element too long (1)** | 1 | Trim to ≤60 chars in the offending page component. |
-| P2 | **Multiple h1 tags (7)** | 7 | Audit 7 pages, demote extra `<h1>` to `<h2>`. |
-| P2 | **Low text-to-HTML ratio (7)** + **Low word count (4)** | 7+4 | Add real content (≥400 words) to the 4 thin pages; identified from mega-export. |
-| P2 | **Uncached JS/CSS (7)** + **Unminified JS/CSS (7)** | 7+7 | Add Vite `build.minify: 'esbuild'` (default already), add long-lived `Cache-Control` headers for hashed assets via a small `public/_headers`-equivalent note (Lovable hosting handles automatically — verify by curl and mark N/A if already served with immutable headers). |
-| P2 | **Temporary redirects (2)** | 2 | Convert two 302s to 301 via router `<Navigate replace>` (already replace, but Semrush treats client-side redirects as 302 — add server-side note or accept). |
-| P2 | **Blocked from crawling (7 NOTICE)** | 7 | Review `robots.txt` disallow list; ensure no accidentally blocked public URL. |
+**Enrollment (after they are already signed in):**
+- New "Security" panel in Account Settings shows "Sign in faster with Face ID / fingerprint".
+- One-tap enroll button triggers the OS biometric prompt and registers a passkey for their account.
+- List of registered passkeys with device label + created date + revoke button.
 
-## Previous-turn loose ends
-1. Re-verify with Playwright that:
-   - `/news` shows the new pillar-insight gold-emerald strip at top.
-   - `/investor-hub` shows "New: The Future of Real Estate…" sub-line.
-   - `/buyer-guide` Next-Step card shows "Related reading:" link.
-2. Confirm `/insights/future-of-real-estate-2026` renders with all 4 JSON-LD blocks (Article, FAQPage, BreadcrumbList, HowTo) and canonical `https://www.jbj.ae/…`.
-3. If any of the 3 hub links didn't render (component structure moved), reinsert.
+**Sign-in (`/auth` page):**
+- New "Continue with Passkey" button above the email field.
+- If the browser supports conditional UI, the email input also shows the passkey autofill chip natively.
+- Click → OS biometric prompt → signed in. No password typed.
 
-## Google Search Console
-- Run URL Inspection API on the pillar article + homepage to confirm indexing eligibility, mobile usability, and rich-results validity.
-- Submit `/insights/future-of-real-estate-2026` to GSC via curl (`urlNotifications:publish` is deprecated; instead confirm site is verified and pillar is in sitemap — Google will crawl within days).
+**Fallbacks always visible:** email+password, Google, magic link — no user is ever locked out if their device changes.
 
-## Files to touch
-- `src/components/CanonicalAndHreflang.tsx` — dedupe hreflang emission.
-- `src/pages/insights/FutureOfRealEstate2026.tsx` — validate JSON-LD schemas, add missing fields.
-- `src/pages/{4-duplicate-urls}.tsx` — unique titles/descriptions/intro paragraph (URLs identified from mega-export in build phase).
-- `src/pages/{7-multi-h1-urls}.tsx` — demote extra h1.
-- `src/pages/{4-thin-content-urls}.tsx` — expand copy to 400+ words each.
-- `scripts/generate-sitemap.ts` + `public/sitemap.xml` — remove 1 incorrect entry, regenerate.
-- `public/robots.txt` — no changes unless a public route is blocked.
-- `index.html` — add static `WebSite` + `BreadcrumbList` JSON-LD fallback for crawler visibility (if not already present via `GlobalSEO`).
-- `public/llms.txt` — create (Semrush notice; helps AI crawlers).
+### 2. Architecture
 
-## Validation (Playwright + curl, before sign-off)
-1. `curl -s https://www.jbj.ae/insights/future-of-real-estate-2026 | grep -c "application/ld+json"` → ≥4.
-2. Playwright: visit `/news`, `/investor-hub`, `/buyer-guide`, `/insights/future-of-real-estate-2026`; screenshot each; assert hub links present, no console errors, correct h1/title.
-3. For each of the 4 duplicate-title URLs, curl the rendered HTML and assert `<title>` is unique.
-4. Fetch `/sitemap.xml`, assert entry count matches generator, no disallowed paths present.
-5. GSC URL Inspection API on pillar + homepage → assert `verdict: PASS` on rich results.
-6. Re-run `seo_chat--list_findings` after edits; mark all addressed findings fixed.
+WebAuthn credentials are stored in our own table and verified by an edge function; that function then mints a Supabase session for the matched user, so the rest of the app continues to use the existing `supabase.auth` session with no changes.
 
-## Out of scope
-- Full SSR migration (would fix "Pages not crawled" definitively but is multi-day). Instead we ship static-head + JSON-LD fallbacks in `index.html` and per-route prerender where cheap.
-- Semrush Position Tracking PDF ideas (separate content-marketing effort).
-- New pages beyond thin-content expansion of existing 4 URLs.
+```text
+Browser (SimpleWebAuthn/browser)
+   │  1. GET  /webauthn-options            → challenge + allowed credentials
+   ▼
+Edge Fn: webauthn-options ── reads webauthn_challenges, user_passkeys
+   │  2. navigator.credentials.get()  (OS biometric prompt)
+   ▼
+Browser
+   │  3. POST /webauthn-verify   { assertion }
+   ▼
+Edge Fn: webauthn-verify
+   │   • verifies signature (SimpleWebAuthn/server)
+   │   • looks up user_id from credential_id
+   │   • uses service role to generateLink / createSession
+   ▼
+Returns { access_token, refresh_token }
+   │
+   ▼
+Browser: supabase.auth.setSession(...)  →  signed in
+```
+
+### 3. Backend (Lovable Cloud)
+
+**Tables (new migration):**
+
+- `user_passkeys` — one row per registered credential
+  - `id uuid PK`, `user_id uuid FK → auth.users on delete cascade`
+  - `credential_id text unique not null` (base64url)
+  - `public_key bytea not null`
+  - `counter bigint not null default 0`
+  - `transports text[]`, `device_label text`, `aaguid uuid`
+  - `backed_up boolean`, `created_at`, `last_used_at`
+- `webauthn_challenges` — short-lived challenge store
+  - `id uuid PK`, `challenge text not null`, `user_id uuid null` (null for usernameless flow)
+  - `kind text check in ('registration','authentication')`
+  - `expires_at timestamptz` (5 minute TTL, cleaned by cron)
+
+Both tables get explicit GRANTs (`authenticated`, `service_role`) and RLS:
+- `user_passkeys`: user can `select` / `delete` their own rows; inserts happen only via service role.
+- `webauthn_challenges`: no direct client access; service role only.
+
+**Edge functions (4):**
+
+1. `webauthn-register-options` — auth required. Generates registration options, stores challenge, returns options.
+2. `webauthn-register-verify` — auth required. Verifies attestation, inserts row in `user_passkeys` with a device label.
+3. `webauthn-auth-options` — public. Generates authentication options (supports usernameless / conditional UI).
+4. `webauthn-auth-verify` — public. Verifies assertion, updates `counter` + `last_used_at`, then mints a Supabase session for `user_id` using the service role and returns `{ access_token, refresh_token }`.
+
+Library: `@simplewebauthn/server` in edge functions, `@simplewebauthn/browser` in the client.
+
+**RP config:**
+- `rpID` = current hostname (`jbj.ae`, `www.jbj.ae`, preview host) — read from request origin.
+- `rpName` = "JBJ Global Real Estate".
+- Support multiple origins so preview + custom domains all work.
+
+### 4. Frontend
+
+**New files:**
+- `src/lib/passkeys.ts` — thin wrapper around SimpleWebAuthn/browser: `registerPasskey()`, `signInWithPasskey()`, `isPasskeySupported()`, `hasConditionalUI()`.
+- `src/components/account/PasskeyManager.tsx` — enroll button + list + revoke, mounted in the existing Security section of Account Settings.
+- `src/components/auth/PasskeyButton.tsx` — "Continue with Passkey" button + conditional-UI hook (`useEffect` triggers `mediation: 'conditional'` on the email input).
+
+**Edits:**
+- `src/pages/Auth.tsx` (or the current sign-in page): add `PasskeyButton` above the email field; wire conditional UI to the email input's `autocomplete="username webauthn"`.
+- Account settings page: mount `PasskeyManager` inside the Security card.
+
+### 5. Security posture
+
+- Challenges are single-use, 5-minute TTL, deleted after verification.
+- `counter` is monotonic-checked; a decrease revokes the credential and forces re-auth.
+- Enrollment requires an already-authenticated session (no anonymous passkey binding).
+- Session minting uses the service role only inside the verify function; the key never touches the client.
+- Origins are whitelisted server-side (preview, `jbj.ae`, `www.jbj.ae`) — any other origin is rejected.
+- Rate-limit both `-options` endpoints (per-IP, 20/min) to prevent challenge farming.
+- User can revoke any device from Account Settings; revoked credential ids are refused immediately.
+
+### 6. Rollout & fallbacks
+
+- Feature is additive: nothing removed. Email/password + Google keep working exactly as today.
+- If WebAuthn is unsupported (older browsers, some in-app webviews), the passkey button hides itself and the standard form is used.
+- If a passkey is lost with the device, the user signs in with email/password or Google and re-enrolls.
+
+### 7. Deliverables per step
+
+1. Migration: `user_passkeys` + `webauthn_challenges` with GRANTs + RLS.
+2. Deploy 4 edge functions above; add `@simplewebauthn/server` import.
+3. Add `@simplewebauthn/browser` to the app; ship `src/lib/passkeys.ts`.
+4. Mount `PasskeyButton` on the auth page + conditional-UI hook.
+5. Mount `PasskeyManager` in Account Settings → Security.
+6. Playwright pass: verify support detection on the preview, enroll flow (mocked authenticator), and revoke.
+
+Approve and I'll build it in that order.
