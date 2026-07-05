@@ -31099,16 +31099,28 @@ html body [data-sidebar-collapse-control] > span * {
 }
 
 /* Sidebar footer CTAs (Sign Out · Collapse) — restore full height so the label
-   is fully readable. Overrides the 24px "compact bottom CTA" lock above. */
-html body [data-chrome="sidebar"] [data-signout-action],
-html body [data-chrome="sidebar"] [data-sidebar-collapse-control],
-html body [data-signout-action],
-html body [data-sidebar-collapse-control] {
+   is fully readable in the EXPANDED sidebar. Scoped with :has() so it does NOT
+   override the collapsed rail's 40x40 icon-only tiles. */
+html body [data-chrome="sidebar"] [data-signout-action]:has([data-signout-label]),
+html body [data-chrome="sidebar"] [data-sidebar-collapse-control]:has(> span),
+html body [data-signout-action]:has([data-signout-label]),
+html body [data-sidebar-collapse-control]:has(> span) {
   min-height: 42px !important;
   height: 42px !important;
   border-radius: 8px !important;
   white-space: nowrap !important;
   overflow: visible !important;
+}
+/* Collapsed rail sign-out — match sibling 40x40 icon tiles exactly. */
+html body [data-signout-action]:not(:has([data-signout-label])) {
+  width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  border-radius: 0.75rem !important; /* rounded-xl */
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 html body [data-chrome="sidebar"] [data-signout-action] :where(svg[class*="lucide"], [data-lucide]),
 html body [data-chrome="sidebar"] [data-sidebar-collapse-control] :where(svg[class*="lucide"], [data-lucide]),
