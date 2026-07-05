@@ -31733,14 +31733,6 @@ html body [data-filter-clean][data-filter-bar-gold] .filter-emerald-action * {
   stroke: #FFFFFF !important;
 }
 
-/* Hard stop for the older space-between sidebar rule: keep the approved
-   taxonomy compact while only lifting the portal pill into the header gap. */
-html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > nav > div.px-3 > div.flex.flex-col {
-  justify-content: flex-start !important;
-  align-content: flex-start !important;
-  gap: 10px !important;
-}
-
 /* Payment and filter dropdown body copy must stay ink on champagne; only
    selected emerald chips / Apply / Reset-all stay white. */
 html body [data-filter-dropdown="true"] > :is(h1,h2,h3,h4,h5,h6,p,span,label,small,div),
@@ -31754,4 +31746,23 @@ html body [data-filter-dropdown="true"] :is(.filter-emerald-action,.filter-emera
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+html body [data-filter-dropdown="true"] > h4,
+html body [data-filter-dropdown="true"] > div > div > div > span,
+html body [data-filter-dropdown="true"] > div > div > label,
+html body [data-filter-dropdown="true"] > div > div > div > label,
+html body [data-filter-dropdown="true"] span.text-\[\#1A1A1A\],
+html body [data-filter-dropdown="true"] label.text-\[\#1A1A1A\],
+html body [data-filter-dropdown="true"] h4.text-\[\#1A1A1A\] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body [data-filter-dropdown="true"] .filter-primary-action,
+html body [data-filter-dropdown="true"] .filter-primary-action *,
+html body [data-filter-dropdown="true"] .filter-emerald-action,
+html body [data-filter-dropdown="true"] .filter-emerald-action * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
