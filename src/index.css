@@ -31132,3 +31132,97 @@ html body [data-sidebar-collapse-control] > span * {
 }
 
 html body [data-signout-label] { display: inline-block !important; width: auto !important; flex: 0 0 auto !important; }
+
+/* ============================================================
+   TICKET HUB TABS — active pill: emerald ombré with pure white
+   text/icon; inactive: dark ink on champagne surface. No icon
+   frame/tile around Search/Plus/Inbox glyphs.
+   ============================================================ */
+html body [data-ticket-hub-tabs] [data-ticket-hub-tab] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  background: transparent !important;
+  border: none !important;
+}
+html body [data-ticket-hub-tabs] [data-ticket-hub-tab] :is(svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+html body [data-ticket-hub-tabs] [data-ticket-hub-tab][data-state="active"] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 6px 18px -8px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.10) !important;
+}
+html body [data-ticket-hub-tabs] [data-ticket-hub-tab][data-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-ticket-hub-tabs] [data-ticket-hub-tab][data-state="active"] :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Kill global "icon tile" frames around lucide Search/Plus/Inbox glyphs
+   whenever they sit inside a tab trigger — no white/gold square behind
+   the glyph, ever. */
+html body :is([role="tab"], [role="tablist"] button) :is(svg, [class*="lucide"]) {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+html body :is([role="tab"], [role="tablist"] button) > span:has(> svg),
+html body :is([role="tab"], [role="tablist"] button) > div:has(> svg) {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Ticket status pill — never wrap the label, never repaint the surface. */
+html body [data-ticket-status-pill],
+html body [data-ticket-status-pill] * {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  flex-shrink: 0 !important;
+}
+html body [data-ticket-status-pill] {
+  border-radius: 9999px !important;
+  height: auto !important;
+  min-height: 22px !important;
+  width: auto !important;
+  max-width: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+}
+
+/* Sign Out button — champagne fill + red border + red glyph/label (locks
+   the destructive palette without repainting to a solid red button). */
+html body [data-signout-action] {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%) !important;
+  background-color: transparent !important;
+  border-color: #DC2626 !important;
+  color: #DC2626 !important;
+}
+html body [data-signout-action]:hover {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%) !important;
+  border-color: #B91C1C !important;
+}
