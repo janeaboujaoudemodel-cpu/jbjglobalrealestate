@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import L from "leaflet";
 import { Button } from "@/components/ui/button";
 import { Layers, AlertTriangle, RefreshCw } from "lucide-react";
@@ -45,8 +45,13 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
     return `AED ${(price / 1000).toFixed(0)}K`;
   }, [t]);
 
-  // Filter to projects with coordinates
-  const projectsWithCoords = projects.filter(p => p.latitude && p.longitude);
+  // Filter to projects with coordinates. Keep this array stable across local
+  // state re-renders; otherwise Leaflet is disposed/recreated on every
+  // mapReadyTick, which appears as an on/off flicker.
+  const projectsWithCoords = useMemo(
+    () => projects.filter(p => p.latitude && p.longitude),
+    [projects]
+  );
 
   // Create marker icon
   const createMarkerIcon = useCallback((price: number | null) => {

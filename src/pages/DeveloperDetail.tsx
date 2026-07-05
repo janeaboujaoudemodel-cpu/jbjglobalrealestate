@@ -326,6 +326,18 @@ const DeveloperDetail = () => {
 
   const filteredProjectsBase = useFilteredProjects(projectsInEmirate, filters);
   const filteredProjects = useMemo(() => applyShortcutFilters(filteredProjectsBase, shortcutFilters), [filteredProjectsBase, shortcutFilters]);
+  const developerMapProjects = useMemo(() => {
+    return (projects || []).map(p => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      latitude: p.latitude,
+      longitude: p.longitude,
+      price_from: p.price_from,
+      cover_image_url: p.cover_image_url,
+      location: p.location,
+    }));
+  }, [projects]);
 
   const hasFiltersApplied =
     filters.search ||
@@ -603,16 +615,7 @@ const DeveloperDetail = () => {
                 <DeveloperProjectsMap
                   developerId={developer.id}
                   developerName={developer.name}
-                  projects={projects.map(p => ({
-                    id: p.id,
-                    name: p.name,
-                    slug: p.slug,
-                    latitude: p.latitude,
-                    longitude: p.longitude,
-                    price_from: p.price_from,
-                    cover_image_url: p.cover_image_url,
-                    location: p.location,
-                  }))}
+                  projects={developerMapProjects}
                 />
               </Suspense>
             </MapErrorBoundary>

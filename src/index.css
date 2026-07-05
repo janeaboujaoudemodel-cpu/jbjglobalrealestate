@@ -32533,3 +32533,29 @@ html body body body body [data-radix-popper-content-wrapper] [data-filter-menu="
   opacity: 1 !important;
   text-shadow: none !important;
 }
+
+/* PASS 210 — developer All Projects filter rail closure: every visible pill
+   on the emerald rail (More filters, Price, Payments, Handover, etc.) uses
+   pure white text/icons. Dropdown panel content is intentionally untouched. */
+html body #root [data-filter-bar-gold] .jj-filter-rail > button,
+html body #root [data-filter-bar-gold] .jj-filter-rail > button *,
+html body #root [data-filter-bar-gold] .jj-filter-rail > button :is(svg,path,line,rect,circle,polyline,polygon),
+html body #root [data-filter-bar-gold] .jj-filter-rail [data-radix-popper-anchor] > button,
+html body #root [data-filter-bar-gold] .jj-filter-rail [data-radix-popper-anchor] > button *,
+html body #root [data-filter-bar-gold] .jj-filter-rail [data-radix-popper-anchor] > button :is(svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body #root [data-filter-clean][data-filter-bar-gold] .jj-filter-rail button.jj-filter-pill-fast.allow-white.text-white:not([role="switch"]):not([role="slider"]),
+html body #root [data-filter-clean][data-filter-bar-gold] .jj-filter-rail button.jj-filter-pill-fast.allow-white.text-white:not([role="switch"]):not([role="slider"]) *,
+html body #root [data-filter-clean][data-filter-bar-gold] .jj-filter-rail button.jj-filter-pill-fast.allow-white.text-white:not([role="switch"]):not([role="slider"]) :is(svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
