@@ -28,7 +28,7 @@ const PopoverContent = React.forwardRef<
         ref={ref}
         align={align}
         sideOffset={sideOffset}
-        data-surface={isFilterDropdown ? "emerald" : "light"}
+        data-surface={isFilterDropdown ? "champagne" : "light"}
         className={cn(
           "z-[120000] w-72 rounded-xl border border-[#064E3B]/25 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 text-[#1A1A1A] shadow-[0_16px_40px_-18px_rgba(6,78,59,0.35)] outline-none duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none",
           className,
