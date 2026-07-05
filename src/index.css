@@ -31850,3 +31850,22 @@ html body .jj-emerald-metallic::after {
   mix-blend-mode: screen !important;
   animation: jj-emerald-metallic-sweep 4.8s linear infinite !important;
 }
+
+/* Property-type / price unit tabs: inactive = champagne ink, active = emerald
+   with pure white text. This fixes the reported Commercial tab black-on-emerald
+   while preserving black text on every non-selected dropdown chip. */
+html body [data-filter-dropdown="true"] [role="tab"][data-state="active"],
+html body [data-filter-dropdown="true"] [role="tab"][aria-selected="true"] {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"][data-state="active"] *,
+html body [data-filter-dropdown="true"] [role="tab"][aria-selected="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
