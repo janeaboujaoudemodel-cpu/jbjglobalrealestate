@@ -427,22 +427,14 @@ const DeveloperDetail = () => {
         {/* Hero Title Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 allow-white" data-no-contrast-guard>
           <h1
+            data-developer-hero-title
             className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-center mb-4 tracking-tight allow-white"
-            style={{
-              color: '#F5E7BF',
-              backgroundImage: 'linear-gradient(180deg,#F5E7BF 0%,#E9CE86 55%,#B89555 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textShadow: '0 2px 24px rgba(0,0,0,0.55)',
-              filter: 'drop-shadow(0 3px 10px rgba(0,0,0,0.55))',
-            }}
           >
             {developer.name}
           </h1>
           <p
+            data-developer-hero-subtitle
             className="text-lg md:text-xl text-center max-w-2xl allow-white font-medium"
-            style={{ color: '#FFFFFF', textShadow: '0 2px 10px rgba(0,0,0,0.75)' }}
           >
             {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
           </p>
