@@ -16,6 +16,7 @@ import { useUserModeContext } from "@/contexts/UserModeContext";
 import GatedToolRoute from "@/components/access/GatedToolRoute";
 import { toolThemes } from "@/components/tools/toolThemes";
 import { InsightsPageScope } from "@/components/insights/InsightsPageScope";
+const AccountPasskeys = lazy(() => import("@/pages/AccountPasskeys"));
 
 // ── Property & Listing Pages ──
 const Index = lazy(() => import("@/pages/Index"));
@@ -237,6 +238,7 @@ export const PublicRoutes = () => (
     <Route path="/" element={<Index />} />
     <Route path="/index" element={<Index />} />
     <Route path="/my-vault" element={<AuthRequiredRoute><MyVault /></AuthRequiredRoute>} />
+    <Route path="/account/passkeys" element={<AuthRequiredRoute><AccountPasskeys /></AuthRequiredRoute>} />
     <Route path="/developer-portal" element={<DeveloperPortal />} />
     <Route path="/briefing-attendance/:briefingId" element={<BriefingAttendance />} />
     <Route path="/vapi-prompt" element={<VapiPrompt />} />

@@ -24,6 +24,7 @@ import { lovable } from "@/integrations/lovable";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useUserModeContext, type UserMode as PlatformUserMode } from "@/contexts/UserModeContext";
 import PasswordStrengthMeter from "@/components/auth/PasswordStrengthMeter";
+import PasskeyButton from "@/components/auth/PasskeyButton";
 
 const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'developer'];
 const isValidPreselect = (v: string | null): v is PlatformUserMode =>
@@ -578,6 +579,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           {/* Social + Biometric (signin / signup only) */}
           {(mode === "signin" || mode === "signup") && (
             <>
+              {mode === "signin" && (
+                <PasskeyButton
+                  onSuccess={() => navigate('/')}
+                  className="w-full h-12 mb-3 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl border border-[#B89555]/40"
+                />
+              )}
               {mode === "signin" && isBiometricAvailable && hasStoredCredential && (
                 <Button type="button" onClick={handleBiometricSignIn} disabled={isSubmitting || biometricLoading} className="w-full h-14 bg-gradient-to-r from-zinc-900 to-black hover:from-zinc-800 hover:to-zinc-900 text-white font-medium rounded-xl flex items-center justify-center gap-3 mb-4 border border-[#1A1A1A] transition-all duration-300 shadow-lg">
                   <Scan className="w-6 h-6" /><span className="text-base">Sign in with Face ID</span>

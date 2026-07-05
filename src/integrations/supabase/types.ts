@@ -34780,6 +34780,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_passkeys: {
+        Row: {
+          aaguid: string | null
+          backed_up: boolean
+          counter: number
+          created_at: string
+          credential_id: string
+          device_label: string | null
+          id: string
+          last_used_at: string | null
+          public_key: string
+          transports: string[]
+          user_id: string
+        }
+        Insert: {
+          aaguid?: string | null
+          backed_up?: boolean
+          counter?: number
+          created_at?: string
+          credential_id: string
+          device_label?: string | null
+          id?: string
+          last_used_at?: string | null
+          public_key: string
+          transports?: string[]
+          user_id: string
+        }
+        Update: {
+          aaguid?: string | null
+          backed_up?: boolean
+          counter?: number
+          created_at?: string
+          credential_id?: string
+          device_label?: string | null
+          id?: string
+          last_used_at?: string | null
+          public_key?: string
+          transports?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_points_ledger: {
         Row: {
           created_at: string
@@ -36867,6 +36909,33 @@ export type Database = {
           is_current?: boolean | null
           snapshot?: Json | null
           version_id?: string
+        }
+        Relationships: []
+      }
+      webauthn_challenges: {
+        Row: {
+          challenge: string
+          created_at: string
+          expires_at: string
+          id: string
+          kind: string
+          user_id: string | null
+        }
+        Insert: {
+          challenge: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          kind: string
+          user_id?: string | null
+        }
+        Update: {
+          challenge?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          kind?: string
+          user_id?: string | null
         }
         Relationships: []
       }
