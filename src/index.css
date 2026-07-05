@@ -31732,3 +31732,26 @@ html body [data-filter-clean][data-filter-bar-gold] .filter-emerald-action * {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* Hard stop for the older space-between sidebar rule: keep the approved
+   taxonomy compact while only lifting the portal pill into the header gap. */
+html body #root [data-chrome="sidebar"] [data-sidebar-emerald] > nav > div.px-3 > div.flex.flex-col {
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
+  gap: 10px !important;
+}
+
+/* Payment and filter dropdown body copy must stay ink on champagne; only
+   selected emerald chips / Apply / Reset-all stay white. */
+html body [data-filter-dropdown="true"] > :is(h1,h2,h3,h4,h5,h6,p,span,label,small,div),
+html body [data-filter-dropdown="true"] > div:not(.filter-emerald-action):not(.jj-pill-emerald-metallic) :is(h1,h2,h3,h4,h5,h6,p,span,label,small):not(.filter-emerald-action):not(.filter-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-filter-selected="true"]):not([data-filter-selected="true"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body [data-filter-dropdown="true"] :is(.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *,[data-filter-selected="true"],[data-filter-selected="true"] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
