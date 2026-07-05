@@ -24,7 +24,7 @@ interface DeveloperLogoProps {
 // their largest fitting size and are NEVER cropped.
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
-  "rounded-lg bg-[#FDFBF7] border border-[#064E3B]/45 " +
+  "rounded-lg bg-[#FDFBF7] border border-[#B89555]/80 " +
   "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[4px]";
 
 
@@ -126,7 +126,7 @@ export function DeveloperLogo({
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
     const cardContainer = cn(
-      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#064E3B]/30 p-6 overflow-hidden",
+      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-6 overflow-hidden",
       className,
     );
     if (!valid) {
@@ -154,7 +154,7 @@ export function DeveloperLogo({
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   const tileContainer = cn(
-    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#064E3B]/30 overflow-hidden",
+    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/70 overflow-hidden",
     className,
   );
   if (!valid) {
