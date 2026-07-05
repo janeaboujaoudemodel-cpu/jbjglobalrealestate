@@ -123,7 +123,7 @@ export default function RecommendedDevelopers({
           </div>
 
           {/* Developer Cards Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch max-w-5xl mx-auto">
             {recommended.map((dev: any, index: number) => {
               // Prefer a real project cover image. Never use the developer
               // logo/wordmark as the card hero — that's what produced the
