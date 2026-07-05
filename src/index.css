@@ -31630,7 +31630,11 @@ html body [data-filter-dropdown="true"] :is(.filter-primary-action, .filter-prim
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(h1,h2,h3,h4,h5,h6,label,span,small,div,button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"),button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]) *,[role="tab"],[role="tab"] *) {
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(h1,h2,h3,h4,h5,h6,label,span,small,div),
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]),
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]) *,
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) [role="tab"],
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) [role="tab"] * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
