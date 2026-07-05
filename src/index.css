@@ -31646,3 +31646,13 @@ html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+html body [data-filter-dropdown="true"] [role="tab"],
+html body [data-filter-dropdown="true"] [role="tab"] *,
+html body [data-filter-dropdown="true"] [role="tab"].jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] [role="tab"].jj-pill-emerald-metallic * {
+  background: linear-gradient(180deg, #FDFBF7 0%, #EADBB6 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #EADBB6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
