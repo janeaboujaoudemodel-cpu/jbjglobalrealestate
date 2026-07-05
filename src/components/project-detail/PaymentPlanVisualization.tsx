@@ -296,6 +296,36 @@ export default function PaymentPlanVisualization({
             </div>
           )}
 
+          {/* Milestone summary cards (Booking / During Construction / On Handover) */}
+          {milestones.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              {milestones.map((m, idx) => {
+                const Icon = m.icon;
+                return (
+                  <div
+                    key={`${m.label}-${idx}`}
+                    className={cn(
+                      "rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-5 text-center shadow-sm",
+                    )}
+                  >
+                    <div
+                      data-emerald="true"
+                      data-icon-circle="true"
+                      className="jj-surface-emerald w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ring-4 ring-[#064E3B]/10"
+                      style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
+                    >
+                      <Icon className="w-6 h-6" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                    </div>
+                    <p className="text-xs uppercase tracking-wider text-[#1A1A1A]/70 mb-1">{m.label}</p>
+                    <p className="text-2xl font-bold text-[#1A1A1A]">{m.value}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+
+
           {/* Detailed Payment Structure Card — only show if we actually have a granular
               monthly/multi-installment schedule (more than the standard booking/construction/handover trio),
               or any installment carries explicit timing info. Otherwise it just duplicates the timeline + cards above. */}

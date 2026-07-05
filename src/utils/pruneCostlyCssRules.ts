@@ -7,14 +7,15 @@ const KEEP_MARKERS = [
   "data-global-search-modal",
 ];
 
-const shouldPruneSelector = (selector: string, cssText: string) => {
+// Only prune truly pathological selectors (extremely long combinators). Do NOT
+// blanket-prune every `:has(...)` rule — the project relies on many intentional
+// `html body:has(#root ...)` scopes for page shells, hero heights, dropdown
+// ink/hover contrast, etc.
+const shouldPruneSelector = (selector: string, _cssText: string) => {
   if (KEEP_MARKERS.some((marker) => selector.includes(marker))) return false;
-  if (selector.includes(":has(")) return true;
-  if (selector.length > 1200 && COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker))) return true;
-  if (selector.length > 1800) return true;
-  if (!selector.includes("html body")) return false;
-  if (cssText.length < 520) return false;
-  return COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker));
+  if (selector.length > 2400) return true;
+  if (selector.length > 1800 && COSTLY_SELECTOR_MARKERS.some((marker) => selector.includes(marker))) return true;
+  return false;
 };
 
 const pruneRuleList = (owner: any): number => {
