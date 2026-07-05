@@ -437,19 +437,19 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12" style={{ marginLeft: 0, marginRight: 0, borderRadius: 0, border: 'none' }}>
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Full-fit, no white corners */}
+          {/* Logo plate — gold border, padded so wide wordmarks (EMAAR, DAMAC) fit */}
           <div 
-            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
+            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4"
             style={{
-              border: '1px solid rgba(6,78,59,0.34)',
-              boxShadow: '0 4px 16px rgba(6,78,59,0.18)'
+              border: '1px solid rgba(184,149,85,0.75)',
+              boxShadow: '0 4px 16px rgba(184,149,85,0.22)'
             }}
           >
             {developer.logo_url ? (
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-contain"
+                className="max-w-full max-h-full w-auto h-auto object-contain"
                 loading="eager"
                decoding="async" />
             ) : (
