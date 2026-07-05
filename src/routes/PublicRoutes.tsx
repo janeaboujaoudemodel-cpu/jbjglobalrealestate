@@ -434,7 +434,7 @@ export const PublicRoutes = () => (
      <Route path="/account/billing" element={<AuthRequiredRoute><AccountBilling /></AuthRequiredRoute>} />
      <Route path="/billing" element={<Navigate to="/account/billing" replace />} />
     <Route path="/client-portal" element={<AuthRequiredRoute><ClientPortal /></AuthRequiredRoute>} />
-    <Route path="/my-tickets" element={<AuthRequiredRoute><MyTickets /></AuthRequiredRoute>} />
+    <Route path="/my-tickets" element={<Navigate to="/ticket-hub?tab=track" replace />} />
     <Route path="/ticket-hub" element={<AuthRequiredRoute><TicketHub /></AuthRequiredRoute>} />
     <Route path="/reopen-ticket" element={<AuthRequiredRoute><ReopenTicket /></AuthRequiredRoute>} />
     <Route path="/join" element={<Navigate to="/careers" replace />} />
