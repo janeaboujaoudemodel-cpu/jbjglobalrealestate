@@ -21,6 +21,7 @@ import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -66,7 +67,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
   const currentYear = new Date().getFullYear();
   const lastYear = currentYear - 1;
   const totalUnits = projects.reduce((sum, p) => sum + Number(p.total_units || 0), 0);
-  const activeProjects = projects.length;
+  const activeProjects = Math.max(projects.length, Number(developer.offplan_projects || 0));
   const publishedValueFloor = projects.reduce((sum, p) => sum + Number(p.price_from || 0), 0);
   const launchesThisYear = projects.filter((p) => new Date(p.created_at || p.updated_at || 0).getFullYear() === currentYear).length;
   const deliveredLastYear = projects.filter((p) => {
@@ -82,8 +83,16 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
     }, {})
   ).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
-  const getMetric = (dev: any): DeveloperProjectMetric =>
-    projectMetricsByDeveloperId.get(dev.id) || { activeProjects: dev.id === developer.id ? activeProjects : 0, totalUnits: 0, priceFloor: 0 };
+  const getMetric = (dev: any): DeveloperProjectMetric => {
+    const metric = projectMetricsByDeveloperId.get(dev.id) || { activeProjects: 0, totalUnits: 0, priceFloor: 0 };
+    if (dev.id === developer.id) {
+      return {
+        ...metric,
+        activeProjects: Math.max(activeProjects, metric.activeProjects, Number(developer.offplan_projects || 0)),
+      };
+    }
+    return metric;
+  };
   const score = activeProjects * 10 + totalUnits / 500;
   const rankList = [developer, ...competitors].sort((a, b) => {
     const ma = getMetric(a);
@@ -206,16 +215,6 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
               )}
             </div>
           </div>
-        </div>
-
-        <div className="rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-5">
-          <div className="flex items-center gap-2 mb-3">
-            <Globe className="w-4 h-4 text-[#064E3B]" />
-            <h3 className="text-[#1A1A1A] font-bold text-lg">Developer Buyer Nationalities</h3>
-          </div>
-          <p className="text-[#1A1A1A]/78 text-sm leading-relaxed">
-            Developer-level nationality rankings require a named DLD developer transaction feed. Until that source is connected, no fabricated nationality data is shown for {developer.name}.
-          </p>
         </div>
       </div>
     </section>
@@ -388,7 +387,7 @@ const DeveloperDetail = () => {
     );
   }
 
-  const activeProjectCount = projects ? projects.length : null;
+  const activeProjectCount = Math.max(projects?.length || 0, Number(developer.offplan_projects || 0));
   const publishedUnits = (projects || []).reduce((sum, p) => sum + Number(p.total_units || 0), 0);
 
   const stats = [
@@ -503,24 +502,15 @@ const DeveloperDetail = () => {
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
           {/* Logo plate — gold border, padded so wide wordmarks (EMAAR, DAMAC) fit */}
-          <div 
-            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4"
-            style={{
-              border: '1px solid rgba(184,149,85,0.75)',
-              boxShadow: '0 4px 16px rgba(184,149,85,0.22)'
-            }}
-          >
-            {developer.logo_url ? (
-              <img
-                src={developer.logo_url}
-                alt={`${developer.name} logo`}
-                className="max-w-full max-h-full w-auto h-auto object-contain"
-                loading="eager"
-               decoding="async" />
-            ) : (
-              <Building2 className="w-10 h-10 text-[#1A1A1A]/70" />
-            )}
-          </div>
+          <DeveloperLogo
+            src={developer.logo_url}
+            alt={`${developer.name} logo`}
+            name={developer.name}
+            variant="bare"
+            renderFallback
+            loading="eager"
+            className="!w-32 !h-32 !rounded-2xl !p-4 jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
+          />
 
           {/* Text */}
           <div className="flex-1">

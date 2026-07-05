@@ -29,7 +29,7 @@ export const filterPillInactiveDark = _pillInactive;
 
 // Active pill — solid emerald metallic with pure white label
 export const filterPillActive = [
-  "jj-pill-emerald-metallic text-white border-0 font-bold shadow-md allow-white",
+  "jj-pill-emerald-metallic text-white border-0 font-bold shadow-md allow-white filter-emerald-action",
   "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 
@@ -46,7 +46,7 @@ export const togglePillBase = [
 
 export const togglePillOff = "border-[#B89555]/45 text-[#1A1A1A] bg-white hover:border-[#064E3B]/55";
 
-export const togglePillOn = "jj-pill-emerald-metallic text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)] allow-white";
+export const togglePillOn = "jj-pill-emerald-metallic text-white border-0 font-bold shadow-[0_8px_20px_rgba(6,78,59,0.24)] allow-white filter-emerald-action";
 
 // ── POPOVER / DIALOG SURFACE ──────────────────────────────────────────────
 // Champagne surface with gold hairline, matching the user-account dropdown.
@@ -69,7 +69,7 @@ export const filterHelpText = "text-xs text-[#1A1A1A]/70";
 
 // ── ACTION BUTTONS ────────────────────────────────────────────────────────
 export const filterPrimaryButton = [
-  "filter-primary-action h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg allow-white",
+  "filter-primary-action filter-emerald-action h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg allow-white",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
 ].join(" ");
 
@@ -90,9 +90,9 @@ export const filterSearchPillInput = "filter-search-pill-input w-full py-1.5 bg-
 // ── ACTIVE FILTER CHIPS (already-applied filter tags) ─────────────────────
 export const activeChipBase = [
   "group inline-flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-full text-xs font-semibold",
-  "jj-pill-emerald-metallic border-0 text-white allow-white",
+  "jj-pill-emerald-metallic border-0 text-white allow-white filter-emerald-action",
 ].join(" ");
-export const activeChipPrimary = "inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-pill-emerald-metallic text-white text-xs font-semibold allow-white";
+export const activeChipPrimary = "inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-pill-emerald-metallic text-white text-xs font-semibold allow-white filter-emerald-action";
 export const activeChipDismissDot = "ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/20 group-hover:bg-white/35 transition-colors";
 
 export const filterDivider = "w-px h-5 bg-[#B89555]/40 flex-shrink-0";
@@ -100,8 +100,8 @@ export const filterDivider = "w-px h-5 bg-[#B89555]/40 flex-shrink-0";
 // ── RESET-ALL PILL ────────────────────────────────────────────────────────
 export const resetAllPill = [
   "inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold",
-  "border border-[#B89555]/50 bg-white text-[#1A1A1A] shadow-none",
+  "filter-emerald-action jj-pill-emerald-metallic border-0 text-white shadow-none allow-white",
   "hover:border-[#064E3B]/55",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
-  "transition-colors duration-100 flex-shrink-0 [&_svg]:text-[#1A1A1A] [&_svg]:opacity-100",
+  "transition-colors duration-100 flex-shrink-0 [&_svg]:text-white [&_svg]:opacity-100",
 ].join(" ");

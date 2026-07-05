@@ -517,10 +517,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   key={p.value}
                   type="button"
                   onClick={() => setDraftPriceMax(draftPriceMax === p.value ? '' : p.value)}
+                  data-filter-selected={draftPriceMax === p.value ? "true" : undefined}
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-colors",
                     draftPriceMax === p.value
-                      ? "jj-pill-emerald-metallic text-white border-0 font-bold"
+                      ? "jj-pill-emerald-metallic filter-emerald-action text-white border-0 font-bold"
                       : dropdownGhostChip
                   )}
                 >
@@ -570,11 +571,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               ['--slider-thumb-shadow' as any]: '0 2px 10px rgba(6,78,59,0.45), 0 0 0 2px #064E3B inset',
             }}
           >
-            <h4 className="text-sm font-bold text-[#1A1A1A] mb-3">{t('filter.paymentsTitle')}</h4>
+            <h4 data-filter-ink-label className="text-sm font-bold mb-3" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{t('filter.paymentsTitle')}</h4>
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-[#1A1A1A] font-semibold">{t('filter.maxPreHandover')}</span>
+                  <span data-filter-ink-label className="text-xs font-semibold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{t('filter.maxPreHandover')}</span>
                   <span className="text-xs font-bold text-[#1A1A1A] bg-white px-2 py-0.5 rounded border border-[#B89555]/55">{draftPaymentPlanMax}%</span>
                 </div>
                 <Slider
@@ -586,7 +587,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div>
-                <label className={filterLabel}>{t('filter.afterHandover')}</label>
+                <label data-filter-ink-label className={filterLabel} style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{t('filter.afterHandover')}</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -600,7 +601,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-[#1A1A1A] font-semibold">{t('filter.postHandoverOnly')}</span>
+                <span data-filter-ink-label className="text-xs font-semibold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{t('filter.postHandoverOnly')}</span>
                 <Switch
                   checked={draftPostHandoverOnly}
                   onCheckedChange={(v) => setDraftPostHandoverOnly(v)}
@@ -645,7 +646,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     <button
                       key={q}
                       onClick={() => update({ handoverFrom: { ...filters.handoverFrom, quarter: q } })}
-                      className={cn(
+                      data-filter-selected={filters.handoverFrom.quarter === q ? "true" : undefined}
+                    className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
                           ? "jj-pill-emerald-metallic text-white border-0 shadow-sm"
@@ -781,7 +783,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     "flex items-center gap-1.5"
                   )}
                 >
-                  <span className={cn("w-2 h-2 rounded-full", opt.dotClass)} />
+                  <span className="w-2 h-2 rounded-full jj-status-dot" />
                   {opt.label}
                 </button>
               ))}
