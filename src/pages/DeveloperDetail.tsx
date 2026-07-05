@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef, lazy, Suspense } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useDeveloper, useProjectsByDeveloper, useDevelopers } from "@/hooks/useProjects";
+import { useDeveloper, useProjectsByDeveloper, useDevelopers, useProjectsListing } from "@/hooks/useProjects";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import { type FilterState } from "@/components/ProjectFilters";
@@ -56,11 +56,17 @@ const fmtAED = (value: number) => {
   return `AED ${Math.round(value).toLocaleString("en-US")}`;
 };
 
-const DeveloperPerformancePanel = ({ developer, projects, competitors }: { developer: any; projects: any[]; competitors: any[] }) => {
+type DeveloperProjectMetric = {
+  activeProjects: number;
+  totalUnits: number;
+  priceFloor: number;
+};
+
+const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMetricsByDeveloperId }: { developer: any; projects: any[]; competitors: any[]; projectMetricsByDeveloperId: Map<string, DeveloperProjectMetric> }) => {
   const currentYear = new Date().getFullYear();
   const lastYear = currentYear - 1;
   const totalUnits = projects.reduce((sum, p) => sum + Number(p.total_units || 0), 0);
-  const activeProjects = developer.offplan_projects || projects.length;
+  const activeProjects = projects.length;
   const publishedValueFloor = projects.reduce((sum, p) => sum + Number(p.price_from || 0), 0);
   const launchesThisYear = projects.filter((p) => new Date(p.created_at || p.updated_at || 0).getFullYear() === currentYear).length;
   const deliveredLastYear = projects.filter((p) => {
@@ -76,9 +82,19 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
     }, {})
   ).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
-  const score = activeProjects * 2 + (developer.completed_projects || 0) / 25 + totalUnits / 500;
-  const rankList = [developer, ...competitors].sort((a, b) => ((b.offplan_projects || 0) * 2 + (b.completed_projects || 0) / 25) - ((a.offplan_projects || 0) * 2 + (a.completed_projects || 0) / 25));
+  const getMetric = (dev: any): DeveloperProjectMetric =>
+    projectMetricsByDeveloperId.get(dev.id) || { activeProjects: dev.id === developer.id ? activeProjects : 0, totalUnits: 0, priceFloor: 0 };
+  const score = activeProjects * 10 + totalUnits / 500;
+  const rankList = [developer, ...competitors].sort((a, b) => {
+    const ma = getMetric(a);
+    const mb = getMetric(b);
+    if (mb.activeProjects !== ma.activeProjects) return mb.activeProjects - ma.activeProjects;
+    return mb.totalUnits - ma.totalUnits;
+  });
   const rank = Math.max(1, rankList.findIndex((d) => d.id === developer.id) + 1);
+  const competitiveRows = [developer, ...competitors]
+    .filter((dev) => dev.id === developer.id || getMetric(dev).activeProjects > 0)
+    .slice(0, 4);
 
   return (
     <section data-developer-intelligence className="mt-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/70 shadow-[0_20px_60px_-36px_rgba(184,149,85,0.42)]">
@@ -141,10 +157,11 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
               <span className="text-[#064E3B] text-xs font-bold">{fmtAED(publishedValueFloor)} price-floor portfolio</span>
             </div>
             <div className="space-y-2.5">
-              {[developer, ...competitors.slice(0, 3)].map((dev, index) => {
-                const units = Number(dev.completed_projects || 0);
-                const active = Number(dev.offplan_projects || (dev.id === developer.id ? projects.length : 0));
-                const width = Math.max(16, Math.min(100, (active / Math.max(activeProjects, ...competitors.map((d) => Number(d.offplan_projects || 0)), 1)) * 100));
+              {competitiveRows.map((dev, index) => {
+                const metric = getMetric(dev);
+                const active = metric.activeProjects;
+                const maxActive = Math.max(activeProjects, ...competitors.map((d) => getMetric(d).activeProjects), 1);
+                const width = Math.max(16, Math.min(100, (active / maxActive) * 100));
                 const selected = dev.id === developer.id;
                 return (
                   <div key={dev.id || dev.name} className="rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] overflow-hidden">
@@ -163,7 +180,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
                         </div>
                         <div className="text-right shrink-0">
                           <p className="text-[#1A1A1A] text-sm font-extrabold">{fmtNumber(active)} active</p>
-                          <p className="text-[#1A1A1A]/68 text-xs">{fmtNumber(units)} delivered</p>
+                          <p className="text-[#1A1A1A]/68 text-xs">verified live inventory</p>
                         </div>
                       </div>
                     </div>
@@ -210,6 +227,7 @@ const DeveloperDetail = () => {
   const { data: developer, isLoading: loadingDeveloper } = useDeveloper(slug || "");
   const { data: projects, isLoading: loadingProjects } = useProjectsByDeveloper(slug || "");
   const { data: allDevelopers } = useDevelopers();
+  const { data: allPublishedProjects } = useProjectsListing();
   const { trackView } = useRecentSearches();
 
   // Track developer view
@@ -326,6 +344,26 @@ const DeveloperDetail = () => {
 
   const safeDeveloperDescription = developer ? getSafeDeveloperDescription(developer) : "";
 
+  const projectMetricsByDeveloperId = useMemo(() => {
+    const metrics = new Map<string, DeveloperProjectMetric>();
+    const seenProjectIds = new Set<string>();
+    const addProject = (project: any) => {
+      if (project?.id && seenProjectIds.has(project.id)) return;
+      if (project?.id) seenProjectIds.add(project.id);
+      const developerId = project?.developer?.id;
+      if (!developerId) return;
+      const current = metrics.get(developerId) || { activeProjects: 0, totalUnits: 0, priceFloor: 0 };
+      metrics.set(developerId, {
+        activeProjects: current.activeProjects + 1,
+        totalUnits: current.totalUnits + Number(project.total_units || 0),
+        priceFloor: current.priceFloor + Number(project.price_from || 0),
+      });
+    };
+    (allPublishedProjects || []).forEach(addProject);
+    (projects || []).forEach(addProject);
+    return metrics;
+  }, [allPublishedProjects, projects]);
+
   if (loadingDeveloper) {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 bg-premium-bg">
@@ -350,6 +388,9 @@ const DeveloperDetail = () => {
     );
   }
 
+  const activeProjectCount = projects ? projects.length : null;
+  const publishedUnits = (projects || []).reduce((sum, p) => sum + Number(p.total_units || 0), 0);
+
   const stats = [
     {
       icon: Calendar,
@@ -358,15 +399,15 @@ const DeveloperDetail = () => {
     },
     {
       icon: Building2,
-      label: "Units Delivered",
-      value: developer.completed_projects
-        ? `${developer.completed_projects.toLocaleString()}+`
+      label: "Published Units",
+      value: publishedUnits
+        ? `${publishedUnits.toLocaleString()}+`
         : null,
     },
     {
       icon: TrendingUp,
       label: "Active Projects",
-      value: developer.offplan_projects || projects?.length || null,
+      value: activeProjectCount ?? null,
     },
     {
       icon: MapPin,
@@ -387,7 +428,13 @@ const DeveloperDetail = () => {
 
   const competitorDevelopers = (allDevelopers || [])
     .filter((d) => d.id !== developer.id)
-    .sort((a, b) => ((b.offplan_projects || 0) * 2 + (b.completed_projects || 0) / 25) - ((a.offplan_projects || 0) * 2 + (a.completed_projects || 0) / 25))
+    .sort((a, b) => {
+      const ma = projectMetricsByDeveloperId.get(a.id);
+      const mb = projectMetricsByDeveloperId.get(b.id);
+      const activeDelta = (mb?.activeProjects || 0) - (ma?.activeProjects || 0);
+      if (activeDelta !== 0) return activeDelta;
+      return (a.rank || 9999) - (b.rank || 9999);
+    })
     .slice(0, 3);
 
   return (
@@ -581,7 +628,7 @@ const DeveloperDetail = () => {
           </div>
         )}
 
-        <DeveloperPerformancePanel developer={developer} projects={projects || []} competitors={competitorDevelopers} />
+        <DeveloperPerformancePanel developer={developer} projects={projects || []} competitors={competitorDevelopers} projectMetricsByDeveloperId={projectMetricsByDeveloperId} />
 
         {/* Projects section */}
         <div className="mt-8">

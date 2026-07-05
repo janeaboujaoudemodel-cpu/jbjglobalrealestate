@@ -31367,16 +31367,16 @@ html body [data-filter-dropdown="true"][data-surface] [class*="text-white"]:not(
    visible categories down the rail so Help & Support no longer leaves a
    dead empty block above the footer. */
 html body [data-chrome="sidebar"] nav > div.px-3 {
-  padding-top: 40px !important;
+  padding-top: 56px !important;
 }
 html body [data-chrome="sidebar"] nav > div.px-3 > div.flex.flex-col {
   flex: 1 1 auto !important;
   min-height: 0 !important;
   justify-content: flex-start !important;
-  gap: 12px !important;
+  gap: 9px !important;
 }
 html body [data-chrome="sidebar"] [id="nav-section-help-&-support"] {
-  margin-top: auto !important;
+  margin-top: 0 !important;
 }
 
 /* Homepage hero search: remove the visible white top divider. */
@@ -31577,4 +31577,82 @@ html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+
+/* Final filter dropdown contrast contract: champagne header tabs and every
+   non-selected value chip are dark ink; only selected chips and Apply buttons
+   keep emerald with white ink. */
+html body [data-filter-dropdown="true"] :is(button, [role="tab"]):not(.jj-pill-emerald-metallic):not(.filter-primary-action):not([data-state="checked"]),
+html body [data-filter-dropdown="true"] :is(button, [role="tab"]):not(.jj-pill-emerald-metallic):not(.filter-primary-action):not([data-state="checked"]) * {
+  background-color: #FFFFFF !important;
+  background-image: none !important;
+  border-color: rgba(184,149,85,0.58) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"],
+html body [data-filter-dropdown="true"] [role="tab"] * {
+  background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"][data-state="active"],
+html body [data-filter-dropdown="true"] [role="tab"][data-state="active"] * {
+  background: linear-gradient(180deg, #F6E8C6 0%, #EADBB6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"] :is(.filter-primary-action, .filter-primary-action *, .jj-pill-emerald-metallic, .jj-pill-emerald-metallic *) {
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-filter-dropdown="true"] :is([role="tab"], [role="tab"] *, button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]), button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]) *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"] {
+  background: linear-gradient(180deg, #FDFBF7 0%, #EADBB6 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #EADBB6 100%) !important;
+  border-color: rgba(184,149,85,0.64) !important;
+}
+html body [data-filter-dropdown="true"] :is(.filter-primary-action, .filter-primary-action *, button.jj-pill-emerald-metallic:not([role="tab"]), button.jj-pill-emerald-metallic:not([role="tab"]) *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(h1,h2,h3,h4,h5,h6,label,span,small,div),
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]),
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) button:not(.filter-primary-action):not(.jj-pill-emerald-metallic):not([data-state="checked"]) *,
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) [role="tab"],
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) [role="tab"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body [data-filter-dropdown="true"][data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(.filter-primary-action,.filter-primary-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"],
+html body [data-filter-dropdown="true"] [role="tab"] *,
+html body [data-filter-dropdown="true"] [role="tab"].jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] [role="tab"].jj-pill-emerald-metallic * {
+  background: linear-gradient(180deg, #FDFBF7 0%, #EADBB6 100%) !important;
+  background-image: linear-gradient(180deg, #FDFBF7 0%, #EADBB6 100%) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
 }
