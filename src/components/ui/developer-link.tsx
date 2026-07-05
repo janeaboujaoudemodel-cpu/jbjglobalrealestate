@@ -50,8 +50,9 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') go(e); }}
         data-no-contrast-guard
         data-developer-gold
+        data-developer-name-shine
         style={{ color: '#B89555', WebkitTextFillColor: '#B89555' }}
-        className="developer-name-gold font-bold !text-[#B89555] cursor-pointer transition-colors duration-150 hover:!text-[#C9A66B] focus-visible:!text-[#C9A66B] focus-visible:outline-none"
+        className="developer-name-gold developer-name-shine font-bold !text-[#B89555] cursor-pointer transition-colors duration-150 hover:!text-[#C9A66B] focus-visible:!text-[#C9A66B] focus-visible:outline-none"
       >
         {name}
       </span>

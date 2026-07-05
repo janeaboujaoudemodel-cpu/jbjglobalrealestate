@@ -63,7 +63,6 @@ const BrokerOnboardingBanner = lazy(chunkImports.BrokerOnboardingBanner);
 const JBJPodcastSection = lazy(chunkImports.JBJPodcastSection);
 const ResalePropertiesSection = lazy(chunkImports.ResalePropertiesSection);
 const ModePortalBanner = lazy(() => import("@/components/home/ModePortalBanner"));
-const CategorySelectorSection = lazy(() => import("@/components/home/CategorySelectorSection"));
 const CTABand = lazy(() => import("@/components/home/CTABand"));
 
 
@@ -357,19 +356,6 @@ const Index = () => {
           <PartnerVerifyHeroCTA />
         </Suspense>
       </div>
-
-
-
-      {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
-      <div id="category-selector" className="py-4">
-        <Suspense fallback={<SectionLoader />}>
-          <CategorySelectorSection />
-        </Suspense>
-      </div>
-
-
-
-
       {/* FEATURED LISTINGS — full-bleed band */}
       <div className="jj-fullbleed-band cv-auto py-4" data-fullbleed-band>
         <LazyVisible minHeight={500}>
