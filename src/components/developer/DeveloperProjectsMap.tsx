@@ -303,6 +303,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           </div>
         )}
         <MapNavigationControlsStandalone
+          key={mapReadyTick}
           mapInstance={mapInstanceRef.current}
           latitude={projectsWithCoords[0]?.latitude || 25.2048}
           longitude={projectsWithCoords[0]?.longitude || 55.2708}
