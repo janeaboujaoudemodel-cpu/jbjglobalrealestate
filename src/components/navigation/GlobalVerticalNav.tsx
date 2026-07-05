@@ -227,6 +227,14 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Disclaimers", href: "/disclaimers", icon: FileText },
   { label: "Intellectual Property", href: "/intellectual-property", icon: ShieldCheck },
   { label: "AML / KYC", href: "/aml-kyc", icon: Shield },
+
+  // ── Help & Support ──
+  { label: "Contact Us", href: "/contact", icon: Phone, section: "HELP & SUPPORT" },
+  { label: "Support Center", href: "/ticket-hub", icon: Ticket },
+  { label: "My Tickets", href: "/my-tickets", icon: LifeBuoy },
+  { label: "FAQs", href: "/faqs", icon: Lightbulb },
+
+
   
 
   // ── Productivity ──
