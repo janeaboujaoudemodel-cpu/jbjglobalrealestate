@@ -34,6 +34,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const [tileLayer, setTileLayer] = useState<MapViewType>('satellite');
   const [mapError, setMapError] = useState<string | null>(null);
   const [mapInteractive, setMapInteractive] = useState(false);
+  // Bumped after L.map init so <MapNavigationControlsStandalone> re-renders with the real instance
+  const [mapReadyTick, setMapReadyTick] = useState(0);
 
   // Format price for popup
   const formatPrice = useCallback((price: number | null) => {
@@ -117,13 +119,25 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       const map = L.map(mapContainerRef.current, {
         center,
         zoom: 11,
+        // Keep scroll wheel disabled until user opts in (prevents page hijack),
+        // but allow touch/drag/keyboard + programmatic zoom so +/- controls
+        // respond instantly with no perceived lag.
         scrollWheelZoom: false,
-        touchZoom: false,
+        touchZoom: true,
+        doubleClickZoom: true,
         dragging: true,
+        keyboard: true,
         zoomControl: false,
+        zoomAnimation: true,
+        zoomSnap: 0.5,
+        wheelDebounceTime: 20,
+        fadeAnimation: false,
+        markerZoomAnimation: false,
       });
 
       mapInstanceRef.current = map;
+      // Force re-render so the standalone nav controls receive the real map instance
+      setMapReadyTick((n) => n + 1);
 
       const tiles = getMapTiles(language);
       const initialTileConfig = tiles.satellite;
@@ -291,6 +305,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           </div>
         )}
         <MapNavigationControlsStandalone
+          key={mapReadyTick}
           mapInstance={mapInstanceRef.current}
           latitude={projectsWithCoords[0]?.latitude || 25.2048}
           longitude={projectsWithCoords[0]?.longitude || 55.2708}

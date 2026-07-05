@@ -30987,3 +30987,70 @@ html body .jj-explore-all-areas-button:hover * {
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* ============================================================
+   Developer Detail — gold filter bar override
+   Scope: [data-filter-bar-gold] wraps FilterShortcutBar variant="dark".
+   The dark variant styles pills for a dark surface; on the gold surface
+   we need explicit dark ink for idle pills and pure white for active
+   emerald pills (icons + text).
+============================================================ */
+html body [data-filter-bar-gold] :is(button, a, label, input, [role="button"]),
+html body [data-filter-bar-gold] :is(button, a, label, [role="button"]) :is(span, p) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-bar-gold] :is(svg, [class*="lucide"]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+/* Emerald active/selected pills inside the gold bar -> pure white text + icons */
+html body [data-filter-bar-gold] [data-active="true"],
+html body [data-filter-bar-gold] [data-state="active"],
+html body [data-filter-bar-gold] [data-selected="true"],
+html body [data-filter-bar-gold] [aria-selected="true"],
+html body [data-filter-bar-gold] [data-surface="emerald"],
+html body [data-filter-bar-gold] .jj-emerald-metallic,
+html body [data-filter-bar-gold] .jj-pill-emerald-metallic {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-filter-bar-gold] :is([data-active="true"], [data-state="active"], [data-selected="true"], [aria-selected="true"], [data-surface="emerald"], .jj-emerald-metallic, .jj-pill-emerald-metallic) :is(span, p, a, label) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-filter-bar-gold] :is([data-active="true"], [data-state="active"], [data-selected="true"], [aria-selected="true"], [data-surface="emerald"], .jj-emerald-metallic, .jj-pill-emerald-metallic) :is(svg, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+/* Search input on gold — keep dark ink and champagne field */
+html body [data-filter-bar-gold] input[type="text"],
+html body [data-filter-bar-gold] input[type="search"] {
+  background: rgba(253,251,247,0.85) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border: 1px solid rgba(184,149,85,0.55) !important;
+}
+html body [data-filter-bar-gold] input::placeholder {
+  color: rgba(26,26,26,0.55) !important;
+}
+
+/* Developer detail hero — locked gold title with pure-white subtitle.
+   Uses !important to defeat global on-light contrast guards. */
+html body h1[data-developer-hero-title],
+html body h1[data-developer-hero-title] * {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  background-image: linear-gradient(180deg,#F5E7BF 0%,#E9CE86 55%,#B89555 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.55) !important;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.55));
+}
+html body p[data-developer-hero-subtitle],
+html body p[data-developer-hero-subtitle] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.75) !important;
+}

@@ -80,23 +80,41 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
   const rank = Math.max(1, rankList.findIndex((d) => d.id === developer.id) + 1);
 
   return (
-    <section data-developer-intelligence className="mt-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#064E3B]/25 shadow-[0_20px_60px_-36px_rgba(6,78,59,0.38)]">
-      <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-black px-5 md:px-7 py-5 allow-white">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-white" />
+    <section data-developer-intelligence className="mt-8 rounded-2xl overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/70 shadow-[0_20px_60px_-36px_rgba(184,149,85,0.42)]">
+        {/* Header — gold champagne with emerald accent text */}
+        <div
+          data-no-contrast-guard
+          className="px-5 md:px-7 py-5"
+          style={{
+            background: 'linear-gradient(135deg,#F7EAC4 0%,#E9D194 45%,#C7A55C 100%)',
+            borderBottom: '1px solid rgba(184,149,85,0.7)',
+          }}
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center"
+                style={{ background: 'rgba(6,78,59,0.12)', border: '1px solid rgba(6,78,59,0.35)' }}
+                data-no-contrast-guard
+              >
+                <BarChart3 className="w-5 h-5" style={{ color: '#064E3B' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#064E3B' }}>JBJ Developer Intelligence</h2>
+                <p className="text-sm" style={{ color: '#3E2B0F' }}>{developer.name} verified portfolio profile</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-white text-2xl md:text-3xl font-bold">JBJ Developer Intelligence</h2>
-              <p className="text-white/78 text-sm">{developer.name} verified portfolio profile</p>
+            <div
+              data-surface="emerald"
+              data-emerald-ok="pill"
+              data-no-contrast-guard
+              className="jj-emerald-metallic allow-white rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white"
+              style={{ color: '#FFFFFF' }}
+            >
+              <span className="allow-white" style={{ color: '#FFFFFF' }}>Rank #{rank} · Score {Math.round(score)}</span>
             </div>
-          </div>
-          <div className="jj-pill-emerald-metallic allow-white text-white border-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.16em]">
-            Rank #{rank} · Score {Math.round(score)}
           </div>
         </div>
-      </div>
 
       <div className="p-5 md:p-7 space-y-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -106,7 +124,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
             { label: "New launches YTD", value: fmtNumber(launchesThisYear), icon: TrendingUp },
             { label: `Delivered ${lastYear}`, value: fmtNumber(deliveredLastYear), icon: Calendar },
           ].map((item) => (
-            <div key={item.label} className="rounded-xl border border-[#064E3B]/20 bg-[#FDFBF7] p-4">
+            <div key={item.label} className="rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-4">
               <div className="flex items-center gap-2 text-[#064E3B] text-[10px] uppercase tracking-[0.16em] font-bold mb-2">
                 <item.icon className="w-4 h-4" />
                 {item.label}
@@ -117,7 +135,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <div className="lg:col-span-2 rounded-xl border border-[#064E3B]/20 bg-[#FDFBF7] p-5">
+          <div className="lg:col-span-2 rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-5">
             <div className="flex items-center justify-between gap-3 mb-4">
               <h3 className="text-[#1A1A1A] font-bold text-lg">Competitive Standing</h3>
               <span className="text-[#064E3B] text-xs font-bold">{fmtAED(publishedValueFloor)} price-floor portfolio</span>
@@ -129,12 +147,18 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
                 const width = Math.max(16, Math.min(100, (active / Math.max(activeProjects, ...competitors.map((d) => Number(d.offplan_projects || 0)), 1)) * 100));
                 const selected = dev.id === developer.id;
                 return (
-                  <div key={dev.id || dev.name} className="rounded-lg border border-[#064E3B]/15 bg-[#F7F2EA] overflow-hidden">
+                  <div key={dev.id || dev.name} className="rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] overflow-hidden">
                     <div className="relative px-3 py-3">
-                      <div className="absolute inset-y-0 left-0 bg-[#064E3B]/10" style={{ width: `${width}%` }} />
+                      <div className="absolute inset-y-0 left-0" style={{ width: `${width}%`, background: 'rgba(184,149,85,0.18)' }} />
                       <div className="relative flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
-                          <span className={selected ? "jj-pill-emerald-metallic allow-white text-white border-0 rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" : "w-8 h-8 rounded-full border border-[#064E3B]/25 bg-[#FDFBF7] text-[#1A1A1A] flex items-center justify-center text-xs font-bold"}>{index + 1}</span>
+                          <span
+                            data-no-contrast-guard
+                            className={selected ? "jj-emerald-metallic allow-white text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-bold" : "w-8 h-8 rounded-full border border-[#B89555]/70 bg-[#FDFBF7] text-[#1A1A1A] flex items-center justify-center text-xs font-bold"}
+                            style={selected ? { color: '#FFFFFF' } : undefined}
+                          >
+                            <span className={selected ? "allow-white" : ""} style={selected ? { color: '#FFFFFF' } : undefined}>{index + 1}</span>
+                          </span>
                           <span className="text-[#1A1A1A] font-bold truncate">{dev.name}</span>
                         </div>
                         <div className="text-right shrink-0">
@@ -149,14 +173,14 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#064E3B]/20 bg-[#FDFBF7] p-5">
+          <div className="rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-5">
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="w-4 h-4 text-[#064E3B]" />
               <h3 className="text-[#1A1A1A] font-bold text-lg">Top Areas</h3>
             </div>
             <div className="space-y-2">
               {topAreas.length > 0 ? topAreas.map(([area, count], i) => (
-                <div key={area} className="flex items-center justify-between gap-3 rounded-lg border border-[#064E3B]/15 bg-[#F7F2EA] px-3 py-2">
+                <div key={area} className="flex items-center justify-between gap-3 rounded-lg border border-[#B89555]/50 bg-[#F7F2EA] px-3 py-2">
                   <span className="text-[#1A1A1A] text-sm font-semibold truncate">{i + 1}. {area}</span>
                   <span className="text-[#064E3B] text-xs font-bold">{count} projects</span>
                 </div>
@@ -167,7 +191,7 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#064E3B]/20 bg-[#FDFBF7] p-5">
+        <div className="rounded-xl border border-[#B89555]/60 bg-[#FDFBF7] p-5">
           <div className="flex items-center gap-2 mb-3">
             <Globe className="w-4 h-4 text-[#064E3B]" />
             <h3 className="text-[#1A1A1A] font-bold text-lg">Developer Buyer Nationalities</h3>
@@ -397,13 +421,21 @@ const DeveloperDetail = () => {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-premium-bg/70 via-transparent to-transparent" />
+        {/* Stronger 3-stop wash so hero copy always meets AA on any photo */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent" />
         {/* Hero Title Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg">
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 allow-white" data-no-contrast-guard>
+          <h1
+            data-developer-hero-title
+            className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-center mb-4 tracking-tight allow-white"
+          >
             {developer.name}
           </h1>
-          <p className="text-white/80 text-lg md:text-xl text-center max-w-2xl">
+          <p
+            data-developer-hero-subtitle
+            className="text-lg md:text-xl text-center max-w-2xl allow-white font-medium"
+          >
             {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
           </p>
         </div>
@@ -421,19 +453,19 @@ const DeveloperDetail = () => {
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12" style={{ marginLeft: 0, marginRight: 0, borderRadius: 0, border: 'none' }}>
         {/* Developer header */}
         <div className="flex flex-col md:flex-row md:items-start gap-6">
-          {/* Logo plate - Full-fit, no white corners */}
+          {/* Logo plate — gold border, padded so wide wordmarks (EMAAR, DAMAC) fit */}
           <div 
-            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
+            className="w-32 h-32 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4"
             style={{
-              border: '1px solid rgba(6,78,59,0.34)',
-              boxShadow: '0 4px 16px rgba(6,78,59,0.18)'
+              border: '1px solid rgba(184,149,85,0.75)',
+              boxShadow: '0 4px 16px rgba(184,149,85,0.22)'
             }}
           >
             {developer.logo_url ? (
               <img
                 src={developer.logo_url}
                 alt={`${developer.name} logo`}
-                className="w-full h-full object-contain"
+                className="max-w-full max-h-full w-auto h-auto object-contain"
                 loading="eager"
                decoding="async" />
             ) : (
@@ -557,8 +589,17 @@ const DeveloperDetail = () => {
           {/* Sentinel for IntersectionObserver */}
           <div ref={filterSentinelRef} className="h-0" />
 
-          {/* Inline filter bar — 2 rows only */}
-          <div data-filter-clean="true" className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black border border-white/12 rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide">
+          {/* Inline filter bar — gold champagne surface, white pill text/icons via scoped override */}
+          <div
+            data-filter-clean="true"
+            data-filter-bar-gold=""
+            className="rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide"
+            style={{
+              background: 'linear-gradient(135deg,#F7EAC4 0%,#E9D194 45%,#C7A55C 100%)',
+              border: '1px solid rgba(184,149,85,0.7)',
+              boxShadow: '0 8px 24px -12px rgba(184,149,85,0.35)',
+            }}
+          >
             <FilterShortcutBar
               variant="dark"
               filters={shortcutFilters}
@@ -596,10 +637,10 @@ const DeveloperDetail = () => {
                 <div className="flex justify-center mt-10">
                   <button
                     onClick={() => setVisibleCount((c) => Math.min(c + 6, filteredProjects.length))}
-                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-150 border border-[#064E3B]/35 hover:border-[#064E3B]/60 hover:-translate-y-0.5"
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-150 border border-[#B89555]/70 hover:border-[#B89555] hover:-translate-y-0.5"
                     style={{
                       background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
-                      boxShadow: '0 4px 20px rgba(6,78,59,0.16)',
+                      boxShadow: '0 4px 20px rgba(184,149,85,0.22)',
                     }}
                   >
                     <span className="text-foreground">
@@ -644,11 +685,11 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* Divider between projects and recommendations */}
+        {/* Divider between projects and recommendations — gold */}
         <div className="py-10 md:py-14">
           <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
-            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
+            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#B89555]/65 to-transparent" />
+            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#B89555]/65 to-transparent" />
           </div>
         </div>
 
