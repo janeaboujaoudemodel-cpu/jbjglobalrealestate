@@ -33,6 +33,7 @@ import SmartEmailComposer from "@/components/crm/SmartEmailComposer";
 import SmartWhatsAppComposer from "@/components/crm/SmartWhatsAppComposer";
 import LeadAuditHistory from "@/components/crm/LeadAuditHistory";
 import LeadMessageGenerator from "@/components/crm/LeadMessageGenerator";
+import ZohoSyncBadge from "@/components/crm/ZohoSyncBadge";
 
 interface Lead {
   id: string;
