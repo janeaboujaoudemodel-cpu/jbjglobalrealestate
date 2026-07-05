@@ -23312,6 +23312,21 @@ html body [data-chrome="sidebar"] a[href="/auth"] {
   max-height: 40px !important;
 }
 
+html body [data-chrome="sidebar"] [data-sidebar-auth-control] {
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  border-radius: 8px !important;
+}
+
+html body.jj-vertical-nav-collapsed [data-sidebar-auth-control] {
+  width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  border-radius: 12px !important;
+}
+
 @media (min-width: 640px) {
   html body .jj-page-nav-anchor--left {
     left: calc(var(--jj-shell-sidebar-w, 72px) + 16px) !important;
