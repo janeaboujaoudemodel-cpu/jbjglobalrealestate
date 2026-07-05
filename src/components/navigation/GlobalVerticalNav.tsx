@@ -15,7 +15,7 @@ import {
   Database, Cog, HardHat, UserPlus, Presentation,
   QrCode, FileSignature, MailOpen, MessagesSquare,
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
-  Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox,
+  Podcast, NotebookPen, BookText, HelpCircle, ScrollText, Inbox, LifeBuoy,
 } from "lucide-react";
 import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
@@ -227,6 +227,14 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Disclaimers", href: "/disclaimers", icon: FileText },
   { label: "Intellectual Property", href: "/intellectual-property", icon: ShieldCheck },
   { label: "AML / KYC", href: "/aml-kyc", icon: Shield },
+
+  // ── Help & Support ──
+  { label: "Contact Us", href: "/contact", icon: Phone, section: "HELP & SUPPORT" },
+  { label: "Support Center", href: "/ticket-hub", icon: Ticket },
+  { label: "My Tickets", href: "/my-tickets", icon: LifeBuoy },
+  { label: "FAQs", href: "/faqs", icon: Lightbulb },
+
+
   
 
   // ── Productivity ──
@@ -518,6 +526,7 @@ const SECTION_KEYS = [
   "BROKER & ACADEMY",
   "INVESTOR",
   "COMPANY & LEGAL",
+  "HELP & SUPPORT",
   "ADMIN & OWNER",
 ] as const;
 type SectionKey = typeof SECTION_KEYS[number];
@@ -535,6 +544,7 @@ const SECTION_ALIAS: Record<string, SectionKey> = {
   "INVESTOR": "INVESTOR",
   "COMPANY": "COMPANY & LEGAL",
   "LEGAL": "COMPANY & LEGAL",
+  "HELP & SUPPORT": "HELP & SUPPORT",
   "MY ACCOUNT": "MY ACCOUNT",
   "ADMIN & OWNER": "ADMIN & OWNER",
 };
@@ -548,6 +558,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
   "COMPANY & LEGAL": Users,
+  "HELP & SUPPORT": LifeBuoy,
   "MY ACCOUNT": User,
   "ADMIN & OWNER": Crown,
 };
@@ -1343,50 +1354,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         </div>
       </nav>
 
-      {/* ━━━ BOTTOM — Support + Sign Out (compact half-height) ━━━ */}
+      {/* ━━━ BOTTOM — Sign Out + Collapse only (premium, elegant) ━━━
+          Contact & Support live in the HELP & SUPPORT nav section above. */}
       <div className="flex-shrink-0">
-        <div className="h-px mb-1 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
+        <div
+          className="h-px mb-1 mt-0"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 92%, transparent 100%)",
+          }}
+          aria-hidden="true"
+        />
         <div className="px-4 pt-4 pb-4 bg-gradient-to-t from-[#F0E8D8]/35 to-transparent rounded-xl">
-          <div className="grid grid-cols-2 gap-2.5 mb-3">
 
-
-
-            {(() => {
-              const contactActive = isRouteActive('/contact');
-              const supportActive = isRouteActive('/ticket-hub');
-              return (
-                <>
-                  <Link
-                    to="/contact"
-                    data-no-contrast-guard
-                    data-sidebar-bottom-cta
-                    data-active={contactActive ? 'true' : undefined}
-                    aria-current={contactActive ? 'page' : undefined}
-                    className="flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border will-change-transform"
-                  >
-                    <span data-emerald-icon-surface className="w-6 h-6 rounded-[6px] flex items-center justify-center">
-                      <Headphones className="w-3.5 h-3.5" strokeWidth={2.2} />
-                    </span>
-                    <span>Contact</span>
-                  </Link>
-                  <Link
-                    to="/ticket-hub"
-                    data-no-contrast-guard
-                    data-sidebar-bottom-cta
-                    data-active={supportActive ? 'true' : undefined}
-                    aria-current={supportActive ? 'page' : undefined}
-                    className="flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border will-change-transform"
-                  >
-                    <span data-emerald-icon-surface className="w-6 h-6 rounded-[6px] flex items-center justify-center">
-                      <Ticket className="w-3.5 h-3.5" strokeWidth={2.2} />
-                    </span>
-                    <span>Support</span>
-                  </Link>
-                </>
-              );
-            })()}
-
-          </div>
 
           {session ? (
             <button
@@ -1546,11 +1526,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               );
             })}
 
-            <div className="h-2 shrink-0" />
+            {/* Push the 4 bottom icons (Contact · Support · Sign Out · Expand)
+                all the way down to the footer of the collapsed rail. */}
+            <div className="flex-1 min-h-4" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1 pt-1 w-full">
+            <div className="flex flex-col items-center gap-1.5 pt-1 pb-1 w-full">
               <div className="h-px w-7 mb-2 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
+
 
               <Tooltip>
                 <TooltipTrigger asChild>

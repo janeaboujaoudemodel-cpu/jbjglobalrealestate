@@ -54,7 +54,7 @@ const MinimalFooter = () => {
           className="jj-footer-rule mx-auto mt-4 h-px w-40 max-w-full"
           style={{
             background:
-              "linear-gradient(90deg, transparent, rgba(4,120,87,0.55), transparent)",
+              "linear-gradient(90deg, transparent, rgba(184,149,85,0.75), transparent)",
           }}
           aria-hidden
         />

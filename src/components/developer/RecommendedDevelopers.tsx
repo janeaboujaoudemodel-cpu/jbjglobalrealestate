@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import { supabase } from "@/integrations/supabase/client";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 
 interface RecommendedDevelopersProps {
@@ -64,6 +66,35 @@ export default function RecommendedDevelopers({
 
   if (recommended.length === 0) return null;
 
+  const recommendedIds = recommended.map((d: any) => d.id).filter(Boolean);
+
+  // Fetch one real project cover image per recommended developer, so cards
+  // never fall back to a text/wordmark logo (e.g. "DPF") when feature_image_url
+  // is missing.
+  const { data: projectImageByDev } = useQuery({
+    queryKey: ["recommended-dev-project-images", recommendedIds],
+    enabled: recommendedIds.length > 0,
+    staleTime: 10 * 60 * 1000,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("developer_id, cover_image_url, created_at")
+        .in("developer_id", recommendedIds)
+        .eq("is_published", true)
+        .not("cover_image_url", "is", null)
+        .neq("cover_image_url", "")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      const map: Record<string, string> = {};
+      (data || []).forEach((row: any) => {
+        if (row.developer_id && row.cover_image_url && !map[row.developer_id]) {
+          map[row.developer_id] = row.cover_image_url;
+        }
+      });
+      return map;
+    },
+  });
+
   return (
     <section
       className="py-14 jj-band"
@@ -94,15 +125,19 @@ export default function RecommendedDevelopers({
           {/* Developer Cards Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {recommended.map((dev: any, index: number) => {
-              // Fallback chain: feature image → logo → ammar hero. Never render
-              // a low-quality mini-logo as the featured card image.
+              // Prefer a real project cover image. Never use the developer
+              // logo/wordmark as the card hero — that's what produced the
+              // "DPF" text placeholder on DAMAC.
               const looksLikeLogoUrl = (url?: string | null) => {
                 if (!url) return false;
-                return /logo|nameplate|thumb|icon|placeholder/i.test(url);
+                return /logo|nameplate|thumb|icon|placeholder|wordmark/i.test(url);
               };
-              const cardImage = dev.feature_image_url && !looksLikeLogoUrl(dev.feature_image_url)
-                ? getHighResImageUrl(dev.feature_image_url)
-                : (dev.logo_url ? getHighResImageUrl(dev.logo_url) : ammarCreekHarbourMasterplan);
+              const projectCover = projectImageByDev?.[dev.id];
+              const rawImage =
+                (projectCover && !looksLikeLogoUrl(projectCover) && projectCover) ||
+                (dev.feature_image_url && !looksLikeLogoUrl(dev.feature_image_url) && dev.feature_image_url) ||
+                null;
+              const cardImage = rawImage ? getHighResImageUrl(rawImage) : ammarCreekHarbourMasterplan;
               return (
               <motion.div
                 key={dev.slug}
@@ -134,7 +169,7 @@ export default function RecommendedDevelopers({
 
                   {/* Info */}
                   <div className="p-3 border-t border-[#B89555]/50">
-                    <h3 className="text-[#1A1A1A] font-bold text-sm leading-tight group-hover:text-[#1A1A1A] transition-colors line-clamp-1">
+                    <h3 className="text-[#1A1A1A] font-bold text-sm leading-snug group-hover:text-[#1A1A1A] transition-colors break-words">
                       {dev.name}
                     </h3>
                     <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]">

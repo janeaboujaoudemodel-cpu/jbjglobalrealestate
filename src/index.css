@@ -1177,6 +1177,38 @@ All colors MUST be HSL.
   }
 }
 
+/* Premium shimmer champagne — soft, always-on, non-distracting sweep.
+   Used on JBJ Developer Intelligence header + filter bars across developer
+   pages. Slow 9s cycle avoids the "blinking" effect flagged on always-visible
+   chrome, while still reading as living, luxurious champagne. */
+.jj-shimmer-champagne-live {
+  background-image: linear-gradient(
+    110deg,
+    #F5EAD1 0%,
+    #F9F0DA 18%,
+    #E7D3A2 38%,
+    #F5EAD1 58%,
+    #D9BE83 78%,
+    #F5EAD1 100%
+  );
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  animation: jj-champagne-shimmer-live 9s ease-in-out infinite;
+  border: 1px solid rgba(184,149,85,0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    inset 0 -8px 18px rgba(184,149,85,0.14),
+    0 8px 24px -14px rgba(184,149,85,0.30);
+}
+@keyframes jj-champagne-shimmer-live {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-shimmer-champagne-live { animation: none; }
+}
+
 /* Metallic animated gold — used by the active sq ft/sq m pill and the
    developer logo box inside the project detail page ONLY. Never use on
    listing cards or generic chrome. */
