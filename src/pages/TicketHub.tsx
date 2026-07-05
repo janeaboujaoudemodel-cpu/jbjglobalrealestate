@@ -81,10 +81,10 @@ const PRIORITY_OPTIONS = [
   { value: "critical", label: "Critical", color: "bg-red-500/20 text-red-700" },
 ];
 
-const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
-  open: { label: "Open", className: "bg-yellow-500/20 text-yellow-600", icon: AlertCircle },
-  in_progress: { label: "In Review", className: "bg-blue-500/20 text-blue-600", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)]", icon: CheckCircle },
+const statusConfig: Record<string, { label: string; className: string; bg: string; fg: string; border: string; icon: typeof CheckCircle }> = {
+  open: { label: "Open", className: "", bg: "#FEF3C7", fg: "#92400E", border: "#F59E0B", icon: AlertCircle },
+  in_progress: { label: "In Review", className: "", bg: "#DBEAFE", fg: "#1E40AF", border: "#3B82F6", icon: Clock },
+  resolved: { label: "Resolved", className: "", bg: "#D1FAE5", fg: "#065F46", border: "#10B981", icon: CheckCircle },
 };
 
 interface AttachmentFile {
@@ -128,7 +128,8 @@ const TicketHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const initialTab = searchParams.get("tab") === "new" ? "new" : "track";
+  const tabParam = searchParams.get("tab");
+  const initialTab = tabParam === "new" ? "new" : tabParam === "inbox" ? "inbox" : "track";
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // New ticket form
@@ -445,16 +446,32 @@ const TicketHub = () => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-[#B89555]/30 rounded-xl h-12 p-1 gap-1">
-                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md">
+              <TabsList
+                data-ticket-hub-tabs
+                className="grid w-full grid-cols-3 border-2 border-[#B89555]/40 rounded-xl h-12 p-1 gap-1"
+                style={{ background: 'linear-gradient(135deg,#FDFBF7 0%,#F7F2EA 50%,#EFE6D6 100%)' }}
+              >
+                <TabsTrigger
+                  value="new"
+                  data-ticket-hub-tab
+                  className="ticket-hub-tab text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#064E3B] data-[state=active]:via-[#042c1c] data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-md"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   New Ticket
                 </TabsTrigger>
-                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md">
+                <TabsTrigger
+                  value="track"
+                  data-ticket-hub-tab
+                  className="ticket-hub-tab text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#064E3B] data-[state=active]:via-[#042c1c] data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-md"
+                >
                   <Search className="w-4 h-4 mr-2" />
                   My Tickets
                 </TabsTrigger>
-                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md relative">
+                <TabsTrigger
+                  value="inbox"
+                  data-ticket-hub-tab
+                  className="ticket-hub-tab text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#064E3B] data-[state=active]:via-[#042c1c] data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-md relative"
+                >
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
                   {(inboxQuery.data?.length || 0) > 0 && (
@@ -674,9 +691,24 @@ const TicketHub = () => {
                                 <button key={ticket.id} onClick={() => handleSelectTicket(ticket.id)}
                                   className={cn("w-full p-4 text-left hover:bg-[#EFE6D6]/5 transition-colors",
                                     selectedTicket?.id === ticket.id && "bg-[#EFE6D6]/10 border-l-4 border-l-gold")}>
-                                  <div className="flex items-center gap-2 mb-1">
+                                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                                     <span className="font-mono text-[#1A1A1A] font-semibold text-sm">{ticket.ticket_number}</span>
-                                    <Badge className={cn("text-xs", status.className)}><StatusIcon className="w-3 h-3 mr-1" />{status.label}</Badge>
+                                    <span
+                                      data-ticket-status-pill
+                                      className="inline-flex items-center gap-1 rounded-full text-[11px] font-semibold px-2.5 py-0.5 border"
+                                      style={{
+                                        background: status.bg,
+                                        color: status.fg,
+                                        borderColor: status.border,
+                                        whiteSpace: 'nowrap',
+                                        wordBreak: 'keep-all',
+                                        overflowWrap: 'normal',
+                                        flexShrink: 0,
+                                      }}
+                                    >
+                                      <StatusIcon className="w-3 h-3" style={{ color: status.fg, stroke: status.fg, flexShrink: 0 }} />
+                                      <span style={{ whiteSpace: 'nowrap', color: status.fg }}>{status.label}</span>
+                                    </span>
                                   </div>
                                   <p className="text-foreground font-medium truncate text-sm">{ticket.subject}</p>
                                   <p className="text-muted-foreground text-xs mt-1">{format(new Date(ticket.created_at), "MMM d, yyyy")}</p>
@@ -703,7 +735,20 @@ const TicketHub = () => {
                                 className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/10">
                                 <Copy className="w-3.5 h-3.5" />
                               </button>
-                              <Badge className={statusConfig[selectedTicket.status]?.className}>{statusConfig[selectedTicket.status]?.label}</Badge>
+                              {(() => {
+                                const s = statusConfig[selectedTicket.status] || statusConfig.open;
+                                const SIcon = s.icon;
+                                return (
+                                  <span
+                                    data-ticket-status-pill
+                                    className="inline-flex items-center gap-1 rounded-full text-[11px] font-semibold px-2.5 py-0.5 border"
+                                    style={{ background: s.bg, color: s.fg, borderColor: s.border, whiteSpace: 'nowrap', wordBreak: 'keep-all', overflowWrap: 'normal', flexShrink: 0 }}
+                                  >
+                                    <SIcon className="w-3 h-3" style={{ color: s.fg, stroke: s.fg, flexShrink: 0 }} />
+                                    <span style={{ whiteSpace: 'nowrap', color: s.fg }}>{s.label}</span>
+                                  </span>
+                                );
+                              })()}
                             </div>
                             <h3 className="font-semibold text-foreground mt-2 truncate">{selectedTicket.subject}</h3>
                             <p className="text-xs text-muted-foreground mt-1">{format(new Date(selectedTicket.created_at), "MMM d, yyyy h:mm a")} · {selectedTicket.service_category}</p>

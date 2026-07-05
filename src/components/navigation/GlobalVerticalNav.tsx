@@ -231,7 +231,6 @@ const NAV_ITEMS: NavItem[] = [
   // ── Help & Support ──
   { label: "Contact Us", href: "/contact", icon: Phone, section: "HELP & SUPPORT" },
   { label: "Support Center", href: "/ticket-hub", icon: Ticket },
-  { label: "My Tickets", href: "/my-tickets", icon: LifeBuoy },
   { label: "FAQs", href: "/faqs", icon: Lightbulb },
 
 
@@ -262,7 +261,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Shortlisted", href: "/favorites?tab=shortlist", icon: Star },
   { label: "Saved Filters", href: "/favorites?tab=saved-filters", icon: Sparkles },
   { label: "Settings", href: "/profile?tab=settings", icon: Settings },
-  { label: "My Tickets", href: "/my-tickets", icon: Ticket },
+  { label: "My Tickets", href: "/ticket-hub?tab=track", icon: Ticket },
 
 
   // ── Business Suites ──
@@ -1377,12 +1376,17 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 title="Sign Out"
                 aria-label="Sign Out"
                 className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
-                style={{ color: '#FFFFFF', borderColor: '#B91C1C', backgroundColor: '#DC2626', boxShadow: '0 4px 12px -4px rgba(220,38,38,0.45), inset 0 1px 0 rgba(255,255,255,0.15)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B91C1C'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; }}
+                style={{
+                  color: '#DC2626',
+                  borderColor: '#DC2626',
+                  background: 'linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%)',
+                  boxShadow: '0 2px 8px -3px rgba(220,38,38,0.30), inset 0 1px 0 rgba(255,255,255,0.55)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%)'; }}
               >
-                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 !text-white allow-white shrink-0" color="#FFFFFF" stroke="#FFFFFF" strokeWidth={2.4} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span data-signout-label className="allow-white !text-white whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
+                <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 shrink-0" color="#DC2626" stroke="#DC2626" strokeWidth={2.4} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                <span data-signout-label className="whitespace-nowrap" style={{ color: '#DC2626', WebkitTextFillColor: '#DC2626', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
               </button>
             ) : (
               <Link
