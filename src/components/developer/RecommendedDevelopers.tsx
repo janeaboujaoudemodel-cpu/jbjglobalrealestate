@@ -123,7 +123,7 @@ export default function RecommendedDevelopers({
           </div>
 
           {/* Developer Cards Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch max-w-5xl mx-auto">
             {recommended.map((dev: any, index: number) => {
               // Prefer a real project cover image. Never use the developer
               // logo/wordmark as the card hero — that's what produced the
@@ -146,10 +146,11 @@ export default function RecommendedDevelopers({
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.07 }}
                 whileHover={{ y: -6 }}
+                className="h-full"
               >
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="group block rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
+                  className="group flex flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
                 >
                   {/* Photo only — no logo/nameplate in the visual card area */}
                   <div className="h-32 relative overflow-hidden bg-[#F7F2EA]">
@@ -168,7 +169,7 @@ export default function RecommendedDevelopers({
                   </div>
 
                   {/* Info */}
-                  <div className="p-3 border-t border-[#B89555]/50">
+                  <div className="p-3 border-t border-[#B89555]/50 flex-1 flex flex-col justify-start">
                     <h3 className="text-[#1A1A1A] font-bold text-sm leading-snug group-hover:text-[#1A1A1A] transition-colors break-words">
                       {dev.name}
                     </h3>

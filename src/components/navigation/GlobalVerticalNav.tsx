@@ -1366,72 +1366,78 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           aria-hidden="true"
         />
         <div className="px-4 pt-4 pb-4 bg-gradient-to-t from-[#F0E8D8]/35 to-transparent rounded-xl">
+          {/* Two premium squares side-by-side: Sign Out · Collapse.
+              Matches the previous Contact/Support proportion so the footer
+              doesn't look squashed. */}
+          <div className="grid grid-cols-2 gap-2.5">
+            {session ? (
+              <button
+                data-signout-action
+                data-no-contrast-guard
+                onClick={() => { supabase.auth.signOut(); }}
+                title="Sign Out"
+                aria-label="Sign Out"
+                className="flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border will-change-transform"
+                style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.borderColor = '#DC2626'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = '#B89555'; }}
+              >
+                <span className="w-6 h-6 rounded-[6px] flex items-center justify-center" style={{ background: 'rgba(220,38,38,0.10)' }}>
+                  <LogOut data-signout-icon data-no-contrast-guard className="w-3.5 h-3.5 !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.4} style={{ color: '#DC2626', stroke: '#DC2626' }} />
+                </span>
+                <span data-signout-label className="!text-[#DC2626]" style={{ color: '#DC2626' }}>Sign Out</span>
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                data-no-contrast-guard
+                className="flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border"
+                style={{ color: '#1A1A1A', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
+              >
+                <span data-emerald-icon-surface className="w-6 h-6 rounded-[6px] flex items-center justify-center">
+                  <User className="w-3.5 h-3.5" strokeWidth={2.2} />
+                </span>
+                <span>Sign In</span>
+              </Link>
+            )}
 
-
-          {session ? (
+            {/* Collapse — emerald border + black fill, white glyph + label */}
             <button
-              data-signout-action
-              data-no-contrast-guard
-              onClick={() => { supabase.auth.signOut(); }}
-              title="Sign Out"
-              aria-label="Sign Out"
-              className="flex items-center justify-center gap-2 text-[12px] font-semibold uppercase tracking-[0.09em] transition-all px-3 h-10 rounded-lg border w-full group"
-              style={{ color: '#DC2626', borderColor: '#B89555', backgroundColor: '#FDFBF7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(220,38,38,0.08)'; e.currentTarget.style.borderColor = '#DC2626'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FDFBF7'; e.currentTarget.style.borderColor = '#B89555'; }}
+              data-sidebar-collapse-control
+              data-on-dark
+              data-allow-dark-cta
+              onClick={toggleCollapse}
+              aria-label="Collapse navigation"
+              className="allow-white group flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border will-change-transform"
+              style={{
+                color: '#FFFFFF',
+                background: '#0A0A0A',
+                borderColor: '#064E3B',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#0d7a5f';
+                e.currentTarget.style.boxShadow = '0 8px 20px -12px rgba(4,120,87,0.55), inset 0 1px 0 rgba(255,255,255,0.10)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#064E3B';
+                e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.06)';
+                e.currentTarget.style.transform = 'none';
+              }}
             >
-              <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.5} style={{ color: '#DC2626', stroke: '#DC2626' }} />
-              <span data-signout-label className="!text-[#DC2626] leading-none" style={{ color: '#DC2626' }}>Sign Out</span>
+              <span
+                className="w-6 h-6 rounded-[6px] flex items-center justify-center"
+                style={{ background: 'rgba(6,78,59,0.55)', border: '1px solid rgba(184,149,85,0.35)' }}
+              >
+                <PanelLeftClose className="allow-white w-3.5 h-3.5" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </span>
+              <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
             </button>
-          ) : (
-            <Link
-              to="/auth"
-              data-no-contrast-guard
-              className="flex items-center justify-center gap-2 text-[12px] font-semibold transition-all px-3 h-10 rounded-lg border w-full group"
-              style={{ color: '#000000', borderColor: 'rgba(0,0,0,0.25)', backgroundColor: '#ffffff' }}
-            >
-              <User className="w-4 h-4" style={{ color: '#000000' }} />
-              <span style={{ color: '#000000' }}>Sign In</span>
-            </Link>
-          )}
-
-          {/* Collapse — gold pill, glow + 3D lift on hover */}
-          <button
-            data-sidebar-collapse-control
-            data-on-dark
-            data-allow-dark-cta
-            onClick={toggleCollapse}
-            aria-label="Collapse navigation"
-            className="allow-white jbj-sidebar-collapse-control group mt-3 flex items-center justify-center gap-2 w-full px-3 h-10 rounded-lg text-[12px] font-extrabold tracking-[0.22em] uppercase transition-all duration-200 will-change-transform"
-            style={{
-              color: '#FFFFFF',
-              background: 'var(--jj-emerald-ombre)',
-              border: '1px solid rgba(255,255,255,0.22)',
-              boxShadow: 'none',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--jj-emerald-ombre-hover)';
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.32)';
-              e.currentTarget.style.boxShadow = '0 10px 24px -10px rgba(4,120,87,0.70), 0 0 0 1px rgba(52,211,153,0.42), 0 0 12px rgba(52,211,153,0.30)';
-              e.currentTarget.style.transform = 'perspective(700px) rotateX(2deg) translateY(-2px) scale(1.02)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--jj-emerald-ombre)';
-              e.currentTarget.style.color = '#FFFFFF';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)';
-              e.currentTarget.style.boxShadow = 'none';
-              e.currentTarget.style.transform = 'none';
-            }}
-          >
-            <PanelLeftClose className="allow-white w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5" strokeWidth={2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            <span className="allow-white" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Collapse</span>
-          </button>
-
-
-
+          </div>
         </div>
       </div>
+
     </div>
   );
 
