@@ -1121,7 +1121,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-10 pb-3 flex flex-col flex-1 min-h-0">
+        <div className="px-3 pt-8 pb-3 flex flex-col flex-1 min-h-0">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
           {/* Uniform vertical rhythm — one consistent gap between every row

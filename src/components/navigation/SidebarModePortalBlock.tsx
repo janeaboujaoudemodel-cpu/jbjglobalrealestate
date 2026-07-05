@@ -66,14 +66,14 @@ export default function SidebarModePortalBlock({ collapsed = false }: { collapse
   }
 
   return (
-    <div className="pt-0.5 pb-1.5">
+    <div className="pt-0 pb-1" data-sidebar-mode-portal-shell>
       <Link
         to={cfg.href}
         data-no-contrast-guard
         data-sidebar-mode-portal
         data-active={active ? "true" : undefined}
         aria-current={active ? "page" : undefined}
-        className={`group flex items-center gap-3 px-3 min-h-11 rounded-xl transition-all duration-200 ${
+        className={`group flex items-center gap-3 px-3 min-h-11 rounded-lg transition-all duration-200 ${
           active ? "" : "hover:bg-[#1A1A1A]/[0.045]"
         }`}
         style={

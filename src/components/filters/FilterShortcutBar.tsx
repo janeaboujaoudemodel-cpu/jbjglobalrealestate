@@ -517,10 +517,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   key={p.value}
                   type="button"
                   onClick={() => setDraftPriceMax(draftPriceMax === p.value ? '' : p.value)}
+                  data-filter-selected={draftPriceMax === p.value ? "true" : undefined}
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-colors",
                     draftPriceMax === p.value
-                      ? "jj-pill-emerald-metallic text-white border-0 font-bold"
+                      ? "jj-pill-emerald-metallic filter-emerald-action text-white border-0 font-bold"
                       : dropdownGhostChip
                   )}
                 >
@@ -645,7 +646,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     <button
                       key={q}
                       onClick={() => update({ handoverFrom: { ...filters.handoverFrom, quarter: q } })}
-                      className={cn(
+                    data-filter-selected={filters.statuses.includes(opt.value) ? "true" : undefined}
+                    className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
                           ? "jj-pill-emerald-metallic text-white border-0 shadow-sm"
@@ -781,7 +783,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     "flex items-center gap-1.5"
                   )}
                 >
-                  <span className={cn("w-2 h-2 rounded-full", opt.dotClass)} />
+                  <span className="w-2 h-2 rounded-full jj-status-dot" />
                   {opt.label}
                 </button>
               ))}
