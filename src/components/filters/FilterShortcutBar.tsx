@@ -386,6 +386,17 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     WebkitTextFillColor: '#1A1A1A',
   } as React.CSSProperties;
 
+  const closeOtherMenus = useCallback((keep: 'price' | 'payments' | 'handover' | 'propertyType' | 'bedrooms' | 'status' | 'construction' | 'views' | 'saved') => {
+    if (keep !== 'price') setPriceOpen(false);
+    if (keep !== 'payments') setPaymentsOpen(false);
+    if (keep !== 'handover') setHandoverOpen(false);
+    if (keep !== 'propertyType') setPropertyTypeOpen(false);
+    if (keep !== 'bedrooms') setBedroomsOpen(false);
+    if (keep !== 'status') setStatusOpen(false);
+    if (keep !== 'construction') setConstructionOpen(false);
+    if (keep !== 'views') setViewsOpen(false);
+  }, []);
+
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
     saved.push({ name, filters, createdAt: new Date().toISOString() });
@@ -427,7 +438,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             viewport edge, making them comfortably tappable.
         */}
         <div
-          className="flex items-center gap-1.5 overflow-x-auto overscroll-x-contain scrollbar-hide w-full px-1"
+          className="jj-filter-rail flex items-center gap-1.5 overflow-x-auto overscroll-x-contain scrollbar-hide w-full px-1"
           style={{
             WebkitOverflowScrolling: 'touch',
             scrollbarWidth: 'none',
@@ -443,7 +454,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </div>
 
           ) : (
-            <div className={cn(filterSearchPillWrapper, "w-[160px]")}>
+            <div className={cn(filterSearchPillWrapper, "w-[160px] overflow-hidden [&_input]:!bg-transparent [&_input]:!bg-none [&_input]:!border-0 [&_input]:!shadow-none")}> 
               <input
                 type="text"
                 value={filters.searchQuery}
@@ -464,7 +475,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           More filters
         </button>
         {/* Price */}
-        <Popover open={priceOpen} onOpenChange={handlePriceOpenChange}>
+        <Popover open={priceOpen} onOpenChange={(open) => { if (open) closeOtherMenus('price'); handlePriceOpenChange(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactiveCls)}>
               {t('filter.price')}
@@ -473,7 +484,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </PopoverTrigger>
             <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
-              <TabsList className={filterTabsList}>
+              <TabsList className={cn(filterTabsList, "jj-filter-tabs-list gap-1.5")}> 
                 <TabsTrigger value="unit" data-filter-selected={filters.priceMode === 'unit' ? "true" : undefined} style={filters.priceMode === 'unit' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.perUnit')}</TabsTrigger>
                 <TabsTrigger value="sqft" data-filter-selected={filters.priceMode === 'sqft' ? "true" : undefined} style={filters.priceMode === 'sqft' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.perSqft')}</TabsTrigger>
                 <TabsTrigger value="sqm" data-filter-selected={filters.priceMode === 'sqm' ? "true" : undefined} style={filters.priceMode === 'sqm' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.perSqm')}</TabsTrigger>
@@ -554,7 +565,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Payments */}
-        <Popover open={paymentsOpen} onOpenChange={handlePaymentsOpenChange}>
+        <Popover open={paymentsOpen} onOpenChange={(open) => { if (open) closeOtherMenus('payments'); handlePaymentsOpenChange(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactiveCls)}>
               {t('filter.payments')}
@@ -633,7 +644,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Handover */}
-        <Popover open={handoverOpen} onOpenChange={setHandoverOpen}>
+        <Popover open={handoverOpen} onOpenChange={(open) => { if (open) closeOtherMenus('handover'); setHandoverOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactiveCls)}>
               {t('filter.handover')}
@@ -704,7 +715,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Property Type */}
-        <Popover open={propertyTypeOpen} onOpenChange={setPropertyTypeOpen}>
+        <Popover open={propertyTypeOpen} onOpenChange={(open) => { if (open) closeOtherMenus('propertyType'); setPropertyTypeOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
               {getPropertyTypeLabel()}
@@ -720,7 +731,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 update({ propertyCategory: category, propertyTypes: [] });
               }}
             >
-              <TabsList className={filterTabsList}>
+              <TabsList className={cn(filterTabsList, "jj-filter-tabs-list gap-1.5")}> 
                 <TabsTrigger value="residential" data-filter-selected={(filters.propertyCategory || 'residential') === 'residential' ? "true" : undefined} style={(filters.propertyCategory || 'residential') === 'residential' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
                 <TabsTrigger value="commercial" data-filter-selected={filters.propertyCategory === 'commercial' ? "true" : undefined} style={filters.propertyCategory === 'commercial' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
               </TabsList>
@@ -741,7 +752,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Bedrooms */}
-        <Popover open={bedroomsOpen} onOpenChange={setBedroomsOpen}>
+        <Popover open={bedroomsOpen} onOpenChange={(open) => { if (open) closeOtherMenus('bedrooms'); setBedroomsOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.bedrooms')}
@@ -770,7 +781,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Status */}
-        <Popover open={statusOpen} onOpenChange={setStatusOpen}>
+        <Popover open={statusOpen} onOpenChange={(open) => { if (open) closeOtherMenus('status'); setStatusOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.status')}
@@ -804,7 +815,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Construction Status */}
-        <Popover open={constructionOpen} onOpenChange={setConstructionOpen}>
+        <Popover open={constructionOpen} onOpenChange={(open) => { if (open) closeOtherMenus('construction'); setConstructionOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactiveCls)}>
               {t('filter.construction')}
@@ -833,7 +844,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Views */}
-        <Popover open={viewsOpen} onOpenChange={setViewsOpen}>
+        <Popover open={viewsOpen} onOpenChange={(open) => { if (open) closeOtherMenus('views'); setViewsOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactiveCls)}>
               <Eye className="w-3.5 h-3.5" />

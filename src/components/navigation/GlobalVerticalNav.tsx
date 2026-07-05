@@ -1570,7 +1570,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      className="jj-side-tile jj-side-auth-tile group w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                      className="jj-side-tile jj-side-auth-tile is-active group w-10 h-10 rounded-xl flex items-center justify-center transition-all"
                     >
                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.15} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
@@ -1580,7 +1580,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" data-no-contrast-guard className="jj-side-tile jj-side-auth-tile group w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+                    <Link to="/auth" data-no-contrast-guard className="jj-side-tile jj-side-auth-tile is-active group w-10 h-10 rounded-xl flex items-center justify-center transition-all">
                       <User className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
                   </TooltipTrigger>

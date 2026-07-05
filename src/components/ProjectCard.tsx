@@ -293,7 +293,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 .filter(Boolean)
                 .join(' — ') || project.name
             }
-            className="object-cover object-center w-[calc(100%+4px)] h-[calc(100%+4px)] max-w-none -m-[2px] group-hover:scale-[1.04] transition-transform duration-300"
+            className="object-cover object-left w-[calc(100%+10px)] h-[calc(100%+8px)] max-w-none -ml-[6px] -mt-[4px]"
             placeholderLabel=""
             priority={priority}
             loggerComponent="ProjectCard"
