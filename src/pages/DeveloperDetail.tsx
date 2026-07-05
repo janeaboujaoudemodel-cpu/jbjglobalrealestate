@@ -592,12 +592,7 @@ const DeveloperDetail = () => {
           <div
             data-filter-clean="true"
             data-filter-bar-gold=""
-            className="rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide"
-            style={{
-              background: 'linear-gradient(135deg,#F7EAC4 0%,#E9D194 45%,#C7A55C 100%)',
-              border: '1px solid rgba(184,149,85,0.7)',
-              boxShadow: '0 8px 24px -12px rgba(184,149,85,0.35)',
-            }}
+            className="jj-shimmer-champagne-live rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide"
           >
             <FilterShortcutBar
               variant="dark"
