@@ -223,8 +223,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   // No projects with coordinates
   if (projectsWithCoords.length === 0) {
     return (
-      <div data-map-shell className="rounded-xl border border-white/15 p-8 text-center">
-        <p className="text-white">{t('map.noLocations')}</p>
+      <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] p-8 text-center">
+        <p className="text-[#1A1A1A]/70 text-sm">{t('map.noLocations')}</p>
       </div>
     );
   }
