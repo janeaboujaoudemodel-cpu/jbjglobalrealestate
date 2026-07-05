@@ -231,7 +231,6 @@ const NAV_ITEMS: NavItem[] = [
   // ── Help & Support ──
   { label: "Contact Us", href: "/contact", icon: Phone, section: "HELP & SUPPORT" },
   { label: "Support Center", href: "/ticket-hub", icon: Ticket },
-  { label: "My Tickets", href: "/my-tickets", icon: LifeBuoy },
   { label: "FAQs", href: "/faqs", icon: Lightbulb },
 
 
