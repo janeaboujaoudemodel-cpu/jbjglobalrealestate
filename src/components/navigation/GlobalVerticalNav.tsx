@@ -1414,8 +1414,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   borderRadius: '8px',
                   height: '42px',
                   minHeight: '42px',
-                  background: '#064E3B',
-                  boxShadow: '0 4px 12px -4px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
+                  background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
+                  backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
+                  boxShadow: '0 4px 12px -4px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
                 }}
               >
                 <User className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
