@@ -117,10 +117,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
   const rawPrimary =
-    images[0]?.image_url ||
     project.cover_image_url ||
     (project as any).card_image_url ||
     (project as any).hero_image_url ||
+    images[0]?.image_url ||
     images.find((i: any) => !!i?.image_url)?.image_url ||
     null;
   const primaryImageUrl = rawPrimary ? getHighResImageUrl(rawPrimary) : null;
@@ -293,7 +293,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
                 .filter(Boolean)
                 .join(' — ') || project.name
             }
-            className="object-cover object-center w-[calc(100%+4px)] h-[calc(100%+4px)] max-w-none -m-[2px] group-hover:scale-[1.04] transition-transform duration-300"
+            className="object-cover object-left w-[calc(100%+10px)] h-[calc(100%+8px)] max-w-none -ml-[6px] -mt-[4px]"
             placeholderLabel=""
             priority={priority}
             loggerComponent="ProjectCard"
