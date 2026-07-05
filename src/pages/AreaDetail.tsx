@@ -11,11 +11,10 @@ import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Loader2, Phone, ArrowUpRight, Search, X } from "lucide-react";
+import { MapPin, ArrowRight, Loader2, Search, X } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
-import { Button } from "@/components/ui/button";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
 import { AreaHeroSection } from "@/components/area-detail/AreaHeroSection";
 import { AreaAboutSection } from "@/components/area-detail/AreaAboutSection";
@@ -25,6 +24,7 @@ import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
@@ -258,50 +258,14 @@ const AreaDetail = () => {
       {/* AI Area Intelligence */}
       <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
 
-      {/* CTA Section */}
-      <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div 
-            className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border border-white/18 relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-sm"
-            style={{
-              boxShadow: '0 30px 80px -20px rgba(0,0,0,0.42), 0 0 60px rgba(6,78,59,0.16)',
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-            
-            <div className="jj-pill-emerald-metallic w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <MapPin className="w-7 h-7 text-white" />
-            </div>
-            <h2 className="allow-white text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
-              Properties in {area.name}
-            </h2>
-            <p className="allow-white text-white text-lg mb-10 max-w-2xl mx-auto">
-              Browse our curated collection of verified properties in this premium neighborhood.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to={`/properties?area=${area.slug}`}>
-                <Button className="allow-white jj-pill-emerald-metallic px-8 py-6 text-base text-white font-bold border-0 hover:scale-105 transition-all duration-300 rounded-xl">
-                  View Properties
-                  <ArrowUpRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="secondary" className="allow-white border border-white/28 text-white hover:bg-white/10 hover:text-white px-8 py-6 text-base font-bold transition-all duration-300 rounded-xl bg-white/7">
-                  <Phone className="w-5 h-5 mr-2 text-white" />
-                  Contact Us
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <CombinedContactNewsletter
+        title={`Explore ${area.name} Properties?`}
+        subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
+      />
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
-        <section id="ready-to-get-started" className="py-16 bg-[#0A0A0A]">
+        <section id="similar-areas" className="py-16 bg-[#0A0A0A]">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
