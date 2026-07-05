@@ -509,7 +509,7 @@ const DeveloperDetail = () => {
             variant="bare"
             renderFallback
             loading="eager"
-            className="!w-32 !h-32 !rounded-2xl !p-4 jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
+            className="!w-36 !h-36 !rounded-2xl !p-3 jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
           />
 
           {/* Text */}

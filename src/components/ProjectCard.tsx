@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Project } from "@/hooks/useProjects";
 import FavoriteButton from "./FavoriteButton";
 import ShortlistBadgeButton from "./ShortlistBadgeButton";
@@ -113,6 +113,7 @@ const getSaleStatusLabel = resolveSaleStatusLabel;
 const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, currency = 'AED', sizeUnit = 'sqft', priority = false }: ProjectCardProps) => {
   const { isOwner } = useUserRole();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
   const rawPrimary =
@@ -196,10 +197,31 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const statusLabel = getStatusLabel();
   const saleStatusLabel = getSaleStatusLabel(project.status_label);
   const badgePosition = 'top-3 left-3';
+  const projectHref = `/project/${project.slug}`;
+  const preloadProjectDetail = () => {
+    void import("@/pages/ProjectDetail");
+  };
+  const openProject = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest('button,[role="button"],input,textarea,select,[data-card-actions-overlay]')) return;
+    if (target?.closest('a') && !target.closest('a[href^="/project/"]')) return;
+    navigate(projectHref);
+  };
 
   return (
     <div
       data-surface="champagne"
+      role="link"
+      tabIndex={0}
+      onMouseEnter={preloadProjectDetail}
+      onFocus={preloadProjectDetail}
+      onClick={openProject}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          navigate(projectHref);
+        }
+      }}
         className={
         "surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/70 transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
@@ -265,7 +287,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       )}
 
 
-      <Link to={`/project/${project.slug}`} className="flex-1 flex flex-col">
+      <Link to={projectHref} className="flex-1 flex flex-col" onMouseEnter={preloadProjectDetail} onFocus={preloadProjectDetail}>
         {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
           <div className="surface-ink aspect-[16/10] overflow-hidden relative" data-surface="ink">
           <VerifiedMedia

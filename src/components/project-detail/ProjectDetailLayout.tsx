@@ -989,7 +989,7 @@ function ProjectDetailLayoutInner({
         }`}
       >
         {/* Row 1: Filter Shortcut Bar */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-3 px-2 transition-all duration-300">
+        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-3 px-2 transition-all duration-300">
           <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>

@@ -118,7 +118,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   >
                     <h3
                       data-developer-gold
-                      className="developer-name-gold text-2xl md:text-[32px] font-bold leading-tight underline underline-offset-4 decoration-[#B89555]/60"
+                      className="developer-name-gold text-2xl md:text-[32px] font-bold leading-tight no-underline"
                     >
                       {developer.name}
                     </h3>
