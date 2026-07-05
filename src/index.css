@@ -31766,3 +31766,18 @@ html body [data-filter-dropdown="true"] .filter-emerald-action * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* Highest-specificity ink rescue for payment/dropdown labels that were still
+   inheriting legacy white text-fill from the old emerald popover contract. */
+html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surface="champagne"] :is(h4,label,span,p,small):not(.filter-emerald-action):not(.filter-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-filter-selected="true"]):not([data-filter-selected="true"] *),
+html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surface="champagne"] :is(.text-\[\#1A1A1A\], .filter-label-ink, .filter-help-ink) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body [data-filter-dropdown="true"][data-filter-dropdown="true"][data-surface="champagne"] :is(.filter-primary-action,.filter-primary-action *,.filter-emerald-action,.filter-emerald-action *,button.jj-pill-emerald-metallic:not([role="tab"]),button.jj-pill-emerald-metallic:not([role="tab"]) *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
