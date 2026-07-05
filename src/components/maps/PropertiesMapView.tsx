@@ -5,6 +5,7 @@ import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
+import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyRemoveLayer } from "@/utils/leafletSafety";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import type { UnifiedProject } from "@/types/unifiedProject";
@@ -36,23 +37,20 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
   const layerRef = useRef<L.TileLayer | null>(null);
 
   useEffect(() => {
-    if (layerRef.current) map.removeLayer(layerRef.current);
+    if (layerRef.current) safelyRemoveLayer(map, layerRef.current);
     const tiles = getMapTiles(language);
     const { url, attribution, subdomains } = tiles[mapView];
     const tileOptions: L.TileLayerOptions = {
+      ...SAFE_TILE_LAYER_OPTIONS,
       attribution,
       maxZoom: 18,
       minZoom: 5,
-      keepBuffer: 2,
-      updateWhenIdle: true,
-      updateWhenZooming: false,
-      detectRetina: false,
       crossOrigin: true,
     };
     if (subdomains) tileOptions.subdomains = subdomains;
     layerRef.current = L.tileLayer(url, tileOptions);
     layerRef.current.addTo(map);
-    return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
+    return () => { safelyRemoveLayer(map, layerRef.current); layerRef.current = null; };
   }, [mapView, language, map]);
 
   return null;
@@ -132,6 +130,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
           attributionControl={false}
+          {...SAFE_LEAFLET_MAP_OPTIONS}
         >
           <DynamicTileLayer mapView={mapView} language={language} />
           <MapViewToggle mapView={mapView} onViewChange={setMapView} t={t} />
