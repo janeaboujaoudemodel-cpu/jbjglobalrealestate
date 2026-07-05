@@ -44,11 +44,11 @@ interface ZohoLead {
 
 async function getCursor(): Promise<string | null> {
   const { data } = await admin.from("app_settings").select("value").eq("key", CURSOR_KEY).maybeSingle();
-  return (data?.value as any)?.iso ?? null;
+  return (data?.value as string | null) ?? null;
 }
 
 async function setCursor(iso: string) {
-  await admin.from("app_settings").upsert({ key: CURSOR_KEY, value: { iso } }, { onConflict: "key" });
+  await admin.from("app_settings").upsert({ key: CURSOR_KEY, value: iso }, { onConflict: "key" });
 }
 
 async function fetchModifiedSince(iso: string | null): Promise<ZohoLead[]> {
