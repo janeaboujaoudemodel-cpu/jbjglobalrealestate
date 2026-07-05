@@ -146,10 +146,11 @@ export default function RecommendedDevelopers({
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.07 }}
                 whileHover={{ y: -6 }}
+                className="h-full"
               >
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="group block rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
+                  className="group flex flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
                 >
                   {/* Photo only — no logo/nameplate in the visual card area */}
                   <div className="h-32 relative overflow-hidden bg-[#F7F2EA]">
