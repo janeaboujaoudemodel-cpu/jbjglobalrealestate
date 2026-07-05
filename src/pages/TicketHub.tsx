@@ -128,7 +128,8 @@ const TicketHub = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const initialTab = searchParams.get("tab") === "new" ? "new" : "track";
+  const tabParam = searchParams.get("tab");
+  const initialTab = tabParam === "new" ? "new" : tabParam === "inbox" ? "inbox" : "track";
   const [activeTab, setActiveTab] = useState(initialTab);
 
   // New ticket form
