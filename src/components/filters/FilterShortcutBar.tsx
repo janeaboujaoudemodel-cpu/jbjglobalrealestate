@@ -470,9 +470,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className={filterTabsList}>
-                <TabsTrigger value="unit" className={filterTabTrigger}>{t('filter.perUnit')}</TabsTrigger>
-                <TabsTrigger value="sqft" className={filterTabTrigger}>{t('filter.perSqft')}</TabsTrigger>
-                <TabsTrigger value="sqm" className={filterTabTrigger}>{t('filter.perSqm')}</TabsTrigger>
+                <TabsTrigger value="unit" data-filter-selected={filters.priceMode === 'unit' ? "true" : undefined} className={filterTabTrigger}>{t('filter.perUnit')}</TabsTrigger>
+                <TabsTrigger value="sqft" data-filter-selected={filters.priceMode === 'sqft' ? "true" : undefined} className={filterTabTrigger}>{t('filter.perSqft')}</TabsTrigger>
+                <TabsTrigger value="sqm" data-filter-selected={filters.priceMode === 'sqm' ? "true" : undefined} className={filterTabTrigger}>{t('filter.perSqm')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -717,8 +717,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className={filterTabsList}>
-                <TabsTrigger value="residential" className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
+                <TabsTrigger value="residential" data-filter-selected={(filters.propertyCategory || 'residential') === 'residential' ? "true" : undefined} className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" data-filter-selected={filters.propertyCategory === 'commercial' ? "true" : undefined} className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
