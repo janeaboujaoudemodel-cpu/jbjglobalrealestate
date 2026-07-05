@@ -1354,50 +1354,19 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         </div>
       </nav>
 
-      {/* ━━━ BOTTOM — Support + Sign Out (compact half-height) ━━━ */}
+      {/* ━━━ BOTTOM — Sign Out + Collapse only (premium, elegant) ━━━
+          Contact & Support live in the HELP & SUPPORT nav section above. */}
       <div className="flex-shrink-0">
-        <div className="h-px mb-1 mt-0" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 92%, transparent 100%)" }} aria-hidden="true" />
+        <div
+          className="h-px mb-1 mt-0"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(184,149,85,0) 8%, rgba(184,149,85,0.85) 50%, rgba(184,149,85,0) 92%, transparent 100%)",
+          }}
+          aria-hidden="true"
+        />
         <div className="px-4 pt-4 pb-4 bg-gradient-to-t from-[#F0E8D8]/35 to-transparent rounded-xl">
-          <div className="grid grid-cols-2 gap-2.5 mb-3">
 
-
-
-            {(() => {
-              const contactActive = isRouteActive('/contact');
-              const supportActive = isRouteActive('/ticket-hub');
-              return (
-                <>
-                  <Link
-                    to="/contact"
-                    data-no-contrast-guard
-                    data-sidebar-bottom-cta
-                    data-active={contactActive ? 'true' : undefined}
-                    aria-current={contactActive ? 'page' : undefined}
-                    className="flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border will-change-transform"
-                  >
-                    <span data-emerald-icon-surface className="w-6 h-6 rounded-[6px] flex items-center justify-center">
-                      <Headphones className="w-3.5 h-3.5" strokeWidth={2.2} />
-                    </span>
-                    <span>Contact</span>
-                  </Link>
-                  <Link
-                    to="/ticket-hub"
-                    data-no-contrast-guard
-                    data-sidebar-bottom-cta
-                    data-active={supportActive ? 'true' : undefined}
-                    aria-current={supportActive ? 'page' : undefined}
-                    className="flex flex-col items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 py-3 h-[68px] rounded-lg border will-change-transform"
-                  >
-                    <span data-emerald-icon-surface className="w-6 h-6 rounded-[6px] flex items-center justify-center">
-                      <Ticket className="w-3.5 h-3.5" strokeWidth={2.2} />
-                    </span>
-                    <span>Support</span>
-                  </Link>
-                </>
-              );
-            })()}
-
-          </div>
 
           {session ? (
             <button
