@@ -69,6 +69,23 @@ async function fetchModifiedSince(iso: string | null): Promise<ZohoLead[]> {
   return (j?.data ?? []) as ZohoLead[];
 }
 
+// jbj_leads.status CHECK: 'new','contacted','qualified','negotiating','converted','lost'
+function mapZohoStatusToJbj(s: string | null): string {
+  if (!s) return "new";
+  const k = s.toLowerCase().trim();
+  if (k.includes("not contacted") || k === "new") return "new";
+  if (k.includes("attempt") || k.includes("contact in future")) return "contacted";
+  if (k.includes("contacted")) return "contacted";
+  if (k.includes("pre-qualified") || k === "qualified" || k.includes("qualified")) {
+    if (k.includes("not qualified")) return "lost";
+    return "qualified";
+  }
+  if (k.includes("negotiat")) return "negotiating";
+  if (k.includes("convert") || k.includes("won")) return "converted";
+  if (k.includes("lost") || k.includes("junk") || k.includes("not qualified")) return "lost";
+  return "new";
+}
+
 async function upsertFromZoho(z: ZohoLead) {
   const first = z.First_Name ?? "";
   const last = z.Last_Name ?? "";
