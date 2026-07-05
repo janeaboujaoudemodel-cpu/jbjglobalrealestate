@@ -340,6 +340,7 @@ const CRMLeadDetail = () => {
             <h1 className="text-lg font-bold text-[#1A1A1A] truncate">{lead.full_name}</h1>
             <p className="text-xs text-[#1A1A1A]/70">{lead.nationality} · {lead.preferred_language?.toUpperCase()} · Created {new Date(lead.created_at).toLocaleDateString()}</p>
           </div>
+          <ZohoSyncBadge leadId={lead.id} table="crm_leads" />
           <Select value={currentStatus} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[160px]">
               <LeadStatusBadge status={currentStatus} size="sm" />
