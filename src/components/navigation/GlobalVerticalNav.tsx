@@ -1434,12 +1434,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               className="allow-white group flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
               style={{
                 color: '#FFFFFF',
-                background: '#064E3B',
+                background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
+                backgroundImage: 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)',
                 borderColor: '#B89555',
-                boxShadow: '0 4px 12px -4px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
+                boxShadow: '0 4px 12px -4px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#0d7a5f'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#064E3B'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundImage = 'linear-gradient(135deg, #0a6b53 0%, #064E3B 55%, #042c1c 100%)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundImage = 'linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)'; }}
             >
               <PanelLeftClose className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               <span className="allow-white whitespace-nowrap" data-on-dark style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Collapse</span>
