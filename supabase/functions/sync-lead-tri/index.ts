@@ -279,7 +279,28 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    const payload = (await req.json()) as Payload;
+    const payload = (await req.json()) as Payload & { id?: string; force?: boolean };
+
+    // Force-sync path: caller passes { source, id, force:true } — load the record ourselves.
+    if (payload.force && payload.id && payload.source) {
+      let record: any = null;
+      if (payload.source === "jbj") {
+        const { data } = await admin.from("jbj_leads").select("*").eq("id", payload.id).maybeSingle();
+        record = data;
+      } else if (payload.source === "crm") {
+        const { data } = await admin.from("crm_leads").select("*").eq("id", payload.id).maybeSingle();
+        record = data;
+      }
+      if (!record) {
+        return new Response(JSON.stringify({ error: "record not found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      payload.operation = "update";
+      payload.record = record;
+    }
+
     if (!payload?.source || !payload?.operation) {
       return new Response(JSON.stringify({ error: "source and operation required" }), {
         status: 400,
@@ -293,6 +314,7 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
 
     let canonical: Canonical;
     if (payload.source === "jbj") canonical = fromJbj(payload.record ?? {});
