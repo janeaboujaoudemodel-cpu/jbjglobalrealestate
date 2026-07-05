@@ -31550,3 +31550,31 @@ html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* Browser-reliable final dropdown contract: all popover copy is dark ink;
+   only actual emerald buttons/chips are reset to white below. */
+html body [data-filter-dropdown="true"] h1,
+html body [data-filter-dropdown="true"] h2,
+html body [data-filter-dropdown="true"] h3,
+html body [data-filter-dropdown="true"] h4,
+html body [data-filter-dropdown="true"] h5,
+html body [data-filter-dropdown="true"] h6,
+html body [data-filter-dropdown="true"] p,
+html body [data-filter-dropdown="true"] span,
+html body [data-filter-dropdown="true"] label,
+html body [data-filter-dropdown="true"] small,
+html body [data-filter-dropdown="true"] div {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] button.flex-1,
+html body [data-filter-dropdown="true"] button.flex-1 *,
+html body [data-filter-dropdown="true"] button.jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] button.jj-pill-emerald-metallic *,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
