@@ -31712,6 +31712,14 @@ html body [data-filter-dropdown="true"] .jj-status-dot {
   box-shadow: 0 0 0 1px rgba(6,78,59,0.20), 0 2px 6px rgba(6,78,59,0.24) !important;
   opacity: 1 !important;
 }
+html body [data-filter-dropdown="true"] button .jj-status-dot,
+html body [data-filter-dropdown="true"] button:not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([data-filter-selected="true"]) .jj-status-dot,
+html body [data-filter-dropdown="true"] :is(button,[role="tab"]):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([data-filter-selected="true"]) .jj-status-dot {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  opacity: 1 !important;
+}
 html body [data-filter-dropdown="true"] .filter-emerald-action .jj-status-dot,
 html body [data-filter-dropdown="true"] [data-filter-selected="true"] .jj-status-dot {
   background: #FFFFFF !important;

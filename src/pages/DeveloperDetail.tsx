@@ -83,8 +83,16 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors, projectMe
     }, {})
   ).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
-  const getMetric = (dev: any): DeveloperProjectMetric =>
-    projectMetricsByDeveloperId.get(dev.id) || { activeProjects: dev.id === developer.id ? activeProjects : 0, totalUnits: 0, priceFloor: 0 };
+  const getMetric = (dev: any): DeveloperProjectMetric => {
+    const metric = projectMetricsByDeveloperId.get(dev.id) || { activeProjects: 0, totalUnits: 0, priceFloor: 0 };
+    if (dev.id === developer.id) {
+      return {
+        ...metric,
+        activeProjects: Math.max(activeProjects, metric.activeProjects, Number(developer.offplan_projects || 0)),
+      };
+    }
+    return metric;
+  };
   const score = activeProjects * 10 + totalUnits / 500;
   const rankList = [developer, ...competitors].sort((a, b) => {
     const ma = getMetric(a);
