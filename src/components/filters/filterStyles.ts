@@ -69,7 +69,7 @@ export const filterHelpText = "text-xs text-[#1A1A1A]/70";
 
 // ── ACTION BUTTONS ────────────────────────────────────────────────────────
 export const filterPrimaryButton = [
-  "h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg allow-white",
+  "filter-primary-action h-9 jj-pill-emerald-metallic text-white font-bold text-xs rounded-lg allow-white",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
 ].join(" ");
 
