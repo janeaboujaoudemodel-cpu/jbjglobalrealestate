@@ -106,7 +106,7 @@ async function upsertFromZoho(z: ZohoLead) {
     full_name: name,
     email_lower: email ? email.toLowerCase() : null,
     phone_e164: phone,
-    pipeline_stage: status,
+    pipeline_stage: rawStatus,
     notes,
     source,
     zoho_lead_id: z.id,
