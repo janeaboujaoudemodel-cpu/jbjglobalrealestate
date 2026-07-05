@@ -29873,7 +29873,6 @@ html body [data-account-menu-content][data-account-menu-content] :is(a,button,[r
 /* Header emerald dropdowns keep white foreground; the property-filter panel now
    uses the champagne + ink site-wide dropdown standard (rules above). */
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
@@ -29885,7 +29884,6 @@ html body:not([data-ai-tools-scope="true"]) :is(
 }
 
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)) {
   color: #FFFFFF !important;
@@ -29894,19 +29892,9 @@ html body:not([data-ai-tools-scope="true"]) :is(
   opacity: 1 !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
-  background: rgba(1, 8, 6, 0.72) !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.32) !important;
-}
+/* [data-filter-dropdown] filter pill popovers are champagne+gold — see
+   filter-pill dropdown rules earlier in this file. Do NOT re-tint them here. */
 
-html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea)::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-}
 
 
 /* Terminal validation rule: header website dropdowns only, AI scope excluded. */
