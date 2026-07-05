@@ -158,8 +158,11 @@ export default function CVBuilder() {
           const path = `${user.id}/${Date.now()}.${ext}`;
           const { error } = await supabase.storage.from("cv-photos").upload(path, file, { upsert: true });
           if (!error) {
-            const { data: pub } = supabase.storage.from("cv-photos").getPublicUrl(path);
-            if (pub?.publicUrl) patch("photoUrl", pub.publicUrl);
+            // Bucket is private — issue a long-lived signed URL for the owner only.
+            const { data: signed } = await supabase.storage
+              .from("cv-photos")
+              .createSignedUrl(path, 60 * 60 * 24 * 365);
+            if (signed?.signedUrl) patch("photoUrl", signed.signedUrl);
           }
         } catch { /* ignore — base64 still works */ }
       }
