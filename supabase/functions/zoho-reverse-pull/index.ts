@@ -129,7 +129,7 @@ async function upsertFromZoho(z: ZohoLead) {
     name,
     email,
     phone,
-    status,
+    status: jbjStatus,
     notes,
     source,
     zoho_lead_id: z.id,
