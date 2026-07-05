@@ -31077,3 +31077,58 @@ html body p[data-developer-hero-subtitle] * {
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 2px 10px rgba(0,0,0,0.75) !important;
 }
+
+/* Sidebar footer CTA buttons — labels must stay single-line and fully
+   readable. Overrides the global button wrap lock (Pass 152 vicinity). */
+html body [data-signout-action],
+html body [data-sidebar-collapse-control] {
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
+html body [data-signout-action] > span,
+html body [data-signout-action] > span *,
+html body [data-signout-label],
+html body [data-sidebar-collapse-control] > span,
+html body [data-sidebar-collapse-control] > span * {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+}
+
+/* Sidebar footer CTAs (Sign Out · Collapse) — restore full height so the label
+   is fully readable. Overrides the 24px "compact bottom CTA" lock above. */
+html body [data-chrome="sidebar"] [data-signout-action],
+html body [data-chrome="sidebar"] [data-sidebar-collapse-control],
+html body [data-signout-action],
+html body [data-sidebar-collapse-control] {
+  min-height: 42px !important;
+  height: 42px !important;
+  border-radius: 8px !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+}
+html body [data-chrome="sidebar"] [data-signout-action] :where(svg[class*="lucide"], [data-lucide]),
+html body [data-chrome="sidebar"] [data-sidebar-collapse-control] :where(svg[class*="lucide"], [data-lucide]),
+html body [data-signout-action] :where(svg[class*="lucide"], [data-lucide]),
+html body [data-sidebar-collapse-control] :where(svg[class*="lucide"], [data-lucide]) {
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+}
+html body [data-signout-action] > span,
+html body [data-signout-action] > span *,
+html body [data-signout-label],
+html body [data-sidebar-collapse-control] > span,
+html body [data-sidebar-collapse-control] > span * {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+}
+
+html body [data-signout-label] { display: inline-block !important; width: auto !important; flex: 0 0 auto !important; }
