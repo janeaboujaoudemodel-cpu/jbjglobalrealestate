@@ -169,7 +169,7 @@ export default function RecommendedDevelopers({
 
                   {/* Info */}
                   <div className="p-3 border-t border-[#B89555]/50">
-                    <h3 className="text-[#1A1A1A] font-bold text-sm leading-tight group-hover:text-[#1A1A1A] transition-colors line-clamp-1">
+                    <h3 className="text-[#1A1A1A] font-bold text-sm leading-snug group-hover:text-[#1A1A1A] transition-colors break-words">
                       {dev.name}
                     </h3>
                     <div className="flex items-center gap-2 mt-1.5 text-xs text-[#1A1A1A]">
