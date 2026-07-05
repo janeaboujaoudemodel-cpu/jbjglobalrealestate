@@ -201,10 +201,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     <div
       data-surface="champagne"
         className={
-        "surface-champagne group relative overflow-hidden rounded-2xl border border-[#064E3B]/45 transition-all duration-300 flex flex-col " +
+        "surface-champagne group relative overflow-hidden rounded-2xl border border-[#B89555]/70 transition-all duration-300 flex flex-col " +
         "bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))] " +
-        "shadow-[0_18px_55px_rgba(0,0,0,0.16),0_0_18px_rgba(6,78,59,0.12)] hover:border-[#064E3B] " +
-        "hover:shadow-[0_26px_75px_rgba(0,0,0,0.20),0_0_26px_rgba(6,78,59,0.18)]"
+        "shadow-[0_18px_55px_rgba(0,0,0,0.16),0_0_18px_rgba(184,149,85,0.16)] hover:border-[#B89555] " +
+        "hover:shadow-[0_26px_75px_rgba(0,0,0,0.20),0_0_26px_rgba(184,149,85,0.28)]"
       }
     >
       {/* Top-right project actions — hidden until card hover/focus.
@@ -415,8 +415,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Bottom group — pinned to card bottom so price rows align across
               every card regardless of content length above. */}
           <div className="mt-auto flex flex-col gap-3 pt-1">
-            {/* Thin gold hairline — separates description from bottom row */}
-            <div className="w-full border-t border-[#064E3B]/35" />
+            {/* Thin gold hairline — separates developer/description from bottom row */}
+            <div className="w-full border-t border-[#B89555]/70" />
 
             {/* Bottom row — price only. Handover lives beside EOI on the photo. */}
             <CardPricePaymentRow
