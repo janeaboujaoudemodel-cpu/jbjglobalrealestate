@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import { supabase } from "@/integrations/supabase/client";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 
 interface RecommendedDevelopersProps {
