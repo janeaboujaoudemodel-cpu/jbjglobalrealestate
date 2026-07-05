@@ -154,7 +154,7 @@ export function DeveloperLogo({
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   const tileContainer = cn(
-    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#064E3B]/30 overflow-hidden",
+    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/70 overflow-hidden",
     className,
   );
   if (!valid) {
