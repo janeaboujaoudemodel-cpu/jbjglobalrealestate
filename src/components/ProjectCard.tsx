@@ -117,10 +117,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   // Single static cover — carousel arrows are banned on cards (gallery only).
   const images = project.images || [];
   const rawPrimary =
-    images[0]?.image_url ||
     project.cover_image_url ||
     (project as any).card_image_url ||
     (project as any).hero_image_url ||
+    images[0]?.image_url ||
     images.find((i: any) => !!i?.image_url)?.image_url ||
     null;
   const primaryImageUrl = rawPrimary ? getHighResImageUrl(rawPrimary) : null;
