@@ -32590,7 +32590,7 @@ html body .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
   ) !important;
   background-size: 220% 100% !important;
   background-repeat: no-repeat !important;
-  mix-blend-mode: screen !important;
+  mix-blend-mode: normal !important;
   opacity: 0.9 !important;
   filter: none !important;
   will-change: background-position !important;
