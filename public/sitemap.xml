@@ -858,12 +858,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/developed-by-majid-al-futtaim</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://jbj.ae/developer/aldar-properties</loc>
     <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
@@ -872,6 +866,12 @@
   <url>
     <loc>https://jbj.ae/developer/wow-realestate-development</loc>
     <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/developer/developed-by-majid-al-futtaim</loc>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -2898,6 +2898,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/developer/meraas</loc>
+    <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/developer/omniyat</loc>
     <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
@@ -2906,12 +2912,6 @@
   <url>
     <loc>https://jbj.ae/developer/select-group</loc>
     <lastmod>2026-07-05</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/developer/meraas</loc>
-    <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
@@ -3252,14 +3252,14 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/object-1</loc>
-    <lastmod>2026-07-05</lastmod>
+    <loc>https://jbj.ae/developer/nova-power-real-estate</loc>
+    <lastmod>2026-04-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/nova-power-real-estate</loc>
-    <lastmod>2026-04-24</lastmod>
+    <loc>https://jbj.ae/developer/object-1</loc>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>

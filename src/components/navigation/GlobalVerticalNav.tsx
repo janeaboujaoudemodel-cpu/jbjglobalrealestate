@@ -1379,13 +1379,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               <button
                 data-signout-action
                 data-no-contrast-guard
+                data-sidebar-auth-control
                 onClick={() => { supabase.auth.signOut(); }}
                 title="Sign Out"
                 aria-label="Sign Out"
                 className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
                 style={{
                   color: '#DC2626',
-                  borderColor: '#DC2626',
+                  borderColor: '#B89555',
+                  borderWidth: 0,
+                  borderRadius: '8px',
+                  height: '42px',
+                  minHeight: '42px',
                   background: 'linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%)',
                   boxShadow: '0 2px 8px -3px rgba(220,38,38,0.30), inset 0 1px 0 rgba(255,255,255,0.55)',
                 }}
@@ -1400,8 +1405,18 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 to="/auth"
                 data-no-contrast-guard
                 data-on-dark
-                className="allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2"
-                style={{ color: '#FFFFFF', borderColor: '#064E3B', backgroundColor: '#064E3B', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)' }}
+                data-sidebar-auth-control
+                className="allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
+                style={{
+                  color: '#FFFFFF',
+                  borderColor: '#B89555',
+                  borderWidth: 0,
+                  borderRadius: '8px',
+                  height: '42px',
+                  minHeight: '42px',
+                  background: '#064E3B',
+                  boxShadow: '0 4px 12px -4px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
+                }}
               >
                 <User className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <span className="allow-white whitespace-nowrap" style={{ color: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign In</span>
@@ -1570,7 +1585,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       data-signout-action
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
-                      className="jj-side-tile jj-side-auth-tile is-active group w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                      data-sidebar-auth-control
+                      className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-10 h-10 rounded-xl flex items-center justify-center"
                     >
                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.15} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
@@ -1580,7 +1596,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               ) : (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link to="/auth" data-no-contrast-guard className="jj-side-tile jj-side-auth-tile is-active group w-10 h-10 rounded-xl flex items-center justify-center transition-all">
+                    <Link
+                      to="/auth"
+                      data-no-contrast-guard
+                      data-sidebar-auth-control
+                      className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-10 h-10 rounded-xl flex items-center justify-center"
+                    >
                       <User className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
                   </TooltipTrigger>
