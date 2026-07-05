@@ -445,7 +445,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       {/* CTA Buttons — Email, Call, WhatsApp. Premium rectangular emerald tiles. */}
       <div className="px-4 pb-4">
-        <div className="grid grid-cols-3 gap-2 border-t border-[#064E3B]/35 pt-3">
+        <div className="grid grid-cols-3 gap-2 border-t border-[#B89555]/70 pt-3">
           <a
             href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(project.name)}&body=${encodeURIComponent(`Hello JBJ Global Real Estate,\n\nI am interested in ${project.name}${project.location ? ` located in ${project.location}` : ''}.\n\nPlease provide more details.\n\nThank you.`)}`}
             onClick={(e) => e.stopPropagation()}
