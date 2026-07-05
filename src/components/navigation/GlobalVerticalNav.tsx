@@ -526,6 +526,7 @@ const SECTION_KEYS = [
   "BROKER & ACADEMY",
   "INVESTOR",
   "COMPANY & LEGAL",
+  "HELP & SUPPORT",
   "ADMIN & OWNER",
 ] as const;
 type SectionKey = typeof SECTION_KEYS[number];
@@ -543,6 +544,7 @@ const SECTION_ALIAS: Record<string, SectionKey> = {
   "INVESTOR": "INVESTOR",
   "COMPANY": "COMPANY & LEGAL",
   "LEGAL": "COMPANY & LEGAL",
+  "HELP & SUPPORT": "HELP & SUPPORT",
   "MY ACCOUNT": "MY ACCOUNT",
   "ADMIN & OWNER": "ADMIN & OWNER",
 };
@@ -556,6 +558,7 @@ const SECTION_ICONS: Record<SectionKey, any> = {
   "BROKER & ACADEMY": GraduationCap,
   "INVESTOR": TrendingUp,
   "COMPANY & LEGAL": Users,
+  "HELP & SUPPORT": LifeBuoy,
   "MY ACCOUNT": User,
   "ADMIN & OWNER": Crown,
 };
