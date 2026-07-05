@@ -31537,3 +31537,16 @@ html body [data-filter-dropdown="true"] :is(svg, [class*="lucide"], path):not(.j
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+html body [data-filter-dropdown="true"] :is(.allow-white, .text-white, [class*="text-white"], h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,div):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] button.flex-1,
+html body [data-filter-dropdown="true"] button.flex-1 *,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
