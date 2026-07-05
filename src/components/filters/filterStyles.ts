@@ -84,8 +84,8 @@ export const filterCheckBoxOn = "jj-pill-emerald-metallic border-0 allow-white";
 export const filterCheckBoxOff = "border-[#B89555]/55 bg-white";
 
 // ── SEARCH PILL (on champagne / light rail) ───────────────────────────────
-export const filterSearchPillWrapper = "min-w-0 flex-shrink-0 flex items-center px-3 rounded-full bg-white border border-[#B89555]/50 shadow-sm";
-export const filterSearchPillInput = "filter-search-pill-input w-full py-1.5 bg-transparent text-xs text-[#1A1A1A] placeholder:text-[#1A1A1A]/55 outline-none border-0 focus:outline-none focus:ring-0";
+export const filterSearchPillWrapper = "jj-filter-search-pill min-w-0 flex-shrink-0 flex items-center px-3 rounded-full jj-emerald-metallic border-0 shadow-sm";
+export const filterSearchPillInput = "filter-search-pill-input w-full py-1.5 bg-transparent text-xs text-white placeholder:text-white/85 outline-none border-0 focus:outline-none focus:ring-0 allow-white";
 
 // ── ACTIVE FILTER CHIPS (already-applied filter tags) ─────────────────────
 export const activeChipBase = [

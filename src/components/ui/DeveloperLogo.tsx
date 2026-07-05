@@ -12,6 +12,7 @@ interface DeveloperLogoProps {
   renderFallback?: boolean;
   name?: string | null;
   variant?: "tile" | "bare" | "card" | "nameplate";
+  "data-keep-gold"?: boolean | string;
 }
 
 // Unified emerald-bordered plate — identical between `bare` and `nameplate`
@@ -37,6 +38,7 @@ export function DeveloperLogo({
   renderFallback = false,
   name,
   variant = "tile",
+  "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
@@ -102,7 +104,7 @@ export function DeveloperLogo({
       return renderNameLabel(cn(UNIFIED_PLATE, className));
     }
     return (
-      <div className={cn(UNIFIED_PLATE, className)}>
+      <div className={cn(UNIFIED_PLATE, className)} data-keep-gold={dataKeepGold}>
         <img
           src={src as string}
           alt={alt}
@@ -164,7 +166,7 @@ export function DeveloperLogo({
   }
 
   return (
-    <div className={tileContainer}>
+    <div className={tileContainer} data-keep-gold={dataKeepGold}>
       <img
         src={src as string}
         alt={alt}

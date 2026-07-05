@@ -198,9 +198,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const saleStatusLabel = getSaleStatusLabel(project.status_label);
   const badgePosition = 'top-3 left-3';
   const projectHref = `/project/${project.slug}`;
-  const preloadProjectDetail = () => {
-    void import("@/pages/ProjectDetail");
-  };
   const openProject = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement | null;
     if (target?.closest('button,[role="button"],input,textarea,select,[data-card-actions-overlay]')) return;
@@ -213,8 +210,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       data-surface="champagne"
       role="link"
       tabIndex={0}
-      onMouseEnter={preloadProjectDetail}
-      onFocus={preloadProjectDetail}
       onClick={openProject}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -287,7 +282,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
       )}
 
 
-      <Link to={projectHref} className="flex-1 flex flex-col" onMouseEnter={preloadProjectDetail} onFocus={preloadProjectDetail}>
+      <Link to={projectHref} className="flex-1 flex flex-col">
         {/* Image — static cover, NO carousel arrows on cards (gallery only). */}
           <div className="surface-ink aspect-[16/10] overflow-hidden relative" data-surface="ink">
           <VerifiedMedia
@@ -474,7 +469,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`Email about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+                className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
             <Mail className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
             <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Email</span>
@@ -485,7 +480,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`Call about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
             <Phone className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
             <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Call</span>
@@ -496,7 +491,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             aria-label={`WhatsApp about ${project.name}`}
             data-surface="emerald"
             data-emerald-ok="button"
-            className="jj-emerald-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
+            className="jj-emerald-metallic jj-card-cta-metallic w-full min-w-0 overflow-hidden h-9 px-2 flex items-center justify-center gap-1.5 rounded-lg"
           >
             <MessageCircle className="w-3.5 h-3.5 flex-shrink-0 text-white allow-white" stroke="#FFFFFF" aria-hidden="true" />
             <span className="truncate text-xs font-semibold text-white allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Chat</span>

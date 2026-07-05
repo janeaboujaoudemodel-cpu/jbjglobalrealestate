@@ -95,7 +95,7 @@ const CombinedContactNewsletter = ({
                 rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
                 data-surface="emerald"
                 data-emerald-ok="button"
-                className="jj-emerald-metallic group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
+                className="jj-emerald-metallic jj-ready-cta-metallic group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
               >
                 <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2.2} />
                 <div className="min-w-0 text-left">

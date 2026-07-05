@@ -509,6 +509,7 @@ const DeveloperDetail = () => {
             variant="bare"
             renderFallback
             loading="eager"
+            data-keep-gold
             className="!w-36 !h-36 !rounded-2xl !p-3 jj-cta-gold-metallic jj-developer-logo-metallic flex-shrink-0"
           />
 
