@@ -645,10 +645,10 @@ const DeveloperDetail = () => {
                 <div className="flex justify-center mt-10">
                   <button
                     onClick={() => setVisibleCount((c) => Math.min(c + 6, filteredProjects.length))}
-                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-150 border border-[#064E3B]/35 hover:border-[#064E3B]/60 hover:-translate-y-0.5"
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-150 border border-[#B89555]/70 hover:border-[#B89555] hover:-translate-y-0.5"
                     style={{
                       background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
-                      boxShadow: '0 4px 20px rgba(6,78,59,0.16)',
+                      boxShadow: '0 4px 20px rgba(184,149,85,0.22)',
                     }}
                   >
                     <span className="text-foreground">
