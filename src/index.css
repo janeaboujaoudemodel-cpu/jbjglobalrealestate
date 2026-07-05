@@ -30901,3 +30901,89 @@ html body:not([data-ai-tools-scope="true"]) [data-radix-popper-content-wrapper][
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* FINAL: no delayed contrast flip, no silver/chrome sheen. */
+html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, [data-surface="emerald"], [data-emerald="true"]),
+html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, [data-surface="emerald"], [data-emerald="true"]):is(:hover, :focus, :focus-visible, :active) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, [data-surface="emerald"], [data-emerald="true"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div),
+html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, [data-surface="emerald"], [data-emerald="true"]):is(:hover, :focus, :focus-visible, :active) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, [data-surface="emerald"], [data-emerald="true"]) :is(svg, [class*="lucide"]),
+html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, [data-surface="emerald"], [data-emerald="true"]) :is(svg, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-chip)::before,
+html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-chip)::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+html body .jj-home-area-panel {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  border: 1px solid rgba(184,149,85,0.55) !important;
+  box-shadow: 0 8px 28px rgba(26,26,26,0.06) !important;
+}
+
+html body .jj-home-area-corner {
+  border-color: rgba(184,149,85,0.48) !important;
+}
+
+html body .jj-home-area-card {
+  background: #EFE6D6 !important;
+  border: 1px solid rgba(184,149,85,0.70) !important;
+  box-shadow: 0 10px 26px rgba(184,149,85,0.16), inset 0 1px 0 rgba(255,255,255,0.78) !important;
+}
+
+html body .jj-home-area-card:hover {
+  border-color: #B89555 !important;
+  box-shadow: 0 18px 40px rgba(184,149,85,0.24), inset 0 1px 0 rgba(255,255,255,0.86) !important;
+}
+
+html body .jj-home-area-caption {
+  background: linear-gradient(180deg, rgba(253,251,247,0.94) 0%, rgba(239,230,214,0.98) 100%) !important;
+  background-color: #EFE6D6 !important;
+  border-top: 1px solid rgba(184,149,85,0.62) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+html body .jj-home-area-caption :is(h3, p),
+html body .jj-home-area-caption :is(h3, p):hover {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body .jj-explore-all-areas-button,
+html body .jj-explore-all-areas-button:hover,
+html body .jj-explore-all-areas-button:focus-visible {
+  background: linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%) !important;
+  background-color: #EFE6D6 !important;
+  border-color: rgba(184,149,85,0.72) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body .jj-explore-all-areas-button *,
+html body .jj-explore-all-areas-button:hover * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
