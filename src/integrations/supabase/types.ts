@@ -10107,12 +10107,15 @@ export type Database = {
           is_global_broker: boolean | null
           is_investor: boolean
           is_junk: boolean
+          jbj_lead_id: string | null
           junk_original_broker_id: string | null
           junk_reason: string | null
           junk_returned_at: string | null
           junk_returned_by_user_id: string | null
           languages: string[] | null
           last_contacted_at: string | null
+          last_sync_source: string | null
+          last_synced_at: string | null
           last_updated_by: string | null
           lead_intent: string | null
           lead_score_band: string | null
@@ -10158,6 +10161,7 @@ export type Database = {
           source_page: string | null
           source_row_index: number | null
           stale_since: string | null
+          sync_error: string | null
           tags: string[] | null
           updated_at: string
           upload_source: string | null
@@ -10165,6 +10169,8 @@ export type Database = {
           vip_tagged_at: string | null
           vip_tagged_by: string | null
           whatsapp_e164: string | null
+          zoho_lead_id: string | null
+          zoho_updated_at: string | null
         }
         Insert: {
           account_status?: string
@@ -10214,12 +10220,15 @@ export type Database = {
           is_global_broker?: boolean | null
           is_investor?: boolean
           is_junk?: boolean
+          jbj_lead_id?: string | null
           junk_original_broker_id?: string | null
           junk_reason?: string | null
           junk_returned_at?: string | null
           junk_returned_by_user_id?: string | null
           languages?: string[] | null
           last_contacted_at?: string | null
+          last_sync_source?: string | null
+          last_synced_at?: string | null
           last_updated_by?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
@@ -10265,6 +10274,7 @@ export type Database = {
           source_page?: string | null
           source_row_index?: number | null
           stale_since?: string | null
+          sync_error?: string | null
           tags?: string[] | null
           updated_at?: string
           upload_source?: string | null
@@ -10272,6 +10282,8 @@ export type Database = {
           vip_tagged_at?: string | null
           vip_tagged_by?: string | null
           whatsapp_e164?: string | null
+          zoho_lead_id?: string | null
+          zoho_updated_at?: string | null
         }
         Update: {
           account_status?: string
@@ -10321,12 +10333,15 @@ export type Database = {
           is_global_broker?: boolean | null
           is_investor?: boolean
           is_junk?: boolean
+          jbj_lead_id?: string | null
           junk_original_broker_id?: string | null
           junk_reason?: string | null
           junk_returned_at?: string | null
           junk_returned_by_user_id?: string | null
           languages?: string[] | null
           last_contacted_at?: string | null
+          last_sync_source?: string | null
+          last_synced_at?: string | null
           last_updated_by?: string | null
           lead_intent?: string | null
           lead_score_band?: string | null
@@ -10372,6 +10387,7 @@ export type Database = {
           source_page?: string | null
           source_row_index?: number | null
           stale_since?: string | null
+          sync_error?: string | null
           tags?: string[] | null
           updated_at?: string
           upload_source?: string | null
@@ -10379,6 +10395,8 @@ export type Database = {
           vip_tagged_at?: string | null
           vip_tagged_by?: string | null
           whatsapp_e164?: string | null
+          zoho_lead_id?: string | null
+          zoho_updated_at?: string | null
         }
         Relationships: [
           {
@@ -21965,46 +21983,64 @@ export type Database = {
           assigned_broker_id: string | null
           budget_range: string | null
           created_at: string | null
+          crm_lead_id: string | null
           email: string | null
           id: string
           last_contact: string | null
+          last_sync_source: string | null
+          last_synced_at: string | null
           name: string
           notes: string | null
           phone: string | null
           property_interest: string | null
           source: string | null
           status: string | null
+          sync_error: string | null
           updated_at: string | null
+          zoho_lead_id: string | null
+          zoho_updated_at: string | null
         }
         Insert: {
           assigned_broker_id?: string | null
           budget_range?: string | null
           created_at?: string | null
+          crm_lead_id?: string | null
           email?: string | null
           id?: string
           last_contact?: string | null
+          last_sync_source?: string | null
+          last_synced_at?: string | null
           name: string
           notes?: string | null
           phone?: string | null
           property_interest?: string | null
           source?: string | null
           status?: string | null
+          sync_error?: string | null
           updated_at?: string | null
+          zoho_lead_id?: string | null
+          zoho_updated_at?: string | null
         }
         Update: {
           assigned_broker_id?: string | null
           budget_range?: string | null
           created_at?: string | null
+          crm_lead_id?: string | null
           email?: string | null
           id?: string
           last_contact?: string | null
+          last_sync_source?: string | null
+          last_synced_at?: string | null
           name?: string
           notes?: string | null
           phone?: string | null
           property_interest?: string | null
           source?: string | null
           status?: string | null
+          sync_error?: string | null
           updated_at?: string | null
+          zoho_lead_id?: string | null
+          zoho_updated_at?: string | null
         }
         Relationships: [
           {
@@ -39543,12 +39579,15 @@ export type Database = {
           is_global_broker: boolean | null
           is_investor: boolean
           is_junk: boolean
+          jbj_lead_id: string | null
           junk_original_broker_id: string | null
           junk_reason: string | null
           junk_returned_at: string | null
           junk_returned_by_user_id: string | null
           languages: string[] | null
           last_contacted_at: string | null
+          last_sync_source: string | null
+          last_synced_at: string | null
           last_updated_by: string | null
           lead_intent: string | null
           lead_score_band: string | null
@@ -39594,6 +39633,7 @@ export type Database = {
           source_page: string | null
           source_row_index: number | null
           stale_since: string | null
+          sync_error: string | null
           tags: string[] | null
           updated_at: string
           upload_source: string | null
@@ -39601,6 +39641,8 @@ export type Database = {
           vip_tagged_at: string | null
           vip_tagged_by: string | null
           whatsapp_e164: string | null
+          zoho_lead_id: string | null
+          zoho_updated_at: string | null
         }
         SetofOptions: {
           from: "*"
@@ -40029,6 +40071,7 @@ export type Database = {
       is_hr_manager: { Args: { _user_id: string }; Returns: boolean }
       is_hr_member: { Args: { _user_id: string }; Returns: boolean }
       is_jbj_owner: { Args: { _user_id: string }; Returns: boolean }
+      is_lead_sync_in_progress: { Args: never; Returns: boolean }
       is_listing_admin: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
         Args: { _org: string; _user?: string }
