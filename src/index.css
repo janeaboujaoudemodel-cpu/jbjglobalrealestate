@@ -31949,3 +31949,45 @@ html body #root .jj-developer-logo-metallic {
   animation: jj-metal-sheen 2.8s ease-in-out infinite !important;
   box-shadow: inset 0 0 0 1px rgba(255,244,210,0.55), inset 0 -1px 2px rgba(0,0,0,0.16), 0 12px 28px -10px rgba(184,149,85,0.72) !important;
 }
+
+/* Absolute terminal filter dropdown rescue — direct literal values, no var()
+   ambiguity, and ink-labels after every emerald rule. */
+html body [data-filter-dropdown="true"] [data-filter-ink-label],
+html body [data-filter-dropdown="true"] [data-filter-ink-label] *,
+html body [data-filter-dropdown="true"] :is(h4,label,span,p,small):not([role="slider"]):not(.filter-primary-action):not(.filter-primary-action *):not(.filter-emerald-action):not(.filter-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-filter-selected="true"]):not([data-filter-selected="true"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"][data-state="active"],
+html body [data-filter-dropdown="true"] [role="tab"][data-state="active"] *,
+html body [data-filter-dropdown="true"] [data-filter-selected="true"],
+html body [data-filter-dropdown="true"] [data-filter-selected="true"] *,
+html body [data-filter-dropdown="true"] .filter-primary-action,
+html body [data-filter-dropdown="true"] .filter-primary-action *,
+html body [data-filter-dropdown="true"] .filter-emerald-action,
+html body [data-filter-dropdown="true"] .filter-emerald-action *,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+html body [data-filter-dropdown="true"] [role="tab"]:not([data-state="active"]):not([data-filter-selected="true"]),
+html body [data-filter-dropdown="true"] [role="tab"]:not([data-state="active"]):not([data-filter-selected="true"]) *,
+html body [data-filter-dropdown="true"] button:not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([data-filter-selected="true"]):not([data-state="checked"]):not([role="switch"]):not([role="slider"]),
+html body [data-filter-dropdown="true"] button:not(.filter-primary-action):not(.filter-emerald-action):not(.jj-pill-emerald-metallic):not([data-filter-selected="true"]):not([data-state="checked"]):not([role="switch"]):not([role="slider"]) * {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+  opacity: 1 !important;
+}

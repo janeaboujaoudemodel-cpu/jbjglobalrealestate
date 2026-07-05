@@ -203,7 +203,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   };
   const openProject = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement | null;
-    if (target?.closest('a,button,[role="button"],input,textarea,select,[data-card-actions-overlay]')) return;
+    if (target?.closest('button,[role="button"],input,textarea,select,[data-card-actions-overlay]')) return;
+    if (target?.closest('a') && !target.closest('a[href^="/project/"]')) return;
     navigate(projectHref);
   };
 
