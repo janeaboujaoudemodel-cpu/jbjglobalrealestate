@@ -693,11 +693,11 @@ const DeveloperDetail = () => {
           )}
         </div>
 
-        {/* Divider between projects and recommendations */}
+        {/* Divider between projects and recommendations — gold */}
         <div className="py-10 md:py-14">
           <div className="flex items-center justify-center gap-6">
-            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
-            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#064E3B]/45 to-transparent" />
+            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#B89555]/65 to-transparent" />
+            <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#B89555]/65 to-transparent" />
           </div>
         </div>
 
