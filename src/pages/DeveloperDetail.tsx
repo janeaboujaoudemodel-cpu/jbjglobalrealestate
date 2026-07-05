@@ -84,9 +84,8 @@ const DeveloperPerformancePanel = ({ developer, projects, competitors }: { devel
         {/* Header — gold champagne with emerald accent text */}
         <div
           data-no-contrast-guard
-          className="px-5 md:px-7 py-5"
+          className="jj-shimmer-champagne-live px-5 md:px-7 py-5"
           style={{
-            background: 'linear-gradient(135deg,#F7EAC4 0%,#E9D194 45%,#C7A55C 100%)',
             borderBottom: '1px solid rgba(184,149,85,0.7)',
           }}
         >
