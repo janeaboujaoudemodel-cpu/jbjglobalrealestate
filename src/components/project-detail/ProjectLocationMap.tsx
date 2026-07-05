@@ -5,6 +5,7 @@ import { Maximize, MousePointer } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
+import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyRemoveLayer } from "@/utils/leafletSafety";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -80,18 +81,19 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
 
   useEffect(() => {
     if (layerRef.current) {
-      map.removeLayer(layerRef.current);
+      safelyRemoveLayer(map, layerRef.current);
     }
     const tiles = getMapTiles(language);
     const { url, attribution, subdomains } = tiles[mapView];
-    const tileOptions: L.TileLayerOptions = { attribution, maxZoom: 19 };
+    const tileOptions: L.TileLayerOptions = { ...SAFE_TILE_LAYER_OPTIONS, attribution, maxZoom: 19 };
     if (subdomains) tileOptions.subdomains = subdomains;
     layerRef.current = L.tileLayer(url, tileOptions);
     layerRef.current.addTo(map);
 
     return () => {
       if (layerRef.current) {
-        map.removeLayer(layerRef.current);
+        safelyRemoveLayer(map, layerRef.current);
+        layerRef.current = null;
       }
     };
   }, [mapView, language, map]);
@@ -155,6 +157,7 @@ export default function ProjectLocationMap({
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
         attributionControl={false}
+        {...SAFE_LEAFLET_MAP_OPTIONS}
       >
         <DynamicTileLayer mapView={mapView} language={language} />
         <ScrollZoomEnabler enabled={scrollZoomEnabled} />
