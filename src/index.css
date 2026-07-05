@@ -23307,11 +23307,13 @@ html body [data-chrome="sidebar"] [data-sidebar-bottom-cta] {
   aspect-ratio: auto !important;
 }
 
-html body [data-chrome="sidebar"] a[href="/auth"] {
+html body [data-chrome="sidebar"] a[href="/auth"]:not([data-sidebar-auth-control]) {
   min-height: 40px !important;
   max-height: 40px !important;
 }
 
+html body [data-chrome="sidebar"] a[href="/auth"][data-sidebar-auth-control],
+html body [data-chrome="sidebar"] button[data-sidebar-auth-control],
 html body [data-chrome="sidebar"] [data-sidebar-auth-control] {
   height: 42px !important;
   min-height: 42px !important;
