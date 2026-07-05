@@ -31991,3 +31991,25 @@ html body [data-filter-dropdown="true"] button:not(.filter-primary-action):not(.
   border-color: rgba(184,149,85,0.58) !important;
   opacity: 1 !important;
 }
+
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] [data-filter-ink-label][data-filter-ink-label][data-filter-ink-label],
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] [data-filter-ink-label][data-filter-ink-label][data-filter-ink-label] *,
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] :is(h4,label,p,small):not(.filter-primary-action):not(.filter-primary-action *):not(.filter-emerald-action):not(.filter-emerald-action *):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-filter-selected="true"]):not([data-filter-selected="true"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] [role="tab"][data-filter-selected="true"][data-filter-selected="true"],
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] [role="tab"][data-state="active"][data-state="active"],
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] [role="tab"][data-filter-selected="true"][data-filter-selected="true"] *,
+html body body body [data-radix-popper-content-wrapper] [data-filter-dropdown="true"][data-filter-dropdown="true"][data-filter-dropdown="true"] [role="tab"][data-state="active"][data-state="active"] * {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
