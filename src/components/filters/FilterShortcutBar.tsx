@@ -472,13 +472,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           className={cn(pillBase, advancedOpen ? pillActive : pillInactiveCls)}
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
-          More filters
+          <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>More filters</span>
         </button>
         {/* Price */}
         <Popover open={priceOpen} onOpenChange={(open) => { if (open) closeOtherMenus('price'); handlePriceOpenChange(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactiveCls)}>
-              {t('filter.price')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.price')}</span>
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
@@ -568,7 +568,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover open={paymentsOpen} onOpenChange={(open) => { if (open) closeOtherMenus('payments'); handlePaymentsOpenChange(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactiveCls)}>
-              {t('filter.payments')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.payments')}</span>
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
@@ -647,7 +647,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover open={handoverOpen} onOpenChange={(open) => { if (open) closeOtherMenus('handover'); setHandoverOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactiveCls)}>
-              {t('filter.handover')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.handover')}</span>
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
           </PopoverTrigger>
@@ -718,7 +718,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover open={propertyTypeOpen} onOpenChange={(open) => { if (open) closeOtherMenus('propertyType'); setPropertyTypeOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
-              {getPropertyTypeLabel()}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{getPropertyTypeLabel()}</span>
               {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
@@ -755,7 +755,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover open={bedroomsOpen} onOpenChange={(open) => { if (open) closeOtherMenus('bedrooms'); setBedroomsOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactiveCls)}>
-              {t('filter.bedrooms')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.bedrooms')}</span>
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
@@ -784,7 +784,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover open={statusOpen} onOpenChange={(open) => { if (open) closeOtherMenus('status'); setStatusOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactiveCls)}>
-              {t('filter.status')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.status')}</span>
               {filters.statuses.length > 0 && <CountBadge count={filters.statuses.length} />}
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
@@ -818,7 +818,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover open={constructionOpen} onOpenChange={(open) => { if (open) closeOtherMenus('construction'); setConstructionOpen(open); }}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactiveCls)}>
-              {t('filter.construction')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.construction')}</span>
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
@@ -848,7 +848,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactiveCls)}>
               <Eye className="w-3.5 h-3.5" />
-              {t('filter.views')}
+              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{t('filter.views')}</span>
               {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
               <ChevronDown className="w-3 h-3 text-white opacity-100" />
             </button>
@@ -890,7 +890,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               filters.sortBy === opt.value ? pillActive : pillInactiveCls
             )}
           >
-            {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
+            {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{opt.label}</span>}
           </button>
         ))}
 
@@ -905,7 +905,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           title={t('filter.map')}
         >
           <Map className="w-3.5 h-3.5" />
-          {isMapMode ? t('filter.list') : t('filter.map')}
+          <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{isMapMode ? t('filter.list') : t('filter.map')}</span>
         </button>
 
         {/* Saved Filters */}
