@@ -117,7 +117,9 @@ const MortgageCalculator = ({
   const [projectResults, setProjectResults] = useState<MortgageProject[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<MortgageProject | null>(null);
-  const [detailsExpanded, setDetailsExpanded] = useState(false);
+  // Default to expanded so the summary cards + visualization are visible on
+  // first paint (the mobile-only toggle collapses on small screens if needed).
+  const [detailsExpanded, setDetailsExpanded] = useState(true);
   const isNavy = themeVariant === "navy";
 
   // Dark slider wrapper style — injects emerald CSS vars so every slider
@@ -662,13 +664,13 @@ const MortgageCalculator = ({
               type="button"
               onClick={() => setDetailsExpanded((v) => !v)}
               aria-expanded={detailsExpanded}
-              className="w-full h-11 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-semibold flex items-center justify-center gap-2"
+              className="md:hidden w-full h-11 rounded-lg border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] text-sm font-semibold flex items-center justify-center gap-2"
             >
               {detailsExpanded ? "Hide detailed breakdown" : "Show detailed breakdown"}
               <span aria-hidden className={detailsExpanded ? "rotate-180 transition-transform" : "transition-transform"}>▾</span>
             </button>
 
-            <div className={detailsExpanded ? "space-y-4 lg:space-y-6" : "hidden"}>
+            <div className={detailsExpanded ? "space-y-4 lg:space-y-6" : "hidden md:block space-y-4 lg:space-y-6"}>
             {/* 6 Champagne Summary Cards - 3x2 Grid */}
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 lg:gap-4">
               <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
@@ -782,7 +784,7 @@ const MortgageCalculator = ({
         </div>
 
         {showAssistant && (
-          <div className={detailsExpanded ? "mt-6" : "mt-6 hidden"}>
+          <div className={detailsExpanded ? "mt-6" : "mt-6 hidden md:block"}>
             <MortgageAIAssistant
               context={{
                 propertyPrice,

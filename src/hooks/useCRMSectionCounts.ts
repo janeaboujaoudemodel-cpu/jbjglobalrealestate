@@ -84,11 +84,11 @@ export function useCRMSectionCounts(): { counts: CRMCounts; loading: boolean; re
       headCount("crm_tasks", (q) => q.in("status", ["todo", "in_progress", "pending"])),
       headCount("crm_notes"),
       headCount("owner_calendar_events", (q) => q.gte("start_at", nowIso)),
-      headCount("user_notifications", (q) => q.eq("read", false)),
+      headCount("user_notifications", (q) => q.eq("is_read", false)),
       headCount("email_inbox_items", (q) => q.is("archived_at", null)),
-      headCount("user_notifications", (q) => q.eq("read", false)),
+      headCount("user_notifications", (q) => q.eq("is_read", false)),
       headCount("crm_email_campaigns"),
-      headCount("crm_automation_rules", (q) => q.eq("enabled", true)),
+      headCount("crm_automation_rules", (q) => q.eq("is_active", true)),
       headCount("crm_leads", (q) => q.not("deleted_at", "is", null)),
     ]);
     const data: CRMCounts = {
