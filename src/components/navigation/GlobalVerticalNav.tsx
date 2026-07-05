@@ -261,7 +261,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Shortlisted", href: "/favorites?tab=shortlist", icon: Star },
   { label: "Saved Filters", href: "/favorites?tab=saved-filters", icon: Sparkles },
   { label: "Settings", href: "/profile?tab=settings", icon: Settings },
-  { label: "My Tickets", href: "/my-tickets", icon: Ticket },
+  { label: "My Tickets", href: "/ticket-hub?tab=track", icon: Ticket },
 
 
   // ── Business Suites ──
