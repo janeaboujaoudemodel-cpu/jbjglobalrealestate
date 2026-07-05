@@ -7308,7 +7308,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 .jj-pill-emerald-metallic,
 .jj-cta-emerald,
 .jj-cta-primary[data-surface="emerald"],
-[data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+[data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-filter-dropdown]) {
   background: var(--jj-official-emerald-surface) !important;
   background-image: var(--jj-official-emerald-surface) !important;
   background-color: #064E3B !important;
