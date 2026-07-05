@@ -34,6 +34,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const [tileLayer, setTileLayer] = useState<MapViewType>('satellite');
   const [mapError, setMapError] = useState<string | null>(null);
   const [mapInteractive, setMapInteractive] = useState(false);
+  // Bumped after L.map init so <MapNavigationControlsStandalone> re-renders with the real instance
+  const [mapReadyTick, setMapReadyTick] = useState(0);
 
   // Format price for popup
   const formatPrice = useCallback((price: number | null) => {
