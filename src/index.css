@@ -7308,7 +7308,7 @@ html[data-tool-fullscreen="true"] [data-tool-frame] > div:first-child {
 .jj-pill-emerald-metallic,
 .jj-cta-emerald,
 .jj-cta-primary[data-surface="emerald"],
-[data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+[data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-filter-dropdown]) {
   background: var(--jj-official-emerald-surface) !important;
   background-image: var(--jj-official-emerald-surface) !important;
   background-color: #064E3B !important;
@@ -18006,7 +18006,7 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
 }
 
 /* Forms and search components. */
-:where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select, [role="combobox"]) {
+:where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([data-no-contrast-guard]):not(.jj-hero-search-input), textarea:not([data-no-contrast-guard]), select:not([data-no-contrast-guard]), [role="combobox"]:not([data-no-contrast-guard])) {
   min-height: var(--jbj-control-h);
   border-radius: var(--jbj-radius-md) !important;
   border: 1px solid var(--jbj-gold-soft) !important;
@@ -18016,10 +18016,23 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
   transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
 }
-:where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select, [role="combobox"]):focus,
-:where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select, [role="combobox"]):focus-visible {
+:where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([data-no-contrast-guard]):not(.jj-hero-search-input), textarea:not([data-no-contrast-guard]), select:not([data-no-contrast-guard]), [role="combobox"]:not([data-no-contrast-guard])):focus,
+:where(.jbj-form-field, [data-jbj-field], input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([data-no-contrast-guard]):not(.jj-hero-search-input), textarea:not([data-no-contrast-guard]), select:not([data-no-contrast-guard]), [role="combobox"]:not([data-no-contrast-guard])):focus-visible {
   border-color: rgba(6, 78, 59, 0.45) !important;
   box-shadow: var(--jbj-focus-ring), inset 0 1px 0 rgba(255,255,255,0.65) !important;
+}
+/* Hard reset for the hero search input — no border/background/shadow ever. */
+html body .jj-hero-search-bar input.jj-hero-search-input,
+html body .jj-hero-search-bar input.jj-hero-search-input:focus,
+html body .jj-hero-search-bar input.jj-hero-search-input:focus-visible,
+html body .jj-hero-search-bar input.jj-hero-search-input:hover {
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  min-height: 0 !important;
+  border-radius: 0 !important;
 }
 :where(input, textarea)::placeholder {
   color: rgba(26, 26, 26, 0.58) !important;
@@ -28176,7 +28189,7 @@ html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filte
 
 /* Filter panel + dropdowns — champagne + ink (site-wide dropdown standard). */
 html body [data-radix-dialog-content][data-filter-clean="true"],
-html body [data-filter-dropdown="true"],
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface],
 html body [data-filter-clean="true"] [data-filter-dropdown="true"] {
   background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
@@ -29860,7 +29873,6 @@ html body [data-account-menu-content][data-account-menu-content] :is(a,button,[r
 /* Header emerald dropdowns keep white foreground; the property-filter panel now
    uses the champagne + ink site-wide dropdown standard (rules above). */
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
@@ -29872,7 +29884,6 @@ html body:not([data-ai-tools-scope="true"]) :is(
 }
 
 html body:not([data-ai-tools-scope="true"]) :is(
-  [data-filter-dropdown],
   [data-mode-switcher-panel="true"]
 ) :is(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,button,div,li,dt,dd,th,td,svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where(input, textarea, [data-mode-active-pill], [data-mode-active-pill] *)) {
   color: #FFFFFF !important;
@@ -29881,19 +29892,9 @@ html body:not([data-ai-tools-scope="true"]) :is(
   opacity: 1 !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea, select, [role="combobox"], [data-radix-select-trigger]) {
-  background: rgba(1, 8, 6, 0.72) !important;
-  background-image: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  border-color: rgba(255,255,255,0.32) !important;
-}
+/* [data-filter-dropdown] filter pill popovers are champagne+gold — see
+   filter-pill dropdown rules earlier in this file. Do NOT re-tint them here. */
 
-html body:not([data-ai-tools-scope="true"]) [data-filter-dropdown] :is(input, textarea)::placeholder {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-  opacity: 1 !important;
-}
 
 
 /* Terminal validation rule: header website dropdowns only, AI scope excluded. */
@@ -31238,4 +31239,121 @@ html body [data-signout-action] {
 html body [data-signout-action]:hover {
   background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%) !important;
   border-color: #B91C1C !important;
+}
+
+/* ============================================================
+   FILTER PILL DROPDOWNS — champagne gold surface, dark ink type,
+   site-wide. Scope: [data-filter-dropdown="true"] (used by every
+   FilterShortcutBar popover: Price, Payments, Handover, More,
+   Property Type, etc.) so we brand every pill dropdown in one place.
+   ============================================================ */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+  box-shadow:
+    0 24px 60px -18px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(184, 149, 85, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+  color: #1A1A1A !important;
+}
+/* Force any nested white/emerald text back to dark ink so labels read
+   on the champagne surface. Excludes emerald-surface CTAs (primary buttons
+   marked [data-emerald-ok] or living inside pill-active surfaces). */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force),
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force) * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+/* Chevron/idle icons — dark ink over champagne. */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] > :not(button) :is(svg, [class*="lucide"]):not([data-emerald-ok]) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+/* Value chip (e.g. "100%") — soft gold pill. */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white\/7,
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-color: rgba(184, 149, 85, 0.55) !important;
+}
+/* Text inputs inside the dropdown — champagne fill + gold hairline. */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="text"],
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="search"],
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="number"] {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border: 1px solid rgba(184, 149, 85, 0.55) !important;
+}
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input::placeholder {
+  color: rgba(26, 26, 26, 0.55) !important;
+}
+/* Slider track & range — emerald ombre range on a gold-tinted track. */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] [role="slider"] {
+  background: #FFFFFF !important;
+  border: 2px solid #064E3B !important;
+  box-shadow: 0 2px 8px rgba(6, 78, 59, 0.35) !important;
+}
+/* Primary/Secondary CTAs at the bottom of the dropdown. */
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]) {
+  border-radius: 10px !important;
+}
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child,
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(6, 78, 59, 0.85) !important;
+  box-shadow: 0 6px 18px -8px rgba(6, 78, 59, 0.55), inset 0 1px 0 rgba(255,255,255,0.10) !important;
+}
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child *,
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* TERMINAL OVERRIDE — filter pill dropdowns are champagne+gold no matter
+   what data-surface Radix injects. High specificity beats [data-surface="emerald"]. */
+html body [data-filter-dropdown="true"][data-surface],
+html body [data-filter-dropdown="true"][data-surface="emerald"],
+html body [data-filter-dropdown="true"][data-surface="dark"] {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
+  background-color: #F7F2EA !important;
+  border: 1px solid rgba(184,149,85,0.55) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: 0 22px 58px rgba(0,0,0,0.18), 0 0 0 1px rgba(184,149,85,0.20), inset 0 1px 0 rgba(255,255,255,0.55) !important;
+}
+html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,strong,em,small,li,div):not([role="slider"]):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"][data-surface] :is(svg, [class*="lucide"], path):not(.jj-pill-emerald-metallic svg):not(.jj-pill-emerald-metallic svg *) {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+/* Primary CTA (Apply filter) at bottom keeps emerald ombre + white ink. */
+html body [data-filter-dropdown="true"][data-surface] button.jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"][data-surface] .jj-pill-emerald-metallic {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-filter-dropdown="true"][data-surface] .jj-pill-emerald-metallic :is(span,svg,path,p) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+
+/* Filter dropdown final ink lock — children marked .allow-white / .text-white
+   were built for the old emerald surface. On the champagne surface force ink. */
+html body [data-filter-dropdown="true"][data-surface] .allow-white,
+html body [data-filter-dropdown="true"][data-surface] .text-white,
+html body [data-filter-dropdown="true"][data-surface] [class*="text-white"]:not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
 }

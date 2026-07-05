@@ -1120,9 +1120,12 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         <div className="px-3 pt-2 pb-3 flex flex-col flex-1 min-h-0">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
-          {/* Items stack from the top with a consistent compact gap so the
-              sidebar never shows a big empty area below Company/Legal. */}
-          <div className="flex flex-col flex-1 gap-1.5" style={{ justifyContent: 'space-between' }}>
+          {/* Uniform vertical rhythm — one consistent gap between every row
+              (highlight hubs AND section accordions) so the sidebar never
+              stretches or leaves an uneven gap between AI Home Finder and
+              Owner Portal. Do NOT use space-between here. */}
+          <div className="flex flex-col gap-2 pt-1">
+
 
 
           {/* Highlight hubs (gold labels) */}
