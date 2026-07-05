@@ -31027,42 +31027,33 @@ html body .jj-explore-all-areas-button:hover * {
    we need explicit dark ink for idle pills and pure white for active
    emerald pills (icons + text).
 ============================================================ */
-html body [data-filter-bar-gold] :is(button, a, label, input, [role="button"]),
+/* All buttons/pills inside the gold filter bar are emerald surfaces
+   (dark variant) — their glyphs and labels MUST be pure white for legibility
+   on the emerald pill background, even though the outer bar is champagne. */
+html body [data-filter-bar-gold] :is(button, a, label, [role="button"]),
 html body [data-filter-bar-gold] :is(button, a, label, [role="button"]) :is(span, p) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-}
-html body [data-filter-bar-gold] :is(svg, [class*="lucide"]) {
-  color: #1A1A1A !important;
-  stroke: #1A1A1A !important;
-}
-/* Emerald active/selected pills inside the gold bar -> pure white text + icons */
-html body [data-filter-bar-gold] [data-active="true"],
-html body [data-filter-bar-gold] [data-state="active"],
-html body [data-filter-bar-gold] [data-selected="true"],
-html body [data-filter-bar-gold] [aria-selected="true"],
-html body [data-filter-bar-gold] [data-surface="emerald"],
-html body [data-filter-bar-gold] .jj-emerald-metallic,
-html body [data-filter-bar-gold] .jj-pill-emerald-metallic {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body [data-filter-bar-gold] :is([data-active="true"], [data-state="active"], [data-selected="true"], [aria-selected="true"], [data-surface="emerald"], .jj-emerald-metallic, .jj-pill-emerald-metallic) :is(span, p, a, label) {
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
-}
-html body [data-filter-bar-gold] :is([data-active="true"], [data-state="active"], [data-selected="true"], [aria-selected="true"], [data-surface="emerald"], .jj-emerald-metallic, .jj-pill-emerald-metallic) :is(svg, [class*="lucide"]) {
+html body [data-filter-bar-gold] :is(button, a, [role="button"]) :is(svg, [class*="lucide"]) {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
 }
-/* Search input on gold — keep dark ink and champagne field */
+/* Search field: no nested dark pill on the champagne bar — flow it into the
+   bar with a soft champagne fill + subtle gold hairline instead of the
+   dark emerald wrapper. */
+html body [data-filter-bar-gold] .bg-\[\#021611\]\/82 {
+  background: rgba(253,251,247,0.65) !important;
+  border-color: rgba(184,149,85,0.55) !important;
+  box-shadow: none !important;
+}
 html body [data-filter-bar-gold] input[type="text"],
 html body [data-filter-bar-gold] input[type="search"] {
-  background: rgba(253,251,247,0.85) !important;
+  background: transparent !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
-  border: 1px solid rgba(184,149,85,0.55) !important;
+  border: none !important;
 }
 html body [data-filter-bar-gold] input::placeholder {
   color: rgba(26,26,26,0.55) !important;
