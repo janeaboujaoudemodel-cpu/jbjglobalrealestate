@@ -446,16 +446,32 @@ const TicketHub = () => {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-[#B89555]/30 rounded-xl h-12 p-1 gap-1">
-                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md">
+              <TabsList
+                data-ticket-hub-tabs
+                className="grid w-full grid-cols-3 border-2 border-[#B89555]/40 rounded-xl h-12 p-1 gap-1"
+                style={{ background: 'linear-gradient(135deg,#FDFBF7 0%,#F7F2EA 50%,#EFE6D6 100%)' }}
+              >
+                <TabsTrigger
+                  value="new"
+                  data-ticket-hub-tab
+                  className="ticket-hub-tab text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#064E3B] data-[state=active]:via-[#042c1c] data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-md"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   New Ticket
                 </TabsTrigger>
-                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md">
+                <TabsTrigger
+                  value="track"
+                  data-ticket-hub-tab
+                  className="ticket-hub-tab text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#064E3B] data-[state=active]:via-[#042c1c] data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-md"
+                >
                   <Search className="w-4 h-4 mr-2" />
                   My Tickets
                 </TabsTrigger>
-                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:shadow-md relative">
+                <TabsTrigger
+                  value="inbox"
+                  data-ticket-hub-tab
+                  className="ticket-hub-tab text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#064E3B] data-[state=active]:via-[#042c1c] data-[state=active]:to-black data-[state=active]:text-white data-[state=active]:shadow-md relative"
+                >
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
                   {(inboxQuery.data?.length || 0) > 0 && (
