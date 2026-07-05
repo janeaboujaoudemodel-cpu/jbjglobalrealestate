@@ -39951,6 +39951,16 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_booking_token: {
+        Args: { _token: string }
+        Returns: {
+          contact_company: string
+          contact_email: string
+          contact_name: string
+          default_language: string
+          default_location_type: string
+        }[]
+      }
       get_broker_message_decrypted: {
         Args: { p_message_id: string }
         Returns: {
