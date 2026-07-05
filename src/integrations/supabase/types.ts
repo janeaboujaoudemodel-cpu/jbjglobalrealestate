@@ -40251,6 +40251,24 @@ export type Database = {
         Args: { _book_id: string; _module_id: string }
         Returns: undefined
       }
+      sync_backfill_refs: {
+        Args: {
+          p_crm_id: string
+          p_error: string
+          p_id: string
+          p_source: string
+          p_zoho_id: string
+        }
+        Returns: undefined
+      }
+      sync_upsert_crm_lead: {
+        Args: { p_existing_id: string; p_row: Json }
+        Returns: string
+      }
+      sync_upsert_jbj_lead: {
+        Args: { p_existing_id: string; p_row: Json }
+        Returns: string
+      }
       track_visitor_session_update: {
         Args: { p_patch: Json; p_session_id: string }
         Returns: undefined
