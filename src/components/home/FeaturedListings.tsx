@@ -39,21 +39,16 @@ const FeaturedListings = () => {
             ? [1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className={`bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/30 h-full flex flex-col ${i > 3 ? 'hidden sm:flex' : ''}`}
+                  className={`bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/55 h-full flex flex-col ${i > 2 ? 'hidden lg:flex' : ''}`}
                 >
                   {/* Image — matches ProjectCard aspect-[16/10] */}
                   <Skeleton className="aspect-[16/10] rounded-none shrink-0" />
                   {/* Body — matches ProjectCard padding + row structure */}
                   <div className="p-4 flex-1 flex flex-col gap-3">
-                    {/* developer "by Xxx" line */}
                     <Skeleton className="h-3 w-1/3" />
-                    {/* title */}
                     <Skeleton className="h-5 w-5/6" />
-                    {/* location */}
                     <Skeleton className="h-3 w-2/3" />
-                    {/* spacer pushes bottom row down so heights align */}
                     <div className="flex-1" />
-                    {/* bottom row: price pill left, handover right */}
                     <div className="flex items-center justify-between pt-1">
                       <Skeleton className="h-7 w-24 rounded-full" />
                       <Skeleton className="h-5 w-16" />
@@ -64,8 +59,8 @@ const FeaturedListings = () => {
             : allProjects.slice(0, 6).map((project, idx) => (
                 <div
                   key={project.id}
-                  // On phone portrait, render only first 3 cards (idx 0..2); hidden on >=sm.
-                  className={`h-full flex ${idx >= 3 ? 'hidden sm:flex' : ''} [&>*]:w-full [&>*]:h-full`}
+                  // Phone + tablet: 2 cards total (idx 0..1). Desktop (lg+): all 6.
+                  className={`h-full flex ${idx >= 2 ? 'hidden lg:flex' : ''} [&>*]:w-full [&>*]:h-full`}
                 >
                   <ProjectCard project={project as any} priority={idx < 3} />
                 </div>
