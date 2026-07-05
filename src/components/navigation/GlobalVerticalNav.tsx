@@ -1387,6 +1387,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 style={{
                   color: '#DC2626',
                   borderColor: '#B89555',
+                  borderWidth: 0,
+                  borderRadius: '8px',
+                  height: '42px',
+                  minHeight: '42px',
                   background: 'linear-gradient(135deg, #FDFBF7 0%, #F7EFDF 50%, #EFE3C9 100%)',
                   boxShadow: '0 2px 8px -3px rgba(220,38,38,0.30), inset 0 1px 0 rgba(255,255,255,0.55)',
                 }}
@@ -1406,6 +1410,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 style={{
                   color: '#FFFFFF',
                   borderColor: '#B89555',
+                  borderWidth: 0,
+                  borderRadius: '8px',
+                  height: '42px',
+                  minHeight: '42px',
                   background: '#064E3B',
                   boxShadow: '0 4px 12px -4px rgba(6,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.10)',
                 }}
