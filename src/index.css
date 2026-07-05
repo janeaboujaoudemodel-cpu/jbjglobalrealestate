@@ -28189,7 +28189,7 @@ html body :is([data-filter-clean="true"], [data-radix-dialog-content][data-filte
 
 /* Filter panel + dropdowns — champagne + ink (site-wide dropdown standard). */
 html body [data-radix-dialog-content][data-filter-clean="true"],
-html body [data-filter-dropdown="true"],
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface],
 html body [data-filter-clean="true"] [data-filter-dropdown="true"] {
   background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
   background-image: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 55%, #F2EBDC 100%) !important;
@@ -31247,7 +31247,7 @@ html body [data-signout-action]:hover {
    FilterShortcutBar popover: Price, Payments, Handover, More,
    Property Type, etc.) so we brand every pill dropdown in one place.
    ============================================================ */
-html body [data-filter-dropdown="true"] {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] {
   background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
   background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
@@ -31260,54 +31260,54 @@ html body [data-filter-dropdown="true"] {
 /* Force any nested white/emerald text back to dark ink so labels read
    on the champagne surface. Excludes emerald-surface CTAs (primary buttons
    marked [data-emerald-ok] or living inside pill-active surfaces). */
-html body [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force),
-html body [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force) * {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force),
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,li,strong,em,small):not([data-emerald-ok]):not(.allow-white-force) * {
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
 /* Chevron/idle icons — dark ink over champagne. */
-html body [data-filter-dropdown="true"] > :not(button) :is(svg, [class*="lucide"]):not([data-emerald-ok]) {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] > :not(button) :is(svg, [class*="lucide"]):not([data-emerald-ok]) {
   color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
 /* Value chip (e.g. "100%") — soft gold pill. */
-html body [data-filter-dropdown="true"] .bg-white\/7,
-html body [data-filter-dropdown="true"] .bg-white {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white\/7,
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] .bg-white {
   background: rgba(255, 255, 255, 0.75) !important;
   border-color: rgba(184, 149, 85, 0.55) !important;
 }
 /* Text inputs inside the dropdown — champagne fill + gold hairline. */
-html body [data-filter-dropdown="true"] input[type="text"],
-html body [data-filter-dropdown="true"] input[type="search"],
-html body [data-filter-dropdown="true"] input[type="number"] {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="text"],
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="search"],
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input[type="number"] {
   background: rgba(255, 255, 255, 0.85) !important;
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
   border: 1px solid rgba(184, 149, 85, 0.55) !important;
 }
-html body [data-filter-dropdown="true"] input::placeholder {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] input::placeholder {
   color: rgba(26, 26, 26, 0.55) !important;
 }
 /* Slider track & range — emerald ombre range on a gold-tinted track. */
-html body [data-filter-dropdown="true"] [role="slider"] {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] [role="slider"] {
   background: #FFFFFF !important;
   border: 2px solid #064E3B !important;
   box-shadow: 0 2px 8px rgba(6, 78, 59, 0.35) !important;
 }
 /* Primary/Secondary CTAs at the bottom of the dropdown. */
-html body [data-filter-dropdown="true"] button[type="button"]:not([role="switch"]):not([role="slider"]) {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]) {
   border-radius: 10px !important;
 }
-html body [data-filter-dropdown="true"] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child,
-html body [data-filter-dropdown="true"] button[type="button"].flex-1 {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child,
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   border: 1px solid rgba(6, 78, 59, 0.85) !important;
   box-shadow: 0 6px 18px -8px rgba(6, 78, 59, 0.55), inset 0 1px 0 rgba(255,255,255,0.10) !important;
 }
-html body [data-filter-dropdown="true"] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child *,
-html body [data-filter-dropdown="true"] button[type="button"].flex-1 * {
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"]:not([role="switch"]):not([role="slider"]):last-child *,
+html body #root [data-filter-dropdown="true"], html body [data-filter-dropdown="true"][data-surface] button[type="button"].flex-1 * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
