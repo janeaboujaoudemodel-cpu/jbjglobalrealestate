@@ -126,7 +126,7 @@ export function DeveloperLogo({
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
     const cardContainer = cn(
-      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#064E3B]/30 p-6 overflow-hidden",
+      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-6 overflow-hidden",
       className,
     );
     if (!valid) {
