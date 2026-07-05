@@ -20,7 +20,7 @@ export const filterPillBase = [
 
 // Inactive pill (default) — champagne surface, ink text, gold hairline, emerald hover accent
 const _pillInactive = [
-  "jj-pill-emerald-metallic allow-white text-white border-0",
+  "jj-filter-pill-fast allow-white text-white border-0",
   "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 
@@ -29,7 +29,7 @@ export const filterPillInactiveDark = _pillInactive;
 
 // Active pill — solid emerald metallic with pure white label
 export const filterPillActive = [
-  "jj-pill-emerald-metallic text-white border-0 font-bold shadow-md allow-white filter-emerald-action",
+  "jj-filter-pill-fast jj-filter-pill-fast-active text-white border-0 font-bold shadow-md allow-white filter-emerald-action",
   "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 
@@ -100,7 +100,7 @@ export const filterDivider = "w-px h-5 bg-[#B89555]/40 flex-shrink-0";
 // ── RESET-ALL PILL ────────────────────────────────────────────────────────
 export const resetAllPill = [
   "inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold",
-  "filter-emerald-action jj-pill-emerald-metallic border-0 text-white shadow-none allow-white",
+  "filter-emerald-action jj-filter-pill-fast jj-filter-pill-fast-active border-0 text-white shadow-none allow-white",
   "hover:border-[#064E3B]/55",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
   "transition-colors duration-100 flex-shrink-0 [&_svg]:text-white [&_svg]:opacity-100",
