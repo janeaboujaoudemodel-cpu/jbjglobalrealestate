@@ -505,22 +505,22 @@ const DeveloperDetail = () => {
               </div>
             )}
 
-            {/* Stats - Aligned consistent layout */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
+            {/* Stats - Aligned consistent layout (labels wrap, values bottom-align) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 items-stretch">
               {stats.map((stat) => (
-                <div 
-                  key={stat.label} 
-                  className="rounded-xl border border-[#064E3B]/28 p-4"
+                <div
+                  key={stat.label}
+                  className="rounded-xl border border-[#B89555]/45 p-4 flex flex-col justify-between min-h-[112px]"
                   style={{
                     background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
-                    boxShadow: '0 0 15px rgba(6,78,59,0.14), inset 0 1px 2px rgba(255,255,255,0.4)',
+                    boxShadow: '0 0 15px rgba(184,149,85,0.18), inset 0 1px 2px rgba(255,255,255,0.4)',
                   }}
                 >
-                  <div className="flex items-center gap-2 text-foreground/70 text-xs uppercase tracking-wide mb-2">
+                  <div className="flex items-center gap-2 text-[#1A1A1A]/75 text-[11px] font-semibold uppercase tracking-wide leading-tight min-h-[32px]">
                     <stat.icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
-                    <span className="truncate">{stat.label}</span>
+                    <span className="whitespace-normal break-words">{stat.label}</span>
                   </div>
-                  <p className="text-foreground text-xl font-bold">{stat.value}</p>
+                  <p className="text-[#1A1A1A] text-xl font-bold leading-tight mt-2 whitespace-nowrap">{stat.value}</p>
                 </div>
               ))}
             </div>

@@ -31077,3 +31077,23 @@ html body p[data-developer-hero-subtitle] * {
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: 0 2px 10px rgba(0,0,0,0.75) !important;
 }
+
+/* Sidebar footer CTA buttons — labels must stay single-line and fully
+   readable. Overrides the global button wrap lock (Pass 152 vicinity). */
+html body [data-signout-action],
+html body [data-sidebar-collapse-control] {
+  overflow: visible !important;
+  white-space: nowrap !important;
+}
+html body [data-signout-action] > span,
+html body [data-signout-action] > span *,
+html body [data-signout-label],
+html body [data-sidebar-collapse-control] > span,
+html body [data-sidebar-collapse-control] > span * {
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+}
