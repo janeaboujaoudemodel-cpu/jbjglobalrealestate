@@ -518,7 +518,6 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 /* ─── SECTION KEYS ─── */
 const SECTION_KEYS = [
   "TOOLS & WORKSPACE",
-  "MY ACCOUNT",
   "PROPERTIES",
   "INSIGHTS & GUIDES",
   "SERVICES",
@@ -526,6 +525,7 @@ const SECTION_KEYS = [
   "INVESTOR",
   "COMPANY & LEGAL",
   "HELP & SUPPORT",
+  "MY ACCOUNT",
   "ADMIN & OWNER",
 ] as const;
 type SectionKey = typeof SECTION_KEYS[number];
@@ -1117,14 +1117,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-2 pb-3 flex flex-col flex-1 min-h-0">
+        <div className="px-3 pt-10 pb-3 flex flex-col flex-1 min-h-0">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
           {/* Uniform vertical rhythm — one consistent gap between every row
               (highlight hubs AND section accordions) so the sidebar never
               stretches or leaves an uneven gap between AI Home Finder and
               Owner Portal. Do NOT use space-between here. */}
-          <div className="flex flex-col gap-2 pt-1">
+          <div className="flex flex-col flex-1 min-h-0 gap-4 pt-1">
 
 
 

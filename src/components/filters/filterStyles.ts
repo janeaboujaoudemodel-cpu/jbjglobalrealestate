@@ -20,8 +20,8 @@ export const filterPillBase = [
 
 // Inactive pill (default) — champagne surface, ink text, gold hairline, emerald hover accent
 const _pillInactive = [
-  "bg-gradient-to-b from-[#FDFBF7] to-[#F2EBDC] border border-[#B89555]/45 text-[#1A1A1A]",
-  "hover:border-[#064E3B]/60 hover:shadow-[0_6px_16px_rgba(6,78,59,0.14)]",
+  "jj-pill-emerald-metallic allow-white text-white border-0",
+  "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 
 export const filterPillInactiveLight = _pillInactive;

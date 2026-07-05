@@ -20,6 +20,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
+import { getSafeDeveloperDescription } from "@/utils/developerContent";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -323,6 +324,8 @@ const DeveloperDetail = () => {
     filters.facilities.length > 0 ||
     filters.premiumOnly;
 
+  const safeDeveloperDescription = developer ? getSafeDeveloperDescription(developer) : "";
+
   if (loadingDeveloper) {
     return (
       <section className="relative w-full min-h-screen py-16 md:py-24 bg-premium-bg">
@@ -391,7 +394,7 @@ const DeveloperDetail = () => {
     <section className="relative w-full min-h-screen bg-premium-bg">
       <SEOHead
         title={`${developer.name} | UAE Property Developer`}
-        description={(developer.description || `Explore ${developer.name} property projects in Dubai and the UAE. ${developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+ units delivered. ` : ""}Off-plan and ready properties on JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
+        description={(safeDeveloperDescription || `Explore ${developer.name} property projects in Dubai and the UAE. ${developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+ units delivered. ` : ""}Off-plan and ready properties on JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
         canonicalPath={`/developer/${slug}`}
         ogImage={developer.feature_image_url || developer.logo_url}
         breadcrumbItems={[
@@ -478,19 +481,19 @@ const DeveloperDetail = () => {
               <span className="text-[#1A1A1A]">{developer.name.split(" ")[0]}</span>{" "}
               {developer.name.split(" ").slice(1).join(" ")}
             </h1>
-            {developer.description && (
+            {safeDeveloperDescription && (
               <div className="max-w-3xl">
-                <div className={`relative ${!isDevDescExpanded && developer.description.length > 400 ? 'max-h-32 overflow-hidden' : ''}`}>
+                <div className={`relative ${!isDevDescExpanded && safeDeveloperDescription.length > 400 ? 'max-h-32 overflow-hidden' : ''}`}>
                   <HtmlT
-                    html={renderMarkdownToHtml(formatReellyDescription(developer.description))}
+                    html={renderMarkdownToHtml(formatReellyDescription(safeDeveloperDescription))}
                     domain="developer.description"
                     className="text-foreground/75 text-base md:text-lg leading-relaxed prose prose-sm dark:prose-invert max-w-none prose-p:mb-2"
                   />
-                  {!isDevDescExpanded && developer.description.length > 400 && (
+                  {!isDevDescExpanded && safeDeveloperDescription.length > 400 && (
                     <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />
                   )}
                 </div>
-                {developer.description.length > 400 && (
+                {safeDeveloperDescription.length > 400 && (
                   <button
                     onClick={() => setIsDevDescExpanded(!isDevDescExpanded)}
                     className="flex items-center gap-1 text-[#1A1A1A] text-sm font-medium mt-3 hover:underline"

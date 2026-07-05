@@ -4,6 +4,7 @@ import { Building2, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
+import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import type { Developer } from "@/hooks/useProjects";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 
@@ -114,6 +115,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
 
   const hasHero = !!cardHeroImageUrl;
   const logoValid = isValidDeveloperLogoUrl(developer.logo_url);
+  const safeDescription = getSafeDeveloperDescription(developer);
 
   return (
     <Link to={`/developer/${developer.slug}`} className="block h-full [perspective:1200px]">
@@ -187,9 +189,9 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
           </h3>
 
           <div className="flex-1 min-h-[36px]">
-            {developer.description ? (
+            {safeDescription ? (
               <p className="text-white text-xs line-clamp-2 leading-relaxed">
-                {developer.description}
+                {safeDescription}
               </p>
             ) : (
               <p className="text-white text-xs italic">

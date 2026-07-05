@@ -31357,3 +31357,224 @@ html body [data-filter-dropdown="true"][data-surface] [class*="text-white"]:not(
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* ============================================================
+   OWNER FIX — terminal locks for the reported sidebar, hero,
+   filter, and animation regressions. Keep this at the end.
+   ============================================================ */
+
+/* Expanded owner sidebar: start lower below the logo, then distribute the
+   visible categories down the rail so Help & Support no longer leaves a
+   dead empty block above the footer. */
+html body [data-chrome="sidebar"] nav > div.px-3 {
+  padding-top: 40px !important;
+}
+html body [data-chrome="sidebar"] nav > div.px-3 > div.flex.flex-col {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  justify-content: flex-start !important;
+  gap: 12px !important;
+}
+html body [data-chrome="sidebar"] [id="nav-section-help-&-support"] {
+  margin-top: auto !important;
+}
+
+/* Homepage hero search: remove the visible white top divider. */
+html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+html body #root .jj-hero-search-premium .jj-hero-search-bar {
+  border-top: 0 !important;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.36), inset 0 0 0 1px rgba(4,78,59,0.38), inset 0 -1px 0 rgba(0,0,0,0.25) !important;
+}
+
+/* Developer/project filter rail: every visible pill is emerald with white
+   copy/icons; the search field remains champagne with dark ink. */
+html body #root [data-filter-bar-gold] button:not([role="switch"]):not([role="slider"]),
+html body #root [data-filter-bar-gold] [role="button"]:not([role="switch"]):not([role="slider"]) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  border-color: transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body #root [data-filter-bar-gold] button:not([role="switch"]):not([role="slider"]) :is(span, svg, path, [class*="lucide"]),
+html body #root [data-filter-bar-gold] [role="button"]:not([role="switch"]):not([role="slider"]) :is(span, svg, path, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-filter-bar-gold] .bg-\[\#021611\]\/82,
+html body #root [data-filter-bar-gold] .filter-search-pill-input,
+html body #root [data-filter-bar-gold] input[type="text"] {
+  background: rgba(253,251,247,0.82) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+
+/* Filter popovers: champagne surface with readable dark ink, but selected
+   chips and Apply stay emerald/white. */
+html body #root [data-filter-dropdown="true"],
+html body #root [data-filter-dropdown="true"][data-surface],
+html body [data-filter-dropdown="true"][data-surface="emerald"],
+html body [data-filter-dropdown="true"][data-surface="dark"] {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 52%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 52%, #EFE6D6 100%) !important;
+  background-color: #F7F2EA !important;
+  border: 1px solid rgba(184,149,85,0.62) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,div):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="checked"]):not([data-state="checked"] *),
+html body [data-filter-dropdown="true"][data-surface] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,div):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="checked"]):not([data-state="checked"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-filter-dropdown="true"] :is(input, select, textarea),
+html body [data-filter-dropdown="true"][data-surface] :is(input, select, textarea) {
+  background: #FFFFFF !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.58) !important;
+}
+html body #root [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
+html body #root [data-filter-dropdown="true"] .jj-pill-emerald-metallic *,
+html body [data-filter-dropdown="true"][data-surface] .jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"][data-surface] .jj-pill-emerald-metallic * {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Restore Email / Call / Chat metallic sweep that was disabled by a later
+   pseudo-element kill switch. */
+html body .jj-emerald-metallic {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+}
+html body .jj-emerald-metallic::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background-image: linear-gradient(115deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 34%, rgba(4,78,59,0.38) 45%, rgba(255,255,255,0.58) 51%, rgba(4,78,59,0.38) 57%, rgba(255,255,255,0) 72%, rgba(255,255,255,0) 100%) !important;
+  background-size: 240% 100% !important;
+  background-repeat: no-repeat !important;
+  mix-blend-mode: screen !important;
+  animation: jj-emerald-metallic-sweep 4.8s linear infinite !important;
+}
+html body .jj-emerald-metallic > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Restore locked sq ft / sq m active sweep exactly as approved. */
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"],
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:hover,
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:focus-visible {
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 52%, #000000 100%) !important;
+  background-color: transparent !important;
+  transform: translateY(-1px) perspective(80px) rotateX(7deg) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -10px 16px rgba(0,0,0,0.48), inset 0 0 0 1px rgba(255,255,255,0.10), 0 8px 18px rgba(0,0,0,0.32) !important;
+}
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep,
+html body #root .jj-sqtoggle[data-active="true"] .jj-sqtoggle-sweep {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(115deg, rgba(6,78,59,0.00) 0%, rgba(4,44,28,0.42) 18%, rgba(255,255,255,0.88) 34%, rgba(6,78,59,0.80) 48%, rgba(255,255,255,0.92) 58%, rgba(4,44,28,0.46) 74%, rgba(6,78,59,0.00) 100%) !important;
+  background-size: 220% 100% !important;
+  background-repeat: no-repeat !important;
+  mix-blend-mode: screen !important;
+  opacity: 1 !important;
+  filter: none !important;
+  will-change: background-position !important;
+  animation: jj-sqtoggle-fast-3d-metal 1.15s linear infinite !important;
+}
+html body #root [data-jj-utility-bar] [data-jj-utility-pill] .jj-sqtoggle[data-active="true"]:active {
+  transform: translateY(1px) scale(0.965) perspective(80px) rotateX(-7deg) !important;
+}
+
+/* Absolute final filter contrast locks. Popovers are Radix-portalled outside
+   #root, so do not scope these to #root. */
+html body [data-filter-clean][data-filter-bar-gold] button,
+html body [data-filter-clean][data-filter-bar-gold] button *,
+html body [data-filter-clean][data-filter-bar-gold] [role="button"],
+html body [data-filter-clean][data-filter-bar-gold] [role="button"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body [data-filter-clean][data-filter-bar-gold] input,
+html body [data-filter-clean][data-filter-bar-gold] input * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"],
+html body [data-filter-dropdown="true"].text-white,
+html body [data-filter-dropdown="true"][data-surface] {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,div):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *):not([data-state="checked"]):not([data-state="checked"] *),
+html body [data-filter-dropdown="true"] :is(svg, [class*="lucide"], path):not(.jj-pill-emerald-metallic svg):not(.jj-pill-emerald-metallic svg *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+html body [data-filter-dropdown="true"] :is(.allow-white, .text-white, [class*="text-white"], h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,div):not(.jj-pill-emerald-metallic):not(.jj-pill-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] button.flex-1,
+html body [data-filter-dropdown="true"] button.flex-1 *,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Browser-reliable final dropdown contract: all popover copy is dark ink;
+   only actual emerald buttons/chips are reset to white below. */
+html body [data-filter-dropdown="true"] h1,
+html body [data-filter-dropdown="true"] h2,
+html body [data-filter-dropdown="true"] h3,
+html body [data-filter-dropdown="true"] h4,
+html body [data-filter-dropdown="true"] h5,
+html body [data-filter-dropdown="true"] h6,
+html body [data-filter-dropdown="true"] p,
+html body [data-filter-dropdown="true"] span,
+html body [data-filter-dropdown="true"] label,
+html body [data-filter-dropdown="true"] small,
+html body [data-filter-dropdown="true"] div {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+html body [data-filter-dropdown="true"] button.flex-1,
+html body [data-filter-dropdown="true"] button.flex-1 *,
+html body [data-filter-dropdown="true"] button.jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] button.jj-pill-emerald-metallic *,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic,
+html body [data-filter-dropdown="true"] .jj-pill-emerald-metallic * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
