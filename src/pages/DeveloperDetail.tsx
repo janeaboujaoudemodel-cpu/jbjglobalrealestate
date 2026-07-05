@@ -397,13 +397,29 @@ const DeveloperDetail = () => {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-premium-bg/70 via-transparent to-transparent" />
+        {/* Stronger 3-stop wash so hero copy always meets AA on any photo */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-transparent" />
         {/* Hero Title Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg">
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 allow-white" data-no-contrast-guard>
+          <h1
+            className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-center mb-4 tracking-tight allow-white"
+            style={{
+              color: '#F5E7BF',
+              backgroundImage: 'linear-gradient(180deg,#F5E7BF 0%,#E9CE86 55%,#B89555 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 2px 24px rgba(0,0,0,0.55)',
+              filter: 'drop-shadow(0 3px 10px rgba(0,0,0,0.55))',
+            }}
+          >
             {developer.name}
           </h1>
-          <p className="text-white/80 text-lg md:text-xl text-center max-w-2xl">
+          <p
+            className="text-lg md:text-xl text-center max-w-2xl allow-white font-medium"
+            style={{ color: '#FFFFFF', textShadow: '0 2px 10px rgba(0,0,0,0.75)' }}
+          >
             {(developer as any).tagline || `Discover premium developments by ${developer.name}`}
           </p>
         </div>
