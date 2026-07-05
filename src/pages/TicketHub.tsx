@@ -81,10 +81,10 @@ const PRIORITY_OPTIONS = [
   { value: "critical", label: "Critical", color: "bg-red-500/20 text-red-700" },
 ];
 
-const statusConfig: Record<string, { label: string; className: string; icon: typeof CheckCircle }> = {
-  open: { label: "Open", className: "bg-yellow-500/20 text-yellow-600", icon: AlertCircle },
-  in_progress: { label: "In Review", className: "bg-blue-500/20 text-blue-600", icon: Clock },
-  resolved: { label: "Resolved", className: "jj-surface-emerald-soft text-[color:var(--emerald-1)]", icon: CheckCircle },
+const statusConfig: Record<string, { label: string; className: string; bg: string; fg: string; border: string; icon: typeof CheckCircle }> = {
+  open: { label: "Open", className: "", bg: "#FEF3C7", fg: "#92400E", border: "#F59E0B", icon: AlertCircle },
+  in_progress: { label: "In Review", className: "", bg: "#DBEAFE", fg: "#1E40AF", border: "#3B82F6", icon: Clock },
+  resolved: { label: "Resolved", className: "", bg: "#D1FAE5", fg: "#065F46", border: "#10B981", icon: CheckCircle },
 };
 
 interface AttachmentFile {
