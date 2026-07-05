@@ -131,6 +131,8 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         zoomAnimation: true,
         zoomSnap: 0.5,
         wheelDebounceTime: 20,
+        fadeAnimation: false,
+        markerZoomAnimation: false,
       });
 
       mapInstanceRef.current = map;
