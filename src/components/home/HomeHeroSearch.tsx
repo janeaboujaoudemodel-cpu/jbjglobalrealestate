@@ -133,7 +133,7 @@ export default function HomeHeroSearch({ onBookConsultation }: HomeHeroSearchPro
             backgroundImage: "var(--jj-emerald-ombre)",
             border: "0",
             boxShadow:
-              "0 18px 40px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.25)",
+              "0 18px 40px rgba(0,0,0,0.36), inset 0 0 0 1px rgba(4,78,59,0.38), inset 0 -1px 0 rgba(0,0,0,0.25)",
           }}
         >
           {/* INPUT segment — transparent on emerald, white text + animated placeholder */}
