@@ -222,6 +222,7 @@ export const OwnerRoutes = () => (
     <Route path="hr/employee/:userId" element={<EmployeeProfile />} />
     <Route path="crm/leads/:id" element={<CRMLeadDetail />} />
     <Route path="crm/sync-errors" element={<CRMSyncDeadLetters />} />
+    <Route path="crm/sync-conflicts" element={<CRMSyncConflicts />} />
     <Route path="crm/leads" element={<Navigate to="/owner/crm?entity=leads&view=all" replace />} />
     <Route path="crm/tasks" element={<Navigate to="/owner/crm?entity=leads&view=tasks" replace />} />
     <Route path="crm/calendar" element={<Navigate to="/owner/crm?entity=leads&view=calendar" replace />} />
