@@ -415,8 +415,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Bottom group — pinned to card bottom so price rows align across
               every card regardless of content length above. */}
           <div className="mt-auto flex flex-col gap-3 pt-1">
-            {/* Thin gold hairline — separates description from bottom row */}
-            <div className="w-full border-t border-[#064E3B]/35" />
+            {/* Thin gold hairline — separates developer/description from bottom row */}
+            <div className="w-full border-t border-[#B89555]/70" />
 
             {/* Bottom row — price only. Handover lives beside EOI on the photo. */}
             <CardPricePaymentRow
