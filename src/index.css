@@ -9426,10 +9426,11 @@ html body [data-chrome="sidebar"] [data-sidebar-emerald] button[data-sidebar-sec
       rgba(255,255,255,0.00) 100%
     ),
     linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
-  background-size: 250% 100%, 100% 100% !important;
-  background-position: -50% 0, 0 0 !important;
+  background-size: 250% 100%, 100% 100%;
+  background-repeat: no-repeat, no-repeat;
   background-blend-mode: overlay, normal !important;
   animation: jj-metallic-sweep 4.5s ease-in-out infinite, jj-emerald-pulse 3.2s ease-in-out infinite !important;
+  will-change: background-position;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
