@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { Wallet } from "lucide-react";
 import { Calculator, TrendingUp, Calendar, Percent, DollarSign, Info, Building2, Search, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -563,15 +562,7 @@ const MortgageCalculator = ({
                 </Label>
                 <span className="text-[#1A1A1A] font-semibold">{formatCurrency(propertyPrice)}</span>
               </div>
-              <Input
-                type="text"
-                value={formatNumberWithCommas(propertyPrice)}
-                onChange={(e) => handlePriceChange(parseFormattedNumber(e.target.value))}
-                data-surface="emerald"
-                className="jj-emerald-action bg-[#064E3B] border border-[#B89555]/55 text-white focus:border-[#B89555]"
-              />
-
-              <div className="py-4">
+              <div className="pt-4 pb-4">
                 <MortgageRange value={propertyPrice} onChange={handlePriceChange} min={PROPERTY_PRICE_MIN} max={PROPERTY_PRICE_MAX} step={PROPERTY_PRICE_STEP} ariaLabel="Property Price" isNavy={isNavy} />
               </div>
               <div className="flex justify-between text-xs text-muted-foreground -mt-1">

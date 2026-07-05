@@ -128,7 +128,7 @@ const DirectContactCTA = ({
           {/* WhatsApp */}
           <a 
             href={getWhatsAppUrl()}
-            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[color:var(--emerald-1)]/30/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:-translate-y-1 hover:border-[color:var(--emerald-1)]/30"
+            className="jj-emerald-metallic jj-ready-cta-metallic flex items-center gap-3 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:-translate-y-1"
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 jj-surface-emerald-soft rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-[color:var(--emerald-1)]/30/50 flex-shrink-0">
               <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-[color:var(--emerald-1)]" />
@@ -144,7 +144,7 @@ const DirectContactCTA = ({
           {/* Call Us */}
           <a 
             href={getCallUrl()}
-            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-blue-500/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(184,149,85,0.4)] hover:-translate-y-1 hover:border-blue-500"
+            className="jj-emerald-metallic jj-ready-cta-metallic flex items-center gap-3 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:-translate-y-1"
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-500/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-blue-500/50 flex-shrink-0">
               <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
@@ -160,7 +160,7 @@ const DirectContactCTA = ({
           {/* Email Us */}
           <a 
             href={`mailto:${CONTACT_INFO.email}`}
-            className="flex items-center gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:shadow-[0_8px_25px_rgba(200,167,102,0.4)] hover:-translate-y-1 hover:border-[#B89555]"
+            className="jj-emerald-metallic jj-ready-cta-metallic flex items-center gap-3 rounded-xl p-3 sm:p-5 transition-all duration-300 group hover:-translate-y-1"
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gold/30 to-handover/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-[#B89555]/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] flex-shrink-0">
               <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-[#1A1A1A] drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
