@@ -24,7 +24,7 @@ interface DeveloperLogoProps {
 // their largest fitting size and are NEVER cropped.
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
-  "rounded-lg bg-[#FDFBF7] border border-[#064E3B]/45 " +
+  "rounded-lg bg-[#FDFBF7] border border-[#B89555]/80 " +
   "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[4px]";
 
 
