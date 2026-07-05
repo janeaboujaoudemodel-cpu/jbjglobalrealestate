@@ -95,6 +95,7 @@ export default function RecommendedDevelopers({
     },
   });
 
+  return (
     <section
       className="py-14 jj-band"
       style={{
