@@ -139,15 +139,14 @@ export default function BookMeetingLanding() {
     if (!token) return;
     (async () => {
       const { data } = await (supabase as any)
-        .from("meeting_booking_tokens")
-        .select("contact_name, contact_email, contact_company, default_language, default_location_type")
-        .eq("token", token).maybeSingle();
-      if (data) {
-        if (data.contact_name) setFullName(data.contact_name);
-        if (data.contact_email) setEmail(data.contact_email);
-        if (data.contact_company) setCompany(data.contact_company);
-        if (data.default_language) setLanguage(data.default_language);
-        if (data.default_location_type) setLocationType(data.default_location_type);
+        .rpc("get_booking_token", { _token: token });
+      const row = Array.isArray(data) ? data[0] : data;
+      if (row) {
+        if (row.contact_name) setFullName(row.contact_name);
+        if (row.contact_email) setEmail(row.contact_email);
+        if (row.contact_company) setCompany(row.contact_company);
+        if (row.default_language) setLanguage(row.default_language);
+        if (row.default_location_type) setLocationType(row.default_location_type);
       }
     })();
   }, [token]);
