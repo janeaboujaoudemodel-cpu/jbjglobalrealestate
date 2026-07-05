@@ -675,9 +675,24 @@ const TicketHub = () => {
                                 <button key={ticket.id} onClick={() => handleSelectTicket(ticket.id)}
                                   className={cn("w-full p-4 text-left hover:bg-[#EFE6D6]/5 transition-colors",
                                     selectedTicket?.id === ticket.id && "bg-[#EFE6D6]/10 border-l-4 border-l-gold")}>
-                                  <div className="flex items-center gap-2 mb-1">
+                                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                                     <span className="font-mono text-[#1A1A1A] font-semibold text-sm">{ticket.ticket_number}</span>
-                                    <Badge className={cn("text-xs", status.className)}><StatusIcon className="w-3 h-3 mr-1" />{status.label}</Badge>
+                                    <span
+                                      data-ticket-status-pill
+                                      className="inline-flex items-center gap-1 rounded-full text-[11px] font-semibold px-2.5 py-0.5 border"
+                                      style={{
+                                        background: status.bg,
+                                        color: status.fg,
+                                        borderColor: status.border,
+                                        whiteSpace: 'nowrap',
+                                        wordBreak: 'keep-all',
+                                        overflowWrap: 'normal',
+                                        flexShrink: 0,
+                                      }}
+                                    >
+                                      <StatusIcon className="w-3 h-3" style={{ color: status.fg, stroke: status.fg, flexShrink: 0 }} />
+                                      <span style={{ whiteSpace: 'nowrap', color: status.fg }}>{status.label}</span>
+                                    </span>
                                   </div>
                                   <p className="text-foreground font-medium truncate text-sm">{ticket.subject}</p>
                                   <p className="text-muted-foreground text-xs mt-1">{format(new Date(ticket.created_at), "MMM d, yyyy")}</p>
