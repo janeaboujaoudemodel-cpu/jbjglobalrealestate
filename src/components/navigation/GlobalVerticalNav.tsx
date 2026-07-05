@@ -1376,20 +1376,20 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 onClick={() => { supabase.auth.signOut(); }}
                 title="Sign Out"
                 aria-label="Sign Out"
-                className="flex flex-row items-center justify-center gap-1 text-[11.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
+                className="flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
                 style={{ color: '#FFFFFF', borderColor: '#B91C1C', backgroundColor: '#DC2626', boxShadow: '0 4px 12px -4px rgba(220,38,38,0.45), inset 0 1px 0 rgba(255,255,255,0.15)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#B91C1C'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#DC2626'; }}
               >
                 <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 !text-white allow-white shrink-0" color="#FFFFFF" stroke="#FFFFFF" strokeWidth={2.4} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span data-signout-label className="allow-white !text-white whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>{"Sign\u00A0Out"}</span>
+                <span data-signout-label className="allow-white !text-white whitespace-nowrap" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', whiteSpace: 'nowrap', overflowWrap: 'normal', wordBreak: 'keep-all' }}>Sign Out</span>
               </button>
             ) : (
               <Link
                 to="/auth"
                 data-no-contrast-guard
                 data-on-dark
-                className="allow-white flex flex-row items-center justify-center gap-1 text-[11.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2"
+                className="allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2"
                 style={{ color: '#FFFFFF', borderColor: '#064E3B', backgroundColor: '#064E3B', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.10)' }}
               >
                 <User className="allow-white w-4 h-4 shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -1404,7 +1404,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
               data-allow-dark-cta
               onClick={toggleCollapse}
               aria-label="Collapse navigation"
-              className="allow-white group flex flex-row items-center justify-center gap-1 text-[11.5px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
+              className="allow-white group flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
               style={{
                 color: '#FFFFFF',
                 background: '#064E3B',

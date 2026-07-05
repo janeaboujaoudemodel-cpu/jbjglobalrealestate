@@ -31130,3 +31130,5 @@ html body [data-sidebar-collapse-control] > span * {
   text-overflow: clip !important;
   max-width: none !important;
 }
+
+html body [data-signout-label] { display: inline-block !important; width: auto !important; flex: 0 0 auto !important; }
