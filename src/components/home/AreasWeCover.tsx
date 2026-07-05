@@ -49,14 +49,14 @@ const AreasWeCover = () => {
   return (
     <section id="top-areas-dubai" className="py-12 md:py-20">
       <ContentTrack>
-        <div className="relative w-full mx-auto rounded-[28px] bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] p-6 md:p-10 lg:p-12 border border-white/18 shadow-[0_24px_70px_-32px_rgba(0,0,0,0.62)]">
-          <span aria-hidden className="pointer-events-none absolute top-0 left-0 h-12 w-12 border-t border-l border-white/24 rounded-tl-[28px]" />
-          <span aria-hidden className="pointer-events-none absolute top-0 right-0 h-12 w-12 border-t border-r border-white/24 rounded-tr-[28px]" />
-          <span aria-hidden className="pointer-events-none absolute bottom-0 left-0 h-12 w-12 border-b border-l border-white/24 rounded-bl-[28px]" />
-          <span aria-hidden className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r border-white/24 rounded-br-[28px]" />
+        <div className="jj-home-area-panel relative w-full mx-auto rounded-[28px] p-6 md:p-10 lg:p-12">
+          <span aria-hidden className="jj-home-area-corner pointer-events-none absolute top-0 left-0 h-12 w-12 border-t border-l rounded-tl-[28px]" />
+          <span aria-hidden className="jj-home-area-corner pointer-events-none absolute top-0 right-0 h-12 w-12 border-t border-r rounded-tr-[28px]" />
+          <span aria-hidden className="jj-home-area-corner pointer-events-none absolute bottom-0 left-0 h-12 w-12 border-b border-l rounded-bl-[28px]" />
+          <span aria-hidden className="jj-home-area-corner pointer-events-none absolute bottom-0 right-0 h-12 w-12 border-b border-r rounded-br-[28px]" />
 
           <div className="relative text-center mb-8 md:mb-10">
-            <h2 data-no-contrast-guard className="allow-white text-white text-2xl md:text-4xl font-bold tracking-tight">
+            <h2 data-no-contrast-guard className="text-[#1A1A1A] text-2xl md:text-4xl font-bold tracking-tight">
               {t("areas.topTitle", "Top Areas in Dubai")}
             </h2>
           </div>
@@ -69,7 +69,7 @@ const AreasWeCover = () => {
             <Link
               key={area.slug}
               to={`/area/${area.slug}`}
-              className="group relative block h-[240px] md:h-[260px] rounded-2xl overflow-hidden border border-white/18 bg-[#042C1C] transform-gpu will-change-transform transition-shadow duration-300 hover:shadow-[0_18px_40px_rgba(0,0,0,0.30)]"
+              className="jj-home-area-card group relative block h-[240px] md:h-[260px] rounded-2xl overflow-hidden transform-gpu will-change-transform transition-shadow duration-300"
               style={{ contain: "layout paint" }}
             >
               {area.imageUrl ? (
@@ -109,13 +109,13 @@ const AreasWeCover = () => {
               </div>
 
 
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md border-t border-white/18 px-4 py-3">
+              <div className="jj-home-area-caption absolute bottom-0 left-0 right-0 px-4 py-3">
                 <div className="flex items-end justify-between gap-3">
                   <div className="min-w-0">
-                    <h3 data-no-contrast-guard className="allow-white text-white font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
+                    <h3 data-no-contrast-guard className="text-[#1A1A1A] font-extrabold text-lg md:text-xl leading-tight tracking-tight truncate">
                       {area.name}
                     </h3>
-                    <p className="allow-white mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white">
+                    <p data-no-contrast-guard className="mt-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[#1A1A1A]">
                       {(area.propertyCount ?? 0).toLocaleString()} {(area.propertyCount ?? 0) === 1 ? "project" : "projects"} available
                     </p>
                   </div>
@@ -148,6 +148,7 @@ const AreasWeCover = () => {
             to="/areas"
             size="md"
             variant="secondary"
+            className="jj-explore-all-areas-button"
             leadingIcon={<Compass strokeWidth={2.2} />}
             trailingIcon={<ArrowRight strokeWidth={2.2} />}
           >

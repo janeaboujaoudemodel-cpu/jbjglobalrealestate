@@ -16,6 +16,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { useAreas, useEmiratesWithAreas, Area } from "@/hooks/useAreas";
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 import ContinueSearching from "@/components/ContinueSearching";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -569,24 +570,10 @@ const AreaGuides = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
-        <div className="px-4 text-center">
-          <h2 className="allow-white text-2xl md:text-3xl font-bold text-white mb-4">
-            Can't Find What You're Looking For?
-          </h2>
-          <p className="allow-white text-white mb-6 max-w-xl mx-auto">
-            Our team can help you discover the perfect area based on your lifestyle and investment goals.
-          </p>
-          <Link
-            to="/contact"
-            className="allow-white jj-pill-emerald-metallic inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-xl border-0 transition-all"
-          >
-            Contact Our Team
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
+      <CombinedContactNewsletter
+        title="Need Help Choosing an Area?"
+        subtitle="Tell our team what lifestyle, budget, and investment goals matter most, and we will shortlist the right communities."
+      />
 
       {/* Continue Searching - Recently viewed areas */}
       <ContinueSearching type="area" />

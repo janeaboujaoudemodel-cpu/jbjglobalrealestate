@@ -48,6 +48,9 @@ const pruneRuleList = (owner: any): number => {
 };
 
 export const installInteractionCssPruner = () => {
+  // Disabled: delayed stylesheet mutation caused visible contrast flips after page load.
+  // The final CSS locks now own interaction/contrast deterministically from first paint.
+  return;
   if (typeof document === "undefined") return;
   const win = window as unknown as { __JBJ_CSS_PRUNER_INSTALLED__?: boolean; __JBJ_CSS_PRUNED__?: number };
   if (win.__JBJ_CSS_PRUNER_INSTALLED__) return;
