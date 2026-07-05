@@ -597,8 +597,17 @@ const DeveloperDetail = () => {
           {/* Sentinel for IntersectionObserver */}
           <div ref={filterSentinelRef} className="h-0" />
 
-          {/* Inline filter bar — 2 rows only */}
-          <div data-filter-clean="true" className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-black border border-white/12 rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide">
+          {/* Inline filter bar — gold champagne surface, white pill text/icons via scoped override */}
+          <div
+            data-filter-clean="true"
+            data-filter-bar-gold=""
+            className="rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide"
+            style={{
+              background: 'linear-gradient(135deg,#F7EAC4 0%,#E9D194 45%,#C7A55C 100%)',
+              border: '1px solid rgba(184,149,85,0.7)',
+              boxShadow: '0 8px 24px -12px rgba(184,149,85,0.35)',
+            }}
+          >
             <FilterShortcutBar
               variant="dark"
               filters={shortcutFilters}
