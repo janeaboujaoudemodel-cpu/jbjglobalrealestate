@@ -30977,8 +30977,8 @@ html body :is(.jj-emerald-card, .jj-surface-emerald, .jj-emerald-metallic, .jj-p
   opacity: 1 !important;
 }
 
-html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-chip)::before,
-html body :is(.jj-emerald-metallic, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-chip)::after {
+html body :is(.jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-chip)::before,
+html body :is(.jj-pill-emerald, .jj-pill-emerald-metallic, .jj-emerald-chip)::after {
   content: none !important;
   display: none !important;
   animation: none !important;
