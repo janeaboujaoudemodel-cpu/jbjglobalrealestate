@@ -125,15 +125,19 @@ export default function RecommendedDevelopers({
           {/* Developer Cards Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {recommended.map((dev: any, index: number) => {
-              // Fallback chain: feature image → logo → ammar hero. Never render
-              // a low-quality mini-logo as the featured card image.
+              // Prefer a real project cover image. Never use the developer
+              // logo/wordmark as the card hero — that's what produced the
+              // "DPF" text placeholder on DAMAC.
               const looksLikeLogoUrl = (url?: string | null) => {
                 if (!url) return false;
-                return /logo|nameplate|thumb|icon|placeholder/i.test(url);
+                return /logo|nameplate|thumb|icon|placeholder|wordmark/i.test(url);
               };
-              const cardImage = dev.feature_image_url && !looksLikeLogoUrl(dev.feature_image_url)
-                ? getHighResImageUrl(dev.feature_image_url)
-                : (dev.logo_url ? getHighResImageUrl(dev.logo_url) : ammarCreekHarbourMasterplan);
+              const projectCover = projectImageByDev?.[dev.id];
+              const rawImage =
+                (projectCover && !looksLikeLogoUrl(projectCover) && projectCover) ||
+                (dev.feature_image_url && !looksLikeLogoUrl(dev.feature_image_url) && dev.feature_image_url) ||
+                null;
+              const cardImage = rawImage ? getHighResImageUrl(rawImage) : ammarCreekHarbourMasterplan;
               return (
               <motion.div
                 key={dev.slug}
