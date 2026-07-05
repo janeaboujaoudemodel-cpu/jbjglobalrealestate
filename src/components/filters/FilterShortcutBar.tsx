@@ -646,7 +646,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     <button
                       key={q}
                       onClick={() => update({ handoverFrom: { ...filters.handoverFrom, quarter: q } })}
-                    data-filter-selected={filters.statuses.includes(opt.value) ? "true" : undefined}
+                      data-filter-selected={filters.handoverFrom.quarter === q ? "true" : undefined}
                     className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
