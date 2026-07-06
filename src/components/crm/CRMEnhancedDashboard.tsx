@@ -214,36 +214,37 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
   return (
     <div className="space-y-6">
       {/* Primary Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 overflow-hidden">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {primaryCards.map((card, index) => (
           <Card key={index} className="overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-[#1A1A1A]/70 truncate">
+            <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2 space-y-0">
+              <CardTitle className="text-[11px] md:text-xs font-semibold uppercase tracking-wide text-[#1A1A1A]/70 leading-snug min-h-[32px] flex items-center">
                 {card.title}
               </CardTitle>
               <IconTile icon={card.icon} tone="emerald" size="md" />
             </CardHeader>
-            <CardContent>
-              <div className="flex items-end justify-between">
+            <CardContent className="pt-0">
+              <div className="flex items-end justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <div className="text-xl md:text-2xl font-bold text-[#1A1A1A] truncate">
-                    {loading ? "..." : card.value}
+                  <div className="text-2xl md:text-3xl font-bold text-[#1A1A1A] leading-none truncate">
+                    {loading ? "…" : card.value}
                   </div>
-                  <p className="text-xs text-[#1A1A1A]/70 mt-1 truncate">
+                  <p className="text-[11px] md:text-xs text-[#1A1A1A]/70 mt-2 truncate">
                     {loading ? "" : card.subValue}
                   </p>
                 </div>
                 {card.trend === "up" && (
-                  <ArrowUpRight className="h-5 w-5 text-[#064E3B]" />
+                  <ArrowUpRight className="h-4 w-4 text-[#064E3B] flex-shrink-0" />
                 )}
                 {card.trend === "down" && (
-                  <ArrowDownRight className="h-5 w-5 text-[#064E3B]" />
+                  <ArrowDownRight className="h-4 w-4 text-[#064E3B] flex-shrink-0" />
                 )}
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

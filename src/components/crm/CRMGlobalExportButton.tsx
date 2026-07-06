@@ -118,11 +118,15 @@ export default function CRMGlobalExportButton() {
       <button
         type="button"
         onClick={() => setPickerOpen(true)}
-        className="shrink-0 inline-flex h-10 items-center gap-2 px-3 rounded-xl text-xs font-semibold border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6] transition-colors"
+        data-surface="emerald"
+        data-emerald-action="true"
+        className="jj-cta-emerald allow-white shrink-0 inline-flex h-10 items-center gap-2 px-3.5 rounded-xl text-xs font-semibold text-white hover:text-white border border-white/20 shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)]"
+        style={{ color: "#FFFFFF" }}
       >
-        <Download className="h-3.5 w-3.5" />
-        Export
+        <Download className="allow-white h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Export</span>
       </button>
+
 
       <Dialog open={pickerOpen} onOpenChange={setPickerOpen}>
         <DialogContent className="bg-[#FDFBF7] border-[#B89555]/30 max-w-lg">

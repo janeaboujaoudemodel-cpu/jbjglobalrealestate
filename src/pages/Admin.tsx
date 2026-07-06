@@ -100,7 +100,7 @@ const Admin = () => {
               <kbd className="ml-auto px-1.5 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] text-[10px] rounded font-mono flex-shrink-0">⌘K</kbd>
             </button>
           </div>
-          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0 pl-2 border-l border-[#B89555]/30">
             <AdminNotificationBell />
             <Link to="/owner/marketing-hub">
               <Button size="sm" data-emerald-action="true" data-surface="emerald" className="jj-cta-emerald font-semibold shadow-[0_12px_24px_-18px_rgba(6,78,59,0.85)]">
@@ -109,21 +109,22 @@ const Admin = () => {
                 <span className="xl:hidden">Marketing</span>
               </Button>
             </Link>
-            <Button variant="secondary" size="sm" onClick={() => h.navigate("/")}>
+            <Button variant="secondary" size="sm" onClick={() => h.navigate("/")} className="border border-[#B89555]/40">
               <Home className="w-3.5 h-3.5 mr-1.5" /><span className="hidden md:inline">View Site</span>
             </Button>
-            <Button variant="secondary" size="sm" onClick={h.handleSignOut}>
+            <Button variant="secondary" size="sm" onClick={h.handleSignOut} className="border border-[#B89555]/40">
               <LogOut className="w-3.5 h-3.5 mr-1.5" /><span className="hidden md:inline">Sign Out</span>
             </Button>
           </div>
+
         </div>
       </header>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 pb-24">
         <Tabs value={h.activeTab} onValueChange={h.setActiveTab} className="space-y-6">
-          <div className="w-full jj-scrollbar-gold-x">
-            <TabsList className="w-max min-w-full justify-start bg-[#FDFBF7]/80 border-2 border-[#B89555]/30 p-1">
+          <div className="w-full rounded-2xl border-2 border-[#B89555]/30 bg-[#FDFBF7]/80 p-2 md:p-3 shadow-sm">
+            <TabsList className="grid gap-1.5 bg-transparent p-0 h-auto grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 w-full">
               {[
                 { value: "overview", icon: LayoutDashboard, label: "Overview" },
                 { value: "ai-assistant", icon: Bot, label: "Admin Assistant" },
@@ -138,13 +139,13 @@ const Admin = () => {
                 { value: "pwa-analytics", icon: Smartphone, label: "PWA Analytics" },
                 { value: "visitor-insights", icon: Activity, label: "Visitors" },
                 { value: "hr-hub", icon: UserCog, label: "HR Hub" },
-                { value: "it-department", icon: Monitor, label: "IT Department" },
+                { value: "it-department", icon: Monitor, label: "IT Dept." },
                 { value: "employee-hub", icon: Briefcase, label: "Employee Hub" },
-                { value: "inquiries-hub", icon: Ticket, label: "Inquiries Hub" },
-                { value: "auth-test", icon: Shield, label: "Authentication Test" },
-                { value: "customer-happiness", icon: Heart, label: "Customer Happiness Hub" },
-                { value: "podcast-studio", icon: Mic, label: "Podcast Studio" },
-                { value: "intelligence", icon: Brain, label: "User Intelligence" },
+                { value: "inquiries-hub", icon: Ticket, label: "Inquiries" },
+                { value: "auth-test", icon: Shield, label: "Auth Test" },
+                { value: "customer-happiness", icon: Heart, label: "Happiness" },
+                { value: "podcast-studio", icon: Mic, label: "Podcast" },
+                { value: "intelligence", icon: Brain, label: "Intelligence" },
                 { value: "founder", icon: Crown, label: "Founder" },
                 { value: "partnerships", icon: Handshake, label: "Partnerships" },
                 { value: "book-hub", icon: BookOpen, label: "Book Hub" },
@@ -157,17 +158,19 @@ const Admin = () => {
                   data-admin-tab-trigger
                   data-owner-admin-tab-active={active ? "true" : undefined}
                   data-surface={active ? "emerald" : "champagne"}
-                  className="text-[#1A1A1A] data-[state=active]:!text-white [&[data-state=active]_*]:!text-white"
+                  className="w-full min-h-[44px] justify-start rounded-lg px-2.5 py-2 text-xs md:text-sm font-medium text-[#1A1A1A] border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] data-[state=active]:!text-white data-[state=active]:!border-white/20 data-[state=active]:shadow-[0_8px_20px_-14px_rgba(6,78,59,0.75)] [&[data-state=active]_*]:!text-white"
                 >
                   <tab.icon
-                    className="w-4 h-4 mr-2 data-[state=active]:!text-white"
+                    className="w-4 h-4 mr-2 flex-shrink-0 data-[state=active]:!text-white"
                     style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
                   />
-                  <span style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{tab.label}</span>
+                  <span className="truncate" style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{tab.label}</span>
                 </TabsTrigger>
               );})}
             </TabsList>
           </div>
+
+
 
           {/* Simple tab content mapping */}
           {[

@@ -33424,3 +33424,34 @@ html body #root [data-project-payment-tabs] [role="tab"][data-state="active"] :i
   stroke: #FFFFFF !important;
 }
 
+
+/* PASS 214 — Batch E lock: property-map price markers and Buy/Off-Plan filter
+   rail pills always render pure white content, regardless of upstream ink
+   guards or component overrides. */
+html body #root .jj-map-price-marker,
+html body #root .jj-map-price-marker *,
+html body #root .leaflet-container .custom-marker,
+html body #root .leaflet-container .custom-marker * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important;
+}
+
+html body #root [data-filter-clean="true"] .jj-filter-rail button,
+html body #root [data-filter-clean="true"] .jj-filter-rail button *,
+html body #root [data-filter-clean="true"] .jj-filter-rail button :is(svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Payments/Handover/etc dropdown panels stay on champagne with ink text
+   (the user asked for black text on champagne inside the emerald filter). */
+html body #root [data-radix-popper-content-wrapper] [data-filter-menu="true"],
+html body #root [data-radix-popper-content-wrapper] [data-filter-menu="true"] :where(h1,h2,h3,h4,h5,p,span,label,li,small,strong,em,b,i,td,th,dt,dd) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}

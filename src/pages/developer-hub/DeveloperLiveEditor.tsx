@@ -335,26 +335,40 @@ const DeveloperLiveEditor = () => {
                     ) : (
                       <>
                         {p.is_published ? (
-                          <Button size="sm" variant="outline" onClick={() => togglePublish(p, false)}
-                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
-                            <XCircle className="w-3.5 h-3.5 mr-1" /> Unpublish
+                          <Button size="sm" onClick={() => togglePublish(p, false)}
+                            data-surface="emerald" data-emerald-action="true"
+                            className="jj-cta-emerald allow-white text-white hover:text-white border border-white/20"
+                            style={{ color: "#FFFFFF" }}>
+                            <XCircle className="allow-white w-3.5 h-3.5 mr-1" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Unpublish</span>
                           </Button>
                         ) : (
                           <Button size="sm" onClick={() => togglePublish(p, true)}
-                            data-surface="emerald" data-emerald-ok="button"
-                            className="jj-surface-emerald allow-white text-white">
-                            <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Publish
+                            data-surface="emerald" data-emerald-action="true"
+                            className="jj-cta-emerald allow-white text-white hover:text-white border border-white/20"
+                            style={{ color: "#FFFFFF" }}>
+                            <CheckCircle2 className="allow-white w-3.5 h-3.5 mr-1" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Publish</span>
                           </Button>
                         )}
-                        <Button size="sm" variant="outline" onClick={() => setEditing(p.id)} className="border-[#B89555]/40 text-[#1A1A1A]">
-                          <Edit3 className="w-3.5 h-3.5 mr-1" /> Edit
+                        <Button size="sm" onClick={() => setEditing(p.id)}
+                          data-surface="emerald" data-emerald-action="true"
+                          className="jj-cta-emerald allow-white text-white hover:text-white border border-white/20"
+                          style={{ color: "#FFFFFF" }}>
+                          <Edit3 className="allow-white w-3.5 h-3.5 mr-1" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                          <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Edit</span>
                         </Button>
                         {p.is_published && p.slug && (
-                          <Button size="sm" variant="ghost" onClick={() => window.open(`/projects/${p.slug}`, "_blank")} className="text-[#1A1A1A]">
-                            <ExternalLink className="w-3.5 h-3.5 mr-1" /> View
+                          <Button size="sm" onClick={() => window.open(`/projects/${p.slug}`, "_blank")}
+                            data-surface="emerald" data-emerald-action="true"
+                            className="jj-cta-emerald allow-white text-white hover:text-white border border-white/20"
+                            style={{ color: "#FFFFFF" }}>
+                            <ExternalLink className="allow-white w-3.5 h-3.5 mr-1" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View</span>
                           </Button>
                         )}
                       </>
+
                     )}
                   </div>
                 </div>
