@@ -74,18 +74,24 @@ export function FormDraftBar({
           type="button"
           onClick={onReset}
           data-no-contrast-guard
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-transparent border border-red-500/40 text-red-600 hover:bg-red-500/10 transition-colors rounded-md"
-          style={{ color: "#DC2626", WebkitTextFillColor: "#DC2626" }}
+          data-on-dark
+          data-allow-dark-cta
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#B91C1C] hover:bg-[#991B1B] transition-colors rounded-md"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
-          <RotateCcw className="w-3.5 h-3.5" style={{ color: "#DC2626" }} /> <span style={{ color: "#DC2626", WebkitTextFillColor: "#DC2626" }}>Reset</span>
+          <RotateCcw className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} /> <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Reset</span>
         </button>
         {onNew && (
           <button
             type="button"
             onClick={onNew}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border transition-colors ${t.newBtn}`}
+            data-no-contrast-guard
+            data-on-dark
+            data-allow-dark-cta
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#064E3B] hover:bg-[#042C1C] transition-colors rounded-md"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <FilePlus className="w-3.5 h-3.5" /> New
+            <FilePlus className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} /> <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>New</span>
           </button>
         )}
       </div>
