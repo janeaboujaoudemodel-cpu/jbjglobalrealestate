@@ -127,21 +127,25 @@ export default function IntegrationWidgets() {
         
         <div className="space-y-3">
           <Button 
-            variant="outline" 
-            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
+            variant="primary"
+            data-surface="emerald"
+            data-cta="primary"
+            className="allow-white w-full justify-start gap-3 h-11 text-white hover:text-white"
             onClick={() => navigate('/owner/crm?entity=leads&view=tasks&action=new')}
           >
-            <Plus className="h-4 w-4 text-[#064E3B]" />
-            <span className="text-sm">Add Quick Task</span>
+            <Plus className="allow-white h-4 w-4 text-white" strokeWidth={2.2} />
+            <span className="allow-white text-sm text-white">Add Quick Task</span>
           </Button>
           
           <Button 
-            variant="outline" 
-            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-[#1A1A1A]"
+            variant="primary"
+            data-surface="emerald"
+            data-cta="primary"
+            className="allow-white w-full justify-start gap-3 h-11 text-white hover:text-white"
             onClick={() => navigate('/owner/crm?entity=leads&view=notes&action=new')}
           >
-            <FileText className="h-4 w-4 text-[#064E3B]" />
-            <span className="text-sm">Add Quick Note</span>
+            <FileText className="allow-white h-4 w-4 text-white" strokeWidth={2.2} />
+            <span className="allow-white text-sm text-white">Add Quick Note</span>
           </Button>
 
           <div 
