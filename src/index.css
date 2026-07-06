@@ -32764,3 +32764,125 @@ html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald
   -webkit-appearance: none !important;
   flex: 0 0 1px !important;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PASS 210 — OWNER BACKEND EMERALD WHITE-INK ENFORCEMENT (FINAL LOCK)
+
+   Fixes reported cases where owner-dashboard cards, pills, buttons, tabs
+   and status chips rendered dark text on the emerald ombre gradient
+   (Active Leads, Test Email/Test Chat, Refresh, JBJ CRM top filter pills,
+   status pills, Access Requests tabs, Missing Logos upload buttons,
+   Featured Projects header CTAs, Admin Assistant metric cards, etc.).
+
+   Strategy: force WHITE foreground on every descendant of any recognizable
+   emerald surface — [data-surface="emerald"], .jj-cta-emerald,
+   .jj-emerald-metallic, .jj-pill-emerald-metallic — regardless of the
+   tailwind text-* / bg-* class the component author used.
+
+   Also fixes the reported dot-overflow on active pills by clamping the
+   status dot inside the pill radius.
+   ───────────────────────────────────────────────────────────────────────── */
+
+html body :is(
+  [data-surface="emerald"],
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  [data-ink-emerald],
+  [data-hero-dark]
+):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
+  color: #FFFFFF !important;
+}
+
+html body :is(
+  [data-surface="emerald"],
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  [data-ink-emerald],
+  [data-hero-dark]
+):not([data-ink-emerald-opt-out])
+  :is(h1, h2, h3, h4, h5, h6, p, span, a, button, label, li, dt, dd, small, strong, em, code, kbd) {
+  color: #FFFFFF !important;
+}
+
+html body :is(
+  [data-surface="emerald"],
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  [data-ink-emerald],
+  [data-hero-dark]
+):not([data-ink-emerald-opt-out]) svg,
+html body :is(
+  [data-surface="emerald"],
+  .jj-cta-emerald,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  [data-ink-emerald],
+  [data-hero-dark]
+):not([data-ink-emerald-opt-out]) svg *:not([data-preserve-fill]) {
+  color: #FFFFFF !important;
+  stroke: currentColor;
+}
+
+/* Neutralize any hardcoded dark text util that landed inside an emerald surface */
+html body :is([data-surface="emerald"], .jj-cta-emerald, .jj-emerald-metallic, .jj-pill-emerald-metallic, [data-ink-emerald], [data-hero-dark]):not([data-ink-emerald-opt-out])
+  :is(.text-black, .text-\[\#1A1A1A\], .text-\[\#0A0A0A\], .text-neutral-900, .text-neutral-800, .text-slate-900, .text-slate-800, .text-emerald-900, .text-emerald-800, .text-emerald-700, .text-gray-900, .text-gray-800, .text-\[\#B89555\], .text-amber-600, .text-yellow-600) {
+  color: #FFFFFF !important;
+}
+
+/* Never render gold text on emerald (restricted brand combo) */
+html body :is([data-surface="emerald"], .jj-cta-emerald, .jj-emerald-metallic, .jj-pill-emerald-metallic, [data-ink-emerald], [data-hero-dark]):not([data-ink-emerald-opt-out])
+  [style*="B89555"],
+html body :is([data-surface="emerald"], .jj-cta-emerald, .jj-emerald-metallic, .jj-pill-emerald-metallic, [data-ink-emerald], [data-hero-dark]):not([data-ink-emerald-opt-out])
+  [style*="184, 149, 85"] {
+  color: #FFFFFF !important;
+}
+
+/* Owner backend: any emerald-bg tailwind chip must render white */
+html body :where(.bg-\[\#064E3B\], .bg-\[\#042c1c\], .bg-emerald-900, .bg-emerald-800, .bg-emerald-700):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *),
+html body :where(.bg-\[\#064E3B\], .bg-\[\#042c1c\], .bg-emerald-900, .bg-emerald-800, .bg-emerald-700):not([data-ink-emerald-opt-out]) * {
+  color: #FFFFFF !important;
+}
+html body :where(.bg-\[\#064E3B\], .bg-\[\#042c1c\], .bg-emerald-900, .bg-emerald-800, .bg-emerald-700):not([data-ink-emerald-opt-out]) svg {
+  color: #FFFFFF !important;
+  stroke: currentColor;
+}
+
+/* Fix reported "dot leaking out of pill" — clamp status dots inside pill radius */
+html body .jj-pill-active > .dot,
+html body [data-active="true"].jj-pill > .dot,
+html body [role="tab"][data-state="active"] > .dot,
+html body [role="tab"] > .status-dot,
+html body .status-dot,
+html body [data-status-dot] {
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  margin: 0 6px 0 0 !important;
+  flex: 0 0 auto !important;
+}
+
+/* PASS 210b — vertical Search text fix in owner header search shell.
+   The owner header search wrapper was collapsing to min-content and forcing
+   the "Search…" placeholder to render one letter per line. Force a sane min
+   width so the input stays horizontal on every viewport. */
+html body [data-owner-search],
+html body .owner-search-shell,
+html body [data-header-search] {
+  min-width: 240px !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  writing-mode: horizontal-tb !important;
+}
+html body [data-owner-search] input,
+html body .owner-search-shell input,
+html body [data-header-search] input {
+  writing-mode: horizontal-tb !important;
+  white-space: nowrap !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}

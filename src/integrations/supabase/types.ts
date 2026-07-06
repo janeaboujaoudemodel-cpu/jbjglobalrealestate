@@ -18615,35 +18615,86 @@ export type Database = {
           },
         ]
       }
+      home_featured_manual_projects: {
+        Row: {
+          community: string | null
+          created_at: string
+          created_by: string | null
+          cta_url: string | null
+          developer_name: string | null
+          emirate: string | null
+          hero_image_url: string | null
+          id: string
+          owner_details: string | null
+          starting_price: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          community?: string | null
+          created_at?: string
+          created_by?: string | null
+          cta_url?: string | null
+          developer_name?: string | null
+          emirate?: string | null
+          hero_image_url?: string | null
+          id?: string
+          owner_details?: string | null
+          starting_price?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          community?: string | null
+          created_at?: string
+          created_by?: string | null
+          cta_url?: string | null
+          developer_name?: string | null
+          emirate?: string | null
+          hero_image_url?: string | null
+          id?: string
+          owner_details?: string | null
+          starting_price?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       home_featured_projects: {
         Row: {
           created_at: string
           created_by: string | null
+          device: string
           display_order: number
           id: string
           is_visible: boolean
+          manual_project_id: string | null
           owner_details: string | null
-          project_id: string
+          project_id: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           created_by?: string | null
+          device?: string
           display_order?: number
           id?: string
           is_visible?: boolean
+          manual_project_id?: string | null
           owner_details?: string | null
-          project_id: string
+          project_id?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           created_by?: string | null
+          device?: string
           display_order?: number
           id?: string
           is_visible?: boolean
+          manual_project_id?: string | null
           owner_details?: string | null
-          project_id?: string
+          project_id?: string | null
           updated_at?: string
         }
         Relationships: [
