@@ -39,16 +39,16 @@ export const STATUS_GROUPS = {
 // GLOBAL STATUS LIST - These EXACT statuses must be used everywhere
 // No alternative lists, no shortened versions, no duplicates
 export const PIPELINE_STATUSES: PipelineStatus[] = [
-  { value: "hot", label: "Hot", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: GOLD, category: "positive" },
-  { value: "vip", label: "VIP", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: GOLD, category: "positive" },
+  { value: "hot", label: "Hot", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "vip", label: "VIP", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
   // POSITIVE (green) - Deal progression
-  { value: "interested", label: "Interested", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
-  { value: "qualified", label: "Qualified", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
-  { value: "viewing", label: "Viewing Scheduled", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
-  { value: "viewing_done", label: "Viewing Done", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
-  { value: "negotiation", label: "Negotiation", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
-  { value: "offer_sent", label: "Offer Sent", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
-  { value: "closed_won", label: "Closed Won", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: EMERALD, category: "positive" },
+  { value: "interested", label: "Interested", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "qualified", label: "Qualified", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "viewing", label: "Viewing Scheduled", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "viewing_done", label: "Viewing Done", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "negotiation", label: "Negotiation", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "offer_sent", label: "Offer Sent", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
+  { value: "closed_won", label: "Closed Won", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
   { value: "already_bought", label: "Already Bought", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
 
   // NEUTRAL (blue) - New / Follow-up / Pending
@@ -100,8 +100,8 @@ const LeadStatusBadge = ({
   };
 
   const toneClass =
-    statusInfo.category === 'positive'
-      ? 'bg-[#FDFBF7] text-[#064E3B] border-[#064E3B]/30'
+    statusInfo.category === 'positive' && statusInfo.color.includes('emerald')
+      ? 'bg-[#064E3B] text-white border-transparent'
       : 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/35';
   
   const Component = onClick ? 'button' : 'span';
