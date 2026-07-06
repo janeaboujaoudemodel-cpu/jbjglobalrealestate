@@ -191,9 +191,9 @@ Deno.serve(async (req) => {
     const projectPatch: Record<string, unknown> = {
       ...payload.patch,
       developer_id: payload.developer_id,
-      // Insert/update hidden first; images and documents are attached before the
-      // strict database readiness gate decides whether it can go live.
-      is_published: false,
+      // New preview records are hidden. Existing live records stay live unless
+      // the owner explicitly uses the publish action.
+      ...(payload.project_id ? {} : { is_published: shouldPublishLive ? false : false }),
       updated_at: new Date().toISOString(),
       source_updated_at: new Date().toISOString(),
       deleted_at: null,
