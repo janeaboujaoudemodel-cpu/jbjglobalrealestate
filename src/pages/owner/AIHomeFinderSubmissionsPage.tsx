@@ -99,17 +99,17 @@ export default function AIHomeFinderSubmissionsPage() {
         />
       </div>
 
-      <div className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+      <div className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] overflow-hidden max-w-full">
+        <div className="overflow-hidden max-w-full">
+          <table className="w-full table-fixed text-[12px] md:text-sm">
             <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
               <tr>
-                <th className="text-left p-3 font-semibold">Lead</th>
-                <th className="text-left p-3 font-semibold">Contact</th>
-                <th className="text-left p-3 font-semibold">Recommendations</th>
-                <th className="text-left p-3 font-semibold">Tier</th>
-                <th className="text-left p-3 font-semibold">Submitted</th>
-                <th className="text-right p-3 font-semibold">Action</th>
+                <th className="w-[15%] text-left p-3 font-semibold">Lead</th>
+                <th className="w-[28%] text-left p-3 font-semibold">Contact</th>
+                <th className="w-[28%] text-left p-3 font-semibold">Recommendations</th>
+                <th className="w-[9%] text-left p-3 font-semibold">Tier</th>
+                <th className="w-[9%] text-left p-3 font-semibold">Submitted</th>
+                <th className="w-[11%] text-right p-3 font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -124,11 +124,11 @@ export default function AIHomeFinderSubmissionsPage() {
                 return (
                   <tr key={s.id} className="border-t border-[#B89555]/15 hover:bg-[#EFE6D6]/40">
                     <td className="p-3">
-                      <div className="font-semibold text-[#1A1A1A]">{s.full_name || "—"}</div>
+                      <div className="font-semibold text-[#1A1A1A] break-words">{s.full_name || "—"}</div>
                       <div className="text-xs text-[#1A1A1A]/60">{s.nationality || ""}{s.preferred_language ? ` · ${s.preferred_language}` : ""}</div>
                     </td>
                     <td className="p-3">
-                      <div className="flex items-center gap-1.5 text-[#1A1A1A]"><Mail className="w-3 h-3" />{s.email}</div>
+                      <div className="flex items-center gap-1.5 text-[#1A1A1A] min-w-0"><Mail className="w-3 h-3 shrink-0" /><span className="truncate">{s.email}</span></div>
                       <div className="flex items-center gap-1.5 text-[#1A1A1A]/80 text-xs mt-0.5"><Phone className="w-3 h-3" />{s.phone}</div>
                     </td>
                     <td className="p-3">
@@ -138,9 +138,10 @@ export default function AIHomeFinderSubmissionsPage() {
                             key={slug}
                             to={`/project/${slug}`}
                             target="_blank"
+                            data-recommendation-chip="champagne"
                             data-ink-emerald-opt-out
-                            className="text-xs px-2 py-0.5 rounded-full bg-[#FFF7E6] border border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] whitespace-nowrap"
-                            style={{ background: "#FFF7E6", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                            className="text-xs px-2 py-0.5 rounded-full border max-w-full truncate"
+                            style={{ background: "#FFF7E6", backgroundImage: "none", borderColor: "rgba(184,149,85,0.50)", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
                           >
                             {slug.replace(/-/g, " ").slice(0, 32)}
                           </Link>
@@ -155,13 +156,13 @@ export default function AIHomeFinderSubmissionsPage() {
                         {tier.label}
                       </span>
                     </td>
-                    <td className="p-3 text-xs text-[#1A1A1A]/70 whitespace-nowrap">
+                    <td className="p-3 text-xs text-[#1A1A1A]/70">
                       <Calendar className="inline w-3 h-3 mr-1" />
                       {formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}
                     </td>
                     <td className="p-3 text-right">
-                      <Button size="sm" variant="outline" onClick={() => setOpenId(s.id)}>
-                        View report
+                      <Button size="sm" variant="outline" className="h-8 px-2 text-[11px] whitespace-nowrap" onClick={() => setOpenId(s.id)}>
+                        View
                       </Button>
                     </td>
                   </tr>

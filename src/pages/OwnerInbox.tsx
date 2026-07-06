@@ -266,7 +266,7 @@ export default function OwnerInbox() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-x-hidden">
         <div className="container mx-auto px-4 py-6 max-w-6xl" data-owner-batch-fix="inbox">
           {/* Header */}
           <motion.div 
@@ -327,7 +327,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Channel Tabs - Header Bar with Badges */}
-          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10 scrollbar-thin">
+          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10 scrollbar-thin max-w-full">
             {dynamicChannelTabs.map((tab) => {
               const tabChannelId = (tab as { channelId?: string }).channelId;
               const isActive = tabChannelId
@@ -388,12 +388,15 @@ export default function OwnerInbox() {
           </div>
 
           {/* AI Category Filter */}
-          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin max-w-full">
             <button
               onClick={() => setCategoryFilter('all')}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
               data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
-              style={categoryFilter === 'all' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties : undefined}
+              data-inbox-category-pill={categoryFilter === 'all' ? "active" : "idle"}
+              style={categoryFilter === 'all'
+                ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
+                : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
               className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === 'all'
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
@@ -406,7 +409,10 @@ export default function OwnerInbox() {
                 onClick={() => setCategoryFilter(key)}
                 data-emerald-action={categoryFilter === key ? "true" : undefined}
                 data-emerald-ok={categoryFilter === key ? "pill" : undefined}
-                style={categoryFilter === key ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties : undefined}
+                data-inbox-category-pill={categoryFilter === key ? "active" : "idle"}
+                style={categoryFilter === key
+                  ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
+                  : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
                 className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === key
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
@@ -454,7 +460,7 @@ export default function OwnerInbox() {
           />
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 xl:grid-cols-[minmax(280px,400px)_minmax(0,1fr)] gap-4 min-h-[600px] max-w-full" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
+          <div className="grid grid-cols-1 2xl:grid-cols-[minmax(300px,420px)_minmax(0,1fr)] gap-4 min-h-[640px] max-w-full" style={{ height: 'min(calc(100vh - 300px), 980px)' }}>
             {/* Thread List */}
             <div className="min-h-0 min-w-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">

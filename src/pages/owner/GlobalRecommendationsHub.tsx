@@ -295,13 +295,14 @@ export default function GlobalRecommendationsHub() {
       </div>
 
       {/* Source Tabs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2">
+      <div className="grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))]">
         {SOURCE_SECTIONS.map(section => (
           <button
             key={section.id}
             onClick={() => setActiveSource(section.id)}
             data-surface={activeSource === section.id ? "emerald" : undefined}
-            className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all min-h-12 ${
+            data-recommendation-source-pill={activeSource === section.id ? "active" : "idle"}
+            className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all min-h-12 min-w-0 ${
  activeSource === section.id
   ? "jj-emerald-metallic allow-white text-white border-transparent shadow-sm"
  : "bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40"
@@ -310,7 +311,7 @@ export default function GlobalRecommendationsHub() {
             <section.icon className="w-4 h-4" />
             <span>{section.label}</span>
             {section.id !== "all" && (
-              <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ml-1 ${activeSource === section.id ? "border-white/70 text-white bg-white/15" : "border-[#B89555]/30 text-[#8A7356] bg-[#EFE6D6]/10"}`}>
+              <Badge variant="outline" data-recommendation-count-pill={activeSource === section.id ? "active" : "idle"} className={`text-[10px] px-1.5 py-0 h-5 ml-1 ${activeSource === section.id ? "border-white/70 text-white bg-white/15" : "border-[#B89555]/30 text-[#8A7356] bg-[#EFE6D6]/10"}`}>
                 {globalRecommendations.filter(r => r.source === section.id || r.category === section.id).length}
               </Badge>
             )}

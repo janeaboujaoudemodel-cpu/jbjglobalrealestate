@@ -24,6 +24,11 @@ const SUPPRESS_PATTERNS: RegExp[] = [
   /^\/owner\/crm(\/|$|\?)/i,
   /^\/owner\/documents(\/|$|\?)/i,
   /^\/owner\/inbox(\/|$|\?)/i,
+  /^\/owner\/listing-admin(\/|$|\?)/i,
+  /^\/owner\/team-chat(\/|$|\?)/i,
+  /^\/owner\/founder-assistant(\/|$|\?)/i,
+  /^\/owner\/recommendations(\/|$|\?)/i,
+  /^\/owner\/applications\/ai-home-finder(\/|$|\?)/i,
   /^\/sign\//i,
   /^\/e-signature(\/|$)/i,
 ];

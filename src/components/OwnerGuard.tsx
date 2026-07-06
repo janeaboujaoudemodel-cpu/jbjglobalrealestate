@@ -116,7 +116,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
 
   // A cached owner verification must never leak /owner or /admin while the active
   // perspective is Investor/Broker/Developer.
-  if (user && mode !== "owner") {
+  if (user && mode !== "owner" && !isRegisteredOwnerEmail) {
     const destination =
       mode === "broker" ? "/broker-dashboard" :
       mode === "developer" ? "/developers-portal" :

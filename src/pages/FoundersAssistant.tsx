@@ -238,7 +238,7 @@ export default function FoundersAssistant() {
       <div className="flex flex-col h-screen">
         {/* Amanda header bar — with proper padding from parent shell */}
         <div className="flex-shrink-0 bg-[#FDFBF7]/80 backdrop-blur-sm border-b-2 border-[#B89555]/30 px-4 py-3 mt-1">
-          <div className="flex items-center justify-between gap-3 min-w-0">
+          <div className="grid grid-cols-1 xl:grid-cols-[minmax(180px,260px)_minmax(0,1fr)_auto] items-center gap-3 min-w-0">
             {/* Left: Amanda identity */}
             <div className="flex items-center gap-3">
               <button
@@ -257,7 +257,7 @@ export default function FoundersAssistant() {
             </div>
 
             {/* Center: Action buttons row — New Chat, History, Save, Tools */}
-            <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto max-w-[52vw] px-1">
+            <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto px-1 jj-scrollbar-gold">
               <Button
                 variant="ghost"
                 size="sm"
@@ -331,7 +331,7 @@ export default function FoundersAssistant() {
             </div>
 
             {/* Right: Search + Notifications */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2 min-w-0">
               <button
                 onClick={() => setShowCommandPalette(true)}
                 className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-[#B89555]/30 text-muted-foreground hover:border-[#B89555]/50 transition-all text-xs"

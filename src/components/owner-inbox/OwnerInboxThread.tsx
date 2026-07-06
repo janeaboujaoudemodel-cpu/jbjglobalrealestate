@@ -169,10 +169,10 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
   return (
     <Card className="border-2 border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full flex flex-col overflow-hidden">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden min-w-0">
       {/* Header */}
       <CardHeader className="border-b border-[#B89555]/10 py-3 px-4 flex-shrink-0">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_auto] gap-3 items-start">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
               {thread.contact_avatar_url ? (
@@ -201,7 +201,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap justify-end">
+          <div className="flex items-center gap-2 flex-wrap justify-start xl:justify-end min-w-0">
             <Select value={thread.status} onValueChange={(v) => onStatusChange(v as ThreadStatus)}>
               <SelectTrigger className="w-[130px] h-8 text-xs border-[#B89555]/30">
                 <SelectValue />
@@ -233,7 +233,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
         {/* Tabs */}
         <div className="mt-3">
-          <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto w-full gap-1 p-1">
+          <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto w-full gap-1 p-1 overflow-visible">
             <TabsTrigger value="conversation" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Conversation</TabsTrigger>
             <TabsTrigger value="lead" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Lead Profile</TabsTrigger>
             <TabsTrigger value="activity" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Activity</TabsTrigger>

@@ -33,7 +33,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
   return (
     <div className="space-y-4">
       {/* Source Selector — Source Portal (left/primary), Realporter API (right) */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {/* Source Portal (Primary — left side) */}
         <Card
           className={`cursor-pointer transition-all border-2 ${
@@ -143,10 +143,10 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
           Select a source above to view detailed sync data
         </span>
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
           onClick={() => refreshCounts()}
-          className="h-6 text-xs text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10"
+          className="h-10 min-w-[120px] text-xs text-[#1A1A1A] hover:text-[#1A1A1A] hover:bg-[#EFE6D6] border-[#B89555]/30"
         >
           <RefreshCw className="w-3 h-3 mr-1" />
           Refresh
