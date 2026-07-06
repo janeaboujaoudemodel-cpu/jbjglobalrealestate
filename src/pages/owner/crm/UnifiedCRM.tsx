@@ -19,7 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database, Plus, UserPlus,
+  ChevronDown, BarChart3, Bell, Database, Plus, UserPlus,
   GraduationCap,
 } from "lucide-react";
 import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
