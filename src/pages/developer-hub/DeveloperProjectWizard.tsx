@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
+import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -62,6 +62,7 @@ const DeveloperProjectWizard = () => {
   const [lastExtractedFields, setLastExtractedFields] = useState<string[]>([]);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [additionalInfoMode, setAdditionalInfoMode] = useState<"keep" | "enrich">("enrich");
+  const [publishResult, setPublishResult] = useState<AutoPublishResponse | null>(null);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
 
@@ -187,7 +188,21 @@ const DeveloperProjectWizard = () => {
       const { data, error } = await supabase.functions.invoke("ai-project-brochure-extract", {
           body: { files: files.map((f) => ({ url: f.extractionUrl || f.url, name: f.name, type: f.type })) },
       });
-      if (error) throw error;
+      if (error) {
+        let message = error.message || "Extraction failed";
+        const ctx = (error as any)?.context;
+        if (ctx && typeof ctx.json === "function") {
+          try {
+            const body = await ctx.json();
+            message = body?.error || body?.detail || message;
+            if (Array.isArray(body?.files_skipped) && body.files_skipped.length) {
+              message += ` (${body.files_skipped.map((f: any) => `${f.name}: ${f.reason}`).join("; ")})`;
+            }
+          } catch {}
+        }
+        throw new Error(message);
+      }
+      if (data?.error) throw new Error(String(data.error));
       const extracted = (data?.extracted ?? {}) as Record<string, unknown>;
       const filled: string[] = [];
       setBasics((prev) => {
@@ -227,6 +242,9 @@ const DeveloperProjectWizard = () => {
         return next;
       });
       setLastExtractedFields(filled);
+      if (Array.isArray((data as any)?.files_skipped) && (data as any).files_skipped.length) {
+        toast.warning(`${(data as any).files_skipped.length} file(s) were skipped. The rest were extracted.`);
+      }
       toast.success(filled.length ? `AI filled ${filled.length} field${filled.length === 1 ? "" : "s"} from your brochure` : "AI could not confidently extract new fields — please fill manually");
     } catch (e: any) {
       toast.error(e?.message || "Extraction failed");
@@ -315,11 +333,88 @@ const DeveloperProjectWizard = () => {
       documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: "brochure" })),
     });
     try { window.localStorage.removeItem(draftKey); } catch {}
-    if (res.status === "published") navigate(ownerRoute ? "/owner/developers/projects" : "/developer-hub/projects");
+    if (res.project_id || res.slug || res.public_path) setPublishResult(res);
     else navigate(ownerRoute ? "/owner/developers" : "/developer-hub");
   };
 
   const inputCls = "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1";
+
+  if (publishResult) {
+    const publicPath = publishResult.public_path || (publishResult.slug ? `/project/${publishResult.slug}` : null);
+    const fullUrl = publicPath && typeof window !== "undefined" ? `${window.location.origin}${publicPath}` : publicPath;
+    const isPublished = publishResult.status === "published";
+    const publishError = (publishResult as AutoPublishResponse & { publish_error?: string | null }).publish_error;
+
+    return (
+      <div className="space-y-6 max-w-4xl">
+        <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-6 rounded-lg">
+          <div className="flex items-start gap-4">
+            <div data-surface="emerald" data-backend-icon-tile="emerald" className="allow-white w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-6 h-6" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">{isPublished ? "Project published live" : "Project saved for review"}</h1>
+              <p className="text-[#1A1A1A]/70 text-sm mt-1">
+                {isPublished ? "The public project page is ready. Open it now or copy the direct URL." : "The project record was created and a preview URL was generated. Complete the missing listing data to publish live."}
+              </p>
+              {publishError && (
+                <p className="mt-3 rounded-md border border-[#B89555]/35 bg-[#FDFBF7] px-3 py-2 text-sm text-[#1A1A1A]">
+                  Publish blocker: {publishError.replace(/^Cannot publish project [^:]+:\s*/i, "")}
+                </p>
+              )}
+              {fullUrl && (
+                <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                  <Input readOnly value={fullUrl} className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A]" />
+                  <Button
+                    type="button"
+                    data-surface="emerald"
+                    className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
+                    onClick={() => { navigator.clipboard?.writeText(fullUrl); toast.success("Project URL copied"); }}
+                  >
+                    <Copy className="w-4 h-4 mr-2" /> Copy
+                  </Button>
+                  <Button
+                    type="button"
+                    data-surface="emerald"
+                    className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
+                    onClick={() => publicPath && window.open(publicPath, "_blank", "noopener,noreferrer")}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" /> {isPublished ? "Open" : "Preview"}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </Card>
+
+        {publicPath && (
+          <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
+            <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] transition-colors">
+              <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
+                {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
+              </div>
+              <div className="p-5 space-y-3">
+                <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">{isPublished ? "Live listing preview" : "Saved listing preview"}</p>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-xl font-semibold text-[#1A1A1A] leading-tight">{basics.name || "Project name"}</h2>
+                    <p className="text-sm text-[#1A1A1A]/70">{activeDeveloperName || "Developer"} · {basics.location || basics.emirate || "Location"}</p>
+                  </div>
+                  <ExternalLink className="w-5 h-5 text-[#B89555] shrink-0" />
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-[#1A1A1A]">
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Handover</span>{basics.handover_date || "—"}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
+                </div>
+              </div>
+            </Card>
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -356,7 +451,7 @@ const DeveloperProjectWizard = () => {
 
       {/* Smart brochure extract */}
       {step === 0 && (
-        <Card className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
+        <Card data-surface="emerald" className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex items-start gap-3">
               <div className="rounded-full p-2 bg-white/10"><Sparkles className="w-5 h-5" /></div>
@@ -529,8 +624,8 @@ const DeveloperProjectWizard = () => {
               <Label className="text-[#1A1A1A]">Additional information</Label>
               <Textarea rows={4} value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Add any extra project notes, amenities, payment plan details, management rules or owner-use rules." className={inputCls} />
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                <Button type="button" variant={additionalInfoMode === "enrich" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("enrich")} className={additionalInfoMode === "enrich" ? "bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Use to enrich listing</Button>
-                <Button type="button" variant={additionalInfoMode === "keep" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("keep")} className={additionalInfoMode === "keep" ? "bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Keep as full text</Button>
+                <Button type="button" variant={additionalInfoMode === "enrich" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("enrich")} data-surface={additionalInfoMode === "enrich" ? "emerald" : undefined} className={additionalInfoMode === "enrich" ? "allow-white bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Use to enrich listing</Button>
+                <Button type="button" variant={additionalInfoMode === "keep" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("keep")} data-surface={additionalInfoMode === "keep" ? "emerald" : undefined} className={additionalInfoMode === "keep" ? "allow-white bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Keep as full text</Button>
                 <Button type="button" variant="outline" size="sm" onClick={applyAdditionalInfo} disabled={!additionalInfo.trim()} className="border-[#B89555]/40 text-[#1A1A1A]">Apply text</Button>
               </div>
             </div>

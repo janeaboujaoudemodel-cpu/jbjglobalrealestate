@@ -9,6 +9,9 @@ const corsHeaders = {
 
 interface FileRef { url: string; name: string; type?: string }
 
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
+const AI_TIMEOUT_MS = 80_000;
+
 const SCHEMA_HINT = `Return ONLY valid minified JSON matching this shape. Use null when unknown. Never invent values.
 {
   "name": string|null,
@@ -36,105 +39,170 @@ const SCHEMA_HINT = `Return ONLY valid minified JSON matching this shape. Use nu
   "amenities": string[]|null
 }`;
 
-async function fileToBase64(url: string): Promise<{ b64: string; mime: string } | null> {
+function response(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+function toBase64(bytes: Uint8Array): string {
+  let binary = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+
+async function fileToBase64(url: string): Promise<{ b64: string; mime: string; bytes: number } | { error: string }> {
   try {
-    const r = await fetch(url);
-    if (!r.ok) return null;
+    const r = await fetch(url, { signal: AbortSignal.timeout(45_000) });
+    if (!r.ok) return { error: `File fetch failed (${r.status})` };
+    const length = Number(r.headers.get("content-length") || "0");
+    if (length > MAX_FILE_BYTES) return { error: `File is larger than 20MB (${Math.ceil(length / 1024 / 1024)}MB)` };
     const mime = r.headers.get("content-type") || "application/pdf";
     const buf = new Uint8Array(await r.arrayBuffer());
-    let bin = "";
-    for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
-    return { b64: btoa(bin), mime };
-  } catch { return null; }
+    if (buf.byteLength > MAX_FILE_BYTES) return { error: `File is larger than 20MB (${Math.ceil(buf.byteLength / 1024 / 1024)}MB)` };
+    return { b64: toBase64(buf), mime, bytes: buf.byteLength };
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : "File could not be read" };
+  }
+}
+
+function stripJsonFence(value: string): string {
+  return value.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
+}
+
+function sanitizeExtracted(input: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(input || {})) {
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (!trimmed || /^(unknown|n\/?a|not available|null|undefined)$/i.test(trimmed)) {
+        out[key] = null;
+      } else {
+        out[key] = trimmed;
+      }
+      continue;
+    }
+    if (Array.isArray(value)) {
+      const cleaned = value
+        .filter((item) => typeof item === "string")
+        .map((item) => item.trim())
+        .filter((item) => item && !/^(unknown|n\/?a|null|undefined)$/i.test(item));
+      out[key] = cleaned.length ? Array.from(new Set(cleaned)) : null;
+      continue;
+    }
+    out[key] = value ?? null;
+  }
+  return out;
+}
+
+function mergeExtracted(base: Record<string, unknown>, next: Record<string, unknown>) {
+  for (const [key, value] of Object.entries(next)) {
+    if (value === null || value === undefined || value === "") continue;
+    if (Array.isArray(value)) {
+      const existing = Array.isArray(base[key]) ? base[key] as unknown[] : [];
+      base[key] = Array.from(new Set([...existing, ...value].filter(Boolean).map(String)));
+      continue;
+    }
+    if (base[key] === null || base[key] === undefined || base[key] === "") base[key] = value;
+  }
+}
+
+async function extractOneFile(apiKey: string, file: FileRef, fetched: { b64: string; mime: string }) {
+  const filePart = fetched.mime.startsWith("image/")
+    ? { type: "image_url", image_url: { url: `data:${fetched.mime};base64,${fetched.b64}` } }
+    : { type: "file", file: { filename: file.name, file_data: `data:${fetched.mime};base64,${fetched.b64}` } };
+
+  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    signal: AbortSignal.timeout(AI_TIMEOUT_MS),
+    headers: {
+      "Content-Type": "application/json",
+      "Lovable-API-Key": apiKey,
+      "X-Lovable-AIG-SDK": "supabase-edge-function",
+    },
+    body: JSON.stringify({
+      model: "google/gemini-3-flash-preview",
+      messages: [{
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: `You are a strict real-estate brochure data extractor. Read this UAE off-plan project document/image and extract only facts clearly stated in it. Rules:
+- Never fabricate. If a field is not clearly stated, use null.
+- Never return "N/A", "unknown", guessed names, guessed dates, or placeholder values.
+- Prefer AED numeric values for prices. Strip commas/currency.
+- amenities = deduplicated short names.
+${SCHEMA_HINT}`,
+          },
+          filePart,
+        ],
+      }],
+      response_format: { type: "json_object" },
+      max_tokens: 2200,
+    }),
+  });
+
+  if (!aiRes.ok) {
+    const detail = await aiRes.text();
+    throw new Error(`AI gateway ${aiRes.status}: ${detail.slice(0, 400)}`);
+  }
+
+  const data = await aiRes.json();
+  const raw = stripJsonFence(data?.choices?.[0]?.message?.content ?? "{}");
+  try {
+    return sanitizeExtracted(JSON.parse(raw));
+  } catch {
+    throw new Error("AI returned invalid JSON for this file");
+  }
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    if (!LOVABLE_API_KEY) throw new Error("AI extraction service is not configured");
 
     const { files } = await req.json() as { files: FileRef[] };
     if (!files?.length) {
-      return new Response(JSON.stringify({ error: "No files provided" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return response({ error: "No files provided" }, 400);
     }
 
-    // Build multimodal content parts
-    const contentParts: any[] = [
-      {
-        type: "text",
-        text: `You are a strict real-estate brochure data extractor. Read every attached document/image and extract fields for a UAE off-plan project. Rules:
-- Never fabricate. If a field is not clearly stated, use null.
-- Prefer numbers in AED for prices. Strip commas/currency.
-- Merge information across multiple files.
-- If multiple values conflict, choose the most explicit/recent.
-- amenities = deduplicated array of short names (e.g. "Pool", "Gym", "Concierge").
-${SCHEMA_HINT}`,
-      },
-    ];
+    const extracted: Record<string, unknown> = {};
+    const filesRead: Array<{ name: string; bytes: number; mime: string }> = [];
+    const filesSkipped: Array<{ name: string; reason: string }> = [];
 
-    let attachedCount = 0;
-    const fetchedFiles = await Promise.all(
-      files.map(async (f) => ({ file: f, fetched: await fileToBase64(f.url) })),
-    );
-    for (const { file: f, fetched } of fetchedFiles) {
-      if (!fetched) continue;
-      if (fetched.mime.startsWith("image/")) {
-        contentParts.push({ type: "image_url", image_url: { url: `data:${fetched.mime};base64,${fetched.b64}` } });
-      } else {
-        // Gemini via OpenRouter accepts PDFs as file parts
-        contentParts.push({ type: "file", file: { filename: f.name, file_data: `data:${fetched.mime};base64,${fetched.b64}` } });
+    // Process sequentially to avoid the memory-limit crashes caused by loading
+    // many PDFs into base64 at the same time. There is no count limit; each file
+    // is read, extracted, merged, then released before moving to the next file.
+    for (const f of files) {
+      const fetched = await fileToBase64(f.url);
+      if ("error" in fetched) {
+        filesSkipped.push({ name: f.name, reason: fetched.error });
+        continue;
       }
-      attachedCount += 1;
+      try {
+        const one = await extractOneFile(LOVABLE_API_KEY, f, fetched);
+        mergeExtracted(extracted, one);
+        filesRead.push({ name: f.name, bytes: fetched.bytes, mime: fetched.mime });
+      } catch (e) {
+        filesSkipped.push({ name: f.name, reason: e instanceof Error ? e.message : "Extraction failed for this file" });
+      }
     }
 
-    if (attachedCount === 0) {
-      return new Response(JSON.stringify({ error: "No uploaded files could be read for extraction. Please retry the upload." }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (filesRead.length === 0) {
+      return response({
+        error: "No uploaded files could be read for extraction. Please retry upload or use smaller files.",
+        files_read: 0,
+        files_skipped: filesSkipped,
+      }, 422);
     }
 
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Lovable-API-Key": LOVABLE_API_KEY,
-          "X-Lovable-AIG-SDK": "supabase-edge-function",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [{ role: "user", content: contentParts }],
-        response_format: { type: "json_object" },
-      }),
-    });
-
-    if (!aiRes.ok) {
-      const txt = await aiRes.text();
-      return new Response(JSON.stringify({ error: `AI gateway ${aiRes.status}`, detail: txt }), {
-        status: aiRes.status === 429 || aiRes.status === 402 ? aiRes.status : 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    const data = await aiRes.json();
-    const raw = data?.choices?.[0]?.message?.content ?? "{}";
-    let parsed: Record<string, unknown> = {};
-    try { parsed = typeof raw === "string" ? JSON.parse(raw) : raw; } catch { parsed = {}; }
-
-    // Sanitise: strip empty strings
-    for (const k of Object.keys(parsed)) {
-      const v = (parsed as any)[k];
-      if (v === "" || v === "unknown" || v === "N/A") (parsed as any)[k] = null;
-    }
-
-    return new Response(JSON.stringify({ extracted: parsed, files_read: attachedCount }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return response({ extracted, files_read: filesRead.length, files_skipped: filesSkipped });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return response({ error: (e as Error).message }, 500);
   }
 });

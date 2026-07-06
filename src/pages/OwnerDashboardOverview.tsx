@@ -139,7 +139,8 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10 text-xs h-7"
+          data-surface="emerald"
+          className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c] text-xs h-7"
           onClick={(e) => { e.stopPropagation(); onOpen(lead.id); }}
         >
           Open <ExternalLink className="h-3 w-3 ml-1" />
@@ -265,7 +266,8 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10"
+          data-surface="emerald"
+          className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
           onClick={() => onOpen(item.id)}
         >
           Open
@@ -612,7 +614,8 @@ export default function OwnerDashboardOverview() {
                   variant="ghost" 
                   size="sm" 
                   onClick={() => setActiveTab('leads')}
-                  className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10"
+                  data-surface="emerald"
+                  className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
                 >
                   View All <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
@@ -665,7 +668,8 @@ export default function OwnerDashboardOverview() {
                   variant="ghost" 
                   size="sm" 
                   onClick={() => navigate('/owner/crm/tasks')}
-                  className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10"
+                  data-surface="emerald"
+                  className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>

@@ -99,10 +99,10 @@ const LeadStatusBadge = ({
     lg: "px-4 py-2 text-sm"
   };
 
-  const toneClass =
-    statusInfo.category === 'positive' && statusInfo.color.includes('emerald')
-      ? 'bg-[#064E3B] text-white border-transparent'
-      : 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/35';
+  const isEmeraldStatus = statusInfo.category === 'positive' || statusInfo.color.includes('#064E3B') || statusInfo.color.includes('emerald');
+  const toneClass = isEmeraldStatus
+    ? 'allow-white bg-[#064E3B] text-white border-transparent'
+    : 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/35';
   
   const Component = onClick ? 'button' : 'span';
   
@@ -110,6 +110,7 @@ const LeadStatusBadge = ({
     <Component
       onClick={onClick}
       disabled={onClick ? false : undefined}
+      data-surface={isEmeraldStatus ? "emerald" : undefined}
       className={cn(
         "inline-flex items-center justify-center gap-1.5 rounded-full border font-bold transition-all whitespace-nowrap",
         sizeClasses[size],
