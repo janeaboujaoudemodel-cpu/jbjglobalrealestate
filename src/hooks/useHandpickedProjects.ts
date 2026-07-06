@@ -309,6 +309,13 @@ export function useHandpickedProjects() {
       const seen = new Set<string>();
       let source: "interest" | "favorites" | "history" | "elite" | "mixed" = "elite";
 
+      // Owner-pinned featured projects run first — always appear at the top of the grid.
+      try {
+        const pinned = await tierPinned();
+        dedupePush(out, seen, pinned);
+      } catch {}
+
+
       try {
         const interest = await tierInterestForm(user?.id, user?.email ?? undefined);
         if (interest.length > 0) source = "interest";
