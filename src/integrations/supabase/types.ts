@@ -16559,6 +16559,47 @@ export type Database = {
         }
         Relationships: []
       }
+      enrichment_scan_log: {
+        Row: {
+          changed_keys: string[]
+          conflicts: Json
+          created_at: string
+          id: string
+          project_id: string | null
+          project_name: string | null
+          run_id: string
+          sources_checked: string[]
+        }
+        Insert: {
+          changed_keys?: string[]
+          conflicts?: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          project_name?: string | null
+          run_id: string
+          sources_checked?: string[]
+        }
+        Update: {
+          changed_keys?: string[]
+          conflicts?: Json
+          created_at?: string
+          id?: string
+          project_id?: string | null
+          project_name?: string | null
+          run_id?: string
+          sources_checked?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrichment_scan_log_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       esign_audit_log: {
         Row: {
           action: Database["public"]["Enums"]["esign_audit_action"]
@@ -28380,6 +28421,7 @@ export type Database = {
           is_published: boolean | null
           is_serviced: boolean | null
           is_sold_out: boolean | null
+          last_enrichment_scan_at: string | null
           latitude: number | null
           launch_date: string | null
           listing_kind: string | null
@@ -28388,6 +28430,7 @@ export type Database = {
           location_distances: Json | null
           location_headline: string | null
           location_image_url: string | null
+          locked_fields: string[]
           longitude: number | null
           management_type: string | null
           name: string
@@ -28488,6 +28531,7 @@ export type Database = {
           is_published?: boolean | null
           is_serviced?: boolean | null
           is_sold_out?: boolean | null
+          last_enrichment_scan_at?: string | null
           latitude?: number | null
           launch_date?: string | null
           listing_kind?: string | null
@@ -28496,6 +28540,7 @@ export type Database = {
           location_distances?: Json | null
           location_headline?: string | null
           location_image_url?: string | null
+          locked_fields?: string[]
           longitude?: number | null
           management_type?: string | null
           name: string
@@ -28596,6 +28641,7 @@ export type Database = {
           is_published?: boolean | null
           is_serviced?: boolean | null
           is_sold_out?: boolean | null
+          last_enrichment_scan_at?: string | null
           latitude?: number | null
           launch_date?: string | null
           listing_kind?: string | null
@@ -28604,6 +28650,7 @@ export type Database = {
           location_distances?: Json | null
           location_headline?: string | null
           location_image_url?: string | null
+          locked_fields?: string[]
           longitude?: number | null
           management_type?: string | null
           name?: string
