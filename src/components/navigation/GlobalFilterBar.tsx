@@ -12,12 +12,18 @@ import FilterShortcutBar, {
 import { encodeFilters, decodeFilters } from "./filterUrl";
 
 
-/** localStorage key for persisting the user's last-used filters */
+/** Session-only key for active filters. Never persist between close/re-open. */
 const FILTERS_STORAGE_KEY = "jbj-active-filters";
+
+try {
+  localStorage.removeItem(FILTERS_STORAGE_KEY);
+} catch {
+  /* ignore privacy-mode errors */
+}
 
 function loadStoredFilters(): ShortcutFilterState | null {
   try {
-    const raw = localStorage.getItem(FILTERS_STORAGE_KEY);
+    const raw = sessionStorage.getItem(FILTERS_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     // Merge over defaults so newly added fields don't break old saves
@@ -29,7 +35,7 @@ function loadStoredFilters(): ShortcutFilterState | null {
 
 function saveStoredFilters(f: ShortcutFilterState) {
   try {
-    localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(f));
+    sessionStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(f));
   } catch {
     /* ignore quota / privacy-mode errors */
   }
@@ -48,7 +54,7 @@ export default function GlobalFilterBar() {
 
   // Initial state precedence:
   //   1. URL params if on a property page AND any filter param is present
-  //   2. localStorage (user's last-used filters)
+  //   2. sessionStorage (current tab only)
   //   3. defaults
   const [filters, setFilters] = useState<ShortcutFilterState>(() => {
     if (isPropertyPage && Array.from(searchParams.keys()).length > 0) {
@@ -58,8 +64,7 @@ export default function GlobalFilterBar() {
   });
 
   // Sync from URL when on property pages and URL has params; otherwise
-  // hydrate from localStorage so refreshing /properties with a bare URL
-  // restores the user's last filters and the bar stays in sync across pages.
+  // hydrate from sessionStorage only. Closing/re-opening starts clean.
   useEffect(() => {
     if (isPropertyPage) {
       const hasUrlFilters = Array.from(searchParams.keys()).length > 0;
@@ -79,21 +84,19 @@ export default function GlobalFilterBar() {
         }
       }
     } else {
-      // On non-property pages, reflect the persisted filters in the bar
-      // so the user sees their selections everywhere.
+      // On non-property pages, reflect only this tab's active filters.
       const stored = loadStoredFilters();
       setFilters(stored ?? defaultShortcutFilters);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  // Persist every change to localStorage (skip pure-default state to keep
-  // storage clean after a Reset All).
+  // Persist only within this browser tab. Closing and opening again resets.
   useEffect(() => {
     const isDefault =
       JSON.stringify(filters) === JSON.stringify(defaultShortcutFilters);
     if (isDefault) {
-      try { localStorage.removeItem(FILTERS_STORAGE_KEY); } catch { /* noop */ }
+      try { sessionStorage.removeItem(FILTERS_STORAGE_KEY); localStorage.removeItem(FILTERS_STORAGE_KEY); } catch { /* noop */ }
     } else {
       saveStoredFilters(filters);
     }
