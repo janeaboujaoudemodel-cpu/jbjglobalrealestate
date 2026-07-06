@@ -6,6 +6,8 @@ export interface AutoPublishPayload {
   developer_id: string;
   project_id?: string | null;
   publish_live?: boolean;
+  enrich?: boolean;
+  locked_fields?: string[];
   patch: Record<string, unknown>;
   images?: Array<{ image_url: string; alt_text?: string; display_order?: number }>;
   documents?: Array<{ file_url: string; file_name: string; document_type?: string; file_size?: number | null; storage_path?: string | null; cover_image_url?: string | null; display_title?: string | null }>;
@@ -13,12 +15,16 @@ export interface AutoPublishPayload {
 }
 
 export interface AutoPublishResponse {
-  status: "published" | "queued_for_review" | "saved_preview";
+  status: "published" | "queued_for_review" | "saved_preview" | "enriched";
   project_id?: string;
   slug?: string | null;
   public_path?: string | null;
   publish_error?: string | null;
   submission_id?: string;
+  changed_keys?: string[];
+  images_added?: number;
+  documents_added?: number;
+  enrich_error?: string | null;
 }
 
 /**
