@@ -245,7 +245,7 @@ export function ProvidentPortalHub() {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
           <div>
             <h2 className="text-foreground font-bold text-lg flex items-center gap-2">
               <Database className="w-5 h-5 text-[#1A1A1A]" />
@@ -255,7 +255,7 @@ export function ProvidentPortalHub() {
               Central hub for Provident data scraping, enrichment, and project synchronization.
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={fetchStats} className="border-[#B89555]/30 hover:bg-[#EFE6D6]/10">
+          <Button variant="outline" size="sm" onClick={fetchStats} className="border-[#B89555]/30 hover:bg-[#EFE6D6]/10 whitespace-nowrap min-w-[120px]">
             <RefreshCw className="w-4 h-4 mr-1" />
             Refresh
           </Button>
@@ -318,7 +318,7 @@ export function ProvidentPortalHub() {
             <span className="font-semibold text-foreground">{enrichPercent}%</span>
           </div>
           <Progress value={enrichPercent} className="h-3" />
-          <div className="grid grid-cols-3 gap-3 text-center text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-sm">
             <div data-surface="emerald" className="rounded-lg p-3 border border-white/20" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 100%)" }}>
               <p className="text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{enrichmentStats.fullyEnriched}</p>
               <p className="text-[11px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Fully Enriched</p>

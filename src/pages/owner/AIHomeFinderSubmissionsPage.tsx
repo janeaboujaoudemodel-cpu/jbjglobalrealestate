@@ -72,7 +72,7 @@ export default function AIHomeFinderSubmissionsPage() {
   const open = submissions.find((s) => s.id === openId) || null;
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-6 md:p-8 max-w-6xl mx-auto" data-owner-batch-fix="ai-home-finder">
       <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -138,7 +138,9 @@ export default function AIHomeFinderSubmissionsPage() {
                             key={slug}
                             to={`/project/${slug}`}
                             target="_blank"
-                            className="text-xs px-2 py-0.5 rounded-full bg-white border border-[#B89555]/40 text-[#1A1A1A] hover:border-[#B89555]"
+                            data-ink-emerald-opt-out
+                            className="text-xs px-2 py-0.5 rounded-full bg-[#FFF7E6] border border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] whitespace-nowrap"
+                            style={{ background: "#FFF7E6", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
                           >
                             {slug.replace(/-/g, " ").slice(0, 32)}
                           </Link>

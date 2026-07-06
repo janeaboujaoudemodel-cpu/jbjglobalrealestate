@@ -172,8 +172,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
       {/* Header */}
       <CardHeader className="border-b border-[#B89555]/10 py-3 px-4 flex-shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-[#B89555]/20">
               {thread.contact_avatar_url ? (
                 <img src={thread.contact_avatar_url} alt="" className="w-full h-full rounded-full object-cover"  loading="lazy" decoding="async" />
@@ -181,12 +181,12 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 <User className="h-5 w-5 text-[#1A1A1A]" />
               )}
             </div>
-            <div>
-              <h3 className="font-semibold text-[#1A1A1A]">
+            <div className="min-w-0">
+              <h3 className="font-semibold text-[#1A1A1A] truncate">
                 {thread.contact_name || thread.contact_identifier}
               </h3>
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-xs text-[#1A1A1A]/70">{thread.contact_identifier}</p>
+                <p className="text-xs text-[#1A1A1A]/70 truncate max-w-[240px]">{thread.contact_identifier}</p>
                 {thread.ai_category && CATEGORY_META[thread.ai_category] && (
                   <Badge variant="outline" className={`text-[10px] h-4 px-1.5 ${CATEGORY_META[thread.ai_category].color}`}>
                     {CATEGORY_META[thread.ai_category].label}
@@ -201,7 +201,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap justify-end">
             <Select value={thread.status} onValueChange={(v) => onStatusChange(v as ThreadStatus)}>
               <SelectTrigger className="w-[130px] h-8 text-xs border-[#B89555]/30">
                 <SelectValue />
@@ -233,11 +233,11 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
         {/* Tabs */}
         <div className="mt-3">
-          <TabsList className="grid grid-cols-4 h-8 w-full">
-            <TabsTrigger value="conversation" className="text-xs">Conversation</TabsTrigger>
-            <TabsTrigger value="lead" className="text-xs">Lead Profile</TabsTrigger>
-            <TabsTrigger value="activity" className="text-xs">Activity</TabsTrigger>
-            <TabsTrigger value="ai" className="text-xs">AI Suggestions</TabsTrigger>
+          <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto w-full gap-1 p-1">
+            <TabsTrigger value="conversation" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Conversation</TabsTrigger>
+            <TabsTrigger value="lead" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Lead Profile</TabsTrigger>
+            <TabsTrigger value="activity" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Activity</TabsTrigger>
+            <TabsTrigger value="ai" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">AI Suggestions</TabsTrigger>
           </TabsList>
         </div>
       </CardHeader>

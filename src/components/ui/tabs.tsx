@@ -42,7 +42,7 @@ const TabsTrigger = React.forwardRef<
     ref={ref}
     data-jj-segmented-trigger=""
     className={cn(
-      "inline-flex min-w-0 max-w-full items-center justify-center whitespace-normal break-words [overflow-wrap:anywhere] rounded-sm px-3 py-1.5 text-center text-sm font-medium leading-tight ring-offset-background transition-none duration-0 text-[#1A1A1A] data-[state=active]:!text-white data-[state=active]:[-webkit-text-fill-color:#fff] hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
+      "inline-flex min-w-max max-w-full items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-center text-sm font-medium leading-tight ring-offset-background transition-none duration-0 text-[#1A1A1A] data-[state=active]:!text-white data-[state=active]:[-webkit-text-fill-color:#fff] hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
       className,
     )}
     {...props}

@@ -1,3 +1,77 @@
+/* =============================================================
+   PASS 213 — OWNER BATCH A-F REGRESSION GUARD
+   Screenshot-proven fixes: no letter-stacked labels, no dark ink
+   on emerald surfaces, no clipped owner workspaces, and minimum
+   button/tab geometry for owner backend pages.
+   ============================================================= */
+html body #root .owner-dashboard-shell :where(button, a[role="button"], [role="button"], [role="tab"], .tabs-trigger, [data-radix-collection-item]) {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  letter-spacing: 0 !important;
+  min-height: 2.25rem;
+}
+
+html body #root .owner-dashboard-shell :where([data-owner-batch-fix], [data-owner-batch-fix] *) {
+  box-sizing: border-box;
+}
+
+html body #root .owner-dashboard-shell :where([data-owner-batch-fix]) {
+  max-width: 100%;
+  overflow-wrap: normal;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  .jj-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-icon-tile-emerald,
+  .jj-filter-pill-fast,
+  button[data-state="active"],
+  [role="tab"][data-state="active"]
+):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  .jj-emerald-metallic,
+  .jj-surface-emerald,
+  .jj-cta-emerald,
+  .jj-emerald-action,
+  .jj-icon-tile-emerald,
+  .jj-filter-pill-fast,
+  button[data-state="active"],
+  [role="tab"][data-state="active"]
+):not([data-ink-emerald-opt-out]):not([data-ink-emerald-opt-out] *)
+  :where(*, span, p, div, small, strong, em, b, label, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root .owner-dashboard-shell [data-ink-emerald-opt-out],
+html body #root .owner-dashboard-shell [data-ink-emerald-opt-out] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root .owner-dashboard-shell :where(.container, main, section, article, [data-owner-batch-fix]) {
+  min-width: 0;
+}
+
+html body #root .owner-dashboard-shell :where(table) {
+  min-width: 720px;
+}
 @property --border-angle {
   syntax: "<angle>";
   initial-value: 0deg;

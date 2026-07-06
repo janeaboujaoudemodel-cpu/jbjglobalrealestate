@@ -296,7 +296,7 @@ const TeamChat = () => {
   const totalCount = chatMembers.length;
 
   return (
-    <div className="flex h-[calc(100vh-11rem)] min-h-[500px] bg-[#FDFBF7] rounded-xl border-2 border-[#B89555]/20 overflow-hidden shadow-sm">
+    <div className="flex h-[calc(100vh-11rem)] min-h-[500px] bg-[#FDFBF7] rounded-xl border-2 border-[#B89555]/20 overflow-hidden shadow-sm" data-owner-batch-fix="team-chat">
 
       {/* ─── Channel Sidebar ─── */}
       <div className={cn(
@@ -492,7 +492,7 @@ const TeamChat = () => {
               )}
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", isInCall ? "jj-surface-emerald-soft" : "hover:bg-[#B89555]/10")} onClick={handleCall}>
               <Phone className={cn("w-4 h-4", isInCall ? "text-[color:var(--emerald-1)] animate-pulse" : "text-[#1A1A1A]/50")} />
             </Button>
@@ -669,7 +669,7 @@ const TeamChat = () => {
 
       {/* ─── Members Sidebar (real employees by department) ─── */}
       {showMembers && !isMobile && (
-        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex flex-col">
+        <div className="hidden 2xl:flex w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex-col">
           <div className="p-4 border-b border-[#B89555]/15">
             <h3 className="text-xs font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">
               Team — {totalCount} members
@@ -735,7 +735,7 @@ const TeamChat = () => {
 
       {/* Productivity Panel */}
       {showProductivityPanel && !isMobile && (
-        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex flex-col overflow-y-auto">
+        <div className="hidden 2xl:flex w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex-col overflow-y-auto">
           <div className="p-4 border-b border-[#B89555]/15">
             <h3 className="text-xs font-semibold text-[#1A1A1A]/40 uppercase tracking-wider flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-[#B89555]" /> Chat Productivity

@@ -226,19 +226,19 @@ export default function FoundersAssistant() {
 
   const statCards = [
     { label: 'Active', count: stats.activeTasks, colorClass: 'bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30', filter: 'in_progress' },
-    { label: 'Done', count: stats.completedTasks, colorClass: 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30', filter: 'completed' },
+    { label: 'Done', count: stats.completedTasks, colorClass: 'jj-emerald-metallic allow-white text-white border-transparent', filter: 'completed' },
     { label: 'Pending', count: stats.pendingTasks, colorClass: 'bg-amber-50 text-amber-700 border-amber-200', filter: 'pending' },
     { label: 'Escalations', count: unreadCount, colorClass: 'bg-red-50 text-red-700 border-red-200', filter: 'escalations' },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" data-owner-batch-fix="founder-assistant">
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
       <div className="flex flex-col h-screen">
         {/* Amanda header bar — with proper padding from parent shell */}
         <div className="flex-shrink-0 bg-[#FDFBF7]/80 backdrop-blur-sm border-b-2 border-[#B89555]/30 px-4 py-3 mt-1">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 min-w-0">
             {/* Left: Amanda identity */}
             <div className="flex items-center gap-3">
               <button
@@ -249,7 +249,7 @@ export default function FoundersAssistant() {
                   <img src={amandaPortrait} alt="Amanda Clarke" className="w-full h-full object-cover"  loading="lazy" decoding="async" />
                   <span className="absolute bottom-0 right-0 w-2.5 h-2.5 jj-surface-emerald border-2 border-white rounded-full" />
                 </div>
-                <div className="hidden sm:block">
+              <div className="hidden lg:block min-w-0">
                   <h1 className="text-sm font-bold text-foreground leading-tight">Amanda Clarke</h1>
                   <p className="text-[10px] text-muted-foreground">Executive Assistant • Online</p>
                 </div>
@@ -257,7 +257,7 @@ export default function FoundersAssistant() {
             </div>
 
             {/* Center: Action buttons row — New Chat, History, Save, Tools */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 min-w-0 overflow-x-auto max-w-[52vw] px-1">
               <Button
                 variant="ghost"
                 size="sm"
@@ -265,7 +265,7 @@ export default function FoundersAssistant() {
                 className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">New Chat</span>
+                <span className="hidden xl:inline whitespace-nowrap">New Chat</span>
               </Button>
 
               <Button
@@ -274,7 +274,7 @@ export default function FoundersAssistant() {
                 className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10 relative"
               >
                 <History className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">History</span>
+                <span className="hidden xl:inline whitespace-nowrap">History</span>
                 {chatSessionCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[9px] flex items-center justify-center font-bold">
                     {chatSessionCount}
@@ -288,7 +288,7 @@ export default function FoundersAssistant() {
                 className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10"
               >
                 <Save className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Save</span>
+                <span className="hidden xl:inline whitespace-nowrap">Save</span>
               </Button>
 
               <div className="h-5 w-px bg-border mx-1" />
@@ -298,7 +298,7 @@ export default function FoundersAssistant() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="text-xs h-8 gap-1 text-muted-foreground hover:text-foreground hover:bg-[#EFE6D6]/10">
                     <Wrench className="w-3.5 h-3.5" />
-                    Tools
+                    <span className="hidden xl:inline whitespace-nowrap">Tools</span>
                     <ChevronDown className="w-3 h-3" />
                   </Button>
                 </DropdownMenuTrigger>

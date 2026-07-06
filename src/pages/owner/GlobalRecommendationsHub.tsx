@@ -224,7 +224,7 @@ export default function GlobalRecommendationsHub() {
   };
 
   return (
-    <div className="space-y-6 p-1">
+    <div className="space-y-6 p-1 max-w-6xl mx-auto" data-owner-batch-fix="recommendations">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
@@ -240,7 +240,7 @@ export default function GlobalRecommendationsHub() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           {criticalCount > 0 && (
             <Badge className="bg-red-500/10 text-red-700 border border-red-500/20 animate-pulse">
               {criticalCount} Critical
@@ -256,7 +256,8 @@ export default function GlobalRecommendationsHub() {
             size="sm"
             onClick={refreshData}
             disabled={isProcessing}
-            className="bg-[#FDFBF7] text-[#1A1A1A] border-2 border-[#B89555]/30 hover:bg-[#1A1A1A] hover:text-[#1A1A1A]"
+            data-surface="emerald"
+            className="jj-emerald-metallic allow-white text-white border-0 whitespace-nowrap min-w-[120px]"
           >
             <RotateCcw className={`h-4 w-4 mr-2 ${isProcessing ? "animate-spin" : ""}`} />
             Refresh
@@ -275,7 +276,7 @@ export default function GlobalRecommendationsHub() {
             className="pl-10 bg-[#FDFBF7] border-[#B89555]/20 focus:border-[#B89555]/50 text-[#1A1A1A]"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {(["pending", "applied", "reverted", "all"] as const).map(status => (
             <Button
               key={status}
@@ -283,7 +284,7 @@ export default function GlobalRecommendationsHub() {
               onClick={() => setActiveStatus(status)}
             className={`capitalize ${
  activeStatus === status
- ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
+  ? "jj-emerald-metallic text-white border-transparent shadow-sm"
  : "bg-[#FDFBF7] text-[#1A1A1A]/70 border border-[#B89555]/20 hover:border-[#B89555]/40"
  }`}
             >
@@ -294,21 +295,22 @@ export default function GlobalRecommendationsHub() {
       </div>
 
       {/* Source Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2">
         {SOURCE_SECTIONS.map(section => (
           <button
             key={section.id}
             onClick={() => setActiveSource(section.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
+            data-surface={activeSource === section.id ? "emerald" : undefined}
+            className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all min-h-12 ${
  activeSource === section.id
- ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-[#1A1A1A] border border-[#B89555]/40 shadow-sm"
+  ? "jj-emerald-metallic allow-white text-white border-transparent shadow-sm"
  : "bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40"
  }`}
           >
             <section.icon className="w-4 h-4" />
             <span>{section.label}</span>
             {section.id !== "all" && (
-              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 ml-1 border-[#B89555]/30 text-[#8A7356] bg-[#EFE6D6]/10">
+              <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ml-1 ${activeSource === section.id ? "border-white/70 text-white bg-white/15" : "border-[#B89555]/30 text-[#8A7356] bg-[#EFE6D6]/10"}`}>
                 {globalRecommendations.filter(r => r.source === section.id || r.category === section.id).length}
               </Badge>
             )}
