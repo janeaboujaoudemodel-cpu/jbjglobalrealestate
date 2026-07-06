@@ -583,7 +583,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               {mode === "signin" && (
                 <PasskeyButton
                   onSuccess={() => navigate('/')}
-                  className="w-full h-12 mb-3 bg-[#FDFBF7] hover:bg-[#F7F2EA] text-[#1A1A1A] font-medium rounded-xl border border-[#B89555]/40"
+                  className="mb-3"
                 />
               )}
               {mode === "signin" && isBiometricAvailable && hasStoredCredential && (

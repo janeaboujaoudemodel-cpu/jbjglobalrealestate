@@ -49,9 +49,11 @@ export function PasskeyButton({ onSuccess, className }: Props) {
       disabled={busy}
       data-no-contrast-guard
       data-allow-dark-cta
+      data-surface="emerald"
+      data-emerald-action="true"
       aria-label="Continue with passkey"
       className={[
-        'jj-passkey-cta group relative w-full overflow-hidden rounded-xl',
+        'jj-passkey-cta jj-cta-emerald jj-emerald-metallic allow-white group relative w-full overflow-hidden rounded-xl',
         'flex items-center justify-center gap-3 h-12 px-6',
         'text-white font-semibold text-[15px] tracking-wide',
         'shadow-[0_10px_30px_-12px_rgba(6,78,59,0.65)]',
@@ -62,7 +64,7 @@ export function PasskeyButton({ onSuccess, className }: Props) {
       style={{
         background:
           'linear-gradient(135deg, #064E3B 0%, #086148 35%, #042C1C 70%, #000000 100%)',
-        border: '1px solid rgba(184,149,85,0.55)',
+        border: 0,
       }}
     >
       {/* champagne sheen sweep */}
@@ -78,29 +80,20 @@ export function PasskeyButton({ onSuccess, className }: Props) {
         }}
       />
 
-      {/* gold hairline top edge */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-6 top-0 h-px"
-        style={{
-          background:
-            'linear-gradient(90deg, transparent, rgba(201,168,76,0.85), transparent)',
-        }}
-      />
       <span className="relative flex items-center gap-2.5" style={{ color: '#FFFFFF' }}>
         {busy ? (
-          <Loader2 className="w-[18px] h-[18px] animate-spin" style={{ color: '#EFE6D6' }} />
+          <Loader2 className="w-[18px] h-[18px] animate-spin" style={{ color: '#FFFFFF' }} />
         ) : (
           <span className="relative inline-flex items-center justify-center">
             <ShieldCheck
               className="w-[18px] h-[18px]"
-              style={{ color: '#C9A84C' }}
+              style={{ color: '#FFFFFF' }}
               strokeWidth={2.25}
               aria-hidden="true"
             />
             <KeyRound
               className="w-[10px] h-[10px] absolute -bottom-0.5 -right-1"
-              style={{ color: '#EFE6D6' }}
+              style={{ color: '#FFFFFF' }}
               strokeWidth={2.5}
               aria-hidden="true"
             />
