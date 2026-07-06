@@ -97,6 +97,7 @@ const AdoptSignatureStudio = lazy(() => import("@/pages/owner/sign/AdoptSignatur
 const OwnerRelationships = lazy(() => import("@/pages/owner/OwnerRelationships"));
 const OwnerRelationshipsRevenue = lazy(() => import("@/pages/owner/OwnerRelationshipsRevenue"));
 const OwnerMediaIngest = lazy(() => import("@/pages/owner/OwnerMediaIngest"));
+const HomeFeaturedProjectsManager = lazy(() => import("@/pages/owner/HomeFeaturedProjectsManager"));
 const AIHomeFinderSubmissions = lazy(() => import("@/pages/owner/AIHomeFinderSubmissionsPage"));
 const DocumentsFormsHub = lazy(() => import("@/pages/owner/DocumentsFormsHub"));
 const VoiceAgentControlPanel = lazy(() => import("@/pages/owner/VoiceAgentControlPanel"));
@@ -320,6 +321,7 @@ export const OwnerRoutes = () => (
     <Route path="relationships" element={<OwnerRelationships />} />
     <Route path="relationships/revenue" element={<OwnerRelationshipsRevenue />} />
     <Route path="media-ingest" element={<OwnerMediaIngest />} />
+    <Route path="properties/featured" element={<HomeFeaturedProjectsManager />} />
     <Route path="applications" element={<Navigate to="/owner/applications/ai-home-finder" replace />} />
     <Route path="applications/ai-home-finder" element={<AIHomeFinderSubmissions />} />
     <Route path="news" element={<OwnerNewsHub />} />

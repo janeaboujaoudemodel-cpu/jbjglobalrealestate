@@ -1,31 +1,13 @@
 /**
  * Developer File Validation Utility
- * Enforces file type whitelist, size limits, filename sanitization, and duplicate detection.
+ * Keeps upload filenames safe while allowing owner project materials without
+ * app-level type or size restrictions. Storage/backend policies remain the
+ * real boundary; this utility should not block legitimate brochures, media,
+ * spreadsheets, archives, or developer packs.
  */
 
-// Allowed MIME types and extensions
-const ALLOWED_TYPES: Record<string, string[]> = {
-  'application/pdf': ['.pdf'],
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-  'application/vnd.ms-excel': ['.xls'],
-  'image/jpeg': ['.jpg', '.jpeg'],
-  'image/png': ['.png'],
-  'image/webp': ['.webp'],
-  'video/mp4': ['.mp4'],
-  'application/zip': ['.zip'],
-  'application/x-zip-compressed': ['.zip'],
-  'image/svg+xml': ['.svg'],
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-};
-
-const ALLOWED_EXTENSIONS = new Set(
-  Object.values(ALLOWED_TYPES).flat().map(e => e.toLowerCase())
-);
-
-// Max 50MB per file, 200MB per session
-export const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
-export const MAX_SESSION_SIZE_BYTES = 200 * 1024 * 1024;
+export const MAX_FILE_SIZE_BYTES = Number.POSITIVE_INFINITY;
+export const MAX_SESSION_SIZE_BYTES = Number.POSITIVE_INFINITY;
 const MAX_FILENAME_LENGTH = 200;
 
 export interface FileValidationResult {
@@ -78,15 +60,6 @@ export function sanitizeFileName(name: string): string {
 }
 
 /**
- * Get file extension from a filename (lowercase).
- */
-function getExtension(name: string): string {
-  const dotIdx = name.lastIndexOf('.');
-  if (dotIdx < 0) return '';
-  return name.slice(dotIdx).toLowerCase();
-}
-
-/**
  * Validate a single file for upload.
  */
 export function validateFile(
@@ -96,40 +69,9 @@ export function validateFile(
 ): FileValidationResult {
   const riskFlags: string[] = [];
   const sanitizedName = sanitizeFileName(file.name);
-  const ext = getExtension(file.name);
 
-  // 1. Check file type
-  const typeAllowed = ALLOWED_TYPES[file.type] || ALLOWED_EXTENSIONS.has(ext);
-  if (!typeAllowed) {
-    return {
-      isValid: false,
-      sanitizedName,
-      rejectionReason: `File type "${ext || file.type}" is not allowed. Accepted: PDF, DOCX, XLSX, JPG, PNG, WEBP, MP4, ZIP, SVG, PPTX.`,
-      riskFlags: ['blocked_file_type'],
-    };
-  }
-
-  // 2. Check file size
-  if (file.size > MAX_FILE_SIZE_BYTES) {
-    return {
-      isValid: false,
-      sanitizedName,
-      rejectionReason: `File exceeds 50MB limit (${(file.size / 1024 / 1024).toFixed(1)}MB).`,
-      riskFlags: ['oversized_file'],
-    };
-  }
-
-  // 3. Check session total size
-  if (sessionTotalBytes + file.size > MAX_SESSION_SIZE_BYTES) {
-    return {
-      isValid: false,
-      sanitizedName,
-      rejectionReason: `Session upload limit of 200MB would be exceeded.`,
-      riskFlags: ['session_limit_exceeded'],
-    };
-  }
-
-  // 4. Check for duplicate filename in session
+  // Owner project uploads intentionally do not block by extension/MIME/size.
+  // Keep non-blocking flags only for operator visibility.
   const lowerName = sanitizedName.toLowerCase();
   if (sessionFileNames.some(n => n.toLowerCase() === lowerName)) {
     riskFlags.push('duplicate_filename');

@@ -17,7 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import type { UnifiedProject } from "@/types/unifiedProject";
 
-const TARGET = 6;
+const FALLBACK_TARGET = 6;
 
 const SELECT = `
   id, name, slug, description, location, price_from, price_to,
@@ -74,25 +74,23 @@ const ELITE_DEVELOPERS = [
 
 const HISTORY_KEY = "JBJ_BROWSING_HISTORY";
 
-// Owner-pinned featured slugs (rendered first on the homepage grid).
-// Must be off-plan with availability — validated at query time by isHomepagePromotable.
-const PINNED_SLUGS: string[] = [
-  "vela-dorchester-collection-omniyat-416",
-];
-
 type Project = UnifiedProject;
 
-async function tierPinned(): Promise<Project[]> {
-  if (PINNED_SLUGS.length === 0) return [];
+async function tierOwnerFeatured(): Promise<Project[]> {
   const { data } = await supabase
-    .from("projects")
-    .select(SELECT)
-    .in("slug", PINNED_SLUGS)
-    .eq("is_published", true);
-  const rows = (data || []) as unknown as Project[];
-  // Preserve author-defined order.
-  return PINNED_SLUGS
-    .map((slug) => rows.find((r: any) => r.slug === slug))
+    .from("home_featured_projects" as any)
+    .select(`
+      display_order,
+      is_visible,
+      owner_details,
+      project:projects(${SELECT})
+    `)
+    .eq("is_visible", true)
+    .order("display_order", { ascending: true })
+    .order("updated_at", { ascending: false });
+
+  return ((data || []) as any[])
+    .map((row) => row.project)
     .filter(Boolean) as Project[];
 }
 
@@ -108,7 +106,7 @@ function readBrowsingHistory(): Array<{ slug?: string; id?: string; developer_na
   }
 }
 
-function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
+function dedupePush(out: Project[], seen: Set<string>, candidates: Project[], target = FALLBACK_TARGET) {
   // Owner rule: promote off-plan first; direct-with-developer ready can stay
   // (top priority); generic completed/ready stock is dropped.
   const filtered = candidates.filter((p) => p && isHomepagePromotable(p));
@@ -119,7 +117,7 @@ function dedupePush(out: Project[], seen: Set<string>, candidates: Project[]) {
     return bDirectReady - aDirectReady;
   });
   for (const p of sorted) {
-    if (out.length >= TARGET) return;
+    if (out.length >= target) return;
     if (!p?.id || seen.has(p.id)) continue;
     // Require an image to keep the grid visually uniform
     if (!p.cover_image_url && !(p.images && p.images.length > 0)) continue;
@@ -156,7 +154,7 @@ async function tierInterestForm(userId: string | undefined, email: string | unde
   if (lead.budget_min) query = query.gte("price_from", Number(lead.budget_min) * 0.7);
   if (lead.budget_max) query = query.lte("price_from", Number(lead.budget_max) * 1.3);
 
-  const { data } = await query.limit(TARGET);
+  const { data } = await query.limit(FALLBACK_TARGET);
   return (data || []) as unknown as Project[];
 }
 
@@ -197,7 +195,7 @@ async function tierFavorites(userId: string | undefined): Promise<Project[]> {
     query = query.in("area_name", areas);
   }
 
-  const { data } = await query.limit(TARGET);
+  const { data } = await query.limit(FALLBACK_TARGET);
   return (data || []) as unknown as Project[];
 }
 
@@ -229,7 +227,7 @@ async function tierBrowsingHistory(): Promise<Project[]> {
     query = query.in("area_name", areas);
   }
 
-  const { data } = await query.limit(TARGET);
+  const { data } = await query.limit(FALLBACK_TARGET);
   return (data || []) as unknown as Project[];
 }
 
@@ -265,13 +263,13 @@ async function tierEliteFallback(mode: string | null): Promise<Project[]> {
       usedDevs.add(pick.developer_name as string);
       result.push(pick);
     }
-    if (result.length >= TARGET) break;
+    if (result.length >= FALLBACK_TARGET) break;
   }
   // Fill remaining from leftovers (still unique developers)
-  if (result.length < TARGET) {
+  if (result.length < FALLBACK_TARGET) {
     for (const arr of perDev) {
       for (const p of arr) {
-        if (result.length >= TARGET) break;
+        if (result.length >= FALLBACK_TARGET) break;
         if (!p.developer_name || usedDevs.has(p.developer_name)) continue;
         if (result.find((r) => r.id === p.id)) continue;
         usedDevs.add(p.developer_name as string);
@@ -302,17 +300,20 @@ export function useHandpickedProjects() {
   const { mode } = useUserModeContext() as any;
 
   return useQuery({
-    queryKey: ["handpicked-projects-v2-offplan-first", user?.id ?? "anon", mode ?? "none"],
+    queryKey: ["handpicked-projects-v3-owner-controlled", user?.id ?? "anon", mode ?? "none"],
     staleTime: 5 * 60 * 1000,
     queryFn: async () => {
       const out: Project[] = [];
       const seen = new Set<string>();
       let source: "interest" | "favorites" | "history" | "elite" | "mixed" = "elite";
 
-      // Owner-pinned featured projects run first — always appear at the top of the grid.
+      // Owner-controlled featured projects run first and may exceed the old six-card limit.
       try {
-        const pinned = await tierPinned();
-        dedupePush(out, seen, pinned);
+        const featured = await tierOwnerFeatured();
+        if (featured.length > 0) {
+          dedupePush(out, seen, featured, featured.length);
+          return { projects: out, source: "mixed" as const };
+        }
       } catch {}
 
 
@@ -322,7 +323,7 @@ export function useHandpickedProjects() {
         dedupePush(out, seen, interest);
       } catch {}
 
-      if (out.length < TARGET && user?.id) {
+      if (out.length < FALLBACK_TARGET && user?.id) {
         try {
           const favs = await tierFavorites(user.id);
           if (favs.length > 0 && source === "elite") source = "favorites";
@@ -331,7 +332,7 @@ export function useHandpickedProjects() {
         } catch {}
       }
 
-      if (out.length < TARGET) {
+      if (out.length < FALLBACK_TARGET) {
         try {
           const history = await tierBrowsingHistory();
           if (history.length > 0 && source === "elite") source = "history";
@@ -340,18 +341,18 @@ export function useHandpickedProjects() {
         } catch {}
       }
 
-      if (out.length < TARGET) {
+      if (out.length < FALLBACK_TARGET) {
         try {
           const elite = await tierEliteFallback(mode ?? null);
           dedupePush(out, seen, elite);
         } catch {}
       }
 
-      if (out.length < TARGET) {
+      if (out.length < FALLBACK_TARGET) {
         try {
           const published = await tierPublishedFallback();
           for (const p of published) {
-            if (out.length >= TARGET) break;
+            if (out.length >= FALLBACK_TARGET) break;
             if (!p?.id || seen.has(p.id)) continue;
             seen.add(p.id);
             out.push(p);
@@ -359,7 +360,7 @@ export function useHandpickedProjects() {
         } catch {}
       }
 
-      return { projects: out.slice(0, TARGET), source };
+      return { projects: out.slice(0, FALLBACK_TARGET), source };
     },
   });
 }

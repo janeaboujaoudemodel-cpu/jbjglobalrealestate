@@ -88,7 +88,20 @@ Deno.serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE);
 
-    // 1. Verify the user is an approved rep for this developer
+    const OWNER_BACKEND_EMAILS = new Set([
+      "janeaboujaoudemodel@gmail.com",
+      "janeaboujaoudenails@gmail.com",
+      "contact@janeaboujaoude.net",
+      "infoo.jane@gmail.com",
+    ]);
+    const userEmail = (userData.user.email || "").toLowerCase().trim();
+    const { data: roles } = await admin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId);
+    const isOwner = OWNER_BACKEND_EMAILS.has(userEmail) && (roles || []).some((r: { role: string }) => r.role === "owner" || r.role === "admin");
+
+    // 1. Verify the user is an approved rep for this developer, unless this is the verified owner.
     const { data: rep } = await admin
       .from("developer_representatives")
       .select("id, status, current_developer_id, auto_approve_uploads")
@@ -96,7 +109,7 @@ Deno.serve(async (req) => {
       .eq("current_developer_id", payload.developer_id)
       .maybeSingle();
 
-    if (!rep || rep.status !== "approved") {
+    if (!isOwner && (!rep || rep.status !== "approved")) {
       return new Response(
         JSON.stringify({ error: "not an approved rep for this developer" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -117,7 +130,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const trustLevel = dev.trust_level as "pending" | "auto_publish" | "suspended";
+    const trustLevel = isOwner ? "auto_publish" : dev.trust_level as "pending" | "auto_publish" | "suspended";
 
     // 3. Suspended → reject
     if (trustLevel === "suspended") {
