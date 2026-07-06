@@ -138,8 +138,10 @@ export type ProjectDetailData = {
   price_to?: number | null;
   bedrooms_min?: number | null;
   bedrooms_max?: number | null;
+  bedroom_types?: string[] | null;
   size_min?: number | null;
   size_max?: number | null;
+  built_up_area?: string | null;
   floors?: number | null;
   handover_date?: string | null;
   payment_plan?: string | null;
@@ -148,7 +150,7 @@ export type ProjectDetailData = {
   amenities?: string[] | null;
   amenity_images?: Record<string, string> | null;
   images: { id: string; url: string; alt?: string | null }[];
-  documents: { id: string; type: string; url: string; name?: string | null }[];
+  documents: { id: string; type: string; url: string; name?: string | null; display_title?: string | null; cover_image_url?: string | null; is_visible?: boolean | null; allow_download?: boolean | null }[];
   // Mirroring fields
   usp_headline?: string | null;
   usp_bullets?: string[] | null;
