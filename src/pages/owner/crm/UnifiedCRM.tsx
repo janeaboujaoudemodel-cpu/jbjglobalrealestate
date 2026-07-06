@@ -88,6 +88,7 @@ function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaL
         ref={ref}
         role="tablist"
         aria-label={ariaLabel}
+        data-crm-tabs-lock="true"
         className="px-3 py-2 pr-12 flex gap-2 overflow-x-auto whitespace-nowrap jj-scrollbar-gold max-w-full min-w-0"
       >
         {children}
@@ -571,6 +572,7 @@ export default function UnifiedCRM() {
           <nav
             role="tablist"
             aria-label="CRM sub-sections"
+            data-crm-tabs-lock="true"
             className="px-3 md:px-6 flex items-center gap-2 py-2.5 overflow-x-auto whitespace-nowrap jj-scrollbar-gold min-w-0 max-w-full"
           >
             {(() => {

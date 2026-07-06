@@ -33226,3 +33226,85 @@ html body :where(
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
+
+/* ============================================================
+   BACKEND CRM TAB CONTRAST LOCK — FINAL GATE
+   Fixes owner CRM pills that were rendering with emerald ombre
+   backgrounds and dark ink text (unreadable). Applies to any
+   [role="tablist"] marked data-crm-tabs-lock and to owner backend
+   portals as a whole. Two states, no overlap:
+     • aria-selected="true"  → emerald ombre + PURE WHITE ink/icons
+     • aria-selected="false" → champagne + INK text, no emerald wash
+   Uses triple-id specificity trick to outrank prior !important
+   passes without changing the cascade order elsewhere.
+   ============================================================ */
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:not(#crm-lock):not(#crm-lock):not(#crm-lock),
+html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="false"] {
+  background: #FDFBF7 !important;
+  background-color: #FDFBF7 !important;
+  background-image: none !important;
+  border: 1px solid rgba(184, 149, 85, 0.28) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:not(#crm-lock) *,
+html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="false"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:hover:not(#crm-lock),
+html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:hover {
+  background: #EFE6D6 !important;
+  background-color: #EFE6D6 !important;
+  background-image: none !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:hover *,
+html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="false"]:hover * {
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  stroke: #064E3B !important;
+}
+
+/* Active tabs — emerald ombre, pure white ink/icons/badges */
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="true"]:not(#crm-lock):not(#crm-lock):not(#crm-lock),
+html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="true"] {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  border: 1px solid transparent !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 24px -14px rgba(6, 78, 59, 0.85), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="true"] *,
+html body [data-backend-portal="owner-crm"] [data-crm-tabs-lock] button[role="tab"][aria-selected="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Counter badges keep their own decoration but ink/text must respect state */
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="true"] .rounded-full,
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="true"] .rounded-md {
+  background-color: rgba(255,255,255,0.22) !important;
+  border-color: rgba(255,255,255,0.78) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"] .rounded-full,
+html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"] .rounded-md {
+  background-color: #EFE6D6 !important;
+  border-color: rgba(184, 149, 85, 0.35) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
