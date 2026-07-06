@@ -33067,3 +33067,147 @@ html body #root :where(.owner-dashboard-shell, [data-backend-portal]) :is(.statu
   border: 1px solid rgba(255,255,255,0.65) !important;
   box-shadow: none !important;
 }
+
+/* ============================================================
+ * BACKEND EMERALD SURFACE LOCK — FINAL POSITIVE CONTRAST CONTRACT
+ * Any element sitting on an emerald surface (data-surface, tile,
+ * pill, CTA, sidebar row, header control, badge, chip) inherits
+ * pure white text + pure white SVG stroke, regardless of any
+ * hard-coded utility class ([text-[#1A1A1A]], text-black,
+ * text-slate-900, etc.). No hover / focus / active state may
+ * flip glyphs back to a dark color.
+ *
+ * Nested light rescue surfaces (champagne / cream / raised / gold /
+ * page / light / pearl and .jj-emerald-soft / .jj-emerald-outline /
+ * [data-emerald-tone="soft"|"outline"] / [data-emerald-variant="soft"])
+ * are explicitly opted OUT so their ink text survives.
+ * ============================================================ */
+html body :where(
+  [data-surface="emerald"],
+  [data-studio-surface="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald],
+  [data-cta="primary"],
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  .jj-emerald-card,
+  .jj-emerald-chip,
+  .jj-icon-tile-emerald,
+  .jj-chip-emerald,
+  .jj-side-tile.is-active,
+  .jj-tab-active-metallic,
+  .jj-hover-emerald
+):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-emerald-variant="soft"]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-surface-emerald-soft) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body :where(
+  [data-surface="emerald"],
+  [data-studio-surface="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald],
+  [data-cta="primary"],
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  .jj-emerald-card,
+  .jj-emerald-chip,
+  .jj-icon-tile-emerald,
+  .jj-chip-emerald,
+  .jj-side-tile.is-active,
+  .jj-tab-active-metallic,
+  .jj-hover-emerald
+):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-emerald-variant="soft"]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-surface-emerald-soft)
+  :where(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,time,dt,dd,th,td,figcaption,blockquote,button,div):not(.allow-dark):not(.allow-dark *):not([data-nested-light]):not([data-nested-light] *):not([data-surface="champagne"]):not([data-surface="champagne"] *):not([data-surface="cream"]):not([data-surface="cream"] *):not([data-surface="raised"]):not([data-surface="raised"] *):not([data-surface="gold"]):not([data-surface="gold"] *):not([data-surface="page"]):not([data-surface="page"] *):not([data-surface="light"]):not([data-surface="light"] *):not([data-surface="pearl"]):not([data-surface="pearl"] *):not(.surface-champagne):not(.surface-champagne *):not(.surface-cream):not(.surface-cream *):not(.surface-raised):not(.surface-raised *):not(.surface-gold):not(.surface-gold *):not(.surface-page):not(.surface-page *):not(.surface-light):not(.surface-light *):not(.surface-pearl):not(.surface-pearl *):not(.jj-card-inner):not(.jj-card-inner *):not(.jj-emerald-soft):not(.jj-emerald-soft *):not(.jj-emerald-outline):not(.jj-emerald-outline *):not(.jj-surface-emerald-soft):not(.jj-surface-emerald-soft *):not([data-emerald-tone="soft"]):not([data-emerald-tone="soft"] *):not([data-emerald-tone="outline"]):not([data-emerald-tone="outline"] *):not([data-emerald-variant="soft"]):not([data-emerald-variant="soft"] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body :where(
+  [data-surface="emerald"],
+  [data-studio-surface="emerald"],
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"],
+  [data-emerald],
+  [data-emerald="true"],
+  [data-jj-emerald],
+  [data-cta="primary"],
+  .jj-cta-emerald,
+  .jj-cta-primary,
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  .jj-pill-emerald,
+  .jj-surface-emerald,
+  .jj-emerald-solid,
+  .jj-emerald-fill,
+  .jj-bg-emerald,
+  .jj-emerald-action,
+  .jj-emerald-card,
+  .jj-emerald-chip,
+  .jj-icon-tile-emerald,
+  .jj-chip-emerald,
+  .jj-side-tile.is-active,
+  .jj-tab-active-metallic,
+  .jj-hover-emerald
+):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]):not([data-emerald-variant="soft"]):not(.jj-emerald-soft):not(.jj-emerald-outline):not(.jj-surface-emerald-soft)
+  :where(svg, [class*="lucide"], [data-lucide]):not(.allow-dark):not(.allow-dark *):not([data-allow-gold]):not(.text-gold):not(.jj-gold-accent):not([data-nested-light] *):not([data-surface="champagne"] *):not([data-surface="cream"] *):not([data-surface="raised"] *):not([data-surface="gold"] *):not([data-surface="page"] *):not([data-surface="light"] *):not([data-surface="pearl"] *):not(.surface-champagne *):not(.surface-cream *):not(.surface-raised *):not(.surface-gold *):not(.surface-page *):not(.surface-light *):not(.surface-pearl *):not(.jj-card-inner *):not(.jj-emerald-soft *):not(.jj-emerald-outline *):not(.jj-surface-emerald-soft *):not([data-emerald-tone="soft"] *):not([data-emerald-tone="outline"] *):not([data-emerald-variant="soft"] *) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Hover / focus / active never re-darken glyphs on emerald surfaces. */
+html body :where(
+  [data-surface="emerald"], [data-studio-surface="emerald"],
+  [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"], [data-emerald], [data-emerald="true"],
+  [data-jj-emerald], [data-cta="primary"],
+  .jj-cta-emerald, .jj-cta-primary,
+  .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-pill-emerald,
+  .jj-surface-emerald, .jj-emerald-solid, .jj-emerald-fill, .jj-bg-emerald,
+  .jj-emerald-action, .jj-emerald-card, .jj-emerald-chip,
+  .jj-icon-tile-emerald, .jj-chip-emerald,
+  .jj-side-tile.is-active, .jj-tab-active-metallic
+):hover,
+html body :where(
+  [data-surface="emerald"], [data-studio-surface="emerald"],
+  [data-backend-icon-tile="emerald"], [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"], [data-emerald], [data-emerald="true"],
+  [data-jj-emerald], [data-cta="primary"],
+  .jj-cta-emerald, .jj-cta-primary,
+  .jj-emerald-metallic, .jj-pill-emerald-metallic, .jj-pill-emerald,
+  .jj-surface-emerald, .jj-emerald-solid, .jj-emerald-fill, .jj-bg-emerald,
+  .jj-emerald-action, .jj-emerald-card, .jj-emerald-chip,
+  .jj-icon-tile-emerald, .jj-chip-emerald,
+  .jj-side-tile.is-active, .jj-tab-active-metallic
+):focus-visible {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
