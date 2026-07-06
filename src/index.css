@@ -119,6 +119,41 @@ html body #root .owner-dashboard-shell [data-recommendation-chip="champagne"] * 
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+html body #root .owner-dashboard-shell [data-enrichment-tile="full"],
+html body #root .owner-dashboard-shell [data-enrichment-tile="full"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .owner-dashboard-shell [data-inbox-category-pill="idle"],
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="idle"] {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.35) !important;
+  box-shadow: none !important;
+}
+
+html body #root .owner-dashboard-shell [data-inbox-category-pill="idle"] *,
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="idle"] *,
+html body #root .owner-dashboard-shell [data-recommendation-count-pill="idle"],
+html body #root .owner-dashboard-shell [data-recommendation-count-pill="idle"] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body #root .owner-dashboard-shell [data-inbox-category-pill="active"],
+html body #root .owner-dashboard-shell [data-inbox-category-pill="active"] *,
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="active"],
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 @property --border-angle {
   syntax: "<angle>";
   initial-value: 0deg;

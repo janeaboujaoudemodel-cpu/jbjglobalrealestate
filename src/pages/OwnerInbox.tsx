@@ -393,6 +393,7 @@ export default function OwnerInbox() {
               onClick={() => setCategoryFilter('all')}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
               data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
+              data-inbox-category-pill={categoryFilter === 'all' ? "active" : "idle"}
               style={categoryFilter === 'all'
                 ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
                 : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
@@ -408,6 +409,7 @@ export default function OwnerInbox() {
                 onClick={() => setCategoryFilter(key)}
                 data-emerald-action={categoryFilter === key ? "true" : undefined}
                 data-emerald-ok={categoryFilter === key ? "pill" : undefined}
+                data-inbox-category-pill={categoryFilter === key ? "active" : "idle"}
                 style={categoryFilter === key
                   ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
                   : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}

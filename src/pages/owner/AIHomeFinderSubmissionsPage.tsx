@@ -108,8 +108,8 @@ export default function AIHomeFinderSubmissionsPage() {
                 <th className="w-[28%] text-left p-3 font-semibold">Contact</th>
                 <th className="w-[28%] text-left p-3 font-semibold">Recommendations</th>
                 <th className="w-[9%] text-left p-3 font-semibold">Tier</th>
-                <th className="w-[10%] text-left p-3 font-semibold">Submitted</th>
-                <th className="w-[10%] text-right p-3 font-semibold">Action</th>
+                <th className="w-[9%] text-left p-3 font-semibold">Submitted</th>
+                <th className="w-[11%] text-right p-3 font-semibold">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -161,8 +161,8 @@ export default function AIHomeFinderSubmissionsPage() {
                       {formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}
                     </td>
                     <td className="p-3 text-right">
-                      <Button size="sm" variant="outline" className="h-8 px-2 text-[11px]" onClick={() => setOpenId(s.id)}>
-                        View report
+                      <Button size="sm" variant="outline" className="h-8 px-2 text-[11px] whitespace-nowrap" onClick={() => setOpenId(s.id)}>
+                        View
                       </Button>
                     </td>
                   </tr>
