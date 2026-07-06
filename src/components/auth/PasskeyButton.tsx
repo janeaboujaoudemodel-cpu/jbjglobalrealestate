@@ -71,11 +71,13 @@ export function PasskeyButton({ onSuccess, className }: Props) {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(115deg, transparent 30%, rgba(239,230,214,0.28) 50%, transparent 70%)',
+            'linear-gradient(115deg, transparent 35%, rgba(239,230,214,0.16) 50%, transparent 65%)',
           transform: 'translateX(-120%)',
-          animation: 'jj-passkey-sheen 3.8s ease-in-out infinite',
+          animation: 'jj-passkey-sheen 4.5s ease-in-out infinite',
+          mixBlendMode: 'screen',
         }}
       />
+
       {/* gold hairline top edge */}
       <span
         aria-hidden="true"
