@@ -393,7 +393,9 @@ export default function OwnerInbox() {
               onClick={() => setCategoryFilter('all')}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
               data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
-              style={categoryFilter === 'all' ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties : undefined}
+              style={categoryFilter === 'all'
+                ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
+                : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
               className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === 'all'
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
@@ -406,7 +408,9 @@ export default function OwnerInbox() {
                 onClick={() => setCategoryFilter(key)}
                 data-emerald-action={categoryFilter === key ? "true" : undefined}
                 data-emerald-ok={categoryFilter === key ? "pill" : undefined}
-                style={categoryFilter === key ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties : undefined}
+                style={categoryFilter === key
+                  ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
+                  : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
                 className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
  categoryFilter === key
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
