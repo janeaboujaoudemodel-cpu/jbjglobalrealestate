@@ -289,14 +289,18 @@ export const AdminOverviewDashboard = () => {
           </p>
         </div>
         <Button
-          variant="secondary"
           size="sm"
           onClick={handleRefresh}
           disabled={refreshing}
+          data-surface="emerald"
+          data-emerald-action="true"
+          className="jj-cta-emerald allow-white text-white hover:text-white font-semibold shadow-[0_12px_24px_-18px_rgba(6,78,59,0.85)]"
+          style={{ color: "#FFFFFF" }}
         >
-          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
-          Refresh
+          <RefreshCw className={`allow-white w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Refresh</span>
         </Button>
+
       </div>
 
       {/* System Health Panel - Champagne theme */}
