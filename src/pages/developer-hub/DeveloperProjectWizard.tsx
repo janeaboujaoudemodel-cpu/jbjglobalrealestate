@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string }
+interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
 
@@ -63,6 +63,10 @@ const DeveloperProjectWizard = () => {
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [additionalInfoMode, setAdditionalInfoMode] = useState<"keep" | "enrich">("enrich");
   const [publishResult, setPublishResult] = useState<AutoPublishResponse | null>(null);
+  const [extractedDeveloperName, setExtractedDeveloperName] = useState("");
+  const [developerDescription, setDeveloperDescription] = useState("");
+  const [developerLogoNeeded, setDeveloperLogoNeeded] = useState(false);
+  const [paymentExpanded, setPaymentExpanded] = useState(false);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
 
@@ -118,22 +122,25 @@ const DeveloperProjectWizard = () => {
       if (Array.isArray(draft?.brochures)) setBrochures(draft.brochures);
       if (Array.isArray(draft?.smartFiles)) setSmartFiles(draft.smartFiles);
       if (draft?.selectedDeveloperId) setSelectedDeveloperId(draft.selectedDeveloperId);
+      if (draft?.extractedDeveloperName) setExtractedDeveloperName(draft.extractedDeveloperName);
+      if (draft?.developerDescription) setDeveloperDescription(draft.developerDescription);
+      if (typeof draft?.developerLogoNeeded === "boolean") setDeveloperLogoNeeded(draft.developerLogoNeeded);
     } catch {
       window.localStorage.removeItem(draftKey);
     }
   }, [draftKey]);
 
   useEffect(() => {
-    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, savedAt: new Date().toISOString() };
+    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() };
     try { window.localStorage.setItem(draftKey, JSON.stringify(payload)); } catch {}
-  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, draftKey]);
+  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, draftKey]);
 
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
-  const activeDeveloperName = isOwner ? ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name : developer?.name;
+  const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
   const trustLevel = developer?.trust_level as string | undefined;
   const willPublishLive = isOwner || trustLevel === "auto_publish";
 
-  const uploadFile = async (file: File, bucket = "rel-media") => {
+  const uploadFile = async (file: File, bucket = "rel-media", role?: Uploaded["role"]) => {
     const v = validateFile(file);
     if (!v.isValid) {
       toast.error(v.rejectionReason || "File rejected");
@@ -147,37 +154,53 @@ const DeveloperProjectWizard = () => {
     }
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60);
-    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type, size: file.size } as Uploaded;
+    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type, size: file.size, role } as Uploaded;
   };
 
   const onCover = async (f: File) => {
-    const u = await uploadFile(f);
+    const u = await uploadFile(f, "rel-media", "cover");
     if (u) setCover(u);
   };
   const onGallery = async (files: FileList) => {
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f);
+      const u = await uploadFile(f, "rel-media", "gallery");
       if (u) setGallery((g) => [...g, u]);
     }
   };
-  const onBrochures = async (files: FileList) => {
+  const onBrochures = async (files: FileList, role: Uploaded["role"] = "brochure", extractAfterUpload = false) => {
+    const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f);
-      if (u) setBrochures((b) => [...b, u]);
+      const u = await uploadFile(f, "rel-media", role);
+      if (u) uploaded.push(u);
+    }
+    if (!uploaded.length) return;
+    setBrochures((b) => [...b, ...uploaded]);
+    if (extractAfterUpload) {
+      const extractionFiles = [...smartFiles, ...uploaded];
+      setSmartFiles(extractionFiles);
+      await runExtraction(extractionFiles);
     }
   };
 
   const onSmartUpload = async (files: FileList) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f);
+      const u = await uploadFile(f, "rel-media", "document");
       if (u) uploaded.push(u);
     }
     if (uploaded.length === 0) return;
-    setSmartFiles((s) => [...s, ...uploaded]);
-    // Also add to brochures list so they are saved as project documents
-    setBrochures((b) => [...b, ...uploaded]);
-    await runExtraction([...smartFiles, ...uploaded]);
+    const imageFiles = uploaded.filter((u) => u.type.startsWith("image/"));
+    const documentFiles = uploaded.filter((u) => !u.type.startsWith("image/"));
+    if (!cover && imageFiles.length) setCover({ ...imageFiles[0], role: "cover" });
+    if (imageFiles.length > 1) setGallery((g) => [...g, ...imageFiles.slice(1).map((u) => ({ ...u, role: "gallery" as const }))]);
+    if (documentFiles.length) {
+      const extractionFiles = [...smartFiles, ...documentFiles];
+      setSmartFiles(extractionFiles);
+      setBrochures((b) => [...b, ...documentFiles]);
+      await runExtraction(extractionFiles);
+    } else {
+      toast.success("Image uploaded. Add a brochure or fact sheet to run AI extraction.");
+    }
   };
 
   const runExtraction = async (files: Uploaded[]) => {
@@ -186,7 +209,7 @@ const DeveloperProjectWizard = () => {
     setLastExtractedFields([]);
     try {
       const { data, error } = await supabase.functions.invoke("ai-project-brochure-extract", {
-          body: { files: files.map((f) => ({ url: f.extractionUrl || f.url, name: f.name, type: f.type })) },
+          body: { files: files.map((f) => ({ url: f.extractionUrl || f.url, name: f.name, type: f.type, role: f.role })) },
       });
       if (error) {
         let message = error.message || "Extraction failed";
@@ -232,6 +255,7 @@ const DeveloperProjectWizard = () => {
         setIfEmpty("number_of_stories", extracted.number_of_stories);
         setIfEmpty("furnished_status", extracted.furnished_status);
         setIfEmpty("management_type", extracted.management_type);
+        setIfEmpty("short_description", extracted.listing_title);
         if (Array.isArray(extracted.amenities) && extracted.amenities.length && !next.amenities) {
           next.amenities = (extracted.amenities as string[]).join(", ");
           filled.push("amenities");
@@ -241,6 +265,11 @@ const DeveloperProjectWizard = () => {
         if (typeof extracted.owner_can_use === "boolean" && !next.owner_can_use) { next.owner_can_use = extracted.owner_can_use ? "yes" : "no"; filled.push("owner_can_use"); }
         return next;
       });
+      const developerInfo = (data as any)?.developer;
+      if (typeof extracted.developer_name === "string" && extracted.developer_name.trim()) setExtractedDeveloperName(extracted.developer_name.trim());
+      if (developerInfo?.developer_id && isOwner) setSelectedDeveloperId(developerInfo.developer_id);
+      if (typeof extracted.developer_description === "string" && extracted.developer_description.trim()) setDeveloperDescription(extracted.developer_description.trim());
+      setDeveloperLogoNeeded(Boolean(developerInfo?.developer_logo_needed));
       setLastExtractedFields(filled);
       if (Array.isArray((data as any)?.files_skipped) && (data as any).files_skipped.length) {
         toast.warning(`${(data as any).files_skipped.length} file(s) were skipped. The rest were extracted.`);
@@ -285,7 +314,7 @@ const DeveloperProjectWizard = () => {
 
   const saveDraft = () => {
     try {
-      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, savedAt: new Date().toISOString() }));
+      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() }));
       toast.success("Draft saved on this device");
     } catch {
       toast.error("Draft could not be saved on this device");
@@ -331,6 +360,7 @@ const DeveloperProjectWizard = () => {
       },
       images: gallery.filter((g) => g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i + 1 })),
       documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: "brochure" })),
+      developer_patch: developerDescription ? { description: developerDescription } : undefined,
     });
     try { window.localStorage.removeItem(draftKey); } catch {}
     if (res.project_id || res.slug || res.public_path) setPublishResult(res);
