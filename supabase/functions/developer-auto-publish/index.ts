@@ -15,6 +15,7 @@ interface Payload {
   developer_id: string;
   // Either project_id (edit) or null (new project)
   project_id?: string | null;
+  publish_live?: boolean;
   patch: {
     name?: string;
     slug?: string;
@@ -34,7 +35,7 @@ interface Payload {
     [k: string]: unknown;
   };
   images?: Array<{ image_url: string; alt_text?: string; display_order?: number }>;
-  documents?: Array<{ file_url: string; file_name: string; document_type?: string }>;
+  documents?: Array<{ file_url: string; file_name: string; document_type?: string; file_size?: number | null; storage_path?: string | null; cover_image_url?: string | null; display_title?: string | null }>;
   // Optional developer profile patch (logo, description)
   developer_patch?: {
     description?: string;
@@ -184,7 +185,9 @@ Deno.serve(async (req) => {
       );
     }
 
-    // 5. AUTO-PUBLISH path
+    // 5. OWNER/AUTO path. Owner uploads are saved as an internal preview unless the
+    // client explicitly asks to publish live. This keeps Preview separate from Publish.
+    const shouldPublishLive = payload.publish_live === true;
     const projectPatch: Record<string, unknown> = {
       ...payload.patch,
       developer_id: payload.developer_id,
@@ -240,11 +243,19 @@ Deno.serve(async (req) => {
 
     // Documents
     if (payload.documents?.length && projectId) {
-      const rows = payload.documents.map((d) => ({
+      const rows = payload.documents.map((d, i) => ({
         project_id: projectId,
         file_url: d.file_url,
         file_name: d.file_name,
         document_type: d.document_type ?? "brochure",
+        file_size: d.file_size ?? null,
+        storage_path: d.storage_path ?? null,
+        cover_image_url: d.cover_image_url ?? null,
+        display_title: d.display_title ?? null,
+        display_order: i,
+        is_visible: true,
+        allow_download: true,
+        data_source: "owner_upload",
       }));
       await admin.from("project_documents").insert(rows as never);
     }
@@ -264,7 +275,7 @@ Deno.serve(async (req) => {
 
     let published = false;
     let publishError: string | null = null;
-    if (projectId) {
+    if (projectId && shouldPublishLive) {
       const { error: publishErr } = await admin
         .from("projects")
         .update({ is_published: true, updated_at: new Date().toISOString() })
@@ -283,12 +294,12 @@ Deno.serve(async (req) => {
       entity_type: "project",
       entity_id: projectId,
       entity_name: payload.patch.name ?? null,
-      details: { route: published ? "auto_publish" : "queued_for_review", trust_level: trustLevel, patch: payload.patch },
+        details: { route: published ? "auto_publish" : "owner_preview", trust_level: trustLevel, publish_live: shouldPublishLive, patch: payload.patch },
     });
 
     return new Response(
       JSON.stringify({
-        status: published ? "published" : "queued_for_review",
+        status: published ? "published" : "saved_preview",
         project_id: projectId,
         slug: projectSlug,
         public_path: projectSlug ? `/project/${projectSlug}` : null,
