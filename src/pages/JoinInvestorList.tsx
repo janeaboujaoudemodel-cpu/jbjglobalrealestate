@@ -138,8 +138,8 @@ const JoinInvestorList = () => {
         <section className="pt-28 pb-8 px-4">
           <div className="max-w-5xl mx-auto text-center">
             <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-[#EFE6D6]/15 border border-[#B89555]/40 px-4 py-1.5 text-[#1A1A1A] text-sm font-semibold mb-5 tracking-wide uppercase">
-                <Shield className="w-4 h-4" />
+              <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/40 text-[11px] font-bold tracking-[0.18em] uppercase text-[#1A1A1A] mb-5">
+                <Shield className="w-3.5 h-3.5" />
                 Exclusive Investor Access
               </motion.div>
               <motion.h1
