@@ -73,7 +73,8 @@ ${SCHEMA_HINT}`,
       },
     ];
 
-    for (const f of files.slice(0, 20)) {
+    let attachedCount = 0;
+    for (const f of files) {
       const fetched = await fileToBase64(f.url);
       if (!fetched) continue;
       if (fetched.mime.startsWith("image/")) {
@@ -82,6 +83,14 @@ ${SCHEMA_HINT}`,
         // Gemini via OpenRouter accepts PDFs as file parts
         contentParts.push({ type: "file", file: { filename: f.name, file_data: `data:${fetched.mime};base64,${fetched.b64}` } });
       }
+      attachedCount += 1;
+    }
+
+    if (attachedCount === 0) {
+      return new Response(JSON.stringify({ error: "No uploaded files could be read for extraction. Please retry the upload." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -89,6 +98,7 @@ ${SCHEMA_HINT}`,
       headers: {
         "Content-Type": "application/json",
         "Lovable-API-Key": LOVABLE_API_KEY,
+          "X-Lovable-AIG-SDK": "supabase-edge-function",
       },
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
@@ -116,7 +126,7 @@ ${SCHEMA_HINT}`,
       if (v === "" || v === "unknown" || v === "N/A") (parsed as any)[k] = null;
     }
 
-    return new Response(JSON.stringify({ extracted: parsed }), {
+    return new Response(JSON.stringify({ extracted: parsed, files_read: attachedCount }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
