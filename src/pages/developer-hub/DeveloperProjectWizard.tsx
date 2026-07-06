@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video, Mic, Maximize2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, Check, Video, Mic, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SafeImage } from "@/components/SafeImage";
+import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
 
-interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
+interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "floor_plan" | "payment_plan" | "document" }
 
 type UploadStatus = {
   id: string;
@@ -97,11 +99,24 @@ const isExtractionCapable = (file: Uploaded) => /pdf|image|text|word|officedocum
 
 const fileKey = (file: Uploaded) => `${file.url || file.path || file.name}`.toLowerCase().replace(/\?.*$/, "");
 
-const getPaymentPlanBadge = (plan: string) => {
-  const ratio = plan.match(/\b(\d{1,3})\s*[\/\-]\s*(\d{1,3})\b/);
-  if (ratio) return `${ratio[1]}/${ratio[2]}`;
-  const percent = plan.match(/\b\d{1,3}\s*%/);
-  return percent ? percent[0].replace(/\s+/g, "") : "%";
+const parseAreaRange = (value: string) => {
+  const nums = (value.match(/\d+(?:,\d{3})*(?:\.\d+)?/g) || [])
+    .map((n) => Number(n.replace(/,/g, "")))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  if (!nums.length) return { min: null, max: null };
+  return { min: Math.min(...nums), max: Math.max(...nums) };
+};
+
+const bedroomLabel = (value: number) => value === 0 ? "Studio" : value >= 6 ? "6+ BR" : `${value} BR`;
+
+const classifyUploadRole = (file: File, fallback: NonNullable<Uploaded["role"]>): NonNullable<Uploaded["role"]> => {
+  if (file.type.startsWith("image/") || file.type.startsWith("video/")) return fallback;
+  const name = file.name.toLowerCase();
+  if (/fact\s*sheet|factsheet|fact[-_]?sheet/.test(name)) return "fact_sheet";
+  if (/brochure|booklet|catalogue|catalog/.test(name)) return "brochure";
+  if (/floor|plan|layout|tower|unit[-_\s]?type/.test(name)) return "floor_plan";
+  if (/payment|installment|instalment|schedule/.test(name)) return "payment_plan";
+  return fallback;
 };
 
 const shouldOverrideProjectName = (current: string, extracted: string) => {
@@ -115,6 +130,8 @@ const shouldOverrideProjectName = (current: string, extracted: string) => {
 const getDocumentType = (file: Uploaded) => {
   if (file.type.startsWith("video/")) return "video";
   if (file.role === "fact_sheet") return "factsheet";
+  if (file.role === "floor_plan") return "floor_plan";
+  if (file.role === "payment_plan") return "payment_plan";
   if (/payment/i.test(file.name)) return "payment_plan";
   if (/floor/i.test(file.name)) return "floor_plan";
   return file.role === "document" ? "document" : "brochure";
@@ -226,7 +243,7 @@ const DeveloperProjectWizard = () => {
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
   const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
   const trustLevel = developer?.trust_level as string | undefined;
-  const willPublishLive = isOwner || trustLevel === "auto_publish";
+  const willPublishLive = !isOwner && trustLevel === "auto_publish";
 
   const markUpload = (id: string, patch: Partial<UploadStatus>) => {
     setUploadStatuses((items) => items.map((item) => item.id === id ? { ...item, ...patch } : item));
@@ -241,7 +258,7 @@ const DeveloperProjectWizard = () => {
       setGallery((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
       return;
     }
-    if (file.role === "fact_sheet" || file.role === "brochure" || file.role === "document") {
+    if (file.role === "fact_sheet" || file.role === "brochure" || file.role === "floor_plan" || file.role === "payment_plan" || file.role === "document") {
       setBrochures((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
       if (isExtractionCapable(file)) {
         setSmartFiles((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
@@ -367,7 +384,7 @@ const DeveloperProjectWizard = () => {
       return null;
     }
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60);
+    const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60).catch(() => ({ data: null as any }));
     markUpload(statusId, { status: "uploaded", elapsed: Math.max(1, Math.round((Date.now() - startedAt) / 1000)) });
     return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type || "application/octet-stream", size: file.size, role } as Uploaded;
   };
@@ -382,18 +399,20 @@ const DeveloperProjectWizard = () => {
   const onGallery = async (files: FileList) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f, "rel-media", "gallery");
+      const role = f.type.startsWith("image/") || f.type.startsWith("video/") ? "gallery" : classifyUploadRole(f, "document");
+      const u = await uploadFile(f, "rel-media", role);
       if (u) uploaded.push(u);
     }
     if (uploaded.length) {
-      setGallery((g) => [...g, ...uploaded]);
+      uploaded.forEach((u) => addUploadedFile(u));
       toast.success(`${uploaded.length} gallery file${uploaded.length === 1 ? "" : "s"} uploaded`);
     }
   };
   const onBrochures = async (files: FileList, role: NonNullable<Uploaded["role"]> = "brochure", extractAfterUpload = false) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f, "rel-media", role);
+      const finalRole = classifyUploadRole(f, role);
+      const u = await uploadFile(f, "rel-media", finalRole);
       if (u) uploaded.push(u);
     }
     if (!uploaded.length) return;
@@ -410,7 +429,8 @@ const DeveloperProjectWizard = () => {
   const onSmartUpload = async (files: FileList) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f, "rel-media", "document");
+      const finalRole = f.type.startsWith("image/") || f.type.startsWith("video/") ? "gallery" : classifyUploadRole(f, "document");
+      const u = await uploadFile(f, "rel-media", finalRole);
       if (u) uploaded.push(u);
     }
     if (uploaded.length === 0) return;
@@ -519,10 +539,7 @@ const DeveloperProjectWizard = () => {
   const canSubmit =
     !!activeDeveloperId && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
 
-  const paymentPlanParts = basics.payment_plan
-    .split(/[,;\n]+/)
-    .map((part) => part.trim())
-    .filter(Boolean);
+  const paymentPresentation = formatPaymentPlanForDisplay(basics.payment_plan, basics.handover_date);
 
   const mediaStats = useMemo(() => {
     const imageCount = gallery.filter((g) => g.type.startsWith("image/")).length + (cover?.type.startsWith("image/") ? 1 : 0);
@@ -534,10 +551,46 @@ const DeveloperProjectWizard = () => {
   }, [gallery, cover, brochures.length, uploadStatuses]);
 
   const bedroomSummary = selectedBedrooms.length
-    ? selectedBedrooms.map((value) => value === 0 ? "Studio" : value >= 6 ? "6+ BR" : `${value} BR`).join(" · ")
+    ? selectedBedrooms.map(bedroomLabel).join(" · ")
     : basics.bedrooms_min || basics.bedrooms_max
       ? `${basics.bedrooms_min || "—"} - ${basics.bedrooms_max || "—"}`
       : "—";
+
+  const sizeSummary = basics.built_up_area || basics.plot_area || "—";
+
+  const documentCoverFor = (file: Uploaded, index: number) => {
+    const lower = file.name.toLowerCase();
+    const cityBuddy = gallery.find((g) => /city\s*buddy|citybuddy|robot|buddy/i.test(g.name) && g.type.startsWith("image/"));
+    if (/city\s*buddy|citybuddy|robot|buddy/.test(lower) && cityBuddy) return cityBuddy.url;
+    const pool = [cover, ...gallery].filter((g): g is Uploaded => !!g && g.type.startsWith("image/"));
+    if (!pool.length) return null;
+    return pool[(index + (file.role === "brochure" || file.role === "fact_sheet" ? 0 : 1)) % pool.length]?.url || pool[0].url;
+  };
+
+  const PaymentPreview = ({ compact = false }: { compact?: boolean }) => {
+    if (!paymentPresentation) return null;
+    return (
+      <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[#B89555] font-bold">Payment plan</p>
+            <p className="mt-1 text-sm font-bold text-[#1A1A1A]">{paymentPresentation.headline}</p>
+          </div>
+          <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{paymentPresentation.badge}</span>
+        </div>
+        {!compact && <p className="mt-2 text-xs text-[#1A1A1A]/72">{paymentPresentation.summary}</p>}
+        <div className={`mt-3 grid gap-2 ${compact ? "grid-cols-1" : "sm:grid-cols-2"}`}>
+          {paymentPresentation.stages.slice(0, compact ? 2 : 6).map((stage) => (
+            <div key={`${stage.label}-${stage.value}`} className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+              <p className="text-xs font-semibold text-[#1A1A1A]">{stage.label}</p>
+              <p className="text-lg font-bold text-[#064E3B]">{stage.value}</p>
+              {stage.detail && <p className="text-[11px] text-[#1A1A1A]/65">{stage.detail}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
@@ -584,8 +637,20 @@ const DeveloperProjectWizard = () => {
     const amenitiesArr = basics.amenities
       ? basics.amenities.split(",").map((s) => s.trim()).filter(Boolean)
       : null;
+    const sizeRange = parseAreaRange(basics.built_up_area || basics.plot_area);
+    const bedroomTypes = selectedBedrooms.length ? selectedBedrooms.map(bedroomLabel) : null;
+    const unitTypes = selectedBedrooms.length
+      ? selectedBedrooms.map((value) => ({
+          type: value === 0 ? "Studio" : value >= 6 ? "6+ Bedrooms" : `${value} Bedroom${value === 1 ? "" : "s"}`,
+          size_from: sizeRange.min ?? undefined,
+          size_to: sizeRange.max ?? undefined,
+          price_from: basics.price_from ? Number(basics.price_from) : undefined,
+          status: "available",
+        }))
+      : null;
     const res = await publish.mutateAsync({
       developer_id: activeDeveloperId,
+      publish_live: !isOwner && willPublishLive,
       patch: {
         name: basics.name.trim(),
         short_description: basics.short_description || null,
@@ -598,9 +663,14 @@ const DeveloperProjectWizard = () => {
         price_to: basics.price_to ? Number(basics.price_to) : null,
         bedrooms_min: basics.bedrooms_min ? Number(basics.bedrooms_min) : null,
         bedrooms_max: basics.bedrooms_max ? Number(basics.bedrooms_max) : null,
+        bedroom_types: bedroomTypes,
+        unit_types: unitTypes,
         payment_plan: basics.payment_plan || null,
         service_charge: basics.service_charge || null,
         built_up_area: basics.built_up_area || null,
+        size_min: sizeRange.min,
+        size_max: sizeRange.max,
+        area_unit: basics.built_up_area || basics.plot_area ? "sqft" : null,
         plot_area: basics.plot_area || null,
         number_of_stories: basics.number_of_stories ? Number(basics.number_of_stories) : null,
         furnished_status: basics.furnished_status || null,
@@ -613,7 +683,15 @@ const DeveloperProjectWizard = () => {
         developer_name: activeDeveloperName || null,
       },
       images: [cover, ...gallery].filter((g): g is Uploaded => !!g && g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i })),
-      documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: getDocumentType(b) })),
+      documents: brochures.map((b, i) => ({
+        file_url: b.url,
+        file_name: b.name,
+        document_type: getDocumentType(b),
+        file_size: b.size,
+        storage_path: b.path || null,
+        cover_image_url: documentCoverFor(b, i),
+        display_title: b.name.replace(/\.[a-z0-9]{2,5}$/i, "").replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim(),
+      })),
       developer_patch: developerDescription ? { description: developerDescription } : undefined,
     });
     try { window.localStorage.removeItem(draftKey); } catch {}
@@ -697,6 +775,7 @@ const DeveloperProjectWizard = () => {
     const publicPath = publishResult.public_path || (publishResult.slug ? `/project/${publishResult.slug}` : null);
     const fullUrl = publicPath && typeof window !== "undefined" ? `${window.location.origin}${publicPath}` : publicPath;
     const isPublished = publishResult.status === "published";
+    const isOwnerPreview = publishResult.status === "saved_preview";
     const publishError = (publishResult as AutoPublishResponse & { publish_error?: string | null }).publish_error;
 
     return (
@@ -707,9 +786,9 @@ const DeveloperProjectWizard = () => {
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">{isPublished ? "Project published live" : "Project saved for review"}</h1>
+              <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">{isPublished ? "Project published live" : isOwnerPreview ? "Owner preview saved" : "Project saved for review"}</h1>
               <p className="text-[#1A1A1A]/70 text-sm mt-1">
-                {isPublished ? "The public project page is ready. Open it now or copy the direct URL." : "The project record was created and a preview URL was generated. Complete the missing listing data to publish live."}
+                {isPublished ? "The public project page is ready. Open it now or copy the direct URL." : isOwnerPreview ? "The project record was saved for your internal review. It is not presented as owner approval." : "The project record was created and a preview URL was generated. Complete the missing listing data to publish live."}
               </p>
               {publishError && (
                 <p className="mt-3 rounded-md border border-[#B89555]/35 bg-[#FDFBF7] px-3 py-2 text-sm text-[#1A1A1A]">
@@ -745,7 +824,7 @@ const DeveloperProjectWizard = () => {
             <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] transition-colors">
               <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
                 <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
-                  {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
+                  {cover?.url ? <SafeImage src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
                 </div>
               </button>
               <div className="p-5 space-y-3">
@@ -760,18 +839,11 @@ const DeveloperProjectWizard = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-[#1A1A1A]">
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Handover</span>{basics.handover_date || "—"}</div>
-                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Size</span>{sizeSummary}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
                 </div>
-                {basics.payment_plan && (
-                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
-                    <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
-                      <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
-                      <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{getPaymentPlanBadge(basics.payment_plan)}</span>
-                    </button>
-                    {paymentExpanded && <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">{paymentPlanParts.map((part, i) => <p key={i}>{part}</p>)}</div>}
-                  </div>
-                )}
+                <PaymentPreview />
                 <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields before publishing."}</p>
                 <ContactActionsPreview />
               </div>
@@ -788,7 +860,7 @@ const DeveloperProjectWizard = () => {
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Add a project</h1>
           <p className="text-[#1A1A1A]/70 text-sm mt-1">
             {willPublishLive
-              ? "Will publish live immediately when you click Publish. Draft autosaves on this device."
+              ? "Owner preview saves the project privately. Use Publish only when you want it live. Draft autosaves on this device."
               : "Will be queued for one-time owner approval. After that, every future edit goes live automatically."}
           </p>
         </div>
@@ -797,8 +869,8 @@ const DeveloperProjectWizard = () => {
  ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
  : "bg-amber-50 text-amber-800 border-amber-200"
  }`}>
-          {willPublishLive ? <ShieldCheck className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
-          {willPublishLive ? "Live publishing" : "Pending approval"}
+          {isOwner ? <ShieldCheck className="w-3.5 h-3.5" /> : willPublishLive ? <ShieldCheck className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+          {isOwner ? "Owner preview" : willPublishLive ? "Live publishing" : "Pending approval"}
         </span>
       </div>
 
@@ -832,7 +904,7 @@ const DeveloperProjectWizard = () => {
             <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} statusRows={uploadStatuses.filter((u) => u.role === "cover")} onFiles={(files) => files[0] && onCover(files[0])} />
             <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*,video/*" files={gallery} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
             <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} statusRows={uploadStatuses.filter((u) => u.role === "fact_sheet" || u.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
-            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} statusRows={uploadStatuses.filter((u) => u.role === "document")} multiple onFiles={onSmartUpload} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document" || b.role === "floor_plan" || b.role === "payment_plan")} statusRows={uploadStatuses.filter((u) => u.role === "document" || u.role === "floor_plan" || u.role === "payment_plan")} multiple onFiles={onSmartUpload} />
           </div>
           {uploadStatuses.length > 0 && (
             <div data-upload-summary className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
@@ -1035,7 +1107,7 @@ const DeveloperProjectWizard = () => {
               {cover ? (
                 <div className="relative mt-2 max-w-sm overflow-hidden rounded-lg border border-[#B89555]/40 bg-[#FDFBF7]">
                   <div className="aspect-video bg-[#EFE6D6]">
-                    <img src={cover.url} alt="cover" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                    <SafeImage src={cover.url} alt="cover" className="h-full w-full object-cover" loading="lazy" decoding="async" />
                   </div>
                   <div className="p-3 text-sm text-[#1A1A1A]">
                     <p className="font-semibold">Current cover</p>
@@ -1061,7 +1133,7 @@ const DeveloperProjectWizard = () => {
                 {gallery.map((g, i) => (
                   <div key={fileKey(g)} className="relative overflow-hidden rounded-lg border border-[#B89555]/40 bg-[#FDFBF7]">
                     {g.type.startsWith("image/") ? (
-                      <img src={g.url} alt={g.name} className="h-32 w-full object-cover" loading="lazy" decoding="async" />
+                      <SafeImage src={g.url} alt={g.name} className="h-32 w-full object-cover" loading="lazy" decoding="async" />
                     ) : g.type.startsWith("video/") ? (
                       <video src={g.url} className="h-32 w-full object-cover" muted playsInline controls preload="metadata" />
                     ) : (
@@ -1105,7 +1177,7 @@ const DeveloperProjectWizard = () => {
               {brochures.map((b, i) => (
                 <div key={fileKey(b)} className="flex items-center gap-3 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] p-3">
                   <div className="grid h-14 w-16 shrink-0 place-items-center overflow-hidden rounded border border-[#B89555]/20 bg-[#EFE6D6]">
-                    {isImageUpload(b) ? <img src={b.url} alt="" className="h-full w-full object-cover" /> : isVideoUpload(b) ? <Video className="h-5 w-5 text-[#B89555]" /> : <FileText className="h-5 w-5 text-[#B89555]" />}
+                    {isImageUpload(b) ? <SafeImage src={b.url} alt="" className="h-full w-full object-cover" /> : isVideoUpload(b) ? <Video className="h-5 w-5 text-[#B89555]" /> : <FileText className="h-5 w-5 text-[#B89555]" />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-[#1A1A1A]">{b.name}</p>
@@ -1160,13 +1232,13 @@ const DeveloperProjectWizard = () => {
       <aside className="space-y-4 min-w-0">
         <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7]">
           <div className="aspect-[4/3] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white">
-            {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
+            {cover?.url ? <SafeImage src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
           </div>
           {gallery.length > 0 && (
             <div className="grid grid-cols-4 gap-1 border-b border-[#B89555]/25 bg-[#EFE6D6] p-1">
               {gallery.slice(0, 4).map((item) => (
                 <div key={fileKey(item)} className="aspect-square overflow-hidden rounded bg-[#FDFBF7]">
-                  {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />}
+                  {item.type.startsWith("image/") ? <SafeImage src={item.url} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />}
                 </div>
               ))}
             </div>
@@ -1183,19 +1255,7 @@ const DeveloperProjectWizard = () => {
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Media</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
             </div>
-            {basics.payment_plan && (
-              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
-                <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
-                  <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
-                  <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{getPaymentPlanBadge(basics.payment_plan)}</span>
-                </button>
-                {paymentExpanded && (
-                  <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">
-                    {paymentPlanParts.length ? paymentPlanParts.map((part, i) => <p key={i}>{part}</p>) : <p>{basics.payment_plan}</p>}
-                  </div>
-                )}
-              </div>
-            )}
+            <PaymentPreview compact />
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
             <Button type="button" variant="outline" onClick={() => setPreviewOpen(true)} className="border-[#B89555]/40 text-[#1A1A1A]">
               <Maximize2 className="mr-2 h-4 w-4" /> Open full preview
@@ -1217,14 +1277,14 @@ const DeveloperProjectWizard = () => {
               <button type="button" onClick={() => setPreviewOpen(false)} className="rounded-full border border-[#B89555]/40 bg-white p-2"><X className="h-4 w-4 text-[#1A1A1A]" /></button>
             </div>
             <div className="aspect-[16/7] bg-[#064E3B]">
-              {cover?.url ? <img src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
+              {cover?.url ? <SafeImage src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
             </div>
             {gallery.length > 0 && (
               <div className="grid grid-cols-2 gap-2 p-4 md:grid-cols-4">
                 {gallery.map((item) => (
                   <div key={fileKey(item)} className="overflow-hidden rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
                     <div className="aspect-video bg-[#EFE6D6]">
-                      {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
+                      {item.type.startsWith("image/") ? <SafeImage src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
                     </div>
                     <p className="truncate px-2 py-1 text-xs font-semibold text-[#1A1A1A]">{item.name}</p>
                   </div>
@@ -1242,7 +1302,7 @@ const DeveloperProjectWizard = () => {
                 <div><span className="block text-xs text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
                 <div><span className="block text-xs text-[#1A1A1A]/60">Gallery</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
                 <div><span className="block text-xs text-[#1A1A1A]/60">Documents</span>{brochures.length}</div>
-                {basics.payment_plan && <div><span className="block text-xs text-[#1A1A1A]/60">Payment plan</span>{basics.payment_plan}</div>}
+                <PaymentPreview compact />
                 <ContactActionsPreview />
               </div>
             </div>
@@ -1267,7 +1327,8 @@ const DeveloperProjectWizard = () => {
         {step < STEPS.length - 1 ? (
           <Button
             onClick={() => setStep((s) => s + 1)}
-            className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"
+            data-surface="emerald"
+            className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
           >
             Next <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
@@ -1275,10 +1336,11 @@ const DeveloperProjectWizard = () => {
           <Button
             onClick={handleSubmit}
             disabled={!canSubmit || publish.isPending}
-            className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"
+            data-surface="emerald"
+            className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
           >
             {publish.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {willPublishLive ? "Publish live" : "Submit for approval"}
+            {isOwner ? "Save owner preview" : willPublishLive ? "Publish live" : "Submit for approval"}
           </Button>
         )}
       </div>

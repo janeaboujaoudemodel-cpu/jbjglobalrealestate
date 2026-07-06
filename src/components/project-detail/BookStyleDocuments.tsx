@@ -2,7 +2,7 @@ import { useRef, useMemo, useState } from "react";
 import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
-import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface BookDoc {
@@ -68,7 +68,7 @@ export default function BookStyleDocuments({
 
   const handleBookClick = (doc: BookDoc, title: string, filename: string) => {
     // Open PDF in-browser viewer
-    const proxiedUrl = maybeProxyStorageUrl(doc.url);
+    const proxiedUrl = proxyAnyDownloadUrl(doc.url, { filename, disposition: "inline" });
     setViewerUrl(proxiedUrl);
     setViewerTitle(title);
     setViewerFilename(filename);
@@ -171,7 +171,7 @@ export default function BookStyleDocuments({
                   </p>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold allow-white" style={{ color: "#FFFFFF" }}>View</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold allow-white" style={{ color: "#FFFFFF" }}>View / Download</span>
                   <Eye className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF" }} />
                 </div>
               </div>
@@ -211,11 +211,17 @@ export default function BookStyleDocuments({
                     document.body.removeChild(link);
                     setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
                   } catch {
-                    // Fallback to onDownload
-                    onDownload(viewerUrl, viewerFilename);
+                    const link = document.createElement("a");
+                    link.href = viewerUrl;
+                    link.download = viewerFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                   }
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-[hsl(var(--gold)/0.9)] to-[hsl(var(--gold)/0.7)] text-[#1A1A1A] text-sm font-semibold border border-[#B89555]/60 hover:border-[#B89555] shadow-sm transition-colors"
+                data-surface="emerald"
+                data-emerald-action="true"
+                className="jj-emerald-action allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border shadow-sm transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Download

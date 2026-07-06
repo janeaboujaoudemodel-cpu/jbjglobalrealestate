@@ -196,6 +196,12 @@ export interface ProjectDocument {
   file_url: string;
   file_name: string;
   display_order?: number | null;
+  display_title?: string | null;
+  cover_image_url?: string | null;
+  is_visible?: boolean | null;
+  allow_download?: boolean | null;
+  file_size?: number | null;
+  storage_path?: string | null;
 }
 
 // ============================================================================

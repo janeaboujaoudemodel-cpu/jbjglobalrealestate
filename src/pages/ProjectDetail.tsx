@@ -191,7 +191,16 @@ const ProjectDetail = () => {
     const documents = (project.documents || [])
       .slice()
       .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
-      .map((d) => ({ id: d.id, type: d.document_type, url: d.file_url, name: d.file_name }));
+      .map((d) => ({
+        id: d.id,
+        type: d.document_type,
+        url: d.file_url,
+        name: d.file_name,
+        display_title: (d as any).display_title ?? null,
+        cover_image_url: (d as any).cover_image_url ?? null,
+        is_visible: (d as any).is_visible ?? true,
+        allow_download: (d as any).allow_download ?? true,
+      }));
 
     return {
       id: project.id,
@@ -224,8 +233,10 @@ const ProjectDetail = () => {
       price_to: project.price_to,
       bedrooms_min: project.bedrooms_min,
       bedrooms_max: project.bedrooms_max,
+      bedroom_types: (project as any).bedroom_types ?? null,
       size_min: project.size_min,
       size_max: project.size_max,
+      built_up_area: (project as any).built_up_area ?? null,
       floors: project.floors,
       handover_date: project.handover_date,
       payment_plan: project.payment_plan,

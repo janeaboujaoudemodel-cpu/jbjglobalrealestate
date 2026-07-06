@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail, FileText } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
+import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
 
 interface FloorPlanType {
   label: string;
@@ -127,10 +128,12 @@ export function FloorPlanGallery({
           <button
             key={fp.id}
             onClick={() => setActiveIndex(idx)}
+            data-surface={activeIndex === idx ? "emerald" : undefined}
+            data-emerald-action={activeIndex === idx ? "true" : undefined}
             className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all",
+              "px-4 py-2 rounded-lg text-sm font-bold transition-all",
               activeIndex === idx
-                ? "bg-primary text-primary-foreground shadow-md"
+                ? "jj-emerald-action allow-white shadow-md"
                 : "bg-card border border-border text-foreground hover:border-primary/50"
             )}
           >
@@ -151,6 +154,14 @@ export function FloorPlanGallery({
               fallbackSrc="/placeholder.svg"
               onError={() => handleImageError(activePlan.id)}
             />
+          ) : activePlan?.pdfUrl ? (
+            <div className="h-full w-full bg-[#FDFBF7]">
+              <iframe
+                title={`${projectName} - ${activePlan.label}`}
+                src={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
+                className="h-full w-full border-0 bg-[#FDFBF7]"
+              />
+            </div>
           ) : (
             <div className="text-center p-8">
               {hasImageError ? (
@@ -164,9 +175,7 @@ export function FloorPlanGallery({
                 <Layers className="w-16 h-16 text-primary/40 mx-auto mb-4" />
               )}
               <p className="text-muted-foreground text-sm">
-                {activePlan?.pdfUrl 
-                  ? "Click download to view the floor plan PDF"
-                  : brochureUrl
+                {brochureUrl
                     ? "Floor plans are available in the project brochure"
                     : "Floor plan preview not available"
                 }
@@ -221,6 +230,8 @@ export function FloorPlanGallery({
               <Button
                 variant="default"
                 size="sm"
+                data-surface="emerald"
+                className="allow-white"
                 onClick={() => onDownload("floor_plan", activePlan.pdfUrl)}
               >
                 <Download className="w-4 h-4 mr-2" />

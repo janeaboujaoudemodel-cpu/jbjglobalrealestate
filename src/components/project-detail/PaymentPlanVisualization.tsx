@@ -4,6 +4,7 @@ import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock, Wallet, List, 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { PearlButton } from "@/components/ui/pearl-button";
+import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
 
 interface PaymentMilestone {
   milestone: string;
@@ -54,6 +55,7 @@ export default function PaymentPlanVisualization({
   const isDetailedBreakdown = Array.isArray(paymentBreakdown);
   const detailedMilestones: PaymentMilestone[] = isDetailedBreakdown ? (paymentBreakdown as PaymentMilestone[]) : [];
   const legacyBreakdown = !isDetailedBreakdown ? (paymentBreakdown as PaymentBreakdownLegacy | null) : null;
+  const premiumPlan = formatPaymentPlanForDisplay(paymentPlan, handoverDate);
 
   const milestones = [];
 
@@ -185,7 +187,7 @@ export default function PaymentPlanVisualization({
         <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-0 overflow-hidden rounded-lg">
           <TabsTrigger value="installment" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <CreditCard className="w-4 h-4 mr-2" />
-            Payment Plan {paymentPlan && `(${paymentPlan})`}
+            Payment Plan {premiumPlan && `(${premiumPlan.badge})`}
           </TabsTrigger>
           <TabsTrigger value="full" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <Wallet className="w-4 h-4 mr-2" />
@@ -208,17 +210,33 @@ export default function PaymentPlanVisualization({
 
         {/* Installment Tab */}
         <TabsContent value="installment">
-          {paymentPlan && (
+          {premiumPlan && (
             <div className="mb-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex items-center gap-4">
                 <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-14 h-14 rounded-full flex items-center justify-center ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', ['--jj-icon-lock-size' as any]: '3.5rem' }}>
                   <Percent className="w-6 h-6" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-[#1A1A1A]">{paymentPlan}</p>
-                  <p className="text-sm text-[#1A1A1A]/70">Flexible Payment Structure</p>
+                  <p className="text-2xl font-bold text-[#1A1A1A]">{premiumPlan.headline}</p>
+                  <p className="text-sm text-[#1A1A1A]/70">{premiumPlan.summary}</p>
+                </div>
+                </div>
+                <div className="rounded-full border border-[#064E3B]/30 bg-[#FDFBF7] px-4 py-2 text-sm font-bold text-[#064E3B]">
+                  {premiumPlan.badge}
                 </div>
               </div>
+              {premiumPlan.stages.length > 0 && (
+                <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                  {premiumPlan.stages.map((stage) => (
+                    <div key={`${stage.label}-${stage.value}`} className="rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] p-4">
+                      <p className="text-xs uppercase tracking-[0.14em] text-[#1A1A1A]/60 font-bold">{stage.label}</p>
+                      <p className="mt-1 text-2xl font-bold text-[#064E3B]">{stage.value}</p>
+                      {stage.detail && <p className="mt-1 text-xs text-[#1A1A1A]/70">{stage.detail}</p>}
+                    </div>
+                  ))}
+                </div>
+              )}
               
               {postHandoverYears && postHandoverYears > 0 && (
                 <div className="mt-4 flex items-center gap-2 px-3 py-2 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg w-fit">
@@ -229,13 +247,9 @@ export default function PaymentPlanVisualization({
                 </div>
               )}
 
-              {/* Legal-safety note: when only a free-text plan exists (no structured
-                  breakdown), we display the developer string verbatim and tell the
-                  buyer to confirm with our team — never invent splits. */}
               {!isDetailedBreakdown && (!legacyBreakdown || (!legacyBreakdown.down_payment && !legacyBreakdown.during_construction && !legacyBreakdown.on_completion)) && (
                 <p className="mt-4 text-xs text-[#1A1A1A]/70 italic">
-                  Plan shown as provided by the developer. Please confirm the official
-                  milestone breakdown with our team before signing.
+                  {premiumPlan.note}
                 </p>
               )}
             </div>

@@ -138,8 +138,10 @@ export type ProjectDetailData = {
   price_to?: number | null;
   bedrooms_min?: number | null;
   bedrooms_max?: number | null;
+  bedroom_types?: string[] | null;
   size_min?: number | null;
   size_max?: number | null;
+  built_up_area?: string | null;
   floors?: number | null;
   handover_date?: string | null;
   payment_plan?: string | null;
@@ -148,7 +150,7 @@ export type ProjectDetailData = {
   amenities?: string[] | null;
   amenity_images?: Record<string, string> | null;
   images: { id: string; url: string; alt?: string | null }[];
-  documents: { id: string; type: string; url: string; name?: string | null }[];
+  documents: { id: string; type: string; url: string; name?: string | null; display_title?: string | null; cover_image_url?: string | null; is_visible?: boolean | null; allow_download?: boolean | null }[];
   // Mirroring fields
   usp_headline?: string | null;
   usp_bullets?: string[] | null;
@@ -447,7 +449,8 @@ function ProjectDetailLayoutInner({
     () =>
       project.documents.filter((d) => {
         const t = normalizeDocType(d.type || "");
-        return t === "brochure" || t.includes("brochure");
+        const n = normalizeDocType(d.name || "");
+        return t === "brochure" || t === "factsheet" || t === "fact_sheet" || t.includes("brochure") || n.includes("brochure") || n.includes("fact_sheet") || n.includes("factsheet");
       }),
     [project.documents],
   );
@@ -603,6 +606,15 @@ function ProjectDetailLayoutInner({
   const brochurePrimary = brochureDocs[0];
   const heroImageUrl = images[0]?.url;
 
+  const documentCoverFor = (doc: ProjectDetailData["documents"][number], index: number) => {
+    if (doc.cover_image_url) return doc.cover_image_url;
+    const lower = `${doc.name || ""} ${doc.display_title || ""}`.toLowerCase();
+    const cityBuddy = images.find((img) => /city\s*buddy|citybuddy|robot|buddy/i.test(`${img.alt || ""} ${img.url || ""}`));
+    if (/city\s*buddy|citybuddy|robot|buddy/.test(lower) && cityBuddy?.url) return cityBuddy.url;
+    if (images.length > 1) return images[(index + 1) % images.length]?.url || images[0]?.url;
+    return images[0]?.url || project.cover_image_url || undefined;
+  };
+
   const paymentPlanBenefitHeadline = useMemo(() => {
     const raw = (project.payment_plan || "").trim();
     if (!raw) return null;
@@ -661,6 +673,8 @@ function ProjectDetailLayoutInner({
       return bedroomTypes.join(', ');
     }
     // Fallback to min/max
+    if (project.bedrooms_min === 0 && project.bedrooms_max === 0) return "Studio";
+    if (project.bedrooms_min === 0 && project.bedrooms_max && project.bedrooms_max > 0) return `Studio - ${project.bedrooms_max} BR`;
     if (!project.bedrooms_min) return null;
     if (project.bedrooms_min === project.bedrooms_max) return `${project.bedrooms_min} BR`;
     return `${project.bedrooms_min}-${project.bedrooms_max} BR`;
@@ -668,6 +682,7 @@ function ProjectDetailLayoutInner({
 
   // Format size text
   const sizeText = useMemo(() => {
+    if (!project.size_min && project.built_up_area) return project.built_up_area;
     if (!project.size_min) return null;
     if (project.size_min === project.size_max) return formatSize(project.size_min);
     return `${convertSize(project.size_min).toLocaleString()} - ${formatSize(project.size_max || 0)}`;
@@ -725,8 +740,8 @@ function ProjectDetailLayoutInner({
           )}
           {/* Lighter overlay — only enough darken at the bottom to guarantee WHITE hero copy readability.
               Side vignette removed so the photo itself stays bright and crisp. */}
-          <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black via-black/75 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-[34%] bg-black/45 pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[54%] bg-gradient-to-t from-black/78 via-black/42 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[24%] bg-black/22 pointer-events-none" />
         </div>
 
         {/* Sold Out Badge - Top Right */}
@@ -1590,6 +1605,10 @@ function ProjectDetailLayoutInner({
                   type: d.type,
                   url: d.url,
                   name: d.name,
+                  display_title: d.display_title,
+                  cover_image_url: documentCoverFor(d, project.documents.findIndex((doc) => doc.id === d.id)),
+                  is_visible: d.is_visible ?? true,
+                  allow_download: d.allow_download ?? true,
                 }))}
                 projectName={project.name}
                 projectImageUrl={project.images?.[0]?.url || undefined}
