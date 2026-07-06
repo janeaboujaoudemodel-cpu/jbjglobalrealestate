@@ -211,7 +211,12 @@ export default function BookStyleDocuments({
                     document.body.removeChild(link);
                     setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
                   } catch {
-                    onDownload(viewerUrl, viewerFilename);
+                    const link = document.createElement("a");
+                    link.href = viewerUrl;
+                    link.download = viewerFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
                   }
                 }}
                 data-surface="emerald"
