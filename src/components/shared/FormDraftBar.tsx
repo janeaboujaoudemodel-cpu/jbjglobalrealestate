@@ -76,7 +76,7 @@ export function FormDraftBar({
           data-no-contrast-guard
           data-on-dark
           data-allow-dark-cta
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#B91C1C] hover:bg-[#991B1B] transition-colors rounded-md"
+          className="allow-white flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#B91C1C] text-white hover:bg-[#991B1B] transition-colors rounded-md"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           <RotateCcw className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} /> <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Reset</span>
