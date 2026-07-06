@@ -13,8 +13,10 @@ import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SafeImage } from "@/components/SafeImage";
+import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
 
-interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
+interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "floor_plan" | "payment_plan" | "document" }
 
 type UploadStatus = {
   id: string;
@@ -104,6 +106,26 @@ const getPaymentPlanBadge = (plan: string) => {
   return percent ? percent[0].replace(/\s+/g, "") : "%";
 };
 
+const parseAreaRange = (value: string) => {
+  const nums = (value.match(/\d+(?:,\d{3})*(?:\.\d+)?/g) || [])
+    .map((n) => Number(n.replace(/,/g, "")))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  if (!nums.length) return { min: null, max: null };
+  return { min: Math.min(...nums), max: Math.max(...nums) };
+};
+
+const bedroomLabel = (value: number) => value === 0 ? "Studio" : value >= 6 ? "6+ BR" : `${value} BR`;
+
+const classifyUploadRole = (file: File, fallback: NonNullable<Uploaded["role"]>): NonNullable<Uploaded["role"]> => {
+  if (file.type.startsWith("image/") || file.type.startsWith("video/")) return fallback;
+  const name = file.name.toLowerCase();
+  if (/fact\s*sheet|factsheet|fact[-_]?sheet/.test(name)) return "fact_sheet";
+  if (/brochure|booklet|catalogue|catalog/.test(name)) return "brochure";
+  if (/floor|plan|layout|tower|unit[-_\s]?type/.test(name)) return "floor_plan";
+  if (/payment|installment|instalment|schedule/.test(name)) return "payment_plan";
+  return fallback;
+};
+
 const shouldOverrideProjectName = (current: string, extracted: string) => {
   const c = current.trim().toLowerCase();
   const e = extracted.trim().toLowerCase();
@@ -115,6 +137,8 @@ const shouldOverrideProjectName = (current: string, extracted: string) => {
 const getDocumentType = (file: Uploaded) => {
   if (file.type.startsWith("video/")) return "video";
   if (file.role === "fact_sheet") return "factsheet";
+  if (file.role === "floor_plan") return "floor_plan";
+  if (file.role === "payment_plan") return "payment_plan";
   if (/payment/i.test(file.name)) return "payment_plan";
   if (/floor/i.test(file.name)) return "floor_plan";
   return file.role === "document" ? "document" : "brochure";
