@@ -227,8 +227,8 @@ export default function FoundersAssistant() {
   const statCards = [
     { label: 'Active', count: stats.activeTasks, colorClass: 'bg-[#EFE6D6]/15 text-[#1A1A1A] border-[#B89555]/30', filter: 'in_progress' },
     { label: 'Done', count: stats.completedTasks, colorClass: 'jj-emerald-metallic allow-white text-white border-transparent', filter: 'completed' },
-    { label: 'Pending', count: stats.pendingTasks, colorClass: 'bg-amber-50 text-amber-700 border-amber-200', filter: 'pending' },
-    { label: 'Escalations', count: unreadCount, colorClass: 'bg-red-50 text-red-700 border-red-200', filter: 'escalations' },
+    { label: 'Pending', count: stats.pendingTasks, colorClass: 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30', filter: 'pending' },
+    { label: 'Escalations', count: unreadCount, colorClass: 'bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/30', filter: 'escalations' },
   ];
 
   return (
@@ -334,7 +334,9 @@ export default function FoundersAssistant() {
             <div className="flex items-center justify-end gap-2 min-w-0">
               <button
                 onClick={() => setShowCommandPalette(true)}
+                data-owner-neutral-control="true"
                 className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-[#B89555]/30 text-muted-foreground hover:border-[#B89555]/50 transition-all text-xs"
+                style={{ background: '#FDFBF7', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
               >
                 <Search className="h-3.5 w-3.5 text-[#1A1A1A]" />
                 <kbd className="px-1.5 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] text-[10px] rounded font-mono">⌘K</kbd>
@@ -362,6 +364,8 @@ export default function FoundersAssistant() {
               <button
                 key={s.label}
                 onClick={() => s.filter === 'escalations' ? setActiveView('escalations') : handleStatClick(s.filter)}
+                data-owner-neutral-control={s.label === 'Pending' || s.label === 'Escalations' ? 'true' : undefined}
+                style={s.label === 'Pending' || s.label === 'Escalations' ? { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } : undefined}
                 className={cn(
                   "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all hover:shadow-sm flex-shrink-0",
                   s.colorClass
