@@ -55,7 +55,7 @@ export default function QuickActionsGrid() {
     <div data-surface="champagne" className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm overflow-hidden">
       <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Quick Actions</h3>
       <TooltipProvider delayDuration={200}>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+        <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(132px,1fr))]">
           {QUICK_ACTIONS.map((action) => (
             <Tooltip key={action.path}>
               <TooltipTrigger asChild>
@@ -71,7 +71,7 @@ export default function QuickActionsGrid() {
                   <div data-backend-icon-tile="emerald-soft" className="allow-white w-10 h-10 rounded-lg bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center shrink-0 group-hover:bg-[#064E3B]/15 group-hover:border-[#064E3B]/35 transition-colors">
                     <action.icon className={cn("allow-white h-5 w-5 flex-shrink-0 text-white transition-colors")} strokeWidth={2.15} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   </div>
-                  <span   className="text-[12px] text-[#1A1A1A]/85 group-hover:text-[#1A1A1A] transition-colors text-center font-semibold leading-tight max-w-full break-words">
+                  <span data-jbj-allow-shrink className="text-[12px] text-[#1A1A1A]/85 group-hover:text-[#1A1A1A] transition-colors text-center font-semibold leading-tight max-w-full whitespace-normal break-normal [overflow-wrap:break-word]">
                     {action.label}
                   </span>
                 </button>
