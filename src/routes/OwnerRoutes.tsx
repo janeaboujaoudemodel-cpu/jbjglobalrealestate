@@ -268,7 +268,7 @@ export const OwnerRoutes = () => (
     <Route path="developers/reps/:id" element={<RepProfileEditor />} />
     <Route path="developers/projects" element={<DeveloperLiveEditor />} />
     <Route path="developers/new-project" element={<DeveloperProjectWizard />} />
-    <Route path="developers/briefings" element={<DeveloperHubAdminPlaceholder title="Briefings" body="Coordinate developer briefings, team attendance, sales representative sessions, launch updates, and follow-ups from this owner Developers Portal." />} />
+    <Route path="developers/briefings" element={<BriefingsHub />} />
     <Route path="developers/calendar" element={<DeveloperLaunchEvents />} />
     <Route path="developers/access-requests" element={<AccessRequestQueue />} />
     <Route path="developers/:slug" element={<DeveloperProfilePage />} />
