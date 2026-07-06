@@ -662,15 +662,15 @@ const ListingAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] pt-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] pt-0" data-owner-batch-fix="listing-admin">
       {/* Premium Dashboard Shell — full bleed, no black gaps */}
       <div className="border-b border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header - Clean neutral style — top offset accounts for owner shell header (64px + 48px utility bar) */}
-      <header className="border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-20 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
-        <div className="max-w-[1200px] mx-auto px-4 pt-6 pb-4">
+      <header className="border-b border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-20">
+        <div className="max-w-[1240px] mx-auto px-4 pt-6 pb-4">
           {/* Row 1: Title and actions */}
-          <div className="flex items-center justify-between gap-4 mb-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+            <div className="flex items-center gap-4 min-w-0">
               <Button
                 variant="ghost"
                 size="icon"
@@ -680,10 +680,10 @@ const ListingAdmin = () => {
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-[#FDFBF7]">
+                <div className="p-2 rounded-lg jj-icon-tile-emerald allow-white" data-surface="emerald">
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h1 className="text-[#1A1A1A] text-xl font-bold">
                     {t('listingAdmin.title')}
                   </h1>
@@ -691,10 +691,11 @@ const ListingAdmin = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 min-w-0">
               <Button
                 onClick={() => navigate("/admin/media-ingestion")}
                 variant="gold"
+                className="min-w-[150px] whitespace-nowrap"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Media Ingestion Hub
@@ -702,6 +703,7 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => navigate("/team")}
                 variant="secondary"
+                className="min-w-[110px] whitespace-nowrap"
               >
                 <Users className="w-4 h-4 mr-2" />
                 {t('listingAdmin.team')}
@@ -709,6 +711,7 @@ const ListingAdmin = () => {
               <Button
                 variant="secondary"
                 onClick={handleSignOut}
+                className="min-w-[110px] whitespace-nowrap"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 {t('listingAdmin.signOut')}
@@ -718,10 +721,11 @@ const ListingAdmin = () => {
 
           {/* Row 2: Navigation Tabs + Stats */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 min-w-0 flex-1">
               <Button
                 onClick={() => { setActiveView('chat'); setShowChat(true); }}
                 variant={activeView === 'chat' ? 'primary' : 'secondary'}
+                className="min-w-[165px] whitespace-nowrap justify-center"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Generate Listing
@@ -729,6 +733,7 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { setActiveView('projects'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
                 variant={activeView === 'projects' || activeView === 'project-detail' ? 'primary' : 'secondary'}
+                className="min-w-[165px] whitespace-nowrap justify-center"
               >
                 <FolderOpen className="w-4 h-4 mr-2" />
                 Project Hub ({totalCount ?? 0})
@@ -737,6 +742,7 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { setActiveView('data-ops'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
                 variant={activeView === 'data-ops' ? 'primary' : 'secondary'}
+                className="min-w-[165px] whitespace-nowrap justify-center"
               >
                 <Database className="w-4 h-4 mr-2" />
                 Sync & Sources
@@ -744,12 +750,13 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => { handleCreateNew(); setActiveView('editor'); }}
                 variant="secondary"
+                className="min-w-[165px] whitespace-nowrap justify-center"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 {t('listingAdmin.addNewProject')}
               </Button>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 flex-wrap justify-end">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-[#B89555]/30">
                 <Building2 className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-sm text-[#1A1A1A] font-medium">{totalCount ?? 0} Published</span>
@@ -774,16 +781,17 @@ const ListingAdmin = () => {
 
         {/* UNIFIED Data Ops View - All sync/extraction in one tabbed interface */}
         {activeView === 'data-ops' && (
-          <div className="mx-auto px-2 py-6 space-y-6">
+          <div className="mx-auto px-2 py-6 space-y-6 max-w-[1240px]">
             {/* SOURCE COUNTS PANEL — Provident primary, Reelly disabled */}
             <SourceCountsPanel onSourceChange={(src) => setActiveSource(src)} activeSource={activeSource} />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
+              <TabsList className="w-full h-auto grid grid-cols-2 lg:grid-cols-5 gap-1 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30 p-1 rounded-lg">
                 {activeSource === "provident" && (
                   <TabsTrigger 
                     value="provident-hub"
-                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
+                    data-surface={dataOpsTab === "provident-hub" ? "emerald" : undefined}
+                    className="min-h-11 min-w-0 whitespace-nowrap text-xs data-[state=active]:jj-emerald-metallic data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:[&_svg]:text-white"
                   >
                     <Database className="w-3.5 h-3.5 mr-1.5" />
                     Provident Portal
@@ -791,21 +799,24 @@ const ListingAdmin = () => {
                 )}
                 <TabsTrigger 
                   value="enrichment"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
+                  data-surface={dataOpsTab === "enrichment" ? "emerald" : undefined}
+                  className="min-h-11 min-w-0 whitespace-nowrap text-xs data-[state=active]:jj-emerald-metallic data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:[&_svg]:text-white"
                 >
                   <Zap className="w-3.5 h-3.5 mr-1.5" />
                   Enrichment & Extraction
                 </TabsTrigger>
                 <TabsTrigger 
                   value="approvals"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
+                  data-surface={dataOpsTab === "approvals" ? "emerald" : undefined}
+                  className="min-h-11 min-w-0 whitespace-nowrap text-xs data-[state=active]:jj-emerald-metallic data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:[&_svg]:text-white"
                 >
                   <Check className="w-3.5 h-3.5 mr-1.5" />
                   Approval Center
                 </TabsTrigger>
                 <TabsTrigger 
                   value="external"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
+                  data-surface={dataOpsTab === "external" ? "emerald" : undefined}
+                  className="min-h-11 min-w-0 whitespace-nowrap text-xs data-[state=active]:jj-emerald-metallic data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:[&_svg]:text-white"
                 >
                   <Database className="w-3.5 h-3.5 mr-1.5" />
                   Sources
@@ -813,7 +824,8 @@ const ListingAdmin = () => {
                 {activeSource === "reelly" && (
                   <TabsTrigger 
                     value="reelly" 
-                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
+                    data-surface={dataOpsTab === "reelly" ? "emerald" : undefined}
+                    className="min-h-11 min-w-0 whitespace-nowrap text-xs data-[state=active]:jj-emerald-metallic data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:[&_svg]:text-white"
                   >
                     <Globe className="w-3.5 h-3.5 mr-1.5" />
                     Reelly Sync
@@ -821,7 +833,8 @@ const ListingAdmin = () => {
                 )}
                 <TabsTrigger 
                   value="dev-visibility"
-                  className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-[#B89555]/40"
+                  data-surface={dataOpsTab === "dev-visibility" ? "emerald" : undefined}
+                  className="min-h-11 min-w-0 whitespace-nowrap text-xs data-[state=active]:jj-emerald-metallic data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:[&_svg]:text-white"
                 >
                   <Building2 className="w-3.5 h-3.5 mr-1.5" />
                   Visibility
