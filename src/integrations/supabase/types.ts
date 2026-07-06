@@ -2256,7 +2256,10 @@ export type Database = {
           location_type: string | null
           notes: string | null
           project_name: string
+          rating: number | null
+          rating_notes: string | null
           representative_id: string
+          sales_rep_id: string | null
           status: string
           updated_at: string | null
           uploaded_files: Json | null
@@ -2278,7 +2281,10 @@ export type Database = {
           location_type?: string | null
           notes?: string | null
           project_name: string
+          rating?: number | null
+          rating_notes?: string | null
           representative_id: string
+          sales_rep_id?: string | null
           status?: string
           updated_at?: string | null
           uploaded_files?: Json | null
@@ -2300,7 +2306,10 @@ export type Database = {
           location_type?: string | null
           notes?: string | null
           project_name?: string
+          rating?: number | null
+          rating_notes?: string | null
           representative_id?: string
+          sales_rep_id?: string | null
           status?: string
           updated_at?: string | null
           uploaded_files?: Json | null
@@ -2319,6 +2328,20 @@ export type Database = {
             columns: ["representative_id"]
             isOneToOne: false
             referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_requests_sales_rep_id_fkey"
+            columns: ["sales_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_requests_sales_rep_id_fkey"
+            columns: ["sales_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
             referencedColumns: ["id"]
           },
         ]

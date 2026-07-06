@@ -125,6 +125,8 @@ const AccessRequestQueue = lazy(() => import("@/pages/developers-portal/access/A
 const DeveloperLaunchEvents = lazy(() => import("@/pages/developer-hub/DeveloperLaunchEvents"));
 const DeveloperLiveEditor = lazy(() => import("@/pages/developer-hub/DeveloperLiveEditor"));
 const DeveloperProjectWizard = lazy(() => import("@/pages/developer-hub/DeveloperProjectWizard"));
+const BriefingsHub = lazy(() => import("@/pages/owner/developers/BriefingsHub"));
+
 const DeveloperCompanyRegistration = lazy(() => import("@/pages/developer-hub/DeveloperCompanyRegistration"));
 const DeveloperHubAdminPlaceholder = lazy(() => import("@/pages/developer-hub-admin/DeveloperHubAdminPlaceholder"));
 
@@ -266,7 +268,7 @@ export const OwnerRoutes = () => (
     <Route path="developers/reps/:id" element={<RepProfileEditor />} />
     <Route path="developers/projects" element={<DeveloperLiveEditor />} />
     <Route path="developers/new-project" element={<DeveloperProjectWizard />} />
-    <Route path="developers/briefings" element={<DeveloperHubAdminPlaceholder title="Briefings" body="Coordinate developer briefings, team attendance, sales representative sessions, launch updates, and follow-ups from this owner Developers Portal." />} />
+    <Route path="developers/briefings" element={<BriefingsHub />} />
     <Route path="developers/calendar" element={<DeveloperLaunchEvents />} />
     <Route path="developers/access-requests" element={<AccessRequestQueue />} />
     <Route path="developers/:slug" element={<DeveloperProfilePage />} />
