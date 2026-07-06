@@ -242,7 +242,7 @@ const DeveloperProjectWizard = () => {
     toast.success("Selected as cover and moved to the listing preview");
   };
 
-  const uploadFile = async (file: File, bucket = "rel-media", role: Uploaded["role"] = "document") => {
+  const uploadFile = async (file: File, bucket = "rel-media", role: NonNullable<Uploaded["role"]> = "document") => {
     const v = validateFile(file);
     if (!v.isValid) {
       toast.error(v.rejectionReason || "File rejected");
@@ -283,7 +283,7 @@ const DeveloperProjectWizard = () => {
       toast.success(`${uploaded.length} gallery file${uploaded.length === 1 ? "" : "s"} uploaded`);
     }
   };
-  const onBrochures = async (files: FileList, role: Uploaded["role"] = "brochure", extractAfterUpload = false) => {
+  const onBrochures = async (files: FileList, role: NonNullable<Uploaded["role"]> = "brochure", extractAfterUpload = false) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
       const u = await uploadFile(f, "rel-media", role);
