@@ -1,121 +1,96 @@
-## Plan
+# Backend Restoration, Contrast, Layout & Feature Fixes
 
-### 1. Fix upload reliability in the project wizard
-- Replace the fragile multi-file upload behavior in the last-stage document uploader with a controlled sequential queue.
-- Keep each file visible immediately with a real status: uploading, uploaded, failed, retry.
-- Classify files correctly by filename/type:
-  - fact sheet / brochure → brochure/fact sheet
-  - floor plan → floor plan
-  - payment plan → payment plan
-  - photos/videos → gallery/media
-  - other PDFs/docs → project documents
-- Ensure uploaded files are not duplicated when the delayed upload response arrives.
+Work is divided into 6 sequential batches. Each batch ends with a Playwright screenshot pass + manual DOM/computed-style audit before moving on. Nothing is claimed "done" without a screenshot proving it.
 
-### 2. Fix broken/blank preview frames
-- Make the wizard preview use the uploaded cover and gallery URLs safely, with image fallback handling instead of a blank white frame.
-- Add a real in-page full preview modal that opens instantly and shows:
-  - hero image
-  - gallery thumbnails/full gallery
-  - bedrooms
-  - size/built-up area
-  - handover
-  - price
-  - documents count
-  - premium payment plan summary
-- Stop relying on the live project page as the only preview path.
+---
 
-### 3. Fix submit/publish wording and behavior
-- For owner uploads, replace “sent/submitted for owner approval” language with “saved by owner” / “preview created”.
-- Separate preview from publishing:
-  - “Preview” opens a preview only.
-  - “Publish” is the only action that should communicate live publishing.
-- Keep the backend trust gate intact, but make the owner-facing UI truthful and not approval-based.
+## Batch 1 — Restore the vertical sidebar
 
-### 4. Persist all details into the project page correctly
-- Ensure bedrooms from the pill selector are saved and displayed as Studio / 1BR / 2BR etc., not “TBA”.
-- Save built-up/size data into fields the project detail page already reads, so the hero stats do not show “TBA” when size was entered.
-- Carry gallery images, cover image, document records, and floor plan documents into the project detail page consistently.
+Revert the recent sidebar edits so it matches the previous locked state (the one the user approved).
 
-### 5. Rewrite payment plan into premium visual presentation
-- Add a deterministic payment-plan formatter that converts plain hints like “70/30 30% post handover…” into a cleaner display:
-  - headline ratio
-  - down payment / during construction / handover / post-handover milestones when detectable
-  - premium short explanatory line
-  - confirmation note for ambiguous or unverified parts
-- Use this formatter in:
-  - wizard side preview
-  - full preview modal
-  - project detail payment section
-- Avoid dumping the user’s raw paragraph as the main visual output; keep raw text only as a secondary note when needed.
+- Restore `src/components/navigation/SidebarModePortalBlock.tsx`, `src/components/ModeSwitcher.tsx`, `src/contexts/UserModeContext.tsx`, `src/index.css` sidebar rules, and the `.lovable/memory/identity/unified-owner-role-standard.md` sidebar-related section to their prior versions (git log for each file → last commit before the sidebar refactor).
+- Do **not** touch any other sidebar behavior.
+- Verify: screenshot `/owner`, `/owner/crm`, `/owner/developers/projects` and diff against the user's uploaded sidebar screenshot (which shows the correct state).
 
-### 6. Wire brochure/fact sheet download correctly
-- Treat uploaded fact sheet and brochure files as the primary source for “Download Brochure”.
-- Route brochure/fact-sheet downloads through the existing backend download proxy with the correct filename and content type.
-- Fix “file damaged / format not recognized” by ensuring the stored URL points to the actual uploaded file and the download response streams the original bytes.
+## Batch 2 — Full backend contrast audit + fixes
 
-### 7. Fix floor plan display and document library behavior
-- Make uploaded floor-plan PDFs appear in the Floor Plans tab immediately.
-- If a PDF cannot render inline, show a premium document panel with View and Download actions instead of an empty frame.
-- Make document cards open a working viewer/download action, not a broken 404.
-- Improve document cover selection:
-  - City Buddy documents use the City Buddy image when present.
-  - Other documents use a different uploaded project image when possible, not always the hero cover.
-  - Fall back to a premium generated-style document cover only if no matching image exists.
+Systematic, page-by-page. Not just pills.
 
-### 8. Fix hero image darkness / marina visibility
-- Adjust the project hero overlay so the marina/beachfront remains visible while keeping text readable.
-- Use a lighter lower scrim and stronger text shadow instead of hiding the lower image content under a heavy black gradient.
+Scope (every backend route under `/owner/**` and `/developer-hub/**`):
+- Owner Panel, Overview, Document Studio, CRM, JBJ CRM, Developers Portal, Sales Reps, Briefings, Projects, Calendar, Access Requests, Developer Profiles, Listing Admin.
 
-### 9. Fix emerald contrast on affected backend/project sections
-- Patch the known affected components directly:
-  - floor plan file pills
-  - payment tabs/buttons
-  - same developer / same area map filters
-  - map price markers
-  - “more projects” action buttons
-  - brochure/document buttons
-- Add a scoped contrast lock for emerald action surfaces so text and icons render pure white on emerald/dark-gradient backgrounds.
+For each page:
+1. Playwright script visits the page (authenticated via injected Supabase session).
+2. Enumerate every element with `data-surface="emerald"` (or bg gradient containing `#064E3B`/`#042c1c`) and assert:
+   - `color` is `rgb(255,255,255)` for text
+   - all descendant `<svg>` have `color: white` and no `text-*` overrides
+   - all badges/counters (e.g. "Investors 3", "Developers …") render numbers in white
+3. Enumerate every element with the champagne/cream surface and assert dark `ink` text.
+4. Enumerate all `hover:` states on dropdown menu items — replace any blue hover (`bg-accent` default, `bg-blue-*`, `text-blue-*`) with the emerald hover token.
+5. Fix at the source (component or token), not per-instance.
 
-### 10. Visual and technical validation
-- Run an authenticated owner E2E flow with Playwright:
-  - upload cover photo
-  - upload multiple gallery images
-  - upload multiple PDFs in the last-stage document area
-  - finish/preview
-  - open project detail
-  - open gallery
-  - open floor plans
-  - download brochure/fact sheet
-  - open project documents
-  - inspect payment plan section
-  - inspect map filters/markers and more-project buttons
-- Capture screenshots for proof:
-  - wizard upload queue
-  - wizard preview/full preview
-  - saved result screen
-  - project hero with visible marina
-  - gallery
-  - floor plans
-  - brochure section
-  - payment plan section
-  - project documents
-  - map/nearby filters
-  - same developer / same area sections
-- Add a computed-style contrast scanner for dark text/icons on emerald surfaces and only report success after the scanner and screenshots pass.
+Known offenders from the screenshots:
+- Investors/Developers/Dev Sales Reps tab counters — number chip contrast.
+- "All Emerald / All Languages" dropdown hover = blue → emerald.
+- Various buttons still rendering ink-on-emerald or emerald-on-emerald.
+- CRM stat cards (Calls Today / WhatsApp / Total Leads / Conversion) — icon tile contrast + card alignment.
 
-## Technical details
-- Main files to change after approval:
-  - `src/pages/developer-hub/DeveloperProjectWizard.tsx`
-  - `src/hooks/useDeveloperAutoPublish.ts`
-  - `supabase/functions/developer-auto-publish/index.ts`
-  - `src/pages/ProjectDetail.tsx`
-  - `src/components/project-detail/ProjectDetailLayout.tsx`
-  - `src/components/project-detail/FloorPlanGallery.tsx`
-  - `src/components/project-detail/PremiumBrochureCard.tsx`
-  - `src/components/project-detail/BookStyleDocuments.tsx`
-  - `src/components/project-detail/PaymentPlanVisualization.tsx`
-  - `src/components/project-detail/ProjectNearbyPropertiesMap.tsx`
-  - `src/components/project-detail/MoreFromDeveloperStrip.tsx`
-  - `src/index.css`
-- Backend/data changes may be added only if needed to store missing size, bedroom, document role, display title, or document cover metadata safely.
-- No unrelated security findings, public-site redesign, or non-owner backend areas will be changed.
+Deliverable: one JSON report `/tmp/browser/contrast-report.json` listing every element checked, pass/fail, and the fix applied. Zero fails before moving on.
+
+## Batch 3 — Backend layout fixes
+
+- CRM entity tab row: the left/right scroll arrows currently overlay the "Investors / Developers / Developer Leads / Database" pills. Reserve horizontal space for the arrows (padding-inline on the scroll container, arrows positioned outside the scroll track) so no overlap at any viewport ≥ 375px.
+- CRM stat cards: equalize card heights, icon-tile sizes, and grid gutter so all four cards align (`grid-cols-4` with `items-stretch`, consistent `min-h`).
+- Any other misaligned cards found during Batch 2 screenshots.
+
+Verify: screenshots at 1280, 1024, 768, 375 for `/owner/crm`.
+
+## Batch 4 — Sales Reps: create + edit
+
+`/owner/developers/reps` currently has no way to add a rep.
+
+- Add "Add Sales Rep" button (emerald-ombre, white text/icon) in the page header, right side.
+- Sheet/dialog with: name, email, phone, developer (select), emirates covered (multi), languages (multi), photo upload, notes.
+- Wire to existing `developer_sales_reps` table (create migration if fields missing; include GRANTs + RLS scoped to owner role via `has_role`).
+- Row actions: edit, deactivate.
+- Verify: create a rep via Playwright, screenshot before/after, confirm row appears and filters work.
+
+## Batch 5 — Briefings: developer + rep + star rating
+
+`/owner/developers/briefings`:
+
+- Briefing record fields: developer (FK), sales_rep (FK to `developer_sales_reps`), date, location, topics (text), rating (1–5 stars), notes, follow-up date.
+- Add/edit sheet with those fields; star-rating control (emerald filled stars, white on emerald pill for the summary chip).
+- List view: sortable by date, rating; filters by developer and rep.
+- Migration for `developer_briefings` table if not present, with GRANTs + RLS.
+- Verify: create a briefing with a 4-star rating, screenshot.
+
+## Batch 6 — Projects: bulk publish, per-row publish, continuous enrichment
+
+Two pages: `/owner/developers/projects` and `/owner/listing-admin` (or wherever the listing admin lives).
+
+- Per-row: replace the always-"Unpublished" chip with a working Publish/Unpublish toggle that flips `projects.published` (or equivalent status column) and revalidates the query.
+- Bulk toolbar (visible when ≥1 row selected):
+  - Select all / Unselect all
+  - Bulk Publish, Bulk Unpublish
+  - Bulk Edit (opens sheet applying selected fields to all)
+  - Bulk Enrich (queues `developer-auto-publish` edge function per selected project)
+- Continuous enrichment: extend `developer-auto-publish` edge function so that for every published project it periodically re-scans approved sources (government portals + whitelisted developer sites already configured) and **merges** new fields into the project — never deletes existing owner-authored content. Merge policy: fill empty fields, append to arrays (dedup), skip fields locked by the owner.
+- Verify: select 3 projects → Bulk Publish → screenshot showing all three as Published; run Bulk Enrich → confirm edge function invocation in logs and new fields appear.
+
+---
+
+## Cross-cutting rules (locked)
+
+- No blue anywhere in backend UI. Hover states use emerald wash token.
+- Emerald surfaces: text + icons + numeric badges are `#FFFFFF` — enforced by CSS contract on `[data-surface="emerald"] *`.
+- Every batch ends with: `tsgo --noEmit` clean + Playwright screenshots at 1280×1800 stored under `/tmp/browser/batch-N/`, then user-visible summary listing what was verified with which screenshot.
+- No claim of completion without a screenshot proving it.
+
+## Technical notes
+
+- Playwright: use `LOVABLE_BROWSER_SUPABASE_*` env for authenticated `/owner/**` routes; verify `LOVABLE_BROWSER_AUTH_STATUS=injected` first.
+- CSS contract lives in `src/index.css` under a single `@layer components` block keyed on `[data-surface="emerald"]` — add `svg { color: #fff }` and `[data-count], .badge, .chip-count { color: #fff }` rules there so numeric counters inherit white.
+- Sidebar restore: use `git log --oneline src/components/navigation/SidebarModePortalBlock.tsx` to find the commit prior to the recent refactor and restore that file's contents.
+- Bulk actions on projects: use TanStack Table row selection state already present in the projects table; add a floating action bar bound to `table.getSelectedRowModel()`.
+- Enrichment merge: implement `mergeProjectEnrichment(existing, incoming)` util with unit tests covering never-delete, array-dedup, and locked-field-skip cases.
