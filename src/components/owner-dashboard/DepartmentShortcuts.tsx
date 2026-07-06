@@ -61,7 +61,7 @@ export default function DepartmentShortcuts() {
   return (
     <div data-surface="champagne" className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Departments & Admin</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
         {DEPARTMENTS.map((dept) => (
           <button
             key={dept.path}
