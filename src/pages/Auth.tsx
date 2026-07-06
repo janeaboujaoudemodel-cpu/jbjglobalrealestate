@@ -680,8 +680,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           ) : (
             /* ─── Standard Form ─────────────────────────────── */
             <form onSubmit={async (e) => {
+              const wasSignin = mode === "signin";
               await handleSubmit(e);
-              if (mode === "signin" && email && password) void offerPasskeyUpgrade();
+              if (wasSignin && email && password) {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.user) void offerPasskeyUpgrade();
+              }
             }} className="jj-auth-form space-y-4" autoComplete="on">
               {/* Email field — shown on signin, signup, forgot, otp-login */}
               {["signin", "signup", "forgot", "otp-login"].includes(mode) && (
