@@ -1406,7 +1406,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                 data-no-contrast-guard
                 data-on-dark
                 data-sidebar-auth-control
-                className="allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
+                className="jj-emerald-metallic allow-white flex flex-row items-center justify-center gap-1.5 text-[11px] font-bold tracking-wide leading-none transition-all duration-200 px-2 h-[42px] rounded-lg border-2 will-change-transform"
                 style={{
                   color: '#FFFFFF',
                   borderColor: '#B89555',
