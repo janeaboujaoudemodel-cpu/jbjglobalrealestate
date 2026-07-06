@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit3, ExternalLink, Loader2, Building2, Home } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles } from "lucide-react";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
+import { toast } from "sonner";
 
 interface Project {
   id: string;
@@ -59,8 +61,11 @@ const DeveloperLiveEditor = () => {
   const { user, isOwner } = useAuth();
   const navigate = useNavigate();
   const publish = useDeveloperAutoPublish();
+  const qc = useQueryClient();
   const [editing, setEditing] = useState<string | null>(null);
   const [edits, setEdits] = useState<Record<string, { price_from?: string; handover_date?: string }>>({});
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich">(null);
 
   const { data: rep } = useQuery({
     queryKey: ["rep-list", user?.id],
@@ -107,6 +112,60 @@ const DeveloperLiveEditor = () => {
     enabled: !!isOwner,
   });
 
+  const allIds = useMemo(() => (projects ?? []).map((p) => p.id), [projects]);
+  const allSelected = allIds.length > 0 && selected.size === allIds.length;
+
+  const toggleSelect = (id: string) => {
+    setSelected((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id); else n.add(id);
+      return n;
+    });
+  };
+  const selectAll = () => setSelected(new Set(allIds));
+  const clearAll = () => setSelected(new Set());
+
+  const togglePublish = async (p: Project, next: boolean) => {
+    const { error } = await supabase.from("projects").update({ is_published: next }).eq("id", p.id);
+    if (error) return toast.error(error.message);
+    toast.success(next ? "Published" : "Unpublished");
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+  };
+
+  const bulkPublish = async (next: boolean) => {
+    if (selected.size === 0) return;
+    setBulkBusy(next ? "publish" : "unpublish");
+    const ids = Array.from(selected);
+    const { error } = await supabase.from("projects").update({ is_published: next }).in("id", ids);
+    setBulkBusy(null);
+    if (error) return toast.error(error.message);
+    toast.success(`${ids.length} project${ids.length > 1 ? "s" : ""} ${next ? "published" : "unpublished"}`);
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+    clearAll();
+  };
+
+  const bulkEnrich = async () => {
+    if (selected.size === 0 || !projects) return;
+    setBulkBusy("enrich");
+    const chosen = projects.filter((p) => selected.has(p.id));
+    let ok = 0, fail = 0;
+    for (const p of chosen) {
+      if (!p.developer_id) { fail++; continue; }
+      try {
+        await publish.mutateAsync({
+          developer_id: p.developer_id,
+          project_id: p.id,
+          patch: {},
+          enrich: true,
+        } as unknown as Parameters<typeof publish.mutateAsync>[0]);
+        ok++;
+      } catch { fail++; }
+    }
+    setBulkBusy(null);
+    toast[fail ? "warning" : "success"](`Enrichment queued for ${ok} / ${chosen.length}`);
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+  };
+
   const saveEdit = async (p: Project) => {
     const e = edits[p.id] || {};
     const patch: Record<string, unknown> = {};
@@ -130,19 +189,61 @@ const DeveloperLiveEditor = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">My Projects</h1>
-          <p className="text-[#1A1A1A]/70 text-sm mt-1">Click any project to edit. Edits publish live for approved developers.</p>
+          <p className="text-[#1A1A1A]/70 text-sm mt-1">Select projects to bulk publish, unpublish, or enrich. Click any row to edit.</p>
         </div>
-        <Button onClick={() => navigate(isOwner ? "/owner/developers/new-project" : "/developer-hub/new-project")} className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90">
+        <Button
+          onClick={() => navigate(isOwner ? "/owner/developers/new-project" : "/developer-hub/new-project")}
+          data-surface="emerald"
+          data-emerald-ok="button"
+          className="jj-surface-emerald allow-white text-white hover:opacity-90"
+        >
           <Plus className="w-4 h-4 mr-2" /> Add project
         </Button>
       </div>
 
       <section className="space-y-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Building2 className="h-5 w-5 text-[#064E3B]" />
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Off-plan projects</h2>
           <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{projects?.length ?? 0}</Badge>
+
+          {(projects?.length ?? 0) > 0 && (
+            <div className="ml-auto flex items-center gap-2">
+              <Button size="sm" variant="outline" onClick={allSelected ? clearAll : selectAll}
+                className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
+                {allSelected ? "Unselect all" : "Select all"}
+              </Button>
+            </div>
+          )}
         </div>
+
+        {selected.size > 0 && (
+          <div
+            data-surface="emerald"
+            data-emerald-ok="toolbar"
+            className="jj-surface-emerald allow-white text-white rounded-xl px-4 py-3 flex flex-wrap items-center gap-3 shadow-lg"
+          >
+            <span className="text-sm font-semibold">{selected.size} selected</span>
+            <div className="ml-auto flex flex-wrap gap-2">
+              <Button size="sm" onClick={() => bulkPublish(true)} disabled={!!bulkBusy}
+                className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
+                {bulkBusy === "publish" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Publish</>}
+              </Button>
+              <Button size="sm" onClick={() => bulkPublish(false)} disabled={!!bulkBusy}
+                className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
+                {bulkBusy === "unpublish" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><XCircle className="w-3.5 h-3.5 mr-1" /> Unpublish</>}
+              </Button>
+              <Button size="sm" onClick={bulkEnrich} disabled={!!bulkBusy}
+                className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
+                {bulkBusy === "enrich" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Sparkles className="w-3.5 h-3.5 mr-1" /> Enrich</>}
+              </Button>
+              <Button size="sm" variant="outline" onClick={clearAll}
+                className="bg-transparent border-white/70 text-white hover:bg-white/10">
+                Clear
+              </Button>
+            </div>
+          </div>
+        )}
 
       {isLoading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]/60" /></div>
@@ -154,13 +255,22 @@ const DeveloperLiveEditor = () => {
         <div className="space-y-3">
           {projects.map((p) => {
             const isEdit = editing === p.id;
+            const isSelected = selected.has(p.id);
             const flags = Array.isArray(p.data_quality_flags) ? p.data_quality_flags : [];
             return (
-              <Card key={p.id} className="bg-[#F7F2EA] border-[#B89555]/40 p-4 rounded-lg">
+              <Card key={p.id}
+                className={`p-4 rounded-lg border transition-colors ${
+                  isSelected
+                    ? "bg-[#EFE6D6] border-[#064E3B]"
+                    : "bg-[#F7F2EA] border-[#B89555]/40"
+                }`}>
                 <div className="flex items-start gap-4">
+                  <div className="pt-1">
+                    <Checkbox checked={isSelected} onCheckedChange={() => toggleSelect(p.id)} aria-label={`Select ${p.name}`} />
+                  </div>
                   <div className="w-20 h-20 rounded bg-[#EFE6D6] border border-[#B89555]/40 flex-shrink-0 overflow-hidden">
                     {p.cover_image_url ? (
-                      <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover"  loading="lazy" decoding="async" />
+                      <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full grid place-items-center text-[10px] text-[#1A1A1A]/40">No cover</div>
                     )}
@@ -169,7 +279,13 @@ const DeveloperLiveEditor = () => {
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-[#1A1A1A]">{p.name}</h3>
                       {p.is_published ? (
-                        <Badge variant="outline" className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">Live</Badge>
+                        <Badge
+                          data-surface="emerald"
+                          data-emerald-ok="badge"
+                          className="jj-surface-emerald allow-white text-white border-transparent"
+                        >
+                          Live
+                        </Badge>
                       ) : (
                         <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200">Unpublished</Badge>
                       )}
@@ -207,7 +323,9 @@ const DeveloperLiveEditor = () => {
                   <div className="flex flex-col gap-2">
                     {isEdit ? (
                       <>
-                        <Button size="sm" onClick={() => saveEdit(p)} disabled={publish.isPending} className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90">
+                        <Button size="sm" onClick={() => saveEdit(p)} disabled={publish.isPending}
+                          data-surface="emerald" data-emerald-ok="button"
+                          className="jj-surface-emerald allow-white text-white">
                           {publish.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : "Save & publish"}
                         </Button>
                         <Button size="sm" variant="outline" onClick={() => setEditing(null)} className="border-[#B89555]/40 text-[#1A1A1A]">
@@ -216,6 +334,18 @@ const DeveloperLiveEditor = () => {
                       </>
                     ) : (
                       <>
+                        {p.is_published ? (
+                          <Button size="sm" variant="outline" onClick={() => togglePublish(p, false)}
+                            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
+                            <XCircle className="w-3.5 h-3.5 mr-1" /> Unpublish
+                          </Button>
+                        ) : (
+                          <Button size="sm" onClick={() => togglePublish(p, true)}
+                            data-surface="emerald" data-emerald-ok="button"
+                            className="jj-surface-emerald allow-white text-white">
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Publish
+                          </Button>
+                        )}
                         <Button size="sm" variant="outline" onClick={() => setEditing(p.id)} className="border-[#B89555]/40 text-[#1A1A1A]">
                           <Edit3 className="w-3.5 h-3.5 mr-1" /> Edit
                         </Button>
