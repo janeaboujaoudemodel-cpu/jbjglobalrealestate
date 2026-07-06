@@ -1224,8 +1224,71 @@ All colors MUST be HSL.
   box-shadow: inset 0 0 0 1px rgba(255,244,210,.45), inset 0 -1px 2px rgba(0,0,0,.18) !important;
 }
 
+/* ── Auth page premium button animations ─────────────────────────── */
+/* Continuous champagne sheen sweep (used by Passkey + Sign In on /auth). */
+@keyframes jj-passkey-sheen {
+  0%   { transform: translateX(-120%); }
+  60%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+/* Emerald button on /auth — subtle continuous gold shimmer over emerald. */
+.jj-auth-emerald-cta {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, #064E3B 0%, #086148 45%, #042C1C 80%, #000000 100%) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(184,149,85,0.55) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 12px 32px -14px rgba(6,78,59,0.75) !important;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.jj-auth-emerald-cta:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 18px 40px -14px rgba(6,78,59,0.85) !important;
+}
+.jj-auth-emerald-cta::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg,
+    transparent 30%,
+    rgba(239,230,214,0.28) 50%,
+    transparent 70%);
+  transform: translateX(-120%);
+  animation: jj-passkey-sheen 3.8s ease-in-out infinite;
+  pointer-events: none;
+}
+.jj-auth-emerald-cta::after {
+  content: "";
+  position: absolute; left: 24px; right: 24px; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.85), transparent);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-auth-emerald-cta::before { animation: none; }
+}
 
-
+/* Emerald ambient backdrop behind the auth card (radial + subtle drift). */
+@keyframes jj-auth-bg-drift {
+  0%   { background-position: 0% 0%, 100% 100%, 50% 50%; }
+  50%  { background-position: 100% 20%, 0% 80%, 60% 40%; }
+  100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+}
+.jj-auth-emerald-bg {
+  background-color: #032922;
+  background-image:
+    radial-gradient(60% 55% at 20% 25%, rgba(9,90,66,0.85) 0%, rgba(3,41,34,0) 65%),
+    radial-gradient(55% 50% at 80% 80%, rgba(6,78,59,0.9) 0%, rgba(3,41,34,0) 70%),
+    linear-gradient(135deg, #021b17 0%, #043a2d 45%, #021b17 100%);
+  background-size: 180% 180%, 180% 180%, 100% 100%;
+  animation: jj-auth-bg-drift 22s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jj-auth-emerald-bg { animation: none; }
+}
 
 
 
