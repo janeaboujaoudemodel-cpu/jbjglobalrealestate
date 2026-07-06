@@ -786,6 +786,7 @@ const DeveloperProjectWizard = () => {
     const publicPath = publishResult.public_path || (publishResult.slug ? `/project/${publishResult.slug}` : null);
     const fullUrl = publicPath && typeof window !== "undefined" ? `${window.location.origin}${publicPath}` : publicPath;
     const isPublished = publishResult.status === "published";
+    const isOwnerPreview = publishResult.status === "saved_preview";
     const publishError = (publishResult as AutoPublishResponse & { publish_error?: string | null }).publish_error;
 
     return (
@@ -796,9 +797,9 @@ const DeveloperProjectWizard = () => {
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">{isPublished ? "Project published live" : "Project saved for review"}</h1>
+              <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">{isPublished ? "Project published live" : isOwnerPreview ? "Owner preview saved" : "Project saved for review"}</h1>
               <p className="text-[#1A1A1A]/70 text-sm mt-1">
-                {isPublished ? "The public project page is ready. Open it now or copy the direct URL." : "The project record was created and a preview URL was generated. Complete the missing listing data to publish live."}
+                {isPublished ? "The public project page is ready. Open it now or copy the direct URL." : isOwnerPreview ? "The project record was saved for your internal review. It is not presented as owner approval." : "The project record was created and a preview URL was generated. Complete the missing listing data to publish live."}
               </p>
               {publishError && (
                 <p className="mt-3 rounded-md border border-[#B89555]/35 bg-[#FDFBF7] px-3 py-2 text-sm text-[#1A1A1A]">
@@ -834,7 +835,7 @@ const DeveloperProjectWizard = () => {
             <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] transition-colors">
               <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
                 <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
-                  {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
+                  {cover?.url ? <SafeImage src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
                 </div>
               </button>
               <div className="p-5 space-y-3">
@@ -849,18 +850,11 @@ const DeveloperProjectWizard = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-[#1A1A1A]">
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Handover</span>{basics.handover_date || "—"}</div>
-                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Size</span>{sizeSummary}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
                 </div>
-                {basics.payment_plan && (
-                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
-                    <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
-                      <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
-                      <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{getPaymentPlanBadge(basics.payment_plan)}</span>
-                    </button>
-                    {paymentExpanded && <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">{paymentPlanParts.map((part, i) => <p key={i}>{part}</p>)}</div>}
-                  </div>
-                )}
+                <PaymentPreview />
                 <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields before publishing."}</p>
                 <ContactActionsPreview />
               </div>
@@ -877,7 +871,7 @@ const DeveloperProjectWizard = () => {
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Add a project</h1>
           <p className="text-[#1A1A1A]/70 text-sm mt-1">
             {willPublishLive
-              ? "Will publish live immediately when you click Publish. Draft autosaves on this device."
+              ? "Owner preview saves the project privately. Use Publish only when you want it live. Draft autosaves on this device."
               : "Will be queued for one-time owner approval. After that, every future edit goes live automatically."}
           </p>
         </div>
@@ -886,8 +880,8 @@ const DeveloperProjectWizard = () => {
  ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
  : "bg-amber-50 text-amber-800 border-amber-200"
  }`}>
-          {willPublishLive ? <ShieldCheck className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
-          {willPublishLive ? "Live publishing" : "Pending approval"}
+          {isOwner ? <ShieldCheck className="w-3.5 h-3.5" /> : willPublishLive ? <ShieldCheck className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+          {isOwner ? "Owner preview" : willPublishLive ? "Live publishing" : "Pending approval"}
         </span>
       </div>
 
