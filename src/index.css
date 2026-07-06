@@ -7,11 +7,53 @@
 html body #root .owner-dashboard-shell :where(button, a[role="button"], [role="button"], [role="tab"], .tabs-trigger, [data-radix-collection-item]) {
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
-  white-space: nowrap !important;
+  white-space: normal !important;
   word-break: normal !important;
-  overflow-wrap: normal !important;
+  overflow-wrap: break-word !important;
   letter-spacing: 0 !important;
   min-height: 2.25rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+html body #root :where([data-jbj-card], [data-jbj-card] *) {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+html body #root [data-jbj-card] :where(.flex, [class*="flex"], [class*="items-"], [class*="justify-"], [class*="gap-"]) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html body #root [data-jbj-card] :where([class*="justify-end"], [class*="ml-auto"], [class*="space-x-"]) {
+  flex-wrap: wrap;
+}
+
+html body #root [data-jbj-card] :where(button, a[role="button"], [role="button"], [data-jbj-button]) {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+html body #root [data-jbj-card] :where(button, a[role="button"], [role="button"], [data-jbj-button]) > :where(span, div) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html body #root .owner-dashboard-shell :where(.flex, [class*="flex"], .grid, [class*="grid"]) > * {
+  min-width: 0;
+}
+
+html body #root .owner-dashboard-shell :where([class*="justify-end"], [class*="items-center"][class*="gap-"]) {
+  max-width: 100%;
+}
+
+html body #root .owner-dashboard-shell :where([data-jbj-button], button, a[role="button"], [role="button"]) :where(span) {
+  min-width: 0;
+  max-width: 100%;
 }
 
 html body #root .owner-dashboard-shell :where([data-owner-batch-fix], [data-owner-batch-fix] *) {

@@ -78,13 +78,13 @@ const Admin = () => {
   if (!h.isOwner) return null;
 
   return (
-    <div data-backend-portal="owner-admin" className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <div data-backend-portal="owner-admin" data-owner-batch-fix className="owner-dashboard-shell min-h-screen overflow-x-clip bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <CommandPalette isOpen={h.showCommandPalette} onClose={() => h.setShowCommandPalette(false)} />
 
       {/* Premium Header */}
-      <header data-admin-owner-header className="border border-[#B89555]/35 bg-[#F7F2EA] rounded-2xl shadow-[0_14px_36px_-24px_rgba(26,26,26,0.28)]">
-        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
-          <div className="flex items-center gap-3 flex-shrink-0">
+      <header data-admin-owner-header className="mx-2 border border-[#B89555]/35 bg-[#F7F2EA] rounded-2xl shadow-[0_14px_36px_-24px_rgba(26,26,26,0.28)] sm:mx-4">
+        <div className="container mx-auto flex min-w-0 flex-wrap items-center gap-3 px-3 py-3 sm:px-4">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
             <div data-backend-icon-tile="emerald" data-surface="emerald" className="w-10 h-10 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 flex items-center justify-center shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.18)]">
               <Shield className="w-4 h-4 allow-white" strokeWidth={2.35} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
@@ -93,14 +93,14 @@ const Admin = () => {
               <p className="text-[#1A1A1A] text-xs font-semibold whitespace-normal break-words leading-tight">{h.user?.email}</p>
             </div>
           </div>
-          <div className="hidden lg:flex items-center flex-1 max-w-sm mx-4">
+          <div className="order-3 hidden min-w-0 w-full items-center xl:order-none xl:flex xl:w-auto xl:flex-1 xl:max-w-sm xl:mx-4">
             <button onClick={() => h.setShowCommandPalette(true)} className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-[#FDFBF7]/80 border border-[#B89555]/30 text-[#1A1A1A]/70 hover:border-[#B89555]/50 transition-all">
               <Search className="h-4 w-4 text-[#1A1A1A] flex-shrink-0" />
               <span className="text-sm">Search...</span>
               <kbd className="ml-auto px-1.5 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] text-[10px] rounded font-mono flex-shrink-0">⌘K</kbd>
             </button>
           </div>
-          <div className="flex items-center gap-2 ml-auto flex-shrink-0 pl-2 border-l border-[#B89555]/30">
+          <div className="ml-auto flex min-w-0 max-w-full flex-wrap items-center justify-end gap-2 pl-2 border-l border-[#B89555]/30">
             <AdminNotificationBell />
             <Link to="/owner/marketing-hub">
               <Button size="sm" data-emerald-action="true" data-surface="emerald" className="jj-cta-emerald font-semibold shadow-[0_12px_24px_-18px_rgba(6,78,59,0.85)]">
@@ -122,7 +122,7 @@ const Admin = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 pb-24">
-        <Tabs value={h.activeTab} onValueChange={h.setActiveTab} className="space-y-6">
+        <Tabs value={h.activeTab} onValueChange={h.setActiveTab} className="min-w-0 space-y-6">
           <div className="w-full rounded-2xl border-2 border-[#B89555]/30 bg-[#FDFBF7]/80 p-2 md:p-3 shadow-sm">
             <TabsList className="grid gap-1.5 bg-transparent p-0 h-auto grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 w-full">
               {[
