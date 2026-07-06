@@ -16,12 +16,35 @@ interface Props {
  *   on click, so users are never left staring at a missing option.
  */
 export function PasskeyButton({ onSuccess, className }: Props) {
-  const [supported, setSupported] = useState(true);
+  const [supported, setSupported] = useState(false);
+  const [hasLocalPasskey, setHasLocalPasskey] = useState(false);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    setSupported(isPasskeySupported());
+    (async () => {
+      const webauthnOk = isPasskeySupported();
+      if (!webauthnOk) return;
+      // Must have conditional-mediation capability (modern platform authenticator).
+      let conditional = false;
+      try {
+        conditional =
+          typeof PublicKeyCredential !== 'undefined' &&
+          typeof (PublicKeyCredential as any).isConditionalMediationAvailable === 'function' &&
+          (await (PublicKeyCredential as any).isConditionalMediationAvailable());
+      } catch {
+        conditional = false;
+      }
+      // And this device must have previously enrolled a passkey for the app.
+      const enrolledFlag =
+        typeof window !== 'undefined' &&
+        window.localStorage.getItem('jbj_passkey_enrolled') === '1';
+      setSupported(webauthnOk && conditional);
+      setHasLocalPasskey(enrolledFlag);
+    })();
   }, []);
+
+  // Hide entirely if the device has no enrolled passkey / no capability.
+  if (!supported || !hasLocalPasskey) return null;
 
   const handle = async () => {
     if (!supported) {
