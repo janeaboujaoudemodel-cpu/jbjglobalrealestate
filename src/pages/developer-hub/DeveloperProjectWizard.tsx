@@ -1000,23 +1000,23 @@ const DeveloperProjectWizard = () => {
               </Select>
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Amenities (comma-separated)</Label>
+              <FieldHeader label="Amenities (comma-separated)" field="amenities" append />
               <Textarea rows={2} value={basics.amenities} onChange={(e) => setBasics({ ...basics, amenities: e.target.value })} placeholder="e.g. Pool, Gym, Concierge, Kids play area" className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Short description</Label>
+              <FieldHeader label="Short description" field="short_description" append />
               <Textarea value={basics.short_description} onChange={(e) => setBasics({ ...basics, short_description: e.target.value })} className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Full description</Label>
+              <FieldHeader label="Full description" field="description" append />
               <Textarea rows={5} value={basics.description} onChange={(e) => setBasics({ ...basics, description: e.target.value })} className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Developer description</Label>
+              <FieldHeader label="Developer description" field="developerDescription" append />
               <Textarea rows={3} value={developerDescription} onChange={(e) => setDeveloperDescription(e.target.value)} placeholder="AI will prepare this from the brochure when available; edit or leave blank." className={inputCls} />
             </div>
             <div className="md:col-span-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4">
-              <Label className="text-[#1A1A1A]">Additional information</Label>
+              <FieldHeader label="Additional information" field="additionalInfo" append />
               <Textarea rows={4} value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Add any extra project notes, amenities, payment plan details, management rules or owner-use rules." className={inputCls} />
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <Button type="button" variant={additionalInfoMode === "enrich" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("enrich")} data-surface={additionalInfoMode === "enrich" ? "emerald" : undefined} className={additionalInfoMode === "enrich" ? "allow-white bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Use to enrich listing</Button>
