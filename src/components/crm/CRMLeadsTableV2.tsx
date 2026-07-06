@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "sonner";
-import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban, Crown, Shield } from "lucide-react";
+import { FileSignature, Mail, MessageSquare, PhoneCall, Trash2, Flame, Star, CheckCircle2, XCircle, Clock, Ban, Crown, Shield, UserPlus } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -835,6 +835,7 @@ export default function CRMLeadsTableV2({
                         )}
                       </div>
                     </TableCell>
+                    <TableCell className="hidden">
                         <div className="sr-only"><LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} /></div>
                         <div className="hidden">
                           <Button
@@ -906,9 +907,9 @@ export default function CRMLeadsTableV2({
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
-                      </div>
                     </TableCell>
                   </TableRow>
+
                 );
               })
             )}
