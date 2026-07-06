@@ -327,7 +327,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Channel Tabs - Header Bar with Badges */}
-          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10 scrollbar-thin max-w-full">
+          <div className="flex flex-wrap items-center gap-1 mb-4 overflow-visible pb-1 border-b-2 border-[#B89555]/10 max-w-full">
             {dynamicChannelTabs.map((tab) => {
               const tabChannelId = (tab as { channelId?: string }).channelId;
               const isActive = tabChannelId
@@ -350,7 +350,7 @@ export default function OwnerInbox() {
                     WebkitTextFillColor: '#FFFFFF',
                     transitionProperty: 'background, background-color, border-color, box-shadow, transform',
                   } as CSSProperties : undefined}
-                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap duration-200 border-b-2 -mb-[2px] rounded-t-lg flex-shrink-0 ${
+                  className={`flex min-w-0 items-center gap-2 px-3 py-2.5 text-sm font-medium whitespace-normal duration-200 border-b-2 -mb-[2px] rounded-t-lg ${
  isActive
  ? 'jj-emerald-action border-transparent !text-white font-bold shadow-sm [&_*]:!text-white'
  : 'transition-all border-transparent text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/20'
@@ -389,7 +389,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* AI Category Filter */}
-          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin max-w-full">
+          <div className="flex flex-wrap items-center gap-2 mb-4 overflow-visible pb-2 max-w-full">
             <button
               onClick={() => setCategoryFilter('all')}
               data-surface={categoryFilter === 'all' ? "emerald" : "champagne"}
@@ -399,7 +399,7 @@ export default function OwnerInbox() {
               style={categoryFilter === 'all'
                 ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
                 : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
-              className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
+              className={`min-w-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-normal ${
  categoryFilter === 'all'
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
  : 'transition bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'
@@ -416,7 +416,7 @@ export default function OwnerInbox() {
                 style={categoryFilter === key
                   ? { background: 'var(--jj-emerald-ombre)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', borderColor: 'transparent', transitionProperty: 'background, background-color, border-color, box-shadow, transform' } as CSSProperties
                   : { background: '#FDFBF7', backgroundImage: 'none', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A', borderColor: 'rgba(184,149,85,0.35)' } as CSSProperties}
-                className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
+                className={`min-w-0 px-3 py-1 rounded-full text-xs font-medium border whitespace-normal ${
  categoryFilter === key
  ? 'jj-emerald-action !text-white border-transparent [&_*]:!text-white'
  : 'transition bg-transparent text-[#1A1A1A]/70 border-[#B89555]/20 hover:bg-[#EFE6D6]/30'

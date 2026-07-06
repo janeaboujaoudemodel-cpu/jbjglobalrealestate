@@ -127,7 +127,7 @@ export function OwnerTasksPopupAlert() {
         data-no-contrast-guard
         data-surface="page"
         style={{ backgroundColor: "#FDFBF7", color: "#1A1A1A" }}
-        className="border-2 border-[#B89555]/60 rounded-2xl shadow-2xl p-6 md:p-8 max-w-md w-full relative"
+        className="border-2 border-[#B89555]/60 rounded-2xl shadow-2xl p-5 md:p-8 max-w-md w-full max-w-[calc(100vw-2rem)] relative overflow-hidden"
       >
         <button
           type="button"
@@ -156,7 +156,7 @@ export function OwnerTasksPopupAlert() {
           />
         </button>
 
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex min-w-0 items-start gap-3 pr-12 mb-4">
           <div
             data-emerald="true"
             data-surface="emerald"
@@ -169,7 +169,7 @@ export function OwnerTasksPopupAlert() {
           >
             <AlertTriangle className="allow-white w-6 h-6" strokeWidth={2.5} style={{ color: "#FFFFFF", stroke: "#FFFFFF", opacity: 1 }} />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <h3 id="pending-tasks-title" style={{ color: "#1A1A1A" }} className="font-bold text-lg leading-tight">
               Pending Tasks
             </h3>
@@ -187,7 +187,7 @@ export function OwnerTasksPopupAlert() {
           </p>
         </div>
 
-        <div className="flex gap-3">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] gap-3 max-[360px]:grid-cols-1">
           <button
             type="button"
             onClick={handleViewTasks}
@@ -201,7 +201,7 @@ export function OwnerTasksPopupAlert() {
               WebkitTextFillColor: "#FFFFFF",
               borderColor: "rgba(52,211,153,0.55)",
             }}
-            className="allow-white flex-1 inline-flex items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+            className="allow-white inline-flex min-w-0 items-center justify-center gap-2 h-10 px-6 rounded-xl border-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
           >
             <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View Tasks</span>
             <ArrowRight
@@ -215,7 +215,7 @@ export function OwnerTasksPopupAlert() {
             onClick={handleClose}
             data-no-contrast-guard
             style={{ backgroundColor: "#F7F2EA", color: "#1A1A1A", borderColor: "rgba(184,149,85,0.4)" }}
-            className="inline-flex items-center justify-center h-10 px-6 rounded-xl border-2 text-sm font-semibold hover:!bg-[#EFE6D6] hover:!border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
+            className="inline-flex min-w-0 items-center justify-center h-10 px-6 rounded-xl border-2 text-sm font-semibold hover:!bg-[#EFE6D6] hover:!border-[#B89555] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B89555] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
           >
             <span data-no-contrast-guard style={{ color: "#1A1A1A" }}>Later</span>
           </button>

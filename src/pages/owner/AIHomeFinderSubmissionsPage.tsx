@@ -99,7 +99,51 @@ export default function AIHomeFinderSubmissionsPage() {
         />
       </div>
 
-      <div className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] overflow-hidden max-w-full">
+      <div className="xl:hidden space-y-3">
+        {isLoading && <div className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/60">Loading submissions…</div>}
+        {!isLoading && filtered.length === 0 && <div className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/60">No submissions yet.</div>}
+        {filtered.map((s) => {
+          const tier = tierStyles[s.result_tier] || tierStyles.exact;
+          return (
+            <article key={s.id} className="min-w-0 max-w-full rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] p-4 text-[#1A1A1A]">
+              <div className="min-w-0 space-y-2">
+                <div>
+                  <div className="font-semibold break-words">{s.full_name || "—"}</div>
+                  <div className="text-xs text-[#1A1A1A]/70 break-words">{s.nationality || ""}{s.preferred_language ? ` · ${s.preferred_language}` : ""}</div>
+                </div>
+                <div className="space-y-1 text-sm">
+                  <div className="flex min-w-0 items-center gap-1.5"><Mail className="w-3 h-3 shrink-0" /><span className="min-w-0 break-all">{s.email}</span></div>
+                  <div className="flex min-w-0 items-center gap-1.5"><Phone className="w-3 h-3 shrink-0" /><span className="min-w-0 break-all">{s.phone || "—"}</span></div>
+                </div>
+                {(s.recommended_slugs || []).length > 0 && (
+                  <div className="grid min-w-0 grid-cols-1 gap-1.5 sm:grid-cols-2">
+                    {(s.recommended_slugs || []).slice(0, 3).map((slug) => (
+                      <Link
+                        key={slug}
+                        to={`/project/${slug}`}
+                        target="_blank"
+                        data-recommendation-chip="champagne"
+                        data-ink-emerald-opt-out
+                        className="block min-w-0 max-w-full truncate rounded-full border px-2 py-1 text-xs"
+                        style={{ background: "#FFF7E6", backgroundImage: "none", borderColor: "rgba(184,149,85,0.50)", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                      >
+                        {slug.replace(/-/g, " ").slice(0, 32)}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                <div className="flex min-w-0 flex-wrap items-center gap-2 pt-1">
+                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold" style={{ background: tier.bg, color: tier.fg, border: `1px solid ${tier.fg}55` }}>{tier.label}</span>
+                  <span className="inline-flex items-center text-xs text-[#1A1A1A]/70"><Calendar className="mr-1 h-3 w-3" />{formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}</span>
+                </div>
+                <Button size="sm" variant="outline" className="h-9 w-full text-xs" onClick={() => setOpenId(s.id)}>View details</Button>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="hidden xl:block rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] overflow-hidden max-w-full">
         <div className="overflow-hidden max-w-full">
           <table className="w-full table-fixed text-[12px] md:text-sm">
             <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
