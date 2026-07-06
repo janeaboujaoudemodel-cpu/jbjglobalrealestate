@@ -56,6 +56,42 @@ html body #root .owner-dashboard-shell :where([data-jbj-button], button, a[role=
   max-width: 100%;
 }
 
+@media (max-width: 767px) {
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] table,
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] thead,
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] tbody,
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] tr,
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] th,
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td {
+    display: block;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] thead {
+    display: none;
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] tr {
+    padding: 0.75rem;
+    border-top: 1px solid rgba(184,149,85,0.22);
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td {
+    padding: 0.35rem 0 !important;
+    text-align: left !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td > :where(div, span, a, button) {
+    max-width: 100% !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td:nth-child(3) > div {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
 html body #root .owner-dashboard-shell :where([data-owner-batch-fix], [data-owner-batch-fix] *) {
   box-sizing: border-box;
 }
