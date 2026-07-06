@@ -17972,21 +17972,21 @@ html body .jj-side-tile :is(svg, [class*="lucide"]) * {
   overflow: visible;
   transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, box-shadow 140ms ease, transform 140ms ease, opacity 140ms ease;
 }
-:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]):where(:not(.jj-header-icon-control)) {
+:where([data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]):where(:not(.jj-header-icon-control)) {
   background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
   background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)) !important;
   border-color: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]):where(:hover, :focus-visible, :active, [data-state="open"], [data-state="active"]) {
+:where([data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]):where(:hover, :focus-visible, :active, [data-state="open"], [data-state="active"]) {
   background: var(--jj-emerald-ombre-hover, var(--jj-emerald-ombre)) !important;
   background-image: var(--jj-emerald-ombre-hover, var(--jj-emerald-ombre)) !important;
   border-color: transparent !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-:where([data-jbj-button], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]) :where(span, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse) {
+:where([data-jbj-button][data-surface="emerald"], .jj-cta-primary, .jj-cta-emerald, .jj-emerald-action, [data-emerald-action], [data-cta="primary"]) :where(span, svg, [class*="lucide"], path, circle, rect, line, polyline, polygon, ellipse) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
