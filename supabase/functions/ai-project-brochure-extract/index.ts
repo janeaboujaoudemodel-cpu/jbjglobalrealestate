@@ -255,6 +255,47 @@ ${SCHEMA_HINT}`,
   }
 }
 
+async function reconcileExtracted(apiKey: string, files: Array<{ name: string; role?: string; extracted: Record<string, unknown> }>) {
+  if (files.length <= 1) return files[0]?.extracted || {};
+  const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    signal: AbortSignal.timeout(45_000),
+    headers: {
+      "Content-Type": "application/json",
+      "Lovable-API-Key": apiKey,
+      "X-Lovable-AIG-SDK": "supabase-edge-function",
+    },
+    body: JSON.stringify({
+      model: "google/gemini-2.5-flash",
+      messages: [{
+        role: "user",
+        content: [{
+          type: "text",
+          text: `Resolve the final project extraction from these per-file results. Return ONLY valid JSON matching the same schema.
+Rules:
+- The main project is usually in the fact sheet/brochure filename and repeated across official facts. Prefer fact_sheet/brochure roles over unrelated support documents.
+- Do not choose unrelated project names from examples or older documents.
+- If a later official fact sheet contradicts a generic/incorrect earlier name, use the fact sheet.
+- Keep rich details: full furnishing phrase, service/management phrases, payment breakdown, highlights, developer description.
+${SCHEMA_HINT}
+Per-file results: ${JSON.stringify(files).slice(0, 28000)}`,
+        }],
+      }],
+      response_format: { type: "json_object" },
+      max_tokens: 8000,
+      temperature: 0.1,
+    }),
+  });
+  if (!aiRes.ok) return files[0]?.extracted || {};
+  const data = await aiRes.json();
+  const raw = extractJson(data?.choices?.[0]?.message?.content ?? "{}");
+  try {
+    return sanitizeExtracted(JSON.parse(raw));
+  } catch {
+    return files[0]?.extracted || {};
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
@@ -267,6 +308,7 @@ Deno.serve(async (req) => {
     }
 
     const extracted: Record<string, unknown> = {};
+    const perFile: Array<{ name: string; role?: string; extracted: Record<string, unknown> }> = [];
     const filesRead: Array<{ name: string; bytes: number; mime: string }> = [];
     const filesSkipped: Array<{ name: string; reason: string }> = [];
 
@@ -291,6 +333,7 @@ Deno.serve(async (req) => {
       try {
         const one = await extractOneFile(LOVABLE_API_KEY, f, fetched);
         mergeExtracted(extracted, one);
+        perFile.push({ name: f.name, role: f.role, extracted: one });
         filesRead.push({ name: f.name, bytes: fetched.bytes, mime: fetched.mime });
       } catch (e) {
         filesSkipped.push({ name: f.name, reason: e instanceof Error ? e.message : "Extraction failed for this file" });
@@ -305,10 +348,11 @@ Deno.serve(async (req) => {
       }, 422);
     }
 
-    const developerResolution = await resolveDeveloper(req.headers.get("Authorization") ?? "", extracted.developer_name, extracted.developer_description);
-    if (developerResolution.developer_name) extracted.developer_name = developerResolution.developer_name;
+    const finalExtracted = await reconcileExtracted(LOVABLE_API_KEY, perFile);
+    const developerResolution = await resolveDeveloper(req.headers.get("Authorization") ?? "", finalExtracted.developer_name, finalExtracted.developer_description);
+    if (developerResolution.developer_name) finalExtracted.developer_name = developerResolution.developer_name;
 
-    return response({ extracted, files_read: filesRead.length, files_skipped: filesSkipped, developer: developerResolution });
+    return response({ extracted: finalExtracted, files_read: filesRead.length, files_skipped: filesSkipped, developer: developerResolution });
   } catch (e) {
     return response({ error: (e as Error).message }, 500);
   }
