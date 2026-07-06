@@ -39,7 +39,7 @@ const RedIcon = L.divIcon({
 
 const formatMarkerPrice = (price: number | null | undefined) => {
   if (!price) return "Ask";
-  if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
+  if (price >= 1000000) return `${Number((price / 1000000).toFixed(1)).toLocaleString()}M`;
   return `${Math.round(price / 1000)}K`;
 };
 
@@ -258,7 +258,7 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`jj-map-filter-toggle inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed" : ""}`}
+        className={`jj-map-filter-toggle inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed" : ""}`}
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
