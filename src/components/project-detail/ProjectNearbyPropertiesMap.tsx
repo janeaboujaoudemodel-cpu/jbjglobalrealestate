@@ -305,7 +305,7 @@ export default function ProjectNearbyPropertiesMap({
         {...SAFE_LEAFLET_MAP_OPTIONS}
       >
         <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
-        <MapNavigationControls latitude={center[0]} longitude={center[1]} />
+        <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 
         {/* Current project marker (red) — only when we have real coords */}
         {hasOwnCoords && (

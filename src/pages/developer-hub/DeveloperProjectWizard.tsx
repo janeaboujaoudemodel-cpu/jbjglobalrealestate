@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video, Mic, Maximize2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, Check, Video, Mic, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
@@ -98,13 +98,6 @@ const isVideoUpload = (file?: Uploaded | null) => !!file?.type?.startsWith("vide
 const isExtractionCapable = (file: Uploaded) => /pdf|image|text|word|officedocument|presentation|spreadsheet/i.test(`${file.type} ${file.name}`);
 
 const fileKey = (file: Uploaded) => `${file.url || file.path || file.name}`.toLowerCase().replace(/\?.*$/, "");
-
-const getPaymentPlanBadge = (plan: string) => {
-  const ratio = plan.match(/\b(\d{1,3})\s*[\/\-]\s*(\d{1,3})\b/);
-  if (ratio) return `${ratio[1]}/${ratio[2]}`;
-  const percent = plan.match(/\b\d{1,3}\s*%/);
-  return percent ? percent[0].replace(/\s+/g, "") : "%";
-};
 
 const parseAreaRange = (value: string) => {
   const nums = (value.match(/\d+(?:,\d{3})*(?:\.\d+)?/g) || [])
@@ -546,10 +539,6 @@ const DeveloperProjectWizard = () => {
   const canSubmit =
     !!activeDeveloperId && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
 
-  const paymentPlanParts = basics.payment_plan
-    .split(/[,;\n]+/)
-    .map((part) => part.trim())
-    .filter(Boolean);
   const paymentPresentation = formatPaymentPlanForDisplay(basics.payment_plan, basics.handover_date);
 
   const mediaStats = useMemo(() => {
