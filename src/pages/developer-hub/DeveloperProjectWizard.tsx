@@ -888,15 +888,15 @@ const DeveloperProjectWizard = () => {
               </div>
             )}
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Project name *</Label>
+              <FieldHeader label="Project name *" field="name" />
               <Input value={basics.name} onChange={(e) => setBasics({ ...basics, name: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Emirate</Label>
+              <FieldHeader label="Emirate" field="emirate" />
               <Input value={basics.emirate} onChange={(e) => setBasics({ ...basics, emirate: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Community / Location</Label>
+              <FieldHeader label="Community / Location" field="location" />
               <Input value={basics.location} onChange={(e) => setBasics({ ...basics, location: e.target.value })} className={inputCls} />
             </div>
             <div>
@@ -908,35 +908,46 @@ const DeveloperProjectWizard = () => {
               <Input type="date" value={basics.launch_date} onChange={(e) => setBasics({ ...basics, launch_date: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Starting price (AED) *</Label>
+              <FieldHeader label="Starting price (AED) *" field="price_from" />
               <Input type="number" value={basics.price_from} onChange={(e) => setBasics({ ...basics, price_from: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Max price (AED)</Label>
+              <FieldHeader label="Max price (AED)" field="price_to" />
               <Input type="number" value={basics.price_to} onChange={(e) => setBasics({ ...basics, price_to: e.target.value })} className={inputCls} />
             </div>
-            <div>
-              <Label className="text-[#1A1A1A]">Bedrooms min</Label>
-              <Input type="number" value={basics.bedrooms_min} onChange={(e) => setBasics({ ...basics, bedrooms_min: e.target.value })} className={inputCls} />
-            </div>
-            <div>
-              <Label className="text-[#1A1A1A]">Bedrooms max</Label>
-              <Input type="number" value={basics.bedrooms_max} onChange={(e) => setBasics({ ...basics, bedrooms_max: e.target.value })} className={inputCls} />
+            <div className="md:col-span-2">
+              <Label className="text-[#1A1A1A]">Bedroom availability</Label>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {BEDROOM_OPTIONS.map((option) => {
+                  const active = selectedBedrooms.includes(option.value);
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => toggleBedroom(option.value)}
+                      data-surface={active ? "emerald" : "light"}
+                      className={`flex h-12 min-w-12 items-center justify-center rounded-full border px-3 text-sm font-bold transition-all ${active ? "bg-[#064E3B] text-white border-[#064E3B] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/45 hover:bg-[#EFE6D6]"}`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Payment plan</Label>
+              <FieldHeader label="Payment plan" field="payment_plan" append />
               <Textarea rows={2} value={basics.payment_plan} onChange={(e) => setBasics({ ...basics, payment_plan: e.target.value })} placeholder="e.g. 10% down, 50% during construction, 40% on handover" className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Service charge</Label>
+              <FieldHeader label="Service charge" field="service_charge" />
               <Input value={basics.service_charge} onChange={(e) => setBasics({ ...basics, service_charge: e.target.value })} placeholder="e.g. AED 18/sqft/year" className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Built-up area</Label>
+              <FieldHeader label="Built-up area" field="built_up_area" />
               <Input value={basics.built_up_area} onChange={(e) => setBasics({ ...basics, built_up_area: e.target.value })} placeholder="e.g. 650 - 2,400 sqft" className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Plot area</Label>
+              <FieldHeader label="Plot area" field="plot_area" />
               <Input value={basics.plot_area} onChange={(e) => setBasics({ ...basics, plot_area: e.target.value })} className={inputCls} />
             </div>
             <div>
