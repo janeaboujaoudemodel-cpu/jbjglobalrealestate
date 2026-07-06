@@ -319,19 +319,20 @@ export function ProvidentPortalHub() {
           </div>
           <Progress value={enrichPercent} className="h-3" />
           <div className="grid grid-cols-3 gap-3 text-center text-sm">
-            <div className="jj-emerald-soft rounded-lg p-3 border border-[color:var(--emerald-1)]/30">
-              <p className="text-lg font-bold text-[color:var(--emerald-1)]">{enrichmentStats.fullyEnriched}</p>
-              <p className="text-[11px] text-[color:var(--emerald-1)]">Fully Enriched</p>
+            <div data-surface="emerald" className="rounded-lg p-3 border border-white/20" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 100%)" }}>
+              <p className="text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{enrichmentStats.fullyEnriched}</p>
+              <p className="text-[11px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Fully Enriched</p>
             </div>
-            <div className="bg-amber-50 rounded-lg p-3 border border-amber-200">
-              <p className="text-lg font-bold text-amber-700">{enrichmentStats.partiallyEnriched}</p>
-              <p className="text-[11px] text-amber-600">Partially Enriched</p>
+            <div className="rounded-lg p-3 border" style={{ background: "#FFF7E6", borderColor: "#F0C674" }}>
+              <p className="text-lg font-extrabold" style={{ color: "#8A5A00", WebkitTextFillColor: "#8A5A00" }}>{enrichmentStats.partiallyEnriched}</p>
+              <p className="text-[11px] font-semibold" style={{ color: "#8A5A00", WebkitTextFillColor: "#8A5A00" }}>Partially Enriched</p>
             </div>
-            <div className="bg-red-50 rounded-lg p-3 border border-red-200">
-              <p className="text-lg font-bold text-red-700">{enrichmentStats.unenriched}</p>
-              <p className="text-[11px] text-red-600">Unenriched</p>
+            <div className="rounded-lg p-3 border" style={{ background: "#FEF2F2", borderColor: "#FCA5A5" }}>
+              <p className="text-lg font-extrabold" style={{ color: "#B91C1C", WebkitTextFillColor: "#B91C1C" }}>{enrichmentStats.unenriched}</p>
+              <p className="text-[11px] font-semibold" style={{ color: "#B91C1C", WebkitTextFillColor: "#B91C1C" }}>Unenriched</p>
             </div>
           </div>
+
           <p className="text-xs text-muted-foreground">
             Fields tracked: amenities, description, handover date, developer, floor plans
           </p>
