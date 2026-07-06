@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
 const MODE_KEY = "jj_user_mode";
 const MODE_SELECTED_KEY = "jj_mode_selected";
@@ -47,9 +48,16 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem(MODE_SELECTED_KEY) === 'true';
   });
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const queryClient = useQueryClient();
   const lastSyncedUserId = useRef<string | null>(null);
+
+  useEffect(() => {
+    const canKeepOwnerMode = isOwner || isOwnerBackendEmail(user?.email);
+    if (mode !== 'owner' || canKeepOwnerMode) return;
+    setModeState('investor');
+    try { localStorage.setItem(MODE_KEY, 'investor'); } catch {}
+  }, [mode, user?.email, isOwner]);
 
   // Cross-tab sync — listen for mode changes from other tabs/windows.
   // `storage` events only fire in OTHER tabs (never the one that wrote),

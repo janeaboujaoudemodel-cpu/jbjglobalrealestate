@@ -384,12 +384,6 @@
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer/6-ellington-properties</loc>
-    <lastmod>2026-06-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.78</priority>
-  </url>
-  <url>
     <loc>https://jbj.ae/developer/azimuth-development</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>weekly</changefreq>
@@ -404,6 +398,12 @@
   <url>
     <loc>https://jbj.ae/developer/developed-by-reportage-properties</loc>
     <lastmod>2026-05-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/developer/6-ellington-properties</loc>
+    <lastmod>2026-07-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>

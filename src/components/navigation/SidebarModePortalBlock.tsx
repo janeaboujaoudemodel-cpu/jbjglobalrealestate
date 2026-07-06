@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Handshake, TrendingUp, Building2, Crown } from "lucide-react";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
 const MODE_CONFIG = {
   broker: {
@@ -33,9 +35,12 @@ const EMERALD_TILE =
   "bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_8px_18px_-12px_rgba(6,78,59,0.65),inset_0_1px_0_rgba(255,255,255,0.18)]";
 
 export default function SidebarModePortalBlock({ collapsed = false }: { collapsed?: boolean }) {
-  const { mode } = useUserModeContext();
+  const { mode, hasMadeInitialSelection } = useUserModeContext();
+  const { user, isOwner } = useAuth();
   const { pathname } = useLocation();
-  const cfg = (mode && MODE_CONFIG[mode as keyof typeof MODE_CONFIG]) || MODE_CONFIG.investor;
+  const canShowOwnerPortal = isOwner || isOwnerBackendEmail(user?.email);
+  const safeMode = !hasMadeInitialSelection || (mode === "owner" && !canShowOwnerPortal) ? "investor" : mode;
+  const cfg = (safeMode && MODE_CONFIG[safeMode as keyof typeof MODE_CONFIG]) || MODE_CONFIG.investor;
   const Icon = cfg.icon;
   const active =
     pathname === cfg.href || pathname.startsWith(cfg.matchPrefix + "/");

@@ -32672,6 +32672,21 @@ html body #root [data-filter-clean][data-filter-bar-gold] .jj-filter-rail button
   opacity: 1 !important;
 }
 
+/* Owner project uploader: emerald upload surfaces must never inherit black ink. */
+html body #root [data-project-upload-emerald],
+html body #root [data-project-upload-emerald] :is(h1,h2,h3,h4,h5,h6,p,span,label,small,strong,em,li,dt,dd,th,td,button,div):not(:where([data-surface="light"], [data-surface="light"] *, [data-surface="champagne"], [data-surface="champagne"] *)),
+html body #root [data-project-upload-emerald] :is(svg,[class*="lucide"],path,line,polyline,polygon,rect,circle,ellipse):not(:where([data-surface="light"], [data-surface="light"] *, [data-surface="champagne"], [data-surface="champagne"] *)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+html body #root [data-project-upload-emerald] [data-upload-tile] :is([class*="bg-black"], [class*="bg-white"]):not(:where([data-surface="light"], [data-surface="light"] *)) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
 /* ============================================================
    Sq ft / Sq m active pill — inherit the SAME slow, elegant
    metallic sweep used by the WhatsApp/Call/Email tiles

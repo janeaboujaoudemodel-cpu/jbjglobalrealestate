@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video, Mic, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
@@ -28,6 +28,27 @@ type UploadStatus = {
 };
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
+
+const BEDROOM_OPTIONS = [
+  { label: "Studio", value: 0 },
+  { label: "1", value: 1 },
+  { label: "2", value: 2 },
+  { label: "3", value: 3 },
+  { label: "4", value: 4 },
+  { label: "5", value: 5 },
+  { label: "6+", value: 6 },
+];
+
+type BrowserSpeechRecognition = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onerror: ((event: { error?: string }) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+};
+type BrowserSpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
 
 const emptyBasics = {
   name: "",
@@ -55,6 +76,8 @@ const emptyBasics = {
 };
 
 type Basics = typeof emptyBasics;
+type DictationField = keyof Basics | "developerDescription" | "additionalInfo";
+
 
 const formatBytes = (bytes: number) => {
   if (!Number.isFinite(bytes) || bytes <= 0) return "—";
@@ -119,6 +142,9 @@ const DeveloperProjectWizard = () => {
   const [developerDescription, setDeveloperDescription] = useState("");
   const [developerLogoNeeded, setDeveloperLogoNeeded] = useState(false);
   const [paymentExpanded, setPaymentExpanded] = useState(false);
+  const [selectedBedrooms, setSelectedBedrooms] = useState<number[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [listeningField, setListeningField] = useState<string | null>(null);
   const [uploadStatuses, setUploadStatuses] = useState<UploadStatus[]>([]);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
@@ -186,15 +212,16 @@ const DeveloperProjectWizard = () => {
       if (draft?.extractedDeveloperName) setExtractedDeveloperName(draft.extractedDeveloperName);
       if (draft?.developerDescription) setDeveloperDescription(draft.developerDescription);
       if (typeof draft?.developerLogoNeeded === "boolean") setDeveloperLogoNeeded(draft.developerLogoNeeded);
+      if (Array.isArray(draft?.selectedBedrooms)) setSelectedBedrooms(draft.selectedBedrooms.filter((v: unknown) => typeof v === "number"));
     } catch {
       window.localStorage.removeItem(draftKey);
     }
   }, [draftKey]);
 
   useEffect(() => {
-    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() };
+    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, savedAt: new Date().toISOString() };
     try { window.localStorage.setItem(draftKey, JSON.stringify(payload)); } catch {}
-  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, draftKey]);
+  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, draftKey]);
 
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
   const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
@@ -240,6 +267,86 @@ const DeveloperProjectWizard = () => {
       return items.filter((_, i) => i !== index);
     });
     toast.success("Selected as cover and moved to the listing preview");
+  };
+
+  useEffect(() => {
+    if (selectedBedrooms.length || !basics.bedrooms_min || !basics.bedrooms_max) return;
+    const min = Number(basics.bedrooms_min);
+    const max = Number(basics.bedrooms_max);
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return;
+    const values = BEDROOM_OPTIONS.map((o) => o.value).filter((v) => v >= min && v <= max);
+    if (values.length) setSelectedBedrooms(values);
+  }, [basics.bedrooms_min, basics.bedrooms_max, selectedBedrooms.length]);
+
+  const setDictationText = (field: DictationField, text: string, append = false) => {
+    if (!text.trim()) return;
+    if (field === "developerDescription") {
+      setDeveloperDescription((prev) => append && prev ? `${prev} ${text}` : text);
+      return;
+    }
+    if (field === "additionalInfo") {
+      setAdditionalInfo((prev) => append && prev ? `${prev} ${text}` : text);
+      return;
+    }
+    setBasics((prev) => ({ ...prev, [field]: append && prev[field] ? `${prev[field]} ${text}` : text }));
+  };
+
+  const startDictation = (field: DictationField, append = false) => {
+    const win = window as typeof window & { SpeechRecognition?: BrowserSpeechRecognitionConstructor; webkitSpeechRecognition?: BrowserSpeechRecognitionConstructor };
+    const Recognition = win.SpeechRecognition || win.webkitSpeechRecognition;
+    if (!Recognition) {
+      toast.error("Microphone dictation is not available in this browser");
+      return;
+    }
+    const recognition = new Recognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    const key = String(field);
+    setListeningField(key);
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results).map((result) => result[0]?.transcript || "").join(" ").trim();
+      setDictationText(field, transcript, append);
+      if (transcript) toast.success("Voice text added");
+    };
+    recognition.onerror = (event) => toast.error(event.error || "Microphone dictation failed");
+    recognition.onend = () => setListeningField((current) => (current === key ? null : current));
+    recognition.start();
+  };
+
+  const DictateButton = ({ field, append = false }: { field: DictationField; append?: boolean }) => {
+    const active = listeningField === String(field);
+    return (
+      <button
+        type="button"
+        onClick={() => startDictation(field, append)}
+        className={`inline-flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-[#FDFBF7] text-[#064E3B] border-[#B89555]/45 hover:bg-[#EFE6D6]"}`}
+        aria-label="Dictate field"
+        title="Dictate field"
+        data-surface={active ? "emerald" : "light"}
+      >
+        {active ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mic className="h-3.5 w-3.5" />}
+      </button>
+    );
+  };
+
+  const FieldHeader = ({ label, field, append = false }: { label: string; field: DictationField; append?: boolean }) => (
+    <div className="flex items-center justify-between gap-2">
+      <Label className="text-[#1A1A1A]">{label}</Label>
+      <DictateButton field={field} append={append} />
+    </div>
+  );
+
+  const toggleBedroom = (value: number) => {
+    setSelectedBedrooms((prev) => {
+      const next = prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value].sort((a, b) => a - b);
+      setBasics((current) => ({
+        ...current,
+        bedrooms_min: next.length ? String(Math.min(...next)) : "",
+        bedrooms_max: next.length ? String(Math.max(...next)) : "",
+      }));
+      return next;
+    });
   };
 
   const uploadFile = async (file: File, bucket = "rel-media", role: NonNullable<Uploaded["role"]> = "document") => {
@@ -417,6 +524,21 @@ const DeveloperProjectWizard = () => {
     .map((part) => part.trim())
     .filter(Boolean);
 
+  const mediaStats = useMemo(() => {
+    const imageCount = gallery.filter((g) => g.type.startsWith("image/")).length + (cover?.type.startsWith("image/") ? 1 : 0);
+    const videoCount = gallery.filter((g) => g.type.startsWith("video/")).length;
+    const documentCount = brochures.length;
+    const uploadingCount = uploadStatuses.filter((u) => u.status === "uploading").length;
+    const failedCount = uploadStatuses.filter((u) => u.status === "failed").length;
+    return { imageCount, videoCount, documentCount, uploadingCount, failedCount };
+  }, [gallery, cover, brochures.length, uploadStatuses]);
+
+  const bedroomSummary = selectedBedrooms.length
+    ? selectedBedrooms.map((value) => value === 0 ? "Studio" : value >= 6 ? "6+ BR" : `${value} BR`).join(" · ")
+    : basics.bedrooms_min || basics.bedrooms_max
+      ? `${basics.bedrooms_min || "—"} - ${basics.bedrooms_max || "—"}`
+      : "—";
+
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
     if (!text) return;
@@ -446,7 +568,7 @@ const DeveloperProjectWizard = () => {
 
   const saveDraft = () => {
     try {
-      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() }));
+      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, savedAt: new Date().toISOString() }));
       toast.success("Draft saved on this device");
     } catch {
       toast.error("Draft could not be saved on this device");
@@ -521,9 +643,12 @@ const DeveloperProjectWizard = () => {
   const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, files = [], statusRows = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; files?: Uploaded[]; statusRows?: UploadStatus[] }) => {
     const pendingRows = statusRows.filter((row) => !files.some((file) => file.name === row.name && file.size === row.size));
     const visibleCount = files.length + pendingRows.length;
+    const pendingPreviewRows = pendingRows.slice(0, 2);
+    const filePreviewRows = files.slice(0, 4);
+    const hiddenCount = Math.max(0, visibleCount - pendingPreviewRows.length - filePreviewRows.length);
 
     return (
-    <div className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15" aria-live="polite">
+    <div data-upload-tile className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15" aria-live="polite">
       <label className="flex min-h-[122px] cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-white/45 bg-white/10 p-4 text-center transition-colors hover:bg-white/15">
         <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/12"><Icon className="h-5 w-5 text-white" /></span>
         <span className="text-sm font-semibold text-white">{title}</span>
@@ -543,14 +668,17 @@ const DeveloperProjectWizard = () => {
       </label>
       {visibleCount > 0 && (
         <div className="mt-3 space-y-2">
-          {pendingRows.map((item) => (
+          <div className="inline-flex rounded-full border border-white/25 bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white">
+            {visibleCount} uploaded / in progress
+          </div>
+          {pendingPreviewRows.map((item) => (
             <div key={item.id} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
               {item.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : item.status === "uploaded" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
               <span className="min-w-0 flex-1 truncate font-semibold">{item.name}</span>
               <span className="shrink-0 text-white/75">{item.status === "uploading" ? `${item.elapsed}s` : item.status === "uploaded" ? "uploaded" : "failed"}</span>
             </div>
           ))}
-          {files.map((f) => (
+          {filePreviewRows.map((f) => (
             <div key={fileKey(f)} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
               {isImageUpload(f) ? <img src={f.url} alt="" className="h-8 w-10 rounded object-cover" /> : isVideoUpload(f) ? <Video className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
               <span className="min-w-0 flex-1 truncate">{f.name}</span>
@@ -558,6 +686,7 @@ const DeveloperProjectWizard = () => {
               <Check className="h-3.5 w-3.5" />
             </div>
           ))}
+          {hiddenCount > 0 && <div className="rounded border border-white/18 bg-white/10 p-2 text-xs font-semibold text-white">+{hiddenCount} more file{hiddenCount === 1 ? "" : "s"}</div>}
         </div>
       )}
     </div>
@@ -687,7 +816,7 @@ const DeveloperProjectWizard = () => {
 
       {/* Smart brochure extract */}
       {step === 0 && (
-        <Card data-surface="emerald" className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
+        <Card data-surface="emerald" data-project-upload-emerald className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex items-start gap-3">
               <div className="rounded-full p-2 bg-white/10"><Sparkles className="w-5 h-5" /></div>
@@ -706,15 +835,9 @@ const DeveloperProjectWizard = () => {
             <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} statusRows={uploadStatuses.filter((u) => u.role === "document")} multiple onFiles={onSmartUpload} />
           </div>
           {uploadStatuses.length > 0 && (
-            <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
-              {uploadStatuses.map((item) => (
-                <div key={item.id} className="flex items-center gap-3 rounded-md border border-white/18 bg-black/12 p-2 text-xs text-white">
-                  {item.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : item.status === "uploaded" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold">{item.name}</p>
-                    <p className="text-white/75">{item.role.replace("_", " ")} · {formatBytes(item.size)} · {item.status === "uploading" ? `${item.elapsed}s uploading` : item.status === "uploaded" ? `uploaded in ${item.elapsed}s` : item.error}</p>
-                  </div>
-                </div>
+            <div data-upload-summary className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
+              {[`Photos ${mediaStats.imageCount}`, `Videos ${mediaStats.videoCount}`, `Docs ${mediaStats.documentCount}`, `Uploading ${mediaStats.uploadingCount}`, `Failed ${mediaStats.failedCount}`].map((label) => (
+                <div key={label} className="rounded-md border border-white/18 bg-white/10 px-3 py-2 text-xs font-bold text-white">{label}</div>
               ))}
             </div>
           )}
@@ -766,15 +889,15 @@ const DeveloperProjectWizard = () => {
               </div>
             )}
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Project name *</Label>
+              <FieldHeader label="Project name *" field="name" />
               <Input value={basics.name} onChange={(e) => setBasics({ ...basics, name: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Emirate</Label>
+              <FieldHeader label="Emirate" field="emirate" />
               <Input value={basics.emirate} onChange={(e) => setBasics({ ...basics, emirate: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Community / Location</Label>
+              <FieldHeader label="Community / Location" field="location" />
               <Input value={basics.location} onChange={(e) => setBasics({ ...basics, location: e.target.value })} className={inputCls} />
             </div>
             <div>
@@ -786,35 +909,46 @@ const DeveloperProjectWizard = () => {
               <Input type="date" value={basics.launch_date} onChange={(e) => setBasics({ ...basics, launch_date: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Starting price (AED) *</Label>
+              <FieldHeader label="Starting price (AED) *" field="price_from" />
               <Input type="number" value={basics.price_from} onChange={(e) => setBasics({ ...basics, price_from: e.target.value })} className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Max price (AED)</Label>
+              <FieldHeader label="Max price (AED)" field="price_to" />
               <Input type="number" value={basics.price_to} onChange={(e) => setBasics({ ...basics, price_to: e.target.value })} className={inputCls} />
             </div>
-            <div>
-              <Label className="text-[#1A1A1A]">Bedrooms min</Label>
-              <Input type="number" value={basics.bedrooms_min} onChange={(e) => setBasics({ ...basics, bedrooms_min: e.target.value })} className={inputCls} />
-            </div>
-            <div>
-              <Label className="text-[#1A1A1A]">Bedrooms max</Label>
-              <Input type="number" value={basics.bedrooms_max} onChange={(e) => setBasics({ ...basics, bedrooms_max: e.target.value })} className={inputCls} />
+            <div className="md:col-span-2">
+              <Label className="text-[#1A1A1A]">Bedroom availability</Label>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {BEDROOM_OPTIONS.map((option) => {
+                  const active = selectedBedrooms.includes(option.value);
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => toggleBedroom(option.value)}
+                      data-surface={active ? "emerald" : "light"}
+                      className={`flex h-12 min-w-12 items-center justify-center rounded-full border px-3 text-sm font-bold transition-all ${active ? "bg-[#064E3B] text-white border-[#064E3B] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)]" : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/45 hover:bg-[#EFE6D6]"}`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Payment plan</Label>
+              <FieldHeader label="Payment plan" field="payment_plan" append />
               <Textarea rows={2} value={basics.payment_plan} onChange={(e) => setBasics({ ...basics, payment_plan: e.target.value })} placeholder="e.g. 10% down, 50% during construction, 40% on handover" className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Service charge</Label>
+              <FieldHeader label="Service charge" field="service_charge" />
               <Input value={basics.service_charge} onChange={(e) => setBasics({ ...basics, service_charge: e.target.value })} placeholder="e.g. AED 18/sqft/year" className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Built-up area</Label>
+              <FieldHeader label="Built-up area" field="built_up_area" />
               <Input value={basics.built_up_area} onChange={(e) => setBasics({ ...basics, built_up_area: e.target.value })} placeholder="e.g. 650 - 2,400 sqft" className={inputCls} />
             </div>
             <div>
-              <Label className="text-[#1A1A1A]">Plot area</Label>
+              <FieldHeader label="Plot area" field="plot_area" />
               <Input value={basics.plot_area} onChange={(e) => setBasics({ ...basics, plot_area: e.target.value })} className={inputCls} />
             </div>
             <div>
@@ -867,23 +1001,23 @@ const DeveloperProjectWizard = () => {
               </Select>
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Amenities (comma-separated)</Label>
+              <FieldHeader label="Amenities (comma-separated)" field="amenities" append />
               <Textarea rows={2} value={basics.amenities} onChange={(e) => setBasics({ ...basics, amenities: e.target.value })} placeholder="e.g. Pool, Gym, Concierge, Kids play area" className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Short description</Label>
+              <FieldHeader label="Short description" field="short_description" append />
               <Textarea value={basics.short_description} onChange={(e) => setBasics({ ...basics, short_description: e.target.value })} className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Full description</Label>
+              <FieldHeader label="Full description" field="description" append />
               <Textarea rows={5} value={basics.description} onChange={(e) => setBasics({ ...basics, description: e.target.value })} className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <Label className="text-[#1A1A1A]">Developer description</Label>
+              <FieldHeader label="Developer description" field="developerDescription" append />
               <Textarea rows={3} value={developerDescription} onChange={(e) => setDeveloperDescription(e.target.value)} placeholder="AI will prepare this from the brochure when available; edit or leave blank." className={inputCls} />
             </div>
             <div className="md:col-span-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4">
-              <Label className="text-[#1A1A1A]">Additional information</Label>
+              <FieldHeader label="Additional information" field="additionalInfo" append />
               <Textarea rows={4} value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Add any extra project notes, amenities, payment plan details, management rules or owner-use rules." className={inputCls} />
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <Button type="button" variant={additionalInfoMode === "enrich" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("enrich")} data-surface={additionalInfoMode === "enrich" ? "emerald" : undefined} className={additionalInfoMode === "enrich" ? "allow-white bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Use to enrich listing</Button>
@@ -1015,7 +1149,7 @@ const DeveloperProjectWizard = () => {
               <div><span className="text-[#1A1A1A]/60">Owner use:</span> {basics.owner_can_use || "—"}</div>
               <div className="col-span-2"><span className="text-[#1A1A1A]/60">Amenities:</span> {basics.amenities || "—"}</div>
               <div><span className="text-[#1A1A1A]/60">Cover image:</span> {cover ? "✓" : "—"}</div>
-              <div><span className="text-[#1A1A1A]/60">Gallery:</span> {gallery.length} items</div>
+              <div><span className="text-[#1A1A1A]/60">Gallery:</span> {mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
               <div><span className="text-[#1A1A1A]/60">Brochures:</span> {brochures.length}</div>
               <div className="col-span-2"><span className="text-[#1A1A1A]/60">Developer description:</span> {developerDescription || "—"}</div>
             </div>
@@ -1028,6 +1162,15 @@ const DeveloperProjectWizard = () => {
           <div className="aspect-[4/3] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white">
             {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
           </div>
+          {gallery.length > 0 && (
+            <div className="grid grid-cols-4 gap-1 border-b border-[#B89555]/25 bg-[#EFE6D6] p-1">
+              {gallery.slice(0, 4).map((item) => (
+                <div key={fileKey(item)} className="aspect-square overflow-hidden rounded bg-[#FDFBF7]">
+                  {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />}
+                </div>
+              ))}
+            </div>
+          )}
           <div className="flex min-h-[430px] flex-col p-4 space-y-3">
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Listing preview</p>
@@ -1037,8 +1180,8 @@ const DeveloperProjectWizard = () => {
             <div className="grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]">
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Handover</span>{basics.handover_date || "—"}</div>
-              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
-              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Media</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
             </div>
             {basics.payment_plan && (
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
@@ -1054,11 +1197,58 @@ const DeveloperProjectWizard = () => {
               </div>
             )}
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
+            <Button type="button" variant="outline" onClick={() => setPreviewOpen(true)} className="border-[#B89555]/40 text-[#1A1A1A]">
+              <Maximize2 className="mr-2 h-4 w-4" /> Open full preview
+            </Button>
             <ContactActionsPreview />
           </div>
         </Card>
       </aside>
       </div>
+
+      {previewOpen && (
+        <div className="fixed inset-0 z-[10020] bg-[#1A1A1A]/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+          <div className="mx-auto h-full max-w-5xl overflow-y-auto rounded-lg border border-[#B89555]/50 bg-[#FDFBF7] shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#B89555]/30 bg-[#FDFBF7]/95 px-4 py-3 backdrop-blur">
+              <div>
+                <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Full listing preview</p>
+                <h2 className="text-lg font-semibold text-[#1A1A1A]">{basics.name || "Project name"}</h2>
+              </div>
+              <button type="button" onClick={() => setPreviewOpen(false)} className="rounded-full border border-[#B89555]/40 bg-white p-2"><X className="h-4 w-4 text-[#1A1A1A]" /></button>
+            </div>
+            <div className="aspect-[16/7] bg-[#064E3B]">
+              {cover?.url ? <img src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
+            </div>
+            {gallery.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 p-4 md:grid-cols-4">
+                {gallery.map((item) => (
+                  <div key={fileKey(item)} className="overflow-hidden rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+                    <div className="aspect-video bg-[#EFE6D6]">
+                      {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
+                    </div>
+                    <p className="truncate px-2 py-1 text-xs font-semibold text-[#1A1A1A]">{item.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="grid gap-4 p-5 md:grid-cols-[1fr_320px]">
+              <div className="space-y-4 text-[#1A1A1A]">
+                <h3 className="text-2xl font-semibold">{basics.name || "Project name"}</h3>
+                <p className="text-sm text-[#1A1A1A]/70">{activeDeveloperName || "Developer"} · {basics.location || basics.emirate || "Location"}</p>
+                <p className="leading-relaxed text-[#1A1A1A]/80">{basics.description || basics.short_description || "Project description will appear here after extraction or manual entry."}</p>
+              </div>
+              <div className="flex flex-col gap-3 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 text-sm text-[#1A1A1A]">
+                <div><span className="block text-xs text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
+                <div><span className="block text-xs text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+                <div><span className="block text-xs text-[#1A1A1A]/60">Gallery</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
+                <div><span className="block text-xs text-[#1A1A1A]/60">Documents</span>{brochures.length}</div>
+                {basics.payment_plan && <div><span className="block text-xs text-[#1A1A1A]/60">Payment plan</span>{basics.payment_plan}</div>}
+                <ContactActionsPreview />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="sticky bottom-0 z-20 -mx-2 flex items-center justify-between rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/95 p-2 shadow-[0_-10px_30px_-24px_rgba(26,26,26,0.45)] backdrop-blur">
         <div className="flex items-center gap-2">
