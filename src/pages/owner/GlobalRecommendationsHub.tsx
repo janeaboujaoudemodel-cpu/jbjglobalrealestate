@@ -295,13 +295,13 @@ export default function GlobalRecommendationsHub() {
       </div>
 
       {/* Source Tabs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2">
+      <div className="grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))]">
         {SOURCE_SECTIONS.map(section => (
           <button
             key={section.id}
             onClick={() => setActiveSource(section.id)}
             data-surface={activeSource === section.id ? "emerald" : undefined}
-            className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all min-h-12 ${
+            className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all min-h-12 min-w-0 ${
  activeSource === section.id
   ? "jj-emerald-metallic allow-white text-white border-transparent shadow-sm"
  : "bg-[#FDFBF7] border border-[#B89555]/20 text-[#1A1A1A]/70 hover:border-[#B89555]/40"

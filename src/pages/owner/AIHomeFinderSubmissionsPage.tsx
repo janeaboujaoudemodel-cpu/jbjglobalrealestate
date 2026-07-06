@@ -101,7 +101,7 @@ export default function AIHomeFinderSubmissionsPage() {
 
       <div className="rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA] overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="min-w-[1080px] w-full text-sm">
             <thead className="bg-[#EFE6D6] text-[#1A1A1A]">
               <tr>
                 <th className="text-left p-3 font-semibold">Lead</th>
@@ -138,9 +138,10 @@ export default function AIHomeFinderSubmissionsPage() {
                             key={slug}
                             to={`/project/${slug}`}
                             target="_blank"
+                            data-recommendation-chip="champagne"
                             data-ink-emerald-opt-out
-                            className="text-xs px-2 py-0.5 rounded-full bg-[#FFF7E6] border border-[#B89555]/50 text-[#1A1A1A] hover:border-[#B89555] whitespace-nowrap"
-                            style={{ background: "#FFF7E6", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                            className="text-xs px-2 py-0.5 rounded-full border whitespace-nowrap"
+                            style={{ background: "#FFF7E6", backgroundImage: "none", borderColor: "rgba(184,149,85,0.50)", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
                           >
                             {slug.replace(/-/g, " ").slice(0, 32)}
                           </Link>

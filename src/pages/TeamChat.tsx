@@ -296,11 +296,11 @@ const TeamChat = () => {
   const totalCount = chatMembers.length;
 
   return (
-    <div className="flex h-[calc(100vh-11rem)] min-h-[500px] bg-[#FDFBF7] rounded-xl border-2 border-[#B89555]/20 overflow-hidden shadow-sm" data-owner-batch-fix="team-chat">
+    <div className="flex h-[calc(100vh-11rem)] min-h-[560px] bg-[#FDFBF7] rounded-xl border-2 border-[#B89555]/20 overflow-hidden shadow-sm min-w-0 max-w-full" data-owner-batch-fix="team-chat">
 
       {/* ─── Channel Sidebar ─── */}
       <div className={cn(
-        "w-full md:w-72 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-r border-[#B89555]/15",
+        "w-full md:w-[300px] xl:w-[320px] flex-shrink-0 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-r border-[#B89555]/15",
         showSidebar ? "flex" : "hidden md:flex"
       )}>
         {/* Workspace Header */}
@@ -464,7 +464,7 @@ const TeamChat = () => {
 
       {/* ─── Main Chat Area ─── */}
       <div className={cn(
-        "flex-1 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA]/30",
+        "flex-1 min-w-0 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA]/30",
         !showSidebar ? "flex" : "hidden md:flex"
       )}>
         {/* Channel Header */}
@@ -669,7 +669,7 @@ const TeamChat = () => {
 
       {/* ─── Members Sidebar (real employees by department) ─── */}
       {showMembers && !isMobile && (
-        <div className="hidden 2xl:flex w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex-col">
+        <div className="hidden 2xl:flex w-72 flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex-col">
           <div className="p-4 border-b border-[#B89555]/15">
             <h3 className="text-xs font-semibold text-[#1A1A1A]/40 uppercase tracking-wider">
               Team — {totalCount} members
