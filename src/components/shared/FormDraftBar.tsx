@@ -26,7 +26,7 @@ const themeMap = {
   gold: {
     bar: 'bg-[#FDFBF7]/40 border border-[#064E3B]/30',
     icon: 'text-[#1A1A1A]',
-    save: 'bg-[#064E3B] text-white hover:bg-[#042C1C]',
+    save: 'allow-white bg-[#064E3B] text-white hover:bg-[#042C1C] rounded-md',
     newBtn: 'border-[#064E3B]/40 text-[#064E3B] hover:bg-[#064E3B]/10',
   },
   blue: emeraldTheme,
