@@ -8,7 +8,9 @@ import { generateAuthenticationOptions } from 'npm:@simplewebauthn/server@13';
 function rpIdFromOrigin(origin: string | null): string {
   if (!origin) return 'localhost';
   try {
-    return new URL(origin).hostname;
+    const hostname = new URL(origin).hostname.toLowerCase();
+    if (hostname === 'jbj.ae' || hostname === 'www.jbj.ae') return 'jbj.ae';
+    return hostname;
   } catch {
     return 'localhost';
   }
@@ -23,6 +25,23 @@ Deno.serve(async (req) => {
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   );
+
+  const { count, error: countError } = await admin
+    .from('user_passkeys')
+    .select('id', { count: 'exact', head: true });
+
+  if (countError) {
+    return new Response(JSON.stringify({ error: 'Passkey service unavailable' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (!count) {
+    return new Response(JSON.stringify({ error: 'No passkeys are set up yet' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
 
   const options = await generateAuthenticationOptions({
     rpID,

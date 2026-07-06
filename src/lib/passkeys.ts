@@ -28,14 +28,15 @@ export async function registerPasskey(deviceLabel?: string): Promise<void> {
 /** Signs in using a passkey. Sets the Supabase session on success. */
 export async function signInWithPasskey(useAutofill = false): Promise<void> {
   const { data: opts, error: e1 } = await supabase.functions.invoke('webauthn-auth-options');
-  if (e1 || !opts) throw new Error(e1?.message || 'Could not start passkey sign-in');
+  if (e1 || !opts) throw new Error((opts as any)?.error || e1?.message || 'Could not start passkey sign-in');
+  if ((opts as any)?.error) throw new Error((opts as any).error);
 
   const assertion = await startAuthentication({ optionsJSON: opts, useBrowserAutofill: useAutofill });
 
   const { data: sess, error: e2 } = await supabase.functions.invoke('webauthn-auth-verify', {
     body: { response: assertion },
   });
-  if (e2 || !sess?.access_token) throw new Error(e2?.message || 'Passkey sign-in failed');
+  if (e2 || !sess?.access_token) throw new Error(sess?.error || e2?.message || 'Passkey sign-in failed');
 
   const { error: sErr } = await supabase.auth.setSession({
     access_token: sess.access_token,

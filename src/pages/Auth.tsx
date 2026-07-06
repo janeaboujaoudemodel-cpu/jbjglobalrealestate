@@ -25,6 +25,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { useUserModeContext, type UserMode as PlatformUserMode } from "@/contexts/UserModeContext";
 import PasswordStrengthMeter from "@/components/auth/PasswordStrengthMeter";
 import PasskeyButton from "@/components/auth/PasskeyButton";
+import { isPasskeySupported, registerPasskey } from "@/lib/passkeys";
 
 const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'developer'];
 const isValidPreselect = (v: string | null): v is PlatformUserMode =>
@@ -424,6 +425,28 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     }
   };
 
+  const offerPasskeyUpgrade = async () => {
+    if (!isPasskeySupported()) return;
+    try {
+      const alreadyAsked = localStorage.getItem("jbj_passkey_upgrade_prompted") === "true";
+      if (alreadyAsked) return;
+      localStorage.setItem("jbj_passkey_upgrade_prompted", "true");
+      const label = typeof navigator !== "undefined" && /iPhone|iPad/.test(navigator.userAgent)
+        ? "iPhone / iPad (Face ID)"
+        : /Mac/.test(navigator.userAgent) ? "Mac (Touch ID)"
+        : /Windows/.test(navigator.userAgent) ? "Windows Hello"
+        : /Android/.test(navigator.userAgent) ? "Android biometrics"
+        : "This device";
+      await registerPasskey(label);
+      toast.success("Passkey added for next sign-in");
+    } catch (err) {
+      const msg = (err as Error).message || "Passkey setup skipped";
+      if (!/NotAllowedError|abort|cancel|InvalidStateError/i.test(msg)) {
+        toast.error("Passkey setup could not be completed", { description: msg });
+      }
+    }
+  };
+
   const handleBiometricSignIn = async () => {
     setIsSubmitting(true);
     try {
@@ -546,11 +569,11 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const canGoBack = ["forgot", "verify-otp", "reset", "otp-login"].includes(mode);
 
   return (
-    <div ref={ref} className="jj-auth-emerald-bg min-h-screen flex items-center justify-center py-12 px-4 relative">
+    <div ref={ref} className="jj-auth-emerald-bg jj-auth-screen flex items-center justify-center px-3 py-3 sm:px-4 relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-      <div className="relative z-10 w-full max-w-md">
-        <div className="bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-10 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)]">
+      <div className="relative z-10 w-full max-w-md jj-auth-panel-wrap">
+        <div className="jj-auth-card bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-6 sm:p-8 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)]">
 
           {/* Back button */}
           {canGoBack && (
@@ -570,9 +593,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           )}
 
           {/* Logo */}
-          <div className="flex justify-center mb-8"><JJLogoImage variant="light" size="md" /></div>
+          <div className="jj-auth-logo flex justify-center mb-6"><JJLogoImage variant="light" size="md" /></div>
 
-          <div className="text-center mb-8">
+          <div className="jj-auth-heading text-center mb-6">
             <h1 className="text-[#1A1A1A] text-2xl font-semibold mb-3">{getTitle()}</h1>
             <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{getSubtitle()}</p>
           </div>
@@ -656,7 +679,14 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             </form>
           ) : (
             /* ─── Standard Form ─────────────────────────────── */
-            <form onSubmit={handleSubmit} className="space-y-5" autoComplete="on">
+            <form onSubmit={async (e) => {
+              const wasSignin = mode === "signin";
+              await handleSubmit(e);
+              if (wasSignin && email && password) {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.user) void offerPasskeyUpgrade();
+              }
+            }} className="jj-auth-form space-y-4" autoComplete="on">
               {/* Email field — shown on signin, signup, forgot, otp-login */}
               {["signin", "signup", "forgot", "otp-login"].includes(mode) && (
                 <div className="space-y-2">
@@ -758,19 +788,18 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
           {/* Toggle signin/signup */}
           {(mode === "signin" || mode === "signup") && (
-            <div className="mt-6 text-center">
+            <div className="mt-5 text-center">
               <button
                 onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setErrors({}); }}
                 className="text-[#1A1A1A] font-medium hover:underline transition-colors"
               >
                 {mode === "signin" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
               </button>
+              <p className="mt-4 text-[11px] leading-relaxed text-[#1A1A1A]/55">© 2026 JBJ Global Real Estate. All Rights Reserved.</p>
             </div>
           )}
 
         </div>
-
-        <p className="text-center text-[#EFE6D6]/70 text-xs mt-8 allow-white">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
 
       </div>
 

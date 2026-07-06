@@ -1284,6 +1284,42 @@ All colors MUST be HSL.
   .jj-auth-emerald-bg { animation: none; }
 }
 
+.jj-auth-screen {
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+.jj-auth-panel-wrap {
+  max-width: min(28rem, calc(100vw - 1.5rem));
+}
+.jj-auth-card {
+  max-height: calc(100dvh - 24px);
+  overflow: hidden;
+}
+.jj-passkey-cta,
+.jj-passkey-cta * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+.jj-passkey-cta svg,
+.jj-passkey-cta [data-lucide] {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+@media (max-height: 820px) {
+  .jj-auth-card { padding: 1.25rem 1.75rem !important; }
+  .jj-auth-logo { margin-bottom: 0.875rem !important; }
+  .jj-auth-heading { margin-bottom: 1rem !important; }
+  .jj-auth-heading h1 { margin-bottom: 0.5rem !important; }
+  .jj-auth-form { gap: 0 !important; }
+  .jj-auth-card :is(button, input) { min-height: 0; }
+}
+@media (max-height: 720px) {
+  .jj-auth-card { padding: 1rem 1.25rem !important; }
+  .jj-auth-logo img { max-height: 54px; width: auto; }
+  .jj-auth-heading p { font-size: 12px !important; line-height: 1.4 !important; }
+}
+
 /* Force the global "Contact Us" edge tag to stick to the RIGHT viewport edge
    even when `html body .jj-emerald-metallic { position: relative !important }`
    would otherwise win the cascade. */

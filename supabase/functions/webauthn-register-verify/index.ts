@@ -10,10 +10,16 @@ const BodySchema = z.object({
   deviceLabel: z.string().max(120).optional(),
 });
 
+function bytesToPgBytea(bytes: Uint8Array): string {
+  return `\\x${Array.from(bytes).map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
+}
+
 function rpIdFromOrigin(origin: string | null): string {
   if (!origin) return 'localhost';
   try {
-    return new URL(origin).hostname;
+    const hostname = new URL(origin).hostname.toLowerCase();
+    if (hostname === 'jbj.ae' || hostname === 'www.jbj.ae') return 'jbj.ae';
+    return hostname;
   } catch {
     return 'localhost';
   }
@@ -109,7 +115,7 @@ Deno.serve(async (req) => {
   const { error: insErr } = await admin.from('user_passkeys').insert({
     user_id: userId,
     credential_id: cred.id,
-    public_key: cred.publicKey,
+    public_key: bytesToPgBytea(cred.publicKey),
     counter: cred.counter,
     transports: cred.transports ?? [],
     device_label: deviceLabel ?? 'Passkey',
