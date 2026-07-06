@@ -292,6 +292,7 @@ const DeveloperProjectWizard = () => {
     if (!uploaded.length) return;
     uploaded.forEach(addUploadedFile);
     if (extractAfterUpload) {
+      toast.success(`${uploaded.length} fact sheet${uploaded.length === 1 ? "" : "s"} uploaded and shown in the card — AI extraction is running`);
       const extractionFiles = [...smartFiles, ...uploaded.filter(isExtractionCapable)];
       await runExtraction(extractionFiles);
     } else {
@@ -517,29 +518,51 @@ const DeveloperProjectWizard = () => {
     </div>
   );
 
-  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, files = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; files?: Uploaded[] }) => (
-    <div className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15">
+  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, files = [], statusRows = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; files?: Uploaded[]; statusRows?: UploadStatus[] }) => {
+    const pendingRows = statusRows.filter((row) => !files.some((file) => file.name === row.name && file.size === row.size));
+    const visibleCount = files.length + pendingRows.length;
+
+    return (
+    <div className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15" aria-live="polite">
       <label className="flex min-h-[122px] cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-white/45 bg-white/10 p-4 text-center transition-colors hover:bg-white/15">
         <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/12"><Icon className="h-5 w-5 text-white" /></span>
         <span className="text-sm font-semibold text-white">{title}</span>
         <span className="mt-1 text-xs leading-snug text-white/80">{note}</span>
         <span className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/35 px-3 py-1 text-xs font-semibold text-white"><Upload className="h-3.5 w-3.5" /> Choose or drag</span>
-        <input type="file" multiple={multiple} accept={accept} className="hidden" disabled={extracting} onChange={(e) => e.target.files && onFiles(e.target.files)} />
+        <input
+          type="file"
+          multiple={multiple}
+          accept={accept}
+          className="hidden"
+          disabled={extracting}
+          onChange={(e) => {
+            if (e.target.files?.length) onFiles(e.target.files);
+            e.currentTarget.value = "";
+          }}
+        />
       </label>
-      {files.length > 0 && (
+      {visibleCount > 0 && (
         <div className="mt-3 space-y-2">
-          {files.slice(0, 3).map((f) => (
+          {pendingRows.map((item) => (
+            <div key={item.id} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
+              {item.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : item.status === "uploaded" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+              <span className="min-w-0 flex-1 truncate font-semibold">{item.name}</span>
+              <span className="shrink-0 text-white/75">{item.status === "uploading" ? `${item.elapsed}s` : item.status === "uploaded" ? "uploaded" : "failed"}</span>
+            </div>
+          ))}
+          {files.map((f) => (
             <div key={fileKey(f)} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
               {isImageUpload(f) ? <img src={f.url} alt="" className="h-8 w-10 rounded object-cover" /> : isVideoUpload(f) ? <Video className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
               <span className="min-w-0 flex-1 truncate">{f.name}</span>
+              <span className="shrink-0 text-white/75">{formatBytes(f.size)}</span>
               <Check className="h-3.5 w-3.5" />
             </div>
           ))}
-          {files.length > 3 && <p className="text-xs text-white/75">+{files.length - 3} more uploaded</p>}
         </div>
       )}
     </div>
-  );
+    );
+  };
 
   if (publishResult) {
     const publicPath = publishResult.public_path || (publishResult.slug ? `/project/${publishResult.slug}` : null);
@@ -677,10 +700,10 @@ const DeveloperProjectWizard = () => {
             </div>
           </div>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} onFiles={(files) => files[0] && onCover(files[0])} />
-            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*,video/*" files={gallery} multiple onFiles={onGallery} />
-            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
-            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} multiple onFiles={onSmartUpload} />
+            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} statusRows={uploadStatuses.filter((u) => u.role === "cover")} onFiles={(files) => files[0] && onCover(files[0])} />
+            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*,video/*" files={gallery} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
+            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} statusRows={uploadStatuses.filter((u) => u.role === "fact_sheet" || u.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} statusRows={uploadStatuses.filter((u) => u.role === "document")} multiple onFiles={onSmartUpload} />
           </div>
           {uploadStatuses.length > 0 && (
             <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
