@@ -16,10 +16,9 @@ import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts
 import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
-  ChevronDown, BarChart3, Bell, ChevronLeft, ChevronRight, Database, Plus, UserPlus,
+  ChevronDown, BarChart3, Bell, Database, Plus, UserPlus,
   GraduationCap,
 } from "lucide-react";
 import { AddBrokerSheet } from "@/pages/owner/crm/BrokersRegistry";
@@ -31,69 +30,13 @@ import { useQueryClient } from "@tanstack/react-query";
  * Arrows fade in/out based on scroll position. Champagne-themed.
  */
 function ScrollStrip({ children, ariaLabel }: { children: React.ReactNode; ariaLabel: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [canL, setCanL] = useState(false);
-  const [canR, setCanR] = useState(false);
-
-  const update = useCallback(() => {
-    const el = ref.current;
-    if (!el) return;
-    setCanL(el.scrollLeft > 4);
-    setCanR(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
-  }, []);
-
-  useEffect(() => {
-    update();
-    const el = ref.current;
-    if (!el) return;
-    el.addEventListener("scroll", update, { passive: true });
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => { el.removeEventListener("scroll", update); ro.disconnect(); };
-  }, [update]);
-
-  const scrollBy = (dir: 1 | -1) => {
-    const el = ref.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * Math.max(200, el.clientWidth * 0.6), behavior: "auto" });
-  };
-
   return (
     <div className="relative min-w-0 max-w-full overflow-hidden border-t border-[#B89555]/15">
-      {canL && (
-        <button
-          type="button"
-          aria-label="Scroll left"
-          onClick={() => scrollBy(-1)}
-          data-surface="emerald"
-          data-emerald-ok="button"
-          className="jj-surface-emerald absolute left-1 top-1 bottom-1 z-10 w-9 rounded-xl flex items-center justify-center shadow-lg"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-      )}
-      {canR && (
-        <button
-          type="button"
-          aria-label="Scroll right"
-          onClick={() => scrollBy(1)}
-          data-surface="emerald"
-          data-emerald-ok="button"
-          className="jj-surface-emerald absolute right-1 top-1 bottom-1 z-10 w-9 rounded-xl flex items-center justify-center shadow-lg"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      )}
       <nav
-        ref={ref}
         role="tablist"
         aria-label={ariaLabel}
         data-crm-tabs-lock="true"
-        className={[
-          "py-2 flex gap-2 overflow-x-auto whitespace-nowrap jj-scrollbar-gold max-w-full min-w-0",
-          canL ? "pl-12" : "pl-3",
-          canR ? "pr-12" : "pr-3",
-        ].join(" ")}
+        className="px-3 py-2 grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(min(100%,148px),1fr))] max-w-full min-w-0"
       >
         {children}
       </nav>
@@ -541,7 +484,7 @@ export default function UnifiedCRM() {
                 data-state={active ? "active" : "inactive"}
                 onClick={() => setEntity(it.id)}
                 className={[
-                   "shrink-0 inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold rounded-xl",
+                   "min-w-0 inline-flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-bold rounded-xl",
                    "border transition-colors",
                   active
                      ? "jj-surface-emerald allow-white border-transparent shadow-[0_10px_24px_-16px_rgba(6,78,59,0.85)]"
@@ -581,7 +524,7 @@ export default function UnifiedCRM() {
             role="tablist"
             aria-label="CRM sub-sections"
             data-crm-tabs-lock="true"
-            className="px-3 md:px-6 flex items-center gap-2 py-2.5 overflow-x-auto whitespace-nowrap jj-scrollbar-gold min-w-0 max-w-full"
+            className="px-3 md:px-6 grid gap-2 py-2.5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,112px),1fr))] min-w-0 max-w-full"
           >
             {(() => {
               const out: React.ReactNode[] = [];
@@ -603,7 +546,7 @@ export default function UnifiedCRM() {
                     data-state={active ? "active" : "inactive"}
                     onClick={() => setView(t.id)}
                     className={[
-                      "shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13px] font-bold transition-colors border max-w-full",
+                      "min-w-0 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-[13px] font-bold transition-colors border max-w-full",
                       active
                         ? "jj-surface-emerald allow-white border-transparent shadow-[0_8px_20px_-16px_rgba(6,78,59,0.80)]"
                         : "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/20 hover:bg-[#EFE6D6]/70 hover:text-[#064E3B]",

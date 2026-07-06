@@ -33643,3 +33643,65 @@ html body #root .owner-dashboard-shell [data-recommendation-source-pill="active"
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 216 — owner final audit locks: inactive filter pills and unchecked
+   checkboxes stay champagne/ink; only deliberate active/checked controls go
+   emerald/white. This beats broad backend emerald sweeps. */
+html body #root .owner-dashboard-shell :is(
+  [data-inbox-category-pill="idle"],
+  [data-recommendation-source-pill="idle"],
+  [data-recommendation-count-pill="idle"],
+  [data-owner-neutral-control="true"],
+  [data-emerald-ok="checkbox"]:not([data-state="checked"]),
+  [data-radix-checkbox-root]:not([data-state="checked"])
+) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  background-color: #FDFBF7 !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.35) !important;
+  box-shadow: none !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-inbox-category-pill="idle"],
+  [data-recommendation-source-pill="idle"],
+  [data-recommendation-count-pill="idle"],
+  [data-owner-neutral-control="true"],
+  [data-emerald-ok="checkbox"]:not([data-state="checked"]),
+  [data-radix-checkbox-root]:not([data-state="checked"])
+) :is(*,span,div,p,small,strong,b,label,svg,path,line,polyline,circle,rect,[class*="lucide"]) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-inbox-category-pill="active"],
+  [data-recommendation-source-pill="active"],
+  [data-emerald-action="true"],
+  [data-surface="emerald"],
+  .jj-emerald-metallic,
+  .jj-surface-emerald
+) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-inbox-category-pill="active"],
+  [data-recommendation-source-pill="active"],
+  [data-emerald-action="true"],
+  [data-surface="emerald"],
+  .jj-emerald-metallic,
+  .jj-surface-emerald
+) :is(*,span,div,p,small,strong,b,label,svg,path,line,polyline,circle,rect,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}

@@ -650,11 +650,11 @@ export default function CRMLeadsTableV2({
         onSuccess={() => { fetchLeads(); onRefresh(); }}
       />
 
-      <div className="w-full max-w-full overflow-x-auto overscroll-x-contain rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] jj-scrollbar-gold [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
-        <Table className="min-w-[1380px] table-fixed [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap">
+      <div className="w-full max-w-full overflow-hidden rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
+        <Table className="w-full min-w-0 table-fixed [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap [&_th]:overflow-hidden [&_td]:overflow-hidden">
           <TableHeader>
             <TableRow className="border-[#B89555]/20 hover:bg-transparent">
-              <TableHead className="w-12">
+              <TableHead className="w-10">
                 <Checkbox
                   checked={allVisibleSelected}
                   onCheckedChange={(checked) => {
@@ -663,15 +663,12 @@ export default function CRMLeadsTableV2({
                   }}
                 />
               </TableHead>
-              <TableHead className="w-[240px] text-[#1A1A1A]/70 font-bold">Name</TableHead>
-              <TableHead className="w-[150px] text-[#1A1A1A]/70 font-bold">Phone</TableHead>
-              <TableHead className="w-[290px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
-              <TableHead className="w-[190px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
-              <TableHead className="w-[210px] min-w-[210px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
-              <TableHead className="w-[100px] text-[#1A1A1A]/70 font-bold">Date</TableHead>
-              <TableHead className="w-20 text-[#1A1A1A]/70 font-bold">VIP</TableHead>
-              <TableHead className="w-[210px] text-[#1A1A1A]/70 font-bold">Assigned Broker</TableHead>
-              <TableHead className="w-[260px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
+              <TableHead className="w-[180px] text-[#1A1A1A]/70 font-bold">Name</TableHead>
+              <TableHead className="w-[120px] text-[#1A1A1A]/70 font-bold">Phone</TableHead>
+              <TableHead className="w-[260px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
+              <TableHead className="w-[120px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
+              <TableHead className="w-[150px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
+              <TableHead className="w-[92px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -773,55 +770,30 @@ export default function CRMLeadsTableV2({
                         {renderSource(lead)}
                       </span>
                     </TableCell>
-                    <TableCell className="w-[210px] min-w-[210px] px-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                    <TableCell className="w-[150px] px-2 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <InlineStatusSelect
                         leadId={lead.id}
                         currentStatus={status}
                         onStatusChange={() => fetchLeads()}
                       />
                     </TableCell>
-                    <TableCell className="text-xs text-[#1A1A1A]/60 whitespace-nowrap">
-                      {formatDisplayDate(lead.created_at)}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant={vip ? "default" : "outline"}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
-                        className={`min-w-[72px] font-semibold ${vip
- ? "bg-[#EFE6D6] text-[#1A1A1A] hover:bg-[#E8DFCF] border border-[#B89555] shadow-sm"
- : "border-[#B89555]/40 text-[#1A1A1A]/70 hover:bg-[#EFE6D6]/40 bg-[#FDFBF7]"}`}
-                      >
-                        {vip ? (
-                          <>
-                            <Star className="h-3.5 w-3.5 mr-1 fill-[#B89555] text-[#B89555]" />
-                            VIP
-                          </>
-                        ) : "VIP"}
-                      </Button>
-                    </TableCell>
-                    <TableCell className="w-[210px] text-sm whitespace-nowrap min-w-0">
-                      <div className="inline-flex max-w-full items-center gap-2 whitespace-nowrap min-w-0">
-                        {assignedNames[lead.id] ? (
-                          <span className="font-semibold text-[#1A1A1A] truncate max-w-[140px]" title={`Assigned: ${assignedNames[lead.id]}`}>
-                            {assignedNames[lead.id]}
-                          </span>
-                        ) : (
-                          <span className="text-[#1A1A1A]/55 italic" title="Not yet assigned to a broker">Unassigned</span>
-                        )}
+                    <TableCell className="w-[92px] text-right">
+                      <div className="inline-flex items-center justify-end gap-1 whitespace-nowrap max-w-full overflow-hidden">
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant={vip ? "default" : "outline"}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleToggleVIP(lead.id, vip); }}
+                          className="h-8 w-8 min-w-8 rounded-full"
+                          title={vip ? "Unmark VIP" : "Mark VIP"}
+                        >
+                          <Star className={vip ? "h-3.5 w-3.5 fill-current" : "h-3.5 w-3.5"} />
+                        </Button>
                         {isOwner && (
                           <Popover>
                             <PopoverTrigger asChild>
-                              <Button
-                                type="button"
-                                size="sm"
-                                variant="outline"
-                                className="h-7 px-2 text-xs bg-[#EFE6D6]/10 border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/20 whitespace-nowrap"
-                                onClick={(e) => e.stopPropagation()}
-                                title="Assign broker"
-                              >
-                                {assignedNames[lead.id] ? "Change" : "Assign"}
+                              <Button type="button" size="icon" variant="outline" className="h-8 w-8 min-w-8 rounded-full" onClick={(e) => e.stopPropagation()} title="Assign broker">
+                                <UserPlus className="h-3.5 w-3.5" />
                               </Button>
                             </PopoverTrigger>
                             <PopoverContent
@@ -863,11 +835,8 @@ export default function CRMLeadsTableV2({
                         )}
                       </div>
                     </TableCell>
-                    <TableCell className="w-[260px] text-right">
-                      <div className="inline-flex items-center justify-end gap-1 whitespace-nowrap">
-                        <LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} />
-                        {/* Premium restrained action cluster — champagne + ink, gold hairline; red reserved for destructive */}
-                        <div className="inline-flex items-center rounded-full border border-[#B89555]/40 bg-[#FDFBF7] overflow-hidden divide-x divide-[#B89555]/20 shadow-sm">
+                        <div className="sr-only"><LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} /></div>
+                        <div className="hidden">
                           <Button
                             type="button"
                             variant="outline"

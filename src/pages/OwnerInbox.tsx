@@ -342,6 +342,7 @@ export default function OwnerInbox() {
                 <button
                   key={`${tab.value}-${tabChannelId ?? 'all'}`}
                   onClick={() => handleChannelTabClick(tab.value, tabChannelId ?? 'all')}
+                  data-surface={isActive ? "emerald" : "champagne"}
                   data-emerald-action={isActive ? "true" : undefined}
                   data-emerald-ok={isActive ? "pill" : undefined}
                   style={isActive ? {
@@ -391,6 +392,7 @@ export default function OwnerInbox() {
           <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin max-w-full">
             <button
               onClick={() => setCategoryFilter('all')}
+              data-surface={categoryFilter === 'all' ? "emerald" : "champagne"}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
               data-emerald-ok={categoryFilter === 'all' ? "pill" : undefined}
               data-inbox-category-pill={categoryFilter === 'all' ? "active" : "idle"}
@@ -407,6 +409,7 @@ export default function OwnerInbox() {
               <button
                 key={key}
                 onClick={() => setCategoryFilter(key)}
+                data-surface={categoryFilter === key ? "emerald" : "champagne"}
                 data-emerald-action={categoryFilter === key ? "true" : undefined}
                 data-emerald-ok={categoryFilter === key ? "pill" : undefined}
                 data-inbox-category-pill={categoryFilter === key ? "active" : "idle"}
@@ -553,26 +556,26 @@ function StatsCard({
 }) {
   const baseVariants = {
     default: "border-[#B89555]/30 bg-[#FDFBF7]",
-    warning: "border-yellow-500/30 bg-yellow-50",
-    danger: "border-red-500/30 bg-red-50",
-    info: "border-blue-500/30 bg-blue-50",
-    orange: "border-orange-500/30 bg-orange-50",
+    warning: "border-[#B89555]/30 bg-[#FDFBF7]",
+    danger: "border-[#B89555]/30 bg-[#FDFBF7]",
+    info: "border-[#B89555]/30 bg-[#FDFBF7]",
+    orange: "border-[#B89555]/30 bg-[#FDFBF7]",
   };
 
   const activeVariants = {
     default: "border-[#B89555] bg-[#EFE6D6]/15 shadow-[0_4px_16px_rgba(200,167,102,0.4)] scale-[1.03]",
-    warning: "border-yellow-500 bg-yellow-100 shadow-[0_4px_16px_rgba(234,179,8,0.4)] scale-[1.03]",
-    danger: "border-red-500 bg-red-100 shadow-[0_4px_16px_rgba(239,68,68,0.4)] scale-[1.03]",
-    info: "border-blue-500 bg-blue-100 shadow-[0_4px_16px_rgba(184,149,85,0.4)] scale-[1.03]",
-    orange: "border-orange-500 bg-orange-100 shadow-[0_4px_16px_rgba(249,115,22,0.4)] scale-[1.03]",
+    warning: "jj-emerald-metallic allow-white border-transparent shadow-[0_4px_16px_rgba(4,44,28,0.4)] scale-[1.03]",
+    danger: "jj-emerald-metallic allow-white border-transparent shadow-[0_4px_16px_rgba(4,44,28,0.4)] scale-[1.03]",
+    info: "jj-emerald-metallic allow-white border-transparent shadow-[0_4px_16px_rgba(4,44,28,0.4)] scale-[1.03]",
+    orange: "jj-emerald-metallic allow-white border-transparent shadow-[0_4px_16px_rgba(4,44,28,0.4)] scale-[1.03]",
   };
 
   const iconColors = {
     default: "text-[#1A1A1A]",
-    warning: "text-yellow-600",
-    danger: "text-red-600",
-    info: "text-blue-600",
-    orange: "text-orange-600",
+    warning: "text-[#1A1A1A]",
+    danger: "text-[#1A1A1A]",
+    info: "text-[#1A1A1A]",
+    orange: "text-[#1A1A1A]",
   };
 
   const isClickable = variant !== 'default';
@@ -582,13 +585,14 @@ function StatsCard({
       className={`${isActive ? activeVariants[variant] : baseVariants[variant]} border-2 transition-all duration-300 ${
  isClickable ? 'cursor-pointer hover:scale-[1.02]' : ''
  }`}
+      data-surface={isActive && variant !== 'default' ? "emerald" : "champagne"}
       onClick={isClickable ? onClick : undefined}
     >
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-[#1A1A1A]/70">{label}</p>
-            <p className="text-xl font-bold text-[#1A1A1A]">{value}</p>
+            <p className={isActive && variant !== 'default' ? "text-xs text-white/80" : "text-xs text-[#1A1A1A]/70"}>{label}</p>
+            <p className={isActive && variant !== 'default' ? "text-xl font-bold text-white" : "text-xl font-bold text-[#1A1A1A]"}>{value}</p>
           </div>
           <div className={`p-2 rounded-lg bg-[#FDFBF7]/50 ${iconColors[variant]}`}>
             {icon}

@@ -281,7 +281,8 @@ export default function GlobalRecommendationsHub() {
             <Button
               key={status}
               size="sm"
-              onClick={() => setActiveStatus(status)}
+            onClick={() => setActiveStatus(status)}
+            data-surface={activeStatus === status ? "emerald" : "champagne"}
             className={`capitalize ${
  activeStatus === status
   ? "jj-emerald-metallic text-white border-transparent shadow-sm"
@@ -300,7 +301,7 @@ export default function GlobalRecommendationsHub() {
           <button
             key={section.id}
             onClick={() => setActiveSource(section.id)}
-            data-surface={activeSource === section.id ? "emerald" : undefined}
+            data-surface={activeSource === section.id ? "emerald" : "champagne"}
             data-recommendation-source-pill={activeSource === section.id ? "active" : "idle"}
             className={`flex items-center justify-center gap-2 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all min-h-12 min-w-0 ${
  activeSource === section.id
