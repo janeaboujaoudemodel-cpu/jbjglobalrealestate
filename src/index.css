@@ -30730,13 +30730,20 @@ html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [d
   stroke: #FFFFFF !important;
 }
 
-html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill],
-html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill] svg {
-  background: #FFFFFF !important;
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill] {
+  background: linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%) !important;
+  background-image: linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%) !important;
+  color: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill] svg,
+html body:not([data-ai-tools-scope="true"]) [data-mode-switcher-panel="true"] [data-mode-active-pill] svg path {
+  background: transparent !important;
   background-image: none !important;
   color: #064E3B !important;
   -webkit-text-fill-color: #064E3B !important;
   stroke: #064E3B !important;
+  fill: none !important;
 }
 
 html body #root [role="dialog"][data-advanced-filter-panel="true"],
