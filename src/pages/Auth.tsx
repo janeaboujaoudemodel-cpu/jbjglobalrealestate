@@ -770,7 +770,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
         </div>
 
-        <p className="text-center text-[#1A1A1A]/70 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+        <p className="text-center text-[#EFE6D6]/70 text-xs mt-8 allow-white">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+
       </div>
 
       {/* Account Reactivation Dialog */}
