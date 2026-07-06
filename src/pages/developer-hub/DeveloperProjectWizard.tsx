@@ -1148,7 +1148,7 @@ const DeveloperProjectWizard = () => {
               <div><span className="text-[#1A1A1A]/60">Owner use:</span> {basics.owner_can_use || "—"}</div>
               <div className="col-span-2"><span className="text-[#1A1A1A]/60">Amenities:</span> {basics.amenities || "—"}</div>
               <div><span className="text-[#1A1A1A]/60">Cover image:</span> {cover ? "✓" : "—"}</div>
-              <div><span className="text-[#1A1A1A]/60">Gallery:</span> {gallery.length} items</div>
+              <div><span className="text-[#1A1A1A]/60">Gallery:</span> {mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
               <div><span className="text-[#1A1A1A]/60">Brochures:</span> {brochures.length}</div>
               <div className="col-span-2"><span className="text-[#1A1A1A]/60">Developer description:</span> {developerDescription || "—"}</div>
             </div>
@@ -1161,6 +1161,15 @@ const DeveloperProjectWizard = () => {
           <div className="aspect-[4/3] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white">
             {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
           </div>
+          {gallery.length > 0 && (
+            <div className="grid grid-cols-4 gap-1 border-b border-[#B89555]/25 bg-[#EFE6D6] p-1">
+              {gallery.slice(0, 4).map((item) => (
+                <div key={fileKey(item)} className="aspect-square overflow-hidden rounded bg-[#FDFBF7]">
+                  {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />}
+                </div>
+              ))}
+            </div>
+          )}
           <div className="flex min-h-[430px] flex-col p-4 space-y-3">
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Listing preview</p>
@@ -1170,8 +1179,8 @@ const DeveloperProjectWizard = () => {
             <div className="grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]">
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Handover</span>{basics.handover_date || "—"}</div>
-              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
-              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Media</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
             </div>
             {basics.payment_plan && (
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
@@ -1187,11 +1196,58 @@ const DeveloperProjectWizard = () => {
               </div>
             )}
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
+            <Button type="button" variant="outline" onClick={() => setPreviewOpen(true)} className="border-[#B89555]/40 text-[#1A1A1A]">
+              <Maximize2 className="mr-2 h-4 w-4" /> Open full preview
+            </Button>
             <ContactActionsPreview />
           </div>
         </Card>
       </aside>
       </div>
+
+      {previewOpen && (
+        <div className="fixed inset-0 z-[10020] bg-[#1A1A1A]/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+          <div className="mx-auto h-full max-w-5xl overflow-y-auto rounded-lg border border-[#B89555]/50 bg-[#FDFBF7] shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#B89555]/30 bg-[#FDFBF7]/95 px-4 py-3 backdrop-blur">
+              <div>
+                <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Full listing preview</p>
+                <h2 className="text-lg font-semibold text-[#1A1A1A]">{basics.name || "Project name"}</h2>
+              </div>
+              <button type="button" onClick={() => setPreviewOpen(false)} className="rounded-full border border-[#B89555]/40 bg-white p-2"><X className="h-4 w-4 text-[#1A1A1A]" /></button>
+            </div>
+            <div className="aspect-[16/7] bg-[#064E3B]">
+              {cover?.url ? <img src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
+            </div>
+            {gallery.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 p-4 md:grid-cols-4">
+                {gallery.map((item) => (
+                  <div key={fileKey(item)} className="overflow-hidden rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+                    <div className="aspect-video bg-[#EFE6D6]">
+                      {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
+                    </div>
+                    <p className="truncate px-2 py-1 text-xs font-semibold text-[#1A1A1A]">{item.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="grid gap-4 p-5 md:grid-cols-[1fr_320px]">
+              <div className="space-y-4 text-[#1A1A1A]">
+                <h3 className="text-2xl font-semibold">{basics.name || "Project name"}</h3>
+                <p className="text-sm text-[#1A1A1A]/70">{activeDeveloperName || "Developer"} · {basics.location || basics.emirate || "Location"}</p>
+                <p className="leading-relaxed text-[#1A1A1A]/80">{basics.description || basics.short_description || "Project description will appear here after extraction or manual entry."}</p>
+              </div>
+              <div className="flex flex-col gap-3 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 text-sm text-[#1A1A1A]">
+                <div><span className="block text-xs text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
+                <div><span className="block text-xs text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
+                <div><span className="block text-xs text-[#1A1A1A]/60">Gallery</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
+                <div><span className="block text-xs text-[#1A1A1A]/60">Documents</span>{brochures.length}</div>
+                {basics.payment_plan && <div><span className="block text-xs text-[#1A1A1A]/60">Payment plan</span>{basics.payment_plan}</div>}
+                <ContactActionsPreview />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="sticky bottom-0 z-20 -mx-2 flex items-center justify-between rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/95 p-2 shadow-[0_-10px_30px_-24px_rgba(26,26,26,0.45)] backdrop-blur">
         <div className="flex items-center gap-2">
