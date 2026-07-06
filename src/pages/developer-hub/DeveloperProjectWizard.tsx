@@ -1313,7 +1313,7 @@ const DeveloperProjectWizard = () => {
                 <div><span className="block text-xs text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
                 <div><span className="block text-xs text-[#1A1A1A]/60">Gallery</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
                 <div><span className="block text-xs text-[#1A1A1A]/60">Documents</span>{brochures.length}</div>
-                {basics.payment_plan && <div><span className="block text-xs text-[#1A1A1A]/60">Payment plan</span>{basics.payment_plan}</div>}
+                <PaymentPreview compact />
                 <ContactActionsPreview />
               </div>
             </div>
@@ -1338,7 +1338,8 @@ const DeveloperProjectWizard = () => {
         {step < STEPS.length - 1 ? (
           <Button
             onClick={() => setStep((s) => s + 1)}
-            className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"
+            data-surface="emerald"
+            className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
           >
             Next <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
@@ -1346,10 +1347,11 @@ const DeveloperProjectWizard = () => {
           <Button
             onClick={handleSubmit}
             disabled={!canSubmit || publish.isPending}
-            className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90"
+            data-surface="emerald"
+            className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
           >
             {publish.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {willPublishLive ? "Publish live" : "Submit for approval"}
+            {isOwner ? "Save owner preview" : willPublishLive ? "Publish live" : "Submit for approval"}
           </Button>
         )}
       </div>
