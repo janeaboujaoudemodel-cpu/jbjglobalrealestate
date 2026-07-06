@@ -185,21 +185,25 @@ const createCustomIcon = (price: number | null) => {
   const icon = new DivIcon({
     className: "custom-marker",
     html: `
-      <div style="
+      <div class="jj-map-price-marker" style="
         background: linear-gradient(135deg, #0B5A45 0%, #073B2F 55%, #03251F 100%);
-        color: #FFFFFF;
+        color: #FFFFFF !important;
+        -webkit-text-fill-color: #FFFFFF !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.35);
         padding: 6px 10px;
         border-radius: 20px;
-        font-weight: bold;
+        font-weight: 800;
         font-size: 12px;
+        line-height: 1;
         white-space: nowrap;
         box-shadow: 0 8px 18px rgba(0,0,0,0.28);
         border: 2px solid rgba(255,255,255,0.96);
         cursor: pointer;
       ">
-        ${priceText}
+        <span style="color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;">${priceText}</span>
       </div>
     `,
+
     iconSize: [60, 30],
     iconAnchor: [30, 30],
   });
