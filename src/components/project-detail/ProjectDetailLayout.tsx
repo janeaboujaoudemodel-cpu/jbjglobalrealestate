@@ -740,8 +740,8 @@ function ProjectDetailLayoutInner({
           )}
           {/* Lighter overlay — only enough darken at the bottom to guarantee WHITE hero copy readability.
               Side vignette removed so the photo itself stays bright and crisp. */}
-          <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black via-black/75 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-[34%] bg-black/45 pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[54%] bg-gradient-to-t from-black/78 via-black/42 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-[24%] bg-black/22 pointer-events-none" />
         </div>
 
         {/* Sold Out Badge - Top Right */}
@@ -1605,6 +1605,10 @@ function ProjectDetailLayoutInner({
                   type: d.type,
                   url: d.url,
                   name: d.name,
+                  display_title: d.display_title,
+                  cover_image_url: documentCoverFor(d, project.documents.findIndex((doc) => doc.id === d.id)),
+                  is_visible: d.is_visible ?? true,
+                  allow_download: d.allow_download ?? true,
                 }))}
                 projectName={project.name}
                 projectImageUrl={project.images?.[0]?.url || undefined}
