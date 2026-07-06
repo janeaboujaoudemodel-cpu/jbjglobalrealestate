@@ -237,9 +237,10 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
             {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-white" />}
           </button>
         ) : (
-          <div data-backend-icon-tile="emerald-soft" className="w-5 h-5 rounded-full bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center flex-shrink-0">
-            <Clock className="h-3 w-3 text-white" />
+          <div data-surface="emerald" className="w-6 h-6 rounded-md bg-[#064E3B] border border-[#B89555]/40 flex items-center justify-center flex-shrink-0 shadow-sm">
+            <Clock className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />
           </div>
+
         )}
         <div className="min-w-0">
           <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-[#1A1A1A]/70 line-through' : 'text-[#1A1A1A]'}`}>
