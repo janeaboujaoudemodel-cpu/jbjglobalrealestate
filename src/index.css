@@ -72,6 +72,53 @@ html body #root .owner-dashboard-shell :where(.container, main, section, article
 html body #root .owner-dashboard-shell :where(table) {
   min-width: 720px;
 }
+
+/* PASS 214 — owner backend hard contrast/layout lock from screenshot audit. */
+html body #root .owner-dashboard-shell :is([data-owner-batch-fix], [data-owner-batch-fix] *) {
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  letter-spacing: 0 !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-owner-batch-fix] .jj-emerald-metallic,
+  [data-owner-batch-fix] .jj-surface-emerald,
+  [data-owner-batch-fix] .jj-emerald-action,
+  [data-owner-batch-fix] [data-surface="emerald"],
+  [data-owner-batch-fix] [data-emerald-action="true"],
+  [data-owner-batch-fix] [role="tab"][data-state="active"],
+  [data-owner-batch-fix] button[data-state="active"]
+) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-owner-batch-fix] .jj-emerald-metallic,
+  [data-owner-batch-fix] .jj-surface-emerald,
+  [data-owner-batch-fix] .jj-emerald-action,
+  [data-owner-batch-fix] [data-surface="emerald"],
+  [data-owner-batch-fix] [data-emerald-action="true"],
+  [data-owner-batch-fix] [role="tab"][data-state="active"],
+  [data-owner-batch-fix] button[data-state="active"]
+) :is(*,span,div,p,small,strong,b,label,svg,path,line,polyline,circle,rect,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root .owner-dashboard-shell [data-recommendation-chip="champagne"],
+html body #root .owner-dashboard-shell [data-recommendation-chip="champagne"] * {
+  background: #FFF7E6 !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
 @property --border-angle {
   syntax: "<angle>";
   initial-value: 0deg;

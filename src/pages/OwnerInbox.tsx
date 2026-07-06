@@ -266,7 +266,7 @@ export default function OwnerInbox() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-x-hidden">
         <div className="container mx-auto px-4 py-6 max-w-6xl" data-owner-batch-fix="inbox">
           {/* Header */}
           <motion.div 
@@ -327,7 +327,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* Channel Tabs - Header Bar with Badges */}
-          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10 scrollbar-thin">
+          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-[#B89555]/10 scrollbar-thin max-w-full">
             {dynamicChannelTabs.map((tab) => {
               const tabChannelId = (tab as { channelId?: string }).channelId;
               const isActive = tabChannelId
@@ -388,7 +388,7 @@ export default function OwnerInbox() {
           </div>
 
           {/* AI Category Filter */}
-          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
+          <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin max-w-full">
             <button
               onClick={() => setCategoryFilter('all')}
               data-emerald-action={categoryFilter === 'all' ? "true" : undefined}
@@ -454,7 +454,7 @@ export default function OwnerInbox() {
           />
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 xl:grid-cols-[minmax(280px,400px)_minmax(0,1fr)] gap-4 min-h-[600px] max-w-full" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
+          <div className="grid grid-cols-1 2xl:grid-cols-[minmax(300px,420px)_minmax(0,1fr)] gap-4 min-h-[640px] max-w-full" style={{ height: 'min(calc(100vh - 300px), 980px)' }}>
             {/* Thread List */}
             <div className="min-h-0 min-w-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">

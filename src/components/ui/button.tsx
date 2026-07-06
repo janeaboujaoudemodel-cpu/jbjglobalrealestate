@@ -122,6 +122,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     const effectiveVariant = variant ?? "primary";
     const isPrimaryCta = effectiveVariant === "primary" || effectiveVariant === "default" || effectiveVariant === "destructive" || effectiveVariant === "gold" || effectiveVariant.startsWith("ai-");
+    const classNameText = typeof className === "string" ? className : "";
+    const hasExplicitForeground = /(?:^|\s)!?text-|(?:^|\s)\[color:|(?:^|\s)text-\[/.test(classNameText);
     const surface = DARK_SURFACE_VARIANTS.has(effectiveVariant) ? "dark" : isPrimaryCta ? "emerald" : "champagne";
     const cta = DARK_SURFACE_VARIANTS.has(effectiveVariant)
       ? "dark"
@@ -139,7 +141,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-cta={cta}
         ref={ref}
         {...props}
-        style={{ ...(props.style ?? {}), color: isPrimaryCta ? "#FFFFFF" : props.style?.color, WebkitTextFillColor: isPrimaryCta ? "#FFFFFF" : (props.style as React.CSSProperties | undefined)?.WebkitTextFillColor }}
+        style={{
+          ...(props.style ?? {}),
+          color: isPrimaryCta && !hasExplicitForeground ? "#FFFFFF" : props.style?.color,
+          WebkitTextFillColor: isPrimaryCta && !hasExplicitForeground ? "#FFFFFF" : (props.style as React.CSSProperties | undefined)?.WebkitTextFillColor,
+        }}
       />
     );
   },
