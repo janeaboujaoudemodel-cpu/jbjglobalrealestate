@@ -197,13 +197,17 @@ Deno.serve(async (req) => {
     };
 
     let projectId = payload.project_id ?? null;
+    let projectSlug: string | null = null;
 
     if (projectId) {
-      const { error: updErr } = await admin
+      const { data: upd, error: updErr } = await admin
         .from("projects")
         .update(projectPatch)
-        .eq("id", projectId);
+        .eq("id", projectId)
+        .select("slug")
+        .single();
       if (updErr) throw updErr;
+      projectSlug = upd?.slug ?? null;
     } else {
       // Generate slug if missing
       if (!projectPatch.slug && typeof projectPatch.name === "string") {
@@ -216,10 +220,11 @@ Deno.serve(async (req) => {
       const { data: ins, error: insErr } = await admin
         .from("projects")
         .insert(projectPatch as never)
-        .select("id")
+        .select("id, slug")
         .single();
       if (insErr) throw insErr;
       projectId = ins.id;
+      projectSlug = ins.slug ?? null;
     }
 
     // Images
@@ -258,6 +263,7 @@ Deno.serve(async (req) => {
       .eq("id", payload.developer_id);
 
     let published = false;
+    let publishError: string | null = null;
     if (projectId) {
       const { error: publishErr } = await admin
         .from("projects")
@@ -265,6 +271,9 @@ Deno.serve(async (req) => {
         .eq("id", projectId);
       if (!publishErr) {
         published = true;
+      } else {
+        publishError = publishErr.message;
+        console.error("developer-auto-publish publish step failed:", publishErr.message);
       }
     }
 
@@ -278,7 +287,13 @@ Deno.serve(async (req) => {
     });
 
     return new Response(
-      JSON.stringify({ status: published ? "published" : "queued_for_review", project_id: projectId }),
+      JSON.stringify({
+        status: published ? "published" : "queued_for_review",
+        project_id: projectId,
+        slug: projectSlug,
+        public_path: projectSlug ? `/project/${projectSlug}` : null,
+        publish_error: publishError,
+      }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {

@@ -11,9 +11,12 @@ export interface AutoPublishPayload {
   developer_patch?: { description?: string; logo_url?: string; website?: string };
 }
 
-interface AutoPublishResponse {
+export interface AutoPublishResponse {
   status: "published" | "queued_for_review";
   project_id?: string;
+  slug?: string | null;
+  public_path?: string | null;
+  publish_error?: string | null;
   submission_id?: string;
 }
 
