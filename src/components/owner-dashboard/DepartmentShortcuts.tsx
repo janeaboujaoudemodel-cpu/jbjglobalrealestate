@@ -61,13 +61,13 @@ export default function DepartmentShortcuts() {
   return (
     <div data-surface="champagne" className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-[#1A1A1A] mb-4">Departments & Admin</h3>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+      <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]">
         {DEPARTMENTS.map((dept) => (
           <button
             key={dept.path}
             onClick={() => navigate(dept.path)}
             className={cn(
-              "flex items-center gap-3 p-4 rounded-xl text-left",
+              "flex items-center gap-3 p-4 rounded-xl text-left min-w-0",
               "bg-[#FDFBF7] border border-[#B89555]/20",
               "hover:border-[#B89555]/50 hover:bg-[#B89555]/10 hover:shadow-md hover:shadow-[#B89555]/10",
               "transition-all duration-200 cursor-pointer group"
@@ -80,10 +80,10 @@ export default function DepartmentShortcuts() {
               <dept.icon className="allow-white h-5 w-5 text-white" strokeWidth={2.1} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#1A1A1A] group-hover:text-[#B89555] transition-colors">
+              <p className="text-sm font-medium text-[#1A1A1A] group-hover:text-[#B89555] transition-colors leading-snug">
                 {dept.label}
               </p>
-              <p className="text-xs text-[#1A1A1A]/70 leading-snug">
+              <p className="text-xs text-[#1A1A1A]/70 leading-snug line-clamp-2">
                 {dept.description}
               </p>
             </div>
