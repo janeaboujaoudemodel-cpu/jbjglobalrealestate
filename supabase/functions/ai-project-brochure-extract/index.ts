@@ -74,8 +74,10 @@ ${SCHEMA_HINT}`,
     ];
 
     let attachedCount = 0;
-    for (const f of files) {
-      const fetched = await fileToBase64(f.url);
+    const fetchedFiles = await Promise.all(
+      files.map(async (f) => ({ file: f, fetched: await fileToBase64(f.url) })),
+    );
+    for (const { file: f, fetched } of fetchedFiles) {
       if (!fetched) continue;
       if (fetched.mime.startsWith("image/")) {
         contentParts.push({ type: "image_url", image_url: { url: `data:${fetched.mime};base64,${fetched.b64}` } });
