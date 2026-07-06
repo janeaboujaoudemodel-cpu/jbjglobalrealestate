@@ -222,6 +222,19 @@ const DeveloperProjectWizard = () => {
       <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-6 rounded-lg">
         {step === 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {isOwner && (
+              <div className="md:col-span-2">
+                <Label className="text-[#1A1A1A]">Developer *</Label>
+                <Select value={selectedDeveloperId} onValueChange={setSelectedDeveloperId}>
+                  <SelectTrigger className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1">
+                    <SelectValue placeholder="Select developer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ownerDevelopers.map((d) => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="md:col-span-2">
               <Label className="text-[#1A1A1A]">Project name *</Label>
               <Input value={basics.name} onChange={(e) => setBasics({ ...basics, name: e.target.value })} className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1" />
@@ -302,8 +315,8 @@ const DeveloperProjectWizard = () => {
                 ))}
                 <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors">
                   <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Add images</span>
-                  <input type="file" multiple accept="image/*" className="hidden" onChange={(e) => e.target.files && onGallery(e.target.files)} />
+                  <span className="text-sm text-[#1A1A1A]">Add project media</span>
+                  <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onGallery(e.target.files)} />
                 </label>
               </div>
             </div>
@@ -312,7 +325,7 @@ const DeveloperProjectWizard = () => {
 
         {step === 2 && (
           <div>
-            <Label className="text-[#1A1A1A]">Brochures & documents (PDF, DOCX)</Label>
+            <Label className="text-[#1A1A1A]">Brochures & project documents</Label>
             <div className="space-y-2 mt-2">
               {brochures.map((b, i) => (
                 <div key={i} className="flex items-center justify-between px-4 py-2 bg-[#FDFBF7] border border-[#B89555]/40 rounded">
@@ -325,7 +338,7 @@ const DeveloperProjectWizard = () => {
               <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
                 <Upload className="w-4 h-4 text-[#1A1A1A]" />
                 <span className="text-sm text-[#1A1A1A]">Add brochure</span>
-                <input type="file" multiple accept=".pdf,.docx" className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files)} />
+                <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files)} />
               </label>
             </div>
           </div>
@@ -350,14 +363,19 @@ const DeveloperProjectWizard = () => {
       </Card>
 
       <div className="flex items-center justify-between">
-        <Button
-          variant="outline"
-          onClick={() => setStep((s) => Math.max(0, s - 1))}
-          disabled={step === 0 || publish.isPending}
-          className="border-[#B89555]/40 text-[#1A1A1A]"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" /> Back
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setStep((s) => Math.max(0, s - 1))}
+            disabled={step === 0 || publish.isPending}
+            className="border-[#B89555]/40 text-[#1A1A1A]"
+          >
+            <ChevronLeft className="w-4 h-4 mr-1" /> Back
+          </Button>
+          <Button variant="outline" onClick={saveDraft} disabled={publish.isPending} className="border-[#B89555]/40 text-[#1A1A1A]">
+            <Save className="w-4 h-4 mr-1" /> Save draft
+          </Button>
+        </div>
         {step < STEPS.length - 1 ? (
           <Button
             onClick={() => setStep((s) => s + 1)}
