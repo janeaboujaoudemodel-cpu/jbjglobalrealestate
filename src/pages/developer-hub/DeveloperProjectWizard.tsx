@@ -431,11 +431,12 @@ const DeveloperProjectWizard = () => {
         </Card>
 
         {publicPath && (
-          <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
             <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] transition-colors">
-              <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
-                {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
-              </div>
+              <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
+                <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
+                  {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
+                </div>
+              </button>
               <div className="p-5 space-y-3">
                 <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">{isPublished ? "Live listing preview" : "Saved listing preview"}</p>
                 <div className="flex items-start justify-between gap-3">
@@ -451,9 +452,22 @@ const DeveloperProjectWizard = () => {
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><MessageCircle className="h-4 w-4" /> Chat</button>
+                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Mail className="h-4 w-4" /> Email</button>
+                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Phone className="h-4 w-4" /> Call</button>
+                </div>
+                {basics.payment_plan && (
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
+                    <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
+                      <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#064E3B] text-xs text-[#064E3B]">{paymentPlanParts[0]?.match(/\d+\/?\d*/)?.[0] || "%"}</span>
+                    </button>
+                    {paymentExpanded && <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">{paymentPlanParts.map((part, i) => <p key={i}>{part}</p>)}</div>}
+                  </div>
+                )}
               </div>
             </Card>
-          </button>
         )}
       </div>
     );
