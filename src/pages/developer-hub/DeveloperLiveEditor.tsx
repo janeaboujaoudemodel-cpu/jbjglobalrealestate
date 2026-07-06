@@ -157,7 +157,7 @@ const DeveloperLiveEditor = () => {
           project_id: p.id,
           patch: {},
           enrich: true,
-        } as unknown as Parameters<typeof publish.mutateAsync>[0]);
+        });
         ok++;
       } catch { fail++; }
     }

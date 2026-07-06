@@ -3,6 +3,7 @@
 // Otherwise routes to developer_project_submissions for owner review.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { mergeProjectEnrichment } from "../_shared/mergeProjectEnrichment.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,6 +17,10 @@ interface Payload {
   // Either project_id (edit) or null (new project)
   project_id?: string | null;
   publish_live?: boolean;
+  // When true, patch/images/documents are merged into the existing project
+  // using never-overwrite/never-delete semantics (mergeProjectEnrichment).
+  enrich?: boolean;
+  locked_fields?: string[];
   patch: {
     name?: string;
     slug?: string;
@@ -184,6 +189,126 @@ Deno.serve(async (req) => {
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
+
+    // 4.5 ENRICH mode — merge into existing project without ever deleting
+    //     owner content. Only fills empty fields, appends+dedupes arrays,
+    //     shallow-merges objects, skips locked fields. Requires project_id.
+    if (payload.enrich) {
+      if (!payload.project_id) {
+        return new Response(
+          JSON.stringify({ error: "enrich mode requires project_id" }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+      const { data: existing, error: exErr } = await admin
+        .from("projects")
+        .select("*")
+        .eq("id", payload.project_id)
+        .single();
+      if (exErr || !existing) {
+        return new Response(
+          JSON.stringify({ error: "project not found for enrichment" }),
+          { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
+      const { merged, changedKeys } = mergeProjectEnrichment(
+        existing as Record<string, unknown>,
+        payload.patch as Record<string, unknown>,
+        payload.locked_fields ?? [],
+      );
+
+      let enrichError: string | null = null;
+      if (changedKeys.length > 0) {
+        const updatePatch: Record<string, unknown> = {};
+        for (const k of changedKeys) updatePatch[k] = merged[k];
+        updatePatch.updated_at = new Date().toISOString();
+        updatePatch.source_updated_at = new Date().toISOString();
+        const { error: mergeErr } = await admin
+          .from("projects")
+          .update(updatePatch)
+          .eq("id", payload.project_id);
+        if (mergeErr) enrichError = mergeErr.message;
+      }
+
+      // Images — append only URLs not already stored.
+      let imagesAdded = 0;
+      if (payload.images?.length) {
+        const { data: existingImgs } = await admin
+          .from("project_images")
+          .select("image_url")
+          .eq("project_id", payload.project_id);
+        const known = new Set((existingImgs ?? []).map((r: { image_url: string }) => r.image_url));
+        const fresh = payload.images.filter((i) => !known.has(i.image_url));
+        if (fresh.length) {
+          const rows = fresh.map((img, i) => ({
+            project_id: payload.project_id,
+            image_url: img.image_url,
+            alt_text: img.alt_text ?? null,
+            display_order: img.display_order ?? (known.size + i),
+          }));
+          await admin.from("project_images").insert(rows as never);
+          imagesAdded = fresh.length;
+        }
+      }
+
+      // Documents — append only file_urls not already stored.
+      let documentsAdded = 0;
+      if (payload.documents?.length) {
+        const { data: existingDocs } = await admin
+          .from("project_documents")
+          .select("file_url")
+          .eq("project_id", payload.project_id);
+        const known = new Set((existingDocs ?? []).map((r: { file_url: string }) => r.file_url));
+        const fresh = payload.documents.filter((d) => !known.has(d.file_url));
+        if (fresh.length) {
+          const rows = fresh.map((d, i) => ({
+            project_id: payload.project_id,
+            file_url: d.file_url,
+            file_name: d.file_name,
+            document_type: d.document_type ?? "brochure",
+            file_size: d.file_size ?? null,
+            storage_path: d.storage_path ?? null,
+            cover_image_url: d.cover_image_url ?? null,
+            display_title: d.display_title ?? null,
+            display_order: known.size + i,
+            is_visible: true,
+            allow_download: true,
+            data_source: "enrichment",
+          }));
+          await admin.from("project_documents").insert(rows as never);
+          documentsAdded = fresh.length;
+        }
+      }
+
+      await admin.from("developer_activity_log").insert({
+        user_id: userId,
+        activity_type: "enrich",
+        entity_type: "project",
+        entity_id: payload.project_id,
+        entity_name: (existing as { name?: string }).name ?? null,
+        details: {
+          route: "enrichment_merge",
+          changed_keys: changedKeys,
+          images_added: imagesAdded,
+          documents_added: documentsAdded,
+          locked_fields: payload.locked_fields ?? [],
+        },
+      });
+
+      return new Response(
+        JSON.stringify({
+          status: "enriched",
+          project_id: payload.project_id,
+          changed_keys: changedKeys,
+          images_added: imagesAdded,
+          documents_added: documentsAdded,
+          enrich_error: enrichError,
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
 
     // 5. OWNER/AUTO path. Owner uploads are saved as an internal preview unless the
     // client explicitly asks to publish live. This keeps Preview separate from Publish.
