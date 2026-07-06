@@ -250,7 +250,7 @@ const DeveloperProjectWizard = () => {
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
   const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
   const trustLevel = developer?.trust_level as string | undefined;
-  const willPublishLive = isOwner || trustLevel === "auto_publish";
+  const willPublishLive = !isOwner && trustLevel === "auto_publish";
 
   const markUpload = (id: string, patch: Partial<UploadStatus>) => {
     setUploadStatuses((items) => items.map((item) => item.id === id ? { ...item, ...patch } : item));
@@ -265,7 +265,7 @@ const DeveloperProjectWizard = () => {
       setGallery((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
       return;
     }
-    if (file.role === "fact_sheet" || file.role === "brochure" || file.role === "document") {
+    if (file.role === "fact_sheet" || file.role === "brochure" || file.role === "floor_plan" || file.role === "payment_plan" || file.role === "document") {
       setBrochures((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
       if (isExtractionCapable(file)) {
         setSmartFiles((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
@@ -391,7 +391,7 @@ const DeveloperProjectWizard = () => {
       return null;
     }
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60);
+    const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60).catch(() => ({ data: null as any }));
     markUpload(statusId, { status: "uploaded", elapsed: Math.max(1, Math.round((Date.now() - startedAt) / 1000)) });
     return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type || "application/octet-stream", size: file.size, role } as Uploaded;
   };
@@ -406,18 +406,20 @@ const DeveloperProjectWizard = () => {
   const onGallery = async (files: FileList) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f, "rel-media", "gallery");
+      const role = f.type.startsWith("image/") || f.type.startsWith("video/") ? "gallery" : classifyUploadRole(f, "document");
+      const u = await uploadFile(f, "rel-media", role);
       if (u) uploaded.push(u);
     }
     if (uploaded.length) {
-      setGallery((g) => [...g, ...uploaded]);
+      uploaded.forEach((u) => addUploadedFile(u));
       toast.success(`${uploaded.length} gallery file${uploaded.length === 1 ? "" : "s"} uploaded`);
     }
   };
   const onBrochures = async (files: FileList, role: NonNullable<Uploaded["role"]> = "brochure", extractAfterUpload = false) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f, "rel-media", role);
+      const finalRole = classifyUploadRole(f, role);
+      const u = await uploadFile(f, "rel-media", finalRole);
       if (u) uploaded.push(u);
     }
     if (!uploaded.length) return;
@@ -434,7 +436,8 @@ const DeveloperProjectWizard = () => {
   const onSmartUpload = async (files: FileList) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f, "rel-media", "document");
+      const finalRole = f.type.startsWith("image/") || f.type.startsWith("video/") ? "gallery" : classifyUploadRole(f, "document");
+      const u = await uploadFile(f, "rel-media", finalRole);
       if (u) uploaded.push(u);
     }
     if (uploaded.length === 0) return;
@@ -547,6 +550,7 @@ const DeveloperProjectWizard = () => {
     .split(/[,;\n]+/)
     .map((part) => part.trim())
     .filter(Boolean);
+  const paymentPresentation = formatPaymentPlanForDisplay(basics.payment_plan, basics.handover_date);
 
   const mediaStats = useMemo(() => {
     const imageCount = gallery.filter((g) => g.type.startsWith("image/")).length + (cover?.type.startsWith("image/") ? 1 : 0);
@@ -558,10 +562,46 @@ const DeveloperProjectWizard = () => {
   }, [gallery, cover, brochures.length, uploadStatuses]);
 
   const bedroomSummary = selectedBedrooms.length
-    ? selectedBedrooms.map((value) => value === 0 ? "Studio" : value >= 6 ? "6+ BR" : `${value} BR`).join(" · ")
+    ? selectedBedrooms.map(bedroomLabel).join(" · ")
     : basics.bedrooms_min || basics.bedrooms_max
       ? `${basics.bedrooms_min || "—"} - ${basics.bedrooms_max || "—"}`
       : "—";
+
+  const sizeSummary = basics.built_up_area || basics.plot_area || "—";
+
+  const documentCoverFor = (file: Uploaded, index: number) => {
+    const lower = file.name.toLowerCase();
+    const cityBuddy = gallery.find((g) => /city\s*buddy|citybuddy|robot|buddy/i.test(g.name) && g.type.startsWith("image/"));
+    if (/city\s*buddy|citybuddy|robot|buddy/.test(lower) && cityBuddy) return cityBuddy.url;
+    const pool = [cover, ...gallery].filter((g): g is Uploaded => !!g && g.type.startsWith("image/"));
+    if (!pool.length) return null;
+    return pool[(index + (file.role === "brochure" || file.role === "fact_sheet" ? 0 : 1)) % pool.length]?.url || pool[0].url;
+  };
+
+  const PaymentPreview = ({ compact = false }: { compact?: boolean }) => {
+    if (!paymentPresentation) return null;
+    return (
+      <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[#B89555] font-bold">Payment plan</p>
+            <p className="mt-1 text-sm font-bold text-[#1A1A1A]">{paymentPresentation.headline}</p>
+          </div>
+          <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{paymentPresentation.badge}</span>
+        </div>
+        {!compact && <p className="mt-2 text-xs text-[#1A1A1A]/72">{paymentPresentation.summary}</p>}
+        <div className={`mt-3 grid gap-2 ${compact ? "grid-cols-1" : "sm:grid-cols-2"}`}>
+          {paymentPresentation.stages.slice(0, compact ? 2 : 6).map((stage) => (
+            <div key={`${stage.label}-${stage.value}`} className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+              <p className="text-xs font-semibold text-[#1A1A1A]">{stage.label}</p>
+              <p className="text-lg font-bold text-[#064E3B]">{stage.value}</p>
+              {stage.detail && <p className="text-[11px] text-[#1A1A1A]/65">{stage.detail}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
