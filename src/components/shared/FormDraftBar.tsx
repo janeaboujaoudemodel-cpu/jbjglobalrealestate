@@ -74,12 +74,16 @@ export function FormDraftBar({
           type="button"
           onClick={onReset}
           data-no-contrast-guard
-          data-on-dark
-          data-allow-dark-cta
-          className="allow-white flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#B91C1C] text-white hover:bg-[#991B1B] transition-colors rounded-md"
-          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          data-allow-ink
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-colors"
+          style={{
+            backgroundImage: "linear-gradient(135deg, #FDFBF7 0%, #EFE6D6 100%)",
+            border: "1px solid rgba(184,149,85,0.55)",
+            color: "#1A1A1A",
+            WebkitTextFillColor: "#1A1A1A",
+          }}
         >
-          <RotateCcw className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} /> <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Reset</span>
+          <RotateCcw className="w-3.5 h-3.5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} /> <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Reset</span>
         </button>
         {onNew && (
           <button
