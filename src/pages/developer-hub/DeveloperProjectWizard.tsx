@@ -78,6 +78,7 @@ const emptyBasics = {
 type Basics = typeof emptyBasics;
 type DictationField = keyof Basics | "developerDescription" | "additionalInfo";
 
+
 const formatBytes = (bytes: number) => {
   if (!Number.isFinite(bytes) || bytes <= 0) return "—";
   const units = ["B", "KB", "MB", "GB"];
