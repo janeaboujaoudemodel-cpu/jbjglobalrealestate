@@ -11,7 +11,6 @@ export interface PipelineStatus {
 }
 
 const EMERALD = '#064E3B';
-const GOLD = '#B89555';
 const INK = '#1A1A1A';
 
 // Status groups for organized dropdowns - locked to the JBJ Emerald/Gold system.
@@ -26,7 +25,7 @@ export const STATUS_GROUPS = {
     label: 'NEUTRAL',
     color: 'text-[#1A1A1A]',
     bgColor: 'bg-[#FDFBF7]',
-    dotColor: GOLD,
+    dotColor: INK,
   },
   negative: {
     label: 'NEGATIVE',
@@ -49,19 +48,19 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "negotiation", label: "Negotiation", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
   { value: "offer_sent", label: "Offer Sent", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
   { value: "closed_won", label: "Closed Won", color: "bg-[#064E3B]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#064E3B]", dotColor: "#FFFFFF", category: "positive" },
-  { value: "already_bought", label: "Already Bought", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "already_bought", label: "Already Bought", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
 
   // NEUTRAL (blue) - New / Follow-up / Pending
-  { value: "new", label: "New", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
-  { value: "contacted", label: "Contacted", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
-  { value: "followup", label: "Follow-up", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
-  { value: "callback", label: "Call Back", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "new", label: "New", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
+  { value: "contacted", label: "Contacted", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
+  { value: "followup", label: "Follow-up", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
+  { value: "callback", label: "Call Back", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
   { value: "no_answer", label: "No Response", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
-  { value: "on_hold", label: "On Hold", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "on_hold", label: "On Hold", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
 
   // NEUTRAL - Lifecycle states
-  { value: "assigned", label: "Assigned", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
-  { value: "archived", label: "Archived", color: "bg-[#B89555]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: GOLD, category: "neutral" },
+  { value: "assigned", label: "Assigned", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
+  { value: "archived", label: "Archived", color: "bg-[#FDFBF7]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "neutral" },
 
   // NEGATIVE (red) - Lost / DNC / Invalid / Deleted
   { value: "not_interested", label: "Not Interested", color: "bg-[#1A1A1A]", bgColor: "bg-[#FDFBF7]", textColor: "text-[#1A1A1A]", dotColor: INK, category: "negative" },
@@ -120,7 +119,7 @@ const LeadStatusBadge = ({
         className,
       )}
     >
-      {showDot && (
+      {showDot && !isEmeraldStatus && (
         <span
           className="w-2 h-2 rounded-full flex-shrink-0"
           style={{ backgroundColor: statusInfo.dotColor }}

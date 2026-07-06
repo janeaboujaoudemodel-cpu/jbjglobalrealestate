@@ -86,6 +86,8 @@ export function SearchableMultiSelect({
         <button
           type="button"
           aria-label={ariaLabel ?? label}
+          data-surface={selected.length > 0 ? "emerald" : "champagne"}
+          data-emerald-ok={selected.length > 0 ? "button" : undefined}
           className={[
             "inline-flex items-center gap-2 px-3 h-10 rounded-lg text-sm font-semibold transition-all",
             selected.length > 0
@@ -196,7 +198,7 @@ export function SearchableMultiSelect({
                     >
                       {checked && <Check className="h-3 w-3" />}
                     </span>
-                    {opt.dot && (
+                    {opt.dot && !checked && (
                       <span
                         aria-hidden
                         className="inline-block h-2.5 w-2.5 rounded-full ring-1 ring-black/5 shrink-0"

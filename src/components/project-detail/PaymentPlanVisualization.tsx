@@ -184,12 +184,12 @@ export default function PaymentPlanVisualization({
 
 
       <Tabs defaultValue="installment" className="w-full">
-        <TabsList className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-0 overflow-hidden rounded-lg">
-          <TabsTrigger value="installment" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
+        <TabsList data-project-payment-tabs className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-0 overflow-hidden rounded-lg">
+          <TabsTrigger value="installment" data-emerald-active className="flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <CreditCard className="w-4 h-4 mr-2" />
             Payment Plan {premiumPlan && `(${premiumPlan.badge})`}
           </TabsTrigger>
-          <TabsTrigger value="full" data-emerald-active data-surface="emerald" data-no-contrast-guard className="allow-white flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
+          <TabsTrigger value="full" data-emerald-active className="flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <Wallet className="w-4 h-4 mr-2" />
             100% Payment
           </TabsTrigger>

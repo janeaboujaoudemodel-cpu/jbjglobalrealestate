@@ -75,7 +75,7 @@ export default function InlineStatusSelect({
 
         {(['positive','neutral','negative'] as const).map((cat) => {
           const headerColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#1A1A1A';
-          const headerDotColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#B89555';
+          const headerDotColor = cat === 'positive' ? '#064E3B' : cat === 'negative' ? '#7F1D1D' : '#1A1A1A';
           const label = cat[0].toUpperCase() + cat.slice(1);
           const items = PIPELINE_STATUSES.filter(s => s.category === cat);
           if (!items.length) return null;

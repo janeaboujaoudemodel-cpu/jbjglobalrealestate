@@ -33308,3 +33308,122 @@ html body [data-crm-tabs-lock] button[role="tab"][aria-selected="false"] .rounde
   -webkit-text-fill-color: #1A1A1A !important;
 }
 
+/* =============================================================
+   PASS 213 — TRUE FILE-END EMERALD CONTRAST CONTRACT
+   Applies beyond CRM: backend portals + project detail. The winning
+   rule is now surface ownership, not broad button/pill repainting.
+   - True emerald surfaces: official emerald ombre + pure white text/icons.
+   - Champagne/outline controls: champagne + ink/emerald text, never emerald.
+   - Status dots inside emerald are removed/white — no gold dot on emerald.
+   ============================================================= */
+html body #root :is(
+  [data-backend-portal],
+  [data-owner-backend],
+  .owner-dashboard-shell,
+  [data-project-detail-page],
+  [data-project-payment-tabs]
+) :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-icon-tile-emerald,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-ok],
+  [data-cta="primary"],
+  button[data-state="active"],
+  button[aria-selected="true"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"]
+):not(.jj-cta-outline):not([data-cta="outline"]):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+
+html body #root :is(
+  [data-backend-portal],
+  [data-owner-backend],
+  .owner-dashboard-shell,
+  [data-project-detail-page],
+  [data-project-payment-tabs]
+) :is(
+  .jj-surface-emerald,
+  .jj-cta-primary,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic,
+  .jj-chip-emerald,
+  .jj-emerald-metallic,
+  .jj-emerald-fill,
+  .jj-emerald-card,
+  .jj-icon-tile-emerald,
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-ok],
+  [data-cta="primary"],
+  button[data-state="active"],
+  button[aria-selected="true"],
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"]
+):not(.jj-cta-outline):not([data-cta="outline"]):not(.jj-emerald-soft):not(.jj-emerald-outline):not([data-emerald-tone="soft"]):not([data-emerald-tone="outline"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,time,dt,dd,th,td,figcaption,blockquote,button,div,svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  stroke-opacity: 1 !important;
+  opacity: 1 !important;
+}
+
+html body #root :is([data-backend-portal], [data-owner-backend], .owner-dashboard-shell, [data-project-detail-page])
+  :is(.jj-cta-outline, [data-cta="outline"], [data-surface="champagne"], [data-surface="cream"], [data-surface="light"]):not([aria-selected="true"]):not([data-state="active"]),
+html body #root [data-project-payment-tabs] [role="tab"]:not([data-state="active"]) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  background-color: #FDFBF7 !important;
+  border: 1px solid rgba(184,149,85,0.40) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  box-shadow: none !important;
+}
+
+html body #root :is([data-backend-portal], [data-owner-backend], .owner-dashboard-shell, [data-project-detail-page])
+  :is(.jj-cta-outline, [data-cta="outline"], [data-surface="champagne"], [data-surface="cream"], [data-surface="light"]):not([aria-selected="true"]):not([data-state="active"]) :is(h1,h2,h3,h4,h5,h6,p,span,a,li,label,strong,em,small,time,dt,dd,th,td,figcaption,blockquote,button,div,svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]),
+html body #root [data-project-payment-tabs] [role="tab"]:not([data-state="active"]) :is(span,svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]) {
+  background: transparent !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
+
+html body #root :is([data-backend-portal], [data-owner-backend], .owner-dashboard-shell, [data-project-detail-page])
+  :is(.jj-surface-emerald, .jj-cta-primary, .jj-cta-emerald, .jj-pill-emerald, .jj-pill-emerald-metallic, .jj-chip-emerald, .jj-emerald-metallic, [data-surface="emerald"], [data-emerald="true"], [data-emerald-ok], [data-cta="primary"], button[data-state="active"], button[aria-selected="true"])
+  :is(.status-dot, [data-status-dot], [aria-hidden="true"].rounded-full, span[style*="#B89555"], span[style*="184,149,85"]) {
+  background: #FFFFFF !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.72) !important;
+  box-shadow: none !important;
+}
+
+html body #root [data-project-payment-tabs] [role="tab"][data-state="active"] {
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-project-payment-tabs] [role="tab"][data-state="active"] :is(span,svg,path,line,rect,circle,polyline,polygon,[class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+

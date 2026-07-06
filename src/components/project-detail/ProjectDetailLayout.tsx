@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react";
 
 import { Link } from "react-router-dom";
 import {
@@ -77,7 +77,6 @@ import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 
-import ProjectNearbyPropertiesMap from "@/components/project-detail/ProjectNearbyPropertiesMap";
 import MoreFromDeveloperStrip from "@/components/project-detail/MoreFromDeveloperStrip";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import BuyerNationalityInsights from "@/components/project-detail/BuyerNationalityInsights";
@@ -111,6 +110,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
 export type ProjectDetailData = {
   id: string;
@@ -689,7 +690,7 @@ function ProjectDetailLayoutInner({
   }, [project.size_min, project.size_max, formatSize, convertSize]);
 
   return (
-    <>
+    <div data-project-detail-page className="contents">
       {/* HERO SECTION - Full Screen */}
       <section data-hero-dark data-on-dark data-no-contrast-guard data-ink-emerald-opt-out className="jj-project-hero jj-fullbleed-band allow-white relative w-full h-screen min-h-[700px]">
         {/* Owner-only: Edit hero / pick from gallery → set as Cover or Profile */}
@@ -1445,16 +1446,18 @@ function ProjectDetailLayoutInner({
                 <h3 className="text-lg font-semibold text-foreground mb-3">
                   Other projects in {project.area_name || project.emirate || 'this area'}
                 </h3>
-                <ProjectNearbyPropertiesMap
-                  currentProjectId={project.id}
-                  currentProjectName={project.name}
-                  currentProjectSlug={project.slug ?? null}
-                  currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
-                  currentDeveloperName={project.developer?.name ?? null}
-                  latitude={typeof project.latitude === 'number' ? project.latitude : null}
-                  longitude={typeof project.longitude === 'number' ? project.longitude : null}
-                  areaName={project.area_name || project.emirate || null}
-                />
+                <Suspense fallback={<div className="h-[420px] rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]" aria-hidden />}>
+                  <ProjectNearbyPropertiesMap
+                    currentProjectId={project.id}
+                    currentProjectName={project.name}
+                    currentProjectSlug={project.slug ?? null}
+                    currentDeveloperId={project.developer?.id ?? (project as any).developer_id ?? null}
+                    currentDeveloperName={project.developer?.name ?? null}
+                    latitude={typeof project.latitude === 'number' ? project.latitude : null}
+                    longitude={typeof project.longitude === 'number' ? project.longitude : null}
+                    areaName={project.area_name || project.emirate || null}
+                  />
+                </Suspense>
                 <p className="mt-2 text-xs text-[#1A1A1A]/70">
                   {typeof project.latitude === 'number' && typeof project.longitude === 'number'
                     ? 'Red pin = this project · Champagne pins = other developers nearby. Click a pin to open that project — you can always return here using the chip at the top.'
@@ -1830,6 +1833,6 @@ function ProjectDetailLayoutInner({
       {/* Footer is now rendered globally in MainLayout - removed duplicate */}
 
       {/* Owner/Visitor view is now driven by the header Mode switcher */}
-    </>
+    </div>
   );
 }
