@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video, Mic, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
@@ -28,6 +28,28 @@ type UploadStatus = {
 };
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
+
+const BEDROOM_OPTIONS = [
+  { label: "Studio", value: 0 },
+  { label: "1", value: 1 },
+  { label: "2", value: 2 },
+  { label: "3", value: 3 },
+  { label: "4", value: 4 },
+  { label: "5", value: 5 },
+  { label: "6+", value: 6 },
+];
+
+type DictationField = keyof Basics | "developerDescription" | "additionalInfo";
+type BrowserSpeechRecognition = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onresult: ((event: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onerror: ((event: { error?: string }) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+};
+type BrowserSpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
 
 const emptyBasics = {
   name: "",
@@ -119,6 +141,9 @@ const DeveloperProjectWizard = () => {
   const [developerDescription, setDeveloperDescription] = useState("");
   const [developerLogoNeeded, setDeveloperLogoNeeded] = useState(false);
   const [paymentExpanded, setPaymentExpanded] = useState(false);
+  const [selectedBedrooms, setSelectedBedrooms] = useState<number[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [listeningField, setListeningField] = useState<string | null>(null);
   const [uploadStatuses, setUploadStatuses] = useState<UploadStatus[]>([]);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
@@ -186,15 +211,16 @@ const DeveloperProjectWizard = () => {
       if (draft?.extractedDeveloperName) setExtractedDeveloperName(draft.extractedDeveloperName);
       if (draft?.developerDescription) setDeveloperDescription(draft.developerDescription);
       if (typeof draft?.developerLogoNeeded === "boolean") setDeveloperLogoNeeded(draft.developerLogoNeeded);
+      if (Array.isArray(draft?.selectedBedrooms)) setSelectedBedrooms(draft.selectedBedrooms.filter((v: unknown) => typeof v === "number"));
     } catch {
       window.localStorage.removeItem(draftKey);
     }
   }, [draftKey]);
 
   useEffect(() => {
-    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() };
+    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, savedAt: new Date().toISOString() };
     try { window.localStorage.setItem(draftKey, JSON.stringify(payload)); } catch {}
-  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, draftKey]);
+  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, draftKey]);
 
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
   const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
@@ -240,6 +266,86 @@ const DeveloperProjectWizard = () => {
       return items.filter((_, i) => i !== index);
     });
     toast.success("Selected as cover and moved to the listing preview");
+  };
+
+  useEffect(() => {
+    if (selectedBedrooms.length || !basics.bedrooms_min || !basics.bedrooms_max) return;
+    const min = Number(basics.bedrooms_min);
+    const max = Number(basics.bedrooms_max);
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return;
+    const values = BEDROOM_OPTIONS.map((o) => o.value).filter((v) => v >= min && v <= max);
+    if (values.length) setSelectedBedrooms(values);
+  }, [basics.bedrooms_min, basics.bedrooms_max, selectedBedrooms.length]);
+
+  const setDictationText = (field: DictationField, text: string, append = false) => {
+    if (!text.trim()) return;
+    if (field === "developerDescription") {
+      setDeveloperDescription((prev) => append && prev ? `${prev} ${text}` : text);
+      return;
+    }
+    if (field === "additionalInfo") {
+      setAdditionalInfo((prev) => append && prev ? `${prev} ${text}` : text);
+      return;
+    }
+    setBasics((prev) => ({ ...prev, [field]: append && prev[field] ? `${prev[field]} ${text}` : text }));
+  };
+
+  const startDictation = (field: DictationField, append = false) => {
+    const win = window as typeof window & { SpeechRecognition?: BrowserSpeechRecognitionConstructor; webkitSpeechRecognition?: BrowserSpeechRecognitionConstructor };
+    const Recognition = win.SpeechRecognition || win.webkitSpeechRecognition;
+    if (!Recognition) {
+      toast.error("Microphone dictation is not available in this browser");
+      return;
+    }
+    const recognition = new Recognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+    const key = String(field);
+    setListeningField(key);
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results).map((result) => result[0]?.transcript || "").join(" ").trim();
+      setDictationText(field, transcript, append);
+      if (transcript) toast.success("Voice text added");
+    };
+    recognition.onerror = (event) => toast.error(event.error || "Microphone dictation failed");
+    recognition.onend = () => setListeningField((current) => (current === key ? null : current));
+    recognition.start();
+  };
+
+  const DictateButton = ({ field, append = false }: { field: DictationField; append?: boolean }) => {
+    const active = listeningField === String(field);
+    return (
+      <button
+        type="button"
+        onClick={() => startDictation(field, append)}
+        className={`inline-flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-[#FDFBF7] text-[#064E3B] border-[#B89555]/45 hover:bg-[#EFE6D6]"}`}
+        aria-label="Dictate field"
+        title="Dictate field"
+        data-surface={active ? "emerald" : "light"}
+      >
+        {active ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mic className="h-3.5 w-3.5" />}
+      </button>
+    );
+  };
+
+  const FieldHeader = ({ label, field, append = false }: { label: string; field: DictationField; append?: boolean }) => (
+    <div className="flex items-center justify-between gap-2">
+      <Label className="text-[#1A1A1A]">{label}</Label>
+      <DictateButton field={field} append={append} />
+    </div>
+  );
+
+  const toggleBedroom = (value: number) => {
+    setSelectedBedrooms((prev) => {
+      const next = prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value].sort((a, b) => a - b);
+      setBasics((current) => ({
+        ...current,
+        bedrooms_min: next.length ? String(Math.min(...next)) : "",
+        bedrooms_max: next.length ? String(Math.max(...next)) : "",
+      }));
+      return next;
+    });
   };
 
   const uploadFile = async (file: File, bucket = "rel-media", role: NonNullable<Uploaded["role"]> = "document") => {
@@ -417,6 +523,21 @@ const DeveloperProjectWizard = () => {
     .map((part) => part.trim())
     .filter(Boolean);
 
+  const mediaStats = useMemo(() => {
+    const imageCount = gallery.filter((g) => g.type.startsWith("image/")).length + (cover?.type.startsWith("image/") ? 1 : 0);
+    const videoCount = gallery.filter((g) => g.type.startsWith("video/")).length;
+    const documentCount = brochures.length;
+    const uploadingCount = uploadStatuses.filter((u) => u.status === "uploading").length;
+    const failedCount = uploadStatuses.filter((u) => u.status === "failed").length;
+    return { imageCount, videoCount, documentCount, uploadingCount, failedCount };
+  }, [gallery, cover, brochures.length, uploadStatuses]);
+
+  const bedroomSummary = selectedBedrooms.length
+    ? selectedBedrooms.map((value) => value === 0 ? "Studio" : value >= 6 ? "6+ BR" : `${value} BR`).join(" · ")
+    : basics.bedrooms_min || basics.bedrooms_max
+      ? `${basics.bedrooms_min || "—"} - ${basics.bedrooms_max || "—"}`
+      : "—";
+
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
     if (!text) return;
@@ -446,7 +567,7 @@ const DeveloperProjectWizard = () => {
 
   const saveDraft = () => {
     try {
-      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() }));
+      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, savedAt: new Date().toISOString() }));
       toast.success("Draft saved on this device");
     } catch {
       toast.error("Draft could not be saved on this device");
