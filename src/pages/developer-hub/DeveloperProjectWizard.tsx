@@ -415,7 +415,6 @@ const DeveloperProjectWizard = () => {
     .split(/[,;\n]+/)
     .map((part) => part.trim())
     .filter(Boolean);
-  const allMediaFiles = useMemo(() => [cover, ...gallery].filter(Boolean) as Uploaded[], [cover, gallery]);
 
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
@@ -515,30 +514,6 @@ const DeveloperProjectWizard = () => {
           <span className="relative text-white">{label}</span>
         </button>
       ))}
-    </div>
-  );
-
-  const FilePreview = ({ file }: { file: Uploaded }) => (
-    <div className="overflow-hidden rounded-md border border-[#B89555]/25 bg-[#FDFBF7]">
-      <div className="aspect-video bg-[#EFE6D6] grid place-items-center">
-        {isImageUpload(file) ? (
-          <img src={file.url} alt={file.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
-        ) : isVideoUpload(file) ? (
-          <video src={file.url} className="h-full w-full object-cover" muted playsInline controls preload="metadata" />
-        ) : (
-          <FileText className="h-8 w-8 text-[#B89555]" />
-        )}
-      </div>
-      <div className="p-2 text-xs text-[#1A1A1A]">
-        <p className="truncate font-semibold">{file.name}</p>
-        <p className="text-[#1A1A1A]/60">{formatBytes(file.size)}</p>
-      </div>
-    </div>
-  );
-
-  const UploadedList = ({ files, empty }: { files: Uploaded[]; empty: string }) => (
-    <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-      {files.length ? files.map((file) => <FilePreview key={fileKey(file)} file={file} />) : <p className="text-xs text-[#1A1A1A]/60">{empty}</p>}
     </div>
   );
 
