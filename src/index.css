@@ -32886,3 +32886,83 @@ html body [data-header-search] input {
   min-width: 0 !important;
   flex: 1 1 auto !important;
 }
+
+/* =============================================================
+   PASS 211 — HARD LOCK: filter rail pills always white text/icons.
+   Fixes leak where a broad champagne guard forced #1A1A1A on
+   .jj-filter-pill-fast descendants. Absolute-final override.
+   ============================================================= */
+html body #root .jj-filter-pill-fast,
+html body #root .jj-filter-pill-fast *,
+html body #root .jj-filter-pill-fast :where(span, p, div, small, strong, em, b, i, label, time, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]),
+html body #root button.jj-filter-pill-fast,
+html body #root button.jj-filter-pill-fast *,
+html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast,
+html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast *,
+html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body #root .jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]),
+html body #root [data-filter-clean] .jj-filter-rail button.jj-filter-pill-fast :where(svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
+/* Extend the same white-ink lock to every emerald surface primitive on
+   backend / listing pages so tags, cards, tiles, chips, and metric badges
+   stay legible. Only inks that would otherwise render dark on emerald. */
+html body #root :is(
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-bg-emerald,
+  .jj-emerald-fill,
+  .jj-emerald-chip,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-side-tile.is-active,
+  [data-surface="emerald"],
+  [data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+),
+html body #root :is(
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-bg-emerald,
+  .jj-emerald-fill,
+  .jj-emerald-chip,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-side-tile.is-active,
+  [data-surface="emerald"],
+  [data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :where(h1, h2, h3, h4, h5, h6, p, span, a, li, label, strong, em, small, time, dt, dd, th, td, figcaption, blockquote, button, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+html body #root :is(
+  .jj-pill-emerald-metallic,
+  .jj-emerald-metallic,
+  .jj-emerald-solid,
+  .jj-cta-emerald,
+  .jj-bg-emerald,
+  .jj-emerald-fill,
+  .jj-emerald-chip,
+  .jj-emerald-card,
+  .jj-tab-active-metallic,
+  .jj-side-tile.is-active,
+  [data-surface="emerald"],
+  [data-icon-tile-tone="emerald"],
+  .jj-icon-tile-emerald
+) :where(svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  stroke: #FFFFFF !important;
+}
