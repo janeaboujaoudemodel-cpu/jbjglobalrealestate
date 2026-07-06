@@ -56,7 +56,7 @@ html body #root .owner-dashboard-shell :where([data-jbj-button], button, a[role=
   max-width: 100%;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1200px) {
   html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] table,
   html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] thead,
   html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] tbody,
@@ -89,6 +89,23 @@ html body #root .owner-dashboard-shell :where([data-jbj-button], button, a[role=
   html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td:nth-child(3) > div {
     display: flex;
     flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td:nth-child(3) a {
+    flex: 1 1 min(100%, 12rem);
+    min-width: 0;
+    max-width: 100% !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-owner-batch-fix="ai-home-finder"] td:nth-child(6) button {
+    width: 100%;
+    justify-content: center;
   }
 }
 
