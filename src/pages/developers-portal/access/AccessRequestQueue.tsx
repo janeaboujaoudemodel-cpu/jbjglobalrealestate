@@ -25,10 +25,23 @@ export default function AccessRequestQueue() {
         </p>
       </header>
       <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
-        <TabsList>
-          <TabsTrigger value="applications">Rep Applications</TabsTrigger>
-          <TabsTrigger value="broker_access">Broker Access Requests</TabsTrigger>
+        <TabsList className="bg-[#FDFBF7]/80 border border-[#B89555]/30 p-1 rounded-xl gap-1">
+          <TabsTrigger
+            value="applications"
+            data-surface={tab === "applications" ? "emerald" : "champagne"}
+            className="text-[#1A1A1A] data-[state=active]:!text-white [&[data-state=active]_*]:!text-white px-4"
+          >
+            <span style={tab === "applications" ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>Rep Applications</span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="broker_access"
+            data-surface={tab === "broker_access" ? "emerald" : "champagne"}
+            className="text-[#1A1A1A] data-[state=active]:!text-white [&[data-state=active]_*]:!text-white px-4"
+          >
+            <span style={tab === "broker_access" ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>Broker Access Requests</span>
+          </TabsTrigger>
         </TabsList>
+
         <TabsContent value="applications" className="mt-4">
           <ApplicationsList />
         </TabsContent>
