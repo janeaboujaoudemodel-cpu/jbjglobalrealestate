@@ -642,9 +642,12 @@ const DeveloperProjectWizard = () => {
   const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, files = [], statusRows = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; files?: Uploaded[]; statusRows?: UploadStatus[] }) => {
     const pendingRows = statusRows.filter((row) => !files.some((file) => file.name === row.name && file.size === row.size));
     const visibleCount = files.length + pendingRows.length;
+    const pendingPreviewRows = pendingRows.slice(0, 2);
+    const filePreviewRows = files.slice(0, 4);
+    const hiddenCount = Math.max(0, visibleCount - pendingPreviewRows.length - filePreviewRows.length);
 
     return (
-    <div className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15" aria-live="polite">
+    <div data-upload-tile className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15" aria-live="polite">
       <label className="flex min-h-[122px] cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-white/45 bg-white/10 p-4 text-center transition-colors hover:bg-white/15">
         <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/12"><Icon className="h-5 w-5 text-white" /></span>
         <span className="text-sm font-semibold text-white">{title}</span>
@@ -664,14 +667,17 @@ const DeveloperProjectWizard = () => {
       </label>
       {visibleCount > 0 && (
         <div className="mt-3 space-y-2">
-          {pendingRows.map((item) => (
+          <div className="inline-flex rounded-full border border-white/25 bg-white/10 px-2.5 py-1 text-[11px] font-bold text-white">
+            {visibleCount} uploaded / in progress
+          </div>
+          {pendingPreviewRows.map((item) => (
             <div key={item.id} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
               {item.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : item.status === "uploaded" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
               <span className="min-w-0 flex-1 truncate font-semibold">{item.name}</span>
               <span className="shrink-0 text-white/75">{item.status === "uploading" ? `${item.elapsed}s` : item.status === "uploaded" ? "uploaded" : "failed"}</span>
             </div>
           ))}
-          {files.map((f) => (
+          {filePreviewRows.map((f) => (
             <div key={fileKey(f)} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
               {isImageUpload(f) ? <img src={f.url} alt="" className="h-8 w-10 rounded object-cover" /> : isVideoUpload(f) ? <Video className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
               <span className="min-w-0 flex-1 truncate">{f.name}</span>
@@ -679,6 +685,7 @@ const DeveloperProjectWizard = () => {
               <Check className="h-3.5 w-3.5" />
             </div>
           ))}
+          {hiddenCount > 0 && <div className="rounded border border-white/18 bg-white/10 p-2 text-xs font-semibold text-white">+{hiddenCount} more file{hiddenCount === 1 ? "" : "s"}</div>}
         </div>
       )}
     </div>
