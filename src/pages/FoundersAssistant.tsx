@@ -335,6 +335,7 @@ export default function FoundersAssistant() {
               <button
                 onClick={() => setShowCommandPalette(true)}
                 data-owner-neutral-control="true"
+                data-surface="champagne"
                 className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-background border border-[#B89555]/30 text-muted-foreground hover:border-[#B89555]/50 transition-all text-xs"
                 style={{ background: '#FDFBF7', color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}
               >
