@@ -120,6 +120,34 @@ function mergeExtracted(base: Record<string, unknown>, next: Record<string, unkn
   }
 }
 
+function countMention(text: string, term: string) {
+  const matches = text.toLowerCase().match(new RegExp(`\\b${term.toLowerCase()}\\b`, "g"));
+  return matches?.length || 0;
+}
+
+function applyProjectMajorityRule(finalExtracted: Record<string, unknown>, files: Array<{ name: string; role?: string; extracted: Record<string, unknown> }>) {
+  const corpus = `${JSON.stringify(files)} ${JSON.stringify(finalExtracted)}`;
+  const amra = countMention(corpus, "amra");
+  const aqua = countMention(corpus, "aqua");
+  if (amra > aqua) {
+    finalExtracted.name = "Amra";
+    const replaceWrongProject = (value: unknown) => {
+      if (typeof value !== "string") return value;
+      return value
+        .replace(/\bAqua\s+Residences?\b/gi, "Amra")
+        .replace(/\bAqua\s+Apartments?\b/gi, "Amra")
+        .replace(/\bAqua\b/gi, "Amra");
+    };
+    for (const key of ["listing_title", "short_description", "description", "payment_plan", "developer_description"] as const) {
+      finalExtracted[key] = replaceWrongProject(finalExtracted[key]);
+    }
+    if (Array.isArray(finalExtracted.key_highlights)) {
+      finalExtracted.key_highlights = finalExtracted.key_highlights.map(replaceWrongProject).filter(Boolean);
+    }
+  }
+  return finalExtracted;
+}
+
 function filePriority(file: FileRef) {
   const name = `${file.role || ""} ${file.name}`.toLowerCase();
   if (/fact|factsheet|fact sheet/.test(name)) return 0;
@@ -274,6 +302,8 @@ async function reconcileExtracted(apiKey: string, files: Array<{ name: string; r
           text: `Resolve the final project extraction from these per-file results. Return ONLY valid JSON matching the same schema.
 Rules:
 - The main project is usually in the fact sheet/brochure filename and repeated across official facts. Prefer fact_sheet/brochure roles over unrelated support documents.
+- If one project name is repeated across most uploaded documents, that majority project wins. Do not select another project name just because it appears once in a comparison, robot/tool note, footer, example, or cross-sell sentence.
+- Specifically, if Amra appears as the main/repeated project and Aqua appears only as a side mention or example, the final project name must be Amra.
 - Do not choose unrelated project names from examples or older documents.
 - If a later official fact sheet contradicts a generic/incorrect earlier name, use the fact sheet.
 - Keep rich details: full furnishing phrase, service/management phrases, payment breakdown, highlights, developer description.
@@ -348,7 +378,7 @@ Deno.serve(async (req) => {
       }, 422);
     }
 
-    const finalExtracted = await reconcileExtracted(LOVABLE_API_KEY, perFile);
+    const finalExtracted = applyProjectMajorityRule(await reconcileExtracted(LOVABLE_API_KEY, perFile), perFile);
     const developerResolution = await resolveDeveloper(req.headers.get("Authorization") ?? "", finalExtracted.developer_name, finalExtracted.developer_description);
     if (developerResolution.developer_name) finalExtracted.developer_name = developerResolution.developer_name;
 

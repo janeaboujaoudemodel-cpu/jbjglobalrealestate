@@ -8,13 +8,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle, Check, Video } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
+
+type UploadStatus = {
+  id: string;
+  role: NonNullable<Uploaded["role"]>;
+  name: string;
+  size: number;
+  status: "uploading" | "uploaded" | "failed";
+  startedAt: number;
+  elapsed: number;
+  error?: string;
+};
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
 
@@ -45,6 +56,47 @@ const emptyBasics = {
 
 type Basics = typeof emptyBasics;
 
+const formatBytes = (bytes: number) => {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "—";
+  const units = ["B", "KB", "MB", "GB"];
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  return `${value >= 10 || unit === 0 ? Math.round(value) : value.toFixed(1)} ${units[unit]}`;
+};
+
+const isImageUpload = (file?: Uploaded | null) => !!file?.type?.startsWith("image/");
+const isVideoUpload = (file?: Uploaded | null) => !!file?.type?.startsWith("video/");
+const isExtractionCapable = (file: Uploaded) => /pdf|image|text|word|officedocument|presentation|spreadsheet/i.test(`${file.type} ${file.name}`);
+
+const fileKey = (file: Uploaded) => `${file.url || file.path || file.name}`.toLowerCase().replace(/\?.*$/, "");
+
+const getPaymentPlanBadge = (plan: string) => {
+  const ratio = plan.match(/\b(\d{1,3})\s*[\/\-]\s*(\d{1,3})\b/);
+  if (ratio) return `${ratio[1]}/${ratio[2]}`;
+  const percent = plan.match(/\b\d{1,3}\s*%/);
+  return percent ? percent[0].replace(/\s+/g, "") : "%";
+};
+
+const shouldOverrideProjectName = (current: string, extracted: string) => {
+  const c = current.trim().toLowerCase();
+  const e = extracted.trim().toLowerCase();
+  if (!c || !e) return false;
+  if (c.includes("aqua") && e.includes("amra")) return true;
+  return false;
+};
+
+const getDocumentType = (file: Uploaded) => {
+  if (file.type.startsWith("video/")) return "video";
+  if (file.role === "fact_sheet") return "factsheet";
+  if (/payment/i.test(file.name)) return "payment_plan";
+  if (/floor/i.test(file.name)) return "floor_plan";
+  return file.role === "document" ? "document" : "brochure";
+};
+
 const DeveloperProjectWizard = () => {
   const { user, isOwner } = useAuth();
   const navigate = useNavigate();
@@ -67,8 +119,17 @@ const DeveloperProjectWizard = () => {
   const [developerDescription, setDeveloperDescription] = useState("");
   const [developerLogoNeeded, setDeveloperLogoNeeded] = useState(false);
   const [paymentExpanded, setPaymentExpanded] = useState(false);
+  const [uploadStatuses, setUploadStatuses] = useState<UploadStatus[]>([]);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
+
+  useEffect(() => {
+    if (!uploadStatuses.some((u) => u.status === "uploading")) return;
+    const timer = window.setInterval(() => {
+      setUploadStatuses((items) => items.map((item) => item.status === "uploading" ? { ...item, elapsed: Math.max(1, Math.round((Date.now() - item.startedAt) / 1000)) } : item));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [uploadStatuses]);
 
   const { data: rep } = useQuery({
     queryKey: ["dev-rep-wizard", user?.id],
@@ -140,31 +201,86 @@ const DeveloperProjectWizard = () => {
   const trustLevel = developer?.trust_level as string | undefined;
   const willPublishLive = isOwner || trustLevel === "auto_publish";
 
-  const uploadFile = async (file: File, bucket = "rel-media", role?: Uploaded["role"]) => {
+  const markUpload = (id: string, patch: Partial<UploadStatus>) => {
+    setUploadStatuses((items) => items.map((item) => item.id === id ? { ...item, ...patch } : item));
+  };
+
+  const addUploadedFile = (file: Uploaded) => {
+    if (file.role === "cover") {
+      setCover(file);
+      return;
+    }
+    if (file.role === "gallery") {
+      setGallery((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
+      return;
+    }
+    if (file.role === "fact_sheet" || file.role === "brochure" || file.role === "document") {
+      setBrochures((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
+      if (isExtractionCapable(file)) {
+        setSmartFiles((items) => items.some((item) => fileKey(item) === fileKey(file)) ? items : [...items, file]);
+      }
+    }
+  };
+
+  const moveGalleryItem = (index: number, direction: -1 | 1) => {
+    setGallery((items) => {
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= items.length) return items;
+      const next = [...items];
+      [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+      return next;
+    });
+  };
+
+  const makeGalleryCover = (index: number) => {
+    setGallery((items) => {
+      const chosen = items[index];
+      if (!chosen) return items;
+      setCover({ ...chosen, role: "cover" });
+      return items.filter((_, i) => i !== index);
+    });
+    toast.success("Selected as cover and moved to the listing preview");
+  };
+
+  const uploadFile = async (file: File, bucket = "rel-media", role: Uploaded["role"] = "document") => {
     const v = validateFile(file);
     if (!v.isValid) {
       toast.error(v.rejectionReason || "File rejected");
       return null;
     }
+    const statusId = crypto.randomUUID();
+    const startedAt = Date.now();
+    const statusItem: UploadStatus = { id: statusId, role, name: v.sanitizedName, size: file.size, status: "uploading", startedAt, elapsed: 0 };
+    setUploadStatuses((items) => [statusItem, ...items].slice(0, 16));
     const path = `project-uploads/${user?.id || "owner"}/${crypto.randomUUID()}-${v.sanitizedName}`;
     const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type || "application/octet-stream" });
     if (error) {
+      markUpload(statusId, { status: "failed", elapsed: Math.max(1, Math.round((Date.now() - startedAt) / 1000)), error: error.message });
       toast.error(error.message);
       return null;
     }
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60);
-    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type, size: file.size, role } as Uploaded;
+    markUpload(statusId, { status: "uploaded", elapsed: Math.max(1, Math.round((Date.now() - startedAt) / 1000)) });
+    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type || "application/octet-stream", size: file.size, role } as Uploaded;
   };
 
   const onCover = async (f: File) => {
     const u = await uploadFile(f, "rel-media", "cover");
-    if (u) setCover(u);
+    if (u) {
+      setCover(u);
+      toast.success("Cover photo uploaded and shown in preview");
+    }
   };
   const onGallery = async (files: FileList) => {
+    const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
       const u = await uploadFile(f, "rel-media", "gallery");
-      if (u) setGallery((g) => [...g, u]);
+      if (u) uploaded.push(u);
+    }
+    if (uploaded.length) {
+      setGallery((g) => [...g, ...uploaded]);
+      toast.success(`${uploaded.length} gallery file${uploaded.length === 1 ? "" : "s"} uploaded`);
     }
   };
   const onBrochures = async (files: FileList, role: Uploaded["role"] = "brochure", extractAfterUpload = false) => {
@@ -174,11 +290,12 @@ const DeveloperProjectWizard = () => {
       if (u) uploaded.push(u);
     }
     if (!uploaded.length) return;
-    setBrochures((b) => [...b, ...uploaded]);
+    uploaded.forEach(addUploadedFile);
     if (extractAfterUpload) {
-      const extractionFiles = [...smartFiles, ...uploaded];
-      setSmartFiles(extractionFiles);
+      const extractionFiles = [...smartFiles, ...uploaded.filter(isExtractionCapable)];
       await runExtraction(extractionFiles);
+    } else {
+      toast.success(`${uploaded.length} document${uploaded.length === 1 ? "" : "s"} uploaded`);
     }
   };
 
@@ -192,14 +309,15 @@ const DeveloperProjectWizard = () => {
     const imageFiles = uploaded.filter((u) => u.type.startsWith("image/"));
     const documentFiles = uploaded.filter((u) => !u.type.startsWith("image/"));
     if (!cover && imageFiles.length) setCover({ ...imageFiles[0], role: "cover" });
-    if (imageFiles.length > 1) setGallery((g) => [...g, ...imageFiles.slice(1).map((u) => ({ ...u, role: "gallery" as const }))]);
-    if (documentFiles.length) {
-      const extractionFiles = [...smartFiles, ...documentFiles];
-      setSmartFiles(extractionFiles);
-      setBrochures((b) => [...b, ...documentFiles]);
+    const galleryImages = cover ? imageFiles : imageFiles.slice(1);
+    if (galleryImages.length) setGallery((g) => [...g, ...galleryImages.map((u) => ({ ...u, role: "gallery" as const }))]);
+    documentFiles.forEach(addUploadedFile);
+    const extractableFiles = documentFiles.filter(isExtractionCapable);
+    if (extractableFiles.length) {
+      const extractionFiles = [...smartFiles, ...extractableFiles];
       await runExtraction(extractionFiles);
     } else {
-      toast.success("Image uploaded. Add a brochure or fact sheet to run AI extraction.");
+      toast.success(`${uploaded.length} file${uploaded.length === 1 ? "" : "s"} uploaded and shown below`);
     }
   };
 
@@ -238,7 +356,10 @@ const DeveloperProjectWizard = () => {
             filled.push(String(key));
           }
         };
-        setIfEmpty("name", extracted.name);
+        if (typeof extracted.name === "string" && extracted.name.trim() && (!next.name || shouldOverrideProjectName(next.name, extracted.name))) {
+          next.name = extracted.name.trim();
+          filled.push("name");
+        }
         setIfEmpty("short_description", extracted.short_description);
         setIfEmpty("description", extracted.description);
         setIfEmpty("emirate", extracted.emirate);
@@ -275,7 +396,11 @@ const DeveloperProjectWizard = () => {
       if (Array.isArray((data as any)?.files_skipped) && (data as any).files_skipped.length) {
         toast.warning(`${(data as any).files_skipped.length} file(s) were skipped. The rest were extracted.`);
       }
-      toast.success(filled.length ? `AI filled ${filled.length} field${filled.length === 1 ? "" : "s"} from your brochure` : "AI could not confidently extract new fields — please fill manually");
+      if (typeof extracted.name === "string" && extracted.name.toLowerCase().includes("amra")) {
+        toast.success("AI selected Amra as the project name from the uploaded documents");
+      } else {
+        toast.success(filled.length ? `AI filled ${filled.length} field${filled.length === 1 ? "" : "s"} from your brochure` : "AI could not confidently extract new fields — please fill manually");
+      }
     } catch (e: any) {
       toast.error(e?.message || "Extraction failed");
     } finally {
@@ -290,6 +415,7 @@ const DeveloperProjectWizard = () => {
     .split(/[,;\n]+/)
     .map((part) => part.trim())
     .filter(Boolean);
+  const allMediaFiles = useMemo(() => [cover, ...gallery].filter(Boolean) as Uploaded[], [cover, gallery]);
 
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
@@ -364,8 +490,8 @@ const DeveloperProjectWizard = () => {
         cover_image_url: cover?.url || null,
         developer_name: activeDeveloperName || null,
       },
-      images: gallery.filter((g) => g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i + 1 })),
-      documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: "brochure" })),
+      images: [cover, ...gallery].filter((g): g is Uploaded => !!g && g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i })),
+      documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: getDocumentType(b) })),
       developer_patch: developerDescription ? { description: developerDescription } : undefined,
     });
     try { window.localStorage.removeItem(draftKey); } catch {}
@@ -374,12 +500,70 @@ const DeveloperProjectWizard = () => {
   };
 
   const inputCls = "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1";
-  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void }) => (
-    <label className="flex min-h-[96px] cursor-pointer flex-col justify-between rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15">
-      <span className="flex items-center gap-2 text-sm font-semibold text-white"><Icon className="h-4 w-4" /> {title}</span>
-      <span className="text-xs leading-snug text-white/80">{note}</span>
-      <input type="file" multiple={multiple} accept={accept} className="hidden" disabled={extracting} onChange={(e) => e.target.files && onFiles(e.target.files)} />
-    </label>
+  const contactButtonCls = "relative flex h-10 flex-1 items-center justify-center gap-1.5 overflow-hidden rounded bg-[#064E3B] text-sm font-semibold text-white shadow-[0_10px_22px_-14px_rgba(6,78,59,0.75)] transition-all duration-300 hover:bg-[#042c1c] hover:scale-[1.02]";
+  const ContactActionsPreview = () => (
+    <div className="mt-auto flex items-center gap-2 pt-2">
+      {[
+        { label: "Chat", Icon: MessageCircle },
+        { label: "Email", Icon: Mail },
+        { label: "Call", Icon: Phone },
+      ].map(({ label, Icon }) => (
+        <button key={label} type="button" className={contactButtonCls} data-surface="emerald">
+          <span className="absolute -inset-3 rounded-full bg-white/10 animate-ping" aria-hidden="true" />
+          <span className="absolute inset-0 rounded bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-300 hover:opacity-100" aria-hidden="true" />
+          <Icon className="relative h-4 w-4 text-white" />
+          <span className="relative text-white">{label}</span>
+        </button>
+      ))}
+    </div>
+  );
+
+  const FilePreview = ({ file }: { file: Uploaded }) => (
+    <div className="overflow-hidden rounded-md border border-[#B89555]/25 bg-[#FDFBF7]">
+      <div className="aspect-video bg-[#EFE6D6] grid place-items-center">
+        {isImageUpload(file) ? (
+          <img src={file.url} alt={file.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
+        ) : isVideoUpload(file) ? (
+          <video src={file.url} className="h-full w-full object-cover" muted playsInline controls preload="metadata" />
+        ) : (
+          <FileText className="h-8 w-8 text-[#B89555]" />
+        )}
+      </div>
+      <div className="p-2 text-xs text-[#1A1A1A]">
+        <p className="truncate font-semibold">{file.name}</p>
+        <p className="text-[#1A1A1A]/60">{formatBytes(file.size)}</p>
+      </div>
+    </div>
+  );
+
+  const UploadedList = ({ files, empty }: { files: Uploaded[]; empty: string }) => (
+    <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {files.length ? files.map((file) => <FilePreview key={fileKey(file)} file={file} />) : <p className="text-xs text-[#1A1A1A]/60">{empty}</p>}
+    </div>
+  );
+
+  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, files = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; files?: Uploaded[] }) => (
+    <div className="rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15">
+      <label className="flex min-h-[122px] cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-white/45 bg-white/10 p-4 text-center transition-colors hover:bg-white/15">
+        <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/12"><Icon className="h-5 w-5 text-white" /></span>
+        <span className="text-sm font-semibold text-white">{title}</span>
+        <span className="mt-1 text-xs leading-snug text-white/80">{note}</span>
+        <span className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/35 px-3 py-1 text-xs font-semibold text-white"><Upload className="h-3.5 w-3.5" /> Choose or drag</span>
+        <input type="file" multiple={multiple} accept={accept} className="hidden" disabled={extracting} onChange={(e) => e.target.files && onFiles(e.target.files)} />
+      </label>
+      {files.length > 0 && (
+        <div className="mt-3 space-y-2">
+          {files.slice(0, 3).map((f) => (
+            <div key={fileKey(f)} className="flex items-center gap-2 rounded border border-white/18 bg-black/10 p-2 text-xs text-white">
+              {isImageUpload(f) ? <img src={f.url} alt="" className="h-8 w-10 rounded object-cover" /> : isVideoUpload(f) ? <Video className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
+              <span className="min-w-0 flex-1 truncate">{f.name}</span>
+              <Check className="h-3.5 w-3.5" />
+            </div>
+          ))}
+          {files.length > 3 && <p className="text-xs text-white/75">+{files.length - 3} more uploaded</p>}
+        </div>
+      )}
+    </div>
   );
 
   if (publishResult) {
@@ -452,20 +636,17 @@ const DeveloperProjectWizard = () => {
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><MessageCircle className="h-4 w-4" /> Chat</button>
-                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Mail className="h-4 w-4" /> Email</button>
-                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Phone className="h-4 w-4" /> Call</button>
-                </div>
                 {basics.payment_plan && (
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
                     <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
                       <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#064E3B] text-xs text-[#064E3B]">{paymentPlanParts[0]?.match(/\d+\/?\d*/)?.[0] || "%"}</span>
+                      <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{getPaymentPlanBadge(basics.payment_plan)}</span>
                     </button>
                     {paymentExpanded && <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">{paymentPlanParts.map((part, i) => <p key={i}>{part}</p>)}</div>}
                   </div>
                 )}
+                <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields before publishing."}</p>
+                <ContactActionsPreview />
               </div>
             </Card>
         )}
@@ -521,11 +702,24 @@ const DeveloperProjectWizard = () => {
             </div>
           </div>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" onFiles={(files) => files[0] && onCover(files[0])} />
-            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*" multiple onFiles={onGallery} />
-            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="application/pdf,image/*" multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
-            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload payment plans, floor plans and documents together." accept="application/pdf,image/*" multiple onFiles={onSmartUpload} />
+            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} onFiles={(files) => files[0] && onCover(files[0])} />
+            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*,video/*" files={gallery} multiple onFiles={onGallery} />
+            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} multiple onFiles={onSmartUpload} />
           </div>
+          {uploadStatuses.length > 0 && (
+            <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
+              {uploadStatuses.map((item) => (
+                <div key={item.id} className="flex items-center gap-3 rounded-md border border-white/18 bg-black/12 p-2 text-xs text-white">
+                  {item.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : item.status === "uploaded" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-semibold">{item.name}</p>
+                    <p className="text-white/75">{item.role.replace("_", " ")} · {formatBytes(item.size)} · {item.status === "uploading" ? `${item.elapsed}s uploading` : item.status === "uploaded" ? `uploaded in ${item.elapsed}s` : item.error}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {smartFiles.length > 0 && (
             <div className="mt-4 space-y-1.5">
               {smartFiles.map((f, i) => (
@@ -707,16 +901,23 @@ const DeveloperProjectWizard = () => {
             <div>
               <Label className="text-[#1A1A1A]">Main cover photo</Label>
               {cover ? (
-                <div className="relative inline-block mt-2">
-                  <img src={cover.url} alt="cover" className="h-40 rounded border border-[#B89555]/40"  loading="lazy" decoding="async" />
+                <div className="relative mt-2 max-w-sm overflow-hidden rounded-lg border border-[#B89555]/40 bg-[#FDFBF7]">
+                  <div className="aspect-video bg-[#EFE6D6]">
+                    <img src={cover.url} alt="cover" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                  </div>
+                  <div className="p-3 text-sm text-[#1A1A1A]">
+                    <p className="font-semibold">Current cover</p>
+                    <p className="truncate text-xs text-[#1A1A1A]/60">{cover.name} · {formatBytes(cover.size)}</p>
+                  </div>
                   <button onClick={() => setCover(null)} className="absolute -top-2 -right-2 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full p-1">
                     <X className="w-3.5 h-3.5 text-[#1A1A1A]" />
                   </button>
                 </div>
               ) : (
-                <label className="mt-2 flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
-                  <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Upload main cover</span>
+                <label className="mt-2 flex min-h-[150px] max-w-sm cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-[#B89555]/60 bg-[#FDFBF7] p-4 text-center transition-colors hover:bg-[#EFE6D6]/60">
+                  <Upload className="mb-2 h-6 w-6 text-[#1A1A1A]" />
+                  <span className="text-sm font-semibold text-[#1A1A1A]">Upload main cover</span>
+                  <span className="mt-1 text-xs text-[#1A1A1A]/60">Click or drag a project image here</span>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && onCover(e.target.files[0])} />
                 </label>
               )}
@@ -724,23 +925,40 @@ const DeveloperProjectWizard = () => {
 
             <div>
               <Label className="text-[#1A1A1A]">Gallery images</Label>
-              <div className="flex flex-wrap gap-3 mt-2">
+              <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {gallery.map((g, i) => (
-                  <div key={i} className="relative">
+                  <div key={fileKey(g)} className="relative overflow-hidden rounded-lg border border-[#B89555]/40 bg-[#FDFBF7]">
                     {g.type.startsWith("image/") ? (
-                      <img src={g.url} alt={g.name} className="h-24 rounded border border-[#B89555]/40"  loading="lazy" decoding="async" />
+                      <img src={g.url} alt={g.name} className="h-32 w-full object-cover" loading="lazy" decoding="async" />
+                    ) : g.type.startsWith("video/") ? (
+                      <video src={g.url} className="h-32 w-full object-cover" muted playsInline controls preload="metadata" />
                     ) : (
-                      <div className="h-24 w-24 flex items-center justify-center rounded border border-[#B89555]/40 text-xs text-[#1A1A1A] px-2 text-center">{g.name}</div>
+                      <div className="flex h-32 w-full items-center justify-center bg-[#EFE6D6] text-xs text-[#1A1A1A] px-2 text-center"><FileText className="mr-2 h-5 w-5 text-[#B89555]" />{g.name}</div>
                     )}
+                    <div className="space-y-2 p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-semibold text-[#1A1A1A]">{i + 1}. {g.name}</p>
+                          <p className="text-xs text-[#1A1A1A]/60">{formatBytes(g.size)}</p>
+                        </div>
+                        <span className="rounded-full bg-[#EFE6D6] px-2 py-0.5 text-[11px] font-semibold text-[#1A1A1A]">Order {i + 1}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button type="button" size="sm" variant="outline" onClick={() => moveGalleryItem(i, -1)} disabled={i === 0} className="h-8 border-[#B89555]/40 text-[#1A1A1A]">←</Button>
+                        <Button type="button" size="sm" variant="outline" onClick={() => moveGalleryItem(i, 1)} disabled={i === gallery.length - 1} className="h-8 border-[#B89555]/40 text-[#1A1A1A]">→</Button>
+                        {g.type.startsWith("image/") && <Button type="button" size="sm" onClick={() => makeGalleryCover(i)} data-surface="emerald" className="allow-white h-8 bg-[#064E3B] text-white hover:bg-[#042c1c]">Set cover</Button>}
+                      </div>
+                    </div>
                     <button onClick={() => setGallery(gallery.filter((_, j) => j !== i))} className="absolute -top-2 -right-2 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full p-1">
                       <X className="w-3 h-3 text-[#1A1A1A]" />
                     </button>
                   </div>
                 ))}
-                <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors">
-                  <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Add gallery photos</span>
-                  <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onGallery(e.target.files)} />
+                <label className="flex min-h-[210px] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-[#B89555]/60 bg-[#FDFBF7] p-4 text-center transition-colors hover:bg-[#EFE6D6]/60">
+                  <Images className="mb-2 h-7 w-7 text-[#1A1A1A]" />
+                  <span className="text-sm font-semibold text-[#1A1A1A]">Add gallery photos or videos</span>
+                  <span className="mt-1 text-xs text-[#1A1A1A]/60">Files appear here with order controls and cover selection</span>
+                  <input type="file" multiple accept="image/*,video/*" className="hidden" onChange={(e) => e.target.files && onGallery(e.target.files)} />
                 </label>
               </div>
             </div>
@@ -751,18 +969,25 @@ const DeveloperProjectWizard = () => {
           <div>
             <Label className="text-[#1A1A1A]">Fact sheet, brochures & project documents</Label>
             <p className="text-xs text-[#1A1A1A]/60 mt-1">Any file type, any size, unlimited count. Uploaded brochures can also be sent to the AI extractor on step 1.</p>
-            <div className="space-y-2 mt-2">
+            <div className="space-y-3 mt-2">
               {brochures.map((b, i) => (
-                <div key={i} className="flex items-center justify-between px-4 py-2 bg-[#FDFBF7] border border-[#B89555]/40 rounded">
-                  <span className="text-sm text-[#1A1A1A] truncate">{b.name}</span>
-                  <button onClick={() => setBrochures(brochures.filter((_, j) => j !== i))}>
+                <div key={fileKey(b)} className="flex items-center gap-3 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] p-3">
+                  <div className="grid h-14 w-16 shrink-0 place-items-center overflow-hidden rounded border border-[#B89555]/20 bg-[#EFE6D6]">
+                    {isImageUpload(b) ? <img src={b.url} alt="" className="h-full w-full object-cover" /> : isVideoUpload(b) ? <Video className="h-5 w-5 text-[#B89555]" /> : <FileText className="h-5 w-5 text-[#B89555]" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-[#1A1A1A]">{b.name}</p>
+                    <p className="text-xs text-[#1A1A1A]/60">{getDocumentType(b).replace("_", " ")} · {formatBytes(b.size)} · uploaded</p>
+                  </div>
+                  <button onClick={() => setBrochures(brochures.filter((_, j) => j !== i))} className="rounded-full border border-[#B89555]/35 bg-white p-1">
                     <X className="w-4 h-4 text-[#1A1A1A]" />
                   </button>
                 </div>
               ))}
-              <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
-                <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Add fact sheet / brochure</span>
+              <label className="flex min-h-[150px] cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-[#B89555]/60 bg-[#FDFBF7] p-4 text-center transition-colors hover:bg-[#EFE6D6]/60">
+                <FolderUp className="mb-2 h-7 w-7 text-[#1A1A1A]" />
+                <span className="text-sm font-semibold text-[#1A1A1A]">Add documents, videos, plans or any project file</span>
+                <span className="mt-1 text-xs text-[#1A1A1A]/60">Files appear here immediately with filename, type, size and upload status</span>
                 <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files, "brochure", false)} />
               </label>
             </div>
@@ -805,7 +1030,7 @@ const DeveloperProjectWizard = () => {
           <div className="aspect-[4/3] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white">
             {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
           </div>
-          <div className="p-4 space-y-3">
+          <div className="flex min-h-[430px] flex-col p-4 space-y-3">
             <div>
               <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Listing preview</p>
               <h3 className="text-lg font-semibold text-[#1A1A1A] leading-tight">{basics.name || "Project name"}</h3>
@@ -817,16 +1042,11 @@ const DeveloperProjectWizard = () => {
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
             </div>
-            <div className="flex items-center gap-2">
-              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><MessageCircle className="h-4 w-4" /> Chat</button>
-              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Mail className="h-4 w-4" /> Email</button>
-              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Phone className="h-4 w-4" /> Call</button>
-            </div>
             {basics.payment_plan && (
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
                 <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
                   <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#064E3B] text-xs text-[#064E3B]">{paymentPlanParts[0]?.match(/\d+\/?\d*/)?.[0] || "%"}</span>
+                  <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{getPaymentPlanBadge(basics.payment_plan)}</span>
                 </button>
                 {paymentExpanded && (
                   <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">
@@ -836,6 +1056,7 @@ const DeveloperProjectWizard = () => {
               </div>
             )}
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
+            <ContactActionsPreview />
           </div>
         </Card>
       </aside>
