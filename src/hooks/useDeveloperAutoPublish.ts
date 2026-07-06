@@ -47,6 +47,15 @@ export function useDeveloperAutoPublish() {
         toast.success("Published live");
       } else if (data.status === "saved_preview") {
         toast.success("Owner preview saved");
+      } else if (data.status === "enriched") {
+        const n = data.changed_keys?.length ?? 0;
+        const im = data.images_added ?? 0;
+        const dc = data.documents_added ?? 0;
+        toast.success(
+          n + im + dc === 0
+            ? "Already up to date — no new data to merge"
+            : `Enriched: ${n} field${n === 1 ? "" : "s"}, ${im} image${im === 1 ? "" : "s"}, ${dc} doc${dc === 1 ? "" : "s"}`
+        );
       } else {
         toast.info("Submitted for owner review");
       }
