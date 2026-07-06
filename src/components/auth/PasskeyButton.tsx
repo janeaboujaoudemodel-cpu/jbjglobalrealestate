@@ -37,7 +37,7 @@ export function PasskeyButton({ onSuccess, className }: Props) {
       const msg = (e as Error).message || 'Passkey sign-in failed';
       // NotAllowedError = user cancelled the OS prompt — stay silent.
       if (!/NotAllowedError|abort|cancel/i.test(msg)) toast.error(msg, {
-        description: /No passkeys/i.test(msg) ? 'Sign in with email once, then add a passkey from your account security page.' : undefined,
+        description: /No passkeys/i.test(msg) ? 'Sign in with email once; your device will be asked to create the passkey before the next sign-in.' : undefined,
       });
     } finally {
       setBusy(false);

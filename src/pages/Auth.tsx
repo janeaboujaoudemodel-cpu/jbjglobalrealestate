@@ -238,6 +238,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             }
           } else {
             toast.success("Welcome back!");
+            await offerPasskeyUpgrade();
             // Honor ?returnTo (canonical), ?redirect (legacy alias), or the
             // sessionStorage backup written by AuthRequiredRoute/BrokerGuard
             // before bouncing here. The backup survives OAuth round-trips that
@@ -428,9 +429,18 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const offerPasskeyUpgrade = async () => {
     if (!isPasskeySupported()) return;
     try {
-      const alreadyAsked = localStorage.getItem("jbj_passkey_upgrade_prompted") === "true";
-      if (alreadyAsked) return;
-      localStorage.setItem("jbj_passkey_upgrade_prompted", "true");
+      const enrolledOnThisBrowser = localStorage.getItem("jbj_passkey_enrolled") === "true";
+      if (enrolledOnThisBrowser) return;
+
+      const { data: existing } = await supabase
+        .from("user_passkeys")
+        .select("id")
+        .limit(1);
+      if (existing && existing.length > 0) {
+        localStorage.setItem("jbj_passkey_enrolled", "true");
+        return;
+      }
+
       const label = typeof navigator !== "undefined" && /iPhone|iPad/.test(navigator.userAgent)
         ? "iPhone / iPad (Face ID)"
         : /Mac/.test(navigator.userAgent) ? "Mac (Touch ID)"
@@ -438,6 +448,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
         : /Android/.test(navigator.userAgent) ? "Android biometrics"
         : "This device";
       await registerPasskey(label);
+      localStorage.setItem("jbj_passkey_enrolled", "true");
       toast.success("Passkey added for next sign-in");
     } catch (err) {
       const msg = (err as Error).message || "Passkey setup skipped";
@@ -679,14 +690,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             </form>
           ) : (
             /* ─── Standard Form ─────────────────────────────── */
-            <form onSubmit={async (e) => {
-              const wasSignin = mode === "signin";
-              await handleSubmit(e);
-              if (wasSignin && email && password) {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session?.user) void offerPasskeyUpgrade();
-              }
-            }} className="jj-auth-form space-y-4" autoComplete="on">
+            <form onSubmit={handleSubmit} className="jj-auth-form space-y-4" autoComplete="on">
               {/* Email field — shown on signin, signup, forgot, otp-login */}
               {["signin", "signup", "forgot", "otp-login"].includes(mode) && (
                 <div className="space-y-2">
