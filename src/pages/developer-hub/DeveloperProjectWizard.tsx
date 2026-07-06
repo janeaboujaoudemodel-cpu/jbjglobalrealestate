@@ -915,7 +915,7 @@ const DeveloperProjectWizard = () => {
             <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} statusRows={uploadStatuses.filter((u) => u.role === "cover")} onFiles={(files) => files[0] && onCover(files[0])} />
             <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*,video/*" files={gallery} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
             <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} statusRows={uploadStatuses.filter((u) => u.role === "fact_sheet" || u.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
-            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} statusRows={uploadStatuses.filter((u) => u.role === "document")} multiple onFiles={onSmartUpload} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document" || b.role === "floor_plan" || b.role === "payment_plan")} statusRows={uploadStatuses.filter((u) => u.role === "document" || u.role === "floor_plan" || u.role === "payment_plan")} multiple onFiles={onSmartUpload} />
           </div>
           {uploadStatuses.length > 0 && (
             <div data-upload-summary className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
@@ -1118,7 +1118,7 @@ const DeveloperProjectWizard = () => {
               {cover ? (
                 <div className="relative mt-2 max-w-sm overflow-hidden rounded-lg border border-[#B89555]/40 bg-[#FDFBF7]">
                   <div className="aspect-video bg-[#EFE6D6]">
-                    <img src={cover.url} alt="cover" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                    <SafeImage src={cover.url} alt="cover" className="h-full w-full object-cover" loading="lazy" decoding="async" />
                   </div>
                   <div className="p-3 text-sm text-[#1A1A1A]">
                     <p className="font-semibold">Current cover</p>
@@ -1144,7 +1144,7 @@ const DeveloperProjectWizard = () => {
                 {gallery.map((g, i) => (
                   <div key={fileKey(g)} className="relative overflow-hidden rounded-lg border border-[#B89555]/40 bg-[#FDFBF7]">
                     {g.type.startsWith("image/") ? (
-                      <img src={g.url} alt={g.name} className="h-32 w-full object-cover" loading="lazy" decoding="async" />
+                      <SafeImage src={g.url} alt={g.name} className="h-32 w-full object-cover" loading="lazy" decoding="async" />
                     ) : g.type.startsWith("video/") ? (
                       <video src={g.url} className="h-32 w-full object-cover" muted playsInline controls preload="metadata" />
                     ) : (
@@ -1188,7 +1188,7 @@ const DeveloperProjectWizard = () => {
               {brochures.map((b, i) => (
                 <div key={fileKey(b)} className="flex items-center gap-3 rounded-lg border border-[#B89555]/40 bg-[#FDFBF7] p-3">
                   <div className="grid h-14 w-16 shrink-0 place-items-center overflow-hidden rounded border border-[#B89555]/20 bg-[#EFE6D6]">
-                    {isImageUpload(b) ? <img src={b.url} alt="" className="h-full w-full object-cover" /> : isVideoUpload(b) ? <Video className="h-5 w-5 text-[#B89555]" /> : <FileText className="h-5 w-5 text-[#B89555]" />}
+                    {isImageUpload(b) ? <SafeImage src={b.url} alt="" className="h-full w-full object-cover" /> : isVideoUpload(b) ? <Video className="h-5 w-5 text-[#B89555]" /> : <FileText className="h-5 w-5 text-[#B89555]" />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-[#1A1A1A]">{b.name}</p>
@@ -1243,13 +1243,13 @@ const DeveloperProjectWizard = () => {
       <aside className="space-y-4 min-w-0">
         <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7]">
           <div className="aspect-[4/3] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white">
-            {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
+            {cover?.url ? <SafeImage src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
           </div>
           {gallery.length > 0 && (
             <div className="grid grid-cols-4 gap-1 border-b border-[#B89555]/25 bg-[#EFE6D6] p-1">
               {gallery.slice(0, 4).map((item) => (
                 <div key={fileKey(item)} className="aspect-square overflow-hidden rounded bg-[#FDFBF7]">
-                  {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />}
+                  {item.type.startsWith("image/") ? <SafeImage src={item.url} alt={item.name} className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />}
                 </div>
               ))}
             </div>
@@ -1266,19 +1266,7 @@ const DeveloperProjectWizard = () => {
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{bedroomSummary}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Media</span>{mediaStats.imageCount} photos · {mediaStats.videoCount} videos</div>
             </div>
-            {basics.payment_plan && (
-              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
-                <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
-                  <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
-                  <span className="flex h-10 min-w-12 items-center justify-center rounded-full border border-[#064E3B] px-2 text-xs font-bold leading-none text-[#064E3B]">{getPaymentPlanBadge(basics.payment_plan)}</span>
-                </button>
-                {paymentExpanded && (
-                  <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">
-                    {paymentPlanParts.length ? paymentPlanParts.map((part, i) => <p key={i}>{part}</p>) : <p>{basics.payment_plan}</p>}
-                  </div>
-                )}
-              </div>
-            )}
+            <PaymentPreview compact />
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
             <Button type="button" variant="outline" onClick={() => setPreviewOpen(true)} className="border-[#B89555]/40 text-[#1A1A1A]">
               <Maximize2 className="mr-2 h-4 w-4" /> Open full preview
@@ -1300,14 +1288,14 @@ const DeveloperProjectWizard = () => {
               <button type="button" onClick={() => setPreviewOpen(false)} className="rounded-full border border-[#B89555]/40 bg-white p-2"><X className="h-4 w-4 text-[#1A1A1A]" /></button>
             </div>
             <div className="aspect-[16/7] bg-[#064E3B]">
-              {cover?.url ? <img src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
+              {cover?.url ? <SafeImage src={cover.url} alt="Project cover" className="h-full w-full object-cover" /> : <div className="grid h-full place-items-center"><Building2 className="h-16 w-16 text-white" /></div>}
             </div>
             {gallery.length > 0 && (
               <div className="grid grid-cols-2 gap-2 p-4 md:grid-cols-4">
                 {gallery.map((item) => (
                   <div key={fileKey(item)} className="overflow-hidden rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
                     <div className="aspect-video bg-[#EFE6D6]">
-                      {item.type.startsWith("image/") ? <img src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
+                      {item.type.startsWith("image/") ? <SafeImage src={item.url} alt={item.name} className="h-full w-full object-cover" /> : <video src={item.url} className="h-full w-full object-cover" controls playsInline preload="metadata" />}
                     </div>
                     <p className="truncate px-2 py-1 text-xs font-semibold text-[#1A1A1A]">{item.name}</p>
                   </div>
