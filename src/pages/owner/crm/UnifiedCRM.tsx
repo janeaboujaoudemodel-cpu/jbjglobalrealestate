@@ -554,16 +554,18 @@ export default function UnifiedCRM() {
                 {it.label}
                 {c !== null && c > 0 && (
                   <span
-                    className={[
-                      "ml-1 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-extrabold tabular-nums",
+                    data-no-contrast-guard
+                    className="ml-1 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[10px] font-extrabold tabular-nums"
+                    style={
                       active
-                        ? "!bg-white !text-[#064E3B] border border-white shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
-                        : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30",
-                    ].join(" ")}
+                        ? { background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", border: "1px solid #FFFFFF", boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }
+                        : { background: "#EFE6D6", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", border: "1px solid rgba(184,149,85,0.35)" }
+                    }
                   >
                     {fmt(c)}
                   </span>
                 )}
+
 
               </button>
             );
