@@ -68,9 +68,11 @@ Deno.serve(async (req) => {
       transports: c.transports as AuthenticatorTransport[] | undefined,
     })),
     authenticatorSelection: {
-      residentKey: 'preferred',
+      residentKey: 'required',
+      requireResidentKey: true,
       userVerification: 'preferred',
     },
+    preferredAuthenticatorType: 'localDevice',
   });
 
   // Persist challenge (5 min TTL via default).

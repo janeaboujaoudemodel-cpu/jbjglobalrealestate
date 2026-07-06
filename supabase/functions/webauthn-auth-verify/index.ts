@@ -8,6 +8,22 @@ import { z } from 'npm:zod@3';
 
 const BodySchema = z.object({ response: z.any() });
 
+function pgByteaToUint8Array(value: unknown): Uint8Array {
+  if (value instanceof Uint8Array) return value;
+  if (Array.isArray(value)) return new Uint8Array(value as number[]);
+  if (typeof value === 'string') {
+    const normalized = value.startsWith('\\x') ? value.slice(2) : value;
+    if (/^[0-9a-fA-F]+$/.test(normalized) && normalized.length % 2 === 0) {
+      const bytes = new Uint8Array(normalized.length / 2);
+      for (let i = 0; i < normalized.length; i += 2) bytes[i / 2] = parseInt(normalized.slice(i, i + 2), 16);
+      return bytes;
+    }
+    const binary = atob(value);
+    return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  }
+  throw new Error('Invalid stored passkey public key');
+}
+
 function rpIdFromOrigin(origin: string | null): string {
   if (!origin) return 'localhost';
   try {
@@ -78,6 +94,7 @@ Deno.serve(async (req) => {
 
   let verification;
   try {
+    const publicKey = pgByteaToUint8Array(cred.public_key);
     verification = await verifyAuthenticationResponse({
       response,
       expectedChallenge: challengeRow.challenge,
@@ -85,7 +102,7 @@ Deno.serve(async (req) => {
       expectedRPID: rpID,
       credential: {
         id: cred.credential_id,
-        publicKey: cred.public_key as Uint8Array,
+        publicKey,
         counter: Number(cred.counter),
         transports: (cred.transports ?? []) as AuthenticatorTransport[],
       },

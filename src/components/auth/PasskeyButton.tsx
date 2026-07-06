@@ -36,7 +36,9 @@ export function PasskeyButton({ onSuccess, className }: Props) {
     } catch (e) {
       const msg = (e as Error).message || 'Passkey sign-in failed';
       // NotAllowedError = user cancelled the OS prompt — stay silent.
-      if (!/NotAllowedError|abort|cancel/i.test(msg)) toast.error(msg);
+      if (!/NotAllowedError|abort|cancel/i.test(msg)) toast.error(msg, {
+        description: /No passkeys/i.test(msg) ? 'Sign in with email once, then add a passkey from your account security page.' : undefined,
+      });
     } finally {
       setBusy(false);
     }
@@ -53,7 +55,7 @@ export function PasskeyButton({ onSuccess, className }: Props) {
       data-emerald-action="true"
       aria-label="Continue with passkey"
       className={[
-        'jj-passkey-cta jj-cta-emerald jj-emerald-metallic allow-white group relative w-full overflow-hidden rounded-xl',
+        'jj-passkey-cta jj-cta-emerald allow-white group relative w-full overflow-hidden rounded-xl',
         'flex items-center justify-center gap-3 h-12 px-6',
         'text-white font-semibold text-[15px] tracking-wide',
         'shadow-[0_10px_30px_-12px_rgba(6,78,59,0.65)]',

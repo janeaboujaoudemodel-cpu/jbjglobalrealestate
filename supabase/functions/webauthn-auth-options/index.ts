@@ -24,6 +24,24 @@ Deno.serve(async (req) => {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   );
 
+  const { count, error: countError } = await admin
+    .from('user_passkeys')
+    .select('id', { count: 'exact', head: true });
+
+  if (countError) {
+    return new Response(JSON.stringify({ error: 'Passkey service unavailable' }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (!count) {
+    return new Response(JSON.stringify({ error: 'No passkeys are set up yet' }), {
+      status: 409,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   const options = await generateAuthenticationOptions({
     rpID,
     userVerification: 'preferred',
