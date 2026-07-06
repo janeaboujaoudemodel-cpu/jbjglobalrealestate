@@ -613,11 +613,12 @@ export default function UnifiedCRM() {
                     {c !== null && c > 0 && (
                       <span
                         className={[
-                           "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-semibold tabular-nums",
+                           "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-extrabold tabular-nums",
                           active
-                            ? "!bg-white/20 !text-white !border !border-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
-                            : "bg-[#EFE6D6] text-[#1A1A1A]/80 border border-[#B89555]/25",
+                            ? "!bg-white !text-[#064E3B] !border !border-white shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
+                            : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30",
                         ].join(" ")}
+
                       >
                         {fmt(c)}
                       </span>
