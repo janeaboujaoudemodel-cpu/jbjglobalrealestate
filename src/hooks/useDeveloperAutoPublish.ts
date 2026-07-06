@@ -5,14 +5,15 @@ import { toast } from "sonner";
 export interface AutoPublishPayload {
   developer_id: string;
   project_id?: string | null;
+  publish_live?: boolean;
   patch: Record<string, unknown>;
   images?: Array<{ image_url: string; alt_text?: string; display_order?: number }>;
-  documents?: Array<{ file_url: string; file_name: string; document_type?: string }>;
+  documents?: Array<{ file_url: string; file_name: string; document_type?: string; file_size?: number | null; storage_path?: string | null; cover_image_url?: string | null; display_title?: string | null }>;
   developer_patch?: { description?: string; logo_url?: string; website?: string };
 }
 
 export interface AutoPublishResponse {
-  status: "published" | "queued_for_review";
+  status: "published" | "queued_for_review" | "saved_preview";
   project_id?: string;
   slug?: string | null;
   public_path?: string | null;
@@ -38,6 +39,8 @@ export function useDeveloperAutoPublish() {
     onSuccess: (data) => {
       if (data.status === "published") {
         toast.success("Published live");
+      } else if (data.status === "saved_preview") {
+        toast.success("Owner preview saved");
       } else {
         toast.info("Submitted for owner review");
       }
