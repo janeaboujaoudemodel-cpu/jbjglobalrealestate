@@ -267,7 +267,7 @@ export default function OwnerInbox() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <div className="container mx-auto px-4 py-6 max-w-7xl">
+        <div className="container mx-auto px-4 py-6 max-w-6xl" data-owner-batch-fix="inbox">
           {/* Header */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -275,7 +275,7 @@ export default function OwnerInbox() {
             className="mb-6"
           >
             <div className="flex items-center justify-between flex-wrap gap-4 bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89555]/20 rounded-2xl p-4 shadow-sm">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 min-w-0">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-[#B89555]/30">
                   <MessageSquare className="h-6 w-6 text-[#1A1A1A]" />
                 </div>
@@ -285,7 +285,7 @@ export default function OwnerInbox() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 flex-wrap justify-end">
                 <Button
                   variant="outline"
                   size="sm"
@@ -300,7 +300,7 @@ export default function OwnerInbox() {
                     refetchThreads();
                   }}
                   disabled={threadsLoading}
-                  className="border-[#B89555]/30"
+                  className="border-[#B89555]/30 whitespace-nowrap min-w-[112px]"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${threadsLoading ? 'animate-spin' : ''}`} />
                   Refresh
@@ -454,9 +454,9 @@ export default function OwnerInbox() {
           />
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[600px]" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
+          <div className="grid grid-cols-1 xl:grid-cols-[minmax(280px,400px)_minmax(0,1fr)] gap-4 min-h-[600px] max-w-full" style={{ height: 'min(calc(100vh - 360px), 900px)' }}>
             {/* Thread List */}
-            <div className="lg:col-span-1 min-h-0 overflow-hidden">
+            <div className="min-h-0 min-w-0 overflow-hidden">
               <Card className="border border-[#B89555]/20 bg-[#FDFBF7]/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
                 <ScrollArea className="h-full">
                   {threadsLoading ? (
@@ -505,7 +505,7 @@ export default function OwnerInbox() {
             </div>
 
             {/* Thread Detail */}
-            <div className="lg:col-span-2 min-h-0 overflow-hidden">
+            <div className="min-h-0 min-w-0 overflow-hidden">
               {selectedThread ? (
                 <OwnerInboxThread
                   thread={selectedThread}
