@@ -10,7 +10,9 @@ const RP_NAME = 'JBJ Global Real Estate';
 function rpIdFromOrigin(origin: string | null): string {
   if (!origin) return 'localhost';
   try {
-    return new URL(origin).hostname;
+    const hostname = new URL(origin).hostname.toLowerCase();
+    if (hostname === 'jbj.ae' || hostname === 'www.jbj.ae') return 'jbj.ae';
+    return hostname;
   } catch {
     return 'localhost';
   }
