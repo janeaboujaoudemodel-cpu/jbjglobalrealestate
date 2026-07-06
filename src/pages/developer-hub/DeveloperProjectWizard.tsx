@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,20 +8,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Uploaded { url: string; name: string; type: string; size: number }
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
 
 const DeveloperProjectWizard = () => {
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const publish = useDeveloperAutoPublish();
   const [step, setStep] = useState(0);
+  const [selectedDeveloperId, setSelectedDeveloperId] = useState("");
 
   const [basics, setBasics] = useState({
     name: "",
@@ -39,6 +42,8 @@ const DeveloperProjectWizard = () => {
   const [cover, setCover] = useState<Uploaded | null>(null);
   const [gallery, setGallery] = useState<Uploaded[]>([]);
   const [brochures, setBrochures] = useState<Uploaded[]>([]);
+  const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
+  const ownerRoute = location.pathname.startsWith("/owner");
 
   const { data: rep } = useQuery({
     queryKey: ["dev-rep-wizard", user?.id],
@@ -66,17 +71,54 @@ const DeveloperProjectWizard = () => {
     enabled: !!rep?.current_developer_id,
   });
 
-  const trustLevel = developer?.trust_level as string | undefined;
-  const willPublishLive = trustLevel === "auto_publish";
+  const { data: ownerDevelopers = [] } = useQuery({
+    queryKey: ["owner-project-wizard-developers", isOwner],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developers")
+        .select("id, name")
+        .order("name", { ascending: true })
+        .limit(500);
+      if (error) throw error;
+      return (data || []) as Array<{ id: string; name: string }>;
+    },
+    enabled: !!isOwner,
+  });
 
-  const uploadFile = async (file: File, bucket = "project-media") => {
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(draftKey);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      if (draft?.basics) setBasics((s) => ({ ...s, ...draft.basics }));
+      if (typeof draft?.step === "number") setStep(Math.max(0, Math.min(STEPS.length - 1, draft.step)));
+      if (draft?.cover) setCover(draft.cover);
+      if (Array.isArray(draft?.gallery)) setGallery(draft.gallery);
+      if (Array.isArray(draft?.brochures)) setBrochures(draft.brochures);
+      if (draft?.selectedDeveloperId) setSelectedDeveloperId(draft.selectedDeveloperId);
+    } catch {
+      window.localStorage.removeItem(draftKey);
+    }
+  }, [draftKey]);
+
+  useEffect(() => {
+    const payload = { basics, step, cover, gallery, brochures, selectedDeveloperId, savedAt: new Date().toISOString() };
+    try { window.localStorage.setItem(draftKey, JSON.stringify(payload)); } catch {}
+  }, [basics, step, cover, gallery, brochures, selectedDeveloperId, draftKey]);
+
+  const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
+  const activeDeveloperName = isOwner ? ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name : developer?.name;
+  const trustLevel = developer?.trust_level as string | undefined;
+  const willPublishLive = isOwner || trustLevel === "auto_publish";
+
+  const uploadFile = async (file: File, bucket = "rel-media") => {
     const v = validateFile(file);
     if (!v.isValid) {
       toast.error(v.rejectionReason || "File rejected");
       return null;
     }
-    const path = `${user?.id}/${Date.now()}-${v.sanitizedName}`;
-    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false });
+    const path = `project-uploads/${user?.id || "owner"}/${crypto.randomUUID()}-${v.sanitizedName}`;
+    const { error } = await supabase.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type || "application/octet-stream" });
     if (error) {
       toast.error(error.message);
       return null;
@@ -103,15 +145,24 @@ const DeveloperProjectWizard = () => {
   };
 
   const canSubmit =
-    !!developer?.id && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
+    !!activeDeveloperId && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
+
+  const saveDraft = () => {
+    try {
+      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, selectedDeveloperId, savedAt: new Date().toISOString() }));
+      toast.success("Draft saved on this device");
+    } catch {
+      toast.error("Draft could not be saved on this device");
+    }
+  };
 
   const handleSubmit = async () => {
-    if (!developer?.id) {
-      toast.error("No developer associated with your account");
+    if (!activeDeveloperId) {
+      toast.error(isOwner ? "Choose a developer first" : "No developer associated with your account");
       return;
     }
     const res = await publish.mutateAsync({
-      developer_id: developer.id,
+      developer_id: activeDeveloperId,
       patch: {
         name: basics.name.trim(),
         short_description: basics.short_description || null,
@@ -125,12 +176,14 @@ const DeveloperProjectWizard = () => {
         bedrooms_max: basics.bedrooms_max ? Number(basics.bedrooms_max) : null,
         payment_plan: basics.payment_plan || null,
         cover_image_url: cover?.url || null,
+        developer_name: activeDeveloperName || null,
       },
-      images: gallery.map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i + 1 })),
+      images: gallery.filter((g) => g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i + 1 })),
       documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: "brochure" })),
     });
-    if (res.status === "published") navigate("/developer-hub/projects");
-    else navigate("/developer-hub");
+    try { window.localStorage.removeItem(draftKey); } catch {}
+    if (res.status === "published") navigate(ownerRoute ? "/owner/developers/projects" : "/developer-hub/projects");
+    else navigate(ownerRoute ? "/owner/developers" : "/developer-hub");
   };
 
   return (
@@ -140,7 +193,7 @@ const DeveloperProjectWizard = () => {
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Add a project</h1>
           <p className="text-[#1A1A1A]/70 text-sm mt-1">
             {willPublishLive
-              ? "Will publish live immediately when you click Publish."
+              ? "Will publish live immediately when you click Publish. Draft autosaves on this device."
               : "Will be queued for one-time owner approval. After that, every future edit goes live automatically."}
           </p>
         </div>
