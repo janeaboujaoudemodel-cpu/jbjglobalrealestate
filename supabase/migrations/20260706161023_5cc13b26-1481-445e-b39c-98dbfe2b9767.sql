@@ -1,0 +1,2 @@
+DROP POLICY IF EXISTS user_sessions_update_v2 ON public.user_sessions;
+CREATE POLICY user_sessions_update_v2 ON public.user_sessions FOR UPDATE TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
