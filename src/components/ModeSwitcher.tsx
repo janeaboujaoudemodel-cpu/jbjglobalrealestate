@@ -157,7 +157,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
     setIsOpen(false);
   };
 
-  const currentConfig = MODE_CONFIG[mode];
+  const safeMode: UserMode = mode === 'owner' && !canDisplayOwnerMode ? 'investor' : mode;
+  const currentConfig = MODE_CONFIG[safeMode];
   const CurrentIcon = isUnselected ? User : currentConfig.icon;
   const triggerLabel = isUnselected ? 'Select your mode' : currentConfig.label;
   const triggerShortLabel = isUnselected ? '?' : currentConfig.shortLabel;
@@ -277,7 +278,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               .filter(([modeKey]) => modeKey !== 'owner' || canDisplayOwnerMode)
               .map(([modeKey, config]) => {
               const Icon = config.icon;
-              const isActive = mode === modeKey;
+              const isActive = safeMode === modeKey;
               void hoveredMode;
 
               return (

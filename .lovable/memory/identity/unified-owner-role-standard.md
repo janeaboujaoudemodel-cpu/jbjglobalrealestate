@@ -31,6 +31,7 @@ Terms like "Admin", "Staff", "Moderator", or "User" are **completely removed** f
 - All authorization is enforced at the API/RLS level (server-side)
 - UI only reflects permissions, never decides them
 - Never use "admin-only" — always say "Owner-only access"
+- Public UI must never show "Owner Portal", owner mode, or owner shortcuts. Anonymous/unclassified viewers are always treated as Investors until a non-owner category is explicitly registered.
 
 ## Implementation Status (Complete - February 2026)
 
