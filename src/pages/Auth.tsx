@@ -546,11 +546,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const canGoBack = ["forgot", "verify-otp", "reset", "otp-login"].includes(mode);
 
   return (
-    <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white">
+    <div ref={ref} className="jj-auth-emerald-bg min-h-screen flex items-center justify-center py-12 px-4 relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-10 shadow-xl">
+        <div className="bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-10 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)]">
+
           {/* Back button */}
           {canGoBack && (
             <button
