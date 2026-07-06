@@ -85,6 +85,7 @@ const NAV_SECTIONS: NavSection[] = [
     label: "PROPERTIES",
     items: [
       { label: "Properties", icon: Building2, path: "/owner/properties" },
+      { label: "Featured Projects", icon: Star, path: "/owner/properties/featured" },
       { label: "Property Map", icon: Map, path: "/owner/map" },
       { label: "Listings Admin", icon: ClipboardList, path: "/owner/listing-admin" },
     ],
