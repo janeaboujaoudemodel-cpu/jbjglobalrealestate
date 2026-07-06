@@ -74,7 +74,27 @@ const ELITE_DEVELOPERS = [
 
 const HISTORY_KEY = "JBJ_BROWSING_HISTORY";
 
+// Owner-pinned featured slugs (rendered first on the homepage grid).
+// Must be off-plan with availability — validated at query time by isHomepagePromotable.
+const PINNED_SLUGS: string[] = [
+  "vela-dorchester-collection-omniyat-416",
+];
+
 type Project = UnifiedProject;
+
+async function tierPinned(): Promise<Project[]> {
+  if (PINNED_SLUGS.length === 0) return [];
+  const { data } = await supabase
+    .from("projects")
+    .select(SELECT)
+    .in("slug", PINNED_SLUGS)
+    .eq("is_published", true);
+  const rows = (data || []) as unknown as Project[];
+  // Preserve author-defined order.
+  return PINNED_SLUGS
+    .map((slug) => rows.find((r: any) => r.slug === slug))
+    .filter(Boolean) as Project[];
+}
 
 function readBrowsingHistory(): Array<{ slug?: string; id?: string; developer_name?: string; area_name?: string }> {
   if (typeof window === "undefined") return [];
@@ -288,6 +308,13 @@ export function useHandpickedProjects() {
       const out: Project[] = [];
       const seen = new Set<string>();
       let source: "interest" | "favorites" | "history" | "elite" | "mixed" = "elite";
+
+      // Owner-pinned featured projects run first — always appear at the top of the grid.
+      try {
+        const pinned = await tierPinned();
+        dedupePush(out, seen, pinned);
+      } catch {}
+
 
       try {
         const interest = await tierInterestForm(user?.id, user?.email ?? undefined);
