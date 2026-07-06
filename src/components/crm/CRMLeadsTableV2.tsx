@@ -158,11 +158,18 @@ export default function CRMLeadsTableV2({
         return;
       }
 
-      const { data: statesData } = await supabase
-        .from("crm_lead_state_per_user")
-        .select("lead_id,pipeline_status")
-        .eq("user_id", userId)
-        .in("lead_id", leadIds);
+      const [{ data: statesData }, { data: allAssignmentRows }] = await Promise.all([
+        supabase
+          .from("crm_lead_state_per_user")
+          .select("lead_id,pipeline_status")
+          .eq("user_id", userId)
+          .in("lead_id", leadIds),
+        supabase
+          .from("crm_lead_assignments")
+          .select("lead_id, assigned_to_user_id")
+          .in("lead_id", leadIds)
+          .is("unassigned_at", null),
+      ]);
 
       const statesMap = new Map((statesData || []).map((s: any) => [s.lead_id, s]));
 
@@ -197,11 +204,8 @@ export default function CRMLeadsTableV2({
       rows = applySourceFilter(rows);
       setLeads(rows);
 
-      const { data: assignmentRows } = await supabase
-        .from("crm_lead_assignments")
-        .select("lead_id, assigned_to_user_id")
-        .in("lead_id", rows.map((r) => r.id))
-        .is("unassigned_at", null);
+      const rowIds = new Set(rows.map((r) => r.id));
+      const assignmentRows = (allAssignmentRows || []).filter((a: any) => rowIds.has(a.lead_id));
 
       const aRows = (assignmentRows || []) as unknown as AssignmentRow[];
       const leadToAssignee = new Map<string, string>();
