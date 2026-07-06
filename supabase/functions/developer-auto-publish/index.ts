@@ -187,7 +187,7 @@ Deno.serve(async (req) => {
 
     // 5. OWNER/AUTO path. Owner uploads are saved as an internal preview unless the
     // client explicitly asks to publish live. This keeps Preview separate from Publish.
-    const shouldPublishLive = payload.publish_live === true;
+    const shouldPublishLive = isOwner ? payload.publish_live === true : payload.publish_live !== false;
     const projectPatch: Record<string, unknown> = {
       ...payload.patch,
       developer_id: payload.developer_id,
