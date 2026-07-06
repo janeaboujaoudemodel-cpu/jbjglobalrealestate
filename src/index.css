@@ -32966,3 +32966,104 @@ html body #root :is(
 ) :where(svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
   stroke: #FFFFFF !important;
 }
+
+/* =============================================================
+   PASS 212 — backend emerald + adaptive layout hard lock.
+   Fixes owner/admin vertical word wrapping and dark ink leaks on
+   emerald icon tiles, action buttons, status pills and cards.
+   ============================================================= */
+html body #root :is(
+  .owner-dashboard-shell,
+  [data-backend-portal],
+  [data-owner-backend],
+  [data-chrome="sidebar"]
+) :where(button, a, [role="button"], [role="tab"], .card, [class*="Card"], input, textarea, select, label, p, span, h1, h2, h3, h4, h5, h6) {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  letter-spacing: 0 !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend]) :where(button, a, [role="button"], [role="tab"]) {
+  min-width: max-content;
+  white-space: nowrap;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-backend-portal], [data-owner-backend]) :where([data-jbj-allow-shrink], [data-jbj-allow-shrink] *) {
+  min-width: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+html body #root :is(
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"],
+  [data-emerald-icon-surface],
+  .jj-icon-tile-emerald
+) {
+  background: var(--jj-emerald-ombre) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 10px 22px -14px rgba(6,78,59,0.85), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+
+html body #root :is(
+  [data-backend-icon-tile="emerald"],
+  [data-backend-icon-tile="emerald-soft"],
+  [data-icon-tile-tone="emerald"],
+  [data-emerald-icon-surface],
+  .jj-icon-tile-emerald
+) :where(*, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root :where(.owner-dashboard-shell, [data-backend-portal]) :is(
+  button[class*="bg-[#064E3B]"],
+  button[class*="from-[#064E3B]"],
+  button[class*="to-[#042c1c]"],
+  a[class*="bg-[#064E3B]"],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  [data-surface="emerald"]
+),
+html body #root :where(.owner-dashboard-shell, [data-backend-portal]) :is(
+  button[class*="bg-[#064E3B]"],
+  button[class*="from-[#064E3B]"],
+  button[class*="to-[#042c1c]"],
+  a[class*="bg-[#064E3B]"],
+  [class*="bg-emerald-"],
+  [class*="from-emerald-"],
+  [class*="to-emerald-"],
+  .jj-emerald-metallic,
+  .jj-pill-emerald-metallic,
+  .jj-cta-emerald,
+  [data-surface="emerald"]
+) :where(*, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root :where(.owner-dashboard-shell, [data-backend-portal]) :is(.status-dot, [data-status-dot], .jj-pill-active > .dot, [role="tab"] > .status-dot) {
+  width: 0.5rem !important;
+  height: 0.5rem !important;
+  min-width: 0.5rem !important;
+  min-height: 0.5rem !important;
+  max-width: 0.5rem !important;
+  max-height: 0.5rem !important;
+  margin: 0 0.375rem 0 0 !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255,255,255,0.65) !important;
+  box-shadow: none !important;
+}

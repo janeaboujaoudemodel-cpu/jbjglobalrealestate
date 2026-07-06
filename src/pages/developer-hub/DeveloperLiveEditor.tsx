@@ -7,13 +7,23 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit3, ExternalLink, Loader2 } from "lucide-react";
+import { Plus, Edit3, ExternalLink, Loader2, Building2, Home } from "lucide-react";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
 
 interface Project {
   id: string;
   name: string;
   slug: string | null;
+  developer_id?: string | null;
+  developer_name?: string | null;
+  developer?: { name: string | null } | null;
+  location?: string | null;
+  emirate?: string | null;
+  construction_status?: string | null;
+  status?: string | null;
+  status_label?: string | null;
+  is_offplan?: boolean | null;
+  listing_kind?: string | null;
   price_from: number | null;
   handover_date: string | null;
   is_published: boolean | null;
@@ -21,8 +31,32 @@ interface Project {
   data_quality_flags: unknown;
 }
 
+interface ResaleProject {
+  id: string;
+  title?: string | null;
+  project_name?: string | null;
+  developer_name?: string | null;
+  area_name?: string | null;
+  emirate?: string | null;
+  asking_price?: number | null;
+  bedrooms?: number | null;
+  property_type?: string | null;
+  handover_status?: string | null;
+  created_at?: string | null;
+}
+
+const isOffPlanProject = (p: Project) => {
+  if (p.listing_kind === "leasing" || p.listing_kind === "resale") return false;
+  if (p.is_offplan === true) return true;
+  const text = [p.construction_status, p.status, p.status_label, p.handover_date]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return !/\b(ready|completed|complete|delivered)\b/.test(text);
+};
+
 const DeveloperLiveEditor = () => {
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const navigate = useNavigate();
   const publish = useDeveloperAutoPublish();
   const [editing, setEditing] = useState<string | null>(null);
@@ -38,20 +72,39 @@ const DeveloperLiveEditor = () => {
         .maybeSingle();
       return data;
     },
-    enabled: !!user?.id,
+    enabled: !!user?.id && !isOwner,
   });
 
   const { data: projects, isLoading } = useQuery({
-    queryKey: ["developer-projects", rep?.current_developer_id],
+    queryKey: ["developer-projects", isOwner ? "owner-all" : rep?.current_developer_id],
     queryFn: async () => {
-      const { data } = await supabase
+      let query = supabase
         .from("projects")
-        .select("id, name, slug, price_from, handover_date, is_published, cover_image_url, data_quality_flags")
-        .eq("developer_id", rep!.current_developer_id!)
-        .order("updated_at", { ascending: false });
-      return (data || []) as Project[];
+        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, data_quality_flags")
+        .order("updated_at", { ascending: false })
+        .limit(500);
+
+      if (!isOwner) query = query.eq("developer_id", rep!.current_developer_id!);
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return ((data || []) as Project[]).filter(isOffPlanProject);
     },
-    enabled: !!rep?.current_developer_id,
+    enabled: isOwner || !!rep?.current_developer_id,
+  });
+
+  const { data: resaleProjects = [], isLoading: loadingResale } = useQuery({
+    queryKey: ["owner-projects-resale-section", isOwner],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("resale_listings_public")
+        .select("id, title, project_name, developer_name, area_name, emirate, asking_price, bedrooms, property_type, handover_status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(250);
+      if (error) throw error;
+      return (data || []) as ResaleProject[];
+    },
+    enabled: !!isOwner,
   });
 
   const saveEdit = async (p: Project) => {
@@ -64,7 +117,7 @@ const DeveloperLiveEditor = () => {
       return;
     }
     await publish.mutateAsync({
-      developer_id: rep!.current_developer_id!,
+      developer_id: isOwner ? p.developer_id! : rep!.current_developer_id!,
       project_id: p.id,
       patch,
     });
@@ -79,16 +132,23 @@ const DeveloperLiveEditor = () => {
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">My Projects</h1>
           <p className="text-[#1A1A1A]/70 text-sm mt-1">Click any project to edit. Edits publish live for approved developers.</p>
         </div>
-        <Button onClick={() => navigate("/developer-hub/new-project")} className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90">
+        <Button onClick={() => navigate(isOwner ? "/owner/developers/new-project" : "/developer-hub/new-project")} className="bg-[#1A1A1A] text-[#FDFBF7] hover:bg-[#1A1A1A]/90">
           <Plus className="w-4 h-4 mr-2" /> Add project
         </Button>
       </div>
+
+      <section className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Building2 className="h-5 w-5 text-[#064E3B]" />
+          <h2 className="text-lg font-semibold text-[#1A1A1A]">Off-plan projects</h2>
+          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{projects?.length ?? 0}</Badge>
+        </div>
 
       {isLoading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]/60" /></div>
       ) : !projects?.length ? (
         <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-10 rounded-lg text-center">
-          <p className="text-[#1A1A1A]/70">No projects yet. Add your first project to get started.</p>
+          <p className="text-[#1A1A1A]/70">No off-plan projects yet. Add your first project to get started.</p>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -136,7 +196,9 @@ const DeveloperLiveEditor = () => {
                         />
                       </div>
                     ) : (
-                      <div className="flex gap-6 text-sm text-[#1A1A1A]/70 mt-2">
+                      <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-[#1A1A1A]/70 mt-2">
+                        <span>{p.developer_name || p.developer?.name || "Developer —"}</span>
+                        <span>{p.location || p.emirate || "Location —"}</span>
                         <span>From AED {p.price_from?.toLocaleString() ?? "—"}</span>
                         <span>Handover {p.handover_date ?? "—"}</span>
                       </div>
@@ -170,6 +232,44 @@ const DeveloperLiveEditor = () => {
             );
           })}
         </div>
+      )}
+      </section>
+
+      {isOwner && (
+        <section className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5 text-[#064E3B]" />
+            <h2 className="text-lg font-semibold text-[#1A1A1A]">Resale projects</h2>
+            <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{resaleProjects.length}</Badge>
+          </div>
+          {loadingResale ? (
+            <div className="flex justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-[#1A1A1A]/60" /></div>
+          ) : resaleProjects.length === 0 ? (
+            <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-8 rounded-lg text-center">
+              <p className="text-[#1A1A1A]/70">No resale projects found.</p>
+            </Card>
+          ) : (
+            <div className="grid gap-3 md:grid-cols-2">
+              {resaleProjects.map((p) => (
+                <Card key={p.id} className="bg-[#F7F2EA] border-[#B89555]/40 p-4 rounded-lg">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-[#1A1A1A] truncate">{p.project_name || p.title || "Unnamed resale"}</h3>
+                      <p className="text-sm text-[#1A1A1A]/70 mt-1 truncate">{p.developer_name || "Developer —"} · {p.area_name || p.emirate || "Location —"}</p>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#1A1A1A]/70 mt-2">
+                        <span>AED {p.asking_price?.toLocaleString() ?? "—"}</span>
+                        <span>{p.bedrooms ?? "—"} BR</span>
+                        <span>{p.property_type || "Property"}</span>
+                        <span>{p.handover_status || "Resale"}</span>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="shrink-0 border-[#B89555]/40 text-[#1A1A1A]">Resale</Badge>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+        </section>
       )}
     </div>
   );

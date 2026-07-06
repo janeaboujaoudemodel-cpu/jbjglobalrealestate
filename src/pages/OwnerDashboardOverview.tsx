@@ -237,7 +237,7 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
           </button>
         ) : (
           <div data-backend-icon-tile="emerald-soft" className="w-5 h-5 rounded-full bg-[#064E3B]/10 border border-[#064E3B]/15 flex items-center justify-center flex-shrink-0">
-            <Clock className="h-3 w-3 text-[#064E3B]" />
+            <Clock className="h-3 w-3 text-white" />
           </div>
         )}
         <div className="min-w-0">
@@ -656,7 +656,7 @@ export default function OwnerDashboardOverview() {
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-base text-[#1A1A1A] flex items-center gap-2">
-                    <Clock className="h-5 w-5 text-[#064E3B]" />
+                    <Clock className="h-5 w-5 text-white" />
                     Needs Follow-up
                   </CardTitle>
                   <CardDescription className="text-[#1A1A1A]/70 text-xs">Pending items</CardDescription>
@@ -698,7 +698,7 @@ export default function OwnerDashboardOverview() {
           <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-[#064E3B]" />
+                    <Activity className="h-5 w-5 text-white" />
                 Recent Conversations
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">Website chat sessions</CardDescription>
@@ -718,7 +718,7 @@ export default function OwnerDashboardOverview() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-[#064E3B]/55 mx-auto mb-3" />
+                  <MessageSquare className="h-12 w-12 text-white/55 mx-auto mb-3" />
                   <p className="text-[#1A1A1A]/70">No conversations yet</p>
                   <p className="text-[#1A1A1A]/70 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
@@ -762,7 +762,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Flag className="h-5 w-5 text-[#064E3B]" />
+                  <Flag className="h-5 w-5 text-white" />
                   Flagged Leads
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">Leads requiring attention</CardDescription>
@@ -786,7 +786,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Crown className="h-5 w-5 text-[#064E3B]" />
+                  <Crown className="h-5 w-5 text-white" />
                   VIP Leads
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">High-value contacts</CardDescription>
@@ -820,7 +820,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-[#064E3B]" />
+                  <Briefcase className="h-5 w-5 text-white" />
                   Employees Hub
                 </CardTitle>
                 <CardDescription className="text-[#1A1A1A]/70">Team management</CardDescription>
@@ -839,14 +839,14 @@ export default function OwnerDashboardOverview() {
           <Card className="bg-[#FDFBF7]/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
-                <Shield className="h-5 w-5 text-[#064E3B]" />
+                <Shield className="h-5 w-5 text-white" />
                 Audit Logs
               </CardTitle>
               <CardDescription className="text-[#1A1A1A]/70">System activity tracking</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <Shield className="h-12 w-12 text-[#064E3B]/55 mx-auto mb-3" />
+                <Shield className="h-12 w-12 text-white/55 mx-auto mb-3" />
                 <p className="text-[#1A1A1A]/70 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"

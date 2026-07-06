@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2 } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface Uploaded { url: string; name: string; type: string; size: number }
+interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string }
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
 
@@ -60,6 +60,8 @@ const DeveloperProjectWizard = () => {
   const [smartFiles, setSmartFiles] = useState<Uploaded[]>([]);
   const [extracting, setExtracting] = useState(false);
   const [lastExtractedFields, setLastExtractedFields] = useState<string[]>([]);
+  const [additionalInfo, setAdditionalInfo] = useState("");
+  const [additionalInfoMode, setAdditionalInfoMode] = useState<"keep" | "enrich">("enrich");
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
 
@@ -143,7 +145,8 @@ const DeveloperProjectWizard = () => {
       return null;
     }
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    return { url: data.publicUrl, name: v.sanitizedName, type: file.type, size: file.size } as Uploaded;
+    const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60);
+    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type, size: file.size } as Uploaded;
   };
 
   const onCover = async (f: File) => {
@@ -182,7 +185,7 @@ const DeveloperProjectWizard = () => {
     setLastExtractedFields([]);
     try {
       const { data, error } = await supabase.functions.invoke("ai-project-brochure-extract", {
-        body: { files: files.map((f) => ({ url: f.url, name: f.name, type: f.type })) },
+          body: { files: files.map((f) => ({ url: f.extractionUrl || f.url, name: f.name, type: f.type })) },
       });
       if (error) throw error;
       const extracted = (data?.extracted ?? {}) as Record<string, unknown>;
@@ -234,6 +237,33 @@ const DeveloperProjectWizard = () => {
 
   const canSubmit =
     !!activeDeveloperId && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
+
+  const applyAdditionalInfo = () => {
+    const text = additionalInfo.trim();
+    if (!text) return;
+    if (additionalInfoMode === "keep") {
+      setBasics((prev) => ({ ...prev, description: [prev.description, text].filter(Boolean).join("\n\n") }));
+      toast.success("Additional information added to full description");
+      return;
+    }
+
+    setBasics((prev) => {
+      const next = { ...prev };
+      const lower = text.toLowerCase();
+      if (/amenit|pool|gym|spa|concierge|play|park|beach|court/.test(lower)) {
+        const existing = prev.amenities ? `${prev.amenities}, ` : "";
+        next.amenities = `${existing}${text}`;
+      } else if (/payment|down|handover|installment|instalment|post[- ]handover|\d+\s*\//.test(lower)) {
+        next.payment_plan = [prev.payment_plan, text].filter(Boolean).join("\n");
+      } else if (/service charge|managed|management|rental|short.?term|owner use|furnished/.test(lower)) {
+        next.description = [prev.description, `Management / usage notes: ${text}`].filter(Boolean).join("\n\n");
+      } else {
+        next.description = [prev.description, text].filter(Boolean).join("\n\n");
+      }
+      return next;
+    });
+    toast.success("Additional information distributed into the listing fields");
+  };
 
   const saveDraft = () => {
     try {
@@ -365,7 +395,8 @@ const DeveloperProjectWizard = () => {
         </Card>
       )}
 
-      <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-6 rounded-lg">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-6 rounded-lg min-w-0">
         {step === 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {isOwner && (
@@ -494,6 +525,15 @@ const DeveloperProjectWizard = () => {
               <Label className="text-[#1A1A1A]">Full description</Label>
               <Textarea rows={5} value={basics.description} onChange={(e) => setBasics({ ...basics, description: e.target.value })} className={inputCls} />
             </div>
+            <div className="md:col-span-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4">
+              <Label className="text-[#1A1A1A]">Additional information</Label>
+              <Textarea rows={4} value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Add any extra project notes, amenities, payment plan details, management rules or owner-use rules." className={inputCls} />
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <Button type="button" variant={additionalInfoMode === "enrich" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("enrich")} className={additionalInfoMode === "enrich" ? "bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Use to enrich listing</Button>
+                <Button type="button" variant={additionalInfoMode === "keep" ? "default" : "outline"} size="sm" onClick={() => setAdditionalInfoMode("keep")} className={additionalInfoMode === "keep" ? "bg-[#064E3B] text-white" : "border-[#B89555]/40 text-[#1A1A1A]"}>Keep as full text</Button>
+                <Button type="button" variant="outline" size="sm" onClick={applyAdditionalInfo} disabled={!additionalInfo.trim()} className="border-[#B89555]/40 text-[#1A1A1A]">Apply text</Button>
+              </div>
+            </div>
           </div>
         )}
 
@@ -593,6 +633,29 @@ const DeveloperProjectWizard = () => {
           </div>
         )}
       </Card>
+
+      <aside className="space-y-4 min-w-0">
+        <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7]">
+          <div className="aspect-[4/3] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white">
+            {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-12 w-12 text-white" />}
+          </div>
+          <div className="p-4 space-y-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">Listing preview</p>
+              <h3 className="text-lg font-semibold text-[#1A1A1A] leading-tight">{basics.name || "Project name"}</h3>
+              <p className="text-sm text-[#1A1A1A]/70">{activeDeveloperName || "Developer"} · {basics.location || basics.emirate || "Location"}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]">
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Price from</span>AED {basics.price_from || "—"}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Handover</span>{basics.handover_date || "—"}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
+            </div>
+            <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
+          </div>
+        </Card>
+      </aside>
+      </div>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
