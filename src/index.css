@@ -12577,7 +12577,6 @@ html body :is(
   [data-emerald="true"],
   [data-emerald-filled],
   [data-emerald-ok],
-  [data-card-action],
   [class*="bg-green-"],
   [class*="bg-emerald-"],
   [class*="bg-teal-"]
@@ -12618,7 +12617,6 @@ html body :is(
   [data-emerald="true"],
   [data-emerald-filled],
   [data-emerald-ok],
-  [data-card-action],
   [class*="bg-green-"],
   [class*="bg-emerald-"],
   [class*="bg-teal-"]
@@ -12651,7 +12649,6 @@ html body :is(
   [data-emerald="true"],
   [data-emerald-filled],
   [data-emerald-ok],
-  [data-card-action],
   [class*="bg-green-"],
   [class*="bg-emerald-"],
   [class*="bg-teal-"]
