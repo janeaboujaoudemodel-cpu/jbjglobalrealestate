@@ -145,7 +145,10 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
               data-active={isActive}
               data-on-dark
               data-allow-dark-cta
-              className="allow-white jj-sqtoggle relative px-3.5 h-full text-[11px] font-bold tracking-wide transition-all duration-200"
+              className={cn(
+                "allow-white jj-sqtoggle relative px-3.5 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
+                isActive && "jj-emerald-metallic"
+              )}
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               aria-label={opt["aria-label"] ?? String(opt.label)}
               aria-pressed={isActive}
