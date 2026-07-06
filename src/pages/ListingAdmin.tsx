@@ -691,11 +691,11 @@ const ListingAdmin = () => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 min-w-0">
+            <div className="flex flex-wrap items-stretch justify-end gap-2 min-w-0">
               <Button
                 onClick={() => navigate("/admin/media-ingestion")}
                 variant="gold"
-                className="min-w-[150px] whitespace-nowrap"
+                className="min-w-[210px] whitespace-nowrap"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Media Ingestion Hub
@@ -703,7 +703,7 @@ const ListingAdmin = () => {
               <Button
                 onClick={() => navigate("/team")}
                 variant="secondary"
-                className="min-w-[110px] whitespace-nowrap"
+                className="min-w-[130px] whitespace-nowrap"
               >
                 <Users className="w-4 h-4 mr-2" />
                 {t('listingAdmin.team')}
@@ -711,7 +711,7 @@ const ListingAdmin = () => {
               <Button
                 variant="secondary"
                 onClick={handleSignOut}
-                className="min-w-[110px] whitespace-nowrap"
+                className="min-w-[130px] whitespace-nowrap"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 {t('listingAdmin.signOut')}
@@ -721,7 +721,7 @@ const ListingAdmin = () => {
 
           {/* Row 2: Navigation Tabs + Stats */}
           <div className="flex items-center justify-between gap-4 flex-wrap">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 min-w-0 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-2 min-w-0 flex-1">
               <Button
                 onClick={() => { setActiveView('chat'); setShowChat(true); }}
                 variant={activeView === 'chat' ? 'primary' : 'secondary'}
@@ -786,7 +786,7 @@ const ListingAdmin = () => {
             <SourceCountsPanel onSourceChange={(src) => setActiveSource(src)} activeSource={activeSource} />
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
-              <TabsList className="w-full h-auto grid grid-cols-2 lg:grid-cols-5 gap-1 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30 p-1 rounded-lg">
+              <TabsList className="w-full h-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6 gap-1 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-[#B89555]/30 p-1 rounded-lg overflow-visible">
                 {activeSource === "provident" && (
                   <TabsTrigger 
                     value="provident-hub"

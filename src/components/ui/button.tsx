@@ -51,7 +51,7 @@ const DARK_SURFACE_VARIANTS = new Set(["hero", "media", "dark", "dark-ghost", "d
 const LIGHT_CTA_VARIANTS = new Set(["primary", "secondary", "tertiary", "gold", "default", "destructive", "outline", "ghost", "link"]);
 
 const buttonVariants = cva(
-  "inline-flex min-h-11 min-w-0 max-w-full items-center justify-center text-center gap-2 whitespace-normal break-words [overflow-wrap:anywhere] [word-break:normal] rounded-xl text-sm font-semibold leading-[1.25] ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] overflow-hidden",
+  "inline-flex min-h-11 min-w-0 max-w-full items-center justify-center text-center gap-2 whitespace-nowrap [overflow-wrap:normal] [word-break:normal] rounded-xl text-sm font-semibold leading-[1.25] ring-offset-background transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer tracking-[0.02em] overflow-hidden",
   {
     variants: {
       variant: {

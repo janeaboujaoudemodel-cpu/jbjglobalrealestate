@@ -6,6 +6,7 @@ import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
 const MODE_KEY = "jj_user_mode";
 const MODE_SELECTED_KEY = "jj_mode_selected";
+const OWNER_NON_OWNER_INTENT_KEY = "jj_owner_non_owner_intent";
 
 // Strictly 3 categories. Legacy 'investor_broker' rows are normalized to 'broker'
 // (broker is the more privileged surface, so existing combined users keep access).
@@ -53,6 +54,19 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
   const lastSyncedUserId = useRef<string | null>(null);
 
   useEffect(() => {
+    if (isOwnerBackendEmail(user?.email)) {
+      const ownerChoseNonOwner = localStorage.getItem(OWNER_NON_OWNER_INTENT_KEY) === 'true';
+      if (mode !== 'owner' && !ownerChoseNonOwner) {
+        setModeState('owner');
+        try {
+          localStorage.setItem(MODE_KEY, 'owner');
+          localStorage.setItem(MODE_SELECTED_KEY, 'true');
+          localStorage.removeItem(OWNER_NON_OWNER_INTENT_KEY);
+        } catch {}
+      }
+      return;
+    }
+
     const canKeepOwnerMode = isOwner || isOwnerBackendEmail(user?.email);
     if (mode !== 'owner' || canKeepOwnerMode) return;
     setModeState('investor');
@@ -145,6 +159,12 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
     // Optimistic update — local only, no DB.
     setModeState(newMode);
     localStorage.setItem(MODE_KEY, newMode);
+    if (isOwnerBackendEmail(user?.email)) {
+      if (newMode === 'owner') localStorage.removeItem(OWNER_NON_OWNER_INTENT_KEY);
+      else localStorage.setItem(OWNER_NON_OWNER_INTENT_KEY, 'true');
+    } else {
+      localStorage.removeItem(OWNER_NON_OWNER_INTENT_KEY);
+    }
 
     // Mark as explicitly selected
     setHasMadeInitialSelection(true);
@@ -221,7 +241,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
 
     // Invalidate role / dashboard caches so the page re-skins without reload.
     try { queryClient.invalidateQueries(); } catch {}
-  }, [user?.id, queryClient]);
+  }, [user?.id, user?.email, queryClient]);
 
   return (
     <UserModeContext.Provider
