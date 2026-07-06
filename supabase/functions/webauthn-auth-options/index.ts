@@ -37,7 +37,6 @@ Deno.serve(async (req) => {
 
   if (!count) {
     return new Response(JSON.stringify({ error: 'No passkeys are set up yet' }), {
-      status: 409,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
