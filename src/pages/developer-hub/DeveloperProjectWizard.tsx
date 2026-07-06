@@ -815,7 +815,7 @@ const DeveloperProjectWizard = () => {
 
       {/* Smart brochure extract */}
       {step === 0 && (
-        <Card data-surface="emerald" className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
+        <Card data-surface="emerald" data-project-upload-emerald className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex items-start gap-3">
               <div className="rounded-full p-2 bg-white/10"><Sparkles className="w-5 h-5" /></div>
@@ -834,15 +834,9 @@ const DeveloperProjectWizard = () => {
             <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document")} statusRows={uploadStatuses.filter((u) => u.role === "document")} multiple onFiles={onSmartUpload} />
           </div>
           {uploadStatuses.length > 0 && (
-            <div className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
-              {uploadStatuses.map((item) => (
-                <div key={item.id} className="flex items-center gap-3 rounded-md border border-white/18 bg-black/12 p-2 text-xs text-white">
-                  {item.status === "uploading" ? <Loader2 className="h-4 w-4 animate-spin" /> : item.status === "uploaded" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold">{item.name}</p>
-                    <p className="text-white/75">{item.role.replace("_", " ")} · {formatBytes(item.size)} · {item.status === "uploading" ? `${item.elapsed}s uploading` : item.status === "uploaded" ? `uploaded in ${item.elapsed}s` : item.error}</p>
-                  </div>
-                </div>
+            <div data-upload-summary className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
+              {[`Photos ${mediaStats.imageCount}`, `Videos ${mediaStats.videoCount}`, `Docs ${mediaStats.documentCount}`, `Uploading ${mediaStats.uploadingCount}`, `Failed ${mediaStats.failedCount}`].map((label) => (
+                <div key={label} className="rounded-md border border-white/18 bg-white/10 px-3 py-2 text-xs font-bold text-white">{label}</div>
               ))}
             </div>
           )}
