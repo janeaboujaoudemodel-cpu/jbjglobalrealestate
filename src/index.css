@@ -32619,3 +32619,37 @@ html body .jj-sqtoggle[data-active="true"].jj-emerald-metallic::after {
   animation: jj-sqtoggle-continuous-sweep 2.2s linear infinite !important;
   opacity: 1 !important;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   PASS 209 — Radix Checkbox duplicate-box fix.
+   Radix's <Checkbox> renders a visible button[role="checkbox"] AND a hidden
+   native <input type="checkbox" aria-hidden="true"> sibling for form
+   submission. Global checkbox skinning rules (borders / background / size /
+   transform: none) were forcing that hidden input to render as a second
+   empty box next to the real emerald one. Hide it hard, everywhere.
+   ───────────────────────────────────────────────────────────────────────── */
+html body input[type="checkbox"][aria-hidden="true"],
+html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald-ok="checkbox"]) + input[type="checkbox"][aria-hidden="true"],
+html body :is(button[role="checkbox"], [data-radix-checkbox-root], [data-emerald-ok="checkbox"]) ~ input[type="checkbox"][aria-hidden="true"] {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  border: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  transform: translateX(-100%) !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  flex: 0 0 1px !important;
+}
