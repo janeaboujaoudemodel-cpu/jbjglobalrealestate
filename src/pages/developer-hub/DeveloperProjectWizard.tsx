@@ -39,7 +39,6 @@ const BEDROOM_OPTIONS = [
   { label: "6+", value: 6 },
 ];
 
-type DictationField = keyof Basics | "developerDescription" | "additionalInfo";
 type BrowserSpeechRecognition = {
   lang: string;
   interimResults: boolean;
@@ -77,6 +76,7 @@ const emptyBasics = {
 };
 
 type Basics = typeof emptyBasics;
+type DictationField = keyof Basics | "developerDescription" | "additionalInfo";
 
 const formatBytes = (bytes: number) => {
   if (!Number.isFinite(bytes) || bytes <= 0) return "—";
