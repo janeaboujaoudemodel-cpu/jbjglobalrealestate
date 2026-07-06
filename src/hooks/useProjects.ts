@@ -358,7 +358,7 @@ export function useProjectsPaginated(
           developer:developers(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name, display_order)
+          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
         `)
         .order("created_at", { ascending: false })
         .range(from, to);
