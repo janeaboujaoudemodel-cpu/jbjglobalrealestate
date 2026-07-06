@@ -28269,6 +28269,7 @@ export type Database = {
           bedrooms_max: number | null
           bedrooms_min: number | null
           building_count: number | null
+          built_up_area: string | null
           card_image_url: string | null
           community_id: string | null
           construction_progress: number | null
@@ -28299,11 +28300,14 @@ export type Database = {
           import_source: string | null
           is_developer_direct: boolean | null
           is_featured: boolean | null
+          is_managed: boolean | null
           is_offplan: boolean | null
           is_premium: boolean | null
           is_published: boolean | null
+          is_serviced: boolean | null
           is_sold_out: boolean | null
           latitude: number | null
+          launch_date: string | null
           listing_kind: string | null
           location: string | null
           location_description: string | null
@@ -28311,13 +28315,17 @@ export type Database = {
           location_headline: string | null
           location_image_url: string | null
           longitude: number | null
+          management_type: string | null
           name: string
+          number_of_stories: number | null
+          owner_can_use: boolean | null
           owner_pii_hidden: boolean
           payment_breakdown: Json | null
           payment_plan: string | null
           payment_plan_verified: boolean
           payment_plan_verified_at: string | null
           payment_plan_verified_by: string | null
+          plot_area: string | null
           price_currency: string | null
           price_from: number | null
           price_to: number | null
@@ -28369,6 +28377,7 @@ export type Database = {
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           building_count?: number | null
+          built_up_area?: string | null
           card_image_url?: string | null
           community_id?: string | null
           construction_progress?: number | null
@@ -28399,11 +28408,14 @@ export type Database = {
           import_source?: string | null
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
+          is_managed?: boolean | null
           is_offplan?: boolean | null
           is_premium?: boolean | null
           is_published?: boolean | null
+          is_serviced?: boolean | null
           is_sold_out?: boolean | null
           latitude?: number | null
+          launch_date?: string | null
           listing_kind?: string | null
           location?: string | null
           location_description?: string | null
@@ -28411,13 +28423,17 @@ export type Database = {
           location_headline?: string | null
           location_image_url?: string | null
           longitude?: number | null
+          management_type?: string | null
           name: string
+          number_of_stories?: number | null
+          owner_can_use?: boolean | null
           owner_pii_hidden?: boolean
           payment_breakdown?: Json | null
           payment_plan?: string | null
           payment_plan_verified?: boolean
           payment_plan_verified_at?: string | null
           payment_plan_verified_by?: string | null
+          plot_area?: string | null
           price_currency?: string | null
           price_from?: number | null
           price_to?: number | null
@@ -28469,6 +28485,7 @@ export type Database = {
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           building_count?: number | null
+          built_up_area?: string | null
           card_image_url?: string | null
           community_id?: string | null
           construction_progress?: number | null
@@ -28499,11 +28516,14 @@ export type Database = {
           import_source?: string | null
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
+          is_managed?: boolean | null
           is_offplan?: boolean | null
           is_premium?: boolean | null
           is_published?: boolean | null
+          is_serviced?: boolean | null
           is_sold_out?: boolean | null
           latitude?: number | null
+          launch_date?: string | null
           listing_kind?: string | null
           location?: string | null
           location_description?: string | null
@@ -28511,13 +28531,17 @@ export type Database = {
           location_headline?: string | null
           location_image_url?: string | null
           longitude?: number | null
+          management_type?: string | null
           name?: string
+          number_of_stories?: number | null
+          owner_can_use?: boolean | null
           owner_pii_hidden?: boolean
           payment_breakdown?: Json | null
           payment_plan?: string | null
           payment_plan_verified?: boolean
           payment_plan_verified_at?: string | null
           payment_plan_verified_by?: string | null
+          plot_area?: string | null
           price_currency?: string | null
           price_from?: number | null
           price_to?: number | null
