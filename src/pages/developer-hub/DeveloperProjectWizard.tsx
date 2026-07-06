@@ -232,6 +232,7 @@ const DeveloperProjectWizard = () => {
         const next = { ...prev };
         const setIfEmpty = (key: keyof Basics, v: unknown) => {
           if (v === null || v === undefined || v === "") return;
+          if ((key === "handover_date" || key === "launch_date") && !/^\d{4}-\d{2}-\d{2}$/.test(String(v))) return;
           if (!next[key] || next[key] === "") {
             next[key] = String(v) as any;
             filled.push(String(key));
