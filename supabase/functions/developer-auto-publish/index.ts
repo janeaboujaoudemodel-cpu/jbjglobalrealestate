@@ -17,6 +17,10 @@ interface Payload {
   // Either project_id (edit) or null (new project)
   project_id?: string | null;
   publish_live?: boolean;
+  // When true, patch/images/documents are merged into the existing project
+  // using never-overwrite/never-delete semantics (mergeProjectEnrichment).
+  enrich?: boolean;
+  locked_fields?: string[];
   patch: {
     name?: string;
     slug?: string;
