@@ -2,7 +2,7 @@
 // for the matched user. Public endpoint.
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { corsHeaders } from '../_shared/cors-utils.ts';
 import { verifyAuthenticationResponse } from 'npm:@simplewebauthn/server@13';
 import { z } from 'npm:zod@3';
 

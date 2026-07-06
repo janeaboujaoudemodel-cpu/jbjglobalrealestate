@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { KeyRound, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { KeyRound, Loader2, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import { isPasskeySupported, signInWithPasskey } from '@/lib/passkeys';
 
@@ -9,14 +8,26 @@ interface Props {
   className?: string;
 }
 
+/**
+ * Premium JBJ-branded passkey CTA.
+ * - Emerald gradient with a slow continuous champagne sheen.
+ * - Renders regardless of platform capability; if the current browser
+ *   cannot use WebAuthn, we still surface the button and explain why
+ *   on click, so users are never left staring at a missing option.
+ */
 export function PasskeyButton({ onSuccess, className }: Props) {
-  const [supported, setSupported] = useState(false);
+  const [supported, setSupported] = useState(true);
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => { setSupported(isPasskeySupported()); }, []);
-  if (!supported) return null;
+  useEffect(() => {
+    setSupported(isPasskeySupported());
+  }, []);
 
   const handle = async () => {
+    if (!supported) {
+      toast.error('This browser does not support passkeys. Try Safari, Chrome or Edge on a device with biometrics.');
+      return;
+    }
     setBusy(true);
     try {
       await signInWithPasskey(false);
@@ -24,24 +35,82 @@ export function PasskeyButton({ onSuccess, className }: Props) {
       onSuccess?.();
     } catch (e) {
       const msg = (e as Error).message || 'Passkey sign-in failed';
-      if (!/NotAllowedError|abort/i.test(msg)) toast.error(msg);
+      // NotAllowedError = user cancelled the OS prompt — stay silent.
+      if (!/NotAllowedError|abort|cancel/i.test(msg)) toast.error(msg);
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <Button
+    <button
       type="button"
-      variant="outline"
       onClick={handle}
       disabled={busy}
-      className={className}
       data-no-contrast-guard
+      data-allow-dark-cta
+      aria-label="Continue with passkey"
+      className={[
+        'jj-passkey-cta group relative w-full overflow-hidden rounded-xl',
+        'flex items-center justify-center gap-3 h-12 px-6',
+        'text-white font-semibold text-[15px] tracking-wide',
+        'shadow-[0_10px_30px_-12px_rgba(6,78,59,0.65)]',
+        'transition-transform duration-300 hover:-translate-y-[1px] active:translate-y-0',
+        'disabled:opacity-70 disabled:cursor-not-allowed',
+        className || '',
+      ].join(' ')}
+      style={{
+        background:
+          'linear-gradient(135deg, #064E3B 0%, #086148 35%, #042C1C 70%, #000000 100%)',
+        border: '1px solid rgba(184,149,85,0.55)',
+      }}
     >
-      {busy ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <KeyRound className="w-4 h-4 mr-2" />}
-      Continue with Passkey
-    </Button>
+      {/* champagne sheen sweep */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(115deg, transparent 35%, rgba(239,230,214,0.16) 50%, transparent 65%)',
+          transform: 'translateX(-120%)',
+          animation: 'jj-passkey-sheen 4.5s ease-in-out infinite',
+          mixBlendMode: 'screen',
+        }}
+      />
+
+      {/* gold hairline top edge */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-6 top-0 h-px"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent, rgba(201,168,76,0.85), transparent)',
+        }}
+      />
+      <span className="relative flex items-center gap-2.5" style={{ color: '#FFFFFF' }}>
+        {busy ? (
+          <Loader2 className="w-[18px] h-[18px] animate-spin" style={{ color: '#EFE6D6' }} />
+        ) : (
+          <span className="relative inline-flex items-center justify-center">
+            <ShieldCheck
+              className="w-[18px] h-[18px]"
+              style={{ color: '#C9A84C' }}
+              strokeWidth={2.25}
+              aria-hidden="true"
+            />
+            <KeyRound
+              className="w-[10px] h-[10px] absolute -bottom-0.5 -right-1"
+              style={{ color: '#EFE6D6' }}
+              strokeWidth={2.5}
+              aria-hidden="true"
+            />
+          </span>
+        )}
+        <span className="allow-white" style={{ color: '#FFFFFF' }}>
+          Continue with Passkey
+        </span>
+      </span>
+    </button>
   );
 }
 

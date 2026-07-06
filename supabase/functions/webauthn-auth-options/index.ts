@@ -2,7 +2,7 @@
 // Public endpoint.
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { corsHeaders } from '../_shared/cors-utils.ts';
 import { generateAuthenticationOptions } from 'npm:@simplewebauthn/server@13';
 
 function rpIdFromOrigin(origin: string | null): string {

@@ -546,11 +546,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const canGoBack = ["forgot", "verify-otp", "reset", "otp-login"].includes(mode);
 
   return (
-    <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-white via-gray-50 to-white">
+    <div ref={ref} className="jj-auth-emerald-bg min-h-screen flex items-center justify-center py-12 px-4 relative">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-10 shadow-xl">
+        <div className="bg-[#FDFBF7] border border-[#B89555]/40 rounded-2xl p-10 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.55)]">
+
           {/* Back button */}
           {canGoBack && (
             <button
@@ -736,21 +737,22 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 </div>
               )}
 
-              <Button type="submit" disabled={isSubmitting} className="w-full h-12 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] font-semibold rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.01]">
+              <Button type="submit" disabled={isSubmitting} data-no-contrast-guard data-allow-dark-cta className="jj-auth-emerald-cta w-full h-12 rounded-xl font-semibold text-[15px] tracking-wide allow-white">
                 {isSubmitting ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" style={{ color: '#EFE6D6' }} />
                 ) : mode === "signup" ? (
-                  "Create Account"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Create Account</span>
                 ) : mode === "forgot" ? (
-                  "Send Verification Code"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Send Verification Code</span>
                 ) : mode === "reset" ? (
-                  "Update Password"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Update Password</span>
                 ) : mode === "otp-login" ? (
-                  "Send Sign-In Code"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Send Sign-In Code</span>
                 ) : (
-                  "Sign In"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Sign In</span>
                 )}
               </Button>
+
             </form>
           )}
 
@@ -768,7 +770,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
         </div>
 
-        <p className="text-center text-[#1A1A1A]/70 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+        <p className="text-center text-[#EFE6D6]/70 text-xs mt-8 allow-white">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+
       </div>
 
       {/* Account Reactivation Dialog */}
