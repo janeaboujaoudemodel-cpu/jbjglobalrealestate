@@ -737,21 +737,22 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 </div>
               )}
 
-              <Button type="submit" disabled={isSubmitting} className="w-full h-12 bg-[#EFE6D6] hover:bg-[#F7F2EA] text-[#1A1A1A] font-semibold rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.01]">
+              <Button type="submit" disabled={isSubmitting} data-no-contrast-guard data-allow-dark-cta className="jj-auth-emerald-cta w-full h-12 rounded-xl font-semibold text-[15px] tracking-wide allow-white">
                 {isSubmitting ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" style={{ color: '#EFE6D6' }} />
                 ) : mode === "signup" ? (
-                  "Create Account"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Create Account</span>
                 ) : mode === "forgot" ? (
-                  "Send Verification Code"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Send Verification Code</span>
                 ) : mode === "reset" ? (
-                  "Update Password"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Update Password</span>
                 ) : mode === "otp-login" ? (
-                  "Send Sign-In Code"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Send Sign-In Code</span>
                 ) : (
-                  "Sign In"
+                  <span className="allow-white" style={{ color: '#FFFFFF' }}>Sign In</span>
                 )}
               </Button>
+
             </form>
           )}
 
