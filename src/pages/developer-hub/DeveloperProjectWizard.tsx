@@ -285,6 +285,11 @@ const DeveloperProjectWizard = () => {
   const canSubmit =
     !!activeDeveloperId && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
 
+  const paymentPlanParts = basics.payment_plan
+    .split(/[,;\n]+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
     if (!text) return;
@@ -368,6 +373,13 @@ const DeveloperProjectWizard = () => {
   };
 
   const inputCls = "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1";
+  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void }) => (
+    <label className="flex min-h-[96px] cursor-pointer flex-col justify-between rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15">
+      <span className="flex items-center gap-2 text-sm font-semibold text-white"><Icon className="h-4 w-4" /> {title}</span>
+      <span className="text-xs leading-snug text-white/80">{note}</span>
+      <input type="file" multiple={multiple} accept={accept} className="hidden" disabled={extracting} onChange={(e) => e.target.files && onFiles(e.target.files)} />
+    </label>
+  );
 
   if (publishResult) {
     const publicPath = publishResult.public_path || (publishResult.slug ? `/project/${publishResult.slug}` : null);
@@ -492,11 +504,12 @@ const DeveloperProjectWizard = () => {
                 </p>
               </div>
             </div>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white text-[#064E3B] font-semibold cursor-pointer hover:bg-white/90 transition-colors">
-              {extracting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-              {extracting ? "Extracting…" : "Upload & extract"}
-              <input type="file" multiple accept="application/pdf,image/*" className="hidden" disabled={extracting} onChange={(e) => e.target.files && onSmartUpload(e.target.files)} />
-            </label>
+          </div>
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" onFiles={(files) => files[0] && onCover(files[0])} />
+            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*" multiple onFiles={onGallery} />
+            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="application/pdf,image/*" multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload payment plans, floor plans and documents together." accept="application/pdf,image/*" multiple onFiles={onSmartUpload} />
           </div>
           {smartFiles.length > 0 && (
             <div className="mt-4 space-y-1.5">
@@ -532,9 +545,17 @@ const DeveloperProjectWizard = () => {
                     <SelectValue placeholder="Select developer" />
                   </SelectTrigger>
                   <SelectContent>
+                    {selectedDeveloperId && activeDeveloperName && !ownerDevelopers.some((d) => d.id === selectedDeveloperId) && (
+                      <SelectItem value={selectedDeveloperId}>{activeDeveloperName}</SelectItem>
+                    )}
                     {ownerDevelopers.map((d) => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
+                {extractedDeveloperName && (
+                  <p className="mt-2 text-xs text-[#1A1A1A]/70">
+                    AI matched developer: <span className="font-semibold text-[#1A1A1A]">{extractedDeveloperName}</span>{developerLogoNeeded ? " — logo still needed for the developer profile." : ""}
+                  </p>
+                )}
               </div>
             )}
             <div className="md:col-span-2">
@@ -650,6 +671,10 @@ const DeveloperProjectWizard = () => {
               <Label className="text-[#1A1A1A]">Full description</Label>
               <Textarea rows={5} value={basics.description} onChange={(e) => setBasics({ ...basics, description: e.target.value })} className={inputCls} />
             </div>
+            <div className="md:col-span-2">
+              <Label className="text-[#1A1A1A]">Developer description</Label>
+              <Textarea rows={3} value={developerDescription} onChange={(e) => setDeveloperDescription(e.target.value)} placeholder="AI will prepare this from the brochure when available; edit or leave blank." className={inputCls} />
+            </div>
             <div className="md:col-span-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4">
               <Label className="text-[#1A1A1A]">Additional information</Label>
               <Textarea rows={4} value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Add any extra project notes, amenities, payment plan details, management rules or owner-use rules." className={inputCls} />
@@ -665,7 +690,7 @@ const DeveloperProjectWizard = () => {
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <Label className="text-[#1A1A1A]">Cover image</Label>
+              <Label className="text-[#1A1A1A]">Main cover photo</Label>
               {cover ? (
                 <div className="relative inline-block mt-2">
                   <img src={cover.url} alt="cover" className="h-40 rounded border border-[#B89555]/40"  loading="lazy" decoding="async" />
@@ -676,14 +701,14 @@ const DeveloperProjectWizard = () => {
               ) : (
                 <label className="mt-2 flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
                   <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Upload cover</span>
+                  <span className="text-sm text-[#1A1A1A]">Upload main cover</span>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && onCover(e.target.files[0])} />
                 </label>
               )}
             </div>
 
             <div>
-              <Label className="text-[#1A1A1A]">Gallery images & floor plans</Label>
+              <Label className="text-[#1A1A1A]">Gallery images</Label>
               <div className="flex flex-wrap gap-3 mt-2">
                 {gallery.map((g, i) => (
                   <div key={i} className="relative">
@@ -699,7 +724,7 @@ const DeveloperProjectWizard = () => {
                 ))}
                 <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors">
                   <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Add project media</span>
+                  <span className="text-sm text-[#1A1A1A]">Add gallery photos</span>
                   <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onGallery(e.target.files)} />
                 </label>
               </div>
@@ -709,7 +734,7 @@ const DeveloperProjectWizard = () => {
 
         {step === 2 && (
           <div>
-            <Label className="text-[#1A1A1A]">Brochures & project documents</Label>
+            <Label className="text-[#1A1A1A]">Fact sheet, brochures & project documents</Label>
             <p className="text-xs text-[#1A1A1A]/60 mt-1">Any file type, any size, unlimited count. Uploaded brochures can also be sent to the AI extractor on step 1.</p>
             <div className="space-y-2 mt-2">
               {brochures.map((b, i) => (
@@ -722,8 +747,8 @@ const DeveloperProjectWizard = () => {
               ))}
               <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
                 <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-sm text-[#1A1A1A]">Add brochure</span>
-                <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files)} />
+                  <span className="text-sm text-[#1A1A1A]">Add fact sheet / brochure</span>
+                <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files, "brochure", false)} />
               </label>
             </div>
           </div>
@@ -754,6 +779,7 @@ const DeveloperProjectWizard = () => {
               <div><span className="text-[#1A1A1A]/60">Cover image:</span> {cover ? "✓" : "—"}</div>
               <div><span className="text-[#1A1A1A]/60">Gallery:</span> {gallery.length} items</div>
               <div><span className="text-[#1A1A1A]/60">Brochures:</span> {brochures.length}</div>
+              <div className="col-span-2"><span className="text-[#1A1A1A]/60">Developer description:</span> {developerDescription || "—"}</div>
             </div>
           </div>
         )}
@@ -776,13 +802,31 @@ const DeveloperProjectWizard = () => {
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
             </div>
+            <div className="flex items-center gap-2">
+              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><MessageCircle className="h-4 w-4" /> Chat</button>
+              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Mail className="h-4 w-4" /> Email</button>
+              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Phone className="h-4 w-4" /> Call</button>
+            </div>
+            {basics.payment_plan && (
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
+                <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
+                  <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#064E3B] text-xs text-[#064E3B]">{paymentPlanParts[0]?.match(/\d+\/?\d*/)?.[0] || "%"}</span>
+                </button>
+                {paymentExpanded && (
+                  <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">
+                    {paymentPlanParts.length ? paymentPlanParts.map((part, i) => <p key={i}>{part}</p>) : <p>{basics.payment_plan}</p>}
+                  </div>
+                )}
+              </div>
+            )}
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
           </div>
         </Card>
       </aside>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="sticky bottom-0 z-20 -mx-2 flex items-center justify-between rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/95 p-2 shadow-[0_-10px_30px_-24px_rgba(26,26,26,0.45)] backdrop-blur">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
