@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, PercentCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string }
+interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
 
 const STEPS = ["Basics", "Media", "Brochures", "Review"] as const;
 
@@ -63,6 +63,10 @@ const DeveloperProjectWizard = () => {
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [additionalInfoMode, setAdditionalInfoMode] = useState<"keep" | "enrich">("enrich");
   const [publishResult, setPublishResult] = useState<AutoPublishResponse | null>(null);
+  const [extractedDeveloperName, setExtractedDeveloperName] = useState("");
+  const [developerDescription, setDeveloperDescription] = useState("");
+  const [developerLogoNeeded, setDeveloperLogoNeeded] = useState(false);
+  const [paymentExpanded, setPaymentExpanded] = useState(false);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
 
@@ -118,22 +122,25 @@ const DeveloperProjectWizard = () => {
       if (Array.isArray(draft?.brochures)) setBrochures(draft.brochures);
       if (Array.isArray(draft?.smartFiles)) setSmartFiles(draft.smartFiles);
       if (draft?.selectedDeveloperId) setSelectedDeveloperId(draft.selectedDeveloperId);
+      if (draft?.extractedDeveloperName) setExtractedDeveloperName(draft.extractedDeveloperName);
+      if (draft?.developerDescription) setDeveloperDescription(draft.developerDescription);
+      if (typeof draft?.developerLogoNeeded === "boolean") setDeveloperLogoNeeded(draft.developerLogoNeeded);
     } catch {
       window.localStorage.removeItem(draftKey);
     }
   }, [draftKey]);
 
   useEffect(() => {
-    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, savedAt: new Date().toISOString() };
+    const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() };
     try { window.localStorage.setItem(draftKey, JSON.stringify(payload)); } catch {}
-  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, draftKey]);
+  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, draftKey]);
 
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
-  const activeDeveloperName = isOwner ? ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name : developer?.name;
+  const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
   const trustLevel = developer?.trust_level as string | undefined;
   const willPublishLive = isOwner || trustLevel === "auto_publish";
 
-  const uploadFile = async (file: File, bucket = "rel-media") => {
+  const uploadFile = async (file: File, bucket = "rel-media", role?: Uploaded["role"]) => {
     const v = validateFile(file);
     if (!v.isValid) {
       toast.error(v.rejectionReason || "File rejected");
@@ -147,37 +154,53 @@ const DeveloperProjectWizard = () => {
     }
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     const { data: signed } = await supabase.storage.from(bucket).createSignedUrl(path, 60 * 60);
-    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type, size: file.size } as Uploaded;
+    return { url: data.publicUrl, extractionUrl: signed?.signedUrl || data.publicUrl, path, bucket, name: v.sanitizedName, type: file.type, size: file.size, role } as Uploaded;
   };
 
   const onCover = async (f: File) => {
-    const u = await uploadFile(f);
+    const u = await uploadFile(f, "rel-media", "cover");
     if (u) setCover(u);
   };
   const onGallery = async (files: FileList) => {
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f);
+      const u = await uploadFile(f, "rel-media", "gallery");
       if (u) setGallery((g) => [...g, u]);
     }
   };
-  const onBrochures = async (files: FileList) => {
+  const onBrochures = async (files: FileList, role: Uploaded["role"] = "brochure", extractAfterUpload = false) => {
+    const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f);
-      if (u) setBrochures((b) => [...b, u]);
+      const u = await uploadFile(f, "rel-media", role);
+      if (u) uploaded.push(u);
+    }
+    if (!uploaded.length) return;
+    setBrochures((b) => [...b, ...uploaded]);
+    if (extractAfterUpload) {
+      const extractionFiles = [...smartFiles, ...uploaded];
+      setSmartFiles(extractionFiles);
+      await runExtraction(extractionFiles);
     }
   };
 
   const onSmartUpload = async (files: FileList) => {
     const uploaded: Uploaded[] = [];
     for (const f of Array.from(files)) {
-      const u = await uploadFile(f);
+      const u = await uploadFile(f, "rel-media", "document");
       if (u) uploaded.push(u);
     }
     if (uploaded.length === 0) return;
-    setSmartFiles((s) => [...s, ...uploaded]);
-    // Also add to brochures list so they are saved as project documents
-    setBrochures((b) => [...b, ...uploaded]);
-    await runExtraction([...smartFiles, ...uploaded]);
+    const imageFiles = uploaded.filter((u) => u.type.startsWith("image/"));
+    const documentFiles = uploaded.filter((u) => !u.type.startsWith("image/"));
+    if (!cover && imageFiles.length) setCover({ ...imageFiles[0], role: "cover" });
+    if (imageFiles.length > 1) setGallery((g) => [...g, ...imageFiles.slice(1).map((u) => ({ ...u, role: "gallery" as const }))]);
+    if (documentFiles.length) {
+      const extractionFiles = [...smartFiles, ...documentFiles];
+      setSmartFiles(extractionFiles);
+      setBrochures((b) => [...b, ...documentFiles]);
+      await runExtraction(extractionFiles);
+    } else {
+      toast.success("Image uploaded. Add a brochure or fact sheet to run AI extraction.");
+    }
   };
 
   const runExtraction = async (files: Uploaded[]) => {
@@ -186,7 +209,7 @@ const DeveloperProjectWizard = () => {
     setLastExtractedFields([]);
     try {
       const { data, error } = await supabase.functions.invoke("ai-project-brochure-extract", {
-          body: { files: files.map((f) => ({ url: f.extractionUrl || f.url, name: f.name, type: f.type })) },
+          body: { files: files.map((f) => ({ url: f.extractionUrl || f.url, name: f.name, type: f.type, role: f.role })) },
       });
       if (error) {
         let message = error.message || "Extraction failed";
@@ -209,6 +232,7 @@ const DeveloperProjectWizard = () => {
         const next = { ...prev };
         const setIfEmpty = (key: keyof Basics, v: unknown) => {
           if (v === null || v === undefined || v === "") return;
+          if ((key === "handover_date" || key === "launch_date") && !/^\d{4}-\d{2}-\d{2}$/.test(String(v))) return;
           if (!next[key] || next[key] === "") {
             next[key] = String(v) as any;
             filled.push(String(key));
@@ -232,6 +256,7 @@ const DeveloperProjectWizard = () => {
         setIfEmpty("number_of_stories", extracted.number_of_stories);
         setIfEmpty("furnished_status", extracted.furnished_status);
         setIfEmpty("management_type", extracted.management_type);
+        setIfEmpty("short_description", extracted.listing_title);
         if (Array.isArray(extracted.amenities) && extracted.amenities.length && !next.amenities) {
           next.amenities = (extracted.amenities as string[]).join(", ");
           filled.push("amenities");
@@ -241,6 +266,11 @@ const DeveloperProjectWizard = () => {
         if (typeof extracted.owner_can_use === "boolean" && !next.owner_can_use) { next.owner_can_use = extracted.owner_can_use ? "yes" : "no"; filled.push("owner_can_use"); }
         return next;
       });
+      const developerInfo = (data as any)?.developer;
+      if (typeof extracted.developer_name === "string" && extracted.developer_name.trim()) setExtractedDeveloperName(extracted.developer_name.trim());
+      if (developerInfo?.developer_id && isOwner) setSelectedDeveloperId(developerInfo.developer_id);
+      if (typeof extracted.developer_description === "string" && extracted.developer_description.trim()) setDeveloperDescription(extracted.developer_description.trim());
+      setDeveloperLogoNeeded(Boolean(developerInfo?.developer_logo_needed));
       setLastExtractedFields(filled);
       if (Array.isArray((data as any)?.files_skipped) && (data as any).files_skipped.length) {
         toast.warning(`${(data as any).files_skipped.length} file(s) were skipped. The rest were extracted.`);
@@ -255,6 +285,11 @@ const DeveloperProjectWizard = () => {
 
   const canSubmit =
     !!activeDeveloperId && !!basics.name.trim() && !!basics.handover_date && !!basics.price_from;
+
+  const paymentPlanParts = basics.payment_plan
+    .split(/[,;\n]+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
 
   const applyAdditionalInfo = () => {
     const text = additionalInfo.trim();
@@ -285,7 +320,7 @@ const DeveloperProjectWizard = () => {
 
   const saveDraft = () => {
     try {
-      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, savedAt: new Date().toISOString() }));
+      window.localStorage.setItem(draftKey, JSON.stringify({ basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, savedAt: new Date().toISOString() }));
       toast.success("Draft saved on this device");
     } catch {
       toast.error("Draft could not be saved on this device");
@@ -331,6 +366,7 @@ const DeveloperProjectWizard = () => {
       },
       images: gallery.filter((g) => g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i + 1 })),
       documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: "brochure" })),
+      developer_patch: developerDescription ? { description: developerDescription } : undefined,
     });
     try { window.localStorage.removeItem(draftKey); } catch {}
     if (res.project_id || res.slug || res.public_path) setPublishResult(res);
@@ -338,6 +374,13 @@ const DeveloperProjectWizard = () => {
   };
 
   const inputCls = "bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A] mt-1";
+  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void }) => (
+    <label className="flex min-h-[96px] cursor-pointer flex-col justify-between rounded-lg border border-white/25 bg-white/10 p-3 text-white transition-colors hover:bg-white/15">
+      <span className="flex items-center gap-2 text-sm font-semibold text-white"><Icon className="h-4 w-4" /> {title}</span>
+      <span className="text-xs leading-snug text-white/80">{note}</span>
+      <input type="file" multiple={multiple} accept={accept} className="hidden" disabled={extracting} onChange={(e) => e.target.files && onFiles(e.target.files)} />
+    </label>
+  );
 
   if (publishResult) {
     const publicPath = publishResult.public_path || (publishResult.slug ? `/project/${publishResult.slug}` : null);
@@ -388,11 +431,12 @@ const DeveloperProjectWizard = () => {
         </Card>
 
         {publicPath && (
-          <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
             <Card className="overflow-hidden rounded-lg border-[#B89555]/40 bg-[#FDFBF7] hover:border-[#B89555] transition-colors">
-              <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
-                {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
-              </div>
+              <button type="button" onClick={() => window.open(publicPath, "_blank", "noopener,noreferrer")} className="block w-full text-left">
+                <div className="aspect-[16/7] bg-gradient-to-br from-[#064E3B] to-[#042c1c] grid place-items-center text-white" data-surface="emerald">
+                  {cover?.url ? <img src={cover.url} alt="Project cover preview" className="h-full w-full object-cover" loading="lazy" decoding="async" /> : <Building2 className="h-14 w-14 text-white" />}
+                </div>
+              </button>
               <div className="p-5 space-y-3">
                 <p className="text-xs uppercase tracking-[0.16em] text-[#B89555] font-bold">{isPublished ? "Live listing preview" : "Saved listing preview"}</p>
                 <div className="flex items-start justify-between gap-3">
@@ -408,9 +452,22 @@ const DeveloperProjectWizard = () => {
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
                   <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
                 </div>
+                <div className="flex items-center gap-2">
+                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><MessageCircle className="h-4 w-4" /> Chat</button>
+                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Mail className="h-4 w-4" /> Email</button>
+                  <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Phone className="h-4 w-4" /> Call</button>
+                </div>
+                {basics.payment_plan && (
+                  <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
+                    <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
+                      <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#064E3B] text-xs text-[#064E3B]">{paymentPlanParts[0]?.match(/\d+\/?\d*/)?.[0] || "%"}</span>
+                    </button>
+                    {paymentExpanded && <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">{paymentPlanParts.map((part, i) => <p key={i}>{part}</p>)}</div>}
+                  </div>
+                )}
               </div>
             </Card>
-          </button>
         )}
       </div>
     );
@@ -462,11 +519,12 @@ const DeveloperProjectWizard = () => {
                 </p>
               </div>
             </div>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-white text-[#064E3B] font-semibold cursor-pointer hover:bg-white/90 transition-colors">
-              {extracting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-              {extracting ? "Extracting…" : "Upload & extract"}
-              <input type="file" multiple accept="application/pdf,image/*" className="hidden" disabled={extracting} onChange={(e) => e.target.files && onSmartUpload(e.target.files)} />
-            </label>
+          </div>
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" onFiles={(files) => files[0] && onCover(files[0])} />
+            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*" multiple onFiles={onGallery} />
+            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="application/pdf,image/*" multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload payment plans, floor plans and documents together." accept="application/pdf,image/*" multiple onFiles={onSmartUpload} />
           </div>
           {smartFiles.length > 0 && (
             <div className="mt-4 space-y-1.5">
@@ -502,9 +560,17 @@ const DeveloperProjectWizard = () => {
                     <SelectValue placeholder="Select developer" />
                   </SelectTrigger>
                   <SelectContent>
+                    {selectedDeveloperId && activeDeveloperName && !ownerDevelopers.some((d) => d.id === selectedDeveloperId) && (
+                      <SelectItem value={selectedDeveloperId}>{activeDeveloperName}</SelectItem>
+                    )}
                     {ownerDevelopers.map((d) => <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
+                {extractedDeveloperName && (
+                  <p className="mt-2 text-xs text-[#1A1A1A]/70">
+                    AI matched developer: <span className="font-semibold text-[#1A1A1A]">{extractedDeveloperName}</span>{developerLogoNeeded ? " — logo still needed for the developer profile." : ""}
+                  </p>
+                )}
               </div>
             )}
             <div className="md:col-span-2">
@@ -620,6 +686,10 @@ const DeveloperProjectWizard = () => {
               <Label className="text-[#1A1A1A]">Full description</Label>
               <Textarea rows={5} value={basics.description} onChange={(e) => setBasics({ ...basics, description: e.target.value })} className={inputCls} />
             </div>
+            <div className="md:col-span-2">
+              <Label className="text-[#1A1A1A]">Developer description</Label>
+              <Textarea rows={3} value={developerDescription} onChange={(e) => setDeveloperDescription(e.target.value)} placeholder="AI will prepare this from the brochure when available; edit or leave blank." className={inputCls} />
+            </div>
             <div className="md:col-span-2 rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4">
               <Label className="text-[#1A1A1A]">Additional information</Label>
               <Textarea rows={4} value={additionalInfo} onChange={(e) => setAdditionalInfo(e.target.value)} placeholder="Add any extra project notes, amenities, payment plan details, management rules or owner-use rules." className={inputCls} />
@@ -635,7 +705,7 @@ const DeveloperProjectWizard = () => {
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <Label className="text-[#1A1A1A]">Cover image</Label>
+              <Label className="text-[#1A1A1A]">Main cover photo</Label>
               {cover ? (
                 <div className="relative inline-block mt-2">
                   <img src={cover.url} alt="cover" className="h-40 rounded border border-[#B89555]/40"  loading="lazy" decoding="async" />
@@ -646,14 +716,14 @@ const DeveloperProjectWizard = () => {
               ) : (
                 <label className="mt-2 flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
                   <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Upload cover</span>
+                  <span className="text-sm text-[#1A1A1A]">Upload main cover</span>
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && onCover(e.target.files[0])} />
                 </label>
               )}
             </div>
 
             <div>
-              <Label className="text-[#1A1A1A]">Gallery images & floor plans</Label>
+              <Label className="text-[#1A1A1A]">Gallery images</Label>
               <div className="flex flex-wrap gap-3 mt-2">
                 {gallery.map((g, i) => (
                   <div key={i} className="relative">
@@ -669,7 +739,7 @@ const DeveloperProjectWizard = () => {
                 ))}
                 <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors">
                   <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                  <span className="text-sm text-[#1A1A1A]">Add project media</span>
+                  <span className="text-sm text-[#1A1A1A]">Add gallery photos</span>
                   <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onGallery(e.target.files)} />
                 </label>
               </div>
@@ -679,7 +749,7 @@ const DeveloperProjectWizard = () => {
 
         {step === 2 && (
           <div>
-            <Label className="text-[#1A1A1A]">Brochures & project documents</Label>
+            <Label className="text-[#1A1A1A]">Fact sheet, brochures & project documents</Label>
             <p className="text-xs text-[#1A1A1A]/60 mt-1">Any file type, any size, unlimited count. Uploaded brochures can also be sent to the AI extractor on step 1.</p>
             <div className="space-y-2 mt-2">
               {brochures.map((b, i) => (
@@ -692,8 +762,8 @@ const DeveloperProjectWizard = () => {
               ))}
               <label className="flex items-center gap-2 px-4 py-3 border border-dashed border-[#B89555]/60 rounded cursor-pointer hover:bg-[#EFE6D6]/60 transition-colors w-fit">
                 <Upload className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-sm text-[#1A1A1A]">Add brochure</span>
-                <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files)} />
+                  <span className="text-sm text-[#1A1A1A]">Add fact sheet / brochure</span>
+                <input type="file" multiple className="hidden" onChange={(e) => e.target.files && onBrochures(e.target.files, "brochure", false)} />
               </label>
             </div>
           </div>
@@ -724,6 +794,7 @@ const DeveloperProjectWizard = () => {
               <div><span className="text-[#1A1A1A]/60">Cover image:</span> {cover ? "✓" : "—"}</div>
               <div><span className="text-[#1A1A1A]/60">Gallery:</span> {gallery.length} items</div>
               <div><span className="text-[#1A1A1A]/60">Brochures:</span> {brochures.length}</div>
+              <div className="col-span-2"><span className="text-[#1A1A1A]/60">Developer description:</span> {developerDescription || "—"}</div>
             </div>
           </div>
         )}
@@ -746,13 +817,31 @@ const DeveloperProjectWizard = () => {
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Bedrooms</span>{basics.bedrooms_min || "—"} - {basics.bedrooms_max || "—"}</div>
               <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-2"><span className="block text-[#1A1A1A]/60">Docs</span>{brochures.length}</div>
             </div>
+            <div className="flex items-center gap-2">
+              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><MessageCircle className="h-4 w-4" /> Chat</button>
+              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Mail className="h-4 w-4" /> Email</button>
+              <button type="button" className="flex h-9 flex-1 items-center justify-center gap-1 rounded bg-[#064E3B] text-sm font-semibold text-white" data-surface="emerald"><Phone className="h-4 w-4" /> Call</button>
+            </div>
+            {basics.payment_plan && (
+              <div className="rounded border border-[#B89555]/25 bg-[#F7F2EA] p-3 text-[#1A1A1A]">
+                <button type="button" onClick={() => setPaymentExpanded((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left text-sm font-semibold text-[#1A1A1A]">
+                  <span className="flex items-center gap-2"><PercentCircle className="h-5 w-5 text-[#064E3B]" /> Payment plan</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#064E3B] text-xs text-[#064E3B]">{paymentPlanParts[0]?.match(/\d+\/?\d*/)?.[0] || "%"}</span>
+                </button>
+                {paymentExpanded && (
+                  <div className="mt-3 space-y-1 text-sm text-[#1A1A1A]/80">
+                    {paymentPlanParts.length ? paymentPlanParts.map((part, i) => <p key={i}>{part}</p>) : <p>{basics.payment_plan}</p>}
+                  </div>
+                )}
+              </div>
+            )}
             <p className="text-sm text-[#1A1A1A]/75 line-clamp-4">{basics.short_description || basics.description || "AI-extracted summary will appear here. Edit fields on the left before publishing."}</p>
           </div>
         </Card>
       </aside>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="sticky bottom-0 z-20 -mx-2 flex items-center justify-between rounded-lg border border-[#B89555]/25 bg-[#FDFBF7]/95 p-2 shadow-[0_-10px_30px_-24px_rgba(26,26,26,0.45)] backdrop-blur">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"

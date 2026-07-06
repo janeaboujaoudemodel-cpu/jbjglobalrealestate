@@ -40387,6 +40387,7 @@ export type Database = {
         Returns: boolean
       }
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
+      is_verified_staff: { Args: { _user_id: string }; Returns: boolean }
       link_broker_entity_by_email: { Args: never; Returns: string }
       list_my_broker_oauth_apps: {
         Args: never
