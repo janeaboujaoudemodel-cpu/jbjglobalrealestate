@@ -648,8 +648,20 @@ const DeveloperProjectWizard = () => {
     const amenitiesArr = basics.amenities
       ? basics.amenities.split(",").map((s) => s.trim()).filter(Boolean)
       : null;
+    const sizeRange = parseAreaRange(basics.built_up_area || basics.plot_area);
+    const bedroomTypes = selectedBedrooms.length ? selectedBedrooms.map(bedroomLabel) : null;
+    const unitTypes = selectedBedrooms.length
+      ? selectedBedrooms.map((value) => ({
+          type: value === 0 ? "Studio" : value >= 6 ? "6+ Bedrooms" : `${value} Bedroom${value === 1 ? "" : "s"}`,
+          size_from: sizeRange.min ?? undefined,
+          size_to: sizeRange.max ?? undefined,
+          price_from: basics.price_from ? Number(basics.price_from) : undefined,
+          status: "available",
+        }))
+      : null;
     const res = await publish.mutateAsync({
       developer_id: activeDeveloperId,
+      publish_live: !isOwner && willPublishLive,
       patch: {
         name: basics.name.trim(),
         short_description: basics.short_description || null,
@@ -662,9 +674,14 @@ const DeveloperProjectWizard = () => {
         price_to: basics.price_to ? Number(basics.price_to) : null,
         bedrooms_min: basics.bedrooms_min ? Number(basics.bedrooms_min) : null,
         bedrooms_max: basics.bedrooms_max ? Number(basics.bedrooms_max) : null,
+        bedroom_types: bedroomTypes,
+        unit_types: unitTypes,
         payment_plan: basics.payment_plan || null,
         service_charge: basics.service_charge || null,
         built_up_area: basics.built_up_area || null,
+        size_min: sizeRange.min,
+        size_max: sizeRange.max,
+        area_unit: basics.built_up_area || basics.plot_area ? "sqft" : null,
         plot_area: basics.plot_area || null,
         number_of_stories: basics.number_of_stories ? Number(basics.number_of_stories) : null,
         furnished_status: basics.furnished_status || null,
@@ -677,7 +694,15 @@ const DeveloperProjectWizard = () => {
         developer_name: activeDeveloperName || null,
       },
       images: [cover, ...gallery].filter((g): g is Uploaded => !!g && g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i })),
-      documents: brochures.map((b) => ({ file_url: b.url, file_name: b.name, document_type: getDocumentType(b) })),
+      documents: brochures.map((b, i) => ({
+        file_url: b.url,
+        file_name: b.name,
+        document_type: getDocumentType(b),
+        file_size: b.size,
+        storage_path: b.path || null,
+        cover_image_url: documentCoverFor(b, i),
+        display_title: b.name.replace(/\.[a-z0-9]{2,5}$/i, "").replace(/[-_]+/g, " ").replace(/\s+/g, " ").trim(),
+      })),
       developer_patch: developerDescription ? { description: developerDescription } : undefined,
     });
     try { window.localStorage.removeItem(draftKey); } catch {}
