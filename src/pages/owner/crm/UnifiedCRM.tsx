@@ -16,7 +16,6 @@ import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts
 import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useRef, useCallback } from "react";
 import {
   Users, Crown, Building2, UserCog, Network, Briefcase, BadgeCheck,
   ChevronDown, BarChart3, Bell, Database, Plus, UserPlus,
