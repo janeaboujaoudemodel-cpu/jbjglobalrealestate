@@ -100,7 +100,7 @@ const Admin = () => {
               <kbd className="ml-auto px-1.5 py-0.5 bg-[#EFE6D6]/10 text-[#1A1A1A] text-[10px] rounded font-mono flex-shrink-0">⌘K</kbd>
             </button>
           </div>
-          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
+          <div className="flex items-center gap-2 ml-auto flex-shrink-0 pl-2 border-l border-[#B89555]/30">
             <AdminNotificationBell />
             <Link to="/owner/marketing-hub">
               <Button size="sm" data-emerald-action="true" data-surface="emerald" className="jj-cta-emerald font-semibold shadow-[0_12px_24px_-18px_rgba(6,78,59,0.85)]">
@@ -109,13 +109,14 @@ const Admin = () => {
                 <span className="xl:hidden">Marketing</span>
               </Button>
             </Link>
-            <Button variant="secondary" size="sm" onClick={() => h.navigate("/")}>
+            <Button variant="secondary" size="sm" onClick={() => h.navigate("/")} className="border border-[#B89555]/40">
               <Home className="w-3.5 h-3.5 mr-1.5" /><span className="hidden md:inline">View Site</span>
             </Button>
-            <Button variant="secondary" size="sm" onClick={h.handleSignOut}>
+            <Button variant="secondary" size="sm" onClick={h.handleSignOut} className="border border-[#B89555]/40">
               <LogOut className="w-3.5 h-3.5 mr-1.5" /><span className="hidden md:inline">Sign Out</span>
             </Button>
           </div>
+
         </div>
       </header>
 
