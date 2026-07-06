@@ -423,7 +423,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   return (
     <>
-      <div className="w-full" data-filter-clean="true">
+      <div className="w-full" data-filter-clean="true" data-filter-bar-gold="true">
         {/* Single merged row: Search + Filter Popovers + Sort + Map + Saved + Reset + Results */}
         {/*
           Mobile-first horizontal rail:
