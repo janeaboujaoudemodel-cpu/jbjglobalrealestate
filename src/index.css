@@ -33611,3 +33611,35 @@ html body #root [data-radix-popper-content-wrapper] [data-filter-menu="true"] :w
   color: #1A1A1A !important;
   -webkit-text-fill-color: #1A1A1A !important;
 }
+
+/* PASS 215 — final owner screenshot sweep locks. */
+html body #root .owner-dashboard-shell [data-enrichment-tile="full"],
+html body #root .owner-dashboard-shell [data-enrichment-tile="full"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root .owner-dashboard-shell [data-inbox-category-pill="idle"],
+html body #root .owner-dashboard-shell [data-inbox-category-pill="idle"] *,
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="idle"],
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="idle"] *,
+html body #root .owner-dashboard-shell [data-recommendation-count-pill="idle"],
+html body #root .owner-dashboard-shell [data-recommendation-count-pill="idle"] * {
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  opacity: 1 !important;
+}
+
+html body #root .owner-dashboard-shell [data-inbox-category-pill="active"],
+html body #root .owner-dashboard-shell [data-inbox-category-pill="active"] *,
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="active"],
+html body #root .owner-dashboard-shell [data-recommendation-source-pill="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
