@@ -266,7 +266,7 @@ async function tierEliteFallback(mode: string | null): Promise<Project[]> {
     if (result.length >= FALLBACK_TARGET) break;
   }
   // Fill remaining from leftovers (still unique developers)
-  if (result.length < TARGET) {
+  if (result.length < FALLBACK_TARGET) {
     for (const arr of perDev) {
       for (const p of arr) {
         if (result.length >= FALLBACK_TARGET) break;
@@ -323,7 +323,7 @@ export function useHandpickedProjects() {
         dedupePush(out, seen, interest);
       } catch {}
 
-      if (out.length < TARGET && user?.id) {
+      if (out.length < FALLBACK_TARGET && user?.id) {
         try {
           const favs = await tierFavorites(user.id);
           if (favs.length > 0 && source === "elite") source = "favorites";
@@ -332,7 +332,7 @@ export function useHandpickedProjects() {
         } catch {}
       }
 
-      if (out.length < TARGET) {
+      if (out.length < FALLBACK_TARGET) {
         try {
           const history = await tierBrowsingHistory();
           if (history.length > 0 && source === "elite") source = "history";
@@ -341,18 +341,18 @@ export function useHandpickedProjects() {
         } catch {}
       }
 
-      if (out.length < TARGET) {
+      if (out.length < FALLBACK_TARGET) {
         try {
           const elite = await tierEliteFallback(mode ?? null);
           dedupePush(out, seen, elite);
         } catch {}
       }
 
-      if (out.length < TARGET) {
+      if (out.length < FALLBACK_TARGET) {
         try {
           const published = await tierPublishedFallback();
           for (const p of published) {
-            if (out.length >= TARGET) break;
+            if (out.length >= FALLBACK_TARGET) break;
             if (!p?.id || seen.has(p.id)) continue;
             seen.add(p.id);
             out.push(p);
