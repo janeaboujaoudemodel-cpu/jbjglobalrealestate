@@ -76,22 +76,35 @@ const HISTORY_KEY = "JBJ_BROWSING_HISTORY";
 
 type Project = UnifiedProject;
 
+function detectDevice(): "mobile" | "tablet" | "desktop" {
+  if (typeof window === "undefined") return "desktop";
+  const w = window.innerWidth;
+  if (w < 640) return "mobile";
+  if (w < 1024) return "tablet";
+  return "desktop";
+}
+
 async function tierOwnerFeatured(): Promise<Project[]> {
+  const device = detectDevice();
   const { data } = await supabase
     .from("home_featured_projects" as any)
     .select(`
       display_order,
       is_visible,
+      device,
       owner_details,
       project:projects(${SELECT})
     `)
     .eq("is_visible", true)
-    .order("display_order", { ascending: true })
-    .order("updated_at", { ascending: false });
+    .in("device", [device, "desktop"])
+    .order("display_order", { ascending: true });
 
-  return ((data || []) as any[])
-    .map((row) => row.project)
-    .filter(Boolean) as Project[];
+  // Prefer device-specific rows; fall back to desktop rows only if no
+  // device-specific slots were configured for the current viewport.
+  const rows = (data || []) as any[];
+  const deviceRows = rows.filter((r) => r.device === device);
+  const chosen = deviceRows.length ? deviceRows : rows.filter((r) => r.device === "desktop");
+  return chosen.map((row) => row.project).filter(Boolean) as Project[];
 }
 
 function readBrowsingHistory(): Array<{ slug?: string; id?: string; developer_name?: string; area_name?: string }> {

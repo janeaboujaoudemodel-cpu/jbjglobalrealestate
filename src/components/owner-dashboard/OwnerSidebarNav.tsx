@@ -77,7 +77,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Projects", icon: ClipboardList, path: "/owner/developers/projects" },
       { label: "Calendar", icon: Calendar, path: "/owner/developers/calendar" },
       { label: "Access Requests", icon: Shield, path: "/owner/developers/access-requests" },
-      { label: "Profile Rebuild", icon: RefreshCw, path: "/owner/developers/profile-rebuild" },
+      { label: "Developer Profiles", icon: RefreshCw, path: "/owner/developers/profile-rebuild" },
       { label: "Missing Logos", icon: ImageOff, path: "/owner/developers/missing-logos" },
     ],
   },
