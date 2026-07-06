@@ -2,7 +2,7 @@
 // Requires an authenticated user (they must be signed in to register a passkey).
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { corsHeaders } from '../_shared/cors-utils.ts';
 import { generateRegistrationOptions } from 'npm:@simplewebauthn/server@13';
 
 const RP_NAME = 'JBJ Global Real Estate';
