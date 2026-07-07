@@ -14,7 +14,7 @@ import {
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
-  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown, Search, Plus
+  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown, Search, Plus, Replace
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
@@ -146,6 +146,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiAddOpen, setAiAddOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerMode, setPickerMode] = useState<"multi" | "replace">("multi");
+  const [replaceTarget, setReplaceTarget] = useState<{ id: string; name: string } | null>(null);
   const [selectedCompareIds, setSelectedCompareIds] = useState<string[]>([]);
   // Auto-open the project picker the first time the user lands on /compare
   // with an empty shortlist so they can immediately search & pick projects.
@@ -184,6 +186,39 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const shortlistReady = !authLoading;
   const seededFromShortlistRef = useRef(false);
   const compareIds = selectedCompareIds.length > 0 ? selectedCompareIds : shortlistIds.slice(0, 4);
+
+  const openMultiPicker = () => {
+    setPickerMode("multi");
+    setReplaceTarget(null);
+    setPickerOpen(true);
+  };
+
+  const openReplacePicker = (project: { id: string; name: string }) => {
+    setPickerMode("replace");
+    setReplaceTarget(project);
+    setPickerOpen(true);
+  };
+
+  const handlePickerOpenChange = (next: boolean) => {
+    setPickerOpen(next);
+    if (!next) {
+      setPickerMode("multi");
+      setReplaceTarget(null);
+    }
+  };
+
+  const handlePickerConfirm = (ids: string[]) => {
+    if (pickerMode === "replace" && replaceTarget) {
+      const replacementId = ids[0];
+      const baseIds = (selectedCompareIds.length > 0 ? selectedCompareIds : compareIds).filter(Boolean);
+      const nextIds = baseIds.map((id) => (id === replaceTarget.id ? replacementId : id));
+      setSelectedCompareIds(Array.from(new Set(nextIds)));
+      setPickerMode("multi");
+      setReplaceTarget(null);
+      return;
+    }
+    setSelectedCompareIds(ids);
+  };
 
   // Fetch project details
   const { data: projects, isLoading } = useQuery({
@@ -709,7 +744,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
               <CompareCTA
                 variant="gradient"
-                onClick={() => setPickerOpen(true)}
+                onClick={openMultiPicker}
                 icon={<Search className="w-4 h-4" />}
               >
                 Search & pick projects
@@ -740,7 +775,15 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           </div>
         </div>
         <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
-        <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} selectedIds={selectedCompareIds} onConfirm={setSelectedCompareIds} />
+        <CompareProjectPicker
+          open={pickerOpen}
+          onOpenChange={handlePickerOpenChange}
+          selectedIds={pickerMode === "replace" ? [] : selectedCompareIds}
+          disabledIds={pickerMode === "replace" ? compareIds.filter((id) => id !== replaceTarget?.id) : []}
+          mode={pickerMode}
+          replaceProjectName={replaceTarget?.name}
+          onConfirm={handlePickerConfirm}
+        />
       </CompareAIShell>
     );
   }
@@ -857,7 +900,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             {/* CTA row — primary emerald metallic (white ink), secondary champagne (black ink) */}
             <div className="flex flex-wrap gap-3 mt-8">
               <button
-                onClick={() => setPickerOpen(true)}
+                onClick={openMultiPicker}
                 disabled={isGenerating}
                 data-no-contrast-guard
                 data-allow-dark-cta
@@ -878,10 +921,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               </button>
 
               <button
-                onClick={() => setPickerOpen(true)}
+                onClick={openMultiPicker}
                 data-no-contrast-guard
                 data-allow-dark-cta
-                className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                className="allow-white inline-flex min-w-[188px] items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
                 style={{
                   backgroundImage: EMERALD_CARD,
                   color: "#FFFFFF",
@@ -1074,6 +1117,16 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                           <p data-developer-name className="text-sm font-medium whitespace-normal break-words [overflow-wrap:anywhere] leading-snug" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>
                             {project.developer?.name}
                           </p>
+                          <button
+                            type="button"
+                            onClick={() => openReplacePicker(project)}
+                            data-no-contrast-guard
+                            className="allow-white mt-1 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg px-3 text-xs font-bold"
+                            style={{ background: "rgba(255,255,255,0.14)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.35)", WebkitTextFillColor: "#FFFFFF" }}
+                          >
+                            <Replace className="w-3.5 h-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                            <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Replace Project</span>
+                          </button>
                         </div>
                       </th>
                     );
@@ -1465,7 +1518,15 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
       <ActiveLeadBanner showAddToShortlist={false} />
       <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
-      <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} selectedIds={selectedCompareIds} onConfirm={setSelectedCompareIds} />
+      <CompareProjectPicker
+        open={pickerOpen}
+        onOpenChange={handlePickerOpenChange}
+        selectedIds={pickerMode === "replace" ? [] : selectedCompareIds}
+        disabledIds={pickerMode === "replace" ? compareIds.filter((id) => id !== replaceTarget?.id) : []}
+        mode={pickerMode}
+        replaceProjectName={replaceTarget?.name}
+        onConfirm={handlePickerConfirm}
+      />
     </section>
   );
 };
