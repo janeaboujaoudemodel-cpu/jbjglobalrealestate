@@ -1,36 +1,38 @@
-import { Building2, Leaf, Route, Sparkles, Handshake } from "lucide-react";
+import { Building2, Leaf, Route, Sparkles, Handshake, Check } from "lucide-react";
+import aerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
+import furnishedApts from "@/assets/amra-brochure/furnished-serviced-apartments.jpg";
+import inRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
+import seaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";
+import grandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
+import spaLounge from "@/assets/amra-brochure/spa-lounge.jpg";
 
 /**
  * Amra-only fact panel — content is quoted verbatim from the AMRA English Factsheet
- * (developer document) so nothing here is inferred or generated. Rendered only for
- * the Amra project on the Project Detail page.
- *
- * Sources (AMRA_English_Factsheet.pdf):
- *  - Amra BNB integrated rental facility & Citi Developers App (Investor Proposition + Investor Friendly sections)
- *  - "A Dh750 million Emirates Road Enhancement Project" (UAE Road Infrastructure section)
- *  - "Minimum of seven sustainability initiative requirements" (Sustainability & Regenerative section)
- *  - Design Partners / B2B Partners list (Design Ethos & Partners + Brand Partnerships sections)
+ * (developer document). Rendered only for the Amra project on Project Detail.
+ * Visual standard: emerald premium surfaces + supporting photography from the brochure.
  */
+
+const EMERALD = "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)";
 
 const bnbFeatures = [
   "Switch short-stay renting on or off anytime",
   "Choose which nights to rent; block personal stays in one tap",
-  "One-stop management across Airbnb, holiday-home partners and Amra portals",
+  "One-stop management across Airbnb, holiday-home partners & Amra portals",
   "Optional smart pricing based on demand trends",
-  "Income dashboard for bookings, nightly rates and payouts",
+  "Income dashboard for bookings, nightly rates & payouts",
   "Guest KYC and concierge-managed check-in / check-out",
 ];
 
 const sustainabilityInitiatives = [
-  "Gardens and vertical green façades",
+  "Gardens & vertical green façades",
   "Solar farming on the rooftop",
-  "Seawater cooling and pool water re-use",
+  "Seawater cooling & pool water re-use",
   "Energy-generating jogging track",
-  "Energy-efficient appliances and LED lighting",
-  "High-performance insulation and water-saving fixtures",
-  "Natural ventilation via skylights and cross-breezes",
-  "Green roofs and living walls",
-  "Smart-home systems for automated energy management",
+  "Energy-efficient appliances & LED lighting",
+  "High-performance insulation & water-saving fixtures",
+  "Natural ventilation via skylights & cross-breezes",
+  "Green roofs & living walls",
+  "Smart-home energy management",
 ];
 
 const designPartners = [
@@ -49,10 +51,35 @@ const brandPartners = [
   { name: "Eden One", role: "Wellness Partner" },
   { name: "Blue Coral Concept", role: "F&B Partner" },
   { name: "Valor Hospitality", role: "Hospitality & Maintenance Partner" },
+  { name: "Life Pharmacy", role: "Pharmacy Partner" },
+  { name: "Venus", role: "Beauty Clinic Partner" },
 ];
 
 interface Props {
   projectName: string;
+}
+
+function EmeraldCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div
+      className={`rounded-2xl overflow-hidden border border-[#B89555]/40 shadow-[0_18px_50px_-30px_rgba(4,44,28,0.55)] ${className}`}
+      style={{ background: EMERALD }}
+      data-surface="emerald"
+    >
+      {children}
+    </div>
+  );
+}
+
+function SectionEyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="text-[10px] uppercase tracking-[0.36em] font-semibold mb-2"
+      style={{ color: "#E9D9A8", WebkitTextFillColor: "#E9D9A8" }}
+    >
+      {children}
+    </p>
+  );
 }
 
 export default function AmraFactSheetInsights({ projectName }: Props) {
@@ -60,145 +87,224 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
 
   return (
     <div className="mb-14 scroll-mt-40 space-y-6" id="amra-factsheet-insights">
-      {/* Amra BNB — Investor management */}
-      <div className="jj-card-inner">
-        <div className="flex items-start gap-3 mb-4">
-          <Building2 className="w-5 h-5 text-[#1A1A1A] mt-1" />
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">
-              Investor Proposition
-            </p>
-            <h3 className="text-h3-sm font-medium text-foreground">
-              Amra BNB — Integrated Rental Facility
-            </h3>
-            <p className="text-sm text-[#1A1A1A]/78 mt-2 max-w-3xl">
+      {/* 1. Amra BNB — Investor management */}
+      <EmeraldCard>
+        <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="relative min-h-[280px] lg:min-h-[420px]">
+            <img
+              src={furnishedApts}
+              alt="Amra fully furnished serviced apartment interior"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3">
+              <img
+                src={inRoomDining}
+                alt="Amra in-room dining"
+                className="w-24 h-16 md:w-32 md:h-20 object-cover rounded-md border border-white/40 shadow-lg"
+                loading="lazy"
+              />
+              <span
+                className="text-[10px] uppercase tracking-[0.28em] font-semibold px-3 py-1 rounded-full border"
+                style={{ color: "#FFFFFF", borderColor: "rgba(233,217,168,0.55)", background: "rgba(4,44,28,0.55)" }}
+              >
+                From the Amra Factsheet
+              </span>
+            </div>
+          </div>
+          <div className="p-6 md:p-8">
+            <div className="flex items-start gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full border border-[#E9D9A8]/40 flex items-center justify-center" style={{ background: "rgba(255,255,255,0.08)" }}>
+                <Building2 className="w-5 h-5" style={{ color: "#E9D9A8" }} />
+              </div>
+              <div>
+                <SectionEyebrow>Investor Proposition</SectionEyebrow>
+                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  Amra BNB — Integrated Rental Facility
+                </h3>
+              </div>
+            </div>
+            <p className="text-sm md:text-[15px] leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}>
               Amra BNB is the developer-operated short-stay platform for owners at Amra.
               Listings are distributed across Airbnb, holiday-home partners and Amra's own
-              portals and controlled from the Citi Developers App — verbatim from the Amra factsheet.
+              portals and controlled from the Citi Developers App.
             </p>
-          </div>
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2 mt-4">
-          {bnbFeatures.map((feature) => (
-            <div
-              key={feature}
-              className="flex items-start gap-2 rounded-md border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-sm font-medium text-[#1A1A1A]"
-            >
-              <Sparkles className="w-4 h-4 text-[#064E3B] mt-0.5 flex-shrink-0" />
-              <span>{feature}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Emirates Road AED 750M infrastructure */}
-      <div className="jj-card-inner">
-        <div className="flex items-start gap-3">
-          <Route className="w-5 h-5 text-[#1A1A1A] mt-1" />
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">
-              UAE Road Infrastructure
-            </p>
-            <h3 className="text-h3-sm font-medium text-foreground">
-              AED 750 M Emirates Road Enhancement — Faster Access to Amra
-            </h3>
-          </div>
-        </div>
-        <ul className="mt-4 space-y-2 text-sm text-[#1A1A1A]/85 max-w-3xl">
-          <li>
-            • The UAE is investing in its federal highway network with a{" "}
-            <strong>AED 750 million Emirates Road Enhancement Project</strong>, widening
-            the corridor from Dubai to Umm Al Quwain.
-          </li>
-          <li>
-            • By 2027, travel capacity is projected to increase by <strong>65%</strong>,
-            cutting journey times by up to <strong>45%</strong> between Dubai, UAQ and Ras Al Khaimah.
-          </li>
-          <li>
-            • The upgrade improves accessibility to Amra as a residential, tourism and
-            investment destination.
-          </li>
-          <li>
-            • On-property mobility: yachts limo service, private-marina yacht parking deck,
-            and heli / air-taxi landing pad availability.
-          </li>
-        </ul>
-      </div>
-
-      {/* Sustainability & Regenerative */}
-      <div className="jj-card-inner">
-        <div className="flex items-start gap-3 mb-4">
-          <Leaf className="w-5 h-5 text-[#064E3B] mt-1" />
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">
-              Sustainability & Regenerative
-            </p>
-            <h3 className="text-h3-sm font-medium text-foreground">
-              Designed to meet a minimum of seven sustainability initiatives
-            </h3>
-          </div>
-        </div>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {sustainabilityInitiatives.map((item) => (
-            <div
-              key={item}
-              className="flex items-start gap-2 rounded-md border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-sm text-[#1A1A1A]"
-            >
-              <Leaf className="w-4 h-4 text-[#064E3B] mt-0.5 flex-shrink-0" />
-              <span>{item}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Design Partners & Brand Partnerships */}
-      <div className="jj-card-inner">
-        <div className="flex items-start gap-3 mb-4">
-          <Handshake className="w-5 h-5 text-[#1A1A1A] mt-1" />
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">
-              Design Ethos & Partners
-            </p>
-            <h3 className="text-h3-sm font-medium text-foreground">
-              Design studios and brand partners named in the Amra factsheet
-            </h3>
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
-              Design Partners
-            </h4>
-            <ul className="grid grid-cols-2 gap-y-1.5 gap-x-4 text-sm text-[#1A1A1A]">
-              {designPartners.map((studio) => (
-                <li key={studio} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#B89555]" />
-                  <span className="font-semibold">{studio}</span>
-                </li>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {bnbFeatures.map((f) => (
+                <div
+                  key={f}
+                  className="flex items-start gap-2 rounded-md border border-[#E9D9A8]/25 px-3 py-2 text-sm font-medium"
+                  style={{ background: "rgba(255,255,255,0.06)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                >
+                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#E9D9A8" }} />
+                  <span>{f}</span>
+                </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </EmeraldCard>
+
+      {/* 2. Emirates Road AED 750M */}
+      <EmeraldCard>
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="p-6 md:p-8">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full border border-[#E9D9A8]/40 flex items-center justify-center" style={{ background: "rgba(255,255,255,0.08)" }}>
+                <Route className="w-5 h-5" style={{ color: "#E9D9A8" }} />
+              </div>
+              <div>
+                <SectionEyebrow>UAE Road Infrastructure</SectionEyebrow>
+                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  AED 750 M Emirates Road Enhancement
+                </h3>
+                <p className="text-xs uppercase tracking-[0.24em] mt-1" style={{ color: "#E9D9A8" }}>
+                  Faster access to Amra
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="rounded-lg border border-[#E9D9A8]/30 p-4" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <p className="text-3xl md:text-4xl font-bold" style={{ color: "#E9D9A8" }}>65%</p>
+                <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.78)" }}>Travel capacity increase by 2027</p>
+              </div>
+              <div className="rounded-lg border border-[#E9D9A8]/30 p-4" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <p className="text-3xl md:text-4xl font-bold" style={{ color: "#E9D9A8" }}>-45%</p>
+                <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.78)" }}>Journey times between Dubai, UAQ & RAK</p>
+              </div>
+            </div>
+            <ul className="space-y-2 text-sm" style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}>
+              <li className="flex gap-2"><Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#E9D9A8" }} /><span>Federal highway widening from Dubai to Umm Al Quwain</span></li>
+              <li className="flex gap-2"><Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#E9D9A8" }} /><span>Amra positioned as a residential, tourism & investment destination</span></li>
+              <li className="flex gap-2"><Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#E9D9A8" }} /><span>On-property mobility: yachts limo service, private-marina yacht deck, heli / air-taxi landing pad</span></li>
             </ul>
           </div>
-          <div>
-            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
-              Brand Partnerships (B2B)
-            </h4>
-            <ul className="space-y-2">
-              {brandPartners.map((partner) => (
-                <li key={partner.name} className="flex items-center justify-between gap-3 text-sm">
-                  <span className="font-semibold text-[#1A1A1A]">{partner.name}</span>
-                  <span className="text-[#1A1A1A]/65 text-xs uppercase tracking-wider">
-                    {partner.role}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-xs text-[#1A1A1A]/60">
-              Additional F&amp;B, supermarket, pharmacy and beauty clinic partners marked
-              as TBC in the developer factsheet.
-            </p>
+          <div className="relative min-h-[280px] lg:min-h-[420px]">
+            <img
+              src={aerialResort}
+              alt="Aerial view of the Amra resort in Umm Al Quwain"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/40" />
           </div>
         </div>
-      </div>
+      </EmeraldCard>
+
+      {/* 3. Sustainability & Regenerative */}
+      <EmeraldCard>
+        <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="relative min-h-[260px] lg:min-h-[480px]">
+            <img
+              src={seaTurtles}
+              alt="Umm Al Quwain sea turtles — Blue Carbon Zone biodiversity"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4">
+              <span
+                className="text-[10px] uppercase tracking-[0.28em] font-semibold px-3 py-1 rounded-full border"
+                style={{ color: "#FFFFFF", borderColor: "rgba(233,217,168,0.55)", background: "rgba(4,44,28,0.55)" }}
+              >
+                Blue Carbon Zone · UAQ
+              </span>
+            </div>
+          </div>
+          <div className="p-6 md:p-8">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full border border-[#E9D9A8]/40 flex items-center justify-center" style={{ background: "rgba(255,255,255,0.08)" }}>
+                <Leaf className="w-5 h-5" style={{ color: "#E9D9A8" }} />
+              </div>
+              <div>
+                <SectionEyebrow>Sustainability & Regenerative</SectionEyebrow>
+                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  Designed to meet a minimum of seven sustainability initiatives
+                </h3>
+              </div>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {sustainabilityInitiatives.map((item) => (
+                <div
+                  key={item}
+                  className="flex items-start gap-2 rounded-md border border-[#E9D9A8]/25 px-3 py-2 text-sm"
+                  style={{ background: "rgba(255,255,255,0.06)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                >
+                  <Leaf className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#E9D9A8" }} />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </EmeraldCard>
+
+      {/* 4. Design Ethos & Partners */}
+      <EmeraldCard>
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="p-6 md:p-8">
+            <div className="flex items-start gap-3 mb-5">
+              <div className="w-10 h-10 rounded-full border border-[#E9D9A8]/40 flex items-center justify-center" style={{ background: "rgba(255,255,255,0.08)" }}>
+                <Handshake className="w-5 h-5" style={{ color: "#E9D9A8" }} />
+              </div>
+              <div>
+                <SectionEyebrow>Design Ethos & Partners</SectionEyebrow>
+                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  Design studios & brand partners named in the Amra factsheet
+                </h3>
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.28em] font-semibold mb-3" style={{ color: "#E9D9A8" }}>
+                  Design Partners
+                </p>
+                <ul className="space-y-1.5">
+                  {designPartners.map((studio) => (
+                    <li key={studio} className="flex items-center gap-2 text-sm" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#E9D9A8" }} />
+                      <span className="font-semibold">{studio}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.28em] font-semibold mb-3" style={{ color: "#E9D9A8" }}>
+                  Brand Partnerships
+                </p>
+                <ul className="space-y-2">
+                  {brandPartners.map((p) => (
+                    <li key={p.name} className="flex items-start justify-between gap-3 text-sm border-b border-[#E9D9A8]/15 pb-1.5 last:border-0">
+                      <span className="font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{p.name}</span>
+                      <span className="text-[10px] uppercase tracking-[0.18em] text-right" style={{ color: "#E9D9A8" }}>{p.role}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-3 text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  Life Pharmacy and Venus confirmed by Amra management. Additional F&amp;B and supermarket partners TBC.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="relative min-h-[300px] lg:min-h-[520px]">
+            <img
+              src={grandLobbyHero}
+              alt="Amra grand lobby — design partner interior"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+            />
+            <img
+              src={spaLounge}
+              alt="Amra spa lounge"
+              className="absolute bottom-4 right-4 w-40 h-28 object-cover rounded-md border border-white/40 shadow-lg hidden md:block"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </EmeraldCard>
     </div>
   );
 }
