@@ -15,6 +15,7 @@ import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SafeImage } from "@/components/SafeImage";
 import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
+import { ProjectDuplicateCheck } from "@/components/projects/ProjectDuplicateCheck";
 
 interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "floor_plan" | "payment_plan" | "document" }
 
