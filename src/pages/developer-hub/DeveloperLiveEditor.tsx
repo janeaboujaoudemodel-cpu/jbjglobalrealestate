@@ -241,9 +241,9 @@ const DeveloperLiveEditor = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <Building2 className="h-5 w-5 text-[#064E3B]" />
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Off-plan projects</h2>
-          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{projects?.length ?? 0}</Badge>
+          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{projects.length}{allProjects && projects.length !== allProjects.length ? ` of ${allProjects.length}` : ""}</Badge>
 
-          {(projects?.length ?? 0) > 0 && (
+          {(allProjects?.length ?? 0) > 0 && (
             <div className="ml-auto flex items-center gap-2">
               <Button size="sm" variant="outline" onClick={allSelected ? clearAll : selectAll}
                 className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
@@ -251,6 +251,39 @@ const DeveloperLiveEditor = () => {
               </Button>
             </div>
           )}
+        </div>
+
+        {/* Search + status tabs */}
+        <div className="flex flex-wrap gap-3 items-center">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by project or developer name…"
+              className="pl-9 bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A]"
+            />
+          </div>
+          <div className="flex gap-1 flex-wrap">
+            {([
+              ["all", "All", counts.all],
+              ["live", "Live", counts.live],
+              ["draft", "Draft / Unpublished", counts.draft],
+            ] as const).map(([key, label, count]) => (
+              <Button
+                key={key}
+                size="sm"
+                variant={statusFilter === key ? "default" : "outline"}
+                onClick={() => setStatusFilter(key as StatusFilter)}
+                className={statusFilter === key
+                  ? "jj-surface-emerald allow-white text-white border-transparent"
+                  : "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"}
+                data-surface={statusFilter === key ? "emerald" : undefined}
+              >
+                {label} <span className="ml-1 opacity-70">({count})</span>
+              </Button>
+            ))}
+          </div>
         </div>
 
         {selected.size > 0 && (
