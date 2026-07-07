@@ -1393,6 +1393,7 @@ function ProjectDetailLayoutInner({
 
       {/* STICKY PROJECT HEADER - replaces the global horizontal header while scrolled. */}
       <div 
+        data-project-sticky-nav="true"
         className={`jj-utility-shell fixed left-0 right-0 z-[9999] backdrop-blur-md transition-all duration-300 ${
           showStickyNav
             ? "top-0 translate-y-0 opacity-100"
