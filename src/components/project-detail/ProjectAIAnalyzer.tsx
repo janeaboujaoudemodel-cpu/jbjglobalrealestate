@@ -215,10 +215,15 @@ export const ProjectAIAnalyzer = ({
     return !VAGUE_KEYWORDS.some(kw => lower.includes(kw));
   });
   const isCitiDeveloper = /\bciti\s+developers?\b/i.test(developer || "");
-  const citiDeveloperLandscape = [
-    "Umm Al Quwain: Amra The First Integrative Wellness Resort is Citi Developers' flagship wellness-resort project.",
-    "Wider Umm Al Quwain: Arya Residences, Aveline Residences, Allura and Agua Residences are separate Citi Developers projects and are not presented as the same micro-location inventory.",
-    "Amra positioning: fully integrated wellness-resort living with 165+ amenities, helipad and air-taxi access, fully furnished and fully serviced residences with app-enabled concierge.",
+  // Citi Developers portfolio — the actual project roster we track.
+  // Shown as a straight developer portfolio (name → area). No claims about
+  // shared micro-locations, comparability, or inventory.
+  const citiDeveloperPortfolio: Array<{ name: string; area: string; flagship?: boolean }> = [
+    { name: "Amra — The First Integrative Wellness Resort", area: "Al Raudah, Umm Al Quwain", flagship: true },
+    { name: "Arya Residences", area: "Umm Al Quwain" },
+    { name: "Aveline Residences", area: "Umm Al Quwain" },
+    { name: "Allura Residences", area: "Umm Al Quwain" },
+    { name: "Agua Residences", area: "Umm Al Quwain" },
   ];
 
   const amraPros = [
@@ -532,16 +537,41 @@ export const ProjectAIAnalyzer = ({
                 )}
               </div>
 
-              {/* Developer Landscape */}
+              {/* Developer Landscape — pure portfolio, no comparability claims */}
               <div data-surface="emerald" className="jj-market-emerald-card border rounded-2xl p-6 shadow-sm" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)", borderColor: "rgba(184,149,85,0.45)" }}>
                 <div className="flex items-center gap-2 mb-3">
                   <Building2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
-                  <h3 className="font-bold text-lg" style={{ color: "#FFFFFF" }}>Developer Landscape</h3>
+                  <h3 className="font-bold text-lg" style={{ color: "#FFFFFF" }}>Developer Portfolio</h3>
                 </div>
                 {isCitiDeveloper ? (
-                  <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#FFFFFF" }}>
-                    {citiDeveloperLandscape.map((item) => <li key={item}>• {item}</li>)}
-                  </ul>
+                  <>
+                    <p className="text-xs uppercase tracking-[0.16em] mb-3 opacity-80" style={{ color: "#FFFFFF" }}>
+                      Citi Developers · known projects
+                    </p>
+                    <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#FFFFFF" }}>
+                      {citiDeveloperPortfolio.map((p) => (
+                        <li key={p.name} className="flex items-start gap-2">
+                          <span aria-hidden className="mt-1 inline-block w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: "#D4B87A" }} />
+                          <span>
+                            <span className="font-semibold">{p.name}</span>
+                            {p.flagship && (
+                              <span className="ml-2 inline-block text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded" style={{ background: "#B89555", color: "#0A0A0A" }}>
+                                Flagship
+                              </span>
+                            )}
+                            <span className="block text-xs opacity-75 mt-0.5">{p.area}</span>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      to="/developer/citi-developers"
+                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] px-3 py-1.5 rounded-full transition-colors"
+                      style={{ background: "#B89555", color: "#0A0A0A" }}
+                    >
+                      View full developer page →
+                    </Link>
+                  </>
                 ) : sections?.developers ? (
                   <div className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "#FFFFFF" }}>
                     {cleanMarkdown(sections.developers)}
