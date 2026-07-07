@@ -1746,7 +1746,18 @@ function ProjectDetailLayoutInner({
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
                    serviceCharge={isAmraProject ? (project.service_charge || "AED 22/sq ft") : project.service_charge}
-                    standardInclusions={isAmraProject ? ["Fully furnished", "Fully serviced", "Fully managed by Amra BNB", "Full sea view", "Citi Buddy concierge", "G + M + 14 residential floors + rooftop"] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
+                    standardInclusions={isAmraProject ? [
+                      "Fully furnished & serviced apartment",
+                      "Sea view from every apartment",
+                      "70/30 payment plan with 3-year post-handover period",
+                      "Delivery by Q4 2029",
+                      "688,000 sq. ft dedicated wellness area (shared)",
+                      "Access to 140+ facilities across dedicated zones",
+                      "Dedicated marina for private yachts",
+                      "Amra BNB one-stop short-stay management",
+                      "Citi Buddy concierge via Citi Developers App",
+                      "In-room dining & all-day dining",
+                    ] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
              </div>
