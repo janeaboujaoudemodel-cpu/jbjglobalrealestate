@@ -14,11 +14,19 @@ interface Props {
 
 const BUCKET = "project-images"; // existing public bucket
 
+const getDisplayLogoUrl = (developerName: string, logoUrl?: string | null) => {
+  if (/^citi\s+developers$/i.test(developerName.trim()) && isValidDeveloperLogoUrl(logoUrl)) {
+    return "/citi-developers-logo-transparent.png";
+  }
+  return logoUrl || null;
+};
+
 export default function DeveloperLogoUploader({ developerId, developerName, logoUrl }: Props) {
   const canEdit = useCanEdit("developer_info");
   const qc = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const displayLogoUrl = getDisplayLogoUrl(developerName, logoUrl);
 
   const upload = async (file: File) => {
     setBusy(true);
@@ -45,10 +53,11 @@ export default function DeveloperLogoUploader({ developerId, developerName, logo
     <div className="relative flex-shrink-0 w-36 h-36">
       <div
         data-keep-gold
-        className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden"
+        data-developer-logo-plate="true"
+        className="jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden"
       >
-        {isValidDeveloperLogoUrl(logoUrl) ? (
-          <img src={logoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
+        {isValidDeveloperLogoUrl(displayLogoUrl) ? (
+          <img src={displayLogoUrl as string} alt={`${developerName} logo`} className="w-full h-full object-contain p-3"  loading="lazy" decoding="async" />
         ) : (
           <span className="text-[#1A1A1A] font-bold text-base text-center px-3 leading-snug w-full flex items-center justify-center min-h-full">{developerName}</span>
         )}
