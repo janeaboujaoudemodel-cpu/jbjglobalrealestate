@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
@@ -77,7 +77,7 @@ type NearbyRow = {
 
 function MapResizeRuntime() {
   const map = useMap();
-  useMemo(() => {
+  useEffect(() => {
     const id = window.setTimeout(() => map.invalidateSize(), 120);
     return () => window.clearTimeout(id);
   }, [map]);
