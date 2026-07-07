@@ -144,6 +144,9 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiAddOpen, setAiAddOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  // Auto-open the project picker the first time the user lands on /compare
+  // with an empty shortlist so they can immediately search & pick projects.
+  const autoOpenedRef = useRef(false);
 
   const handleExtractedToManual = (e: ExtractedProject) => {
     setAiAddOpen(false);
