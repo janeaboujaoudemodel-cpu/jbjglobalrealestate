@@ -503,8 +503,10 @@ export default function ProjectNearbyPropertiesMap({
             </Popup>
           </Marker>
         ))}
-      </MapContainer>
+        </MapContainer>
+        </div>
       </div>
     </div>
   );
 }
+
