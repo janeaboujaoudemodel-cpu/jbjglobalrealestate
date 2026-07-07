@@ -69,10 +69,11 @@ export default function HouseDetailsSection({
     details.push({ icon: Home, label: "Building Type", value: buildingType });
   }
   if (floors && floors > 3) {
+    const isAmra = /amra/i.test(projectName);
     details.push({ 
       icon: Layers, 
-      label: "Number of Floors", 
-      value: `${floors} Floors` 
+      label: isAmra ? "Building Height" : "Number of Floors", 
+      value: isAmra ? "15 stories · G + M + 14 residential floors + rooftop" : `${floors} Floors` 
     });
   }
   if (totalUnits && totalUnits > 4) {

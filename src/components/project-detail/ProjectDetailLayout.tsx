@@ -503,7 +503,7 @@ function ProjectDetailLayoutInner({
     const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
-    const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
+    const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard || isAmraProject;
     const hasMasterPlan = !!project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0;
 
     const mortgageEligible = isMortgageEligible({
@@ -739,7 +739,9 @@ function ProjectDetailLayoutInner({
       { label: "Wynn Casino / Marjan nightlife", time: "15 minutes by car · 7 minutes by air taxi" },
       { label: "Vida Resort / 25 Hours Hotel / UAQ Downtown", time: "20 minutes by car" },
     ];
-    return [...base, ...additions].filter((item, index, list) => list.findIndex((v) => v.label.toLowerCase() === item.label.toLowerCase()) === index);
+    const overrideLabels = new Set(additions.map((item) => item.label.toLowerCase()));
+    const cleanedBase = base.filter((item) => !overrideLabels.has(item.label.toLowerCase()));
+    return [...additions, ...cleanedBase].filter((item, index, list) => list.findIndex((v) => v.label.toLowerCase() === item.label.toLowerCase()) === index);
   }, [isAmraProject, project.location_distances]);
 
   // Helper: Derive bedroom range from unit_types array when min/max are null
@@ -1437,7 +1439,7 @@ function ProjectDetailLayoutInner({
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40 relative">
                 <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="house-details" initial={project as any} /></div>
                 <HouseDetailsSection
-                  floors={project.floors}
+                  floors={isAmraProject ? (project.floors || 15) : project.floors}
                   totalUnits={project.availability_visible ? project.total_units : null}
                   buildingType={project.property_type_label}
                  ceilingHeight={project.ceiling_height}
