@@ -36,14 +36,18 @@ function humanizeDocTitle(rawName: string): string {
   return t.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-function displayDocumentTitle(doc: BookDoc, fallback: string): string {
+// Doc type detection — order matters. Citi Buddy is checked BEFORE brochure
+// because concierge PDFs sometimes include "brochure" in filename.
+function detectDocType(doc: BookDoc): { label: string; kind: string } {
   const raw = `${doc.display_title || ""} ${doc.name || ""} ${doc.type || ""}`.toLowerCase();
-  if (/fact\s*sheet|factsheet/.test(raw)) return "Fact Sheet";
-  if (/spa\s*draft|catalogue|catalog|brochure/.test(raw)) return "Brochure";
-  if (/city\s*buddy|citi\s*buddy|buddy/.test(raw)) return "Citi Buddy";
-  if (/payment/.test(raw)) return "Payment Plan";
-  if (/floor/.test(raw)) return "Floor Plan";
-  return fallback;
+  if (/citi\s*buddy|city\s*buddy|\bbuddy\b|concierge/.test(raw)) return { label: "Citi Buddy", kind: "citi_buddy" };
+  if (/fact\s*sheet|factsheet/.test(raw)) return { label: "Fact Sheet", kind: "fact_sheet" };
+  if (/floor\s*plan/.test(raw)) return { label: "Floor Plan", kind: "floor_plan" };
+  if (/payment/.test(raw)) return { label: "Payment Plan", kind: "payment_plan" };
+  if (/\bspa\b/.test(raw)) return { label: "SPA", kind: "spa" };
+  if (/inventory/.test(raw)) return { label: "Inventory", kind: "inventory" };
+  if (/brochure/.test(raw)) return { label: "Brochure", kind: "brochure" };
+  return { label: humanizeDocTitle(doc.display_title || doc.name || doc.type || "Document"), kind: doc.type || "document" };
 }
 
 const typeIcon: Record<string, React.ReactNode> = {
@@ -53,7 +57,10 @@ const typeIcon: Record<string, React.ReactNode> = {
   floor_plan: <Layers className="w-4 h-4" />,
   inventory: <ClipboardList className="w-4 h-4" />,
   renders: <Image className="w-4 h-4" />,
+  citi_buddy: <FileText className="w-4 h-4" />,
+  spa: <FileText className="w-4 h-4" />,
 };
+
 
 export default function BookStyleDocuments({
   documents,
