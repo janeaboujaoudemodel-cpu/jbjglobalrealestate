@@ -112,6 +112,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
+import amenityHelipadImg from "@/assets/amenity-helipad.jpg";
+import amenityYachtMarinaImg from "@/assets/amenity-yacht-marina.jpg";
+import amenityWellnessSpaImg from "@/assets/amenity-wellness-spa.jpg";
+import amenityInRoomDiningImg from "@/assets/amenity-in-room-dining.jpg";
+import amenityFurnishedApartmentImg from "@/assets/amenity-furnished-apartment.jpg";
+import amenitySeaLagoonViewImg from "@/assets/amenity-sea-lagoon-view.jpg";
+import amenityAppConciergeImg from "@/assets/amenity-app-concierge.jpg";
+import amenityWellnessComplexImg from "@/assets/amenity-wellness-complex.jpg";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
@@ -739,16 +747,36 @@ function ProjectDetailLayoutInner({
   const amraAmenityImages = useMemo(() => {
     const mapped: Record<string, string> = { ...(project.amenity_images || {}) };
     if (!isAmraProject) return mapped;
-    const gallery = images
-      .filter((img) => !/bathroom|toilet|floor|plan/i.test(`${img.alt || ""} ${img.url || ""}`))
-      .map((img) => img.url);
-    amraAmenities.forEach((label, index) => {
-      if (!mapped[label] && gallery.length) mapped[label] = gallery[(index + 2) % gallery.length];
+
+    // Dedicated, curated images for Amra's signature amenities. These are
+    // matched by keyword — never by index — so a "heli-pad" title never
+    // lands on a bathroom or facade photo. Titles that don't match any
+    // dedicated image are left unmapped, and the component falls back to a
+    // clean icon tile (better than showing an unrelated photo).
+    const dedicated: Array<{ url: string; keywords: RegExp }> = [
+      { url: amenityHelipadImg, keywords: /heli|helipad|air.?taxi|helicopter/i },
+      { url: amenityYachtMarinaImg, keywords: /yacht|marina|boat|jetty|pontoon|limo/i },
+      { url: amenityWellnessSpaImg, keywords: /spa|sauna|jacuzzi|steam|hammam|thermal|treatment|massage|wellness (?:area|zone|centre|center)/i },
+      { url: amenityInRoomDiningImg, keywords: /in.?room dining|room service|all.?day dining|restaurant|dining|f&b/i },
+      { url: amenityFurnishedApartmentImg, keywords: /furnished|furniture|serviced (?:apartment|residenc)|hotel.?apartment|hotel.?style/i },
+      { url: amenitySeaLagoonViewImg, keywords: /sea view|lagoon|water view|ocean view|panoramic view|beach view/i },
+      { url: amenityAppConciergeImg, keywords: /app.?enabled|smart.?app|concierge|short.?stay|management/i },
+      { url: amenityWellnessComplexImg, keywords: /165|wellness.*(?:amenit|complex|resort)|470,?000|dedicated wellness/i },
+      { url: citiBuddyRobotAsset.url, keywords: /citi\s*buddy|city\s*buddy|robot|ai companion/i },
+    ];
+
+    amraAmenities.forEach((label) => {
+      if (mapped[label]) return; // owner-supplied wins
+      const hit = dedicated.find((d) => d.keywords.test(label));
+      if (hit) mapped[label] = hit.url;
+      // else: no image — component will show icon tile. No random gallery assignment.
     });
+
+    // Also register the exact-title keys for legacy lookups.
     mapped["Citi Buddy (AI Robot Companion)"] = citiBuddyRobotAsset.url;
     mapped["Citi Buddy concierge"] = citiBuddyRobotAsset.url;
     return mapped;
-  }, [amraAmenities, images, isAmraProject, project.amenity_images]);
+  }, [amraAmenities, isAmraProject, project.amenity_images]);
 
   const amraLocationDistances = useMemo(() => {
     const base = project.location_distances || [];
