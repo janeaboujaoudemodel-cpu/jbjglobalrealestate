@@ -17,6 +17,7 @@ import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
+import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null; show_sale_status?: boolean | null };
@@ -105,33 +106,9 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     return `${project.bedrooms_min}-${project.bedrooms_max} BR`;
   };
 
-  // Get unit types inline — ALWAYS prefer the manual `bedroom_types` array
-  // when present so the card mirrors exactly what the owner typed
-  // (e.g. "Studio, 2, 4 BR" — not a filled-in range).
-  const getUnitTypesText = () => {
-    const manual = (project as any).bedroom_types;
-    if (Array.isArray(manual) && manual.length > 0) {
-      return manual
-        .map((b: any) => {
-          const s = String(b).trim();
-          if (!s) return null;
-          if (/studio/i.test(s)) return 'Studio';
-          if (/br|bed/i.test(s)) return s.toUpperCase().replace(/\s+/g, '');
-          const n = Number(s);
-          return Number.isFinite(n) ? (n === 0 ? 'Studio' : `${n}BR`) : s;
-        })
-        .filter(Boolean)
-        .join(' • ');
-    }
-    const types: string[] = [];
-    if (project.bedrooms_min === 0 || (project as any).has_studio) types.push('Studio');
-    if (project.bedrooms_min && project.bedrooms_max) {
-      for (let i = Math.max(project.bedrooms_min, 1); i <= Math.min(project.bedrooms_max, 5); i++) {
-        types.push(`${i}BR`);
-      }
-    }
-    return types.length > 0 ? types.join(' • ') : null;
-  };
+  // Get unit types as a RANGE (Studio - 4 BR) — never an enumerated list.
+  // See src/utils/formatBedroomRange.ts for the locked rule.
+  const getUnitTypesText = () => formatBedroomRange(project as any);
 
   // Get size range text
   const getSizeText = () => {
