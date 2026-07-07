@@ -1,10 +1,12 @@
 import { Building2, Leaf, Route, Sparkles, Handshake, Check } from "lucide-react";
-import aerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
-import furnishedApts from "@/assets/amra-brochure/furnished-serviced-apartments.jpg";
-import inRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
-import seaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";
-import grandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
-import spaLounge from "@/assets/amra-brochure/spa-lounge.jpg";
+// Visuals mirrored 1:1 from the developer brochure — same photograph used on
+// each corresponding slide of the AMRA English Factsheet.
+import brochureEmiratesRoad from "@/assets/amra-brochure/brochure-emirates-road.jpg";      // Slide: UAE Road Infrastructure
+import brochureInvestorPath from "@/assets/amra-brochure/brochure-investor-path.jpg";      // Slide: Investor Proposition
+import brochureCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";                // Slide: Citi Developers App / AMRA BNB
+import brochureDesignArches from "@/assets/amra-brochure/brochure-design-ethos-arches.jpg";// Slide: Design Ethos & Partners
+import brochureYacht from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";        // Slide: Brand Partnerships
+import seaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";                            // UAQ Blue Carbon zone
 
 /**
  * Amra-only fact panel — content is quoted verbatim from the AMRA English Factsheet
@@ -51,6 +53,7 @@ const brandPartners = [
   { name: "Eden One", role: "Wellness Partner" },
   { name: "Blue Coral Concept", role: "F&B Partner" },
   { name: "Valor Hospitality", role: "Hospitality & Maintenance Partner" },
+  { name: "Spinneys", role: "Supermarket Partner" },
   { name: "Life Pharmacy", role: "Pharmacy Partner" },
   { name: "Venus", role: "Beauty Clinic Partner" },
 ];
