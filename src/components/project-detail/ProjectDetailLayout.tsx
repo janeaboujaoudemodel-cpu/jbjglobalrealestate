@@ -74,6 +74,7 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
+import { isMortgageEligible, mortgageIneligibilityReason } from "@/utils/mortgageEligibility";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 
@@ -499,6 +500,15 @@ function ProjectDetailLayoutInner({
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
     const hasMasterPlan = !!project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0;
 
+    const mortgageEligible = isMortgageEligible({
+      sale_status: project.sale_status,
+      construction_status: project.construction_status,
+      status_label: project.status_label,
+      construction_progress: project.construction_progress,
+      developer_name: project.developer?.name,
+      developer: project.developer ? { name: project.developer.name } : null,
+    });
+
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
       if (t.id === "usp") return hasUsp;
@@ -514,9 +524,28 @@ function ProjectDetailLayoutInner({
       if (t.id === "developer") return hasDeveloper;
       if (t.id === "house-details") return hasHouseDetails;
       if (t.id === "master-plan") return hasMasterPlan;
+      if (t.id === "mortgage") return mortgageEligible;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label]);
+
+  const mortgageEligible = useMemo(() => isMortgageEligible({
+    sale_status: project.sale_status,
+    construction_status: project.construction_status,
+    status_label: project.status_label,
+    construction_progress: project.construction_progress,
+    developer_name: project.developer?.name,
+    developer: project.developer ? { name: project.developer.name } : null,
+  }), [project.sale_status, project.construction_status, project.status_label, project.construction_progress, project.developer]);
+
+  const mortgageBlockedReason = useMemo(() => mortgageIneligibilityReason({
+    sale_status: project.sale_status,
+    construction_status: project.construction_status,
+    status_label: project.status_label,
+    construction_progress: project.construction_progress,
+    developer_name: project.developer?.name,
+    developer: project.developer ? { name: project.developer.name } : null,
+  }), [project.sale_status, project.construction_status, project.status_label, project.construction_progress, project.developer]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
@@ -1720,7 +1749,8 @@ function ProjectDetailLayoutInner({
             <OwnerDocDropzone projectId={project.id} />
           </div>
 
-           {/* MORTGAGE CALCULATOR (Order B: after brochure) */}
+           {/* MORTGAGE CALCULATOR — hidden for off-plan (unless tier-1 dev ≥50% built) */}
+           {mortgageEligible ? (
            <div ref={mortgageRef} className="mb-14 scroll-mt-32">
               <div className="jj-card-inner p-0 overflow-hidden">
                 <MortgageCalculator
@@ -1731,6 +1761,19 @@ function ProjectDetailLayoutInner({
                 />
               </div>
             </div>
+           ) : (
+             <div ref={mortgageRef} className="mb-14 scroll-mt-32">
+               <div className="jj-card-inner p-6 text-sm text-[#1A1A1A]/80 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl">
+                 <div className="flex items-start gap-3">
+                   <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
+                   <div>
+                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage not available for this project</p>
+                     <p>{mortgageBlockedReason}</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           )}
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
            <div ref={aiRef} id="ai" className="mb-10 md:mb-12 scroll-mt-40">

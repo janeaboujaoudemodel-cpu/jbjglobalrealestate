@@ -64,11 +64,15 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="jj-map-square-control"
+        className="jj-map-square-control inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
         data-surface="emerald"
+        data-emerald-action="true"
+        data-no-contrast-guard
         aria-label={t('map.openInGoogleMaps')}
+        style={{ backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF' }}
       >
-        <Maximize className="w-5 h-5" />
+        <Maximize className="w-4 h-4" />
+        <span>Open in Google Maps</span>
       </a>
     </div>
   );
@@ -143,8 +147,14 @@ export default function ProjectLocationMap({
   const coordinates: [number, number] = refinedCoords
     ?? (latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng]);
 
-  const mapQuery = `${projectName}${location ? `, ${location}` : ""}, UAE`;
-  const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
+  // Prefer coordinates for accurate Google Maps deep-link (avoids ambiguous name searches)
+  const hasCoords = !!(latitude && longitude);
+  const mapQuery = hasCoords
+    ? `${latitude},${longitude}`
+    : `${projectName}${location ? `, ${location}` : ""}, UAE`;
+  const externalMapsUrl = hasCoords
+    ? `https://www.google.com/maps/search/?api=1&query=${latitude}%2C${longitude}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
   return (
     <div data-map-shell className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '1px solid rgba(255,255,255,0.16)', boxShadow: '0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)' }}>

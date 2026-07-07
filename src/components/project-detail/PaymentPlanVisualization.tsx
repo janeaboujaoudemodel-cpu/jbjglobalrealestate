@@ -112,9 +112,14 @@ export default function PaymentPlanVisualization({
     });
   }
   
+  const isPostHandover = !!(postHandoverYears && postHandoverYears > 0);
+  const handoverLabel = isPostHandover
+    ? `Post-Handover${postHandoverYears ? ` (${postHandoverYears * 12} months)` : ""}`
+    : "On Handover";
+
   if (legacyBreakdown?.on_completion) {
     milestones.push({
-      label: "On Handover",
+      label: handoverLabel,
       value: legacyBreakdown.on_completion,
       icon: Home,
       color: "text-blue-600",
@@ -125,8 +130,11 @@ export default function PaymentPlanVisualization({
   } else if (isDetailedBreakdown && detailedMilestones.length > 1) {
 
     const last = detailedMilestones[detailedMilestones.length - 1];
+    const rawLabel = last.milestone || handoverLabel;
+    // Normalize any lingering "on handover" wording when we know it's actually post-handover
+    const finalLabel = isPostHandover && /on\s*handover/i.test(rawLabel) ? handoverLabel : rawLabel;
     milestones.push({
-      label: last.milestone || "On Handover",
+      label: finalLabel,
       value: `${last.percentage}%`,
       icon: Home,
       color: "text-blue-600",
@@ -282,25 +290,37 @@ export default function PaymentPlanVisualization({
                 )}
               </div>
               
-              {/* Timeline Dots */}
-              <div className="relative mt-4">
+              {/* Timeline Dots — anchored to the END of each stage bar so the circles
+                  visually match the width of the corresponding segment (e.g. the "During
+                  Construction" dot aligns with the end of its 60% bar, not the midpoint). */}
+              <div className="relative mt-4 h-12">
                 <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
-                <div className="flex justify-between relative">
-                  <div className="flex flex-col items-center">
-                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B' }} />
-                    <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">On Booking</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)' }} />
-                    <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">During Construction</span>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)' }} />
-                    <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center">
-                      On Handover{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}
-                    </span>
-                  </div>
-                </div>
+                {(() => {
+                  const bookingEnd = total > 0 ? (bookingPct / total) * 100 : 0;
+                  const constructionEnd = total > 0 ? ((bookingPct + constructionPct) / total) * 100 : 0;
+                  const handoverEnd = 100;
+                  const dot = (leftPct: number, gradient: string, label: React.ReactNode, align: "start"|"center"|"end" = "center") => (
+                    <div
+                      className="absolute flex flex-col items-center"
+                      style={{
+                        left: `${leftPct}%`,
+                        transform: align === "start" ? "translateX(0)" : align === "end" ? "translateX(-100%)" : "translateX(-50%)",
+                      }}
+                    >
+                      <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: gradient, backgroundColor: '#064E3B' }} />
+                      <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center whitespace-nowrap max-w-[180px]">
+                        {label}
+                      </span>
+                    </div>
+                  );
+                  return (
+                    <>
+                      {dot(0, 'var(--jj-emerald-ombre)', <>On Booking</>, "start")}
+                      {bookingPct > 0 && constructionPct > 0 && dot(bookingEnd, 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)', <>During Construction</>, "center")}
+                      {dot(handoverEnd, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}</>, "end")}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           )}
