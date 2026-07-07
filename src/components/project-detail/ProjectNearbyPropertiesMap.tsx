@@ -270,7 +270,7 @@ export default function ProjectNearbyPropertiesMap({
 
   return (
     <div className={className}>
-      <div data-map-shell className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full pb-1">
+      <div data-map-shell data-nearby-map-tabs="true" className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full pb-1">
         {chip("all", "All nearby", allMarkers.length)}
         {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
         {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}

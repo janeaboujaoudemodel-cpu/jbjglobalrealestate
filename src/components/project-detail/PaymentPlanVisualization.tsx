@@ -56,6 +56,10 @@ export default function PaymentPlanVisualization({
   const detailedMilestones: PaymentMilestone[] = isDetailedBreakdown ? (paymentBreakdown as PaymentMilestone[]) : [];
   const legacyBreakdown = !isDetailedBreakdown ? (paymentBreakdown as PaymentBreakdownLegacy | null) : null;
   const premiumPlan = formatPaymentPlanForDisplay(paymentPlan, handoverDate);
+  const cashPlan = {
+    label: "100% on booking",
+    note: "Cash discount applicable on full payment.",
+  };
 
   const milestones = [];
 
@@ -202,9 +206,9 @@ export default function PaymentPlanVisualization({
             <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}>
               <Wallet className="w-8 h-8" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             </div>
-            <p className="text-2xl font-bold text-[#1A1A1A] mb-2">100%</p>
-            <p className="text-sm text-[#1A1A1A]/70">Pay full amount upfront</p>
-            <p className="text-xs text-[#1A1A1A]/70 mt-2">Cash discount applicable on full payment.</p>
+            <p className="text-2xl font-bold text-[#1A1A1A] mb-2">{cashPlan.label}</p>
+            <p className="text-sm text-[#1A1A1A]/70">Pay the full amount upfront</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">{cashPlan.note}</p>
           </div>
         </TabsContent>
 

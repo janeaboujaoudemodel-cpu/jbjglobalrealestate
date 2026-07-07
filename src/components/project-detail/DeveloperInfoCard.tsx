@@ -48,12 +48,20 @@ interface DeveloperInfoCardProps {
 
 const DESCRIPTION_PREVIEW_LENGTH = 500;
 
+const getDisplayLogoUrl = (developerName: string, logoUrl?: string | null) => {
+  if (/^citi\s+developers$/i.test(developerName.trim()) && isValidDeveloperLogoUrl(logoUrl)) {
+    return "/citi-developers-logo-transparent.png";
+  }
+  return logoUrl || null;
+};
+
 export default function DeveloperInfoCard({ developer, projectName, projectCount, editable }: DeveloperInfoCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   
   if (!developer) return null;
 
   const computedOffplanProjects = developer.offplan_projects ?? projectCount ?? null;
+  const displayLogoUrl = getDisplayLogoUrl(developer.name, developer.logo_url);
 
   const stats = [
     { label: "Founded", value: developer.founded_year ? `${developer.founded_year.toLocaleString()}` : null, icon: Calendar },
@@ -88,13 +96,14 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
             ) : (
               <div
                 data-keep-gold
-                className="jj-cta-gold-metallic jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-0"
+                data-developer-logo-plate="true"
+                className="jj-developer-logo-metallic w-36 h-36 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 p-0"
               >
-                {isValidDeveloperLogoUrl(developer.logo_url) ? (
+                {isValidDeveloperLogoUrl(displayLogoUrl) ? (
                   <img
-                    src={developer.logo_url as string}
+                    src={displayLogoUrl as string}
                     alt={`${developer.name} logo`}
-                    className="w-full h-full object-contain p-3 mix-blend-multiply"
+                    className="w-full h-full object-contain p-3"
                    loading="lazy" decoding="async" />
                 ) : (
                   <span className="text-[#3a2a08] font-bold text-base text-center px-2">

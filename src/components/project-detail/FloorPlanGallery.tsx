@@ -145,7 +145,7 @@ export function FloorPlanGallery({
       </div>
 
       {/* Floor Plan Preview Card */}
-      <div className="relative rounded-xl border-2 border-primary/30 bg-card overflow-hidden">
+      <div className="relative rounded-xl border-2 border-[#B89555]/45 bg-card overflow-hidden">
         {/* Image preview area */}
         <div className="relative aspect-[4/3] bg-gradient-to-br from-muted/50 to-muted flex items-center justify-center">
           {activePlan?.imageUrl && !hasImageError ? (

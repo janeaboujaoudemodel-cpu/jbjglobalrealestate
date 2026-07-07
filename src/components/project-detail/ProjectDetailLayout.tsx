@@ -645,6 +645,14 @@ function ProjectDetailLayoutInner({
     [formatPriceRangeFull, project.price_from, project.price_to],
   );
 
+  const plotSizeText = useMemo(() => {
+    const raw = project.built_up_area || null;
+    if (!raw) return null;
+    const n = Number(String(raw).replace(/[^\d.]/g, ""));
+    if (Number.isFinite(n) && n > 0) return `${Math.round(n).toLocaleString("en-US")} sq ft`;
+    return String(raw);
+  }, [project.built_up_area]);
+
   const brochureInclusions = useMemo(() => {
     const hasCityBuddy = project.documents.some((doc) => /citi\s*buddy|city\s*buddy|buddy/i.test(`${doc.name || ""} ${doc.display_title || ""} ${doc.url || ""}`));
     return [
@@ -1120,9 +1128,9 @@ function ProjectDetailLayoutInner({
               </p>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">{plotSizeText ? "Plot size" : "Size"}</p>
               <p className="mt-2 text-xl font-bold text-foreground">
-                {sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
+                {plotSizeText || sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
           </div>
