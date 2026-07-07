@@ -1884,18 +1884,18 @@ function ProjectDetailLayoutInner({
               />
             </div>
 
+           {/* BUYER NATIONALITY INSIGHTS — project + area */}
+           <BuyerNationalityInsights
+             projectName={project.name}
+             areaName={project.area_name || project.location || null}
+           />
+
            {/* DLD MARKET WIDGET — full-bleed band (escapes outer max-w container) */}
            <div className="jj-project-nested-band mb-10 md:mb-12">
              <SectionDividerGoldFullBleed />
              <DLDMarketWidget />
              <SectionDividerGoldFullBleed />
            </div>
-
-           {/* BUYER NATIONALITY INSIGHTS — project + area */}
-           <BuyerNationalityInsights
-             projectName={project.name}
-             areaName={project.area_name || project.location || null}
-           />
 
            {/* MORE FROM THIS DEVELOPER — moved to bottom so it doesn't replace the area map */}
            <MoreFromDeveloperStrip
