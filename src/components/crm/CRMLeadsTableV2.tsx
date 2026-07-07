@@ -650,7 +650,7 @@ export default function CRMLeadsTableV2({
         onSuccess={() => { fetchLeads(); onRefresh(); }}
       />
 
-      <div className="w-full max-w-full overflow-hidden rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
+      <div data-crm-leads-responsive="true" className="w-full max-w-full overflow-hidden rounded-2xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] [&_*]:[overflow-wrap:normal] [&_*]:[word-break:normal]">
         <Table className="w-full min-w-0 table-fixed [&_th]:whitespace-nowrap [&_td]:whitespace-nowrap [&_th]:overflow-hidden [&_td]:overflow-hidden">
           <TableHeader>
             <TableRow className="border-[#B89555]/20 hover:bg-transparent">

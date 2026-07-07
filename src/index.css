@@ -33892,3 +33892,106 @@ html body #root .owner-dashboard-shell :is(
   stroke: #FFFFFF !important;
   opacity: 1 !important;
 }
+
+/* PASS 217 — backend-wide screenshot contrast/root layout lock.
+   Root fixes from live owner audit:
+   - Active segmented tabs inside champagne cards were being repainted ink by later surface rules.
+   - Emerald icon-only alert controls exposed black accessible text color.
+   - CRM lead table kept desktop column geometry inside a narrow owner content pane. */
+html body #root .owner-dashboard-shell :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-action="true"],
+  .jj-surface-emerald,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [data-jj-segmented-trigger][aria-selected="true"]
+) {
+  background: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-image: var(--jj-emerald-ombre, linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%)) !important;
+  background-color: #064E3B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  text-shadow: none !important;
+}
+
+html body #root .owner-dashboard-shell :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-emerald-action="true"],
+  .jj-surface-emerald,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  [role="tab"][data-state="active"],
+  [role="tab"][aria-selected="true"],
+  [data-jj-segmented-trigger][data-state="active"],
+  [data-jj-segmented-trigger][aria-selected="true"]
+) :is(*,span,div,p,small,strong,b,label,svg,path,line,polyline,polygon,circle,rect,[class*="lucide"]):not([data-no-contrast-guard]):not([data-no-contrast-guard] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 1200px) {
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] table,
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] thead,
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] tbody,
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] tr,
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] th,
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] td {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] table {
+    min-width: 0 !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] thead {
+    display: none !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] tbody {
+    display: grid !important;
+    gap: 0.75rem !important;
+    padding: 0.75rem !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] tr {
+    border: 1px solid rgba(184,149,85,0.26) !important;
+    border-radius: 0.75rem !important;
+    background: #FDFBF7 !important;
+    padding: 0.75rem !important;
+    overflow: hidden !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] td {
+    border: 0 !important;
+    padding: 0.35rem 0 !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] td > :where(div,span,a,button) {
+    max-width: 100% !important;
+  }
+
+  html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] td:nth-child(7) > div {
+    justify-content: flex-start !important;
+    overflow: visible !important;
+  }
+}
