@@ -110,7 +110,7 @@ export default function CompareProjectPicker({
     for (const id of ids) {
       if (user && isUUID(id)) {
         try {
-          await addDb.mutateAsync(id);
+          await toggleDb.mutateAsync({ projectId: id, isShortlisted: false });
         } catch (_e) {}
       } else {
         toggleGuest(id);
