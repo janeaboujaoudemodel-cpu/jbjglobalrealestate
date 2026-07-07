@@ -16,6 +16,10 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Urbanist', 'Inter', 'system-ui', 'sans-serif'],
+        // Editorial brochure serif — mirrors the AMRA brochure headline treatment
+        // (Cormorant Garamond is the closest free analog to Tiempos / Domaine).
+        serif: ['"Cormorant Garamond"', 'Georgia', '"Times New Roman"', 'serif'],
+        brochure: ['"Cormorant Garamond"', 'Georgia', '"Times New Roman"', 'serif'],
       },
       fontSize: {
         'h1': ['3.5rem', { lineHeight: '1.1', fontWeight: '600', letterSpacing: '-0.02em' }],

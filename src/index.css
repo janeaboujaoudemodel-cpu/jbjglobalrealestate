@@ -34342,3 +34342,21 @@ html body #root button[aria-label="Talk to JBJ support"].jj-emerald-metallic {
 }
 
 
+
+/* =========================================================================
+   Brochure headline standard — AMRA English Factsheet inspired.
+   All primary page titles (h1, h2) and any element with .font-brochure
+   use Cormorant Garamond, mirroring the developer brochure typography.
+   Subheads, UI labels, buttons, chips, and body text remain Urbanist/Inter.
+   ========================================================================= */
+h1,
+h2,
+.font-brochure,
+[data-brochure-title] {
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif !important;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+h1 { font-weight: 500; }
+h2 { font-weight: 500; }
+/* Keep utility-driven size classes intact; only override the family. */
