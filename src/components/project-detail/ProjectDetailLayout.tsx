@@ -1071,20 +1071,13 @@ function ProjectDetailLayoutInner({
     return `${formatSize(minSize).split(' ')[0]} - ${formatSize(maxSize)}`;
   };
 
-  // Format bedrooms text - prefer bedroom_types array if available
-  const bedroomsText = useMemo(() => {
-    // If bedroom_types array exists with labels, show those
-    const bedroomTypes = (project as any).bedroom_types;
-    if (bedroomTypes && Array.isArray(bedroomTypes) && bedroomTypes.length > 0) {
-      return bedroomTypes.join(', ');
-    }
-    // Fallback to min/max
-    if (project.bedrooms_min === 0 && project.bedrooms_max === 0) return "Studio";
-    if (project.bedrooms_min === 0 && project.bedrooms_max && project.bedrooms_max > 0) return `Studio - ${project.bedrooms_max} BR`;
-    if (!project.bedrooms_min) return null;
-    if (project.bedrooms_min === project.bedrooms_max) return `${project.bedrooms_min} BR`;
-    return `${project.bedrooms_min}-${project.bedrooms_max} BR`;
-  }, [project.bedrooms_min, project.bedrooms_max, (project as any).bedroom_types]);
+  // Format bedrooms text as a RANGE — see src/utils/formatBedroomRange.ts
+  // (LOCKED: "Studio, 2, 4" from bedroom_types means range Studio → 4 BR,
+  // not three discrete options.)
+  const bedroomsText = useMemo(
+    () => formatBedroomRange(project as any),
+    [project.bedrooms_min, project.bedrooms_max, (project as any).bedroom_types, (project as any).has_studio]
+  );
 
   // Format size text
   const sizeText = useMemo(() => {
