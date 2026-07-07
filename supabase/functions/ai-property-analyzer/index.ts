@@ -111,7 +111,7 @@ Use EXACTLY these section headers (numbered, bold):
 1. **Area Overview** - 2 sentences max: location positioning and lifestyle in a nutshell
 2. **Price Per Sqft** - Avg price/sqft, YoY trend % (2 bullet points max)
 3. **Supply vs Demand** - Pipeline units count, absorption rate (2 bullet points max)
-4. **Developer Landscape** - Top 3 developers with one flagship each (3 bullet points max)
+4. **Developer Landscape** - Top 3 developers that are **actually active in ${area}, ${emirateContext}** with one flagship project **located in ${area}** each (3 bullet points max). NEVER list a developer or project from a different emirate or area. If you cannot confirm at least 2 developers with projects in ${area}, write "Data not available for this area" instead of guessing. Do NOT list Sobha, Emaar, DAMAC, Nakheel, Meraas, Aldar unless you are certain they have an active project in ${area}, ${emirateContext}.
 5. **Investment Metrics** - Rental yield % and capital appreciation % (2 bullet points max)
 6. **Pros** - 3 key advantages (one line each)
 7. **Cons** - 3 key risks (one line each)
