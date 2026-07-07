@@ -33,7 +33,7 @@ const ALL_TABS = [
 ];
 
 export default function PropertySuite() {
-  // Compare is broker/owner-only — investor & developer modes never see it.
+  // Compare is professional-only — broker, developer, and owner workspaces.
   const { allowed: canCompare } = useCompareAccess();
   const tabs = useMemo(() => ALL_TABS.filter(t => t.value !== "compare" || canCompare), [canCompare]);
   const [activeTab, setActiveTab] = useState(tabs[0]?.value || "finder");

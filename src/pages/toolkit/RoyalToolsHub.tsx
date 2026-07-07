@@ -20,6 +20,8 @@ import {
   type ToolCategory,
 } from '@/config/royalToolsRegistry';
 import { useToolVisibility } from '@/hooks/useToolVisibility';
+import { useUserModeContext } from '@/contexts/UserModeContext';
+import { useIsAppOwner } from '@/hooks/useIsAppOwner';
 
 interface ToolCardProps {
   tool: ToolDefinition;
@@ -55,11 +57,14 @@ export default function RoyalToolsHub() {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ToolCategory | 'all'>('all');
   const visibility = useToolVisibility();
+  const { mode } = useUserModeContext();
+  const { isOwner } = useIsAppOwner();
+  const canCompare = isOwner || mode === 'broker' || mode === 'developer';
 
   const filteredTools = useMemo(() => {
     return allTools.filter(tool => {
       // Hide tools toggled off in the admin AI Tools Control Panel
-      if (!visibility.isPublic(tool.id)) return false;
+      if (!visibility.isPublic(tool.id) && !(tool.id === 'property-comparison' && canCompare)) return false;
 
       const matchesSearch =
         tool.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -70,7 +75,7 @@ export default function RoyalToolsHub() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [search, selectedCategory, visibility]);
+  }, [search, selectedCategory, visibility, canCompare]);
 
   const categories = Object.keys(categoryLabels) as ToolCategory[];
 

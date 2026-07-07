@@ -138,15 +138,6 @@ const services: ServiceSlide[] = [
     available: true
   },
   {
-    id: "compare",
-    title: "Compare Your Property",
-    description: "Side-by-side analysis of multiple properties with AI-powered insights",
-    icon: Scale,
-    href: "/compare",
-    bgImage: buyPropertyBg,
-    available: true
-  },
-  {
     id: "evaluation",
     title: "Get Property Evaluation",
     description: "AI-powered property valuation tool for accurate market assessments",
