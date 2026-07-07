@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail, FileText } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
-import PdfCanvasViewer from "@/components/project-detail/PdfCanvasViewer";
+
+const PdfCanvasViewer = lazy(() => import("@/components/project-detail/PdfCanvasViewer"));
 
 interface FloorPlanType {
   label: string;
@@ -156,12 +157,14 @@ export function FloorPlanGallery({
               onError={() => handleImageError(activePlan.id)}
             />
           ) : activePlan?.pdfUrl ? (
-            <PdfCanvasViewer
-              title={`${projectName} - ${activePlan.label}`}
-              url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
-              maxPages={2}
-              className="h-full w-full"
-            />
+            <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7] text-sm font-semibold text-[#1A1A1A]">Loading floor plan…</div>}>
+              <PdfCanvasViewer
+                title={`${projectName} - ${activePlan.label}`}
+                url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
+                maxPages={2}
+                className="h-full w-full"
+              />
+            </Suspense>
           ) : (
             <div className="text-center p-8">
               {hasImageError ? (
