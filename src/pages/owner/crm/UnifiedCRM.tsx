@@ -564,6 +564,11 @@ export default function UnifiedCRM() {
                             ? "!bg-white !text-[#064E3B] !border !border-white shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
                             : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30",
                         ].join(" ")}
+                        style={
+                          active
+                            ? { background: "#FFFFFF", color: "#064E3B", WebkitTextFillColor: "#064E3B", borderColor: "#FFFFFF" }
+                            : { background: "#EFE6D6", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", borderColor: "rgba(184,149,85,0.30)" }
+                        }
 
                       >
                         {fmt(c)}

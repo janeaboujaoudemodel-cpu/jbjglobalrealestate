@@ -133,7 +133,6 @@ export function OwnerTasksPopupAlert() {
           type="button"
           onClick={handleClose}
           aria-label="Close pending tasks alert"
-          data-no-contrast-guard
           data-emerald="true"
           style={{ backgroundImage: "var(--jj-emerald-ombre)", backgroundColor: "#064E3B", color: "#FFFFFF", border: "none", boxShadow: "none" }}
           className="absolute top-3 right-3 inline-flex items-center justify-center w-9 h-9 rounded-full transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B] focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]"
@@ -149,7 +148,6 @@ export function OwnerTasksPopupAlert() {
               });
             }}
             className="w-5 h-5"
-            data-no-contrast-guard
             strokeWidth={2.5}
             color="#FFFFFF"
             stroke="#FFFFFF"
