@@ -83,7 +83,10 @@ const DeveloperLiveEditor = () => {
   const [autofillBusy, setAutofillBusy] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "name-asc" | "name-desc">("newest");
   const [pageSize, setPageSize] = useState(PAGE_SIZE);
+
 
   const { data: rep } = useQuery({
     queryKey: ["rep-list", user?.id],
@@ -124,13 +127,15 @@ const DeveloperLiveEditor = () => {
   });
 
   const { data: allProjects, isLoading } = useQuery({
-    queryKey: ["developer-projects", isOwner ? "owner-all" : devFilterId, pageSize, statusFilter],
+    queryKey: ["developer-projects", isOwner ? "owner-all" : devFilterId, pageSize, statusFilter, sortOrder],
     queryFn: async () => {
+      const sortCol = sortOrder === "name-asc" || sortOrder === "name-desc" ? "name" : "created_at";
+      const asc = sortOrder === "oldest" || sortOrder === "name-asc";
       let query = supabase
         .from("projects")
         .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, description, source, data_quality_flags, created_at, updated_at")
         .or("listing_kind.is.null,listing_kind.eq.offplan")
-        .order("created_at", { ascending: false })
+        .order(sortCol, { ascending: asc, nullsFirst: false })
         .limit(pageSize);
 
       if (!isOwner) query = query.eq("developer_id", devFilterId!);
@@ -144,16 +149,28 @@ const DeveloperLiveEditor = () => {
     enabled: isOwner || !!devFilterId,
   });
 
+  const availableSources = useMemo(() => {
+    const set = new Set<string>();
+    (allProjects ?? []).forEach((p) => set.add(p.source || "unknown"));
+    return Array.from(set).sort();
+  }, [allProjects]);
+
   const projects = useMemo(() => {
     if (!allProjects) return [] as Project[];
     const q = search.trim().toLowerCase();
-    if (!q) return allProjects;
     return allProjects.filter((p) => {
+      if (sourceFilter !== "all") {
+        const src = p.source || "unknown";
+        if (src !== sourceFilter) return false;
+      }
+      if (!q) return true;
       const hay = [p.name, p.developer_name, p.developer?.name, p.location, p.emirate]
         .filter(Boolean).join(" ").toLowerCase();
       return hay.includes(q);
     });
-  }, [allProjects, search]);
+  }, [allProjects, search, sourceFilter]);
+
+
 
   const { data: resaleProjects = [], isLoading: loadingResale } = useQuery({
     queryKey: ["owner-projects-resale-section", isOwner],
@@ -335,7 +352,31 @@ const DeveloperLiveEditor = () => {
               </Button>
             ))}
           </div>
+          {/* Source + Sort */}
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value)}
+            className="h-9 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] text-sm px-2"
+            aria-label="Filter by source"
+          >
+            <option value="all">All sources</option>
+            {availableSources.map((s) => (
+              <option key={s} value={s}>{humanizeSource(s)}</option>
+            ))}
+          </select>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+            className="h-9 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] text-sm px-2"
+            aria-label="Sort projects"
+          >
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name-asc">Name A → Z</option>
+            <option value="name-desc">Name Z → A</option>
+          </select>
         </div>
+
 
         {selected.size > 0 && (
           <div
