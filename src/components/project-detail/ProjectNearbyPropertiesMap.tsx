@@ -16,24 +16,25 @@ import "leaflet/dist/leaflet.css";
 
 type FilterMode = "nearby" | "area" | "emirate";
 
-// Red pin — current project must be visually unmistakable.
+// Premium emerald/gold pin — current project must be visually unmistakable.
 const CURRENT_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="46" height="60" viewBox="0 0 46 60" fill="none">
-  <path d="M23 0C10.3 0 0 10 0 22.4 0 39.7 23 60 23 60s23-20.3 23-37.6C46 10 35.7 0 23 0z" fill="#D71920" stroke="#FFFFFF" stroke-width="2"/>
-  <circle cx="23" cy="22" r="8" fill="#FFFFFF"/>
-  <circle cx="23" cy="22" r="4" fill="#D71920"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
+  <defs><linearGradient id="nearPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse"><stop stop-color="#0B6E4F"/><stop offset="0.48" stop-color="#064E3B"/><stop offset="1" stop-color="#000000"/></linearGradient><filter id="nearShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.42"/></filter></defs>
+  <path filter="url(#nearShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#nearPin)" stroke="#D8B86A" stroke-width="2.5"/>
+  <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.12)" stroke="#F4E3A8" stroke-width="2"/>
+  <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
 </svg>`;
 
 const RedIcon = L.divIcon({
   html: CURRENT_PIN_SVG,
   className: "jj-map-pin",
-  iconSize: [46, 60],
-  iconAnchor: [23, 60],
-  popupAnchor: [0, -60],
+  iconSize: [58, 74],
+  iconAnchor: [29, 74],
+  popupAnchor: [0, -72],
 });
 
 const createChampagneMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#B89555 0%,#F7ECD0 55%,#B89555 100%);color:#1A1A1A !important;border:1px solid rgba(26,26,26,0.28);padding:5px 10px;border-radius:3px;font-size:11px;font-weight:800;white-space:nowrap;text-align:center;box-shadow:0 8px 18px -8px rgba(0,0,0,0.65);letter-spacing:0;">${priceText}</div>`,
+  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#0B6E4F 0%,#064E3B 55%,#000000 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;border:1px solid rgba(244,227,168,0.42);padding:6px 11px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.16);letter-spacing:0;">${priceText}</div>`,
   className: "custom-marker jj-map-pin",
   iconSize: [80, 28],
   iconAnchor: [40, 28],
@@ -84,7 +85,7 @@ function FitBoundsRuntime({ points }: { points: [number, number][] }) {
   useEffect(() => {
     if (!points.length) return;
     if (points.length === 1) {
-      map.setView(points[0], 15, { animate: false });
+        map.setView(points[0], 15, { animate: false });
       return;
     }
     const bounds = L.latLngBounds(points.map(([a, b]) => L.latLng(a, b)));
@@ -99,6 +100,11 @@ function ScrollLockRuntime() {
     map.scrollWheelZoom.disable();
     // Prevent leaflet from stealing keyboard scroll
     map.keyboard?.disable();
+    map.options.zoomSnap = 0.25;
+    map.options.zoomDelta = 0.5;
+    map.doubleClickZoom.enable();
+    map.touchZoom.enable();
+    map.dragging.enable();
   }, [map]);
   return null;
 }
@@ -321,8 +327,7 @@ export default function ProjectNearbyPropertiesMap({
         key={mode}
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
-        disabled={disabled}
-        className="inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold transition-colors"
+        className={`jj-map-active-toggle jj-sqtoggle relative inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold transition-colors ${isActive ? "" : ""}`}
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
@@ -335,11 +340,12 @@ export default function ProjectNearbyPropertiesMap({
           backgroundColor: isActive ? undefined : '#F7F2EA',
           color: isActive ? '#FFFFFF' : '#1A1A1A',
           borderRight: '1px solid rgba(184,149,85,0.28)',
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          opacity: disabled ? 0.55 : 1,
+          cursor: 'pointer',
+          opacity: disabled ? 0.78 : 1,
           minHeight: 44,
         }}
       >
+        <span className="jj-sqtoggle-sweep" aria-hidden="true" />
         <span className="min-w-0 truncate" style={{ color: 'inherit' }}>{label}</span>
         <span className="text-[10px] tabular-nums" style={{ color: 'inherit', opacity: 0.9 }}>{count}</span>
       </button>
@@ -387,8 +393,8 @@ export default function ProjectNearbyPropertiesMap({
         <div style={{ height: 420, position: "relative" }}>
         <style>{`
           .jj-map-pin { background: none !important; border: none !important; }
-          .jj-map-pin .jj-nearby-price-pill { color: #FFFFFF !important; }
-          .jj-map-pin .jj-nearby-price-pill * { color: #FFFFFF !important; }
+          .jj-map-pin .jj-nearby-price-pill { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+          .jj-map-pin .jj-nearby-price-pill * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
           /* Kill the leaflet popup tail arrow that reads as hover "crop lines" */
           .leaflet-popup-tip-container, .leaflet-popup-tip { display: none !important; }
           .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; padding: 0; }
@@ -405,6 +411,9 @@ export default function ProjectNearbyPropertiesMap({
           style={{ height: "100%", width: "100%" }}
           zoomControl={false}
           attributionControl={false}
+          zoomSnap={0.25}
+          zoomDelta={0.5}
+          wheelPxPerZoomLevel={60}
           {...SAFE_LEAFLET_MAP_OPTIONS}
         >
           <MapResizeRuntime />

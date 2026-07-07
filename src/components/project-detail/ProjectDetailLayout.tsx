@@ -111,6 +111,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
+import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -656,15 +658,20 @@ function ProjectDetailLayoutInner({
   const heroImageUrl = images[0]?.url;
   const projectDocumentHeroImage = project.cover_image_url || images.find((img) => !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || images[0]?.url;
 
+  const publicProjectStatus = useMemo(() => {
+    if (project.sale_status?.toLowerCase().includes("off")) return "Off-plan";
+    return getProjectStatus(project).label;
+  }, [project]);
+
   const citiBuddyImageUrl = useMemo(
-    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || null,
+    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || citiBuddyRobotAsset.url,
     [images],
   );
 
   const documentCoverFor = (doc: ProjectDetailData["documents"][number], index: number) => {
     if (doc.cover_image_url) return doc.cover_image_url;
     const lower = `${doc.name || ""} ${doc.display_title || ""}`.toLowerCase();
-    if (/city\s*buddy|citi\s*buddy|citybuddy|robot|buddy/.test(lower)) return citiBuddyImageUrl || undefined;
+    if (/city\s*buddy|citi\s*buddy|citybuddy|robot|buddy/.test(lower)) return citiBuddyDocumentCoverAsset.url || citiBuddyImageUrl || undefined;
     if (/fact\s*sheet|factsheet|brochure|spa\s*draft|catalogue|catalog/i.test(lower)) return projectDocumentHeroImage;
     const nonBathroom = images.find((img, i) => i >= index && !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`));
     return nonBathroom?.url || projectDocumentHeroImage || undefined;
@@ -729,6 +736,20 @@ function ProjectDetailLayoutInner({
     ].filter((item, index, list) => list.findIndex((v) => v.toLowerCase() === item.toLowerCase()) === index);
   }, [isAmraProject, project.amenities]);
 
+  const amraAmenityImages = useMemo(() => {
+    const mapped: Record<string, string> = { ...(project.amenity_images || {}) };
+    if (!isAmraProject) return mapped;
+    const gallery = images
+      .filter((img) => !/bathroom|toilet|floor|plan/i.test(`${img.alt || ""} ${img.url || ""}`))
+      .map((img) => img.url);
+    amraAmenities.forEach((label, index) => {
+      if (!mapped[label] && gallery.length) mapped[label] = gallery[(index + 2) % gallery.length];
+    });
+    mapped["Citi Buddy (AI Robot Companion)"] = citiBuddyRobotAsset.url;
+    mapped["Citi Buddy concierge"] = citiBuddyRobotAsset.url;
+    return mapped;
+  }, [amraAmenities, images, isAmraProject, project.amenity_images]);
+
   const amraLocationDistances = useMemo(() => {
     const base = project.location_distances || [];
     if (!isAmraProject) return base;
@@ -737,7 +758,8 @@ function ProjectDetailLayoutInner({
       { label: "Dubai International Airport", time: "40 minutes by road · 15 minutes by air taxi" },
       { label: "Al Khor Mangrove", time: "5 minutes by car" },
       { label: "Wynn Casino / Marjan nightlife", time: "15 minutes by car · 7 minutes by air taxi" },
-      { label: "Vida Resort / 25 Hours Hotel / UAQ Downtown", time: "20 minutes by car" },
+      { label: "Vida Resort", time: "Next to the project · approximately 25 meters" },
+      { label: "25hours Hotel / UAQ Downtown", time: "Confirm from official source" },
     ];
     const overrideLabels = new Set(additions.map((item) => item.label.toLowerCase()));
     const cleanedBase = base.filter((item) => !overrideLabels.has(item.label.toLowerCase()));
@@ -947,7 +969,7 @@ function ProjectDetailLayoutInner({
                 <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                   <Calendar className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" surface="dark" scope="quick_facts" label="Edit handover date">
-                    <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{synced.label}</span>
+                    <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{publicProjectStatus}</span>
                   </InlineEditable>
                 </div>
               ) : null;
@@ -1198,7 +1220,7 @@ function ProjectDetailLayoutInner({
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
               <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" scope="quick_facts" label="Edit handover date">
-                <p className="mt-2 text-xl font-bold text-foreground">{getProjectStatus(project).label}</p>
+                <p className="mt-2 text-xl font-bold text-foreground">{publicProjectStatus}</p>
               </InlineEditable>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
@@ -1223,6 +1245,7 @@ function ProjectDetailLayoutInner({
                floors={project.floors && project.floors > 3 ? project.floors : undefined}
                availabilityStatus={project.availability_visible ? project.availability_status : null}
                statusLabel={project.status_label}
+               saleStatus={project.sale_status}
                handoverDate={project.handover_date}
                updatedAt={project.updated_at}
              />
@@ -1482,7 +1505,7 @@ function ProjectDetailLayoutInner({
                      Amenities & Features
                      <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="amenities" initial={project as any} /></span>
                    </h3>
-                   <AmenitiesWithPhotos amenities={amraAmenities} amenityImages={project.amenity_images} />
+                    <AmenitiesWithPhotos amenities={amraAmenities} amenityImages={amraAmenityImages} />
                  </div>
                </div>
               )}
@@ -1495,8 +1518,8 @@ function ProjectDetailLayoutInner({
                       <SafeImage
                         src={citiBuddyImageUrl}
                         alt="Citi Buddy resident concierge"
-                        className="h-[280px] lg:h-full min-h-[280px] w-full object-cover"
-                        loading="lazy"
+                        className="h-[280px] lg:h-full min-h-[280px] w-full object-contain bg-[#FDFBF7] p-5"
+                        loading="eager"
                         decoding="async"
                       />
                     )}
@@ -1623,7 +1646,7 @@ function ProjectDetailLayoutInner({
                   whether this project has coords or an area_name. */}
               <div className="mt-6">
                 <h3 className="text-lg font-semibold text-foreground mb-3">
-                  Other projects in {project.area_name || project.emirate || 'this area'}
+                  Related projects in {project.emirate || 'UAE'}
                 </h3>
                 <Suspense fallback={<div className="h-[420px] rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]" aria-hidden />}>
                   <ProjectNearbyPropertiesMap
@@ -1640,8 +1663,8 @@ function ProjectDetailLayoutInner({
                 </Suspense>
                 <p className="mt-2 text-xs text-[#1A1A1A]/70">
                   {typeof project.latitude === 'number' && typeof project.longitude === 'number'
-                    ? 'Red pin = this project · Champagne pins = other developers nearby. Click a pin to open that project — you can always return here using the chip at the top.'
-                    : `Champagne pins = other developers in ${project.area_name || project.emirate || 'this area'}. Click a pin to open that project — you can always return here using the chip at the top.`}
+                    ? 'Premium pin = this project · Emerald price pins = related nearby projects. Click a pin to open that project — you can always return here using the chip at the top.'
+                    : `Emerald price pins = related projects in ${project.emirate || 'UAE'}. Click a pin to open that project — you can always return here using the chip at the top.`}
                 </p>
               </div>
 
@@ -1892,13 +1915,6 @@ function ProjectDetailLayoutInner({
              areaName={project.area_name || project.location || null}
            />
 
-           {/* DLD MARKET WIDGET — full-bleed band (escapes outer max-w container) */}
-           <div className="jj-project-nested-band mb-10 md:mb-12">
-             <SectionDividerGoldFullBleed />
-             <DLDMarketWidget />
-             <SectionDividerGoldFullBleed />
-           </div>
-
            {/* MORE FROM THIS DEVELOPER — moved to bottom so it doesn't replace the area map */}
            <MoreFromDeveloperStrip
              currentProjectId={project.id}
@@ -1949,14 +1965,16 @@ function ProjectDetailLayoutInner({
              </div>
            )}
 
-           {/* REPORT AN ISSUE BANNER */}
-           <div className="mb-10 md:mb-12">
-             <ReportIssueButton
-               projectName={project.name}
-               projectId={project.id}
-               projectSlug={project.slug || undefined}
-             />
-           </div>
+            {/* REPORT AN ISSUE BANNER — imported/scraped projects only, never manual owner-entered projects */}
+            {project.import_source && project.import_source !== "manual" && (
+              <div className="mb-10 md:mb-12">
+                <ReportIssueButton
+                  projectName={project.name}
+                  projectId={project.id}
+                  projectSlug={project.slug || undefined}
+                />
+              </div>
+            )}
 
           {/* INQUIRY FORM - Full-bleed champagne band so the form sits on a dedicated section */}
         </div>
@@ -2005,6 +2023,13 @@ function ProjectDetailLayoutInner({
         currentEmirate={(project as any).emirate || null}
       />
       </div>
+      </div>
+
+      {/* DUBAI MARKET INTELLIGENCE — after recommended projects as requested */}
+      <div className="jj-project-nested-band mb-10 md:mb-12">
+        <SectionDividerGoldFullBleed />
+        <DLDMarketWidget />
+        <SectionDividerGoldFullBleed />
       </div>
 
 

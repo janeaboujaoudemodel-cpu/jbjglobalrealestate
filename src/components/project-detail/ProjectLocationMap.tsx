@@ -22,18 +22,26 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const PROJECT_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="46" height="60" viewBox="0 0 46 60" fill="none">
-  <path d="M23 0C10.3 0 0 10 0 22.4 0 39.7 23 60 23 60s23-20.3 23-37.6C46 10 35.7 0 23 0z" fill="#D71920" stroke="#FFFFFF" stroke-width="2"/>
-  <circle cx="23" cy="22" r="8" fill="#FFFFFF"/>
-  <circle cx="23" cy="22" r="4" fill="#D71920"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
+  <defs>
+    <linearGradient id="pinEmerald" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B6E4F"/><stop offset="0.48" stop-color="#064E3B"/><stop offset="1" stop-color="#000000"/>
+    </linearGradient>
+    <filter id="pinShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+  <path filter="url(#pinShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#pinEmerald)" stroke="#D8B86A" stroke-width="2.5"/>
+  <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.12)" stroke="#F4E3A8" stroke-width="2"/>
+  <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
 </svg>`;
 
 const PROJECT_LOCATION_ICON = L.divIcon({
   className: "custom-marker jj-map-pin",
   html: PROJECT_PIN_SVG,
-  iconSize: [46, 60],
-  iconAnchor: [23, 60],
-  popupAnchor: [0, -60],
+  iconSize: [58, 74],
+  iconAnchor: [29, 74],
+  popupAnchor: [0, -72],
 });
 
 // View toggle controls
@@ -53,14 +61,15 @@ function MapViewToggle({
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className="jj-map-layer-button"
+            className="jj-map-layer-button jj-sqtoggle jj-map-active-toggle"
             data-active={mapView === view ? "true" : "false"}
             data-surface="emerald"
             data-emerald-action="true"
             data-no-contrast-guard
             style={{ whiteSpace: 'nowrap', writingMode: 'horizontal-tb', minWidth: 'max-content', flex: '0 0 auto' }}
           >
-            {t(`map.${view}`)}
+            <span className="jj-sqtoggle-sweep" aria-hidden="true" />
+            <span>{t(`map.${view}`)}</span>
           </button>
         ))}
       </div>
@@ -113,7 +122,10 @@ function SmoothMapRuntime() {
     map.scrollWheelZoom.disable();
     map.options.zoomSnap = 0.25;
     map.options.zoomDelta = 0.5;
-    map.options.wheelPxPerZoomLevel = 90;
+    map.options.wheelPxPerZoomLevel = 60;
+    map.doubleClickZoom.enable();
+    map.touchZoom.enable();
+    map.dragging.enable();
   }, [map]);
 
   return null;
@@ -166,7 +178,7 @@ export default function ProjectLocationMap({
         attributionControl={false}
         zoomSnap={0.25}
         zoomDelta={0.5}
-        wheelPxPerZoomLevel={90}
+        wheelPxPerZoomLevel={60}
         {...SAFE_LEAFLET_MAP_OPTIONS}
       >
         <DynamicTileLayer mapView={mapView} language={language} />

@@ -2,7 +2,6 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
-import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { useUserMode } from "@/hooks/useUserMode";
 import { PresentationBuilderDialog } from "@/components/presentation-builder/PresentationBuilderDialog";
 import type { DeckProject } from "@/components/presentation-builder/renderDeckHtml";
@@ -68,7 +67,7 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
               onClick={() => setOpen(true)}
               whileHover={{ y: -4, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="relative w-[380px] h-[260px] rounded-lg overflow-hidden cursor-pointer flex flex-col items-center justify-center gap-4 text-white"
+              className="relative w-full max-w-[380px] h-[260px] rounded-lg overflow-hidden cursor-pointer flex flex-col items-center justify-start gap-0 text-white px-6 pt-5 pb-6"
               style={{
                 background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                 border: "1px solid rgba(0,0,0,0.28)",
@@ -85,17 +84,17 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                   backgroundImage: "linear-gradient(120deg, transparent 0%, rgba(0,0,0,0.34) 36%, rgba(6,78,59,0.20) 50%, rgba(0,0,0,0.38) 64%, transparent 100%)",
                 }}
               />
-              <div className="relative z-10 flex flex-col items-center justify-center" aria-hidden="true">
+              <div className="relative z-10 flex flex-col items-center justify-center -mt-3" aria-hidden="true">
                 <img
                   src={jbjMonogram}
                   alt="JBJ Global Real Estate"
-                  className="w-44 h-44 object-contain select-none"
+                  className="w-48 h-48 object-contain select-none"
                   style={{ filter: "drop-shadow(0 5px 16px rgba(0,0,0,0.68))" }}
                 />
               </div>
 
-              {/* Text block lifted up so it hugs the monogram instead of hanging at the bottom */}
-              <div className="relative z-10 text-center px-6 -mt-6" data-no-contrast-guard>
+              {/* Text block sits directly under the lifted monogram, not at the bottom */}
+              <div className="relative z-10 text-center px-6 -mt-9" data-no-contrast-guard>
                 <div id="jj-genpres-eyebrow" className="text-[11px] uppercase tracking-[0.3em] mb-1">
                   Click to start
                 </div>

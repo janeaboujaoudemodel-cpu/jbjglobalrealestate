@@ -9,6 +9,7 @@ interface QuickFactsBarProps {
   floors?: number | null;
   availabilityStatus?: string | null;
   statusLabel?: string | null;
+  saleStatus?: string | null;
   handoverDate?: string | null;
   updatedAt?: string | null;
 }
@@ -19,19 +20,22 @@ export default function QuickFactsBar({
   floors,
   availabilityStatus,
   statusLabel,
+  saleStatus,
   handoverDate,
   updatedAt,
 }: QuickFactsBarProps) {
   // Synced status (single source of truth = handover_date)
   const synced = getProjectStatus({
     handover_date: handoverDate,
-    status_label: statusLabel,
+    status_label: statusLabel || saleStatus,
     availability_status: availabilityStatus,
   });
   // Only show a status pill when the raw value is a public-friendly label
   // (hides internal admin states like "pending", "draft", etc.)
-  const rawStatus = statusLabel || availabilityStatus;
-  const publicPillLabel = isPublicStatus(rawStatus) ? rawStatus : (synced.isReady ? "Ready" : null);
+  const rawStatus = saleStatus || statusLabel || availabilityStatus;
+  const publicPillLabel = saleStatus?.toLowerCase().includes("off")
+    ? "Off-plan"
+    : isPublicStatus(rawStatus) ? rawStatus : (synced.isReady ? "Ready" : null);
 
   const facts = [
     {
