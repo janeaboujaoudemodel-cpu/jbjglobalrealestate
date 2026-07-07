@@ -1,6 +1,5 @@
 export const APPROVED_PUBLIC_TOOLS = [
   { id: "ai-home-finder", label: "AI Home Finder", href: "/ai-home-finder" },
-  { id: "property-comparison", label: "Property Comparison", href: "/compare" },
   { id: "mortgage-calculator", label: "Mortgage Calculator", href: "/mortgage-calculator" },
   { id: "rental-index", label: "Rental Index", href: "/rental-index" },
   { id: "property-evaluator", label: "Property Evaluator", href: "/property-evaluator" },

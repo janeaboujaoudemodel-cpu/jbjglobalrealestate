@@ -73,6 +73,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const isOwner = authIsOwner || roleIsOwner;
   const { mode } = useUserModeContext();
   const ownerBackendActive = isOwner && mode === "owner";
+  const canAccessCompare = ownerBackendActive || mode === "broker" || mode === "developer";
   const modeDashboardHref = ownerBackendActive
     ? "/owner"
     : mode === "broker"
@@ -625,7 +626,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     { href: "/referral-partner", label: "Referral Partner", icon: Users },
     { href: "/ai-home-finder", label: "AI Home Finder", icon: Sparkles },
     { href: "/map", label: "Property Map", icon: MapPin },
-    { href: "/compare", label: "Compare Properties", icon: ClipboardCheck },
+    ...(canAccessCompare ? [{ href: "/compare", label: "Compare Properties", icon: ClipboardCheck }] : []),
     { href: "/landlord-portal", label: "Landlord Portal", icon: Building2 },
     { href: "/listing-portal", label: "List Your Property", icon: ClipboardCheck },
   ];
@@ -633,7 +634,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   // Mobile menu - only approved public tools
   const mobileToolkitLinks = [
     { href: "/ai-home-finder", label: "AI Home Finder", icon: Sparkles },
-    { href: "/compare", label: "Property Comparison", icon: ClipboardCheck },
+    ...(canAccessCompare ? [{ href: "/compare", label: "Property Comparison", icon: ClipboardCheck }] : []),
     { href: "/mortgage-calculator", label: "Mortgage Calculator", icon: Calculator },
     { href: "/rental-index", label: "Rental Index", icon: TrendingUp },
     { href: "/property-evaluator", label: "Property Evaluator", icon: BarChart3 },

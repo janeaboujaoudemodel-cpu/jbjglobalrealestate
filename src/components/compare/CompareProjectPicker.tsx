@@ -54,8 +54,7 @@ export default function CompareProjectPicker({
   const [emirateFilter, setEmirateFilter] = useState("all");
 
   const { data: dbShortlist } = useShortlist();
-  const { shortlist: guestShortlist, toggleShortlist: toggleGuest } =
-    useGuestShortlist();
+  const { shortlist: guestShortlist } = useGuestShortlist();
 
   useEffect(() => {
     if (open) setPending(new Set(selectedIds));
