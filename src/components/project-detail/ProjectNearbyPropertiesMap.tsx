@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -74,6 +74,15 @@ type NearbyRow = {
   area_name: string | null;
   emirate: string | null;
 };
+
+function MapResizeRuntime() {
+  const map = useMap();
+  useMemo(() => {
+    const id = window.setTimeout(() => map.invalidateSize(), 120);
+    return () => window.clearTimeout(id);
+  }, [map]);
+  return null;
+}
 
 export default function ProjectNearbyPropertiesMap({
   currentProjectId,
@@ -335,6 +344,7 @@ export default function ProjectNearbyPropertiesMap({
         attributionControl={false}
         {...SAFE_LEAFLET_MAP_OPTIONS}
       >
+        <MapResizeRuntime />
         <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
         <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 
