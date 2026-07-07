@@ -58,9 +58,7 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
   })();
 
   const topRows = (data?.top || []).slice(0, 5);
-  // Project-level proxy: use area data when available, else fall back to top Dubai.
-  const projectRows = (areaRows?.rows || topRows).slice(0, 5);
-  const showAreaProxy = !areaRows; // mark proxy when area-specific data missing
+  const projectRows = (areaRows?.rows || []).slice(0, 5);
 
   if (!projectRows.length && !topRows.length) return null;
 
@@ -138,25 +136,28 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
         </h3>
         <div className="w-16 h-px bg-[#B89555] mt-3" />
         <p className="text-[14px] text-[#1A1A1A]/75 mt-3 max-w-2xl">
-          Top buyer nationalities for {projectName}
-          {areaName ? ` and the surrounding ${areaName} community` : " and the wider Dubai market"}.
-          Use this to understand the investor profile and target audience for this project.
+          Buyer nationality data is shown only when area-specific data exists. UAE-wide data is kept separate and never presented as project-specific.
         </p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {card(
-          projectName,
-          "Top 5 buyers in this project",
+        {projectRows.length > 0 ? card(
+          areaRows?.key || areaName || projectName,
+          "Top 5 buyers in verified area data",
           <Building2 className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />,
           projectRows,
-          showAreaProxy ? "Dubai proxy" : undefined,
+        ) : (
+          <div className="relative rounded-2xl bg-[#FDFBF7] border border-[#B89555]/30 p-6 md:p-7 shadow-sm">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[#1A1A1A]/60 font-semibold">Project-specific buyer data</p>
+            <h4 className="text-lg md:text-xl font-semibold text-[#1A1A1A] leading-tight mt-1">Not available yet</h4>
+            <p className="mt-3 text-sm text-[#1A1A1A]/75">No verified buyer-nationality dataset is connected for {projectName}. UAE-wide data is not used as a project claim.</p>
+          </div>
         )}
         {card(
           areaRows?.key || areaName || "Dubai · all areas",
-          "Top 5 buyers in surrounding area",
+          areaRows ? "Top 5 buyers in surrounding area" : "UAE-wide reference only",
           <MapPin className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />,
           (areaRows?.rows || topRows).slice(0, 5),
-          !areaRows && areaName ? "Dubai proxy" : undefined,
+          !areaRows && areaName ? "Reference" : undefined,
         )}
       </div>
     </section>

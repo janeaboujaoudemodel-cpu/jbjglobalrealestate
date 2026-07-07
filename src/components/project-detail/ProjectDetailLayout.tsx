@@ -91,6 +91,7 @@ import { ArrowLeft } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
+import citiBuddyRobot from "@/assets/citi-buddy-robot-concierge.jpg";
 import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
@@ -187,6 +188,7 @@ export type ProjectDetailData = {
   down_payment_percent?: number | null;
   video_url?: string | null;
   virtual_tour_url?: string | null;
+  videos?: { id: string; url: string; title?: string | null; display_order?: number | null; is_visible?: boolean | null }[];
   roi_estimate?: number | null;
   rental_yield_estimate?: number | null;
   // House details
@@ -482,19 +484,24 @@ function ProjectDetailLayoutInner({
       }),
     [project.documents],
   );
+  const uploadedVideos = useMemo(
+    () => (project.videos || []).filter((v) => (v.is_visible ?? true) && !!v.url),
+    [project.videos],
+  );
+  const isAmraProject = /amra/i.test(project.name);
 
   const visibleTabs = useMemo(() => {
     const hasGallery = images.length > 0;
     const hasUsp = (project.usp_bullets?.length ?? 0) > 0;
     const hasFloorPlans = floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0;
-    const hasAmenities = (project.amenities?.length ?? 0) > 0;
+    const hasAmenities = (project.amenities?.length ?? 0) > 0 || isAmraProject;
     const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown || !!project.down_payment_percent;
     const hasUsefulInfo = (project.faqs?.length ?? 0) > 0;
     const hasBrochure = brochureDocs.length > 0;
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
     const hasConstruction = true; // Always show construction section
-    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0;
+    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
@@ -527,7 +534,7 @@ function ProjectDetailLayoutInner({
       if (t.id === "mortgage") return mortgageEligible;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, uploadedVideos.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label, isAmraProject]);
 
   const mortgageEligible = useMemo(() => isMortgageEligible({
     sale_status: project.sale_status,
@@ -648,14 +655,17 @@ function ProjectDetailLayoutInner({
     : `${project.name}${project.location ? `, ${project.location}` : ""}${(project as any).emirate ? `, ${(project as any).emirate}` : ""}, UAE`;
   const brochurePrimary = brochureDocs[0];
   const heroImageUrl = images[0]?.url;
+  const projectDocumentHeroImage = project.cover_image_url || images.find((img) => !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || images[0]?.url;
 
   const documentCoverFor = (doc: ProjectDetailData["documents"][number], index: number) => {
     if (doc.cover_image_url) return doc.cover_image_url;
     const lower = `${doc.name || ""} ${doc.display_title || ""}`.toLowerCase();
     const cityBuddy = images.find((img) => /city\s*buddy|citybuddy|robot|buddy/i.test(`${img.alt || ""} ${img.url || ""}`));
+    if (/city\s*buddy|citi\s*buddy|citybuddy|robot|buddy/.test(lower)) return cityBuddy?.url || citiBuddyRobot;
+    if (/fact\s*sheet|factsheet|brochure|spa\s*draft|catalogue|catalog/i.test(lower)) return projectDocumentHeroImage;
     if (/city\s*buddy|citybuddy|robot|buddy/.test(lower) && cityBuddy?.url) return cityBuddy.url;
-    if (images.length > 1) return images[(index + 1) % images.length]?.url || images[0]?.url;
-    return images[0]?.url || project.cover_image_url || undefined;
+    const nonBathroom = images.find((img, i) => i >= index && !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`));
+    return nonBathroom?.url || projectDocumentHeroImage || undefined;
   };
 
   const paymentPlanBenefitHeadline = useMemo(() => {
@@ -699,6 +709,36 @@ function ProjectDetailLayoutInner({
     () => project.documents.some((doc) => /citi\s*buddy|city\s*buddy|buddy/i.test(`${doc.name || ""} ${doc.display_title || ""} ${doc.url || ""}`)),
     [project.documents],
   );
+
+  const amraAmenities = useMemo(() => {
+    const base = project.amenities || [];
+    if (!isAmraProject) return base;
+    return [
+      ...base,
+      "165+ wellness and lifestyle amenities",
+      "470,000 sq ft dedicated wellness area",
+      "Heli and air-taxi landing pad",
+      "Yacht limo service and private marina deck",
+      "In-room dining and all-day dining",
+      "App-enabled short-stay management",
+      "Fully furnished apartments",
+      "Fully serviced apartments",
+      "Full sea and lagoon water views",
+    ].filter((item, index, list) => list.findIndex((v) => v.toLowerCase() === item.toLowerCase()) === index);
+  }, [isAmraProject, project.amenities]);
+
+  const amraLocationDistances = useMemo(() => {
+    const base = project.location_distances || [];
+    if (!isAmraProject) return base;
+    const additions = [
+      { label: "Marjan Island", time: "15 minutes by road" },
+      { label: "Dubai International Airport", time: "40 minutes by road · 15 minutes by air taxi" },
+      { label: "Al Khor Mangrove", time: "Direct access" },
+      { label: "Wynn Casino / Marjan nightlife", time: "Nearby overflow demand driver" },
+      { label: "Vida Resort / 25 Hours Hotel / UAQ Downtown", time: "Strategic hospitality cluster" },
+    ];
+    return [...base, ...additions].filter((item, index, list) => list.findIndex((v) => v.label.toLowerCase() === item.label.toLowerCase()) === index);
+  }, [isAmraProject, project.location_distances]);
 
   // Helper: Derive bedroom range from unit_types array when min/max are null
   const deriveBedroomsFromUnitTypes = (unitTypes: ProjectDetailData['unit_types']): string | null => {
@@ -1391,7 +1431,7 @@ function ProjectDetailLayoutInner({
            )}
 
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
-           {(project.floors || project.total_units || project.service_charge || project.finishing_standard || hasCitiBuddyDocument) && (
+           {(project.floors || project.total_units || project.service_charge || project.finishing_standard || hasCitiBuddyDocument || isAmraProject) && (
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40 relative">
                 <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="house-details" initial={project as any} /></div>
                 <HouseDetailsSection
@@ -1400,8 +1440,8 @@ function ProjectDetailLayoutInner({
                   buildingType={project.property_type_label}
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
-                 serviceCharge={project.service_charge}
-                  standardInclusions={hasCitiBuddyDocument ? ["Citi Buddy"] : null}
+                  serviceCharge={project.service_charge}
+                   standardInclusions={isAmraProject ? ["Fully furnished", "Fully serviced", "Full sea view", "Citi Buddy concierge"] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
              </div>
@@ -1430,7 +1470,7 @@ function ProjectDetailLayoutInner({
            )}
 
            {/* AMENITIES SECTION - Premium with Icons */}
-           {(project.amenities?.length ?? 0) > 0 && (
+           {amraAmenities.length > 0 && (
               <div ref={amenitiesRef} id="amenities" className="mb-14 scroll-mt-40">
                 <div className="jj-card-inner">
                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
@@ -1438,13 +1478,36 @@ function ProjectDetailLayoutInner({
                      Amenities & Features
                      <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="amenities" initial={project as any} /></span>
                    </h3>
-                   <AmenitiesWithPhotos amenities={project.amenities!} amenityImages={project.amenity_images} />
+                   <AmenitiesWithPhotos amenities={amraAmenities} amenityImages={project.amenity_images} />
                  </div>
                </div>
               )}
 
+            {(hasCitiBuddyDocument || isAmraProject) && (
+              <div className="mb-14 scroll-mt-40">
+                <div className="jj-card-inner overflow-hidden p-0">
+                  <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr]">
+                    <SafeImage
+                      src={citiBuddyRobot}
+                      alt="Citi Buddy AI robot concierge"
+                      className="h-[280px] lg:h-full min-h-[280px] w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="p-6 md:p-8 flex flex-col justify-center">
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-3">Resident Concierge</p>
+                      <h3 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-4">Citi Buddy</h3>
+                      <p className="text-[15px] leading-relaxed text-[#1A1A1A]/82">
+                        Citi Buddy connects residents to smart-home controls, short-stay management, concierge requests, in-room dining, security alerts and service bookings through the Citi Developers app.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
-           {(project.video_url || project.virtual_tour_url || videoDocs.length > 0) && (
+           {(project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
              <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
                 {(project.video_url || project.virtual_tour_url) && (
@@ -1454,17 +1517,17 @@ function ProjectDetailLayoutInner({
                     projectName={project.name}
                   />
                 )}
-                {videoDocs.length > 0 && (
+                {(videoDocs.length > 0 || uploadedVideos.length > 0) && (
                   <div className="jj-card-inner mt-6">
                     <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-4">
                       <Video className="w-5 h-5 text-[#064E3B]" />
                       Video Gallery
                     </h3>
                     <div className="grid gap-4 md:grid-cols-2">
-                      {videoDocs.map((video) => (
+                      {[...uploadedVideos.map((v) => ({ id: v.id, url: v.url, title: v.title || "Uploaded project video" })), ...videoDocs.map((v) => ({ id: v.id, url: v.url, title: v.display_title || v.name || "Project video" }))].map((video) => (
                         <div key={video.id} className="overflow-hidden rounded-lg border border-[#B89555]/35 bg-[#FDFBF7]">
                           <video src={video.url} className="aspect-video w-full bg-[#021611] object-cover" controls playsInline preload="metadata" />
-                          <div className="p-3 text-sm font-semibold text-[#1A1A1A]">{video.display_title || video.name || "Project video"}</div>
+                          <div className="p-3 text-sm font-semibold text-[#1A1A1A]">{video.title}</div>
                         </div>
                       ))}
                     </div>
@@ -1561,9 +1624,9 @@ function ProjectDetailLayoutInner({
 
 
               {/* Nearby Points of Interest - Below Map */}
-              {project.location_distances && project.location_distances.length > 0 && (
+              {amraLocationDistances && amraLocationDistances.length > 0 && (
                 <div className="mt-6">
-                  <PointsOfInterest points={project.location_distances} />
+                  <PointsOfInterest points={amraLocationDistances} />
                 </div>
               )}
             </div>

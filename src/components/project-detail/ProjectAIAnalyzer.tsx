@@ -214,6 +214,12 @@ export const ProjectAIAnalyzer = ({
     const lower = con.toLowerCase();
     return !VAGUE_KEYWORDS.some(kw => lower.includes(kw));
   });
+  const isCitiDeveloper = /\bciti\s+developers?\b/i.test(developer || "");
+  const citiDeveloperLandscape = [
+    "Citi Developers is the developer to evaluate for this project; this section is intentionally limited to Citi Developers, not Sobha or other nearby developers.",
+    "Portfolio context includes Arya Residences, Aveline Residences, Allura, Agua Residences and Amra Residences.",
+    "For Amra, the relevant developer story is Citi Developers’ move into wellness-led, serviced coastal living in Umm Al Quwain with app-enabled operations and concierge services.",
+  ];
 
   if (!hasMinimumData) {
     return (
@@ -517,7 +523,11 @@ export const ProjectAIAnalyzer = ({
                   <Building2 className="w-5 h-5" style={{ color: "#FFFFFF" }} />
                   <h3 className="font-bold text-lg" style={{ color: "#FFFFFF" }}>Developer Landscape</h3>
                 </div>
-                {sections?.developers ? (
+                {isCitiDeveloper ? (
+                  <ul className="space-y-2 text-sm leading-relaxed" style={{ color: "#FFFFFF" }}>
+                    {citiDeveloperLandscape.map((item) => <li key={item}>• {item}</li>)}
+                  </ul>
+                ) : sections?.developers ? (
                   <div className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "#FFFFFF" }}>
                     {cleanMarkdown(sections.developers)}
                   </div>

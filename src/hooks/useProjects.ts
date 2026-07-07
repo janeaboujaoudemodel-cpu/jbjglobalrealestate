@@ -603,7 +603,16 @@ export function useProject(projectSlug: string) {
         .maybeSingle();
       
       if (error) throw error;
-      return data as UnifiedProject | null;
+      if (!data) return null;
+
+      const { data: videos } = await supabase
+        .from("project_videos")
+        .select("id, url, title, display_order, is_visible")
+        .eq("project_id", data.id)
+        .eq("is_visible", true)
+        .order("display_order", { ascending: true });
+
+      return { ...(data as unknown as UnifiedProject), videos: (videos as any[]) || [] };
     },
     enabled: !!projectSlug,
   });

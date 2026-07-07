@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useEffect, useMemo, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -74,6 +74,15 @@ type NearbyRow = {
   area_name: string | null;
   emirate: string | null;
 };
+
+function MapResizeRuntime() {
+  const map = useMap();
+  useEffect(() => {
+    const id = window.setTimeout(() => map.invalidateSize(), 120);
+    return () => window.clearTimeout(id);
+  }, [map]);
+  return null;
+}
 
 export default function ProjectNearbyPropertiesMap({
   currentProjectId,
@@ -289,7 +298,7 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`jj-map-filter-toggle inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed" : ""}`}
+        className={`jj-map-filter-toggle inline-flex w-full min-w-0 min-h-[42px] items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer"}`}
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
@@ -335,6 +344,7 @@ export default function ProjectNearbyPropertiesMap({
         attributionControl={false}
         {...SAFE_LEAFLET_MAP_OPTIONS}
       >
+        <MapResizeRuntime />
         <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
         <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 

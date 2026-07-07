@@ -36,6 +36,16 @@ function humanizeDocTitle(rawName: string): string {
   return t.replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+function displayDocumentTitle(doc: BookDoc, fallback: string): string {
+  const raw = `${doc.display_title || ""} ${doc.name || ""} ${doc.type || ""}`.toLowerCase();
+  if (/fact\s*sheet|factsheet/.test(raw)) return "Fact Sheet";
+  if (/spa\s*draft|catalogue|catalog|brochure/.test(raw)) return "Brochure";
+  if (/city\s*buddy|citi\s*buddy|buddy/.test(raw)) return "Citi Buddy";
+  if (/payment/.test(raw)) return "Payment Plan";
+  if (/floor/.test(raw)) return "Floor Plan";
+  return fallback;
+}
+
 const typeIcon: Record<string, React.ReactNode> = {
   brochure: <FileText className="w-4 h-4" />,
   fact_sheet: <FileText className="w-4 h-4" />,
@@ -121,7 +131,7 @@ export default function BookStyleDocuments({
         style={{ scrollbarWidth: "none" }}
       >
         {visibleDocs.map((doc) => {
-          const title = doc.display_title || doc.name || humanizeDocTitle(doc.type);
+          const title = displayDocumentTitle(doc, doc.display_title || doc.name || humanizeDocTitle(doc.type));
           const coverUrl = doc.cover_image_url || projectImageUrl;
           const icon = typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
           // Derive a truthful label from filename first (Fact Sheet, City Buddy…), fall back to type
@@ -169,9 +179,9 @@ export default function BookStyleDocuments({
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
               {/* Top-right type chip — approved emerald label, pure white content */}
-              <div data-emerald-action="true" className="jj-emerald-action absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full shadow-sm max-w-[112px]">
+              <div data-emerald-action="true" className="jj-emerald-action absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full shadow-sm max-w-[126px] min-h-[24px]">
                 <span className="text-white [&>svg]:w-3 [&>svg]:h-3">{icon}</span>
-                <span className="text-[8px] uppercase tracking-[0.12em] font-bold text-white truncate">{typeLabel}</span>
+                <span className="text-[7px] uppercase tracking-[0.08em] font-bold text-white truncate leading-none">{displayDocumentTitle(doc, typeLabel)}</span>
               </div>
 
               {/* Bottom label panel — emerald fill, pure white text */}

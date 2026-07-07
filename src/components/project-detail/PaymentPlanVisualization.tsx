@@ -112,9 +112,20 @@ export default function PaymentPlanVisualization({
     });
   }
   
-  const isPostHandover = !!(postHandoverYears && postHandoverYears > 0);
+  const derivedPostHandoverMonths = (() => {
+    if (postHandoverYears && postHandoverYears > 0) return postHandoverYears * 12;
+    const raw = `${paymentPlan || ""} ${JSON.stringify(paymentBreakdown || "")}`;
+    if (!/post[-\s]?handover|after\s+handover/i.test(raw)) return null;
+    const monthMatch = raw.match(/(\d{1,3})\s*months?\s*post[-\s]?handover|post[-\s]?handover[^\d]{0,24}(\d{1,3})\s*months?/i);
+    if (monthMatch) return Number(monthMatch[1] || monthMatch[2]);
+    const yearMatch = raw.match(/(\d{1,2})\s*years?\s*post[-\s]?handover|post[-\s]?handover[^\d]{0,24}(\d{1,2})\s*years?/i);
+    if (yearMatch) return Number(yearMatch[1] || yearMatch[2]) * 12;
+    return null;
+  })();
+  const isPostHandover = !!(derivedPostHandoverMonths && derivedPostHandoverMonths > 0);
+  const postHandoverYearLabel = derivedPostHandoverMonths ? derivedPostHandoverMonths / 12 : null;
   const handoverLabel = isPostHandover
-    ? `Post-Handover${postHandoverYears ? ` (${postHandoverYears * 12} months)` : ""}`
+    ? `Post-Handover${derivedPostHandoverMonths ? ` (${derivedPostHandoverMonths} months)` : ""}`
     : "On Handover";
 
   // For post-handover balances, the final installment is NOT due at handover —
@@ -124,7 +135,7 @@ export default function PaymentPlanVisualization({
     if (!isPostHandover || !handoverDate) return null;
     const d = new Date(handoverDate);
     if (Number.isNaN(d.getTime())) return null;
-    d.setFullYear(d.getFullYear() + (postHandoverYears || 0));
+    d.setMonth(d.getMonth() + (derivedPostHandoverMonths || 0));
     return d.toISOString().slice(0, 10);
   })();
 
@@ -233,7 +244,11 @@ export default function PaymentPlanVisualization({
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-[#1A1A1A]">{premiumPlan.headline}</p>
-                  <p className="text-sm text-[#1A1A1A]/70">{premiumPlan.summary}</p>
+                  <p className="text-sm text-[#1A1A1A]/70">
+                    {isPostHandover && postHandoverEndDate
+                      ? `Post-Handover (${derivedPostHandoverMonths} months) · Due by ${postHandoverEndDate}`
+                      : premiumPlan.summary}
+                  </p>
                 </div>
                 </div>
                 <div className="rounded-full border border-[#064E3B]/30 bg-[#FDFBF7] px-4 py-2 text-sm font-bold text-[#064E3B] whitespace-nowrap shrink-0">
@@ -253,11 +268,11 @@ export default function PaymentPlanVisualization({
                 </div>
               )}
               
-              {postHandoverYears && postHandoverYears > 0 && (
+              {isPostHandover && (
                 <div className="mt-4 flex items-center gap-2 px-3 py-2 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg w-fit">
                   <Clock className="w-4 h-4 text-[color:var(--emerald-1)]" />
                   <span className="text-sm font-medium text-[color:var(--emerald-1)]">
-                    {postHandoverYears} {postHandoverYears === 1 ? 'Year' : 'Years'} Post-Handover
+                    Post-Handover ({derivedPostHandoverMonths} months){postHandoverEndDate ? ` · Due by ${postHandoverEndDate}` : ""}
                   </span>
                 </div>
               )}

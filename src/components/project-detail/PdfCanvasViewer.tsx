@@ -24,6 +24,7 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
 
     async function renderPage() {
       setLoading(true);
+      let renderTask: any = null;
       try {
         const page = await doc.getPage(pageNumber);
         const baseViewport = page.getViewport({ scale: 1 });
@@ -42,7 +43,8 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
 
         const context = canvas.getContext("2d");
         if (!context) throw new Error("Canvas unavailable");
-        await page.render({ canvasContext: context, viewport: renderViewport }).promise;
+        renderTask = page.render({ canvasContext: context, viewport: renderViewport });
+        await renderTask.promise;
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -54,6 +56,12 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
 
     return () => {
       cancelled = true;
+      try {
+        const canvas = canvasRef.current;
+        canvas?.getContext("2d")?.clearRect(0, 0, canvas.width, canvas.height);
+      } catch {
+        // no-op: cleanup best effort
+      }
     };
   }, [doc, pageNumber]);
 
@@ -72,6 +80,7 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
 export default function PdfCanvasViewer({ url, title, maxPages = 999, className = "" }: PdfCanvasViewerProps) {
   const [doc, setDoc] = useState<any | null>(null);
   const [pageCount, setPageCount] = useState(0);
+  const [renderedPages, setRenderedPages] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,16 +90,17 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
     setError(null);
     setDoc(null);
     setPageCount(0);
+    setRenderedPages(0);
+    let loadingTask: any = null;
 
     async function load() {
       const pdfjs = await loadPdfJs();
-      const response = await fetch(url, { credentials: "same-origin" });
-      if (!response.ok) throw new Error(`Document returned ${response.status}`);
-      const data = await response.arrayBuffer();
-      const loadedDoc = await pdfjs.getDocument({ data: new Uint8Array(data), useWorkerFetch: false }).promise;
+      loadingTask = pdfjs.getDocument({ url, withCredentials: false, useWorkerFetch: false, rangeChunkSize: 65536 });
+      const loadedDoc = await loadingTask.promise;
       if (cancelled) return;
       setDoc(loadedDoc);
       setPageCount(Math.min(loadedDoc.numPages || 1, maxPages));
+      setRenderedPages(Math.min(2, loadedDoc.numPages || 1, maxPages));
     }
 
     load()
@@ -103,8 +113,17 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
 
     return () => {
       cancelled = true;
+      try { loadingTask?.destroy?.(); } catch { /* no-op */ }
     };
   }, [url, maxPages]);
+
+  useEffect(() => {
+    if (!doc || !pageCount || renderedPages >= pageCount) return;
+    const id = window.setTimeout(() => {
+      setRenderedPages((current) => Math.min(pageCount, current + 2));
+    }, 180);
+    return () => window.clearTimeout(id);
+  }, [doc, pageCount, renderedPages]);
 
   if (loading) {
     return (
@@ -131,9 +150,14 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
 
   return (
     <div className={`space-y-4 overflow-y-auto bg-[#FDFBF7] p-4 ${className}`} aria-label={title}>
-      {Array.from({ length: pageCount }, (_, index) => (
+      {Array.from({ length: renderedPages }, (_, index) => (
         <PdfPage key={index + 1} doc={doc} pageNumber={index + 1} />
       ))}
+      {renderedPages < pageCount && (
+        <div className="grid min-h-[120px] place-items-center rounded-lg border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-4 text-center text-xs font-semibold text-[#1A1A1A]/75">
+          <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin text-[#064E3B]" /> Loading more pages…</span>
+        </div>
+      )}
       {doc.numPages > pageCount && (
         <p className="rounded-lg border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-center text-xs font-semibold text-[#1A1A1A]/75">
           Showing first {pageCount} of {doc.numPages} pages. Download for the complete file.
