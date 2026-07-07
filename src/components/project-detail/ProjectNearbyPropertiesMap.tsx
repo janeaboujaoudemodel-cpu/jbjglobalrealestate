@@ -16,30 +16,24 @@ import "leaflet/dist/leaflet.css";
 
 type FilterMode = "nearby" | "area" | "emirate";
 
-// Emerald pin — current project (replaces the red-pin-with-white-dot)
+// Red pin — current project must be visually unmistakable.
 const CURRENT_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44" fill="none">
-  <defs>
-    <linearGradient id="cpin" x1="17" y1="0" x2="17" y2="40" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0B6E4F"/>
-      <stop offset="55%" stop-color="#064E3B"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </linearGradient>
-  </defs>
-  <path d="M17 0C7.6 0 0 7.4 0 16.6 0 29.4 17 44 17 44s17-14.6 17-27.4C34 7.4 26.4 0 17 0z" fill="url(#cpin)" stroke="rgba(184,149,85,0.6)" stroke-width="1"/>
-  <circle cx="17" cy="16" r="5.5" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="60" viewBox="0 0 46 60" fill="none">
+  <path d="M23 0C10.3 0 0 10 0 22.4 0 39.7 23 60 23 60s23-20.3 23-37.6C46 10 35.7 0 23 0z" fill="#D71920" stroke="#FFFFFF" stroke-width="2"/>
+  <circle cx="23" cy="22" r="8" fill="#FFFFFF"/>
+  <circle cx="23" cy="22" r="4" fill="#D71920"/>
 </svg>`;
 
 const RedIcon = L.divIcon({
   html: CURRENT_PIN_SVG,
   className: "jj-map-pin",
-  iconSize: [34, 44],
-  iconAnchor: [17, 44],
-  popupAnchor: [0, -44],
+  iconSize: [46, 60],
+  iconAnchor: [23, 60],
+  popupAnchor: [0, -60],
 });
 
-const createEmeraldMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%);color:#FFFFFF !important;border:1px solid rgba(184,149,85,0.45);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap;text-align:center;box-shadow:0 4px 12px -4px rgba(0,0,0,0.5);letter-spacing:0.01em;">${priceText}</div>`,
+const createChampagneMarkerIcon = (priceText: string) => L.divIcon({
+  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#B89555 0%,#F7ECD0 55%,#B89555 100%);color:#1A1A1A !important;border:1px solid rgba(26,26,26,0.28);padding:5px 10px;border-radius:3px;font-size:11px;font-weight:800;white-space:nowrap;text-align:center;box-shadow:0 8px 18px -8px rgba(0,0,0,0.65);letter-spacing:0;">${priceText}</div>`,
   className: "custom-marker jj-map-pin",
   iconSize: [80, 28],
   iconAnchor: [40, 28],
@@ -90,11 +84,11 @@ function FitBoundsRuntime({ points }: { points: [number, number][] }) {
   useEffect(() => {
     if (!points.length) return;
     if (points.length === 1) {
-      map.setView(points[0], 14, { animate: false });
+      map.setView(points[0], 15, { animate: false });
       return;
     }
     const bounds = L.latLngBounds(points.map(([a, b]) => L.latLng(a, b)));
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13, animate: false });
+    map.fitBounds(bounds, { padding: [46, 46], maxZoom: 15, animate: false });
   }, [map, points]);
   return null;
 }
@@ -237,9 +231,7 @@ export default function ProjectNearbyPropertiesMap({
 
   const allMarkers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
 
-  const nearestMarkers = useMemo(
-    () => {
-      const distanceKm = (p: NearbyRow) => {
+  const distanceKm = useMemo(() => (p: NearbyRow) => {
         if (!hasOwnCoords || typeof p.latitude !== "number" || typeof p.longitude !== "number") return Number.POSITIVE_INFINITY;
         const toRad = (v: number) => (v * Math.PI) / 180;
         const r = 6371;
@@ -247,10 +239,16 @@ export default function ProjectNearbyPropertiesMap({
         const dLng = toRad(p.longitude - (longitude as number));
         const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(latitude as number)) * Math.cos(toRad(p.latitude)) * Math.sin(dLng / 2) ** 2;
         return 2 * r * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      };
-      return [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b)).slice(0, 18);
-    },
+      },
     [allMarkers, latitude, longitude, hasOwnCoords],
+  );
+  const nearestMarkers = useMemo(
+    () => {
+      const sorted = [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b));
+      const local = hasOwnCoords ? sorted.filter((p) => distanceKm(p) <= 28) : sorted;
+      return (local.length ? local : sorted.slice(0, 6)).slice(0, 12);
+    },
+    [allMarkers, distanceKm, hasOwnCoords],
   );
   const sameAreaCount = useMemo(
     () =>
@@ -396,6 +394,7 @@ export default function ProjectNearbyPropertiesMap({
           .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; padding: 0; }
           .leaflet-popup-content { margin: 0; }
           .leaflet-container { background: #0a1f18; }
+          .leaflet-control-zoom { display: none !important; }
         `}</style>
         <MapContainer
           center={resolvedCenter}
@@ -435,7 +434,7 @@ export default function ProjectNearbyPropertiesMap({
           <Marker
             key={p.id}
             position={[p.latitude!, p.longitude!]}
-            icon={createEmeraldMarkerIcon(p.price_from ? formatPrice(p.price_from) : "Ask")}
+            icon={createChampagneMarkerIcon(p.price_from ? formatPrice(p.price_from) : "Ask")}
             eventHandlers={{
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => {

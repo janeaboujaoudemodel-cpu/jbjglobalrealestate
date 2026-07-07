@@ -4,6 +4,7 @@ import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail, FileTex
 import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { cleanDocumentTitle } from "@/utils/documentTitles";
 
 const PdfCanvasViewer = lazy(() => import("@/components/project-detail/PdfCanvasViewer"));
 
@@ -56,7 +57,7 @@ export function FloorPlanGallery({
     })),
     ...(floorPlanDocs || []).map((doc) => ({
       id: doc.id,
-      label: doc.name || "Floor Plan",
+      label: cleanDocumentTitle(doc.name, "Floor Plan"),
       pdfUrl: doc.url,
       imageUrl: undefined,
     })),
@@ -157,7 +158,7 @@ export function FloorPlanGallery({
               onError={() => handleImageError(activePlan.id)}
             />
           ) : activePlan?.pdfUrl ? (
-            <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7] text-sm font-semibold text-[#1A1A1A]">Loading floor plan…</div>}>
+            <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7]"><div data-surface="emerald" data-no-contrast-guard className="inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold allow-white" style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Loading floor plan…</div></div>}>
               <PdfCanvasViewer
                 title={`${projectName} - ${activePlan.label}`}
                 url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}

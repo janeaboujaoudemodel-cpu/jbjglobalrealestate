@@ -216,13 +216,24 @@ export const ProjectAIAnalyzer = ({
   });
   const isCitiDeveloper = /\bciti\s+developers?\b/i.test(developer || "");
   const citiDeveloperLandscape = [
-    "Portfolio: Arya Residences, Aveline Residences, Allura, Agua Residences and Amra Residences — all in Umm Al Quwain.",
-    "Arya Residences — Citi's debut residential tower on Al Raudah, mid-rise apartments introducing the developer's design language of full sea views and serviced living.",
-    "Aveline Residences — sister tower to Arya, expanding the beachfront cluster with larger family layouts and shared podium amenities.",
-    "Allura — boutique low-rise focused on furnished 1 & 2-bedroom units targeted at short-stay and rental yield buyers.",
-    "Agua Residences — waterfront tower emphasising direct beach access, infinity pools and resort-grade landscaping.",
-    "Amra Residences — the flagship: first fully integrated wellness resort in the UAE, 165+ amenities including helipad and air-taxi vertiport, fully furnished + fully serviced with app-enabled concierge.",
+    "Al Raudah: Amra The First Integrative Wellness Resort is Citi Developers' Al Raudah project.",
+    "Al Muroor / wider Umm Al Quwain: Arya Residences, Aveline Residences, Allura and Agua Residences are separate Citi Developers projects and are not presented as Al Raudah inventory.",
+    "Amra positioning: fully integrated wellness-resort living with 165+ amenities, helipad and air-taxi access, fully furnished and fully serviced residences with app-enabled concierge.",
   ];
+
+  const amraPros = [
+    "Fully furnished apartments.",
+    "Fully serviced residential living with hotel-style lifestyle.",
+    "Fully managed by Amra BNB for short-term rental operations.",
+    "Suitable for short-term rental and yearly rental strategies.",
+    "Owner can access and use the unit anytime, subject to management terms.",
+    "Hotel-apartment lifestyle while the license is residential.",
+    "Residential license means no 5% hotel VAT on ownership structure.",
+    "Service charge indicated at AED 22/sq ft, materially below typical hotel-apartment service-charge levels.",
+  ];
+  const displayedProsList = isAmra
+    ? [...amraPros, ...prosList].filter((item, index, list) => list.findIndex((v) => v.toLowerCase() === item.toLowerCase()) === index)
+    : prosList;
 
 
   if (!hasMinimumData) {
@@ -549,9 +560,9 @@ export const ProjectAIAnalyzer = ({
                   <ThumbsUp className="w-5 h-5 allow-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                   <h3 className="font-bold text-lg allow-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Pros</h3>
                 </div>
-                {prosList.length > 0 ? (
+                {displayedProsList.length > 0 ? (
                   <ul className="space-y-2.5">
-                    {prosList.map((item, i) => (
+                    {displayedProsList.map((item, i) => (
                       <li key={i} data-surface="emerald" className="jj-project-pros-item flex items-start gap-2.5 rounded-lg px-3 py-2.5 border border-[#B89555]/35" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                         <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                         <span className="text-sm leading-snug" style={{ color: "#FFFFFF" }}>{item}</span>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
 import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { cleanDocumentTitle } from "@/utils/documentTitles";
 
 const PdfCanvasViewer = lazy(() => import("@/components/project-detail/PdfCanvasViewer"));
 
@@ -25,29 +26,19 @@ interface BookStyleDocumentsProps {
   onDownload: (url: string, filename: string) => void;
 }
 
-function humanizeDocTitle(rawName: string): string {
-  let t = rawName
-    .replace(/\.[a-z0-9]{2,5}$/i, "")
-    .replace(/\(\d+\)\s*$/g, "")
-    .replace(/[-_]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  if (!t) return rawName;
-  return t.replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 // Doc type detection — order matters. Citi Buddy is checked BEFORE brochure
 // because concierge PDFs sometimes include "brochure" in filename.
 function detectDocType(doc: BookDoc): { label: string; kind: string } {
   const raw = `${doc.display_title || ""} ${doc.name || ""} ${doc.type || ""}`.toLowerCase();
+  const cleanTitle = cleanDocumentTitle(doc.display_title || doc.name || doc.type || "Document");
   if (/citi\s*buddy|city\s*buddy|\bbuddy\b|concierge/.test(raw)) return { label: "Citi Buddy", kind: "citi_buddy" };
   if (/fact\s*sheet|factsheet/.test(raw)) return { label: "Fact Sheet", kind: "fact_sheet" };
-  if (/floor\s*plan/.test(raw)) return { label: "Floor Plan", kind: "floor_plan" };
+  if (/floor\s*plan/.test(raw)) return { label: /floor\s*plan$/i.test(cleanTitle) ? "Floor Plan" : cleanTitle, kind: "floor_plan" };
   if (/payment/.test(raw)) return { label: "Payment Plan", kind: "payment_plan" };
   if (/\bspa\b/.test(raw)) return { label: "SPA", kind: "spa" };
   if (/inventory/.test(raw)) return { label: "Inventory", kind: "inventory" };
   if (/brochure/.test(raw)) return { label: "Brochure", kind: "brochure" };
-  return { label: humanizeDocTitle(doc.display_title || doc.name || doc.type || "Document"), kind: doc.type || "document" };
+  return { label: cleanTitle, kind: doc.type || "document" };
 }
 
 const typeIcon: Record<string, React.ReactNode> = {
@@ -292,7 +283,7 @@ export default function BookStyleDocuments({
             {/* PDF viewer — flex-1 + min-h-0 is required for the inner overflow-y-auto to scroll */}
             <div className="flex-1 min-h-0 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
               {viewerUrl && (
-                <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7] text-sm font-semibold text-[#1A1A1A]">Loading document…</div>}>
+                <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7]"><div data-surface="emerald" data-no-contrast-guard className="inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold allow-white" style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Loading document…</div></div>}>
                   <PdfCanvasViewer url={viewerUrl} title={viewerTitle} maxPages={999} className="h-full w-full" />
                 </Suspense>
               )}

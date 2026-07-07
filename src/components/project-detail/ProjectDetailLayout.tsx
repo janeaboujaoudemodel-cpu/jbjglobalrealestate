@@ -91,7 +91,6 @@ import { ArrowLeft } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
-import citiBuddyRobot from "@/assets/citi-buddy-robot-concierge.jpg";
 import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
@@ -504,7 +503,7 @@ function ProjectDetailLayoutInner({
     const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
-    const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
+    const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard || isAmraProject;
     const hasMasterPlan = !!project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0;
 
     const mortgageEligible = isMortgageEligible({
@@ -657,13 +656,16 @@ function ProjectDetailLayoutInner({
   const heroImageUrl = images[0]?.url;
   const projectDocumentHeroImage = project.cover_image_url || images.find((img) => !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || images[0]?.url;
 
+  const citiBuddyImageUrl = useMemo(
+    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || null,
+    [images],
+  );
+
   const documentCoverFor = (doc: ProjectDetailData["documents"][number], index: number) => {
     if (doc.cover_image_url) return doc.cover_image_url;
     const lower = `${doc.name || ""} ${doc.display_title || ""}`.toLowerCase();
-    const cityBuddy = images.find((img) => /city\s*buddy|citybuddy|robot|buddy/i.test(`${img.alt || ""} ${img.url || ""}`));
-    if (/city\s*buddy|citi\s*buddy|citybuddy|robot|buddy/.test(lower)) return cityBuddy?.url || citiBuddyRobot;
+    if (/city\s*buddy|citi\s*buddy|citybuddy|robot|buddy/.test(lower)) return citiBuddyImageUrl || undefined;
     if (/fact\s*sheet|factsheet|brochure|spa\s*draft|catalogue|catalog/i.test(lower)) return projectDocumentHeroImage;
-    if (/city\s*buddy|citybuddy|robot|buddy/.test(lower) && cityBuddy?.url) return cityBuddy.url;
     const nonBathroom = images.find((img, i) => i >= index && !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`));
     return nonBathroom?.url || projectDocumentHeroImage || undefined;
   };
@@ -733,11 +735,13 @@ function ProjectDetailLayoutInner({
     const additions = [
       { label: "Marjan Island", time: "15 minutes by road" },
       { label: "Dubai International Airport", time: "40 minutes by road · 15 minutes by air taxi" },
-      { label: "Al Khor Mangrove", time: "Direct access" },
-      { label: "Wynn Casino / Marjan nightlife", time: "Nearby overflow demand driver" },
-      { label: "Vida Resort / 25 Hours Hotel / UAQ Downtown", time: "Strategic hospitality cluster" },
+      { label: "Al Khor Mangrove", time: "5 minutes by car" },
+      { label: "Wynn Casino / Marjan nightlife", time: "15 minutes by car · 7 minutes by air taxi" },
+      { label: "Vida Resort / 25 Hours Hotel / UAQ Downtown", time: "20 minutes by car" },
     ];
-    return [...base, ...additions].filter((item, index, list) => list.findIndex((v) => v.label.toLowerCase() === item.label.toLowerCase()) === index);
+    const overrideLabels = new Set(additions.map((item) => item.label.toLowerCase()));
+    const cleanedBase = base.filter((item) => !overrideLabels.has(item.label.toLowerCase()));
+    return [...additions, ...cleanedBase].filter((item, index, list) => list.findIndex((v) => v.label.toLowerCase() === item.label.toLowerCase()) === index);
   }, [isAmraProject, project.location_distances]);
 
   // Helper: Derive bedroom range from unit_types array when min/max are null
@@ -1435,13 +1439,13 @@ function ProjectDetailLayoutInner({
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40 relative">
                 <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="house-details" initial={project as any} /></div>
                 <HouseDetailsSection
-                  floors={project.floors}
+                  floors={isAmraProject ? (project.floors || 15) : project.floors}
                   totalUnits={project.availability_visible ? project.total_units : null}
                   buildingType={project.property_type_label}
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
-                  serviceCharge={project.service_charge}
-                   standardInclusions={isAmraProject ? ["Fully furnished", "Fully serviced", "Full sea view", "Citi Buddy concierge"] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
+                   serviceCharge={isAmraProject ? (project.service_charge || "AED 22/sq ft") : project.service_charge}
+                    standardInclusions={isAmraProject ? ["Fully furnished", "Fully serviced", "Fully managed by Amra BNB", "Full sea view", "Citi Buddy concierge", "G + M + 14 residential floors + rooftop"] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
              </div>
@@ -1486,20 +1490,39 @@ function ProjectDetailLayoutInner({
             {(hasCitiBuddyDocument || isAmraProject) && (
               <div className="mb-14 scroll-mt-40">
                 <div className="jj-card-inner overflow-hidden p-0">
-                  <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr]">
-                    <SafeImage
-                      src={citiBuddyRobot}
-                      alt="Citi Buddy AI robot concierge"
-                      className="h-[280px] lg:h-full min-h-[280px] w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                  <div className={citiBuddyImageUrl ? "grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr]" : "grid grid-cols-1"}>
+                    {citiBuddyImageUrl && (
+                      <SafeImage
+                        src={citiBuddyImageUrl}
+                        alt="Citi Buddy resident concierge"
+                        className="h-[280px] lg:h-full min-h-[280px] w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
                     <div className="p-6 md:p-8 flex flex-col justify-center">
                       <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-3">Resident Concierge</p>
                       <h3 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-4">Citi Buddy</h3>
                       <p className="text-[15px] leading-relaxed text-[#1A1A1A]/82">
                         Citi Buddy connects residents to smart-home controls, short-stay management, concierge requests, in-room dining, security alerts and service bookings through the Citi Developers app.
                       </p>
+                      <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                        {[
+                          "Smart-home controls",
+                          "Concierge and service bookings",
+                          "Short-term rental management",
+                          "Yearly rental support",
+                          "In-room dining requests",
+                          "Security alerts and access",
+                          "Housekeeping and maintenance",
+                          "Owner access anytime",
+                        ].map((feature) => (
+                          <div key={feature} className="flex items-center gap-2 rounded-md border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-sm font-semibold text-[#1A1A1A]">
+                            <Check className="h-4 w-4 text-[#064E3B]" />
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1521,7 +1544,7 @@ function ProjectDetailLayoutInner({
                   <div className="jj-card-inner mt-6">
                     <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-4">
                       <Video className="w-5 h-5 text-[#064E3B]" />
-                      Video Gallery
+                      Project Videos Gallery
                     </h3>
                     <div className="grid gap-4 md:grid-cols-2">
                       {[...uploadedVideos.map((v) => ({ id: v.id, url: v.url, title: v.title || "Uploaded project video" })), ...videoDocs.map((v) => ({ id: v.id, url: v.url, title: v.display_title || v.name || "Project video" }))].map((video) => (
@@ -1863,18 +1886,18 @@ function ProjectDetailLayoutInner({
               />
             </div>
 
+           {/* BUYER NATIONALITY INSIGHTS — project + area */}
+           <BuyerNationalityInsights
+             projectName={project.name}
+             areaName={project.area_name || project.location || null}
+           />
+
            {/* DLD MARKET WIDGET — full-bleed band (escapes outer max-w container) */}
            <div className="jj-project-nested-band mb-10 md:mb-12">
              <SectionDividerGoldFullBleed />
              <DLDMarketWidget />
              <SectionDividerGoldFullBleed />
            </div>
-
-           {/* BUYER NATIONALITY INSIGHTS — project + area */}
-           <BuyerNationalityInsights
-             projectName={project.name}
-             areaName={project.area_name || project.location || null}
-           />
 
            {/* MORE FROM THIS DEVELOPER — moved to bottom so it doesn't replace the area map */}
            <MoreFromDeveloperStrip
