@@ -80,6 +80,13 @@ const ShortlistBadgeButton = ({
   const actionClass =
     "jj-surface-emerald jj-favorite-trigger inline-flex items-center justify-center rounded-full aspect-square shrink-0 leading-none transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] overflow-hidden p-0";
 
+  const toggleShortlistOnly = () => {
+    toggleGuestShortlist(projectId);
+    toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
+    // If removing from shortlist, also clear any badge that was assigned.
+    if (isShortlisted && currentBadge) setBadge(projectId, null);
+  };
+
   const handleSetBadge = (badge: ShortlistBadge | null) => {
     // Auto-add to shortlist if not already shortlisted
     if (!isShortlisted && badge) {
