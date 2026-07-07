@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.20.0";
 
 // src/lib/mcp/tools/echo.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
@@ -59,11 +59,16 @@ var search_properties_default = defineTool2({
 });
 
 // src/lib/mcp/index.ts
+var projectRef = "mdafrewypkkrildjgtey";
 var mcp_default = defineMcp({
   name: "jbj-global-mcp",
   title: "JBJ Global Real Estate",
   version: "0.1.0",
   instructions: "MCP tools for JBJ Global Real Estate. Use `search_properties` to query published property listings by keyword, city, or price range. Use `echo` to verify connectivity.",
+  auth: auth.oauth.issuer({
+    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    acceptedAudiences: "authenticated"
+  }),
   tools: [echo_default, search_properties_default]
 });
 

@@ -42,10 +42,18 @@ const BrokerCRM = lazy(() => import("@/pages/broker/BrokerCRM"));
 const BrokerDatabaseView = lazy(() => import("@/pages/broker/BrokerDatabaseView"));
 const BrokerAgreementSign = lazy(() => import("@/pages/broker/BrokerAgreementSign"));
 const BrokerGuard = lazy(() => import("@/components/BrokerGuard"));
+const OAuthConsent = lazy(() => import("@/pages/OAuthConsent"));
 
 export const StandaloneRoutes = () => (
   <>
     <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
+    <Route path="/.lovable/oauth/consent" element={
+      <RouteErrorBoundary routeName="OAuthConsent">
+        <Suspense fallback={<PageLoader />}>
+          <OAuthConsent />
+        </Suspense>
+      </RouteErrorBoundary>
+    } />
     <Route path="/broker/activate" element={<RouteErrorBoundary routeName="BrokerActivate"><BrokerActivate /></RouteErrorBoundary>} />
     {/* /broker/crm and /broker/crm/database/:id moved into the nested
         Broker Portal shell — see src/routes/BrokerPortalRoutes.tsx. */}
