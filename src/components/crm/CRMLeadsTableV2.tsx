@@ -766,7 +766,7 @@ export default function CRMLeadsTableV2({
                       )}
                     </TableCell>
                     <TableCell className="w-[190px] text-sm text-[#1A1A1A]/80 min-w-0 leading-snug">
-                      <span className="inline-flex max-w-full items-center px-2 py-1 rounded-md bg-[#EFE6D6]/60 border border-[#B89555]/25 text-[#1A1A1A]/85 text-xs font-medium truncate">
+                      <span className="jj-emerald-metallic allow-white inline-flex max-w-full items-center px-2 py-1 rounded-md border-0 text-white text-xs font-semibold truncate [&_*]:!text-white">
                         {renderSource(lead)}
                       </span>
                     </TableCell>

@@ -710,7 +710,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
         </header>
 
         <Tabs value={tab} onValueChange={(v) => { setTab(v as Bucket); setSelected(new Set()); }}>
-          <TabsList className="w-full min-w-0 bg-[#F7F2EA] border border-[#B89555]/30 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))] h-auto gap-1 p-1 overflow-visible">
+          <TabsList className="w-full min-w-0 bg-[#F7F2EA] border border-[#B89555]/30 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,148px),1fr))] h-auto gap-1 p-1 overflow-visible">
             <TabsTrigger value="templates">Templates</TabsTrigger>
             <TabsTrigger value="documents">Live Editor</TabsTrigger>
             <TabsTrigger value="esign">E-signature</TabsTrigger>
@@ -756,7 +756,7 @@ export default function DocumentsFormsHub({ initialTabOverride }: DocumentsForms
                       type="button"
                       onClick={() => showCategory(item.key)}
                       data-surface={active ? "emerald" : "champagne"}
-                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0 max-w-full overflow-hidden", active ? "border-transparent bg-[var(--jj-emerald-ombre)] shadow-lg" : "border-[#B89555]/35 bg-[#FDFBF7] hover:bg-[#EFE6D6]"].join(" ")}
+                      className={["text-left rounded-lg border px-3 py-3 transition min-w-0 max-w-full overflow-hidden", active ? "jj-emerald-metallic allow-white border-transparent text-white shadow-lg [&_*]:!text-white [&_svg]:!stroke-white" : "border-[#B89555]/35 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]"].join(" ")}
                     >
                       <div className="flex items-start gap-2 min-w-0">
                         <Icon className={active ? "w-4 h-4 shrink-0 text-[#FFFFFF]" : "w-4 h-4 shrink-0 text-[#1A1A1A]"} />

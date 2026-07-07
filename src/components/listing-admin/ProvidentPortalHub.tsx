@@ -319,7 +319,7 @@ export function ProvidentPortalHub() {
           </div>
           <Progress value={enrichPercent} className="h-3" />
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-sm">
-            <div data-enrichment-tile="full" data-surface="emerald" className="rounded-lg p-3 border border-white/20" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            <div data-enrichment-tile="full" data-surface="emerald" className="jj-emerald-metallic allow-white rounded-lg p-3 border border-white/20 text-white [&_*]:!text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
               <p className="text-lg font-extrabold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{enrichmentStats.fullyEnriched}</p>
               <p className="text-[11px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Fully Enriched</p>
             </div>
