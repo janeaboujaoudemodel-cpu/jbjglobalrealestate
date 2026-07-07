@@ -1387,15 +1387,17 @@ function ProjectDetailLayoutInner({
       )}
 
 
-      {/* STICKY SUB-NAVIGATION - Two rows: Search + Shortcuts */}
+      {/* STICKY SUB-NAVIGATION - REPLACES global header when active (top-0). Two rows: Search + Shortcuts */}
       <div 
-        className={`jj-utility-shell fixed top-[88px] [body.jj-vertical-nav-collapsed_&]:top-[48px] right-0 z-[9990] backdrop-blur-md transition-all duration-300 ${
-          showStickyNav ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+        className={`jj-utility-shell fixed left-0 right-0 z-[9990] backdrop-blur-md transition-all duration-300 ${
+          showStickyNav
+            ? "top-0 translate-y-0 opacity-100"
+            : "top-[88px] -translate-y-full opacity-0 pointer-events-none"
         }`}
       >
         {/* Row 1: Filter Shortcut Bar */}
         <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-3 px-2 transition-all duration-300">
-          <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+          <div className="max-w-full overflow-x-auto scrollbar-hide flex justify-center md:justify-start" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
@@ -1404,7 +1406,7 @@ function ProjectDetailLayoutInner({
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-              <div className="flex items-center gap-1 py-2.5">
+              <div className="flex items-center justify-center lg:justify-start gap-1 py-2.5 mx-auto w-max lg:w-auto lg:mx-0">
                 {visibleTabs.map((tab) => (
                   <button
                     key={tab.id}
