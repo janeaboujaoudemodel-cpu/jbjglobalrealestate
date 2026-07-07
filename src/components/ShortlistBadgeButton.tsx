@@ -1,4 +1,4 @@
-import { Award, X } from "lucide-react";
+import { Award, X, ListPlus, ListMinus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
