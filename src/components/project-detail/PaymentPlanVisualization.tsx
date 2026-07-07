@@ -240,8 +240,8 @@ export default function PaymentPlanVisualization({
         <TabsContent value="installment">
           {premiumPlan && (
             <div className="mb-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="flex min-w-0 flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-14 h-14 rounded-full flex items-center justify-center ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)', ['--jj-icon-lock-size' as any]: '3.5rem' }}>
                   <Percent className="w-6 h-6" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </div>
@@ -254,7 +254,7 @@ export default function PaymentPlanVisualization({
                   </p>
                 </div>
                 </div>
-                <div className="rounded-full border border-[#064E3B]/30 bg-[#FDFBF7] px-4 py-2 text-sm font-bold text-[#064E3B] whitespace-nowrap shrink-0">
+                <div className="w-fit max-w-full rounded-full border border-[#064E3B]/30 bg-[#FDFBF7] px-4 py-2 text-sm font-bold text-[#064E3B] whitespace-nowrap shrink-0">
                   {premiumPlan.badge}
                 </div>
 
@@ -339,7 +339,7 @@ export default function PaymentPlanVisualization({
               {/* Timeline Dots — anchored to the END of each stage bar so the circles
                   visually match the width of the corresponding segment (e.g. the "During
                   Construction" dot aligns with the end of its 60% bar, not the midpoint). */}
-              <div className="relative mt-4 h-24">
+              <div className="relative mt-4 h-32 sm:h-24">
                 <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
                 {(() => {
                   // Anchor each label to the MIDPOINT of its segment so it visually
@@ -357,7 +357,7 @@ export default function PaymentPlanVisualization({
                       }}
                     >
                       <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: gradient, backgroundColor: '#064E3B' }} />
-                      <span className={`mt-2 text-xs text-[#1A1A1A]/70 text-center ${compact ? "whitespace-normal max-w-[150px]" : "whitespace-nowrap max-w-[180px]"}`}>
+                      <span className={`mt-2 text-[11px] sm:text-xs text-[#1A1A1A]/70 text-center ${compact ? "whitespace-normal max-w-[118px] sm:max-w-[150px]" : "whitespace-normal max-w-[92px] sm:whitespace-nowrap sm:max-w-[180px]"}`}>
                         {label}
                       </span>
                     </div>
