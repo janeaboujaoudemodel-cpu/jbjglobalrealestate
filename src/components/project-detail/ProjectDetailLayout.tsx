@@ -870,14 +870,18 @@ function ProjectDetailLayoutInner({
 
           {/* USPs Row - Location, Bedrooms, Size, Handover, Payment Plan */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8" data-no-contrast-guard>
-            {project.location && (
+            {(project.emirate || project.area_name || project.location) && (() => {
+              const displayLoc = project.emirate
+                ? `${project.emirate}${project.area_name ? ` · ${project.area_name}` : ""}`
+                : (project.area_name || project.location || "");
+              return (
               <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                 <MapPin className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <InlineEditable projectId={project.id} field="location" value={project.location} surface="dark">
-                  <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{project.location}</span>
-                </InlineEditable>
+                <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{displayLoc}</span>
               </div>
-            )}
+              );
+            })()}
+
             {bedroomsText && (
               <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                 <Bed className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
