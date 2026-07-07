@@ -44,13 +44,13 @@ function MapViewToggle({
   t: (key: string) => string;
 }) {
   return (
-    <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
-      <div className="jj-map-layer-switcher">
+    <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2 items-start max-w-[calc(100%-2rem)]">
+      <div className="jj-map-layer-switcher inline-flex flex-row gap-1">
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className="jj-map-layer-button"
+            className="jj-map-layer-button whitespace-nowrap"
             data-active={mapView === view ? "true" : "false"}
             data-surface="emerald"
             data-emerald-action="true"
@@ -64,15 +64,15 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="jj-map-square-control inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
+        className="jj-map-square-control inline-flex flex-row items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 w-auto"
         data-surface="emerald"
         data-emerald-action="true"
         data-no-contrast-guard
         aria-label={t('map.openInGoogleMaps')}
-        style={{ backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF' }}
+        style={{ backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', writingMode: 'horizontal-tb' }}
       >
-        <Maximize className="w-4 h-4" />
-        <span>Open in Google Maps</span>
+        <Maximize className="w-4 h-4 shrink-0" />
+        <span className="whitespace-nowrap">Open in Google Maps</span>
       </a>
     </div>
   );
@@ -190,15 +190,17 @@ export default function ProjectLocationMap({
 
       {/* Click to enable scroll zoom overlay */}
       {!scrollZoomEnabled && (
-        <div
-          className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer pointer-events-none"
+        <button
+          type="button"
+          className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer bg-transparent border-0 p-0"
           onClick={() => setScrollZoomEnabled(true)}
+          aria-label={t('map.clickToEnable')}
         >
-          <div data-surface="emerald" data-emerald-action="true" data-no-contrast-guard className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
+          <span data-surface="emerald" data-emerald-action="true" data-no-contrast-guard className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium inline-flex items-center gap-2 pointer-events-none">
             <MousePointer className="w-4 h-4" />
             {t('map.clickToEnable')}
-          </div>
-        </div>
+          </span>
+        </button>
       )}
     </div>
   );
