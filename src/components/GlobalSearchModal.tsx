@@ -123,6 +123,7 @@ interface DbResult {
   name: string;
   slug: string;
   image?: string | null;
+  developerLogo?: string | null;
 }
 
 const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = false, anchorRect = null }: GlobalSearchModalProps) => {
@@ -145,6 +146,17 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     '/investor-dashboard';
 
   const debouncedQuery = useDebouncedValue(query.trim(), 300);
+
+  const rankSearchName = (name: string, q: string) => {
+    const n = name.toLowerCase().trim();
+    const needle = q.toLowerCase().trim();
+    if (!needle) return 99;
+    if (n === needle) return 0;
+    if (n.startsWith(needle)) return 1;
+    if (n.split(/\s+/).includes(needle)) return 2;
+    if (n.includes(needle)) return 3;
+    return 9 + Math.abs(n.length - needle.length) / 100;
+  };
 
   // Check CRM access
   const { data: crmProfile } = useQuery({
@@ -186,8 +198,11 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         .from('developers' as any)
         .select('id, name, slug, logo_url')
         .ilike('name', `%${debouncedQuery}%`)
-        .limit(5);
-      return ((data as unknown as Array<{ id: string; name: string; slug: string; logo_url: string | null }>) || []).map(d => ({ id: d.id, name: d.name, slug: d.slug, image: d.logo_url }));
+        .limit(12);
+      return ((data as unknown as Array<{ id: string; name: string; slug: string; logo_url: string | null }>) || [])
+        .sort((a, b) => rankSearchName(a.name, debouncedQuery) - rankSearchName(b.name, debouncedQuery))
+        .slice(0, 5)
+        .map(d => ({ id: d.id, name: d.name, slug: d.slug, image: d.logo_url }));
     },
     enabled: debouncedQuery.length >= 2 && isOpen,
     staleTime: 30000,
@@ -198,12 +213,16 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     queryFn: async (): Promise<DbResult[]> => {
       const { data } = await supabase
         .from('projects')
-        .select('id, name, slug, cover_image_url, developer_name')
+        .select('id, name, slug, cover_image_url, developer_name, is_published, status, deleted_at, developer:developers(logo_url)')
         .or(`name.ilike.%${debouncedQuery}%,developer_name.ilike.%${debouncedQuery}%`)
         .or('listing_kind.is.null,listing_kind.neq.leasing')
-        .eq('status', 'active')
-        .limit(5);
-      return (data || []).map(p => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url }));
+        .is('deleted_at', null)
+        .eq('is_published', true)
+        .limit(20);
+      return (data || [])
+        .sort((a: any, b: any) => rankSearchName(a.name, debouncedQuery) - rankSearchName(b.name, debouncedQuery))
+        .slice(0, 6)
+        .map((p: any) => ({ id: p.id, name: p.name, slug: p.slug, image: p.cover_image_url, developerLogo: p.developer?.logo_url || null }));
     },
     enabled: debouncedQuery.length >= 2 && isOpen,
     staleTime: 30000,
@@ -217,8 +236,11 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         .select('id, name, slug, image_url')
         .ilike('name', `%${debouncedQuery}%`)
         .eq('is_active', true)
-        .limit(5);
-      return (data || []).map(a => ({ id: a.id, name: a.name, slug: a.slug, image: a.image_url }));
+        .limit(12);
+      return (data || [])
+        .sort((a, b) => rankSearchName(a.name, debouncedQuery) - rankSearchName(b.name, debouncedQuery))
+        .slice(0, 5)
+        .map(a => ({ id: a.id, name: a.name, slug: a.slug, image: a.image_url }));
     },
     enabled: debouncedQuery.length >= 2 && isOpen,
     staleTime: 30000,
@@ -360,10 +382,10 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && query.trim()) {
       // Prioritize DB results, then static
-      if (dbDevelopers.length > 0) {
-        handleSelect(`/developer/${dbDevelopers[0].slug}`);
-      } else if (dbProjects.length > 0) {
+      if (dbProjects.length > 0) {
         handleSelect(`/project/${dbProjects[0].slug}`);
+      } else if (dbDevelopers.length > 0) {
+        handleSelect(`/developer/${dbDevelopers[0].slug}`);
       } else if (dbAreas.length > 0) {
         handleSelect(`/area/${dbAreas[0].slug}`);
       } else if (results.length > 0) {
@@ -380,15 +402,15 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left jj-hover-emerald ${isFirst ? 'bg-[#FDFBF7] border-[#B89555]/55 shadow-sm' : 'bg-[#FDFBF7]/70 border-[#B89555]/20 hover:border-[#B89555]/55'}`}
     >
-      {item.image ? (
+      {item.image || item.developerLogo ? (
         <div className="w-9 h-9 rounded-lg overflow-hidden border border-[#B89555]/40 bg-white flex items-center justify-center flex-shrink-0">
-          <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
+          <SafeImage src={item.image || item.developerLogo || ""} alt={item.name} className="w-full h-full object-cover" />
         </div>
       ) : (
         <IconTile icon={FallbackIcon} tone="emerald" size="sm" />
       )}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-[#1A1A1A] truncate">{item.name}</p>
+        <p className="text-sm font-semibold text-[#1A1A1A] truncate" style={{ color: "#1A1A1A" }}>{item.name}</p>
       </div>
       <ArrowRight data-search-arrow className="w-4 h-4 text-[#064E3B] flex-shrink-0" />
     </button>
@@ -399,22 +421,22 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     if (!hasDbResults) return null;
     return (
       <div className="space-y-3">
-        {dbDevelopers.length > 0 && (
-          <div>
-            <p className={`${compact ? 'text-xs' : 'text-xs'} font-semibold text-[#1A1A1A] mb-1 px-1 uppercase tracking-wider`}>Developers</p>
-            <div className="space-y-0.5">
-              {dbDevelopers.map((d, i) => (
-                <DbResultItem key={d.id} item={d} route={`/developer/${d.slug}`} fallbackIcon={Building2} isFirst={!compact && i === 0 && dbProjects.length === 0 && dbAreas.length === 0} />
-              ))}
-            </div>
-          </div>
-        )}
         {dbProjects.length > 0 && (
           <div>
             <p className="text-xs font-semibold text-[#1A1A1A] mb-1 px-1 uppercase tracking-wider">Projects</p>
             <div className="space-y-0.5">
-              {dbProjects.map(p => (
-                <DbResultItem key={p.id} item={p} route={`/project/${p.slug}`} fallbackIcon={Building2} />
+              {dbProjects.map((p, i) => (
+                <DbResultItem key={p.id} item={p} route={`/project/${p.slug}`} fallbackIcon={Building2} isFirst={!compact && i === 0} />
+              ))}
+            </div>
+          </div>
+        )}
+        {dbDevelopers.length > 0 && (
+          <div>
+            <p className={`${compact ? 'text-xs' : 'text-xs'} font-semibold text-[#1A1A1A] mb-1 px-1 uppercase tracking-wider`}>Developers</p>
+            <div className="space-y-0.5">
+              {dbDevelopers.map((d) => (
+                <DbResultItem key={d.id} item={d} route={`/developer/${d.slug}`} fallbackIcon={Building2} />
               ))}
             </div>
           </div>

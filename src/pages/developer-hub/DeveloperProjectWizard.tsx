@@ -138,6 +138,17 @@ const getDocumentType = (file: Uploaded) => {
   return file.role === "document" ? "document" : "brochure";
 };
 
+const normalizeStoredUploadType = (url: string | null | undefined, type: string | null | undefined, name: string | null | undefined) => {
+  const raw = `${type || ""} ${name || ""} ${url || ""}`.toLowerCase();
+  if (/\.(mp4|mov|webm|m4v)(\?|$)/.test(raw) || raw.includes("video")) return "video/mp4";
+  if (/\.(png|jpe?g|webp|gif|avif)(\?|$)/.test(raw) || raw.includes("image")) return "image/jpeg";
+  if (/\.pdf(\?|$)/.test(raw) || raw.includes("pdf")) return "application/pdf";
+  return "application/octet-stream";
+};
+
+const isVideoDocumentType = (type: string | null | undefined, name?: string | null, url?: string | null) =>
+  normalizeStoredUploadType(url, type, name).startsWith("video/") || /(^|[_\s-])video(s)?($|[_\s-])/i.test(type || "");
+
 const DeveloperProjectWizard = () => {
   const { user, isOwner } = useAuth();
   const navigate = useNavigate();
@@ -166,6 +177,27 @@ const DeveloperProjectWizard = () => {
   const [uploadStatuses, setUploadStatuses] = useState<UploadStatus[]>([]);
   const draftKey = useMemo(() => `jbj_project_upload_draft_${user?.id || "guest"}`, [user?.id]);
   const ownerRoute = location.pathname.startsWith("/owner");
+  const editProjectId = useMemo(() => new URLSearchParams(location.search).get("edit"), [location.search]);
+  const isEditingProject = !!editProjectId;
+
+  const { data: editProject, isLoading: editProjectLoading } = useQuery({
+    queryKey: ["project-wizard-edit", editProjectId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("projects")
+        .select(`
+          *,
+          developer:developers(id, name),
+          images:project_images(id, image_url, alt_text, display_order),
+          documents:project_documents(id, document_type, file_url, file_name, file_size, display_order, storage_path, display_title, cover_image_url)
+        `)
+        .eq("id", editProjectId!)
+        .maybeSingle();
+      if (error) throw error;
+      return data as any;
+    },
+    enabled: !!editProjectId,
+  });
 
   useEffect(() => {
     if (!uploadStatuses.some((u) => u.status === "uploading")) return;
@@ -216,6 +248,7 @@ const DeveloperProjectWizard = () => {
   });
 
   useEffect(() => {
+    if (isEditingProject) return;
     try {
       const raw = window.localStorage.getItem(draftKey);
       if (!raw) return;
@@ -234,12 +267,77 @@ const DeveloperProjectWizard = () => {
     } catch {
       window.localStorage.removeItem(draftKey);
     }
-  }, [draftKey]);
+  }, [draftKey, isEditingProject]);
 
   useEffect(() => {
+    if (!editProject) return;
+    setSelectedDeveloperId(editProject.developer_id || "");
+    setExtractedDeveloperName(editProject.developer?.name || editProject.developer_name || "");
+    setBasics({
+      name: editProject.name || "",
+      short_description: editProject.short_description || "",
+      description: editProject.description || "",
+      emirate: editProject.emirate || "",
+      location: editProject.location || editProject.area_name || "",
+      handover_date: editProject.handover_date && /^\d{4}-\d{2}-\d{2}/.test(String(editProject.handover_date)) ? String(editProject.handover_date).slice(0, 10) : (editProject.handover_date || ""),
+      launch_date: editProject.launch_date ? String(editProject.launch_date).slice(0, 10) : "",
+      price_from: editProject.price_from ? String(editProject.price_from) : "",
+      price_to: editProject.price_to ? String(editProject.price_to) : "",
+      bedrooms_min: editProject.bedrooms_min !== null && editProject.bedrooms_min !== undefined ? String(editProject.bedrooms_min) : "",
+      bedrooms_max: editProject.bedrooms_max !== null && editProject.bedrooms_max !== undefined ? String(editProject.bedrooms_max) : "",
+      payment_plan: editProject.payment_plan || "",
+      service_charge: editProject.service_charge || "",
+      built_up_area: editProject.built_up_area || [editProject.size_min, editProject.size_max].filter(Boolean).join(" - "),
+      plot_area: editProject.plot_area || "",
+      number_of_stories: editProject.number_of_stories ? String(editProject.number_of_stories) : "",
+      furnished_status: editProject.furnished_status || "",
+      amenities: Array.isArray(editProject.amenities) ? editProject.amenities.join(", ") : "",
+      is_serviced: editProject.is_serviced === true ? "yes" : editProject.is_serviced === false ? "no" : "",
+      is_managed: editProject.is_managed === true ? "yes" : editProject.is_managed === false ? "no" : "",
+      management_type: editProject.management_type || "",
+      owner_can_use: editProject.owner_can_use === true ? "yes" : editProject.owner_can_use === false ? "no" : "",
+    });
+    setCover(editProject.cover_image_url ? {
+      url: editProject.cover_image_url,
+      name: `${editProject.name || "project"}-cover`,
+      type: "image/jpeg",
+      size: 0,
+      role: "cover",
+    } : null);
+    const imageUploads: Uploaded[] = (editProject.images || [])
+      .slice()
+      .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0))
+      .filter((img: any) => img.image_url && img.image_url !== editProject.cover_image_url)
+      .map((img: any) => ({ url: img.image_url, name: img.alt_text || "Gallery photo", type: "image/jpeg", size: 0, role: "gallery" as const }));
+    const docUploads: Uploaded[] = (editProject.documents || []).map((doc: any) => ({
+      url: doc.file_url,
+      name: doc.file_name || doc.display_title || "Project document",
+      type: normalizeStoredUploadType(doc.file_url, doc.document_type, doc.file_name),
+      size: doc.file_size || 0,
+      path: doc.storage_path || undefined,
+      role: isVideoDocumentType(doc.document_type, doc.file_name, doc.file_url) ? "gallery" as const : (doc.document_type === "floor_plan" ? "floor_plan" as const : doc.document_type === "payment_plan" ? "payment_plan" as const : doc.document_type === "factsheet" ? "fact_sheet" as const : "brochure" as const),
+    }));
+    setGallery([...imageUploads, ...docUploads.filter((d) => d.type.startsWith("video/"))]);
+    setBrochures(docUploads.filter((d) => !d.type.startsWith("video/")));
+    setSmartFiles(docUploads.filter((d) => !d.type.startsWith("video/") && isExtractionCapable(d)));
+    if (Array.isArray(editProject.bedroom_types) && editProject.bedroom_types.length) {
+      const nums = editProject.bedroom_types
+        .map((v: unknown): number | null => String(v).toLowerCase().includes("studio") ? 0 : Number(String(v).match(/\d+/)?.[0]))
+        .filter((v: number | null): v is number => v !== null && Number.isFinite(v));
+      setSelectedBedrooms(nums.length ? Array.from(new Set<number>(nums)).sort((a: number, b: number) => a - b) : []);
+    } else if (editProject.bedrooms_min !== null && editProject.bedrooms_max !== null) {
+      const min = Number(editProject.bedrooms_min);
+      const max = Number(editProject.bedrooms_max);
+      setSelectedBedrooms(BEDROOM_OPTIONS.map((o) => o.value).filter((v) => v >= min && v <= max));
+    }
+    setStep(0);
+  }, [editProject]);
+
+  useEffect(() => {
+    if (isEditingProject) return;
     const payload = { basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, savedAt: new Date().toISOString() };
     try { window.localStorage.setItem(draftKey, JSON.stringify(payload)); } catch {}
-  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, draftKey]);
+  }, [basics, step, cover, gallery, brochures, smartFiles, selectedDeveloperId, extractedDeveloperName, developerDescription, developerLogoNeeded, selectedBedrooms, draftKey, isEditingProject]);
 
   const activeDeveloperId = isOwner ? selectedDeveloperId : developer?.id;
   const activeDeveloperName = isOwner ? (ownerDevelopers.find((d) => d.id === selectedDeveloperId)?.name || extractedDeveloperName) : developer?.name;
@@ -651,6 +749,7 @@ const DeveloperProjectWizard = () => {
       : null;
     const res = await publish.mutateAsync({
       developer_id: activeDeveloperId,
+      project_id: editProjectId || undefined,
       publish_live: !isOwner && willPublishLive,
       patch: {
         name: basics.name.trim(),
@@ -684,7 +783,7 @@ const DeveloperProjectWizard = () => {
         developer_name: activeDeveloperName || null,
       },
       images: [cover, ...gallery].filter((g): g is Uploaded => !!g && g.type.startsWith("image/")).map((g, i) => ({ image_url: g.url, alt_text: g.name, display_order: i })),
-      documents: brochures.map((b, i) => ({
+      documents: [...brochures, ...gallery.filter((g) => g.type.startsWith("video/"))].map((b, i) => ({
         file_url: b.url,
         file_name: b.name,
         document_type: getDocumentType(b),
@@ -695,7 +794,7 @@ const DeveloperProjectWizard = () => {
       })),
       developer_patch: developerDescription ? { description: developerDescription } : undefined,
     });
-    try { window.localStorage.removeItem(draftKey); } catch {}
+    if (!isEditingProject) { try { window.localStorage.removeItem(draftKey); } catch {} }
     if (res.project_id || res.slug || res.public_path) setPublishResult(res);
     else navigate(ownerRoute ? "/owner/developers" : "/developer-hub");
   };
@@ -858,18 +957,21 @@ const DeveloperProjectWizard = () => {
     <div className="space-y-6 max-w-4xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">Add a project</h1>
+          <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">{isEditingProject ? "Edit project" : "Add a project"}</h1>
           <p className="text-[#1A1A1A]/70 text-sm mt-1">
             {willPublishLive
               ? "Owner preview saves the project privately. Use Publish only when you want it live. Draft autosaves on this device."
               : "Will be queued for one-time owner approval. After that, every future edit goes live automatically."}
           </p>
         </div>
-        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
- willPublishLive
- ? "jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30"
- : "bg-amber-50 text-amber-800 border-amber-200"
- }`}>
+        <span
+          data-surface={isOwner || willPublishLive ? "emerald" : undefined}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+            isOwner || willPublishLive
+              ? "jj-surface-emerald allow-white bg-[#064E3B] text-white border-transparent shadow-[0_10px_24px_-16px_rgba(6,78,59,0.85)]"
+              : "bg-amber-50 text-amber-800 border-amber-200"
+          }`}
+        >
           {isOwner ? <ShieldCheck className="w-3.5 h-3.5" /> : willPublishLive ? <ShieldCheck className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
           {isOwner ? "Owner preview" : willPublishLive ? "Live publishing" : "Pending approval"}
         </span>
@@ -894,16 +996,17 @@ const DeveloperProjectWizard = () => {
             <div className="flex items-start gap-3">
               <div className="rounded-full p-2 bg-white/10"><Sparkles className="w-5 h-5" /></div>
               <div>
-                <h3 className="font-semibold text-white">Smart brochure extract</h3>
-                <p className="text-white/80 text-sm mt-1 max-w-xl">
+                <h3 className="font-semibold text-white" style={{ color: "#FFFFFF" }}>Smart brochure extract</h3>
+                <p className="text-white/80 text-sm mt-1 max-w-xl" style={{ color: "rgba(255,255,255,0.86)" }}>
                   Upload one or many brochures, payment plans, floor plans or fact sheets (PDF or image). AI will read them and pre-fill everything below. Unknown fields stay empty — nothing is invented.
                 </p>
               </div>
             </div>
           </div>
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
             <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} statusRows={uploadStatuses.filter((u) => u.role === "cover")} onFiles={(files) => files[0] && onCover(files[0])} />
-            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*,video/*" files={gallery} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
+            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*" files={gallery.filter((g) => g.type.startsWith("image/"))} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
+            <UploadTile icon={Video} title="Gallery videos" note="Adds walkthroughs and project videos to a separate public video gallery." accept="video/*" files={gallery.filter((g) => g.type.startsWith("video/"))} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
             <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} statusRows={uploadStatuses.filter((u) => u.role === "fact_sheet" || u.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
             <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document" || b.role === "floor_plan" || b.role === "payment_plan")} statusRows={uploadStatuses.filter((u) => u.role === "document" || u.role === "floor_plan" || u.role === "payment_plan")} multiple onFiles={onSmartUpload} />
           </div>
@@ -1327,7 +1430,7 @@ const DeveloperProjectWizard = () => {
           >
             <ChevronLeft className="w-4 h-4 mr-1" /> Back
           </Button>
-          <Button variant="outline" onClick={saveDraft} disabled={publish.isPending} className="border-[#B89555]/40 text-[#1A1A1A]">
+          <Button variant="outline" onClick={saveDraft} disabled={publish.isPending || isEditingProject} className="border-[#B89555]/40 text-[#1A1A1A]">
             <Save className="w-4 h-4 mr-1" /> Save draft
           </Button>
         </div>
@@ -1347,7 +1450,7 @@ const DeveloperProjectWizard = () => {
             className="allow-white bg-[#064E3B] text-white hover:bg-[#042c1c]"
           >
             {publish.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {isOwner ? "Save owner preview" : willPublishLive ? "Publish live" : "Submit for approval"}
+            {isEditingProject ? "Save project changes" : isOwner ? "Save owner preview" : willPublishLive ? "Publish live" : "Submit for approval"}
           </Button>
         )}
       </div>

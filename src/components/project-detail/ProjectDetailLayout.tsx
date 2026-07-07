@@ -472,6 +472,16 @@ function ProjectDetailLayoutInner({
     [project.documents],
   );
 
+  const videoDocs = useMemo(
+    () =>
+      project.documents.filter((d) => {
+        const t = normalizeDocType(d.type || "");
+        const n = `${d.name || ""} ${d.url || ""}`.toLowerCase();
+        return t === "video" || t === "videos" || n.includes(".mp4") || n.includes(".mov") || n.includes(".webm") || n.includes("video");
+      }),
+    [project.documents],
+  );
+
   const visibleTabs = useMemo(() => {
     const hasGallery = images.length > 0;
     const hasUsp = (project.usp_bullets?.length ?? 0) > 0;
@@ -483,7 +493,7 @@ function ProjectDetailLayoutInner({
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
     const hasConstruction = true; // Always show construction section
-    const hasMedia = !!project.video_url || !!project.virtual_tour_url;
+    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
@@ -506,7 +516,7 @@ function ProjectDetailLayoutInner({
       if (t.id === "master-plan") return hasMasterPlan;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
@@ -1369,14 +1379,32 @@ function ProjectDetailLayoutInner({
               )}
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
-           {(project.video_url || project.virtual_tour_url) && (
+           {(project.video_url || project.virtual_tour_url || videoDocs.length > 0) && (
              <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
-               <ProjectMediaSection
-                 videoUrl={project.video_url}
-                 virtualTourUrl={project.virtual_tour_url}
-                 projectName={project.name}
-               />
+                {(project.video_url || project.virtual_tour_url) && (
+                  <ProjectMediaSection
+                    videoUrl={project.video_url}
+                    virtualTourUrl={project.virtual_tour_url}
+                    projectName={project.name}
+                  />
+                )}
+                {videoDocs.length > 0 && (
+                  <div className="jj-card-inner mt-6">
+                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-4">
+                      <Video className="w-5 h-5 text-[#064E3B]" />
+                      Video Gallery
+                    </h3>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {videoDocs.map((video) => (
+                        <div key={video.id} className="overflow-hidden rounded-lg border border-[#B89555]/35 bg-[#FDFBF7]">
+                          <video src={video.url} className="aspect-video w-full bg-[#021611] object-cover" controls playsInline preload="metadata" />
+                          <div className="p-3 text-sm font-semibold text-[#1A1A1A]">{video.display_title || video.name || "Project video"}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
              </div>
            )}
 

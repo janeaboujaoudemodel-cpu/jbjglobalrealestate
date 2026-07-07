@@ -449,6 +449,7 @@ export function useProjectsListing() {
         developer_name, construction_progress,
         total_units, available_units, down_payment_percent,
         roi_estimate, rental_yield_estimate, latitude, longitude,
+          deleted_at,
         developer:developers(id, name, slug, logo_url),
         community:communities(id, name, slug)
       `;
@@ -468,6 +469,7 @@ export function useProjectsListing() {
           .select(LISTING_COLUMNS)
           .eq("is_published", true)
           .or("listing_kind.is.null,listing_kind.neq.leasing")
+          .is("deleted_at", null)
           .not("cover_image_url", "is", null)
           .neq("cover_image_url", "")
           .order("created_at", { ascending: false })
@@ -503,6 +505,7 @@ export function useProjectsMapListing() {
         created_at, sale_status, construction_status,
         area_name, cover_image_url, is_published,
         developer_name, latitude, longitude,
+        deleted_at,
         community:communities(id, name, slug)
       `;
 
@@ -514,6 +517,7 @@ export function useProjectsMapListing() {
         .select(MAP_COLUMNS)
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
+        .is("deleted_at", null)
         .order("created_at", { ascending: false })
         .limit(1200);
 
@@ -539,6 +543,7 @@ export function useProjectsByCommunity(communitySlug: string) {
         .eq("community.slug", communitySlug)
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
+        .is("deleted_at", null)
         .not("cover_image_url", "is", null)
         .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
@@ -566,6 +571,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .eq("developer.slug", developerSlug)
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
+        .is("deleted_at", null)
         .not("cover_image_url", "is", null)
         .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
@@ -590,9 +596,10 @@ export function useProject(projectSlug: string) {
           developer:developers(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, description, headquarters),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name, display_order)
+          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
         `)
         .eq("slug", projectSlug)
+        .is("deleted_at", null)
         .maybeSingle();
       
       if (error) throw error;

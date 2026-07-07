@@ -378,6 +378,40 @@ html body #root .owner-dashboard-shell [data-chat-compact-action] * {
 @tailwind components;
 @tailwind utilities;
 
+/* PASS 216 — Amra project/search contrast and checkbox tick repair. */
+html body #root [data-global-search-modal] :is(button, a, p, span, div, h1, h2, h3, h4, h5, h6):not([data-surface="emerald"]):not([data-surface="emerald"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  text-shadow: none !important;
+}
+
+html body #root [data-global-search-modal] :is([data-search-arrow], svg[data-search-arrow]) {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+}
+
+html body #root [data-surface="champagne"] :is(h1,h2,h3,h4,h5,h6,p,span,a,div):not([data-surface="emerald"]):not([data-surface="emerald"] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root button[role="checkbox"][data-state="checked"] :is(svg, path, polyline, line),
+html body #root [data-radix-checkbox-root][data-state="checked"] :is(svg, path, polyline, line),
+html body #root [data-force-white-tick="true"],
+html body #root [data-force-white-tick="true"] * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-project-upload-emerald] :is(h1,h2,h3,h4,h5,h6,p,span,div,small,strong,label):not([data-upload-tile]):not([data-upload-tile] *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
 /* Advanced Filter Panel — champagne + ink standard (matches user account dropdown).
    Emerald reserved for active pills/hovers via jj-pill-emerald-metallic. */
 html body [data-filter-clean][role="dialog"] {

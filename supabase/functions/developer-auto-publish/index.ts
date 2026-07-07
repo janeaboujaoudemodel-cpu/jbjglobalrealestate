@@ -355,20 +355,32 @@ Deno.serve(async (req) => {
       projectSlug = ins.slug ?? null;
     }
 
-    // Images
+    // Images — append only URLs not already stored, especially on edits.
     if (payload.images?.length && projectId) {
-      const rows = payload.images.map((img, i) => ({
+      const { data: existingImgs } = await admin
+        .from("project_images")
+        .select("image_url")
+        .eq("project_id", projectId);
+      const known = new Set((existingImgs ?? []).map((r: { image_url: string }) => r.image_url));
+      const freshImages = payload.images.filter((img) => img.image_url && !known.has(img.image_url));
+      const rows = freshImages.map((img, i) => ({
         project_id: projectId,
         image_url: img.image_url,
         alt_text: img.alt_text ?? null,
-        display_order: img.display_order ?? i,
+        display_order: img.display_order ?? (known.size + i),
       }));
-      await admin.from("project_images").insert(rows as never);
+      if (rows.length) await admin.from("project_images").insert(rows as never);
     }
 
-    // Documents
+    // Documents — append only URLs not already stored, especially on edits.
     if (payload.documents?.length && projectId) {
-      const rows = payload.documents.map((d, i) => ({
+      const { data: existingDocs } = await admin
+        .from("project_documents")
+        .select("file_url")
+        .eq("project_id", projectId);
+      const known = new Set((existingDocs ?? []).map((r: { file_url: string }) => r.file_url));
+      const freshDocs = payload.documents.filter((d) => d.file_url && !known.has(d.file_url));
+      const rows = freshDocs.map((d, i) => ({
         project_id: projectId,
         file_url: d.file_url,
         file_name: d.file_name,
@@ -377,12 +389,12 @@ Deno.serve(async (req) => {
         storage_path: d.storage_path ?? null,
         cover_image_url: d.cover_image_url ?? null,
         display_title: d.display_title ?? null,
-        display_order: i,
+        display_order: known.size + i,
         is_visible: true,
         allow_download: true,
         data_source: "owner_upload",
       }));
-      await admin.from("project_documents").insert(rows as never);
+      if (rows.length) await admin.from("project_documents").insert(rows as never);
     }
 
     // Developer profile patch (logo/description)
