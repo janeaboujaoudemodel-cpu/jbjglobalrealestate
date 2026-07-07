@@ -114,6 +114,7 @@ import {
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
 import citiBuddyRobotLocal from "@/assets/citi-buddy-robot-concierge.jpg";
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
+import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsights";
 // Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
 import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
@@ -1746,7 +1747,18 @@ function ProjectDetailLayoutInner({
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
                    serviceCharge={isAmraProject ? (project.service_charge || "AED 22/sq ft") : project.service_charge}
-                    standardInclusions={isAmraProject ? ["Fully furnished", "Fully serviced", "Fully managed by Amra BNB", "Full sea view", "Citi Buddy concierge", "G + M + 14 residential floors + rooftop"] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
+                    standardInclusions={isAmraProject ? [
+                      "Fully furnished & serviced apartment",
+                      "Sea view from every apartment",
+                      "70/30 payment plan with 3-year post-handover period",
+                      "Delivery by Q4 2029",
+                      "688,000 sq. ft dedicated wellness area (shared)",
+                      "Access to 140+ facilities across dedicated zones",
+                      "Dedicated marina for private yachts",
+                      "Amra BNB one-stop short-stay management",
+                      "Citi Buddy concierge via Citi Developers App",
+                      "In-room dining & all-day dining",
+                    ] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
              </div>
@@ -1948,6 +1960,11 @@ function ProjectDetailLayoutInner({
               )}
             </div>
           </div>
+
+          {/* AMRA-only factsheet insights: BNB investor management, AED 750M Emirates Road,
+              sustainability, and named design/brand partners. Content is verbatim from the
+              AMRA English Factsheet (developer document). */}
+          {isAmraProject && <AmraFactSheetInsights projectName={project.name} />}
 
           {/* MoreFromDeveloperStrip moved to the bottom of the page so that the
               "Other projects in this area" map above is not visually replaced
