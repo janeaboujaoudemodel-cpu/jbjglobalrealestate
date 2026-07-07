@@ -116,7 +116,19 @@ export default function BookStyleDocuments({
           const title = doc.display_title || doc.name || humanizeDocTitle(doc.type);
           const coverUrl = doc.cover_image_url || projectImageUrl;
           const icon = typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
-          const typeLabel = humanizeDocTitle(doc.type);
+          // Derive a truthful label from filename first (Fact Sheet, City Buddy…), fall back to type
+          const nameNoExt = (doc.name || "").replace(/\.[a-z0-9]{2,5}$/i, "").replace(/[-_]+/g, " ").trim();
+          const inferredFromName = (() => {
+            const n = nameNoExt.toLowerCase();
+            if (n.includes("fact sheet") || n.includes("factsheet")) return "Fact Sheet";
+            if (n.includes("brochure")) return "Brochure";
+            if (n.includes("payment")) return "Payment Plan";
+            if (n.includes("floor")) return "Floor Plan";
+            if (n.includes("buddy")) return "City Buddy";
+            if (n.includes("inventory")) return "Inventory";
+            return null;
+          })();
+          const typeLabel = inferredFromName || humanizeDocTitle(doc.type);
           const filename = `${projectName.replace(/\s+/g, "-")}-${title.replace(/\s+/g, "-")}.pdf`;
 
           return (
@@ -158,23 +170,53 @@ export default function BookStyleDocuments({
               <div
                 data-no-contrast-guard
                 data-on-dark
-                className="absolute inset-x-0 bottom-0 h-[40%] border-t border-black/30 px-3.5 py-3 flex flex-col justify-between allow-white"
+                className="absolute inset-x-0 bottom-0 h-[40%] border-t border-black/30 px-3 py-2.5 flex flex-col justify-between allow-white"
                 style={{
                   background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                   color: "#FFFFFF",
                 }}
               >
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-1.5 line-clamp-1 allow-white" style={{ color: "#FFFFFF" }}>
+                  <p className="text-[9px] uppercase tracking-[0.22em] font-bold mb-1 line-clamp-1 allow-white" style={{ color: "#FFFFFF" }}>
                     {projectName}
                   </p>
-                  <p className="font-bold text-[14px] leading-tight line-clamp-2 allow-white" style={{ color: "#FFFFFF" }}>
+                  <p className="font-bold text-[13px] leading-tight line-clamp-2 allow-white" style={{ color: "#FFFFFF" }}>
                     {title}
                   </p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold allow-white" style={{ color: "#FFFFFF" }}>View / Download</span>
-                  <Eye className="w-3.5 h-3.5 allow-white" style={{ color: "#FFFFFF" }} />
+                <div className="flex items-center gap-1.5 mt-1">
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => { e.stopPropagation(); handleBookClick(doc, title, filename); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); handleBookClick(doc, title, filename); } }}
+                    className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] uppercase tracking-[0.16em] font-bold bg-white/15 border border-white/45 hover:bg-white/25 transition-colors allow-white"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    <Eye className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+                    View
+                  </span>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const proxied = proxyAnyDownloadUrl(doc.url, { filename, disposition: "attachment" });
+                      onDownload(proxied, filename);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.stopPropagation();
+                        const proxied = proxyAnyDownloadUrl(doc.url, { filename, disposition: "attachment" });
+                        onDownload(proxied, filename);
+                      }
+                    }}
+                    className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] uppercase tracking-[0.16em] font-bold bg-white/15 border border-white/45 hover:bg-white/25 transition-colors allow-white"
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    <Download className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
+                    Save
+                  </span>
                 </div>
               </div>
 
@@ -192,7 +234,7 @@ export default function BookStyleDocuments({
 
       {/* PDF Viewer Modal */}
       <Dialog open={!!viewerUrl} onOpenChange={(open) => !open && setViewerUrl(null)}>
-        <DialogContent className="max-w-5xl h-[85vh] p-0 bg-card border-[#B89555]/30 rounded-xl overflow-hidden">
+        <DialogContent className="!max-w-[96vw] w-[96vw] h-[94vh] p-0 bg-card border-[#B89555]/30 rounded-xl overflow-hidden">
           <DialogTitle className="sr-only">{viewerTitle}</DialogTitle>
           <div className="flex flex-col h-full">
             {/* Header bar */}
@@ -229,11 +271,15 @@ export default function BookStyleDocuments({
                 Download
               </button>
             </div>
-            {/* PDF iframe */}
+            {/* Mobile hint */}
+            <div className="md:hidden px-4 py-2 bg-[#F7F2EA] border-b border-[#B89555]/20 text-[11px] text-[#1A1A1A]/75">
+              For the full document experience, open on desktop.
+            </div>
+            {/* PDF viewer */}
             <div className="flex-1 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
               {viewerUrl && (
                 <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7] text-sm font-semibold text-[#1A1A1A]">Loading document…</div>}>
-                  <PdfCanvasViewer url={viewerUrl} title={viewerTitle} maxPages={4} className="h-full w-full" />
+                  <PdfCanvasViewer url={viewerUrl} title={viewerTitle} maxPages={999} className="h-full w-full" />
                 </Suspense>
               )}
             </div>

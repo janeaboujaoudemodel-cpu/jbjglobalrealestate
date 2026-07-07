@@ -69,7 +69,7 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
   );
 }
 
-export default function PdfCanvasViewer({ url, title, maxPages = 3, className = "" }: PdfCanvasViewerProps) {
+export default function PdfCanvasViewer({ url, title, maxPages = 999, className = "" }: PdfCanvasViewerProps) {
   const [doc, setDoc] = useState<any | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(true);
