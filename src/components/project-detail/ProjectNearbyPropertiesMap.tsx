@@ -324,19 +324,30 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`jj-map-filter-toggle inline-flex w-full min-w-0 min-h-[42px] items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer"}`}
+        className="inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold transition-colors"
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
         data-emerald-action={isActive ? "true" : undefined}
+        data-no-contrast-guard
+        style={{
+          backgroundImage: isActive
+            ? 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)'
+            : 'none',
+          backgroundColor: isActive ? undefined : '#F7F2EA',
+          color: isActive ? '#FFFFFF' : '#1A1A1A',
+          borderRight: '1px solid rgba(184,149,85,0.28)',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled ? 0.55 : 1,
+          minHeight: 44,
+        }}
       >
-        <span className="min-w-0 truncate">{label}</span>
-        <span className="text-[10px] tabular-nums">
-          {count}
-        </span>
+        <span className="min-w-0 truncate" style={{ color: 'inherit' }}>{label}</span>
+        <span className="text-[10px] tabular-nums" style={{ color: 'inherit', opacity: 0.9 }}>{count}</span>
       </button>
     );
   };
+
 
   return (
     <div className={className}>
