@@ -500,6 +500,15 @@ function ProjectDetailLayoutInner({
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
     const hasMasterPlan = !!project.master_plan_image_url || (project.community_highlights?.length ?? 0) > 0;
 
+    const mortgageEligible = isMortgageEligible({
+      sale_status: project.sale_status,
+      construction_status: project.construction_status,
+      status_label: project.status_label,
+      construction_progress: project.construction_progress,
+      developer_name: project.developer?.name,
+      developer: project.developer ? { name: project.developer.name } : null,
+    });
+
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
       if (t.id === "usp") return hasUsp;
@@ -515,9 +524,28 @@ function ProjectDetailLayoutInner({
       if (t.id === "developer") return hasDeveloper;
       if (t.id === "house-details") return hasHouseDetails;
       if (t.id === "master-plan") return hasMasterPlan;
+      if (t.id === "mortgage") return mortgageEligible;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label]);
+
+  const mortgageEligible = useMemo(() => isMortgageEligible({
+    sale_status: project.sale_status,
+    construction_status: project.construction_status,
+    status_label: project.status_label,
+    construction_progress: project.construction_progress,
+    developer_name: project.developer?.name,
+    developer: project.developer ? { name: project.developer.name } : null,
+  }), [project.sale_status, project.construction_status, project.status_label, project.construction_progress, project.developer]);
+
+  const mortgageBlockedReason = useMemo(() => mortgageIneligibilityReason({
+    sale_status: project.sale_status,
+    construction_status: project.construction_status,
+    status_label: project.status_label,
+    construction_progress: project.construction_progress,
+    developer_name: project.developer?.name,
+    developer: project.developer ? { name: project.developer.name } : null,
+  }), [project.sale_status, project.construction_status, project.status_label, project.construction_progress, project.developer]);
 
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
