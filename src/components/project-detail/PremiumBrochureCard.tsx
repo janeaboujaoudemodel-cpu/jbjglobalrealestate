@@ -3,6 +3,7 @@ import { Download, Lock, Loader2, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
+import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto";
 import { maybeProxyStorageUrl, proxyAnyDownloadUrl } from "@/utils/downloadProxy";
@@ -183,15 +184,26 @@ const PremiumBrochureCard = ({
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
             {/* Top: Monogram floats directly on the cover photo — no boxed background,
                 large and premium. Drop-shadow guarantees contrast on any image. */}
-            <img
-              src={jbjMonogram}
-              alt="JBJ"
-              className="absolute top-4 left-5 h-14 w-14 object-contain select-none pointer-events-none"
-              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.85)) drop-shadow(0 0 10px rgba(0,0,0,0.55))" }}
-              loading="eager"
-              fetchPriority="high"
-              decoding="sync"
-            />
+            <div className="absolute top-4 left-5 flex items-center gap-3 select-none pointer-events-none">
+              <img
+                src={jbjMonogram}
+                alt="JBJ"
+                className="h-16 w-16 object-contain"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.65))" }}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+              />
+              <img
+                src={jbjFullLogoLight}
+                alt="JBJ Global Real Estate"
+                className="h-12 w-auto object-contain"
+                style={{ filter: "drop-shadow(0 2px 7px rgba(0,0,0,0.9))" }}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+              />
+            </div>
 
 
 
