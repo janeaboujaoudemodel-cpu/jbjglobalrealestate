@@ -211,7 +211,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
         <div className="space-y-4">
           <h3 className="text-xl font-semibold text-[#1A1A1A]">Location</h3>
           {project.location && (
-            <p className="text-[#1A1A1A]/90">{project.location}, Dubai, UAE</p>
+            <p className="text-[#1A1A1A]/90">{project.location}{project.emirate ? `, ${project.emirate}` : ""}, UAE</p>
           )}
           <div className="rounded-xl overflow-hidden border border-[#B89555]/30">
             <ProjectLocationMap
