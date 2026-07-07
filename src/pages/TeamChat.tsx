@@ -347,20 +347,20 @@ const TeamChat = () => {
               <button
                 key={channel.id}
                 className={cn(
-                  "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-200 mb-0.5",
+                      "w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200 mb-0.5 min-w-0",
                   activeChannel === channel.id
                     ? "bg-gradient-to-r from-[#B89555]/15 to-[#B89555]/5 text-[#1A1A1A] font-medium border border-[#B89555]/25"
                     : "text-[#1A1A1A]/60 hover:bg-[#B89555]/5 hover:text-[#1A1A1A] border border-transparent"
                 )}
                 onClick={() => handleSelectChannel(channel.id)}
               >
-                <span className="flex items-center gap-2">
+                <span className="flex min-w-0 items-center gap-2 truncate">
                   {channel.isPrivate ? (
                     <Lock className={cn("w-4 h-4", activeChannel === channel.id ? "text-[#B89555]" : "text-[#1A1A1A]/30")} />
                   ) : (
                     <Hash className={cn("w-4 h-4", activeChannel === channel.id ? "text-[#B89555]" : "text-[#1A1A1A]/30")} />
                   )}
-                  {channel.name}
+                  <span className="truncate">{channel.name}</span>
                 </span>
                 {channel.unread > 0 && (
                   <Badge className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white text-[10px] px-1.5 py-0 h-5 border-0 shadow-sm">
@@ -560,13 +560,13 @@ const TeamChat = () => {
                       "text-xs font-semibold",
                       isOwn
                         ? "bg-gradient-to-br from-[#B89555] to-[#A68444] text-white"
-                        : "bg-[#B89555]/10 text-[#B89555]"
+                        : "jj-emerald-metallic allow-white text-white"
                     )}>
                       {getInitials(message.userName)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline gap-2">
+                    <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
                       <span className="font-semibold text-sm text-[#1A1A1A]">{message.userName}</span>
                       <span className="text-[11px] text-[#1A1A1A]/35">
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -584,18 +584,22 @@ const TeamChat = () => {
                       <ChatAttachmentRenderer key={att.id} attachment={att} />
                     ))}
                     {/* Hover action bar */}
-                    <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity flex-wrap max-w-full">
                       <button
                         onClick={() => togglePin(message.id)}
-                        className="text-[10px] text-[#1A1A1A]/30 hover:text-[#B89555] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#B89555]/5"
+                        aria-label={isPinned ? "Unpin message" : "Pin message"}
+                        title={isPinned ? "Unpin message" : "Pin message"}
+                        className="inline-flex h-8 w-8 min-w-8 items-center justify-center rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]/40"
                       >
-                        <Pin className="w-3 h-3" /> {isPinned ? "Unpin" : "Pin"}
+                        <Pin className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={async () => { await navigator.clipboard.writeText(message.content); toast.success("Copied"); }}
-                        className="text-[10px] text-[#1A1A1A]/30 hover:text-[#B89555] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#B89555]/5"
+                        aria-label="Copy message"
+                        title="Copy message"
+                        className="inline-flex h-8 w-8 min-w-8 items-center justify-center rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]/40"
                       >
-                        <Copy className="w-3 h-3" /> Copy
+                        <Copy className="w-3.5 h-3.5" />
                       </button>
                       <QuickCalendarWidget compact source="chat" prefillTitle={message.content.substring(0, 60)} />
                       <QuickNoteWidget compact source="chat" prefillTitle={`Chat note`} prefillContent={`${message.userName}: ${message.content}`} />

@@ -233,11 +233,11 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
 
         {/* Tabs */}
         <div className="mt-3">
-          <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto w-full gap-1 p-1 overflow-visible">
-            <TabsTrigger value="conversation" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Conversation</TabsTrigger>
-            <TabsTrigger value="lead" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Lead Profile</TabsTrigger>
-            <TabsTrigger value="activity" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Activity</TabsTrigger>
-            <TabsTrigger value="ai" className="text-xs min-h-8 whitespace-nowrap data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">AI Suggestions</TabsTrigger>
+          <TabsList className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr))] h-auto w-full gap-1 p-1 overflow-visible">
+            <TabsTrigger value="conversation" className="text-xs min-h-8 whitespace-normal leading-tight data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Conversation</TabsTrigger>
+            <TabsTrigger value="lead" className="text-xs min-h-8 whitespace-normal leading-tight data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Lead Profile</TabsTrigger>
+            <TabsTrigger value="activity" className="text-xs min-h-8 whitespace-normal leading-tight data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">Activity</TabsTrigger>
+            <TabsTrigger value="ai" className="text-xs min-h-8 whitespace-normal leading-tight data-[state=active]:jj-emerald-metallic data-[state=active]:text-white">AI Suggestions</TabsTrigger>
           </TabsList>
         </div>
       </CardHeader>
