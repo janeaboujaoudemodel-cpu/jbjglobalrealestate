@@ -57,8 +57,11 @@ export default function CompareProjectPicker({
 
   const alreadyShortlisted = useMemo<Set<string>>(() => {
     const s = new Set<string>();
-    if (user && dbShortlist) dbShortlist.forEach((r) => s.add(r.project_id));
-    guestShortlist.forEach((g) => s.add(g.project_id));
+    if (user) {
+      dbShortlist?.forEach((r) => s.add(r.project_id));
+    } else {
+      guestShortlist.forEach((g) => s.add(g.project_id));
+    }
     return s;
   }, [user, dbShortlist, guestShortlist]);
 
@@ -72,12 +75,7 @@ export default function CompareProjectPicker({
         .select("id, name, slug, location, price_from, developer:developers(name, slug)")
         .eq("is_published", true)
         .order("updated_at", { ascending: false })
-        .limit(60);
-      const term = query.trim();
-      if (term) {
-        // name / location / developer.name — combine with `.or`
-        q.or(`name.ilike.%${term}%,location.ilike.%${term}%`);
-      }
+        .limit(1000);
       const { data, error } = await q;
       if (error) throw error;
       return (data ?? []) as any;

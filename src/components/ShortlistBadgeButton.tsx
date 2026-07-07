@@ -1,6 +1,6 @@
 import { Award, X, ListPlus, ListMinus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useShortlist } from "@/hooks/useFavorites";
+import { useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useShortlistBadges, ShortlistBadge } from "@/hooks/useShortlistBadges";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -55,6 +55,7 @@ const ShortlistBadgeButton = ({
   const { user } = useAuth();
   const useDb = user && isUUID(projectId);
   const { data: userShortlist } = useShortlist();
+  const toggleUserShortlist = useToggleShortlist();
   const { isShortlisted: isGuestShortlisted, toggleShortlist: toggleGuestShortlist } = useGuestShortlist();
   const { getBadge, setBadge } = useShortlistBadges();
 
@@ -81,8 +82,12 @@ const ShortlistBadgeButton = ({
     "jj-surface-emerald jj-favorite-trigger inline-flex items-center justify-center rounded-full aspect-square shrink-0 leading-none transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] overflow-hidden p-0";
 
   const toggleShortlistOnly = () => {
-    toggleGuestShortlist(projectId);
-    toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
+    if (useDb) {
+      toggleUserShortlist.mutate({ projectId, isShortlisted });
+    } else {
+      toggleGuestShortlist(projectId);
+      toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
+    }
     // If removing from shortlist, also clear any badge that was assigned.
     if (isShortlisted && currentBadge) setBadge(projectId, null);
   };
@@ -90,8 +95,12 @@ const ShortlistBadgeButton = ({
   const handleSetBadge = (badge: ShortlistBadge | null) => {
     // Auto-add to shortlist if not already shortlisted
     if (!isShortlisted && badge) {
-      toggleGuestShortlist(projectId);
-      toast.success("Added to shortlist");
+      if (useDb) {
+        toggleUserShortlist.mutate({ projectId, isShortlisted: false });
+      } else {
+        toggleGuestShortlist(projectId);
+        toast.success("Added to shortlist");
+      }
     }
     setBadge(projectId, badge);
     if (badge) {

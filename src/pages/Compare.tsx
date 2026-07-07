@@ -2,8 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import UnitCompareShell from "@/components/compare/units/UnitCompareShell";
 import CompareModeToggle from "@/components/compare/CompareModeToggle";
-import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
-import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -31,7 +29,6 @@ import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
 import { useActiveLead } from "@/contexts/ActiveLeadContext";
 import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
-import { toolThemes } from "@/components/tools/toolThemes";
 import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
 import CompareProjectPicker from "@/components/compare/CompareProjectPicker";
 import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShell";
@@ -115,11 +112,6 @@ const Compare = () => {
     else next.delete("mode");
     setSearchParams(next, { replace: true });
   };
-  const access = useCompareAccess();
-
-  if (access.isLoading) return null;
-  if (!access.allowed) return <CompareAccessGate />;
-
   if (compareMode === "units") {
     return <UnitCompareShell onModeChange={setCompareMode} />;
   }
@@ -131,13 +123,13 @@ interface ProjectsCompareProps {
 }
 
 const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const { isConsVisible } = useConsVisibility();
   const navigate = useNavigate();
   const { activeLead } = useActiveLead();
   const { hasActiveMembership } = useMembership();
-  const { data: authShortlist } = useShortlist();
+  const { data: authShortlist, isLoading: authShortlistLoading } = useShortlist();
   const { shortlist: guestShortlist } = useGuestShortlist();
   const { getBadge } = useShortlistBadges();
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
@@ -178,6 +170,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   // Use auth shortlist if logged in, otherwise guest shortlist
   const shortlist = user ? authShortlist : guestShortlist;
   const shortlistIds = shortlist?.map((s) => s.project_id) || [];
+  const shortlistReady = !authLoading;
 
   // Fetch project details
   const { data: projects, isLoading } = useQuery({
@@ -198,15 +191,15 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       if (error) throw error;
       return data;
     },
-    enabled: shortlistIds.length > 0,
+    enabled: shortlistReady && shortlistIds.length > 0,
   });
 
   useEffect(() => {
-    if (!autoOpenedRef.current && !isLoading && (!projects || projects.length === 0)) {
+    if (shortlistReady && !autoOpenedRef.current && !isLoading && (!projects || projects.length === 0)) {
       autoOpenedRef.current = true;
       setPickerOpen(true);
     }
-  }, [isLoading, projects]);
+  }, [shortlistReady, isLoading, projects]);
 
 
   // Check if user can use free or needs VIP
@@ -562,7 +555,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
     );
   };
 
-  if (isLoading) {
+  if (authLoading) {
     return (
       <section className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-white/70 animate-spin" />
@@ -784,8 +777,8 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             {/* CTA row — primary emerald metallic (white ink), secondary champagne (black ink) */}
             <div className="flex flex-wrap gap-3 mt-8">
               <button
-                onClick={generateSmartAnalysis}
-                disabled={isGenerating || projects.length < 2}
+                onClick={() => setPickerOpen(true)}
+                disabled={isGenerating}
                 data-no-contrast-guard
                 data-allow-dark-cta
                 data-compare-hero-cta="start"

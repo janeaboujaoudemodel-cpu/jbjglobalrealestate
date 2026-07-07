@@ -18,7 +18,7 @@ export interface Shortlist {
 }
 
 export function useFavorites() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   return useQuery({
     queryKey: ["favorites", user?.id],
@@ -33,12 +33,12 @@ export function useFavorites() {
       if (error) throw error;
       return data as Favorite[];
     },
-    enabled: !!user,
+    enabled: !loading && !!user,
   });
 }
 
 export function useShortlist() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   return useQuery({
     queryKey: ["shortlist", user?.id],
@@ -53,7 +53,7 @@ export function useShortlist() {
       if (error) throw error;
       return data as Shortlist[];
     },
-    enabled: !!user,
+    enabled: !loading && !!user,
   });
 }
 
@@ -116,7 +116,10 @@ export function useToggleShortlist() {
         // No limit - users can shortlist as many as they want
         const { error } = await supabase
           .from("shortlists")
-          .insert({ user_id: user.id, project_id: projectId });
+          .upsert(
+            { user_id: user.id, project_id: projectId },
+            { onConflict: "user_id,project_id", ignoreDuplicates: true }
+          );
         if (error) throw error;
       }
     },

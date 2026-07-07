@@ -13,8 +13,6 @@ import { BrokerPortalRoutes } from "@/routes/BrokerPortalRoutes";
 import TeamRouteGate from "@/routes/TeamRouteGate";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import { useUserModeContext } from "@/contexts/UserModeContext";
-import GatedToolRoute from "@/components/access/GatedToolRoute";
-import { toolThemes } from "@/components/tools/toolThemes";
 import { InsightsPageScope } from "@/components/insights/InsightsPageScope";
 const AccountPasskeys = lazy(() => import("@/pages/AccountPasskeys"));
 
@@ -396,14 +394,7 @@ export const PublicRoutes = () => (
       path="/compare"
       element={
         <AuthRequiredRoute>
-          <GatedToolRoute
-            toolId="compare"
-            toolName="Property Comparison"
-            theme={toolThemes.indigo}
-            tagline="Compare unlimited projects and units side by side, with payment plan and ROI breakdowns. Unlocked for JBJ brokers."
-          >
-            <Compare />
-          </GatedToolRoute>
+          <Compare />
         </AuthRequiredRoute>
       }
     />
