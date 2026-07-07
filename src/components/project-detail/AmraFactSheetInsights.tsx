@@ -1,10 +1,12 @@
 import { Building2, Leaf, Route, Sparkles, Handshake, Check } from "lucide-react";
-import aerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
-import furnishedApts from "@/assets/amra-brochure/furnished-serviced-apartments.jpg";
-import inRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
-import seaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";
-import grandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
-import spaLounge from "@/assets/amra-brochure/spa-lounge.jpg";
+// Visuals mirrored 1:1 from the developer brochure — same photograph used on
+// each corresponding slide of the AMRA English Factsheet.
+import brochureEmiratesRoad from "@/assets/amra-brochure/brochure-emirates-road.jpg";      // Slide: UAE Road Infrastructure
+import brochureInvestorPath from "@/assets/amra-brochure/brochure-investor-path.jpg";      // Slide: Investor Proposition
+import brochureCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";                // Slide: Citi Developers App / AMRA BNB
+import brochureDesignArches from "@/assets/amra-brochure/brochure-design-ethos-arches.jpg";// Slide: Design Ethos & Partners
+import brochureYacht from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";        // Slide: Brand Partnerships
+import seaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";                            // UAQ Blue Carbon zone
 
 /**
  * Amra-only fact panel — content is quoted verbatim from the AMRA English Factsheet
@@ -51,6 +53,7 @@ const brandPartners = [
   { name: "Eden One", role: "Wellness Partner" },
   { name: "Blue Coral Concept", role: "F&B Partner" },
   { name: "Valor Hospitality", role: "Hospitality & Maintenance Partner" },
+  { name: "Spinneys", role: "Supermarket Partner" },
   { name: "Life Pharmacy", role: "Pharmacy Partner" },
   { name: "Venus", role: "Beauty Clinic Partner" },
 ];
@@ -93,8 +96,8 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="relative min-h-[280px] lg:min-h-[420px]">
             <img
-              src={furnishedApts}
-              alt="Amra fully furnished serviced apartment interior"
+              src={brochureInvestorPath}
+              alt="Amra brochure — investor arrival through palm-lined path (Investor Proposition slide)"
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
               decoding="async"
@@ -102,8 +105,8 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
             <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-transparent to-transparent" />
             <div className="absolute bottom-4 left-4">
               <img
-                src={inRoomDining}
-                alt="Amra in-room dining"
+                src={brochureCitiApp}
+                alt="Amra brochure — Citi Developers App / AMRA BNB management slide"
                 className="w-28 h-20 md:w-36 md:h-24 object-cover rounded-md border border-white/40 shadow-lg"
                 loading="lazy"
               />
@@ -178,8 +181,8 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
           </div>
           <div className="relative min-h-[280px] lg:min-h-[420px]">
             <img
-              src={aerialResort}
-              alt="Aerial view of the Amra resort in Umm Al Quwain"
+              src={brochureEmiratesRoad}
+              alt="Amra brochure — Emirates Road interchange at night (UAE Road Infrastructure slide)"
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
@@ -279,21 +282,21 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
                   ))}
                 </ul>
                 <p className="mt-3 text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>
-                  Life Pharmacy and Venus confirmed by Amra management. Additional F&amp;B and supermarket partners TBC.
+                  Spinneys, Life Pharmacy and Venus confirmed by Amra management. Additional F&amp;B partners TBC.
                 </p>
               </div>
             </div>
           </div>
           <div className="relative min-h-[300px] lg:min-h-[520px]">
             <img
-              src={grandLobbyHero}
-              alt="Amra grand lobby — design partner interior"
+              src={brochureDesignArches}
+              alt="Amra brochure — travertine arched corridor (Design Ethos & Partners slide)"
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
             <img
-              src={spaLounge}
-              alt="Amra spa lounge"
+              src={brochureYacht}
+              alt="Amra brochure — yacht partnership lifestyle (Brand Partnerships slide)"
               className="absolute bottom-4 right-4 w-40 h-28 object-cover rounded-md border border-white/40 shadow-lg hidden md:block"
               loading="lazy"
             />
