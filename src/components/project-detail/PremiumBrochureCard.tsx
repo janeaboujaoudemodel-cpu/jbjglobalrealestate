@@ -182,37 +182,12 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Monogram floats directly on the cover photo — no boxed background,
-                large and premium. Drop-shadow guarantees contrast on any image. */}
-            <div className="absolute top-4 left-5 flex items-center gap-3 select-none pointer-events-none">
-              <img
-                src={jbjMonogram}
-                alt="JBJ"
-                className="h-16 w-16 object-contain"
-                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.65))" }}
-                loading="eager"
-                fetchPriority="high"
-                decoding="sync"
-              />
-              <img
-                src={jbjFullLogoLight}
-                alt="JBJ Global Real Estate"
-                className="h-12 w-auto object-contain"
-                style={{ filter: "drop-shadow(0 2px 7px rgba(0,0,0,0.9))" }}
-                loading="eager"
-                fetchPriority="high"
-                decoding="sync"
-              />
-            </div>
-
-
-
-
-            {/* Bottom: Brochure info — deeper emerald ombré panel */}
+            {/* Emerald info panel — now extended upward to host the JBJ monogram
+                directly above the project title. No duplicated wordmark. */}
             <div
               data-no-contrast-guard
               data-on-dark
-              className="mt-auto -mx-1 px-4 py-3 rounded-lg allow-white"
+              className="mt-auto -mx-1 px-4 pt-3 pb-3 rounded-lg allow-white"
               style={{
                 background: "linear-gradient(135deg, rgba(4,60,44,0.94) 0%, rgba(2,28,18,0.96) 58%, rgba(0,0,0,0.98) 100%)",
                 backdropFilter: "blur(4px)",
@@ -222,9 +197,27 @@ const PremiumBrochureCard = ({
                 WebkitTextFillColor: "#FFFFFF",
               }}
             >
+              <div className="flex items-center gap-3 mb-2">
+                <img
+                  src={jbjMonogram}
+                  alt="JBJ Global Real Estate"
+                  className="h-10 w-10 object-contain select-none"
+                  style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.85))" }}
+                  loading="eager"
+                  decoding="sync"
+                />
+                <span
+                  data-no-contrast-guard
+                  className="text-[10px] uppercase tracking-[0.28em] font-semibold allow-white"
+                  style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}
+                >
+                  JBJ Global Real Estate
+                </span>
+              </div>
+
               <h3
                 data-no-contrast-guard
-                className="text-xl font-bold mb-2 leading-tight allow-white"
+                className="text-xl font-bold mb-1 leading-tight allow-white"
                 style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
               >
                 {projectName}
@@ -237,8 +230,8 @@ const PremiumBrochureCard = ({
               >
                 {location || 'UAE'}
               </p>
-
             </div>
+
 
 
 
