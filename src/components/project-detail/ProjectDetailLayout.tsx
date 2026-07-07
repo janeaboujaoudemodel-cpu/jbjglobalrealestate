@@ -114,6 +114,7 @@ import {
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
 import citiBuddyRobotLocal from "@/assets/citi-buddy-robot-concierge.jpg";
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
+import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsights";
 // Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
 import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
