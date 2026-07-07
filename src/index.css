@@ -1666,11 +1666,15 @@ All colors MUST be HSL.
    even when `html body .jj-emerald-metallic { position: relative !important }`
    would otherwise win the cascade. */
 html body button[aria-label="Talk to JBJ support"].jj-emerald-metallic,
-html body button[aria-label="Talk to JBJ support"] {
+html body button[aria-label="Talk to JBJ support"],
+html body #root button[aria-label="Talk to JBJ support"] {
   position: fixed !important;
   right: 0 !important;
   left: auto !important;
   top: 50% !important;
+  writing-mode: vertical-rl !important;
+  text-orientation: mixed !important;
+  white-space: nowrap !important;
 }
 
 
