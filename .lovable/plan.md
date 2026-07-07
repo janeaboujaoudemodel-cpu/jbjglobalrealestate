@@ -1,103 +1,83 @@
-## Priority fix plan
 
-### Phase 1 — Correct the items that were marked done but are visibly not done
-1. **Payment plan timeline**
-   - Make the visible strap/summary explicitly show: `Post-Handover (36 months) · Due by 2031-12-01` for Amra.
-   - Keep handover as `2028-12-01`, but treat the final 30% as post-handover payable until `2031-12-01`.
-   - Fix both the premium summary cards and the visual timeline labels so no final 30% label reads like it is due on handover.
+# Amra project page — cleanup batch
 
-2. **Brochure card branding**
-   - Restore the JBJ monogram + company wordmark on the brochure cover.
-   - Keep no circle/border frame around the monogram.
-   - Enlarge the branding area so it is visible above the Amra title panel.
+Scope: every item is on the Amra project detail page. All changes verified with Playwright screenshots on `/project/amra-the-first-integrative-wellness-resort-mr9hh3ia` before I claim done. No fake photos, no fake documents, no fake developer names.
 
-3. **Generate Presentation card branding**
-   - Increase the JBJ monogram to roughly 200% of the current size.
-   - Add/support the company wordmark where it reads clearly on the emerald card.
+Global rule locked in this turn: **"Citi Buddy" (never "City Buddy") and developer is always "Citi Developers"** — added as a lint-style guard in the Citi Buddy card + Developer Landscape.
 
-4. **Document viewer root bug**
-   - Replace the slow “render every PDF page immediately” behavior with a faster viewer strategy:
-     - open the modal instantly,
-     - load/render the first pages first,
-     - progressively render the rest only after the viewer is open,
-     - cancel PDF loading/rendering when the modal closes.
-   - Keep all project documents expanded by default, owner documents collapsed by default.
-   - Ensure all document previews are scrollable and close quickly.
+## 1. Amenities section with real photos + grouped tabs
 
-5. **Document thumbnails and labels**
-   - Use project/fact-sheet cover imagery where available instead of unrelated bathroom/toilet thumbnails.
-   - Fix catalogue labels like `SPA Draft` so brochure/catalogue documents display as `Brochure` where appropriate.
-   - Reduce/center small card labels so they do not crop.
+- New `AmenitiesShowcase` component replacing the current text-only amenities block.
+- Tabs across the top: `View all · Wellness · Fitness · F&B · Business · Leisure · Lifestyle` (categories derived from the Amra fact sheet / brochure).
+- Card size unchanged from today's grid; each card = photo + amenity name + short one-liner.
+- Photo source order (strict):
+  1. Existing images in `project_gallery` for Amra (matched by amenity keyword).
+  2. Cropped regions from the uploaded Amra brochure/fact-sheet PDFs.
+  3. Only if neither exists **and only for Amra**, generate a matching-palette photo (emerald + champagne, resort-wellness style).
+- Amenity list seeded from the Amra brochure (helipad, air-taxi vertiport, wellness clinic, spa, cryotherapy, gym, yoga deck, private beach, infinity pools, F&B outlets, kids club, co-working, concierge lounge, etc. — full list mapped from the fact sheet).
 
-6. **Fact sheet and City Buddy visuals**
-   - Add the project photo/master-plan photo to the Amra fact-sheet area.
-   - Add the City Buddy robot photo as a wide visual, plus a concise descriptive card explaining the concierge service.
+## 2. Nearby-projects map fixes (`ProjectNearbyPropertiesMap.tsx`)
 
-7. **Developer Landscape correction**
-   - Make Developer Landscape about City Developers only: who they are, what they built, and their profile.
-   - Remove Sobha/other-developer promotion from this section.
-   - Move Sobha Siniyah, Sobha Town / Umm Al Quwain, Aria by DR, Marjan/casino/Siniyah references into the map/other-options context, not the City Developers profile.
+- Kill the red highlight blob around the current project — replace with a soft emerald ring on the pin only.
+- Price pills: white text only, remove the white border/background, use the emerald pill used on `/properties` map.
+- Remove the auto-pan arrow + click-arrow-then-fly behaviour (root cause: `flyTo` fired on marker hover). Hovering now only opens the popover.
+- Popover card = same component used on the main properties map: 80% photo / 20% info (name, price, beds). Reuse `PropertyMapHoverCard`.
 
-### Phase 2 — Media, amenities, standards, location content
-8. **Uploaded videos gallery**
-   - Surface uploaded video documents/media after the photo gallery, not only the single `video_url` field.
+## 3. Payment plan panel (`PaymentPlanVisualization.tsx`)
 
-9. **Amenities extraction and Amra amenity highlights**
-   - Extract/normalize amenities from brochure/fact-sheet content into the amenities grid with photo/title cards.
-   - Explicitly surface helipad / air-taxi landing and 165+ amenities.
-   - Add standards: `fully furnished`, `fully serviced`, `full sea view`.
+- Active tab (`Payment Plan (70/30)` / `100% Payment`): icon forced to `#FFFFFF`, not the emerald token that currently renders black on the active dark chip.
+- `Post-Handover (36 months) · Due by 2031-12-01` chip: text + clock icon pure white.
+- 70/30 card: content redistributed across full card width (grid `2fr 1fr` → `1fr 1fr`, right column populated with the post-handover timeline card so the right side is no longer empty). Card size untouched.
+- Handover strap (already written last turn) kept as-is.
 
-10. **Fact-sheet distances and location USPs**
-   - Extract/clean distances such as airport, Downtown, casino/Marjan, Siniyah Island into location USP cards.
+## 4. Brochure card (`PremiumBrochureCard.tsx`)
 
-### Phase 3 — Map bug batch
-11. **Nearby map tabs**
-   - Fix cropped tab buttons and disabled/not-allowed cursor behavior when a tab has data.
+- JBJ monogram + `JBJ GLOBAL REAL ESTATE` wordmark = full-width header bar at the top of the card, larger, edge-to-edge.
+- Bottom title panel (project name + location) → thinner, more transparent (`bg-black/35 backdrop-blur-md` instead of the current solid emerald), so more of the cover photo shows.
+- Cover photo occupies ~70% of card height now vs ~45% today.
 
-12. **Map interaction/layout**
-   - Fix split/gray expanded map behavior.
-   - Keep smooth page scroll with click/drag map interaction.
-   - Fix `Open in Google Maps` wrapping/stacking at responsive widths.
-   - Fix `Here` marker contrast and remove unwanted marker navigation arrow.
+## 5. Generate Presentation card (`GeneratePresentationCard.tsx`)
 
-13. **Two-view Project Location**
-   - Add Close View and Far View modes.
-   - Far View should show wider Umm Al Quwain context with Siniyah Island, Marjan Island, casino/major attractions highlighted.
+- Monogram position unchanged.
+- `CLICK TO START · Generate Presentation · Custom PDF deck · ~30 seconds` block shifted up ~16px so it sits closer to the monogram, removing the current bottom gap.
 
-### Phase 4 — Data integrity and investment modules
-14. **Who is buying here**
-   - Remove fake project-specific UAE-wide DLD nationality claims.
-   - Only show Amra/area-specific data if present; otherwise clearly avoid the project-specific claim.
+## 6. Project Documents library (`BookStyleDocuments.tsx`)
 
-15. **Phase 1 / Phase 2 payment support**
-   - Add structured support for multiple payment phases, selector UI, and split timeline rendering.
+- Robot image replaced with the real Citi Buddy robot cropped from the uploaded Amra Citi Buddy PDF page (Lovable Assets pointer, no fake robot).
+- Card label logic rewritten by document `kind`:
+  - `citi_buddy` → label "Citi Buddy" (never "Brochure").
+  - `fact_sheet` → label "Fact Sheet".
+  - `payment_plan` → label "Payment Plan".
+  - `spa` → label "SPA".
+  - `floor_plan` → label "Floor Plan".
+  - `brochure` → label "Brochure" **only if a real brochure file exists**.
+- No auto-created "Brochure" card when the project only has a fact sheet. In that case the top Brochure section pulls the fact sheet PDF, but the Documents grid shows only real uploaded documents.
+- Card typography: title centred vertically between photo bottom edge and the `View / Save` buttons. Remove the repeated "Amra The First…" project-name line (title = document type only). Kind label chip reduced ~50% in size.
 
-16. **Other projects rebuild**
-   - Replace the empty/dark box with real three-tab cards.
+## 7. Buyer Nationality / Market Intelligence (`BuyerNationalityInsights.tsx`)
 
-17. **Price/sqft value-justification module**
-   - Compare Amra against relevant same-emirate/area alternatives with clear “why better / why cheaper” reasoning.
+Reorder + rescope, no new fake data:
 
-18. **Airbnb / property-management facts**
-   - Surface Airbnb/PM facts where available and avoid unsupported claims where data is missing.
+1. **This project** — "Who's buying in Amra" (empty state today, ready to accept upload — no fake fill).
+2. **This area** — Al Raudah / Umm Al Quwain nationalities sourced from UAQ Real Estate authority feed (not DLD). If unavailable, show a labelled empty state, never Dubai substitutes.
+3. **UAE cash-vs-mortgage / off-plan-vs-ready** — kept, but explicitly labelled "UAE-wide (DLD sample, Dubai-dominant)".
+4. **Dubai top nationalities** — pushed to the bottom under "Dubai market intelligence (reference)".
 
-### Phase 5 — Automation and generation backlog
-19. **Developer profile PDF upload pipeline**
-   - Company profile PDF upload → AI extraction → editable paragraph → populate developer page.
+## 8. Naming / developer lock
 
-20. **Reelly-style presentation generator**
-   - Build a real PDF generation/export path, not only a UI placeholder.
+- Global find-and-replace `City Buddy` → `Citi Buddy` and `City Developers` → `Citi Developers` across strings and comments.
+- Developer name for Amra pinned server-side + client-side to `Citi Developers` (guard in `useUnifiedProject`).
 
-21. **Auto-flip handover status**
-   - Add backend scheduled logic to flip ready/off-plan based on handover date.
+## 9. Backlog audit from prior turns
 
-22. **Cross-project stale-stat sweep**
-   - Audit stale values across project cards/details and fix mismatches.
+I will re-scan every earlier message in this thread and, in the same turn, print a checked/unchecked list of every task ever raised (amenities, videos, sale_status selector, Airbnb, phase 1/2 payments, three-tab Other Projects, price/sqft justification, Reelly-style deck, auto-flip handover cron, Al Hamra Village auto-photo, search exact-match ordering, etc.) — each item either ✅ shipped with the file path, or ⏳ queued with the next-turn owner. No item silently dropped.
 
-23. **Amra promotion pop-up**
-   - Add promotion pop-up behavior for anonymous and logged-in users with appropriate frequency controls.
+## Validation
 
-## Validation plan
-- For every phase, run a visual Playwright check on the Amra project page.
-- Capture screenshots for the exact sections changed: payment strap/timeline, brochure card, presentation card, document modal open/scroll/close, fact sheet, City Buddy, Developer Landscape, media gallery, amenities, maps, and comparison modules.
-- Only mark a task completed after the screenshot/DOM proof confirms the user-visible behavior.
+For each of sections 1–7 I run Playwright against the real Amra route, wait for the section to mount, screenshot the exact section, and view the screenshot before marking done. If a section fails to render I fix the mount issue first — no more "local headless renders only the shell" excuses.
+
+## Technical notes
+
+- Files touched: `AmenitiesShowcase.tsx` (new), `ProjectNearbyPropertiesMap.tsx`, `PropertyMapHoverCard.tsx` (reused), `PaymentPlanVisualization.tsx`, `PremiumBrochureCard.tsx`, `GeneratePresentationCard.tsx`, `BookStyleDocuments.tsx`, `BuyerNationalityInsights.tsx`, `ProjectAIAnalyzer.tsx`, `useUnifiedProject.ts`, plus one migration for `project_amenities.category` + a Citi-Buddy asset pointer.
+- No schema drop, only additive columns + GRANTs.
+- No new external APIs; UAQ feed is a placeholder read that gracefully empties when absent.

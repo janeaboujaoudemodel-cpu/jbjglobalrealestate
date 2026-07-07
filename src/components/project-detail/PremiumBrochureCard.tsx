@@ -181,56 +181,66 @@ const PremiumBrochureCard = ({
           <div className="absolute inset-0 rounded-lg ring-1 ring-black/20 group-hover:ring-black/30 transition-colors" />
 
           {/* Content Layout */}
-          <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Emerald info panel — now extended upward to host the JBJ monogram
-                directly above the project title. No duplicated wordmark. */}
+          <div className="relative z-10 h-full flex flex-col justify-between p-0">
+            {/* Full-edge header bar — bigger monogram + wordmark, transparent so photo still shows */}
+            <div
+              className="w-full flex items-center gap-3 px-4 py-2.5 select-none"
+              style={{
+                background: "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.32) 78%, transparent 100%)",
+                backdropFilter: "blur(2px)",
+              }}
+            >
+              <img
+                src={jbjMonogram}
+                alt="JBJ"
+                className="h-12 w-12 object-contain shrink-0"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9))" }}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+              />
+              <span
+                data-no-contrast-guard
+                className="text-[13px] uppercase tracking-[0.32em] font-bold allow-white"
+                style={{
+                  color: "#FFFFFF",
+                  WebkitTextFillColor: "#FFFFFF",
+                  textShadow: "0 1px 4px rgba(0,0,0,0.95)",
+                }}
+              >
+                JBJ Global Real Estate
+              </span>
+            </div>
+
+            {/* Thinner, more transparent title panel at the bottom — reveals more of the cover photo */}
             <div
               data-no-contrast-guard
               data-on-dark
-              className="mt-auto -mx-1 px-4 pt-3 pb-3 rounded-lg allow-white"
+              className="mx-3 mb-3 px-4 py-2 rounded-md allow-white"
               style={{
-                background: "linear-gradient(135deg, rgba(4,60,44,0.94) 0%, rgba(2,28,18,0.96) 58%, rgba(0,0,0,0.98) 100%)",
-                backdropFilter: "blur(4px)",
-                border: "1px solid rgba(0,0,0,0.42)",
-                boxShadow: "0 10px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10)",
+                background: "rgba(0,0,0,0.42)",
+                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.08)",
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
               }}
             >
-              <div className="flex items-center gap-3 mb-2">
-                <img
-                  src={jbjMonogram}
-                  alt="JBJ Global Real Estate"
-                  className="h-10 w-10 object-contain select-none"
-                  style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.85))" }}
-                  loading="eager"
-                  decoding="sync"
-                />
-                <span
-                  data-no-contrast-guard
-                  className="text-[10px] uppercase tracking-[0.28em] font-semibold allow-white"
-                  style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}
-                >
-                  JBJ Global Real Estate
-                </span>
-              </div>
-
               <h3
                 data-no-contrast-guard
-                className="text-xl font-bold mb-1 leading-tight allow-white"
-                style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
+                className="text-[15px] font-bold leading-tight allow-white"
+                style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95)" }}
               >
                 {projectName}
               </h3>
-
               <p
                 data-no-contrast-guard
-                className="text-[11px] uppercase tracking-[0.2em] font-semibold allow-white"
+                className="text-[10px] uppercase tracking-[0.2em] font-semibold allow-white mt-0.5"
                 style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
               >
                 {location || 'UAE'}
               </p>
             </div>
+
 
 
 

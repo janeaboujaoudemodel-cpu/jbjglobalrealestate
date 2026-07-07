@@ -598,7 +598,7 @@ export default function BrochureGeneratorPage() {
             <CleanTextarea
               value={aiFullPrompt}
               onChange={e => setAiFullPrompt(e.target.value)}
-              placeholder='e.g. "Create a luxury brochure for Amra by City Developers — waterfront living in Dubai Marina"'
+              placeholder='e.g. "Create a luxury brochure for Amra by Citi Developers — waterfront living in Umm Al Quwain"'
               rows={2}
             />
           </div>

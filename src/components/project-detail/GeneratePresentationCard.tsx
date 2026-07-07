@@ -94,13 +94,15 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                 />
               </div>
 
-              <div className="relative z-10 text-center px-6" data-no-contrast-guard>
+              {/* Text block lifted up so it hugs the monogram instead of hanging at the bottom */}
+              <div className="relative z-10 text-center px-6 -mt-6" data-no-contrast-guard>
                 <div id="jj-genpres-eyebrow" className="text-[11px] uppercase tracking-[0.3em] mb-1">
                   Click to start
                 </div>
-                <div id="jj-genpres-title" className="text-[20px] font-semibold">Generate Presentation</div>
-                <div id="jj-genpres-sub" className="text-[12px] mt-1">Custom PDF deck · ~30 seconds</div>
+                <div id="jj-genpres-title" className="text-[20px] font-semibold leading-tight">Generate Presentation</div>
+                <div id="jj-genpres-sub" className="text-[12px] mt-1 opacity-90">Custom PDF deck · ~30 seconds</div>
               </div>
+
 
 
             </motion.button>

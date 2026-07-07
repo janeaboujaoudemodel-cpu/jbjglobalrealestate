@@ -24790,7 +24790,7 @@ html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div {
   border-radius: 999px !important;
   background: var(--jj-map-emerald) !important;
   background-image: var(--jj-map-emerald) !important;
-  border: 2px solid rgba(255,255,255,0.96) !important;
+  border: 0 !important;
   box-shadow: 0 8px 18px rgba(0,0,0,0.32) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
@@ -24799,6 +24799,16 @@ html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div {
   line-height: 1 !important;
   white-space: nowrap !important;
 }
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-marker-pill *,
+html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+}
+/* Kill the popup tail/arrow on project nearby map — user finds it distracting */
+html body .jj-map-popup .leaflet-popup-tip-container,
+html body .jj-map-popup .leaflet-popup-tip { display: none !important; }
+
 
 html body .jj-map-popup .leaflet-popup-content-wrapper,
 html body .developer-map-popup .leaflet-popup-content-wrapper,
