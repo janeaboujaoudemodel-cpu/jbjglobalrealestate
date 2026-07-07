@@ -51,15 +51,14 @@ export default function CompareProjectPicker({
   const [limit, setLimit] = useState<number>(3);
 
   const { data: dbShortlist } = useShortlist();
-  const addDb = useAddToShortlist();
-  const removeDb = useRemoveFromShortlist();
+  const toggleDb = useToggleShortlist();
   const { shortlist: guestShortlist, toggleShortlist: toggleGuest } =
     useGuestShortlist();
 
   const alreadyShortlisted = useMemo<Set<string>>(() => {
     const s = new Set<string>();
     if (user && dbShortlist) dbShortlist.forEach((r) => s.add(r.project_id));
-    guestShortlist.forEach((id) => s.add(id));
+    guestShortlist.forEach((g) => s.add(g.project_id));
     return s;
   }, [user, dbShortlist, guestShortlist]);
 
