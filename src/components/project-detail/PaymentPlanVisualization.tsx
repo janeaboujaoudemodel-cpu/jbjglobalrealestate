@@ -339,7 +339,7 @@ export default function PaymentPlanVisualization({
               {/* Timeline Dots — anchored to the END of each stage bar so the circles
                   visually match the width of the corresponding segment (e.g. the "During
                   Construction" dot aligns with the end of its 60% bar, not the midpoint). */}
-              <div className="relative mt-4 h-12">
+              <div className="relative mt-4 h-24">
                 <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
                 {(() => {
                   // Anchor each label to the MIDPOINT of its segment so it visually
@@ -347,7 +347,7 @@ export default function PaymentPlanVisualization({
                   const bookingMid = total > 0 ? (bookingPct / 2 / total) * 100 : 0;
                   const constructionMid = total > 0 ? ((bookingPct + constructionPct / 2) / total) * 100 : 0;
                   const preHandoverEnd = total > 0 ? ((bookingPct + constructionPct) / total) * 100 : 70;
-                  const postHandoverEnd = 100;
+                  const postHandoverEnd = 98;
                   const dot = (leftPct: number, gradient: string, label: React.ReactNode, compact = false) => (
                     <div
                       className="absolute flex flex-col items-center"
