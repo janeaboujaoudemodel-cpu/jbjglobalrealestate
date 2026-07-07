@@ -85,20 +85,15 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                   backgroundImage: "linear-gradient(120deg, transparent 0%, rgba(0,0,0,0.34) 36%, rgba(6,78,59,0.20) 50%, rgba(0,0,0,0.38) 64%, transparent 100%)",
                 }}
               />
-              <div className="relative z-10 flex flex-col items-center justify-center -mb-2" aria-hidden="true">
+              <div className="relative z-10 flex flex-col items-center justify-center" aria-hidden="true">
                 <img
                   src={jbjMonogram}
-                  alt="JBJ"
-                  className="w-40 h-40 object-contain select-none"
+                  alt="JBJ Global Real Estate"
+                  className="w-44 h-44 object-contain select-none"
                   style={{ filter: "drop-shadow(0 5px 16px rgba(0,0,0,0.68))" }}
                 />
-                <img
-                  src={jbjFullLogoLight}
-                  alt="JBJ Global Real Estate"
-                  className="-mt-8 h-12 w-auto object-contain select-none"
-                  style={{ filter: "drop-shadow(0 3px 12px rgba(0,0,0,0.72))" }}
-                />
               </div>
+
               <div className="relative z-10 text-center px-6" data-no-contrast-guard>
                 <div id="jj-genpres-eyebrow" className="text-[11px] uppercase tracking-[0.3em] mb-1">
                   Click to start
