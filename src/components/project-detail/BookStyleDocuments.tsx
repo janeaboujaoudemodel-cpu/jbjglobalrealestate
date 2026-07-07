@@ -138,22 +138,10 @@ export default function BookStyleDocuments({
         style={{ scrollbarWidth: "none" }}
       >
         {visibleDocs.map((doc) => {
-          const title = displayDocumentTitle(doc, doc.display_title || doc.name || humanizeDocTitle(doc.type));
+          const detected = detectDocType(doc);
+          const title = detected.label;
           const coverUrl = doc.cover_image_url || projectImageUrl;
-          const icon = typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
-          // Derive a truthful label from filename first (Fact Sheet, City Buddy…), fall back to type
-          const nameNoExt = (doc.name || "").replace(/\.[a-z0-9]{2,5}$/i, "").replace(/[-_]+/g, " ").trim();
-          const inferredFromName = (() => {
-            const n = nameNoExt.toLowerCase();
-            if (n.includes("fact sheet") || n.includes("factsheet")) return "Fact Sheet";
-            if (n.includes("brochure")) return "Brochure";
-            if (n.includes("payment")) return "Payment Plan";
-            if (n.includes("floor")) return "Floor Plan";
-            if (n.includes("buddy")) return "City Buddy";
-            if (n.includes("inventory")) return "Inventory";
-            return null;
-          })();
-          const typeLabel = inferredFromName || humanizeDocTitle(doc.type);
+          const icon = typeIcon[detected.kind] || typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
           const filename = `${projectName.replace(/\s+/g, "-")}-${title.replace(/\s+/g, "-")}.pdf`;
 
           return (
@@ -185,30 +173,31 @@ export default function BookStyleDocuments({
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
-              {/* Top-right type chip — approved emerald label, pure white content */}
-              <div data-emerald-action="true" className="jj-emerald-action absolute top-3 right-3 z-20 inline-flex items-center gap-1 px-2 py-0.5 rounded-full shadow-sm max-w-[126px] min-h-[24px]">
-                <span className="text-white [&>svg]:w-3 [&>svg]:h-3">{icon}</span>
-                <span className="text-[7px] uppercase tracking-[0.08em] font-bold text-white truncate leading-none">{displayDocumentTitle(doc, typeLabel)}</span>
+              {/* Top-right kind chip — smaller (~50%), single truthful label */}
+              <div data-emerald-action="true" className="jj-emerald-action absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full shadow-sm min-h-[16px]">
+                <span className="text-white [&>svg]:w-2.5 [&>svg]:h-2.5">{icon}</span>
+                <span className="text-[6px] uppercase tracking-[0.08em] font-bold text-white leading-none">{title}</span>
               </div>
 
-              {/* Bottom label panel — emerald fill, pure white text */}
+              {/* Bottom label panel — title vertically centred between photo bottom and buttons, no project name repetition */}
               <div
                 data-no-contrast-guard
                 data-on-dark
-                className="absolute inset-x-0 bottom-0 h-[40%] border-t border-black/30 px-3 py-2.5 flex flex-col justify-between allow-white"
+                className="absolute inset-x-0 bottom-0 h-[38%] border-t border-black/30 px-3 py-2.5 flex flex-col allow-white"
                 style={{
                   background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                   color: "#FFFFFF",
                 }}
               >
-                <div>
-                  <p className="text-[9px] uppercase tracking-[0.22em] font-bold mb-1 line-clamp-1 allow-white" style={{ color: "#FFFFFF" }}>
-                    {projectName}
-                  </p>
-                  <p className="font-bold text-[13px] leading-tight line-clamp-2 allow-white" style={{ color: "#FFFFFF" }}>
+                <div className="flex-1 flex items-center justify-center">
+                  <p
+                    className="font-bold text-[15px] leading-tight text-center line-clamp-2 allow-white"
+                    style={{ color: "#FFFFFF" }}
+                  >
                     {title}
                   </p>
                 </div>
+
                 <div className="flex items-center gap-1.5 mt-1">
                   <span
                     role="button"
