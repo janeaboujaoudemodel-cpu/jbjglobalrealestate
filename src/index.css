@@ -30345,6 +30345,15 @@ html body #root .jj-project-pros-panel .jj-project-pros-item :is(*,span,div,svg,
   stroke: #FFFFFF !important;
 }
 
+html body #root .jj-project-pros-panel :is(h3, svg, [class*="lucide"], path, line, polyline, polygon, rect, circle, ellipse),
+html body #root .jj-project-pros-panel .allow-white,
+html body #root .jj-project-pros-panel .allow-white * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+
 html body #root [data-section="payment"] [data-payment-progress-bar] > div,
 html body #root [data-section="payment"] [data-payment-progress-bar] > div :is(span,svg,path,line,polyline,polygon,rect,circle) {
   color: #FFFFFF !important;

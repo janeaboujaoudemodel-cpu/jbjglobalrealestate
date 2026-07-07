@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Upload, Loader2, Eye, EyeOff, FileText, Trash2 } from "lucide-react";
+import { Upload, Loader2, Eye, EyeOff, FileText, Trash2, ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
@@ -26,6 +26,7 @@ const inferType = (name: string): string => {
   if (n.includes("floor")) return "floor_plan";
   if (n.includes("fact")) return "fact_sheet";
   if (n.includes("inventory")) return "inventory";
+  if (/\.(mp4|mov|webm|ogg|m4v)(\?|$)/i.test(n) || n.includes("video") || n.includes("tour")) return "video";
   return "brochure";
 };
 
@@ -118,13 +119,21 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
   if (!isOwner) return null;
 
   return (
-    <div className="mt-4 rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] p-4">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70">
-          Owner · Documents
-        </p>
-        <span className="text-[11px] text-[#1A1A1A]/55">Auto-enriches the listing</span>
-      </div>
+    <details className="mt-4 group rounded-xl border border-[#B89555]/40 bg-[#F7F2EA]">
+      <summary className="list-none cursor-pointer p-4 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70">
+            Owner · Documents
+          </p>
+          <span className="text-[11px] text-[#1A1A1A]/55">Collapsed by default · auto-enriches the listing</span>
+        </div>
+        <span className="inline-flex items-center gap-2 rounded-md border border-[#064E3B]/25 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-[#064E3B] bg-[#FDFBF7]">
+          <span className="group-open:hidden">Expand</span>
+          <span className="hidden group-open:inline">Collapse</span>
+          <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
+        </span>
+      </summary>
+      <div className="px-4 pb-4">
 
       <label
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -143,6 +152,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
           className="hidden"
           onChange={(e) => e.target.files && upload(e.target.files)}
           disabled={busy}
+          accept=".pdf,.png,.jpg,.jpeg,.webp,.mp4,.mov,.webm,.ogg,.m4v,application/pdf,image/*,video/*"
         />
         {busy ? (
           <Loader2 className="w-6 h-6 mx-auto animate-spin text-[#B89555]" />
@@ -150,10 +160,10 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
           <Upload className="w-6 h-6 mx-auto text-[#B89555]" />
         )}
         <div className="mt-2 text-sm font-semibold text-[#1A1A1A]">
-          {busy ? "Uploading…" : "Drop brochures, floor plans, payment plans"}
+          {busy ? "Uploading…" : "Drop brochures, floor plans, payment plans, videos"}
         </div>
         <div className="text-xs text-[#1A1A1A]/60 mt-0.5">
-          PDF / PNG / JPG — auto-attaches to this project
+          PDF / PNG / JPG / MP4 / MOV — auto-attaches to this project
         </div>
       </label>
 
@@ -195,6 +205,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
           })}
         </div>
       )}
-    </div>
+      </div>
+    </details>
   );
 }

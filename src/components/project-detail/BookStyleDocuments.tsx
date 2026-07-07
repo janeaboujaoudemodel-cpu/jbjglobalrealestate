@@ -77,7 +77,7 @@ export default function BookStyleDocuments({
   };
 
   return (
-    <details className="relative group">
+    <details open className="relative group">
       <summary className="list-none cursor-pointer mb-5 flex items-center justify-between gap-4">
         <div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">The Library</p>

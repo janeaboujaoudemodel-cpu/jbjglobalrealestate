@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { Button } from "@/components/ui/button";
-import { Maximize, MousePointer } from "lucide-react";
+import { Maximize } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
@@ -105,17 +104,16 @@ function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; languag
   return null;
 }
 
-// Scroll zoom enabler on click
-function ScrollZoomEnabler({ enabled }: { enabled: boolean }) {
+// Scroll zoom is deliberately kept off by default so the page scroll never stalls.
+function SmoothMapRuntime() {
   const map = useMap();
 
   useEffect(() => {
-    if (enabled) {
-      map.scrollWheelZoom.enable();
-    } else {
-      map.scrollWheelZoom.disable();
-    }
-  }, [enabled, map]);
+    map.scrollWheelZoom.disable();
+    map.options.zoomSnap = 0.25;
+    map.options.zoomDelta = 0.5;
+    map.options.wheelPxPerZoomLevel = 90;
+  }, [map]);
 
   return null;
 }
@@ -137,15 +135,11 @@ export default function ProjectLocationMap({
 }: ProjectLocationMapProps) {
   const { t, language } = useLanguage();
   const [mapView, setMapView] = useState<MapViewType>("satellite");
-  const [scrollZoomEnabled, setScrollZoomEnabled] = useState(false);
-  const [hasRefined, setHasRefined] = useState(false);
-  const [refinedCoords, setRefinedCoords] = useState<[number, number] | null>(null);
 
   const defaultLat = 25.2048;
   const defaultLng = 55.2708;
 
-  const coordinates: [number, number] = refinedCoords
-    ?? (latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng]);
+  const coordinates: [number, number] = latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng];
 
   // Prefer coordinates for accurate Google Maps deep-link (avoids ambiguous name searches)
   const hasCoords = !!(latitude && longitude);
@@ -153,8 +147,8 @@ export default function ProjectLocationMap({
     ? `${latitude},${longitude}`
     : `${projectName}${location ? `, ${location}` : ""}, UAE`;
   const externalMapsUrl = hasCoords
-    ? `https://www.google.com/maps/search/?api=1&query=${latitude}%2C${longitude}`
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
+    ? `https://maps.google.com/?q=${latitude},${longitude}`
+    : `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}`;
 
   return (
     <div data-map-shell className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '1px solid rgba(255,255,255,0.16)', boxShadow: '0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)' }}>
@@ -167,10 +161,13 @@ export default function ProjectLocationMap({
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
         attributionControl={false}
+        zoomSnap={0.25}
+        zoomDelta={0.5}
+        wheelPxPerZoomLevel={90}
         {...SAFE_LEAFLET_MAP_OPTIONS}
       >
         <DynamicTileLayer mapView={mapView} language={language} />
-        <ScrollZoomEnabler enabled={scrollZoomEnabled} />
+        <SmoothMapRuntime />
         <MapViewToggle 
           mapView={mapView} 
           onViewChange={setMapView}
@@ -187,21 +184,6 @@ export default function ProjectLocationMap({
           </Popup>
         </Marker>
       </MapContainer>
-
-      {/* Click to enable scroll zoom overlay */}
-      {!scrollZoomEnabled && (
-        <button
-          type="button"
-          className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer bg-transparent border-0 p-0"
-          onClick={() => setScrollZoomEnabled(true)}
-          aria-label={t('map.clickToEnable')}
-        >
-          <span data-surface="emerald" data-emerald-action="true" data-no-contrast-guard className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium inline-flex items-center gap-2 pointer-events-none">
-            <MousePointer className="w-4 h-4" />
-            {t('map.clickToEnable')}
-          </span>
-        </button>
-      )}
     </div>
   );
 }
