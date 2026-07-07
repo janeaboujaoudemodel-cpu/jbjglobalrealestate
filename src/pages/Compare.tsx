@@ -9,13 +9,13 @@ import { useMembership } from "@/hooks/useMembership";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
 import { useShortlistBadges } from "@/hooks/useShortlistBadges";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 import { 
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
   ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown, Search, Plus
 } from "lucide-react";
-import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
 import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { Input } from "@/components/ui/input";
@@ -37,6 +37,9 @@ import SampleComparisonPreview from "@/components/compare/SampleComparisonPrevie
 import CompareCTA from "@/components/compare/CompareCTA";
 import MarketContextStrip from "@/components/compare/MarketContextStrip";
 import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
+import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
+import { formatPriceShort } from "@/lib/formatPrice";
+import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
 const INQUIRY_FORM_URL = "https://JBJ.AE/contact";
 const COMPARE_FREE_KEY = "jbj_compare_free_used";
@@ -99,6 +102,7 @@ interface AIAnalysis {
 }
 
 const Compare = () => {
+  const access = useCompareAccess();
   // --- Compare mode router (Projects vs Units) ---------------------------
   // Hooks must run unconditionally on every render. We do all routing-level
   // hooks here, then delegate to a child component for each mode so each
@@ -112,6 +116,12 @@ const Compare = () => {
     else next.delete("mode");
     setSearchParams(next, { replace: true });
   };
+  if (access.isLoading) {
+    return <section className="min-h-screen bg-[#021611]" />;
+  }
+  if (!access.allowed) {
+    return <CompareAccessGate />;
+  }
   if (compareMode === "units") {
     return <UnitCompareShell onModeChange={setCompareMode} />;
   }
@@ -136,6 +146,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiAddOpen, setAiAddOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [selectedCompareIds, setSelectedCompareIds] = useState<string[]>([]);
   // Auto-open the project picker the first time the user lands on /compare
   // with an empty shortlist so they can immediately search & pick projects.
   const autoOpenedRef = useRef(false);
@@ -171,12 +182,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const shortlist = user ? authShortlist : guestShortlist;
   const shortlistIds = shortlist?.map((s) => s.project_id) || [];
   const shortlistReady = !authLoading;
+  const seededFromShortlistRef = useRef(false);
+  const compareIds = selectedCompareIds.length > 0 ? selectedCompareIds : shortlistIds.slice(0, 4);
 
   // Fetch project details
   const { data: projects, isLoading } = useQuery({
-    queryKey: ["compare-projects", shortlistIds],
+    queryKey: ["compare-projects", compareIds],
     queryFn: async () => {
-      if (!shortlistIds.length) return [];
+      if (!compareIds.length) return [];
       const { data, error } = await supabase
         .from("projects")
         .select(`
@@ -186,13 +199,20 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           community:communities(name, slug),
           documents:project_documents(file_url, file_name, document_type)
         `)
-        .in("id", shortlistIds);
+        .in("id", compareIds);
 
       if (error) throw error;
       return data;
     },
-    enabled: shortlistReady && shortlistIds.length > 0,
+    enabled: shortlistReady && compareIds.length > 0,
   });
+
+  useEffect(() => {
+    if (!seededFromShortlistRef.current && shortlistIds.length > 0) {
+      seededFromShortlistRef.current = true;
+      setSelectedCompareIds(shortlistIds.slice(0, 4));
+    }
+  }, [shortlistIds.join("|")]);
 
   useEffect(() => {
     if (shortlistReady && !autoOpenedRef.current && !isLoading && (!projects || projects.length === 0)) {
