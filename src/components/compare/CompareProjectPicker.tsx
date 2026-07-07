@@ -568,10 +568,12 @@ export default function CompareProjectPicker({
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="inline-flex h-12 min-w-[172px] items-center justify-center rounded-lg px-4 text-sm font-bold"
-              style={{ background: "rgba(255,255,255,0.74)", color: "#1A1A1A", border: "1px solid rgba(6,78,59,0.35)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.75)" }}
+              data-surface="emerald"
+              data-no-contrast-guard
+              className="allow-white inline-flex h-12 min-w-[172px] items-center justify-center rounded-lg px-4 text-sm font-bold"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.24)", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.62)" }}
             >
-              Cancel
+              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Cancel</span>
             </button>
             <button
               type="button"
