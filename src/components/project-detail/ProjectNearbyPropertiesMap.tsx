@@ -382,8 +382,8 @@ export default function ProjectNearbyPropertiesMap({
               },
             }}
           >
-            <Popup className="jj-map-popup">
-              <div className="jj-map-popup-card min-w-[220px] max-w-[280px]">
+            <Popup className="jj-map-popup" autoPan={false} closeButton={false}>
+
                 {p.cover_image_url && (
                   <img
                     src={p.cover_image_url}
