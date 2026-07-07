@@ -173,6 +173,21 @@ const isReadyProject = (project: object) => {
 const prioritizeOffPlan = <T extends object>(projects: T[]): T[] =>
   [...projects].sort((a, b) => Number(isReadyProject(a)) - Number(isReadyProject(b)));
 
+const searchRelevance = (project: { name?: string | null; developer_name?: string | null; developer?: { name?: string | null } | null }, query: string) => {
+  const q = query.toLowerCase().trim();
+  if (!q) return 99;
+  const name = (project.name || "").toLowerCase().trim();
+  const developer = (project.developer?.name || project.developer_name || "").toLowerCase().trim();
+  if (name === q) return 0;
+  if (name.startsWith(q)) return 1;
+  if (name.split(/\s+/).includes(q)) return 2;
+  if (name.includes(q)) return 3;
+  if (developer === q) return 5;
+  if (developer.startsWith(q)) return 6;
+  if (developer.includes(q)) return 7;
+  return 20 + Math.abs(name.length - q.length) / 100;
+};
+
 // Sale status options with color dots
 const SALE_STATUS = [
   { value: "all", label: "All Sale Statuses", dotClass: null },
@@ -459,8 +474,11 @@ const Properties = () => {
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
   const finalProjects = useMemo(() => {
     const filtered = applyShortcutFilters(sortedProjects, shortcutFilters);
-    return appliedFilters.completionStatus === 'ready' ? filtered : prioritizeOffPlan(filtered);
-  }, [sortedProjects, shortcutFilters, appliedFilters.completionStatus]);
+    const base = appliedFilters.completionStatus === 'ready' ? filtered : prioritizeOffPlan(filtered);
+    const q = (appliedFilters.search || shortcutFilters.searchQuery || "").trim();
+    if (!q) return base;
+    return [...base].sort((a, b) => searchRelevance(a, q) - searchRelevance(b, q));
+  }, [sortedProjects, shortcutFilters, appliedFilters.completionStatus, appliedFilters.search]);
   // Pagination — 12 per page with numeric page controls
   const PAGE_SIZE = 12;
   const [currentPage, setCurrentPage] = useState(1);

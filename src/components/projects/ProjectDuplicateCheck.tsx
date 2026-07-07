@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2, AlertTriangle, ExternalLink, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Candidate {
   id: string;
@@ -80,7 +81,16 @@ export function ProjectDuplicateCheck({
     };
   }, [name, developerName, emirate, location, onConfirmedUnique]);
 
-  if ((name || "").trim().length < 3) return null;
+  if ((name || "").trim().length < 3) {
+    return (
+      <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 mt-2">
+        <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+          <CheckCircle2 className="w-4 h-4 text-[#064E3B]" />
+          <span>AI duplicate assistant is ready — enter the project name to check existing and similar projects.</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] p-3 mt-2">
@@ -147,12 +157,12 @@ export function ProjectDuplicateCheck({
 
       {candidates.length > 0 && (
         <label className="mt-3 flex items-start gap-2 text-xs text-[#1A1A1A] cursor-pointer">
-          <input
-            type="checkbox"
+          <Checkbox
             checked={confirmed}
-            onChange={(e) => {
-              setConfirmed(e.target.checked);
-              onConfirmedUnique?.(e.target.checked);
+            onCheckedChange={(checked) => {
+              const next = checked === true;
+              setConfirmed(next);
+              onConfirmedUnique?.(next);
             }}
             className="mt-0.5"
           />
