@@ -64,11 +64,15 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="jj-map-square-control"
+        className="jj-map-square-control inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
         data-surface="emerald"
+        data-emerald-action="true"
+        data-no-contrast-guard
         aria-label={t('map.openInGoogleMaps')}
+        style={{ backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF' }}
       >
-        <Maximize className="w-5 h-5" />
+        <Maximize className="w-4 h-4" />
+        <span>Open in Google Maps</span>
       </a>
     </div>
   );
