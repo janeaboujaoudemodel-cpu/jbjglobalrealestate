@@ -41,7 +41,8 @@ interface Row {
   price_from: number | null;
   emirate?: string | null;
   cover_image_url?: string | null;
-  image_url?: string | null;
+  card_image_url?: string | null;
+  gallery_start_image_url?: string | null;
   developer: { id?: string | null; name: string; slug: string | null; logo_url?: string | null } | null;
   images?: { image_url: string | null; display_order?: number | null }[] | null;
 }
@@ -126,7 +127,7 @@ export default function CompareProjectPicker({
     queryFn: async (): Promise<Row[]> => {
       const q = supabase
         .from("projects")
-        .select("id, name, slug, location, emirate, price_from, cover_image_url, image_url, developer:developers(id, name, slug, logo_url), images:project_images(image_url, display_order)")
+        .select("id, name, slug, location, emirate, price_from, cover_image_url, card_image_url, gallery_start_image_url, developer:developers(id, name, slug, logo_url), images:project_images(image_url, display_order)")
         .eq("is_published", true)
         .order("updated_at", { ascending: false })
         .limit(1000);
@@ -295,7 +296,7 @@ export default function CompareProjectPicker({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         data-compare-picker
-        className="max-w-5xl p-0 overflow-hidden border-[#064E3B]/45"
+        className="sm:!max-w-5xl p-0 overflow-hidden border-[#064E3B]/45"
         style={{
           background:
             "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 62%, #EEF7F3 100%)",
@@ -330,7 +331,7 @@ export default function CompareProjectPicker({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="px-6 pt-4 pb-2 grid gap-3 md:grid-cols-[1.15fr_210px_180px_190px]">
+        <div className="px-6 pt-4 pb-2 grid gap-3 md:grid-cols-2 xl:grid-cols-[1.15fr_210px_180px_190px]">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-[#1A1A1A]/60 absolute left-3 top-1/2 -translate-y-1/2" />
             <Input
@@ -488,7 +489,7 @@ export default function CompareProjectPicker({
               {filtered.map((r) => {
                 const picked = pending.has(r.id);
                 const already = alreadyShortlisted.has(r.id);
-                const coverSrc = r.cover_image_url || r.image_url || r.images?.find((img) => !!img?.image_url)?.image_url || comparePropertyFallback;
+                const coverSrc = r.cover_image_url || r.card_image_url || r.gallery_start_image_url || r.images?.find((img) => !!img?.image_url)?.image_url || comparePropertyFallback;
                 return (
                   <li key={r.id}>
                     <button
