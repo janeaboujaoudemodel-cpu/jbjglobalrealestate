@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,29 +16,38 @@ import "leaflet/dist/leaflet.css";
 
 type FilterMode = "nearby" | "area" | "emirate";
 
-// Premium emerald/gold pin — current project must be visually unmistakable.
-const CURRENT_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
-  <defs><linearGradient id="nearPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse"><stop stop-color="#0B6E4F"/><stop offset="0.48" stop-color="#064E3B"/><stop offset="1" stop-color="#000000"/></linearGradient><filter id="nearShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.42"/></filter></defs>
-  <path filter="url(#nearShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#nearPin)" stroke="#D8B86A" stroke-width="2.5"/>
-  <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.12)" stroke="#F4E3A8" stroke-width="2"/>
-  <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
-</svg>`;
+// Premium red/gold pin with attached name label — current project must be visually unmistakable.
+const buildCurrentPin = (projectName: string) => `
+<div style="position:relative;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
+  <div style="background:linear-gradient(135deg,#7A0F0F 0%,#B71C1C 45%,#5A0A0A 100%);color:#FFFFFF;font-weight:900;font-size:12px;letter-spacing:0.03em;padding:6px 12px;border-radius:999px;border:1.5px solid #F4E3A8;box-shadow:0 10px 22px -10px rgba(0,0,0,0.8);white-space:nowrap;text-transform:uppercase;margin-bottom:4px;">${projectName}</div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
+    <defs>
+      <linearGradient id="redPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#D32F2F"/><stop offset="0.5" stop-color="#B71C1C"/><stop offset="1" stop-color="#5A0A0A"/>
+      </linearGradient>
+      <filter id="redShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.55"/></filter>
+    </defs>
+    <path filter="url(#redShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#redPin)" stroke="#F4E3A8" stroke-width="2.5"/>
+    <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.14)" stroke="#F4E3A8" stroke-width="2"/>
+    <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
+  </svg>
+</div>`;
 
-const RedIcon = L.divIcon({
-  html: CURRENT_PIN_SVG,
+const createCurrentPinIcon = (projectName: string) => L.divIcon({
+  html: buildCurrentPin(projectName),
   className: "jj-map-pin",
-  iconSize: [58, 74],
-  iconAnchor: [29, 74],
-  popupAnchor: [0, -72],
+  iconSize: [220, 108],
+  iconAnchor: [110, 108],
+  popupAnchor: [0, -108],
 });
 
+// Champagne/gold price pill for peer Citi Developer projects.
 const createChampagneMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#0B6E4F 0%,#064E3B 55%,#000000 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;border:1px solid rgba(244,227,168,0.42);padding:6px 11px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.16);letter-spacing:0;">${priceText}</div>`,
+  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#E4CE99 0%,#C8A766 55%,#8E6E36 100%);color:#1A1A1A !important;-webkit-text-fill-color:#1A1A1A !important;border:1.5px solid rgba(255,255,255,0.55);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.55);letter-spacing:0;">${priceText}</div>`,
   className: "custom-marker jj-map-pin",
-  iconSize: [80, 28],
-  iconAnchor: [40, 28],
-  popupAnchor: [0, -28],
+  iconSize: [90, 30],
+  iconAnchor: [45, 30],
+  popupAnchor: [0, -30],
 });
 
 
@@ -130,7 +139,7 @@ export default function ProjectNearbyPropertiesMap({
   const hasOwnCoords =
     typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
 
-  const [filterMode, setFilterMode] = useState<FilterMode>("nearby");
+  
 
   const { data: nearbyProjects } = useQuery({
     queryKey: ["nearby-projects-map", currentProjectId, areaName, emirate, latitude, longitude, currentDeveloperId],
@@ -248,39 +257,18 @@ export default function ProjectNearbyPropertiesMap({
       },
     [allMarkers, latitude, longitude, hasOwnCoords],
   );
-  const nearestMarkers = useMemo(
-    () => {
-      const sorted = [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b));
-      const local = hasOwnCoords ? sorted.filter((p) => distanceKm(p) <= 28) : sorted;
-      return (local.length ? local : sorted.slice(0, 6)).slice(0, 12);
-    },
-    [allMarkers, distanceKm, hasOwnCoords],
-  );
-  const sameAreaCount = useMemo(
-    () =>
-      areaName
-        ? allMarkers.filter((m) => {
-            const a = (m.area_name || "").toLowerCase();
-            return a.includes(areaName.toLowerCase());
-          }).length
-        : 0,
-    [allMarkers, areaName],
-  );
-  const sameEmirateCount = useMemo(
-    () => emirate ? allMarkers.filter((m) => (m.emirate || "").toLowerCase() === emirate.toLowerCase()).length : 0,
-    [allMarkers, emirate],
-  );
-
+  // Show ALL peer projects on the same map. Prefer same-developer projects (Citi Developers'
+  // other projects) — they are the story we want to tell. If there are none, fall back to the
+  // full merged set so the map is never empty.
   const markers = useMemo(() => {
-    if (filterMode === "area" && areaName) {
-      const a = areaName.toLowerCase();
-      return allMarkers.filter((m) => (m.area_name || "").toLowerCase().includes(a));
+    if (currentDeveloperId) {
+      const sameDev = allMarkers.filter((m) => m.developer_id === currentDeveloperId);
+      if (sameDev.length > 0) return sameDev;
     }
-    if (filterMode === "emirate" && emirate) {
-      return allMarkers.filter((m) => (m.emirate || "").toLowerCase() === emirate.toLowerCase());
-    }
-    return nearestMarkers;
-  }, [allMarkers, nearestMarkers, filterMode, areaName, emirate]);
+    const sorted = [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b));
+    return sorted.slice(0, 16);
+  }, [allMarkers, currentDeveloperId, distanceKm]);
+
 
   // Derive a map center: project coords if available, otherwise the centroid of area peers.
   const center = useMemo<[number, number] | null>(() => {
@@ -320,34 +308,8 @@ export default function ProjectNearbyPropertiesMap({
     navigate(`/project/${slug}`);
   };
 
-  const chip = (mode: FilterMode, label: string, count: number, disabled = false) => {
-    const isActive = filterMode === mode;
-    return (
-      <button
-        key={mode}
-        type="button"
-        onClick={() => setFilterMode(mode)}
-        className="jj-nearby-tab relative inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-3 text-xs font-semibold transition-colors"
-        data-active={isActive ? "true" : "false"}
-        data-disabled={disabled ? "true" : "false"}
-        data-no-contrast-guard
-        style={{
-          background: isActive
-            ? 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)'
-            : '#F7F2EA',
-          color: isActive ? '#FFFFFF' : '#1A1A1A',
-          borderRight: '1px solid rgba(184,149,85,0.35)',
-          borderRadius: 0,
-          cursor: 'pointer',
-          opacity: 1,
-          minHeight: 48,
-        }}
-      >
-        <span className="min-w-0 truncate" style={{ color: 'inherit' }}>{label}</span>
-        <span className="text-[10px] tabular-nums" style={{ color: 'inherit', opacity: 0.9 }}>{count}</span>
-      </button>
-    );
-  };
+
+
 
 
   // Build the list of points for auto-fit — always include the current project pin
@@ -376,37 +338,25 @@ export default function ProjectNearbyPropertiesMap({
           background: "#F7F2EA",
         }}
       >
-        {/* Header — grid, no gap, so all three chips read as one connected bar */}
-        <div
-          data-nearby-map-tabs="true"
-          className="grid grid-cols-1 sm:grid-cols-3 w-full"
-          style={{ borderBottom: "1px solid rgba(184,149,85,0.35)" }}
-        >
-          {chip("nearby", "Closest nearby", nearestMarkers.length)}
-          {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
-          {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
-        </div>
-
-        <div style={{ height: 420, position: "relative" }}>
+        <div style={{ height: 460, position: "relative" }}>
         <style>{`
           .jj-map-pin { background: none !important; border: none !important; }
-          .jj-map-pin .jj-nearby-price-pill { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-          .jj-map-pin .jj-nearby-price-pill * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-          /* Kill the leaflet popup tail arrow that reads as hover "crop lines" */
           .leaflet-popup-tip-container, .leaflet-popup-tip { display: none !important; }
           .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; padding: 0; }
           .leaflet-popup-content { margin: 0; }
           .leaflet-container { background: #0a1f18; }
-          .leaflet-control-zoom { display: none !important; }
+          .leaflet-control-zoom { display: block !important; }
+          .leaflet-control-zoom a { background:#F7F2EA !important; color:#064E3B !important; border:1px solid rgba(184,149,85,0.55) !important; font-weight:900; }
+          .leaflet-control-zoom a:hover { background:#EFE7D6 !important; }
         `}</style>
         <MapContainer
           center={resolvedCenter}
           zoom={13}
-          scrollWheelZoom={false}
+          scrollWheelZoom={true}
           touchZoom={true}
           dragging={true}
           style={{ height: "100%", width: "100%" }}
-          zoomControl={false}
+          zoomControl={true}
           attributionControl={false}
           zoomSnap={0.25}
           zoomDelta={0.5}
@@ -414,25 +364,25 @@ export default function ProjectNearbyPropertiesMap({
           {...SAFE_LEAFLET_MAP_OPTIONS}
         >
           <MapResizeRuntime />
-          <ScrollLockRuntime />
           <FitBoundsRuntime points={fitPoints} />
           <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
           <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 
 
-        {/* Current project marker (red) — only when we have real coords */}
+        {/* Current project marker (red, with attached name label) */}
         {hasOwnCoords && (
-          <Marker position={[latitude as number, longitude as number]} icon={RedIcon}>
-            <Popup className="jj-map-popup">
-              <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3">
-                <div className="text-sm font-bold">{currentProjectName}</div>
-                <div className="text-xs mt-1">
+          <Marker position={[latitude as number, longitude as number]} icon={createCurrentPinIcon(currentProjectName)}>
+            <Popup className="jj-map-popup" closeButton={false}>
+              <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3 bg-white rounded-2xl">
+                <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
+                <div className="text-xs mt-1 text-[#1A1A1A]/70">
                   {t("map.thisProject") || "This project"}
                 </div>
               </div>
             </Popup>
           </Marker>
         )}
+
 
 
         {/* Nearby projects */}

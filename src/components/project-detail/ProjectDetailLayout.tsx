@@ -1882,22 +1882,15 @@ function ProjectDetailLayoutInner({
               )}
 
 
-              {/* Leaflet Map with satellite view, navigation, and view toggle */}
-              <ProjectLocationMap
-                projectName={project.name}
-                location={project.location}
-                latitude={project.latitude ?? null}
-                longitude={project.longitude ?? null}
-               />
-
-              {/* Nearby Properties Map — ALWAYS rendered so visitors can see
-                  other developer projects in the same area, regardless of
-                  whether this project has coords or an area_name. */}
-              <div className="mt-6">
+              {/* Unified project location map — red pin marks this project, gold champagne
+                  pins mark the developer's other projects. Zoom & drag enabled. */}
+              <div className="mt-2">
                 <h3 className="text-lg font-semibold text-foreground mb-3">
-                  Related projects in {project.emirate || 'UAE'}
+                  {project.developer?.name
+                    ? `${project.name} & more by ${project.developer.name}`
+                    : `${project.name} on the map`}
                 </h3>
-                <Suspense fallback={<div className="h-[420px] rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]" aria-hidden />}>
+                <Suspense fallback={<div className="h-[460px] rounded-2xl border border-[#B89555]/30 bg-[#F7F2EA]" aria-hidden />}>
                   <ProjectNearbyPropertiesMap
                     currentProjectId={project.id}
                     currentProjectName={project.name}
@@ -1911,11 +1904,11 @@ function ProjectDetailLayoutInner({
                   />
                 </Suspense>
                 <p className="mt-2 text-xs text-[#1A1A1A]/70">
-                  {typeof project.latitude === 'number' && typeof project.longitude === 'number'
-                    ? 'Premium pin = this project · Emerald price pins = related nearby projects. Click a pin to open that project — you can always return here using the chip at the top.'
-                    : `Emerald price pins = related projects in ${project.emirate || 'UAE'}. Click a pin to open that project — you can always return here using the chip at the top.`}
+                  Red pin = {project.name}. Gold pins = other projects by {project.developer?.name || 'this developer'}. Hover a gold pin to preview, click to open.
                 </p>
               </div>
+
+
 
 
               {/* Nearby Points of Interest - Below Map */}
