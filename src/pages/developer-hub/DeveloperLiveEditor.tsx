@@ -8,9 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles } from "lucide-react";
+import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles, Search } from "lucide-react";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
 import { toast } from "sonner";
+
+type StatusFilter = "all" | "live" | "pending" | "draft";
+const PAGE_SIZE = 200;
 
 interface Project {
   id: string;
@@ -66,6 +69,9 @@ const DeveloperLiveEditor = () => {
   const [edits, setEdits] = useState<Record<string, { price_from?: string; handover_date?: string }>>({});
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich">(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
   const { data: rep } = useQuery({
     queryKey: ["rep-list", user?.id],
@@ -80,14 +86,14 @@ const DeveloperLiveEditor = () => {
     enabled: !!user?.id && !isOwner,
   });
 
-  const { data: projects, isLoading } = useQuery({
-    queryKey: ["developer-projects", isOwner ? "owner-all" : rep?.current_developer_id],
+  const { data: allProjects, isLoading } = useQuery({
+    queryKey: ["developer-projects", isOwner ? "owner-all" : rep?.current_developer_id, pageSize],
     queryFn: async () => {
       let query = supabase
         .from("projects")
-        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, data_quality_flags")
-        .order("updated_at", { ascending: false })
-        .limit(500);
+        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, data_quality_flags, created_at, updated_at")
+        .order("created_at", { ascending: false })
+        .limit(pageSize);
 
       if (!isOwner) query = query.eq("developer_id", rep!.current_developer_id!);
 
@@ -97,6 +103,36 @@ const DeveloperLiveEditor = () => {
     },
     enabled: isOwner || !!rep?.current_developer_id,
   });
+
+  const projects = useMemo(() => {
+    if (!allProjects) return [] as Project[];
+    const q = search.trim().toLowerCase();
+    return allProjects.filter((p) => {
+      // status filter
+      if (statusFilter === "live" && !p.is_published) return false;
+      if (statusFilter === "pending") {
+        // pending = has data-quality flags OR not published and has status "pending"
+        const flags = Array.isArray(p.data_quality_flags) ? p.data_quality_flags : [];
+        const isPending = flags.length > 0 || (!p.is_published && /pending|review/i.test(p.status || p.status_label || ""));
+        if (!isPending) return false;
+      }
+      if (statusFilter === "draft" && p.is_published) return false;
+      // search filter
+      if (q) {
+        const hay = [p.name, p.developer_name, p.developer?.name, p.location, p.emirate]
+          .filter(Boolean).join(" ").toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [allProjects, search, statusFilter]);
+
+  const counts = useMemo(() => {
+    const src = allProjects || [];
+    const live = src.filter((p) => p.is_published).length;
+    const draft = src.filter((p) => !p.is_published).length;
+    return { all: src.length, live, pending: 0, draft };
+  }, [allProjects]);
 
   const { data: resaleProjects = [], isLoading: loadingResale } = useQuery({
     queryKey: ["owner-projects-resale-section", isOwner],
@@ -205,9 +241,9 @@ const DeveloperLiveEditor = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <Building2 className="h-5 w-5 text-[#064E3B]" />
           <h2 className="text-lg font-semibold text-[#1A1A1A]">Off-plan projects</h2>
-          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{projects?.length ?? 0}</Badge>
+          <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{projects.length}{allProjects && projects.length !== allProjects.length ? ` of ${allProjects.length}` : ""}</Badge>
 
-          {(projects?.length ?? 0) > 0 && (
+          {(allProjects?.length ?? 0) > 0 && (
             <div className="ml-auto flex items-center gap-2">
               <Button size="sm" variant="outline" onClick={allSelected ? clearAll : selectAll}
                 className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
@@ -215,6 +251,39 @@ const DeveloperLiveEditor = () => {
               </Button>
             </div>
           )}
+        </div>
+
+        {/* Search + status tabs */}
+        <div className="flex flex-wrap gap-3 items-center">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#1A1A1A]/50" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by project or developer name…"
+              className="pl-9 bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A]"
+            />
+          </div>
+          <div className="flex gap-1 flex-wrap">
+            {([
+              ["all", "All", counts.all],
+              ["live", "Live", counts.live],
+              ["draft", "Draft / Unpublished", counts.draft],
+            ] as const).map(([key, label, count]) => (
+              <Button
+                key={key}
+                size="sm"
+                variant={statusFilter === key ? "default" : "outline"}
+                onClick={() => setStatusFilter(key as StatusFilter)}
+                className={statusFilter === key
+                  ? "jj-surface-emerald allow-white text-white border-transparent"
+                  : "border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"}
+                data-surface={statusFilter === key ? "emerald" : undefined}
+              >
+                {label} <span className="ml-1 opacity-70">({count})</span>
+              </Button>
+            ))}
+          </div>
         </div>
 
         {selected.size > 0 && (
@@ -247,9 +316,13 @@ const DeveloperLiveEditor = () => {
 
       {isLoading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]/60" /></div>
-      ) : !projects?.length ? (
+      ) : !projects.length ? (
         <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-10 rounded-lg text-center">
-          <p className="text-[#1A1A1A]/70">No off-plan projects yet. Add your first project to get started.</p>
+          <p className="text-[#1A1A1A]/70">
+            {(allProjects?.length ?? 0) === 0
+              ? "No off-plan projects yet. Add your first project to get started."
+              : `No projects match "${search || statusFilter}". Try clearing the search or the status filter.`}
+          </p>
         </Card>
       ) : (
         <div className="space-y-3">
@@ -375,6 +448,18 @@ const DeveloperLiveEditor = () => {
               </Card>
             );
           })}
+        </div>
+      )}
+      {allProjects && allProjects.length >= pageSize && (
+        <div className="flex justify-center pt-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setPageSize((s) => s + PAGE_SIZE)}
+            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+          >
+            Load more projects
+          </Button>
         </div>
       )}
       </section>

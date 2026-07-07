@@ -15,6 +15,7 @@ import { validateFile } from "@/utils/developerFileValidation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SafeImage } from "@/components/SafeImage";
 import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
+import { ProjectDuplicateCheck } from "@/components/projects/ProjectDuplicateCheck";
 
 interface Uploaded { url: string; name: string; type: string; size: number; extractionUrl?: string; path?: string; bucket?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "floor_plan" | "payment_plan" | "document" }
 
@@ -963,6 +964,12 @@ const DeveloperProjectWizard = () => {
             <div className="md:col-span-2">
               <FieldHeader label="Project name *" field="name" />
               <Input value={basics.name} onChange={(e) => setBasics({ ...basics, name: e.target.value })} className={inputCls} />
+              <ProjectDuplicateCheck
+                name={basics.name}
+                developerName={activeDeveloperName || ""}
+                emirate={basics.emirate}
+                location={basics.location}
+              />
             </div>
             <div>
               <FieldHeader label="Emirate" field="emirate" />
