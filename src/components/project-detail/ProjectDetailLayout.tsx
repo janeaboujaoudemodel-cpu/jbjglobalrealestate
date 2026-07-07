@@ -1960,6 +1960,11 @@ function ProjectDetailLayoutInner({
             </div>
           </div>
 
+          {/* AMRA-only factsheet insights: BNB investor management, AED 750M Emirates Road,
+              sustainability, and named design/brand partners. Content is verbatim from the
+              AMRA English Factsheet (developer document). */}
+          {isAmraProject && <AmraFactSheetInsights projectName={project.name} />}
+
           {/* MoreFromDeveloperStrip moved to the bottom of the page so that the
               "Other projects in this area" map above is not visually replaced
               by sibling developer inventory. See render at end of layout. */}
