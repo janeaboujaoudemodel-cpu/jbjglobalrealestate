@@ -963,6 +963,12 @@ const DeveloperProjectWizard = () => {
             <div className="md:col-span-2">
               <FieldHeader label="Project name *" field="name" />
               <Input value={basics.name} onChange={(e) => setBasics({ ...basics, name: e.target.value })} className={inputCls} />
+              <ProjectDuplicateCheck
+                name={basics.name}
+                developerName={activeDeveloperName || ""}
+                emirate={basics.emirate}
+                location={basics.location}
+              />
             </div>
             <div>
               <FieldHeader label="Emirate" field="emirate" />
