@@ -668,7 +668,7 @@ export default function CRMLeadsTableV2({
               <TableHead className="w-[260px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
               <TableHead className="w-[120px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
               <TableHead className="w-[150px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
-              <TableHead className="w-[92px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
+              <TableHead className="w-[360px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
