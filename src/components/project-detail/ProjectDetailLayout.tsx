@@ -1347,7 +1347,7 @@ function ProjectDetailLayoutInner({
            )}
 
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
-           {(project.floors || project.total_units || project.service_charge || project.finishing_standard) && (
+           {(project.floors || project.total_units || project.service_charge || project.finishing_standard || hasCitiBuddyDocument) && (
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40 relative">
                 <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="house-details" initial={project as any} /></div>
                 <HouseDetailsSection
