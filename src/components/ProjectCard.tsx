@@ -17,6 +17,7 @@ import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
+import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null; show_sale_status?: boolean | null };
