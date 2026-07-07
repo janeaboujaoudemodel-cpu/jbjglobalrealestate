@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import UnitCompareShell from "@/components/compare/units/UnitCompareShell";
 import CompareModeToggle from "@/components/compare/CompareModeToggle";
