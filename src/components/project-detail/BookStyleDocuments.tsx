@@ -128,12 +128,23 @@ export default function BookStyleDocuments({
         className="flex gap-5 overflow-x-auto scrollbar-hide pb-4 pt-2 snap-x snap-mandatory"
         style={{ scrollbarWidth: "none" }}
       >
-        {visibleDocs.map((doc) => {
-          const detected = detectDocType(doc);
-          const title = detected.label;
-          const coverUrl = doc.cover_image_url || projectImageUrl;
-          const icon = typeIcon[detected.kind] || typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
-          const filename = `${projectName.replace(/\s+/g, "-")}-${title.replace(/\s+/g, "-")}.pdf`;
+        {(() => {
+          // Precompute duplicate counts per kind so we can suffix " 1"/" 2"
+          // when the same document type appears more than once (e.g. two Citi Buddy PDFs).
+          const kindCounts: Record<string, number> = {};
+          visibleDocs.forEach((d) => {
+            const k = detectDocType(d).kind;
+            kindCounts[k] = (kindCounts[k] || 0) + 1;
+          });
+          const kindSeen: Record<string, number> = {};
+          return visibleDocs.map((doc) => {
+            const detected = detectDocType(doc);
+            kindSeen[detected.kind] = (kindSeen[detected.kind] || 0) + 1;
+            const needsNumber = (kindCounts[detected.kind] || 0) > 1;
+            const title = needsNumber ? `${detected.label} ${kindSeen[detected.kind]}` : detected.label;
+            const coverUrl = doc.cover_image_url || projectImageUrl;
+            const icon = typeIcon[detected.kind] || typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
+            const filename = `${projectName.replace(/\s+/g, "-")}-${title.replace(/\s+/g, "-")}.pdf`;
 
           return (
             <motion.button
@@ -234,7 +245,8 @@ export default function BookStyleDocuments({
               </div>
             </motion.button>
           );
-        })}
+          });
+        })()}
       </div>
 
       {/* PDF Viewer Modal */}

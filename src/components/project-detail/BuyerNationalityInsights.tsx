@@ -72,12 +72,19 @@ export default function BuyerNationalityInsights({ projectName, areaName }: Buye
         </span>
         <div>
           <p className="text-[14px] font-semibold text-[#1A1A1A] leading-tight">{row.country}</p>
-          <div className="mt-1.5 h-1.5 w-full rounded-full bg-[#010806] overflow-hidden">
+          <div
+            className="mt-1.5 h-1.5 w-full rounded-full overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, #D4B87A 0%, #B89555 55%, #8f6f2b 100%)",
+              border: "1px solid rgba(184,149,85,0.5)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.4)",
+            }}
+          >
             <div
               className="h-full rounded-full"
               style={{
                 width: `${widthPct}%`,
-                background: "linear-gradient(90deg, #064E3B 0%, #042C1C 100%)",
+                background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
               }}
             />
           </div>

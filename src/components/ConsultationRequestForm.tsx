@@ -236,8 +236,34 @@ export const ConsultationRequestForm = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
         data-form-shell
-        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-6 sm:p-7 md:p-8 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-3xl mx-auto ${className}`}
+        data-jbj-consultation-form
+        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
     >
+      {/* Local pill lock — force gold champagne on inactive & pure emerald+white on active,
+          winning over the site-wide emerald surface guards. Scoped to this form only. */}
+      <style>{`
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive,
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:hover,
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:focus,
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-inactive:focus-visible {
+          background: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
+          background-color: #F3E4C2 !important;
+          background-image: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
+          color: #1A1A1A !important;
+          -webkit-text-fill-color: #1A1A1A !important;
+          border: 1px solid #B89555 !important;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.55) !important;
+        }
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-active,
+        [data-jbj-consultation-form] [data-field-group] button.jbj-pill-active:hover {
+          background: linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000 100%) !important;
+          background-color: #064E3B !important;
+          color: #FFFFFF !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          border: 1px solid #064E3B !important;
+          box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 4px 12px rgba(4,44,28,0.35) !important;
+        }
+      `}</style>
       {/* Header */}
       <div className="text-center mb-6">
         <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-3">
@@ -363,7 +389,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-              <div data-field-group className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
+              <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
                     <div className="flex flex-wrap gap-2">
                       {BEDROOM_OPTIONS.map((b) => {
                         const active = selected.includes(b.value);
@@ -375,9 +401,10 @@ export const ConsultationRequestForm = ({
                             data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border"
-                                : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                                ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
+                                : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
                             }
+                            style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                           >
                             {b.label}
                           </button>
@@ -413,7 +440,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div data-field-group className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
+                  <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
                     <div className="flex flex-wrap gap-2">
                       {SIZE_BUCKETS.map((b) => {
                         const active =
@@ -427,9 +454,10 @@ export const ConsultationRequestForm = ({
                             data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border"
-                                : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                                ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
+                                : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
                             }
+                            style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                           >
                             {b.label}
                           </button>
