@@ -352,7 +352,31 @@ const DeveloperLiveEditor = () => {
               </Button>
             ))}
           </div>
+          {/* Source + Sort */}
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value)}
+            className="h-9 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] text-sm px-2"
+            aria-label="Filter by source"
+          >
+            <option value="all">All sources</option>
+            {availableSources.map((s) => (
+              <option key={s} value={s}>{humanizeSource(s)}</option>
+            ))}
+          </select>
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as typeof sortOrder)}
+            className="h-9 rounded-md border border-[#B89555]/40 bg-[#FDFBF7] text-[#1A1A1A] text-sm px-2"
+            aria-label="Sort projects"
+          >
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="name-asc">Name A → Z</option>
+            <option value="name-desc">Name Z → A</option>
+          </select>
         </div>
+
 
         {selected.size > 0 && (
           <div
