@@ -198,21 +198,15 @@ const PremiumBrochureCard = ({
               }}
             >
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden shrink-0"
-                style={{
-                  background: "radial-gradient(circle at 30% 30%, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)",
-                  border: "1px solid rgba(0,0,0,0.18)",
-                  boxShadow:
-                    "0 4px 10px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18)",
-                }}
+                className="w-8 h-8 flex items-center justify-center overflow-hidden shrink-0"
               >
                 <img
                   src={jbjFullLogoDarkBg}
                   alt="JBJ"
-                  className="w-full h-full object-cover"
-                  style={{ transform: "scale(1.18)" }}
+                  className="w-full h-full object-contain"
                  loading="eager" fetchPriority="high" decoding="sync" />
               </div>
+
               <p
                 data-no-contrast-guard
                 className="text-[12.5px] uppercase leading-none whitespace-nowrap allow-white truncate"
@@ -241,7 +235,7 @@ const PremiumBrochureCard = ({
             >
               <h3
                 data-no-contrast-guard
-                className="text-xl font-bold mb-2 line-clamp-1 leading-tight allow-white"
+                className="text-xl font-bold mb-2 leading-tight allow-white"
                 style={{ color: "#FFFFFF", textShadow: "0 2px 6px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.6)" }}
               >
                 {projectName}
@@ -252,8 +246,9 @@ const PremiumBrochureCard = ({
                 className="text-[11px] uppercase tracking-[0.2em] font-semibold allow-white"
                 style={{ color: "#FFFFFF", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
               >
-                {location || 'Dubai • UAE'}
+                {location || 'UAE'}
               </p>
+
             </div>
 
 

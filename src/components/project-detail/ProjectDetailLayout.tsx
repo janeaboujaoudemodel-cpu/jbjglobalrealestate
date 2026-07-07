@@ -1667,7 +1667,7 @@ function ProjectDetailLayoutInner({
                       : setLeadCaptureOpen(true)
                     }
                     isLocked={!brochurePrimary || (!isLeadCaptured && !!brochurePrimary)}
-                    location={project.area_name ? `${project.area_name}${project.emirate ? ` • ${project.emirate}` : ""}` : (project.emirate || undefined)}
+                    location={project.emirate ? `${project.emirate}${project.area_name ? ` • ${project.area_name}` : ""}` : (project.area_name || undefined)}
                   />
                 </div>
               </div>
@@ -1767,12 +1767,19 @@ function ProjectDetailLayoutInner({
                  <div className="flex items-start gap-3">
                    <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
                    <div>
-                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage not available for this project</p>
-                     <p>{mortgageBlockedReason}</p>
+                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage financing will be available on handover</p>
+                     <p>
+                       Since this project is still under construction, UAE banks do not yet finance the purchase.
+                       Once {project.name} is officially marked completed, buyers will be able to finance up to
+                       70% of the property value over a term of up to 25 years — the 30% already paid during
+                       construction is credited toward your equity. We update the site automatically the day the
+                       project is handed over, so this section will switch to a full mortgage calculator on its own.
+                     </p>
                    </div>
                  </div>
                </div>
              </div>
+
            )}
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}

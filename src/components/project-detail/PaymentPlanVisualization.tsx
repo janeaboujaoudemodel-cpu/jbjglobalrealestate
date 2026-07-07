@@ -225,9 +225,10 @@ export default function PaymentPlanVisualization({
                   <p className="text-sm text-[#1A1A1A]/70">{premiumPlan.summary}</p>
                 </div>
                 </div>
-                <div className="rounded-full border border-[#064E3B]/30 bg-[#FDFBF7] px-4 py-2 text-sm font-bold text-[#064E3B]">
+                <div className="rounded-full border border-[#064E3B]/30 bg-[#FDFBF7] px-4 py-2 text-sm font-bold text-[#064E3B] whitespace-nowrap shrink-0">
                   {premiumPlan.badge}
                 </div>
+
               </div>
               {premiumPlan.stages.length > 0 && (
                 <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -296,15 +297,17 @@ export default function PaymentPlanVisualization({
               <div className="relative mt-4 h-12">
                 <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
                 {(() => {
-                  const bookingEnd = total > 0 ? (bookingPct / total) * 100 : 0;
-                  const constructionEnd = total > 0 ? ((bookingPct + constructionPct) / total) * 100 : 0;
-                  const handoverEnd = 100;
-                  const dot = (leftPct: number, gradient: string, label: React.ReactNode, align: "start"|"center"|"end" = "center") => (
+                  // Anchor each label to the MIDPOINT of its segment so it visually
+                  // aligns under the correct bar (e.g. "During Construction" sits under 60%).
+                  const bookingMid = total > 0 ? (bookingPct / 2 / total) * 100 : 0;
+                  const constructionMid = total > 0 ? ((bookingPct + constructionPct / 2) / total) * 100 : 0;
+                  const handoverMid = total > 0 ? ((bookingPct + constructionPct + handoverPct / 2) / total) * 100 : 100;
+                  const dot = (leftPct: number, gradient: string, label: React.ReactNode) => (
                     <div
                       className="absolute flex flex-col items-center"
                       style={{
                         left: `${leftPct}%`,
-                        transform: align === "start" ? "translateX(0)" : align === "end" ? "translateX(-100%)" : "translateX(-50%)",
+                        transform: "translateX(-50%)",
                       }}
                     >
                       <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: gradient, backgroundColor: '#064E3B' }} />
@@ -315,12 +318,13 @@ export default function PaymentPlanVisualization({
                   );
                   return (
                     <>
-                      {dot(0, 'var(--jj-emerald-ombre)', <>On Booking</>, "start")}
-                      {bookingPct > 0 && constructionPct > 0 && dot(bookingEnd, 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)', <>During Construction</>, "center")}
-                      {dot(handoverEnd, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}</>, "end")}
+                      {bookingPct > 0 && dot(bookingMid, 'var(--jj-emerald-ombre)', <>On Booking</>)}
+                      {constructionPct > 0 && dot(constructionMid, 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)', <>During Construction</>)}
+                      {handoverPct > 0 && dot(handoverMid, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}</>)}
                     </>
                   );
                 })()}
+
               </div>
             </div>
           )}
