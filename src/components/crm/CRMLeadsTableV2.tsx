@@ -837,7 +837,7 @@ export default function CRMLeadsTableV2({
                     </TableCell>
                     <TableCell className="hidden">
                         <div className="sr-only"><LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} /></div>
-                        <div className="hidden">
+                        <div className="flex items-center gap-0.5">
                           <Button
                             type="button"
                             variant="outline"
