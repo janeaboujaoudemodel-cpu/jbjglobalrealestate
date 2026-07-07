@@ -16,29 +16,38 @@ import "leaflet/dist/leaflet.css";
 
 type FilterMode = "nearby" | "area" | "emirate";
 
-// Premium emerald/gold pin — current project must be visually unmistakable.
-const CURRENT_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
-  <defs><linearGradient id="nearPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse"><stop stop-color="#0B6E4F"/><stop offset="0.48" stop-color="#064E3B"/><stop offset="1" stop-color="#000000"/></linearGradient><filter id="nearShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.42"/></filter></defs>
-  <path filter="url(#nearShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#nearPin)" stroke="#D8B86A" stroke-width="2.5"/>
-  <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.12)" stroke="#F4E3A8" stroke-width="2"/>
-  <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
-</svg>`;
+// Premium red/gold pin with attached name label — current project must be visually unmistakable.
+const buildCurrentPin = (projectName: string) => `
+<div style="position:relative;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
+  <div style="background:linear-gradient(135deg,#7A0F0F 0%,#B71C1C 45%,#5A0A0A 100%);color:#FFFFFF;font-weight:900;font-size:12px;letter-spacing:0.03em;padding:6px 12px;border-radius:999px;border:1.5px solid #F4E3A8;box-shadow:0 10px 22px -10px rgba(0,0,0,0.8);white-space:nowrap;text-transform:uppercase;margin-bottom:4px;">${projectName}</div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
+    <defs>
+      <linearGradient id="redPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#D32F2F"/><stop offset="0.5" stop-color="#B71C1C"/><stop offset="1" stop-color="#5A0A0A"/>
+      </linearGradient>
+      <filter id="redShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.55"/></filter>
+    </defs>
+    <path filter="url(#redShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#redPin)" stroke="#F4E3A8" stroke-width="2.5"/>
+    <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.14)" stroke="#F4E3A8" stroke-width="2"/>
+    <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
+  </svg>
+</div>`;
 
-const RedIcon = L.divIcon({
-  html: CURRENT_PIN_SVG,
+const createCurrentPinIcon = (projectName: string) => L.divIcon({
+  html: buildCurrentPin(projectName),
   className: "jj-map-pin",
-  iconSize: [58, 74],
-  iconAnchor: [29, 74],
-  popupAnchor: [0, -72],
+  iconSize: [220, 108],
+  iconAnchor: [110, 108],
+  popupAnchor: [0, -108],
 });
 
+// Champagne/gold price pill for peer Citi Developer projects.
 const createChampagneMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#0B6E4F 0%,#064E3B 55%,#000000 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;border:1px solid rgba(244,227,168,0.42);padding:6px 11px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.16);letter-spacing:0;">${priceText}</div>`,
+  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#E4CE99 0%,#C8A766 55%,#8E6E36 100%);color:#1A1A1A !important;-webkit-text-fill-color:#1A1A1A !important;border:1.5px solid rgba(255,255,255,0.55);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.55);letter-spacing:0;">${priceText}</div>`,
   className: "custom-marker jj-map-pin",
-  iconSize: [80, 28],
-  iconAnchor: [40, 28],
-  popupAnchor: [0, -28],
+  iconSize: [90, 30],
+  iconAnchor: [45, 30],
+  popupAnchor: [0, -30],
 });
 
 
