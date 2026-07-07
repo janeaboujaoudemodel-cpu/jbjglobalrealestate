@@ -112,6 +112,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
+import amenityHelipadImg from "@/assets/amenity-helipad.jpg";
+import amenityYachtMarinaImg from "@/assets/amenity-yacht-marina.jpg";
+import amenityWellnessSpaImg from "@/assets/amenity-wellness-spa.jpg";
+import amenityInRoomDiningImg from "@/assets/amenity-in-room-dining.jpg";
+import amenityFurnishedApartmentImg from "@/assets/amenity-furnished-apartment.jpg";
+import amenitySeaLagoonViewImg from "@/assets/amenity-sea-lagoon-view.jpg";
+import amenityAppConciergeImg from "@/assets/amenity-app-concierge.jpg";
+import amenityWellnessComplexImg from "@/assets/amenity-wellness-complex.jpg";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
