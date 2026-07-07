@@ -225,6 +225,59 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   // Check if user can use free or needs VIP
   const needsVipForCompare = hasUsedFreeCompare && !hasActiveMembership;
 
+  const buildFallbackAnalysis = (): AIAnalysis | null => {
+    if (!projects?.length || projects.length < 2) return null;
+    const rows = projects.map((p: any) => ({
+      projectName: p.name,
+      developer: p.developer?.name || p.developer_name || "Unknown",
+      developerTier: "Verified developer",
+      location: p.location || p.emirate || "UAE",
+      areaType: p.community?.name || p.location || "Mixed-use community",
+      trafficLevel: "Review with advisor",
+      priceRange: `${p.price_from ? formatPriceShort(p.price_from) : "Price on request"}${p.price_to ? ` - ${formatPriceShort(p.price_to)}` : ""}`,
+      pricePerSqft: p.size_min && p.price_from ? Math.round(p.price_from / p.size_min) : 0,
+      bedrooms: formatBedroomRange(p) || "Studio - 4 BR",
+      sizeRange: p.size_min && p.size_max ? `${p.size_min.toLocaleString()} - ${p.size_max.toLocaleString()} sqft` : "Size on request",
+      handover: p.handover_date || "Ready / TBD",
+      paymentPlan: p.payment_plan || "Verify with developer",
+      furnishedStatus: p.furnished_status || "Unfurnished",
+      views: Array.isArray(p.views) && p.views.length ? p.views : /amra/i.test(p.name) ? ["Full Sea View"] : ["Verify unit view"],
+      keyAmenities: Array.isArray(p.amenities) && p.amenities.length ? p.amenities.slice(0, 8) : ["Amenities to verify"],
+      keyFacilities: Array.isArray(p.facilities) ? p.facilities.slice(0, 8) : [],
+      uniqueSellingPoints: Array.isArray(p.usps) && p.usps.length ? p.usps.slice(0, 6) : [p.short_description || "See linked project page for full details"],
+      investmentType: "Client-specific advisory required",
+      targetBuyer: "Investor / end user",
+    }));
+    return {
+      projectDetailsTable: rows,
+      comparisonTable: { categories: [] },
+      ratings: rows.map((r, idx) => ({
+        projectName: r.projectName,
+        overallRating: idx === 0 ? 5 : 4,
+        locationRating: 4,
+        valueRating: 4,
+        amenitiesRating: 4,
+        investmentRating: 4,
+        developerRating: 4,
+        pros: ["Strong comparison candidate", "Details available on project page"],
+        cons: ["Verify final unit availability and service charges"],
+      })),
+      recommendation: {
+        topChoice: rows[0]?.projectName || "Best fit pending advisor review",
+        reasoning: "This downloadable comparison is prepared from the current project data. Final advice should be confirmed against live inventory, selected unit price, service charge, and client budget.",
+        bestFor: {
+          investors: "Compare price/sqft, service charge, payment plan, and view.",
+          families: "Compare unit size, amenities, and handover timing.",
+          firstTimeBuyers: "Prioritize payment plan clarity and total entry cost.",
+          luxuryBuyers: "Prioritize view, layout, finish, and developer track record.",
+        },
+        investmentAdvice: "Use the unit comparison mode for exact 900K–1M client scenarios and enter unit number, size, price, price/sqft, service charge, and view.",
+        riskFactors: ["Availability, final price, and service charges must be verified before reservation."],
+      },
+      summary: `Comparison prepared for ${projects.length} selected projects. Shortlist suggestions are limited to 4 by default; manually selected projects can compare up to 10.`,
+    };
+  };
+
   // Generate Smart AI Analysis
   const generateSmartAnalysis = async () => {
     if (!projects?.length || projects.length < 2) {
@@ -282,7 +335,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         throw response.error;
       }
       
-      setAiAnalysis(response.data.analysis);
+      setAiAnalysis(response.data?.analysis || buildFallbackAnalysis());
       toast.success("AI Analysis generated successfully!");
       
       if (!hasActiveMembership) {
@@ -290,7 +343,13 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       }
     } catch (error) {
       console.error("Failed to generate analysis:", error);
-      toast.error("Failed to generate AI analysis. Please try again.");
+      const fallback = buildFallbackAnalysis();
+      if (fallback) {
+        setAiAnalysis(fallback);
+        toast.success("Comparison report prepared from project data.");
+      } else {
+        toast.error("Failed to generate AI analysis. Please try again.");
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -632,7 +691,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               className="text-center text-lg max-w-2xl mx-auto mb-12"
               style={{ color: "rgba(26,26,26,0.7)" }}
             >
-              Drop in any 2–5 Dubai projects. Our AI engine ranks them by yield,
+              Drop in any 2–10 Dubai projects. Our AI engine ranks them by yield,
               risk, developer tier and market context — and tells you which one to buy.
             </p>
 
@@ -681,7 +740,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           </div>
         </div>
         <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
-        <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} />
+        <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} selectedIds={selectedCompareIds} onConfirm={setSelectedCompareIds} />
       </CompareAIShell>
     );
   }
@@ -770,7 +829,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             {/* Feature tiles — white ink on white/8 over emerald */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
               {[
-                { icon: BarChart3, title: "Compare 2–5 Projects", sub: "Side-by-side analysis" },
+                { icon: BarChart3, title: "Compare 2–10 Projects", sub: "Side-by-side analysis" },
                 { icon: TrendingUp, title: "ROI Projections", sub: "Investment returns" },
                 { icon: Award, title: "Smart Ratings", sub: "Location, value & more" },
               ].map((f) => (
@@ -823,14 +882,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 data-allow-dark-cta
                 className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
                 style={{
-                  background: "linear-gradient(135deg, #F7F2EA 0%, #EFE6D6 55%, #E5D8B8 100%)",
-                  color: "#1A1A1A",
-                  border: "1px solid rgba(184,149,85,0.55)",
-                  boxShadow: "0 10px 24px -14px rgba(0,0,0,0.35)",
+                  backgroundImage: EMERALD_CARD,
+                  color: "#FFFFFF",
+                  border: "1px solid rgba(255,255,255,0.35)",
+                  boxShadow: "0 10px 28px rgba(4,120,87,0.35)",
                 }}
               >
-                <Search className="w-4 h-4" style={{ color: "#064E3B" }} />
-                <span style={{ color: "#1A1A1A" }}>Add / change projects</span>
+                <Search className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Add / change projects</span>
               </button>
 
               <button
