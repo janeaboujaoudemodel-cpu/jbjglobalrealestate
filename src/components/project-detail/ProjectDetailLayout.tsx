@@ -613,7 +613,7 @@ function ProjectDetailLayoutInner({
     setLeadCaptureOpen(true);
   };
 
-  const mapQuery = `${project.name}${project.location ? `, ${project.location}` : ""}, Dubai, UAE`;
+  const mapQuery = `${project.name}${project.location ? `, ${project.location}` : ""}${(project as any).emirate ? `, ${(project as any).emirate}` : ""}, UAE`;
   const brochurePrimary = brochureDocs[0];
   const heroImageUrl = images[0]?.url;
 
@@ -1638,7 +1638,7 @@ function ProjectDetailLayoutInner({
                       : setLeadCaptureOpen(true)
                     }
                     isLocked={!brochurePrimary || (!isLeadCaptured && !!brochurePrimary)}
-                    location={project.area_name ? `${project.area_name} • Dubai` : undefined}
+                    location={project.area_name ? `${project.area_name}${project.emirate ? ` • ${project.emirate}` : ""}` : (project.emirate || undefined)}
                   />
                 </div>
               </div>

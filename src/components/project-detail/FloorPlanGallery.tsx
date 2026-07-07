@@ -161,7 +161,7 @@ export function FloorPlanGallery({
               <PdfCanvasViewer
                 title={`${projectName} - ${activePlan.label}`}
                 url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
-                maxPages={2}
+                maxPages={999}
                 className="h-full w-full"
               />
             </Suspense>

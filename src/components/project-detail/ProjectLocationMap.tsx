@@ -143,7 +143,7 @@ export default function ProjectLocationMap({
   const coordinates: [number, number] = refinedCoords
     ?? (latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng]);
 
-  const mapQuery = `${projectName}${location ? `, ${location}` : ""}, Dubai, UAE`;
+  const mapQuery = `${projectName}${location ? `, ${location}` : ""}, UAE`;
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
   return (

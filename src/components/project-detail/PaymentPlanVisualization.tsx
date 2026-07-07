@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock, Wallet, List, ShieldCheck, ShieldAlert } from "lucide-react";
+import { CreditCard, Calendar, CheckCircle, Home, Percent, Clock, Wallet, List, ShieldCheck } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -164,7 +164,7 @@ export default function PaymentPlanVisualization({
           <CreditCard className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           Payment Plan
         </h3>
-        {paymentPlanVerified ? (
+        {paymentPlanVerified && (
           <span
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 border border-white/40"
             style={{ color: '#FFFFFF' }}
@@ -172,15 +172,6 @@ export default function PaymentPlanVisualization({
           >
             <ShieldCheck className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             Verified by JBJ
-          </span>
-        ) : (
-          <span
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 border border-white/40"
-            style={{ color: '#FFFFFF' }}
-            title="Confirm the official milestone breakdown with our team before signing."
-          >
-            <ShieldAlert className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            Pending verification — confirm with our team
           </span>
         )}
       </div>
@@ -348,57 +339,60 @@ export default function PaymentPlanVisualization({
               monthly/multi-installment schedule (more than the standard booking/construction/handover trio),
               or any installment carries explicit timing info. Otherwise it just duplicates the timeline + cards above. */}
           {isDetailedBreakdown && (detailedMilestones.length > 3 || detailedMilestones.some(m => !!m.timing)) && (
-            <div className="mt-6 p-5 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7]">
-              <div className="flex items-center gap-2 mb-4">
-                <List className="w-5 h-5 text-[#1A1A1A]" />
-                <h4 className="font-semibold text-[#1A1A1A]">Detailed Payment Structure</h4>
-              </div>
-              <div className="space-y-0">
-                {detailedMilestones.map((step, idx) => {
-                  const isFirst = idx === 0;
-                  const isLast = idx === detailedMilestones.length - 1;
-                  return (
-                    <div 
-                      key={idx}
-                      className={cn(
-                        "flex items-center gap-3 px-4 py-3 border-b border-[#B89555]/30 last:border-b-0",
-                        isFirst && "jj-emerald-soft/50",
-                        isLast && "bg-blue-50/50",
-                      )}
-                    >
-                      <div className={cn(
-                        "w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold",
-                        isFirst ? "jj-emerald-soft text-[color:var(--emerald-1)]" :
-                        isLast ? "bg-blue-100 text-blue-700" :
-                        "bg-amber-100 text-amber-700"
-                      )}>
-                        {idx + 1}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#1A1A1A] truncate">{step.milestone}</p>
-                        {step.timing && (
-                          <p className="text-xs text-[#1A1A1A]/70">{step.timing}</p>
-                        )}
-                      </div>
-                      <div className={cn(
-                        "text-sm font-bold flex-shrink-0",
-                        isFirst ? "text-[color:var(--emerald-1)]" :
-                        isLast ? "text-blue-600" :
-                        "text-amber-600"
-                      )}>
-                        {step.percentage}%
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="mt-3 pt-3 border-t border-[#B89555]/30 flex items-center justify-between px-4">
-                <span className="text-sm font-semibold text-[#1A1A1A]">Total</span>
-                <span className="text-sm font-bold text-[#1A1A1A]">
-                  {detailedMilestones.reduce((s, m) => s + m.percentage, 0)}%
+            <details className="mt-6 rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] group">
+              <summary className="cursor-pointer list-none p-5 flex items-center justify-between gap-2 select-none">
+                <span className="flex items-center gap-2">
+                  <List className="w-5 h-5 text-[#1A1A1A]" />
+                  <h4 className="font-semibold text-[#1A1A1A]">Detailed Payment Structure</h4>
                 </span>
+                <span className="text-xs font-semibold text-[#064E3B] group-open:hidden">Show</span>
+                <span className="text-xs font-semibold text-[#064E3B] hidden group-open:inline">Hide</span>
+              </summary>
+              <div className="px-5 pb-5">
+                <div className="space-y-0">
+                  {detailedMilestones.map((step, idx) => {
+                    const isFirst = idx === 0;
+                    const isLast = idx === detailedMilestones.length - 1;
+                    return (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-3 px-4 py-3 border-b border-[#B89555]/30 last:border-b-0"
+                      >
+                        <div
+                          data-emerald="true"
+                          data-icon-circle="true"
+                          data-no-contrast-guard
+                          className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                          style={{ backgroundImage: 'var(--jj-emerald-ombre)', backgroundColor: '#064E3B', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                        >
+                          {idx + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-[#1A1A1A] truncate">{step.milestone}</p>
+                          {step.timing && (
+                            <p className="text-xs text-[#1A1A1A]/70">{step.timing}</p>
+                          )}
+                        </div>
+                        <div className={cn(
+                          "text-sm font-bold flex-shrink-0",
+                          isFirst ? "text-[color:var(--emerald-1)]" :
+                          isLast ? "text-[color:var(--emerald-1)]" :
+                          "text-[#1A1A1A]"
+                        )}>
+                          {step.percentage}%
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="mt-3 pt-3 border-t border-[#B89555]/30 flex items-center justify-between px-4">
+                  <span className="text-sm font-semibold text-[#1A1A1A]">Total</span>
+                  <span className="text-sm font-bold text-[#1A1A1A]">
+                    {detailedMilestones.reduce((s, m) => s + m.percentage, 0)}%
+                  </span>
+                </div>
               </div>
-            </div>
+            </details>
           )}
 
           {milestones.length === 0 && !paymentPlan && (
