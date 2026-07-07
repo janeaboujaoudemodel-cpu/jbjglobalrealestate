@@ -22,13 +22,27 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const PROJECT_PIN_SVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44" fill="none">
+  <defs>
+    <linearGradient id="epin" x1="17" y1="0" x2="17" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B6E4F"/>
+      <stop offset="55%" stop-color="#064E3B"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+  <path d="M17 0C7.6 0 0 7.4 0 16.6 0 29.4 17 44 17 44s17-14.6 17-27.4C34 7.4 26.4 0 17 0z" fill="url(#epin)" stroke="rgba(184,149,85,0.55)" stroke-width="1"/>
+  <circle cx="17" cy="16" r="5.5" fill="#FFFFFF"/>
+</svg>`;
+
 const PROJECT_LOCATION_ICON = L.divIcon({
-  className: "custom-marker",
-  html: `<div class="jj-map-marker-pill" style="background:linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%);color:#fff;border:1px solid rgba(184,149,85,.55);">Here</div>`,
-  iconSize: [72, 32],
-  iconAnchor: [36, 32],
-  popupAnchor: [0, -32],
+  className: "custom-marker jj-map-pin",
+  html: PROJECT_PIN_SVG,
+  iconSize: [34, 44],
+  iconAnchor: [17, 44],
+  popupAnchor: [0, -44],
 });
+
 
 const attractionIcon = (label: string) => L.divIcon({
   className: "custom-marker",
