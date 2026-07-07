@@ -34345,18 +34345,35 @@ html body #root button[aria-label="Talk to JBJ support"].jj-emerald-metallic {
 
 /* =========================================================================
    Brochure headline standard — AMRA English Factsheet inspired.
-   All primary page titles (h1, h2) and any element with .font-brochure
-   use Cormorant Garamond, mirroring the developer brochure typography.
-   Subheads, UI labels, buttons, chips, and body text remain Urbanist/Inter.
+   LOCKED site-wide (mem://style/typography/brochure-display-font):
+   every heading tag (h1–h6), every semantic heading token (.text-h1..h4,
+   .text-hero, .text-display), every element opted in with `.font-brochure`,
+   `.font-serif`, `[data-brochure-title]`, or `role="heading"` renders in
+   Cormorant Garamond. Body copy, UI labels, buttons, chips, inputs, and
+   badges stay on Urbanist / Inter.
    ========================================================================= */
-h1,
-h2,
-.font-brochure,
-[data-brochure-title] {
+h1, h2, h3, h4, h5, h6,
+.text-h1, .text-h2, .text-h3, .text-h4,
+.text-hero, .text-display,
+.font-brochure, .font-serif,
+[data-brochure-title],
+[role="heading"] {
   font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif !important;
   font-weight: 500;
   letter-spacing: -0.005em;
 }
-h1 { font-weight: 500; }
-h2 { font-weight: 500; }
-/* Keep utility-driven size classes intact; only override the family. */
+h1, h2, h3 { font-weight: 500; }
+h4, h5, h6 { font-weight: 600; }
+
+/* Explicit opt-out for headings that must stay sans (rare — e.g. UI chrome
+   labels styled as headings). Add `data-font-sans` to bypass. */
+[data-font-sans],
+[data-font-sans] h1,
+[data-font-sans] h2,
+[data-font-sans] h3,
+[data-font-sans] h4,
+[data-font-sans] h5,
+[data-font-sans] h6 {
+  font-family: 'Urbanist', 'Inter', system-ui, sans-serif !important;
+}
+
