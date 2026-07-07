@@ -596,15 +596,23 @@ export function useProject(projectSlug: string) {
           developer:developers(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, description, headquarters),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path),
-          videos:project_videos(id, url, title, display_order, is_visible)
+          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
         `)
         .eq("slug", projectSlug)
         .is("deleted_at", null)
         .maybeSingle();
       
       if (error) throw error;
-      return data as UnifiedProject | null;
+      if (!data) return null;
+
+      const { data: videos } = await supabase
+        .from("project_videos")
+        .select("id, url, title, display_order, is_visible")
+        .eq("project_id", data.id)
+        .eq("is_visible", true)
+        .order("display_order", { ascending: true });
+
+      return { ...(data as unknown as UnifiedProject), videos: (videos as any[]) || [] };
     },
     enabled: !!projectSlug,
   });
