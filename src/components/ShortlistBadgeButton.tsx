@@ -161,39 +161,27 @@ const ShortlistBadgeButton = ({
             Rank this project
           </div>
           <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSetBadge('top1');
-            }}
-            className={`${badgeConfig.top1.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
+            onClick={(e) => { e.stopPropagation(); handleSetBadge('top1'); }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-medium"
           >
             🥇 Top 1 (Gold)
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSetBadge('top2');
-            }}
-            className={`${badgeConfig.top2.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
+            onClick={(e) => { e.stopPropagation(); handleSetBadge('top2'); }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-medium"
           >
             🥈 Top 2 (Silver)
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSetBadge('top3');
-            }}
-            className={`${badgeConfig.top3.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
+            onClick={(e) => { e.stopPropagation(); handleSetBadge('top3'); }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-medium"
           >
             🥉 Top 3 (Bronze)
           </DropdownMenuItem>
           {currentBadge && (
             <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSetBadge(null);
-              }}
-              className="text-white/70 hover:bg-[#1A1A1A] cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); handleSetBadge(null); }}
+              className="text-[#1A1A1A]/70 hover:bg-[#EFE6D6] cursor-pointer"
             >
               <X className="w-4 h-4 mr-2" />
               Remove Badge
