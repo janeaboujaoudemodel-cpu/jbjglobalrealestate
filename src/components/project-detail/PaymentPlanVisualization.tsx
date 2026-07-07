@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { PearlButton } from "@/components/ui/pearl-button";
 import { formatPaymentPlanForDisplay } from "@/utils/paymentPlanPresentation";
+import { formatDisplayDate } from "@/utils/formatDate";
 
 interface PaymentMilestone {
   milestone: string;
@@ -138,6 +139,8 @@ export default function PaymentPlanVisualization({
     d.setMonth(d.getMonth() + (derivedPostHandoverMonths || 0));
     return d.toISOString().slice(0, 10);
   })();
+  const formattedHandoverDate = formatDisplayDate(handoverDate || "");
+  const formattedPostHandoverEndDate = formatDisplayDate(postHandoverEndDate || "");
 
   if (legacyBreakdown?.on_completion) {
     milestones.push({
@@ -211,11 +214,11 @@ export default function PaymentPlanVisualization({
       <Tabs defaultValue="installment" className="w-full">
         <TabsList data-project-payment-tabs className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-0 overflow-hidden rounded-lg">
           <TabsTrigger value="installment" data-emerald-active className="flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
-            <CreditCard className="w-4 h-4 mr-2" />
+            <CreditCard className="w-4 h-4 mr-2" style={{ color: "currentColor", stroke: "currentColor" }} />
             Payment Plan {premiumPlan && `(${premiumPlan.badge})`}
           </TabsTrigger>
           <TabsTrigger value="full" data-emerald-active className="flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
-            <Wallet className="w-4 h-4 mr-2" />
+            <Wallet className="w-4 h-4 mr-2" style={{ color: "currentColor", stroke: "currentColor" }} />
             100% Payment
           </TabsTrigger>
         </TabsList>
@@ -225,7 +228,7 @@ export default function PaymentPlanVisualization({
         <TabsContent value="full">
             <div className="p-6 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] text-center">
             <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}>
-              <Wallet className="w-8 h-8" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <Wallet className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             </div>
             <p className="text-2xl font-bold text-[#1A1A1A] mb-2">{cashPlan.label}</p>
             <p className="text-sm text-[#1A1A1A]/70">Pay the full amount upfront</p>
@@ -245,8 +248,8 @@ export default function PaymentPlanVisualization({
                 <div>
                   <p className="text-2xl font-bold text-[#1A1A1A]">{premiumPlan.headline}</p>
                   <p className="text-sm text-[#1A1A1A]/70">
-                    {isPostHandover && postHandoverEndDate
-                      ? `Post-Handover (${derivedPostHandoverMonths} months) · Due by ${postHandoverEndDate}`
+                    {isPostHandover && handoverDate
+                      ? `Handover: ${formattedHandoverDate || handoverDate} · Post-handover balance paid over ${derivedPostHandoverMonths} months`
                       : premiumPlan.summary}
                   </p>
                 </div>
@@ -287,7 +290,7 @@ export default function PaymentPlanVisualization({
                     className="text-sm font-semibold allow-white"
                     style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                   >
-                    Post-Handover ({derivedPostHandoverMonths} months){postHandoverEndDate ? ` · Due by ${postHandoverEndDate}` : ""}
+                    Handover: {formattedHandoverDate || handoverDate}
                   </span>
                 </div>
               )}
@@ -343,8 +346,9 @@ export default function PaymentPlanVisualization({
                   // aligns under the correct bar (e.g. "During Construction" sits under 60%).
                   const bookingMid = total > 0 ? (bookingPct / 2 / total) * 100 : 0;
                   const constructionMid = total > 0 ? ((bookingPct + constructionPct / 2) / total) * 100 : 0;
-                  const handoverMid = total > 0 ? ((bookingPct + constructionPct + handoverPct / 2) / total) * 100 : 100;
-                  const dot = (leftPct: number, gradient: string, label: React.ReactNode) => (
+                  const preHandoverEnd = total > 0 ? ((bookingPct + constructionPct) / total) * 100 : 70;
+                  const postHandoverEnd = 100;
+                  const dot = (leftPct: number, gradient: string, label: React.ReactNode, compact = false) => (
                     <div
                       className="absolute flex flex-col items-center"
                       style={{
@@ -353,7 +357,7 @@ export default function PaymentPlanVisualization({
                       }}
                     >
                       <div data-emerald="true" data-no-contrast-guard className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10" style={{ backgroundImage: gradient, backgroundColor: '#064E3B' }} />
-                      <span className="mt-2 text-xs text-[#1A1A1A]/70 text-center whitespace-nowrap max-w-[180px]">
+                      <span className={`mt-2 text-xs text-[#1A1A1A]/70 text-center ${compact ? "whitespace-normal max-w-[150px]" : "whitespace-nowrap max-w-[180px]"}`}>
                         {label}
                       </span>
                     </div>
@@ -362,7 +366,9 @@ export default function PaymentPlanVisualization({
                     <>
                       {bookingPct > 0 && dot(bookingMid, 'var(--jj-emerald-ombre)', <>On Booking</>)}
                       {constructionPct > 0 && dot(constructionMid, 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)', <>During Construction</>)}
-                      {handoverPct > 0 && dot(handoverMid, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{(postHandoverEndDate || handoverDate) && <><br /><span className="text-[#1A1A1A] font-medium">{isPostHandover && postHandoverEndDate ? `Due by ${postHandoverEndDate}` : handoverDate}</span></>}</>)}
+                      {isPostHandover && handoverDate && dot(preHandoverEnd, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>Handover<br /><span className="text-[#1A1A1A] font-medium">{formattedHandoverDate || handoverDate}</span></>, true)}
+                      {handoverPct > 0 && isPostHandover && dot(postHandoverEnd, 'linear-gradient(135deg,#064E3B 0%,#000 100%)', <>Post-Handover ({derivedPostHandoverMonths} months)<br /><span className="text-[#1A1A1A] font-medium">Due by {formattedPostHandoverEndDate || postHandoverEndDate}</span></>, true)}
+                      {handoverPct > 0 && !isPostHandover && dot(preHandoverEnd, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{formattedHandoverDate || handoverDate}</span></>}</>, true)}
                     </>
                   );
                 })()}
@@ -389,7 +395,7 @@ export default function PaymentPlanVisualization({
                       className="jj-surface-emerald w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 ring-4 ring-[#064E3B]/10"
                       style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
                     >
-                      <Icon className="w-6 h-6" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                      <Icon className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                     </div>
                     <p className="text-xs uppercase tracking-wider text-[#1A1A1A]/70 mb-1">{m.label}</p>
                     <p className="text-2xl font-bold text-[#1A1A1A]">{m.value}</p>
@@ -486,7 +492,7 @@ export default function PaymentPlanVisualization({
           {handoverDate && (
             <p className="mt-6 text-sm text-[#1A1A1A]/70 italic text-center">
               {isPostHandover && postHandoverEndDate
-                ? `Project handover: ${handoverDate}. The remaining post-handover balance is paid in instalments after handover and is fully settled by ${postHandoverEndDate} — you receive your unit on the handover date, not on the final payment date.`
+                ? `Project handover: ${formattedHandoverDate || handoverDate}. The 30% post-handover balance is paid after handover and fully settled by ${formattedPostHandoverEndDate || postHandoverEndDate} — you receive your unit on the handover date, not on the final payment date.`
                 : `Benefit from extended payment terms until ${handoverDate} handover`}
             </p>
           )}

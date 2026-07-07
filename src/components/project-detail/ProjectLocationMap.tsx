@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { Maximize, MapPinned } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
@@ -23,45 +22,28 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const PROJECT_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44" fill="none">
-  <defs>
-    <linearGradient id="epin" x1="17" y1="0" x2="17" y2="40" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0B6E4F"/>
-      <stop offset="55%" stop-color="#064E3B"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </linearGradient>
-  </defs>
-  <path d="M17 0C7.6 0 0 7.4 0 16.6 0 29.4 17 44 17 44s17-14.6 17-27.4C34 7.4 26.4 0 17 0z" fill="url(#epin)" stroke="rgba(184,149,85,0.55)" stroke-width="1"/>
-  <circle cx="17" cy="16" r="5.5" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="60" viewBox="0 0 46 60" fill="none">
+  <path d="M23 0C10.3 0 0 10 0 22.4 0 39.7 23 60 23 60s23-20.3 23-37.6C46 10 35.7 0 23 0z" fill="#D71920" stroke="#FFFFFF" stroke-width="2"/>
+  <circle cx="23" cy="22" r="8" fill="#FFFFFF"/>
+  <circle cx="23" cy="22" r="4" fill="#D71920"/>
 </svg>`;
 
 const PROJECT_LOCATION_ICON = L.divIcon({
   className: "custom-marker jj-map-pin",
   html: PROJECT_PIN_SVG,
-  iconSize: [34, 44],
-  iconAnchor: [17, 44],
-  popupAnchor: [0, -44],
-});
-
-
-const attractionIcon = (label: string) => L.divIcon({
-  className: "custom-marker",
-  html: `<div class="jj-map-marker-pill" style="background:linear-gradient(135deg,#B89555 0%,#F7ECD0 55%,#B89555 100%);color:#1A1A1A;border:1px solid rgba(26,26,26,.25);">${label}</div>`,
-  iconSize: [132, 32],
-  iconAnchor: [66, 32],
-  popupAnchor: [0, -32],
+  iconSize: [46, 60],
+  iconAnchor: [23, 60],
+  popupAnchor: [0, -60],
 });
 
 // View toggle controls
 function MapViewToggle({ 
   mapView, 
   onViewChange,
-  externalUrl,
   t,
 }: { 
   mapView: MapViewType; 
   onViewChange: (view: MapViewType) => void;
-  externalUrl: string;
   t: (key: string) => string;
 }) {
   return (
@@ -82,20 +64,6 @@ function MapViewToggle({
           </button>
         ))}
       </div>
-      <a
-        href={externalUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
-        data-surface="emerald"
-        data-emerald-action="true"
-        data-no-contrast-guard
-        aria-label={t('map.openInGoogleMaps')}
-        style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF', writingMode: 'horizontal-tb', whiteSpace: 'nowrap', minWidth: 'max-content', flex: '0 0 auto', border: '1px solid rgba(184,149,85,0.45)' }}
-      >
-        <Maximize className="w-4 h-4 shrink-0" style={{ color: '#FFFFFF' }} />
-        <span style={{ whiteSpace: 'nowrap', color: '#FFFFFF' }}>Open in Google Maps</span>
-      </a>
     </div>
   );
 }
@@ -168,21 +136,13 @@ export default function ProjectLocationMap({
 }: ProjectLocationMapProps) {
   const { t, language } = useLanguage();
   const [mapView, setMapView] = useState<MapViewType>("satellite");
-  const [distanceView, setDistanceView] = useState<"close" | "far">("close");
 
   const defaultLat = 25.2048;
   const defaultLng = 55.2708;
 
   const coordinates: [number, number] = latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng];
-  const isAmra = /amra/i.test(projectName);
-  const farCenter: [number, number] = isAmra ? [25.701, 55.942] : coordinates;
-  const mapCenter = distanceView === "far" ? farCenter : coordinates;
-  const mapZoom = distanceView === "far" ? 10 : 15;
-  const attractions = isAmra ? [
-    { label: "Siniyah Island", position: [25.617, 55.635] as [number, number], note: "Protected island and nature destination" },
-    { label: "Marjan Island", position: [25.666, 55.749] as [number, number], note: "RAK hospitality and casino demand driver" },
-    { label: "Wynn Casino", position: [25.679, 55.746] as [number, number], note: "Future regional nightlife landmark" },
-  ] : [];
+  const mapCenter = coordinates;
+  const mapZoom = /amra/i.test(projectName) ? 16 : 15;
 
   // Prefer coordinates for accurate Google Maps deep-link (avoids ambiguous name searches)
   const hasCoords = !!(latitude && longitude);
@@ -215,28 +175,9 @@ export default function ProjectLocationMap({
         <MapViewToggle 
           mapView={mapView} 
           onViewChange={setMapView}
-          externalUrl={externalMapsUrl}
           t={t}
         />
         <MapNavigationControls latitude={coordinates[0]} longitude={coordinates[1]} />
-        {isAmra && (
-          <div className="absolute right-4 top-4 z-[1000] jj-map-layer-switcher inline-flex gap-1">
-            {(["close", "far"] as const).map((view) => (
-              <button
-                key={view}
-                type="button"
-                onClick={() => setDistanceView(view)}
-                className="jj-map-layer-button whitespace-nowrap"
-                data-active={distanceView === view ? "true" : "false"}
-                data-surface="emerald"
-                data-emerald-action="true"
-                data-no-contrast-guard
-              >
-                {view === "close" ? "Close view" : "Far view"}
-              </button>
-            ))}
-          </div>
-        )}
         <Marker position={coordinates} icon={PROJECT_LOCATION_ICON}>
           <Popup className="jj-map-popup">
             <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3" data-map-project-card data-surface="emerald">
@@ -245,16 +186,6 @@ export default function ProjectLocationMap({
             </div>
           </Popup>
         </Marker>
-        {distanceView === "far" && attractions.map((item) => (
-          <Marker key={item.label} position={item.position} icon={attractionIcon(item.label)}>
-            <Popup className="jj-map-popup">
-              <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3" data-map-project-card data-surface="emerald">
-                <div className="text-sm font-medium flex items-center gap-2"><MapPinned className="w-4 h-4" />{item.label}</div>
-                <div className="text-xs mt-1">{item.note}</div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
       </MapContainer>
     </div>
   );

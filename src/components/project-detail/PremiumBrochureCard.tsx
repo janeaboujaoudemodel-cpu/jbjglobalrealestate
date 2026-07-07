@@ -167,8 +167,8 @@ const PremiumBrochureCard = ({
           />
           
           {/* Layered scrims — top + bottom — guarantee wordmark and title legibility on any photo */}
-          <div className="absolute inset-x-0 top-0 h-[34%] bg-gradient-to-b from-black/50 via-black/18 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/46 via-black/8 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-[31%] bg-gradient-to-b from-black/44 via-black/12 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/38 via-black/5 to-transparent" />
 
           {/* Subtle emerald depth overlay */}
           <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/6 via-transparent to-black/5" />
@@ -186,14 +186,14 @@ const PremiumBrochureCard = ({
             <div
               className="w-full flex items-center gap-3 px-4 py-2.5 select-none"
               style={{
-                background: "linear-gradient(180deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.32) 78%, transparent 100%)",
+                background: "linear-gradient(180deg, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0.24) 78%, transparent 100%)",
                 backdropFilter: "blur(2px)",
               }}
             >
               <img
                 src={jbjMonogram}
                 alt="JBJ"
-                className="h-12 w-12 object-contain shrink-0"
+                className="h-16 w-16 object-contain shrink-0"
                 style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9))" }}
                 loading="eager"
                 fetchPriority="high"
@@ -218,7 +218,7 @@ const PremiumBrochureCard = ({
               data-on-dark
               className="mx-3 mb-3 px-4 py-2 rounded-md allow-white"
               style={{
-                background: "rgba(0,0,0,0.42)",
+                background: "rgba(0,0,0,0.34)",
                 backdropFilter: "blur(6px)",
                 border: "1px solid rgba(255,255,255,0.08)",
                 color: "#FFFFFF",

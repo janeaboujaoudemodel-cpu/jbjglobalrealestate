@@ -15,6 +15,28 @@ async function loadPdfJs() {
   return pdfjs;
 }
 
+const LOADER_STYLE = {
+  backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)",
+  color: "#FFFFFF",
+  WebkitTextFillColor: "#FFFFFF",
+  border: "1px solid rgba(255,255,255,0.22)",
+  boxShadow: "0 10px 30px -14px rgba(0,0,0,0.5)",
+} as const;
+
+export function PdfLoadingPill({ label = "Loading document…" }: { label?: string }) {
+  return (
+    <div
+      data-surface="emerald"
+      data-no-contrast-guard
+      className="inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold allow-white"
+      style={LOADER_STYLE}
+    >
+      <Loader2 className="h-4 w-4 animate-spin allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+      <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{label}</span>
+    </div>
+  );
+}
+
 function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
@@ -69,7 +91,7 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
     <div className="relative mx-auto w-full overflow-x-auto rounded-lg bg-[#FDFBF7] p-3 shadow-inner">
       {loading && (
         <div className="absolute inset-0 z-10 grid min-h-[260px] place-items-center bg-[#FDFBF7]/85">
-          <Loader2 className="h-7 w-7 animate-spin text-[#064E3B]" />
+          <PdfLoadingPill />
         </div>
       )}
       <canvas ref={canvasRef} className="mx-auto block max-w-full" aria-label={`Page ${pageNumber}`} />
@@ -128,18 +150,7 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
   if (loading) {
     return (
       <div className={`grid min-h-[420px] place-items-center bg-[#FDFBF7] ${className}`} aria-label={`Loading ${title}`}>
-        <div
-          className="flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold"
-          style={{
-            backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)',
-            color: '#FFFFFF',
-            border: '1px solid rgba(255,255,255,0.22)',
-            boxShadow: '0 10px 30px -14px rgba(0,0,0,0.5)',
-          }}
-        >
-          <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#FFFFFF' }} />
-          <span style={{ color: '#FFFFFF' }}>Loading document…</span>
-        </div>
+        <PdfLoadingPill />
       </div>
     );
   }
@@ -163,8 +174,8 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
         <PdfPage key={index + 1} doc={doc} pageNumber={index + 1} />
       ))}
       {renderedPages < pageCount && (
-        <div className="grid min-h-[120px] place-items-center rounded-lg px-3 py-4 text-center text-xs font-semibold" style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF' }}>
-          <span className="inline-flex items-center gap-2" style={{ color: '#FFFFFF' }}><Loader2 className="h-4 w-4 animate-spin" style={{ color: '#FFFFFF' }} /> Loading more pages…</span>
+        <div className="grid min-h-[120px] place-items-center rounded-lg bg-[#FDFBF7] px-3 py-4 text-center text-xs font-semibold">
+          <PdfLoadingPill label="Loading more pages…" />
         </div>
       )}
 
