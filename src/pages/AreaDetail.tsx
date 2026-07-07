@@ -11,7 +11,7 @@ import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Loader2, Search, X } from "lucide-react";
+import { MapPin, ArrowRight, Loader2, Search, X, Building2, Info, Sparkles } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
@@ -197,6 +197,21 @@ const AreaDetail = () => {
     </>
   );
 
+  const areaStickyTabs = [
+    { id: "area-about", label: "Developer", icon: Info },
+    { id: "area-projects", label: "Floor Plans", icon: Building2 },
+    { id: "area-map", label: "Location", icon: MapPin },
+    { id: "area-ai", label: "AI Analyzer", icon: Sparkles },
+  ];
+
+  const scrollToAreaSection = (id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY - 132;
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.scrollTo({ top: Math.max(0, top), behavior: prefersReduced ? "auto" : "smooth" });
+  };
+
   return (
     <div className={`min-h-screen bg-[#1A1A1A] flex ${isFixed && !bottomReached ? '' : ''}`}>
       {/* Vertical nav handled globally by MainLayout */}
@@ -217,14 +232,38 @@ const AreaDetail = () => {
       {/* Full-Screen Hero with Real Photo */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
+      {isFixed && !bottomReached && (
+        <div data-scoped-sticky-nav="area" className="jj-utility-shell fixed left-0 right-0 top-0 z-[9999] backdrop-blur-md transition-all duration-300">
+          <div data-filter-clean="true" data-filter-bar-gold="area-detail" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2">
+            <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
+              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="areas" searchSlot={filterBarContent} hidePropertyType hideTrendingSort />
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+            <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
+              <div className="flex w-max min-w-max items-center gap-1 py-2.5">
+                {areaStickyTabs.map((tab) => (
+                  <button key={tab.id} type="button" onClick={() => scrollToAreaSection(tab.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap shrink-0 min-w-fit transition-all text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent">
+                    <tab.icon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* About This Area */}
-      <AreaAboutSection area={area as any} />
+      <div id="area-about" className="scroll-mt-40">
+        <AreaAboutSection area={area as any} />
+      </div>
 
       {/* Sentinel for IntersectionObserver — sits just above inline bar */}
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)] transition-all duration-300">
+      <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)] transition-all duration-300">
         <div className="container mx-auto">
             <FilterShortcutBar
             variant="dark"
@@ -232,6 +271,8 @@ const AreaDetail = () => {
             onFilterChange={setShortcutFilters}
             priorityFilter="areas"
             searchSlot={filterBarContent}
+            hidePropertyType
+            hideTrendingSort
           />
         </div>
       </div>
@@ -242,21 +283,27 @@ const AreaDetail = () => {
 
 
       {/* Projects Grid - edge to edge */}
-      <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
+      <div id="area-projects" className="scroll-mt-40">
+        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
+      </div>
 
       {/* Developers Bar - connected, no gap */}
       <AreaDevelopersBar areaName={area.name} />
 
       {/* Interactive Map */}
       <MapErrorBoundary>
-        <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+        <div id="area-map" className="scroll-mt-40">
+          <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+        </div>
       </MapErrorBoundary>
 
       {/* DLD Market Intelligence */}
       <DLDMarketWidget highlightArea={area.name} />
 
       {/* AI Area Intelligence */}
-      <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
+      <div id="area-ai" className="scroll-mt-40">
+        <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
+      </div>
 
       <CombinedContactNewsletter
         title={`Explore ${area.name} Properties?`}

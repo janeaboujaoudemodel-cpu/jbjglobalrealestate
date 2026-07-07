@@ -74,7 +74,6 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
-import ProjectStickyUtilityControls from "@/components/project-detail/ProjectStickyUtilityControls";
 import { isMortgageEligible, mortgageIneligibilityReason } from "@/utils/mortgageEligibility";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
@@ -294,6 +293,17 @@ const SUB_NAV_TABS = [
   { id: "ai", label: "AI Analyzer", icon: Sparkles },
   { id: "mortgage", label: "Mortgage", icon: Calculator },
 ] as const;
+
+const STICKY_PROJECT_TAB_IDS = new Set([
+  "developer",
+  "floor-plans",
+  "house-details",
+  "amenities",
+  "location",
+  "brochure",
+  "payment",
+  "ai",
+]);
 
 const normalizeDocType = (value: string) => value.toLowerCase().trim().replace(/[\s-]+/g, "_");
 
@@ -613,6 +623,11 @@ function ProjectDetailLayoutInner({
       return true;
     });
   }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, uploadedVideos.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label, isAmraProject]);
+
+  const stickyProjectTabs = useMemo(
+    () => visibleTabs.filter((tab) => STICKY_PROJECT_TAB_IDS.has(tab.id)),
+    [visibleTabs],
+  );
 
   const mortgageEligible = useMemo(() => isMortgageEligible({
     sale_status: project.sale_status,
@@ -1397,29 +1412,29 @@ function ProjectDetailLayoutInner({
         className={`jj-utility-shell fixed left-0 right-0 z-[9999] backdrop-blur-md transition-all duration-300 ${
           showStickyNav
             ? "top-0 translate-y-0 opacity-100"
-            : "top-[88px] -translate-y-full opacity-0 pointer-events-none"
+            : "top-0 -translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        {/* Row 1: controls moved out of the global header */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 transition-all duration-300">
-          <div className="jj-content-track">
-            <ProjectStickyUtilityControls filters={shortcutFilters} onFilterChange={setShortcutFilters} />
-          </div>
-        </div>
-
-        {/* Row 2: Filter Shortcut Bar */}
+        {/* Row 1: project search/filter pills only. */}
         <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2 transition-all duration-300">
-          <div className="max-w-full overflow-x-auto scrollbar-hide flex justify-center md:justify-start" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-            <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+          <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
+            <FilterShortcutBar
+              variant="light"
+              filters={shortcutFilters}
+              onFilterChange={setShortcutFilters}
+              priorityFilter="projects"
+              hidePropertyType
+              hideTrendingSort
+            />
           </div>
         </div>
 
-        {/* Row 3: Curated Shortcuts — gold bottom border for visibility */}
+        {/* Row 2: project section tabs only. */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-              <div className="flex items-center justify-center lg:justify-start gap-1 py-2.5 mx-auto w-max lg:w-auto lg:mx-0">
-                {visibleTabs.map((tab) => (
+              <div className="flex w-max min-w-max items-center gap-1 py-2.5">
+                {stickyProjectTabs.map((tab) => (
                   <button
                     key={tab.id}
                     data-tab={tab.id}
