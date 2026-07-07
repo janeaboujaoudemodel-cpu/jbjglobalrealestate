@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -96,6 +96,7 @@ const Favorites = () => {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : searchParams.get("tab") === "designs" ? "designs" : "favorites";
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
   const [selectedFavorites, setSelectedFavorites] = useState<string[]>([]);
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -114,6 +115,10 @@ const Favorites = () => {
   const designShortCount = designShorts?.length || 0;
   const designFavGroups = designFavs ? groupByType(designFavs) : {};
   const designShortGroups = designShorts ? groupByType(designShorts) : {};
+
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab]);
 
   const toggleSection = (key: string) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -286,7 +291,7 @@ const Favorites = () => {
           </div>
         )}
 
-        <Tabs defaultValue={defaultTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="bg-[#FDFBF7]/60 border border-[#B89555]/20 p-1 mb-8 gap-1">
             <TabsTrigger
               value="favorites"

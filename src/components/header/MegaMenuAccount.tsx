@@ -18,6 +18,8 @@ import { cn } from '@/lib/utils';
 import { searchItems } from '@/config/globalSearchIndex';
 import { useUserAlerts } from '@/hooks/useUserAlerts';
 import { useIsAppOwner } from '@/hooks/useIsAppOwner';
+import { useFavorites, useShortlist } from '@/hooks/useFavorites';
+import { useGuestFavorites, useGuestShortlist } from '@/hooks/useGuestFavorites';
 
 interface MegaMenuAccountProps {
   onClose: () => void;
@@ -46,6 +48,12 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { mode, isDeveloperMode } = useUserModeContext();
   const ownerBackendActive = isOwner && mode === 'owner';
   const { data: alertCounts } = useUserAlerts();
+  const { data: favorites } = useFavorites();
+  const { data: shortlist } = useShortlist();
+  const { favorites: guestFavorites } = useGuestFavorites();
+  const { shortlist: guestShortlist } = useGuestShortlist();
+  const favoriteCount = user ? (favorites?.length || 0) : guestFavorites.length;
+  const shortlistCount = user ? (shortlist?.length || 0) : guestShortlist.length;
 
   // Currency & unit state synced with localStorage
   const [activeCurrency, setActiveCurrency] = useState<string>(() =>
@@ -262,8 +270,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
     { href: '/my-dashboard#inbox', label: t('account.inbox', 'Inbox'), icon: Headphones, description: t('account.inboxDesc', 'Messages from JBJ'), badge: 0 },
     { href: '/my-dashboard#tasks', label: t('account.myTasks', 'My Tasks'), icon: ListChecks, description: t('account.myTasksDesc', 'View and manage your tasks'), badge: alertCounts?.pendingTasks || 0 },
     { href: '/profile', label: t('account.myProfile', 'My Profile'), icon: User, description: t('account.myProfileDesc', 'View and edit your profile'), badge: 0 },
-    { href: '/favorites', label: t('nav.favorites', 'Favorites'), icon: Heart, description: t('account.favoritesDesc', 'Your saved properties'), badge: 0, dividerAfter: true },
-    { href: '/favorites?tab=shortlist', label: t('nav.shortlist', 'Shortlist'), icon: Star, description: 'Your shortlisted properties', badge: 0, dividerAfter: true },
+    { href: '/favorites', label: t('nav.favorites', 'Favorites'), icon: Heart, description: t('account.favoritesDesc', 'Your saved properties'), badge: favoriteCount, dividerAfter: true },
+    { href: '/favorites?tab=shortlist', label: t('nav.shortlist', 'Shortlist'), icon: Star, description: 'Your shortlisted properties', badge: shortlistCount, dividerAfter: true },
     { href: '/favorites?tab=designs', label: 'My Design', icon: PenTool, description: 'Your saved design work', badge: 0, dividerAfter: true },
     { href: '#recommended', label: t('account.recommended', 'Recommended for You'), icon: Sparkles, description: t('account.recommendedDesc', 'Based on your latest search'), badge: 0, action: 'open-recommendations' as const },
     { href: '/toolkit', label: t('account.aiTools', 'AI Tools'), icon: Sparkles, description: t('account.aiToolsDesc', 'Professional AI-powered tools'), badge: 0 },

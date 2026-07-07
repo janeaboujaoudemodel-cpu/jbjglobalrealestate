@@ -467,6 +467,35 @@ const Properties = () => {
     if (!q) return base;
     return [...base].sort((a, b) => searchRelevance(a, q) - searchRelevance(b, q));
   }, [sortedProjects, shortcutFilters, appliedFilters.completionStatus, appliedFilters.search]);
+  const hasShortcutFilters = useMemo(() => {
+    return (
+      shortcutFilters.priceMin !== '' ||
+      shortcutFilters.priceMax !== '' ||
+      shortcutFilters.paymentPlanMax < 100 ||
+      shortcutFilters.postHandoverOnly ||
+      shortcutFilters.propertyCategory !== null ||
+      shortcutFilters.propertyTypes.length > 0 ||
+      shortcutFilters.bedrooms.length > 0 ||
+      shortcutFilters.bathrooms.length > 0 ||
+      shortcutFilters.statuses.length > 0 ||
+      shortcutFilters.constructionStatuses.length > 0 ||
+      shortcutFilters.sizeMin !== '' ||
+      shortcutFilters.sizeMax !== '' ||
+      shortcutFilters.emirates.length > 0 ||
+      shortcutFilters.areas.length > 0 ||
+      shortcutFilters.developers.length > 0 ||
+      shortcutFilters.searchQuery.trim() !== '' ||
+      shortcutFilters.views.length > 0 ||
+      shortcutFilters.amenities.length > 0 ||
+      shortcutFilters.verifiedOnly ||
+      shortcutFilters.virtualTourOnly ||
+      shortcutFilters.furnishing.length > 0 ||
+      shortcutFilters.handoverFrom.year !== defaultShortcutFilters.handoverFrom.year ||
+      shortcutFilters.handoverFrom.quarter !== defaultShortcutFilters.handoverFrom.quarter ||
+      shortcutFilters.handoverTo.year !== defaultShortcutFilters.handoverTo.year ||
+      shortcutFilters.handoverTo.quarter !== defaultShortcutFilters.handoverTo.quarter
+    );
+  }, [shortcutFilters]);
   // Pagination — 12 per page with numeric page controls
   const PAGE_SIZE = 12;
   const [currentPage, setCurrentPage] = useState(1);
@@ -554,6 +583,8 @@ const Properties = () => {
     filters.investmentType !== null,
     filters.saleStatus !== null,
   ].filter(Boolean).length;
+  const hasAnyActiveFilter = activeFilterCount > 0 || hasShortcutFilters;
+  const displayedResultCount = hasAnyActiveFilter ? finalProjects.length : (projects?.length || finalProjects.length);
 
   // Dynamic SEO based on transaction type per Master Blueprint
   const dynamicSEO = appliedFilters.transactionType === 'rent'
@@ -1195,7 +1226,7 @@ const Properties = () => {
               <div className="px-4 pt-4 pb-2 flex items-center justify-between min-h-[24px]">
                 {!showSkeletons && (
                   <p className="text-[#1A1A1A]/70 text-sm">
-                    Showing <span className="text-[#1A1A1A] font-medium">{finalProjects.length}</span> properties
+                    Showing <span className="text-[#1A1A1A] font-medium">{displayedResultCount}</span> {hasAnyActiveFilter ? 'matching ' : ''}properties
                   </p>
                 )}
               </div>
@@ -1278,7 +1309,7 @@ const Properties = () => {
               <div className="mb-6 flex items-center justify-between px-4 pt-4 min-h-[28px]">
                 {!showSkeletons && (
                   <p className="text-[#1A1A1A]/70">
-                    Showing <span className="text-[#1A1A1A] font-medium">{finalProjects.length}</span> properties
+                    Showing <span className="text-[#1A1A1A] font-medium">{displayedResultCount}</span> {hasAnyActiveFilter ? 'matching ' : ''}properties
                     {appliedFilters.transactionType === 'rent' && ' for rent'}
                     {appliedFilters.transactionType === 'buy' && ' for sale'}
                   </p>
