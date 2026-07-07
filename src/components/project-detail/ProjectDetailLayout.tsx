@@ -154,6 +154,10 @@ import amraSeaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";
 import amraIndoorPoolCols from "@/assets/amra-brochure/indoor-pool-columns.jpg";
 import amraChandelierLounge from "@/assets/amra-brochure/chandelier-lounge.jpg";
 import amraMinimalPool from "@/assets/amra-brochure/minimal-pool.jpg";
+import amraCryoChamber from "@/assets/amra-brochure/cryo-chamber.jpg";
+import amraHyperbaric from "@/assets/amra-brochure/hyperbaric-room.jpg";
+import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
+import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -799,7 +803,7 @@ function ProjectDetailLayoutInner({
       // Signature project USPs
       "Citi Buddy (AI Robot Companion)",
       "165+ wellness and lifestyle amenities",
-      "470,000 sq ft dedicated wellness area",
+      "688,000 sq ft dedicated wellness area",
       "Heli and air-taxi landing pad",
       "Yacht limo service and private marina deck",
       "In-room dining and all-day dining",
@@ -899,10 +903,10 @@ function ProjectDetailLayoutInner({
     const dedicated: Record<string, string> = {
       "Citi Buddy (AI Robot Companion)": citiBuddyRobotAsset.url,
       "165+ wellness and lifestyle amenities": amraAerialResort,
-      "470,000 sq ft dedicated wellness area": amraAerialResort,
+      "688,000 sq ft dedicated wellness area": amraAerialResort,
       "Heli and air-taxi landing pad": amraAerialResort,
       "Yacht limo service and private marina deck": amraPoolCabanas,
-      "In-room dining and all-day dining": amraSpaLounge,
+      "In-room dining and all-day dining": amraInRoomDining,
       "App-enabled short-stay management (Amra B&B)": citiBuddyRobotAsset.url,
       "Fully furnished apartments": amraFurnishedApts,
       "Fully serviced apartments": amraFurnishedApts,
@@ -953,11 +957,11 @@ function ProjectDetailLayoutInner({
       "Sensory Room for guided meditation": amraStudio,
       "Snow Shower": amraShowerRoom,
       "Salt Earth Room": amraSaltRoom,
-      "Hyperbaric Room": amraFloatingPods,
-      "Cryo Rooms": amraSaltRoom,
+      "Hyperbaric Room": amraHyperbaric,
+      "Cryo Rooms": amraCryoChamber,
       "Massage Room": amraSpaTreatment,
       "Hot-bath Jacuzzi & Cold Plunge": amraSpaHydro,
-      "Sauna & Steam Rooms": amraSaltRoom,
+      "Sauna & Steam Rooms": amraSaunaSteam,
       "Sensory Shower & Vitality Bar": amraShowerRoom,
       "Indoor Wellness Swimming Pool": amraSpaPool,
       "Dedicated Hydrotherapy Pool": amraSpaHydro,
