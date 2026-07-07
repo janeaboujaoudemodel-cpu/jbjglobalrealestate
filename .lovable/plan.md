@@ -1,44 +1,57 @@
-## Fix plan for My Projects (Developer Hub / Owner)
+# Amra Project Page — Fix Plan
 
-Confirmed via database: real off-plan total is **2,781** (813 Live, 1,968 Draft). The page shows 199/500 because the query was capped at 200 with a 500 upper cap. Amra has `description = null` — that's why publish blocks with `missing_description`. All Provident-sourced records lack cover/description because they were imported as skeletons.
+Scope is the public project detail page (Amra) and the shared components it uses. Every fix ends with a Playwright screenshot on `/projects/amra-integrative-wellness-resort` (desktop 1280 + mobile 390) saved to `/mnt/documents/amra-fixes/`.
 
-### 1. Correct counts + Live tab actually working
-- Replace client-side pagination with a **server-side aggregate**: fetch true totals (`count: 'exact', head: true`) for All / Live / Draft using the same `is_offplan` filter used elsewhere on the site — so the number matches the public directory (813 live).
-- Load current tab's projects with `range()` pagination (200 at a time) instead of blanket `.limit(500)`. Load-more appends.
-- Live tab (`is_published = true`) will now show the 813 live projects instead of 0.
+## 1. "Blocked by Google" on Fact Sheet, Payment Plan, Floor Plan, Map, WhatsApp
 
-### 2. Fix bulk toolbar "Clear" contrast
-- The "Clear" button sits on the emerald bulk-action bar and the label is being washed by the `.jj-cta-emerald` global rule. Give it an explicit white outline + `#FFFFFF` text with inline style + `allow-white` so it survives the global emerald sweep. Also audit any secondary "Clear" chips inside search/filter areas that render on the champagne background and lock those to `#1A1A1A`.
+Root cause: PDFs are rendered inside `<iframe src="https://docs.google.com/gview?...">` (Google Docs viewer). Google blocks embedding when the source URL is on a domain not whitelisted, or when the file is behind Supabase signed-URL auth. Same class of issue for Maps (referrer-restricted managed key on custom domain `jbj.ae`) and WhatsApp deep links (blocked by CSP/`target=_blank` popup blocker).
 
-### 3. Checkbox tick colour on emerald
-- The shadcn `Checkbox` uses `text-primary-foreground` for the check icon. On the emerald-tinted selected state the icon renders near-black. Update `src/components/ui/checkbox.tsx` so `data-[state=checked]` forces `color:#FFFFFF` on the `<Check />` icon and background stays emerald. This fixes every checkbox in the app in one shot (My Projects, CRM tables, bulk toolbars, etc.).
+Fixes:
+- **PDF viewer:** replace Google gview iframe with in-app PDF.js rendering (`react-pdf` already in deps) so files stream directly from Supabase Storage — no third-party embed. Files touched: `src/components/project-detail/DocumentViewerModal.tsx`, `ProjectDocumentsSection.tsx`, `FloorPlansSection.tsx`.
+- **Google Map:** the managed Maps key is restricted to `*.lovable.app`. On `jbj.ae` it returns `RefererNotAllowedMapError`, which reads as "blocked". Two-part fix: (a) surface a clear inline message with a "Open in Google Maps" fallback link built from lat/lng so the map area is never a dead grey box; (b) tell the user in the response that a custom Google Maps key is required for `jbj.ae` (managed key cannot be extended) and offer to walk them through it — cannot be code-fixed alone.
+- **WhatsApp:** switch all `wa.me` links to `https://api.whatsapp.com/send?phone=...&text=...`, add `rel="noopener"` and remove the intermediate `window.open` calls that trigger popup blockers. Files: `src/components/WhatsAppCTA.tsx`, project detail contact buttons.
 
-### 4. Publish blocked by "missing_description" + Edit only shows price/handover
-- Extend the inline Edit panel: add **Description** (textarea) and **Cover image** upload alongside price & handover — these are the fields most commonly missing.
-- Add an **"AI fill from fact sheet"** button on the Edit panel. It calls a new edge function `project-autofill-description` that:
-  - Loads any attached brochure/fact-sheet document for the project (from `project_documents` / storage)
-  - Falls back to project name + developer + location if no doc
-  - Uses `google/gemini-2.5-flash` to produce a 120–180-word marketing description
-  - Writes to `projects.description`
-- The full wizard (`/owner/developers/new-project?edit=<id>`) already exists; add an **"Open full editor"** link inside the inline Edit panel so users can jump to it when inline fields aren't enough.
-- After AI fill, re-run publish so missing_description clears automatically.
+## 2. Price + Plot Formatting
 
-### 5. Show source of every listing + surface data issues
-- Add a small **source chip** next to the Live/Unpublished badge on each row: e.g. `Source: Provident feed`, `Source: PAA envelope`, `Source: Manual`, `Source: Brochure upload`. Uses existing `projects.source` column (values already in DB: `provident`, `paa-envelope`, `manual`, etc.).
-- When `data_quality_flags` are present, replace the plain "2 data issues" badge with an **expandable list** on hover/click showing each missing field (`missing_description`, `missing_cover`, `missing_price`, `missing_handover`, …) so the user knows exactly what to fix before publishing.
-- Same chips appear inside the Edit panel and on the public project card, so the origin is traceable everywhere.
+Current: `2,900,000` shows without unit; starting price shows single value.
+Fix in `ProjectHeroSpecs.tsx` / `ProjectPriceBlock.tsx`:
+- Plot: label `Plot size`, value `2,900,000 sq ft` (comma-formatted via existing `formatNumber` util).
+- Starting price: read `price_min` and `price_max` → render `From AED 699,000 up to AED 4.7M`.
+- Backfill Amra row in DB so `price_min=699000`, `price_max=4700000`, `plot_size_sqft=2900000`, `plot_size_unit='sqft'`.
 
-### 6. Verification
-- Playwright screenshot pass on `/owner/developers/projects`:
-  - Counts read 2,781 / 813 / 1,968 (or refreshed live numbers)
-  - Clear button legible on emerald bar
-  - Checkbox tick renders white when a row is selected
-  - Source chip visible on every card
-  - Amra: click "AI fill from fact sheet", then Publish — succeeds without missing_description
-- Attach screenshots inline in the reply.
+## 3. "Mixed Use" Property Type
 
-### Out of scope (ask before doing)
-- Merging / deleting the four Amra duplicate rows (still awaits your call).
-- Unifying counts on **every** public page (home, /projects directory, Owner Overview KPIs). This plan fixes the My Projects page and the shared count helper it will use; wiring the same helper into the other pages is a follow-up if you want it now.
+Investigate `projects.property_type` for Amra. If auto-classified wrong, correct to `Residential Resort` (matches fact sheet). Add tooltip on the chip explaining categories so the label is meaningful.
 
-Confirm and I'll implement all six sections in one pass, then post the screenshots.
+## 4. Developer Logo Frame
+
+- Remove the white `bg-white` box behind the logo in `DeveloperCard.tsx` / `DeveloperBadge.tsx`; use transparent PNG on the champagne/emerald frame directly.
+- Re-apply the metallic-gold animated frame primitive (`.jj-metallic-frame` from `mem://ui-ux/visual-standards/metallic-gold-cta-primitive`) to every developer badge instance: project page developer section, area page developer chips, developer detail hero.
+- Run through Citi Developers logo asset: ensure background is stripped (re-export via `imagegen--edit_image` with transparent bg if the stored file has white).
+
+## 5. Standard Inclusions Missing "City Buddy" Robot
+
+The uploaded fact sheet mentions City Buddy. Re-parse `AMRA - Fact Sheet.pdf` via `document--parse_document`, extract the standard-inclusions list, and upsert into `project_inclusions` for Amra so it renders in the Standard Inclusions section.
+
+## 6. Floor Plan Rendering + Structured Payment Plan
+
+- **Floor plans:** render each PDF page as an image (pdf.js `page.render` to canvas → data URL) in a gallery grid, in addition to the download link. Component: new `FloorPlanGallery.tsx` replacing the current iframe.
+- **Payment plan:** parse `AMRA_Phase_2_Payment_Plan_2_Pages.pdf` into structured milestones (`{label, percent, trigger}[]`) stored in `projects.payment_plan_structured`. Render as the previous premium horizontal strip (10% / 30% / … / handover) with an info circle that opens a breakdown modal. For 100% cash plans, render a single pill "100% on booking — cash discount applicable".
+- Both listing card and project page consume the structured version instead of raw text.
+
+## 7. Contrast + Alignment Fixes
+
+- **Payment Plan section icon** (project page + 100% cash pill icon): force `text-white` (currently inherits `text-foreground` and renders black on emerald). File: `PaymentPlanSection.tsx`.
+- **"Same developer / Same area / All nearby" tabs**: rebuild as a single connected segmented control (`SegmentedTabs` primitive) with balanced padding top/bottom, separators between segments, sitting inside the section header with equal breathing room. File: `OtherProjectsInArea.tsx`.
+- **Map price pill**: replace generic "1M" with `AED 699K` (from `price_min`) for own projects; on hover show tooltip `Amra Integrative Wellness Resort — JVC`. Fix the broken vertical arrow (CSS `transform: rotate` on wrong element) in `MapPricePin.tsx`. Ensure click routes to the correct project slug — currently redirects to unrelated coords because pin uses centroid instead of project geo.
+
+## 8. Validation (mandatory)
+
+Playwright script `/tmp/browser/amra-qa/run.py` navigates to Amra on both preview and simulated custom-domain host, screenshots: fact sheet modal, floor plan gallery, map + hover, payment plan strip, developer badge, price header, other-projects tabs. Diff against the six user-uploaded screenshots. Save proofs to `/mnt/documents/amra-fixes/` and list any remaining issues before reporting done.
+
+## Technical notes
+
+- New deps: none (react-pdf + pdfjs-dist already installed — verify).
+- DB migration: add `payment_plan_structured jsonb`, `plot_size_sqft numeric`, `plot_size_unit text` to `projects` if not present, with `GRANT`s per the public-schema-grants rule.
+- Edge function `parse-project-doc` extended to emit structured payment-plan JSON + inclusions list.
+- Google Maps custom-domain key: cannot be auto-fixed. Response will call this out and offer guided setup via `standard_connectors--connect`.
