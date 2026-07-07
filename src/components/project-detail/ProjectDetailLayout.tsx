@@ -1749,7 +1749,8 @@ function ProjectDetailLayoutInner({
             <OwnerDocDropzone projectId={project.id} />
           </div>
 
-           {/* MORTGAGE CALCULATOR (Order B: after brochure) */}
+           {/* MORTGAGE CALCULATOR — hidden for off-plan (unless tier-1 dev ≥50% built) */}
+           {mortgageEligible ? (
            <div ref={mortgageRef} className="mb-14 scroll-mt-32">
               <div className="jj-card-inner p-0 overflow-hidden">
                 <MortgageCalculator
@@ -1760,6 +1761,19 @@ function ProjectDetailLayoutInner({
                 />
               </div>
             </div>
+           ) : (
+             <div ref={mortgageRef} className="mb-14 scroll-mt-32">
+               <div className="jj-card-inner p-6 text-sm text-[#1A1A1A]/80 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl">
+                 <div className="flex items-start gap-3">
+                   <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
+                   <div>
+                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage not available for this project</p>
+                     <p>{mortgageBlockedReason}</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           )}
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}
            <div ref={aiRef} id="ai" className="mb-10 md:mb-12 scroll-mt-40">
