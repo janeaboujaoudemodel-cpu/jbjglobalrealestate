@@ -385,37 +385,25 @@ export default function ProjectNearbyPropertiesMap({
           background: "#F7F2EA",
         }}
       >
-        {/* Header — grid, no gap, so all three chips read as one connected bar */}
-        <div
-          data-nearby-map-tabs="true"
-          className="grid grid-cols-1 sm:grid-cols-3 w-full"
-          style={{ borderBottom: "1px solid rgba(184,149,85,0.35)" }}
-        >
-          {chip("nearby", "Closest nearby", nearestMarkers.length)}
-          {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
-          {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
-        </div>
-
-        <div style={{ height: 420, position: "relative" }}>
+        <div style={{ height: 460, position: "relative" }}>
         <style>{`
           .jj-map-pin { background: none !important; border: none !important; }
-          .jj-map-pin .jj-nearby-price-pill { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-          .jj-map-pin .jj-nearby-price-pill * { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-          /* Kill the leaflet popup tail arrow that reads as hover "crop lines" */
           .leaflet-popup-tip-container, .leaflet-popup-tip { display: none !important; }
           .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; padding: 0; }
           .leaflet-popup-content { margin: 0; }
           .leaflet-container { background: #0a1f18; }
-          .leaflet-control-zoom { display: none !important; }
+          .leaflet-control-zoom { display: block !important; }
+          .leaflet-control-zoom a { background:#F7F2EA !important; color:#064E3B !important; border:1px solid rgba(184,149,85,0.55) !important; font-weight:900; }
+          .leaflet-control-zoom a:hover { background:#EFE7D6 !important; }
         `}</style>
         <MapContainer
           center={resolvedCenter}
           zoom={13}
-          scrollWheelZoom={false}
+          scrollWheelZoom={true}
           touchZoom={true}
           dragging={true}
           style={{ height: "100%", width: "100%" }}
-          zoomControl={false}
+          zoomControl={true}
           attributionControl={false}
           zoomSnap={0.25}
           zoomDelta={0.5}
@@ -423,25 +411,25 @@ export default function ProjectNearbyPropertiesMap({
           {...SAFE_LEAFLET_MAP_OPTIONS}
         >
           <MapResizeRuntime />
-          <ScrollLockRuntime />
           <FitBoundsRuntime points={fitPoints} />
           <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
           <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 
 
-        {/* Current project marker (red) — only when we have real coords */}
+        {/* Current project marker (red, with attached name label) */}
         {hasOwnCoords && (
-          <Marker position={[latitude as number, longitude as number]} icon={RedIcon}>
-            <Popup className="jj-map-popup">
-              <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3">
-                <div className="text-sm font-bold">{currentProjectName}</div>
-                <div className="text-xs mt-1">
+          <Marker position={[latitude as number, longitude as number]} icon={createCurrentPinIcon(currentProjectName)}>
+            <Popup className="jj-map-popup" closeButton={false}>
+              <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3 bg-white rounded-2xl">
+                <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>
+                <div className="text-xs mt-1 text-[#1A1A1A]/70">
                   {t("map.thisProject") || "This project"}
                 </div>
               </div>
             </Popup>
           </Marker>
         )}
+
 
 
         {/* Nearby projects */}
