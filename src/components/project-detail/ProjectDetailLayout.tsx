@@ -114,6 +114,7 @@ import {
 } from "@/components/ui/accordion";
 import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
+import citiBuddyRobotLocal from "@/assets/citi-buddy-robot-concierge.jpg";
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
 // Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
@@ -741,7 +742,7 @@ function ProjectDetailLayoutInner({
   }, [project]);
 
   const citiBuddyImageUrl = useMemo(
-    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || citiBuddyRobotAsset.url,
+    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || citiBuddyRobotLocal,
     [images],
   );
 
@@ -905,7 +906,7 @@ function ProjectDetailLayoutInner({
     // resolves to a brochure-cropped photo (or, for Citi Buddy, the official
     // robot render). Titles absent from this map fall back to an icon tile.
     const dedicated: Record<string, string> = {
-      "Citi Buddy (AI Robot Companion)": citiBuddyRobotAsset.url,
+      "Citi Buddy (AI Robot Companion)": citiBuddyRobotLocal,
       "165+ wellness and lifestyle amenities": amraAerialResort,
       "688,000 sq ft dedicated wellness area": amraSpaPool,
       "Heli and air-taxi landing pad": amraAerialResort,
@@ -999,7 +1000,7 @@ function ProjectDetailLayoutInner({
     });
 
     // Legacy aliases
-    mapped["Citi Buddy concierge"] = citiBuddyRobotAsset.url;
+    mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
     return mapped;
   }, [amraAmenities, isAmraProject, project.amenity_images]);
 

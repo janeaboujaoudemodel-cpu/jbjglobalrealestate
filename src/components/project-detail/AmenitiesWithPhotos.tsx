@@ -148,10 +148,12 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={currentPage === 0}
             aria-label="Previous amenities page"
-            className="inline-flex items-center gap-1 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#053a2c] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            data-emerald-action="true"
+            data-no-contrast-guard
+            className="jj-emerald-action allow-white inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <ChevronLeft className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> Prev
+            <ChevronLeft className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Prev</span>
           </button>
 
           <div className="flex items-center gap-1.5">
@@ -164,9 +166,11 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                   onClick={() => setPage(i)}
                   aria-label={`Amenities page ${i + 1}`}
                   aria-current={active ? "page" : undefined}
+                  data-emerald-action={active ? "true" : undefined}
+                  data-no-contrast-guard={active ? true : undefined}
                   className={`w-9 h-9 min-w-9 rounded-full p-0 text-xs font-bold tabular-nums transition-all ${
                     active
-                      ? "bg-[#064E3B] text-white shadow-sm"
+                      ? "jj-emerald-action allow-white text-white shadow-sm"
                       : "bg-white text-[#064E3B] border border-[#B89555]/50 hover:bg-[#EFE6D6]/40"
                   }`}
                   style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
@@ -182,10 +186,12 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={currentPage >= totalPages - 1}
             aria-label="Next amenities page"
-            className="inline-flex items-center gap-1 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#053a2c] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            data-emerald-action="true"
+            data-no-contrast-guard
+            className="jj-emerald-action allow-white inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            Next <ChevronRight className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Next</span> <ChevronRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </button>
         </div>
       )}
