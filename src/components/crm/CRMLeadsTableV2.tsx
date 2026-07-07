@@ -777,7 +777,7 @@ export default function CRMLeadsTableV2({
                         onStatusChange={() => fetchLeads()}
                       />
                     </TableCell>
-                    <TableCell className="w-[92px] text-right">
+                    <TableCell className="w-[360px] text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="inline-flex items-center justify-end gap-1 whitespace-nowrap max-w-full overflow-hidden">
                         <Button
                           type="button"
