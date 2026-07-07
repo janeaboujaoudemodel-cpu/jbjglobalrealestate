@@ -18,18 +18,18 @@ export interface TriageResult {
 }
 
 export const CATEGORY_META: Record<string, { label: string; color: string }> = {
-  real_estate_lead:    { label: "Real Estate Lead",    color: "jj-surface-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/30" },
-  real_estate_ops:     { label: "Real Estate Ops",     color: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
-  sales_offer:         { label: "Sales / Offers",      color: "bg-orange-500/10 text-orange-700 border-orange-500/30" },
-  campaign:            { label: "Campaign / Influencer", color: "bg-pink-500/10 text-pink-700 border-pink-500/30" },
-  advertising:         { label: "Advertising",         color: "bg-fuchsia-500/10 text-fuchsia-700 border-fuchsia-500/30" },
-  marketing:           { label: "Marketing",           color: "bg-purple-500/10 text-purple-700 border-purple-500/30" },
-  business_linkedin:   { label: "Business / LinkedIn", color: "bg-sky-500/10 text-sky-700 border-sky-500/30" },
-  finance:             { label: "Finance / Banking",   color: "bg-amber-500/10 text-amber-700 border-amber-500/30" },
-  developer_documents: { label: "Developer / Docs",    color: "bg-indigo-500/10 text-indigo-700 border-indigo-500/30" },
+  real_estate_lead:    { label: "Real Estate Lead",    color: "jj-emerald-metallic allow-white text-white border-transparent [&_*]:!text-white" },
+  real_estate_ops:     { label: "Real Estate Ops",     color: "jj-emerald-metallic allow-white text-white border-transparent [&_*]:!text-white" },
+  sales_offer:         { label: "Sales / Offers",      color: "jj-emerald-metallic allow-white text-white border-transparent [&_*]:!text-white" },
+  campaign:            { label: "Campaign / Influencer", color: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40" },
+  advertising:         { label: "Advertising",         color: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40" },
+  marketing:           { label: "Marketing",           color: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40" },
+  business_linkedin:   { label: "Business / LinkedIn", color: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40" },
+  finance:             { label: "Finance / Banking",   color: "jj-emerald-metallic allow-white text-white border-transparent [&_*]:!text-white" },
+  developer_documents: { label: "Developer / Docs",    color: "jj-emerald-metallic allow-white text-white border-transparent [&_*]:!text-white" },
   system:              { label: "System / Website",    color: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" },
-  personal:            { label: "Personal",            color: "bg-rose-500/10 text-rose-700 border-rose-500/30" },
-  spam:                { label: "Spam",                color: "bg-red-500/10 text-red-700 border-red-500/30" },
+  personal:            { label: "Personal",            color: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40" },
+  spam:                { label: "Spam",                color: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40" },
   other:               { label: "Other",               color: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30" },
 };
 

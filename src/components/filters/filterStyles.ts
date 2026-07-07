@@ -20,7 +20,7 @@ export const filterPillBase = [
 
 // Inactive pill (default) — champagne surface, ink text, gold hairline, emerald hover accent
 const _pillInactive = [
-  "jj-filter-pill-fast allow-white text-white border-0",
+  "jj-filter-pill-fast allow-white text-white border-0 [&_*]:!text-white [&_svg]:!text-white [&_svg]:!stroke-white",
   "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 
@@ -29,7 +29,7 @@ export const filterPillInactiveDark = _pillInactive;
 
 // Active pill — solid emerald metallic with pure white label
 export const filterPillActive = [
-  "jj-filter-pill-fast jj-filter-pill-fast-active text-white border-0 font-bold shadow-md allow-white filter-emerald-action",
+  "jj-filter-pill-fast jj-filter-pill-fast-active text-white border-0 font-bold shadow-md allow-white filter-emerald-action [&_*]:!text-white [&_svg]:!text-white [&_svg]:!stroke-white",
   "hover:shadow-[0_10px_24px_rgba(6,78,59,0.28)]",
 ].join(" ");
 

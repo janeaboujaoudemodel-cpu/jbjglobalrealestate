@@ -249,6 +249,98 @@ html body #root .owner-dashboard-shell [data-recommendation-source-pill="active"
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
+
+/* PASS 215 — Root contrast/layout repair from user screenshot audit.
+   Root causes fixed here:
+   1) Later light-surface rules were winning over active emerald pills.
+   2) Global overflow-wrap allowed compact action labels to stack one letter per line.
+   3) Map/CRM/document active controls had partial foreground locks only on child spans. */
+html body #root :is(
+  .jj-filter-pill-fast,
+  .jj-filter-pill-fast *,
+  .filter-emerald-action,
+  .filter-emerald-action *,
+  .jj-emerald-metallic,
+  .jj-emerald-metallic *,
+  .jj-emerald-action,
+  .jj-emerald-action *,
+  .jj-pill-emerald-metallic,
+  .jj-pill-emerald-metallic *,
+  [data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+  [data-surface="emerald"]:not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline) *,
+  [data-filter-selected="true"],
+  [data-filter-selected="true"] *,
+  [role="tab"][data-state="active"],
+  [role="tab"][data-state="active"] *
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body #root :is(.jj-filter-pill-fast, .filter-emerald-action, .jj-emerald-metallic, .jj-emerald-action, .jj-pill-emerald-metallic, [data-filter-selected="true"], [role="tab"][data-state="active"]):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline) {
+  background: var(--jj-emerald-ombre) !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border-color: transparent !important;
+}
+
+html body #root :is(button, a[role="button"], [role="button"], [role="tab"], .jj-map-marker-pill, .jj-map-layer-button, .jj-filter-pill-fast, .jj-pill-emerald-metallic, .jj-emerald-metallic) {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  letter-spacing: 0 !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-filter-clean], [data-map-page], [data-map-shell]) :is(button, a[role="button"], [role="button"], [role="tab"]) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+html body #root :is([data-filter-clean], [data-map-page], [data-map-shell]) :is(.jj-filter-pill-fast, .jj-map-layer-button, .jj-map-marker-pill),
+html body #root .owner-dashboard-shell [data-chat-compact-action],
+html body #root .owner-dashboard-shell :is(button[aria-label="Pin message"], button[aria-label="Unpin message"], button[aria-label="Copy message"]) {
+  min-width: max-content !important;
+}
+
+html body #root :is(.owner-dashboard-shell, [data-filter-clean], [data-map-page], [data-map-shell]) :is(button, a[role="button"], [role="button"], [role="tab"]) :is(span, svg, [class*="lucide"]) {
+  flex-shrink: 0;
+}
+
+html body #root [data-filter-clean] .jj-filter-rail {
+  align-items: center !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-width: 100% !important;
+}
+
+html body #root [data-filter-clean] .jj-filter-rail :is(.jj-filter-pill-fast, .filter-emerald-action) {
+  flex: 0 0 auto !important;
+  min-height: 38px !important;
+  white-space: nowrap !important;
+}
+
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-marker-pill,
+html body #root :where([data-map-page], [data-map-shell]) .jj-map-marker-pill:is(:hover,:focus,:active),
+html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div,
+html body #root :where([data-map-page], [data-map-shell]) .custom-marker > div:is(:hover,:focus,:active) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: var(--jj-map-emerald, var(--jj-emerald-ombre)) !important;
+  background-image: var(--jj-map-emerald, var(--jj-emerald-ombre)) !important;
+  white-space: nowrap !important;
+}
+
+html body #root .owner-dashboard-shell [data-chat-compact-action],
+html body #root .owner-dashboard-shell [data-chat-compact-action] * {
+  white-space: nowrap !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
 @property --border-angle {
   syntax: "<angle>";
   initial-value: 0deg;

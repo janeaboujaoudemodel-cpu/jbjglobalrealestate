@@ -39,11 +39,13 @@ export default function QuickCalendarWidget({
 
   if (compact) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1" data-chat-compact-action>
         <Button
           variant="ghost"
-          size="sm"
-          className="h-7 text-[10px] border border-[#B89555]/20 text-[#1A1A1A]/60 hover:bg-[#B89555]/10 hover:text-[#B89555]"
+          size="icon"
+          aria-label="Add to calendar"
+          title="Add to calendar"
+          className="h-8 w-8 min-w-8 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]/40"
           onClick={() => {
             if (prefillTitle) {
               navigate(`/ai-calendar?title=${encodeURIComponent(prefillTitle)}&date=${date}`);
@@ -52,7 +54,7 @@ export default function QuickCalendarWidget({
             }
           }}
         >
-          <Calendar className="w-3 h-3 mr-1" /> Add to Calendar
+          <Calendar className="w-3.5 h-3.5" />
         </Button>
       </div>
     );
