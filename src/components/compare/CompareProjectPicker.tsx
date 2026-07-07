@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
-import { useShortlist, useAddToShortlist, useRemoveFromShortlist } from "@/hooks/useFavorites";
+import { useShortlist, useToggleShortlist } from "@/hooks/useFavorites";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
