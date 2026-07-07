@@ -1638,7 +1638,7 @@ function ProjectDetailLayoutInner({
                       : setLeadCaptureOpen(true)
                     }
                     isLocked={!brochurePrimary || (!isLeadCaptured && !!brochurePrimary)}
-                    location={project.area_name ? `${project.area_name} • Dubai` : undefined}
+                    location={project.area_name ? `${project.area_name}${project.emirate ? ` • ${project.emirate}` : ""}` : (project.emirate || undefined)}
                   />
                 </div>
               </div>
