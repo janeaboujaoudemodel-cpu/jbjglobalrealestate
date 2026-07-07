@@ -245,6 +245,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       hasCRMAccess: ownerBackendActive || (!isOwner && !!hasCRMAccess),
       hasListingAdminAccess: ownerBackendActive || (!isOwner && !!hasListingAdminAccess),
       isBroker: mode === 'broker',
+      isDeveloper: mode === 'developer',
       isAuthenticated: !!user,
       limit: 20,
     }).map((item) => ({

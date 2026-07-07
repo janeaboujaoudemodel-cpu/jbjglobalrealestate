@@ -280,6 +280,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
     hasCRMAccess: searchCRMAccess,
     hasListingAdminAccess: searchListingAdminAccess,
     isBroker: searchBrokerAccess,
+    isDeveloper: mode === 'developer',
     isAuthenticated: !!user,
     limit: 12,
     }).filter(item => item.icon && typeof item.icon === 'function')
@@ -298,6 +299,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
         hasCRMAccess: searchCRMAccess,
         hasListingAdminAccess: searchListingAdminAccess,
         isBroker: searchBrokerAccess,
+        isDeveloper: mode === 'developer',
         isAuthenticated: !!user,
         limit: 6,
       }).filter(item => item.icon && typeof item.icon === 'function')

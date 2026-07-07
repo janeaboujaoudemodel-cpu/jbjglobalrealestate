@@ -14,7 +14,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { allTools } from "@/config/royalToolsRegistry";
 
-export type SearchItemAccess = 'public' | 'authenticated' | 'owner' | 'crm' | 'listing-admin' | 'broker';
+export type SearchItemAccess = 'public' | 'authenticated' | 'owner' | 'crm' | 'listing-admin' | 'broker' | 'professional';
 
 export interface SearchItem {
   id: string;
@@ -91,7 +91,7 @@ const toolsFromRegistry: SearchItem[] = allTools
     ],
     description: tool.description,
     icon: tool.icon,
-    access: 'public' as SearchItemAccess,
+    access: tool.id === 'property-comparison' ? 'professional' as SearchItemAccess : 'public' as SearchItemAccess,
     category: 'tool' as const,
   }));
 
@@ -153,6 +153,7 @@ export interface SearchItemsOptions {
   hasCRMAccess?: boolean;
   hasListingAdminAccess?: boolean;
   isBroker?: boolean;
+  isDeveloper?: boolean;
   isAuthenticated?: boolean;
   limit?: number;
 }
@@ -163,6 +164,7 @@ function accessibleFor(item: SearchItem, o: SearchItemsOptions): boolean {
     hasCRMAccess = false,
     hasListingAdminAccess = false,
     isBroker = false,
+    isDeveloper = false,
     isAuthenticated = false,
   } = o;
   switch (item.access) {
@@ -172,6 +174,7 @@ function accessibleFor(item: SearchItem, o: SearchItemsOptions): boolean {
     case 'crm': return isOwner || hasCRMAccess;
     case 'listing-admin': return isOwner || hasListingAdminAccess;
     case 'broker': return isOwner || isBroker || hasCRMAccess;
+    case 'professional': return isOwner || isBroker || isDeveloper || hasCRMAccess;
     default: return false;
   }
 }
