@@ -14884,17 +14884,17 @@ html body #root [data-keep-gold].jj-cta-gold-metallic :where(*, span, strong, p,
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%);
   box-shadow: 0 16px 36px -18px rgba(4, 44, 28, 0.82), inset 0 1px 0 rgba(255,255,255,0.14);
 }
-html body #root .jj-project-pros-panel .jj-project-pros-item,
-html body #root .jj-project-pros-panel .jj-project-pros-item :where(*, span, div) {
-  color: #1A1A1A !important;
-  -webkit-text-fill-color: #1A1A1A !important;
-  opacity: 1 !important;
+/* Ensure every child of the pros panel (header, items, icons) renders white on the emerald surface */
+html body #root .jj-project-pros-panel,
+html body #root .jj-project-pros-panel :where(h1,h2,h3,h4,h5,h6,p,span,a,strong,small,em,b,label,li,dt,dd) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
-html body #root .jj-project-pros-panel .jj-project-pros-item :where(svg, [class*="lucide"]) {
-  color: #064E3B !important;
-  stroke: #064E3B !important;
-  fill: none !important;
+html body #root .jj-project-pros-panel :where(svg, [class*="lucide"], path, line, polyline, polygon, rect, circle, ellipse) {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }
+
 
 html body #root .jj-residency-chip[data-residency-active="true"],
 html body #root .jj-residency-chip.jj-residency-chip-active {
