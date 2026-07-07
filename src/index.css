@@ -34228,4 +34228,87 @@ html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbo
   opacity: 1 !important;
 }
 
+/* =========================================================================
+   AMRA PROJECT DETAIL FINAL LOCK — map tabs, marker labels, PDF loaders,
+   and mobile payment/card containment. This intentionally sits at EOF.
+   ========================================================================= */
+html body #root :where([data-map-shell]) .jj-map-active-toggle[data-active="true"],
+html body #root :where([data-map-shell]) .jj-map-active-toggle[data-active="true"]:hover,
+html body #root :where([data-map-shell]) .jj-map-active-toggle[data-active="true"]:focus-visible {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 52%, #000000 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 52%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -10px 16px rgba(0,0,0,0.48),
+    inset 0 0 0 1px rgba(255,255,255,0.10),
+    0 8px 18px rgba(0,0,0,0.32) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  transform: translateY(-1px) perspective(80px) rotateX(7deg) !important;
+}
+
+html body #root :where([data-map-shell]) .jj-map-active-toggle[data-active="true"] .jj-sqtoggle-sweep {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  background-image: linear-gradient(115deg, rgba(3,20,15,0) 0%, rgba(3,20,15,0) 24%, rgba(4,47,34,.55) 38%, rgba(4,120,87,.72) 46%, rgba(16,185,129,.95) 50%, rgba(4,120,87,.72) 54%, rgba(4,47,34,.55) 62%, rgba(3,20,15,0) 78%, rgba(3,20,15,0) 100%) !important;
+  background-size: 220% 100% !important;
+  mix-blend-mode: screen !important;
+  animation: jj-sqtoggle-fast-3d-metal 1.15s linear infinite !important;
+}
+
+html body #root :where([data-map-shell]) .jj-map-active-toggle[data-active="true"] > span:not(.jj-sqtoggle-sweep),
+html body #root :where([data-map-shell]) .jj-map-active-toggle[data-active="true"] *:not(.jj-sqtoggle-sweep) {
+  position: relative !important;
+  z-index: 3 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root :where([data-map-shell]) .jj-map-active-toggle:not([data-active="true"]),
+html body #root :where([data-map-shell]) .jj-map-active-toggle:not([data-active="true"]):hover {
+  cursor: pointer !important;
+}
+
+html body #root :where([data-map-shell]) .jj-nearby-price-pill,
+html body #root :where([data-map-shell]) .jj-nearby-price-pill *,
+html body #root :where([data-map-shell]) .custom-marker .jj-nearby-price-pill,
+html body #root :where([data-map-shell]) .custom-marker .jj-nearby-price-pill * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.55) !important;
+}
+
+html body #root [aria-label^="Loading"] :is(.allow-white, svg, span),
+html body #root [aria-label*="document"] :is(.allow-white, svg, span),
+html body #root [data-no-contrast-guard] .allow-white,
+html body #root [data-no-contrast-guard] .allow-white * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+@media (max-width: 767px) {
+  html body #root [data-section="payment"] {
+    overflow-x: clip !important;
+  }
+  html body #root [data-section="payment"] :is(h3, p, span, div) {
+    overflow-wrap: anywhere !important;
+  }
+  html body #root .jj-project-shell {
+    max-width: 100vw !important;
+  }
+  html body #root .jj-card-inner {
+    max-width: calc(100vw - 1.25rem) !important;
+  }
+}
+
 
