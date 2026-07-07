@@ -269,13 +269,29 @@ export default function PaymentPlanVisualization({
               )}
               
               {isPostHandover && (
-                <div className="mt-4 flex items-center gap-2 px-3 py-2 jj-emerald-soft border border-[color:var(--emerald-1)]/30 rounded-lg w-fit">
-                  <Clock className="w-4 h-4 text-[color:var(--emerald-1)]" />
-                  <span className="text-sm font-medium text-[color:var(--emerald-1)]">
+                <div
+                  data-emerald="true"
+                  data-no-contrast-guard
+                  data-on-dark
+                  className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg allow-white"
+                  style={{
+                    backgroundImage: 'var(--jj-emerald-ombre)',
+                    backgroundColor: '#064E3B',
+                    color: '#FFFFFF',
+                    WebkitTextFillColor: '#FFFFFF',
+                    boxShadow: '0 8px 20px -8px rgba(4,44,28,0.6), inset 0 1px 0 rgba(255,255,255,0.1)',
+                  }}
+                >
+                  <Clock className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                  <span
+                    className="text-sm font-semibold allow-white"
+                    style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                  >
                     Post-Handover ({derivedPostHandoverMonths} months){postHandoverEndDate ? ` · Due by ${postHandoverEndDate}` : ""}
                   </span>
                 </div>
               )}
+
 
               {!isDetailedBreakdown && (!legacyBreakdown || (!legacyBreakdown.down_payment && !legacyBreakdown.during_construction && !legacyBreakdown.on_completion)) && (
                 <p className="mt-4 text-xs text-[#1A1A1A]/70 italic">
