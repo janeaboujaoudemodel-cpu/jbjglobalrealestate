@@ -77,12 +77,20 @@ export default function BookStyleDocuments({
   };
 
   return (
-    <div className="relative">
-      <div className="mb-5">
-        <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">The Library</p>
-        <h3 className="text-[#1A1A1A] text-2xl md:text-3xl font-semibold tracking-tight">Project Documents</h3>
-        <div className="w-16 h-px bg-[#B89555] mt-3" />
-      </div>
+    <details className="relative group">
+      <summary className="list-none cursor-pointer mb-5 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-1">The Library</p>
+          <h3 className="text-[#1A1A1A] text-2xl md:text-3xl font-semibold tracking-tight">Project Documents ({visibleDocs.length})</h3>
+          <div className="w-16 h-px bg-[#B89555] mt-3" />
+        </div>
+        <span className="text-xs font-bold text-[#064E3B] uppercase tracking-wider px-4 py-2 rounded-lg border border-[#064E3B]/30 bg-[#F7F2EA] whitespace-nowrap">
+          <span className="group-open:hidden">Expand ▾</span>
+          <span className="hidden group-open:inline">Collapse ▴</span>
+        </span>
+      </summary>
+      <div className="relative">
+
 
       {visibleDocs.length > 3 && (
         <>
@@ -286,6 +294,8 @@ export default function BookStyleDocuments({
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </details>
+
   );
 }

@@ -870,14 +870,18 @@ function ProjectDetailLayoutInner({
 
           {/* USPs Row - Location, Bedrooms, Size, Handover, Payment Plan */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8" data-no-contrast-guard>
-            {project.location && (
+            {(project.emirate || project.area_name || project.location) && (() => {
+              const displayLoc = project.emirate
+                ? `${project.emirate}${project.area_name ? ` · ${project.area_name}` : ""}`
+                : (project.area_name || project.location || "");
+              return (
               <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                 <MapPin className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <InlineEditable projectId={project.id} field="location" value={project.location} surface="dark">
-                  <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{project.location}</span>
-                </InlineEditable>
+                <span className="text-sm md:text-base text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{displayLoc}</span>
               </div>
-            )}
+              );
+            })()}
+
             {bedroomsText && (
               <div className="flex items-center gap-2 text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                 <Bed className="w-5 h-5 text-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -1667,7 +1671,7 @@ function ProjectDetailLayoutInner({
                       : setLeadCaptureOpen(true)
                     }
                     isLocked={!brochurePrimary || (!isLeadCaptured && !!brochurePrimary)}
-                    location={project.area_name ? `${project.area_name}${project.emirate ? ` • ${project.emirate}` : ""}` : (project.emirate || undefined)}
+                    location={project.emirate ? `${project.emirate}${project.area_name ? ` • ${project.area_name}` : ""}` : (project.area_name || undefined)}
                   />
                 </div>
               </div>
@@ -1767,12 +1771,19 @@ function ProjectDetailLayoutInner({
                  <div className="flex items-start gap-3">
                    <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
                    <div>
-                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage not available for this project</p>
-                     <p>{mortgageBlockedReason}</p>
+                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage financing will be available on handover</p>
+                     <p>
+                       Since this project is still under construction, UAE banks do not yet finance the purchase.
+                       Once {project.name} is officially marked completed, buyers will be able to finance up to
+                       70% of the property value over a term of up to 25 years — the 30% already paid during
+                       construction is credited toward your equity. We update the site automatically the day the
+                       project is handed over, so this section will switch to a full mortgage calculator on its own.
+                     </p>
                    </div>
                  </div>
                </div>
              </div>
+
            )}
 
            {/* JBJ AI ANALYZER (Order B: after mortgage) */}

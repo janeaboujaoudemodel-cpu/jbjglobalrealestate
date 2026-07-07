@@ -278,9 +278,13 @@ const ProjectDetail = () => {
       external_id: project.external_id ?? null,
       cover_image_url: project.cover_image_url ?? null,
       area_name: project.area_name ?? null,
+      emirate: (project as any).emirate ?? null,
+      sale_status: (project as any).sale_status ?? null,
+      construction_status: (project as any).construction_status ?? null,
       latitude: project.latitude ?? null,
       longitude: project.longitude ?? null,
       availability_visible: (project as any).availability_visible ?? false,
+
     };
   }, [project]);
 
