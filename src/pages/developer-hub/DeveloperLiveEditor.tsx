@@ -69,6 +69,9 @@ const DeveloperLiveEditor = () => {
   const [edits, setEdits] = useState<Record<string, { price_from?: string; handover_date?: string }>>({});
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich">(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
   const { data: rep } = useQuery({
     queryKey: ["rep-list", user?.id],
@@ -83,14 +86,14 @@ const DeveloperLiveEditor = () => {
     enabled: !!user?.id && !isOwner,
   });
 
-  const { data: projects, isLoading } = useQuery({
-    queryKey: ["developer-projects", isOwner ? "owner-all" : rep?.current_developer_id],
+  const { data: allProjects, isLoading } = useQuery({
+    queryKey: ["developer-projects", isOwner ? "owner-all" : rep?.current_developer_id, pageSize],
     queryFn: async () => {
       let query = supabase
         .from("projects")
-        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, data_quality_flags")
-        .order("updated_at", { ascending: false })
-        .limit(500);
+        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, data_quality_flags, created_at, updated_at")
+        .order("created_at", { ascending: false })
+        .limit(pageSize);
 
       if (!isOwner) query = query.eq("developer_id", rep!.current_developer_id!);
 
@@ -100,6 +103,36 @@ const DeveloperLiveEditor = () => {
     },
     enabled: isOwner || !!rep?.current_developer_id,
   });
+
+  const projects = useMemo(() => {
+    if (!allProjects) return [] as Project[];
+    const q = search.trim().toLowerCase();
+    return allProjects.filter((p) => {
+      // status filter
+      if (statusFilter === "live" && !p.is_published) return false;
+      if (statusFilter === "pending") {
+        // pending = has data-quality flags OR not published and has status "pending"
+        const flags = Array.isArray(p.data_quality_flags) ? p.data_quality_flags : [];
+        const isPending = flags.length > 0 || (!p.is_published && /pending|review/i.test(p.status || p.status_label || ""));
+        if (!isPending) return false;
+      }
+      if (statusFilter === "draft" && p.is_published) return false;
+      // search filter
+      if (q) {
+        const hay = [p.name, p.developer_name, p.developer?.name, p.location, p.emirate]
+          .filter(Boolean).join(" ").toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [allProjects, search, statusFilter]);
+
+  const counts = useMemo(() => {
+    const src = allProjects || [];
+    const live = src.filter((p) => p.is_published).length;
+    const draft = src.filter((p) => !p.is_published).length;
+    return { all: src.length, live, pending: 0, draft };
+  }, [allProjects]);
 
   const { data: resaleProjects = [], isLoading: loadingResale } = useQuery({
     queryKey: ["owner-projects-resale-section", isOwner],
