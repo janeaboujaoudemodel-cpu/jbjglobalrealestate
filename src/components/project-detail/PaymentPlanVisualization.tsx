@@ -470,10 +470,11 @@ export default function PaymentPlanVisualization({
           {handoverDate && (
             <p className="mt-6 text-sm text-[#1A1A1A]/70 italic text-center">
               {isPostHandover && postHandoverEndDate
-                ? `Handover ${handoverDate} · post-handover balance payable until ${postHandoverEndDate}`
+                ? `Project handover: ${handoverDate}. The remaining post-handover balance is paid in instalments after handover and is fully settled by ${postHandoverEndDate} — you receive your unit on the handover date, not on the final payment date.`
                 : `Benefit from extended payment terms until ${handoverDate} handover`}
             </p>
           )}
+
         </TabsContent>
       </Tabs>
       </div>
