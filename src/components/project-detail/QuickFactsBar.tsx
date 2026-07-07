@@ -37,8 +37,8 @@ export default function QuickFactsBar({
     {
       icon: Home,
       label: "Property Type",
-      value: propertyType || "Mixed Use",
-      show: true
+      value: propertyType || null,
+      show: !!propertyType
     },
     {
       icon: Building2,

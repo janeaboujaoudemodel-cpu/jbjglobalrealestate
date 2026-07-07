@@ -1,9 +1,11 @@
-import { useRef, useMemo, useState } from "react";
+import { lazy, Suspense, useRef, useMemo, useState } from "react";
 import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
 import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+
+const PdfCanvasViewer = lazy(() => import("@/components/project-detail/PdfCanvasViewer"));
 
 interface BookDoc {
   id: string;
@@ -230,11 +232,9 @@ export default function BookStyleDocuments({
             {/* PDF iframe */}
             <div className="flex-1 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
               {viewerUrl && (
-                <iframe
-                  src={viewerUrl}
-                  className="w-full h-full"
-                  title={viewerTitle}
-                />
+                <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7] text-sm font-semibold text-[#1A1A1A]">Loading document…</div>}>
+                  <PdfCanvasViewer url={viewerUrl} title={viewerTitle} maxPages={4} className="h-full w-full" />
+                </Suspense>
               )}
             </div>
           </div>

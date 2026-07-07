@@ -10,6 +10,7 @@ import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS } from "@/utils/leafl
 import { PricePill } from "@/components/ui/price-pill";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { pushBackStack } from "@/lib/browsingHistory";
+import { useCurrency } from "@/hooks/useCurrency";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -37,14 +38,8 @@ const RedIcon = L.divIcon({
   popupAnchor: [0, -46],
 });
 
-const formatMarkerPrice = (price: number | null | undefined) => {
-  if (!price) return "Ask";
-  if (price >= 1000000) return `${Number((price / 1000000).toFixed(1)).toLocaleString()}M`;
-  return `${Math.round(price / 1000)}K`;
-};
-
-const createEmeraldMarkerIcon = (price: number | null | undefined) => L.divIcon({
-  html: `<div class="jj-map-marker-pill">${formatMarkerPrice(price)}</div>`,
+const createEmeraldMarkerIcon = (priceText: string) => L.divIcon({
+  html: `<div class="jj-map-marker-pill">${priceText}</div>`,
   className: "custom-marker",
   iconSize: [72, 32],
   iconAnchor: [36, 32],
@@ -90,6 +85,7 @@ export default function ProjectNearbyPropertiesMap({
   className = "",
 }: ProjectNearbyPropertiesMapProps) {
   const { t, language } = useLanguage();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const tiles = getMapTiles(language);
 
@@ -327,7 +323,7 @@ export default function ProjectNearbyPropertiesMap({
           <Marker
             key={p.id}
             position={[p.latitude!, p.longitude!]}
-            icon={createEmeraldMarkerIcon(p.price_from)}
+            icon={createEmeraldMarkerIcon(p.price_from ? formatPrice(p.price_from) : "Ask")}
             eventHandlers={{
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => {

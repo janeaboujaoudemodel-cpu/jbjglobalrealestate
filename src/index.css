@@ -34052,6 +34052,73 @@ html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] button
   stroke: #1A1A1A !important;
 }
 
+/* Project detail proof patch — logo plate, map popups/tabs, PDF canvas and payment-plan contrast. */
+html body #root .jj-developer-logo-metallic {
+  background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
+  background-size: 220% 220% !important;
+  animation: jj-metal-sheen 4.5s ease-in-out infinite !important;
+}
+
+html body #root .jj-developer-logo-metallic img {
+  background: transparent !important;
+  mix-blend-mode: multiply !important;
+}
+
+html body #root .jj-map-marker-pill,
+html body #root .jj-map-marker-pill * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root .leaflet-popup-content-wrapper,
+html body #root .leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body #root .jj-map-popup-card {
+  overflow: hidden !important;
+  border: 1px solid rgba(184,149,85,0.46) !important;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 58%, #EFE6D6 100%) !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.22) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root .jj-map-popup-card :is(a, button, p, div, span) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root .jj-map-popup-card [data-price-badge],
+html body #root .jj-map-popup-card [data-price-badge] * {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root .jj-map-filter-toggle[data-active="true"],
+html body #root .jj-map-filter-toggle[data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-project-payment-tabs] [data-state="active"],
+html body #root [data-project-payment-tabs] [data-state="active"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-section="payment"] [data-icon-circle="true"],
+html body #root [data-section="payment"] [data-icon-circle="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* =========================================================================
    Radix Checkbox tick: ALWAYS white when checked. This must be the LAST rule
    in the file so it wins over any champagne / surface-light contrast guard

@@ -198,13 +198,13 @@ export default function PaymentPlanVisualization({
 
         {/* Full Payment Tab */}
         <TabsContent value="full">
-          <div className="p-6 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] text-center">
-            <div className="w-16 h-16 rounded-full bg-[#1A1A1A]/10 flex items-center justify-center mx-auto mb-4 ring-4 ring-black/5">
-              <Wallet className="w-8 h-8 text-[#1A1A1A]" />
+            <div className="p-6 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA] text-center">
+            <div data-emerald="true" data-icon-circle="true" className="jj-surface-emerald w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ring-4 ring-[#064E3B]/10" style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}>
+              <Wallet className="w-8 h-8" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             </div>
             <p className="text-2xl font-bold text-[#1A1A1A] mb-2">100%</p>
             <p className="text-sm text-[#1A1A1A]/70">Pay full amount upfront</p>
-            <p className="text-xs text-[#1A1A1A]/70 mt-2">Contact us for special discounts on full payment</p>
+            <p className="text-xs text-[#1A1A1A]/70 mt-2">Cash discount applicable on full payment.</p>
           </div>
         </TabsContent>
 

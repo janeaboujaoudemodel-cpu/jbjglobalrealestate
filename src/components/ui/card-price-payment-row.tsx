@@ -22,27 +22,8 @@ import {
   PAYMENT_PLAN_NA,
 } from "@/utils/paymentPlanSummary";
 import { cn } from "@/lib/utils";
+import { useCurrency } from "@/hooks/useCurrency";
 
-
-const SYMBOLS: Record<string, string> = {
-  AED: "AED", USD: "$", EUR: "€", GBP: "£", INR: "₹",
-  SAR: "SAR", CNY: "¥", RUB: "₽", CAD: "C$", AUD: "A$",
-};
-const RATES: Record<string, number> = {
-  AED: 1, USD: 0.27, EUR: 0.25, GBP: 0.21, INR: 22.5,
-  SAR: 1.02, CNY: 1.98, RUB: 24.5, CAD: 0.37, AUD: 0.42,
-};
-
-function formatPrice(price: number, currency: string): string {
-  const converted = price * (RATES[currency] ?? 1);
-  const sym = SYMBOLS[currency] ?? currency;
-  if (converted >= 1_000_000) {
-    const m = converted / 1_000_000;
-    return `${sym} ${m % 1 === 0 ? m.toFixed(0) : m.toFixed(2)}M`;
-  }
-  if (converted >= 1_000) return `${sym} ${Math.round(converted / 1_000)}K`;
-  return `${sym} ${Math.round(converted).toLocaleString()}`;
-}
 
 interface Milestone {
   milestone?: string;
@@ -134,11 +115,12 @@ function getBreakdownRows(
 
 export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
   price,
-  currency = "AED",
+  currency: _currency = "AED",
   project,
   className,
 }) => {
   const [isPlanOpen, setIsPlanOpen] = React.useState(false);
+  const { formatPriceFull } = useCurrency();
   const hasPrice = typeof price === "number" && price > 0;
   const summary = formatPaymentPlanSummary(project);
   const breakdown = getBreakdownRows(project);
@@ -167,7 +149,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
             hasPrice ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70",
           )}
         >
-          {hasPrice ? formatPrice(price!, currency) : "On request"}
+          {hasPrice ? formatPriceFull(price!) : "On request"}
         </span>
       </div>
 

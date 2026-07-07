@@ -22,53 +22,11 @@ interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null; show_sale_status?: boolean | null };
   showFavorite?: boolean;
   showBadgeButton?: boolean;
-  currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
+  currency?: string;
   sizeUnit?: 'sqft' | 'sqm';
   /** Mark as above-the-fold (LCP) — first 1–3 cards in a grid. */
   priority?: boolean;
 }
-
-// Currency conversion rates - 10 unified currencies
-const CURRENCY_RATES: Record<string, number> = {
-  AED: 1,
-  USD: 0.27,
-  EUR: 0.25,
-  GBP: 0.21,
-  INR: 22.5,
-  SAR: 1.02,
-  CNY: 1.98,
-  RUB: 24.5,
-  CAD: 0.37,
-  AUD: 0.42,
-};
-
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  AED: 'AED',
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  INR: '₹',
-  SAR: 'SAR',
-  CNY: '¥',
-  RUB: '₽',
-  CAD: 'C$',
-  AUD: 'A$',
-};
-
-// Helper to format price with currency conversion
-const formatPriceWithCurrency = (price: number, currency: string = 'AED'): string => {
-  const converted = Math.round(Math.round(price) * CURRENCY_RATES[currency]);
-  const symbol = CURRENCY_SYMBOLS[currency];
-  if (converted >= 1000000) {
-    const millions = converted / 1000000;
-    const formatted = millions % 1 === 0 ? `${millions}` : `${millions.toFixed(1)}`;
-    return `${symbol} ${formatted}M`;
-  }
-  if (converted >= 1000) {
-    return `${symbol} ${Math.round(converted / 1000)}K`;
-  }
-  return `${symbol} ${converted.toLocaleString('en-US')}`;
-};
 
 // Projects that should show "New" status label (only these specific ones)
 const PROJECTS_WITH_NEW_STATUS = [

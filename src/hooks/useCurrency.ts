@@ -126,7 +126,16 @@ export function useCurrency() {
     return `${symbol} ${converted.toLocaleString('en-US')}`;
   }, [currency]);
 
+  const formatPriceRangeFull = useCallback((minAED: number | null | undefined, maxAED: number | null | undefined): string => {
+    const hasMin = typeof minAED === 'number' && minAED > 0;
+    const hasMax = typeof maxAED === 'number' && maxAED > 0 && maxAED !== minAED;
+    if (hasMin && hasMax) return `From ${formatPriceFull(minAED)} up to ${formatPriceFull(maxAED)}`;
+    if (hasMin) return `From ${formatPriceFull(minAED)}`;
+    if (hasMax) return `Up to ${formatPriceFull(maxAED)}`;
+    return 'Price on request';
+  }, [formatPriceFull]);
+
   const currencyInfo = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
 
-  return { currency, formatPrice, formatPriceFull, currencyInfo };
+  return { currency, formatPrice, formatPriceFull, formatPriceRangeFull, currencyInfo };
 }
