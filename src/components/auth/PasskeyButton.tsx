@@ -35,9 +35,12 @@ export function PasskeyButton({ onSuccess, className }: Props) {
         conditional = false;
       }
       // And this device must have previously enrolled a passkey for the app.
-      const enrolledFlag =
-        typeof window !== 'undefined' &&
-        window.localStorage.getItem('jbj_passkey_enrolled') === '1';
+      // Accept both legacy '1' and current 'true' values written by Auth.tsx.
+      const flag =
+        typeof window !== 'undefined'
+          ? window.localStorage.getItem('jbj_passkey_enrolled')
+          : null;
+      const enrolledFlag = flag === '1' || flag === 'true';
       setSupported(webauthnOk && conditional);
       setHasLocalPasskey(enrolledFlag);
     })();
