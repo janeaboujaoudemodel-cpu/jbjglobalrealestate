@@ -1915,13 +1915,8 @@ function ProjectDetailLayoutInner({
              areaName={project.area_name || project.location || null}
            />
 
-           {/* MORE FROM THIS DEVELOPER — moved to bottom so it doesn't replace the area map */}
-           <MoreFromDeveloperStrip
-             currentProjectId={project.id}
-             developerId={project.developer?.id ?? (project as any).developer_id ?? null}
-             developerName={project.developer?.name ?? (project as any).developer_name ?? null}
-             developerSlug={project.developer?.slug ?? null}
-           />
+           {/* MORE FROM THIS DEVELOPER — moved down into its own band directly above
+               Dubai Market Intelligence (see below). Placeholder kept for git history. */}
 
 
 
@@ -2025,7 +2020,22 @@ function ProjectDetailLayoutInner({
       </div>
       </div>
 
-      {/* DUBAI MARKET INTELLIGENCE — after recommended projects as requested */}
+      {/* MORE PROJECTS BY THIS DEVELOPER — dedicated band directly above Dubai
+          Market Intelligence, so users see the developer's full portfolio
+          before the wider market context. */}
+      <SectionDividerGoldFullBleed />
+      <div className="pt-10 md:pt-14 pb-6 md:pb-8 jj-project-band jj-fullbleed-band bg-[#FDFBF7]">
+        <div className="jj-project-shell">
+          <MoreFromDeveloperStrip
+            currentProjectId={project.id}
+            developerId={project.developer?.id ?? (project as any).developer_id ?? null}
+            developerName={project.developer?.name ?? (project as any).developer_name ?? null}
+            developerSlug={project.developer?.slug ?? null}
+          />
+        </div>
+      </div>
+
+      {/* DUBAI MARKET INTELLIGENCE — after developer portfolio strip */}
       <div className="jj-project-nested-band mb-10 md:mb-12">
         <SectionDividerGoldFullBleed />
         <DLDMarketWidget />
