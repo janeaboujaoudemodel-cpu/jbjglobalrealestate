@@ -316,9 +316,13 @@ const DeveloperLiveEditor = () => {
 
       {isLoading ? (
         <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#1A1A1A]/60" /></div>
-      ) : !projects?.length ? (
+      ) : !projects.length ? (
         <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-10 rounded-lg text-center">
-          <p className="text-[#1A1A1A]/70">No off-plan projects yet. Add your first project to get started.</p>
+          <p className="text-[#1A1A1A]/70">
+            {(allProjects?.length ?? 0) === 0
+              ? "No off-plan projects yet. Add your first project to get started."
+              : `No projects match "${search || statusFilter}". Try clearing the search or the status filter.`}
+          </p>
         </Card>
       ) : (
         <div className="space-y-3">
