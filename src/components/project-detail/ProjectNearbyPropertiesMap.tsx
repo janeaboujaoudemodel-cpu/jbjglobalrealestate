@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
