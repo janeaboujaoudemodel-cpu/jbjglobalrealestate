@@ -173,7 +173,8 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               {designPartners.map((studio) => (
                 <span
                   key={studio}
-                  className="inline-flex items-center rounded-full border border-[#B89555]/35 bg-[#FDFBF7] px-3 py-1 text-xs font-semibold text-[#1A1A1A]"
+                  className="inline-flex items-center rounded-md border border-[#B89555]/40 px-3 py-1 text-xs font-semibold"
+                  style={{ background: "#FDFBF7", color: "#1A1A1A" }}
                 >
                   {studio}
                 </span>
