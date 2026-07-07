@@ -16,7 +16,6 @@ import {
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
   ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown, Search, Plus, Replace
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import LegalDisclaimer from "@/components/LegalDisclaimer";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -210,6 +209,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const handlePickerConfirm = (ids: string[]) => {
     if (pickerMode === "replace" && replaceTarget) {
       const replacementId = ids[0];
+      if (!replacementId) return;
       const baseIds = (selectedCompareIds.length > 0 ? selectedCompareIds : compareIds).filter(Boolean);
       const nextIds = baseIds.map((id) => (id === replaceTarget.id ? replacementId : id));
       setSelectedCompareIds(Array.from(new Set(nextIds)));
