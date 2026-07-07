@@ -1,45 +1,64 @@
-# Contrast & Layout Remediation — Batched Plan
 
-Every batch ends with a Playwright screenshot proof under `/tmp/browser/<batch>/`. No batch closes without a screenshot showing the fix. No partial completion.
+## Why your Amra project looks missing
 
-## Batch A — Owner Overview (`/owner`)
-1. **Needs Follow-up circles** (screenshot 1): status dots inside cards render dark-on-dark. Force emerald surface + white inner mark, ≥3:1.
-2. **Alert bell vs Search** spacing: add left margin so bell is not glued to Search.
-3. **Buttons out of card** (Marketing / View Site / Sign Out): constrain header actions inside the Owner Panel card, wrap on narrow widths.
-4. **Overview → Book Hub tab bar**: current flat wrap is unreadable. Rebuild as a proper segmented grid (labeled sections, icon+text pills, 3–4 per row, emerald active state, champagne idle).
-5. **Refresh button**: convert to emerald-filled with pure white icon+label.
+Your upload **did** save. In the database:
 
-## Batch B — Vertical Sidebar Restoration
-1. Restore the pre-change owner sidebar exactly (structure, order, icon set, spacing) to match front-end.
-2. Icons: match the **squared-rounded emerald tile** shape used by the "Calls Today" stat icon — not the softer pill currently rendered.
+- `Amra The First Integrative Wellness Resort` — Citi Developers — uploaded 2026-07-06 17:18
+- `Amra Residences` — Citi Developers — Feb 2026
+- `In Amra Residences` — Mar 2026
+- `Amra` — Citi Developers — Mar 2026
 
-## Batch C — CRM (`/owner/crm`)
-1. **Export button** (icon+label): both currently render near-black on emerald. Force white foreground.
-2. **Calls Today / WhatsApp / Total Leads / Conversion Rate** cards: align on one row, unify icon tile size + shape + position, unify label/number baseline, remove wrapping.
-3. Match those icon tiles to the sidebar icons (single shape system).
-4. **Investors / Developers pipeline chips**: numeric badges show black-on-emerald → force white.
+Two problems today:
 
-## Batch D — Developer Hub
-1. **Projects list** (`/owner/developers/projects` etc.): Unpublish / Edit / View buttons → emerald-filled, white content.
-2. **Access Requests → Rep Applications** tab: active pill contrast broken → emerald active + white text; inactive champagne + ink.
+1. **My Projects** only lists the first ~500 in a fixed order and has **no search or status filter**, so newer or pending uploads fall off-screen with no way to find them.
+2. There is **no duplicate-check step** on upload, so the same building gets saved under multiple names with different cover photos.
 
-## Batch E — Front-End `/properties` Buy/Off-Plan
-1. Emerald filter bar: More Filters / Price / Payments / Handover / Property Type triggers render black-on-emerald → white text + white chevrons.
-2. Open **Payments dropdown**: panel must be champagne background with **black** text (per user), emerald hover.
-3. Property Map circle badges (price labels): force white numerals on emerald.
+---
 
-## Batch F — Listing Admin (`/owner/listing-admin`)
-1. Sweep header row from "Project Enrichment" through "Visible" toggle for black-on-emerald.
-2. "606 partially enriched" status pill → correct emerald/white or champagne/ink pairing depending on surface.
+## What I'll build
 
-## Validation Protocol (per batch)
-```
-/tmp/browser/<batch>/
-  before.png
-  after.png
-  notes.md   # sampled computed colors: fg rgb, bg rgb, WCAG ratio
-```
-Playwright samples `getComputedStyle` for each fixed element; ratio must be ≥ 4.5:1 for text, ≥ 3:1 for large text/icons. If any sample fails, the batch is not done.
+### 1. My Projects — search + status filter + newest-first ordering
+- Add a **search box** (searches project name + developer name, debounced).
+- Add tabs/filters: **All · Published (Live) · Pending · Draft · Unpublished**.
+- Default sort: **newest first** so anything you just uploaded is always at the top.
+- Increase the effective list ceiling and add "Load more" so you never lose a project past 500.
 
-## Execution Order
-A → B → C → D → E → F, sequentially. Each batch is a single commit-scope; no cross-batch drift.
+### 2. Show pending projects too
+- Currently the page filters to published only. I'll surface pending, draft, and unpublished with a colored status badge on each row (green Live, amber Pending, grey Draft).
+
+### 3. AI duplicate-check assistant on every upload surface
+Adds a small AI panel inside:
+- **Developer Portal → Add / Upload Project**
+- **Owner → My Projects → Add Project**
+- **Founder / bulk upload flows**
+
+Behavior when you type a project name:
+- Runs a fuzzy match against `projects` (name, developer_name, area, address, aliases).
+- Uses AI to normalize variations ("Amra" / "Amra Residences" / "In Amra Residences" / "Amra The First Integrative Wellness Resort" → same building).
+- Shows: "⚠️ 3 possible existing matches for **Amra** by Citi Developers" with each match's cover, name, developer, area, upload date, and **Open / Merge / Continue anyway** actions.
+- Blocks silent duplicates by requiring the user to explicitly confirm "This is a new project" before saving.
+
+### 4. Clean up the existing Amra duplicates
+I will not auto-delete. Instead I'll surface the four Amra records inside the new duplicate-check panel so you can pick the canonical one and merge/archive the others in one click.
+
+---
+
+## Technical notes
+
+- **Search**: client-side filter on the query result plus a server-side `ilike` on `name` and `developer_name` for lists over 500.
+- **Status filter**: uses existing `projects.status` + `is_published` columns (both already exist). No schema change.
+- **Duplicate detection service**: new `src/services/projectDuplicateCheck.ts` that runs (a) trigram/`ilike` prefilter over `projects.name` and `developer_name`, then (b) a Lovable AI call (`google/gemini-2.5-flash`) to score semantic similarity and return a ranked match list.
+- **UI**: new `<ProjectDuplicateCheck>` component embedded in the three upload surfaces above.
+- **My Projects page** (`src/pages/owner/developers/OwnerDevelopersProjects.tsx` or equivalent): add `SearchInput`, `StatusTabs`, `order('created_at', { ascending: false })`, and "Load more" pagination.
+
+No database migration needed.
+
+---
+
+## What I won't touch unless you ask
+
+- Deleting or merging Amra records automatically.
+- Renaming existing projects.
+- Changing publish/unpublish behavior itself.
+
+Approve this and I'll implement it end-to-end and verify with screenshots.
