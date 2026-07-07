@@ -115,6 +115,10 @@ interface FilterShortcutBarProps {
   showResultsCount?: boolean;
   /** Hide the duplicate sort pills (Newest/Low-High/High-Low/A-Z/Trending) when a SortBySelect is used elsewhere. */
   hideSort?: boolean;
+  /** Hide only the Trending sort pill when the rail must match the approved project sticky order. */
+  hideTrendingSort?: boolean;
+  /** Hide Property Type when a scoped sticky rail must match the owner-approved project filter order. */
+  hidePropertyType?: boolean;
 }
 
 const PRICE_PRESETS = [
@@ -189,7 +193,7 @@ const CURRENCY_RATES: Record<string, number> = {
 const SQFT_TO_SQM = 1 / 10.764;
 const SQM_TO_SQFT = 10.764;
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel, showResultsCount = false, hideSort = false }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel, showResultsCount = false, hideSort = false, hideTrendingSort = false, hidePropertyType = false }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');
@@ -715,41 +719,43 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Property Type */}
-        <Popover open={propertyTypeOpen} onOpenChange={(open) => { if (open) closeOtherMenus('propertyType'); setPropertyTypeOpen(open); }}>
-          <PopoverTrigger asChild>
-            <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
-              <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{getPropertyTypeLabel()}</span>
-              {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
-              <ChevronDown className="w-3 h-3 text-white opacity-100" />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-72 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <Tabs
-              value={filters.propertyCategory || 'residential'}
-              onValueChange={(val) => {
-                const category = val as 'residential' | 'commercial';
-                update({ propertyCategory: category, propertyTypes: [] });
-              }}
-            >
-              <TabsList className={cn(filterTabsList, "jj-filter-tabs-list gap-1.5")}> 
-                <TabsTrigger value="residential" data-filter-selected={(filters.propertyCategory || 'residential') === 'residential' ? "true" : undefined} style={(filters.propertyCategory || 'residential') === 'residential' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" data-filter-selected={filters.propertyCategory === 'commercial' ? "true" : undefined} style={filters.propertyCategory === 'commercial' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <div className="flex flex-wrap gap-2">
-              {(filters.propertyCategory === 'commercial' ? COMMERCIAL_TYPES : RESIDENTIAL_TYPES).map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => update({ propertyTypes: toggleArray(filters.propertyTypes, opt.value) })}
-                  data-filter-selected={filters.propertyTypes.includes(opt.value) ? "true" : undefined}
-                  className={cn(togglePillBase, filters.propertyTypes.includes(opt.value) ? togglePillOn : togglePillOff)}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
+        {!hidePropertyType && (
+          <Popover open={propertyTypeOpen} onOpenChange={(open) => { if (open) closeOtherMenus('propertyType'); setPropertyTypeOpen(open); }}>
+            <PopoverTrigger asChild>
+              <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactiveCls)}>
+                <span className="allow-white text-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{getPropertyTypeLabel()}</span>
+                {filters.propertyTypes.length > 1 && <CountBadge count={filters.propertyTypes.length - 1} />}
+                <ChevronDown className="w-3 h-3 text-white opacity-100" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent data-filter-dropdown="true" data-no-contrast-guard className={cn("w-72 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
+              <Tabs
+                value={filters.propertyCategory || 'residential'}
+                onValueChange={(val) => {
+                  const category = val as 'residential' | 'commercial';
+                  update({ propertyCategory: category, propertyTypes: [] });
+                }}
+              >
+                <TabsList className={cn(filterTabsList, "jj-filter-tabs-list gap-1.5")}> 
+                  <TabsTrigger value="residential" data-filter-selected={(filters.propertyCategory || 'residential') === 'residential' ? "true" : undefined} style={(filters.propertyCategory || 'residential') === 'residential' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.residential')}</TabsTrigger>
+                  <TabsTrigger value="commercial" data-filter-selected={filters.propertyCategory === 'commercial' ? "true" : undefined} style={filters.propertyCategory === 'commercial' ? selectedTabStyle : inactiveTabStyle} className={filterTabTrigger}>{t('filter.commercial')}</TabsTrigger>
+                </TabsList>
+              </Tabs>
+              <div className="flex flex-wrap gap-2">
+                {(filters.propertyCategory === 'commercial' ? COMMERCIAL_TYPES : RESIDENTIAL_TYPES).map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => update({ propertyTypes: toggleArray(filters.propertyTypes, opt.value) })}
+                    data-filter-selected={filters.propertyTypes.includes(opt.value) ? "true" : undefined}
+                    className={cn(togglePillBase, filters.propertyTypes.includes(opt.value) ? togglePillOn : togglePillOff)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
 
         {/* Bedrooms */}
         <Popover open={bedroomsOpen} onOpenChange={(open) => { if (open) closeOtherMenus('bedrooms'); setBedroomsOpen(open); }}>
@@ -881,7 +887,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <div className={filterDivider} />
 
         {/* Sort pills (hidden when consumer page uses a dedicated SortBySelect) */}
-        {!hideSort && SORT_OPTIONS.map((opt) => (
+        {!hideSort && SORT_OPTIONS.filter((opt) => !(hideTrendingSort && opt.value === 'trending')).map((opt) => (
           <button
             key={opt.value}
             onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}

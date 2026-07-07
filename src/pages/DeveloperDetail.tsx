@@ -8,7 +8,7 @@ import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Globe } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Globe, Briefcase, Info } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -317,6 +317,21 @@ const DeveloperDetail = () => {
   // Reset showAll when filters or developer changes
   useEffect(() => { setShowAllProjects(false); setVisibleCount(6); }, [slug, selectedEmirate, filters]);
 
+  const developerStickyTabs = [
+    { id: "developer-overview", label: "Developer", icon: Building2 },
+    { id: "developer-map", label: "Location", icon: MapPin },
+    { id: "developer-intelligence", label: "AI Analyzer", icon: BarChart3 },
+    { id: "developer-projects", label: "Projects", icon: Briefcase },
+  ];
+
+  const scrollToDeveloperSection = (id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY - 132;
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.scrollTo({ top: Math.max(0, top), behavior: prefersReduced ? "auto" : "smooth" });
+  };
+
   // Apply emirate filter first, then apply other filters
   const projectsInEmirate = useMemo(() => {
     if (!projects) return [];
@@ -462,6 +477,29 @@ const DeveloperDetail = () => {
         ]}
       />
       <SchemaEntity kind="developer" slug={slug || ""} pageTitle={`${developer.name} — Live Projects in the UAE`} />
+
+      {isFilterFixed && !bottomReached && (
+        <div data-scoped-sticky-nav="developer" className="jj-utility-shell fixed left-0 right-0 top-0 z-[9999] backdrop-blur-md transition-all duration-300">
+          <div data-filter-clean="true" data-filter-bar-gold="developer-detail" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2">
+            <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
+              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="developers" hidePropertyType hideTrendingSort />
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+            <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
+              <div className="flex w-max min-w-max items-center gap-1 py-2.5">
+                {developerStickyTabs.map((tab) => (
+                  <button key={tab.id} type="button" onClick={() => scrollToDeveloperSection(tab.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap shrink-0 min-w-fit transition-all text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent">
+                    <tab.icon className="w-3.5 h-3.5" />
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero section - always visible */}
       <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
           {heroImageUrl ? (
@@ -512,7 +550,7 @@ const DeveloperDetail = () => {
       {/* Content (Layer 2) */}
       <div className="jj-layer-2 mt-6 md:mt-8 mb-12" style={{ marginLeft: 0, marginRight: 0, borderRadius: 0, border: 'none' }}>
         {/* Developer header */}
-        <div className="flex flex-col md:flex-row md:items-start gap-6">
+        <div id="developer-overview" className="flex flex-col md:flex-row md:items-start gap-6 scroll-mt-40">
           {/* Logo plate — gold border, padded so wide wordmarks (EMAAR, DAMAC) fit */}
           <DeveloperLogo
             src={developer.logo_url}
@@ -609,7 +647,7 @@ const DeveloperDetail = () => {
 
         {/* Developer Projects Map - Wrapped in error boundary */}
         {projects && projects.length > 0 && (
-          <div className="mt-8">
+          <div id="developer-map" className="mt-8 scroll-mt-40">
             <MapErrorBoundary>
               <Suspense fallback={<MapLoadingFallback />}>
                 <DeveloperProjectsMap
@@ -622,10 +660,12 @@ const DeveloperDetail = () => {
           </div>
         )}
 
-        <DeveloperPerformancePanel developer={developer} projects={projects || []} competitors={competitorDevelopers} projectMetricsByDeveloperId={projectMetricsByDeveloperId} />
+        <div id="developer-intelligence" className="scroll-mt-40">
+          <DeveloperPerformancePanel developer={developer} projects={projects || []} competitors={competitorDevelopers} projectMetricsByDeveloperId={projectMetricsByDeveloperId} />
+        </div>
 
         {/* Projects section */}
-        <div className="mt-8">
+        <div id="developer-projects" className="mt-8 scroll-mt-40">
           {/* Emirates Tabs */}
           <EmiratesTabs
             projects={projects}
@@ -649,11 +689,13 @@ const DeveloperDetail = () => {
             data-filter-bar-gold=""
             className="jj-shimmer-champagne-live rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide"
           >
-            <FilterShortcutBar
+              <FilterShortcutBar
               variant="dark"
               filters={shortcutFilters}
               onFilterChange={setShortcutFilters}
               priorityFilter="developers"
+                hidePropertyType
+                hideTrendingSort
             />
           </div>
 
