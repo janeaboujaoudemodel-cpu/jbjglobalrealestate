@@ -143,6 +143,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiAddOpen, setAiAddOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const handleExtractedToManual = (e: ExtractedProject) => {
     setAiAddOpen(false);
