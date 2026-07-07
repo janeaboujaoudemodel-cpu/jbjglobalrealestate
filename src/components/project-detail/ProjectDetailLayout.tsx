@@ -74,6 +74,7 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
+import ProjectStickyUtilityControls from "@/components/project-detail/ProjectStickyUtilityControls";
 import { isMortgageEligible, mortgageIneligibilityReason } from "@/utils/mortgageEligibility";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
@@ -111,8 +112,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
+import citiBuddyRobotLocal from "@/assets/citi-buddy-robot-concierge.jpg";
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
 // Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
@@ -370,11 +371,11 @@ function ProjectDetailLayoutInner({
 
   const { isLeadCaptured } = useLeadCapture();
 
-  // Show sticky nav after scrolling past hero
+  // Replace the global horizontal header as soon as the user scrolls away from the top.
+  // At scrollY=0 the normal site header is restored.
   useEffect(() => {
     const onScroll = () => {
-      const heroHeight = window.innerHeight;
-      setShowStickyNav(window.scrollY > heroHeight - 150);
+      setShowStickyNav(window.scrollY > 16);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -505,11 +506,14 @@ function ProjectDetailLayoutInner({
     if (!isAmraProject) return project.documents;
     const nonBrochure = project.documents.filter((d) => {
       const t = normalizeDocType(d.type || "");
-      const n = normalizeDocType(d.name || "");
-      const isBrochureLike =
-        t === "brochure" || t === "factsheet" || t === "fact_sheet" ||
-        t.includes("brochure") || n.includes("brochure") || n.includes("fact_sheet") || n.includes("factsheet");
-      return !isBrochureLike;
+      const n = normalizeDocType(`${d.name || ""} ${d.display_title || ""}`);
+      const isDeprecatedFactSheet =
+        t === "factsheet" ||
+        t === "fact_sheet" ||
+        n.includes("fact_sheet") ||
+        n.includes("factsheet") ||
+        n.includes("amra_fact_sheet");
+      return !isDeprecatedFactSheet;
     });
     const replacement = {
       id: "amra-factsheet-v4",
@@ -737,7 +741,7 @@ function ProjectDetailLayoutInner({
   }, [project]);
 
   const citiBuddyImageUrl = useMemo(
-    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || citiBuddyRobotAsset.url,
+    () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || citiBuddyRobotLocal,
     [images],
   );
 
@@ -807,10 +811,10 @@ function ProjectDetailLayoutInner({
       "Heli and air-taxi landing pad",
       "Yacht limo service and private marina deck",
       "In-room dining and all-day dining",
-      "App-enabled short-stay management (Amra B&B)",
       "Fully furnished apartments",
       "Fully serviced apartments",
       "Full sea view & direct beach access",
+      "App-enabled short-stay management (Amra B&B)",
       // Ground Floor — Outdoor Wellness Amenities (142,625 sq ft)
       "Adult Infinity Pool with lagoon horizon",
       "Dedicated Kids' Pool with shaded edges",
@@ -901,15 +905,15 @@ function ProjectDetailLayoutInner({
     // resolves to a brochure-cropped photo (or, for Citi Buddy, the official
     // robot render). Titles absent from this map fall back to an icon tile.
     const dedicated: Record<string, string> = {
-      "Citi Buddy (AI Robot Companion)": citiBuddyRobotAsset.url,
+      "Citi Buddy (AI Robot Companion)": citiBuddyRobotLocal,
       "165+ wellness and lifestyle amenities": amraAerialResort,
-      "688,000 sq ft dedicated wellness area": amraAerialResort,
+      "688,000 sq ft dedicated wellness area": amraSpaPool,
       "Heli and air-taxi landing pad": amraAerialResort,
       "Yacht limo service and private marina deck": amraPoolCabanas,
       "In-room dining and all-day dining": amraInRoomDining,
-      "App-enabled short-stay management (Amra B&B)": citiBuddyRobotAsset.url,
+      "App-enabled short-stay management (Amra B&B)": citiBuddyDocumentCoverAsset.url,
       "Fully furnished apartments": amraFurnishedApts,
-      "Fully serviced apartments": amraFurnishedApts,
+      "Fully serviced apartments": amraGrandLobby,
       "Full sea view & direct beach access": amraSeaTurtles,
 
       "Adult Infinity Pool with lagoon horizon": amraPoolCabanas,
@@ -995,7 +999,7 @@ function ProjectDetailLayoutInner({
     });
 
     // Legacy aliases
-    mapped["Citi Buddy concierge"] = citiBuddyRobotAsset.url;
+    mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
     return mapped;
   }, [amraAmenities, isAmraProject, project.amenity_images]);
 
@@ -1387,22 +1391,30 @@ function ProjectDetailLayoutInner({
       )}
 
 
-      {/* STICKY SUB-NAVIGATION - REPLACES global header when active (top-0). Two rows: Search + Shortcuts */}
+      {/* STICKY PROJECT HEADER - replaces the global horizontal header while scrolled. */}
       <div 
-        className={`jj-utility-shell fixed left-0 right-0 z-[9990] backdrop-blur-md transition-all duration-300 ${
+        data-project-sticky-nav="true"
+        className={`jj-utility-shell fixed left-0 right-0 z-[9999] backdrop-blur-md transition-all duration-300 ${
           showStickyNav
             ? "top-0 translate-y-0 opacity-100"
             : "top-[88px] -translate-y-full opacity-0 pointer-events-none"
         }`}
       >
-        {/* Row 1: Filter Shortcut Bar */}
-        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-3 px-2 transition-all duration-300">
+        {/* Row 1: controls moved out of the global header */}
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 transition-all duration-300">
+          <div className="jj-content-track">
+            <ProjectStickyUtilityControls filters={shortcutFilters} onFilterChange={setShortcutFilters} />
+          </div>
+        </div>
+
+        {/* Row 2: Filter Shortcut Bar */}
+        <div data-filter-clean="true" data-filter-bar-gold="project-detail" data-project-detail-filterbar="true" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2 transition-all duration-300">
           <div className="max-w-full overflow-x-auto scrollbar-hide flex justify-center md:justify-start" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
 
-        {/* Row 2: Curated Shortcuts — gold bottom border for visibility */}
+        {/* Row 3: Curated Shortcuts — gold bottom border for visibility */}
         <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="jj-content-track">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
@@ -1756,7 +1768,7 @@ function ProjectDetailLayoutInner({
                      Amenities & Features
                      <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="amenities" initial={project as any} /></span>
                    </h3>
-                    <AmenitiesWithPhotos amenities={amraAmenities} amenityImages={amraAmenityImages} />
+                     <AmenitiesWithPhotos amenities={amraAmenities} amenityImages={amraAmenityImages} pageSize={12} />
                  </div>
                </div>
               )}

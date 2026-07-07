@@ -16,11 +16,15 @@ import "leaflet/dist/leaflet.css";
 
 type FilterMode = "nearby" | "area" | "emirate";
 
-// Premium red/gold pin with attached name label — current project must be visually unmistakable.
+const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char] || char));
+
+const shortMapLabel = (projectName: string) => /amra/i.test(projectName) ? "AMRA" : projectName.split(/\s+/).slice(0, 2).join(" ");
+
+// Premium red/gold pin with compact attached label — no long vertical text layout.
 const buildCurrentPin = (projectName: string) => `
-<div style="position:relative;display:flex;flex-direction:column;align-items:center;pointer-events:none;">
-  <div style="background:linear-gradient(135deg,#7A0F0F 0%,#B71C1C 45%,#5A0A0A 100%);color:#FFFFFF;font-weight:900;font-size:12px;letter-spacing:0.03em;padding:6px 12px;border-radius:999px;border:1.5px solid #F4E3A8;box-shadow:0 10px 22px -10px rgba(0,0,0,0.8);white-space:nowrap;text-transform:uppercase;margin-bottom:4px;">${projectName}</div>
-  <svg xmlns="http://www.w3.org/2000/svg" width="58" height="74" viewBox="0 0 58 74" fill="none">
+<div style="position:relative;width:104px;height:104px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;">
+  <div style="background:linear-gradient(135deg,#8B1111 0%,#C42121 48%,#5A0A0A 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;font-weight:900;font-size:12px;letter-spacing:0.08em;padding:5px 12px;border-radius:999px;border:1.5px solid #F4E3A8;box-shadow:0 10px 22px -10px rgba(0,0,0,0.8);white-space:nowrap;text-transform:uppercase;margin-bottom:3px;text-shadow:0 1px 2px rgba(0,0,0,0.55);">${escapeHtml(shortMapLabel(projectName))}</div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="54" height="70" viewBox="0 0 58 74" fill="none">
     <defs>
       <linearGradient id="redPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
         <stop stop-color="#D32F2F"/><stop offset="0.5" stop-color="#B71C1C"/><stop offset="1" stop-color="#5A0A0A"/>
@@ -36,14 +40,14 @@ const buildCurrentPin = (projectName: string) => `
 const createCurrentPinIcon = (projectName: string) => L.divIcon({
   html: buildCurrentPin(projectName),
   className: "jj-map-pin",
-  iconSize: [220, 108],
-  iconAnchor: [110, 108],
-  popupAnchor: [0, -108],
+  iconSize: [104, 104],
+  iconAnchor: [52, 104],
+  popupAnchor: [0, -104],
 });
 
 // Champagne/gold price pill for peer Citi Developer projects.
 const createChampagneMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#E4CE99 0%,#C8A766 55%,#8E6E36 100%);color:#1A1A1A !important;-webkit-text-fill-color:#1A1A1A !important;border:1.5px solid rgba(255,255,255,0.55);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.55);letter-spacing:0;">${priceText}</div>`,
+  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#D7BD78 0%,#B89555 45%,#6E5227 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;border:1.5px solid rgba(255,255,255,0.72);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.55);letter-spacing:0;text-shadow:0 1px 2px rgba(0,0,0,0.65);">${escapeHtml(priceText)}</div>`,
   className: "custom-marker jj-map-pin",
   iconSize: [90, 30],
   iconAnchor: [45, 30],

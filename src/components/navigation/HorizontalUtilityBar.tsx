@@ -75,6 +75,7 @@ function decodeFiltersFromURL(p: URLSearchParams): ShortcutFilterState {
 export default function HorizontalUtilityBar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [filterBarActive, setFilterBarActive] = useState(false);
   const searchTriggerRef = useRef<HTMLButtonElement | null>(null);
   const filterTriggerRef = useRef<HTMLButtonElement | null>(null);
   const [searchAnchor, setSearchAnchor] = useState<DOMRect | null>(null);
@@ -99,6 +100,14 @@ export default function HorizontalUtilityBar() {
     return () => window.removeEventListener('areaUnitChange', handler);
   }, []);
 
+  useEffect(() => {
+    const sync = () => setFilterBarActive(document.body.classList.contains('filter-bar-fixed'));
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
   const toggleAreaUnit = () => {
     const next = areaUnit === 'sqft' ? 'sqm' : 'sqft';
     setAreaUnit(next);
@@ -118,7 +127,7 @@ export default function HorizontalUtilityBar() {
     <>
       <div
         data-jj-utility-bar
-        className="jj-utility-shell fixed top-0 right-0 h-[88px] z-[9998] flex items-center transition-[left,height,background-color] duration-100 ease-out px-5 xl:px-7 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent"
+        className={`jj-utility-shell fixed top-0 right-0 h-[88px] z-[9998] flex items-center transition-[left,height,background-color,transform,opacity] duration-200 ease-out px-5 xl:px-7 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent ${filterBarActive ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}
       >
 
 

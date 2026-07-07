@@ -53,14 +53,42 @@ const findRealPhoto = (amenity: string, amenityImages?: Record<string, string> |
   return null;
 };
 
+const paginateAmenities = (amenities: string[], pageSize: number, amenityImages?: Record<string, string> | null) => {
+  const remaining = amenities.map((amenity, index) => ({ amenity, index }));
+  const pages: string[][] = [];
+
+  while (remaining.length > 0) {
+    const usedPhotos = new Set<string>();
+    const pageItems: string[] = [];
+
+    while (pageItems.length < pageSize && remaining.length > 0) {
+      let chosenIndex = remaining.findIndex(({ amenity }) => {
+        const photo = findRealPhoto(amenity, amenityImages);
+        return !photo || !usedPhotos.has(photo);
+      });
+      if (chosenIndex < 0) chosenIndex = 0;
+
+      const [chosen] = remaining.splice(chosenIndex, 1);
+      const photo = findRealPhoto(chosen.amenity, amenityImages);
+      if (photo) usedPhotos.add(photo);
+      pageItems.push(chosen.amenity);
+    }
+
+    pages.push(pageItems);
+  }
+
+  return pages.length ? pages : [[]];
+};
+
 export default function AmenitiesWithPhotos({ amenities, amenityImages, className = "", pageSize = 15 }: AmenitiesWithPhotosProps) {
   const [page, setPage] = useState(0);
-  const totalPages = Math.max(1, Math.ceil((amenities?.length || 0) / pageSize));
-  const currentPage = Math.min(page, totalPages - 1);
-  const visible = useMemo(
-    () => (amenities || []).slice(currentPage * pageSize, currentPage * pageSize + pageSize),
-    [amenities, currentPage, pageSize],
+  const pages = useMemo(
+    () => paginateAmenities(amenities || [], pageSize, amenityImages),
+    [amenities, pageSize, amenityImages],
   );
+  const totalPages = Math.max(1, pages.length);
+  const currentPage = Math.min(page, totalPages - 1);
+  const visible = pages[currentPage] || [];
 
   if (!amenities || amenities.length === 0) return null;
 
@@ -76,13 +104,13 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
               key={`${currentPage}-${idx}-${amenity}`}
               className="group flex flex-col items-center gap-0 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all text-center overflow-hidden"
             >
-              <div className={`w-full ${isCitiBuddy ? "h-40 bg-gradient-to-b from-[#F7F1E6] to-[#EFE6D6]" : "h-24"} overflow-hidden relative flex items-center justify-center`}>
+              <div className={`w-full ${isCitiBuddy ? "h-44 bg-gradient-to-b from-[#F7F1E6] to-[#EFE6D6]" : "h-24"} overflow-hidden relative flex items-center justify-center`}>
                 {photoUrl ? (
                   <>
                     <img
                       src={photoUrl}
                       alt={amenity}
-                      className={`w-full h-full ${isCitiBuddy ? "object-contain p-2" : "object-cover group-hover:scale-105 transition-transform duration-500"}`}
+                      className={`w-full h-full ${isCitiBuddy ? "object-contain p-0" : "object-cover group-hover:scale-105 transition-transform duration-500"}`}
                       loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = 'none';
@@ -120,9 +148,12 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={currentPage === 0}
             aria-label="Previous amenities page"
-            className="inline-flex items-center gap-1 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#053a2c] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            data-emerald-action="true"
+            data-no-contrast-guard
+            className="jj-emerald-action allow-white inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <ChevronLeft className="w-4 h-4" /> Prev
+            <ChevronLeft className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Prev</span>
           </button>
 
           <div className="flex items-center gap-1.5">
@@ -135,11 +166,14 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                   onClick={() => setPage(i)}
                   aria-label={`Amenities page ${i + 1}`}
                   aria-current={active ? "page" : undefined}
-                  className={`min-w-[32px] h-8 px-2.5 rounded-full text-xs font-semibold tabular-nums transition-all ${
+                  data-emerald-action={active ? "true" : undefined}
+                  data-no-contrast-guard={active ? true : undefined}
+                  className={`w-9 h-9 min-w-9 rounded-full p-0 text-xs font-bold tabular-nums transition-all ${
                     active
-                      ? "bg-[#064E3B] text-white shadow-sm"
+                      ? "jj-emerald-action allow-white text-white shadow-sm"
                       : "bg-white text-[#064E3B] border border-[#B89555]/50 hover:bg-[#EFE6D6]/40"
                   }`}
+                  style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
                 >
                   {i + 1}
                 </button>
@@ -152,9 +186,12 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={currentPage >= totalPages - 1}
             aria-label="Next amenities page"
-            className="inline-flex items-center gap-1 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#053a2c] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            data-emerald-action="true"
+            data-no-contrast-guard
+            className="jj-emerald-action allow-white inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            Next <ChevronRight className="w-4 h-4" />
+            <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Next</span> <ChevronRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </button>
         </div>
       )}
