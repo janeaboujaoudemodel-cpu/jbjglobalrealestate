@@ -2,7 +2,7 @@ import * as React from "react";
 import { Download, Lock, Loader2, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import jbjFullLogoDarkBg from "@/assets/jbj-fulllogo-dark-bg.jpg?inline";
+import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 
 const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto";
 import { maybeProxyStorageUrl, proxyAnyDownloadUrl } from "@/utils/downloadProxy";
@@ -181,54 +181,31 @@ const PremiumBrochureCard = ({
 
           {/* Content Layout */}
           <div className="relative z-10 h-full flex flex-col justify-end p-6">
-            {/* Top: Brand mark — emerald label, pure white content */}
-            <div
-              data-no-contrast-guard
-              data-on-dark
-              className="absolute top-3 left-5 flex items-center gap-2 pr-3 py-1.5 rounded-md allow-white"
-              style={{
-                background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
-                paddingLeft: 6,
-                right: 64, // never overlap lock icon (top-4 right-4 + 44px)
-                maxWidth: "calc(100% - 88px)",
-                border: "1px solid rgba(0,0,0,0.30)",
-                boxShadow: "0 8px 20px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.12)",
-                color: "#FFFFFF",
-                WebkitTextFillColor: "#FFFFFF",
-              }}
-            >
-              <div
-                className="w-8 h-8 flex items-center justify-center overflow-hidden shrink-0"
-              >
-                <img
-                  src={jbjFullLogoDarkBg}
-                  alt="JBJ"
-                  className="w-full h-full object-contain"
-                 loading="eager" fetchPriority="high" decoding="sync" />
-              </div>
-
-              <p
-                data-no-contrast-guard
-                className="text-[12.5px] uppercase leading-none whitespace-nowrap allow-white truncate"
-                style={{ color: "#FFFFFF", letterSpacing: "0.10em", textShadow: "0 1px 3px rgba(0,0,0,0.95)" }}
-              >
-                <span style={{ color: "#FFFFFF", fontWeight: 800 }}>JBJ</span>{" "}
-                <span style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.12em" }}>Global Real Estate</span>
-              </p>
-            </div>
+            {/* Top: Monogram floats directly on the cover photo — no boxed background,
+                large and premium. Drop-shadow guarantees contrast on any image. */}
+            <img
+              src={jbjMonogram}
+              alt="JBJ"
+              className="absolute top-4 left-5 h-14 w-14 object-contain select-none pointer-events-none"
+              style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.85)) drop-shadow(0 0 10px rgba(0,0,0,0.55))" }}
+              loading="eager"
+              fetchPriority="high"
+              decoding="sync"
+            />
 
 
 
-            {/* Bottom: Brochure info — compact emerald panel for guaranteed contrast */}
+
+            {/* Bottom: Brochure info — deeper emerald ombré panel */}
             <div
               data-no-contrast-guard
               data-on-dark
               className="mt-auto -mx-1 px-4 py-3 rounded-lg allow-white"
               style={{
-                background: "linear-gradient(135deg, rgba(6,78,59,0.86) 0%, rgba(4,44,28,0.88) 58%, rgba(0,0,0,0.92) 100%)",
+                background: "linear-gradient(135deg, rgba(4,60,44,0.94) 0%, rgba(2,28,18,0.96) 58%, rgba(0,0,0,0.98) 100%)",
                 backdropFilter: "blur(4px)",
-                border: "1px solid rgba(0,0,0,0.30)",
-                boxShadow: "0 10px 24px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
+                border: "1px solid rgba(0,0,0,0.42)",
+                boxShadow: "0 10px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10)",
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
               }}
