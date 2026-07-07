@@ -117,6 +117,17 @@ export default function PaymentPlanVisualization({
     ? `Post-Handover${postHandoverYears ? ` (${postHandoverYears * 12} months)` : ""}`
     : "On Handover";
 
+  // For post-handover balances, the final installment is NOT due at handover —
+  // it's due when the post-handover plan ends. Compute that end date so the
+  // timeline reads "Due by <handover + N years>" instead of the handover date.
+  const postHandoverEndDate: string | null = (() => {
+    if (!isPostHandover || !handoverDate) return null;
+    const d = new Date(handoverDate);
+    if (Number.isNaN(d.getTime())) return null;
+    d.setFullYear(d.getFullYear() + (postHandoverYears || 0));
+    return d.toISOString().slice(0, 10);
+  })();
+
   if (legacyBreakdown?.on_completion) {
     milestones.push({
       label: handoverLabel,
@@ -320,7 +331,7 @@ export default function PaymentPlanVisualization({
                     <>
                       {bookingPct > 0 && dot(bookingMid, 'var(--jj-emerald-ombre)', <>On Booking</>)}
                       {constructionPct > 0 && dot(constructionMid, 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)', <>During Construction</>)}
-                      {handoverPct > 0 && dot(handoverMid, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{handoverDate}</span></>}</>)}
+                      {handoverPct > 0 && dot(handoverMid, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{(postHandoverEndDate || handoverDate) && <><br /><span className="text-[#1A1A1A] font-medium">{isPostHandover && postHandoverEndDate ? `Due by ${postHandoverEndDate}` : handoverDate}</span></>}</>)}
                     </>
                   );
                 })()}
@@ -443,7 +454,9 @@ export default function PaymentPlanVisualization({
 
           {handoverDate && (
             <p className="mt-6 text-sm text-[#1A1A1A]/70 italic text-center">
-              Benefit from extended payment terms until {handoverDate} handover
+              {isPostHandover && postHandoverEndDate
+                ? `Handover ${handoverDate} · post-handover balance payable until ${postHandoverEndDate}`
+                : `Benefit from extended payment terms until ${handoverDate} handover`}
             </p>
           )}
         </TabsContent>

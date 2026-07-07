@@ -1605,12 +1605,9 @@ function ProjectDetailLayoutInner({
                   setLeadCaptureOpen(true);
                 }}
               />
-              {isOwner && (
-                <PaymentPlanVerificationToggle
-                  projectId={project.id}
-                  verified={!!(project as any).payment_plan_verified}
-                />
-              )}
+              {/* Manual owner-entered payment plans are inherently verified; the
+                  "Mark as verified" toggle only made sense for scraped data and
+                  was confusing to users, so it's intentionally removed. */}
             </div>
             )}
 
@@ -1778,9 +1775,9 @@ function ProjectDetailLayoutInner({
                      <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage financing will be available on handover</p>
                       <p>
                         For this off-plan payment structure, the buyer pays 70% through booking and construction.
-                        The remaining 30% is the post-handover balance: it can be paid through the developer plan
-                        over 36 months, or after handover the buyer may apply for bank financing on that remaining
-                        balance and stretch it over a longer mortgage term, subject to bank approval.
+                        On handover, the remaining 30% can be converted into a UAE mortgage and repaid over up to
+                        25 years through the bank — instead of the developer's 3-year post-handover plan — subject to
+                        bank approval.
                       </p>
                    </div>
                  </div>
