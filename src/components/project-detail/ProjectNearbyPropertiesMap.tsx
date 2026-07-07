@@ -85,6 +85,31 @@ function MapResizeRuntime() {
   return null;
 }
 
+function FitBoundsRuntime({ points }: { points: [number, number][] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!points.length) return;
+    if (points.length === 1) {
+      map.setView(points[0], 14, { animate: false });
+      return;
+    }
+    const bounds = L.latLngBounds(points.map(([a, b]) => L.latLng(a, b)));
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13, animate: false });
+  }, [map, points]);
+  return null;
+}
+
+function ScrollLockRuntime() {
+  const map = useMap();
+  useEffect(() => {
+    map.scrollWheelZoom.disable();
+    // Prevent leaflet from stealing keyboard scroll
+    map.keyboard?.disable();
+  }, [map]);
+  return null;
+}
+
+
 export default function ProjectNearbyPropertiesMap({
   currentProjectId,
   currentProjectName,
