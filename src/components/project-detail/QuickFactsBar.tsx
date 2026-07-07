@@ -1,9 +1,11 @@
-import { Building2, Layers, Home, CalendarCheck, CheckCircle, Clock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { Building2, Layers, Home, CalendarCheck, Sparkles, Clock, Hand } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { isPublicStatus, getProjectStatus } from "@/utils/projectStatus";
+import { supabase } from "@/integrations/supabase/client";
 
 interface QuickFactsBarProps {
+  projectId?: string;
   propertyType?: string | null;
   totalUnits?: number | null;
   floors?: number | null;
@@ -14,7 +16,20 @@ interface QuickFactsBarProps {
   updatedAt?: string | null;
 }
 
+/**
+ * Premium "at-a-glance" strip shown just below the hero.
+ *
+ * Rules (LOCKED — see mem://features/project-detail/provenance-and-updated-standard):
+ *  • Status pill (Off-plan / Ready) uses the emerald brand gradient.
+ *  • Handover, Property type and Updated share the same champagne-card look.
+ *  • Updated timestamp is the MAX of `projects.updated_at` and the most recent
+ *    `admin_edit_log` entry for this project — so any manual/AI edit made
+ *    through the admin surfaces is reflected immediately, not the stale row
+ *    timestamp.
+ *  • Never render the same "Updated" chip twice on the page.
+ */
 export default function QuickFactsBar({
+  projectId,
   propertyType,
   totalUnits,
   floors,
@@ -24,112 +39,152 @@ export default function QuickFactsBar({
   handoverDate,
   updatedAt,
 }: QuickFactsBarProps) {
-  // Synced status (single source of truth = handover_date)
   const synced = getProjectStatus({
     handover_date: handoverDate,
     status_label: statusLabel || saleStatus,
     availability_status: availabilityStatus,
   });
-  // Only show a status pill when the raw value is a public-friendly label
-  // (hides internal admin states like "pending", "draft", etc.)
+
   const rawStatus = saleStatus || statusLabel || availabilityStatus;
-  const publicPillLabel = saleStatus?.toLowerCase().includes("off")
+  const isOffPlan = saleStatus?.toLowerCase().includes("off");
+  const publicPillLabel = isOffPlan
     ? "Off-plan"
-    : isPublicStatus(rawStatus) ? rawStatus : (synced.isReady ? "Ready" : null);
+    : isPublicStatus(rawStatus)
+      ? rawStatus
+      : synced.isReady
+        ? "Ready"
+        : null;
+
+  // Pull the most recent admin-edit-log entry so the "Updated" chip reflects
+  // real activity, not the stale `projects.updated_at` column.
+  const { data: lastLogAt } = useQuery({
+    queryKey: ["project-last-activity", projectId],
+    enabled: !!projectId,
+    staleTime: 30_000,
+    queryFn: async (): Promise<string | null> => {
+      const { data, error } = await supabase
+        .from("admin_edit_log" as any)
+        .select("created_at")
+        .eq("entity_type", "project")
+        .eq("entity_id", projectId!)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) return null;
+      return (data as any)?.created_at ?? null;
+    },
+  });
+
+  const effectiveUpdatedAt = (() => {
+    const a = updatedAt ? new Date(updatedAt).getTime() : 0;
+    const b = lastLogAt ? new Date(lastLogAt).getTime() : 0;
+    const t = Math.max(a, b);
+    return t > 0 ? new Date(t).toISOString() : null;
+  })();
 
   const facts = [
     {
       icon: Home,
-      label: "Property Type",
+      label: "Property type",
       value: propertyType || null,
-      show: !!propertyType
+      show: !!propertyType,
     },
     {
       icon: Building2,
-      label: "Total Units",
-      value: totalUnits ? `${totalUnits} Units` : null,
-      show: !!totalUnits && totalUnits > 4
+      label: "Total units",
+      value: totalUnits ? `${totalUnits}` : null,
+      show: !!totalUnits && totalUnits > 4,
     },
     {
       icon: Layers,
       label: "Floors",
-      value: floors ? `${floors} Floors` : null,
-      show: !!floors
+      value: floors ? `${floors}` : null,
+      show: !!floors,
     },
     {
       icon: CalendarCheck,
       label: "Handover",
       value: synced.label !== "TBA" ? synced.label : formatDisplayDate(handoverDate),
-      show: !!handoverDate || synced.isReady
+      show: !!handoverDate || synced.isReady,
     },
-  ].filter(f => f.show && f.value);
+  ].filter((f) => f.show && f.value);
 
-  const getStatusColor = (status?: string | null) => {
-    if (!status) return "bg-red-50 text-red-600 border-red-200";
-    const s = status.toLowerCase();
-    if (s.includes("available") || s.includes("selling")) return "jj-surface-emerald-soft text-emerald-400 border-[color:var(--emerald-1)]/30/30";
-    if (s.includes("limited") || s.includes("few")) return "bg-amber-500/20 text-[#1A1A1A] border-amber-500/30";
-    if (s.includes("sold") || s.includes("out")) return "bg-red-500/20 text-red-400 border-red-500/30";
-    if (s.includes("launch") || s.includes("soon") || s.includes("new")) return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-    return "bg-[#EFE6D6]/20 text-[#1A1A1A] border-[#B89555]/30";
-  };
-
-  const formatDate = (dateStr?: string | null) => {
-    if (!dateStr) return null;
+  const formatUpdated = (iso?: string | null) => {
+    if (!iso) return null;
     try {
-      return new Date(dateStr).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric"
-      });
+      const d = new Date(iso);
+      const mins = Math.floor((Date.now() - d.getTime()) / 60000);
+      if (mins < 1) return "just now";
+      if (mins < 60) return `${mins} min ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      const days = Math.floor(hrs / 24);
+      if (days < 7) return `${days}d ago`;
+      return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
     } catch {
       return null;
     }
   };
 
   return (
-    <div className="w-full overflow-x-auto pb-2">
-      <div className="flex items-center gap-3 min-w-max">
-        {/* Status Badge - only render public-friendly labels (no leaking "pending" etc.) */}
+    <div className="w-full">
+      <div className="flex flex-wrap items-stretch gap-3">
+        {/* Off-plan / Ready — emerald brand pill, not a chip */}
         {publicPillLabel && (
-          <Badge
-            className={`px-3 py-1.5 text-sm font-medium border ${getStatusColor(publicPillLabel)}`}
+          <div
+            data-surface="emerald"
+            data-no-contrast-guard
+            className="allow-white inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold border border-black/25 shadow-sm"
+            style={{
+              background:
+                "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)",
+              color: "#FFFFFF",
+              boxShadow: "0 10px 24px -14px rgba(4,44,28,0.75)",
+            }}
           >
-            <CheckCircle className="w-3.5 h-3.5 mr-1.5" />
-            {publicPillLabel}
-          </Badge>
+            <Sparkles className="w-4 h-4" style={{ color: "#F5E7C4" }} />
+            <span style={{ color: "#FFFFFF" }}>{publicPillLabel}</span>
+          </div>
         )}
 
-        {/* Divider */}
-        {publicPillLabel && facts.length > 0 && (
-          <div className="w-px h-6 bg-border" />
-        )}
-
-        {/* Quick Facts */}
+        {/* Fact cards */}
         {facts.map((fact, idx) => (
-          <div 
-            key={idx} 
-            className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[#B89555]/20 bg-card"
+          <div
+            key={idx}
+            className="flex items-center gap-3 rounded-xl border border-[#B89555]/50 bg-[#FDFBF7] px-4 py-3 shadow-sm min-w-[180px]"
           >
-            <fact.icon className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
-            <div className="flex flex-col">
-              {fact.label ? (
-                <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/80 font-medium leading-none">{fact.label}</span>
-              ) : null}
-              <span className="text-sm font-medium text-foreground">{fact.value}</span>
+            <div className="w-8 h-8 rounded-lg bg-[#EFE6D6] flex items-center justify-center flex-shrink-0">
+              <fact.icon className="w-4 h-4 text-[#064E3B]" aria-hidden="true" />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold leading-none">
+                {fact.label}
+              </span>
+              <span className="mt-1 text-sm font-semibold text-[#1A1A1A] truncate">
+                {fact.value}
+              </span>
             </div>
           </div>
         ))}
 
-        {/* Last Updated */}
-        {updatedAt && (
-          <>
-            <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-1.5 text-xs text-[#1A1A1A]/70 font-medium">
-              <Clock className="w-3.5 h-3.5" />
-              <span>Updated: {formatDate(updatedAt)}</span>
+        {/* Updated — single source of truth, sits with Handover */}
+        {effectiveUpdatedAt && (
+          <div className="flex items-center gap-3 rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] px-4 py-3 shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
+              <Clock className="w-4 h-4 text-[#064E3B]" aria-hidden="true" />
             </div>
-          </>
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 font-semibold leading-none">
+                Updated
+              </span>
+              <span className="mt-1 text-sm font-semibold text-[#1A1A1A]">
+                {formatUpdated(effectiveUpdatedAt)}
+              </span>
+              <span className="text-[10px] text-[#1A1A1A]/55 leading-none mt-0.5 inline-flex items-center gap-1">
+                <Hand className="w-2.5 h-2.5" /> maintained manually
+              </span>
+            </div>
+          </div>
         )}
       </div>
     </div>

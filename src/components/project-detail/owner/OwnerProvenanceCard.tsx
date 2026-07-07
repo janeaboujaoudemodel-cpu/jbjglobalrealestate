@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Clock, Database, History, Undo2, Eye, Sparkles, X } from "lucide-react";
+import { Clock, Database, History, Undo2, Eye, Sparkles, X, Star } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
@@ -90,6 +90,8 @@ export default function OwnerProvenanceCard({
   const [historyOpen, setHistoryOpen] = useState(false);
   const [enrichOpen, setEnrichOpen] = useState(false);
   const [enrichSection, setEnrichSection] = useState<string | undefined>(undefined);
+  // Minimized by default — owner clicks the star to expand.
+  const [expanded, setExpanded] = useState(false);
   
 
   const { data: logs = [], refetch } = useQuery({
@@ -156,16 +158,42 @@ export default function OwnerProvenanceCard({
     setEnrichOpen(true);
   };
 
+  // Collapsed: just a small gold star chip. Click to expand.
+  if (!expanded) {
+    return (
+      <>
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          title="Owner · Provenance (click to expand)"
+          aria-label="Show provenance"
+          className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[#B89555]/60 bg-[#F7F2EA] shadow-sm hover:bg-[#EFE6D6] transition-colors"
+        >
+          <Star className="w-4 h-4 text-[#B89555]" fill="#B89555" />
+        </button>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/70">
-            Owner · Provenance
+            Owner · Edit history & sources
           </span>
           <span data-emerald-action="true" className="allow-white ml-auto inline-flex items-center gap-1 text-[10px] font-semibold text-white bg-[#064E3B] px-2 py-0.5 rounded-md border border-transparent">
             <Database className="w-3 h-3" /> Private
           </span>
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            aria-label="Minimize"
+            className="p-1 rounded hover:bg-[#EFE6D6]"
+            title="Minimize"
+          >
+            <X className="w-3.5 h-3.5 text-[#1A1A1A]/70" />
+          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#1A1A1A]">

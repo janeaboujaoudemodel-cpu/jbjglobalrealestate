@@ -1519,6 +1519,7 @@ function ProjectDetailLayoutInner({
           {/* QUICK FACTS BAR - Reelly-style horizontal bar */}
           <div className="mb-12">
              <QuickFactsBar
+               projectId={project.id}
                propertyType={project.property_type_label}
                totalUnits={project.availability_visible ? project.total_units : null}
                floors={project.floors && project.floors > 3 ? project.floors : undefined}
@@ -1530,10 +1531,11 @@ function ProjectDetailLayoutInner({
              />
           </div>
 
-          {/* OWNER PROVENANCE CARD — owner/admin only, replaces the old public "Updated X ago" chip */}
+          {/* OWNER PROVENANCE — collapsed to a gold star; click to expand.
+              Public "Updated" chip lives inside <QuickFactsBar> only. */}
           {isOwner && (
             <div className="mb-8 flex justify-end">
-              <div className="w-full max-w-md">
+              <div className="max-w-md">
                 <OwnerProvenanceCard
                   projectId={project.id}
                   projectName={project.name}
