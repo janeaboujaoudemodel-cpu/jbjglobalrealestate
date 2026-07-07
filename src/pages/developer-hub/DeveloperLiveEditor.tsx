@@ -450,6 +450,18 @@ const DeveloperLiveEditor = () => {
           })}
         </div>
       )}
+      {allProjects && allProjects.length >= pageSize && (
+        <div className="flex justify-center pt-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setPageSize((s) => s + PAGE_SIZE)}
+            className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+          >
+            Load more projects
+          </Button>
+        </div>
+      )}
       </section>
 
       {isOwner && (
