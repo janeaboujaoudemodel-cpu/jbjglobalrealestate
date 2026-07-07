@@ -43,6 +43,41 @@ html body #root [data-jbj-card] :where(button, a[role="button"], [role="button"]
   max-width: 100%;
 }
 
+html body :is([role="dialog"], [data-radix-popper-content-wrapper]) [aria-label="Close"] {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  min-width: 2.5rem !important;
+  min-height: 2.5rem !important;
+  max-width: 2.5rem !important;
+  max-height: 2.5rem !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 9999px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+  flex: 0 0 2.5rem !important;
+}
+
+html body :is([role="dialog"], [data-radix-popper-content-wrapper]) [aria-label="Close"] svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  flex: 0 0 1rem !important;
+}
+
+html body #root [data-compare-picker] :where(*)::selection {
+  background-color: rgba(6, 78, 59, 0.22) !important;
+  color: #1A1A1A !important;
+}
+
+html body #root [data-compare-picker] :where(input, textarea, button, [role="button"]):focus-visible {
+  outline: none !important;
+  border-color: #064E3B !important;
+  box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.18) !important;
+}
+
 html body #root .owner-dashboard-shell :where(.flex, [class*="flex"], .grid, [class*="grid"]) > * {
   min-width: 0;
 }
