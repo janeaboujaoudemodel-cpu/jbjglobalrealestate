@@ -19,7 +19,7 @@ const fadeInUp = {
 
 const AIComparisonWidget = () => {
   const features = [
-    { icon: BarChart3, label: "Compare unlimited projects", description: "No 2-5 cap — add as many as you need" },
+    { icon: BarChart3, label: "Compare up to 10 projects", description: "Select exact projects, developers, or areas" },
     { icon: TrendingUp, label: "ROI projections", description: "Yield & investment returns" },
     { icon: Calculator, label: "Excel & premium table", description: "Two export styles" },
   ];

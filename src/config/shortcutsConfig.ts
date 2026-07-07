@@ -118,7 +118,8 @@ export function filterShortcutGroups(groups: ShortcutGroup[], opts: {
     if (group.visibility.includes('investor') && (opts.mode === 'investor' || (!opts.isOwner && opts.isInvestor))) return true;
     return false;
   }).map((group) => {
-    const items = group.items.map((item) => {
+    const canCompare = (opts.isOwner && opts.mode === 'owner') || opts.mode === 'broker' || opts.mode === 'developer';
+    const items = group.items.filter((item) => item.href !== '/compare' || canCompare).map((item) => {
       if (item.label === 'My Dashboard') {
         return { ...item, href: getDashboardHref({ isOwner: opts.isOwner, mode: opts.mode }) };
       }

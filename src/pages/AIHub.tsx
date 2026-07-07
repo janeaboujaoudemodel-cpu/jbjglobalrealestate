@@ -8,6 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserMode } from "@/hooks/useUserMode";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import {
   ArrowUpRight,
   Sparkles,
@@ -231,6 +232,7 @@ function ToolCard({ tool, index }: { tool: ToolDef; index: number }) {
 const AIHub = () => {
   const { user } = useAuth();
   const { mode } = useUserMode();
+  const { isOwner } = useIsAppOwner();
   const navigate = useNavigate();
   const [toolSearch, setToolSearch] = useState("");
   const [toolFilter, setToolFilter] = useState<ToolCategory | "all">("all");
@@ -238,8 +240,8 @@ const AIHub = () => {
   const visibility = useToolVisibility();
 
   const allTools = useMemo(
-    () => ALL_TOOLS.filter((t) => visibility.isPublic(t.id)),
-    [visibility]
+    () => ALL_TOOLS.filter((t) => t.id === "property-comparison" ? (isOwner || mode === "broker" || mode === "developer") : visibility.isPublic(t.id)),
+    [visibility, isOwner, mode]
   );
 
   const filteredTools = useMemo(() => {

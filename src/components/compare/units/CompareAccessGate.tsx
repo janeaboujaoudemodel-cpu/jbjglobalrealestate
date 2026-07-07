@@ -3,7 +3,7 @@ import CompareAIShell from "@/components/compare/CompareAIShell";
 import { useUserMode } from "@/hooks/useUserMode";
 import { toast } from "sonner";
 
-/** Shown when an investor or developer hits /compare directly. */
+/** Shown when a client/investor hits /compare directly. */
 export default function CompareAccessGate() {
   const { setMode } = useUserMode();
   return (
@@ -20,11 +20,11 @@ export default function CompareAccessGate() {
           <Lock className="w-7 h-7" style={{ color: "#B89555" }} />
         </div>
         <h1 className="text-3xl font-bold mb-3" style={{ color: "#1A1A1A" }}>
-          Broker-only tool
+          Professional comparison tool
         </h1>
         <p className="mb-8" style={{ color: "rgba(26,26,26,0.7)" }}>
-          The Property &amp; Unit Comparison engine is part of the JBJ Broker Toolkit.
-          Switch to <strong style={{ color: "#1A1A1A" }}>Broker mode</strong> to access it.
+          The Property &amp; Unit Comparison engine is available for brokers,
+          developers, and the owner workspace only.
         </p>
         <button
           onClick={async () => {

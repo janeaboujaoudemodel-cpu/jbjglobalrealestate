@@ -10,7 +10,6 @@ import {
   Plane, 
   MessageCircle,
   ArrowRight,
-  Scale,
   Handshake,
   Wrench,
 } from "lucide-react";
@@ -135,15 +134,6 @@ const services: ServiceSlide[] = [
     icon: MessageCircle,
     href: "/contact",
     bgImage: generalInquiriesBg,
-    available: true
-  },
-  {
-    id: "compare",
-    title: "Compare Your Property",
-    description: "Side-by-side analysis of multiple properties with AI-powered insights",
-    icon: Scale,
-    href: "/compare",
-    bgImage: buyPropertyBg,
     available: true
   },
   {

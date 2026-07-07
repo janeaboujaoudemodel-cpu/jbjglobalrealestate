@@ -59,12 +59,16 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
     switch (id) {
       case "label": return u.label;
       case "bedrooms": return u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`;
+      case "propertyType": return u.propertyType || "Apartment";
       case "size": return u.sizeSqft ? `${fmt0.format(u.sizeSqft)} sqft` : "—";
       case "price": return AED(u.priceAED);
       case "pricePerSqft": return u.sizeSqft ? `AED ${fmt0.format(u.priceAED / u.sizeSqft)}` : "—";
       case "view": return u.view || "—";
       case "floor": return u.floor || "—";
       case "unitNumber": return u.unitNumber || "—";
+      case "cityNumber": return u.cityNumber || "—";
+      case "layout": return u.layout || "—";
+      case "unitDescription": return u.description || "—";
       case "projectName": return project.name;
       case "developer": return project.developer?.name || "—";
       case "location": return project.location || "—";
@@ -83,7 +87,7 @@ export default function UnitComparisonTable({ project, units, visible, sharedPla
       case "developerActive": return project.developer?.offplan_projects?.toString() || "—";
       case "estimatedROI": return u.priceAED < 1800000 ? "High potential" : "Balanced";
       case "estimatedYield": return u.bedrooms === "studio" || u.bedrooms === "1" ? "Strong rental fit" : "Family demand";
-      case "serviceCharges": return "Verify with developer";
+      case "serviceCharges": return u.serviceCharge || "Verify with developer";
       case "dldFee": return u.priceAED ? AED(u.priceAED * 0.04) : "—";
       default: return "—";
     }

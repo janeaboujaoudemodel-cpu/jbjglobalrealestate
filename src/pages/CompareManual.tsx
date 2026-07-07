@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { exportPremiumXlsx } from "@/utils/exportXlsx";
 import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
+import { formatPriceShort } from "@/lib/formatPrice";
 
 interface ManualProject {
   id: string;
@@ -22,8 +23,16 @@ interface ManualProject {
   emirate: string;
   priceFrom: string;
   priceTo: string;
+  propertyType: string;
   bedrooms: string;
   sizeRange: string;
+  pricePerSqft: string;
+  serviceCharge: string;
+  unitNumber: string;
+  cityNumber: string;
+  layout: string;
+  description: string;
+  projectUrl: string;
   handover: string;
   amenities: string; // comma separated
   views: string;
@@ -39,8 +48,16 @@ const blank = (): ManualProject => ({
   emirate: "Dubai",
   priceFrom: "",
   priceTo: "",
+  propertyType: "Apartment",
   bedrooms: "",
   sizeRange: "",
+  pricePerSqft: "",
+  serviceCharge: "",
+  unitNumber: "",
+  cityNumber: "",
+  layout: "",
+  description: "",
+  projectUrl: "",
   handover: "",
   amenities: "",
   views: "",
@@ -67,6 +84,7 @@ const CompareManual = () => {
       priceFrom: e.priceFromAed != null ? String(e.priceFromAed) : "",
       priceTo: e.priceToAed != null ? String(e.priceToAed) : "",
       bedrooms: e.bedrooms || "",
+      propertyType: "Apartment",
       sizeRange:
         e.sizeFromSqft && e.sizeToSqft
           ? `${e.sizeFromSqft} - ${e.sizeToSqft}`
@@ -76,6 +94,14 @@ const CompareManual = () => {
       handover: e.handover || "",
       paymentPlan: e.paymentPlan || "",
       amenities: (e.amenities || []).join(", "),
+      pricePerSqft: e.priceFromAed && e.sizeFromSqft ? String(Math.round(e.priceFromAed / e.sizeFromSqft)) : "",
+      views: "",
+      serviceCharge: "",
+      unitNumber: "",
+      cityNumber: "",
+      layout: "",
+      description: "",
+      projectUrl: "",
     };
     setProjects((prev) => {
       // If first card is empty, replace it; else append
@@ -104,8 +130,8 @@ const CompareManual = () => {
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
 
   const addProject = () => {
-    if (projects.length >= 25) {
-      toast.error("Maximum 25 projects per comparison.");
+    if (projects.length >= 10) {
+      toast.error("Maximum 10 projects per comparison.");
       return;
     }
     setProjects((prev) => [...prev, blank()]);
@@ -170,8 +196,16 @@ const CompareManual = () => {
         emirate: p.emirate.trim() || "Dubai",
         priceFrom: Number(p.priceFrom) || 0,
         priceTo: p.priceTo ? Number(p.priceTo) : undefined,
+        propertyType: p.propertyType,
         bedrooms: p.bedrooms.trim(),
         sizeRange: p.sizeRange.trim(),
+        pricePerSqft: p.pricePerSqft ? Number(p.pricePerSqft) : undefined,
+        serviceCharge: p.serviceCharge.trim(),
+        unitNumber: p.unitNumber.trim(),
+        cityNumber: p.cityNumber.trim(),
+        layout: p.layout.trim(),
+        description: p.description.trim(),
+        projectUrl: p.projectUrl.trim(),
         handover: p.handover.trim() || undefined,
         amenities: p.amenities.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 30),
         views: p.views.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 20),
@@ -245,8 +279,8 @@ const CompareManual = () => {
               AI Property Comparison
             </h1>
             <p className="text-[#1A1A1A]/70 mt-2 max-w-xl">
-              Enter up to 25 projects, attach brochures or PDFs, and generate a side-by-side
-              comparison with ROI, amenities and verdict.
+              Enter up to 10 projects or units, including exact unit details, pricing,
+              service charge, view, layout and project link.
             </p>
           </div>
           <Link to="/properties?compareMode=1">
@@ -299,11 +333,29 @@ const CompareManual = () => {
                 <Field label="Price to (AED)">
                   <Input type="number" value={p.priceTo} onChange={(e) => update(p.id, { priceTo: e.target.value })} placeholder="3500000" />
                 </Field>
+                <Field label="Property type">
+                  <Input value={p.propertyType} onChange={(e) => update(p.id, { propertyType: e.target.value })} placeholder="Apartment / Hotel apartment / Townhouse" />
+                </Field>
                 <Field label="Bedrooms">
-                  <Input value={p.bedrooms} onChange={(e) => update(p.id, { bedrooms: e.target.value })} placeholder="2-4 BR" />
+                  <Input value={p.bedrooms} onChange={(e) => update(p.id, { bedrooms: e.target.value })} placeholder="Studio - 4 BR / 1 BR" />
                 </Field>
                 <Field label="Size range (sqft)">
                   <Input value={p.sizeRange} onChange={(e) => update(p.id, { sizeRange: e.target.value })} placeholder="1100 - 2400" />
+                </Field>
+                <Field label="Price per sqft">
+                  <Input type="number" value={p.pricePerSqft} onChange={(e) => update(p.id, { pricePerSqft: e.target.value })} placeholder="1450" />
+                </Field>
+                <Field label="Service charge">
+                  <Input value={p.serviceCharge} onChange={(e) => update(p.id, { serviceCharge: e.target.value })} placeholder="AED 18/sqft" />
+                </Field>
+                <Field label="Unit number">
+                  <Input value={p.unitNumber} onChange={(e) => update(p.id, { unitNumber: e.target.value })} placeholder="Optional" />
+                </Field>
+                <Field label="City number">
+                  <Input value={p.cityNumber} onChange={(e) => update(p.id, { cityNumber: e.target.value })} placeholder="Optional" />
+                </Field>
+                <Field label="Layout / type">
+                  <Input value={p.layout} onChange={(e) => update(p.id, { layout: e.target.value })} placeholder="Type A / corner / high floor" />
                 </Field>
                 <Field label="Handover">
                   <Input value={p.handover} onChange={(e) => update(p.id, { handover: e.target.value })} placeholder="Q4 2027" />
@@ -316,6 +368,14 @@ const CompareManual = () => {
                 </Field>
                 <Field label="Views (comma separated)">
                   <Input value={p.views} onChange={(e) => update(p.id, { views: e.target.value })} placeholder="Sea, Skyline" />
+                </Field>
+                <Field label="Project URL">
+                  <Input value={p.projectUrl} onChange={(e) => update(p.id, { projectUrl: e.target.value })} placeholder="https://jbj.ae/project/..." />
+                </Field>
+              </div>
+              <div className="mt-4">
+                <Field label="Description / notes">
+                  <textarea value={p.description} onChange={(e) => update(p.id, { description: e.target.value })} placeholder="Client-specific notes, USPs, management, amenities, restrictions…" className="w-full min-h-24 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-3 py-2 text-sm text-[#1A1A1A] outline-none focus:border-[#064E3B]" />
                 </Field>
               </div>
 
@@ -364,6 +424,40 @@ const CompareManual = () => {
             </motion.div>
           ))}
         </div>
+
+        {projects.some((p) => p.name.trim()) && (
+          <section className="mt-8 overflow-x-auto rounded-2xl border border-[#064E3B]/25 bg-[#F7F2EA]">
+            <table className="w-full text-sm">
+              <thead className="bg-[#064E3B] text-white">
+                <tr>
+                  <th className="px-4 py-3 text-left">Field</th>
+                  {projects.filter((p) => p.name.trim()).map((p) => <th key={p.id} className="px-4 py-3 text-left min-w-[190px]">{p.name}</th>)}
+                </tr>
+              </thead>
+              <tbody className="text-[#1A1A1A]">
+                {[
+                  ["Developer", (p: ManualProject) => p.developer || "—"],
+                  ["Location", (p: ManualProject) => p.location || "—"],
+                  ["Type", (p: ManualProject) => p.propertyType || "—"],
+                  ["Price", (p: ManualProject) => p.priceFrom ? formatPriceShort(Number(p.priceFrom)) : "—"],
+                  ["Price/sqft", (p: ManualProject) => p.pricePerSqft ? `AED ${p.pricePerSqft}` : "—"],
+                  ["Bedrooms", (p: ManualProject) => p.bedrooms || "—"],
+                  ["Size", (p: ManualProject) => p.sizeRange || "—"],
+                  ["Service charge", (p: ManualProject) => p.serviceCharge || "—"],
+                  ["View", (p: ManualProject) => p.views || "—"],
+                  ["Unit #", (p: ManualProject) => p.unitNumber || "—"],
+                  ["Layout", (p: ManualProject) => p.layout || "—"],
+                  ["Project link", (p: ManualProject) => p.projectUrl ? <a href={p.projectUrl} target="_blank" rel="noopener noreferrer" className="underline text-[#064E3B]">Open listing</a> : "—"],
+                ].map(([label, getter]) => (
+                  <tr key={String(label)} className="border-t border-[#064E3B]/15">
+                    <td className="px-4 py-3 font-semibold bg-[#EAF4EF]">{String(label)}</td>
+                    {projects.filter((p) => p.name.trim()).map((p) => <td key={p.id} className="px-4 py-3">{(getter as (p: ManualProject) => React.ReactNode)(p)}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )}
 
         <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center gap-2 flex-wrap">

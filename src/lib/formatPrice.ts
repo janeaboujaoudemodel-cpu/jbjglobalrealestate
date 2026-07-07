@@ -5,17 +5,20 @@
 
 export function formatPrice(price: number | null | undefined): string {
   if (!price) return "Price on request";
-  return `AED ${Math.round(price).toLocaleString()}`;
+  return `AED ${formatPriceRaw(price)}`;
 }
 
 export function formatPriceShort(price: number | null | undefined): string {
   if (!price) return "Price on request";
-  const rounded = Math.round(price);
-  if (rounded >= 1000000) return `AED ${(rounded / 1000000).toFixed(1)}M`;
-  if (rounded >= 1000) return `AED ${Math.round(rounded / 1000)}K`;
-  return `AED ${rounded.toLocaleString()}`;
+  return `AED ${formatPriceRaw(price)}`;
 }
 
 export function formatPriceRaw(price: number): string {
-  return Math.round(price).toLocaleString();
+  const rounded = Math.round(price);
+  if (rounded >= 1_000_000) {
+    const value = rounded / 1_000_000;
+    return `${Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1)}M`;
+  }
+  if (rounded >= 1_000) return `${Math.round(rounded / 1_000)}K`;
+  return rounded.toLocaleString();
 }

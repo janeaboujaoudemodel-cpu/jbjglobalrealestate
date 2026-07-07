@@ -7,8 +7,8 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
  * Investor & developer modes get a gate card on direct route hits.
  */
 export function useCompareAccess() {
-  const { isBrokerMode, isLoading: modeLoading } = useUserMode();
+  const { isBrokerMode, isDeveloperMode, isLoading: modeLoading } = useUserMode();
   const { isOwner, isLoading: ownerLoading } = useIsAppOwner();
-  const allowed = isBrokerMode || isOwner;
-  return { allowed, isBrokerMode, isOwner, isLoading: modeLoading || ownerLoading };
+  const allowed = isBrokerMode || isDeveloperMode || isOwner;
+  return { allowed, isBrokerMode, isDeveloperMode, isOwner, isLoading: modeLoading || ownerLoading };
 }

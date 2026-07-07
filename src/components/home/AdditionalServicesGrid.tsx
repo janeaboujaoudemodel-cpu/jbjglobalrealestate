@@ -23,15 +23,6 @@ interface ServiceCard {
 
 const additionalServices: ServiceCard[] = [
   {
-    id: "compare",
-    title: "Compare Your Property",
-    description: "Side-by-side analysis of multiple properties",
-    icon: Scale,
-    href: "/compare",
-    available: true,
-    color: "from-blue-500 to-blue-600"
-  },
-  {
     id: "evaluation",
     title: "Get Property Evaluation",
     description: "AI-powered property valuation tool",

@@ -8,6 +8,8 @@ import {
 import { PearlButton } from "@/components/ui/pearl-button";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
 import { isApprovedPublicToolId } from "@/config/publicToolAccess";
+import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 
 interface RoyalTool {
   id: string;
@@ -43,7 +45,10 @@ const GOLD_HOVER_IDS = new Set([
 
 export function ToolkitShowcaseCard() {
   const visibility = useToolVisibility();
-  const tools = royalTools.filter(t => isApprovedPublicToolId(t.id) && visibility.isPublic(t.id));
+  const { mode } = useUserModeContext();
+  const { isOwner } = useIsAppOwner();
+  const canCompare = isOwner || mode === "broker" || mode === "developer";
+  const tools = royalTools.filter(t => (isApprovedPublicToolId(t.id) || (t.id === "property-comparison" && canCompare)) && (visibility.isPublic(t.id) || (t.id === "property-comparison" && canCompare)));
 
   const [activeId, setActiveId] = useState<string>(tools[0]?.id ?? royalTools[0].id);
   const tabsRef = useRef<HTMLDivElement>(null);

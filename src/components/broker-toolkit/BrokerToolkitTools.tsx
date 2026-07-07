@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 import {
   Home,
   GitCompare,
@@ -32,7 +33,7 @@ type BrokerTool = {
 // AI Tools Control Panel — no toggle is exposed on this public page.
 const BROKER_TOOLS: BrokerTool[] = [
   { id: "ai-home-finder", name: "AI Home Finder", description: "Match clients to listings with AI-powered filters.", icon: Home, href: "/ai-home-finder" },
-  { id: "property-comparison", name: "Property Comparison", description: "Compare up to 3 properties side-by-side.", icon: GitCompare, href: "/compare" },
+  { id: "property-comparison", name: "Property Comparison", description: "Compare up to 10 projects or detailed units side-by-side.", icon: GitCompare, href: "/compare" },
   { id: "mortgage-calculator", name: "Mortgage Calculator", description: "Calculate payments and affordability instantly.", icon: Calculator, href: "/mortgage-calculator" },
   { id: "property-evaluator", name: "Property Evaluator", description: "AI-driven valuation based on market data.", icon: BarChart3, href: "/property-evaluator" },
   { id: "rental-index", name: "Rental Index", description: "Rental estimates with market benchmarks.", icon: TrendingUp, href: "/rental-index" },
@@ -42,10 +43,11 @@ const BROKER_TOOLS: BrokerTool[] = [
 
 export function BrokerToolkitTools() {
   const visibility = useToolVisibility();
+  const { allowed: canCompare } = useCompareAccess();
 
   const tools = useMemo(
-    () => BROKER_TOOLS.filter((t) => visibility.isPublic(t.id)),
-    [visibility],
+    () => BROKER_TOOLS.filter((t) => t.id === "property-comparison" ? canCompare : visibility.isPublic(t.id)),
+    [visibility, canCompare],
   );
 
   return (
