@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { IconTile } from "@/components/ui/icon-tile";
 import { useToolVisibility } from "@/hooks/useToolVisibility";
+import { useCompareAccess } from "@/hooks/useCompareAccess";
 import {
   Home,
   GitCompare,
@@ -42,10 +43,11 @@ const BROKER_TOOLS: BrokerTool[] = [
 
 export function BrokerToolkitTools() {
   const visibility = useToolVisibility();
+  const { allowed: canCompare } = useCompareAccess();
 
   const tools = useMemo(
-    () => BROKER_TOOLS.filter((t) => visibility.isPublic(t.id)),
-    [visibility],
+    () => BROKER_TOOLS.filter((t) => t.id === "property-comparison" ? canCompare : visibility.isPublic(t.id)),
+    [visibility, canCompare],
   );
 
   return (

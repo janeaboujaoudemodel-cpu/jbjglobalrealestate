@@ -240,7 +240,7 @@ const AIHub = () => {
   const visibility = useToolVisibility();
 
   const allTools = useMemo(
-    () => ALL_TOOLS.filter((t) => visibility.isPublic(t.id) && (t.id !== "property-comparison" || isOwner || mode === "broker" || mode === "developer")),
+    () => ALL_TOOLS.filter((t) => t.id === "property-comparison" ? (isOwner || mode === "broker" || mode === "developer") : visibility.isPublic(t.id)),
     [visibility, isOwner, mode]
   );
 
