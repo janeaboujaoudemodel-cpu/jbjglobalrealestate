@@ -16,35 +16,36 @@ import "leaflet/dist/leaflet.css";
 
 type FilterMode = "nearby" | "area" | "emirate";
 
-// Red pin — current project
-const RED_PIN_SVG = `
-<svg xmlns="http://www.w3.org/2000/svg" width="36" height="46" viewBox="0 0 36 46" fill="none">
+// Emerald pin — current project (replaces the red-pin-with-white-dot)
+const CURRENT_PIN_SVG = `
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44" fill="none">
   <defs>
-    <linearGradient id="rpin" x1="18" y1="0" x2="18" y2="42" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#DC2626"/>
-      <stop offset="100%" stop-color="#991B1B"/>
+    <linearGradient id="cpin" x1="17" y1="0" x2="17" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0B6E4F"/>
+      <stop offset="55%" stop-color="#064E3B"/>
+      <stop offset="100%" stop-color="#000000"/>
     </linearGradient>
   </defs>
-  <path d="M18 0C8 0 0 8 0 18c0 14 18 28 18 28s18-14 18-28C36 8 28 0 18 0z" fill="url(#rpin)"/>
-  <circle cx="18" cy="16" r="7" fill="white" opacity="0.95"/>
-  <circle cx="18" cy="16" r="3.5" fill="#DC2626"/>
+  <path d="M17 0C7.6 0 0 7.4 0 16.6 0 29.4 17 44 17 44s17-14.6 17-27.4C34 7.4 26.4 0 17 0z" fill="url(#cpin)" stroke="rgba(184,149,85,0.6)" stroke-width="1"/>
+  <circle cx="17" cy="16" r="5.5" fill="#FFFFFF"/>
 </svg>`;
 
 const RedIcon = L.divIcon({
-  html: RED_PIN_SVG,
+  html: CURRENT_PIN_SVG,
   className: "jj-map-pin",
-  iconSize: [36, 46],
-  iconAnchor: [18, 46],
-  popupAnchor: [0, -46],
+  iconSize: [34, 44],
+  iconAnchor: [17, 44],
+  popupAnchor: [0, -44],
 });
 
 const createEmeraldMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-map-marker-pill">${priceText}</div>`,
-  className: "custom-marker",
-  iconSize: [72, 32],
-  iconAnchor: [36, 32],
-  popupAnchor: [0, -32],
+  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%);color:#FFFFFF !important;border:1px solid rgba(184,149,85,0.45);padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap;text-align:center;box-shadow:0 4px 12px -4px rgba(0,0,0,0.5);letter-spacing:0.01em;">${priceText}</div>`,
+  className: "custom-marker jj-map-pin",
+  iconSize: [80, 28],
+  iconAnchor: [40, 28],
+  popupAnchor: [0, -28],
 });
+
 
 interface ProjectNearbyPropertiesMapProps {
   currentProjectId: string;
@@ -83,6 +84,31 @@ function MapResizeRuntime() {
   }, [map]);
   return null;
 }
+
+function FitBoundsRuntime({ points }: { points: [number, number][] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!points.length) return;
+    if (points.length === 1) {
+      map.setView(points[0], 14, { animate: false });
+      return;
+    }
+    const bounds = L.latLngBounds(points.map(([a, b]) => L.latLng(a, b)));
+    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13, animate: false });
+  }, [map, points]);
+  return null;
+}
+
+function ScrollLockRuntime() {
+  const map = useMap();
+  useEffect(() => {
+    map.scrollWheelZoom.disable();
+    // Prevent leaflet from stealing keyboard scroll
+    map.keyboard?.disable();
+  }, [map]);
+  return null;
+}
+
 
 export default function ProjectNearbyPropertiesMap({
   currentProjectId,
@@ -298,55 +324,96 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`jj-map-filter-toggle inline-flex w-full min-w-0 min-h-[42px] items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer"}`}
+        className="inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold transition-colors"
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
         data-emerald-action={isActive ? "true" : undefined}
+        data-no-contrast-guard
+        style={{
+          backgroundImage: isActive
+            ? 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)'
+            : 'none',
+          backgroundColor: isActive ? undefined : '#F7F2EA',
+          color: isActive ? '#FFFFFF' : '#1A1A1A',
+          borderRight: '1px solid rgba(184,149,85,0.28)',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled ? 0.55 : 1,
+          minHeight: 44,
+        }}
       >
-        <span className="min-w-0 truncate">{label}</span>
-        <span className="text-[10px] tabular-nums">
-          {count}
-        </span>
+        <span className="min-w-0 truncate" style={{ color: 'inherit' }}>{label}</span>
+        <span className="text-[10px] tabular-nums" style={{ color: 'inherit', opacity: 0.9 }}>{count}</span>
       </button>
     );
   };
 
+
+  // Build the list of points for auto-fit — always include the current project pin
+  // plus all visible nearby markers, so users see everything (Siniyah Island, UAQ, etc.)
+  // without having to manually zoom out.
+  const fitPoints = useMemo<[number, number][]>(() => {
+    const pts: [number, number][] = [];
+    if (hasOwnCoords) pts.push([latitude as number, longitude as number]);
+    markers.forEach((m) => {
+      if (typeof m.latitude === "number" && typeof m.longitude === "number") {
+        pts.push([m.latitude, m.longitude]);
+      }
+    });
+    return pts;
+  }, [hasOwnCoords, latitude, longitude, markers]);
+
   return (
     <div className={className}>
-      <div data-map-shell data-nearby-map-tabs="true" className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full pb-1">
-        {chip("nearby", "Closest nearby", nearestMarkers.length)}
-        {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
-        {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
-      </div>
+      {/* Single connected frame: header + map share the same rounded shell so the tabs never look detached */}
       <div
         data-map-shell
         className="rounded-2xl overflow-hidden"
         style={{
-          height: 380,
-          border: "1px solid rgba(255,255,255,0.16)",
+          border: "1px solid rgba(184,149,85,0.35)",
           boxShadow: "0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)",
+          background: "#F7F2EA",
         }}
       >
-      <style>{`
-        .jj-map-pin { background: none !important; border: none !important; }
-        .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; }
-        .leaflet-popup-content { margin: 0; }
-      `}</style>
-      <MapContainer
-        center={resolvedCenter}
-        zoom={13}
-        scrollWheelZoom={false}
-        touchZoom={true}
-        dragging={true}
-        style={{ height: "100%", width: "100%" }}
-        zoomControl={false}
-        attributionControl={false}
-        {...SAFE_LEAFLET_MAP_OPTIONS}
-      >
-        <MapResizeRuntime />
-        <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
-        <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
+        {/* Header — grid, no gap, so all three chips read as one connected bar */}
+        <div
+          data-nearby-map-tabs="true"
+          className="grid grid-cols-1 sm:grid-cols-3 w-full"
+          style={{ borderBottom: "1px solid rgba(184,149,85,0.35)" }}
+        >
+          {chip("nearby", "Closest nearby", nearestMarkers.length)}
+          {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
+          {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
+        </div>
+
+        <div style={{ height: 420, position: "relative" }}>
+        <style>{`
+          .jj-map-pin { background: none !important; border: none !important; }
+          .jj-map-pin .jj-nearby-price-pill { color: #FFFFFF !important; }
+          .jj-map-pin .jj-nearby-price-pill * { color: #FFFFFF !important; }
+          /* Kill the leaflet popup tail arrow that reads as hover "crop lines" */
+          .leaflet-popup-tip-container, .leaflet-popup-tip { display: none !important; }
+          .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; padding: 0; }
+          .leaflet-popup-content { margin: 0; }
+          .leaflet-container { background: #0a1f18; }
+        `}</style>
+        <MapContainer
+          center={resolvedCenter}
+          zoom={13}
+          scrollWheelZoom={false}
+          touchZoom={true}
+          dragging={true}
+          style={{ height: "100%", width: "100%" }}
+          zoomControl={false}
+          attributionControl={false}
+          {...SAFE_LEAFLET_MAP_OPTIONS}
+        >
+          <MapResizeRuntime />
+          <ScrollLockRuntime />
+          <FitBoundsRuntime points={fitPoints} />
+          <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
+          <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
+
 
         {/* Current project marker (red) — only when we have real coords */}
         {hasOwnCoords && (
@@ -436,8 +503,10 @@ export default function ProjectNearbyPropertiesMap({
             </Popup>
           </Marker>
         ))}
-      </MapContainer>
+        </MapContainer>
+        </div>
       </div>
     </div>
   );
 }
+

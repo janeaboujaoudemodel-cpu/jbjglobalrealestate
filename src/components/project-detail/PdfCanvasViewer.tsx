@@ -128,13 +128,22 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
   if (loading) {
     return (
       <div className={`grid min-h-[420px] place-items-center bg-[#FDFBF7] ${className}`} aria-label={`Loading ${title}`}>
-        <div className="flex items-center gap-3 rounded-full border border-[#B89555]/35 bg-[#F7F2EA] px-4 py-2 text-sm font-semibold text-[#1A1A1A]">
-          <Loader2 className="h-4 w-4 animate-spin text-[#064E3B]" />
-          Loading document…
+        <div
+          className="flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold"
+          style={{
+            backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)',
+            color: '#FFFFFF',
+            border: '1px solid rgba(255,255,255,0.22)',
+            boxShadow: '0 10px 30px -14px rgba(0,0,0,0.5)',
+          }}
+        >
+          <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#FFFFFF' }} />
+          <span style={{ color: '#FFFFFF' }}>Loading document…</span>
         </div>
       </div>
     );
   }
+
 
   if (error || !doc) {
     return (
@@ -154,10 +163,11 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
         <PdfPage key={index + 1} doc={doc} pageNumber={index + 1} />
       ))}
       {renderedPages < pageCount && (
-        <div className="grid min-h-[120px] place-items-center rounded-lg border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-4 text-center text-xs font-semibold text-[#1A1A1A]/75">
-          <span className="inline-flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin text-[#064E3B]" /> Loading more pages…</span>
+        <div className="grid min-h-[120px] place-items-center rounded-lg px-3 py-4 text-center text-xs font-semibold" style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF' }}>
+          <span className="inline-flex items-center gap-2" style={{ color: '#FFFFFF' }}><Loader2 className="h-4 w-4 animate-spin" style={{ color: '#FFFFFF' }} /> Loading more pages…</span>
         </div>
       )}
+
       {doc.numPages > pageCount && (
         <p className="rounded-lg border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-center text-xs font-semibold text-[#1A1A1A]/75">
           Showing first {pageCount} of {doc.numPages} pages. Download for the complete file.
