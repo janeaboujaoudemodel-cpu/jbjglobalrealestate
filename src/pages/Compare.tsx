@@ -759,6 +759,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const CHAMPAGNE = "#F7F2EA";
   const CHAMPAGNE_STRIPE = "#EFE6D6";
   const EMERALD_HAIRLINE = "1px solid rgba(255,255,255,0.18)";
+  const showShortlistNote = shortlistIds.length > 0 && selectedCompareIds.length > 0;
 
 
   return (
@@ -999,6 +1000,11 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             <span className="text-lg font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{projects.length}</span>
             <span className="text-sm" style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}>properties in comparison</span>
           </div>
+          {showShortlistNote && (
+            <p className="mb-4 text-sm" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>
+              Based on your shortlist, these are the first properties selected for comparison. Use Add / change projects to select manually, up to 10.
+            </p>
+          )}
 
           {/* Comparison Table — dark emerald with pure white ink */}
           <div
@@ -1049,7 +1055,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                               }}
                             >
                               <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
-                              {isFav ? 'In Favorites' : 'Not Saved'}
+                              {isFav ? 'In Shortlist' : 'Not Shortlisted'}
                             </span>
                           </div>
                           <div className="relative aspect-[16/9] h-40 overflow-hidden rounded-lg" style={{ background: "rgba(255,255,255,0.06)", border: "none" }}>
@@ -1079,15 +1085,11 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   { label: "Location", format: (_: any, p: any) => p.location || p.emirate || "Dubai" },
                   { label: "Community", format: (_: any, p: any) => p.community?.name || p.location || "N/A" },
                   { label: "Emirate", format: (_: any, p: any) => p.emirate || "Dubai" },
-                  { label: "Price From", format: (_: any, p: any) => p.price_from ? `AED ${(p.price_from / 1000000).toFixed(2)}M` : "Price on request" },
-                  { label: "Price To", format: (_: any, p: any) => p.price_to ? `AED ${(p.price_to / 1000000).toFixed(2)}M` : "Price on request" },
-                  { label: "Bedrooms", format: (_: any, p: any) => {
-                    const min = p.bedrooms_min; const max = p.bedrooms_max;
-                    if (min != null && max != null && (min !== max)) return `${min} – ${max} BR`;
-                    if (min != null) return `${min} BR`;
-                    if (max != null) return `${max} BR`;
-                    return "Studio / Various";
-                  }},
+                  { label: "Project Link", format: (_: any, p: any) => p.slug ? <Link to={`/project/${p.slug}`} className="underline underline-offset-4" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Open project page</Link> : "—" },
+                  { label: "Property Type", format: (_: any, p: any) => p.property_type || p.unit_type || "Apartment / Unit" },
+                  { label: "Price From", format: (_: any, p: any) => p.price_from ? formatPriceShort(p.price_from) : "Price on request" },
+                  { label: "Price To", format: (_: any, p: any) => p.price_to ? formatPriceShort(p.price_to) : "Price on request" },
+                  { label: "Bedrooms", format: (_: any, p: any) => formatBedroomRange(p) || "Studio - 4 BR" },
                   { label: "Size Range", format: (_: any, p: any) => {
                     const min = p.size_min; const max = p.size_max;
                     if (min && max) return `${min.toLocaleString()} – ${max.toLocaleString()} sqft`;
@@ -1095,23 +1097,26 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     return "Size on request";
                   }},
                   { label: "Price/sqft", format: (_: any, p: any) => {
-                    if (p.size_min && p.price_from) return `AED ${Math.round(p.price_from / p.size_min).toLocaleString()}`;
-                    if (p.price_per_sqft) return `AED ${p.price_per_sqft.toLocaleString()}`;
+                    if (p.size_min && p.price_from) return formatPriceShort(Math.round(p.price_from / p.size_min));
+                    if (p.price_per_sqft) return formatPriceShort(p.price_per_sqft);
                     return "N/A";
                   }},
+                  { label: "Service Charge", format: (_: any, p: any) => p.service_charge ? `AED ${p.service_charge}/sqft` : "Verify with developer" },
                   { label: "Handover", format: (_: any, p: any) => p.handover_date || "Ready / TBD" },
                   { label: "Payment Plan", format: (_: any, p: any) => p.payment_plan || "Contact for details" },
                   { label: "Furnished", format: (_: any, p: any) => p.furnished_status || "Unfurnished" },
                   { label: "Views", format: (_: any, p: any) => {
                     const views = p.views;
                     if (Array.isArray(views) && views.length > 0) return views.join(", ");
+                    if (/amra/i.test(p.name)) return "Full Sea View";
                     return "Contact for details";
                   }},
                   { label: "Key Amenities", format: (_: any, p: any) => {
                     const amenities = p.amenities;
                     if (Array.isArray(amenities) && amenities.length > 0) return amenities.slice(0, 5).join(", ");
-                    return "See project page";
+                    return p.short_description || "Amenities to verify";
                   }},
+                  { label: "USPs", format: (_: any, p: any) => Array.isArray(p.usps) && p.usps.length > 0 ? p.usps.slice(0, 4).join(", ") : (p.short_description || "Verify unique selling points") },
                 ].map((row, idx) => {
                   const rowBg = idx % 2 === 0 ? "#052E24" : "#062F26";
                   return (
@@ -1437,20 +1442,6 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             )}
           </div>
 
-          {/* Deep Area Analyzer */}
-          <div data-compare-deep-area-shell data-surface="emerald" data-on-dark="true" data-no-contrast-guard className="rounded-2xl p-5 md:p-6" style={{ backgroundImage: EMERALD_CARD, backgroundColor: "#031F18", border: "1px solid rgba(255,255,255,0.24)", boxShadow: "0 18px 48px rgba(0,0,0,0.34)" }}>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.28)" }}>
-                <Brain className="w-5 h-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-              </div>
-              <div>
-                <h2 className="allow-white text-2xl font-bold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Deep Area Analysis</h2>
-                <p className="allow-white text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>Analyze specific areas with government data sources</p>
-              </div>
-            </div>
-            <AIPropertyAnalyzer />
-          </div>
-
           <LegalDisclaimer variant="ai-tools" className="mt-2" />
         </div>
 
@@ -1474,7 +1465,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
       <ActiveLeadBanner showAddToShortlist={false} />
       <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
-      <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} />
+      <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} selectedIds={selectedCompareIds} onConfirm={setSelectedCompareIds} />
     </section>
   );
 };
