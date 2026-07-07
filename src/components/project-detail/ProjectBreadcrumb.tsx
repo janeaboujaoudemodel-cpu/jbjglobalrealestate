@@ -12,18 +12,19 @@ import { cn } from "@/lib/utils";
 interface ProjectBreadcrumbProps {
   projectName: string;
   location?: string | null;
+  emirate?: string | null;
   surface?: "light" | "dark";
 }
 
 /**
  * Breadcrumb navigation for project detail pages.
- * Structure: Home / All Projects in Dubai / [Area] / [Project Name]
- *
- * `surface="dark"` renders white/amber tones for use over dark hero imagery.
+ * Structure: Home / All Projects in [Emirate] / [Area] / [Project Name]
  */
-export function ProjectBreadcrumb({ projectName, location, surface = "light" }: ProjectBreadcrumbProps) {
+export function ProjectBreadcrumb({ projectName, location, emirate, surface = "light" }: ProjectBreadcrumbProps) {
   const area = location?.split(",")[0]?.trim() || null;
   const areaSlug = area?.toLowerCase().replace(/\s+/g, "-") || null;
+  const emirateLabel = emirate?.trim() || "the UAE";
+  const emirateSlug = emirate?.toLowerCase().replace(/\s+/g, "-") || null;
 
   const isDark = surface === "dark";
 
@@ -50,8 +51,8 @@ export function ProjectBreadcrumb({ projectName, location, surface = "light" }: 
 
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/properties" style={linkStyle} className="hover:opacity-100 transition-opacity">
-              All Projects in Dubai
+            <Link to={emirateSlug ? `/properties?emirate=${emirateSlug}` : "/properties"} style={linkStyle} className="hover:opacity-100 transition-opacity">
+              All Projects in {emirateLabel}
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>

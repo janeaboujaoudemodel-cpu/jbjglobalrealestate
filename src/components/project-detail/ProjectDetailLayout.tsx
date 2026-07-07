@@ -1044,7 +1044,7 @@ function ProjectDetailLayoutInner({
 
 
           {/* Breadcrumb Navigation */}
-          <ProjectBreadcrumb projectName={project.name} location={project.location} surface="dark" />
+          <ProjectBreadcrumb projectName={project.name} location={project.location} emirate={(project as any).emirate ?? null} surface="dark" />
         </div>
       </section>
 
