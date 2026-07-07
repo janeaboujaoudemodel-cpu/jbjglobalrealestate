@@ -46,9 +46,9 @@ export default function UnitCompareShell({ onModeChange }: Props) {
     if (!project || units.length > 0) return [];
     const base = project.price_from || 1450000;
     return [
-      { id: "preview-studio", label: "Studio", bedrooms: "studio", sizeSqft: 480, priceAED: Math.round(base * 0.72), view: "Community", floor: "Mid", unitNumber: "Preview" },
-      { id: "preview-1br", label: "1 BR", bedrooms: "1", sizeSqft: 780, priceAED: base, view: "Boulevard", floor: "High", unitNumber: "Preview" },
-      { id: "preview-2br", label: "2 BR", bedrooms: "2", sizeSqft: 1180, priceAED: Math.round(base * 1.58), view: "Best view", floor: "High", unitNumber: "Preview" },
+      { id: "preview-studio", label: "Studio", bedrooms: "studio", sizeSqft: 480, priceAED: Math.round(base * 0.72), propertyType: "Apartment", serviceCharge: "Verify", view: "Community", floor: "Mid", unitNumber: "Preview", cityNumber: "", layout: "Preview", description: "Sample unit" },
+      { id: "preview-1br", label: "1 BR", bedrooms: "1", sizeSqft: 780, priceAED: base, propertyType: "Apartment", serviceCharge: "Verify", view: "Boulevard", floor: "High", unitNumber: "Preview", cityNumber: "", layout: "Preview", description: "Sample unit" },
+      { id: "preview-2br", label: "2 BR", bedrooms: "2", sizeSqft: 1180, priceAED: Math.round(base * 1.58), propertyType: "Apartment", serviceCharge: "Verify", view: "Best view", floor: "High", unitNumber: "Preview", cityNumber: "", layout: "Preview", description: "Sample unit" },
     ];
   }, [project, units.length]);
   const tableUnits = units.length > 0 ? units : previewUnits;
