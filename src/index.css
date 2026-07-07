@@ -34017,3 +34017,25 @@ html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] button
   -webkit-text-fill-color: #1A1A1A !important;
   stroke: #1A1A1A !important;
 }
+
+/* =========================================================================
+   Radix Checkbox tick: ALWAYS white when checked. This must be the LAST rule
+   in the file so it wins over any champagne / surface-light contrast guard
+   that would otherwise repaint the SVG stroke to ink (#1A1A1A).
+   ========================================================================= */
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"],
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg,
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg *,
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg path,
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg polyline,
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg line,
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg[class*="lucide"],
+html body #root button[role="checkbox"][data-state="checked"][data-radix-checkbox-root][data-emerald-ok="checkbox"] svg[class*="lucide"] path {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+
