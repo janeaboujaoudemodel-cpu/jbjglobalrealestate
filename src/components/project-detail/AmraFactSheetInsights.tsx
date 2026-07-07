@@ -246,7 +246,7 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               <div>
                 <SectionEyebrow>Design Ethos & Partners</SectionEyebrow>
                 <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                  Design studios & brand partners named in the Amra factsheet
+                  Design studios & brand partners at Amra
                 </h3>
               </div>
             </div>
