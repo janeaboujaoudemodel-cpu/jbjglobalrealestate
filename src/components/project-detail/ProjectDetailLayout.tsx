@@ -187,6 +187,7 @@ export type ProjectDetailData = {
   down_payment_percent?: number | null;
   video_url?: string | null;
   virtual_tour_url?: string | null;
+  videos?: { id: string; url: string; title?: string | null; display_order?: number | null; is_visible?: boolean | null }[];
   roi_estimate?: number | null;
   rental_yield_estimate?: number | null;
   // House details

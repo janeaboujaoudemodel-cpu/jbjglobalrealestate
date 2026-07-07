@@ -132,6 +132,7 @@ export interface UnifiedProject {
   cover_image_url?: string | null;
   video_url?: string | null;
   virtual_tour_url?: string | null;
+  videos?: ProjectVideo[];
   
   // Investment metrics
   roi_estimate?: number | null;
@@ -202,6 +203,14 @@ export interface ProjectDocument {
   allow_download?: boolean | null;
   file_size?: number | null;
   storage_path?: string | null;
+}
+
+export interface ProjectVideo {
+  id: string;
+  url: string;
+  title?: string | null;
+  display_order?: number | null;
+  is_visible?: boolean | null;
 }
 
 // ============================================================================

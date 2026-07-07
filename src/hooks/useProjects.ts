@@ -596,7 +596,8 @@ export function useProject(projectSlug: string) {
           developer:developers(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, description, headquarters),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
-          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
+          documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path),
+          videos:project_videos(id, url, title, display_order, is_visible)
         `)
         .eq("slug", projectSlug)
         .is("deleted_at", null)

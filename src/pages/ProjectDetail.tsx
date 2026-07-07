@@ -202,6 +202,18 @@ const ProjectDetail = () => {
         allow_download: (d as any).allow_download ?? true,
       }));
 
+    const videos = ((project as any).videos || [])
+      .slice()
+      .sort((a: any, b: any) => (a.display_order ?? 0) - (b.display_order ?? 0))
+      .filter((v: any) => (v.is_visible ?? true) && !!v.url)
+      .map((v: any) => ({
+        id: v.id,
+        url: v.url,
+        title: v.title ?? null,
+        display_order: v.display_order ?? null,
+        is_visible: v.is_visible ?? true,
+      }));
+
     return {
       id: project.id,
       name: project.name,
@@ -246,6 +258,7 @@ const ProjectDetail = () => {
       amenity_images: project.amenity_images ? (project.amenity_images as Record<string, string>) : null,
       images,
       documents,
+      videos,
       usp_headline: project.usp_headline ?? null,
       usp_bullets: asStringArray(project.usp_bullets),
       usp_image_url: project.usp_image_url ?? null,
