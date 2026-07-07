@@ -1491,8 +1491,6 @@ function ProjectDetailLayoutInner({
                       src={citiBuddyRobot}
                       alt="Citi Buddy AI robot concierge"
                       className="h-[280px] lg:h-full min-h-[280px] w-full object-cover"
-                      width={1600}
-                      height={900}
                       loading="lazy"
                       decoding="async"
                     />

@@ -289,7 +289,7 @@ export default function ProjectNearbyPropertiesMap({
         type="button"
         onClick={() => !disabled && setFilterMode(mode)}
         disabled={disabled}
-        className={`jj-map-filter-toggle inline-flex w-full min-w-0 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed" : ""}`}
+        className={`jj-map-filter-toggle inline-flex w-full min-w-0 min-h-[42px] items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold border transition-colors ${isActive ? "jj-emerald-action allow-white" : "bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/35"} ${disabled ? "cursor-not-allowed opacity-55" : "cursor-pointer"}`}
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
         data-surface={isActive ? "emerald" : "champagne"}
