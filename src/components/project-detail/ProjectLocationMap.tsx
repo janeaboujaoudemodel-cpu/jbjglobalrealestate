@@ -65,17 +65,18 @@ function MapViewToggle({
   t: (key: string) => string;
 }) {
   return (
-    <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2 items-start max-w-[calc(100%-2rem)]">
-      <div className="jj-map-layer-switcher inline-flex flex-row gap-1">
+    <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2 items-start" style={{ maxWidth: 'calc(100% - 2rem)' }}>
+      <div className="jj-map-layer-switcher inline-flex flex-row flex-nowrap gap-1" style={{ width: 'auto' }}>
         {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className="jj-map-layer-button whitespace-nowrap"
+            className="jj-map-layer-button"
             data-active={mapView === view ? "true" : "false"}
             data-surface="emerald"
             data-emerald-action="true"
             data-no-contrast-guard
+            style={{ whiteSpace: 'nowrap', writingMode: 'horizontal-tb', minWidth: 'max-content', flex: '0 0 auto' }}
           >
             {t(`map.${view}`)}
           </button>
@@ -85,19 +86,20 @@ function MapViewToggle({
         href={externalUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="jj-map-square-control inline-flex flex-row items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 w-auto min-w-fit"
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold"
         data-surface="emerald"
         data-emerald-action="true"
         data-no-contrast-guard
         aria-label={t('map.openInGoogleMaps')}
-        style={{ backgroundImage: 'var(--jj-emerald-ombre)', color: '#FFFFFF', writingMode: 'horizontal-tb' }}
+        style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF', writingMode: 'horizontal-tb', whiteSpace: 'nowrap', minWidth: 'max-content', flex: '0 0 auto', border: '1px solid rgba(184,149,85,0.45)' }}
       >
-        <Maximize className="w-4 h-4 shrink-0" />
-        <span className="whitespace-nowrap">Open in Google Maps</span>
+        <Maximize className="w-4 h-4 shrink-0" style={{ color: '#FFFFFF' }} />
+        <span style={{ whiteSpace: 'nowrap', color: '#FFFFFF' }}>Open in Google Maps</span>
       </a>
     </div>
   );
 }
+
 
 function MapViewController({ center, zoom }: { center: [number, number]; zoom: number }) {
   const map = useMap();
