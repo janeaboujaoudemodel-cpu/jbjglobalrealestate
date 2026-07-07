@@ -557,6 +557,7 @@ export default function UnifiedCRM() {
                     {t.label}
                     {c !== null && c > 0 && (
                       <span
+                        data-no-contrast-guard
                         className={[
                            "inline-flex items-center justify-center min-w-[1.125rem] h-[18px] px-1 rounded-md text-[10px] font-extrabold tabular-nums",
                           active
