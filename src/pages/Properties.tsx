@@ -76,37 +76,10 @@ import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import PropertiesMapView from "@/components/maps/PropertiesMapView";
+import { CURRENCY_RATES, CURRENCY_SYMBOLS } from "@/hooks/useCurrency";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 
-// Currency conversion rates - 10 unified currencies
-const CURRENCY_RATES: Record<string, number> = {
-  AED: 1,
-  USD: 0.27,
-  EUR: 0.25,
-  GBP: 0.21,
-  INR: 22.5,
-  SAR: 1.02,
-  CNY: 1.98,
-  RUB: 24.5,
-  CAD: 0.37,
-  AUD: 0.42,
-};
-
-const CURRENCY_SYMBOLS: Record<string, string> = {
-  AED: 'AED',
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  INR: '₹',
-  SAR: 'SAR',
-  CNY: '¥',
-  RUB: '₽',
-  CAD: 'C$',
-  AUD: 'A$',
-};
-
-// Extended currency type - 10 unified currencies
-type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
+type ExtendedCurrency = string;
 
 const CURRENCY_KEY = 'jj_currency';
 
@@ -531,8 +504,8 @@ const Properties = () => {
 
   // Format price with currency
   const formatPrice = (value: number) => {
-    const converted = value * CURRENCY_RATES[filters.currency];
-    const symbol = CURRENCY_SYMBOLS[filters.currency];
+    const converted = value * (CURRENCY_RATES[filters.currency] ?? 1);
+    const symbol = CURRENCY_SYMBOLS[filters.currency] ?? filters.currency;
     if (converted >= 1000000000) return `${symbol} ${(converted / 1000000000).toFixed(1)}B`;
     if (converted >= 1000000) return `${symbol} ${(converted / 1000000).toFixed(0)}M`;
     if (converted >= 1000) return `${symbol} ${(converted / 1000).toFixed(0)}K`;

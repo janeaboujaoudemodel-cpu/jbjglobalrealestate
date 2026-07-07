@@ -181,7 +181,7 @@ export default function ProjectLocationMap({
       {/* Click to enable scroll zoom overlay */}
       {!scrollZoomEnabled && (
         <div
-          className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer"
+          className="absolute inset-0 z-[999] flex items-center justify-center cursor-pointer pointer-events-none"
           onClick={() => setScrollZoomEnabled(true)}
         >
           <div data-surface="emerald" data-emerald-action="true" data-no-contrast-guard className="jj-map-enable-chip px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 pointer-events-none">
