@@ -34311,4 +34311,34 @@ html body #root [data-no-contrast-guard] .allow-white * {
   }
 }
 
+/* OWNER LOCK — project/developer/area sticky controls use the same squared
+   emerald button geometry as Location/Register Interest/Collapse, never fully
+   rounded pills. Kept last to beat legacy emerald/pill radius guards. */
+html body #root :is([data-project-sticky-nav="true"], [data-scoped-sticky-nav]) :is(
+  .jj-filter-rail > button,
+  .jj-filter-search-pill,
+  .jj-filter-pill-fast,
+  .filter-emerald-action,
+  button[data-filter-selected="true"],
+  [data-surface="emerald"],
+  [data-emerald-action="true"]
+) {
+  border-radius: 10px !important;
+}
+
+html body #root :is([data-project-sticky-nav="true"], [data-scoped-sticky-nav]) :is(
+  .jj-filter-search-pill input,
+  .filter-search-pill-input
+) {
+  border-radius: 10px !important;
+}
+
+html body #root button[aria-label="Talk to JBJ support"],
+html body #root button[aria-label="Talk to JBJ support"].jj-emerald-metallic {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
 
