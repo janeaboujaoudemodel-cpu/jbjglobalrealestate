@@ -1,6 +1,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Presentation, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
 import { useUserMode } from "@/hooks/useUserMode";
 import { PresentationBuilderDialog } from "@/components/presentation-builder/PresentationBuilderDialog";
 import type { DeckProject } from "@/components/presentation-builder/renderDeckHtml";
@@ -84,11 +85,15 @@ export const GeneratePresentationCard: React.FC<Props> = ({ project }) => {
                 }}
               />
               <div
-                data-emerald-action="true"
-                className="jj-emerald-action relative z-10 w-16 h-16 rounded-full inline-flex items-center justify-center"
-                style={{ boxShadow: "0 8px 18px rgba(0,0,0,0.4)" }}
+                className="relative z-10 inline-flex items-center justify-center"
+                aria-hidden="true"
               >
-                <Presentation className="w-7 h-7" style={{ color: "#FFFFFF" }} />
+                <img
+                  src={jbjMonogram}
+                  alt="JBJ"
+                  className="w-20 h-20 object-contain select-none"
+                  style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.5))" }}
+                />
               </div>
               <div className="relative z-10 text-center px-6" data-no-contrast-guard>
                 <div id="jj-genpres-eyebrow" className="text-[11px] uppercase tracking-[0.3em] mb-1">
