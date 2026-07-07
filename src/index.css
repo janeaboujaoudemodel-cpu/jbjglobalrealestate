@@ -33995,3 +33995,12 @@ html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] {
     overflow: visible !important;
   }
 }
+
+html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] button.jbj-form-field[data-no-contrast-guard],
+html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] button.jbj-form-field[data-no-contrast-guard] * {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
