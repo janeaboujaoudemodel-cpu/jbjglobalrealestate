@@ -1678,7 +1678,17 @@ html body #root button[aria-label="Talk to JBJ support"] {
 }
 
 
-
+/* Radix Checkbox: force the tick to be pure white on ANY checked state so it never
+   renders dark on the emerald filled background (My Projects, CRM tables, bulk toolbars). */
+html body button[role="checkbox"][data-state="checked"] svg,
+html body button[role="checkbox"][data-state="checked"] svg *,
+html body [data-radix-checkbox-root][data-state="checked"] svg,
+html body [data-radix-checkbox-root][data-state="checked"] svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  opacity: 1 !important;
+}
 
 
 .animate-sparkle {
