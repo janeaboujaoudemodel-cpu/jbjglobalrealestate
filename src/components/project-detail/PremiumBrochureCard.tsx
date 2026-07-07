@@ -195,7 +195,7 @@ const PremiumBrochureCard = ({
                 className="h-16 w-16 object-contain shrink-0"
                 style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9))" }}
                 loading="eager"
-                fetchpriority="high"
+                {...({ fetchpriority: "high" } as any)}
                 decoding="sync"
               />
               <span
