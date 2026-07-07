@@ -1519,6 +1519,7 @@ function ProjectDetailLayoutInner({
           {/* QUICK FACTS BAR - Reelly-style horizontal bar */}
           <div className="mb-12">
              <QuickFactsBar
+               projectId={project.id}
                propertyType={project.property_type_label}
                totalUnits={project.availability_visible ? project.total_units : null}
                floors={project.floors && project.floors > 3 ? project.floors : undefined}
