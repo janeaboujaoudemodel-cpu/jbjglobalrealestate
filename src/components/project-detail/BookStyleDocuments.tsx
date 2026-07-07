@@ -244,9 +244,9 @@ export default function BookStyleDocuments({
       <Dialog open={!!viewerUrl} onOpenChange={(open) => !open && setViewerUrl(null)}>
         <DialogContent className="!max-w-[96vw] w-[96vw] h-[94vh] p-0 bg-card border-[#B89555]/30 rounded-xl overflow-hidden">
           <DialogTitle className="sr-only">{viewerTitle}</DialogTitle>
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col h-full min-h-0">
             {/* Header bar */}
-            <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-[#B89555]/20">
+            <div className="flex items-center justify-between px-4 py-3 bg-card border-b border-[#B89555]/20 shrink-0">
               <p className="text-sm font-semibold text-foreground truncate">{viewerTitle}</p>
               <button
                 onClick={async () => {
@@ -280,11 +280,11 @@ export default function BookStyleDocuments({
               </button>
             </div>
             {/* Mobile hint */}
-            <div className="md:hidden px-4 py-2 bg-[#F7F2EA] border-b border-[#B89555]/20 text-[11px] text-[#1A1A1A]/75">
+            <div className="md:hidden px-4 py-2 bg-[#F7F2EA] border-b border-[#B89555]/20 text-[11px] text-[#1A1A1A]/75 shrink-0">
               For the full document experience, open on desktop.
             </div>
-            {/* PDF viewer */}
-            <div className="flex-1 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
+            {/* PDF viewer — flex-1 + min-h-0 is required for the inner overflow-y-auto to scroll */}
+            <div className="flex-1 min-h-0 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
               {viewerUrl && (
                 <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7] text-sm font-semibold text-[#1A1A1A]">Loading document…</div>}>
                   <PdfCanvasViewer url={viewerUrl} title={viewerTitle} maxPages={999} className="h-full w-full" />
