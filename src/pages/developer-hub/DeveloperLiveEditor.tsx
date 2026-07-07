@@ -8,9 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles } from "lucide-react";
+import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles, Search } from "lucide-react";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
 import { toast } from "sonner";
+
+type StatusFilter = "all" | "live" | "pending" | "draft";
+const PAGE_SIZE = 200;
 
 interface Project {
   id: string;
