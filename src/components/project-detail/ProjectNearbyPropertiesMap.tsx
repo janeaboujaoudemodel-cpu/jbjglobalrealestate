@@ -327,25 +327,22 @@ export default function ProjectNearbyPropertiesMap({
         key={mode}
         type="button"
         onClick={() => setFilterMode(mode)}
-        className={`jj-map-active-toggle jj-sqtoggle relative inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold transition-colors ${isActive ? "" : ""}`}
+        className="jj-nearby-tab relative inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-3 text-xs font-semibold transition-colors"
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
-        data-surface={isActive ? "emerald" : "champagne"}
-        data-emerald-action={isActive ? "true" : undefined}
         data-no-contrast-guard
         style={{
-          backgroundImage: isActive
+          background: isActive
             ? 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)'
-            : 'none',
-          backgroundColor: isActive ? undefined : '#F7F2EA',
+            : '#F7F2EA',
           color: isActive ? '#FFFFFF' : '#1A1A1A',
-          borderRight: '1px solid rgba(184,149,85,0.28)',
+          borderRight: '1px solid rgba(184,149,85,0.35)',
+          borderRadius: 0,
           cursor: 'pointer',
           opacity: 1,
-          minHeight: 44,
+          minHeight: 48,
         }}
       >
-        <span className="jj-sqtoggle-sweep" aria-hidden="true" />
         <span className="min-w-0 truncate" style={{ color: 'inherit' }}>{label}</span>
         <span className="text-[10px] tabular-nums" style={{ color: 'inherit', opacity: 0.9 }}>{count}</span>
       </button>

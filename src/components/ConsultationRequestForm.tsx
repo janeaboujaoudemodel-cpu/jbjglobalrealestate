@@ -236,7 +236,7 @@ export const ConsultationRequestForm = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
         data-form-shell
-        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-6 sm:p-7 md:p-8 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-3xl mx-auto ${className}`}
+        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
     >
       {/* Header */}
       <div className="text-center mb-6">
@@ -363,7 +363,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-              <div data-field-group className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
+              <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
                     <div className="flex flex-wrap gap-2">
                       {BEDROOM_OPTIONS.map((b) => {
                         const active = selected.includes(b.value);
@@ -375,9 +375,10 @@ export const ConsultationRequestForm = ({
                             data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border"
-                                : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                                ? "jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold border border-[#064E3B] text-white"
+                                : "h-9 px-3.5 rounded-full text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555] hover:border-[#8f6f2b] transition-colors"
                             }
+                            style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                           >
                             {b.label}
                           </button>
@@ -413,7 +414,7 @@ export const ConsultationRequestForm = ({
               return (
                 <FormItem>
                   <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-                  <div data-field-group className="rounded-xl border border-[#B89555]/30 p-4 md:p-5 bg-[#FDFBF7]/35">
+                  <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
                     <div className="flex flex-wrap gap-2">
                       {SIZE_BUCKETS.map((b) => {
                         const active =
@@ -427,9 +428,10 @@ export const ConsultationRequestForm = ({
                             data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "jj-emerald-action h-10 px-4 rounded-full text-sm font-medium border"
-                                : "h-10 px-4 rounded-full text-sm font-medium bg-[#FDFBF7] text-[#1A1A1A]/80 border border-[#B89555]/40 hover:border-[#B89555] hover:bg-[#EFE6D6]/60"
+                                ? "jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold border border-[#064E3B] text-white"
+                                : "h-9 px-3.5 rounded-full text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555] hover:border-[#8f6f2b] transition-colors"
                             }
+                            style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                           >
                             {b.label}
                           </button>

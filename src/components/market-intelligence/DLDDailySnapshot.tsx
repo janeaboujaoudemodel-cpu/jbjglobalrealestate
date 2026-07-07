@@ -61,6 +61,10 @@ const INK = "#0A0A0A";
 // Brand emerald metallic ombre — matches var(--jj-emerald-ombre) site-wide.
 const EMERALD_BAR = "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)";
 const EMERALD_DOT = "#064E3B";
+// Gold champagne — used for mortgage/secondary halves and unfilled portions of
+// the top-10 bars so the "other side" reads clearly gold, not muted beige.
+const GOLD_BAR = "linear-gradient(135deg, #D4B87A 0%, #B89555 55%, #8f6f2b 100%)";
+const GOLD_DOT = "#B89555";
 const PURE_WHITE = "#FFFFFF";
 
 const WhiteGlyphIcon = ({ Icon, className = "h-5 w-5" }: { Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; className?: string }) => {
@@ -258,13 +262,13 @@ export const DLDDailySnapshot = () => {
                   <div
                     data-no-contrast-guard
                     data-allow-dark-cta
-                    data-dld-emerald-fill
-                    className="dld-emerald-fill"
-                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(mortgageShare, 2)}%`, minWidth: mortgageShare > 0 ? 18 : 0, borderRadius: 9999, background: EMERALD_BAR, backgroundColor: EMERALD_DOT }}
+                    data-dld-gold-fill
+                    className="dld-gold-fill"
+                    style={{ position: "absolute", insetBlock: 0, left: 0, width: `${Math.max(mortgageShare, 2)}%`, minWidth: mortgageShare > 0 ? 18 : 0, borderRadius: 9999, background: GOLD_BAR, backgroundColor: GOLD_DOT, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35)" }}
                   />
                 </div>
-                <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/70">
-                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: EMERALD_DOT }} /> Mortgage · {mortgageShare}% of all transactions
+                <p className="mt-1 flex items-center gap-1.5 text-[11px] tabular-nums text-[#1A1A1A]/80">
+                  <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: GOLD_DOT }} /> Mortgage · {mortgageShare}% of all transactions
                 </p>
               </div>
             </div>
@@ -308,7 +312,7 @@ export const DLDDailySnapshot = () => {
                     <div
                       data-no-contrast-guard
                       className="relative h-2.5 overflow-hidden rounded-full"
-                      style={{ backgroundColor: "#EFE6D6", border: `1px solid rgba(184,149,85,0.35)` }}
+                      style={{ background: GOLD_BAR, border: `1px solid rgba(184,149,85,0.55)`, boxShadow: "inset 0 1px 0 rgba(255,255,255,0.35)" }}
                     >
                       <div
                         data-no-contrast-guard
