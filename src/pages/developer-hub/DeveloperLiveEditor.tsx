@@ -245,7 +245,7 @@ const DeveloperLiveEditor = () => {
 
   const saveEdit = async (p: Project) => {
     const e = edits[p.id] || {};
-    const patch: Record<string, unknown> = {};
+    const patch: { price_from?: number; handover_date?: string; description?: string } = {};
     if (e.price_from !== undefined && e.price_from !== "") patch.price_from = Number(e.price_from);
     if (e.handover_date !== undefined && e.handover_date !== "") patch.handover_date = e.handover_date;
     if (e.description !== undefined && e.description !== "") patch.description = e.description;
@@ -255,6 +255,7 @@ const DeveloperLiveEditor = () => {
     }
     // Direct update — bypass useDeveloperAutoPublish so it works for both owner and dev-rep
     const { error } = await supabase.from("projects").update(patch).eq("id", p.id);
+
     if (error) return toast.error(error.message);
     toast.success("Saved");
     setEditing(null);
