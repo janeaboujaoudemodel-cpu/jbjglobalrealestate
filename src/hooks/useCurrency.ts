@@ -99,8 +99,15 @@ export function useCurrency() {
         setCurrency(code);
       }
     };
+    const storageHandler = (e: StorageEvent) => {
+      if (e.key === CURRENCY_KEY && e.newValue) setCurrency(e.newValue);
+    };
     window.addEventListener('currencyChange', handler);
-    return () => window.removeEventListener('currencyChange', handler);
+    window.addEventListener('storage', storageHandler);
+    return () => {
+      window.removeEventListener('currencyChange', handler);
+      window.removeEventListener('storage', storageHandler);
+    };
   }, []);
 
   const formatPrice = useCallback((priceAED: number | null | undefined): string => {

@@ -34053,15 +34053,72 @@ html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] button
 }
 
 /* Project detail proof patch — logo plate, map popups/tabs, PDF canvas and payment-plan contrast. */
-html body #root .jj-developer-logo-metallic {
-  background-image: linear-gradient(120deg, #d8b86a 0%, #f4e3a8 25%, #b89555 50%, #f4e3a8 75%, #d8b86a 100%) !important;
-  background-size: 220% 220% !important;
-  animation: jj-metal-sheen 4.5s ease-in-out infinite !important;
+html body #root [data-developer-logo-plate="true"].jj-developer-logo-metallic,
+html body #root .jj-developer-logo-metallic[data-developer-logo-plate="true"] {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 58%, #F7F2EA 100%) !important;
+  background-image: linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 58%, #F7F2EA 100%) !important;
+  background-size: 100% 100% !important;
+  border: 1px solid rgba(184,149,85,0.88) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.96),
+    inset 0 -1px 0 rgba(184,149,85,0.28),
+    0 18px 36px -16px rgba(78,55,22,0.42),
+    0 0 0 1px rgba(255,255,255,0.38) !important;
+  animation: none !important;
 }
 
-html body #root .jj-developer-logo-metallic img {
+html body #root [data-developer-logo-plate="true"].jj-developer-logo-metallic::before,
+html body #root .jj-developer-logo-metallic[data-developer-logo-plate="true"]::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -2px !important;
+  border-radius: inherit !important;
+  padding: 2px !important;
+  background: linear-gradient(115deg, #8E6E36 0%, #FFF1C2 18%, #B89555 36%, #FFF8DA 50%, #B89555 64%, #FFF1C2 82%, #8E6E36 100%) !important;
+  background-size: 240% 240% !important;
+  animation: jj-dev-logo-border-sweep 3.2s linear infinite !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask-composite: exclude !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+html body #root [data-developer-logo-plate="true"].jj-developer-logo-metallic::after,
+html body #root .jj-developer-logo-metallic[data-developer-logo-plate="true"]::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.72) 48%, transparent 61%) !important;
+  transform: translateX(-130%) !important;
+  animation: jj-dev-logo-surface-sheen 4.4s ease-in-out infinite !important;
+  mix-blend-mode: screen !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+html body #root [data-developer-logo-plate="true"].jj-developer-logo-metallic img,
+html body #root .jj-developer-logo-metallic[data-developer-logo-plate="true"] img {
+  position: relative !important;
+  z-index: 3 !important;
   background: transparent !important;
-  mix-blend-mode: multiply !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+@keyframes jj-dev-logo-border-sweep {
+  0% { background-position: 180% 0; }
+  100% { background-position: -80% 0; }
+}
+
+@keyframes jj-dev-logo-surface-sheen {
+  0%, 34% { transform: translateX(-130%); opacity: 0; }
+  42% { opacity: 0.75; }
+  62% { transform: translateX(130%); opacity: 0; }
+  100% { transform: translateX(130%); opacity: 0; }
 }
 
 html body #root .jj-map-marker-pill,
@@ -34103,6 +34160,19 @@ html body #root .jj-map-filter-toggle[data-active="true"] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+
+html body #root [data-nearby-map-tabs="true"] .jj-map-filter-toggle {
+  min-height: 2.75rem !important;
+  padding-left: 0.85rem !important;
+  padding-right: 0.85rem !important;
+  letter-spacing: 0 !important;
+}
+
+html body #root [data-nearby-map-tabs="true"] .jj-map-filter-toggle span:first-child {
+  white-space: normal !important;
+  line-height: 1.15 !important;
+  text-overflow: clip !important;
 }
 
 html body #root [data-project-payment-tabs] [data-state="active"],

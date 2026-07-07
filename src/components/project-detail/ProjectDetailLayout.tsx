@@ -645,6 +645,14 @@ function ProjectDetailLayoutInner({
     [formatPriceRangeFull, project.price_from, project.price_to],
   );
 
+  const plotSizeText = useMemo(() => {
+    const raw = project.built_up_area || null;
+    if (!raw) return null;
+    const n = Number(String(raw).replace(/[^\d.]/g, ""));
+    if (Number.isFinite(n) && n > 0) return `${Math.round(n).toLocaleString("en-US")} sq ft`;
+    return String(raw);
+  }, [project.built_up_area]);
+
   const brochureInclusions = useMemo(() => {
     const hasCityBuddy = project.documents.some((doc) => /citi\s*buddy|city\s*buddy|buddy/i.test(`${doc.name || ""} ${doc.display_title || ""} ${doc.url || ""}`));
     return [
@@ -713,11 +721,11 @@ function ProjectDetailLayoutInner({
 
   // Format size text
   const sizeText = useMemo(() => {
-    if (!project.size_min && project.built_up_area) return project.built_up_area;
+    if (!project.size_min && plotSizeText) return plotSizeText;
     if (!project.size_min) return null;
     if (project.size_min === project.size_max) return formatSize(project.size_min);
     return `${convertSize(project.size_min).toLocaleString()} - ${formatSize(project.size_max || 0)}`;
-  }, [project.size_min, project.size_max, formatSize, convertSize]);
+  }, [project.size_min, project.size_max, plotSizeText, formatSize, convertSize]);
 
   return (
     <div data-project-detail-page className="contents">
@@ -1120,9 +1128,9 @@ function ProjectDetailLayoutInner({
               </p>
             </div>
             <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Size</p>
+              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">{plotSizeText ? "Plot size" : "Size"}</p>
               <p className="mt-2 text-xl font-bold text-foreground">
-                {sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
+                {plotSizeText || sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
           </div>
