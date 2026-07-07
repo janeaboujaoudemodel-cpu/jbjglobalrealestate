@@ -33943,7 +33943,7 @@ html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] {
   overflow-x: hidden !important;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] table,
   html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] thead,
   html body #root .owner-dashboard-shell [data-crm-leads-responsive="true"] tbody,
