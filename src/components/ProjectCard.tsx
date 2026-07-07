@@ -177,33 +177,40 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
     >
       {/* Top-right project actions — hidden until card hover/focus.
           Row 1: favorite + shortlist. Row 2: badge aligned exactly under shortlist. */}
+      {/* Top-right project actions — always visible; z-40 so the owner pencil
+          overlay never blocks the shortlist / favorite hit-area. */}
       <div
-        className="absolute top-3 right-3 z-20 flex flex-col items-end gap-1.5"
+        className="absolute top-3 right-3 z-40 flex flex-col items-end gap-1.5 pointer-events-none"
         data-no-contrast-guard
         data-card-actions-overlay=""
       >
         {showFavorite && (
-          <FavoriteButton projectId={project.id} size="md" />
+          <div className="pointer-events-auto">
+            <FavoriteButton projectId={project.id} size="md" />
+          </div>
         )}
         {showBadgeButton && (
-          <ShortlistBadgeButton
-            projectId={project.id}
-            size="md"
-            showBadgeIndicator={false}
-            className="justify-end"
-          />
+          <div className="pointer-events-auto">
+            <ShortlistBadgeButton
+              projectId={project.id}
+              size="md"
+              showBadgeIndicator={false}
+              className="justify-end"
+            />
+          </div>
         )}
       </div>
 
 
-      {/* Owner edit affordance — top-right, below favorite stack. Owners only. */}
+      {/* Owner edit affordance — tucked under the actions stack so it never
+          overlays the shortlist button. Owners only. */}
       <div className="absolute top-3 right-3 z-30" data-no-contrast-guard>
         <OwnerCardEditMenu
           projectId={project.id}
           slug={project.slug}
           saleStatus={project.status_label}
           showSaleStatus={(project as any).show_sale_status}
-          className="mt-12"
+          className="mt-[110px]"
         />
       </div>
 

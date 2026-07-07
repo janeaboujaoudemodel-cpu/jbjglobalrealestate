@@ -1,4 +1,4 @@
-import { Award, X } from "lucide-react";
+import { Award, X, ListPlus, ListMinus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useShortlist } from "@/hooks/useFavorites";
 import { useGuestShortlist } from "@/hooks/useGuestFavorites";
@@ -80,6 +80,13 @@ const ShortlistBadgeButton = ({
   const actionClass =
     "jj-surface-emerald jj-favorite-trigger inline-flex items-center justify-center rounded-full aspect-square shrink-0 leading-none transition-all duration-200 hover:brightness-110 border-0 ring-0 shadow-[0_4px_14px_-4px_rgba(6,78,59,0.45)] overflow-hidden p-0";
 
+  const toggleShortlistOnly = () => {
+    toggleGuestShortlist(projectId);
+    toast.success(isShortlisted ? "Removed from shortlist" : "Added to shortlist");
+    // If removing from shortlist, also clear any badge that was assigned.
+    if (isShortlisted && currentBadge) setBadge(projectId, null);
+  };
+
   const handleSetBadge = (badge: ShortlistBadge | null) => {
     // Auto-add to shortlist if not already shortlisted
     if (!isShortlisted && badge) {
@@ -135,40 +142,46 @@ const ShortlistBadgeButton = ({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
+          {/* Primary action — plain add/remove from shortlist */}
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
-              handleSetBadge('top1');
+              toggleShortlistOnly();
             }}
-            className={`${badgeConfig.top1.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-semibold"
+          >
+            {isShortlisted ? (
+              <><ListMinus className="w-4 h-4 mr-2 text-[#064E3B]" /> Remove from shortlist</>
+            ) : (
+              <><ListPlus className="w-4 h-4 mr-2 text-[#064E3B]" /> Add to shortlist</>
+            )}
+          </DropdownMenuItem>
+          <div className="my-1 h-px bg-[#B89555]/30" />
+          <div className="px-2 pt-1 pb-1 text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 font-semibold">
+            Rank this project
+          </div>
+          <DropdownMenuItem
+            onClick={(e) => { e.stopPropagation(); handleSetBadge('top1'); }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-medium"
           >
             🥇 Top 1 (Gold)
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSetBadge('top2');
-            }}
-            className={`${badgeConfig.top2.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
+            onClick={(e) => { e.stopPropagation(); handleSetBadge('top2'); }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-medium"
           >
             🥈 Top 2 (Silver)
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSetBadge('top3');
-            }}
-            className={`${badgeConfig.top3.menuColor} hover:bg-[#1A1A1A] cursor-pointer font-medium`}
+            onClick={(e) => { e.stopPropagation(); handleSetBadge('top3'); }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-medium"
           >
             🥉 Top 3 (Bronze)
           </DropdownMenuItem>
           {currentBadge && (
             <DropdownMenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSetBadge(null);
-              }}
-              className="text-white/70 hover:bg-[#1A1A1A] cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); handleSetBadge(null); }}
+              className="text-[#1A1A1A]/70 hover:bg-[#EFE6D6] cursor-pointer"
             >
               <X className="w-4 h-4 mr-2" />
               Remove Badge

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import UnitCompareShell from "@/components/compare/units/UnitCompareShell";
 import CompareModeToggle from "@/components/compare/CompareModeToggle";
@@ -15,7 +15,7 @@ import {
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
-  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown
+  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown, Search, Plus
 } from "lucide-react";
 import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,7 @@ import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
+import CompareProjectPicker from "@/components/compare/CompareProjectPicker";
 import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShell";
 import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
 import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
@@ -142,6 +143,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
   const [aiAnalysis, setAiAnalysis] = useState<AIAnalysis | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiAddOpen, setAiAddOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  // Auto-open the project picker the first time the user lands on /compare
+  // with an empty shortlist so they can immediately search & pick projects.
+  const autoOpenedRef = useRef(false);
 
   const handleExtractedToManual = (e: ExtractedProject) => {
     setAiAddOpen(false);
@@ -195,6 +200,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
     },
     enabled: shortlistIds.length > 0,
   });
+
+  useEffect(() => {
+    if (!autoOpenedRef.current && !isLoading && (!projects || projects.length === 0)) {
+      autoOpenedRef.current = true;
+      setPickerOpen(true);
+    }
+  }, [isLoading, projects]);
+
 
   // Check if user can use free or needs VIP
   const needsVipForCompare = hasUsedFreeCompare && !hasActiveMembership;
@@ -622,17 +635,24 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
             {/* CTAs */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+              <CompareCTA
+                variant="gradient"
+                onClick={() => setPickerOpen(true)}
+                icon={<Search className="w-4 h-4" />}
+              >
+                Search & pick projects
+              </CompareCTA>
               <Link to="/properties">
-                <CompareCTA variant="gradient" icon={<Building className="w-4 h-4" />}>
+                <CompareCTA variant="glass" icon={<Building className="w-4 h-4" />}>
                   Browse properties
                 </CompareCTA>
               </Link>
               <CompareCTA
-                variant="glass"
+                variant="outline"
                 onClick={() => setAiAddOpen(true)}
                 icon={<Sparkles className="w-4 h-4" style={{ color: "#B89555" }} />}
               >
-                Add via link / PDF (AI fill)
+                Add via link / PDF
               </CompareCTA>
               <Link to="/compare-manual">
                 <CompareCTA variant="outline">Compare manually</CompareCTA>
@@ -648,6 +668,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           </div>
         </div>
         <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
+        <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} />
       </CompareAIShell>
     );
   }
@@ -781,6 +802,22 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                 ) : (
                   <><Sparkles className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /><span className="allow-white" style={{ color: "#FFFFFF" }}>Start Comparing</span></>
                 )}
+              </button>
+
+              <button
+                onClick={() => setPickerOpen(true)}
+                data-no-contrast-guard
+                data-allow-dark-cta
+                className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                style={{
+                  background: "linear-gradient(135deg, #F7F2EA 0%, #EFE6D6 55%, #E5D8B8 100%)",
+                  color: "#1A1A1A",
+                  border: "1px solid rgba(184,149,85,0.55)",
+                  boxShadow: "0 10px 24px -14px rgba(0,0,0,0.35)",
+                }}
+              >
+                <Search className="w-4 h-4" style={{ color: "#064E3B" }} />
+                <span style={{ color: "#1A1A1A" }}>Add / change projects</span>
               </button>
 
               <button
@@ -1365,6 +1402,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
       <ActiveLeadBanner showAddToShortlist={false} />
       <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
+      <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} />
     </section>
   );
 };
