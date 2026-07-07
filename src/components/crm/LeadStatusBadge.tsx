@@ -110,6 +110,12 @@ const LeadStatusBadge = ({
       onClick={onClick}
       disabled={onClick ? false : undefined}
       data-surface={isEmeraldStatus ? "emerald" : undefined}
+      data-no-contrast-guard={!isEmeraldStatus ? true : undefined}
+      style={
+        isEmeraldStatus
+          ? { background: "#064E3B", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", borderColor: "transparent" }
+          : { background: "#FDFBF7", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", borderColor: "rgba(184,149,85,0.35)" }
+      }
       className={cn(
         "inline-flex items-center justify-center gap-1.5 rounded-full border font-bold transition-all whitespace-nowrap",
         sizeClasses[size],
@@ -125,7 +131,10 @@ const LeadStatusBadge = ({
           style={{ backgroundColor: statusInfo.dotColor }}
         />
       )}
-      <span className="font-semibold tracking-wide uppercase text-[inherit]">
+      <span
+        className="font-semibold tracking-wide uppercase text-[inherit]"
+        style={isEmeraldStatus ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+      >
         {statusInfo.label}
       </span>
     </Component>

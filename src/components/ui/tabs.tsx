@@ -37,19 +37,43 @@ TabsList.displayName = TabsPrimitive.List.displayName;
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    data-jj-segmented-trigger=""
-    data-emerald-active=""
-    className={cn(
-      "inline-flex min-w-0 max-w-full shrink items-center justify-center whitespace-normal [overflow-wrap:break-word] [word-break:normal] rounded-sm px-3 py-1.5 text-center text-sm font-medium leading-tight ring-offset-background transition-none duration-0 text-[#1A1A1A] data-[state=active]:jj-emerald-metallic data-[state=active]:!text-white data-[state=active]:[-webkit-text-fill-color:#fff] data-[state=active]:[&_svg]:!stroke-white data-[state=active]:[&_*]:!text-white hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
-      className,
-    )}
-    {...props}
-  />
+>(({ className, ...props }, ref) => {
+  const localRef = React.useRef<React.ElementRef<typeof TabsPrimitive.Trigger>>(null);
 
-));
+  React.useImperativeHandle(ref, () => localRef.current as React.ElementRef<typeof TabsPrimitive.Trigger>);
+
+  React.useEffect(() => {
+    const node = localRef.current;
+    if (!node) return;
+    const sync = () => {
+      const active = node.getAttribute("data-state") === "active" || node.getAttribute("aria-selected") === "true";
+      if (active) {
+        node.style.setProperty("color", "#FFFFFF", "important");
+        node.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+      } else {
+        node.style.removeProperty("color");
+        node.style.removeProperty("-webkit-text-fill-color");
+      }
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(node, { attributes: true, attributeFilter: ["data-state", "aria-selected"] });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <TabsPrimitive.Trigger
+      ref={localRef}
+      data-jj-segmented-trigger=""
+      data-emerald-active=""
+      className={cn(
+        "inline-flex min-w-0 max-w-full shrink items-center justify-center whitespace-normal [overflow-wrap:break-word] [word-break:normal] rounded-sm px-3 py-1.5 text-center text-sm font-medium leading-tight ring-offset-background transition-none duration-0 text-[#1A1A1A] data-[state=active]:jj-emerald-metallic data-[state=active]:!text-white data-[state=active]:[-webkit-text-fill-color:#fff] data-[state=active]:[&_svg]:!stroke-white data-[state=active]:[&_*]:!text-white hover:bg-[color:var(--emerald-soft-bg)] hover:text-[color:var(--emerald-1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--emerald-1)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
 const TabsContent = React.forwardRef<
