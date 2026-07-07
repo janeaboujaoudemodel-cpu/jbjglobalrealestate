@@ -10,7 +10,6 @@ import {
   Plane, 
   MessageCircle,
   ArrowRight,
-  Scale,
   Handshake,
   Wrench,
 } from "lucide-react";
