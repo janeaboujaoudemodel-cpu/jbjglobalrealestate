@@ -12,7 +12,7 @@
 // ── PILL / CHIP TRIGGERS ──────────────────────────────────────────────────
 export const filterPillBase = [
   "inline-flex !w-auto min-w-0 items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2",
-  "rounded-full text-xs md:text-[13px] font-semibold whitespace-nowrap select-none",
+  "rounded-lg text-xs md:text-[13px] font-semibold whitespace-nowrap select-none",
   "overflow-hidden text-ellipsis max-w-[220px] flex-shrink-0 touch-manipulation",
   "transition-[background-color,border-color,box-shadow,color] duration-100 cursor-pointer",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
@@ -39,7 +39,7 @@ export function pillInactive(_variant: "light" | "dark" = "light") {
 
 // ── TOGGLE PILLS INSIDE POPOVERS ──────────────────────────────────────────
 export const togglePillBase = [
-  "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold",
+  "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold",
   "border transition-colors duration-100 cursor-pointer",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-1 focus-visible:ring-offset-[#FDFBF7]",
 ].join(" ");
@@ -84,7 +84,7 @@ export const filterCheckBoxOn = "jj-pill-emerald-metallic border-0 allow-white";
 export const filterCheckBoxOff = "border-[#B89555]/55 bg-white";
 
 // ── SEARCH PILL (on champagne / light rail) ───────────────────────────────
-export const filterSearchPillWrapper = "jj-filter-search-pill min-w-0 flex-shrink-0 flex items-center px-3 rounded-full jj-emerald-metallic border-0 shadow-sm";
+export const filterSearchPillWrapper = "jj-filter-search-pill min-w-0 flex-shrink-0 flex items-center px-3 rounded-lg jj-emerald-metallic border-0 shadow-sm";
 export const filterSearchPillInput = "filter-search-pill-input w-full py-1.5 bg-transparent text-xs text-white placeholder:text-white/85 outline-none border-0 focus:outline-none focus:ring-0 allow-white";
 
 // ── ACTIVE FILTER CHIPS (already-applied filter tags) ─────────────────────
@@ -99,7 +99,7 @@ export const filterDivider = "w-px h-5 bg-[#B89555]/40 flex-shrink-0";
 
 // ── RESET-ALL PILL ────────────────────────────────────────────────────────
 export const resetAllPill = [
-  "inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold",
+  "inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold",
   "filter-emerald-action jj-filter-pill-fast jj-filter-pill-fast-active border-0 text-white shadow-none allow-white",
   "hover:border-[#064E3B]/55",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#FDFBF7]",
