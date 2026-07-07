@@ -65,6 +65,7 @@ function EmeraldCard({ children, className = "" }: { children: React.ReactNode; 
       className={`rounded-2xl overflow-hidden border border-[#B89555]/40 shadow-[0_18px_50px_-30px_rgba(4,44,28,0.55)] ${className}`}
       style={{ background: EMERALD }}
       data-surface="emerald"
+      data-no-contrast-guard
     >
       {children}
     </div>
@@ -99,19 +100,13 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3">
+            <div className="absolute bottom-4 left-4">
               <img
                 src={inRoomDining}
                 alt="Amra in-room dining"
-                className="w-24 h-16 md:w-32 md:h-20 object-cover rounded-md border border-white/40 shadow-lg"
+                className="w-28 h-20 md:w-36 md:h-24 object-cover rounded-md border border-white/40 shadow-lg"
                 loading="lazy"
               />
-              <span
-                className="text-[10px] uppercase tracking-[0.28em] font-semibold px-3 py-1 rounded-full border"
-                style={{ color: "#FFFFFF", borderColor: "rgba(233,217,168,0.55)", background: "rgba(4,44,28,0.55)" }}
-              >
-                From the Amra Factsheet
-              </span>
             </div>
           </div>
           <div className="p-6 md:p-8">
@@ -252,7 +247,7 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               <div>
                 <SectionEyebrow>Design Ethos & Partners</SectionEyebrow>
                 <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-                  Design studios & brand partners named in the Amra factsheet
+                  Design studios & brand partners at Amra
                 </h3>
               </div>
             </div>
