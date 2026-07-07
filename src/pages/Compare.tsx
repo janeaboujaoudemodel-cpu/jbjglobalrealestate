@@ -805,6 +805,22 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               </button>
 
               <button
+                onClick={() => setPickerOpen(true)}
+                data-no-contrast-guard
+                data-allow-dark-cta
+                className="allow-white inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-bold rounded-xl"
+                style={{
+                  background: "linear-gradient(135deg, #F7F2EA 0%, #EFE6D6 55%, #E5D8B8 100%)",
+                  color: "#1A1A1A",
+                  border: "1px solid rgba(184,149,85,0.55)",
+                  boxShadow: "0 10px 24px -14px rgba(0,0,0,0.35)",
+                }}
+              >
+                <Search className="w-4 h-4" style={{ color: "#064E3B" }} />
+                <span style={{ color: "#1A1A1A" }}>Add / change projects</span>
+              </button>
+
+              <button
                 onClick={() => setAiAddOpen(true)}
                 data-no-contrast-guard
                 data-allow-dark-cta
