@@ -1431,7 +1431,7 @@ function ProjectDetailLayoutInner({
            )}
 
            {/* HOUSE DETAILS SECTION (Reelly-style) */}
-           {(project.floors || project.total_units || project.service_charge || project.finishing_standard || hasCitiBuddyDocument) && (
+           {(project.floors || project.total_units || project.service_charge || project.finishing_standard || hasCitiBuddyDocument || isAmraProject) && (
              <div ref={houseDetailsRef} id="house-details" className="mb-14 scroll-mt-40 relative">
                 <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="house-details" initial={project as any} /></div>
                 <HouseDetailsSection
@@ -1440,8 +1440,8 @@ function ProjectDetailLayoutInner({
                   buildingType={project.property_type_label}
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
-                 serviceCharge={project.service_charge}
-                  standardInclusions={hasCitiBuddyDocument ? ["Citi Buddy"] : null}
+                  serviceCharge={project.service_charge}
+                   standardInclusions={isAmraProject ? ["Fully furnished", "Fully serviced", "Full sea view", "Citi Buddy concierge"] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
              </div>
@@ -1470,7 +1470,7 @@ function ProjectDetailLayoutInner({
            )}
 
            {/* AMENITIES SECTION - Premium with Icons */}
-           {(project.amenities?.length ?? 0) > 0 && (
+           {amraAmenities.length > 0 && (
               <div ref={amenitiesRef} id="amenities" className="mb-14 scroll-mt-40">
                 <div className="jj-card-inner">
                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
@@ -1478,13 +1478,38 @@ function ProjectDetailLayoutInner({
                      Amenities & Features
                      <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="amenities" initial={project as any} /></span>
                    </h3>
-                   <AmenitiesWithPhotos amenities={project.amenities!} amenityImages={project.amenity_images} />
+                   <AmenitiesWithPhotos amenities={amraAmenities} amenityImages={project.amenity_images} />
                  </div>
                </div>
               )}
 
+            {(hasCitiBuddyDocument || isAmraProject) && (
+              <div className="mb-14 scroll-mt-40">
+                <div className="jj-card-inner overflow-hidden p-0">
+                  <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr]">
+                    <SafeImage
+                      src={citiBuddyRobot}
+                      alt="Citi Buddy AI robot concierge"
+                      className="h-[280px] lg:h-full min-h-[280px] w-full object-cover"
+                      width={1600}
+                      height={900}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="p-6 md:p-8 flex flex-col justify-center">
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-3">Resident Concierge</p>
+                      <h3 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-4">Citi Buddy</h3>
+                      <p className="text-[15px] leading-relaxed text-[#1A1A1A]/82">
+                        Citi Buddy connects residents to smart-home controls, short-stay management, concierge requests, in-room dining, security alerts and service bookings through the Citi Developers app.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
-           {(project.video_url || project.virtual_tour_url || videoDocs.length > 0) && (
+           {(project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
              <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
                 {(project.video_url || project.virtual_tour_url) && (
@@ -1494,17 +1519,17 @@ function ProjectDetailLayoutInner({
                     projectName={project.name}
                   />
                 )}
-                {videoDocs.length > 0 && (
+                {(videoDocs.length > 0 || uploadedVideos.length > 0) && (
                   <div className="jj-card-inner mt-6">
                     <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-4">
                       <Video className="w-5 h-5 text-[#064E3B]" />
                       Video Gallery
                     </h3>
                     <div className="grid gap-4 md:grid-cols-2">
-                      {videoDocs.map((video) => (
+                      {[...uploadedVideos.map((v) => ({ id: v.id, url: v.url, title: v.title || "Uploaded project video" })), ...videoDocs.map((v) => ({ id: v.id, url: v.url, title: v.display_title || v.name || "Project video" }))].map((video) => (
                         <div key={video.id} className="overflow-hidden rounded-lg border border-[#B89555]/35 bg-[#FDFBF7]">
                           <video src={video.url} className="aspect-video w-full bg-[#021611] object-cover" controls playsInline preload="metadata" />
-                          <div className="p-3 text-sm font-semibold text-[#1A1A1A]">{video.display_title || video.name || "Project video"}</div>
+                          <div className="p-3 text-sm font-semibold text-[#1A1A1A]">{video.title}</div>
                         </div>
                       ))}
                     </div>
@@ -1601,9 +1626,9 @@ function ProjectDetailLayoutInner({
 
 
               {/* Nearby Points of Interest - Below Map */}
-              {project.location_distances && project.location_distances.length > 0 && (
+              {amraLocationDistances && amraLocationDistances.length > 0 && (
                 <div className="mt-6">
-                  <PointsOfInterest points={project.location_distances} />
+                  <PointsOfInterest points={amraLocationDistances} />
                 </div>
               )}
             </div>
