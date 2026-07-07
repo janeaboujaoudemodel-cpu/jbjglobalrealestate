@@ -6,7 +6,7 @@ import brochureInvestorPath from "@/assets/amra-brochure/brochure-investor-path.
 import brochureCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";                // Slide: Citi Developers App / AMRA BNB
 import brochureDesignArches from "@/assets/amra-brochure/brochure-design-ethos-arches.jpg";// Slide: Design Ethos & Partners
 import brochureYacht from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";        // Slide: Brand Partnerships
-import seaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";                            // UAQ Blue Carbon zone
+import brochureSustainabilityLeaf from "@/assets/amra-brochure/brochure-sustainability-leaf.jpg"; // Slide: Sustainability & Regenerative
 
 /**
  * Amra-only fact panel — content is quoted verbatim from the AMRA English Factsheet
@@ -119,9 +119,9 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               </div>
               <div>
                 <SectionEyebrow>Investor Proposition</SectionEyebrow>
-                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                <h2 className="font-brochure text-3xl md:text-[34px] font-semibold leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   Amra BNB — Integrated Rental Facility
-                </h3>
+                </h2>
               </div>
             </div>
             <p className="text-sm md:text-[15px] leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.85)", WebkitTextFillColor: "rgba(255,255,255,0.85)" }}>
@@ -155,9 +155,9 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               </div>
               <div>
                 <SectionEyebrow>UAE Road Infrastructure</SectionEyebrow>
-                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                <h2 className="font-brochure text-3xl md:text-[34px] font-semibold leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   AED 750 M Emirates Road Enhancement
-                </h3>
+                </h2>
                 <p className="text-xs uppercase tracking-[0.24em] mt-1" style={{ color: "#E9D9A8" }}>
                   Faster access to Amra
                 </p>
@@ -196,18 +196,18 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="relative min-h-[260px] lg:min-h-[480px]">
             <img
-              src={seaTurtles}
-              alt="Umm Al Quwain sea turtles — Blue Carbon Zone biodiversity"
+              src={brochureSustainabilityLeaf}
+              alt="Amra brochure — banana leaf floating on lagoon water (Sustainability & Regenerative slide)"
               className="absolute inset-0 w-full h-full object-cover"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-tr from-black/55 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-transparent" />
             <div className="absolute bottom-4 left-4">
               <span
                 className="text-[10px] uppercase tracking-[0.28em] font-semibold px-3 py-1 rounded-full border"
                 style={{ color: "#FFFFFF", borderColor: "rgba(233,217,168,0.55)", background: "rgba(4,44,28,0.55)" }}
               >
-                Blue Carbon Zone · UAQ
+                Sustainability &amp; Regenerative
               </span>
             </div>
           </div>
@@ -218,9 +218,9 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               </div>
               <div>
                 <SectionEyebrow>Sustainability & Regenerative</SectionEyebrow>
-                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                <h2 className="font-brochure text-3xl md:text-[34px] font-semibold leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   Designed to meet a minimum of seven sustainability initiatives
-                </h3>
+                </h2>
               </div>
             </div>
             <div className="grid gap-2 sm:grid-cols-2">
@@ -249,9 +249,9 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               </div>
               <div>
                 <SectionEyebrow>Design Ethos & Partners</SectionEyebrow>
-                <h3 className="text-2xl md:text-[26px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                <h2 className="font-brochure text-3xl md:text-[34px] font-semibold leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   Design studios & brand partners at Amra
-                </h3>
+                </h2>
               </div>
             </div>
 
