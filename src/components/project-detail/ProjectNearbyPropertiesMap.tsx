@@ -257,39 +257,18 @@ export default function ProjectNearbyPropertiesMap({
       },
     [allMarkers, latitude, longitude, hasOwnCoords],
   );
-  const nearestMarkers = useMemo(
-    () => {
-      const sorted = [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b));
-      const local = hasOwnCoords ? sorted.filter((p) => distanceKm(p) <= 28) : sorted;
-      return (local.length ? local : sorted.slice(0, 6)).slice(0, 12);
-    },
-    [allMarkers, distanceKm, hasOwnCoords],
-  );
-  const sameAreaCount = useMemo(
-    () =>
-      areaName
-        ? allMarkers.filter((m) => {
-            const a = (m.area_name || "").toLowerCase();
-            return a.includes(areaName.toLowerCase());
-          }).length
-        : 0,
-    [allMarkers, areaName],
-  );
-  const sameEmirateCount = useMemo(
-    () => emirate ? allMarkers.filter((m) => (m.emirate || "").toLowerCase() === emirate.toLowerCase()).length : 0,
-    [allMarkers, emirate],
-  );
-
+  // Show ALL peer projects on the same map. Prefer same-developer projects (Citi Developers'
+  // other projects) — they are the story we want to tell. If there are none, fall back to the
+  // full merged set so the map is never empty.
   const markers = useMemo(() => {
-    if (filterMode === "area" && areaName) {
-      const a = areaName.toLowerCase();
-      return allMarkers.filter((m) => (m.area_name || "").toLowerCase().includes(a));
+    if (currentDeveloperId) {
+      const sameDev = allMarkers.filter((m) => m.developer_id === currentDeveloperId);
+      if (sameDev.length > 0) return sameDev;
     }
-    if (filterMode === "emirate" && emirate) {
-      return allMarkers.filter((m) => (m.emirate || "").toLowerCase() === emirate.toLowerCase());
-    }
-    return nearestMarkers;
-  }, [allMarkers, nearestMarkers, filterMode, areaName, emirate]);
+    const sorted = [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b));
+    return sorted.slice(0, 16);
+  }, [allMarkers, currentDeveloperId, distanceKm]);
+
 
   // Derive a map center: project coords if available, otherwise the centroid of area peers.
   const center = useMemo<[number, number] | null>(() => {
