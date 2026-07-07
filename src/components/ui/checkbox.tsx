@@ -61,6 +61,7 @@ const Checkbox = React.forwardRef<
       <CheckboxPrimitive.Indicator className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <Check
           ref={svgRef as unknown as React.Ref<SVGSVGElement>}
+          data-force-white-tick="true"
           className="!text-white !stroke-white allow-white"
           style={{ width: "82%", height: "82%" }}
           strokeWidth={3.4}
