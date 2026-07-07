@@ -1,4 +1,6 @@
-import { 
+import { useState, useMemo } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
   Dumbbell, Waves, TreePine, Car, Shield, Wifi, Utensils, Baby, Dog, Sun,
   Wind, Building, Users, Heart, Coffee, ShoppingBag, Sparkles, Gamepad2,
   Film, BookOpen, Stethoscope, Bike, Sailboat
@@ -8,88 +10,86 @@ interface AmenitiesWithPhotosProps {
   amenities: string[];
   amenityImages?: Record<string, string> | null;
   className?: string;
+  pageSize?: number;
 }
 
-// Map amenity keywords to icons
 const getAmenityIcon = (amenity: string) => {
   const lower = amenity.toLowerCase();
-  if (lower.includes('gym') || lower.includes('fitness') || lower.includes('exercise')) return Dumbbell;
-  if (lower.includes('pool') || lower.includes('swimming')) return Waves;
-  if (lower.includes('garden') || lower.includes('park') || lower.includes('green') || lower.includes('landscape')) return TreePine;
-  if (lower.includes('parking') || lower.includes('garage')) return Car;
+  if (lower.includes('gym') || lower.includes('fitness') || lower.includes('hiit')) return Dumbbell;
+  if (lower.includes('pool') || lower.includes('swim') || lower.includes('hydro') || lower.includes('plunge') || lower.includes('jacuzzi')) return Waves;
+  if (lower.includes('garden') || lower.includes('park') || lower.includes('green') || lower.includes('landscape') || lower.includes('buffer')) return TreePine;
+  if (lower.includes('parking') || lower.includes('garage') || lower.includes('drop-off') || lower.includes('vehicular')) return Car;
   if (lower.includes('security') || lower.includes('cctv') || lower.includes('guard')) return Shield;
-  if (lower.includes('wifi') || lower.includes('internet') || lower.includes('smart')) return Wifi;
-  if (lower.includes('restaurant') || lower.includes('dining') || lower.includes('kitchen')) return Utensils;
-  if (lower.includes('kid') || lower.includes('child') || lower.includes('play') || lower.includes('nursery')) return Baby;
+  if (lower.includes('wifi') || lower.includes('internet') || lower.includes('smart home') || lower.includes('iot')) return Wifi;
+  if (lower.includes('restaurant') || lower.includes('dining') || lower.includes('bbq') || lower.includes('isabella') || lower.includes('hunter')) return Utensils;
+  if (lower.includes('kid') || lower.includes('child') || lower.includes('play') || lower.includes('nursery') || lower.includes('trampoline')) return Baby;
   if (lower.includes('pet') || lower.includes('dog')) return Dog;
-  if (lower.includes('sun') || lower.includes('terrace') || lower.includes('rooftop') || lower.includes('deck')) return Sun;
-  if (lower.includes('spa') || lower.includes('sauna') || lower.includes('wellness') || lower.includes('jacuzzi')) return Wind;
+  if (lower.includes('sun') || lower.includes('terrace') || lower.includes('rooftop') || lower.includes('deck') || lower.includes('cabana')) return Sun;
+  if (lower.includes('spa') || lower.includes('sauna') || lower.includes('wellness') || lower.includes('steam') || lower.includes('hammam') || lower.includes('cryo') || lower.includes('salt')) return Wind;
   if (lower.includes('lobby') || lower.includes('reception') || lower.includes('concierge')) return Building;
-  if (lower.includes('community') || lower.includes('clubhouse') || lower.includes('lounge')) return Users;
-  if (lower.includes('yoga') || lower.includes('meditation')) return Heart;
-  if (lower.includes('cafe') || lower.includes('coffee')) return Coffee;
-  if (lower.includes('retail') || lower.includes('shop') || lower.includes('mall')) return ShoppingBag;
-  if (lower.includes('game') || lower.includes('arcade') || lower.includes('billiard')) return Gamepad2;
-  if (lower.includes('cinema') || lower.includes('theater') || lower.includes('movie')) return Film;
+  if (lower.includes('community') || lower.includes('clubhouse') || lower.includes('lounge') || lower.includes('social')) return Users;
+  if (lower.includes('yoga') || lower.includes('meditation') || lower.includes('reiki') || lower.includes('sound heal') || lower.includes('breath')) return Heart;
+  if (lower.includes('cafe') || lower.includes('coffee') || lower.includes('café')) return Coffee;
+  if (lower.includes('retail') || lower.includes('shop') || lower.includes('mall') || lower.includes('market') || lower.includes('pharmacy')) return ShoppingBag;
+  if (lower.includes('game') || lower.includes('arcade') || lower.includes('billiard') || lower.includes('virtual')) return Gamepad2;
+  if (lower.includes('cinema') || lower.includes('theater') || lower.includes('movie') || lower.includes('gallery') || lower.includes('art')) return Film;
   if (lower.includes('library') || lower.includes('study') || lower.includes('business') || lower.includes('conference') || lower.includes('meeting')) return BookOpen;
-  if (lower.includes('clinic') || lower.includes('health') || lower.includes('medical')) return Stethoscope;
-  if (lower.includes('cycling') || lower.includes('bike') || lower.includes('jogging')) return Bike;
-  if (lower.includes('beach') || lower.includes('marina') || lower.includes('yacht')) return Sailboat;
+  if (lower.includes('clinic') || lower.includes('health') || lower.includes('medical') || lower.includes('therapy') || lower.includes('oxygen') || lower.includes('vitamin')) return Stethoscope;
+  if (lower.includes('cycl') || lower.includes('bike') || lower.includes('jogging') || lower.includes('rowing') || lower.includes('parkour')) return Bike;
+  if (lower.includes('beach') || lower.includes('marina') || lower.includes('yacht') || lower.includes('helipad') || lower.includes('boat') || lower.includes('sea')) return Sailboat;
   return Sparkles;
 };
 
-// Find the real Reelly photo for an amenity by matching name
 const findRealPhoto = (amenity: string, amenityImages?: Record<string, string> | null): string | null => {
   if (!amenityImages) return null;
-  // Exact match first
   if (amenityImages[amenity]) return amenityImages[amenity];
-  // Case-insensitive match
   const lower = amenity.toLowerCase();
   for (const [key, url] of Object.entries(amenityImages)) {
     if (key.toLowerCase() === lower) return url;
   }
-  // Partial match — amenity name contains or is contained in a key
   for (const [key, url] of Object.entries(amenityImages)) {
     if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) return url;
   }
   return null;
 };
 
-export default function AmenitiesWithPhotos({ amenities, amenityImages, className = "" }: AmenitiesWithPhotosProps) {
+export default function AmenitiesWithPhotos({ amenities, amenityImages, className = "", pageSize = 15 }: AmenitiesWithPhotosProps) {
+  const [page, setPage] = useState(0);
+  const totalPages = Math.max(1, Math.ceil((amenities?.length || 0) / pageSize));
+  const currentPage = Math.min(page, totalPages - 1);
+  const visible = useMemo(
+    () => (amenities || []).slice(currentPage * pageSize, currentPage * pageSize + pageSize),
+    [amenities, currentPage, pageSize],
+  );
+
   if (!amenities || amenities.length === 0) return null;
 
   return (
     <div className={className}>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-        {amenities.map((amenity, idx) => {
+        {visible.map((amenity, idx) => {
           const Icon = getAmenityIcon(amenity);
           const photoUrl = findRealPhoto(amenity, amenityImages);
-          
           return (
             <div
-              key={idx}
+              key={`${currentPage}-${idx}-${amenity}`}
               className="group flex flex-col items-center gap-0 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all text-center overflow-hidden"
             >
-              {/* Fixed-height top area for uniform alignment */}
               <div className="w-full h-24 overflow-hidden relative flex items-center justify-center">
                 {photoUrl ? (
                   <>
-                    <img 
-                      src={photoUrl} 
+                    <img
+                      src={photoUrl}
                       alt={amenity}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                       onError={(e) => {
-                        // If real photo fails to load, hide image and show icon
                         (e.target as HTMLImageElement).style.display = 'none';
-                        const fallback = (e.target as HTMLImageElement).nextElementSibling;
-                        if (fallback) (fallback as HTMLElement).style.display = 'none';
                         const iconContainer = (e.target as HTMLImageElement).parentElement?.querySelector('.amenity-icon-fallback');
                         if (iconContainer) (iconContainer as HTMLElement).style.display = 'flex';
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                    {/* Hidden fallback icon shown on image error */}
                     <div className="amenity-icon-fallback hidden w-12 h-12 rounded-full bg-[#EFE6D6]/10 items-center justify-center">
                       <Icon className="w-6 h-6 text-[#1A1A1A]" />
                     </div>
@@ -109,6 +109,51 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
           );
         })}
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-5 flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.max(0, p - 1))}
+            disabled={currentPage === 0}
+            aria-label="Previous amenities page"
+            className="inline-flex items-center gap-1 rounded-full border border-[#B89555]/40 bg-white/70 px-3 py-1.5 text-xs font-medium text-[#1A1A1A] hover:bg-[#EFE6D6]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" /> Prev
+          </button>
+
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setPage(i)}
+                aria-label={`Amenities page ${i + 1}`}
+                aria-current={i === currentPage ? "page" : undefined}
+                className={`h-2 rounded-full transition-all ${
+                  i === currentPage
+                    ? "w-6 bg-[#B89555]"
+                    : "w-2 bg-[#B89555]/30 hover:bg-[#B89555]/50"
+                }`}
+              />
+            ))}
+          </div>
+
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {currentPage + 1} / {totalPages}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={currentPage >= totalPages - 1}
+            aria-label="Next amenities page"
+            className="inline-flex items-center gap-1 rounded-full border border-[#B89555]/40 bg-white/70 px-3 py-1.5 text-xs font-medium text-[#1A1A1A] hover:bg-[#EFE6D6]/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            Next <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

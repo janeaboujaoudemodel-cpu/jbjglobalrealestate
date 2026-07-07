@@ -112,15 +112,48 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
-import amenityHelipadImg from "@/assets/amenity-helipad.jpg";
-import amenityYachtMarinaImg from "@/assets/amenity-yacht-marina.jpg";
-import amenityWellnessSpaImg from "@/assets/amenity-wellness-spa.jpg";
-import amenityInRoomDiningImg from "@/assets/amenity-in-room-dining.jpg";
-import amenityFurnishedApartmentImg from "@/assets/amenity-furnished-apartment.jpg";
-import amenitySeaLagoonViewImg from "@/assets/amenity-sea-lagoon-view.jpg";
-import amenityAppConciergeImg from "@/assets/amenity-app-concierge.jpg";
-import amenityWellnessComplexImg from "@/assets/amenity-wellness-complex.jpg";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
+import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
+// Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
+// Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
+import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
+import amraAerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
+import amraFurnishedApts from "@/assets/amra-brochure/furnished-serviced-apartments.jpg";
+import amraGrandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
+import amraGrandLobby from "@/assets/amra-brochure/grand-lobby.jpg";
+import amraHallwayPassage from "@/assets/amra-brochure/hallway-passage.jpg";
+import amraSideLobby from "@/assets/amra-brochure/side-lobby.jpg";
+import amraRedLight from "@/assets/amra-brochure/red-light-therapy.jpg";
+import amraSpaPool from "@/assets/amra-brochure/spa-pool.jpg";
+import amraFemaleSpaTreatment from "@/assets/amra-brochure/female-spa-treatment.jpg";
+import amraReikiRoom from "@/assets/amra-brochure/reiki-room.jpg";
+import amraSoundHealing from "@/assets/amra-brochure/sound-healing-dome.jpg";
+import amraNapReset from "@/assets/amra-brochure/nap-reset-room.jpg";
+import amraStudio from "@/assets/amra-brochure/studio.jpg";
+import amraSmartBoots from "@/assets/amra-brochure/smart-recovery-boots.jpg";
+import amraFemaleChanging from "@/assets/amra-brochure/female-changing-room.jpg";
+import amraFloatingPods from "@/assets/amra-brochure/floating-sleep-pods.jpg";
+import amraSpaReception from "@/assets/amra-brochure/spa-reception.jpg";
+import amraDigitalDetox from "@/assets/amra-brochure/digital-detox-cabins.jpg";
+import amraSpaHydro from "@/assets/amra-brochure/spa-hydrotherapy.jpg";
+import amraSpaLounge from "@/assets/amra-brochure/spa-lounge.jpg";
+import amraSaltRoom from "@/assets/amra-brochure/salt-room.jpg";
+import amraSpaTreatment from "@/assets/amra-brochure/spa-treatment-room.jpg";
+import amraBeautySalon from "@/assets/amra-brochure/beauty-salon.jpg";
+import amraShowerRoom from "@/assets/amra-brochure/shower-room.jpg";
+import amraTrampoline from "@/assets/amra-brochure/trampoline-studio.jpg";
+import amraRowing from "@/assets/amra-brochure/rowing-studio.jpg";
+import amraKidsPlay from "@/assets/amra-brochure/kids-soft-play.jpg";
+import amraKidsClimb from "@/assets/amra-brochure/kids-climbing.jpg";
+import amraVirtualFitness from "@/assets/amra-brochure/virtual-fitness.jpg";
+import amraParkour from "@/assets/amra-brochure/parkour.jpg";
+import amraCycling from "@/assets/amra-brochure/cycling.jpg";
+import amraPanoramicGym from "@/assets/amra-brochure/panoramic-gym.jpg";
+import amraSeaViewGym from "@/assets/amra-brochure/sea-view-gym.jpg";
+import amraSeaTurtles from "@/assets/amra-brochure/sea-turtles.jpg";
+import amraIndoorPoolCols from "@/assets/amra-brochure/indoor-pool-columns.jpg";
+import amraChandelierLounge from "@/assets/amra-brochure/chandelier-lounge.jpg";
+import amraMinimalPool from "@/assets/amra-brochure/minimal-pool.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -458,46 +491,74 @@ function ProjectDetailLayoutInner({
     return undefined;
   }, [images, project.cover_image_url, project.name]);
 
+  const isAmraProject = /amra/i.test(project.name);
+
+  // AMRA: replace any legacy brochure/factsheet documents with the new
+  // AMRA English Factsheet asset (single source of truth). Older factsheets
+  // are filtered out of the documents list entirely — everywhere the app
+  // reads brochures pulls from this same effective list.
+  const effectiveDocuments = useMemo(() => {
+    if (!isAmraProject) return project.documents;
+    const nonBrochure = project.documents.filter((d) => {
+      const t = normalizeDocType(d.type || "");
+      const n = normalizeDocType(d.name || "");
+      const isBrochureLike =
+        t === "brochure" || t === "factsheet" || t === "fact_sheet" ||
+        t.includes("brochure") || n.includes("brochure") || n.includes("fact_sheet") || n.includes("factsheet");
+      return !isBrochureLike;
+    });
+    const replacement = {
+      id: "amra-factsheet-v4",
+      type: "brochure",
+      url: amraFactsheetAsset.url,
+      name: "AMRA English Factsheet",
+      display_title: "AMRA English Factsheet",
+      cover_image_url: null,
+      is_visible: true,
+      allow_download: true,
+    } as ProjectDetailData["documents"][number];
+    return [replacement, ...nonBrochure];
+  }, [isAmraProject, project.documents]);
+
   const brochureDocs = useMemo(
     () =>
-      project.documents.filter((d) => {
+      effectiveDocuments.filter((d) => {
         const t = normalizeDocType(d.type || "");
         const n = normalizeDocType(d.name || "");
         return t === "brochure" || t === "factsheet" || t === "fact_sheet" || t.includes("brochure") || n.includes("brochure") || n.includes("fact_sheet") || n.includes("factsheet");
       }),
-    [project.documents],
+    [effectiveDocuments],
   );
   const paymentPlanDocs = useMemo(
     () =>
-      project.documents.filter((d) => {
+      effectiveDocuments.filter((d) => {
         const t = normalizeDocType(d.type || "");
         return t === "payment_plan" || t === "paymentplan" || (t.includes("payment") && t.includes("plan"));
       }),
-    [project.documents],
+    [effectiveDocuments],
   );
   const floorPlanDocs = useMemo(
     () =>
-      project.documents.filter((d) => {
+      effectiveDocuments.filter((d) => {
         const t = normalizeDocType(d.type || "");
         return t === "floor_plan" || t === "floorplan" || (t.includes("floor") && t.includes("plan"));
       }),
-    [project.documents],
+    [effectiveDocuments],
   );
 
   const videoDocs = useMemo(
     () =>
-      project.documents.filter((d) => {
+      effectiveDocuments.filter((d) => {
         const t = normalizeDocType(d.type || "");
         const n = `${d.name || ""} ${d.url || ""}`.toLowerCase();
         return ["video", "videos", "project_video", "media", "tour", "virtual_tour"].includes(t) || n.includes(".mp4") || n.includes(".mov") || n.includes(".m4v") || n.includes(".webm") || n.includes(".ogg") || n.includes("video") || n.includes("tour");
       }),
-    [project.documents],
+    [effectiveDocuments],
   );
   const uploadedVideos = useMemo(
     () => (project.videos || []).filter((v) => (v.is_visible ?? true) && !!v.url),
     [project.videos],
   );
-  const isAmraProject = /amra/i.test(project.name);
 
   const visibleTabs = useMemo(() => {
     const hasGallery = images.length > 0;
@@ -727,53 +788,209 @@ function ProjectDetailLayoutInner({
     [project.documents],
   );
 
+  // Full amenity roster for AMRA, sourced directly from the AMRA English Factsheet
+  // (Ground Floor + Wellness & Longevity Zone + Mind & Movement Zone + Tower B).
+  // Each label below is paired 1:1 with an image cropped from the brochure via
+  // `amraAmenityImages`, so no title ever renders against a random gallery photo.
   const amraAmenities = useMemo(() => {
     const base = project.amenities || [];
     if (!isAmraProject) return base;
-    return [
-      ...base,
+    const roster = [
+      // Signature project USPs
+      "Citi Buddy (AI Robot Companion)",
       "165+ wellness and lifestyle amenities",
       "470,000 sq ft dedicated wellness area",
       "Heli and air-taxi landing pad",
       "Yacht limo service and private marina deck",
       "In-room dining and all-day dining",
-      "App-enabled short-stay management",
+      "App-enabled short-stay management (Amra B&B)",
       "Fully furnished apartments",
       "Fully serviced apartments",
-      "Full sea and lagoon water views",
-    ].filter((item, index, list) => list.findIndex((v) => v.toLowerCase() === item.toLowerCase()) === index);
+      "Full sea view & direct beach access",
+      // Ground Floor — Outdoor Wellness Amenities (142,625 sq ft)
+      "Adult Infinity Pool with lagoon horizon",
+      "Dedicated Kids' Pool with shaded edges",
+      "Pool Decks & sun-loungers",
+      "Cabanas",
+      "Relaxation pods",
+      "Social sitting & dining zones",
+      "BBQ area",
+      "Kids' play zones",
+      "Lagoon-side viewing decks",
+      "Landscaped green buffers",
+      "Water cascades & shaded seating",
+      // Ground Floor — Indoor Amenities (148,424 sq ft)
+      "Grand Entrance Lobby with water features",
+      "Hallway passages & side lobbies",
+      "All Day Dining restaurant",
+      "Isabella Restaurant",
+      "Hunter & Barrel Restaurant",
+      "Organic Super Market",
+      "Art Gallery",
+      "Pharmacy",
+      // Tower E — Wellness & Longevity Zone (22,604 sq ft)
+      "Heated Marble Lounge",
+      "Hydro Pool",
+      "Female Spa Area",
+      "Male Spa Area",
+      "Oxygen Therapy Rooms",
+      "Breath Work Room",
+      "Smart Recovery Hub",
+      "Soundproof Nap & Reset Room",
+      "Digital Detox Cabins",
+      "Sound Healing Dome",
+      "Red Light Therapy Suites",
+      "Smart Recovery Boots",
+      "IV Vitamin Infusion Lounge",
+      "Floating Sleep Therapy Pods",
+      "Movement Studio",
+      "Reiki Room",
+      "Female Changing Room",
+      // Tower A — Reception, Treatment & Hydrotherapy (18,817 sq ft)
+      "Spa Reception & Lounge",
+      "Wellness Bar (teas, infusions, supplements)",
+      "Full-service Beauty Salon",
+      "Sensory Room for guided meditation",
+      "Snow Shower",
+      "Salt Earth Room",
+      "Hyperbaric Room",
+      "Cryo Rooms",
+      "Massage Room",
+      "Hot-bath Jacuzzi & Cold Plunge",
+      "Sauna & Steam Rooms",
+      "Sensory Shower & Vitality Bar",
+      "Indoor Wellness Swimming Pool",
+      "Dedicated Hydrotherapy Pool",
+      "Relaxation Lounge",
+      "Luxury Shower Rooms",
+      // Tower D — Mind & Movement Zone (15,070 sq ft)
+      "Signature Gym",
+      "Virtual Fitness Room",
+      "Indoor Cycling Studio",
+      "Indoor Rowing Studio",
+      "Trampoline Studio",
+      "Kids Soft Play Sports Zone",
+      "Parkour Studio",
+      "Dance Studio",
+      "Wellness Café",
+      "HIIT Training Room",
+      // Tower B — Sports & Movement (12,952 sq ft)
+      "Squash Court",
+      "Yoga & Meditation Studios",
+      "Panoramic Sea View Gym",
+      "Pilates Studio",
+      "Boxing Ring",
+      "HIIT Studio",
+      "Punching Studio",
+      "Healthy Café Area",
+    ];
+    // Merge owner-supplied amenities first (they win), then de-dupe against roster.
+    const merged = [...base, ...roster];
+    return merged.filter((item, index, list) => list.findIndex((v) => v.toLowerCase().trim() === item.toLowerCase().trim()) === index);
   }, [isAmraProject, project.amenities]);
 
   const amraAmenityImages = useMemo(() => {
     const mapped: Record<string, string> = { ...(project.amenity_images || {}) };
     if (!isAmraProject) return mapped;
 
-    // Dedicated, curated images for Amra's signature amenities. These are
-    // matched by keyword — never by index — so a "heli-pad" title never
-    // lands on a bathroom or facade photo. Titles that don't match any
-    // dedicated image are left unmapped, and the component falls back to a
-    // clean icon tile (better than showing an unrelated photo).
-    const dedicated: Array<{ url: string; keywords: RegExp }> = [
-      { url: amenityHelipadImg, keywords: /heli|helipad|air.?taxi|helicopter/i },
-      { url: amenityYachtMarinaImg, keywords: /yacht|marina|boat|jetty|pontoon|limo/i },
-      { url: amenityWellnessSpaImg, keywords: /spa|sauna|jacuzzi|steam|hammam|thermal|treatment|massage|wellness (?:area|zone|centre|center)/i },
-      { url: amenityInRoomDiningImg, keywords: /in.?room dining|room service|all.?day dining|restaurant|dining|f&b/i },
-      { url: amenityFurnishedApartmentImg, keywords: /furnished|furniture|serviced (?:apartment|residenc)|hotel.?apartment|hotel.?style/i },
-      { url: amenitySeaLagoonViewImg, keywords: /sea view|lagoon|water view|ocean view|panoramic view|beach view/i },
-      { url: amenityAppConciergeImg, keywords: /app.?enabled|smart.?app|concierge|short.?stay|management/i },
-      { url: amenityWellnessComplexImg, keywords: /165|wellness.*(?:amenit|complex|resort)|470,?000|dedicated wellness/i },
-      { url: citiBuddyRobotAsset.url, keywords: /citi\s*buddy|city\s*buddy|robot|ai companion/i },
-    ];
+    // 1:1 mapping — every title below is an exact key from `amraAmenities` and
+    // resolves to a brochure-cropped photo (or, for Citi Buddy, the official
+    // robot render). Titles absent from this map fall back to an icon tile.
+    const dedicated: Record<string, string> = {
+      "Citi Buddy (AI Robot Companion)": citiBuddyRobotAsset.url,
+      "165+ wellness and lifestyle amenities": amraAerialResort,
+      "470,000 sq ft dedicated wellness area": amraAerialResort,
+      "Heli and air-taxi landing pad": amraAerialResort,
+      "Yacht limo service and private marina deck": amraPoolCabanas,
+      "In-room dining and all-day dining": amraSpaLounge,
+      "App-enabled short-stay management (Amra B&B)": citiBuddyRobotAsset.url,
+      "Fully furnished apartments": amraFurnishedApts,
+      "Fully serviced apartments": amraFurnishedApts,
+      "Full sea view & direct beach access": amraSeaTurtles,
+
+      "Adult Infinity Pool with lagoon horizon": amraPoolCabanas,
+      "Dedicated Kids' Pool with shaded edges": amraMinimalPool,
+      "Pool Decks & sun-loungers": amraPoolCabanas,
+      "Cabanas": amraPoolCabanas,
+      "Relaxation pods": amraFloatingPods,
+      "Social sitting & dining zones": amraChandelierLounge,
+      "BBQ area": amraPoolCabanas,
+      "Kids' play zones": amraKidsPlay,
+      "Lagoon-side viewing decks": amraPoolCabanas,
+      "Landscaped green buffers": amraAerialResort,
+      "Water cascades & shaded seating": amraIndoorPoolCols,
+
+      "Grand Entrance Lobby with water features": amraGrandLobbyHero,
+      "Hallway passages & side lobbies": amraHallwayPassage,
+      "All Day Dining restaurant": amraSpaLounge,
+      "Isabella Restaurant": amraChandelierLounge,
+      "Hunter & Barrel Restaurant": amraChandelierLounge,
+      "Organic Super Market": amraSideLobby,
+      "Art Gallery": amraSideLobby,
+      "Pharmacy": amraSideLobby,
+
+      "Heated Marble Lounge": amraSpaHydro,
+      "Hydro Pool": amraSpaPool,
+      "Female Spa Area": amraFemaleSpaTreatment,
+      "Male Spa Area": amraSpaTreatment,
+      "Oxygen Therapy Rooms": amraNapReset,
+      "Breath Work Room": amraStudio,
+      "Smart Recovery Hub": amraSmartBoots,
+      "Soundproof Nap & Reset Room": amraNapReset,
+      "Digital Detox Cabins": amraDigitalDetox,
+      "Sound Healing Dome": amraSoundHealing,
+      "Red Light Therapy Suites": amraRedLight,
+      "Smart Recovery Boots": amraSmartBoots,
+      "IV Vitamin Infusion Lounge": amraSpaTreatment,
+      "Floating Sleep Therapy Pods": amraFloatingPods,
+      "Movement Studio": amraStudio,
+      "Reiki Room": amraReikiRoom,
+      "Female Changing Room": amraFemaleChanging,
+
+      "Spa Reception & Lounge": amraSpaReception,
+      "Wellness Bar (teas, infusions, supplements)": amraSpaLounge,
+      "Full-service Beauty Salon": amraBeautySalon,
+      "Sensory Room for guided meditation": amraStudio,
+      "Snow Shower": amraShowerRoom,
+      "Salt Earth Room": amraSaltRoom,
+      "Hyperbaric Room": amraFloatingPods,
+      "Cryo Rooms": amraSaltRoom,
+      "Massage Room": amraSpaTreatment,
+      "Hot-bath Jacuzzi & Cold Plunge": amraSpaHydro,
+      "Sauna & Steam Rooms": amraSaltRoom,
+      "Sensory Shower & Vitality Bar": amraShowerRoom,
+      "Indoor Wellness Swimming Pool": amraSpaPool,
+      "Dedicated Hydrotherapy Pool": amraSpaHydro,
+      "Relaxation Lounge": amraSpaLounge,
+      "Luxury Shower Rooms": amraShowerRoom,
+
+      "Signature Gym": amraSeaViewGym,
+      "Virtual Fitness Room": amraVirtualFitness,
+      "Indoor Cycling Studio": amraCycling,
+      "Indoor Rowing Studio": amraRowing,
+      "Trampoline Studio": amraTrampoline,
+      "Kids Soft Play Sports Zone": amraKidsClimb,
+      "Parkour Studio": amraParkour,
+      "Dance Studio": amraStudio,
+      "Wellness Café": amraSpaLounge,
+      "HIIT Training Room": amraSeaViewGym,
+
+      "Squash Court": amraPanoramicGym,
+      "Yoga & Meditation Studios": amraStudio,
+      "Panoramic Sea View Gym": amraPanoramicGym,
+      "Pilates Studio": amraStudio,
+      "Boxing Ring": amraSeaViewGym,
+      "HIIT Studio": amraSeaViewGym,
+      "Punching Studio": amraSeaViewGym,
+      "Healthy Café Area": amraSpaLounge,
+    };
 
     amraAmenities.forEach((label) => {
       if (mapped[label]) return; // owner-supplied wins
-      const hit = dedicated.find((d) => d.keywords.test(label));
-      if (hit) mapped[label] = hit.url;
-      // else: no image — component will show icon tile. No random gallery assignment.
+      if (dedicated[label]) mapped[label] = dedicated[label];
     });
 
-    // Also register the exact-title keys for legacy lookups.
-    mapped["Citi Buddy (AI Robot Companion)"] = citiBuddyRobotAsset.url;
+    // Legacy aliases
     mapped["Citi Buddy concierge"] = citiBuddyRobotAsset.url;
     return mapped;
   }, [amraAmenities, isAmraProject, project.amenity_images]);
@@ -1825,15 +2042,15 @@ function ProjectDetailLayoutInner({
 
           {/* BOOK-STYLE ALL DOCUMENTS STRIP + OWNER DROPZONE */}
           <div className="mb-14">
-            {project.documents.length > 0 ? (
+            {effectiveDocuments.length > 0 ? (
               <BookStyleDocuments
-                documents={project.documents.map(d => ({
+                documents={effectiveDocuments.map(d => ({
                   id: d.id,
                   type: d.type,
                   url: d.url,
                   name: d.name,
                   display_title: d.display_title,
-                  cover_image_url: documentCoverFor(d, project.documents.findIndex((doc) => doc.id === d.id)),
+                  cover_image_url: documentCoverFor(d, effectiveDocuments.findIndex((doc) => doc.id === d.id)),
                   is_visible: d.is_visible ?? true,
                   allow_download: d.allow_download ?? true,
                 }))}
