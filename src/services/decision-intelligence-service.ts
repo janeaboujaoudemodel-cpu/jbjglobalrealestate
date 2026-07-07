@@ -69,7 +69,7 @@ class DecisionIntelligenceService {
       const leadsResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true });
       const totalLeads = leadsResult.count || 0;
 
-      const convertedResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const convertedResult = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('pipeline_stage', 'closed_won');
       const convertedLeads = convertedResult.count || 0;
 
       // Fetch real project data
@@ -251,7 +251,7 @@ class DecisionIntelligenceService {
     if (queryLower.includes('lead') || queryLower.includes('broker')) {
       const r1 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true });
       const totalLeads = r1.count || 0;
-      const r2 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('status', 'converted');
+      const r2 = await (supabase as any).from('crm_leads').select('*', { count: 'exact', head: true }).eq('pipeline_stage', 'closed_won');
       const convertedLeads = r2.count || 0;
 
       return {

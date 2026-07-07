@@ -1628,16 +1628,15 @@ All colors MUST be HSL.
 }
 
 .jj-auth-screen {
-  height: 100dvh;
   min-height: 100dvh;
-  overflow: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .jj-auth-panel-wrap {
   max-width: min(28rem, calc(100vw - 1.5rem));
 }
 .jj-auth-card {
-  max-height: calc(100dvh - 24px);
-  overflow: hidden;
+  overflow: visible;
 }
 .jj-passkey-cta,
 .jj-passkey-cta * {

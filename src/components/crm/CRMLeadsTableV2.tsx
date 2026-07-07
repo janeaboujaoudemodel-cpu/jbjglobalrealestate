@@ -668,7 +668,7 @@ export default function CRMLeadsTableV2({
               <TableHead className="w-[260px] text-[#1A1A1A]/70 font-bold">Email</TableHead>
               <TableHead className="w-[120px] text-[#1A1A1A]/70 font-bold">Source</TableHead>
               <TableHead className="w-[150px] text-[#1A1A1A]/70 font-bold">Status</TableHead>
-              <TableHead className="w-[92px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
+              <TableHead className="w-[360px] text-right text-[#1A1A1A]/70 font-bold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -777,7 +777,7 @@ export default function CRMLeadsTableV2({
                         onStatusChange={() => fetchLeads()}
                       />
                     </TableCell>
-                    <TableCell className="w-[92px] text-right">
+                    <TableCell className="w-[360px] text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="inline-flex items-center justify-end gap-1 whitespace-nowrap max-w-full overflow-hidden">
                         <Button
                           type="button"
@@ -833,11 +833,32 @@ export default function CRMLeadsTableV2({
                             </PopoverContent>
                           </Popover>
                         )}
+                        <LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} />
+                        <Button type="button" size="icon" variant="outline" onClick={() => handleWhatsApp(lead)} title="WhatsApp" aria-label="WhatsApp" className="h-8 w-8 min-w-8 rounded-full">
+                          <MessageSquare className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button type="button" size="icon" variant="outline" onClick={() => handleCall(lead)} title="Call" aria-label="Call" className="h-8 w-8 min-w-8 rounded-full">
+                          <PhoneCall className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button type="button" size="icon" variant="outline" onClick={() => handleEmail(lead)} title="Email" aria-label="Email" className="h-8 w-8 min-w-8 rounded-full">
+                          <Mail className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button type="button" size="icon" variant="outline" onClick={() => setAgreementLead(lead)} title="Send Agreement" aria-label="Send Agreement" className="h-8 w-8 min-w-8 rounded-full">
+                          <FileSignature className="h-3.5 w-3.5" />
+                        </Button>
+                        {isOwner && (
+                          <Button type="button" size="icon" variant="outline" onClick={() => setAccessLead(lead)} title="Manage broker access" aria-label="Manage broker access" className="h-8 w-8 min-w-8 rounded-full">
+                            <Shield className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+                        <Button type="button" size="icon" variant="outline" onClick={() => openDeleteDialog(lead)} title="Delete" aria-label="Delete" className="h-8 w-8 min-w-8 rounded-full">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
                       </div>
                     </TableCell>
-                    <TableCell className="hidden">
+                    <TableCell className="hidden" aria-hidden="true">
                         <div className="sr-only"><LeadQuickActions leadId={lead.id} leadName={lead.full_name} leadPhone={lead.phone_e164} leadEmail={lead.email_lower} userId={userId} /></div>
-                        <div className="hidden">
+                        <div className="flex items-center gap-0.5">
                           <Button
                             type="button"
                             variant="outline"
