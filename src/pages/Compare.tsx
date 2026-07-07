@@ -635,17 +635,24 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
             {/* CTAs */}
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+              <CompareCTA
+                variant="gradient"
+                onClick={() => setPickerOpen(true)}
+                icon={<Search className="w-4 h-4" />}
+              >
+                Search & pick projects
+              </CompareCTA>
               <Link to="/properties">
-                <CompareCTA variant="gradient" icon={<Building className="w-4 h-4" />}>
+                <CompareCTA variant="glass" icon={<Building className="w-4 h-4" />}>
                   Browse properties
                 </CompareCTA>
               </Link>
               <CompareCTA
-                variant="glass"
+                variant="outline"
                 onClick={() => setAiAddOpen(true)}
                 icon={<Sparkles className="w-4 h-4" style={{ color: "#B89555" }} />}
               >
-                Add via link / PDF (AI fill)
+                Add via link / PDF
               </CompareCTA>
               <Link to="/compare-manual">
                 <CompareCTA variant="outline">Compare manually</CompareCTA>
@@ -661,6 +668,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           </div>
         </div>
         <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
+        <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} />
       </CompareAIShell>
     );
   }
