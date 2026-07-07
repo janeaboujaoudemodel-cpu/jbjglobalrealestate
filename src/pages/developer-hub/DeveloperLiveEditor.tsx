@@ -83,7 +83,10 @@ const DeveloperLiveEditor = () => {
   const [autofillBusy, setAutofillBusy] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "name-asc" | "name-desc">("newest");
   const [pageSize, setPageSize] = useState(PAGE_SIZE);
+
 
   const { data: rep } = useQuery({
     queryKey: ["rep-list", user?.id],
