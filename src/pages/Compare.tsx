@@ -15,7 +15,7 @@ import {
   ChevronLeft, Sparkles, Send, Loader2, CheckCircle, Download, Star, 
   Users, Crown, Gift, TrendingUp, MapPin, Building, Home, 
   BadgeCheck, AlertTriangle, Zap, Award, Phone, Mail, BarChart3,
-  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown
+  ArrowLeft, ArrowUpRight, Heart, ListChecks, Layers, Brain, ThumbsUp, ThumbsDown, Search, Plus
 } from "lucide-react";
 import AIPropertyAnalyzer from "@/components/ai-tools/AIPropertyAnalyzer";
 import { Button } from "@/components/ui/button";
