@@ -130,7 +130,7 @@ export default function CompareProjectPicker({
   const removeShortlisted = async (id: string) => {
     if (user && isUUID(id)) {
       try {
-        await removeDb.mutateAsync(id);
+        await toggleDb.mutateAsync({ projectId: id, isShortlisted: true });
       } catch (_e) {}
     } else {
       toggleGuest(id); // guest toggle removes if present
