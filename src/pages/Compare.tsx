@@ -1402,6 +1402,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
 
       <ActiveLeadBanner showAddToShortlist={false} />
       <AddProjectDialog open={aiAddOpen} onOpenChange={setAiAddOpen} onAdd={handleExtractedToManual} />
+      <CompareProjectPicker open={pickerOpen} onOpenChange={setPickerOpen} />
     </section>
   );
 };
