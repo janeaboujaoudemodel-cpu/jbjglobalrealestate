@@ -349,41 +349,71 @@ export default function ProjectNearbyPropertiesMap({
   };
 
 
+  // Build the list of points for auto-fit — always include the current project pin
+  // plus all visible nearby markers, so users see everything (Siniyah Island, UAQ, etc.)
+  // without having to manually zoom out.
+  const fitPoints = useMemo<[number, number][]>(() => {
+    const pts: [number, number][] = [];
+    if (hasOwnCoords) pts.push([latitude as number, longitude as number]);
+    markers.forEach((m) => {
+      if (typeof m.latitude === "number" && typeof m.longitude === "number") {
+        pts.push([m.latitude, m.longitude]);
+      }
+    });
+    return pts;
+  }, [hasOwnCoords, latitude, longitude, markers]);
+
   return (
     <div className={className}>
-      <div data-map-shell data-nearby-map-tabs="true" className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full pb-1">
-        {chip("nearby", "Closest nearby", nearestMarkers.length)}
-        {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
-        {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
-      </div>
+      {/* Single connected frame: header + map share the same rounded shell so the tabs never look detached */}
       <div
         data-map-shell
         className="rounded-2xl overflow-hidden"
         style={{
-          height: 380,
-          border: "1px solid rgba(255,255,255,0.16)",
+          border: "1px solid rgba(184,149,85,0.35)",
           boxShadow: "0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)",
+          background: "#F7F2EA",
         }}
       >
-      <style>{`
-        .jj-map-pin { background: none !important; border: none !important; }
-        .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; }
-        .leaflet-popup-content { margin: 0; }
-      `}</style>
-      <MapContainer
-        center={resolvedCenter}
-        zoom={13}
-        scrollWheelZoom={false}
-        touchZoom={true}
-        dragging={true}
-        style={{ height: "100%", width: "100%" }}
-        zoomControl={false}
-        attributionControl={false}
-        {...SAFE_LEAFLET_MAP_OPTIONS}
-      >
-        <MapResizeRuntime />
-        <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
-        <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
+        {/* Header — grid, no gap, so all three chips read as one connected bar */}
+        <div
+          data-nearby-map-tabs="true"
+          className="grid grid-cols-1 sm:grid-cols-3 w-full"
+          style={{ borderBottom: "1px solid rgba(184,149,85,0.35)" }}
+        >
+          {chip("nearby", "Closest nearby", nearestMarkers.length)}
+          {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
+          {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
+        </div>
+
+        <div style={{ height: 420, position: "relative" }}>
+        <style>{`
+          .jj-map-pin { background: none !important; border: none !important; }
+          .jj-map-pin .jj-nearby-price-pill { color: #FFFFFF !important; }
+          .jj-map-pin .jj-nearby-price-pill * { color: #FFFFFF !important; }
+          /* Kill the leaflet popup tail arrow that reads as hover "crop lines" */
+          .leaflet-popup-tip-container, .leaflet-popup-tip { display: none !important; }
+          .leaflet-popup-content-wrapper { border-radius: 18px; border: 1px solid rgba(255,255,255,0.16); background: transparent; padding: 0; }
+          .leaflet-popup-content { margin: 0; }
+          .leaflet-container { background: #0a1f18; }
+        `}</style>
+        <MapContainer
+          center={resolvedCenter}
+          zoom={13}
+          scrollWheelZoom={false}
+          touchZoom={true}
+          dragging={true}
+          style={{ height: "100%", width: "100%" }}
+          zoomControl={false}
+          attributionControl={false}
+          {...SAFE_LEAFLET_MAP_OPTIONS}
+        >
+          <MapResizeRuntime />
+          <ScrollLockRuntime />
+          <FitBoundsRuntime points={fitPoints} />
+          <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
+          <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
+
 
         {/* Current project marker (red) — only when we have real coords */}
         {hasOwnCoords && (
