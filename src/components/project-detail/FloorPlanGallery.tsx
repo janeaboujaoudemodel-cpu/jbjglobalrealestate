@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail, FileText } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
@@ -46,6 +46,7 @@ export function FloorPlanGallery({
 }: FloorPlanGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [imageError, setImageError] = useState<Record<string, boolean>>({});
+  const isMobile = useMemo(() => typeof window !== "undefined" && window.matchMedia?.("(max-width: 767px)").matches, []);
   
   // Combine floor plan types and documents into a unified list
   const floorPlans = [
@@ -158,14 +159,35 @@ export function FloorPlanGallery({
               onError={() => handleImageError(activePlan.id)}
             />
           ) : activePlan?.pdfUrl ? (
-            <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7]"><div data-surface="emerald" data-no-contrast-guard className="inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold allow-white" style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Loading floor plan…</div></div>}>
-              <PdfCanvasViewer
-                title={`${projectName} - ${activePlan.label}`}
-                url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
-                maxPages={999}
-                className="h-full w-full"
-              />
-            </Suspense>
+            isMobile ? (
+              <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-[#FDFBF7] p-6 text-center">
+                <Layers className="h-14 w-14 text-[#064E3B]" />
+                <div>
+                  <p className="text-lg font-semibold text-[#1A1A1A]">{activePlan.label}</p>
+                  <p className="mt-1 text-sm text-[#1A1A1A]/70">Open the floor plan PDF for the complete layout.</p>
+                </div>
+                <Button
+                  type="button"
+                  data-surface="emerald"
+                  className="allow-white"
+                  onClick={() => onDownload("floor_plan", activePlan.pdfUrl)}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Open Floor Plan
+                </Button>
+              </div>
+            ) : (
+              <Suspense fallback={<div className="grid h-full w-full place-items-center bg-[#FDFBF7]"><div data-surface="emerald" data-no-contrast-guard className="inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold allow-white" style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Loading floor plan…</div></div>}>
+                <PdfCanvasViewer
+                  title={`${projectName} - ${activePlan.label}`}
+                  url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
+                  maxPages={1}
+                  initialPages={1}
+                  progressive={false}
+                  className="h-full w-full"
+                />
+              </Suspense>
+            )
           ) : (
             <div className="text-center p-8">
               {hasImageError ? (

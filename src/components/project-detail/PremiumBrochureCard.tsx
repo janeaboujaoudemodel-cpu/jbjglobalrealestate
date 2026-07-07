@@ -3,7 +3,6 @@ import { Download, Lock, Loader2, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import jbjMonogram from "@/assets/jbj-monogram-light-transparent.png";
-import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
 const BROCHURE_BG_URL = "https://imgengine.khaleejtimes.com/khaleejtimes-english/2026-02-04/lvnx1x0g/Dubai.jpg?width=1200&height=800&format=auto";
 import { maybeProxyStorageUrl, proxyAnyDownloadUrl } from "@/utils/downloadProxy";
@@ -162,16 +161,16 @@ const PremiumBrochureCard = ({
         >
           {/* Dynamic project image background */}
           <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})` }}
+            className="absolute inset-0 bg-cover"
+            style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})`, backgroundPosition: "center 44%" }}
           />
           
           {/* Layered scrims — top + bottom — guarantee wordmark and title legibility on any photo */}
-          <div className="absolute inset-x-0 top-0 h-[31%] bg-gradient-to-b from-black/44 via-black/12 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/38 via-black/5 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-[28%] bg-gradient-to-b from-black/34 via-black/8 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-black/0 to-transparent" />
 
           {/* Subtle emerald depth overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/6 via-transparent to-black/5" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#064E3B]/4 via-transparent to-black/3" />
 
           {/* Spine effect on left - book binding */}
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
@@ -186,7 +185,7 @@ const PremiumBrochureCard = ({
             <div
               className="w-full flex items-center gap-3 px-4 py-2.5 select-none"
               style={{
-                background: "linear-gradient(180deg, rgba(0,0,0,0.64) 0%, rgba(0,0,0,0.24) 78%, transparent 100%)",
+                  background: "linear-gradient(180deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.18) 78%, transparent 100%)",
                 backdropFilter: "blur(2px)",
               }}
             >
@@ -196,7 +195,7 @@ const PremiumBrochureCard = ({
                 className="h-16 w-16 object-contain shrink-0"
                 style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.9))" }}
                 loading="eager"
-                fetchPriority="high"
+                {...({ fetchpriority: "high" } as any)}
                 decoding="sync"
               />
               <span

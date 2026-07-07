@@ -7,6 +7,8 @@ type PdfCanvasViewerProps = {
   title: string;
   maxPages?: number;
   className?: string;
+  initialPages?: number;
+  progressive?: boolean;
 };
 
 async function loadPdfJs() {
@@ -31,7 +33,7 @@ export function PdfLoadingPill({ label = "Loading document…" }: { label?: stri
       className="inline-flex items-center gap-3 rounded-full px-5 py-2.5 text-sm font-semibold allow-white"
       style={LOADER_STYLE}
     >
-      <Loader2 className="h-4 w-4 animate-spin allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+      <Loader2 className="h-4 w-4 animate-spin allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }} />
       <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{label}</span>
     </div>
   );
@@ -99,7 +101,7 @@ function PdfPage({ doc, pageNumber }: { doc: any; pageNumber: number }) {
   );
 }
 
-export default function PdfCanvasViewer({ url, title, maxPages = 999, className = "" }: PdfCanvasViewerProps) {
+export default function PdfCanvasViewer({ url, title, maxPages = 999, className = "", initialPages = 2, progressive = true }: PdfCanvasViewerProps) {
   const [doc, setDoc] = useState<any | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [renderedPages, setRenderedPages] = useState(0);
@@ -117,12 +119,19 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
 
     async function load() {
       const pdfjs = await loadPdfJs();
-      loadingTask = pdfjs.getDocument({ url, withCredentials: false, useWorkerFetch: false, rangeChunkSize: 65536 });
+      loadingTask = pdfjs.getDocument({
+        url,
+        withCredentials: false,
+        useWorkerFetch: false,
+        disableAutoFetch: maxPages <= 1,
+        disableStream: maxPages <= 1,
+        rangeChunkSize: maxPages <= 1 ? 262144 : 65536,
+      });
       const loadedDoc = await loadingTask.promise;
       if (cancelled) return;
       setDoc(loadedDoc);
       setPageCount(Math.min(loadedDoc.numPages || 1, maxPages));
-      setRenderedPages(Math.min(2, loadedDoc.numPages || 1, maxPages));
+      setRenderedPages(Math.min(initialPages, loadedDoc.numPages || 1, maxPages));
     }
 
     load()
@@ -140,7 +149,7 @@ export default function PdfCanvasViewer({ url, title, maxPages = 999, className 
   }, [url, maxPages]);
 
   useEffect(() => {
-    if (!doc || !pageCount || renderedPages >= pageCount) return;
+    if (!progressive || !doc || !pageCount || renderedPages >= pageCount) return;
     const id = window.setTimeout(() => {
       setRenderedPages((current) => Math.min(pageCount, current + 2));
     }, 180);

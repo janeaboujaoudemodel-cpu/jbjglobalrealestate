@@ -1,5 +1,8 @@
 const NOISE_WORDS = new Set([
   "final",
+  "finalll",
+  "finale",
+  "finall",
   "latest",
   "last",
   "new",

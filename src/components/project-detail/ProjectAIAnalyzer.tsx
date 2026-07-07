@@ -216,8 +216,8 @@ export const ProjectAIAnalyzer = ({
   });
   const isCitiDeveloper = /\bciti\s+developers?\b/i.test(developer || "");
   const citiDeveloperLandscape = [
-    "Al Raudah: Amra The First Integrative Wellness Resort is Citi Developers' Al Raudah project.",
-    "Al Muroor / wider Umm Al Quwain: Arya Residences, Aveline Residences, Allura and Agua Residences are separate Citi Developers projects and are not presented as Al Raudah inventory.",
+    "Umm Al Quwain: Amra The First Integrative Wellness Resort is Citi Developers' flagship wellness-resort project.",
+    "Wider Umm Al Quwain: Arya Residences, Aveline Residences, Allura and Agua Residences are separate Citi Developers projects and are not presented as the same micro-location inventory.",
     "Amra positioning: fully integrated wellness-resort living with 165+ amenities, helipad and air-taxi access, fully furnished and fully serviced residences with app-enabled concierge.",
   ];
 
