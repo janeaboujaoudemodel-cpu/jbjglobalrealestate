@@ -91,6 +91,7 @@ import { ArrowLeft } from "lucide-react";
 import { CONTACT_INFO, getCallUrl, getEmailUrl, getWhatsAppUrl } from "@/constants/stats";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
 import { SafeImage } from "@/components/SafeImage";
+import citiBuddyRobot from "@/assets/citi-buddy-robot-concierge.jpg";
 import { filterValidImages, getFirstValidImageUrl, getHighResImageUrl } from "@/lib/imageUtils";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useAreaUnit } from "@/hooks/useAreaUnit";
@@ -483,19 +484,24 @@ function ProjectDetailLayoutInner({
       }),
     [project.documents],
   );
+  const uploadedVideos = useMemo(
+    () => (project.videos || []).filter((v) => (v.is_visible ?? true) && !!v.url),
+    [project.videos],
+  );
+  const isAmraProject = /amra/i.test(project.name);
 
   const visibleTabs = useMemo(() => {
     const hasGallery = images.length > 0;
     const hasUsp = (project.usp_bullets?.length ?? 0) > 0;
     const hasFloorPlans = floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0;
-    const hasAmenities = (project.amenities?.length ?? 0) > 0;
+    const hasAmenities = (project.amenities?.length ?? 0) > 0 || isAmraProject;
     const hasPayment = !!project.payment_plan || paymentPlanDocs.length > 0 || !!project.payment_breakdown || !!project.down_payment_percent;
     const hasUsefulInfo = (project.faqs?.length ?? 0) > 0;
     const hasBrochure = brochureDocs.length > 0;
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
     const hasConstruction = true; // Always show construction section
-    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0;
+    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard;
@@ -528,7 +534,7 @@ function ProjectDetailLayoutInner({
       if (t.id === "mortgage") return mortgageEligible;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, uploadedVideos.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label, isAmraProject]);
 
   const mortgageEligible = useMemo(() => isMortgageEligible({
     sale_status: project.sale_status,
@@ -649,14 +655,17 @@ function ProjectDetailLayoutInner({
     : `${project.name}${project.location ? `, ${project.location}` : ""}${(project as any).emirate ? `, ${(project as any).emirate}` : ""}, UAE`;
   const brochurePrimary = brochureDocs[0];
   const heroImageUrl = images[0]?.url;
+  const projectDocumentHeroImage = project.cover_image_url || images.find((img) => !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || images[0]?.url;
 
   const documentCoverFor = (doc: ProjectDetailData["documents"][number], index: number) => {
     if (doc.cover_image_url) return doc.cover_image_url;
     const lower = `${doc.name || ""} ${doc.display_title || ""}`.toLowerCase();
     const cityBuddy = images.find((img) => /city\s*buddy|citybuddy|robot|buddy/i.test(`${img.alt || ""} ${img.url || ""}`));
+    if (/city\s*buddy|citi\s*buddy|citybuddy|robot|buddy/.test(lower)) return cityBuddy?.url || citiBuddyRobot;
+    if (/fact\s*sheet|factsheet|brochure|spa\s*draft|catalogue|catalog/i.test(lower)) return projectDocumentHeroImage;
     if (/city\s*buddy|citybuddy|robot|buddy/.test(lower) && cityBuddy?.url) return cityBuddy.url;
-    if (images.length > 1) return images[(index + 1) % images.length]?.url || images[0]?.url;
-    return images[0]?.url || project.cover_image_url || undefined;
+    const nonBathroom = images.find((img, i) => i >= index && !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`));
+    return nonBathroom?.url || projectDocumentHeroImage || undefined;
   };
 
   const paymentPlanBenefitHeadline = useMemo(() => {
@@ -700,6 +709,36 @@ function ProjectDetailLayoutInner({
     () => project.documents.some((doc) => /citi\s*buddy|city\s*buddy|buddy/i.test(`${doc.name || ""} ${doc.display_title || ""} ${doc.url || ""}`)),
     [project.documents],
   );
+
+  const amraAmenities = useMemo(() => {
+    const base = project.amenities || [];
+    if (!isAmraProject) return base;
+    return [
+      ...base,
+      "165+ wellness and lifestyle amenities",
+      "470,000 sq ft dedicated wellness area",
+      "Heli and air-taxi landing pad",
+      "Yacht limo service and private marina deck",
+      "In-room dining and all-day dining",
+      "App-enabled short-stay management",
+      "Fully furnished apartments",
+      "Fully serviced apartments",
+      "Full sea and lagoon water views",
+    ].filter((item, index, list) => list.findIndex((v) => v.toLowerCase() === item.toLowerCase()) === index);
+  }, [isAmraProject, project.amenities]);
+
+  const amraLocationDistances = useMemo(() => {
+    const base = project.location_distances || [];
+    if (!isAmraProject) return base;
+    const additions = [
+      { label: "Marjan Island", time: "15 minutes by road" },
+      { label: "Dubai International Airport", time: "40 minutes by road · 15 minutes by air taxi" },
+      { label: "Al Khor Mangrove", time: "Direct access" },
+      { label: "Wynn Casino / Marjan nightlife", time: "Nearby overflow demand driver" },
+      { label: "Vida Resort / 25 Hours Hotel / UAQ Downtown", time: "Strategic hospitality cluster" },
+    ];
+    return [...base, ...additions].filter((item, index, list) => list.findIndex((v) => v.label.toLowerCase() === item.label.toLowerCase()) === index);
+  }, [isAmraProject, project.location_distances]);
 
   // Helper: Derive bedroom range from unit_types array when min/max are null
   const deriveBedroomsFromUnitTypes = (unitTypes: ProjectDetailData['unit_types']): string | null => {
