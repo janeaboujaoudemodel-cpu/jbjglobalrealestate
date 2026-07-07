@@ -16,50 +16,10 @@ interface ReellyProjectCardProps {
   project: ReellyProject;
   showFavorite?: boolean;
   showBadgeButton?: boolean;
- currency?: 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
+ currency?: string;
   sizeUnit?: 'sqft' | 'sqm';
   compact?: boolean;
 }
- 
-// Currency conversion rates - 10 unified currencies
- const CURRENCY_RATES: Record<string, number> = {
-   AED: 1,
-   USD: 0.27,
-   EUR: 0.25,
-   GBP: 0.21,
-   INR: 22.5,
-  SAR: 1.02,
-  CNY: 1.98,
-  RUB: 24.5,
-  CAD: 0.37,
-  AUD: 0.42,
- };
- 
- const CURRENCY_SYMBOLS: Record<string, string> = {
-   AED: 'AED',
-   USD: '$',
-   EUR: '€',
-   GBP: '£',
-   INR: '₹',
-  SAR: 'SAR',
-  CNY: '¥',
-  RUB: '₽',
-  CAD: 'C$',
-  AUD: 'A$',
- };
- 
- // Helper to format price with currency conversion
- const formatPriceWithCurrency = (price: number, currency: string = 'AED'): string => {
-   const converted = Math.round(price * CURRENCY_RATES[currency]);
-   const symbol = CURRENCY_SYMBOLS[currency];
-   if (converted >= 1000000) {
-     return `${symbol} ${(converted / 1000000).toFixed(1)}M`;
-   }
-   if (converted >= 1000) {
-     return `${symbol} ${Math.round(converted / 1000)}K`;
-   }
-   return `${symbol} ${converted.toLocaleString('en-US')}`;
- };
  
 // Sale status label resolver — visual style owned by <CardBadge variant="status" />.
 const getSaleStatusLabel = resolveSaleStatusLabel;

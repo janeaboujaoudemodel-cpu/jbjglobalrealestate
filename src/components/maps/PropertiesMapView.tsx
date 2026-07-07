@@ -9,15 +9,9 @@ import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS, safelyRemoveLayer } 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import type { UnifiedProject } from "@/types/unifiedProject";
+import { useCurrency } from "@/hooks/useCurrency";
 
-function formatMarkerPrice(price: number | null | undefined) {
-  if (!price) return "Ask";
-  if (price >= 1000000) return `${(price / 1000000).toFixed(1)}M`;
-  return `${Math.round(price / 1000)}K`;
-}
-
-function createEmeraldMarkerIcon(price: number | null | undefined, highlighted = false) {
-  const priceText = formatMarkerPrice(price);
+function createEmeraldMarkerIcon(priceText: string, highlighted = false) {
   const scale = highlighted ? 1.08 : 1;
   return L.divIcon({
     html: `
@@ -95,6 +89,7 @@ interface PropertiesMapViewProps {
 
 export default function PropertiesMapView({ projects, hoveredProjectId, onProjectHover, onProjectClick }: PropertiesMapViewProps) {
   const { t, language } = useLanguage();
+  const { formatPrice, formatPriceFull } = useCurrency();
   const [mapView, setMapView] = useState<MapViewType>("satellite");
 
   const projectsWithCoords = useMemo(
@@ -141,7 +136,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
             <Marker
               key={project.id}
               position={[project.lat, project.lng]}
-              icon={createEmeraldMarkerIcon(project.price_from, hoveredProjectId === project.id)}
+              icon={createEmeraldMarkerIcon(project.price_from ? formatPrice(project.price_from) : "Ask", hoveredProjectId === project.id)}
               eventHandlers={{
                 mouseover: (e: any) => {
                   e.target.openPopup();
@@ -165,7 +160,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                     )}
                     {project.price_from ? (
                       <p className="text-xs font-semibold mt-1">
-                        {t('map.from')} AED {Math.round(Number(project.price_from)).toLocaleString()}
+                        {t('map.from')} {formatPriceFull(Number(project.price_from))}
                       </p>
                     ) : (
                       <p className="text-xs font-semibold mt-1">{t('map.priceOnRequest')}</p>

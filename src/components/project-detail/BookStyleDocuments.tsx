@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
 import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import PdfCanvasViewer from "@/components/project-detail/PdfCanvasViewer";
 
 interface BookDoc {
   id: string;
@@ -230,11 +231,7 @@ export default function BookStyleDocuments({
             {/* PDF iframe */}
             <div className="flex-1 bg-[#FDFBF7] rounded-b-xl overflow-hidden">
               {viewerUrl && (
-                <iframe
-                  src={viewerUrl}
-                  className="w-full h-full"
-                  title={viewerTitle}
-                />
+                <PdfCanvasViewer url={viewerUrl} title={viewerTitle} maxPages={4} className="h-full w-full" />
               )}
             </div>
           </div>

@@ -108,6 +108,8 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 // Extended currency type - 10 unified currencies
 type ExtendedCurrency = 'AED' | 'USD' | 'EUR' | 'GBP' | 'INR' | 'SAR' | 'CNY' | 'RUB' | 'CAD' | 'AUD';
 
+const CURRENCY_KEY = 'jj_currency';
+
 interface ExtendedFilterState extends Omit<FilterState, 'currency'> {
   currency: ExtendedCurrency;
   propertyType: string | null;
@@ -252,6 +254,19 @@ const Properties = () => {
   const [isMapMode, setIsMapMode] = useState(false);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const cardListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const applyGlobalCurrency = (code: string | null) => {
+      if (!code || !(code in CURRENCY_RATES)) return;
+      const next = code as ExtendedCurrency;
+      setFilters(prev => ({ ...prev, currency: next }));
+      setAppliedFilters(prev => ({ ...prev, currency: next }));
+    };
+    applyGlobalCurrency(localStorage.getItem(CURRENCY_KEY));
+    const handler = (e: Event) => applyGlobalCurrency((e as CustomEvent).detail);
+    window.addEventListener('currencyChange', handler);
+    return () => window.removeEventListener('currencyChange', handler);
+  }, []);
 
   // Two-phase scroll-to-fix filter logic
   useEffect(() => {
@@ -496,6 +511,10 @@ const Properties = () => {
   const showSkeletons = isLoading;
 
   const updateFilter = <K extends keyof ExtendedFilterState>(key: K, value: ExtendedFilterState[K]) => {
+    if (key === "currency" && typeof value === "string") {
+      localStorage.setItem(CURRENCY_KEY, value);
+      window.dispatchEvent(new CustomEvent('currencyChange', { detail: value }));
+    }
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 

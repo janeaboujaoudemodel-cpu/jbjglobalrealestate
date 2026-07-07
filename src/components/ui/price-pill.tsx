@@ -14,6 +14,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface PricePillProps {
   price?: number | null;
@@ -29,41 +30,16 @@ interface PricePillProps {
   className?: string;
 }
 
-const SYMBOLS: Record<string, string> = {
-  AED: "AED",
-  USD: "$",
-  EUR: "€",
-  GBP: "£",
-  INR: "₹",
-  SAR: "SAR",
-  CNY: "¥",
-  RUB: "₽",
-  CAD: "C$",
-  AUD: "A$",
-};
-
-const RATES: Record<string, number> = {
-  AED: 1, USD: 0.27, EUR: 0.25, GBP: 0.21, INR: 22.5,
-  SAR: 1.02, CNY: 1.98, RUB: 24.5, CAD: 0.37, AUD: 0.42,
-};
-
-function format(price: number, currency: string): string {
-  const converted = price * (RATES[currency] ?? 1);
-  const sym = SYMBOLS[currency] ?? currency;
-  if (converted >= 1_000_000) return `${sym} ${(converted / 1_000_000).toFixed(1)}M`;
-  if (converted >= 1_000) return `${sym} ${(converted / 1_000).toFixed(0)}K`;
-  return `${sym} ${Math.round(converted).toLocaleString()}`;
-}
-
 export const PricePill: React.FC<PricePillProps> = ({
   price,
-  currency = "AED",
+  currency: _currency = "AED",
   floating = false,
   eyebrow = "From",
   fallback = "Price on request",
   listingKind,
   className,
 }) => {
+  const { formatPrice } = useCurrency();
   const hasPrice = typeof price === "number" && price > 0;
   const isLeasing = (listingKind || "").toLowerCase() === "leasing";
   return (
@@ -81,7 +57,7 @@ export const PricePill: React.FC<PricePillProps> = ({
         <>
           <span className="price-pill-eyebrow">{eyebrow}</span>
           <span className="price-pill-value">
-            {format(price!, currency)}
+            {formatPrice(price!)}
             {isLeasing && (
               <span className="price-pill-eyebrow" style={{ marginLeft: 4 }}>/yr</span>
             )}

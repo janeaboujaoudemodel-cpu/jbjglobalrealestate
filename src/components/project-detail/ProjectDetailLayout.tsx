@@ -262,7 +262,7 @@ function ProjectDetailLayoutInner({
   showFooter = true,
 }: ProjectDetailLayoutProps) {
   const { editMode: projectEditMode, toggle: toggleProjectEditMode } = useProjectEditMode();
-  const { formatPrice: formatPriceUtil } = useCurrency();
+  const { formatPriceRangeFull } = useCurrency();
   const { formatSize, convertSize, unitLabel } = useAreaUnit();
   const [activeTab, setActiveTab] = useState("details");
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
@@ -640,6 +640,21 @@ function ProjectDetailLayoutInner({
       : "Benefit from extended payment terms";
   }, [project.handover_date, project.payment_plan]);
 
+  const priceRangeText = useMemo(
+    () => formatPriceRangeFull(project.price_from, project.price_to),
+    [formatPriceRangeFull, project.price_from, project.price_to],
+  );
+
+  const brochureInclusions = useMemo(() => {
+    const hasCityBuddy = project.documents.some((doc) => /citi\s*buddy|city\s*buddy|buddy/i.test(`${doc.name || ""} ${doc.display_title || ""} ${doc.url || ""}`));
+    return [
+      "Full floor plan layouts",
+      "Detailed specifications",
+      "Payment plan breakdown",
+      ...(hasCityBuddy ? ["Citi Buddy concierge service"] : []),
+    ];
+  }, [project.documents]);
+
   // Helper: Derive bedroom range from unit_types array when min/max are null
   const deriveBedroomsFromUnitTypes = (unitTypes: ProjectDetailData['unit_types']): string | null => {
     if (!unitTypes || unitTypes.length === 0) return null;
@@ -770,9 +785,9 @@ function ProjectDetailLayoutInner({
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl mb-2 text-white/85 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" data-no-contrast-guard>
-              Starting from{" "}
+              Price range{" "}
               <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" surface="dark">
-                <span className="font-bold text-2xl md:text-3xl drop-shadow-[0_0_12px_rgba(234,88,12,0.4)]" style={{ color: '#FB923C' }}>{formatPriceUtil(project.price_from)}</span>
+                <span className="font-bold text-2xl md:text-3xl drop-shadow-[0_0_12px_rgba(234,88,12,0.4)]" style={{ color: '#FB923C' }}>{priceRangeText}</span>
               </InlineEditable>
             </p>
           )}
@@ -1082,7 +1097,7 @@ function ProjectDetailLayoutInner({
               <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" scope="quick_facts" label="Edit starting price">
                 <p className="mt-2 text-xl font-bold text-price-orange">
                   {typeof project.price_from === "number" && project.price_from > 0
-                    ? formatPriceUtil(project.price_from)
+                    ? priceRangeText
                     : "Price TBA"}
                 </p>
               </InlineEditable>
@@ -1581,11 +1596,7 @@ function ProjectDetailLayoutInner({
                     }
                   </p>
                   <ul className="space-y-3 text-[15px] text-[#1A1A1A] mb-6">
-                    {[
-                      "Full floor plan layouts",
-                      "Detailed specifications",
-                      "Payment plan breakdown",
-                    ].map((item) => (
+                    {brochureInclusions.map((item) => (
                       <li key={item} className="flex items-center gap-3">
                         <span
                           data-emerald-action="true"

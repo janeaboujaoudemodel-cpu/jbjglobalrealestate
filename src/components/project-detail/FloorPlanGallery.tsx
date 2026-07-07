@@ -4,6 +4,7 @@ import { Download, Layers, ChevronLeft, ChevronRight, AlertCircle, Mail, FileTex
 import { SafeImage } from "@/components/SafeImage";
 import { cn } from "@/lib/utils";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import PdfCanvasViewer from "@/components/project-detail/PdfCanvasViewer";
 
 interface FloorPlanType {
   label: string;
@@ -155,13 +156,12 @@ export function FloorPlanGallery({
               onError={() => handleImageError(activePlan.id)}
             />
           ) : activePlan?.pdfUrl ? (
-            <div className="h-full w-full bg-[#FDFBF7]">
-              <iframe
-                title={`${projectName} - ${activePlan.label}`}
-                src={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
-                className="h-full w-full border-0 bg-[#FDFBF7]"
-              />
-            </div>
+            <PdfCanvasViewer
+              title={`${projectName} - ${activePlan.label}`}
+              url={maybeProxyStorageUrl(activePlan.pdfUrl, { filename: `${activePlan.label}.pdf`, disposition: "inline" })}
+              maxPages={2}
+              className="h-full w-full"
+            />
           ) : (
             <div className="text-center p-8">
               {hasImageError ? (
