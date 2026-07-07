@@ -90,6 +90,8 @@ export default function OwnerProvenanceCard({
   const [historyOpen, setHistoryOpen] = useState(false);
   const [enrichOpen, setEnrichOpen] = useState(false);
   const [enrichSection, setEnrichSection] = useState<string | undefined>(undefined);
+  // Minimized by default — owner clicks the star to expand.
+  const [expanded, setExpanded] = useState(false);
   
 
   const { data: logs = [], refetch } = useQuery({
