@@ -33,6 +33,7 @@ import { useConsVisibility } from "@/contexts/ConsVisibilityContext";
 import { ToolAnimatedFrame } from "@/components/tools/PremiumToolShell";
 import { toolThemes } from "@/components/tools/toolThemes";
 import AddProjectDialog, { type ExtractedProject } from "@/components/compare/AddProjectDialog";
+import CompareProjectPicker from "@/components/compare/CompareProjectPicker";
 import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShell";
 import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
 import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
