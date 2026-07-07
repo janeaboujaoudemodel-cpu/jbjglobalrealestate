@@ -28,6 +28,7 @@ interface HouseDetailsSectionProps {
   
   // Additional features
   features?: string[] | null;
+  standardInclusions?: string[] | null;
   
   projectName: string;
 }
@@ -58,6 +59,7 @@ export default function HouseDetailsSection({
   parkingSpaces,
   serviceCharge,
   features,
+  standardInclusions,
   projectName,
 }: HouseDetailsSectionProps) {
   // Build the details list from available data
@@ -97,6 +99,7 @@ export default function HouseDetailsSection({
     { icon: Shield, label: "24/7 Security" },
     { icon: Droplets, label: "Central A/C" },
     { icon: Zap, label: "Smart Home Ready" },
+    ...(standardInclusions || []).map((label) => ({ icon: Sparkles, label })),
   ];
 
   // Only render if we have details or features
@@ -162,7 +165,7 @@ export default function HouseDetailsSection({
             Standard Inclusions
           </h4>
           <div className="flex flex-wrap gap-3">
-            {standardFeatures.map((feature, idx) => (
+            {standardFeatures.filter((feature, index, list) => list.findIndex((item) => item.label.toLowerCase() === feature.label.toLowerCase()) === index).map((feature, idx) => (
               <div
                 key={idx}
                 data-surface="emerald"

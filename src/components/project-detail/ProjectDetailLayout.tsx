@@ -655,6 +655,11 @@ function ProjectDetailLayoutInner({
     ];
   }, [project.documents]);
 
+  const hasCitiBuddyDocument = useMemo(
+    () => project.documents.some((doc) => /citi\s*buddy|city\s*buddy|buddy/i.test(`${doc.name || ""} ${doc.display_title || ""} ${doc.url || ""}`)),
+    [project.documents],
+  );
+
   // Helper: Derive bedroom range from unit_types array when min/max are null
   const deriveBedroomsFromUnitTypes = (unitTypes: ProjectDetailData['unit_types']): string | null => {
     if (!unitTypes || unitTypes.length === 0) return null;
@@ -1352,6 +1357,7 @@ function ProjectDetailLayoutInner({
                  ceilingHeight={project.ceiling_height}
                  finishingStandard={project.finishing_standard}
                  serviceCharge={project.service_charge}
+                  standardInclusions={hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
              </div>
