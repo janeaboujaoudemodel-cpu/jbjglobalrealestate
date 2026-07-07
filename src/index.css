@@ -4795,15 +4795,15 @@ a[class*="bg-red-"]:hover {
     padding-bottom: max(0.5rem, env(safe-area-inset-bottom)) !important;
   }
   [data-chrome="cookie-banner"] > div {
-    max-width: min(360px, calc(100vw - 1rem)) !important;
+    max-width: min(340px, calc(100vw - 1rem)) !important;
     margin-left: auto !important;
     margin-right: auto !important;
     border-radius: 1rem !important;
-    max-height: 70vh !important;
+    max-height: 54vh !important;
   }
-  [data-chrome="cookie-banner"] > div > div { padding: 0.875rem !important; }
-  [data-chrome="cookie-banner"] h3 { font-size: 0.95rem !important; margin-bottom: 0.25rem !important; }
-  [data-chrome="cookie-banner"] p { font-size: 0.72rem !important; line-height: 1.35 !important; }
+  [data-chrome="cookie-banner"] > div > div { padding: 0.625rem !important; }
+  [data-chrome="cookie-banner"] h3 { font-size: 0.82rem !important; margin-bottom: 0.125rem !important; }
+  [data-chrome="cookie-banner"] p { font-size: 0.66rem !important; line-height: 1.25 !important; }
   [data-chrome="cookie-banner"] button {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;

@@ -94,12 +94,12 @@ const DialogContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close className={cn(
-          "absolute right-4 top-4 rounded-full w-8 h-8 flex items-center justify-center opacity-100 ring-offset-background transition-none focus:outline-none focus:ring-2 focus:ring-[#064E3B]/45 focus:ring-offset-2 disabled:pointer-events-none z-20",
+          "absolute right-4 top-4 rounded-full aspect-square w-10 h-10 min-w-10 min-h-10 p-0 flex items-center justify-center opacity-100 ring-offset-background transition-none focus:outline-none focus:ring-2 focus:ring-[#064E3B]/45 focus:ring-offset-2 disabled:pointer-events-none z-20 leading-none",
           isAdvancedFilterPanel
             ? "allow-white jj-pill-emerald-metallic border-0 text-white"
             : "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#064E3B]/30 hover:shadow-[0_4px_15px_rgba(6,78,59,0.2)]"
         )}>
-          <X className={cn("h-4 w-4", isAdvancedFilterPanel ? "text-white" : "text-[#1A1A1A]")} />
+          <X className={cn("h-4 w-4 shrink-0", isAdvancedFilterPanel ? "text-white" : "text-[#1A1A1A]")} />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
