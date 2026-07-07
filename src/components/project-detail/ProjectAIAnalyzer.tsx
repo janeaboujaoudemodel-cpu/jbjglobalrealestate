@@ -530,10 +530,10 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {/* Pros */}
-              <div className="jj-project-pros-panel border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md">
+              <div data-surface="emerald" data-no-contrast-guard className="jj-project-pros-panel border-2 border-[color:var(--emerald-1)]/30 rounded-2xl p-6 shadow-md allow-white">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsUp className="w-5 h-5" style={{ color: '#FFFFFF' }} />
-                  <h3 className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Pros</h3>
+                  <ThumbsUp className="w-5 h-5 allow-white" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                  <h3 className="font-bold text-lg allow-white" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Pros</h3>
                 </div>
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">

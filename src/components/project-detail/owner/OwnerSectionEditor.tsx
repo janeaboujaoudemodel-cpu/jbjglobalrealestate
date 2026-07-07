@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Pencil, Loader2, Save, X } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetDescription } from "@/components/ui/sheet";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -111,7 +112,7 @@ export default function OwnerSectionEditor({
       else if (f.type === "distances") parsed = textToDistances(raw || "");
       else if (f.type === "faqs") parsed = textToFaqs(raw || "");
       else if (f.type === "date") parsed = raw || null;
-      else if (f.type === "text" || f.type === "textarea" || f.type === "url")
+      else if (f.type === "text" || f.type === "textarea" || f.type === "url" || f.type === "select")
         parsed = raw === "" ? null : raw;
 
       if (f.key.startsWith("dev_")) {
@@ -232,7 +233,20 @@ function FieldRow({
       <Label htmlFor={id} className="text-[#1A1A1A] text-sm font-semibold">
         {field.label}
       </Label>
-      {field.type === "textarea" || field.type === "list" || field.type === "highlights" || field.type === "distances" || field.type === "faqs" ? (
+      {field.type === "select" ? (
+        <Select value={value} onValueChange={onChange}>
+          <SelectTrigger id={id} className={`mt-1 ${common}`}>
+            <SelectValue placeholder={field.placeholder || "Select"} />
+          </SelectTrigger>
+          <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40 text-[#1A1A1A]">
+            {(field.options || []).map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : field.type === "textarea" || field.type === "list" || field.type === "highlights" || field.type === "distances" || field.type === "faqs" ? (
         <Textarea
           id={id}
           value={value}

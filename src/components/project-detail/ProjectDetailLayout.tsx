@@ -478,7 +478,7 @@ function ProjectDetailLayoutInner({
       project.documents.filter((d) => {
         const t = normalizeDocType(d.type || "");
         const n = `${d.name || ""} ${d.url || ""}`.toLowerCase();
-        return t === "video" || t === "videos" || n.includes(".mp4") || n.includes(".mov") || n.includes(".webm") || n.includes("video");
+        return ["video", "videos", "project_video", "media", "tour", "virtual_tour"].includes(t) || n.includes(".mp4") || n.includes(".mov") || n.includes(".m4v") || n.includes(".webm") || n.includes(".ogg") || n.includes("video") || n.includes("tour");
       }),
     [project.documents],
   );
@@ -642,7 +642,10 @@ function ProjectDetailLayoutInner({
     setLeadCaptureOpen(true);
   };
 
-  const mapQuery = `${project.name}${project.location ? `, ${project.location}` : ""}${(project as any).emirate ? `, ${(project as any).emirate}` : ""}, UAE`;
+  const hasProjectCoords = typeof project.latitude === "number" && typeof project.longitude === "number";
+  const mapQuery = hasProjectCoords
+    ? `${project.latitude},${project.longitude}`
+    : `${project.name}${project.location ? `, ${project.location}` : ""}${(project as any).emirate ? `, ${(project as any).emirate}` : ""}, UAE`;
   const brochurePrimary = brochureDocs[0];
   const heroImageUrl = images[0]?.url;
 
@@ -1480,7 +1483,7 @@ function ProjectDetailLayoutInner({
                   <span className="ml-2"><OwnerSectionEditor projectId={project.id} section="location" initial={project as any} /></span>
                 </h3>
                 <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
+                  href={hasProjectCoords ? `https://maps.google.com/?q=${project.latitude},${project.longitude}` : `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-emerald-action="true"
@@ -1545,7 +1548,8 @@ function ProjectDetailLayoutInner({
                     currentDeveloperName={project.developer?.name ?? null}
                     latitude={typeof project.latitude === 'number' ? project.latitude : null}
                     longitude={typeof project.longitude === 'number' ? project.longitude : null}
-                    areaName={project.area_name || project.emirate || null}
+                    areaName={project.area_name || null}
+                    emirate={project.emirate || null}
                   />
                 </Suspense>
                 <p className="mt-2 text-xs text-[#1A1A1A]/70">
@@ -1772,13 +1776,12 @@ function ProjectDetailLayoutInner({
                    <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
                    <div>
                      <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage financing will be available on handover</p>
-                     <p>
-                       Since this project is still under construction, UAE banks do not yet finance the purchase.
-                       Once {project.name} is officially marked completed, buyers will be able to finance up to
-                       70% of the property value over a term of up to 25 years — the 30% already paid during
-                       construction is credited toward your equity. We update the site automatically the day the
-                       project is handed over, so this section will switch to a full mortgage calculator on its own.
-                     </p>
+                      <p>
+                        For this off-plan payment structure, the buyer pays 70% through booking and construction.
+                        The remaining 30% is the post-handover balance: it can be paid through the developer plan
+                        over 36 months, or after handover the buyer may apply for bank financing on that remaining
+                        balance and stretch it over a longer mortgage term, subject to bank approval.
+                      </p>
                    </div>
                  </div>
                </div>

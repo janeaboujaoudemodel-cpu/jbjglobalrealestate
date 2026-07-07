@@ -14,7 +14,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-type FilterMode = "all" | "developer" | "area";
+type FilterMode = "nearby" | "area" | "emirate";
 
 // Red pin — current project
 const RED_PIN_SVG = `
@@ -56,6 +56,7 @@ interface ProjectNearbyPropertiesMapProps {
   latitude: number | null;
   longitude: number | null;
   areaName?: string | null;
+  emirate?: string | null;
   className?: string;
 }
 
@@ -71,6 +72,7 @@ type NearbyRow = {
   developer_name: string | null;
   developer_slug: string | null;
   area_name: string | null;
+  emirate: string | null;
 };
 
 export default function ProjectNearbyPropertiesMap({
@@ -82,6 +84,7 @@ export default function ProjectNearbyPropertiesMap({
   latitude,
   longitude,
   areaName,
+  emirate,
   className = "",
 }: ProjectNearbyPropertiesMapProps) {
   const { t, language } = useLanguage();
@@ -92,14 +95,14 @@ export default function ProjectNearbyPropertiesMap({
   const hasOwnCoords =
     typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
 
-  const [filterMode, setFilterMode] = useState<FilterMode>("all");
+  const [filterMode, setFilterMode] = useState<FilterMode>("nearby");
 
   const { data: nearbyProjects } = useQuery({
-    queryKey: ["nearby-projects-map", currentProjectId, areaName, latitude, longitude, currentDeveloperId],
-    enabled: hasOwnCoords || !!areaName || !!currentDeveloperId,
+    queryKey: ["nearby-projects-map", currentProjectId, areaName, emirate, latitude, longitude, currentDeveloperId],
+    enabled: hasOwnCoords || !!areaName || !!emirate || !!currentDeveloperId,
     queryFn: async (): Promise<NearbyRow[]> => {
       const select =
-        "id, name, slug, latitude, longitude, price_from, cover_image_url, area_name, developer_id, developer:developers(name, slug)";
+        "id, name, slug, latitude, longitude, price_from, cover_image_url, area_name, emirate, developer_id, developer:developers(name, slug)";
 
       const shape = (rows: any[]): NearbyRow[] =>
         (rows || [])
@@ -115,6 +118,7 @@ export default function ProjectNearbyPropertiesMap({
             developer_name: p.developer?.name ?? null,
             developer_slug: p.developer?.slug ?? null,
             area_name: p.area_name ?? null,
+            emirate: p.emirate ?? null,
           }))
           .filter(
             (p) =>
@@ -157,9 +161,25 @@ export default function ProjectNearbyPropertiesMap({
         });
       }
 
-      // 3) Bounding-box fallback
+      // 3) Same emirate peers — important where area names are less familiar than the emirate.
+      if (emirate) {
+        const { data: byEmirate } = await supabase
+          .from("projects")
+          .select(select)
+          .neq("id", currentProjectId)
+          .eq("is_published", true)
+          .ilike("emirate", emirate)
+          .not("latitude", "is", null)
+          .not("longitude", "is", null)
+          .limit(80);
+        shape(byEmirate as any[]).forEach((r) => {
+          if (!merged.has(r.id)) merged.set(r.id, r);
+        });
+      }
+
+      // 4) Bounding-box fallback
       if (merged.size === 0 && hasOwnCoords) {
-        const delta = 0.1;
+        const delta = 0.18;
         const { data } = await supabase
           .from("projects")
           .select(select)
@@ -182,9 +202,20 @@ export default function ProjectNearbyPropertiesMap({
 
   const allMarkers = useMemo(() => nearbyProjects || [], [nearbyProjects]);
 
-  const sameDevCount = useMemo(
-    () => (currentDeveloperId ? allMarkers.filter((m) => m.developer_id === currentDeveloperId).length : 0),
-    [allMarkers, currentDeveloperId],
+  const nearestMarkers = useMemo(
+    () => {
+      const distanceKm = (p: NearbyRow) => {
+        if (!hasOwnCoords || typeof p.latitude !== "number" || typeof p.longitude !== "number") return Number.POSITIVE_INFINITY;
+        const toRad = (v: number) => (v * Math.PI) / 180;
+        const r = 6371;
+        const dLat = toRad(p.latitude - (latitude as number));
+        const dLng = toRad(p.longitude - (longitude as number));
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(latitude as number)) * Math.cos(toRad(p.latitude)) * Math.sin(dLng / 2) ** 2;
+        return 2 * r * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      };
+      return [...allMarkers].sort((a, b) => distanceKm(a) - distanceKm(b)).slice(0, 18);
+    },
+    [allMarkers, latitude, longitude, hasOwnCoords],
   );
   const sameAreaCount = useMemo(
     () =>
@@ -196,17 +227,21 @@ export default function ProjectNearbyPropertiesMap({
         : 0,
     [allMarkers, areaName],
   );
+  const sameEmirateCount = useMemo(
+    () => emirate ? allMarkers.filter((m) => (m.emirate || "").toLowerCase() === emirate.toLowerCase()).length : 0,
+    [allMarkers, emirate],
+  );
 
   const markers = useMemo(() => {
-    if (filterMode === "developer" && currentDeveloperId) {
-      return allMarkers.filter((m) => m.developer_id === currentDeveloperId);
-    }
     if (filterMode === "area" && areaName) {
       const a = areaName.toLowerCase();
       return allMarkers.filter((m) => (m.area_name || "").toLowerCase().includes(a));
     }
-    return allMarkers;
-  }, [allMarkers, filterMode, currentDeveloperId, areaName]);
+    if (filterMode === "emirate" && emirate) {
+      return allMarkers.filter((m) => (m.emirate || "").toLowerCase() === emirate.toLowerCase());
+    }
+    return nearestMarkers;
+  }, [allMarkers, nearestMarkers, filterMode, areaName, emirate]);
 
   // Derive a map center: project coords if available, otherwise the centroid of area peers.
   const center = useMemo<[number, number] | null>(() => {
@@ -271,9 +306,9 @@ export default function ProjectNearbyPropertiesMap({
   return (
     <div className={className}>
       <div data-map-shell data-nearby-map-tabs="true" className="mb-2 grid grid-cols-1 sm:grid-cols-3 gap-2 w-full pb-1">
-        {chip("all", "All nearby", allMarkers.length)}
-        {chip("developer", currentDeveloperName ? `Same developer · ${currentDeveloperName}` : "Same developer", sameDevCount, sameDevCount === 0)}
+        {chip("nearby", "Closest nearby", nearestMarkers.length)}
         {chip("area", areaName ? `Same area · ${areaName}` : "Same area", sameAreaCount, sameAreaCount === 0)}
+        {chip("emirate", emirate ? `Same emirate · ${emirate}` : "Same emirate", sameEmirateCount, sameEmirateCount === 0)}
       </div>
       <div
         data-map-shell

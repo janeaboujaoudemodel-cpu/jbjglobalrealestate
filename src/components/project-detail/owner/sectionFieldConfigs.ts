@@ -13,7 +13,8 @@ export type FieldType =
   | "faqs"        // [{ question, answer }]
   | "highlights"  // string[] (same as list, distinct label)
   | "url"
-  | "images";     // handled by <OwnerImageManager>
+  | "images"     // handled by <OwnerImageManager>
+  | "select";
 
 export interface FieldDef {
   key: string;          // column in `projects` table OR special "_images"
@@ -21,6 +22,7 @@ export interface FieldDef {
   type: FieldType;
   placeholder?: string;
   help?: string;
+  options?: Array<{ value: string; label: string }>;
 }
 
 export interface SectionConfig {
@@ -40,6 +42,11 @@ export const SECTION_CONFIGS: Record<string, SectionConfig> = {
       { key: "location", label: "Location", type: "text", placeholder: "e.g. Jumeirah Golf Estates, Dubai" },
       { key: "area_name", label: "Area name", type: "text" },
       { key: "emirate", label: "Emirate", type: "text" },
+      { key: "sale_status", label: "Sale status", type: "select", options: [
+        { value: "off_plan", label: "Off-plan" },
+        { value: "ready", label: "Ready" },
+        { value: "off_sale", label: "Off-sale" },
+      ] },
       { key: "description", label: "About this project", type: "textarea", help: "Plain text — formatting is added automatically." },
       { key: "property_type_label", label: "Property type", type: "text" },
       { key: "price_from", label: "Starting price (AED)", type: "number" },
