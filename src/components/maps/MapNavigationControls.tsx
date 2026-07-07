@@ -1,5 +1,6 @@
 import { useMap } from "react-leaflet";
 import { ZoomIn, ZoomOut, Navigation, Box } from "lucide-react";
+import type { MouseEvent } from "react";
 
 interface MapNavigationControlsProps {
   latitude: number;
@@ -9,7 +10,7 @@ interface MapNavigationControlsProps {
 export function MapNavigationControls({ latitude, longitude }: MapNavigationControlsProps) {
   const map = useMap();
 
-  const run = (event: React.MouseEvent<HTMLButtonElement>, action: () => void) => {
+  const run = (event: MouseEvent<HTMLButtonElement>, action: () => void) => {
     event.preventDefault();
     event.stopPropagation();
     map.stop();
@@ -61,7 +62,7 @@ export function MapNavigationControlsStandalone({
 }) {
   if (!mapInstance) return null;
 
-  const run = (event: React.MouseEvent<HTMLButtonElement>, action: () => void) => {
+  const run = (event: MouseEvent<HTMLButtonElement>, action: () => void) => {
     event.preventDefault();
     event.stopPropagation();
     mapInstance.stop();

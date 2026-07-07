@@ -326,7 +326,7 @@ export default function ProjectNearbyPropertiesMap({
       <button
         key={mode}
         type="button"
-        onClick={() => !disabled && setFilterMode(mode)}
+        onClick={() => setFilterMode(mode)}
         className={`jj-map-active-toggle jj-sqtoggle relative inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-2.5 text-xs font-semibold transition-colors ${isActive ? "" : ""}`}
         data-active={isActive ? "true" : "false"}
         data-disabled={disabled ? "true" : "false"}
@@ -341,7 +341,7 @@ export default function ProjectNearbyPropertiesMap({
           color: isActive ? '#FFFFFF' : '#1A1A1A',
           borderRight: '1px solid rgba(184,149,85,0.28)',
           cursor: 'pointer',
-          opacity: disabled ? 0.78 : 1,
+          opacity: 1,
           minHeight: 44,
         }}
       >
