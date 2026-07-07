@@ -84,7 +84,8 @@ export default function InboxAICommandPanel({ threads, selectedIds, onApplyFilte
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition"
+        data-surface="emerald"
+        className="jj-emerald-metallic allow-white inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-white border-0 shadow-sm transition [&_*]:!text-white [&_svg]:!stroke-white"
       >
         <Sparkles className="h-3.5 w-3.5" /> Ask Amanda
       </button>
@@ -92,9 +93,9 @@ export default function InboxAICommandPanel({ threads, selectedIds, onApplyFilte
   }
 
   return (
-    <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-3 mb-3">
+    <div className="rounded-xl border border-[#B89555]/30 bg-gradient-to-br from-[#FDFBF7] to-white p-3 mb-3">
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2 text-purple-800 font-semibold text-sm">
+        <div className="flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm">
           <Sparkles className="h-4 w-4" /> Inbox Command
         </div>
         <button onClick={() => { setOpen(false); setPlan(null); }} className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]">
@@ -107,16 +108,16 @@ export default function InboxAICommandPanel({ threads, selectedIds, onApplyFilte
           onChange={(e) => setCmd(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") run(); }}
           placeholder='e.g. "Mark all SHEIN and newsletters as read"'
-          className="flex-1 border-purple-200 bg-white"
+          className="flex-1 border-[#B89555]/30 bg-white"
           disabled={busy}
         />
-        <Button onClick={run} disabled={busy || !cmd.trim()} className="bg-purple-600 hover:bg-purple-700 text-white">
+        <Button onClick={run} disabled={busy || !cmd.trim()} data-surface="emerald" className="jj-emerald-metallic allow-white text-white">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Run"}
         </Button>
       </div>
       <div className="flex flex-wrap gap-1.5 mt-2">
         {SUGGESTIONS.map(s => (
-          <button key={s} onClick={() => setCmd(s)} className="text-[10px] px-2 py-0.5 rounded-full bg-white border border-purple-200 text-purple-700 hover:bg-purple-50">
+          <button key={s} onClick={() => setCmd(s)} className="text-[10px] px-2 py-0.5 rounded-full bg-white border border-[#B89555]/30 text-[#1A1A1A] hover:bg-[#EFE6D6]/40">
             {s}
           </button>
         ))}
@@ -127,15 +128,15 @@ export default function InboxAICommandPanel({ threads, selectedIds, onApplyFilte
           {plan.summary && <p className="text-xs text-[#1A1A1A]/80 italic">{plan.summary}</p>}
           {plan.actions.length === 0 && <p className="text-xs text-[#1A1A1A]/60">No actions suggested.</p>}
           {plan.actions.map((a, i) => (
-            <div key={i} className="flex items-center justify-between bg-white border border-purple-100 rounded-lg p-2">
+            <div key={i} className="flex items-center justify-between bg-white border border-[#B89555]/20 rounded-lg p-2">
               <div className="flex items-center gap-2 min-w-0">
-                <Badge className="bg-purple-100 text-purple-700 border-purple-200 text-[10px]">{a.type}</Badge>
+                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/30 text-[10px]">{a.type}</Badge>
                 <span className="text-xs text-[#1A1A1A]/70 truncate">
                   {a.thread_ids?.length || 0} thread{(a.thread_ids?.length || 0) === 1 ? "" : "s"}
                   {a.value ? ` — ${a.value.slice(0, 60)}` : ""}
                 </span>
               </div>
-              <Button size="sm" variant="outline" className="h-7 text-[11px] border-purple-300 text-purple-700" onClick={() => apply(a)}>
+              <Button size="sm" variant="outline" className="h-7 text-[11px] border-[#B89555]/30 text-[#1A1A1A]" onClick={() => apply(a)}>
                 <CheckCircle2 className="h-3 w-3 mr-1" /> Apply
               </Button>
             </div>

@@ -62,8 +62,11 @@ export default function QuickNoteWidget({
     return (
       <Button
         variant="ghost"
-        size="sm"
-        className="h-7 text-[10px] border border-[#B89555]/20 text-[#1A1A1A]/60 hover:bg-[#B89555]/10 hover:text-[#B89555]"
+        size="icon"
+        aria-label="Save as note"
+        title="Save as note"
+        data-chat-compact-action
+        className="h-8 w-8 min-w-8 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] text-[#1A1A1A] hover:bg-[#EFE6D6]/40"
         onClick={() => {
           if (prefillContent || prefillTitle) {
             setTitle(prefillTitle);
@@ -74,7 +77,7 @@ export default function QuickNoteWidget({
           }
         }}
       >
-        <FileText className="w-3 h-3 mr-1" /> Save as Note
+        <FileText className="w-3.5 h-3.5" />
       </Button>
     );
   }
