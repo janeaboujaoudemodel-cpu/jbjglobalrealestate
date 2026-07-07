@@ -297,8 +297,14 @@ html body #root :is(button, a[role="button"], [role="button"], [role="tab"], .jj
 }
 
 html body #root :is(.owner-dashboard-shell, [data-filter-clean], [data-map-page], [data-map-shell]) :is(button, a[role="button"], [role="button"], [role="tab"]) {
-  min-width: max-content;
+  min-width: 0;
   max-width: 100%;
+}
+
+html body #root :is([data-filter-clean], [data-map-page], [data-map-shell]) :is(.jj-filter-pill-fast, .jj-map-layer-button, .jj-map-marker-pill),
+html body #root .owner-dashboard-shell [data-chat-compact-action],
+html body #root .owner-dashboard-shell :is(button[aria-label="Pin message"], button[aria-label="Unpin message"], button[aria-label="Copy message"]) {
+  min-width: max-content !important;
 }
 
 html body #root :is(.owner-dashboard-shell, [data-filter-clean], [data-map-page], [data-map-shell]) :is(button, a[role="button"], [role="button"], [role="tab"]) :is(span, svg, [class*="lucide"]) {
