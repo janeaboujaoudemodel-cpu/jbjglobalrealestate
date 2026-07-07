@@ -139,7 +139,7 @@ export default function ProjectNearbyPropertiesMap({
   const hasOwnCoords =
     typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
 
-  const [filterMode, setFilterMode] = useState<FilterMode>("nearby");
+  
 
   const { data: nearbyProjects } = useQuery({
     queryKey: ["nearby-projects-map", currentProjectId, areaName, emirate, latitude, longitude, currentDeveloperId],
