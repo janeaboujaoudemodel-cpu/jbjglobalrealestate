@@ -398,7 +398,7 @@ export const PublicRoutes = () => (
         </AuthRequiredRoute>
       }
     />
-    <Route path="/compare-manual" element={<Navigate to="/compare" replace />} />
+    <Route path="/compare-manual" element={<AuthRequiredRoute><CompareManual /></AuthRequiredRoute>} />
     {/* AI Home Finder — canonical URL (no legacy /quiz route). */}
     <Route path="/ai-home-finder" element={<Quiz />} />
     <Route path="/ai-home-finder-results" element={<QuizResults />} />
