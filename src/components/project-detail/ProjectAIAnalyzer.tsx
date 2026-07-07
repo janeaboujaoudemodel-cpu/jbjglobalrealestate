@@ -216,10 +216,14 @@ export const ProjectAIAnalyzer = ({
   });
   const isCitiDeveloper = /\bciti\s+developers?\b/i.test(developer || "");
   const citiDeveloperLandscape = [
-    "Citi Developers is the developer to evaluate for this project; this section is intentionally limited to Citi Developers, not Sobha or other nearby developers.",
-    "Portfolio context includes Arya Residences, Aveline Residences, Allura, Agua Residences and Amra Residences.",
-    "For Amra, the relevant developer story is Citi Developers’ move into wellness-led, serviced coastal living in Umm Al Quwain with app-enabled operations and concierge services.",
+    "Portfolio: Arya Residences, Aveline Residences, Allura, Agua Residences and Amra Residences — all in Umm Al Quwain.",
+    "Arya Residences — Citi's debut residential tower on Al Raudah, mid-rise apartments introducing the developer's design language of full sea views and serviced living.",
+    "Aveline Residences — sister tower to Arya, expanding the beachfront cluster with larger family layouts and shared podium amenities.",
+    "Allura — boutique low-rise focused on furnished 1 & 2-bedroom units targeted at short-stay and rental yield buyers.",
+    "Agua Residences — waterfront tower emphasising direct beach access, infinity pools and resort-grade landscaping.",
+    "Amra Residences — the flagship: first fully integrated wellness resort in the UAE, 165+ amenities including helipad and air-taxi vertiport, fully furnished + fully serviced with app-enabled concierge.",
   ];
+
 
   if (!hasMinimumData) {
     return (
