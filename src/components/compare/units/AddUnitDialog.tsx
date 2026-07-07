@@ -9,9 +9,14 @@ export interface UnitDraft {
   bedrooms: string; // "studio" | "1" | "2" | ...
   sizeSqft: number;
   priceAED: number;
+  propertyType: string;
+  serviceCharge: string;
   view: string;
   floor: string;
   unitNumber: string;
+  cityNumber: string;
+  layout: string;
+  description: string;
 }
 
 interface Props {
@@ -35,9 +40,14 @@ const emptyUnit = (): UnitDraft => ({
   bedrooms: "1",
   sizeSqft: 800,
   priceAED: 1500000,
+  propertyType: "Apartment",
+  serviceCharge: "",
   view: "",
   floor: "",
   unitNumber: "",
+  cityNumber: "",
+  layout: "",
+  description: "",
 });
 
 export default function AddUnitDialog({ open, onOpenChange, onAdd, onSave, initialUnit }: Props) {
@@ -92,6 +102,12 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd, onSave, initi
           <Field label="Price (AED)">
             <input type="number" value={d.priceAED} onChange={(e) => setD({ ...d, priceAED: Number(e.target.value) })} className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
           </Field>
+          <Field label="Property type">
+            <input value={d.propertyType} onChange={(e) => setD({ ...d, propertyType: e.target.value })} placeholder="Apartment / serviced / townhouse" className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
+          </Field>
+          <Field label="Service charge">
+            <input value={d.serviceCharge} onChange={(e) => setD({ ...d, serviceCharge: e.target.value })} placeholder="AED 18/sqft" className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
+          </Field>
           <Field label="View">
             <input value={d.view} onChange={(e) => setD({ ...d, view: e.target.value })} placeholder="Sea / Community / Pool" className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
           </Field>
@@ -100,6 +116,15 @@ export default function AddUnitDialog({ open, onOpenChange, onAdd, onSave, initi
           </Field>
           <Field label="Unit #" full>
             <input value={d.unitNumber} onChange={(e) => setD({ ...d, unitNumber: e.target.value })} placeholder="Optional (private)" className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
+          </Field>
+          <Field label="City number">
+            <input value={d.cityNumber} onChange={(e) => setD({ ...d, cityNumber: e.target.value })} placeholder="Optional" className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
+          </Field>
+          <Field label="Layout">
+            <input value={d.layout} onChange={(e) => setD({ ...d, layout: e.target.value })} placeholder="Type A / corner / high floor" className="w-full px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
+          </Field>
+          <Field label="Description" full>
+            <textarea value={d.description} onChange={(e) => setD({ ...d, description: e.target.value })} placeholder="Unit notes, management, USPs, amenities…" className="w-full min-h-20 px-3 py-2 rounded-lg outline-none focus:border-[#B89555]" style={fld} data-no-contrast-guard />
           </Field>
         </div>
 

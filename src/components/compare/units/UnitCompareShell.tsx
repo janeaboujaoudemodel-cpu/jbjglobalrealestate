@@ -53,7 +53,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
   }, [project, units.length]);
   const tableUnits = units.length > 0 ? units : previewUnits;
   const isPreviewTable = units.length === 0 && previewUnits.length > 0;
-  const canAdd = units.length < 4;
+  const canAdd = units.length < 10;
 
   const saveComparison = useMutation({
     mutationFn: async () => {
@@ -148,7 +148,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                     <span className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold" style={{ background: "rgba(184,149,85,0.18)", color: "#1A1A1A" }}>2</span>
                     <h3 className="text-[#1A1A1A] font-semibold">Add the units to compare</h3>
                   </div>
-                  <span className="text-xs text-[#1A1A1A]/55">Up to 4 units · 1BR · 2BR · 3BR · etc.</span>
+                  <span className="text-xs text-[#1A1A1A]/55">Up to 10 units · studio · 1BR · 2BR · exact layouts</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {units.map((u) => (
@@ -160,6 +160,7 @@ export default function UnitCompareShell({ onModeChange }: Props) {
                       <div className="text-xs text-[#1A1A1A]/60">{u.bedrooms === "studio" ? "Studio" : `${u.bedrooms} BR`} · {u.sizeSqft} sqft</div>
                       <div className="text-[#1A1A1A] font-semibold mt-1 truncate">{u.label || "(no label)"}</div>
                       <div className="text-[#1A1A1A]/80 text-sm mt-1">AED {u.priceAED.toLocaleString()}</div>
+                      {u.propertyType && <div className="text-[#1A1A1A]/55 text-xs mt-1">{u.propertyType}</div>}
                       {u.view && <div className="text-[#1A1A1A]/55 text-xs mt-1">{u.view}</div>}
                       <div className="flex gap-3 mt-2">
                         <button

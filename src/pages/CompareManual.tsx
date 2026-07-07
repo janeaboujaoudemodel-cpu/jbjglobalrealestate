@@ -130,7 +130,7 @@ const CompareManual = () => {
     setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
 
   const addProject = () => {
-    if (projects.length >= 25) {
+    if (projects.length >= 10) {
       toast.error("Maximum 10 projects per comparison.");
       return;
     }

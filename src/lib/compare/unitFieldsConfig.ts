@@ -1,6 +1,6 @@
 export type UnitFieldId =
   // Unit
-  | "label" | "bedrooms" | "size" | "price" | "pricePerSqft" | "view" | "floor" | "unitNumber"
+  | "label" | "bedrooms" | "propertyType" | "size" | "price" | "pricePerSqft" | "view" | "floor" | "unitNumber" | "cityNumber" | "layout" | "unitDescription"
   // Location & Project
   | "projectName" | "developer" | "location" | "community" | "handover"
   // Payment Plan
@@ -22,12 +22,16 @@ export const UNIT_FIELDS: UnitFieldDef[] = [
   // Unit
   { id: "label", label: "Label", group: "Unit", defaultVisible: true },
   { id: "bedrooms", label: "Bedrooms", group: "Unit", defaultVisible: true },
+  { id: "propertyType", label: "Property type", group: "Unit", defaultVisible: true },
   { id: "size", label: "Size (sqft)", group: "Unit", defaultVisible: true },
   { id: "price", label: "Price (AED)", group: "Unit", defaultVisible: true },
   { id: "pricePerSqft", label: "Price / sqft", group: "Unit", defaultVisible: true },
   { id: "view", label: "View", group: "Unit", defaultVisible: true },
   { id: "floor", label: "Floor", group: "Unit", defaultVisible: false },
   { id: "unitNumber", label: "Unit #", group: "Unit", defaultVisible: false },
+  { id: "cityNumber", label: "City number", group: "Unit", defaultVisible: false },
+  { id: "layout", label: "Layout", group: "Unit", defaultVisible: true },
+  { id: "unitDescription", label: "Description", group: "Unit", defaultVisible: false },
   // Project
   { id: "projectName", label: "Project name", group: "Project", defaultVisible: true },
   { id: "developer", label: "Developer", group: "Project", defaultVisible: true },
