@@ -721,11 +721,11 @@ function ProjectDetailLayoutInner({
 
   // Format size text
   const sizeText = useMemo(() => {
-    if (!project.size_min && project.built_up_area) return project.built_up_area;
+    if (!project.size_min && plotSizeText) return plotSizeText;
     if (!project.size_min) return null;
     if (project.size_min === project.size_max) return formatSize(project.size_min);
     return `${convertSize(project.size_min).toLocaleString()} - ${formatSize(project.size_max || 0)}`;
-  }, [project.size_min, project.size_max, formatSize, convertSize]);
+  }, [project.size_min, project.size_max, plotSizeText, formatSize, convertSize]);
 
   return (
     <div data-project-detail-page className="contents">
