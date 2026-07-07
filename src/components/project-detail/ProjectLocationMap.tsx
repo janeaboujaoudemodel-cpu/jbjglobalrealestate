@@ -147,8 +147,14 @@ export default function ProjectLocationMap({
   const coordinates: [number, number] = refinedCoords
     ?? (latitude && longitude ? [latitude, longitude] : [defaultLat, defaultLng]);
 
-  const mapQuery = `${projectName}${location ? `, ${location}` : ""}, UAE`;
-  const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
+  // Prefer coordinates for accurate Google Maps deep-link (avoids ambiguous name searches)
+  const hasCoords = !!(latitude && longitude);
+  const mapQuery = hasCoords
+    ? `${latitude},${longitude}`
+    : `${projectName}${location ? `, ${location}` : ""}, UAE`;
+  const externalMapsUrl = hasCoords
+    ? `https://www.google.com/maps/search/?api=1&query=${latitude}%2C${longitude}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
 
   return (
     <div data-map-shell className={`rounded-2xl overflow-hidden relative ${className}`} style={{ height: 450, border: '1px solid rgba(255,255,255,0.16)', boxShadow: '0 28px 60px -34px rgba(0,0,0,0.82), inset 0 1px 0 rgba(255,255,255,0.16)' }}>
