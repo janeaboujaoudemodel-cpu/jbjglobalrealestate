@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Clock, Database, History, Undo2, Eye, Sparkles, X } from "lucide-react";
+import { Clock, Database, History, Undo2, Eye, Sparkles, X, Star } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAppOwner } from "@/hooks/useIsAppOwner";
