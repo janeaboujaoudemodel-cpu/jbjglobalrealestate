@@ -401,8 +401,8 @@ export const ConsultationRequestForm = ({
                             data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold border border-[#064E3B] text-white"
-                                : "h-9 px-3.5 rounded-full text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555] hover:border-[#8f6f2b] transition-colors"
+                                ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
+                                : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
                             }
                             style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                           >
@@ -454,8 +454,8 @@ export const ConsultationRequestForm = ({
                             data-emerald-action={active ? "true" : undefined}
                             className={
                               active
-                                ? "jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold border border-[#064E3B] text-white"
-                                : "h-9 px-3.5 rounded-full text-[13px] font-semibold text-[#1A1A1A] border border-[#B89555] hover:border-[#8f6f2b] transition-colors"
+                                ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
+                                : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
                             }
                             style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
                           >
