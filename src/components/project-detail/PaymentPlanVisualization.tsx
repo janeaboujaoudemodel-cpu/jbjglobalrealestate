@@ -112,9 +112,14 @@ export default function PaymentPlanVisualization({
     });
   }
   
+  const isPostHandover = !!(postHandoverYears && postHandoverYears > 0);
+  const handoverLabel = isPostHandover
+    ? `Post-Handover${postHandoverYears ? ` (${postHandoverYears * 12} months)` : ""}`
+    : "On Handover";
+
   if (legacyBreakdown?.on_completion) {
     milestones.push({
-      label: "On Handover",
+      label: handoverLabel,
       value: legacyBreakdown.on_completion,
       icon: Home,
       color: "text-blue-600",
@@ -125,8 +130,11 @@ export default function PaymentPlanVisualization({
   } else if (isDetailedBreakdown && detailedMilestones.length > 1) {
 
     const last = detailedMilestones[detailedMilestones.length - 1];
+    const rawLabel = last.milestone || handoverLabel;
+    // Normalize any lingering "on handover" wording when we know it's actually post-handover
+    const finalLabel = isPostHandover && /on\s*handover/i.test(rawLabel) ? handoverLabel : rawLabel;
     milestones.push({
-      label: last.milestone || "On Handover",
+      label: finalLabel,
       value: `${last.percentage}%`,
       icon: Home,
       color: "text-blue-600",
