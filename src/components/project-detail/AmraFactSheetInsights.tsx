@@ -64,6 +64,7 @@ function EmeraldCard({ children, className = "" }: { children: React.ReactNode; 
     <div
       className={`rounded-2xl overflow-hidden border border-[#B89555]/40 shadow-[0_18px_50px_-30px_rgba(4,44,28,0.55)] ${className}`}
       style={{ background: EMERALD }}
+      data-surface="emerald"
       data-no-contrast-guard
     >
       {children}
