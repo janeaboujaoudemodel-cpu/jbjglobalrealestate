@@ -74,6 +74,7 @@ import { useIsAppOwner } from "@/hooks/useIsAppOwner";
 import RecommendedProjects from "@/components/project-detail/RecommendedProjects";
 import ReportIssueButton from "@/components/project-detail/ReportIssueButton";
 import AmenitiesWithPhotos from "@/components/project-detail/AmenitiesWithPhotos";
+import { isMortgageEligible, mortgageIneligibilityReason } from "@/utils/mortgageEligibility";
 import PointsOfInterest from "@/components/project-detail/PointsOfInterest";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 
