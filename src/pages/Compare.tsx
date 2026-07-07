@@ -779,7 +779,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
           open={pickerOpen}
           onOpenChange={handlePickerOpenChange}
           selectedIds={pickerMode === "replace" ? [] : selectedCompareIds}
-          disabledIds={pickerMode === "replace" ? compareIds.filter((id) => id !== replaceTarget?.id) : []}
+          disabledIds={pickerMode === "replace" ? compareIds : []}
           mode={pickerMode}
           replaceProjectName={replaceTarget?.name}
           onConfirm={handlePickerConfirm}
@@ -1522,7 +1522,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
         open={pickerOpen}
         onOpenChange={handlePickerOpenChange}
         selectedIds={pickerMode === "replace" ? [] : selectedCompareIds}
-        disabledIds={pickerMode === "replace" ? compareIds.filter((id) => id !== replaceTarget?.id) : []}
+        disabledIds={pickerMode === "replace" ? compareIds : []}
         mode={pickerMode}
         replaceProjectName={replaceTarget?.name}
         onConfirm={handlePickerConfirm}
