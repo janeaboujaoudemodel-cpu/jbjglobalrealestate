@@ -112,7 +112,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import citiBuddyRobotAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
 import citiBuddyRobotLocal from "@/assets/citi-buddy-robot-concierge.jpg";
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
@@ -372,11 +371,11 @@ function ProjectDetailLayoutInner({
 
   const { isLeadCaptured } = useLeadCapture();
 
-  // Show sticky nav after scrolling past hero
+  // Replace the global horizontal header as soon as the user scrolls away from the top.
+  // At scrollY=0 the normal site header is restored.
   useEffect(() => {
     const onScroll = () => {
-      const heroHeight = window.innerHeight;
-      setShowStickyNav(window.scrollY > heroHeight - 150);
+      setShowStickyNav(window.scrollY > 16);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
