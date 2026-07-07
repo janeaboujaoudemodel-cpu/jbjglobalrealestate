@@ -308,34 +308,8 @@ export default function ProjectNearbyPropertiesMap({
     navigate(`/project/${slug}`);
   };
 
-  const chip = (mode: FilterMode, label: string, count: number, disabled = false) => {
-    const isActive = filterMode === mode;
-    return (
-      <button
-        key={mode}
-        type="button"
-        onClick={() => setFilterMode(mode)}
-        className="jj-nearby-tab relative inline-flex w-full min-w-0 items-center justify-center gap-2 px-3 py-3 text-xs font-semibold transition-colors"
-        data-active={isActive ? "true" : "false"}
-        data-disabled={disabled ? "true" : "false"}
-        data-no-contrast-guard
-        style={{
-          background: isActive
-            ? 'linear-gradient(135deg,#064E3B 0%,#042c1c 58%,#000 100%)'
-            : '#F7F2EA',
-          color: isActive ? '#FFFFFF' : '#1A1A1A',
-          borderRight: '1px solid rgba(184,149,85,0.35)',
-          borderRadius: 0,
-          cursor: 'pointer',
-          opacity: 1,
-          minHeight: 48,
-        }}
-      >
-        <span className="min-w-0 truncate" style={{ color: 'inherit' }}>{label}</span>
-        <span className="text-[10px] tabular-nums" style={{ color: 'inherit', opacity: 0.9 }}>{count}</span>
-      </button>
-    );
-  };
+
+
 
 
   // Build the list of points for auto-fit — always include the current project pin
