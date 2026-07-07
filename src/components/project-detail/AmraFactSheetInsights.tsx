@@ -169,17 +169,14 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
               Design Partners
             </h4>
-            <div className="flex flex-wrap gap-2">
+            <ul className="grid grid-cols-2 gap-y-1.5 gap-x-4 text-sm text-[#1A1A1A]">
               {designPartners.map((studio) => (
-                <span
-                  key={studio}
-                  className="inline-flex items-center rounded-md border border-[#B89555]/40 px-3 py-1 text-xs font-semibold"
-                  style={{ background: "#FDFBF7", color: "#1A1A1A" }}
-                >
-                  {studio}
-                </span>
+                <li key={studio} className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B89555]" />
+                  <span className="font-semibold">{studio}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
           <div>
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-3">
