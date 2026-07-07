@@ -142,6 +142,24 @@ const ShortlistBadgeButton = ({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent className="bg-[#FDFBF7] border-[#1A1A1A]" onClick={(e) => e.stopPropagation()}>
+          {/* Primary action — plain add/remove from shortlist */}
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleShortlistOnly();
+            }}
+            className="text-[#1A1A1A] hover:bg-[#EFE6D6] cursor-pointer font-semibold"
+          >
+            {isShortlisted ? (
+              <><ListMinus className="w-4 h-4 mr-2 text-[#064E3B]" /> Remove from shortlist</>
+            ) : (
+              <><ListPlus className="w-4 h-4 mr-2 text-[#064E3B]" /> Add to shortlist</>
+            )}
+          </DropdownMenuItem>
+          <div className="my-1 h-px bg-[#B89555]/30" />
+          <div className="px-2 pt-1 pb-1 text-[10px] uppercase tracking-[0.14em] text-[#1A1A1A]/60 font-semibold">
+            Rank this project
+          </div>
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
