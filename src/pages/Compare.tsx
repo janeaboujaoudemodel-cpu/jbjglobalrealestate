@@ -201,6 +201,14 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
     enabled: shortlistIds.length > 0,
   });
 
+  useEffect(() => {
+    if (!autoOpenedRef.current && !isLoading && (!projects || projects.length === 0)) {
+      autoOpenedRef.current = true;
+      setPickerOpen(true);
+    }
+  }, [isLoading, projects]);
+
+
   // Check if user can use free or needs VIP
   const needsVipForCompare = hasUsedFreeCompare && !hasActiveMembership;
 
