@@ -271,7 +271,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
       trafficLevel: "Review with advisor",
       priceRange: `${p.price_from ? formatPriceShort(p.price_from) : "Price on request"}${p.price_to ? ` - ${formatPriceShort(p.price_to)}` : ""}`,
       pricePerSqft: p.size_min && p.price_from ? Math.round(p.price_from / p.size_min) : 0,
-      bedrooms: formatBedroomRange(p) || "Studio - 4 BR",
+      bedrooms: formatBedroomRange(p) || "Not specified",
       sizeRange: p.size_min && p.size_max ? `${p.size_min.toLocaleString()} - ${p.size_max.toLocaleString()} sqft` : "Size on request",
       handover: p.handover_date || "Ready / TBD",
       paymentPlan: p.payment_plan || "Verify with developer",
