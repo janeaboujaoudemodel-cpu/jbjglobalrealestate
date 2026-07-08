@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Building2, Layers, Home, CalendarCheck, Sparkles, Clock, Hand } from "lucide-react";
+import { Building2, Layers, Home, CalendarCheck, Sparkles, Clock } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { isPublicStatus, getProjectStatus } from "@/utils/projectStatus";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +14,9 @@ interface QuickFactsBarProps {
   saleStatus?: string | null;
   handoverDate?: string | null;
   updatedAt?: string | null;
+  /** When true, show the "Updated" chip. Public visitors never see it — the
+   *  owner sees the timestamp inside the gold-star OwnerProvenanceCard. */
+  showUpdated?: boolean;
 }
 
 /**
