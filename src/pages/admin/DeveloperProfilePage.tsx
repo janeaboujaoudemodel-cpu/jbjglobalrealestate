@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import OwnerCompanyProfileUploader from "@/components/owner/OwnerCompanyProfileUploader";
 
 interface Developer {
   id: string;
@@ -410,6 +411,12 @@ export default function DeveloperProfilePage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Owner company-profile PDF uploader (AI extract → review queue) */}
+        {canEdit && (
+          <OwnerCompanyProfileUploader developerId={developer.id} developerName={developer.name} />
+        )}
+
 
         {/* Needs-review flag: unverified fields were removed and are shown here for owner action */}
         {developer.needs_review && (

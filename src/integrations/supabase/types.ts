@@ -5684,6 +5684,50 @@ export type Database = {
         }
         Relationships: []
       }
+      company_profile_requests: {
+        Row: {
+          created_at: string
+          developer_id: string
+          fulfilled_at: string | null
+          id: string
+          message: string | null
+          requester_email: string | null
+          requester_name: string | null
+          requester_phone: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          fulfilled_at?: string | null
+          id?: string
+          message?: string | null
+          requester_email?: string | null
+          requester_name?: string | null
+          requester_phone?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          fulfilled_at?: string | null
+          id?: string
+          message?: string | null
+          requester_email?: string | null
+          requester_name?: string | null
+          requester_phone?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_profile_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compare_field_presets: {
         Row: {
           created_at: string
@@ -12575,6 +12619,59 @@ export type Database = {
           },
         ]
       }
+      developer_documents: {
+        Row: {
+          created_at: string
+          developer_id: string
+          doc_type: string
+          extracted_at: string | null
+          file_name: string | null
+          file_size: number | null
+          file_url: string
+          id: string
+          is_public: boolean
+          storage_path: string | null
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          doc_type?: string
+          extracted_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url: string
+          id?: string
+          is_public?: boolean
+          storage_path?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          doc_type?: string
+          extracted_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          is_public?: boolean
+          storage_path?: string | null
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_documents_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_enrichment_log: {
         Row: {
           after_jsonb: Json
@@ -16609,6 +16706,72 @@ export type Database = {
           status?: string
           stop_requested?: boolean | null
           total_projects?: number | null
+        }
+        Relationships: []
+      }
+      enrichment_review_drafts: {
+        Row: {
+          ai_model: string | null
+          applied_fields: string[] | null
+          created_at: string
+          created_by: string | null
+          current_snapshot: Json | null
+          error_message: string | null
+          extracted_fields: Json
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          skipped_fields: string[] | null
+          source_document_id: string | null
+          source_file_name: string | null
+          source_file_url: string | null
+          status: string
+          target_id: string
+          target_slug: string | null
+          target_type: string
+          updated_at: string
+        }
+        Insert: {
+          ai_model?: string | null
+          applied_fields?: string[] | null
+          created_at?: string
+          created_by?: string | null
+          current_snapshot?: Json | null
+          error_message?: string | null
+          extracted_fields?: Json
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          skipped_fields?: string[] | null
+          source_document_id?: string | null
+          source_file_name?: string | null
+          source_file_url?: string | null
+          status?: string
+          target_id: string
+          target_slug?: string | null
+          target_type: string
+          updated_at?: string
+        }
+        Update: {
+          ai_model?: string | null
+          applied_fields?: string[] | null
+          created_at?: string
+          created_by?: string | null
+          current_snapshot?: Json | null
+          error_message?: string | null
+          extracted_fields?: Json
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          skipped_fields?: string[] | null
+          source_document_id?: string | null
+          source_file_name?: string | null
+          source_file_url?: string | null
+          status?: string
+          target_id?: string
+          target_slug?: string | null
+          target_type?: string
+          updated_at?: string
         }
         Relationships: []
       }

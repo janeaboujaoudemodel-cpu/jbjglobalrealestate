@@ -24,6 +24,7 @@ import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan
 
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -621,6 +622,13 @@ const DeveloperDetail = () => {
                 </div>
               ))}
             </div>
+
+            {/* Company Profile card — Download (if uploaded) / Request otherwise */}
+            <div className="mt-5 max-w-md">
+              <CompanyProfileCard developerId={developer.id} developerName={developer.name} />
+            </div>
+
+
 
 
             {/* Identity actions — View all projects + (broker-only) request rep access */}
