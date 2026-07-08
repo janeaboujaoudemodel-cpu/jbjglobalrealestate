@@ -212,12 +212,12 @@ export default function PaymentPlanVisualization({
 
 
       <Tabs defaultValue="installment" className="w-full">
-        <TabsList data-project-payment-tabs className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-0 overflow-hidden rounded-lg">
-          <TabsTrigger value="installment" data-emerald-active className="flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
+          <TabsList data-project-payment-tabs className="w-full mb-6 bg-[#F7F2EA] border border-[#B89555]/30 p-1 rounded-xl gap-1">
+          <TabsTrigger value="installment" data-emerald-active className="flex-1 h-12 rounded-lg text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <CreditCard className="w-4 h-4 mr-2" style={{ color: "currentColor", stroke: "currentColor" }} />
             Payment Plan {premiumPlan && `(${premiumPlan.badge})`}
           </TabsTrigger>
-          <TabsTrigger value="full" data-emerald-active className="flex-1 h-12 rounded-none text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
+          <TabsTrigger value="full" data-emerald-active className="flex-1 h-12 rounded-lg text-[#1A1A1A]/70 data-[state=active]:!text-white data-[state=active]:shadow-sm data-[state=active]:[&_svg]:!text-white">
             <Wallet className="w-4 h-4 mr-2" style={{ color: "currentColor", stroke: "currentColor" }} />
             100% Payment
           </TabsTrigger>
@@ -492,7 +492,7 @@ export default function PaymentPlanVisualization({
           {handoverDate && (
             <p className="mt-6 text-sm text-[#1A1A1A]/70 italic text-center">
               {isPostHandover && postHandoverEndDate
-                ? `Project handover: ${formattedHandoverDate || handoverDate}. The 30% post-handover balance is paid after handover and fully settled by ${formattedPostHandoverEndDate || postHandoverEndDate} — you receive your unit on the handover date, not on the final payment date.`
+                ? `Project handover: ${formattedHandoverDate || handoverDate}. The ${handoverPct || 30}% post-handover balance is mortgage-financeable after handover, subject to bank approval, and is fully settled by ${formattedPostHandoverEndDate || postHandoverEndDate}.`
                 : `Benefit from extended payment terms until ${handoverDate} handover`}
             </p>
           )}

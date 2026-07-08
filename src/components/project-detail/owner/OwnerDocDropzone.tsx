@@ -68,17 +68,26 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
           .upload(path, file, { contentType: file.type || "application/octet-stream" });
         if (upErr) throw upErr;
         const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
-        const { error: insErr } = await supabase.from("project_documents").insert({
-          project_id: projectId,
-          document_type: inferType(file.name),
-          file_url: pub.publicUrl,
-          file_name: file.name,
-          file_size: file.size,
-          storage_path: path,
-          is_visible: true,
-          allow_download: true,
-          data_source: "owner_upload",
-        } as any);
+        const docType = inferType(file.name);
+        const { error: insErr } = docType === "video"
+          ? await supabase.from("project_videos").insert({
+              project_id: projectId,
+              url: pub.publicUrl,
+              title: file.name,
+              is_visible: true,
+              display_order: 0,
+            } as any)
+          : await supabase.from("project_documents").insert({
+              project_id: projectId,
+              document_type: docType,
+              file_url: pub.publicUrl,
+              file_name: file.name,
+              file_size: file.size,
+              storage_path: path,
+              is_visible: true,
+              allow_download: true,
+              data_source: "owner_upload",
+            } as any);
         if (insErr) throw insErr;
 
         // Fire-and-forget enrichment via existing edge function
