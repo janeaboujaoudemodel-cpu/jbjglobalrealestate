@@ -73,7 +73,7 @@ export default function PasswordField({ value, onChange, id = "password" }: Prop
           className={cn(
             "w-full h-11 rounded-md bg-white border border-[#B89555]/40",
             "px-3 pr-24 text-sm font-mono tracking-wider text-[#1A1A1A]",
-            "focus:outline-none focus:border-[#064E3B] focus:ring-2 focus:ring-[#064E3B]/15",
+            "focus:outline-none focus:border-[#064E3B] focus:ring-2 focus:ring-[#064E3B]/20",
             "transition-colors"
           )}
           placeholder="Enter or generate a strong password"
@@ -84,7 +84,7 @@ export default function PasswordField({ value, onChange, id = "password" }: Prop
             onClick={copy}
             disabled={!value}
             aria-label="Copy password"
-            className="h-8 w-8 grid place-items-center rounded-md text-[#1A1A1A]/60 hover:text-[#064E3B] hover:bg-[#064E3B]/8 disabled:opacity-30 transition-colors"
+            className="h-8 w-8 grid place-items-center rounded-md text-[#1A1A1A]/60 hover:text-[#064E3B] hover:bg-[#064E3B]/10 disabled:opacity-30 transition-colors"
           >
             {copied ? <Check className="w-4 h-4 text-[#064E3B]" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -92,7 +92,7 @@ export default function PasswordField({ value, onChange, id = "password" }: Prop
             type="button"
             onClick={() => setReveal((r) => !r)}
             aria-label={reveal ? "Hide password" : "Show password"}
-            className="h-8 w-8 grid place-items-center rounded-md text-[#1A1A1A]/60 hover:text-[#064E3B] hover:bg-[#064E3B]/8 transition-colors"
+            className="h-8 w-8 grid place-items-center rounded-md text-[#1A1A1A]/60 hover:text-[#064E3B] hover:bg-[#064E3B]/10 transition-colors"
           >
             {reveal ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
@@ -133,7 +133,7 @@ export default function PasswordField({ value, onChange, id = "password" }: Prop
       </div>
 
       {reveal && value && (
-        <p className="text-[11px] text-[#0d3a2b]/80 bg-[#064E3B]/6 border border-[#064E3B]/15 rounded-md px-3 py-2">
+        <p className="text-[11px] text-[#0d3a2b] bg-[#F0F7F3] border border-[#064E3B]/30 font-medium rounded-md px-3 py-2">
           Your password is visible above — copy it now if you want to save it manually.
           Chrome will also offer to save your username and this password when you submit the form.
         </p>
