@@ -181,6 +181,9 @@ import amraRooftopSportsDeck from "@/assets/amra-brochure/rooftop-sports-deck.jp
 import amraBusinessZone from "@/assets/amra-brochure/business-zone.jpg";
 import amraParentChildStudio from "@/assets/amra-brochure/parent-child-studio.jpg";
 import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
+import amraEntranceLobbyFeaturedSculpture from "@/assets/amra-brochure/entrance-lobby-featured-sculpture.jpg";
+import amraHelipadAirTaxi from "@/assets/amra-brochure/helipad-air-taxi.jpg";
+import amraSpinneysSupermarket from "@/assets/amra-brochure/spinneys-supermarket.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -883,7 +886,8 @@ function ProjectDetailLayoutInner({
       "All Day Dining Restaurant",
       "Isabella Cucina Italiana",
       "Hunter & Barrel",
-      "Organic Super Market",
+      "Organic Supermarket",
+      "Spinneys",
       "Art Gallery",
       "Pharmacy",
 
@@ -1014,8 +1018,8 @@ function ProjectDetailLayoutInner({
       "Full sea view & direct beach access": amraSeaTurtles,
       "App-enabled short-stay management (Amra B&B)": citiBuddyDocumentCoverAsset.url,
       "Yacht limo service and private marina deck": amraYachtPartnerships,
-      "Helipad": amraAerialResort,
-      "Air Taxi Landing Pad": amraAerialResort,
+      "Helipad": amraHelipadAirTaxi,
+      "Air Taxi Landing Pad": amraHelipadAirTaxi,
 
       // GROUND FLOOR — Outdoor
       "Landscaped green buffers to create privacy and reduce heat gain": amraAerialResort,
@@ -1034,12 +1038,14 @@ function ProjectDetailLayoutInner({
       "Water cascades and shaded seating to cool microclimate naturally": amraIndoorPoolCols,
 
       // GROUND FLOOR — Indoor
-      "Multiple vehicular & pedestrian drop-offs; stroller-friendly paths": amraGrandLobby,
-      "Entrance lobby with featured sculptures & water features; cascading pools": amraGrandLobbyHero,
+      "Multiple vehicular & pedestrian drop-offs; stroller-friendly paths": galleryImage(12, amraAerialResort),
+      "Entrance lobby with featured sculptures & water features; cascading pools": amraEntranceLobbyFeaturedSculpture,
       "All Day Dining Restaurant": amraAllDayDining,
       "Isabella Cucina Italiana": amraIsabellaCucina,
       "Hunter & Barrel": amraHunterBarrel,
-      "Organic Super Market": amraOrganicSuperMarket,
+      "Organic Supermarket": amraSpinneysSupermarket,
+      "Organic Super Market": amraSpinneysSupermarket,
+      "Spinneys": amraSpinneysSupermarket,
       "Art Gallery": amraArtGallery,
       "Pharmacy": amraPharmacy,
 
@@ -1902,7 +1908,7 @@ function ProjectDetailLayoutInner({
                       "Citi Buddy concierge via Citi Developers App",
                       "In-room dining & all-day dining",
                       "Helipad & air-taxi landing pad with private limousine service",
-                      "Complimentary golf cart & buggy service",
+                      "Complimentary golf car & buggy service",
                     ] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
