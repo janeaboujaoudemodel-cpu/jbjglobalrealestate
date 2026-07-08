@@ -163,6 +163,24 @@ import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
 import amraSmegKitchen from "@/assets/amra-smeg-kitchen.jpg";
 import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
 import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
+// Brochure-verbatim generated assets (see brochure-verbatim-amenity-standard memory rule)
+import amraSnowShower from "@/assets/amra-brochure/snow-shower.jpg";
+import amraSmartRecoveryHub from "@/assets/amra-brochure/smart-recovery-hub.jpg";
+import amraIsabellaCucina from "@/assets/amra-brochure/isabella-cucina-italiana.jpg";
+import amraHunterBarrel from "@/assets/amra-brochure/hunter-and-barrel.jpg";
+import amraAllDayDining from "@/assets/amra-brochure/all-day-dining.jpg";
+import amraOrganicSuperMarket from "@/assets/amra-brochure/organic-super-market.jpg";
+import amraArtGallery from "@/assets/amra-brochure/art-gallery.jpg";
+import amraPharmacy from "@/assets/amra-brochure/pharmacy.jpg";
+import amraBowlingLanes from "@/assets/amra-brochure/bowling-lanes.jpg";
+import amraVrGameZone from "@/assets/amra-brochure/vr-game-zone.jpg";
+import amraGolfSimulator from "@/assets/amra-brochure/golf-simulator.jpg";
+import amraArcadePoolDarts from "@/assets/amra-brochure/arcade-pool-darts.jpg";
+import amraBookLoungeLibrary from "@/assets/amra-brochure/book-lounge-library.jpg";
+import amraRooftopSportsDeck from "@/assets/amra-brochure/rooftop-sports-deck.jpg";
+import amraBusinessZone from "@/assets/amra-brochure/business-zone.jpg";
+import amraParentChildStudio from "@/assets/amra-brochure/parent-child-studio.jpg";
+import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -823,54 +841,58 @@ function ProjectDetailLayoutInner({
     [project.documents],
   );
 
-  // Full amenity roster for AMRA, sourced directly from the AMRA English Factsheet
-  // (Ground Floor + Wellness & Longevity Zone + Mind & Movement Zone + Tower B).
-  // Each label below is paired 1:1 with an image cropped from the brochure via
-  // `amraAmenityImages`, so no title ever renders against a random gallery photo.
+  // Full amenity roster for AMRA — titles are VERBATIM from the AMRA English
+  // Factsheet (see mem://features/project-detail/brochure-verbatim-amenity-
+  // standard). Never rename. Each label is paired 1:1 with a brochure crop or
+  // an in-brand generated photo via `amraAmenityImages`.
   const amraAmenities = useMemo(() => {
     const base = project.amenities || [];
     if (!isAmraProject) return base;
     const roster = [
-      // Signature project USPs
+      // Signature project USPs (owner-supplied wording preserved)
       "Citi Buddy (AI Robot Companion)",
       "Smart Home Automation",
       "IoT-enabled apartments",
       "24/7 Security with 256-bit encryption",
-      "165+ wellness and lifestyle amenities",
-      "750,000 sq ft of amenities",
-      "Heli and air-taxi landing pad",
-      "Yacht limo service and private marina deck",
-      "In-room dining and all-day dining",
-      "Fully furnished apartments",
-      "Fully serviced apartments",
+      "Fully Furnished & Serviced Apartments",
       "Full sea view & direct beach access",
       "App-enabled short-stay management (Amra B&B)",
-      // Ground Floor — Outdoor Wellness Amenities (142,625 sq ft)
-      "Adult Infinity Pool with lagoon horizon",
-      "Dedicated Kids' Pool with shaded edges",
-      "Pool Decks & sun-loungers",
+      "Yacht limo service and private marina deck",
+      "Helipad",
+      "Air Taxi Landing Pad",
+
+      // GROUND FLOOR — Outdoor Ground Amenities (142,625 sq ft)
+      "Landscaped green buffers to create privacy and reduce heat gain",
+      "Adult Infinity Pool with seamless lagoon horizon views",
+      "Dedicated Kids' Pool with safe, shaded edges",
+      "Pool Decks",
+      "Expansive sun decks with loungers",
       "Cabanas",
-      "Floating Sleep Therapy Pods",
+      "Relaxation pods",
+      "Social Sitting",
+      "Dining Zones",
       "BBQ area",
       "Kids' play zones",
-      "Lagoon-side viewing decks",
-      "Landscaped green buffers",
-      "Water cascades & shaded seating",
-      // Ground Floor — Indoor Amenities (148,424 sq ft)
-      "Grand Entrance Lobby with water features",
-      "Hallway passages & side lobbies",
-      "All Day Dining restaurant",
-      "Isabella Cucina Restaurant",
-      "Hunter & Barrel Restaurant",
-      "Pay That Pot Coffee",
+      "Organic pathways leading to lagoon-side viewing decks",
+      "Drought-resistant planting strategy ensuring year-round greenery",
+      "Water cascades and shaded seating to cool microclimate naturally",
+
+      // GROUND FLOOR — Indoor Amenities (148,424 sq ft)
+      "Multiple vehicular & pedestrian drop-offs; stroller-friendly paths",
+      "Entrance lobby with featured sculptures & water features; cascading pools",
+      "All Day Dining Restaurant",
+      "Isabella Cucina Italiana",
+      "Hunter & Barrel",
       "Organic Super Market",
       "Art Gallery",
       "Pharmacy",
-      // Tower E — Wellness & Longevity Zone (22,604 sq ft)
+
+      // TOWER E — Wellness & Longevity Zone (22,604 sq ft) — Mezzanine
       "Heated Marble Lounge",
       "Hydro Pool",
       "Female Spa Area",
       "Male Spa Area",
+      "Male Changing Room",
       "Oxygen Therapy Rooms",
       "Breath Work Room",
       "Smart Recovery Hub",
@@ -881,46 +903,93 @@ function ProjectDetailLayoutInner({
       "Smart Recovery Boots",
       "IV Vitamin Infusion Lounge",
       "Floating Sleep Therapy Pods",
-      "Movement Studio",
+      "Studio",
       "Reiki Room",
       "Female Changing Room",
-      // Tower A — Reception, Treatment & Hydrotherapy (18,817 sq ft)
-      "Spa Reception & Lounge",
-      "Wellness Bar (teas, infusions, supplements)",
+
+      // TOWER A — Spa, Treatment & Hydrotherapy (18,817 sq ft)
+      "Reception",
+      "Spa lounge for pre/post treatment relaxation",
+      "Wellness bar for teas, infusions, and supplements",
       "Full-service Beauty Salon",
       "Sensory Room for guided meditation",
+      "Heated marble loungers",
       "Snow Shower",
       "Salt Earth Room",
       "Hyperbaric Room",
       "Cryo Rooms",
-      "Massage Room",
-      "Hot-bath Jacuzzi & Cold Plunge",
-      "Sauna & Steam Rooms",
-      "Sensory Shower & Vitality Bar",
+      "Massage room",
+      "Female Spa Area: Hot-bath Jacuzzi, Cold Plunge, Sauna, Steam, Sensory Shower & Vitality Bar",
+      "Male Spa Area: Hot-bath Jacuzzi, Cold Plunge, Sauna, Steam, Sensory Shower & Vitality Bar",
       "Indoor Wellness Swimming Pool",
       "Dedicated Hydrotherapy Pool",
       "Relaxation Lounge",
-      "Luxury Shower Rooms",
-      // Tower D — Mind & Movement Zone (15,070 sq ft)
-      "Signature Gym",
+
+      // TOWER D — Mind & Movement Zone (15,070 sq ft) — Mezzanine
+      "Gym",
       "Virtual Fitness Room",
-      "Indoor Cycling Studio",
-      "Indoor Rowing Studio",
-      "Trampoline Studio",
+      "Cycling",
+      "Indoor Rowing",
+      "Trampoline",
       "Kids Soft Play Sports Zone",
       "Parkour Studio",
       "Dance Studio",
-      "Wellness Café",
-      "HIIT Training Room",
-      // Tower B — Sports & Movement (12,952 sq ft)
+      "Cafe",
+      "Hiit Training Room",
+
+      // TOWER B — Sports & Movement (12,952 sq ft)
       "Squash Court",
       "Yoga & Meditation Studios",
-      "Panoramic Sea View Gym",
+      "Panoramic Gym with Beach View",
       "Pilates Studio",
       "Boxing Ring",
       "HIIT Studio",
       "Punching Studio",
+      "Male & Female Steam Rooms",
+      "Male & Female Sauna Rooms",
+      "Male & Female Changing Rooms",
       "Healthy Café Area",
+
+      // SHARED ORBIT — Connection Zone (Tower D Mezzanine)
+      "Parent-Child Bonding Activity Studio",
+      "Intergenerational Games",
+      "Story Telling Lounge",
+      "Teen Digital Balance & Creativity Lab",
+      "Kids Mindfulness & Emotional Intelligence Room",
+
+      // GOLDEN SILENCE — Stillness Zone (Tower D & E Mezzanine, 5,597 sq ft)
+      "Philosophy Circle",
+      "Book Lounge",
+      "Writing & Reading Library",
+
+      // FULL MOON — Games Zone (Mezzanine, 13,697 sq ft)
+      "Bowling lanes",
+      "VR Game Zone",
+      "Car Simulators",
+      "Golf Simulators",
+      "Foosball",
+      "Auto-scored darts",
+      "Pool tables",
+      "Art Room",
+      "Soft Play Room",
+      "Daycare",
+
+      // SUNRISE — Business Zone (Mezzanine, 15,894 sq ft)
+      "2 Receptions with welcome seating",
+      "2 Conference Rooms with complete sea view",
+      "Self-service coffee area",
+      "3 Meeting Rooms",
+      "2 CEO Offices",
+      "Open coworking zones with sofas, tables, and media-enabled pods",
+      "2 Multifunctional Offices",
+
+      // ROOFTOP SPORTS
+      "2 Paddle Courts",
+      "Pickleball Court",
+      "Mini Futsal Court",
+      "2 Badminton Courts",
+      "Mini Golf",
+      "Refreshments Area, Juice Bar and Seating",
     ];
     // Merge owner-supplied amenities first (they win), then de-dupe against roster.
     const merged = [...base, ...roster];
@@ -932,98 +1001,151 @@ function ProjectDetailLayoutInner({
     if (!isAmraProject) return mapped;
     const galleryImage = (index: number, fallback: string) => images[index]?.url || fallback;
 
-    // 1:1 mapping — every title below is an exact key from `amraAmenities` and
-    // resolves to a brochure-cropped photo (or, for Citi Buddy, the official
-    // robot render). Titles absent from this map fall back to an icon tile.
+    // 1:1 mapping — every key is a VERBATIM brochure title from `amraAmenities`
+    // above. Missing brochure photos have been generated in the AMRA brand
+    // palette (see `src/assets/amra-brochure/*` generated set).
     const dedicated: Record<string, string> = {
+      // Signature USPs
       "Citi Buddy (AI Robot Companion)": citiBuddyRobotLocal,
       "Smart Home Automation": amraCitiApp,
-      "IoT-enabled apartments": galleryImage(2, amraStudio),
+      "IoT-enabled apartments": amraCitiApp,
       "24/7 Security with 256-bit encryption": amraGrandLobby,
-      "165+ wellness and lifestyle amenities": amraAerialResort,
-      "750,000 sq ft of amenities": amraSpaPool,
-      "Heli and air-taxi landing pad": amraAerialResort,
-      "Yacht limo service and private marina deck": amraYachtPartnerships,
-      "In-room dining and all-day dining": amraInRoomDining,
-      "App-enabled short-stay management (Amra B&B)": citiBuddyDocumentCoverAsset.url,
-      "Fully furnished apartments": galleryImage(2, amraStudio),
-      "Fully serviced apartments": amraGrandLobby,
+      "Fully Furnished & Serviced Apartments": galleryImage(2, amraStudio),
       "Full sea view & direct beach access": amraSeaTurtles,
+      "App-enabled short-stay management (Amra B&B)": citiBuddyDocumentCoverAsset.url,
+      "Yacht limo service and private marina deck": amraYachtPartnerships,
+      "Helipad": amraAerialResort,
+      "Air Taxi Landing Pad": amraAerialResort,
 
-      "Adult Infinity Pool with lagoon horizon": amraPoolCabanas,
-      "Dedicated Kids' Pool with shaded edges": amraMinimalPool,
-      "Pool Decks & sun-loungers": amraPoolCabanas,
+      // GROUND FLOOR — Outdoor
+      "Landscaped green buffers to create privacy and reduce heat gain": amraAerialResort,
+      "Adult Infinity Pool with seamless lagoon horizon views": amraPoolCabanas,
+      "Dedicated Kids' Pool with safe, shaded edges": amraMinimalPool,
+      "Pool Decks": amraPoolCabanas,
+      "Expansive sun decks with loungers": amraPoolCabanas,
       "Cabanas": amraPoolCabanas,
-      "Floating Sleep Therapy Pods": amraFloatingPods,
+      "Relaxation pods": amraFloatingPods,
+      "Social Sitting": amraIndoorPoolCols,
+      "Dining Zones": amraInRoomDining,
       "BBQ area": amraPoolCabanas,
       "Kids' play zones": amraKidsPlay,
-      "Lagoon-side viewing decks": amraPoolCabanas,
-      "Landscaped green buffers": amraAerialResort,
-      "Water cascades & shaded seating": amraIndoorPoolCols,
+      "Organic pathways leading to lagoon-side viewing decks": amraAerialResort,
+      "Drought-resistant planting strategy ensuring year-round greenery": amraAerialResort,
+      "Water cascades and shaded seating to cool microclimate naturally": amraIndoorPoolCols,
 
-      "Grand Entrance Lobby with water features": amraGrandLobbyHero,
-      "Hallway passages & side lobbies": amraHallwayPassage,
-      "All Day Dining restaurant": amraInRoomDining,
-      "Isabella Cucina Restaurant": amraInRoomDining,
-      "Hunter & Barrel Restaurant": amraInRoomDining,
-      "Pay That Pot Coffee": amraSpaLounge,
-      "Organic Super Market": amraSideLobby,
-      "Art Gallery": amraSideLobby,
-      "Pharmacy": amraSideLobby,
+      // GROUND FLOOR — Indoor
+      "Multiple vehicular & pedestrian drop-offs; stroller-friendly paths": amraGrandLobby,
+      "Entrance lobby with featured sculptures & water features; cascading pools": amraGrandLobbyHero,
+      "All Day Dining Restaurant": amraAllDayDining,
+      "Isabella Cucina Italiana": amraIsabellaCucina,
+      "Hunter & Barrel": amraHunterBarrel,
+      "Organic Super Market": amraOrganicSuperMarket,
+      "Art Gallery": amraArtGallery,
+      "Pharmacy": amraPharmacy,
 
+      // TOWER E — Wellness & Longevity Zone
       "Heated Marble Lounge": amraSpaHydro,
       "Hydro Pool": amraSpaPool,
       "Female Spa Area": amraFemaleSpaTreatment,
       "Male Spa Area": amraSpaTreatment,
+      "Male Changing Room": amraFemaleChanging,
       "Oxygen Therapy Rooms": amraNapReset,
       "Breath Work Room": amraStudio,
-      "Smart Recovery Hub": amraSmartBoots,
+      "Smart Recovery Hub": amraSmartRecoveryHub,
       "Soundproof Nap & Reset Room": amraNapReset,
       "Digital Detox Cabins": amraDigitalDetox,
       "Sound Healing Dome": amraSoundHealing,
       "Red Light Therapy Suites": amraRedLight,
       "Smart Recovery Boots": amraSmartBoots,
       "IV Vitamin Infusion Lounge": amraSpaTreatment,
-      "Movement Studio": amraStudio,
+      "Floating Sleep Therapy Pods": amraFloatingPods,
+      "Studio": amraStudio,
       "Reiki Room": amraReikiRoom,
       "Female Changing Room": amraFemaleChanging,
 
-      "Spa Reception & Lounge": amraSpaReception,
-      "Wellness Bar (teas, infusions, supplements)": amraSpaLounge,
+      // TOWER A — Spa & Hydrotherapy
+      "Reception": amraSpaReception,
+      "Spa lounge for pre/post treatment relaxation": amraSpaLounge,
+      "Wellness bar for teas, infusions, and supplements": amraSpaLounge,
       "Full-service Beauty Salon": amraBeautySalon,
       "Sensory Room for guided meditation": amraStudio,
-      "Snow Shower": amraShowerRoom,
+      "Heated marble loungers": amraSpaHydro,
+      "Snow Shower": amraSnowShower,
       "Salt Earth Room": amraSaltRoom,
       "Hyperbaric Room": amraHyperbaric,
       "Cryo Rooms": amraCryoChamber,
-      "Massage Room": amraSpaTreatment,
-      "Hot-bath Jacuzzi & Cold Plunge": amraSpaHydro,
-      "Sauna & Steam Rooms": amraSaunaSteam,
-      "Sensory Shower & Vitality Bar": amraShowerRoom,
-      "Indoor Wellness Swimming Pool": amraSpaPool,
-      "Dedicated Hydrotherapy Pool": amraSpaHydro,
-      "Relaxation Lounge": amraSpaLounge,
-      "Luxury Shower Rooms": amraShowerRoom,
+      "Massage room": amraSpaTreatment,
+      "Female Spa Area: Hot-bath Jacuzzi, Cold Plunge, Sauna, Steam, Sensory Shower & Vitality Bar": amraSaunaSteam,
+      "Male Spa Area: Hot-bath Jacuzzi, Cold Plunge, Sauna, Steam, Sensory Shower & Vitality Bar": amraSpaHydro,
+      "Indoor Wellness Swimming Pool": amraIndoorPoolCols,
+      "Dedicated Hydrotherapy Pool": amraSpaPool,
+      "Relaxation Lounge": amraChandelierLounge,
 
-      "Signature Gym": amraSeaViewGym,
+      // TOWER D — Mind & Movement Zone
+      "Gym": amraSeaViewGym,
       "Virtual Fitness Room": amraVirtualFitness,
-      "Indoor Cycling Studio": amraCycling,
-      "Indoor Rowing Studio": amraRowing,
-      "Trampoline Studio": amraTrampoline,
+      "Cycling": amraCycling,
+      "Indoor Rowing": amraRowing,
+      "Trampoline": amraTrampoline,
       "Kids Soft Play Sports Zone": amraKidsClimb,
       "Parkour Studio": amraParkour,
       "Dance Studio": amraStudio,
-      "Wellness Café": amraSpaLounge,
-      "HIIT Training Room": amraSeaViewGym,
+      "Cafe": amraJuiceBar,
+      "Hiit Training Room": amraSeaViewGym,
 
+      // TOWER B — Sports & Movement
       "Squash Court": amraPanoramicGym,
       "Yoga & Meditation Studios": amraStudio,
-      "Panoramic Sea View Gym": amraPanoramicGym,
+      "Panoramic Gym with Beach View": amraPanoramicGym,
       "Pilates Studio": amraStudio,
       "Boxing Ring": amraSeaViewGym,
       "HIIT Studio": amraSeaViewGym,
       "Punching Studio": amraSeaViewGym,
+      "Male & Female Steam Rooms": amraSaunaSteam,
+      "Male & Female Sauna Rooms": amraSaunaSteam,
+      "Male & Female Changing Rooms": amraFemaleChanging,
       "Healthy Café Area": amraSpaLounge,
+
+      // SHARED ORBIT — Connection Zone (kids/family)
+      "Parent-Child Bonding Activity Studio": amraParentChildStudio,
+      "Intergenerational Games": amraParentChildStudio,
+      "Story Telling Lounge": amraBookLoungeLibrary,
+      "Teen Digital Balance & Creativity Lab": amraVirtualFitness,
+      "Kids Mindfulness & Emotional Intelligence Room": amraKidsPlay,
+
+      // GOLDEN SILENCE — Stillness Zone
+      "Philosophy Circle": amraBookLoungeLibrary,
+      "Book Lounge": amraBookLoungeLibrary,
+      "Writing & Reading Library": amraBookLoungeLibrary,
+
+      // FULL MOON — Games Zone
+      "Bowling lanes": amraBowlingLanes,
+      "VR Game Zone": amraVrGameZone,
+      "Car Simulators": amraVrGameZone,
+      "Golf Simulators": amraGolfSimulator,
+      "Foosball": amraArcadePoolDarts,
+      "Auto-scored darts": amraArcadePoolDarts,
+      "Pool tables": amraArcadePoolDarts,
+      "Art Room": amraArtGallery,
+      "Soft Play Room": amraKidsClimb,
+      "Daycare": amraParentChildStudio,
+
+      // SUNRISE — Business Zone
+      "2 Receptions with welcome seating": amraSpaReception,
+      "2 Conference Rooms with complete sea view": amraBusinessZone,
+      "Self-service coffee area": amraJuiceBar,
+      "3 Meeting Rooms": amraBusinessZone,
+      "2 CEO Offices": amraBusinessZone,
+      "Open coworking zones with sofas, tables, and media-enabled pods": amraBusinessZone,
+      "2 Multifunctional Offices": amraBusinessZone,
+
+      // ROOFTOP SPORTS
+      "2 Paddle Courts": amraRooftopSportsDeck,
+      "Pickleball Court": amraRooftopSportsDeck,
+      "Mini Futsal Court": amraRooftopSportsDeck,
+      "2 Badminton Courts": amraRooftopSportsDeck,
+      "Mini Golf": amraRooftopSportsDeck,
+      "Refreshments Area, Juice Bar and Seating": amraJuiceBar,
     };
 
     amraAmenities.forEach((label) => {
@@ -1031,19 +1153,12 @@ function ProjectDetailLayoutInner({
       if (dedicated[label]) mapped[label] = dedicated[label];
     });
 
-    // Hard overrides for previously incorrect AMRA pairings and coverage for
-    // owner-supplied amenities that weren't in the factsheet roster above.
-    mapped["24/7 Security with 256-bit encryption"] = amraGrandLobby;
-    mapped["Smart Home Automation"] = amraCitiApp;
-    mapped["IoT-enabled apartments"] = amraCitiApp;
-    mapped["Fully furnished apartments"] = galleryImage(2, amraStudio);
-    mapped["Fully serviced apartments"] = amraCitiApp;
+    // Legacy aliases for owner-supplied variants that may still exist in DB.
+    mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
     mapped["Integrative Wellness Resort features"] = amraAerialResort;
     mapped["Smart Parenting monitoring system"] = amraKidsPlay;
     mapped["Remote home management via Customer App"] = amraCitiApp;
-
-    // Legacy aliases
-    mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
+    mapped["In-room dining and all-day dining"] = amraInRoomDining;
     return mapped;
   }, [amraAmenities, images, isAmraProject, project.amenity_images]);
 
@@ -1780,12 +1895,14 @@ function ProjectDetailLayoutInner({
                     standardInclusions={isAmraProject ? [
                       "Fully furnished & serviced apartment",
                       "Sea view from every apartment",
-                       "Access to 165+ amenities",
-                       "750,000 sq. ft of amenities",
+                      "Access to 165+ amenities",
+                      "750,000 sq. ft of amenities",
                       "Dedicated marina for private yachts",
                       "Amra BNB one-stop short-stay management",
                       "Citi Buddy concierge via Citi Developers App",
                       "In-room dining & all-day dining",
+                      "Helipad & air-taxi landing pad with private limousine service",
+                      "Complimentary golf cart & buggy service",
                     ] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
