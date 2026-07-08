@@ -206,9 +206,9 @@ export const ConsultationRequestForm = ({
 
   // Clean field recipe — no boxed background, no thick frame.
   // The global gold-hairline lock in src/index.css paints rest/hover/focus borders.
-  const selectTriggerClass = "h-12 bg-transparent rounded-lg text-[#1A1A1A]";
+  const selectTriggerClass = "h-12 bg-transparent rounded-lg text-[#1A1A1A] px-4";
   const selectContentClass = "";
-  const inputClass = "h-12 bg-transparent rounded-lg text-[#1A1A1A]";
+  const inputClass = "h-12 bg-transparent rounded-lg text-[#1A1A1A] px-4";
 
   if (isSuccess) {
     return (
@@ -237,7 +237,7 @@ export const ConsultationRequestForm = ({
       viewport={{ once: true }}
         data-form-shell
         data-jbj-consultation-form
-        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
+        className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-7 sm:p-10 md:p-12 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
     >
       {/* Local pill lock — force gold champagne on inactive & pure emerald+white on active,
           winning over the site-wide emerald surface guards. Scoped to this form only. */}
@@ -281,7 +281,7 @@ export const ConsultationRequestForm = ({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" data-form-shell>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" data-form-shell>
           <FormField
             control={form.control}
             name="fullName"
@@ -590,7 +590,7 @@ export const ConsultationRequestForm = ({
                   <Textarea
                     placeholder="Additional details (optional)"
                     {...field}
-                    className="min-h-[80px] bg-transparent text-[#1A1A1A] resize-none rounded-lg"
+                    className="min-h-[92px] bg-transparent text-[#1A1A1A] resize-none rounded-lg px-4 py-3"
                   />
                 </FormControl>
                 <FormMessage />
@@ -603,12 +603,12 @@ export const ConsultationRequestForm = ({
               control={form.control}
               name="agreeTerms"
               render={({ field }) => (
-                <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/35 p-3 md:p-4">
+                  <FormItem className="form-checkbox-row flex items-start gap-3 space-y-0 flex-1 min-w-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]/35 p-4 md:p-5">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={(checked) => field.onChange(checked === true)}
-                    className="mt-0.5"
+                    className="mt-0.5 grid h-5 w-5 min-w-5 place-items-center rounded border-[#B89555] data-[state=checked]:bg-[#064E3B] data-[state=checked]:text-white"
                     data-no-contrast-guard
                     />
                   </FormControl>

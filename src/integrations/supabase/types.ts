@@ -6069,27 +6069,51 @@ export type Database = {
       }
       cookie_consents: {
         Row: {
+          accepted_at: string
+          consent_source: string
           consent_status: string
           created_at: string
           id: string
+          ip_address: unknown
+          page_url: string | null
+          policy_snapshot: Json
+          policy_version: string
           preferences: Json
+          referrer: string | null
           user_agent: string | null
+          user_id: string | null
           visitor_id: string
         }
         Insert: {
+          accepted_at?: string
+          consent_source?: string
           consent_status: string
           created_at?: string
           id?: string
+          ip_address?: unknown
+          page_url?: string | null
+          policy_snapshot?: Json
+          policy_version?: string
           preferences?: Json
+          referrer?: string | null
           user_agent?: string | null
+          user_id?: string | null
           visitor_id: string
         }
         Update: {
+          accepted_at?: string
+          consent_source?: string
           consent_status?: string
           created_at?: string
           id?: string
+          ip_address?: unknown
+          page_url?: string | null
+          policy_snapshot?: Json
+          policy_version?: string
           preferences?: Json
+          referrer?: string | null
           user_agent?: string | null
+          user_id?: string | null
           visitor_id?: string
         }
         Relationships: []

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Upload, Loader2, Eye, EyeOff, FileText, Trash2, ChevronDown } from "lucide-react";
+import { Upload, Loader2, Eye, EyeOff, FileText, Trash2, ChevronDown, Image as ImageIcon, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
@@ -18,6 +18,10 @@ interface OwnerDocDropzoneProps {
 }
 
 const BUCKET = "project-documents";
+const PUBLIC_MEDIA_BUCKET = "rel-media";
+
+const isImageFile = (file: File) => file.type.startsWith("image/") || /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(file.name);
+const isVideoFile = (file: File) => file.type.startsWith("video/") || /\.(mp4|mov|webm|ogg|m4v)(\?|$)/i.test(file.name);
 
 const inferType = (name: string): string => {
   const n = name.toLowerCase();
@@ -54,6 +58,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
     qc.invalidateQueries({ queryKey: ["owner-project-documents", projectId] });
     qc.invalidateQueries({ queryKey: ["project"] });
     qc.invalidateQueries({ queryKey: ["projects"] });
+    qc.invalidateQueries({ queryKey: ["owner-project-images", projectId] });
   };
 
   const upload = useCallback(async (files: FileList | File[]) => {
@@ -62,20 +67,31 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
     let ok = 0, fail = 0;
     for (const file of Array.from(files)) {
       try {
-        const path = `${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const mediaKind = isImageFile(file) ? "image" : isVideoFile(file) ? "video" : "document";
+        const bucket = mediaKind === "document" ? BUCKET : PUBLIC_MEDIA_BUCKET;
+        const folder = mediaKind === "document" ? projectId : `project-uploads/${projectId}`;
+        const path = `${folder}/${crypto.randomUUID()}-${file.name}`;
         const { error: upErr } = await supabase.storage
-          .from(BUCKET)
+          .from(bucket)
           .upload(path, file, { contentType: file.type || "application/octet-stream" });
         if (upErr) throw upErr;
-        const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
+        const { data: pub } = supabase.storage.from(bucket).getPublicUrl(path);
         const docType = inferType(file.name);
-        const { error: insErr } = docType === "video"
+        const nextOrder = existing.length + ok;
+        const { error: insErr } = mediaKind === "image"
+          ? await supabase.from("project_images").insert({
+              project_id: projectId,
+              image_url: pub.publicUrl,
+              alt_text: file.name,
+              display_order: nextOrder,
+            } as any)
+          : mediaKind === "video" || docType === "video"
           ? await supabase.from("project_videos").insert({
               project_id: projectId,
               url: pub.publicUrl,
               title: file.name,
               is_visible: true,
-              display_order: 0,
+              display_order: nextOrder,
             } as any)
           : await supabase.from("project_documents").insert({
               project_id: projectId,
@@ -90,10 +106,12 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
             } as any);
         if (insErr) throw insErr;
 
-        // Fire-and-forget enrichment via existing edge function
-        supabase.functions
-          .invoke("enrich-project", { body: { projectId, fileUrl: pub.publicUrl, fileName: file.name } })
-          .catch(() => {});
+        // Fire-and-forget enrichment via existing edge function for documents only.
+        if (mediaKind === "document") {
+          supabase.functions
+            .invoke("enrich-project", { body: { projectId, fileUrl: pub.publicUrl, fileName: file.name } })
+            .catch(() => {});
+        }
         ok++;
       } catch (e: any) {
         console.error(e);
@@ -169,10 +187,10 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
           <Upload className="w-6 h-6 mx-auto text-[#B89555]" />
         )}
         <div className="mt-2 text-sm font-semibold text-[#1A1A1A]">
-          {busy ? "Uploading…" : "Drop brochures, floor plans, payment plans, videos"}
+          {busy ? "Uploading…" : "Drop brochures, floor plans, photos, videos"}
         </div>
         <div className="text-xs text-[#1A1A1A]/60 mt-0.5">
-          PDF / PNG / JPG / MP4 / MOV — auto-attaches to this project
+          Photos publish to Gallery · videos publish to Project Media · PDFs publish to Documents
         </div>
       </label>
 
@@ -182,7 +200,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
             const visible = d.is_visible ?? true;
             return (
               <div key={d.id} className="flex items-center gap-3 px-3 py-2 text-sm">
-                <FileText className="w-4 h-4 text-[#B89555] shrink-0" />
+                {d.document_type === "video" ? <Video className="w-4 h-4 text-[#B89555] shrink-0" /> : d.file_url?.match(/\.(png|jpe?g|webp|gif|avif)(\?|$)/i) ? <ImageIcon className="w-4 h-4 text-[#B89555] shrink-0" /> : <FileText className="w-4 h-4 text-[#B89555] shrink-0" />}
                 <span className="font-medium text-[#1A1A1A] truncate">
                   {d.file_name || d.document_type}
                 </span>
