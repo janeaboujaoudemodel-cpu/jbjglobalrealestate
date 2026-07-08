@@ -1895,12 +1895,14 @@ function ProjectDetailLayoutInner({
                     standardInclusions={isAmraProject ? [
                       "Fully furnished & serviced apartment",
                       "Sea view from every apartment",
-                       "Access to 165+ amenities",
-                       "750,000 sq. ft of amenities",
+                      "Access to 165+ amenities",
+                      "750,000 sq. ft of amenities",
                       "Dedicated marina for private yachts",
                       "Amra BNB one-stop short-stay management",
                       "Citi Buddy concierge via Citi Developers App",
                       "In-room dining & all-day dining",
+                      "Helipad & air-taxi landing pad with private limousine service",
+                      "Complimentary golf cart & buggy service",
                     ] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
