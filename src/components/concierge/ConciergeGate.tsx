@@ -145,7 +145,8 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
     "bg-[#FDFBF7] border border-[#B89555]/45 focus:border-[#B89555] focus:bg-[#FDFBF7] outline-none transition";
 
   return (
-    <div className="flex min-h-full w-full flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+    <div className="flex w-full flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+
       {/* 24/7 Free Support badge */}
       <div className="flex items-center justify-center">
         <span
@@ -300,10 +301,11 @@ export default function ConciergeGate({ onVerified, channelLabel = "Concierge" }
             type="submit"
             disabled={submitting}
             data-no-contrast-guard
-            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold text-[#1A1A1A] disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2 hover:bg-[#F7F2EA] hover:text-[#1A1A1A] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)]"
+            style={{ color: "#0EA5E9", WebkitTextFillColor: "#0EA5E9" }}
+            className="mt-2 w-full h-12 rounded-lg border border-[#B89555]/70 bg-[#EFE6D6] text-[13.5px] font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition inline-flex items-center justify-center gap-2 hover:bg-[#F7F2EA] hover:border-[#B89555] hover:shadow-[0_0_24px_hsl(var(--gold)/0.22)] [&_svg]:!text-[#0EA5E9] [&_svg]:!stroke-[#0EA5E9]"
           >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-            {submitting ? "Sending code…" : "Send verification code"}
+            {submitting ? <Loader2 className="h-4 w-4 animate-spin" style={{ color: "#0EA5E9", stroke: "#0EA5E9" }} /> : <ShieldCheck className="h-4 w-4" style={{ color: "#0EA5E9", stroke: "#0EA5E9" }} />}
+            <span style={{ color: "#0EA5E9" }}>{submitting ? "Sending code…" : "Send verification code"}</span>
           </button>
 
           <p className="mt-2 text-[10.5px] text-[#1A1A1A]/70 text-center leading-snug px-2 pb-1">

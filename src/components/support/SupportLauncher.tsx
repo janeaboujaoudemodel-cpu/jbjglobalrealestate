@@ -169,58 +169,82 @@ export default function SupportLauncher() {
 
   return (
     <>
-      {/* ============== MOBILE: horizontal "Contact us" pill (bottom-right) ============== */}
+      {/* ============== MOBILE / TABLET (phone icon trigger + emerald panel — matches desktop) ============== */}
       <div className="fixed bottom-5 right-4 z-[60] block lg:hidden pointer-events-none" data-no-contrast-guard>
         <AnimatePresence>
           {open && (
             <>
               <motion.div
-                key="scrim"
-                className="fixed inset-0 bg-[#0F0F0F]/25"
+                key="mscrim"
+                className="fixed inset-0 bg-[#0F0F0F]/20 pointer-events-auto"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={close}
               />
               <motion.div
-                key="orbs"
-                className="absolute bottom-12 right-0 flex max-h-[calc(100dvh-7rem)] w-[280px] flex-col gap-2 overflow-hidden rounded-2xl p-3"
-                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                key="mpanel"
+                initial={{ opacity: 0, y: 12, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                exit={{ opacity: 0, y: 12, scale: 0.98 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
-                style={{
-                  background: "linear-gradient(180deg, rgba(247,242,234,0.96) 0%, rgba(239,230,214,0.94) 100%)",
-                  backdropFilter: "blur(18px) saturate(160%)",
-                  WebkitBackdropFilter: "blur(18px) saturate(160%)",
-                  border: "1px solid rgba(184,149,85,0.45)",
-                  boxShadow: "0 24px 60px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.55)",
-                }}
+                data-no-contrast-guard
+                className="jbj-emerald-animated-border absolute bottom-14 right-0 w-[min(320px,calc(100vw-2rem))] max-h-[calc(100dvh-8rem)] rounded-2xl p-[2px] pointer-events-auto shadow-[0_30px_60px_rgba(0,0,0,0.35),0_0_34px_rgba(16,185,129,0.35)]"
               >
-                <div className="flex items-center justify-between gap-2 pb-2 mb-1 border-b border-[#B89555]/25">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg jj-surface-emerald text-white shrink-0">
-                      <Sparkles className="h-3.5 w-3.5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <div
+                  data-emerald="true"
+                  data-allow-dark-cta
+                  data-no-contrast-guard
+                  className="jj-emerald-metallic allow-white flex flex-col overflow-hidden rounded-[14px] p-3 text-white max-h-[calc(100dvh-8.5rem)]"
+                >
+                  <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 mb-2">
+                    <span
+                      className="allow-white inline-flex h-11 items-center gap-1.5 px-4 rounded-full text-[11px] font-semibold text-white"
+                      style={{
+                        color: "#FFFFFF",
+                        WebkitTextFillColor: "#FFFFFF",
+                        backgroundImage: "var(--jj-emerald-ombre)",
+                        border: 0,
+                        boxShadow: "none",
+                      }}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                      Call Our Agent
                     </span>
-                    <span className="text-[13px] font-semibold tracking-tight text-[#1A1A1A] whitespace-nowrap truncate">JBJ Concierge</span>
+                    <button
+                      onClick={close}
+                      aria-label="Close"
+                      data-allow-dark-cta
+                      data-no-contrast-guard
+                      className="allow-white h-11 w-11 min-w-11 inline-flex items-center justify-center rounded-full text-white transition-[filter] hover:brightness-110"
+                      style={{
+                        color: "#FFFFFF",
+                        WebkitTextFillColor: "#FFFFFF",
+                        backgroundImage: "var(--jj-emerald-ombre)",
+                        border: 0,
+                        boxShadow: "none",
+                      }}
+                    >
+                      <X className="h-4 w-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                    </button>
                   </div>
-                  <button
-                    onClick={close}
-                    aria-label="Close"
-                    className="h-7 w-7 shrink-0 inline-flex items-center justify-center rounded-full border border-[#B89555]/45 bg-white/60 text-[#1A1A1A]"
+
+                  <div
+                    className="grid w-full grid-cols-[minmax(0,1fr)] auto-rows-[86px] items-stretch justify-stretch gap-2.5 overflow-y-auto overflow-x-hidden pr-0.5"
+                    style={{ gridTemplateColumns: "minmax(0, 1fr)" }}
                   >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 auto-rows-[86px] gap-2 overflow-y-auto pr-0.5">
-                  {channels.map((c) => (
-                    <div key={c.id} className="rounded-xl h-[86px] min-w-0">
-                      <ChannelCard channel={c} compact onActivate={close} />
-                    </div>
-                  ))}
+                    {channels.map((c) => (
+                      <div
+                        key={c.id}
+                        className="block h-[86px] w-full min-w-0 max-w-full self-stretch justify-self-stretch [&>*]:!block [&>*]:!h-full [&>*]:!w-full [&>*]:!min-w-0 [&>*]:!max-w-full [&>*]:!box-border"
+                        style={{ width: "100%", inlineSize: "100%" }}
+                      >
+                        <ChannelCard channel={c} onActivate={close} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
-
             </>
           )}
         </AnimatePresence>
@@ -233,7 +257,7 @@ export default function SupportLauncher() {
           data-allow-dark-cta
           data-no-contrast-guard
           whileTap={{ scale: 0.96 }}
-          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center h-11 w-11 sm:w-11 px-0 gap-0 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
+          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center h-12 w-12 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors"
           style={{
             color: "#FFFFFF",
             WebkitTextFillColor: "#FFFFFF",
@@ -243,28 +267,10 @@ export default function SupportLauncher() {
           }}
         >
           {open ? (
-            <span
-              aria-hidden
-              className="pointer-events-none flex items-center justify-center"
-              style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
-            >
-              <X style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
-            </span>
+            <X aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
           ) : (
             <>
-              <span
-                aria-hidden
-                className="pointer-events-none flex items-center justify-center"
-                style={{ position: "absolute", inset: 0, top: 0, right: 0, bottom: 0, left: 0 }}
-              >
-                <Phone style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", transform: "translate(0.5px, -0.5px)" }} />
-              </span>
-              <span
-                className="allow-white hidden text-[11px] font-semibold uppercase tracking-[0.2em]"
-                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-              >
-                Contact Us
-              </span>
+              <Phone aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block" }} />
               <span
                 className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
                 style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8 }}
@@ -274,6 +280,7 @@ export default function SupportLauncher() {
         </motion.button>
 
       </div>
+
 
 
       {/* ============== DESKTOP: vertical edge tag (right) ============== */}
