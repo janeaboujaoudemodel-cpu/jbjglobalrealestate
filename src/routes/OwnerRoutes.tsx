@@ -189,7 +189,9 @@ export const OwnerRoutes = () => (
   }>
 
     <Route index element={<OwnerDashboardOverview />} />
+    <Route path="public-gate" element={<OwnerPublicGateEditor />} />
     <Route path="inbox" element={<OwnerInbox />} />
+
     <Route path="templates" element={<OwnerTemplates />} />
     <Route path="settings/communication" element={<OwnerCommSettings />} />
     <Route path="agenda" element={<OwnerAgenda />} />
