@@ -163,16 +163,23 @@ export default function BookStyleDocuments({
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
-              {/* Bottom action panel only — no labels over the book cover image. */}
+              {/* Bottom panel — title + action buttons */}
               <div
                 data-no-contrast-guard
                 data-on-dark
-                className="absolute inset-x-0 bottom-0 border-t border-black/30 px-3 py-2.5 flex flex-col allow-white"
+                className="absolute inset-x-0 bottom-0 border-t border-black/30 px-3 pt-2 pb-2.5 flex flex-col gap-1.5 allow-white"
                 style={{
                   background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                   color: "#FFFFFF",
                 }}
               >
+                <p
+                  className="text-[11px] font-semibold leading-tight text-white line-clamp-2 allow-white"
+                  style={{ color: "#FFFFFF", fontFamily: "'Cormorant Garamond', serif", letterSpacing: "0.01em" }}
+                  title={title}
+                >
+                  {title}
+                </p>
                 <div className="flex items-center gap-1.5">
                   <span
                     role="button"
@@ -208,6 +215,7 @@ export default function BookStyleDocuments({
                   </span>
                 </div>
               </div>
+
 
 
 
