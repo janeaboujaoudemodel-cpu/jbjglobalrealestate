@@ -977,7 +977,6 @@ function ProjectDetailLayoutInner({
       "Red Light Therapy Suites": amraRedLight,
       "Smart Recovery Boots": amraSmartBoots,
       "IV Vitamin Infusion Lounge": amraSpaTreatment,
-      "Floating Sleep Therapy Pods": amraFloatingPods,
       "Movement Studio": amraStudio,
       "Reiki Room": amraReikiRoom,
       "Female Changing Room": amraFemaleChanging,
