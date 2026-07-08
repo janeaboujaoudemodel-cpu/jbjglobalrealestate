@@ -138,8 +138,9 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           role,
           // Demographics from profile or role_selections
           nationality: p.nationality || roleSelection?.nationality || "",
-          country: p.country || roleSelection?.country || "",
-          city: p.city || roleSelection?.city || "",
+          country: p.country || roleSelection?.current_location_country || "",
+          city: p.city || roleSelection?.current_location_city || "",
+
           preferred_language: p.preferred_language || roleSelection?.preferred_language || "",
           age_range: p.age_range || roleSelection?.age_range || "",
           page_time_breakdown: p.page_time_breakdown || {},
