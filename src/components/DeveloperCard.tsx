@@ -7,6 +7,8 @@ import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import type { Developer } from "@/hooks/useProjects";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
+import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
+
 
 interface DeveloperCardProps {
   developer: Developer;
