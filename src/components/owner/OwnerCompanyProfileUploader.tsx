@@ -146,9 +146,6 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           Audit log →
         </Link>
       </div>
-        <Link to="/owner/enrichment-review" className="text-xs font-semibold text-[#064E3B] hover:underline">
-          Review queue →
-        </Link>
       </div>
 
       <label
@@ -163,12 +160,24 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           onChange={(e) => e.target.files && upload(e.target.files)} />
         {busy ? <Loader2 className="w-6 h-6 mx-auto animate-spin text-[#B89555]" /> : <Upload className="w-6 h-6 mx-auto text-[#B89555]" />}
         <div className="mt-2 text-sm font-semibold text-[#1A1A1A]">
-          {busy ? "Uploading…" : "Drop company profile PDFs here"}
+          {busy ? "Uploading & extracting with AI…" : "Drop company profile PDFs here"}
         </div>
         <div className="text-xs text-[#1A1A1A]/60 mt-0.5 inline-flex items-center gap-1">
-          <Sparkles className="w-3 h-3" /> AI reads it · you review before it publishes
+          <Sparkles className="w-3 h-3" /> AI extracts every field and replaces the description automatically
         </div>
       </label>
+
+      {lastExtraction && lastExtraction.length > 0 && (
+        <div className="mt-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-900">
+          <span className="font-semibold">AI updated {lastExtraction.length} field{lastExtraction.length > 1 ? "s" : ""}:</span>{" "}
+          {lastExtraction.join(", ")}
+        </div>
+      )}
+      {lastExtraction && lastExtraction.length === 0 && (
+        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+          AI ran but did not find any new fields in the uploaded file.
+        </div>
+      )}
 
       {docs.length > 0 && (
         <div className="mt-3 divide-y divide-[#B89555]/15 rounded-md border border-[#B89555]/20 bg-white">
