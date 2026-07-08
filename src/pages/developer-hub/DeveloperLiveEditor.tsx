@@ -92,8 +92,10 @@ const DeveloperLiveEditor = () => {
   const [editing, setEditing] = useState<string | null>(null);
   const [edits, setEdits] = useState<Record<string, { price_from?: string; handover_date?: string; description?: string }>>({});
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich">(null);
+  const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich" | "dedupe" | "delete">(null);
   const [autofillBusy, setAutofillBusy] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ mode: "single" | "bulk"; id?: string; name?: string } | null>(null);
+  const [showMerged, setShowMerged] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
