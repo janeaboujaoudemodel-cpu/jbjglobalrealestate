@@ -1,7 +1,14 @@
 project_id = "mdafrewypkkrildjgtey"
 
+[functions.submit-lead]
+verify_jwt = false
+
+[functions.signup-client]
+verify_jwt = false
+
 [functions.apply-book-content-once]
 verify_jwt = false
+
 
 [functions.submit-meeting-booking]
 verify_jwt = false
