@@ -72,28 +72,33 @@ export async function requireOwnerAuth(
 
   const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
 
-  // 4. Registered owner email is the gate. A user_roles owner/admin row alone
-  // must never grant access to owner edge functions.
+  // 4. Access is granted if ANY of these match:
+  //    a) userEmail == app_settings.owner_email (configured owner)
+  //    b) userEmail == PRIMARY_OWNER_EMAIL (bootstrap fallback)
+  //    c) user has 'owner' or 'admin' row in user_roles
   const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
 
-  const { data: ownerSetting } = await serviceClient
-    .from("app_settings")
-    .select("value")
-    .eq("key", "owner_email")
-    .maybeSingle();
+  const [{ data: ownerSetting }, { data: roles }] = await Promise.all([
+    serviceClient.from("app_settings").select("value").eq("key", "owner_email").maybeSingle(),
+    serviceClient.from("user_roles").select("role").eq("user_id", userId),
+  ]);
 
   const configuredOwnerEmail = String(ownerSetting?.value || "").toLowerCase().trim();
-  const registeredOwnerEmail = configuredOwnerEmail === PRIMARY_OWNER_EMAIL
-    ? configuredOwnerEmail
-    : PRIMARY_OWNER_EMAIL;
-  if (userEmail.toLowerCase().trim() !== registeredOwnerEmail) {
+  const normalizedEmail = userEmail.toLowerCase().trim();
+  const emailOk =
+    normalizedEmail === PRIMARY_OWNER_EMAIL ||
+    (!!configuredOwnerEmail && normalizedEmail === configuredOwnerEmail);
+  const roleOk = !!roles?.some(
+    (r: { role: string }) => r.role === "owner" || r.role === "admin",
+  );
+
+  if (!emailOk && !roleOk) {
     await logDenied(req, "owner_email_mismatch", userId, userEmail);
     return denied(403, "Owner-only access. This action has been logged.");
   }
 
-  // Optional sanity check/source compatibility: registered owner email can enter
-  // even during first registration before user_roles has been seeded.
   return { response: null, userId, email: userEmail };
+
 
   /* Legacy role-only gate intentionally disabled.
 
