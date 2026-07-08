@@ -18,7 +18,7 @@ type FilterMode = "nearby" | "area" | "emirate";
 
 const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char] || char));
 
-const shortMapLabel = (projectName: string) => /amra/i.test(projectName) ? "AMRA" : projectName.split(/\s+/).slice(0, 2).join(" ");
+
 
 // Premium project pin — minimal white label (no red pill, no all-caps),
 // paired with a discreet gold-outlined pin. Keeps the map feeling editorial.
