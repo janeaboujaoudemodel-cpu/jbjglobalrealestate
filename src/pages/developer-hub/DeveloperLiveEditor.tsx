@@ -9,7 +9,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles, Search, AlertTriangle, Wand2 } from "lucide-react";
+import { Plus, Edit3, ExternalLink, Loader2, Building2, Home, CheckCircle2, XCircle, Sparkles, Search, AlertTriangle, Wand2, Trash2, Copy as CopyIcon, Merge } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useDeveloperAutoPublish } from "@/hooks/useDeveloperAutoPublish";
 import { toast } from "sonner";
 
@@ -37,6 +47,9 @@ interface Project {
   description?: string | null;
   source?: string | null;
   data_quality_flags: unknown;
+  is_manually_verified?: boolean | null;
+  merged_into_project_id?: string | null;
+  duplicate_count?: number;
 }
 
 interface ResaleProject {
@@ -79,8 +92,10 @@ const DeveloperLiveEditor = () => {
   const [editing, setEditing] = useState<string | null>(null);
   const [edits, setEdits] = useState<Record<string, { price_from?: string; handover_date?: string; description?: string }>>({});
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich">(null);
+  const [bulkBusy, setBulkBusy] = useState<null | "publish" | "unpublish" | "enrich" | "dedupe" | "delete">(null);
   const [autofillBusy, setAutofillBusy] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ mode: "single" | "bulk"; id?: string; name?: string } | null>(null);
+  const [showMerged, setShowMerged] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
@@ -105,39 +120,50 @@ const DeveloperLiveEditor = () => {
 
   // Server-side totals (true counts, not capped)
   const { data: counts } = useQuery({
-    queryKey: ["developer-projects-counts", isOwner ? "owner-all" : devFilterId],
+    queryKey: ["developer-projects-counts", isOwner ? "owner-all" : devFilterId, showMerged],
     queryFn: async () => {
       const build = (published: boolean | null) => {
         let q = supabase
           .from("projects")
           .select("id", { count: "exact", head: true })
           .or("listing_kind.is.null,listing_kind.eq.offplan");
+        if (!showMerged) q = q.is("merged_into_project_id", null);
         if (!isOwner) q = q.eq("developer_id", devFilterId!);
         if (published !== null) q = q.eq("is_published", published);
         return q;
       };
-      const [all, live, draft] = await Promise.all([build(null), build(true), build(false)]);
+      // Duplicates count (rows already merged into a keeper)
+      let dupQ = supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .not("merged_into_project_id", "is", null)
+        .or("listing_kind.is.null,listing_kind.eq.offplan");
+      if (!isOwner) dupQ = dupQ.eq("developer_id", devFilterId!);
+
+      const [all, live, draft, dups] = await Promise.all([build(null), build(true), build(false), dupQ]);
       return {
         all: all.count ?? 0,
         live: live.count ?? 0,
         draft: draft.count ?? 0,
+        duplicates: dups.count ?? 0,
       };
     },
     enabled: isOwner || !!devFilterId,
   });
 
   const { data: allProjects, isLoading } = useQuery({
-    queryKey: ["developer-projects", isOwner ? "owner-all" : devFilterId, pageSize, statusFilter, sortOrder],
+    queryKey: ["developer-projects", isOwner ? "owner-all" : devFilterId, pageSize, statusFilter, sortOrder, showMerged],
     queryFn: async () => {
       const sortCol = sortOrder === "name-asc" || sortOrder === "name-desc" ? "name" : "created_at";
       const asc = sortOrder === "oldest" || sortOrder === "name-asc";
       let query = supabase
         .from("projects")
-        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, description, source, data_quality_flags, created_at, updated_at")
+        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, description, source, data_quality_flags, is_manually_verified, merged_into_project_id, created_at, updated_at")
         .or("listing_kind.is.null,listing_kind.eq.offplan")
         .order(sortCol, { ascending: asc, nullsFirst: false })
         .limit(pageSize);
 
+      if (!showMerged) query = query.is("merged_into_project_id", null);
       if (!isOwner) query = query.eq("developer_id", devFilterId!);
       if (statusFilter === "live") query = query.eq("is_published", true);
       if (statusFilter === "draft") query = query.eq("is_published", false);
@@ -145,6 +171,23 @@ const DeveloperLiveEditor = () => {
       const { data, error } = await query;
       if (error) throw error;
       return (data || []) as Project[];
+    },
+    enabled: isOwner || !!devFilterId,
+  });
+
+  // Duplicate counts per keeper (how many rows were merged into each surviving project)
+  const { data: dupMap } = useQuery({
+    queryKey: ["project-duplicate-groups", isOwner ? "owner-all" : devFilterId],
+    queryFn: async () => {
+      let q = supabase.from("project_duplicate_groups").select("keeper_id, duplicate_count");
+      if (!isOwner) q = q.eq("developer_id", devFilterId!);
+      const { data, error } = await q;
+      if (error) return {} as Record<string, number>;
+      const m: Record<string, number> = {};
+      for (const r of (data || []) as { keeper_id: string; duplicate_count: number }[]) {
+        if (r.duplicate_count > 0) m[r.keeper_id] = Number(r.duplicate_count);
+      }
+      return m;
     },
     enabled: isOwner || !!devFilterId,
   });
@@ -242,6 +285,50 @@ const DeveloperLiveEditor = () => {
     qc.invalidateQueries({ queryKey: ["developer-projects"] });
   };
 
+  const runAutoMerge = async () => {
+    setBulkBusy("dedupe");
+    try {
+      const { data, error } = await supabase.rpc("auto_merge_duplicate_projects");
+      if (error) throw error;
+      const merged = Array.isArray(data) ? data.length : 0;
+      toast.success(merged > 0
+        ? `Auto-merged ${merged} duplicate project${merged === 1 ? "" : "s"}`
+        : "No new duplicates found");
+      qc.invalidateQueries({ queryKey: ["developer-projects"] });
+      qc.invalidateQueries({ queryKey: ["developer-projects-counts"] });
+      qc.invalidateQueries({ queryKey: ["project-duplicate-groups"] });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Dedupe failed");
+    } finally {
+      setBulkBusy(null);
+    }
+  };
+
+  const deleteProject = async (id: string) => {
+    const { error } = await supabase.from("projects").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Project deleted");
+    setConfirmDelete(null);
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+    qc.invalidateQueries({ queryKey: ["developer-projects-counts"] });
+    qc.invalidateQueries({ queryKey: ["project-duplicate-groups"] });
+  };
+
+  const bulkDelete = async () => {
+    if (selected.size === 0) return;
+    setBulkBusy("delete");
+    const ids = Array.from(selected);
+    const { error } = await supabase.from("projects").delete().in("id", ids);
+    setBulkBusy(null);
+    setConfirmDelete(null);
+    if (error) return toast.error(error.message);
+    toast.success(`${ids.length} project${ids.length === 1 ? "" : "s"} deleted`);
+    clearAll();
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+    qc.invalidateQueries({ queryKey: ["developer-projects-counts"] });
+    qc.invalidateQueries({ queryKey: ["project-duplicate-groups"] });
+  };
+
   const autofillDescription = async (p: Project) => {
     setAutofillBusy(p.id);
     try {
@@ -291,7 +378,7 @@ const DeveloperLiveEditor = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">My Projects</h1>
-          <p className="text-[#1A1A1A]/70 text-sm mt-1">Select projects to bulk publish, unpublish, or enrich. Click any row to edit.</p>
+          <p className="text-[#1A1A1A]/70 text-sm mt-1">Bulk publish, unpublish, enrich or delete. Auto-merge finds duplicates (same developer + same name) and keeps the verified one.</p>
         </div>
         <Button
           onClick={() => navigate(isOwner ? "/owner/developers/new-project" : "/developer-hub/new-project")}
@@ -310,16 +397,48 @@ const DeveloperLiveEditor = () => {
           <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
             {counts?.all?.toLocaleString() ?? "…"}
           </Badge>
+          {(counts?.duplicates ?? 0) > 0 && (
+            <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 gap-1">
+              <CopyIcon className="w-3 h-3" />
+              {counts?.duplicates?.toLocaleString()} duplicate{counts?.duplicates === 1 ? "" : "s"} merged
+            </Badge>
+          )}
 
-          {(counts?.all ?? 0) > 0 && (
-            <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2 flex-wrap">
+            {isOwner && (
+              <>
+                <label className="flex items-center gap-1.5 text-xs text-[#1A1A1A]/70 select-none">
+                  <input
+                    type="checkbox"
+                    checked={showMerged}
+                    onChange={(e) => setShowMerged(e.target.checked)}
+                    className="accent-[#064E3B]"
+                  />
+                  Show merged
+                </label>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={runAutoMerge}
+                  disabled={!!bulkBusy}
+                  className="border-[#064E3B]/40 text-[#064E3B] hover:bg-[#064E3B]/10"
+                  title="Group identical projects (same developer + same name) and keep the manually-verified one"
+                >
+                  {bulkBusy === "dedupe"
+                    ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    : <><Merge className="w-3.5 h-3.5 mr-1" /> Auto-merge duplicates</>}
+                </Button>
+              </>
+            )}
+            {(counts?.all ?? 0) > 0 && (
               <Button size="sm" variant="outline" onClick={allSelected ? clearAll : selectAll}
                 className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
                 {allSelected ? "Unselect all" : "Select all"}
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+
 
         {/* Search + status tabs */}
         <div className="flex flex-wrap gap-3 items-center">
@@ -398,6 +517,12 @@ const DeveloperLiveEditor = () => {
                 className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
                 {bulkBusy === "enrich" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Sparkles className="w-3.5 h-3.5 mr-1" /> Enrich</>}
               </Button>
+              {isOwner && (
+                <Button size="sm" onClick={() => setConfirmDelete({ mode: "bulk" })} disabled={!!bulkBusy}
+                  className="bg-red-600 text-white hover:bg-red-700 font-semibold">
+                  {bulkBusy === "delete" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Trash2 className="w-3.5 h-3.5 mr-1" /> Delete</>}
+                </Button>
+              )}
               <Button size="sm" onClick={clearAll} disabled={!!bulkBusy}
                 className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold border border-white">
                 <span style={{ color: "#064E3B" }}>Clear</span>
@@ -464,6 +589,22 @@ const DeveloperLiveEditor = () => {
                         <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
                           <AlertTriangle className="w-3 h-3 mr-1" />
                           {flags.length} data issue{flags.length > 1 ? "s" : ""}
+                        </Badge>
+                      )}
+                      {(dupMap?.[p.id] ?? 0) > 0 && (
+                        <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 gap-1">
+                          <CopyIcon className="w-3 h-3" />
+                          {dupMap![p.id]} duplicate{dupMap![p.id] === 1 ? "" : "s"} merged
+                        </Badge>
+                      )}
+                      {p.is_manually_verified && (
+                        <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
+                          Verified
+                        </Badge>
+                      )}
+                      {p.merged_into_project_id && (
+                        <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 text-[10px]">
+                          Merged duplicate
                         </Badge>
                       )}
                     </div>
@@ -585,6 +726,17 @@ const DeveloperLiveEditor = () => {
                             <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View</span>
                           </Button>
                         )}
+                        {isOwner && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setConfirmDelete({ mode: "single", id: p.id, name: p.name })}
+                            className="border-red-300 text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 mr-1" />
+                            Delete
+                          </Button>
+                        )}
                       </>
 
                     )}
@@ -645,6 +797,33 @@ const DeveloperLiveEditor = () => {
           )}
         </section>
       )}
+
+      <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {confirmDelete?.mode === "bulk"
+                ? `Delete ${selected.size} project${selected.size === 1 ? "" : "s"}?`
+                : `Delete "${confirmDelete?.name ?? "this project"}"?`}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the project record. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (confirmDelete?.mode === "bulk") bulkDelete();
+                else if (confirmDelete?.id) deleteProject(confirmDelete.id);
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
