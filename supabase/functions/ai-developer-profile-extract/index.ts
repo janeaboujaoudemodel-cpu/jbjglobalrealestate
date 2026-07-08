@@ -1,8 +1,16 @@
 // Extracts developer-level fields from an uploaded PDF company profile /
-// brochure using Lovable AI (Gemini multimodal) and writes them into
-// enrichment_review_drafts with status='pending' for owner review.
+// brochure using Lovable AI (Gemini multimodal) and writes them DIRECTLY
+// into the `developers` table (owner-driven upload = trusted source).
 //
-// Never overwrites existing developer fields — the review UI only fills empties.
+// Rules (per owner instruction):
+//   - Description is ALWAYS replaced when the AI returns one (owner uploaded
+//     the official profile — it is the source of truth).
+//   - Other non-null extracted fields are written too. Nulls never wipe existing values.
+//   - An audit row is still written to `enrichment_review_drafts` with
+//     status='applied' so the change is traceable in Enrichment Review.
+//
+// The owner can still manually edit any field afterwards from the developer
+// admin page — this function only fills / replaces, never locks.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -25,16 +33,24 @@ const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not 
   "website": string|null,
   "email": string|null,
   "phone": string|null,
+  "ceo_name": string|null,
+  "parent_company": string|null,
+  "license_number": string|null,
   "total_projects": number|null,
   "completed_projects": number|null,
+  "offplan_projects": number|null,
+  "upcoming_units": number|null,
   "units_delivered": number|null,
+  "portfolio_worth": number|null,
   "years_of_experience": number|null,
   "specializations": string[]|null,
   "signature_projects": string[]|null,
   "awards": string[]|null,
   "leadership": string[]|null,
   "tagline": string|null,
-  "mission": string|null
+  "mission": string|null,
+  "linkedin_url": string|null,
+  "instagram_url": string|null
 }`;
 
 function json(body: unknown, status = 200) {
@@ -63,6 +79,48 @@ async function fetchFile(url: string) {
   const buf = new Uint8Array(await r.arrayBuffer());
   if (buf.byteLength > MAX_FILE_BYTES) throw new Error(`File larger than 20MB`);
   return { b64: toBase64(buf), mime: r.headers.get("content-type") || "application/pdf" };
+}
+
+/** Map the AI JSON to actual `developers` table columns. */
+function mapToDeveloperColumns(ex: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  const put = (col: string, val: unknown) => {
+    if (val === undefined || val === null) return;
+    if (typeof val === "string" && val.trim() === "") return;
+    if (Array.isArray(val) && val.length === 0) return;
+    out[col] = val;
+  };
+
+  put("description", ex.description);
+  put("founded_year", ex.founded_year);
+  put("headquarters", ex.headquarters);
+  put("website_url", ex.website);
+  put("ceo_name", ex.ceo_name);
+  put("parent_company", ex.parent_company);
+  put("license_number", ex.license_number);
+  put("completed_projects", ex.completed_projects);
+  put("offplan_projects", ex.offplan_projects);
+  put("upcoming_units", ex.upcoming_units);
+  put("total_units_delivered", ex.units_delivered);
+  put("portfolio_worth", ex.portfolio_worth);
+  put("linkedin_url", ex.linkedin_url);
+  put("instagram_url", ex.instagram_url);
+
+  // specialization is a single TEXT column — join arrays with commas.
+  if (Array.isArray(ex.specializations) && ex.specializations.length) {
+    put("specialization", (ex.specializations as string[]).map((s) => String(s).trim()).filter(Boolean).join(", "));
+  } else if (typeof ex.specializations === "string") {
+    put("specialization", ex.specializations);
+  }
+
+  // notable_projects is also a single TEXT column — join arrays with commas.
+  if (Array.isArray(ex.signature_projects) && ex.signature_projects.length) {
+    put("notable_projects", (ex.signature_projects as string[]).map((s) => String(s).trim()).filter(Boolean).join(", "));
+  } else if (typeof ex.signature_projects === "string") {
+    put("notable_projects", ex.signature_projects);
+  }
+
+  return out;
 }
 
 Deno.serve(async (req) => {
@@ -94,7 +152,7 @@ Deno.serve(async (req) => {
         messages: [{
           role: "user",
           content: [
-            { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the uploaded file for developer "${dev.name}" and return ONLY the JSON per schema. Never fabricate — unknown = null.\n\n${SCHEMA}` },
+            { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the entire uploaded document for developer "${dev.name}" and return ONLY the JSON per schema. Copy text verbatim from the document (do not paraphrase). The "description" MUST be a 2–4 paragraph verbatim / near-verbatim company overview taken from the document (About / Overview / Who We Are / Vision sections). Unknown fields = null. Never fabricate.\n\n${SCHEMA}` },
             filePart,
           ],
         }],
@@ -110,11 +168,24 @@ Deno.serve(async (req) => {
     let extracted: Record<string, unknown> = {};
     try { extracted = JSON.parse(extractJson(raw)); } catch { extracted = {}; }
 
-    // Snapshot current developer values (only for the extracted keys) so the UI can diff.
+    // Snapshot of current developer values for the audit row.
     const current: Record<string, unknown> = {};
     for (const k of Object.keys(extracted)) current[k] = (dev as any)[k] ?? null;
 
-    const { data: draft, error: dErr } = await admin.from("enrichment_review_drafts").insert({
+    // Map to actual columns and apply directly. Description is always replaced
+    // (when non-empty) because the owner uploaded the official profile.
+    const patch = mapToDeveloperColumns(extracted);
+    let updatedFields: string[] = [];
+    if (Object.keys(patch).length > 0) {
+      patch.last_enriched_at = new Date().toISOString();
+      patch.enrichment_source = "ai_company_profile";
+      const { error: updErr } = await admin.from("developers").update(patch).eq("id", developerId);
+      if (updErr) return json({ error: `developer update failed: ${updErr.message}` }, 500);
+      updatedFields = Object.keys(patch).filter((k) => k !== "last_enriched_at" && k !== "enrichment_source");
+    }
+
+    // Audit trail — mark as applied so it doesn't clutter the pending queue.
+    const { data: draft } = await admin.from("enrichment_review_drafts").insert({
       target_type: "developer",
       target_id: developerId,
       target_slug: dev.slug,
@@ -124,15 +195,14 @@ Deno.serve(async (req) => {
       extracted_fields: extracted,
       current_snapshot: current,
       ai_model: "google/gemini-2.5-flash",
-      status: "pending",
-    }).select("id").single();
-    if (dErr) return json({ error: dErr.message }, 500);
+      status: updatedFields.length > 0 ? "applied" : "empty",
+    }).select("id").maybeSingle();
 
     if (documentId) {
       await admin.from("developer_documents").update({ extracted_at: new Date().toISOString() }).eq("id", documentId);
     }
 
-    return json({ ok: true, draftId: draft.id, extracted });
+    return json({ ok: true, draftId: draft?.id ?? null, updatedFields, extracted });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "unknown" }, 500);
   }

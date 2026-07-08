@@ -182,6 +182,7 @@ import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
 import amraEntranceLobbyFeaturedSculpture from "@/assets/amra-brochure/entrance-lobby-featured-sculpture.jpg";
 import amraHelipadAirTaxi from "@/assets/amra-brochure/helipad-air-taxi.jpg";
 import amraSpinneysSupermarket from "@/assets/amra-brochure/spinneys-supermarket.jpg";
+import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -1817,13 +1818,21 @@ function ProjectDetailLayoutInner({
                    }}
                  />
                </div>
-               <DeveloperInfoCard
-                 developer={project.developer}
-                 projectName={project.name}
-                 editable
-               />
-             </div>
-           )}
+                <DeveloperInfoCard
+                  developer={project.developer}
+                  projectName={project.name}
+                  editable
+                />
+                {project.developer.id && (
+                  <div className="mt-4">
+                    <CompanyProfileCard
+                      developerId={project.developer.id}
+                      developerName={project.developer.name || "the developer"}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
 
            {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}

@@ -49,12 +49,20 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
 
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["developer-documents", developerId] });
+    qc.invalidateQueries({ queryKey: ["developer-company-profile", developerId] });
     qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
+    qc.invalidateQueries({ queryKey: ["admin-developer"] });
+    qc.invalidateQueries({ queryKey: ["developer"] });
+    qc.invalidateQueries({ queryKey: ["project"] });
+    qc.invalidateQueries({ queryKey: ["projects"] });
   };
+
+  const [lastExtraction, setLastExtraction] = useState<string[] | null>(null);
 
   const upload = useCallback(async (files: FileList | File[]) => {
     if (!files || (files as FileList).length === 0) return;
     setBusy(true);
+    setLastExtraction(null);
     let ok = 0;
     for (const file of Array.from(files)) {
       try {
@@ -64,8 +72,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           .upload(path, file, { contentType: file.type || "application/pdf" });
         if (upErr) throw upErr;
 
-        // Private bucket → create a long-lived signed URL for the AI extractor.
-        const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(path, 60 * 60);
+        // Private bucket → create a signed URL that outlives the AI extraction call.
+        const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(path, 60 * 60 * 6);
         const fileUrl = signed?.signedUrl || "";
 
         const { data: docRow, error: dbErr } = await supabase.from("developer_documents").insert({
@@ -79,21 +87,30 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
         }).select("id").single();
         if (dbErr) throw dbErr;
 
-        // Fire the AI extraction (fire-and-forget; the review page will surface it).
-        supabase.functions.invoke("ai-developer-profile-extract", {
-          body: { developerId, fileUrl, fileName: file.name, documentId: docRow.id },
-        }).then(({ error }) => {
-          if (error) toast.error(`AI extraction failed: ${error.message}`);
-          else toast.success("AI extraction complete — review it in Enrichment Review");
-          refresh();
-        });
+        // Await the AI extraction so the user sees exactly what got written.
+        toast.message(`Reading ${file.name} with AI…`, { duration: 4000 });
+        const { data: aiData, error: aiErr } = await supabase.functions.invoke(
+          "ai-developer-profile-extract",
+          { body: { developerId, fileUrl, fileName: file.name, documentId: docRow.id } },
+        );
+        if (aiErr) {
+          toast.error(`AI extraction failed: ${aiErr.message}`);
+        } else {
+          const updated: string[] = (aiData as any)?.updatedFields ?? [];
+          setLastExtraction(updated);
+          if (updated.length > 0) {
+            toast.success(`AI wrote ${updated.length} field${updated.length > 1 ? "s" : ""} into the developer profile`);
+          } else {
+            toast.message("AI ran but found no new information in this file");
+          }
+        }
         ok++;
       } catch (e: any) {
         console.error(e);
         toast.error(e.message || "Upload failed");
       }
     }
-    if (ok) toast.success(`Uploaded ${ok} file${ok > 1 ? "s" : ""} · AI extraction started`);
+    if (ok) toast.success(`Uploaded ${ok} file${ok > 1 ? "s" : ""}`);
     setBusy(false);
     refresh();
   }, [developerId]);
@@ -122,13 +139,15 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
             Owner · Company Profiles
           </p>
           <p className="text-[11px] text-[#1A1A1A]/55">
-            Upload PDFs for {developerName || "this developer"}. Lovable AI extracts fields — you approve.
+            Upload the developer's official PDF. AI reads it and instantly writes the description and profile fields for {developerName || "this developer"}. You can still edit every field manually below.
           </p>
         </div>
         <Link to="/owner/enrichment-review" className="text-xs font-semibold text-[#064E3B] hover:underline">
-          Review queue →
+          Audit log →
         </Link>
       </div>
+
+
 
       <label
         onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
@@ -142,12 +161,24 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           onChange={(e) => e.target.files && upload(e.target.files)} />
         {busy ? <Loader2 className="w-6 h-6 mx-auto animate-spin text-[#B89555]" /> : <Upload className="w-6 h-6 mx-auto text-[#B89555]" />}
         <div className="mt-2 text-sm font-semibold text-[#1A1A1A]">
-          {busy ? "Uploading…" : "Drop company profile PDFs here"}
+          {busy ? "Uploading & extracting with AI…" : "Drop company profile PDFs here"}
         </div>
         <div className="text-xs text-[#1A1A1A]/60 mt-0.5 inline-flex items-center gap-1">
-          <Sparkles className="w-3 h-3" /> AI reads it · you review before it publishes
+          <Sparkles className="w-3 h-3" /> AI extracts every field and replaces the description automatically
         </div>
       </label>
+
+      {lastExtraction && lastExtraction.length > 0 && (
+        <div className="mt-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-900">
+          <span className="font-semibold">AI updated {lastExtraction.length} field{lastExtraction.length > 1 ? "s" : ""}:</span>{" "}
+          {lastExtraction.join(", ")}
+        </div>
+      )}
+      {lastExtraction && lastExtraction.length === 0 && (
+        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+          AI ran but did not find any new fields in the uploaded file.
+        </div>
+      )}
 
       {docs.length > 0 && (
         <div className="mt-3 divide-y divide-[#B89555]/15 rounded-md border border-[#B89555]/20 bg-white">
