@@ -163,6 +163,24 @@ import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
 import amraSmegKitchen from "@/assets/amra-smeg-kitchen.jpg";
 import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
 import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
+// Brochure-verbatim generated assets (see brochure-verbatim-amenity-standard memory rule)
+import amraSnowShower from "@/assets/amra-brochure/snow-shower.jpg";
+import amraSmartRecoveryHub from "@/assets/amra-brochure/smart-recovery-hub.jpg";
+import amraIsabellaCucina from "@/assets/amra-brochure/isabella-cucina-italiana.jpg";
+import amraHunterBarrel from "@/assets/amra-brochure/hunter-and-barrel.jpg";
+import amraAllDayDining from "@/assets/amra-brochure/all-day-dining.jpg";
+import amraOrganicSuperMarket from "@/assets/amra-brochure/organic-super-market.jpg";
+import amraArtGallery from "@/assets/amra-brochure/art-gallery.jpg";
+import amraPharmacy from "@/assets/amra-brochure/pharmacy.jpg";
+import amraBowlingLanes from "@/assets/amra-brochure/bowling-lanes.jpg";
+import amraVrGameZone from "@/assets/amra-brochure/vr-game-zone.jpg";
+import amraGolfSimulator from "@/assets/amra-brochure/golf-simulator.jpg";
+import amraArcadePoolDarts from "@/assets/amra-brochure/arcade-pool-darts.jpg";
+import amraBookLoungeLibrary from "@/assets/amra-brochure/book-lounge-library.jpg";
+import amraRooftopSportsDeck from "@/assets/amra-brochure/rooftop-sports-deck.jpg";
+import amraBusinessZone from "@/assets/amra-brochure/business-zone.jpg";
+import amraParentChildStudio from "@/assets/amra-brochure/parent-child-studio.jpg";
+import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
