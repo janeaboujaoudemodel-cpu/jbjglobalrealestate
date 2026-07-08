@@ -94,7 +94,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
 
   return (
     <div className={className}>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {visible.map((amenity, idx) => {
           const Icon = getAmenityIcon(amenity);
           const photoUrl = findRealPhoto(amenity, amenityImages);
@@ -102,15 +102,15 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
           return (
             <div
               key={`${currentPage}-${idx}-${amenity}`}
-              className="group flex flex-col items-center gap-0 rounded-xl border border-[#B89555]/20 bg-card hover:border-[#B89555]/40 hover:bg-[#EFE6D6]/5 transition-all text-center overflow-hidden"
+              className="group flex flex-col gap-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] hover:border-[#B89555]/55 transition-all overflow-hidden shadow-sm"
             >
-              <div className={`w-full ${isCitiBuddy ? "h-44 bg-gradient-to-b from-[#F7F1E6] to-[#EFE6D6]" : "h-24"} overflow-hidden relative flex items-center justify-center`}>
+              <div className={`w-full h-40 overflow-hidden relative flex items-center justify-center ${isCitiBuddy ? "bg-[#F7F2EA]" : "bg-[#F7F2EA]"}`}>
                 {photoUrl ? (
                   <>
                     <img
                       src={photoUrl}
                       alt={amenity}
-                      className={`w-full h-full ${isCitiBuddy ? "object-contain p-0" : "object-cover group-hover:scale-105 transition-transform duration-500"}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = 'none';
@@ -126,13 +126,13 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                     </div>
                   </>
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center group-hover:bg-[#EFE6D6]/20 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6] flex items-center justify-center group-hover:bg-[#E8D7B8] transition-colors">
                     <Icon className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                 )}
               </div>
-              <div className="px-2 py-2.5">
-                <span className="text-xs text-muted-foreground leading-tight">
+              <div className="px-4 py-3 min-h-[64px] flex items-center">
+                <span className="text-sm font-semibold text-[#1A1A1A] leading-snug">
                   {amenity}
                 </span>
               </div>

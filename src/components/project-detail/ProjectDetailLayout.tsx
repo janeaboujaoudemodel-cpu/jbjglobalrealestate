@@ -161,6 +161,8 @@ import amraCryoChamber from "@/assets/amra-brochure/cryo-chamber.jpg";
 import amraHyperbaric from "@/assets/amra-brochure/hyperbaric-room.jpg";
 import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
 import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
+import amraSmegKitchen from "@/assets/amra-smeg-premium-kitchen.jpg";
+import amraFallbackVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -592,7 +594,7 @@ function ProjectDetailLayoutInner({
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
     const hasConstruction = true; // Always show construction section
-    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
+    const hasMedia = isAmraProject || !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard || isAmraProject;
@@ -825,7 +827,7 @@ function ProjectDetailLayoutInner({
       // Signature project USPs
       "Citi Buddy (AI Robot Companion)",
       "165+ wellness and lifestyle amenities",
-      "688,000 sq ft dedicated wellness area",
+      "750,000 sq ft of amenities",
       "Heli and air-taxi landing pad",
       "Yacht limo service and private marina deck",
       "In-room dining and all-day dining",
@@ -925,7 +927,7 @@ function ProjectDetailLayoutInner({
     const dedicated: Record<string, string> = {
       "Citi Buddy (AI Robot Companion)": citiBuddyRobotLocal,
       "165+ wellness and lifestyle amenities": amraAerialResort,
-      "688,000 sq ft dedicated wellness area": amraSpaPool,
+      "750,000 sq ft of amenities": amraSpaPool,
       "Heli and air-taxi landing pad": amraAerialResort,
       "Yacht limo service and private marina deck": amraPoolCabanas,
       "In-room dining and all-day dining": amraInRoomDining,
@@ -1029,8 +1031,9 @@ function ProjectDetailLayoutInner({
       { label: "Dubai International Airport", time: "40 minutes by road · 15 minutes by air taxi" },
       { label: "Al Khor Mangrove", time: "5 minutes by car" },
       { label: "Wynn Casino / Marjan nightlife", time: "15 minutes by car · 7 minutes by air taxi" },
-      { label: "Vida Resort", time: "Next to the project · approximately 25 meters" },
-      { label: "25hours Hotel / UAQ Downtown", time: "Confirm from official source" },
+      { label: "Vida Beach Resort Umm Al Quwain", time: "8–10 minutes by car" },
+      { label: "25hours Hotel Umm Al Quwain", time: "10–12 minutes by car" },
+      { label: "Umm Al Quwain Downtown", time: "12–15 minutes by car" },
     ];
     const overrideLabels = new Set(additions.map((item) => item.label.toLowerCase()));
     const cleanedBase = base.filter((item) => !overrideLabels.has(item.label.toLowerCase()));
@@ -1637,12 +1640,12 @@ function ProjectDetailLayoutInner({
             )}
 
            {/* CONSTRUCTION TIMELINE SECTION (Reelly-style) */}
-           {(project.construction_progress !== null && project.construction_progress !== undefined) && (
+           {(isAmraProject || project.construction_progress !== null && project.construction_progress !== undefined) && (
              <div ref={constructionRef} id="construction" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="construction" initial={project as any} /></div>
                <ConstructionTimelineSection
-                 constructionProgress={project.construction_progress}
-                 constructionStartDate={project.construction_start_date}
+                  constructionProgress={project.construction_progress ?? (isAmraProject ? 0 : null)}
+                  constructionStartDate={project.construction_start_date ?? (isAmraProject ? "2026-07-01" : null)}
                  expectedCompletion={project.expected_completion}
                  handoverDate={project.handover_date}
                  projectName={project.name}
@@ -1748,8 +1751,8 @@ function ProjectDetailLayoutInner({
                     standardInclusions={isAmraProject ? [
                       "Fully furnished & serviced apartment",
                       "Sea view from every apartment",
-                      "688,000 sq. ft dedicated wellness area (shared)",
-                      "Access to 140+ facilities across dedicated zones",
+                       "Access to 165+ amenities",
+                       "750,000 sq. ft of amenities",
                       "Dedicated marina for private yachts",
                       "Amra BNB one-stop short-stay management",
                       "Citi Buddy concierge via Citi Developers App",
@@ -1783,19 +1786,17 @@ function ProjectDetailLayoutInner({
                 <div className="jj-card-inner overflow-hidden p-0">
                   <div className={citiBuddyImageUrl ? "grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]" : "grid grid-cols-1"}>
                     {citiBuddyImageUrl && (
-                      <div className="relative bg-[#FDFBF7]">
+                      <div className="relative bg-[#F7F2EA]">
                         <SafeImage
                           src={citiBuddyImageUrl}
                           alt="Citi Buddy resident concierge robot"
-                          className="h-[320px] lg:h-full min-h-[320px] w-full object-contain p-5"
+                          className="h-[420px] lg:h-full min-h-[420px] w-full object-cover object-center p-0"
                           loading="eager"
                           decoding="async"
                         />
                         {/* Premium value chip — signals the AED 25K gift without competing with the pin card */}
-                        <div className="absolute top-4 left-4 rounded-full border border-[#B89555]/60 bg-white/92 px-3 py-1.5 text-[11px] font-semibold text-[#1A1A1A] shadow-sm">
-                          <span className="text-[#064E3B]">Included gift</span>
-                          <span className="mx-1.5 text-[#B89555]">·</span>
-                          <span>USD 25,000 value</span>
+                        <div className="absolute top-4 left-4 rounded-full border border-white/35 bg-[#064E3B] px-3 py-1.5 text-[11px] font-semibold text-white shadow-lg" data-no-contrast-guard>
+                          <span>Included gift · USD 25,000 value</span>
                         </div>
                       </div>
                     )}
@@ -1803,17 +1804,17 @@ function ProjectDetailLayoutInner({
                       <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-3">Complimentary with every residence</p>
                       <h3 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-2">Citi Buddy — your in-home robot concierge</h3>
                       <p className="text-[14px] leading-relaxed text-[#1A1A1A]/82">
-                        A <strong>USD 25,000</strong> Citi Buddy robot is gifted with every apartment — studio through 4-bedroom — and paired with the Citi Developers app for smart-home controls, concierge, dining, security alerts and short-stay management.
+                        A <strong>USD 25,000</strong> Citi Buddy robot is included with every apartment. It is a refined AI companion with touchscreen and voice control for home assistance, automation and daily tasks, paired with the Citi Developers Customer App for remote control.
                       </p>
 
                       <div className="mt-5 grid gap-2 sm:grid-cols-2">
                         {[
-                          "Smart-home & climate controls",
-                          "Concierge and in-room dining",
-                          "Housekeeping & maintenance requests",
-                          "Short-stay & yearly rental management",
-                          "Security alerts and access",
-                          "Owner dashboard — anytime",
+                          "Designed by Citi Vision",
+                          "AI agents for everyday tasks",
+                          "Smart parenting screen-time alerts",
+                          "256-bit encrypted privacy",
+                          "Remote control via Citi Developers App",
+                          "Assistant, nanny, elder/pet companion and 24/7 home guardian",
                         ].map((feature) => (
                           <div key={feature} className="flex items-center gap-2 rounded-md border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-[13px] font-semibold text-[#1A1A1A]">
                             <Check className="h-4 w-4 text-[#064E3B]" />
@@ -1828,15 +1829,18 @@ function ProjectDetailLayoutInner({
                   <div className="border-t border-[#B89555]/25" />
 
                   {/* Kitchen package — Smeg + Villeroy & Boch */}
-                  <div className="p-6 md:p-8 bg-[#FDFBF7]">
-                    <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Fully fitted kitchen · included</p>
-                        <h4 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] mt-1">Smeg Italian appliances & Villeroy &amp; Boch tableware</h4>
-                      </div>
-                      <span className="rounded-full border border-[#B89555]/50 bg-white px-3 py-1 text-[11px] font-semibold text-[#064E3B]">Move-in ready</span>
-                    </div>
-                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="bg-[#FDFBF7]">
+                    <div className="grid lg:grid-cols-[0.9fr_1.1fr] overflow-hidden">
+                      <SafeImage src={amraSmegKitchen} alt="Premium Italian kitchen appliances and tableware" className="h-full min-h-[360px] w-full object-cover" loading="lazy" width={1400} height={900} />
+                      <div className="p-6 md:p-8">
+                        <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
+                          <div>
+                            <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Fully fitted kitchen · included</p>
+                            <h4 className="text-xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">Smeg Italian appliances & Villeroy &amp; Boch tableware</h4>
+                          </div>
+                          <span className="rounded-full border border-[#B89555]/50 bg-white px-3 py-1 text-[11px] font-semibold text-[#064E3B]">Move-in ready</span>
+                        </div>
+                        <div className="grid gap-2 sm:grid-cols-2">
                       {[
                         "Smeg fridge / refrigerator",
                         "Smeg dishwasher",
@@ -1856,6 +1860,8 @@ function ProjectDetailLayoutInner({
                           {item}
                         </div>
                       ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1899,12 +1905,12 @@ function ProjectDetailLayoutInner({
             )}
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
-           {(project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
+            {(isAmraProject || project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
              <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
-                {(project.video_url || project.virtual_tour_url) && (
+                 {(project.video_url || project.virtual_tour_url || isAmraProject) && (
                   <ProjectMediaSection
-                    videoUrl={project.video_url}
+                    videoUrl={project.video_url || (isAmraProject ? amraFallbackVideoAsset.url : null)}
                     virtualTourUrl={project.virtual_tour_url}
                     projectName={project.name}
                   />
@@ -1938,7 +1944,7 @@ function ProjectDetailLayoutInner({
                   <span className="ml-2"><OwnerSectionEditor projectId={project.id} section="location" initial={project as any} /></span>
                 </h3>
                 <a
-                  href={hasProjectCoords ? `https://maps.google.com/?q=${project.latitude},${project.longitude}` : `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}`}
+                  href={hasProjectCoords ? `https://www.google.com/maps/search/?api=1&query=${project.latitude},${project.longitude}` : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-emerald-action="true"
@@ -2230,7 +2236,7 @@ function ProjectDetailLayoutInner({
                          {mortgageBlockedReason || "Mortgage availability will be confirmed closer to handover."}
                        </p>
                        <p>
-                         In practice: whatever percentage of the price is payable <strong>after completion / handover</strong> (for example a 60/40 plan means 40% on/after handover) is the portion a UAE bank can convert into a mortgage — subject to bank approval. Any pre-completion instalments follow the developer's own payment schedule. Speak to our advisors for the exact structure of this project.
+                         For this project, the <strong>30% post-handover balance</strong> is the portion that can be mortgage-financed through a UAE bank after handover, subject to bank approval. The pre-handover 70% follows the developer payment schedule.
                        </p>
                      </div>
                   </div>

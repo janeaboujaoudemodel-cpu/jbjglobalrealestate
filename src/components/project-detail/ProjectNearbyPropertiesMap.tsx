@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getMapTiles } from "@/constants/mapTiles";
+import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import { SAFE_LEAFLET_MAP_OPTIONS, SAFE_TILE_LAYER_OPTIONS } from "@/utils/leafletSafety";
 import { PricePill } from "@/components/ui/price-pill";
 import { DeveloperLink } from "@/components/ui/developer-link";
@@ -22,27 +22,22 @@ const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (char) => ({ "&"
 
 // Premium project pin — minimal white label (no red pill, no all-caps),
 // paired with a discreet gold-outlined pin. Keeps the map feeling editorial.
-const buildCurrentPin = (projectName: string) => `
-<div style="position:relative;width:160px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;">
-  <div style="background:rgba(10,20,15,0.55);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;font-weight:600;font-size:12px;letter-spacing:0.02em;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.35);backdrop-filter:blur(6px);white-space:nowrap;margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,0.55);max-width:150px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(projectName)}</div>
+const buildCurrentPin = () => `
+<div style="position:relative;width:42px;height:54px;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;">
   <svg xmlns="http://www.w3.org/2000/svg" width="42" height="54" viewBox="0 0 58 74" fill="none">
     <defs>
-      <linearGradient id="jjPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#0B2A20"/><stop offset="0.55" stop-color="#064E3B"/><stop offset="1" stop-color="#010806"/>
-      </linearGradient>
       <filter id="jjPinShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="6" stdDeviation="4" flood-color="#000000" flood-opacity="0.55"/></filter>
     </defs>
-    <path filter="url(#jjPinShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#jjPin)" stroke="#F4E3A8" stroke-width="1.6"/>
-    <circle cx="29" cy="29" r="6" fill="#FFFFFF"/>
+    <path filter="url(#jjPinShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="#D71920" stroke="#FFFFFF" stroke-width="2"/>
   </svg>
 </div>`;
 
-const createCurrentPinIcon = (projectName: string) => L.divIcon({
-  html: buildCurrentPin(projectName),
+const createCurrentPinIcon = () => L.divIcon({
+  html: buildCurrentPin(),
   className: "jj-map-pin",
-  iconSize: [160, 96],
-  iconAnchor: [80, 96],
-  popupAnchor: [0, -96],
+  iconSize: [42, 54],
+  iconAnchor: [21, 54],
+  popupAnchor: [0, -54],
 });
 
 // Champagne/gold price pill for peer Citi Developer projects.
@@ -139,6 +134,7 @@ export default function ProjectNearbyPropertiesMap({
   const { formatPrice } = useCurrency();
   const navigate = useNavigate();
   const tiles = getMapTiles(language);
+  const [mapView, setMapView] = useState<MapViewType>("satellite");
 
   const hasOwnCoords =
     typeof latitude === "number" && typeof longitude === "number" && !isNaN(latitude) && !isNaN(longitude);
@@ -360,7 +356,7 @@ export default function ProjectNearbyPropertiesMap({
           touchZoom={true}
           dragging={true}
           style={{ height: "100%", width: "100%" }}
-          zoomControl={true}
+          zoomControl={false}
           attributionControl={false}
           zoomSnap={0.25}
           zoomDelta={0.5}
@@ -369,13 +365,20 @@ export default function ProjectNearbyPropertiesMap({
         >
           <MapResizeRuntime />
           <FitBoundsRuntime points={fitPoints} />
-          <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles.satellite.url} attribution={tiles.satellite.attribution} {...(tiles.satellite.subdomains ? { subdomains: tiles.satellite.subdomains } : {})} maxZoom={19} />
+          <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles[mapView].url} attribution={tiles[mapView].attribution} {...(tiles[mapView].subdomains ? { subdomains: tiles[mapView].subdomains } : {})} maxZoom={19} />
+          <div className="absolute top-4 left-4 z-[1000] inline-flex overflow-hidden rounded-xl border border-[#B89555]/45 bg-[#FDFBF7]/95 shadow-lg">
+            {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
+              <button key={view} type="button" onClick={() => setMapView(view)} className={`px-3 py-2 text-xs font-bold capitalize ${mapView === view ? "jj-emerald-action" : "text-[#064E3B]"}`}>
+                {view}
+              </button>
+            ))}
+          </div>
           <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 
 
         {/* Current project marker (red, with attached name label) */}
         {hasOwnCoords && (
-          <Marker position={[latitude as number, longitude as number]} icon={createCurrentPinIcon(currentProjectName)}>
+          <Marker position={[latitude as number, longitude as number]} icon={createCurrentPinIcon()}>
             <Popup className="jj-map-popup" closeButton={false}>
               <div className="jj-map-popup-card min-w-[200px] max-w-[260px] p-3 bg-white rounded-2xl">
                 <div className="text-sm font-bold text-[#1A1A1A]">{currentProjectName}</div>

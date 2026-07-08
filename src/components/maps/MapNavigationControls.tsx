@@ -17,8 +17,8 @@ export function MapNavigationControls({ latitude, longitude }: MapNavigationCont
     action();
   };
 
-  const handleZoomIn = () => map.zoomIn(1, { animate: false });
-  const handleZoomOut = () => map.zoomOut(1, { animate: false });
+  const handleZoomIn = () => map.setZoom(map.getZoom() + 1, { animate: false });
+  const handleZoomOut = () => map.setZoom(map.getZoom() - 1, { animate: false });
   const handleRecenter = () => {
     map.setView([latitude, longitude], map.getZoom(), { animate: false });
   };
@@ -68,8 +68,8 @@ export function MapNavigationControlsStandalone({
     mapInstance.stop();
     action();
   };
-  const handleZoomIn = () => mapInstance.zoomIn(1, { animate: false });
-  const handleZoomOut = () => mapInstance.zoomOut(1, { animate: false });
+  const handleZoomIn = () => mapInstance.setZoom(mapInstance.getZoom() + 1, { animate: false });
+  const handleZoomOut = () => mapInstance.setZoom(mapInstance.getZoom() - 1, { animate: false });
   const handleRecenter = () => {
     mapInstance.setView([latitude, longitude], mapInstance.getZoom(), { animate: false });
   };
