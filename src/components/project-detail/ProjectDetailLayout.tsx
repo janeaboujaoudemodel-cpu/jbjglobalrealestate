@@ -541,6 +541,7 @@ function ProjectDetailLayoutInner({
   // it alongside the other project documents (brochure, payment plan, etc.).
   const developerId = project.developer?.id;
   const developerName = project.developer?.name || "Developer";
+  const developerLogoUrl = project.developer?.logo_url || null;
   const { data: developerCompanyProfileDoc } = useQuery({
     queryKey: ["project-developer-company-profile", developerId],
     enabled: !!developerId,
@@ -566,12 +567,16 @@ function ProjectDetailLayoutInner({
         url: signed.signedUrl,
         name: data.file_name || `${developerName} Company Profile`,
         display_title: `${developerName} Company Profile`,
-        cover_image_url: null,
+        // LOCKED RULE: Company Profile book always uses the developer's logo
+        // as the cover — never a random project photo. Falls back gracefully
+        // to null so the book renders the branded emerald placeholder.
+        cover_image_url: developerLogoUrl,
         is_visible: true,
         allow_download: true,
       } as ProjectDetailData["documents"][number];
     },
   });
+
 
   const effectiveDocuments = useMemo(() => {
     const base = (() => {

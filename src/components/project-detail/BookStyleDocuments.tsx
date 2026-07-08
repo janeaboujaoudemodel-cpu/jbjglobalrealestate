@@ -134,19 +134,47 @@ export default function BookStyleDocuments({
             const coverUrl = doc.cover_image_url || projectImageUrl;
             const filename = `${projectName.replace(/\s+/g, "-")}-${title.replace(/\s+/g, "-")}.pdf`;
 
+          const isCompanyProfile = detected.kind === "company_profile";
           return (
             <motion.button
               key={doc.id}
               onClick={() => handleBookClick(doc, title, filename)}
-              className="snap-start flex-shrink-0 group relative rounded-xl overflow-hidden ring-1 ring-[#B89555]/40 hover:ring-[#B89555] shadow-[0_12px_30px_-12px_rgba(0,0,0,0.45),0_4px_12px_-4px_rgba(0,0,0,0.25)] transition-all bg-[#1A1A1A]"
+              className="snap-start flex-shrink-0 group relative rounded-xl overflow-hidden ring-1 ring-[#B89555]/50 hover:ring-[#B89555] shadow-[0_18px_40px_-14px_rgba(0,0,0,0.55),0_6px_14px_-6px_rgba(0,0,0,0.35)] transition-all bg-[#1A1A1A]"
               style={{ width: 200, height: 280 }}
               whileHover={{ y: -6, scale: 1.03 }}
               transition={{ type: "spring", stiffness: 300 }}
               data-no-contrast-guard
             >
-              {/* Book cover image — top portion */}
+              {/* Book cover — top portion. Company Profile books display the
+                  developer LOGO on a champagne backdrop (locked rule) instead
+                  of a cropped project photo. */}
               <div className="absolute inset-x-0 top-0 h-[62%] overflow-hidden">
-                {coverUrl ? (
+                {isCompanyProfile ? (
+                  <div
+                    className="w-full h-full flex items-center justify-center p-6"
+                    style={{
+                      background:
+                        "radial-gradient(120% 90% at 50% 0%, #FDFBF7 0%, #F5EEDC 55%, #E7D7B0 100%)",
+                    }}
+                  >
+                    {coverUrl ? (
+                      <SafeImage
+                        src={coverUrl}
+                        alt={title}
+                        className="max-w-[78%] max-h-[78%] w-auto h-auto object-contain drop-shadow-[0_4px_10px_rgba(6,78,59,0.18)] transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <span
+                        className="text-[#064E3B] text-3xl font-medium tracking-tight text-center leading-tight"
+                        style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                      >
+                        {title}
+                      </span>
+                    )}
+                    {/* Gilded frame */}
+                    <div className="absolute inset-3 border border-[#B89555]/40 rounded-md pointer-events-none" />
+                  </div>
+                ) : coverUrl ? (
                   <SafeImage
                     src={coverUrl}
                     alt={title}
@@ -156,37 +184,55 @@ export default function BookStyleDocuments({
                   <div className="w-full h-full bg-gradient-to-br from-[#2a2a2a] to-[#1A1A1A]" />
                 )}
                 {/* Subtle vignette on image */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/32 via-transparent to-[#1A1A1A]/5" />
+                {!isCompanyProfile && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/32 via-transparent to-[#1A1A1A]/5" />
+                )}
               </div>
 
               {/* Spine effect on left edge */}
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
-              <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
+              <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/50 z-10" />
 
-              {/* Bottom panel — title + action buttons */}
+              {/* Bottom panel — premium title plate + action buttons */}
               <div
                 data-no-contrast-guard
                 data-on-dark
-                className="absolute inset-x-0 bottom-0 border-t border-black/30 px-3 pt-2 pb-2.5 flex flex-col gap-1.5 allow-white"
+                className="absolute inset-x-0 bottom-0 border-t border-[#B89555]/35 px-3.5 pt-3 pb-3 flex flex-col gap-2 allow-white"
                 style={{
-                  background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
+                  background:
+                    "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                   color: "#FFFFFF",
                 }}
               >
-                <p
-                  className="text-[11px] font-semibold leading-tight text-white line-clamp-2 allow-white"
-                  style={{ color: "#FFFFFF", fontFamily: "'Cormorant Garamond', serif", letterSpacing: "0.01em" }}
-                  title={title}
-                >
-                  {title}
-                </p>
-                <div className="flex items-center gap-1.5">
+                {/* Title plate — gold eyebrow rule + serif display */}
+                <div className="flex flex-col items-center text-center gap-1">
+                  <span
+                    className="block h-px w-8 bg-[#B89555]/70 allow-white"
+                    aria-hidden
+                  />
+                  <p
+                    className="text-white line-clamp-2 allow-white"
+                    style={{
+                      color: "#FFFFFF",
+                      fontFamily: "'Cormorant Garamond', 'Cormorant', serif",
+                      fontSize: "15px",
+                      lineHeight: 1.15,
+                      fontWeight: 500,
+                      letterSpacing: "0.015em",
+                      textShadow: "0 1px 1px rgba(0,0,0,0.35)",
+                    }}
+                    title={title}
+                  >
+                    {title}
+                  </p>
+                </div>
+                <div className="flex items-center gap-1.5 pt-0.5">
                   <span
                     role="button"
                     tabIndex={0}
                     onClick={(e) => { e.stopPropagation(); handleBookClick(doc, title, filename); }}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); handleBookClick(doc, title, filename); } }}
-                    className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] uppercase tracking-[0.16em] font-bold bg-white/15 border border-white/45 hover:bg-white/25 transition-colors allow-white"
+                    className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] uppercase tracking-[0.18em] font-semibold bg-white/10 border border-[#B89555]/55 hover:bg-white/20 transition-colors allow-white"
                     style={{ color: "#FFFFFF" }}
                   >
                     <Eye className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
@@ -207,7 +253,7 @@ export default function BookStyleDocuments({
                         onDownload(proxied, filename);
                       }
                     }}
-                    className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] uppercase tracking-[0.16em] font-bold bg-white/15 border border-white/45 hover:bg-white/25 transition-colors allow-white"
+                    className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1 rounded-md text-[10px] uppercase tracking-[0.18em] font-semibold bg-white/10 border border-[#B89555]/55 hover:bg-white/20 transition-colors allow-white"
                     style={{ color: "#FFFFFF" }}
                   >
                     <Download className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
@@ -215,6 +261,7 @@ export default function BookStyleDocuments({
                   </span>
                 </div>
               </div>
+
 
 
 
