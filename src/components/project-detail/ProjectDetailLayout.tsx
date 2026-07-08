@@ -161,8 +161,10 @@ import amraCryoChamber from "@/assets/amra-brochure/cryo-chamber.jpg";
 import amraHyperbaric from "@/assets/amra-brochure/hyperbaric-room.jpg";
 import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
 import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
+import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
+import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
+import amenityAppConcierge from "@/assets/amenity-app-concierge.jpg";
 import amraSmegKitchen from "@/assets/amra-smeg-premium-kitchen.jpg";
-import amraFallbackVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -826,6 +828,9 @@ function ProjectDetailLayoutInner({
     const roster = [
       // Signature project USPs
       "Citi Buddy (AI Robot Companion)",
+      "Smart Home Automation",
+      "IoT-enabled apartments",
+      "24/7 Security with 256-bit encryption",
       "165+ wellness and lifestyle amenities",
       "750,000 sq ft of amenities",
       "Heli and air-taxi landing pad",
@@ -920,19 +925,23 @@ function ProjectDetailLayoutInner({
   const amraAmenityImages = useMemo(() => {
     const mapped: Record<string, string> = { ...(project.amenity_images || {}) };
     if (!isAmraProject) return mapped;
+    const galleryImage = (index: number, fallback: string) => images[index]?.url || fallback;
 
     // 1:1 mapping — every title below is an exact key from `amraAmenities` and
     // resolves to a brochure-cropped photo (or, for Citi Buddy, the official
     // robot render). Titles absent from this map fall back to an icon tile.
     const dedicated: Record<string, string> = {
       "Citi Buddy (AI Robot Companion)": citiBuddyRobotLocal,
+      "Smart Home Automation": amenityAppConcierge,
+      "IoT-enabled apartments": amraCitiApp,
+      "24/7 Security with 256-bit encryption": galleryImage(34, amraGrandLobby),
       "165+ wellness and lifestyle amenities": amraAerialResort,
       "750,000 sq ft of amenities": amraSpaPool,
       "Heli and air-taxi landing pad": amraAerialResort,
-      "Yacht limo service and private marina deck": amraPoolCabanas,
+      "Yacht limo service and private marina deck": amraYachtPartnerships,
       "In-room dining and all-day dining": amraInRoomDining,
       "App-enabled short-stay management (Amra B&B)": citiBuddyDocumentCoverAsset.url,
-      "Fully furnished apartments": amraFurnishedApts,
+      "Fully furnished apartments": galleryImage(2, amraStudio),
       "Fully serviced apartments": amraGrandLobby,
       "Full sea view & direct beach access": amraSeaTurtles,
 
@@ -1021,7 +1030,7 @@ function ProjectDetailLayoutInner({
     // Legacy aliases
     mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
     return mapped;
-  }, [amraAmenities, isAmraProject, project.amenity_images]);
+  }, [amraAmenities, images, isAmraProject, project.amenity_images]);
 
   const amraLocationDistances = useMemo(() => {
     const base = project.location_distances || [];
