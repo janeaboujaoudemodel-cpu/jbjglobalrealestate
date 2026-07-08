@@ -282,7 +282,7 @@ const SUB_NAV_TABS = [
   { id: "construction", label: "Progress", icon: HardHat },
   { id: "developer", label: "Developer", icon: Building2 },
   { id: "usp", label: "Highlights", icon: Star },
-  { id: "floor-plans", label: "Floor Plans", icon: Layers },
+  
   { id: "house-details", label: "Specs", icon: Home },
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "media", label: "Media", icon: Video },
