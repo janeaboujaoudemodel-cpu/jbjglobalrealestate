@@ -72,7 +72,7 @@ Deno.serve(async (req) => {
         notes: b.notes ?? null,
         source: "public_gate_signup",
         submission_source: "public_gate",
-        source_page: b.source_page ?? null,
+        
         page_source: b.source_page ?? null,
         status: "new",
         user_agent,
