@@ -62,14 +62,14 @@ export default function HouseDetailsSection({
   standardInclusions,
   projectName,
 }: HouseDetailsSectionProps) {
+  const isAmra = /amra/i.test(projectName);
   // Build the details list from available data
   const details: DetailItem[] = [];
 
   if (buildingType) {
-    details.push({ icon: Home, label: "Building Type", value: buildingType });
+    details.push({ icon: Home, label: "Residence Type", value: buildingType });
   }
   if (floors && floors > 3) {
-    const isAmra = /amra/i.test(projectName);
     details.push({ 
       icon: Layers, 
       label: isAmra ? "Building Height" : "Number of Floors", 
@@ -108,40 +108,71 @@ export default function HouseDetailsSection({
     return null;
   }
 
+  const featuredDetails = details.slice(0, 3);
+  const remainingDetails = details.slice(3);
+
   return (
-    <div className="jj-card-inner">
-      <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-6">
-        <Building2 className="w-5 h-5 text-[#1A1A1A]" />
-        House Details
-      </h3>
+    <div className="jj-card-inner overflow-hidden p-0">
+      <div className="border-b border-[#B89555]/25 bg-[#FDFBF7] p-6 md:p-8">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#1A1A1A]/55">
+          {isAmra ? "Private resort residence" : "Property specifications"}
+        </p>
+        <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
+          <Building2 className="w-5 h-5 text-[#1A1A1A]" />
+          House Details
+        </h3>
+      </div>
 
       {/* Main Specifications Grid */}
       {details.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-          {details.map((detail, idx) => (
+        <div className="p-6 md:p-8">
+          <div className="grid gap-4 md:grid-cols-3 mb-5">
+            {featuredDetails.map((detail, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl border border-[#B89555]/35 bg-[#F7F2EA] p-5 min-h-[150px] flex flex-col justify-between"
+              >
+                <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#FDFBF7]">
+                  <detail.icon className="w-5 h-5 text-[#064E3B]" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-[#1A1A1A]/58 mb-1.5">
+                    {detail.label}
+                  </p>
+                  <p className="text-lg md:text-xl font-semibold leading-snug text-[#1A1A1A]">
+                    {detail.value}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {remainingDetails.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {remainingDetails.map((detail, idx) => (
             <div
               key={idx}
-              data-surface="emerald"
-              className="jj-house-detail-card p-4 rounded-xl border border-[#B89555]/35 transition-all"
-              style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}
+              className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4 transition-all hover:border-[#B89555]/60"
             >
-              <div data-icon-circle="true" className="w-10 h-10 rounded-full bg-white/12 border border-white/25 flex items-center justify-center mb-3" style={{ ['--jj-icon-lock-size' as any]: '2.5rem' }}>
-                <detail.icon className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <div className="w-9 h-9 rounded-full border border-[#B89555]/35 bg-[#F7F2EA] flex items-center justify-center mb-3">
+                <detail.icon className="w-4.5 h-4.5 text-[#064E3B]" />
               </div>
-              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "rgba(255,255,255,0.76)", WebkitTextFillColor: "rgba(255,255,255,0.76)" }}>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-1 text-[#1A1A1A]/55">
                 {detail.label}
               </p>
-              <p className="text-lg font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+              <p className="text-base font-semibold text-[#1A1A1A] leading-snug">
                 {detail.value}
               </p>
             </div>
-          ))}
+              ))}
+            </div>
+          )}
         </div>
       )}
 
       {/* Additional Features */}
       {features && features.length > 0 && (
-        <div>
+        <div className="px-6 md:px-8 pb-6 md:pb-8">
           <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
             Property Features
           </h4>
@@ -161,7 +192,7 @@ export default function HouseDetailsSection({
 
       {/* Standard Features (always show a few) */}
       {details.length > 0 && (
-        <div className="mt-6 pt-6 border-t border-border">
+        <div className="px-6 md:px-8 pb-6 md:pb-8 pt-6 border-t border-[#B89555]/25">
           <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
             Standard Inclusions
           </h4>
@@ -169,12 +200,10 @@ export default function HouseDetailsSection({
             {standardFeatures.filter((feature, index, list) => list.findIndex((item) => item.label.toLowerCase() === feature.label.toLowerCase()) === index).map((feature, idx) => (
               <div
                 key={idx}
-                data-surface="emerald"
-                className="jj-house-inclusion-pill flex items-center gap-2 px-4 py-2 rounded-full border border-[#B89555]/35"
-                style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}
+                className="jj-house-inclusion-pill flex items-center gap-2 px-4 py-2 rounded-full border border-[#B89555]/35 bg-[#FDFBF7]"
               >
-                <feature.icon className="w-4 h-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                <span className="text-sm font-medium" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{feature.label}</span>
+                <feature.icon className="w-4 h-4 text-[#064E3B]" />
+                <span className="text-sm font-medium text-[#1A1A1A]">{feature.label}</span>
               </div>
             ))}
           </div>
