@@ -109,55 +109,75 @@ export default function Signup() {
           </ol>
         </div>
 
-        <div className="bg-white border border-[#B89555]/30 rounded-md p-5 sm:p-8">
-          {step === 0 && <CategoryStep value={category} onChange={setCategory} />}
-          {step === 1 && category && (
-            <CategoryFields
-              category={category}
-              data={categoryData}
-              onChange={(p) => setCategoryData((prev) => ({ ...prev, ...p }))}
+        <form
+          onSubmit={(e) => { e.preventDefault(); if (step === 2 && !loading) submit(); }}
+          autoComplete="on"
+          className="animate-fade-in"
+        >
+          {/* Hidden username hint so Chrome pairs email+password on the last step */}
+          {step !== 2 && (
+            <input
+              type="text"
+              name="username"
+              autoComplete="username"
+              value={common.email || ""}
+              readOnly
+              tabIndex={-1}
+              aria-hidden="true"
+              className="sr-only"
             />
           )}
-          {step === 2 && (
-            <CommonStep
-              data={common}
-              onChange={(p) => setCommon((prev) => ({ ...prev, ...p }))}
-              services={services}
-              setServices={setServices}
-            />
-          )}
-        </div>
 
-        <div className="mt-6 flex items-center justify-between">
-          <Button
-            type="button"
-            variant="ghost"
-            disabled={step === 0 || loading}
-            onClick={() => setStep((s) => Math.max(0, s - 1))}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back
-          </Button>
+          <div className="bg-white border border-[#B89555]/30 rounded-md p-5 sm:p-8 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-12px_rgba(6,78,59,0.10)]">
+            {step === 0 && <CategoryStep value={category} onChange={setCategory} />}
+            {step === 1 && category && (
+              <CategoryFields
+                category={category}
+                data={categoryData}
+                onChange={(p) => setCategoryData((prev) => ({ ...prev, ...p }))}
+              />
+            )}
+            {step === 2 && (
+              <CommonStep
+                data={common}
+                onChange={(p) => setCommon((prev) => ({ ...prev, ...p }))}
+                services={services}
+                setServices={setServices}
+              />
+            )}
+          </div>
 
-          {step < 2 ? (
+          <div className="mt-6 flex items-center justify-between">
             <Button
               type="button"
-              disabled={!canNext}
-              onClick={() => setStep((s) => Math.min(2, s + 1))}
-              className="bg-[#064E3B] hover:bg-[#053929] text-white"
+              variant="ghost"
+              disabled={step === 0 || loading}
+              onClick={() => setStep((s) => Math.max(0, s - 1))}
             >
-              Continue <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back
             </Button>
-          ) : (
-            <Button
-              type="button"
-              disabled={loading}
-              onClick={submit}
-              className="bg-[#064E3B] hover:bg-[#053929] text-white"
-            >
-              {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating…</> : "Create account"}
-            </Button>
-          )}
-        </div>
+
+            {step < 2 ? (
+              <Button
+                type="button"
+                disabled={!canNext}
+                onClick={() => setStep((s) => Math.min(2, s + 1))}
+                className="bg-[#064E3B] hover:bg-[#053929] text-white transition-all active:scale-[0.98]"
+              >
+                Continue <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                disabled={loading}
+                className="bg-[#064E3B] hover:bg-[#053929] text-white transition-all active:scale-[0.98] shadow-[0_10px_24px_-12px_rgba(6,78,59,0.55)]"
+              >
+                {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating…</> : "Create account"}
+              </Button>
+            )}
+          </div>
+        </form>
+
 
         <p className="mt-6 text-center text-xs text-[#1A1A1A]/60">
           Already registered?{" "}
