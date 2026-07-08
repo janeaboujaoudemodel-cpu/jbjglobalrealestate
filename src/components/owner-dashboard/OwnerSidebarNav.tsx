@@ -109,8 +109,10 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Workflow Automation", icon: Zap, path: "/owner/automations" },
       { label: "Meeting Hub", icon: Video, path: "/meeting-center" },
       { label: "AI Meeting Summarizer", icon: Brain, path: "/ai-meeting-summarizer" },
+      { label: "Agent Integrations (MCP)", icon: Plug, path: "/owner/agent-integrations" },
     ],
   },
+
   {
     label: "CREATIVE",
     items: [
