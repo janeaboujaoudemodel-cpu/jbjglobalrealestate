@@ -41,6 +41,7 @@ export default function QuickFactsBar({
   saleStatus,
   handoverDate,
   updatedAt,
+  showUpdated = false,
 }: QuickFactsBarProps) {
   const synced = getProjectStatus({
     handover_date: handoverDate,
