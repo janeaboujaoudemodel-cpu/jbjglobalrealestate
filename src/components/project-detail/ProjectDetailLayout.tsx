@@ -1748,8 +1748,6 @@ function ProjectDetailLayoutInner({
                     standardInclusions={isAmraProject ? [
                       "Fully furnished & serviced apartment",
                       "Sea view from every apartment",
-                      "70/30 payment plan with 3-year post-handover period",
-                      "Delivery by Q4 2029",
                       "688,000 sq. ft dedicated wellness area (shared)",
                       "Access to 140+ facilities across dedicated zones",
                       "Dedicated marina for private yachts",
