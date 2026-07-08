@@ -1626,41 +1626,40 @@ function ProjectDetailLayoutInner({
 
 
           {/* Quick Stats Grid - Premium gold border visible */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
-              <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" scope="quick_facts" label="Edit starting price">
-                <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-price-orange break-words leading-tight tabular-nums">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-12">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card px-3 py-4 md:px-4 md:py-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 min-h-[98px] flex flex-col justify-center overflow-hidden">
+              <p className="text-[10px] md:text-[11px] text-muted-foreground uppercase tracking-wider leading-tight break-words">Starting Price</p>
+              <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" scope="quick_facts" label="Edit starting price" className="mt-2 w-full min-w-0 max-w-full justify-center flex-wrap gap-1.5">
+                <p className="max-w-full min-w-0 text-sm md:text-base font-bold text-price-orange whitespace-normal break-words [overflow-wrap:anywhere] leading-tight tabular-nums">
                   {typeof project.price_from === "number" && project.price_from > 0
                     ? priceRangeText
                     : "Price TBA"}
                 </p>
               </InlineEditable>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
-              <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" scope="quick_facts" label="Edit handover date">
-                <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-foreground break-words leading-tight">{publicProjectStatus}</p>
+            <div className="rounded-xl border-2 border-[#B89555] bg-card px-3 py-4 md:px-4 md:py-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 min-h-[98px] flex flex-col justify-center overflow-hidden">
+              <p className="text-[10px] md:text-[11px] text-muted-foreground uppercase tracking-wider leading-tight break-words">Handover</p>
+              <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" scope="quick_facts" label="Edit handover date" className="mt-2 w-full min-w-0 max-w-full justify-center flex-wrap gap-1.5">
+                <p className="max-w-full min-w-0 text-sm md:text-base font-bold text-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-tight">{publicProjectStatus}</p>
               </InlineEditable>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
-              <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-foreground break-words leading-tight">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card px-3 py-4 md:px-4 md:py-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 min-h-[98px] flex flex-col justify-center overflow-hidden">
+              <p className="text-[10px] md:text-[11px] text-muted-foreground uppercase tracking-wider leading-tight break-words">Bedrooms</p>
+              <p className="mt-2 max-w-full min-w-0 text-sm md:text-base font-bold text-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-tight">
                 {bedroomsText || deriveBedroomsFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
-              <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">{plotSizeText ? "Plot size" : "Size"}</p>
-              <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-foreground break-words leading-tight tabular-nums">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card px-3 py-4 md:px-4 md:py-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 min-h-[98px] flex flex-col justify-center overflow-hidden">
+              <p className="text-[10px] md:text-[11px] text-muted-foreground uppercase tracking-wider leading-tight break-words">{plotSizeText ? "Plot size" : "Size"}</p>
+              <p className="mt-2 max-w-full min-w-0 text-sm md:text-base font-bold text-foreground whitespace-normal break-words [overflow-wrap:anywhere] leading-tight tabular-nums">
                 {plotSizeText || sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
           </div>
 
-          {/* QUICK FACTS BAR - Reelly-style horizontal bar */}
+          {/* QUICK FACTS BAR - public strap; updated timestamp stays only in owner provenance. */}
           <div className="mb-12">
              <QuickFactsBar
-               projectId={project.id}
                propertyType={project.property_type_label}
                totalUnits={project.availability_visible ? project.total_units : null}
                floors={project.floors && project.floors > 3 ? project.floors : undefined}
@@ -1668,13 +1667,11 @@ function ProjectDetailLayoutInner({
                statusLabel={project.status_label}
                saleStatus={project.sale_status}
                handoverDate={project.handover_date}
-               updatedAt={project.updated_at}
-               showUpdated={false}
              />
           </div>
 
           {/* OWNER PROVENANCE — collapsed to a gold star; click to expand.
-              Public "Updated" chip lives inside <QuickFactsBar> only. */}
+              "Updated" appears here for the owner, never in the public strap. */}
           {isOwner && (
             <div className="mb-8 flex justify-end">
               <div className="max-w-md">
