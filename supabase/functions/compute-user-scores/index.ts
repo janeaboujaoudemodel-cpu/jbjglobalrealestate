@@ -315,8 +315,9 @@ Deno.serve(async (req) => {
         // NEW: demographics from user_role_selections
         if (roleSel) {
           if (roleSel.nationality) profileData.nationality = roleSel.nationality;
-          if (roleSel.country) profileData.country = roleSel.country;
-          if (roleSel.city) profileData.city = roleSel.city;
+          if (roleSel.current_location_country) profileData.country = roleSel.current_location_country;
+          if (roleSel.current_location_city) profileData.city = roleSel.current_location_city;
+
           if (roleSel.preferred_language) profileData.preferred_language = roleSel.preferred_language;
           if (roleSel.age_range) profileData.age_range = roleSel.age_range;
         }
