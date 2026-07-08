@@ -1132,9 +1132,12 @@ export type Database = {
           image_url: string | null
           is_active: boolean | null
           is_high_demand: boolean | null
+          is_manually_verified: boolean
           is_trending: boolean | null
           latitude: number | null
           longitude: number | null
+          manually_verified_at: string | null
+          manually_verified_by: string | null
           name: string
           project_count_sale: number | null
           property_count: number | null
@@ -1156,9 +1159,12 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean | null
           is_high_demand?: boolean | null
+          is_manually_verified?: boolean
           is_trending?: boolean | null
           latitude?: number | null
           longitude?: number | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name: string
           project_count_sale?: number | null
           property_count?: number | null
@@ -1180,9 +1186,12 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean | null
           is_high_demand?: boolean | null
+          is_manually_verified?: boolean
           is_trending?: boolean | null
           latitude?: number | null
           longitude?: number | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name?: string
           project_count_sale?: number | null
           property_count?: number | null
@@ -5632,7 +5641,10 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          is_manually_verified: boolean
           location: string | null
+          manually_verified_at: string | null
+          manually_verified_by: string | null
           name: string
           slug: string
           updated_at: string
@@ -5642,7 +5654,10 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          is_manually_verified?: boolean
           location?: string | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name: string
           slug: string
           updated_at?: string
@@ -5652,7 +5667,10 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          is_manually_verified?: boolean
           location?: string | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name?: string
           slug?: string
           updated_at?: string
@@ -14337,6 +14355,7 @@ export type Database = {
           id: string
           instagram_url: string | null
           is_hidden: boolean | null
+          is_manually_verified: boolean
           last_auto_publish_at: string | null
           last_confirmed_at: string | null
           last_confirmed_by: string | null
@@ -14355,6 +14374,8 @@ export type Database = {
           logo_verified: boolean
           logo_verified_at: string | null
           logo_verified_by: string | null
+          manually_verified_at: string | null
+          manually_verified_by: string | null
           name: string
           needs_review: boolean
           notable_projects: string | null
@@ -14401,6 +14422,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_hidden?: boolean | null
+          is_manually_verified?: boolean
           last_auto_publish_at?: string | null
           last_confirmed_at?: string | null
           last_confirmed_by?: string | null
@@ -14419,6 +14441,8 @@ export type Database = {
           logo_verified?: boolean
           logo_verified_at?: string | null
           logo_verified_by?: string | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name: string
           needs_review?: boolean
           notable_projects?: string | null
@@ -14465,6 +14489,7 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_hidden?: boolean | null
+          is_manually_verified?: boolean
           last_auto_publish_at?: string | null
           last_confirmed_at?: string | null
           last_confirmed_by?: string | null
@@ -14483,6 +14508,8 @@ export type Database = {
           logo_verified?: boolean
           logo_verified_at?: string | null
           logo_verified_by?: string | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name?: string
           needs_review?: boolean
           notable_projects?: string | null
@@ -24693,6 +24720,54 @@ export type Database = {
         }
         Relationships: []
       }
+      missing_field_flags: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_name: string | null
+          entity_slug: string | null
+          entity_type: string
+          field_name: string
+          first_seen_at: string
+          id: string
+          last_seen_at: string
+          resolved_at: string | null
+          seen_count: number
+          surface: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_name?: string | null
+          entity_slug?: string | null
+          entity_type: string
+          field_name: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          resolved_at?: string | null
+          seen_count?: number
+          surface?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_name?: string | null
+          entity_slug?: string | null
+          entity_type?: string
+          field_name?: string
+          first_seen_at?: string
+          id?: string
+          last_seen_at?: string
+          resolved_at?: string | null
+          seen_count?: number
+          surface?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       module_questions: {
         Row: {
           correct_index: number
@@ -28436,6 +28511,7 @@ export type Database = {
           is_developer_direct: boolean | null
           is_featured: boolean | null
           is_managed: boolean | null
+          is_manually_verified: boolean
           is_offplan: boolean | null
           is_premium: boolean | null
           is_published: boolean | null
@@ -28453,6 +28529,8 @@ export type Database = {
           locked_fields: string[]
           longitude: number | null
           management_type: string | null
+          manually_verified_at: string | null
+          manually_verified_by: string | null
           name: string
           number_of_stories: number | null
           owner_can_use: boolean | null
@@ -28546,6 +28624,7 @@ export type Database = {
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
           is_managed?: boolean | null
+          is_manually_verified?: boolean
           is_offplan?: boolean | null
           is_premium?: boolean | null
           is_published?: boolean | null
@@ -28563,6 +28642,8 @@ export type Database = {
           locked_fields?: string[]
           longitude?: number | null
           management_type?: string | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name: string
           number_of_stories?: number | null
           owner_can_use?: boolean | null
@@ -28656,6 +28737,7 @@ export type Database = {
           is_developer_direct?: boolean | null
           is_featured?: boolean | null
           is_managed?: boolean | null
+          is_manually_verified?: boolean
           is_offplan?: boolean | null
           is_premium?: boolean | null
           is_published?: boolean | null
@@ -28673,6 +28755,8 @@ export type Database = {
           locked_fields?: string[]
           longitude?: number | null
           management_type?: string | null
+          manually_verified_at?: string | null
+          manually_verified_by?: string | null
           name?: string
           number_of_stories?: number | null
           owner_can_use?: boolean | null
