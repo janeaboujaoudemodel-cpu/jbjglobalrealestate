@@ -24,9 +24,17 @@ export default function SiteAccessGate({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (loading) return <>{children}</>; // don't flash-redirect during boot
+  const publicPath = isPublicPath(location.pathname);
+  if (publicPath) return <>{children}</>;
+  if (loading) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-[#FDFBF7]">
+        <div className="w-10 h-10 rounded-full border-2 border-[#B89555]/30 border-t-[#064E3B] animate-spin" />
+      </div>
+    );
+  }
   if (user) return <>{children}</>;
-  if (isPublicPath(location.pathname)) return <>{children}</>;
 
   return <Navigate to="/access" replace state={{ from: location.pathname + location.search }} />;
 }
+
