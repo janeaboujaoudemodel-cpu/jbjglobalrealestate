@@ -19,6 +19,20 @@ const COOKIES_POLICY_SNAPSHOT = {
   effective_date: "2025-01-01",
 };
 
+type CookieConsentAuditPayload = {
+  visitor_id: string;
+  user_id: string | null;
+  consent_status: "all";
+  preferences: { essential: boolean; analytics: boolean; marketing: boolean };
+  user_agent: string;
+  accepted_at: string;
+  policy_version: string;
+  policy_snapshot: typeof COOKIES_POLICY_SNAPSHOT;
+  consent_source: "cookie_banner";
+  page_url: string;
+  referrer: string | null;
+};
+
 const CookiesConsentBanner = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('cookies-consent');
   const [shouldShow, setShouldShow] = useState(false);
@@ -64,19 +78,23 @@ const CookiesConsentBanner = () => {
     try {
       const visitorId = localStorage.getItem('jj_visitor_id') || crypto.randomUUID();
       localStorage.setItem('jj_visitor_id', visitorId);
-      await supabase.from('cookie_consents').insert({
+      const cookieConsentTable = supabase.from('cookie_consents') as unknown as {
+        insert: (values: CookieConsentAuditPayload) => Promise<{ error: { message: string } | null }>;
+      };
+      const { error } = await cookieConsentTable.insert({
         visitor_id: visitorId,
         user_id: user?.id ?? null,
         consent_status: 'all',
-        preferences: consentData.preferences as any,
+        preferences: consentData.preferences,
         user_agent: navigator.userAgent,
         accepted_at: consentData.timestamp,
         policy_version: COOKIES_POLICY_SNAPSHOT.version,
-        policy_snapshot: COOKIES_POLICY_SNAPSHOT as any,
+        policy_snapshot: COOKIES_POLICY_SNAPSHOT,
         consent_source: 'cookie_banner',
         page_url: consentData.page_url,
         referrer: consentData.referrer,
-      } as any);
+      });
+      if (error) throw error;
     } catch (e) {
       console.error('Failed to persist cookie consent:', e);
     }
