@@ -537,31 +537,70 @@ function ProjectDetailLayoutInner({
   // AMRA English Factsheet asset (single source of truth). Older factsheets
   // are filtered out of the documents list entirely — everywhere the app
   // reads brochures pulls from this same effective list.
+  // Fetch the developer's public company profile PDF (if any) so we can surface
+  // it alongside the other project documents (brochure, payment plan, etc.).
+  const developerId = project.developer?.id;
+  const developerName = project.developer?.name || "Developer";
+  const { data: developerCompanyProfileDoc } = useQuery({
+    queryKey: ["project-developer-company-profile", developerId],
+    enabled: !!developerId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developer_documents")
+        .select("id, file_name, storage_path")
+        .eq("developer_id", developerId!)
+        .eq("doc_type", "company_profile")
+        .eq("is_public", true)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      if (!data?.storage_path) return null;
+      const { data: signed } = await supabase.storage
+        .from("developer-profiles")
+        .createSignedUrl(data.storage_path, 60 * 60 * 6);
+      if (!signed?.signedUrl) return null;
+      return {
+        id: `developer-company-profile-${data.id}`,
+        type: "company_profile",
+        url: signed.signedUrl,
+        name: data.file_name || `${developerName} Company Profile`,
+        display_title: `${developerName} Company Profile`,
+        cover_image_url: null,
+        is_visible: true,
+        allow_download: true,
+      } as ProjectDetailData["documents"][number];
+    },
+  });
+
   const effectiveDocuments = useMemo(() => {
-    if (!isAmraProject) return project.documents;
-    const nonBrochure = project.documents.filter((d) => {
-      const t = normalizeDocType(d.type || "");
-      const n = normalizeDocType(`${d.name || ""} ${d.display_title || ""}`);
-      const isDeprecatedFactSheet =
-        t === "factsheet" ||
-        t === "fact_sheet" ||
-        n.includes("fact_sheet") ||
-        n.includes("factsheet") ||
-        n.includes("amra_fact_sheet");
-      return !isDeprecatedFactSheet;
-    });
-    const replacement = {
-      id: "amra-factsheet-v4",
-      type: "brochure",
-      url: amraFactsheetAsset.url,
-      name: "AMRA English Factsheet",
-      display_title: "AMRA English Factsheet",
-      cover_image_url: null,
-      is_visible: true,
-      allow_download: true,
-    } as ProjectDetailData["documents"][number];
-    return [replacement, ...nonBrochure];
-  }, [isAmraProject, project.documents]);
+    const base = (() => {
+      if (!isAmraProject) return project.documents;
+      const nonBrochure = project.documents.filter((d) => {
+        const t = normalizeDocType(d.type || "");
+        const n = normalizeDocType(`${d.name || ""} ${d.display_title || ""}`);
+        const isDeprecatedFactSheet =
+          t === "factsheet" ||
+          t === "fact_sheet" ||
+          n.includes("fact_sheet") ||
+          n.includes("factsheet") ||
+          n.includes("amra_fact_sheet");
+        return !isDeprecatedFactSheet;
+      });
+      const replacement = {
+        id: "amra-factsheet-v4",
+        type: "brochure",
+        url: amraFactsheetAsset.url,
+        name: "AMRA English Factsheet",
+        display_title: "AMRA English Factsheet",
+        cover_image_url: null,
+        is_visible: true,
+        allow_download: true,
+      } as ProjectDetailData["documents"][number];
+      return [replacement, ...nonBrochure];
+    })();
+    return developerCompanyProfileDoc ? [...base, developerCompanyProfileDoc] : base;
+  }, [isAmraProject, project.documents, developerCompanyProfileDoc]);
 
   const brochureDocs = useMemo(
     () =>
