@@ -96,10 +96,12 @@ export default function PublicAccess() {
       {/* Floating lead CTA */}
       <button
         onClick={() => setLeadOpen(true)}
-        className="fixed bottom-5 right-5 z-30 rounded-full bg-[#064E3B] text-white px-5 py-3 text-sm font-semibold shadow-[0_10px_30px_-8px_rgba(6,78,59,0.55)] hover:-translate-y-0.5 transition-transform"
+        className="fixed bottom-5 right-5 z-30 group inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white px-5 py-3 text-sm font-semibold tracking-wide shadow-[0_14px_30px_-8px_rgba(6,78,59,0.55)] ring-1 ring-[#B89555]/25 hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-10px_rgba(6,78,59,0.65)] active:scale-[0.97] transition-all duration-200"
       >
+        <span className="w-1.5 h-1.5 rounded-full bg-[#B89555] group-hover:animate-pulse" />
         Speak to an advisor
       </button>
+
     </div>
   );
 }
