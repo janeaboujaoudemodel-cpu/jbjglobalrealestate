@@ -139,9 +139,13 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
             Owner · Company Profiles
           </p>
           <p className="text-[11px] text-[#1A1A1A]/55">
-            Upload PDFs for {developerName || "this developer"}. Lovable AI extracts fields — you approve.
+            Upload the developer's official PDF. AI reads it and instantly writes the description and profile fields for {developerName || "this developer"}. You can still edit every field manually below.
           </p>
         </div>
+        <Link to="/owner/enrichment-review" className="text-xs font-semibold text-[#064E3B] hover:underline">
+          Audit log →
+        </Link>
+      </div>
         <Link to="/owner/enrichment-review" className="text-xs font-semibold text-[#064E3B] hover:underline">
           Review queue →
         </Link>
