@@ -74,16 +74,17 @@ export default function ConstructionTimelineSection({
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${stage.className}`}>
-                <CircleDot className="h-3.5 w-3.5 text-[#064E3B]" />
+              <span data-no-contrast-guard className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${stage.className}`} style={{ color: "#1A1A1A" }}>
+                <CircleDot className="h-3.5 w-3.5" style={{ color: "#064E3B" }} />
                 {stage.label}
               </span>
               {startedThisMonth && (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/45 bg-[#F7F2EA] px-3 py-1 text-xs font-semibold text-[#1A1A1A]">
-                  <Clock className="h-3.5 w-3.5 text-[#064E3B]" />
+                <span data-no-contrast-guard className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/45 bg-[#F7F2EA] px-3 py-1 text-xs font-semibold" style={{ color: "#1A1A1A" }}>
+                  <Clock className="h-3.5 w-3.5" style={{ color: "#064E3B" }} />
                   This month it started
                 </span>
               )}
+
             </div>
             <span className="text-2xl font-bold text-[#1A1A1A]">{validatedProgress}%</span>
           </div>
