@@ -344,8 +344,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
         {/* Thumbnails */}
         {total > 1 && (
           <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-muted-foreground text-sm">{total} Photos</span>
+            <div className="flex items-center justify-end mb-2">
               <button
                 type="button"
                 onClick={handleDownloadAll}

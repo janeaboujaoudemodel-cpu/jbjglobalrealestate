@@ -121,7 +121,6 @@ import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsi
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
 import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
 import amraAerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
-import amraGrandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
 import amraGrandLobby from "@/assets/amra-brochure/grand-lobby.jpg";
 import amraHallwayPassage from "@/assets/amra-brochure/hallway-passage.jpg";
 import amraSideLobby from "@/assets/amra-brochure/side-lobby.jpg";
@@ -169,7 +168,6 @@ import amraSmartRecoveryHub from "@/assets/amra-brochure/smart-recovery-hub.jpg"
 import amraIsabellaCucina from "@/assets/amra-brochure/isabella-cucina-italiana.jpg";
 import amraHunterBarrel from "@/assets/amra-brochure/hunter-and-barrel.jpg";
 import amraAllDayDining from "@/assets/amra-brochure/all-day-dining.jpg";
-import amraOrganicSuperMarket from "@/assets/amra-brochure/organic-super-market.jpg";
 import amraArtGallery from "@/assets/amra-brochure/art-gallery.jpg";
 import amraPharmacy from "@/assets/amra-brochure/pharmacy.jpg";
 import amraBowlingLanes from "@/assets/amra-brochure/bowling-lanes.jpg";
@@ -181,6 +179,9 @@ import amraRooftopSportsDeck from "@/assets/amra-brochure/rooftop-sports-deck.jp
 import amraBusinessZone from "@/assets/amra-brochure/business-zone.jpg";
 import amraParentChildStudio from "@/assets/amra-brochure/parent-child-studio.jpg";
 import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
+import amraEntranceLobbyFeaturedSculpture from "@/assets/amra-brochure/entrance-lobby-featured-sculpture.jpg";
+import amraHelipadAirTaxi from "@/assets/amra-brochure/helipad-air-taxi.jpg";
+import amraSpinneysSupermarket from "@/assets/amra-brochure/spinneys-supermarket.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -883,7 +884,8 @@ function ProjectDetailLayoutInner({
       "All Day Dining Restaurant",
       "Isabella Cucina Italiana",
       "Hunter & Barrel",
-      "Organic Super Market",
+      "Organic Supermarket",
+      "Spinneys",
       "Art Gallery",
       "Pharmacy",
 
@@ -1014,8 +1016,8 @@ function ProjectDetailLayoutInner({
       "Full sea view & direct beach access": amraSeaTurtles,
       "App-enabled short-stay management (Amra B&B)": citiBuddyDocumentCoverAsset.url,
       "Yacht limo service and private marina deck": amraYachtPartnerships,
-      "Helipad": amraAerialResort,
-      "Air Taxi Landing Pad": amraAerialResort,
+      "Helipad": amraHelipadAirTaxi,
+      "Air Taxi Landing Pad": amraHelipadAirTaxi,
 
       // GROUND FLOOR — Outdoor
       "Landscaped green buffers to create privacy and reduce heat gain": amraAerialResort,
@@ -1034,12 +1036,14 @@ function ProjectDetailLayoutInner({
       "Water cascades and shaded seating to cool microclimate naturally": amraIndoorPoolCols,
 
       // GROUND FLOOR — Indoor
-      "Multiple vehicular & pedestrian drop-offs; stroller-friendly paths": amraGrandLobby,
-      "Entrance lobby with featured sculptures & water features; cascading pools": amraGrandLobbyHero,
+      "Multiple vehicular & pedestrian drop-offs; stroller-friendly paths": galleryImage(12, amraAerialResort),
+      "Entrance lobby with featured sculptures & water features; cascading pools": amraEntranceLobbyFeaturedSculpture,
       "All Day Dining Restaurant": amraAllDayDining,
       "Isabella Cucina Italiana": amraIsabellaCucina,
       "Hunter & Barrel": amraHunterBarrel,
-      "Organic Super Market": amraOrganicSuperMarket,
+      "Organic Supermarket": amraSpinneysSupermarket,
+      "Organic Super Market": amraSpinneysSupermarket,
+      "Spinneys": amraSpinneysSupermarket,
       "Art Gallery": amraArtGallery,
       "Pharmacy": amraPharmacy,
 
@@ -1736,12 +1740,7 @@ function ProjectDetailLayoutInner({
              <div ref={galleryRef} id="gallery" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
-                      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/58">
-                        {images.length} saved photo{images.length === 1 ? "" : "s"}
-                      </p>
-                    </div>
+                    <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
                    <div className="flex items-center gap-2">
                      <OwnerSectionEditor projectId={project.id} coverImageUrl={project.cover_image_url} section="gallery" initial={project as any} label="Manage photos" />
                        <button
@@ -1902,7 +1901,7 @@ function ProjectDetailLayoutInner({
                       "Citi Buddy concierge via Citi Developers App",
                       "In-room dining & all-day dining",
                       "Helipad & air-taxi landing pad with private limousine service",
-                      "Complimentary golf cart & buggy service",
+                      "Complimentary golf car & buggy service",
                     ] : hasCitiBuddyDocument ? ["Citi Buddy"] : null}
                  projectName={project.name}
                />
