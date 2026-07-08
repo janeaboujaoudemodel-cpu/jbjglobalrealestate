@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
-import { Play, Video, Eye, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Play, Video, Eye, ExternalLink, ChevronLeft, ChevronRight, Download, X } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
+
 
 interface ProjectMediaSectionProps {
   videoUrl?: string | null;
