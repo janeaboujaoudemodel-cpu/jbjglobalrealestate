@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { Play, Video, Eye, ExternalLink } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 
 interface ProjectMediaSectionProps {
