@@ -1102,7 +1102,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         <Link to="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0"  loading="lazy" decoding="async" />
           <div className="min-w-0 mt-1">
-            <span className="block text-[11px] font-extrabold text-[#1A1A1A] tracking-[0.08em] leading-none whitespace-nowrap">JBJ GLOBAL REAL ESTATE</span>
+            <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap" style={{ color: "#0A0A0A", WebkitTextFillColor: "#0A0A0A" }}>JBJ GLOBAL REAL ESTATE</span>
           </div>
         </Link>
       </div>
