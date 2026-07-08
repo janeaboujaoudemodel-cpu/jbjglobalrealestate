@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from "react";
 import { Play, Video, Eye, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface ProjectMediaSectionProps {
@@ -71,8 +70,6 @@ export default function ProjectMediaSection({
   if (mediaVideos.length === 0 && !virtualTourUrl) return null;
 
   const activeVideo = activeVideoIndex !== null ? mediaVideos[activeVideoIndex] : null;
-  const activeYoutubeId = activeVideo ? getYouTubeVideoId(activeVideo.url) : null;
-  const activeVimeoId = activeVideo ? getVimeoVideoId(activeVideo.url) : null;
   const activeIsDirect = activeVideo ? isDirectVideoUrl(activeVideo.url) : false;
   const hasOneCard = mediaVideos.length + (virtualTourUrl ? 1 : 0) === 1;
 
