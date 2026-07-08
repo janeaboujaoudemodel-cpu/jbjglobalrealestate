@@ -133,7 +133,7 @@ export default function PasswordField({ value, onChange, id = "password" }: Prop
       </div>
 
       {reveal && value && (
-        <p className="text-[11px] text-[#0d3a2b]/80 bg-[#064E3B]/10 border border-[#064E3B]/20 rounded-md px-3 py-2">
+        <p className="text-[11px] text-[#0d3a2b] bg-[#F0F7F3] border border-[#064E3B]/30 font-medium rounded-md px-3 py-2">
           Your password is visible above — copy it now if you want to save it manually.
           Chrome will also offer to save your username and this password when you submit the form.
         </p>
