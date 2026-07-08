@@ -1,6 +1,8 @@
 import { auth, defineMcp } from "@lovable.dev/mcp-js";
 import echoTool from "./tools/echo";
-import searchPropertiesTool from "./tools/search-properties";
+import searchProjectsTool from "./tools/search-projects";
+import getProjectTool from "./tools/get-project";
+import listDevelopersTool from "./tools/list-developers";
 
 // Build the Supabase Auth issuer from the project ref (baked at build time by
 // Vite). Do NOT read from SUPABASE_URL — Lovable Cloud may proxy that host and
@@ -11,12 +13,18 @@ const projectRef =
 export default defineMcp({
   name: "jbj-global-mcp",
   title: "JBJ Global Real Estate",
-  version: "0.1.0",
+  version: "0.2.0",
   instructions:
-    "MCP tools for JBJ Global Real Estate. Use `search_properties` to query published property listings by keyword, city, or price range. Use `echo` to verify connectivity.",
+    "MCP tools for JBJ Global Real Estate — the JBJ Dubai off-plan and ready-property catalogue. " +
+    "Use `search_projects` to find PUBLISHED projects by keyword, emirate, price range or bedroom count. " +
+    "Use `get_project` to fetch full detail for a single project by URL slug. " +
+    "Use `list_developers` to browse the UAE developer directory. " +
+    "Use `echo` to verify connectivity. " +
+    "All results include a canonical public URL on https://jbj.ae so agents can link users directly to the listing.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",
   }),
-  tools: [echoTool, searchPropertiesTool],
+  tools: [echoTool, searchProjectsTool, getProjectTool, listDevelopersTool],
 });
+

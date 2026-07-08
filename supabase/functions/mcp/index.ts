@@ -17,23 +17,26 @@ var echo_default = defineTool({
   handler: ({ text }) => ({ content: [{ type: "text", text }] })
 });
 
-// src/lib/mcp/tools/search-properties.ts
+// src/lib/mcp/tools/search-projects.ts
 import { createClient } from "npm:@supabase/supabase-js@^2.108.2";
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z2 } from "npm:zod@^3.23.8";
-var search_properties_default = defineTool2({
-  name: "search_properties",
-  title: "Search JBJ properties",
-  description: "Search JBJ Global Real Estate's published property listings by keyword, city, or price range. Returns up to 20 matching listings with name, city, price, bedrooms, and a public URL.",
+var PUBLIC_PROJECT_FIELDS = "id, name, slug, developer_name, emirate, location, price_from, price_to, bedroom_types, handover_date, total_units, cover_image_url, status";
+var PUBLIC_SITE = "https://jbj.ae";
+var search_projects_default = defineTool2({
+  name: "search_projects",
+  title: "Search JBJ projects",
+  description: "Search JBJ Global Real Estate's PUBLISHED off-plan and ready projects. Filters: keyword (matched against name, developer, location), emirate, min/max price in AED, and bedroom count. Returns up to 20 projects with public URL, developer, emirate, price range, bedroom range, handover date, and cover image.",
   inputSchema: {
-    query: z2.string().optional().describe("Free-text keyword matched against property name and description."),
-    city: z2.string().optional().describe("City or emirate filter (e.g. 'Dubai')."),
-    min_price: z2.number().optional().describe("Minimum listing price in AED."),
-    max_price: z2.number().optional().describe("Maximum listing price in AED."),
+    query: z2.string().optional().describe("Free-text keyword matched against project name, developer name, and location."),
+    emirate: z2.string().optional().describe("Emirate filter \u2014 'Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah', 'Ajman', 'Umm Al Quwain', 'Fujairah'."),
+    min_price: z2.number().optional().describe("Minimum starting price in AED."),
+    max_price: z2.number().optional().describe("Maximum starting price in AED."),
+    bedrooms: z2.number().int().min(0).max(10).optional().describe("Bedroom count that must appear in the project's available layouts (0 = studio)."),
     limit: z2.number().int().min(1).max(20).optional().describe("Max results (1-20, default 10).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async ({ query, city, min_price, max_price, limit }) => {
+  handler: async ({ query, emirate, min_price, max_price, bedrooms, limit }) => {
     const url = process.env.SUPABASE_URL;
     const anon = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
     if (!url || !anon) {
@@ -42,18 +45,103 @@ var search_properties_default = defineTool2({
     const supabase = createClient(url, anon, {
       auth: { persistSession: false, autoRefreshToken: false }
     });
-    let q = supabase.from("properties").select("*").limit(limit ?? 10);
-    if (query) q = q.or(`name.ilike.%${query}%,description.ilike.%${query}%`);
-    if (city) q = q.ilike("city", `%${city}%`);
-    if (typeof min_price === "number") q = q.gte("price", min_price);
-    if (typeof max_price === "number") q = q.lte("price", max_price);
+    let q = supabase.from("projects").select(PUBLIC_PROJECT_FIELDS).eq("is_published", true).order("updated_at", { ascending: false }).limit(limit ?? 10);
+    if (query) {
+      const like = `%${query.replace(/[%,]/g, "")}%`;
+      q = q.or(
+        `name.ilike.${like},developer_name.ilike.${like},location.ilike.${like}`
+      );
+    }
+    if (emirate) q = q.ilike("emirate", `%${emirate}%`);
+    if (typeof min_price === "number") q = q.gte("price_from", min_price);
+    if (typeof max_price === "number") q = q.lte("price_from", max_price);
+    if (typeof bedrooms === "number") q = q.contains("bedroom_types", [bedrooms]);
     const { data, error } = await q;
     if (error) {
       return { content: [{ type: "text", text: error.message }], isError: true };
     }
+    const results = (data ?? []).map((p) => ({
+      ...p,
+      url: `${PUBLIC_SITE}/project/${p.slug}`
+    }));
     return {
-      content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }],
-      structuredContent: { results: data ?? [] }
+      content: [{ type: "text", text: JSON.stringify(results, null, 2) }],
+      structuredContent: { results }
+    };
+  }
+});
+
+// src/lib/mcp/tools/get-project.ts
+import { createClient as createClient2 } from "npm:@supabase/supabase-js@^2.108.2";
+import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { z as z3 } from "npm:zod@^3.23.8";
+var PUBLIC_SITE2 = "https://jbj.ae";
+var get_project_default = defineTool3({
+  name: "get_project",
+  title: "Get JBJ project by slug",
+  description: "Fetch full public detail for a single JBJ project by its URL slug (e.g. the trailing segment of https://jbj.ae/project/<slug>). Returns developer, emirate, location, price range, bedroom types, handover date, description, cover image and public URL.",
+  inputSchema: {
+    slug: z3.string().min(1).describe("Project URL slug, e.g. 'ammar-signature-residences'.")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ slug }) => {
+    const url = process.env.SUPABASE_URL;
+    const anon = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
+    if (!url || !anon) {
+      return { content: [{ type: "text", text: "Backend is not configured." }], isError: true };
+    }
+    const supabase = createClient2(url, anon, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
+    const { data, error } = await supabase.from("projects").select(
+      "id, name, slug, developer_name, emirate, location, price_from, price_to, bedroom_types, handover_date, total_units, cover_image_url, status, description, amenities, updated_at"
+    ).eq("slug", slug).eq("is_published", true).maybeSingle();
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    if (!data) {
+      return { content: [{ type: "text", text: `No published project found with slug "${slug}".` }], isError: true };
+    }
+    const project = { ...data, url: `${PUBLIC_SITE2}/project/${data.slug}` };
+    return {
+      content: [{ type: "text", text: JSON.stringify(project, null, 2) }],
+      structuredContent: { project }
+    };
+  }
+});
+
+// src/lib/mcp/tools/list-developers.ts
+import { createClient as createClient3 } from "npm:@supabase/supabase-js@^2.108.2";
+import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.20.0";
+import { z as z4 } from "npm:zod@^3.23.8";
+var PUBLIC_SITE3 = "https://jbj.ae";
+var list_developers_default = defineTool4({
+  name: "list_developers",
+  title: "List JBJ developers",
+  description: "List UAE property developers featured on JBJ Global Real Estate. Returns each developer's name, slug, active project count and public URL. Never returns internal contact details, office locations, or unverified fields.",
+  inputSchema: {
+    query: z4.string().optional().describe("Optional keyword filter matched against developer name."),
+    limit: z4.number().int().min(1).max(50).optional().describe("Max results (1-50, default 25).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ query, limit }) => {
+    const url = process.env.SUPABASE_URL;
+    const anon = process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
+    if (!url || !anon) {
+      return { content: [{ type: "text", text: "Backend is not configured." }], isError: true };
+    }
+    const supabase = createClient3(url, anon, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
+    let q = supabase.from("developers").select("name, slug, description, offplan_projects, completed_projects, logo_url").eq("is_active", true).order("offplan_projects", { ascending: false, nullsFirst: false }).limit(limit ?? 25);
+    if (query) q = q.ilike("name", `%${query.replace(/[%,]/g, "")}%`);
+    const { data, error } = await q;
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    const results = (data ?? []).map((d) => ({
+      ...d,
+      url: `${PUBLIC_SITE3}/developer/${d.slug}`
+    }));
+    return {
+      content: [{ type: "text", text: JSON.stringify(results, null, 2) }],
+      structuredContent: { results }
     };
   }
 });
@@ -63,13 +151,13 @@ var projectRef = "mdafrewypkkrildjgtey";
 var mcp_default = defineMcp({
   name: "jbj-global-mcp",
   title: "JBJ Global Real Estate",
-  version: "0.1.0",
-  instructions: "MCP tools for JBJ Global Real Estate. Use `search_properties` to query published property listings by keyword, city, or price range. Use `echo` to verify connectivity.",
+  version: "0.2.0",
+  instructions: "MCP tools for JBJ Global Real Estate \u2014 the JBJ Dubai off-plan and ready-property catalogue. Use `search_projects` to find PUBLISHED projects by keyword, emirate, price range or bedroom count. Use `get_project` to fetch full detail for a single project by URL slug. Use `list_developers` to browse the UAE developer directory. Use `echo` to verify connectivity. All results include a canonical public URL on https://jbj.ae so agents can link users directly to the listing.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated"
   }),
-  tools: [echo_default, search_properties_default]
+  tools: [echo_default, search_projects_default, get_project_default, list_developers_default]
 });
 
 // lovable-mcp-supabase-entry.ts

@@ -12,7 +12,7 @@
   "mcp": {
     "server": {
       "name": "jbj-global-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "title": "JBJ Global Real Estate"
     },
     "tools": [
@@ -43,9 +43,9 @@
         "outputSchema": null
       },
       {
-        "name": "search_properties",
-        "title": "Search JBJ properties",
-        "description": "Search JBJ Global Real Estate's published property listings by keyword, city, or price range. Returns up to 20 matching listings with name, city, price, bedrooms, and a public URL.",
+        "name": "search_projects",
+        "title": "Search JBJ projects",
+        "description": "Search JBJ Global Real Estate's PUBLISHED off-plan and ready projects. Filters: keyword (matched against name, developer, location), emirate, min/max price in AED, and bedroom count. Returns up to 20 projects with public URL, developer, emirate, price range, bedroom range, handover date, and cover image.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -56,25 +56,85 @@
           "properties": {
             "query": {
               "type": "string",
-              "description": "Free-text keyword matched against property name and description."
+              "description": "Free-text keyword matched against project name, developer name, and location."
             },
-            "city": {
+            "emirate": {
               "type": "string",
-              "description": "City or emirate filter (e.g. 'Dubai')."
+              "description": "Emirate filter — 'Dubai', 'Abu Dhabi', 'Sharjah', 'Ras Al Khaimah', 'Ajman', 'Umm Al Quwain', 'Fujairah'."
             },
             "min_price": {
               "type": "number",
-              "description": "Minimum listing price in AED."
+              "description": "Minimum starting price in AED."
             },
             "max_price": {
               "type": "number",
-              "description": "Maximum listing price in AED."
+              "description": "Maximum starting price in AED."
+            },
+            "bedrooms": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10,
+              "description": "Bedroom count that must appear in the project's available layouts (0 = studio)."
             },
             "limit": {
               "type": "integer",
               "minimum": 1,
               "maximum": 20,
               "description": "Max results (1-20, default 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_project",
+        "title": "Get JBJ project by slug",
+        "description": "Fetch full public detail for a single JBJ project by its URL slug (e.g. the trailing segment of https://jbj.ae/project/<slug>). Returns developer, emirate, location, price range, bedroom types, handover date, description, cover image and public URL.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Project URL slug, e.g. 'ammar-signature-residences'."
+            }
+          },
+          "required": [
+            "slug"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_developers",
+        "title": "List JBJ developers",
+        "description": "List UAE property developers featured on JBJ Global Real Estate. Returns each developer's name, slug, active project count and public URL. Never returns internal contact details, office locations, or unverified fields.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Optional keyword filter matched against developer name."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Max results (1-50, default 25)."
             }
           },
           "additionalProperties": false,
