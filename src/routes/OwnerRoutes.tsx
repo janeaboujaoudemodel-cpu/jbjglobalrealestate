@@ -260,6 +260,8 @@ export const OwnerRoutes = () => (
     } />
     <Route path="founder-assistant" element={<FoundersAssistant />} />
     <Route path="recommendations" element={<GlobalRecommendationsHub />} />
+    <Route path="agent-integrations" element={<AgentIntegrations />} />
+
     <Route path="developers" element={<DeveloperDirectory />} />
     <Route path="developers/directory" element={<Navigate to="/owner/developers" replace />} />
     <Route path="developers/add" element={<DeveloperCompanyRegistration />} />
