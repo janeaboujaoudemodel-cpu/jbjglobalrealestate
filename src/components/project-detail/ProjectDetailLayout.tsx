@@ -1823,14 +1823,6 @@ function ProjectDetailLayoutInner({
                   projectName={project.name}
                   editable
                 />
-                {project.developer.id && (
-                  <div className="mt-4">
-                    <CompanyProfileCard
-                      developerId={project.developer.id}
-                      developerName={project.developer.name || "the developer"}
-                    />
-                  </div>
-                )}
               </div>
             )}
 
