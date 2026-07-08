@@ -40,13 +40,14 @@ const createCurrentPinIcon = () => L.divIcon({
   popupAnchor: [0, -54],
 });
 
-// Champagne/gold price pill for peer Citi Developer projects.
-const createChampagneMarkerIcon = (priceText: string) => L.divIcon({
-  html: `<div class="jj-nearby-price-pill" style="background:linear-gradient(135deg,#D7BD78 0%,#B89555 45%,#6E5227 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;border:1.5px solid rgba(255,255,255,0.72);padding:6px 12px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 10px 20px -9px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.55);letter-spacing:0;text-shadow:0 1px 2px rgba(0,0,0,0.65);">${escapeHtml(priceText)}</div>`,
+// Small champagne/gold dot pin for peer projects — no price label on the map
+// (price still shows inside the hover popup). Keeps Amra the visual focus.
+const createChampagneMarkerIcon = () => L.divIcon({
+  html: `<div style="width:18px;height:18px;border-radius:999px;background:radial-gradient(circle at 30% 30%,#F1D488 0%,#B89555 55%,#6E5227 100%);border:2px solid #FFFFFF;box-shadow:0 6px 14px -6px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.55);"></div>`,
   className: "custom-marker jj-map-pin",
-  iconSize: [90, 30],
-  iconAnchor: [45, 30],
-  popupAnchor: [0, -30],
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+  popupAnchor: [0, -12],
 });
 
 
@@ -93,11 +94,12 @@ function FitBoundsRuntime({ points }: { points: [number, number][] }) {
   useEffect(() => {
     if (!points.length) return;
     if (points.length === 1) {
-        map.setView(points[0], 15, { animate: false });
+      // Zoom out enough to show coastline / surrounding context, not just a blank tile.
+      map.setView(points[0], 12, { animate: false });
       return;
     }
     const bounds = L.latLngBounds(points.map(([a, b]) => L.latLng(a, b)));
-    map.fitBounds(bounds, { padding: [46, 46], maxZoom: 15, animate: false });
+    map.fitBounds(bounds, { padding: [60, 60], maxZoom: 13, animate: false });
   }, [map, points]);
   return null;
 }
@@ -366,12 +368,25 @@ export default function ProjectNearbyPropertiesMap({
           <MapResizeRuntime />
           <FitBoundsRuntime points={fitPoints} />
           <TileLayer {...SAFE_TILE_LAYER_OPTIONS} url={tiles[mapView].url} attribution={tiles[mapView].attribution} {...(tiles[mapView].subdomains ? { subdomains: tiles[mapView].subdomains } : {})} maxZoom={19} />
-          <div className="absolute top-4 left-4 z-[1000] inline-flex overflow-hidden rounded-xl border border-[#B89555]/45 bg-[#FDFBF7]/95 shadow-lg">
-            {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => (
-              <button key={view} type="button" onClick={() => setMapView(view)} className={`px-3 py-2 text-xs font-bold capitalize ${mapView === view ? "jj-emerald-action" : "text-[#064E3B]"}`}>
-                {view}
-              </button>
-            ))}
+          <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
+            {(["satellite", "street", "terrain"] as MapViewType[]).map((view) => {
+              const active = mapView === view;
+              return (
+                <button
+                  key={view}
+                  type="button"
+                  onClick={() => setMapView(view)}
+                  data-emerald-action={active ? "true" : undefined}
+                  className={
+                    active
+                      ? "jj-emerald-action inline-flex items-center justify-center h-9 min-w-[104px] px-4 rounded-full text-xs font-bold capitalize shadow-md border border-transparent"
+                      : "inline-flex items-center justify-center h-9 min-w-[104px] px-4 rounded-full text-xs font-bold capitalize bg-[#FDFBF7]/95 text-[#064E3B] border border-[#B89555]/55 shadow-md hover:bg-[#EFE6D6]"
+                  }
+                >
+                  {view}
+                </button>
+              );
+            })}
           </div>
           <MapNavigationControls latitude={resolvedCenter[0]} longitude={resolvedCenter[1]} />
 
@@ -397,7 +412,7 @@ export default function ProjectNearbyPropertiesMap({
           <Marker
             key={p.id}
             position={[p.latitude!, p.longitude!]}
-            icon={createChampagneMarkerIcon(p.price_from ? formatPrice(p.price_from) : "Ask")}
+            icon={createChampagneMarkerIcon()}
             eventHandlers={{
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => {
