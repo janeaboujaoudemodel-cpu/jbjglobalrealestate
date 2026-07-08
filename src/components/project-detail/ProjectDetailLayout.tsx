@@ -182,6 +182,7 @@ import amraJuiceBar from "@/assets/amra-brochure/juice-bar-refreshments.jpg";
 import amraEntranceLobbyFeaturedSculpture from "@/assets/amra-brochure/entrance-lobby-featured-sculpture.jpg";
 import amraHelipadAirTaxi from "@/assets/amra-brochure/helipad-air-taxi.jpg";
 import amraSpinneysSupermarket from "@/assets/amra-brochure/spinneys-supermarket.jpg";
+import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
