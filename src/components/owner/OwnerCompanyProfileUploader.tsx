@@ -146,7 +146,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           Audit log →
         </Link>
       </div>
-      </div>
+
+
 
       <label
         onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
