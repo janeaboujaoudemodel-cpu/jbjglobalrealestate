@@ -1142,7 +1142,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                   { label: "Property Type", format: (_: any, p: any) => p.property_type || p.unit_type || "Apartment / Unit" },
                   { label: "Price From", format: (_: any, p: any) => p.price_from ? formatPriceShort(p.price_from) : "Price on request" },
                   { label: "Price To", format: (_: any, p: any) => p.price_to ? formatPriceShort(p.price_to) : "Price on request" },
-                  { label: "Bedrooms", format: (_: any, p: any) => formatBedroomRange(p) || "Studio - 4 BR" },
+                  { label: "Bedrooms", format: (_: any, p: any) => formatBedroomRange(p) || "Not specified" },
                   { label: "Size Range", format: (_: any, p: any) => {
                     const min = p.size_min; const max = p.size_max;
                     if (min && max) return `${min.toLocaleString()} – ${max.toLocaleString()} sqft`;
