@@ -10828,6 +10828,73 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_profile_activity: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          payload: Json
+          profile_id: string
+          type: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          profile_id: string
+          type: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          profile_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_profile_activity_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "crm_user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_profile_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          profile_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          profile_id: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_profile_notes_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "crm_user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_relationship_contacts: {
         Row: {
           created_at: string
@@ -11351,6 +11418,119 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vw_crm_database_row_status"
             referencedColumns: ["lead_id"]
+          },
+        ]
+      }
+      crm_user_profiles: {
+        Row: {
+          archived_at: string | null
+          assigned_to: string | null
+          budget_max: number | null
+          budget_min: number | null
+          category: Database["public"]["Enums"]["crm_category"]
+          category_data: Json
+          communities: string[]
+          company_name: string
+          country: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          internal_labels: string[]
+          investment_experience: string
+          last_login_at: string | null
+          merged_into_id: string | null
+          nationality: string
+          notes: string
+          phone: string
+          position: string
+          preferred_contact_method: string
+          preferred_contact_time: string
+          preferred_language: string
+          services: string[]
+          source_page: string
+          status: string
+          tags: string[]
+          updated_at: string
+          user_id: string
+          whatsapp: string
+          years_experience: number | null
+        }
+        Insert: {
+          archived_at?: string | null
+          assigned_to?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          category: Database["public"]["Enums"]["crm_category"]
+          category_data?: Json
+          communities?: string[]
+          company_name?: string
+          country?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          internal_labels?: string[]
+          investment_experience?: string
+          last_login_at?: string | null
+          merged_into_id?: string | null
+          nationality?: string
+          notes?: string
+          phone?: string
+          position?: string
+          preferred_contact_method?: string
+          preferred_contact_time?: string
+          preferred_language?: string
+          services?: string[]
+          source_page?: string
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          user_id: string
+          whatsapp?: string
+          years_experience?: number | null
+        }
+        Update: {
+          archived_at?: string | null
+          assigned_to?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: Database["public"]["Enums"]["crm_category"]
+          category_data?: Json
+          communities?: string[]
+          company_name?: string
+          country?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          internal_labels?: string[]
+          investment_experience?: string
+          last_login_at?: string | null
+          merged_into_id?: string | null
+          nationality?: string
+          notes?: string
+          phone?: string
+          position?: string
+          preferred_contact_method?: string
+          preferred_contact_time?: string
+          preferred_language?: string
+          services?: string[]
+          source_page?: string
+          status?: string
+          tags?: string[]
+          updated_at?: string
+          user_id?: string
+          whatsapp?: string
+          years_experience?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_user_profiles_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "crm_user_profiles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -41321,6 +41501,18 @@ export type Database = {
         | "dormant"
         | "blacklisted"
         | "prospect"
+      crm_category:
+        | "investor"
+        | "buyer"
+        | "seller"
+        | "broker"
+        | "developer"
+        | "landlord"
+        | "tenant"
+        | "partner"
+        | "service_provider"
+        | "media"
+        | "other"
       crm_client_status:
         | "lead"
         | "qualified"
@@ -41985,6 +42177,19 @@ export const Constants = {
         "dormant",
         "blacklisted",
         "prospect",
+      ],
+      crm_category: [
+        "investor",
+        "buyer",
+        "seller",
+        "broker",
+        "developer",
+        "landlord",
+        "tenant",
+        "partner",
+        "service_provider",
+        "media",
+        "other",
       ],
       crm_client_status: [
         "lead",
