@@ -1,10 +1,4 @@
-import { 
-  Calendar, 
-  HardHat, 
-  Home,
-  Flag,
-  Clock 
-} from "lucide-react";
+import { HardHat, Home, Flag, Clock, CircleDot } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { formatDisplayDate } from "@/utils/formatDate";
 
@@ -48,14 +42,22 @@ export default function ConstructionTimelineSection({
     }
   }
 
-  // Determine stage based on progress
+  const startDate = constructionStartDate ? new Date(constructionStartDate) : null;
+  const now = new Date();
+  const startedThisMonth = Boolean(
+    startDate &&
+      startDate.getFullYear() === now.getFullYear() &&
+      startDate.getMonth() === now.getMonth()
+  );
+
+  // Determine stage based on progress. Never use emerald pills with dark text.
   const getConstructionStage = (progress: number) => {
-    if (progress === 0) return { label: "Pre-Construction", color: "bg-[#B89555]" };
-    if (progress < 30) return { label: "Foundation", color: "bg-orange-500" };
-    if (progress < 60) return { label: "Superstructure", color: "bg-amber-500" };
-    if (progress < 90) return { label: "Finishing", color: "jj-surface-emerald" };
-    if (progress < 100) return { label: "Final Touches", color: "bg-blue-500" };
-    return { label: "Complete", color: "bg-[#EFE6D6]" };
+    if (progress === 0) return { label: startedThisMonth ? "Started this month" : "Pre-construction", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
+    if (progress < 30) return { label: "Foundation", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
+    if (progress < 60) return { label: "Superstructure", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
+    if (progress < 90) return { label: "Finishing", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
+    if (progress < 100) return { label: "Final touches", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
+    return { label: "Complete", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
   };
 
   const stage = getConstructionStage(validatedProgress);
@@ -71,10 +73,17 @@ export default function ConstructionTimelineSection({
       {hasData && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${stage.color}`}>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${stage.className}`}>
+                <CircleDot className="h-3.5 w-3.5 text-[#064E3B]" />
                 {stage.label}
               </span>
+              {startedThisMonth && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/45 bg-[#F7F2EA] px-3 py-1 text-xs font-semibold text-[#1A1A1A]">
+                  <Clock className="h-3.5 w-3.5 text-[#064E3B]" />
+                  This month it started
+                </span>
+              )}
             </div>
             <span className="text-2xl font-bold text-[#1A1A1A]">{validatedProgress}%</span>
           </div>
@@ -96,11 +105,11 @@ export default function ConstructionTimelineSection({
         {constructionStartDate && (
           <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-full jj-surface-emerald-soft flex items-center justify-center">
-                <Flag className="w-5 h-5 text-emerald-500" />
+              <div className="w-10 h-10 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
+                <Flag className="w-5 h-5 text-[#064E3B]" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Construction Started</p>
+                <p className="text-xs text-muted-foreground">{startedThisMonth ? "Started This Month" : "Construction Started"}</p>
                 <p className="text-base font-semibold text-foreground">{formatDisplayDate(constructionStartDate)}</p>
               </div>
             </div>
@@ -110,8 +119,8 @@ export default function ConstructionTimelineSection({
         {expectedCompletion && (
           <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-amber-500" />
+              <div className="w-10 h-10 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
+                <Clock className="w-5 h-5 text-[#064E3B]" />
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Expected Completion</p>
@@ -124,7 +133,7 @@ export default function ConstructionTimelineSection({
         {handoverDate && (
           <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/20 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
                 <Home className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
@@ -141,20 +150,17 @@ export default function ConstructionTimelineSection({
         <div className="mt-8 relative">
           {/* Timeline Line */}
           <div className="absolute top-4 left-0 right-0 h-0.5 bg-muted" />
-          <div 
-            className="absolute top-4 left-0 h-0.5 bg-gradient-to-r from-gold to-gold-light transition-all"
-            style={{ width: `${validatedProgress}%` }}
-          />
+          <div className="absolute top-4 left-0 h-0.5 bg-[#064E3B] transition-all" style={{ width: `${validatedProgress}%` }} />
           
           {/* Timeline Points */}
           <div className="flex justify-between relative">
             <div className="flex flex-col items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
- validatedProgress > 0 ? "bg-[#EFE6D6] text-[#1A1A1A]" : "bg-muted text-muted-foreground"
+              <div className={`w-8 h-8 rounded-full border flex items-center justify-center z-10 ${
+ startedThisMonth || validatedProgress > 0 ? "bg-[#FDFBF7] border-[#064E3B] text-[#064E3B]" : "bg-[#F7F2EA] border-[#B89555]/35 text-[#1A1A1A]/60"
  }`}>
                 <Flag className="w-4 h-4" />
               </div>
-              <span className="text-xs text-muted-foreground mt-2">Start</span>
+              <span className="text-xs text-muted-foreground mt-2">{startedThisMonth ? "Started this month" : "Start"}</span>
             </div>
             
             <div className="flex flex-col items-center">
