@@ -32,6 +32,38 @@ serve(async (req) => {
   const waf = await enforceWAF(req, corsHeaders, "ai", "ai-mortgage-advisor");
   if (waf.blocked) return waf.response!;
 
+  // Require an authenticated user (JWT). Deployment default is verify_jwt=false,
+  // so validate the caller in code before invoking the AI gateway.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const token = authHeader.toLowerCase().startsWith("bearer ") ? authHeader.slice(7) : "";
+  if (!token) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+  try {
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+    const { data: userData, error: userErr } = await authClient.auth.getUser(token);
+    if (userErr || !userData?.user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  } catch (_e) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+
+
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
