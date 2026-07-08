@@ -378,7 +378,7 @@ const DeveloperLiveEditor = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-[#1A1A1A] tracking-tight">My Projects</h1>
-          <p className="text-[#1A1A1A]/70 text-sm mt-1">Select projects to bulk publish, unpublish, or enrich. Click any row to edit.</p>
+          <p className="text-[#1A1A1A]/70 text-sm mt-1">Bulk publish, unpublish, enrich or delete. Auto-merge finds duplicates (same developer + same name) and keeps the verified one.</p>
         </div>
         <Button
           onClick={() => navigate(isOwner ? "/owner/developers/new-project" : "/developer-hub/new-project")}
