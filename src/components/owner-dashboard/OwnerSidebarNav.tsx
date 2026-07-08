@@ -63,6 +63,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: "Owner Panel", icon: Crown, path: "/owner/admin" },
       { label: "Overview", icon: LayoutDashboard, path: "/owner" },
+      { label: "JBJ Hub", icon: Sparkles, path: "/owner/jbj-hub" },
       { label: "Document Studio", icon: FileText, path: "/owner/documents/forms" },
       {
         label: "CRM",
@@ -112,7 +113,7 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "Meeting Hub", icon: Video, path: "/meeting-center" },
       { label: "AI Meeting Summarizer", icon: Brain, path: "/ai-meeting-summarizer" },
       { label: "Agent Integrations (MCP)", icon: Plug, path: "/owner/agent-integrations" },
-      { label: "Areas & Communities", icon: MapPin, path: "/owner/areas" },
+      { label: "Areas & Communities", icon: MapPin, path: "/owner/jbj-hub?tab=areas" },
       { label: "Data Gaps", icon: AlertTriangle, path: "/owner/data-gaps" },
     ],
   },
