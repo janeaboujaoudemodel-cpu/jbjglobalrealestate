@@ -767,10 +767,8 @@ function ProjectDetailLayoutInner({
 
   const amraKitchenInteriorImageUrl = useMemo(
     () =>
-      images.find((img) => /kitchen|appliance|smeg|dining|lounge|living/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
-      images.find((img) => /4bhk\s+br|bedroom|residence|interior/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
-      images.find((img) => !/bathroom|washroom|pool|court|golf|plan/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
-      amraInRoomDining,
+      images.find((img) => /smeg|appliance/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
+      amraSmegKitchen,
     [images],
   );
 
