@@ -234,6 +234,10 @@ export const usePopupVisibility = (id: PopupId) => {
   const { requestShow, notifyDismissed, canShow, isMobile } = usePopupCoordinator();
   const [wantsToShow, setWantsToShow] = useState(false);
 
+  // Stable callbacks so consumers can safely use them in dependency arrays.
+  const requestToShow = useCallback(() => setWantsToShow(true), []);
+  const dismiss = useCallback(() => setWantsToShow(false), []);
+
   // When the popup wants to show, register with coordinator
   useEffect(() => {
     if (wantsToShow) {
@@ -254,12 +258,12 @@ export const usePopupVisibility = (id: PopupId) => {
     /**
      * Call this when the popup determines it should try to show.
      */
-    requestToShow: () => setWantsToShow(true),
+    requestToShow,
     
     /**
      * Call this when the popup is dismissed.
      */
-    dismiss: () => setWantsToShow(false),
+    dismiss,
     
     /**
      * Whether the popup is currently allowed to render/show.
