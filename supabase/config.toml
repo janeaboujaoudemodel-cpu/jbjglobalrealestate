@@ -601,3 +601,6 @@ verify_jwt = false
 
 [functions.documents-public-fill]
 verify_jwt = false
+
+[functions.register-user]
+verify_jwt = false

@@ -260,6 +260,11 @@ export const OwnerRoutes = () => (
         {React.createElement(React.lazy(() => import("@/pages/owner/OwnerUsers")))}
       </Suspense>
     } />
+    <Route path="crm-directory" element={
+      <Suspense fallback={<PageLoader />}>
+        {React.createElement(React.lazy(() => import("@/pages/owner/OwnerCRMDirectory")))}
+      </Suspense>
+    } />
 
     <Route path="research-users" element={
       <Suspense fallback={<PageLoader />}>

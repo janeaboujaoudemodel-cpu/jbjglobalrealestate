@@ -5,6 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 // Paths that unauthenticated visitors are allowed to see.
 const PUBLIC_PATH_PREFIXES = [
   "/access",
+  "/signup",
+  "/welcome",
   "/auth",
   "/reset-password",
   "/oauth",
