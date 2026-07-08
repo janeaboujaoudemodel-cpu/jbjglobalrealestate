@@ -69,7 +69,7 @@ const OwnerDashboardShell = () => {
            loading="lazy" decoding="async" />
           {!collapsed && (
             <span
-              className="min-w-0 flex-1 text-[12px] uppercase tracking-[0.18em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left truncate"
+              className="min-w-0 flex-1 text-[11px] uppercase tracking-[0.08em] text-[#1A1A1A] font-extrabold whitespace-nowrap leading-none text-left"
             >
               JBJ GLOBAL REAL ESTATE
             </span>

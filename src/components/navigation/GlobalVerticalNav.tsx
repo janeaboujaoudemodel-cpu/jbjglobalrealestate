@@ -1101,9 +1101,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-3 before:bottom-3 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-3 after:right-3 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
         <Link to="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0"  loading="lazy" decoding="async" />
-          <div className="flex flex-col mt-1">
-            <span className="text-[12px] font-extrabold text-[#1A1A1A] tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-            <span className="text-[10px] font-bold text-[#1A1A1A]/70 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+          <div className="min-w-0 mt-1">
+            <span className="block text-[11px] font-extrabold text-[#1A1A1A] tracking-[0.08em] leading-none whitespace-nowrap">JBJ GLOBAL REAL ESTATE</span>
           </div>
         </Link>
       </div>
