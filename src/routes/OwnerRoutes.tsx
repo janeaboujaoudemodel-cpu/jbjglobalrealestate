@@ -48,6 +48,8 @@ const GlobalRecommendationsHub = lazy(() => import("@/pages/owner/GlobalRecommen
 const AgentIntegrations = lazy(() => import("@/pages/owner/AgentIntegrations"));
 const OwnerDataGaps = lazy(() => import("@/pages/owner/OwnerDataGaps"));
 const OwnerAreasAdmin = lazy(() => import("@/pages/owner/OwnerAreasAdmin"));
+const OwnerPublicGateEditor = lazy(() => import("@/pages/owner/OwnerPublicGateEditor"));
+
 const JbjHub = lazy(() => import("@/pages/owner/JbjHub"));
 const OwnerEnrichmentReview = lazy(() => import("@/pages/owner/OwnerEnrichmentReview"));
 
