@@ -18,7 +18,7 @@ interface Props {
   cardImageUrl?: string | null;
 }
 
-const BUCKET = "project-images";
+const BUCKET = "rel-media";
 
 export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl }: Props) {
   const canEdit = useCanEdit("project_photos");
@@ -90,7 +90,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
     let i = 0;
     for (const file of Array.from(files)) {
       try {
-        const path = `${projectId}/${crypto.randomUUID()}-${file.name}`;
+        const path = `project-uploads/${projectId}/${crypto.randomUUID()}-${file.name}`;
         const { error: upErr } = await supabase.storage
           .from(BUCKET)
           .upload(path, file, { contentType: file.type || "image/jpeg" });
@@ -103,6 +103,9 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
           alt_text: file.name,
         } as any);
         if (insErr) throw insErr;
+        if (!coverImageUrl && nextOrder === 0 && i === 0) {
+          await supabase.from("projects").update({ cover_image_url: pub.publicUrl } as any).eq("id", projectId);
+        }
         ok++;
       } catch (e) {
         console.error(e);
@@ -114,7 +117,7 @@ export default function HeroImagePicker({ projectId, coverImageUrl, cardImageUrl
     if (!ok && fail) toast.error("Upload failed");
     setBusy(false);
     refresh();
-  }, [projectId, images?.length]);
+  }, [projectId, images?.length, coverImageUrl]);
 
   if (!canEdit) return null;
 
