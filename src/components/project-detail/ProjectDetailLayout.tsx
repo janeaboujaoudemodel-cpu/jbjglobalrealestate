@@ -2384,7 +2384,7 @@ function ProjectDetailLayoutInner({
                   url: d.url,
                   name: d.name,
                   display_title: d.display_title,
-                  cover_image_url: documentCoverFor(d, effectiveDocuments.findIndex((doc) => doc.id === d.id)),
+                  cover_image_url: documentCovers[d.id] || documentCoverFor(d, effectiveDocuments.findIndex((doc) => doc.id === d.id)),
                   is_visible: d.is_visible ?? true,
                   allow_download: d.allow_download ?? true,
                 }))}
