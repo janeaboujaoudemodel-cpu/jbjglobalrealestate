@@ -49,6 +49,7 @@ const AgentIntegrations = lazy(() => import("@/pages/owner/AgentIntegrations"));
 const OwnerDataGaps = lazy(() => import("@/pages/owner/OwnerDataGaps"));
 const OwnerAreasAdmin = lazy(() => import("@/pages/owner/OwnerAreasAdmin"));
 const JbjHub = lazy(() => import("@/pages/owner/JbjHub"));
+const OwnerEnrichmentReview = lazy(() => import("@/pages/owner/OwnerEnrichmentReview"));
 
 const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagement"));
 const Documents = lazy(() => import("@/pages/Documents"));
@@ -267,6 +268,7 @@ export const OwnerRoutes = () => (
     <Route path="data-gaps" element={<OwnerDataGaps />} />
     <Route path="areas" element={<OwnerAreasAdmin />} />
     <Route path="jbj-hub" element={<JbjHub />} />
+    <Route path="enrichment-review" element={<OwnerEnrichmentReview />} />
 
     <Route path="developers" element={<DeveloperDirectory />} />
     <Route path="developers/directory" element={<Navigate to="/owner/developers" replace />} />

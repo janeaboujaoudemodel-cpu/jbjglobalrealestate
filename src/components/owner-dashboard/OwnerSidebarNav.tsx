@@ -114,7 +114,8 @@ const NAV_SECTIONS: NavSection[] = [
       { label: "AI Meeting Summarizer", icon: Brain, path: "/ai-meeting-summarizer" },
       { label: "Agent Integrations (MCP)", icon: Plug, path: "/owner/agent-integrations" },
       { label: "Areas & Communities", icon: MapPin, path: "/owner/jbj-hub?tab=areas" },
-      { label: "Data Gaps", icon: AlertTriangle, path: "/owner/data-gaps" },
+     { label: "Data Gaps", icon: AlertTriangle, path: "/owner/data-gaps" },
+     { label: "AI Enrichment Review", icon: Sparkles, path: "/owner/enrichment-review" },
     ],
   },
 
