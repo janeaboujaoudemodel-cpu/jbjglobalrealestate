@@ -45,6 +45,8 @@ const OwnerSafetyPage = lazy(() => import("@/pages/owner/OwnerSafetyPage"));
 const OwnerFounderSettings = lazy(() => import("@/pages/owner/OwnerFounderSettings"));
 const PodcastStudio = lazy(() => import("@/pages/owner/PodcastStudio"));
 const GlobalRecommendationsHub = lazy(() => import("@/pages/owner/GlobalRecommendationsHub"));
+const AgentIntegrations = lazy(() => import("@/pages/owner/AgentIntegrations"));
+
 const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagement"));
 const Documents = lazy(() => import("@/pages/Documents"));
 const CRMLeadDetail = lazy(() => import("@/pages/CRMLeadDetail"));
