@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowLeft, ArrowRight, Download, Maximize2, X } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
+import { SafeImage } from "@/components/SafeImage";
 import { Button } from "@/components/ui/button";
 import { SUPABASE_URL } from "@/config/backend";
 
@@ -287,7 +288,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
       <div className="relative">
         {/* Inline carousel — uses pageIndex, completely independent of fullscreen */}
         <div className="aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-muted via-muted/80 to-muted/60 relative group flex items-center justify-center">
-          <img
+          <SafeImage
             src={getHighResImageUrl(images[pageIndex].image_url)}
             alt={images[pageIndex].alt_text || "Project image"}
             className="w-full h-full object-cover"
@@ -378,7 +379,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                     type="button"
                     aria-label={isOverflowTile ? `View all ${total} photos` : `View photo ${index + 1}`}
                   >
-                    <img
+                    <SafeImage
                       src={getHighResImageUrl(image.image_url, "464x312")}
                       alt={image.alt_text || `Thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"
@@ -444,7 +445,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
 
             {/* Stage — image fills available space. min-h-0 / min-w-0 lets flex child actually shrink. */}
             <div className="relative flex-1 min-h-0 min-w-0 flex items-center justify-center overflow-hidden bg-[#F7F2EA] p-2 md:p-4">
-              <img
+              <SafeImage
                 key={images[fsIndex].id}
                 src={getHighResImageUrl(images[fsIndex].image_url)}
                 alt={images[fsIndex].alt_text || `Photo ${fsIndex + 1}`}
@@ -488,7 +489,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                       }`}
                       aria-label={`Go to photo ${i + 1}`}
                     >
-                      <img
+                      <SafeImage
                         src={getHighResImageUrl(img.image_url, "200x150")}
                         alt={img.alt_text || `Thumbnail ${i + 1}`}
                         className="w-full h-full object-cover"

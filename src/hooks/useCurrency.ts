@@ -136,11 +136,11 @@ export function useCurrency() {
   const formatPriceRangeFull = useCallback((minAED: number | null | undefined, maxAED: number | null | undefined): string => {
     const hasMin = typeof minAED === 'number' && minAED > 0;
     const hasMax = typeof maxAED === 'number' && maxAED > 0 && maxAED !== minAED;
-    if (hasMin && hasMax) return `From ${formatPriceFull(minAED)} up to ${formatPriceFull(maxAED)}`;
-    if (hasMin) return `From ${formatPriceFull(minAED)}`;
-    if (hasMax) return `Up to ${formatPriceFull(maxAED)}`;
+    if (hasMin && hasMax) return `${formatPrice(minAED)} to ${formatPrice(maxAED)}`;
+    if (hasMin) return `From ${formatPrice(minAED)}`;
+    if (hasMax) return `Up to ${formatPrice(maxAED)}`;
     return 'Price on request';
-  }, [formatPriceFull]);
+  }, [formatPrice]);
 
   const currencyInfo = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
 
