@@ -41,6 +41,7 @@ const getAmenityIcon = (amenity: string) => {
 };
 
 const findRealPhoto = (amenity: string, amenityImages?: Record<string, string> | null): string | null => {
+  if (/24\s*\/\s*7|security|cctv|guard/i.test(amenity)) return null;
   if (!amenityImages) return null;
   if (amenityImages[amenity]) return amenityImages[amenity];
   const lower = amenity.toLowerCase();
@@ -110,7 +111,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                     <img
                       src={photoUrl}
                       alt={amenity}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="block w-full h-full object-cover object-center p-0 m-0 border-0 group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = 'none';
@@ -121,8 +122,10 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                     {!isCitiBuddy && (
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                     )}
-                    <div className="amenity-icon-fallback hidden w-12 h-12 rounded-full bg-[#EFE6D6]/10 items-center justify-center">
-                      <Icon className="w-6 h-6 text-[#1A1A1A]" />
+                    <div className="amenity-icon-fallback hidden absolute inset-0 bg-[#F7F2EA] items-center justify-center">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EFE6D6]">
+                        <Icon className="w-6 h-6 text-[#1A1A1A]" />
+                      </span>
                     </div>
                   </>
                 ) : (
@@ -167,13 +170,14 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                   aria-label={`Amenities page ${i + 1}`}
                   aria-current={active ? "page" : undefined}
                   data-emerald-action={active ? "true" : undefined}
-                  data-no-contrast-guard={active ? true : undefined}
-                   className={`inline-grid place-items-center w-9 h-9 min-w-9 min-h-9 aspect-square rounded-full p-0 text-xs font-bold tabular-nums leading-none shrink-0 transition-all ${
+                  data-no-contrast-guard
+                  data-amenity-page-button="true"
+                   className={`inline-flex items-center justify-center rounded-full p-0 text-xs font-bold tabular-nums leading-none shrink-0 transition-all ${
                     active
                       ? "jj-emerald-action allow-white text-white shadow-sm"
                       : "bg-white text-[#064E3B] border border-[#B89555]/50 hover:bg-[#EFE6D6]/40"
                   }`}
-                  style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
+                  style={active ? { width: 36, height: 36, minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36, flexBasis: 36, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { width: 36, height: 36, minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36, flexBasis: 36, color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
                 >
                   {i + 1}
                 </button>

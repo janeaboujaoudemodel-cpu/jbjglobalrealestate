@@ -1,64 +1,55 @@
-I will implement the Amra fixes in focused batches and validate with Playwright screenshots on desktop and mobile.
+## Root cause found
 
-## Batch 1 — Floor-plan loading and document titles
-- Replace the inline floor-plan PDF renderer with a fast first-page preview on desktop and a stable document preview/download card on mobile so it stops hanging on “Loading document…”.
-- Force every document loader/spinner to pure white on emerald, including Suspense fallbacks and nested PDF page loaders.
-- Stop rendering all PDF pages inside the floor-plan card; keep full viewing/downloading in the document modal/download flow.
-- Ensure floor-plan labels do not show noise such as `FINAL`, file extensions, or raw filenames.
+- Amra has **85 saved photos** in the backend under `project_images`; they are not lost.
+- The public project query fetches those photos, but the gallery/media rendering path can still show zero because the project detail page normalizes/dedupes images in multiple places and the media section is currently video-only.
+- Amra currently has **0 rows in `project_videos`** and storage search found **0 video files** in the relevant media buckets, so there are no backend videos attached to restore from the current saved project data. The fix must still make future video uploads persist and display immediately.
+- Construction progress is hardcoded/fallbacked for Amra to July 2026 + 0%, and the visual line uses progress percent only, so “started this month” and the first milestone can look inconsistent.
 
-## Batch 2 — Project location map
-- Replace the red/black pin with a larger premium JBJ-style project pin.
-- Apply the exact active metallic pill effect used by the `sq ft / sq m` active toggle to Satellite / Street / Terrain without changing the button colors or palette.
-- Move premium view controls beside the Open Maps action using labels like “Survey view” / “Detail view” instead of “far/close”.
-- Fix zoom controls so plus/minus respond instantly and do not scroll or redirect the page.
+## Plan
 
-## Batch 3 — Nearby projects map
-- Rename the heading from “Other projects in Al Raudah” to a clean Umm Al Quwain/emirate-based title.
-- Rebuild the three map header tabs as one connected emerald/champagne bar with the same active pill effect as `sq ft`.
-- Remove disabled/blocked cursor behavior from clickable tabs; only truly unavailable tabs will be inactive.
-- Force all price/currency text on map markers to pure white.
-- Replace the ugly current-project pin with the same premium visible pin.
-- Fix marker click and zoom behavior and keep the map stable without automatic route/home redirects.
+1. **Stop the gallery zero-render issue at the source**
+   - Normalize Amra/project images once in the project-detail mapping layer and pass all 85 saved `project_images` through consistently.
+   - Add a visible owner/debug-safe count path so the gallery section cannot silently disappear when backend rows exist.
+   - Remove any over-aggressive filtering/deduping that can collapse valid owner-uploaded filenames like `1.jpg`, `02.jpg`, etc.
 
-## Batch 4 — Presentation and brochure cards
-- Lift the Generate Presentation monogram and “Click to start / ~30 seconds” content upward and redistribute padding cleanly inside the emerald card.
-- Make the project brochure cover photo more visible from the center while keeping the same card design.
-- Remove the live React `fetchPriority` console warning from the brochure image.
+2. **Make Project Media handle both photos and videos correctly**
+   - Keep `Project Gallery` for photos.
+   - Rebuild `Project Media` so uploaded videos play inline in the same section without a tiny modal.
+   - Add a clear empty video state for owner mode only: if no videos exist, it says no videos are attached instead of pretending there is a fake video.
+   - Ensure future video uploads route to `project_videos`, invalidate the exact project query, and appear on the public page immediately.
 
-## Batch 5 — Project status and visible off-plan label
-- Mark Amra as off-plan in the visible project status/category UI.
-- Keep mortgage logic hidden/blocked for off-plan unless the existing rules allow it.
-- Ensure the status is visible to users in the hero/quick facts where the project status is shown.
+3. **Attempt safe video recovery from backend storage**
+   - Re-scan relevant storage paths and document tables for video MIME types/extensions.
+   - If real video objects exist but are not linked, create/repair `project_videos` rows.
+   - If the backend truly has zero video objects, do not use fake fallback video; leave the owner upload path fixed.
 
-## Batch 6 — Section ordering and manual-project report rule
-- Reorder bottom sections exactly as requested:
-  1. Who’s buying here
-  2. More projects by Citi Developers
-  3. Noticed something incorrect? only for scraped/imported projects
-  4. Expert consultation / request a callback
-  5. Recommended Projects
-  6. Dubai Market Intelligence
-- Hide “Noticed something incorrect?” for manually added projects.
-- Keep it available only for scraped/imported projects.
+4. **Fix construction progress logic and contrast**
+   - Replace static “Started this month” logic with date-based labels:
+     - current start month: “Started this month”
+     - after current month: “Construction started” + elapsed months/automatic status
+     - future start date: “Pre-construction” / “Starts in …”
+   - Make the first timeline segment visibly filled from the start even when progress is 0, while still showing `0%` as the backend progress.
+   - Lock the status pill, icons, and progress line to correct white-on-emerald / champagne contrast so the guard cannot flip them.
 
-## Batch 7 — Videos, amenities, and Citi Buddy assets
-- Restore the video gallery section so uploaded videos appear on the project page even when there is no main `video_url`.
-- Use existing uploaded/project gallery images for amenities first.
-- For missing amenity photos, use images extracted from the fact sheet/documents; only generate images if no real source exists.
-- Add the real Citi Buddy robot visual from the Citi Buddy document/gallery into the Citi Buddy card, cropped/transparent-style if possible, not as a fake background.
-- Use the Citi Buddy robot image as the document cover for Citi Buddy instead of repeating the generic project photo.
+5. **Rebuild House Details and Standard Inclusions**
+   - Replace the current uneven card layout with equal-height, responsive premium cards.
+   - Rebuild standard inclusions as aligned tiles/pills with stable dimensions, not wrapping unevenly or misaligning.
 
-## Batch 8 — Location facts cleanup
-- Remove/avoid unsupported false distance claims.
-- Correct Vida Resort wording to reflect it is next to the project / about 25 meters away unless the official source states otherwise.
-- Keep “flagship” next to Amra where appropriate.
+6. **Fix Amra amenity photos and white borders**
+   - Remap Smart Home / IoT, 24-7 Security, Yacht-Limo, Fully Furnished, Fully Serviced, Smart Kitchen/Smeg to real Amra uploaded or brochure-derived images only.
+   - Avoid lobby photos for security and avoid inaccurate kitchen imagery.
+   - Use image containers that crop cleanly with no white side borders.
+   - For amenities without a verified photo, show a premium icon tile instead of a wrong/random photo.
 
-## Batch 9 — Responsive and stability fixes
-- Fix mobile cropping in the payment-plan timeline, starting price, floor-plan section, and cards.
-- Prevent project-page refresh/redirect from returning users to the homepage; preserve the current project/search route after refresh.
-- Reduce map/PDF work on initial render to improve perceived page speed.
+7. **Fix pagination circles**
+   - Rebuild the amenity page number controls as fixed square/circle buttons with stable width/height and centered numerals.
+   - Verify they remain circles on tablet width and do not stretch vertically.
 
-## Validation deliverables
-- Run Playwright on the Amra project page with desktop viewport `1280x1800` and a mobile viewport.
-- Capture screenshots for: floor plans loader/preview, location map active pill + premium pin, nearby map tabs + white marker labels, generate presentation card, brochure card, off-plan label, videos, amenities/Citi Buddy, reordered bottom sections, and payment/mobile layout.
-- Check console output and report zero relevant errors/warnings after the fixes.
+8. **Sidebar/wordmark parity**
+   - Align backend owner sidebar wordmark sizing, one-line black title, spacing, and vertical sidebar behavior to the front-end vertical sidebar pattern.
+
+9. **Validation before claiming fixed**
+   - Run database checks for Amra image/video counts.
+   - Run Playwright on `/project/amra-the-first-integrative-wellness-resort-mr9hh3ia` at the requested preview viewport and desktop viewport.
+   - Capture screenshots for: gallery with photos, media/video section state, construction progress, house details, standard inclusions, amenities with pagination, and backend sidebar.
+   - Only mark items fixed after screenshot and data validation pass.

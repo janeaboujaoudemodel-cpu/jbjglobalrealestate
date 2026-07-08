@@ -171,9 +171,9 @@ const OwnerDashboardShell = () => {
   // Expose content-area offsets so the global BrandedLoader centers in the
   // visible main area (right of sidebar, below the top bar) rather than over
   // the whole viewport.
-  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "320px";
+  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "200px";
   const contentTop = "var(--shell-header-h)";
-  const mainWidth = isMobile || fullscreen ? "100%" : sidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 320px)";
+  const mainWidth = isMobile || fullscreen ? "100%" : sidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 200px)";
 
   return (
     <div
@@ -203,8 +203,8 @@ const OwnerDashboardShell = () => {
           data-backend-sidebar="owner"
           data-surface="champagne"
           className={cn(
-            "owner-shell-surface fixed left-0 top-0 h-full bg-[#F7F2EA] border-r border-[#B89555]/40 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
-            sidebarCollapsed ? "w-[72px]" : "w-[320px]"
+              "owner-shell-surface fixed left-0 top-0 h-full bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-[#B89555]/30 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
+              sidebarCollapsed ? "w-[72px]" : "w-[200px]"
           )}
           role="navigation"
           aria-label="Owner dashboard navigation"
@@ -217,7 +217,7 @@ const OwnerDashboardShell = () => {
       <main 
         className={cn(
           "flex-1 min-w-0 overflow-x-hidden transition-all duration-300 overscroll-contain",
-          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[320px]")
+          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[200px]")
         )}
         style={{ width: mainWidth, maxWidth: mainWidth }}
         role="main"

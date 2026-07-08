@@ -57,6 +57,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["owner-project-documents", projectId] });
     qc.invalidateQueries({ queryKey: ["project"] });
+    qc.invalidateQueries({ queryKey: ["project", projectId] });
     qc.invalidateQueries({ queryKey: ["projects"] });
     qc.invalidateQueries({ queryKey: ["owner-project-images", projectId] });
   };
@@ -83,7 +84,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
               project_id: projectId,
               image_url: pub.publicUrl,
               alt_text: file.name,
-              display_order: nextOrder,
+              display_order: Date.now() + ok,
             } as any)
           : mediaKind === "video" || docType === "video"
           ? await supabase.from("project_videos").insert({
@@ -91,7 +92,7 @@ export default function OwnerDocDropzone({ projectId }: OwnerDocDropzoneProps) {
               url: pub.publicUrl,
               title: file.name,
               is_visible: true,
-              display_order: nextOrder,
+              display_order: Date.now() + ok,
             } as any)
           : await supabase.from("project_documents").insert({
               project_id: projectId,

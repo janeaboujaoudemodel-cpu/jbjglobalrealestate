@@ -8,7 +8,8 @@ import {
   Wind,
   Shield,
   Zap,
-  Home
+  Home,
+  CheckCircle2
 } from "lucide-react";
 
 interface HouseDetailsSectionProps {
@@ -108,13 +109,14 @@ export default function HouseDetailsSection({
     return null;
   }
 
-  const featuredDetails = details.slice(0, 3);
-  const remainingDetails = details.slice(3);
+  const uniqueStandardFeatures = standardFeatures.filter((feature, index, list) =>
+    list.findIndex((item) => item.label.toLowerCase() === feature.label.toLowerCase()) === index,
+  );
 
   return (
-    <div className="jj-card-inner overflow-hidden p-0">
+    <div className="jj-card-inner overflow-hidden p-0" data-house-details-premium="true">
       <div className="border-b border-[#B89555]/25 bg-[#FDFBF7] p-6 md:p-8">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#1A1A1A]/55">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#1A1A1A]/55">
           {isAmra ? "Private resort residence" : "Property specifications"}
         </p>
         <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2">
@@ -126,47 +128,27 @@ export default function HouseDetailsSection({
       {/* Main Specifications Grid */}
       {details.length > 0 && (
         <div className="p-6 md:p-8">
-          <div className="grid auto-rows-fr gap-4 md:grid-cols-3 mb-5">
-            {featuredDetails.map((detail, idx) => (
+          <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {details.map((detail, idx) => (
               <div
                 key={idx}
-                className="h-full rounded-xl border border-[#B89555]/35 bg-[#F7F2EA] p-5 min-h-[170px] flex flex-col justify-between"
+                className="group relative flex min-h-[168px] h-full flex-col justify-between overflow-hidden rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] p-5 shadow-sm transition-colors hover:border-[#B89555]/70"
               >
-                <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#FDFBF7]">
-                  <detail.icon className="w-5 h-5 text-[#064E3B]" />
+                <div className="absolute inset-x-0 top-0 h-1 bg-[#064E3B] opacity-90" />
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#FDFBF7]">
+                  <detail.icon className="h-5 w-5 text-[#064E3B]" />
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-[#1A1A1A]/58 mb-1.5">
+                  <p className="mb-1.5 text-[10px] uppercase tracking-[0.18em] font-semibold text-[#1A1A1A]/58">
                     {detail.label}
                   </p>
-                  <p className="text-lg md:text-xl font-semibold leading-snug text-[#1A1A1A]">
+                  <p className="text-lg md:text-xl font-semibold leading-snug text-[#1A1A1A] [overflow-wrap:anywhere]">
                     {detail.value}
                   </p>
                 </div>
               </div>
             ))}
           </div>
-
-          {remainingDetails.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {remainingDetails.map((detail, idx) => (
-            <div
-              key={idx}
-              className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4 transition-all hover:border-[#B89555]/60"
-            >
-              <div className="w-9 h-9 rounded-full border border-[#B89555]/35 bg-[#F7F2EA] flex items-center justify-center mb-3">
-                <detail.icon className="w-4 h-4 text-[#064E3B]" />
-              </div>
-              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-1 text-[#1A1A1A]/55">
-                {detail.label}
-              </p>
-              <p className="text-base font-semibold text-[#1A1A1A] leading-snug">
-                {detail.value}
-              </p>
-            </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
 
@@ -193,19 +175,21 @@ export default function HouseDetailsSection({
       {/* Standard Features (always show a few) */}
       {details.length > 0 && (
         <div className="px-6 md:px-8 pb-6 md:pb-8 pt-6 border-t border-[#B89555]/25">
-          <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
+          <h4 className="mb-4 text-sm font-semibold text-foreground uppercase tracking-wider">
             Standard Inclusions
           </h4>
-          <div className="flex flex-wrap gap-3">
-            {standardFeatures.filter((feature, index, list) => list.findIndex((item) => item.label.toLowerCase() === feature.label.toLowerCase()) === index).map((feature, idx) => (
+          <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {uniqueStandardFeatures.map((feature, idx) => (
               <div
                 key={idx}
                 data-no-contrast-guard
-                data-emerald-action="true"
-                className="jj-house-inclusion-pill jj-emerald-action allow-white flex items-center gap-2 px-4 py-2 rounded-full border border-transparent"
+                className="flex min-h-[72px] h-full items-center gap-3 rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] px-4 py-3"
               >
-                <feature.icon className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-                <span className="text-sm font-medium allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{feature.label}</span>
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#064E3B]">
+                  <feature.icon className="h-4 w-4" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                </span>
+                <span className="min-w-0 flex-1 text-sm font-semibold leading-snug text-[#1A1A1A]">{feature.label}</span>
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[#064E3B]" />
               </div>
             ))}
           </div>

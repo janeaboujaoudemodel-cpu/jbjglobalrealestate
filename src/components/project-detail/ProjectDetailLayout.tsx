@@ -162,7 +162,6 @@ import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
 import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
 import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
 import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
-import amraSmegKitchen from "@/assets/amra-smeg-premium-kitchen.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
 
@@ -594,7 +593,7 @@ function ProjectDetailLayoutInner({
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
     const hasConstruction = true; // Always show construction section
-    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
+    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0 || isOwner;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard || isAmraProject;
@@ -627,7 +626,7 @@ function ProjectDetailLayoutInner({
       if (t.id === "mortgage") return mortgageEligible;
       return true;
     });
-  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, uploadedVideos.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label, isAmraProject]);
+  }, [brochureDocs.length, floorPlanDocs.length, images.length, paymentPlanDocs.length, videoDocs.length, uploadedVideos.length, project.amenities, project.faqs, project.payment_breakdown, project.payment_plan, project.floor_plan_types, project.usp_bullets, project.unit_types, project.construction_progress, project.video_url, project.virtual_tour_url, project.roi_estimate, project.rental_yield_estimate, project.developer, project.floors, project.total_units, project.service_charge, project.finishing_standard, project.master_plan_image_url, project.community_highlights, project.sale_status, project.construction_status, project.status_label, isAmraProject, isOwner]);
 
   const stickyProjectTabs = useMemo(
     () => visibleTabs.filter((tab) => STICKY_PROJECT_TAB_IDS.has(tab.id)),
@@ -762,6 +761,15 @@ function ProjectDetailLayoutInner({
 
   const citiBuddyImageUrl = useMemo(
     () => images.find((img) => /citi\s*buddy|city\s*buddy|citybuddy|robot|buddy|concierge/i.test(`${img.alt || ""} ${img.url || ""}`))?.url || citiBuddyRobotLocal,
+    [images],
+  );
+
+  const amraKitchenInteriorImageUrl = useMemo(
+    () =>
+      images.find((img) => /kitchen|appliance|smeg|dining|lounge|living/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
+      images.find((img) => /4bhk\s+br|bedroom|residence|interior/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
+      images.find((img) => !/bathroom|washroom|pool|court|golf|plan/i.test(`${img.alt || ""} ${img.url || ""}`))?.url ||
+      amraInRoomDining,
     [images],
   );
 
@@ -1023,6 +1031,15 @@ function ProjectDetailLayoutInner({
       if (mapped[label]) return; // owner-supplied wins
       if (dedicated[label]) mapped[label] = dedicated[label];
     });
+
+    // Hard overrides for previously incorrect AMRA pairings: do not show a
+    // lobby as security, and avoid synthetic kitchen imagery when owner media
+    // already contains real furnished interiors.
+    delete mapped["24/7 Security with 256-bit encryption"];
+    mapped["Smart Home Automation"] = amraCitiApp;
+    mapped["IoT-enabled apartments"] = amraCitiApp;
+    mapped["Fully furnished apartments"] = galleryImage(2, amraStudio);
+    mapped["Fully serviced apartments"] = amraCitiApp;
 
     // Legacy aliases
     mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
@@ -1603,7 +1620,12 @@ function ProjectDetailLayoutInner({
              <div ref={galleryRef} id="gallery" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <div className="flex items-center justify-between mb-4">
-                   <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
+                    <div>
+                      <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
+                      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/58">
+                        {images.length} saved photo{images.length === 1 ? "" : "s"}
+                      </p>
+                    </div>
                    <div className="flex items-center gap-2">
                      <OwnerSectionEditor projectId={project.id} coverImageUrl={project.cover_image_url} section="gallery" initial={project as any} label="Manage photos" />
                        <button
@@ -1837,7 +1859,7 @@ function ProjectDetailLayoutInner({
                   {/* Kitchen package — Smeg + Villeroy & Boch */}
                   <div className="bg-[#FDFBF7]">
                     <div className="grid lg:grid-cols-[0.9fr_1.1fr] overflow-hidden">
-                      <SafeImage src={images[59]?.url || images[57]?.url || amraSmegKitchen} alt="Amra apartment interior with integrated kitchen palette" className="h-full min-h-[360px] w-full object-cover" loading="lazy" width={1400} height={900} />
+                      <SafeImage src={amraKitchenInteriorImageUrl} alt="Amra apartment interior with integrated kitchen palette" className="block h-full min-h-[360px] w-full object-cover object-center p-0 m-0 border-0" loading="lazy" width={1400} height={900} />
                       <div className="p-6 md:p-8">
                         <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
                           <div>
@@ -1914,7 +1936,7 @@ function ProjectDetailLayoutInner({
             )}
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
-            {(project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
+            {(project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0 || isOwner) && (
              <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
                 <ProjectMediaSection
@@ -1925,6 +1947,7 @@ function ProjectDetailLayoutInner({
                     ...videoDocs.map((v) => ({ id: v.id, url: v.url, title: v.display_title || v.name || "Project video" })),
                   ]}
                   projectName={project.name}
+                  showOwnerEmptyState={isOwner}
                 />
              </div>
            )}
