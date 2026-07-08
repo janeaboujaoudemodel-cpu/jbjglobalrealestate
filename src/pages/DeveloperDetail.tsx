@@ -20,6 +20,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
 import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
+import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
+
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
