@@ -840,6 +840,50 @@ function ProjectDetailLayoutInner({
     return nonBathroom?.url || projectDocumentHeroImage || undefined;
   };
 
+  // Deduplicated cover map — every document gets its OWN photo. The only
+  // documents allowed to share visual identity are Citi Buddy / robot PDFs
+  // (they represent the same concierge robot). We cycle through a small pool
+  // of robot covers so even two robot docs still get different photos when
+  // possible.
+  const documentCovers = useMemo(() => {
+    const used = new Set<string>();
+    const map: Record<string, string | undefined> = {};
+    const robotCovers = [
+      citiBuddyDocumentCoverAsset.url,
+      citiBuddyImageUrl,
+      citiBuddyRobotLocal,
+    ].filter(Boolean) as string[];
+    let robotIdx = 0;
+    const pool = images
+      .filter((img) => !/bathroom|toilet/i.test(`${img.alt || ""} ${img.url || ""}`))
+      .map((i) => i.url);
+
+    for (const doc of effectiveDocuments) {
+      const lower = `${doc.name || ""} ${doc.display_title || ""} ${doc.type || ""}`.toLowerCase();
+      const isRobot = /city\s*buddy|citi\s*buddy|citybuddy|robot|buddy|concierge/.test(lower);
+      if (doc.cover_image_url) {
+        map[doc.id] = doc.cover_image_url;
+        used.add(doc.cover_image_url);
+        continue;
+      }
+      if (isRobot) {
+        map[doc.id] = robotCovers[robotIdx % Math.max(robotCovers.length, 1)];
+        robotIdx++;
+        continue;
+      }
+      const url = pool.find((u) => !used.has(u));
+      if (url) {
+        used.add(url);
+        map[doc.id] = url;
+      } else {
+        map[doc.id] = projectDocumentHeroImage || undefined;
+      }
+    }
+    return map;
+  }, [effectiveDocuments, images, projectDocumentHeroImage, citiBuddyImageUrl]);
+
+
+
   const paymentPlanBenefitHeadline = useMemo(() => {
     const raw = (project.payment_plan || "").trim();
     if (!raw) return null;
