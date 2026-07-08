@@ -38,6 +38,8 @@ import {
   RefreshCw,
   Plug,
 
+  MapPin,
+  AlertTriangle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
