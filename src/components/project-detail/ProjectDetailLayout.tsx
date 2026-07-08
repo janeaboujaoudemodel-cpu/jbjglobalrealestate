@@ -609,7 +609,7 @@ function ProjectDetailLayoutInner({
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
       if (t.id === "usp") return hasUsp;
-      if (t.id === "floor-plans") return hasFloorPlans;
+      
       if (t.id === "amenities") return hasAmenities;
       if (t.id === "payment") return hasPayment;
       if (t.id === "faq") return hasUsefulInfo;
