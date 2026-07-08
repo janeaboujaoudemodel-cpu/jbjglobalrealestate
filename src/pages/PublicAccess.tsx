@@ -77,7 +77,7 @@ export default function PublicAccess() {
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
             <div className="flex items-center gap-3">
-              <JJLogoImage className="h-8 w-auto opacity-95" />
+              <JJLogoImage size="xs" showText={false} variant="dark" className="!items-start" />
               <div className="leading-tight">
                 <p className="font-serif text-base">JBJ Global Real Estate</p>
                 <p className="text-[10px] tracking-[0.28em] uppercase text-[#B89555]/90 mt-0.5">Dubai · UAE</p>
