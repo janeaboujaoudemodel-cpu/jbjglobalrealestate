@@ -591,6 +591,22 @@ const DeveloperLiveEditor = () => {
                           {flags.length} data issue{flags.length > 1 ? "s" : ""}
                         </Badge>
                       )}
+                      {(dupMap?.[p.id] ?? 0) > 0 && (
+                        <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 gap-1">
+                          <CopyIcon className="w-3 h-3" />
+                          {dupMap![p.id]} duplicate{dupMap![p.id] === 1 ? "" : "s"} merged
+                        </Badge>
+                      )}
+                      {p.is_manually_verified && (
+                        <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-200 text-[10px]">
+                          Verified
+                        </Badge>
+                      )}
+                      {p.merged_into_project_id && (
+                        <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 text-[10px]">
+                          Merged duplicate
+                        </Badge>
+                      )}
                     </div>
 
                     {/* Data-issue list — always visible so users know exactly what to fix */}
