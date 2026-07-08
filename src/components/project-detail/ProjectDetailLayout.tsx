@@ -298,7 +298,7 @@ const SUB_NAV_TABS = [
 
 const STICKY_PROJECT_TAB_IDS = new Set([
   "developer",
-  "floor-plans",
+  
   "house-details",
   "amenities",
   "location",
