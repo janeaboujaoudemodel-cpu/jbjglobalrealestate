@@ -160,6 +160,7 @@ import amraCryoChamber from "@/assets/amra-brochure/cryo-chamber.jpg";
 import amraHyperbaric from "@/assets/amra-brochure/hyperbaric-room.jpg";
 import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
 import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
+import amraSmegKitchen from "@/assets/amra-smeg-kitchen.jpg";
 import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
 import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
 
