@@ -1161,7 +1161,6 @@ function ProjectDetailLayoutInner({
     mapped["In-room dining and all-day dining"] = amraInRoomDining;
     return mapped;
   }, [amraAmenities, images, isAmraProject, project.amenity_images]);
-  }, [amraAmenities, images, isAmraProject, project.amenity_images]);
 
   const amraLocationDistances = useMemo(() => {
     const base = project.location_distances || [];
