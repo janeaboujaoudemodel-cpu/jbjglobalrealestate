@@ -31,6 +31,7 @@ interface BookStyleDocumentsProps {
 function detectDocType(doc: BookDoc): { label: string; kind: string } {
   const raw = `${doc.display_title || ""} ${doc.name || ""} ${doc.type || ""}`.toLowerCase();
   const cleanTitle = cleanDocumentTitle(doc.display_title || doc.name || doc.type || "Document");
+  if (/company\s*profile/.test(raw)) return { label: "Company Profile", kind: "company_profile" };
   if (/citi\s*buddy|city\s*buddy|\bbuddy\b|concierge/.test(raw)) return { label: "Citi Buddy", kind: "citi_buddy" };
   if (/fact\s*sheet|factsheet/.test(raw)) return { label: "Fact Sheet", kind: "fact_sheet" };
   if (/floor\s*plan/.test(raw)) return { label: /floor\s*plan$/i.test(cleanTitle) ? "Floor Plan" : cleanTitle, kind: "floor_plan" };
