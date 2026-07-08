@@ -41,7 +41,6 @@ const getAmenityIcon = (amenity: string) => {
 };
 
 const findRealPhoto = (amenity: string, amenityImages?: Record<string, string> | null): string | null => {
-  if (/24\s*\/\s*7|security|cctv|guard/i.test(amenity)) return null;
   if (!amenityImages) return null;
   if (amenityImages[amenity]) return amenityImages[amenity];
   const lower = amenity.toLowerCase();
