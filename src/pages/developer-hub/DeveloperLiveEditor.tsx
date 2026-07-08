@@ -797,6 +797,33 @@ const DeveloperLiveEditor = () => {
           )}
         </section>
       )}
+
+      <AlertDialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {confirmDelete?.mode === "bulk"
+                ? `Delete ${selected.size} project${selected.size === 1 ? "" : "s"}?`
+                : `Delete "${confirmDelete?.name ?? "this project"}"?`}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the project record. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (confirmDelete?.mode === "bulk") bulkDelete();
+                else if (confirmDelete?.id) deleteProject(confirmDelete.id);
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
