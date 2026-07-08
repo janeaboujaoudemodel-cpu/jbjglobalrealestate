@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
             : Promise.resolve({ data: [] }),
           // Demographics from user_role_selections
           supabase.from("user_role_selections")
-            .select("nationality, country, city, preferred_language, age_range, selected_role")
+            .select("nationality, current_location_country, current_location_city, preferred_language, age_range, selected_role")
             .eq("user_id", userId)
             .maybeSingle(),
         ]);
