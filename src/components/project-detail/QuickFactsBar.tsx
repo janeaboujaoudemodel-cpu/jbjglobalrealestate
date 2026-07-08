@@ -75,7 +75,7 @@ export default function QuickFactsBar({
 
   return (
     <div className="w-full min-w-0">
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4 items-stretch">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 items-stretch">
         {/* Off-plan / Ready — equal-height status card, aligned with the strap cards. */}
         {publicPillLabel && (
           <div
