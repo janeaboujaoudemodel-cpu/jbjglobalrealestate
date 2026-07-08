@@ -34,7 +34,7 @@ export default function PublicAccess() {
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 h-[72px] flex items-center justify-between gap-6">
           <a href="/access" className="flex items-center gap-3 group">
             <div className="relative">
-              <JJLogoImage className="h-10 w-auto transition-transform duration-300 group-hover:scale-105" />
+              <JJLogoImage size="sm" showText={false} className="!items-start" />
             </div>
             <div className="hidden sm:flex flex-col leading-none">
               <span className="font-serif text-[19px] text-[#0d3a2b] tracking-tight">JBJ Global</span>
