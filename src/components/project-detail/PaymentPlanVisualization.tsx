@@ -339,7 +339,7 @@ export default function PaymentPlanVisualization({
               {/* Timeline Dots — anchored to the END of each stage bar so the circles
                   visually match the width of the corresponding segment (e.g. the "During
                   Construction" dot aligns with the end of its 60% bar, not the midpoint). */}
-              <div className="relative mt-4 h-32 sm:h-24">
+              <div className="relative mt-4 h-40 sm:h-32">
                 <div className="absolute top-3 left-0 right-0 h-0.5" style={{ backgroundImage: 'linear-gradient(90deg,#064E3B 0%,#0B6E4F 50%,#0E8A63 100%)' }} />
                 {(() => {
                   // Anchor each label to the MIDPOINT of its segment so it visually
@@ -347,7 +347,10 @@ export default function PaymentPlanVisualization({
                   const bookingMid = total > 0 ? (bookingPct / 2 / total) * 100 : 0;
                   const constructionMid = total > 0 ? ((bookingPct + constructionPct / 2) / total) * 100 : 0;
                   const preHandoverEnd = total > 0 ? ((bookingPct + constructionPct) / total) * 100 : 70;
-                  const postHandoverEnd = 98;
+                  // Pull the post-handover dot in from the edge so its premium
+                  // label card has breathing room and doesn't wrap into a
+                  // vertical stack.
+                  const postHandoverEnd = 94;
                   const dot = (leftPct: number, gradient: string, label: React.ReactNode, compact = false) => (
                     <div
                       className="absolute flex flex-col items-center"
@@ -362,18 +365,59 @@ export default function PaymentPlanVisualization({
                       </span>
                     </div>
                   );
+
+                  // Premium chip for Post-Handover milestone — anchored so it
+                  // never clips the right edge of the container.
+                  const postHandoverChip = () => (
+                    <div
+                      className="absolute flex flex-col items-end"
+                      style={{ left: `${postHandoverEnd}%`, transform: "translateX(-50%)" }}
+                    >
+                      <div
+                        data-emerald="true"
+                        data-no-contrast-guard
+                        className="w-6 h-6 rounded-full border-4 border-white shadow-lg z-10 self-center"
+                        style={{ backgroundImage: 'linear-gradient(135deg,#064E3B 0%,#000 100%)', backgroundColor: '#064E3B' }}
+                      />
+                      <div
+                        className="mt-2 rounded-xl border border-[#B89555]/45 shadow-[0_10px_24px_-14px_rgba(6,78,59,0.45)] px-3 py-2 min-w-[170px] max-w-[210px]"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
+                        }}
+                      >
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="inline-block h-px w-4 bg-[#B89555]/70" aria-hidden />
+                          <span className="text-[9px] uppercase tracking-[0.22em] font-semibold text-[#064E3B]">
+                            Post-Handover
+                          </span>
+                        </div>
+                        <p
+                          className="text-[13px] leading-tight text-[#1A1A1A]"
+                          style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 500 }}
+                        >
+                          {derivedPostHandoverMonths} months balance
+                        </p>
+                        <p className="mt-0.5 text-[10.5px] text-[#1A1A1A]/70">
+                          Due by <span className="font-semibold text-[#1A1A1A]">{formattedPostHandoverEndDate || postHandoverEndDate}</span>
+                        </p>
+                      </div>
+                    </div>
+                  );
+
                   return (
                     <>
                       {bookingPct > 0 && dot(bookingMid, 'var(--jj-emerald-ombre)', <>On Booking</>)}
                       {constructionPct > 0 && dot(constructionMid, 'linear-gradient(135deg,#0B6E4F 0%,#0A5A3F 100%)', <>During Construction</>)}
                       {isPostHandover && handoverDate && dot(preHandoverEnd, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>Handover<br /><span className="text-[#1A1A1A] font-medium">{formattedHandoverDate || handoverDate}</span></>, true)}
-                      {handoverPct > 0 && isPostHandover && dot(postHandoverEnd, 'linear-gradient(135deg,#064E3B 0%,#000 100%)', <>Post-Handover ({derivedPostHandoverMonths} months)<br /><span className="text-[#1A1A1A] font-medium">Due by {formattedPostHandoverEndDate || postHandoverEndDate}</span></>, true)}
+                      {handoverPct > 0 && isPostHandover && postHandoverChip()}
                       {handoverPct > 0 && !isPostHandover && dot(preHandoverEnd, 'linear-gradient(135deg,#0E8A63 0%,#0A6647 100%)', <>{handoverLabel}{handoverDate && <><br /><span className="text-[#1A1A1A] font-medium">{formattedHandoverDate || handoverDate}</span></>}</>, true)}
                     </>
                   );
                 })()}
 
               </div>
+
             </div>
           )}
 
