@@ -588,7 +588,7 @@ export function useProject(projectSlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, description, headquarters),
+          developer:developers(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, notable_projects, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
