@@ -126,7 +126,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                     </div>
                   </>
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-[#EFE6D6] flex items-center justify-center group-hover:bg-[#E8D7B8] transition-colors">
+                  <div className="w-12 h-12 min-w-12 min-h-12 aspect-square rounded-full bg-[#EFE6D6] flex items-center justify-center group-hover:bg-[#E8D7B8] transition-colors">
                     <Icon className="w-6 h-6 text-[#1A1A1A]" />
                   </div>
                 )}
@@ -168,7 +168,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                   aria-current={active ? "page" : undefined}
                   data-emerald-action={active ? "true" : undefined}
                   data-no-contrast-guard={active ? true : undefined}
-                  className={`w-9 h-9 min-w-9 rounded-full p-0 text-xs font-bold tabular-nums transition-all ${
+                   className={`inline-grid place-items-center w-9 h-9 min-w-9 min-h-9 aspect-square rounded-full p-0 text-xs font-bold tabular-nums leading-none shrink-0 transition-all ${
                     active
                       ? "jj-emerald-action allow-white text-white shadow-sm"
                       : "bg-white text-[#064E3B] border border-[#B89555]/50 hover:bg-[#EFE6D6]/40"
