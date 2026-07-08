@@ -1966,7 +1966,20 @@ function ProjectDetailLayoutInner({
                   target="_blank"
                   rel="noopener noreferrer"
                   data-emerald-action="true"
-                  className="jj-emerald-action inline-flex items-center gap-2 h-9 rounded-md px-4 text-sm font-semibold transition-colors shadow-sm"
+                  onClick={(e) => {
+                    // Force top-level new tab so preview iframes cannot capture the navigation
+                    // (which surfaces as "www.google.com refused to connect / ERR_BLOCKED_BY_RESPONSE").
+                    e.preventDefault();
+                    const url = hasProjectCoords
+                      ? `https://www.google.com/maps/search/?api=1&query=${project.latitude},${project.longitude}`
+                      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
+                    const win = window.open(url, "_blank", "noopener,noreferrer");
+                    if (!win) {
+                      // Popup blocked — navigate the top window instead of the iframe.
+                      try { window.top!.location.href = url; } catch { window.location.href = url; }
+                    }
+                  }}
+                  className="jj-emerald-action inline-flex items-center gap-2 h-9 rounded-full px-4 text-sm font-semibold transition-colors shadow-sm"
                 >
                   <MapPin className="w-4 h-4" />
                   <span>Open in Maps</span>
