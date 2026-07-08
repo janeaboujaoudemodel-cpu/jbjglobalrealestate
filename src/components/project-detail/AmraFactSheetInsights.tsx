@@ -98,7 +98,7 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
             <img
               src={brochureInvestorPath}
               alt="Amra brochure — investor arrival through palm-lined path (Investor Proposition slide)"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full scale-[1.02] object-cover"
               loading="lazy"
               decoding="async"
             />
@@ -107,7 +107,7 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               <img
                 src={brochureCitiApp}
                 alt="Amra brochure — Citi Developers App / AMRA BNB management slide"
-                className="w-28 h-20 md:w-36 md:h-24 object-cover rounded-md border border-white/40 shadow-lg"
+                className="w-28 h-20 md:w-36 md:h-24 scale-[1.02] object-cover rounded-md shadow-lg"
                 loading="lazy"
               />
             </div>
@@ -183,7 +183,7 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
             <img
               src={brochureEmiratesRoad}
               alt="Amra brochure — Emirates Road interchange at night (UAE Road Infrastructure slide)"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full scale-[1.02] object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/40" />
@@ -198,7 +198,7 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
             <img
               src={brochureSustainabilityLeaf}
               alt="Amra brochure — banana leaf floating on lagoon water (Sustainability & Regenerative slide)"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full scale-[1.02] object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-transparent" />
@@ -291,13 +291,13 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
             <img
               src={brochureDesignArches}
               alt="Amra brochure — travertine arched corridor (Design Ethos & Partners slide)"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full scale-[1.02] object-cover"
               loading="lazy"
             />
             <img
               src={brochureYacht}
               alt="Amra brochure — yacht partnership lifestyle (Brand Partnerships slide)"
-              className="absolute bottom-4 right-4 w-40 h-28 object-cover rounded-md border border-white/40 shadow-lg hidden md:block"
+              className="absolute bottom-4 right-4 w-40 h-28 scale-[1.02] object-cover rounded-md shadow-lg hidden md:block"
               loading="lazy"
             />
           </div>
