@@ -2223,16 +2223,16 @@ function ProjectDetailLayoutInner({
              <div ref={mortgageRef} className="mb-14 scroll-mt-32">
                <div className="jj-card-inner p-6 text-sm text-[#1A1A1A]/80 bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl">
                  <div className="flex items-start gap-3">
-                   <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
-                   <div>
-                     <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage financing will be available on handover</p>
+                    <Calculator className="w-5 h-5 text-[#064E3B] mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-[#1A1A1A] mb-1">Mortgage financing will be available on handover</p>
                       <p>
-                        For this off-plan payment structure, the buyer pays 70% through booking and construction.
-                        On handover, the remaining 30% can be converted into a UAE mortgage and repaid over up to
-                        25 years through the bank — instead of the developer's 3-year post-handover plan — subject to
-                        bank approval.
+                        This is an off-plan project. Buyers typically follow the developer's payment plan
+                        during construction. On handover, the outstanding balance can usually be converted
+                        into a UAE mortgage, subject to bank approval. Speak to our advisors for the exact
+                        structure of this project.
                       </p>
-                   </div>
+                    </div>
                  </div>
                </div>
              </div>
