@@ -1817,13 +1817,21 @@ function ProjectDetailLayoutInner({
                    }}
                  />
                </div>
-               <DeveloperInfoCard
-                 developer={project.developer}
-                 projectName={project.name}
-                 editable
-               />
-             </div>
-           )}
+                <DeveloperInfoCard
+                  developer={project.developer}
+                  projectName={project.name}
+                  editable
+                />
+                {project.developer.id && (
+                  <div className="mt-4">
+                    <CompanyProfileCard
+                      developerId={project.developer.id}
+                      developerName={project.developer.name || "the developer"}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
 
            {/* UNIQUE SELLING POINTS (USP/Highlights) SECTION */}
