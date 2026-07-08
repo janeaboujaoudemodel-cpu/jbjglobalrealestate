@@ -155,7 +155,7 @@ export default function HouseDetailsSection({
               className="rounded-lg border border-[#B89555]/30 bg-[#FDFBF7] p-4 transition-all hover:border-[#B89555]/60"
             >
               <div className="w-9 h-9 rounded-full border border-[#B89555]/35 bg-[#F7F2EA] flex items-center justify-center mb-3">
-                <detail.icon className="w-4.5 h-4.5 text-[#064E3B]" />
+                <detail.icon className="w-4 h-4 text-[#064E3B]" />
               </div>
               <p className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-1 text-[#1A1A1A]/55">
                 {detail.label}
