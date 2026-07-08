@@ -517,6 +517,12 @@ const DeveloperLiveEditor = () => {
                 className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold">
                 {bulkBusy === "enrich" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Sparkles className="w-3.5 h-3.5 mr-1" /> Enrich</>}
               </Button>
+              {isOwner && (
+                <Button size="sm" onClick={() => setConfirmDelete({ mode: "bulk" })} disabled={!!bulkBusy}
+                  className="bg-red-600 text-white hover:bg-red-700 font-semibold">
+                  {bulkBusy === "delete" ? <Loader2 className="w-3 h-3 animate-spin" /> : <><Trash2 className="w-3.5 h-3.5 mr-1" /> Delete</>}
+                </Button>
+              )}
               <Button size="sm" onClick={clearAll} disabled={!!bulkBusy}
                 className="bg-white text-[#064E3B] hover:bg-white/90 font-semibold border border-white">
                 <span style={{ color: "#064E3B" }}>Clear</span>
