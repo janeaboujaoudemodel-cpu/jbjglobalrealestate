@@ -1,0 +1,1 @@
+DELETE FROM public.project_videos WHERE url ILIKE '%amra-bg.mp4%' OR url ILIKE '%vercel-storage%amra%';
