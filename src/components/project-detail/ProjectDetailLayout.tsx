@@ -1031,14 +1031,16 @@ function ProjectDetailLayoutInner({
       if (dedicated[label]) mapped[label] = dedicated[label];
     });
 
-    // Hard overrides for previously incorrect AMRA pairings: do not show a
-    // lobby as security, and avoid synthetic kitchen imagery when owner media
-    // already contains real furnished interiors.
-    delete mapped["24/7 Security with 256-bit encryption"];
+    // Hard overrides for previously incorrect AMRA pairings and coverage for
+    // owner-supplied amenities that weren't in the factsheet roster above.
+    mapped["24/7 Security with 256-bit encryption"] = amraGrandLobby;
     mapped["Smart Home Automation"] = amraCitiApp;
     mapped["IoT-enabled apartments"] = amraCitiApp;
     mapped["Fully furnished apartments"] = galleryImage(2, amraStudio);
     mapped["Fully serviced apartments"] = amraCitiApp;
+    mapped["Integrative Wellness Resort features"] = amraAerialResort;
+    mapped["Smart Parenting monitoring system"] = amraKidsPlay;
+    mapped["Remote home management via Customer App"] = amraCitiApp;
 
     // Legacy aliases
     mapped["Citi Buddy concierge"] = citiBuddyRobotLocal;
