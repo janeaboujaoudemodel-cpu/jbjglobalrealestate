@@ -120,22 +120,32 @@ const DeveloperLiveEditor = () => {
 
   // Server-side totals (true counts, not capped)
   const { data: counts } = useQuery({
-    queryKey: ["developer-projects-counts", isOwner ? "owner-all" : devFilterId],
+    queryKey: ["developer-projects-counts", isOwner ? "owner-all" : devFilterId, showMerged],
     queryFn: async () => {
       const build = (published: boolean | null) => {
         let q = supabase
           .from("projects")
           .select("id", { count: "exact", head: true })
           .or("listing_kind.is.null,listing_kind.eq.offplan");
+        if (!showMerged) q = q.is("merged_into_project_id", null);
         if (!isOwner) q = q.eq("developer_id", devFilterId!);
         if (published !== null) q = q.eq("is_published", published);
         return q;
       };
-      const [all, live, draft] = await Promise.all([build(null), build(true), build(false)]);
+      // Duplicates count (rows already merged into a keeper)
+      let dupQ = supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .not("merged_into_project_id", "is", null)
+        .or("listing_kind.is.null,listing_kind.eq.offplan");
+      if (!isOwner) dupQ = dupQ.eq("developer_id", devFilterId!);
+
+      const [all, live, draft, dups] = await Promise.all([build(null), build(true), build(false), dupQ]);
       return {
         all: all.count ?? 0,
         live: live.count ?? 0,
         draft: draft.count ?? 0,
+        duplicates: dups.count ?? 0,
       };
     },
     enabled: isOwner || !!devFilterId,
