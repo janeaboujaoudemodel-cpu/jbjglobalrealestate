@@ -285,6 +285,50 @@ const DeveloperLiveEditor = () => {
     qc.invalidateQueries({ queryKey: ["developer-projects"] });
   };
 
+  const runAutoMerge = async () => {
+    setBulkBusy("dedupe");
+    try {
+      const { data, error } = await supabase.rpc("auto_merge_duplicate_projects");
+      if (error) throw error;
+      const merged = Array.isArray(data) ? data.length : 0;
+      toast.success(merged > 0
+        ? `Auto-merged ${merged} duplicate project${merged === 1 ? "" : "s"}`
+        : "No new duplicates found");
+      qc.invalidateQueries({ queryKey: ["developer-projects"] });
+      qc.invalidateQueries({ queryKey: ["developer-projects-counts"] });
+      qc.invalidateQueries({ queryKey: ["project-duplicate-groups"] });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Dedupe failed");
+    } finally {
+      setBulkBusy(null);
+    }
+  };
+
+  const deleteProject = async (id: string) => {
+    const { error } = await supabase.from("projects").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Project deleted");
+    setConfirmDelete(null);
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+    qc.invalidateQueries({ queryKey: ["developer-projects-counts"] });
+    qc.invalidateQueries({ queryKey: ["project-duplicate-groups"] });
+  };
+
+  const bulkDelete = async () => {
+    if (selected.size === 0) return;
+    setBulkBusy("delete");
+    const ids = Array.from(selected);
+    const { error } = await supabase.from("projects").delete().in("id", ids);
+    setBulkBusy(null);
+    setConfirmDelete(null);
+    if (error) return toast.error(error.message);
+    toast.success(`${ids.length} project${ids.length === 1 ? "" : "s"} deleted`);
+    clearAll();
+    qc.invalidateQueries({ queryKey: ["developer-projects"] });
+    qc.invalidateQueries({ queryKey: ["developer-projects-counts"] });
+    qc.invalidateQueries({ queryKey: ["project-duplicate-groups"] });
+  };
+
   const autofillDescription = async (p: Project) => {
     setAutofillBusy(p.id);
     try {
