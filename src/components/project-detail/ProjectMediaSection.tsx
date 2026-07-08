@@ -70,7 +70,7 @@ export default function ProjectMediaSection({
     });
   }, [hasValidVideo, videoUrl, videos]);
 
-  if (mediaVideos.length === 0 && !virtualTourUrl && !showOwnerEmptyState) return null;
+  if (mediaVideos.length === 0 && !virtualTourUrl) return null;
 
   const hasOneCard = mediaVideos.length + (virtualTourUrl ? 1 : 0) === 1;
 
