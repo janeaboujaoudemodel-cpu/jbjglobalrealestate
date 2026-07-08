@@ -397,16 +397,48 @@ const DeveloperLiveEditor = () => {
           <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">
             {counts?.all?.toLocaleString() ?? "…"}
           </Badge>
+          {(counts?.duplicates ?? 0) > 0 && (
+            <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 gap-1">
+              <CopyIcon className="w-3 h-3" />
+              {counts?.duplicates?.toLocaleString()} duplicate{counts?.duplicates === 1 ? "" : "s"} merged
+            </Badge>
+          )}
 
-          {(counts?.all ?? 0) > 0 && (
-            <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2 flex-wrap">
+            {isOwner && (
+              <>
+                <label className="flex items-center gap-1.5 text-xs text-[#1A1A1A]/70 select-none">
+                  <input
+                    type="checkbox"
+                    checked={showMerged}
+                    onChange={(e) => setShowMerged(e.target.checked)}
+                    className="accent-[#064E3B]"
+                  />
+                  Show merged
+                </label>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={runAutoMerge}
+                  disabled={!!bulkBusy}
+                  className="border-[#064E3B]/40 text-[#064E3B] hover:bg-[#064E3B]/10"
+                  title="Group identical projects (same developer + same name) and keep the manually-verified one"
+                >
+                  {bulkBusy === "dedupe"
+                    ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    : <><Merge className="w-3.5 h-3.5 mr-1" /> Auto-merge duplicates</>}
+                </Button>
+              </>
+            )}
+            {(counts?.all ?? 0) > 0 && (
               <Button size="sm" variant="outline" onClick={allSelected ? clearAll : selectAll}
                 className="border-[#B89555]/40 text-[#1A1A1A] hover:bg-[#EFE6D6]">
                 {allSelected ? "Unselect all" : "Select all"}
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+
 
         {/* Search + status tabs */}
         <div className="flex flex-wrap gap-3 items-center">
