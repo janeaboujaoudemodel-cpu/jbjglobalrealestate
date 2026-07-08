@@ -1846,7 +1846,7 @@ function ProjectDetailLayoutInner({
                             <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Fully fitted kitchen · included</p>
                             <h4 className="text-xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">Smeg Italian appliances & Villeroy &amp; Boch tableware</h4>
                           </div>
-                          <span className="rounded-full border border-[#B89555]/50 bg-[#FDFBF7] px-3 py-1 text-[11px] font-semibold text-[#064E3B]">Move-in ready</span>
+                          <span data-no-contrast-guard className="rounded-full border border-[#B89555]/50 bg-[#FDFBF7] px-3 py-1 text-[11px] font-semibold" style={{ color: "#064E3B" }}>Move-in ready</span>
                         </div>
                         <div className="grid gap-2 sm:grid-cols-2">
                       {[
