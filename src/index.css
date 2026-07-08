@@ -34412,3 +34412,109 @@ h4, h5, h6 { font-weight: 600; }
   font-family: 'Urbanist', 'Inter', system-ui, sans-serif !important;
 }
 
+
+/* =========================================================================
+   PASS FINAL — TERMINAL CONTRAST GUARD (LOCKED)
+   Placed at the very end of index.css so it wins the cascade over every
+   earlier rule regardless of specificity ties. Two invariants:
+     1. Emerald / dark surfaces → white text + white icons.
+     2. Champagne / gold / light surfaces → ink (#1A1A1A) text + ink icons.
+   Opt-outs:
+     - `[data-no-contrast-guard]`  → escape either rule (for surfaces that
+       intentionally mix, e.g. a white pill on emerald).
+     - `.allow-white`              → keep white text on a light surface.
+     - `.allow-ink`                → keep ink on a dark surface.
+   ========================================================================= */
+
+/* --- 1. Emerald / dark → white ------------------------------------------ */
+html body #root
+  :is(
+    [data-surface="emerald"],
+    [data-surface="dark"],
+    [data-surface="ink"],
+    [data-surface="navy"],
+    [data-on-dark],
+    [data-cta="primary"],
+    [data-cta="dark"],
+    [data-brand-hero],
+    [data-sidebar-emerald],
+    .jj-surface-emerald,
+    .jj-hero-fullscreen,
+    .jj-emerald-action,
+    .jj-emerald-metallic,
+    .jj-pill-emerald-metallic,
+    .jj-cta-emerald,
+    .jj-official-emerald,
+    [data-emerald-action="true"],
+    [data-emerald="true"]
+  ):not([data-no-contrast-guard]):not(.allow-ink):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline),
+html body #root
+  :is(
+    [data-surface="emerald"],
+    [data-surface="dark"],
+    [data-surface="ink"],
+    [data-surface="navy"],
+    [data-on-dark],
+    [data-cta="primary"],
+    [data-cta="dark"],
+    [data-brand-hero],
+    [data-sidebar-emerald],
+    .jj-surface-emerald,
+    .jj-hero-fullscreen,
+    .jj-emerald-action,
+    .jj-emerald-metallic,
+    .jj-pill-emerald-metallic,
+    .jj-cta-emerald,
+    .jj-official-emerald,
+    [data-emerald-action="true"],
+    [data-emerald="true"]
+  ):not([data-no-contrast-guard]):not(.allow-ink):not(.jj-surface-emerald-soft):not(.jj-emerald-soft):not(.jj-emerald-outline)
+  :where(*, span, p, div, small, strong, em, b, label, li, dt, dd, a, button, h1, h2, h3, h4, h5, h6, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]):not([data-no-contrast-guard]):not(.allow-ink):not([data-no-contrast-guard] *):not(.allow-ink *) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* --- 2. Champagne / gold / light → ink --------------------------------- */
+html body #root
+  :is(
+    [data-surface="champagne"],
+    [data-surface="gold"],
+    [data-surface="light"],
+    [data-surface="page"],
+    [data-surface="cream"],
+    [data-surface="raised"],
+    [data-surface="pearl"],
+    [data-on-light],
+    [data-studio-surface="champagne"],
+    .surface-champagne,
+    .surface-cream,
+    .surface-raised,
+    .surface-page,
+    .surface-light,
+    .surface-gold
+  ):not([data-no-contrast-guard]):not(.allow-white),
+html body #root
+  :is(
+    [data-surface="champagne"],
+    [data-surface="gold"],
+    [data-surface="light"],
+    [data-surface="page"],
+    [data-surface="cream"],
+    [data-surface="raised"],
+    [data-surface="pearl"],
+    [data-on-light],
+    [data-studio-surface="champagne"],
+    .surface-champagne,
+    .surface-cream,
+    .surface-raised,
+    .surface-page,
+    .surface-light,
+    .surface-gold
+  ):not([data-no-contrast-guard]):not(.allow-white)
+  :where(*, span, p, div, small, strong, em, b, label, li, dt, dd, a, button, h1, h2, h3, h4, h5, h6, svg, path, line, rect, circle, polyline, polygon, [class*="lucide"]):not([data-surface="emerald"]):not([data-surface="dark"]):not([data-surface="ink"]):not(.jj-surface-emerald):not(.jj-emerald-action):not(.jj-emerald-metallic):not(.jj-pill-emerald-metallic):not([data-emerald-action="true"]):not([data-emerald="true"]):not(.allow-white):not([data-no-contrast-guard]):not([data-surface="emerald"] *):not([data-no-contrast-guard] *):not(.allow-white *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+}
