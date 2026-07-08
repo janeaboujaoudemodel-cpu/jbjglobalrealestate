@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
-import { Play, Video, Eye, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Play, Video, Eye, ExternalLink, ChevronLeft, ChevronRight, Download, X } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
+
 
 interface ProjectMediaSectionProps {
   videoUrl?: string | null;
@@ -175,18 +176,23 @@ export default function ProjectMediaSection({
         )}
       </div>
 
-      {/* Video Modal */}
+      {/* Video Modal — large, in-page expansion (not fullscreen) */}
       <Dialog open={activeVideoIndex !== null} onOpenChange={(open) => { if (!open) closeVideo(); }}>
-        <DialogContent className="max-w-5xl p-0 bg-[#1A1A1A] border-[#B89555]/30 overflow-hidden">
-          <DialogTitle className="sr-only">{projectName} Video</DialogTitle>
-          <div className="aspect-video w-full flex items-center justify-center relative">
+        <DialogContent
+          className="max-w-[min(1400px,96vw)] w-[96vw] p-0 bg-[#0b0b0b] border-[#B89555]/30 overflow-hidden sm:rounded-xl"
+          onEscapeKeyDown={closeVideo}
+          onPointerDownOutside={closeVideo}
+        >
+          <DialogTitle className="sr-only">{activeVideo?.title || `${projectName} Video`}</DialogTitle>
+          <div className="relative w-full" style={{ aspectRatio: "16 / 9", maxHeight: "88vh" }}>
             {activeVideo && activeIsDirect ? (
               <video
                 key={activeVideo.url}
                 ref={(node) => { videoRef.current = node; }}
                 src={activeVideo.url}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain bg-black"
                 controls
+                controlsList="nodownload"
                 autoPlay
                 playsInline
               />
@@ -200,15 +206,38 @@ export default function ProjectMediaSection({
                 title={activeVideo.title || `${projectName} Video`}
               />
             ) : null}
+
+            {/* Top-right toolbar: Download + Close (both always work) */}
+            <div className="absolute top-3 right-3 z-20 flex items-center gap-2">
+              {activeVideo && activeIsDirect && (
+                <a
+                  href={activeVideo.url}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Download video"
+                  className="inline-grid h-10 w-10 place-items-center rounded-full bg-white/95 text-[#1A1A1A] shadow-lg hover:bg-white"
+                >
+                  <Download className="h-5 w-5" />
+                </a>
+              )}
+              <DialogClose
+                aria-label="Close video"
+                className="inline-grid h-10 w-10 place-items-center rounded-full bg-white/95 text-[#1A1A1A] shadow-lg hover:bg-white"
+              >
+                <X className="h-5 w-5" />
+              </DialogClose>
+            </div>
+
             {mediaVideos.length > 1 && (
               <>
-                <button type="button" onClick={() => moveVideo(-1)} aria-label="Previous video" className="absolute left-4 top-1/2 -translate-y-1/2 inline-grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/55 text-white hover:bg-black/75">
+                <button type="button" onClick={() => moveVideo(-1)} aria-label="Previous video" className="absolute left-4 top-1/2 -translate-y-1/2 inline-grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/55 text-white hover:bg-black/75 z-10">
                   <ChevronLeft className="h-5 w-5" />
                 </button>
-                <button type="button" onClick={() => moveVideo(1)} aria-label="Next video" className="absolute right-4 top-1/2 -translate-y-1/2 inline-grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/55 text-white hover:bg-black/75">
+                <button type="button" onClick={() => moveVideo(1)} aria-label="Next video" className="absolute right-4 top-1/2 -translate-y-1/2 inline-grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/55 text-white hover:bg-black/75 z-10">
                   <ChevronRight className="h-5 w-5" />
                 </button>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white z-10">
                   {(activeVideoIndex ?? 0) + 1} / {mediaVideos.length}
                 </div>
               </>
@@ -216,6 +245,7 @@ export default function ProjectMediaSection({
           </div>
         </DialogContent>
       </Dialog>
+
 
       {/* Virtual Tour Modal */}
       <Dialog open={tourOpen} onOpenChange={setTourOpen}>
