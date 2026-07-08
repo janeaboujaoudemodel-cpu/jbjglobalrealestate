@@ -1857,9 +1857,8 @@ function ProjectDetailLayoutInner({
 
                   {/* Kitchen package — Smeg + Villeroy & Boch */}
                   <div className="bg-[#FDFBF7]">
-                    <div className="grid lg:grid-cols-[0.9fr_1.1fr] overflow-hidden">
-                      <SafeImage src={amraKitchenInteriorImageUrl} alt="Amra apartment interior with integrated kitchen palette" className="block h-full min-h-[360px] w-full object-cover object-center p-0 m-0 border-0" loading="lazy" width={1400} height={900} />
-                      <div className="p-6 md:p-8">
+                    <div className="grid lg:grid-cols-[1.1fr_0.9fr] overflow-hidden">
+                      <div className="p-6 md:p-8 order-2 lg:order-1">
                         <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Fully fitted kitchen · included</p>
@@ -1889,6 +1888,7 @@ function ProjectDetailLayoutInner({
                       ))}
                         </div>
                       </div>
+                      <SafeImage src={amraKitchenInteriorImageUrl} alt="Smeg Italian built-in kitchen appliances in an Amra residence" className="order-1 lg:order-2 block h-full min-h-[360px] w-full object-cover object-center p-0 m-0 border-0" loading="lazy" width={1400} height={900} />
                     </div>
                   </div>
 
