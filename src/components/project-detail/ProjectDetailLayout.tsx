@@ -1761,27 +1761,9 @@ function ProjectDetailLayoutInner({
              </div>
            )}
 
-           {/* FLOOR PLANS SECTION */}
-           {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
-             <div ref={floorPlansRef} id="floor-plans" className="mb-14 scroll-mt-40">
-               <div className="jj-card-inner">
-                 <div className="flex items-center gap-2 mb-2">
-                   <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
-                   <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="floor-plans" initial={project as any} label="Upload floor plans" /></span>
-                 </div>
-                 <div className="mt-6">
-                   <FloorPlanGallery
-                     floorPlanTypes={project.floor_plan_types ?? null}
-                     floorPlanDocs={floorPlanDocs}
-                     projectName={project.name}
-                     onDownload={(_, url) => handleDocumentDownload("floor_plan", url)}
-                     brochureUrl={brochurePrimary?.url}
-                     onDownloadBrochure={(url) => handleDocumentDownload("brochure", url)}
-                   />
-                 </div>
-               </div>
-             </div>
-           )}
+           {/* FLOOR PLANS SECTION — removed per owner: floor-plan files remain
+               available inside the Project Documents section below. */}
+
 
            {/* AMENITIES SECTION - Premium with Icons */}
            {amraAmenities.length > 0 && (
