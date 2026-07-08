@@ -285,7 +285,10 @@ export default function DeveloperProfilePage() {
           last_confirmed_by: user.id,
           last_confirmed_at: new Date().toISOString(),
           confirmation_source: source,
+          needs_review: false,
+          review_flags: [],
         } as any)
+
         .eq("id", developer.id);
       if (error) throw error;
       await supabase.from("developer_audit_log" as any).insert({
