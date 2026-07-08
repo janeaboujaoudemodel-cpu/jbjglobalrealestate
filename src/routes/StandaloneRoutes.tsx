@@ -43,10 +43,13 @@ const BrokerDatabaseView = lazy(() => import("@/pages/broker/BrokerDatabaseView"
 const BrokerAgreementSign = lazy(() => import("@/pages/broker/BrokerAgreementSign"));
 const BrokerGuard = lazy(() => import("@/components/BrokerGuard"));
 const OAuthConsent = lazy(() => import("@/pages/OAuthConsent"));
+const PublicAccess = lazy(() => import("@/pages/PublicAccess"));
 
 export const StandaloneRoutes = () => (
   <>
+    <Route path="/access" element={<RouteErrorBoundary routeName="PublicAccess"><PublicAccess /></RouteErrorBoundary>} />
     <Route path="/auth" element={<RouteErrorBoundary routeName="Auth"><Auth /></RouteErrorBoundary>} />
+
     <Route path="/.lovable/oauth/consent" element={
       <RouteErrorBoundary routeName="OAuthConsent">
         <Suspense fallback={<PageLoader />}>
