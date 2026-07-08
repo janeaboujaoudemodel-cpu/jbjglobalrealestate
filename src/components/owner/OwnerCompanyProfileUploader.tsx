@@ -49,12 +49,20 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
 
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["developer-documents", developerId] });
+    qc.invalidateQueries({ queryKey: ["developer-company-profile", developerId] });
     qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
+    qc.invalidateQueries({ queryKey: ["admin-developer"] });
+    qc.invalidateQueries({ queryKey: ["developer"] });
+    qc.invalidateQueries({ queryKey: ["project"] });
+    qc.invalidateQueries({ queryKey: ["projects"] });
   };
+
+  const [lastExtraction, setLastExtraction] = useState<string[] | null>(null);
 
   const upload = useCallback(async (files: FileList | File[]) => {
     if (!files || (files as FileList).length === 0) return;
     setBusy(true);
+    setLastExtraction(null);
     let ok = 0;
     for (const file of Array.from(files)) {
       try {
@@ -64,8 +72,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           .upload(path, file, { contentType: file.type || "application/pdf" });
         if (upErr) throw upErr;
 
-        // Private bucket → create a long-lived signed URL for the AI extractor.
-        const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(path, 60 * 60);
+        // Private bucket → create a signed URL that outlives the AI extraction call.
+        const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(path, 60 * 60 * 6);
         const fileUrl = signed?.signedUrl || "";
 
         const { data: docRow, error: dbErr } = await supabase.from("developer_documents").insert({
@@ -79,21 +87,30 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
         }).select("id").single();
         if (dbErr) throw dbErr;
 
-        // Fire the AI extraction (fire-and-forget; the review page will surface it).
-        supabase.functions.invoke("ai-developer-profile-extract", {
-          body: { developerId, fileUrl, fileName: file.name, documentId: docRow.id },
-        }).then(({ error }) => {
-          if (error) toast.error(`AI extraction failed: ${error.message}`);
-          else toast.success("AI extraction complete — review it in Enrichment Review");
-          refresh();
-        });
+        // Await the AI extraction so the user sees exactly what got written.
+        toast.message(`Reading ${file.name} with AI…`, { duration: 4000 });
+        const { data: aiData, error: aiErr } = await supabase.functions.invoke(
+          "ai-developer-profile-extract",
+          { body: { developerId, fileUrl, fileName: file.name, documentId: docRow.id } },
+        );
+        if (aiErr) {
+          toast.error(`AI extraction failed: ${aiErr.message}`);
+        } else {
+          const updated: string[] = (aiData as any)?.updatedFields ?? [];
+          setLastExtraction(updated);
+          if (updated.length > 0) {
+            toast.success(`AI wrote ${updated.length} field${updated.length > 1 ? "s" : ""} into the developer profile`);
+          } else {
+            toast.message("AI ran but found no new information in this file");
+          }
+        }
         ok++;
       } catch (e: any) {
         console.error(e);
         toast.error(e.message || "Upload failed");
       }
     }
-    if (ok) toast.success(`Uploaded ${ok} file${ok > 1 ? "s" : ""} · AI extraction started`);
+    if (ok) toast.success(`Uploaded ${ok} file${ok > 1 ? "s" : ""}`);
     setBusy(false);
     refresh();
   }, [developerId]);
