@@ -1925,7 +1925,7 @@ function ProjectDetailLayoutInner({
                   />
                 </Suspense>
                 <p className="mt-2 text-xs text-[#1A1A1A]/70">
-                  Red pin = {project.name}. Gold pins = other projects by {project.developer?.name || 'this developer'}. Hover a gold pin to preview, click to open.
+                  {project.name} is the highlighted pin. Gold pins mark other projects by {project.developer?.name || 'this developer'}. Hover to preview, click to open.
                 </p>
               </div>
 
