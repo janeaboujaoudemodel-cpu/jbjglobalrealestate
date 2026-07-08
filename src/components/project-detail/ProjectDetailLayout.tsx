@@ -1783,38 +1783,116 @@ function ProjectDetailLayoutInner({
             {(hasCitiBuddyDocument || isAmraProject) && (
               <div className="mb-14 scroll-mt-40">
                 <div className="jj-card-inner overflow-hidden p-0">
-                  <div className={citiBuddyImageUrl ? "grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr]" : "grid grid-cols-1"}>
+                  <div className={citiBuddyImageUrl ? "grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]" : "grid grid-cols-1"}>
                     {citiBuddyImageUrl && (
-                      <SafeImage
-                        src={citiBuddyImageUrl}
-                        alt="Citi Buddy resident concierge"
-                        className="h-[280px] lg:h-full min-h-[280px] w-full object-contain bg-[#FDFBF7] p-5"
-                        loading="eager"
-                        decoding="async"
-                      />
+                      <div className="relative bg-[#FDFBF7]">
+                        <SafeImage
+                          src={citiBuddyImageUrl}
+                          alt="Citi Buddy resident concierge robot"
+                          className="h-[320px] lg:h-full min-h-[320px] w-full object-contain p-5"
+                          loading="eager"
+                          decoding="async"
+                        />
+                        {/* Premium value chip — signals the AED 25K gift without competing with the pin card */}
+                        <div className="absolute top-4 left-4 rounded-full border border-[#B89555]/60 bg-white/92 px-3 py-1.5 text-[11px] font-semibold text-[#1A1A1A] shadow-sm">
+                          <span className="text-[#064E3B]">Included gift</span>
+                          <span className="mx-1.5 text-[#B89555]">·</span>
+                          <span>USD 25,000 value</span>
+                        </div>
+                      </div>
                     )}
                     <div className="p-6 md:p-8 flex flex-col justify-center">
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-3">Resident Concierge</p>
-                      <h3 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-4">Citi Buddy</h3>
-                      <p className="text-[15px] leading-relaxed text-[#1A1A1A]/82">
-                        Citi Buddy connects residents to smart-home controls, short-stay management, concierge requests, in-room dining, security alerts and service bookings through the Citi Developers app.
+                      <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold mb-3">Complimentary with every residence</p>
+                      <h3 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] mb-2">Citi Buddy — your in-home robot concierge</h3>
+                      <p className="text-[14px] leading-relaxed text-[#1A1A1A]/82">
+                        A <strong>USD 25,000</strong> Citi Buddy robot is gifted with every apartment — studio through 4-bedroom — and paired with the Citi Developers app for smart-home controls, concierge, dining, security alerts and short-stay management.
                       </p>
+
                       <div className="mt-5 grid gap-2 sm:grid-cols-2">
                         {[
-                          "Smart-home controls",
-                          "Concierge and service bookings",
-                          "Short-term rental management",
-                          "Yearly rental support",
-                          "In-room dining requests",
+                          "Smart-home & climate controls",
+                          "Concierge and in-room dining",
+                          "Housekeeping & maintenance requests",
+                          "Short-stay & yearly rental management",
                           "Security alerts and access",
-                          "Housekeeping and maintenance",
-                          "Owner access anytime",
+                          "Owner dashboard — anytime",
                         ].map((feature) => (
-                          <div key={feature} className="flex items-center gap-2 rounded-md border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-sm font-semibold text-[#1A1A1A]">
+                          <div key={feature} className="flex items-center gap-2 rounded-md border border-[#B89555]/25 bg-[#F7F2EA] px-3 py-2 text-[13px] font-semibold text-[#1A1A1A]">
                             <Check className="h-4 w-4 text-[#064E3B]" />
                             {feature}
                           </div>
                         ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Divider band */}
+                  <div className="border-t border-[#B89555]/25" />
+
+                  {/* Kitchen package — Smeg + Villeroy & Boch */}
+                  <div className="p-6 md:p-8 bg-[#FDFBF7]">
+                    <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Fully fitted kitchen · included</p>
+                        <h4 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] mt-1">Smeg Italian appliances & Villeroy &amp; Boch tableware</h4>
+                      </div>
+                      <span className="rounded-full border border-[#B89555]/50 bg-white px-3 py-1 text-[11px] font-semibold text-[#064E3B]">Move-in ready</span>
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                      {[
+                        "Smeg fridge / refrigerator",
+                        "Smeg dishwasher",
+                        "Smeg washing machine",
+                        "Gas cooker + electric cooktop",
+                        "Built-in oven & extractor hood",
+                        "Espresso coffee machine",
+                        "Cheese maker",
+                        "Citrus juicer — lemon & orange",
+                        "Toaster & baking tray",
+                        "2 × Villeroy & Boch dinnerware sets",
+                        "Full cutlery & serving pieces",
+                        "Decorative accessories",
+                      ].map((item) => (
+                        <div key={item} className="flex items-center gap-2 rounded-md border border-[#B89555]/25 bg-white px-3 py-2 text-[13px] font-medium text-[#1A1A1A]">
+                          <Check className="h-3.5 w-3.5 text-[#064E3B] flex-shrink-0" />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Divider band */}
+                  <div className="border-t border-[#B89555]/25" />
+
+                  {/* Property management + serviced living */}
+                  <div className="p-6 md:p-8">
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      <div className="rounded-xl border border-[#B89555]/35 bg-[#F7F2EA] p-5">
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Included with the price</p>
+                        <h5 className="text-lg font-semibold text-[#1A1A1A] mt-1 mb-3">Serviced living, always on</h5>
+                        <ul className="space-y-2 text-[13.5px] text-[#1A1A1A]/85">
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> 24/7 valet service</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Property maintenance</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Housekeeping twice a week</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Towel & bathrobe changes</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> All available even if you don't rent out your unit</li>
+                        </ul>
+                      </div>
+                      <div className="rounded-xl border border-[#B89555]/35 bg-white p-5">
+                        <div className="flex items-baseline justify-between gap-2 mb-3">
+                          <div>
+                            <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Optional rental program</p>
+                            <h5 className="text-lg font-semibold text-[#1A1A1A] mt-1">Full property management</h5>
+                          </div>
+                          <span className="rounded-full bg-[#064E3B] text-white px-3 py-1 text-[11px] font-semibold">12% fee</span>
+                        </div>
+                        <ul className="space-y-2 text-[13.5px] text-[#1A1A1A]/85">
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Check-in & check-out handled for you</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Cleaning between stays</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Live occupancy & revenue in the app</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Payouts sent straight to your bank</li>
+                          <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Only 12% of revenue — everything else stays yours</li>
+                        </ul>
                       </div>
                     </div>
                   </div>
