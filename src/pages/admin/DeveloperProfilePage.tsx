@@ -48,6 +48,11 @@ interface Developer {
   last_confirmed_at: string | null;
   confirmation_source: string | null;
   description_languages: string[] | null;
+  needs_review?: boolean | null;
+  review_flags?: string[] | null;
+  review_flagged_at?: string | null;
+  unverified_snapshot?: Record<string, unknown> | null;
+
 }
 
 const MEDIA_KINDS = [
