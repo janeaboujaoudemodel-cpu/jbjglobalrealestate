@@ -29,16 +29,33 @@ export default function PublicAccess() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-[#B89555]/20 bg-[#FDFBF7]/95 backdrop-blur">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <a href="/access" className="flex items-center gap-3">
-            <JJLogoImage className="h-9 w-auto" />
-            <span className="font-serif text-lg text-[#0d3a2b] hidden sm:inline">JBJ Global Real Estate</span>
+      {/* Top bar — 72px, hairline, monogram + wordmark aligned to same baseline */}
+      <header className="sticky top-0 z-40 border-b border-[#B89555]/25 bg-[#FDFBF7]/92 backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 h-[72px] flex items-center justify-between gap-6">
+          <a href="/access" className="flex items-center gap-3 group">
+            <div className="relative">
+              <JJLogoImage className="h-10 w-auto transition-transform duration-300 group-hover:scale-105" />
+            </div>
+            <div className="hidden sm:flex flex-col leading-none">
+              <span className="font-serif text-[19px] text-[#0d3a2b] tracking-tight">JBJ Global</span>
+              <span className="text-[10px] tracking-[0.32em] uppercase text-[#B89555] mt-0.5">Real Estate</span>
+            </div>
           </a>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Button variant="secondary" size="sm" onClick={() => setLoginOpen(true)}>Log in</Button>
-            <Button variant="primary" size="sm" onClick={() => setSignupOpen(true)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setLoginOpen(true)}
+              className="h-10 px-4 transition-all active:scale-[0.97]"
+            >
+              Log in
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setSignupOpen(true)}
+              className="h-10 px-4 transition-all active:scale-[0.97] shadow-[0_8px_20px_-10px_rgba(6,78,59,0.55)]"
+            >
               Sign up <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </div>
@@ -46,22 +63,31 @@ export default function PublicAccess() {
       </header>
 
       {isLoading && (
-        <div className="mx-auto max-w-7xl px-4 py-24 text-center text-[#1A1A1A]/50 font-serif">Loading…</div>
+        <div className="mx-auto max-w-7xl px-4 py-24 text-center text-[#1A1A1A]/50 font-serif animate-fade-in">Loading…</div>
       )}
 
-      <main>
+      <main className="animate-fade-in">
         {ordered.map((s) => (
           <SectionRenderer key={s.id} section={s} onCta={handleCta} />
         ))}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-[#B89555]/20 bg-[#0d3a2b] text-white/80">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
-          <p>© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
-          <p className="text-white/60">Dubai · UAE</p>
+      {/* Footer — refined, wordmark + tagline + rights */}
+      <footer className="border-t border-[#B89555]/20 bg-gradient-to-br from-[#0d3a2b] via-[#0a2f22] to-[#062018] text-white/85">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 py-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
+            <div className="flex items-center gap-3">
+              <JJLogoImage className="h-8 w-auto opacity-95" />
+              <div className="leading-tight">
+                <p className="font-serif text-base">JBJ Global Real Estate</p>
+                <p className="text-[10px] tracking-[0.28em] uppercase text-[#B89555]/90 mt-0.5">Dubai · UAE</p>
+              </div>
+            </div>
+            <p className="text-white/60 text-xs tracking-wide">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+          </div>
         </div>
       </footer>
+
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
       <SignupDialog open={signupOpen} onOpenChange={setSignupOpen} />
