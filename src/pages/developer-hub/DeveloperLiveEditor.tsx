@@ -47,6 +47,9 @@ interface Project {
   description?: string | null;
   source?: string | null;
   data_quality_flags: unknown;
+  is_manually_verified?: boolean | null;
+  merged_into_project_id?: string | null;
+  duplicate_count?: number;
 }
 
 interface ResaleProject {
