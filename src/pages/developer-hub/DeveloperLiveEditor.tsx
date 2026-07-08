@@ -726,6 +726,17 @@ const DeveloperLiveEditor = () => {
                             <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View</span>
                           </Button>
                         )}
+                        {isOwner && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setConfirmDelete({ mode: "single", id: p.id, name: p.name })}
+                            className="border-red-300 text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 mr-1" />
+                            Delete
+                          </Button>
+                        )}
                       </>
 
                     )}
