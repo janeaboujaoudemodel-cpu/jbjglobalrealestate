@@ -119,6 +119,7 @@ const App = () => {
 
                    
             {/* BrandIntroSplash disabled until further notice */}
+            <SiteAccessGate>
             <Routes>
               {/* ── Standalone Routes (no shell) ── */}
               <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
@@ -154,6 +155,8 @@ const App = () => {
                 </Route>
               </Route>
             </Routes>
+            </SiteAccessGate>
+
                   <GlobalSupportMount />
                   </PopupCoordinatorProvider>
                 </ActiveLeadProvider>
