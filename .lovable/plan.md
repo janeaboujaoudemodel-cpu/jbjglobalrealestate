@@ -1,55 +1,135 @@
-## Root cause found
 
-- Amra has **85 saved photos** in the backend under `project_images`; they are not lost.
-- The public project query fetches those photos, but the gallery/media rendering path can still show zero because the project detail page normalizes/dedupes images in multiple places and the media section is currently video-only.
-- Amra currently has **0 rows in `project_videos`** and storage search found **0 video files** in the relevant media buckets, so there are no backend videos attached to restore from the current saved project data. The fix must still make future video uploads persist and display immediately.
-- Construction progress is hardcoded/fallbacked for Amra to July 2026 + 0%, and the visual line uses progress percent only, so “started this month” and the first milestone can look inconsistent.
+## Goal
 
-## Plan
+Build a premium JBJ-branded public landing page that gates the entire site. Unauthenticated visitors can only see the landing page, a Sign Up flow, a Login flow, or submit a Lead form. Everything else redirects to the gate. Landing sections are editable from a backend Company Profile builder.
 
-1. **Stop the gallery zero-render issue at the source**
-   - Normalize Amra/project images once in the project-detail mapping layer and pass all 85 saved `project_images` through consistently.
-   - Add a visible owner/debug-safe count path so the gallery section cannot silently disappear when backend rows exist.
-   - Remove any over-aggressive filtering/deduping that can collapse valid owner-uploaded filenames like `1.jpg`, `02.jpg`, etc.
+## Design system (locked to existing JBJ)
 
-2. **Make Project Media handle both photos and videos correctly**
-   - Keep `Project Gallery` for photos.
-   - Rebuild `Project Media` so uploaded videos play inline in the same section without a tiny modal.
-   - Add a clear empty video state for owner mode only: if no videos exist, it says no videos are attached instead of pretending there is a fake video.
-   - Ensure future video uploads route to `project_videos`, invalidate the exact project query, and appear on the public page immediately.
+- Palette: pearl / champagne backgrounds, emerald `#064E3B` + black accents, white text ONLY on emerald/black, dark text ONLY on champagne/pearl. No blue. No cheap gradients.
+- Typography: existing Cormorant Garamond headings + current body font. No new fonts.
+- Buttons: reuse existing JBJ button variants (`variant="premium"` / emerald primary + champagne secondary). No new button styles.
+- Enforced by existing Contrast Guard + Global Visual Identity System memories.
 
-3. **Attempt safe video recovery from backend storage**
-   - Re-scan relevant storage paths and document tables for video MIME types/extensions.
-   - If real video objects exist but are not linked, create/repair `project_videos` rows.
-   - If the backend truly has zero video objects, do not use fake fallback video; leave the owner upload path fixed.
+## 1. Access gate
 
-4. **Fix construction progress logic and contrast**
-   - Replace static “Started this month” logic with date-based labels:
-     - current start month: “Started this month”
-     - after current month: “Construction started” + elapsed months/automatic status
-     - future start date: “Pre-construction” / “Starts in …”
-   - Make the first timeline segment visibly filled from the start even when progress is 0, while still showing `0%` as the backend progress.
-   - Lock the status pill, icons, and progress line to correct white-on-emerald / champagne contrast so the guard cannot flip them.
+New component `SiteAccessGate` wrapping the app in `App.tsx`:
 
-5. **Rebuild House Details and Standard Inclusions**
-   - Replace the current uneven card layout with equal-height, responsive premium cards.
-   - Rebuild standard inclusions as aligned tiles/pills with stable dimensions, not wrapping unevenly or misaligning.
+- Reads Supabase session via existing `useAuth`.
+- If session exists → render children as today.
+- If no session → check current path:
+  - Allowed public paths: `/`, `/welcome`, `/login`, `/signup`, `/reset-password`, `/auth/*`, `/legal/*`, static asset paths.
+  - Any other path → `<Navigate to="/welcome" replace state={{ from: pathname }} />` so we can send them back after login.
+- SEO-safe: server returns 200 on `/welcome` with real title/description; bots crawling `/welcome` still get content.
 
-6. **Fix Amra amenity photos and white borders**
-   - Remap Smart Home / IoT, 24-7 Security, Yacht-Limo, Fully Furnished, Fully Serviced, Smart Kitchen/Smeg to real Amra uploaded or brochure-derived images only.
-   - Avoid lobby photos for security and avoid inaccurate kitchen imagery.
-   - Use image containers that crop cleanly with no white side borders.
-   - For amenities without a verified photo, show a premium icon tile instead of a wrong/random photo.
+## 2. Public landing page `/welcome`
 
-7. **Fix pagination circles**
-   - Rebuild the amenity page number controls as fixed square/circle buttons with stable width/height and centered numerals.
-   - Verify they remain circles on tablet width and do not stretch vertically.
+New route + page `src/pages/Welcome.tsx` composed of section components rendered from a config fetched from `public_gate_sections`:
 
-8. **Sidebar/wordmark parity**
-   - Align backend owner sidebar wordmark sizing, one-line black title, spacing, and vertical sidebar behavior to the front-end vertical sidebar pattern.
+Section types (structured editor, fixed set):
+1. `hero` — headline, sub-headline, background image/video, CTA buttons (Sign Up / Lead form).
+2. `overview` — platform/service intro, 3-column icons.
+3. `video` — embedded demo video with poster.
+4. `features` — 3–6 benefit cards.
+5. `solutions` — property solutions preview grid (Buy / Sell / Rent / Off-Plan / Investment / Golden Visa).
+6. `lead_cta` — full-width band with "Get in touch" opening lead popup.
+7. `login_signup` — dual card with Login and Sign Up buttons.
 
-9. **Validation before claiming fixed**
-   - Run database checks for Amra image/video counts.
-   - Run Playwright on `/project/amra-the-first-integrative-wellness-resort-mr9hh3ia` at the requested preview viewport and desktop viewport.
-   - Capture screenshots for: gallery with photos, media/video section state, construction progress, house details, standard inclusions, amenities with pagination, and backend sidebar.
-   - Only mark items fixed after screenshot and data validation pass.
+All sections read `title`, `body`, `media`, `cta_label`, `cta_action` from DB with sensible defaults so first render works before any admin edits.
+
+Responsive: verified at 1440, 1180 (laptop), 1024 iPad landscape, 768 iPad portrait, 390 mobile.
+
+## 3. Sign Up flow
+
+New page `/signup` with a single-column premium form:
+
+Fields: full name, email, phone (with country code), nationality (searchable select), preferred language, user type (buyer / seller / investor / tenant / landlord / broker / developer — single select), notes, and multi-select service pills:
+Buy, Sell, Rent, List, Off-Plan, Property Management, Investment Advisory, Golden Visa, Mortgage Support, Interior Design, Company Setup.
+
+Zod validation client + edge function. Creates Supabase auth user (email + password), assigns new role `client` in `user_roles`, writes profile fields to existing `client_profiles` table (extend with missing columns), and inserts a matching `leads` row tagged `source_page='signup'`.
+
+After success → session established → redirect to intended path or `/`.
+
+## 4. Lead form popup
+
+Reusable `<LeadFormDialog />` triggered from hero, `lead_cta` section, and floating CTA. Captures: name, email, phone, nationality, language, services, user type, notes. No password. Writes to existing `leads` table with:
+- `source_page` (route where opened)
+- `user_type`, `services[]`, `language`, `nationality`
+- `status = 'new'`, `assigned_to = null`
+
+Popup can be dismissed; visitor stays on `/welcome` (still gated).
+
+## 5. Login flow
+
+New page `/login` — email + password. Reuses existing Supabase auth. After sign in, redirect back to `state.from`.
+
+## 6. Backend
+
+### Migration (single)
+
+- Extend `app_role` enum with `'client'`.
+- `ALTER TABLE public.client_profiles` — add any missing columns: `nationality text`, `preferred_language text`, `services text[]`, `user_type text`, `notes text`, `source_page text`, `signup_ip text`.
+- `ALTER TABLE public.leads` — add same fields if missing (`services text[]`, `user_type text`, `preferred_language text`, `nationality text`, `source_page text`).
+- New table `public.public_gate_sections`:
+  - `id`, `kind` (enum hero/overview/video/features/solutions/lead_cta/login_signup), `position int`, `visible bool`, `title text`, `subtitle text`, `body text`, `media jsonb`, `cta jsonb`, `props jsonb`, `created_at`, `updated_at`.
+  - GRANT SELECT to `anon, authenticated`; ALL to `service_role`. Owner/admin write via role check.
+  - RLS: public read visible=true; write only for `owner` / `super_admin` via `has_role`.
+- Seed 7 default sections so `/welcome` renders immediately.
+
+### Edge functions
+
+- `signup-client` — validates payload, creates auth user (email confirm off unless already enabled), inserts `client_profiles` + `user_roles(client)` + `leads` row.
+- `submit-lead` — validates payload, inserts `leads` row, returns `{ ok: true }`.
+
+Both use `corsHeaders` and Zod validation.
+
+## 7. Backend editor: Company Profile / Public Gate Page
+
+New owner-only route `/owner/public-gate` (added to existing Owner Hub nav):
+
+- Lists sections from `public_gate_sections` ordered by `position`.
+- Drag-and-drop reorder (`@dnd-kit/sortable`, already installed).
+- Per-section actions: edit (opens side sheet with fields for that kind), duplicate, delete, toggle visibility.
+- "Add section" picks a kind from the fixed enum, inserts at end.
+- Media upload uses existing `owner_document_assets` bucket pattern.
+- Live preview link opens `/welcome` in a new tab.
+
+Guarded by existing `useOwnerAuth` middleware.
+
+## 8. Files to add / edit
+
+Add:
+- `src/pages/Welcome.tsx`
+- `src/pages/Signup.tsx`
+- `src/pages/Login.tsx` (only if a dedicated one doesn't already exist; otherwise reuse)
+- `src/components/gate/SiteAccessGate.tsx`
+- `src/components/gate/LeadFormDialog.tsx`
+- `src/components/gate/sections/{Hero,Overview,VideoSection,Features,Solutions,LeadCta,LoginSignup}.tsx`
+- `src/components/owner/public-gate/{PublicGateEditor,SectionCard,SectionEditSheet}.tsx`
+- `src/hooks/usePublicGateSections.ts`
+- `supabase/functions/signup-client/index.ts`
+- `supabase/functions/submit-lead/index.ts`
+
+Edit:
+- `src/App.tsx` — mount `SiteAccessGate`, register `/welcome`, `/signup`, `/login`, `/owner/public-gate`.
+- Owner Hub nav — add "Public Gate Page" entry.
+
+Do NOT touch: existing project detail, hub, developer, or brochure code.
+
+## 9. Validation before completion
+
+Playwright scripts capture and I visually inspect:
+- `/welcome` at 1440, 1180, 1024, 768, 390.
+- Signup popup + Login popup states.
+- Lead form popup submission → toast success.
+- Owner editor: reorder, edit, hide/show, duplicate, add.
+- DB check: `select * from leads order by created_at desc limit 1` after a submission; `select * from client_profiles` after a signup.
+- Contrast Guard: no blue, no white-on-champagne, no dark-on-emerald.
+
+I'll only mark the task done after screenshots + DB checks pass.
+
+## Technical notes
+
+- No new fonts, no new colors, no new button variants — all reuse existing tokens/variants.
+- Signup uses email/password with `emailRedirectTo: window.location.origin` to keep future email confirm working.
+- Session state via existing `onAuthStateChange` listener; gate uses `getUser()` for trusted checks.
+- Rate limit lead submissions in `submit-lead` via existing `function_rate_limits` table pattern.

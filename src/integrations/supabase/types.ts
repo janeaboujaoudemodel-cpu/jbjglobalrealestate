@@ -22862,14 +22862,19 @@ export type Database = {
           ip_hash: string | null
           language: string | null
           nationality: string | null
+          notes: string | null
           page_source: string | null
           phone: string | null
           phone_encrypted: string | null
           phone_verified: boolean | null
+          preferred_language: string | null
+          services: string[] | null
           source: string
           status: string | null
           submission_source: string | null
           updated_at: string
+          user_agent: string | null
+          user_type: string | null
         }
         Insert: {
           age_range?: string | null
@@ -22889,14 +22894,19 @@ export type Database = {
           ip_hash?: string | null
           language?: string | null
           nationality?: string | null
+          notes?: string | null
           page_source?: string | null
           phone?: string | null
           phone_encrypted?: string | null
           phone_verified?: boolean | null
+          preferred_language?: string | null
+          services?: string[] | null
           source: string
           status?: string | null
           submission_source?: string | null
           updated_at?: string
+          user_agent?: string | null
+          user_type?: string | null
         }
         Update: {
           age_range?: string | null
@@ -22916,14 +22926,19 @@ export type Database = {
           ip_hash?: string | null
           language?: string | null
           nationality?: string | null
+          notes?: string | null
           page_source?: string | null
           phone?: string | null
           phone_encrypted?: string | null
           phone_verified?: boolean | null
+          preferred_language?: string | null
+          services?: string[] | null
           source?: string
           status?: string | null
           submission_source?: string | null
           updated_at?: string
+          user_agent?: string | null
+          user_type?: string | null
         }
         Relationships: []
       }
@@ -29152,6 +29167,51 @@ export type Database = {
           id?: string
           sources_used?: string[] | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      public_gate_sections: {
+        Row: {
+          body: string | null
+          created_at: string
+          cta: Json
+          id: string
+          kind: string
+          media: Json
+          position: number
+          props: Json
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          cta?: Json
+          id?: string
+          kind: string
+          media?: Json
+          position?: number
+          props?: Json
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          cta?: Json
+          id?: string
+          kind?: string
+          media?: Json
+          position?: number
+          props?: Json
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          visible?: boolean
         }
         Relationships: []
       }
