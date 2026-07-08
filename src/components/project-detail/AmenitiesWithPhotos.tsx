@@ -104,7 +104,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
               key={`${currentPage}-${idx}-${amenity}`}
               className="group flex flex-col gap-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] hover:border-[#B89555]/55 transition-all overflow-hidden shadow-sm"
             >
-              <div className={`w-full ${/yacht|marina|lobby|entrance/i.test(amenity) ? "h-52" : "h-44"} overflow-hidden relative flex items-center justify-center bg-[#F7F2EA]`}>
+              <div className="w-full h-44 overflow-hidden relative flex items-center justify-center bg-[#F7F2EA]">
                 {photoUrl ? (
                   <>
                     <img
@@ -152,10 +152,10 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
             aria-label="Previous amenities page"
             data-emerald-action="true"
             data-no-contrast-guard
-            className="jj-emerald-action allow-white inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            className="jj-emerald-action allow-white inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-full p-0 text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <ChevronLeft className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} /> <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Prev</span>
+            <ChevronLeft className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </button>
 
           <div className="flex items-center gap-1.5">
@@ -171,12 +171,12 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
                   data-emerald-action={active ? "true" : undefined}
                   data-no-contrast-guard
                   data-amenity-page-button="true"
-                   className={`inline-flex items-center justify-center rounded-full p-0 text-xs font-bold tabular-nums leading-none shrink-0 transition-all ${
+                    className={`inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-full p-0 text-xs font-bold tabular-nums leading-none shrink-0 transition-all ${
                     active
                       ? "jj-emerald-action allow-white text-white shadow-sm"
                       : "bg-white text-[#064E3B] border border-[#B89555]/50 hover:bg-[#EFE6D6]/40"
                   }`}
-                  style={active ? { width: 36, height: 36, minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36, flexBasis: 36, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { width: 36, height: 36, minWidth: 36, minHeight: 36, maxWidth: 36, maxHeight: 36, flexBasis: 36, color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
+                  style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : { color: "#064E3B", WebkitTextFillColor: "#064E3B" }}
                 >
                   {i + 1}
                 </button>
@@ -191,10 +191,10 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
             aria-label="Next amenities page"
             data-emerald-action="true"
             data-no-contrast-guard
-            className="jj-emerald-action allow-white inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+            className="jj-emerald-action allow-white inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-full p-0 text-white hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
-            <span className="allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Next</span> <ChevronRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+            <ChevronRight className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
           </button>
         </div>
       )}

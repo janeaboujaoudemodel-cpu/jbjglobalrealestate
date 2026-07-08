@@ -121,7 +121,6 @@ import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsi
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
 import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
 import amraAerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
-import amraGrandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
 import amraGrandLobby from "@/assets/amra-brochure/grand-lobby.jpg";
 import amraHallwayPassage from "@/assets/amra-brochure/hallway-passage.jpg";
 import amraSideLobby from "@/assets/amra-brochure/side-lobby.jpg";
@@ -169,7 +168,6 @@ import amraSmartRecoveryHub from "@/assets/amra-brochure/smart-recovery-hub.jpg"
 import amraIsabellaCucina from "@/assets/amra-brochure/isabella-cucina-italiana.jpg";
 import amraHunterBarrel from "@/assets/amra-brochure/hunter-and-barrel.jpg";
 import amraAllDayDining from "@/assets/amra-brochure/all-day-dining.jpg";
-import amraOrganicSuperMarket from "@/assets/amra-brochure/organic-super-market.jpg";
 import amraArtGallery from "@/assets/amra-brochure/art-gallery.jpg";
 import amraPharmacy from "@/assets/amra-brochure/pharmacy.jpg";
 import amraBowlingLanes from "@/assets/amra-brochure/bowling-lanes.jpg";
@@ -1742,12 +1740,7 @@ function ProjectDetailLayoutInner({
              <div ref={galleryRef} id="gallery" className="mb-14 scroll-mt-40">
                <div className="jj-card-inner">
                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
-                      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#1A1A1A]/58">
-                        {images.length} saved photo{images.length === 1 ? "" : "s"}
-                      </p>
-                    </div>
+                    <h3 className="text-h3-sm font-medium text-foreground">Project Gallery</h3>
                    <div className="flex items-center gap-2">
                      <OwnerSectionEditor projectId={project.id} coverImageUrl={project.cover_image_url} section="gallery" initial={project as any} label="Manage photos" />
                        <button
