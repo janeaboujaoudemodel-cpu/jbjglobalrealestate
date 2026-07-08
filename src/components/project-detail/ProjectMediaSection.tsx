@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { Play, Video, Eye, ExternalLink } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+import { Play, Video, Eye, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 interface ProjectMediaSectionProps {
   videoUrl?: string | null;
   virtualTourUrl?: string | null;
+  videos?: { id: string; url: string; title?: string | null }[];
   projectName: string;
 }
 
@@ -45,26 +46,57 @@ const isDirectVideoUrl = (url: string): boolean => {
 export default function ProjectMediaSection({
   videoUrl,
   virtualTourUrl,
+  videos = [],
   projectName,
 }: ProjectMediaSectionProps) {
-  const [videoOpen, setVideoOpen] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
   const [tourOpen, setTourOpen] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
   // Only treat as valid video if it matches known patterns
   const hasValidVideo = videoUrl && isValidVideoUrl(videoUrl) && !videoError;
+  const mediaVideos = useMemo(() => {
+    const rows = videos.filter((video) => video.url && isValidVideoUrl(video.url));
+    if (hasValidVideo && videoUrl) rows.unshift({ id: "primary-video", url: videoUrl, title: "Project video" });
+    const seen = new Set<string>();
+    return rows.filter((video) => {
+      const key = video.url.toLowerCase().replace(/\?.*$/, "");
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [hasValidVideo, videoUrl, videos]);
 
-  if (!hasValidVideo && !virtualTourUrl) return null;
+  if (mediaVideos.length === 0 && !virtualTourUrl) return null;
 
-  const youtubeId = hasValidVideo ? getYouTubeVideoId(videoUrl!) : null;
-  const vimeoId = hasValidVideo ? getVimeoVideoId(videoUrl!) : null;
-  const isDirect = hasValidVideo ? isDirectVideoUrl(videoUrl!) : false;
-  const hasOneCard = (hasValidVideo ? 1 : 0) + (virtualTourUrl ? 1 : 0) === 1;
+  const activeVideo = activeVideoIndex !== null ? mediaVideos[activeVideoIndex] : null;
+  const activeYoutubeId = activeVideo ? getYouTubeVideoId(activeVideo.url) : null;
+  const activeVimeoId = activeVideo ? getVimeoVideoId(activeVideo.url) : null;
+  const activeIsDirect = activeVideo ? isDirectVideoUrl(activeVideo.url) : false;
+  const hasOneCard = mediaVideos.length + (virtualTourUrl ? 1 : 0) === 1;
 
-  const getEmbedUrl = () => {
+  const getEmbedUrl = (url: string) => {
+    const youtubeId = getYouTubeVideoId(url);
+    const vimeoId = getVimeoVideoId(url);
     if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
     if (vimeoId) return `https://player.vimeo.com/video/${vimeoId}?autoplay=1`;
     return null; // direct videos handled separately
+  };
+
+  const closeVideo = () => {
+    videoRef.current?.pause();
+    videoRef.current?.removeAttribute("src");
+    videoRef.current?.load();
+    videoRef.current = null;
+    setActiveVideoIndex(null);
+  };
+
+  const moveVideo = (direction: -1 | 1) => {
+    setActiveVideoIndex((index) => {
+      if (index === null || mediaVideos.length === 0) return index;
+      return (index + direction + mediaVideos.length) % mediaVideos.length;
+    });
   };
 
   return (
@@ -76,9 +108,13 @@ export default function ProjectMediaSection({
 
       <div className={`grid gap-4 ${hasOneCard ? 'grid-cols-1 max-w-2xl mx-auto' : 'grid-cols-1 sm:grid-cols-2'}`}>
         {/* Video Card */}
-        {hasValidVideo && (
-          <button
-            onClick={() => setVideoOpen(true)}
+        {mediaVideos.map((video, index) => {
+          const youtubeId = getYouTubeVideoId(video.url);
+          const isDirect = isDirectVideoUrl(video.url);
+          return (
+            <button
+            key={video.id || video.url}
+            onClick={() => setActiveVideoIndex(index)}
             className="group relative rounded-xl border-2 border-[#B89555]/30 bg-card overflow-hidden aspect-video hover:border-[#B89555]/60 hover:shadow-lg hover:shadow-gold/10 transition-all text-left"
           >
             {/* YouTube Thumbnail */}
@@ -93,7 +129,7 @@ export default function ProjectMediaSection({
               />
             ) : isDirect ? (
               <video
-                src={videoUrl!}
+                src={video.url}
                 className="w-full h-full object-cover"
                 muted
                 preload="metadata"
@@ -115,10 +151,11 @@ export default function ProjectMediaSection({
             
             {/* Label */}
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-              <p className="text-white font-medium">Watch Project Video</p>
+              <p className="text-white font-medium">{video.title || "Watch Project Video"}</p>
             </div>
           </button>
-        )}
+          );
+        })}
 
         {/* Virtual Tour Card */}
         {virtualTourUrl && (
@@ -142,27 +179,43 @@ export default function ProjectMediaSection({
       </div>
 
       {/* Video Modal */}
-      <Dialog open={videoOpen} onOpenChange={setVideoOpen}>
-        <DialogContent className="max-w-4xl p-0 bg-[#1A1A1A] border-[#B89555]/30">
+      <Dialog open={activeVideoIndex !== null} onOpenChange={(open) => { if (!open) closeVideo(); }}>
+        <DialogContent className="max-w-5xl p-0 bg-[#1A1A1A] border-[#B89555]/30 overflow-hidden">
           <DialogTitle className="sr-only">{projectName} Video</DialogTitle>
-          <div className="aspect-video w-full flex items-center justify-center">
-            {videoOpen && isDirect && videoUrl ? (
+          <div className="aspect-video w-full flex items-center justify-center relative">
+            {activeVideo && activeIsDirect ? (
               <video
-                src={videoUrl}
+                key={activeVideo.url}
+                ref={(node) => { videoRef.current = node; }}
+                src={activeVideo.url}
                 className="w-full h-full object-contain"
                 controls
                 autoPlay
                 playsInline
               />
-            ) : videoOpen && getEmbedUrl() ? (
+            ) : activeVideo && getEmbedUrl(activeVideo.url) ? (
               <iframe
-                src={getEmbedUrl() || ""}
+                key={activeVideo.url}
+                src={getEmbedUrl(activeVideo.url) || ""}
                 className="w-full h-full"
                 allow="autoplay; fullscreen; picture-in-picture"
                 allowFullScreen
-                title={`${projectName} Video`}
+                title={activeVideo.title || `${projectName} Video`}
               />
             ) : null}
+            {mediaVideos.length > 1 && (
+              <>
+                <button type="button" onClick={() => moveVideo(-1)} aria-label="Previous video" className="absolute left-4 top-1/2 -translate-y-1/2 inline-grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/55 text-white hover:bg-black/75">
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button type="button" onClick={() => moveVideo(1)} aria-label="Next video" className="absolute right-4 top-1/2 -translate-y-1/2 inline-grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/55 text-white hover:bg-black/75">
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white">
+                  {(activeVideoIndex ?? 0) + 1} / {mediaVideos.length}
+                </div>
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>
