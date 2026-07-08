@@ -408,16 +408,57 @@ export default function DeveloperProfilePage() {
           </CardContent>
         </Card>
 
+        {/* Needs-review flag: unverified fields were removed and are shown here for owner action */}
+        {developer.needs_review && (
+          <Card className="border-2 border-amber-400 bg-amber-50">
+            <CardContent className="py-4 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
+              <div className="flex-1 space-y-2">
+                <p className="text-sm font-semibold text-amber-900">
+                  Needs verification — unverified profile fields were removed automatically.
+                </p>
+                <p className="text-xs text-amber-900/80">
+                  We can't confirm these values came from the developer's official website or a
+                  verified API, so they've been cleared to prevent showing wrong information to
+                  clients. Contact the developer and re-enter the correct values below, then click
+                  <span className="font-semibold"> "Confirm this profile"</span> to clear the flag.
+                </p>
+                {Array.isArray(developer.review_flags) && developer.review_flags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {developer.review_flags.map((f) => (
+                      <Badge key={f} className="bg-amber-200 text-amber-900 border border-amber-400 text-[10px] font-black uppercase tracking-wide">
+                        {f.replace(/_/g, " ")}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                {developer.unverified_snapshot && Object.keys(developer.unverified_snapshot).length > 0 && (
+                  <details className="pt-2">
+                    <summary className="text-xs font-semibold text-amber-900 cursor-pointer">
+                      View removed values (for reference — do NOT paste unless you verify)
+                    </summary>
+                    <pre className="mt-2 text-[11px] bg-white/70 border border-amber-300 rounded p-2 overflow-auto max-h-48">
+                      {JSON.stringify(developer.unverified_snapshot, null, 2)}
+                    </pre>
+                  </details>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Privacy banner: everything below is owner-only */}
         <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
           <CardContent className="py-3 flex items-start gap-3">
             <ShieldCheck className="w-4 h-4 text-[#1A1A1A] mt-0.5 shrink-0" />
             <p className="text-xs text-[#1A1A1A]/80">
-              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone, address and social/community links are
-              <span className="font-semibold"> never shown publicly</span>. They exist so JBJ can reach the developer directly — clients must always close through us.
+              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone and social/community links are
+              <span className="font-semibold"> never shown publicly</span>. Developer office locations are
+              <span className="font-semibold"> never stored or displayed anywhere</span>. These contact points exist so JBJ can reach the developer directly — clients must always close through us.
             </p>
           </CardContent>
         </Card>
+
 
         <Tabs defaultValue="overview">
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
