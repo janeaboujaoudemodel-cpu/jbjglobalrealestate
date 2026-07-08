@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { Play, Video, Eye, ExternalLink } from "lucide-react";
+import { Play, Video, Eye, ExternalLink, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 
@@ -8,6 +8,7 @@ interface ProjectMediaSectionProps {
   virtualTourUrl?: string | null;
   videos?: { id: string; url: string; title?: string | null }[];
   projectName: string;
+  showOwnerEmptyState?: boolean;
 }
 
 // Validate that a URL is a real video (YouTube, Vimeo, or direct video file)
@@ -48,6 +49,7 @@ export default function ProjectMediaSection({
   virtualTourUrl,
   videos = [],
   projectName,
+  showOwnerEmptyState = false,
 }: ProjectMediaSectionProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [activeVideoIndex, setActiveVideoIndex] = useState<number | null>(null);
@@ -68,7 +70,7 @@ export default function ProjectMediaSection({
     });
   }, [hasValidVideo, videoUrl, videos]);
 
-  if (mediaVideos.length === 0 && !virtualTourUrl) return null;
+  if (mediaVideos.length === 0 && !virtualTourUrl && !showOwnerEmptyState) return null;
 
   const hasOneCard = mediaVideos.length + (virtualTourUrl ? 1 : 0) === 1;
 
@@ -88,6 +90,18 @@ export default function ProjectMediaSection({
       </h3>
 
       <div className={`grid gap-4 ${hasOneCard ? 'grid-cols-1 max-w-2xl mx-auto' : 'grid-cols-1 sm:grid-cols-2'}`}>
+        {mediaVideos.length === 0 && showOwnerEmptyState && (
+          <div className="sm:col-span-2 rounded-xl border border-dashed border-[#B89555]/55 bg-[#FDFBF7] p-6 md:p-8 text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#F7F2EA]">
+              <Upload className="h-5 w-5 text-[#064E3B]" />
+            </div>
+            <p className="text-sm font-bold text-[#1A1A1A]">No project videos are attached yet</p>
+            <p className="mx-auto mt-1 max-w-xl text-xs leading-relaxed text-[#1A1A1A]/65">
+              Upload MP4, MOV, WebM or M4V files from the owner upload panel and they will publish here as inline playable media.
+            </p>
+          </div>
+        )}
+
         {/* Video Card */}
         {mediaVideos.map((video, index) => {
           const youtubeId = getYouTubeVideoId(video.url);
@@ -120,7 +134,7 @@ export default function ProjectMediaSection({
               <video
                 src={video.url}
                 ref={activeVideoIndex === index ? (node) => { videoRef.current = node; } : undefined}
-                className="w-full h-full object-cover bg-black"
+                className="w-full h-full object-contain bg-black"
                 muted={activeVideoIndex !== index}
                 controls={activeVideoIndex === index}
                 autoPlay={activeVideoIndex === index}

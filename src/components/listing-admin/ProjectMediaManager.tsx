@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { X, GripVertical, Upload, Image as ImageIcon, Star, Layers, CreditCard, Loader2 } from "lucide-react";
+import { X, GripVertical, Upload, Image as ImageIcon, Star, Layers, CreditCard, Loader2, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SafeImage } from "@/components/SafeImage";
@@ -28,6 +28,9 @@ interface ProjectMediaManagerProps {
 }
 
 type ImageRole = "card" | "hero" | "gallery";
+
+const isVideoFile = (file: File) => file.type.startsWith("video/") || /\.(mp4|mov|webm|ogg|m4v)(\?|$)/i.test(file.name);
+const isImageFile = (file: File) => file.type.startsWith("image/") || /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(file.name);
 
 const ROLE_CONFIG: Record<ImageRole, { label: string; icon: typeof Star; color: string; field: string }> = {
   card: { label: "Card", icon: CreditCard, color: "bg-blue-500", field: "card_image_url" },
@@ -139,18 +142,26 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
     try {
       for (const file of Array.from(files)) {
-        const fileName = `project-uploads/${project.id}/${Date.now()}-${file.name}`;
+        if (!isImageFile(file) && !isVideoFile(file)) continue;
+        const fileName = `project-uploads/${project.id}/${crypto.randomUUID()}-${file.name}`;
         const { error: uploadError } = await supabase.storage.from("rel-media").upload(fileName, file);
         if (uploadError) continue;
 
         const { data: urlData } = supabase.storage.from("rel-media").getPublicUrl(fileName);
-        const { error: dbError } = await supabase.from("project_images").insert({
-          project_id: project.id,
-          image_url: urlData.publicUrl,
-          is_primary: false,
-          display_order: images.length + successCount,
-        } as any);
-        if (!project.cover_image_url && images.length === 0 && successCount === 0) {
+        const { error: dbError } = isVideoFile(file)
+          ? await supabase.from("project_videos").insert({
+              project_id: project.id,
+              url: urlData.publicUrl,
+              title: file.name,
+              is_visible: true,
+              display_order: successCount,
+            } as any)
+          : await supabase.from("project_images").insert({
+              project_id: project.id,
+              image_url: urlData.publicUrl,
+              display_order: images.length + successCount,
+            } as any);
+        if (isImageFile(file) && !project.cover_image_url && images.length === 0 && successCount === 0) {
           await supabase.from("projects").update({ cover_image_url: urlData.publicUrl } as any).eq("id", project.id);
         }
         if (!dbError) successCount++;
@@ -162,9 +173,9 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
           entity_type: "project",
           entity_id: project.id,
           entity_name: project.name,
-          action: "upload_image",
-          changed_fields: ["images"],
-          summary: `Uploaded ${successCount} image(s)`,
+          action: "upload_media",
+          changed_fields: ["images", "videos"],
+          summary: `Uploaded ${successCount} media file(s)`,
         });
         onRefresh();
       }
@@ -255,10 +266,10 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
       <div className="flex items-center gap-3">
         <Button onClick={() => imageInputRef.current?.click()} disabled={isUploading} variant="secondary" size="sm">
           {isUploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-          Upload Images
+          Upload Media
         </Button>
-        <span className="text-xs text-muted-foreground">{images.length} image{images.length !== 1 ? "s" : ""} • Drag to reorder</span>
-        <input ref={imageInputRef} type="file" className="hidden" accept="image/*" multiple onChange={handleUpload} />
+        <span className="text-xs text-muted-foreground">{images.length} image{images.length !== 1 ? "s" : ""} • photos publish to gallery, videos to media</span>
+        <input ref={imageInputRef} type="file" className="hidden" accept="image/*,video/*,.mp4,.mov,.webm,.ogg,.m4v" multiple onChange={handleUpload} />
       </div>
 
       {/* Image Grid */}
@@ -266,6 +277,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
         <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-[#B89555]/30 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
           <ImageIcon className="w-10 h-10 text-muted-foreground mb-3" />
           <p className="text-sm text-muted-foreground">No images uploaded yet</p>
+          <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><Video className="h-3.5 w-3.5" /> Video files uploaded here publish to Project Media.</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

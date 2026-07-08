@@ -16,8 +16,8 @@ const Progress = React.forwardRef<
       className="h-full w-full flex-1 transition-all"
       data-progress-indicator
       style={{
-        transform: `translateX(-${100 - (value || 0)}%)`,
-        background: "var(--jj-emerald-ombre, linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary))))",
+        transform: `translateX(calc(-100% + var(--jj-progress-visual-value, ${(value || 0)}%)))`,
+        background: "var(--jj-progress-bg, var(--jj-emerald-ombre, linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)))))",
       }}
     />
   </ProgressPrimitive.Root>
