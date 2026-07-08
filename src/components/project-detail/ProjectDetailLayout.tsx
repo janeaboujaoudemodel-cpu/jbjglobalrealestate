@@ -1627,31 +1627,31 @@ function ProjectDetailLayoutInner({
 
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Starting Price</p>
               <InlineEditable projectId={project.id} field="price_from" value={project.price_from} type="number" scope="quick_facts" label="Edit starting price">
-                <p className="mt-2 text-xl font-bold text-price-orange">
+                <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-price-orange break-words leading-tight tabular-nums">
                   {typeof project.price_from === "number" && project.price_from > 0
                     ? priceRangeText
                     : "Price TBA"}
                 </p>
               </InlineEditable>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Handover</p>
               <InlineEditable projectId={project.id} field="handover_date" value={project.handover_date} type="date" scope="quick_facts" label="Edit handover date">
-                <p className="mt-2 text-xl font-bold text-foreground">{publicProjectStatus}</p>
+                <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-foreground break-words leading-tight">{publicProjectStatus}</p>
               </InlineEditable>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">Bedrooms</p>
-              <p className="mt-2 text-xl font-bold text-foreground">
+              <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-foreground break-words leading-tight">
                 {bedroomsText || deriveBedroomsFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
-            <div className="rounded-xl border-2 border-[#B89555] bg-card p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all">
+            <div className="rounded-xl border-2 border-[#B89555] bg-card p-4 md:p-5 text-center shadow-md hover:shadow-lg hover:shadow-gold/20 transition-all min-w-0 flex flex-col justify-center">
               <p className="text-meta-xs text-muted-foreground uppercase tracking-wider">{plotSizeText ? "Plot size" : "Size"}</p>
-              <p className="mt-2 text-xl font-bold text-foreground">
+              <p className="mt-2 text-sm md:text-base lg:text-lg font-bold text-foreground break-words leading-tight tabular-nums">
                 {plotSizeText || sizeText || deriveSizeFromUnitTypes(project.unit_types) || "TBA"}
               </p>
             </div>
@@ -1669,7 +1669,7 @@ function ProjectDetailLayoutInner({
                saleStatus={project.sale_status}
                handoverDate={project.handover_date}
                updatedAt={project.updated_at}
-               showUpdated={isOwner}
+               showUpdated={false}
              />
           </div>
 
