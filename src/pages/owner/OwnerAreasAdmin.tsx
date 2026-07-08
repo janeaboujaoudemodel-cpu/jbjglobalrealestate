@@ -71,11 +71,11 @@ export default function OwnerAreasAdmin() {
 
   const save = useMutation({
     mutationFn: async (row: Partial<AreaRow>) => {
-      const payload: Record<string, unknown> = {
-        name: row.name,
+      const payload = {
+        name: row.name ?? "",
         slug: row.slug || slugify(row.name || ""),
-        emirate: row.emirate,
-        description: row.description,
+        emirate: row.emirate ?? "Dubai",
+        description: row.description ?? null,
         hero_image_url: row.hero_image_url || null,
         image_url: row.image_url || null,
         latitude: row.latitude ?? null,
@@ -90,7 +90,7 @@ export default function OwnerAreasAdmin() {
         const { error } = await supabase.from("areas").update(payload).eq("id", row.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from("areas").insert(payload as never);
+        const { error } = await supabase.from("areas").insert(payload);
         if (error) throw error;
       }
     },

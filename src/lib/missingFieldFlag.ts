@@ -33,11 +33,7 @@ export function flagMissingField(input: FlagInput): void {
     if (now - last < THROTTLE_MS) return;
     recent.set(key, now);
 
-    // Upsert on (entity_type, entity_id, field_name) — increments seen_count.
-    // Fire-and-forget; ignore errors.
-    void supabase.rpc("noop_missing_flag_upsert" as never, {} as never).then(() => {
-      /* if RPC missing, fall through to direct insert */
-    }).catch(() => {});
+    // Fire-and-forget; ignore errors. Never throw.
 
     void supabase
       .from("missing_field_flags")

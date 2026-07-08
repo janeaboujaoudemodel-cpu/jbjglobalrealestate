@@ -4,7 +4,7 @@
  * navigation. Non-owners always see everything (hook returns false).
  */
 import { useEffect, useState, useCallback } from "react";
-import { useIsOwner } from "@/hooks/useIsOwner";
+import { useIsOwner } from "@/components/OwnerGuard";
 
 const KEY = "jbj:owner:manualOnly";
 
