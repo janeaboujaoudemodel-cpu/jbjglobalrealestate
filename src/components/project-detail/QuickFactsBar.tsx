@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Building2, Layers, Home, CalendarCheck, Sparkles, Clock, Hand } from "lucide-react";
+import { Building2, Layers, Home, CalendarCheck, Sparkles, Clock } from "lucide-react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { isPublicStatus, getProjectStatus } from "@/utils/projectStatus";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +14,9 @@ interface QuickFactsBarProps {
   saleStatus?: string | null;
   handoverDate?: string | null;
   updatedAt?: string | null;
+  /** When true, show the "Updated" chip. Public visitors never see it — the
+   *  owner sees the timestamp inside the gold-star OwnerProvenanceCard. */
+  showUpdated?: boolean;
 }
 
 /**
@@ -38,6 +41,7 @@ export default function QuickFactsBar({
   saleStatus,
   handoverDate,
   updatedAt,
+  showUpdated = false,
 }: QuickFactsBarProps) {
   const synced = getProjectStatus({
     handover_date: handoverDate,
@@ -167,8 +171,9 @@ export default function QuickFactsBar({
           </div>
         ))}
 
-        {/* Updated — single source of truth, sits with Handover */}
-        {effectiveUpdatedAt && (
+        {/* Updated — owner-only chip. Public visitors don't see it here;
+            the owner sees the full timestamp inside OwnerProvenanceCard's gold star. */}
+        {showUpdated && effectiveUpdatedAt && (
           <div className="flex items-center gap-3 rounded-xl border border-[#B89555]/40 bg-[#F7F2EA] px-4 py-3 shadow-sm">
             <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
               <Clock className="w-4 h-4 text-[#064E3B]" aria-hidden="true" />
@@ -179,9 +184,6 @@ export default function QuickFactsBar({
               </span>
               <span className="mt-1 text-sm font-semibold text-[#1A1A1A]">
                 {formatUpdated(effectiveUpdatedAt)}
-              </span>
-              <span className="text-[10px] text-[#1A1A1A]/55 leading-none mt-0.5 inline-flex items-center gap-1">
-                <Hand className="w-2.5 h-2.5" /> maintained manually
               </span>
             </div>
           </div>

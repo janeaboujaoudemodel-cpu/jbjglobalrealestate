@@ -18,31 +18,31 @@ type FilterMode = "nearby" | "area" | "emirate";
 
 const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char] || char));
 
-const shortMapLabel = (projectName: string) => /amra/i.test(projectName) ? "AMRA" : projectName.split(/\s+/).slice(0, 2).join(" ");
 
-// Premium red/gold pin with compact attached label — no long vertical text layout.
+
+// Premium project pin — minimal white label (no red pill, no all-caps),
+// paired with a discreet gold-outlined pin. Keeps the map feeling editorial.
 const buildCurrentPin = (projectName: string) => `
-<div style="position:relative;width:104px;height:104px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;">
-  <div style="background:linear-gradient(135deg,#8B1111 0%,#C42121 48%,#5A0A0A 100%);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;font-weight:900;font-size:12px;letter-spacing:0.08em;padding:5px 12px;border-radius:999px;border:1.5px solid #F4E3A8;box-shadow:0 10px 22px -10px rgba(0,0,0,0.8);white-space:nowrap;text-transform:uppercase;margin-bottom:3px;text-shadow:0 1px 2px rgba(0,0,0,0.55);">${escapeHtml(shortMapLabel(projectName))}</div>
-  <svg xmlns="http://www.w3.org/2000/svg" width="54" height="70" viewBox="0 0 58 74" fill="none">
+<div style="position:relative;width:160px;height:96px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;">
+  <div style="background:rgba(10,20,15,0.55);color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;font-weight:600;font-size:12px;letter-spacing:0.02em;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.35);backdrop-filter:blur(6px);white-space:nowrap;margin-bottom:4px;text-shadow:0 1px 2px rgba(0,0,0,0.55);max-width:150px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(projectName)}</div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="42" height="54" viewBox="0 0 58 74" fill="none">
     <defs>
-      <linearGradient id="redPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
-        <stop stop-color="#D32F2F"/><stop offset="0.5" stop-color="#B71C1C"/><stop offset="1" stop-color="#5A0A0A"/>
+      <linearGradient id="jjPin" x1="9" y1="4" x2="51" y2="68" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#0B2A20"/><stop offset="0.55" stop-color="#064E3B"/><stop offset="1" stop-color="#010806"/>
       </linearGradient>
-      <filter id="redShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#000000" flood-opacity="0.55"/></filter>
+      <filter id="jjPinShadow" x="-8" y="-6" width="74" height="88" filterUnits="userSpaceOnUse"><feDropShadow dx="0" dy="6" stdDeviation="4" flood-color="#000000" flood-opacity="0.55"/></filter>
     </defs>
-    <path filter="url(#redShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#redPin)" stroke="#F4E3A8" stroke-width="2.5"/>
-    <circle cx="29" cy="29" r="12" fill="rgba(255,255,255,0.14)" stroke="#F4E3A8" stroke-width="2"/>
-    <circle cx="29" cy="29" r="5" fill="#FFFFFF"/>
+    <path filter="url(#jjPinShadow)" d="M29 3C14.1 3 2 14.9 2 29.6 2 50.2 29 72 29 72s27-21.8 27-42.4C56 14.9 43.9 3 29 3z" fill="url(#jjPin)" stroke="#F4E3A8" stroke-width="1.6"/>
+    <circle cx="29" cy="29" r="6" fill="#FFFFFF"/>
   </svg>
 </div>`;
 
 const createCurrentPinIcon = (projectName: string) => L.divIcon({
   html: buildCurrentPin(projectName),
   className: "jj-map-pin",
-  iconSize: [104, 104],
-  iconAnchor: [52, 104],
-  popupAnchor: [0, -104],
+  iconSize: [160, 96],
+  iconAnchor: [80, 96],
+  popupAnchor: [0, -96],
 });
 
 // Champagne/gold price pill for peer Citi Developer projects.

@@ -113,7 +113,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import citiBuddyDocumentCoverAsset from "@/assets/citi-buddy-document-cover.jpg.asset.json";
-import citiBuddyRobotLocal from "@/assets/citi-buddy-robot-concierge.jpg";
+import citiBuddyRobotRealAsset from "@/assets/citi-buddy-robot-real.png.asset.json";
+const citiBuddyRobotLocal = citiBuddyRobotRealAsset.url;
 import amraFactsheetAsset from "@/assets/amra-factsheet.pdf.asset.json";
 import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsights";
 // Amra brochure-cropped imagery (extracted from the official AMRA Factsheet PDF).
@@ -282,7 +283,7 @@ const SUB_NAV_TABS = [
   { id: "construction", label: "Progress", icon: HardHat },
   { id: "developer", label: "Developer", icon: Building2 },
   { id: "usp", label: "Highlights", icon: Star },
-  { id: "floor-plans", label: "Floor Plans", icon: Layers },
+  
   { id: "house-details", label: "Specs", icon: Home },
   { id: "amenities", label: "Amenities", icon: Building2 },
   { id: "media", label: "Media", icon: Video },
@@ -298,7 +299,7 @@ const SUB_NAV_TABS = [
 
 const STICKY_PROJECT_TAB_IDS = new Set([
   "developer",
-  "floor-plans",
+  
   "house-details",
   "amenities",
   "location",
@@ -609,7 +610,7 @@ function ProjectDetailLayoutInner({
     return SUB_NAV_TABS.filter((t) => {
       if (t.id === "gallery") return hasGallery;
       if (t.id === "usp") return hasUsp;
-      if (t.id === "floor-plans") return hasFloorPlans;
+      
       if (t.id === "amenities") return hasAmenities;
       if (t.id === "payment") return hasPayment;
       if (t.id === "faq") return hasUsefulInfo;
@@ -1522,6 +1523,7 @@ function ProjectDetailLayoutInner({
                saleStatus={project.sale_status}
                handoverDate={project.handover_date}
                updatedAt={project.updated_at}
+               showUpdated={isOwner}
              />
           </div>
 
@@ -1760,27 +1762,9 @@ function ProjectDetailLayoutInner({
              </div>
            )}
 
-           {/* FLOOR PLANS SECTION */}
-           {(floorPlanDocs.length > 0 || (project.floor_plan_types?.length ?? 0) > 0) && (
-             <div ref={floorPlansRef} id="floor-plans" className="mb-14 scroll-mt-40">
-               <div className="jj-card-inner">
-                 <div className="flex items-center gap-2 mb-2">
-                   <h3 className="text-h3-sm font-medium text-foreground">Floor Plans</h3>
-                   <span className="ml-auto"><OwnerSectionEditor projectId={project.id} section="floor-plans" initial={project as any} label="Upload floor plans" /></span>
-                 </div>
-                 <div className="mt-6">
-                   <FloorPlanGallery
-                     floorPlanTypes={project.floor_plan_types ?? null}
-                     floorPlanDocs={floorPlanDocs}
-                     projectName={project.name}
-                     onDownload={(_, url) => handleDocumentDownload("floor_plan", url)}
-                     brochureUrl={brochurePrimary?.url}
-                     onDownloadBrochure={(url) => handleDocumentDownload("brochure", url)}
-                   />
-                 </div>
-               </div>
-             </div>
-           )}
+           {/* FLOOR PLANS SECTION — removed per owner: floor-plan files remain
+               available inside the Project Documents section below. */}
+
 
            {/* AMENITIES SECTION - Premium with Icons */}
            {amraAmenities.length > 0 && (
@@ -1941,7 +1925,7 @@ function ProjectDetailLayoutInner({
                   />
                 </Suspense>
                 <p className="mt-2 text-xs text-[#1A1A1A]/70">
-                  Red pin = {project.name}. Gold pins = other projects by {project.developer?.name || 'this developer'}. Hover a gold pin to preview, click to open.
+                  {project.name} is the highlighted pin. Gold pins mark other projects by {project.developer?.name || 'this developer'}. Hover to preview, click to open.
                 </p>
               </div>
 
