@@ -14356,6 +14356,7 @@ export type Database = {
           logo_verified_at: string | null
           logo_verified_by: string | null
           name: string
+          needs_review: boolean
           notable_projects: string | null
           notes: string | null
           office_address: string | null
@@ -14366,11 +14367,14 @@ export type Database = {
           public_fields: Json
           rank: number | null
           registration_status: string | null
+          review_flagged_at: string | null
+          review_flags: Json
           slug: string
           specialization: string | null
           telegram_group_url: string | null
           total_units_delivered: number | null
           trust_level: Database["public"]["Enums"]["developer_trust_level"]
+          unverified_snapshot: Json | null
           upcoming_units: number | null
           updated_at: string
           website_url: string | null
@@ -14416,6 +14420,7 @@ export type Database = {
           logo_verified_at?: string | null
           logo_verified_by?: string | null
           name: string
+          needs_review?: boolean
           notable_projects?: string | null
           notes?: string | null
           office_address?: string | null
@@ -14426,11 +14431,14 @@ export type Database = {
           public_fields?: Json
           rank?: number | null
           registration_status?: string | null
+          review_flagged_at?: string | null
+          review_flags?: Json
           slug: string
           specialization?: string | null
           telegram_group_url?: string | null
           total_units_delivered?: number | null
           trust_level?: Database["public"]["Enums"]["developer_trust_level"]
+          unverified_snapshot?: Json | null
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null
@@ -14476,6 +14484,7 @@ export type Database = {
           logo_verified_at?: string | null
           logo_verified_by?: string | null
           name?: string
+          needs_review?: boolean
           notable_projects?: string | null
           notes?: string | null
           office_address?: string | null
@@ -14486,11 +14495,14 @@ export type Database = {
           public_fields?: Json
           rank?: number | null
           registration_status?: string | null
+          review_flagged_at?: string | null
+          review_flags?: Json
           slug?: string
           specialization?: string | null
           telegram_group_url?: string | null
           total_units_delivered?: number | null
           trust_level?: Database["public"]["Enums"]["developer_trust_level"]
+          unverified_snapshot?: Json | null
           upcoming_units?: number | null
           updated_at?: string
           website_url?: string | null

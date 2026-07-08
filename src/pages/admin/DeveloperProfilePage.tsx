@@ -48,6 +48,11 @@ interface Developer {
   last_confirmed_at: string | null;
   confirmation_source: string | null;
   description_languages: string[] | null;
+  needs_review?: boolean | null;
+  review_flags?: string[] | null;
+  review_flagged_at?: string | null;
+  unverified_snapshot?: Record<string, unknown> | null;
+
 }
 
 const MEDIA_KINDS = [
@@ -177,7 +182,11 @@ export default function DeveloperProfilePage() {
       const payload: any = {
         description: form.description ?? null,
         website_url: form.website_url ?? null,
-        headquarters: form.headquarters ?? null,
+        // Location fields are permanently nulled — JBJ never stores or displays
+        // developer office locations. See mem: constraint/no-developer-location.
+        headquarters: null,
+        office_address: null,
+        google_maps_url: null,
         founded_year: form.founded_year ?? null,
         ceo_name: form.ceo_name ?? null,
         parent_company: form.parent_company ?? null,
@@ -186,14 +195,13 @@ export default function DeveloperProfilePage() {
         whatsapp_group_url: form.whatsapp_group_url ?? null,
         telegram_group_url: form.telegram_group_url ?? null,
         admin_email: form.admin_email ?? null,
-        office_address: form.office_address ?? null,
-        google_maps_url: form.google_maps_url ?? null,
         instagram_url: form.instagram_url ?? null,
         linkedin_url: form.linkedin_url ?? null,
         notable_projects: form.notable_projects ?? null,
         specialization: form.specialization ?? null,
         description_languages: form.description_languages ?? [],
       };
+
       const { error } = await supabase.from("developers").update(payload).eq("id", developer.id);
       if (error) throw error;
       // audit
@@ -277,7 +285,10 @@ export default function DeveloperProfilePage() {
           last_confirmed_by: user.id,
           last_confirmed_at: new Date().toISOString(),
           confirmation_source: source,
+          needs_review: false,
+          review_flags: [],
         } as any)
+
         .eq("id", developer.id);
       if (error) throw error;
       await supabase.from("developer_audit_log" as any).insert({
@@ -365,7 +376,7 @@ export default function DeveloperProfilePage() {
               className="w-28 h-28 rounded-2xl border border-[#B89555]/55 bg-[#FDFBF7] flex items-center justify-center overflow-hidden group relative shrink-0 shadow-[0_22px_45px_-26px_rgba(0,0,0,0.65)]"
               title={canEdit ? "Click to upload logo" : "Logo"}
             >
-              <DeveloperLogo src={developer.logo_url} alt={`${developer.name} logo`} name={developer.name} variant="card" renderFallback className="w-full h-full rounded-2xl border-0 shadow-none p-4" />
+              <DeveloperLogo src={developer.logo_url} alt={`${developer.name} logo`} name={developer.name} variant="card" renderFallback className="w-full h-full rounded-2xl border-0 shadow-none p-0" />
               {canEdit && (
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
                   <Upload className="w-6 h-6 text-white" />
@@ -383,7 +394,6 @@ export default function DeveloperProfilePage() {
               <p className="text-[11px] uppercase tracking-[0.24em] text-[#EFE6D6] font-black">Developer Profile</p>
               <h1 className="mt-1 text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">{developer.name}</h1>
               <div className="flex items-center gap-3 mt-3 text-sm text-white/85 flex-wrap">
-                {developer.headquarters && <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{developer.headquarters}</span>}
                 {developer.website_url && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#EFE6D6] border border-[#B89555]/50 text-[11px] font-black text-[#1A1A1A]">
                     <ShieldCheck className="w-3 h-3" /> Owner-only
@@ -394,22 +404,64 @@ export default function DeveloperProfilePage() {
                 )}
                 <span className="font-semibold">{projects.length} projects · {reps.length} sales reps</span>
               </div>
+
             </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Needs-review flag: unverified fields were removed and are shown here for owner action */}
+        {developer.needs_review && (
+          <Card className="border-2 border-amber-400 bg-amber-50">
+            <CardContent className="py-4 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
+              <div className="flex-1 space-y-2">
+                <p className="text-sm font-semibold text-amber-900">
+                  Needs verification — unverified profile fields were removed automatically.
+                </p>
+                <p className="text-xs text-amber-900/80">
+                  We can't confirm these values came from the developer's official website or a
+                  verified API, so they've been cleared to prevent showing wrong information to
+                  clients. Contact the developer and re-enter the correct values below, then click
+                  <span className="font-semibold"> "Confirm this profile"</span> to clear the flag.
+                </p>
+                {Array.isArray(developer.review_flags) && developer.review_flags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {developer.review_flags.map((f) => (
+                      <Badge key={f} className="bg-amber-200 text-amber-900 border border-amber-400 text-[10px] font-black uppercase tracking-wide">
+                        {f.replace(/_/g, " ")}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+                {developer.unverified_snapshot && Object.keys(developer.unverified_snapshot).length > 0 && (
+                  <details className="pt-2">
+                    <summary className="text-xs font-semibold text-amber-900 cursor-pointer">
+                      View removed values (for reference — do NOT paste unless you verify)
+                    </summary>
+                    <pre className="mt-2 text-[11px] bg-white/70 border border-amber-300 rounded p-2 overflow-auto max-h-48">
+                      {JSON.stringify(developer.unverified_snapshot, null, 2)}
+                    </pre>
+                  </details>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Privacy banner: everything below is owner-only */}
         <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
           <CardContent className="py-3 flex items-start gap-3">
             <ShieldCheck className="w-4 h-4 text-[#1A1A1A] mt-0.5 shrink-0" />
             <p className="text-xs text-[#1A1A1A]/80">
-              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone, address and social/community links are
-              <span className="font-semibold"> never shown publicly</span>. They exist so JBJ can reach the developer directly — clients must always close through us.
+              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone and social/community links are
+              <span className="font-semibold"> never shown publicly</span>. Developer office locations are
+              <span className="font-semibold"> never stored or displayed anywhere</span>. These contact points exist so JBJ can reach the developer directly — clients must always close through us.
             </p>
           </CardContent>
         </Card>
+
 
         <Tabs defaultValue="overview">
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
@@ -444,9 +496,8 @@ export default function DeveloperProfilePage() {
                   <Field label="Website URL">
                     <Input disabled={!canEdit} value={form.website_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, website_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                   </Field>
-                  <Field label="Headquarters">
-                    <Input disabled={!canEdit} value={form.headquarters ?? ""} onChange={(e) => setForm((f) => ({ ...f, headquarters: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
-                  </Field>
+                  {/* Headquarters intentionally removed — never store or display developer office locations. */}
+
                   <Field label="Founded year">
                     <Input type="number" disabled={!canEdit} value={form.founded_year ?? ""} onChange={(e) => setForm((f) => ({ ...f, founded_year: e.target.value ? parseInt(e.target.value) : null }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                   </Field>
@@ -474,12 +525,9 @@ export default function DeveloperProfilePage() {
                   <Field label="Admin email">
                     <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="contact@developer.ae" />
                   </Field>
-                  <Field label="Office address">
-                    <Input disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="Building, floor, area" />
-                  </Field>
-                  <Field label="Google Maps link">
-                    <Input disabled={!canEdit} value={form.google_maps_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, google_maps_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://maps.google.com/…" />
-                  </Field>
+                  {/* Office address & Google Maps link intentionally removed —
+                      never store or display developer physical locations. */}
+
                   <Field label="WhatsApp Group invite">
                     <Input disabled={!canEdit} value={form.whatsapp_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://chat.whatsapp.com/…" />
                   </Field>
@@ -643,14 +691,9 @@ export default function DeveloperProfilePage() {
                 <Field label="Email">
                   <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                 </Field>
-                <Field label="Google Maps URL">
-                  <Input disabled={!canEdit} value={form.google_maps_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, google_maps_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
-                </Field>
-                <div className="col-span-2">
-                  <Field label="Office address">
-                    <Textarea rows={2} disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
-                  </Field>
-                </div>
+                {/* Google Maps URL & Office address intentionally removed —
+                    never store or display developer physical locations. */}
+
                 {canEdit && dirty && (
                   <div className="col-span-2 flex justify-end">
                     <Button onClick={() => saveMutation.mutate()} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/80">Save</Button>

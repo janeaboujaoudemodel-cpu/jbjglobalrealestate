@@ -435,16 +435,8 @@ const DeveloperDetail = () => {
       label: "Active Projects",
       value: activeProjectCount ?? null,
     },
-    {
-      icon: MapPin,
-      label: "Headquarters",
-      value: developer.headquarters 
-        ? (() => {
-            const parts = developer.headquarters.split(',').map((s: string) => s.trim());
-            return parts.length >= 2 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : parts[parts.length - 1];
-          })()
-        : null,
-    },
+    // Headquarters intentionally removed — never display developer office locations.
+
   ].filter(s => s.value !== null);
 
   const heroImageUrl =

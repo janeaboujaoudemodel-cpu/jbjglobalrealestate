@@ -15,18 +15,16 @@ interface DeveloperLogoProps {
   "data-keep-gold"?: boolean | string;
 }
 
-// Unified emerald-bordered plate — identical between `bare` and `nameplate`
-// so every project card has an identical badge footprint. Padding is
-// kept minimal so wide wordmarks AND square marks both render at their
-// maximum size without ever being cropped (object-contain enforced).
-// Square-ish, ~35% smaller than the previous h-14 w-24 plate so cards feel
-// closer to the Reelly reference. Padding stays minimal + object-contain
-// is enforced on the <img loading="lazy" decoding="async" /> so wide wordmarks AND square marks render at
-// their largest fitting size and are NEVER cropped.
+// Unified emerald-bordered plate. Padding is 0 so wordmarks & monograms
+// render at MAX zoom without cropping (object-contain enforced). White
+// backgrounds baked into raster logos are visually knocked out with
+// mix-blend-mode: multiply against the plate's white surface, so PNG/JPG
+// logos look transparent without any server-side background removal.
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
-  "rounded-lg bg-[#FDFBF7] border border-[#B89555]/80 " +
-  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-[4px]";
+  "rounded-lg bg-white border border-[#B89555]/80 " +
+  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-0";
+
 
 
 export function DeveloperLogo({
@@ -113,12 +111,13 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          className="block max-w-full max-h-full w-auto h-auto object-contain"
+          className="block w-full h-full object-contain [mix-blend-mode:multiply]"
           style={{
             filter: override.invert
               ? "invert(1) brightness(1)"
-              : "contrast(1.08) saturate(1.1)",
+              : "contrast(1.15) saturate(1.2)",
           }}
+
         />
       </div>
     );
@@ -128,9 +127,10 @@ export function DeveloperLogo({
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
     const cardContainer = cn(
-      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-6 overflow-hidden",
+      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-1 overflow-hidden",
       className,
     );
+
     if (!valid) {
       if (name || alt) {
         return renderNameLabel(cardContainer, "text-[#1A1A1A]", "card");
@@ -147,8 +147,9 @@ export function DeveloperLogo({
             setError(true);
             onError?.();
           }}
-          className="block max-h-full max-w-full w-auto h-auto object-contain"
-          style={{ filter: "contrast(1.08) saturate(1.1)" }}
+          className="block w-full h-full object-contain [mix-blend-mode:multiply]"
+          style={{ filter: "contrast(1.15) saturate(1.2)" }}
+
         />
       </div>
     );
@@ -156,9 +157,10 @@ export function DeveloperLogo({
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   const tileContainer = cn(
-    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-[#FDFBF7] p-1.5 shadow-sm border border-[#B89555]/70 overflow-hidden",
+    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white p-0 shadow-sm border border-[#B89555]/70 overflow-hidden",
     className,
   );
+
   if (!valid) {
     if (!renderFallback && !(name || alt)) return null;
     if (name || alt) return renderNameLabel(tileContainer);
@@ -175,8 +177,9 @@ export function DeveloperLogo({
           setError(true);
           onError?.();
         }}
-        className="block max-h-full max-w-full w-auto h-auto rounded-sm object-contain"
-        style={{ filter: "contrast(1.08) saturate(1.1)" }}
+        className="block w-full h-full object-contain rounded-sm [mix-blend-mode:multiply]"
+        style={{ filter: "contrast(1.15) saturate(1.2)" }}
+
       />
     </div>
   );
