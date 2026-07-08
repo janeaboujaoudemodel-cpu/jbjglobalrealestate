@@ -110,7 +110,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
       const [profilesRes, crmRes, rolesRes] = await Promise.all([
         supabase.from("profiles").select("id, full_name, first_name, last_name, email, phone_number, user_role, user_type").in("id", userIds),
         supabase.from("crm_users_profile").select("user_id, display_name, phone, crm_role, email").in("user_id", userIds),
-        supabase.from("user_role_selections").select("user_id, selected_role, full_name, phone_e164, email, nationality, country, city, preferred_language, age_range").in("user_id", userIds),
+        supabase.from("user_role_selections").select("user_id, selected_role, full_name, phone_e164, email, nationality, current_location_country, current_location_city, preferred_language, age_range").in("user_id", userIds),
       ]);
 
       const profileMap = new Map((profilesRes.data || []).map((p: any) => [p.id, p]));
@@ -138,8 +138,9 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
           role,
           // Demographics from profile or role_selections
           nationality: p.nationality || roleSelection?.nationality || "",
-          country: p.country || roleSelection?.country || "",
-          city: p.city || roleSelection?.city || "",
+          country: p.country || roleSelection?.current_location_country || "",
+          city: p.city || roleSelection?.current_location_city || "",
+
           preferred_language: p.preferred_language || roleSelection?.preferred_language || "",
           age_range: p.age_range || roleSelection?.age_range || "",
           page_time_breakdown: p.page_time_breakdown || {},

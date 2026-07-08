@@ -64,13 +64,15 @@ export default function RecommendedDevelopers({
       .map((s) => s.developer);
   }, [developers, currentDeveloperSlug, browsingContext]);
 
-  if (recommended.length === 0) return null;
-
-  const recommendedIds = recommended.map((d: any) => d.id).filter(Boolean);
+  const recommendedIds = useMemo(
+    () => recommended.map((d: any) => d.id).filter(Boolean),
+    [recommended],
+  );
 
   // Fetch one real project cover image per recommended developer, so cards
   // never fall back to a text/wordmark logo (e.g. "DPF") when feature_image_url
-  // is missing.
+  // is missing. This hook MUST run unconditionally on every render to keep
+  // hook order stable — the early-return guard below happens AFTER it.
   const { data: projectImageByDev } = useQuery({
     queryKey: ["recommended-dev-project-images", recommendedIds],
     enabled: recommendedIds.length > 0,
@@ -94,6 +96,10 @@ export default function RecommendedDevelopers({
       return map;
     },
   });
+
+  if (recommended.length === 0) return null;
+
+
 
   return (
     <section
