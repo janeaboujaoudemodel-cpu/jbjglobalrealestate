@@ -45,6 +45,8 @@ import { AdminRoutes } from "@/routes/AdminRoutes";
 import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
 import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
 import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
+import SiteAccessGate from "@/components/gate/SiteAccessGate";
+
 
 // Owner-only + post-paint extras (lazy, idle-mounted — never blocks FCP)
 import DeferredAppExtras from "@/components/util/DeferredAppExtras";
