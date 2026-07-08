@@ -52,12 +52,12 @@ export default function ConstructionTimelineSection({
 
   // Determine stage based on progress. Never use emerald pills with dark text.
   const getConstructionStage = (progress: number) => {
-    if (progress === 0) return { label: startedThisMonth ? "Started this month" : "Pre-construction", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
-    if (progress < 30) return { label: "Foundation", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
-    if (progress < 60) return { label: "Superstructure", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
-    if (progress < 90) return { label: "Finishing", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
-    if (progress < 100) return { label: "Final touches", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
-    return { label: "Complete", className: "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/55" };
+    if (progress === 0) return { label: startedThisMonth ? "Started this month" : "Pre-construction phase", className: "jj-emerald-action allow-white border-transparent" };
+    if (progress < 30) return { label: "Foundation works", className: "jj-emerald-action allow-white border-transparent" };
+    if (progress < 60) return { label: "Superstructure", className: "jj-emerald-action allow-white border-transparent" };
+    if (progress < 90) return { label: "Finishing", className: "jj-emerald-action allow-white border-transparent" };
+    if (progress < 100) return { label: "Final touches", className: "jj-emerald-action allow-white border-transparent" };
+    return { label: "Complete", className: "jj-emerald-action allow-white border-transparent" };
   };
 
   const stage = getConstructionStage(validatedProgress);
@@ -74,13 +74,13 @@ export default function ConstructionTimelineSection({
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span data-no-contrast-guard className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${stage.className}`} style={{ color: "#1A1A1A" }}>
-                <CircleDot className="h-3.5 w-3.5" style={{ color: "#064E3B" }} />
+              <span data-no-contrast-guard data-emerald-action="true" className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${stage.className}`} style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                <CircleDot className="h-3.5 w-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                 {stage.label}
               </span>
               {startedThisMonth && (
-                <span data-no-contrast-guard className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/45 bg-[#F7F2EA] px-3 py-1 text-xs font-semibold" style={{ color: "#1A1A1A" }}>
-                  <Clock className="h-3.5 w-3.5" style={{ color: "#064E3B" }} />
+                <span data-no-contrast-guard className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/55 bg-[#FDFBF7] px-3 py-1 text-xs font-semibold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+                  <Clock className="h-3.5 w-3.5" style={{ color: "#064E3B", stroke: "#064E3B" }} />
                   This month it started
                 </span>
               )}
@@ -92,7 +92,7 @@ export default function ConstructionTimelineSection({
             value={validatedProgress} 
             className="h-4 bg-muted"
           />
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs font-medium text-[#1A1A1A]/75 mt-2">
             {validatedProgress === 100 
               ? "Construction completed - ready for handover" 
               : `${100 - validatedProgress}% remaining to completion`
@@ -104,13 +104,13 @@ export default function ConstructionTimelineSection({
       {/* Timeline Milestones */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {constructionStartDate && (
-          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
                 <Flag className="w-5 h-5 text-[#064E3B]" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">{startedThisMonth ? "Started This Month" : "Construction Started"}</p>
+                <p className="text-xs font-semibold text-[#1A1A1A]/70">{startedThisMonth ? "Started this month" : "Construction started"}</p>
                 <p className="text-base font-semibold text-foreground">{formatDisplayDate(constructionStartDate)}</p>
               </div>
             </div>
@@ -118,13 +118,13 @@ export default function ConstructionTimelineSection({
         )}
 
         {expectedCompletion && (
-          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
                 <Clock className="w-5 h-5 text-[#064E3B]" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Expected Completion</p>
+                <p className="text-xs font-semibold text-[#1A1A1A]/70">Expected completion</p>
                 <p className="text-base font-semibold text-foreground">{formatDisplayDate(expectedCompletion)}</p>
               </div>
             </div>
@@ -132,13 +132,13 @@ export default function ConstructionTimelineSection({
         )}
 
         {handoverDate && (
-          <div className="rounded-xl border border-[#B89555]/30 bg-card p-4">
+          <div className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] flex items-center justify-center">
                 <Home className="w-5 h-5 text-[#1A1A1A]" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Handover Date</p>
+                <p className="text-xs font-semibold text-[#1A1A1A]/70">Handover date</p>
                 <p className="text-base font-semibold text-foreground">{formatDisplayDate(handoverDate)}</p>
               </div>
             </div>

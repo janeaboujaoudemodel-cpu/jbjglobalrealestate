@@ -451,7 +451,8 @@ export function useProjectsListing() {
         roi_estimate, rental_yield_estimate, latitude, longitude,
           deleted_at,
         developer:developers(id, name, slug, logo_url),
-        community:communities(id, name, slug)
+        community:communities(id, name, slug),
+        images:project_images(image_url, display_order)
       `;
 
       // Paginated fetch — Supabase caps at 1000 rows per request.
@@ -470,8 +471,6 @@ export function useProjectsListing() {
           .eq("is_published", true)
           .or("listing_kind.is.null,listing_kind.neq.leasing")
           .is("deleted_at", null)
-          .not("cover_image_url", "is", null)
-          .neq("cover_image_url", "")
           .order("created_at", { ascending: false })
           .range(from, to);
 
@@ -544,8 +543,6 @@ export function useProjectsByCommunity(communitySlug: string) {
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .is("deleted_at", null)
-        .not("cover_image_url", "is", null)
-        .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
@@ -572,8 +569,6 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .is("deleted_at", null)
-        .not("cover_image_url", "is", null)
-        .neq("cover_image_url", "")
         .order("created_at", { ascending: false });
       
       if (error) throw error;
@@ -609,7 +604,7 @@ export function useProject(projectSlug: string) {
         .from("project_videos")
         .select("id, url, title, display_order, is_visible")
         .eq("project_id", data.id)
-        .eq("is_visible", true)
+        .or("is_visible.is.null,is_visible.eq.true")
         .order("display_order", { ascending: true });
 
       return { ...(data as unknown as UnifiedProject), videos: (videos as any[]) || [] };

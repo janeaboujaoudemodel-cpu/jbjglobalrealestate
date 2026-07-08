@@ -1,5 +1,5 @@
 import { lazy, Suspense, useRef, useMemo, useState } from "react";
-import { Download, FileText, DollarSign, Layers, ClipboardList, Image, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { Download, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import { SafeImage } from "@/components/SafeImage";
 import { proxyAnyDownloadUrl } from "@/utils/downloadProxy";
@@ -40,18 +40,6 @@ function detectDocType(doc: BookDoc): { label: string; kind: string } {
   if (/brochure/.test(raw)) return { label: "Brochure", kind: "brochure" };
   return { label: cleanTitle, kind: doc.type || "document" };
 }
-
-const typeIcon: Record<string, React.ReactNode> = {
-  brochure: <FileText className="w-4 h-4" />,
-  fact_sheet: <FileText className="w-4 h-4" />,
-  payment_plan: <DollarSign className="w-4 h-4" />,
-  floor_plan: <Layers className="w-4 h-4" />,
-  inventory: <ClipboardList className="w-4 h-4" />,
-  renders: <Image className="w-4 h-4" />,
-  citi_buddy: <FileText className="w-4 h-4" />,
-  spa: <FileText className="w-4 h-4" />,
-};
-
 
 export default function BookStyleDocuments({
   documents,
@@ -143,7 +131,6 @@ export default function BookStyleDocuments({
             const needsNumber = (kindCounts[detected.kind] || 0) > 1;
             const title = needsNumber ? `${detected.label} ${kindSeen[detected.kind]}` : detected.label;
             const coverUrl = doc.cover_image_url || projectImageUrl;
-            const icon = typeIcon[detected.kind] || typeIcon[doc.type] || <FileText className="w-3.5 h-3.5" />;
             const filename = `${projectName.replace(/\s+/g, "-")}-${title.replace(/\s+/g, "-")}.pdf`;
 
           return (
@@ -175,32 +162,17 @@ export default function BookStyleDocuments({
               <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-r from-[#0A0A0A] via-[#1A1A1A]/40 to-transparent z-10" />
               <div className="absolute left-[7px] top-3 bottom-3 w-px bg-[#B89555]/40 z-10" />
 
-              {/* Top-right kind chip — smaller (~50%), single truthful label */}
-              <div data-emerald-action="true" className="jj-emerald-action absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full shadow-sm min-h-[16px]">
-                <span className="text-white [&>svg]:w-2.5 [&>svg]:h-2.5">{icon}</span>
-                <span className="text-[6px] uppercase tracking-[0.08em] font-bold text-white leading-none">{title}</span>
-              </div>
-
-              {/* Bottom label panel — title vertically centred between photo bottom and buttons, no project name repetition */}
+              {/* Bottom action panel only — no labels over the book cover image. */}
               <div
                 data-no-contrast-guard
                 data-on-dark
-                className="absolute inset-x-0 bottom-0 h-[38%] border-t border-black/30 px-3 py-2.5 flex flex-col allow-white"
+                className="absolute inset-x-0 bottom-0 border-t border-black/30 px-3 py-2.5 flex flex-col allow-white"
                 style={{
                   background: "linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #000000 100%)",
                   color: "#FFFFFF",
                 }}
               >
-                <div className="flex-1 flex items-center justify-center">
-                  <p
-                    className="font-bold text-[15px] leading-tight text-center line-clamp-2 allow-white"
-                    style={{ color: "#FFFFFF" }}
-                  >
-                    {title}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-1.5 mt-1">
+                <div className="flex items-center gap-1.5">
                   <span
                     role="button"
                     tabIndex={0}

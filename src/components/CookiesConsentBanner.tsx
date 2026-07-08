@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useAgreementSaver } from "@/hooks/useAgreementSaver";
+import { useAuth } from "@/contexts/AuthContext";
 
 const COOKIES_CONSENT_KEY = "jj_cookies_consent";
 
@@ -18,10 +19,25 @@ const COOKIES_POLICY_SNAPSHOT = {
   effective_date: "2025-01-01",
 };
 
+type CookieConsentAuditPayload = {
+  visitor_id: string;
+  user_id: string | null;
+  consent_status: "all";
+  preferences: { essential: boolean; analytics: boolean; marketing: boolean };
+  user_agent: string;
+  accepted_at: string;
+  policy_version: string;
+  policy_snapshot: typeof COOKIES_POLICY_SNAPSHOT;
+  consent_source: "cookie_banner";
+  page_url: string;
+  referrer: string | null;
+};
+
 const CookiesConsentBanner = () => {
   const { requestToShow, dismiss, isVisible } = usePopupVisibility('cookies-consent');
   const [shouldShow, setShouldShow] = useState(false);
   const { saveAgreement } = useAgreementSaver();
+  const { user } = useAuth();
 
   useEffect(() => {
     const consent = localStorage.getItem(COOKIES_CONSENT_KEY);
@@ -46,6 +62,8 @@ const CookiesConsentBanner = () => {
       status: "all",
       preferences: { essential: true, analytics: true, marketing: true },
       timestamp: new Date().toISOString(),
+      page_url: window.location.href,
+      referrer: document.referrer || null,
     };
     localStorage.setItem(COOKIES_CONSENT_KEY, JSON.stringify(consentData));
     dismiss();
@@ -60,12 +78,23 @@ const CookiesConsentBanner = () => {
     try {
       const visitorId = localStorage.getItem('jj_visitor_id') || crypto.randomUUID();
       localStorage.setItem('jj_visitor_id', visitorId);
-      await supabase.from('cookie_consents').insert({
+      const cookieConsentTable = supabase.from('cookie_consents') as unknown as {
+        insert: (values: CookieConsentAuditPayload) => Promise<{ error: { message: string } | null }>;
+      };
+      const { error } = await cookieConsentTable.insert({
         visitor_id: visitorId,
+        user_id: user?.id ?? null,
         consent_status: 'all',
-        preferences: consentData.preferences as any,
+        preferences: consentData.preferences,
         user_agent: navigator.userAgent,
+        accepted_at: consentData.timestamp,
+        policy_version: COOKIES_POLICY_SNAPSHOT.version,
+        policy_snapshot: COOKIES_POLICY_SNAPSHOT,
+        consent_source: 'cookie_banner',
+        page_url: consentData.page_url,
+        referrer: consentData.referrer,
       });
+      if (error) throw error;
     } catch (e) {
       console.error('Failed to persist cookie consent:', e);
     }
@@ -87,14 +116,20 @@ const CookiesConsentBanner = () => {
         >
           <div
             data-surface="champagne"
-            className="surface-champagne pointer-events-auto mx-auto flex max-w-[22rem] items-center gap-2 rounded-full border border-[#064E3B]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EEF7F3] px-3 py-2 shadow-lg shadow-emerald-950/10 sm:max-w-md sm:gap-3 sm:px-4 sm:py-2.5"
+            className="surface-champagne pointer-events-auto mx-auto flex max-w-[24rem] items-center gap-2 rounded-2xl border border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EEF7F3] px-3 py-2.5 shadow-[0_18px_45px_-22px_rgba(4,44,28,0.45)] sm:max-w-lg sm:gap-3 sm:px-4 sm:py-3"
           >
             <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#EAF4EF] sm:h-7 sm:w-7">
               <Cookie className="h-3.5 w-3.5 text-[#064E3B] sm:h-4 sm:w-4" />
             </div>
-            <p className="flex-1 text-[10px] leading-tight text-[#1A1A1A]/90 sm:text-xs">
-              We have placed some cookies.
-            </p>
+            <div className="flex-1 text-[#1A1A1A]">
+              <p className="text-[11px] font-semibold leading-tight sm:text-xs">We use essential cookies to keep this experience secure and reliable.</p>
+              <p className="mt-0.5 text-[10px] leading-tight text-[#1A1A1A]/70 sm:text-[11px]">
+                By selecting Okay, your consent is recorded with date, time, browser and policy version. Read our{" "}
+                <a href="/cookies" className="font-semibold underline decoration-[#B89555] underline-offset-2 hover:text-[#064E3B]">Cookies Policy</a>
+                {" "}and{" "}
+                <a href="/privacy" className="font-semibold underline decoration-[#B89555] underline-offset-2 hover:text-[#064E3B]">Privacy Policy</a>.
+              </p>
+            </div>
             <Button
               onClick={handleOkay}
               className="jj-official-emerald allow-white h-7 flex-none rounded-full px-3 text-[10px] sm:h-8 sm:px-4 sm:text-xs"

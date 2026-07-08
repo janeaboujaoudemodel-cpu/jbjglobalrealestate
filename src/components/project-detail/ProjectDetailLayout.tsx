@@ -162,7 +162,6 @@ import amraSaunaSteam from "@/assets/amra-brochure/sauna-steam.jpg";
 import amraInRoomDining from "@/assets/amra-brochure/in-room-dining.jpg";
 import amraCitiApp from "@/assets/amra-brochure/brochure-citi-app.jpg";
 import amraYachtPartnerships from "@/assets/amra-brochure/brochure-yacht-partnerships.jpg";
-import amenityAppConcierge from "@/assets/amenity-app-concierge.jpg";
 import amraSmegKitchen from "@/assets/amra-smeg-premium-kitchen.jpg";
 
 const ProjectNearbyPropertiesMap = lazy(() => import("@/components/project-detail/ProjectNearbyPropertiesMap"));
@@ -844,8 +843,7 @@ function ProjectDetailLayoutInner({
       "Dedicated Kids' Pool with shaded edges",
       "Pool Decks & sun-loungers",
       "Cabanas",
-      "Relaxation pods",
-      "Social sitting & dining zones",
+      "Floating Sleep Therapy Pods",
       "BBQ area",
       "Kids' play zones",
       "Lagoon-side viewing decks",
@@ -855,8 +853,9 @@ function ProjectDetailLayoutInner({
       "Grand Entrance Lobby with water features",
       "Hallway passages & side lobbies",
       "All Day Dining restaurant",
-      "Isabella Restaurant",
+      "Isabella Cucina Restaurant",
       "Hunter & Barrel Restaurant",
+      "Pay That Pot Coffee",
       "Organic Super Market",
       "Art Gallery",
       "Pharmacy",
@@ -931,9 +930,9 @@ function ProjectDetailLayoutInner({
     // robot render). Titles absent from this map fall back to an icon tile.
     const dedicated: Record<string, string> = {
       "Citi Buddy (AI Robot Companion)": citiBuddyRobotLocal,
-      "Smart Home Automation": amenityAppConcierge,
-      "IoT-enabled apartments": amraCitiApp,
-      "24/7 Security with 256-bit encryption": galleryImage(34, amraGrandLobby),
+      "Smart Home Automation": amraCitiApp,
+      "IoT-enabled apartments": galleryImage(2, amraStudio),
+      "24/7 Security with 256-bit encryption": amraGrandLobby,
       "165+ wellness and lifestyle amenities": amraAerialResort,
       "750,000 sq ft of amenities": amraSpaPool,
       "Heli and air-taxi landing pad": amraAerialResort,
@@ -948,8 +947,7 @@ function ProjectDetailLayoutInner({
       "Dedicated Kids' Pool with shaded edges": amraMinimalPool,
       "Pool Decks & sun-loungers": amraPoolCabanas,
       "Cabanas": amraPoolCabanas,
-      "Relaxation pods": amraFloatingPods,
-      "Social sitting & dining zones": amraChandelierLounge,
+      "Floating Sleep Therapy Pods": amraFloatingPods,
       "BBQ area": amraPoolCabanas,
       "Kids' play zones": amraKidsPlay,
       "Lagoon-side viewing decks": amraPoolCabanas,
@@ -958,9 +956,10 @@ function ProjectDetailLayoutInner({
 
       "Grand Entrance Lobby with water features": amraGrandLobbyHero,
       "Hallway passages & side lobbies": amraHallwayPassage,
-      "All Day Dining restaurant": amraSpaLounge,
-      "Isabella Restaurant": amraChandelierLounge,
-      "Hunter & Barrel Restaurant": amraChandelierLounge,
+      "All Day Dining restaurant": amraInRoomDining,
+      "Isabella Cucina Restaurant": amraInRoomDining,
+      "Hunter & Barrel Restaurant": amraInRoomDining,
+      "Pay That Pot Coffee": amraSpaLounge,
       "Organic Super Market": amraSideLobby,
       "Art Gallery": amraSideLobby,
       "Pharmacy": amraSideLobby,
@@ -978,7 +977,6 @@ function ProjectDetailLayoutInner({
       "Red Light Therapy Suites": amraRedLight,
       "Smart Recovery Boots": amraSmartBoots,
       "IV Vitamin Infusion Lounge": amraSpaTreatment,
-      "Floating Sleep Therapy Pods": amraFloatingPods,
       "Movement Studio": amraStudio,
       "Reiki Room": amraReikiRoom,
       "Female Changing Room": amraFemaleChanging,
@@ -1794,11 +1792,11 @@ function ProjectDetailLayoutInner({
                 <div className="jj-card-inner overflow-hidden p-0">
                   <div className={citiBuddyImageUrl ? "grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]" : "grid grid-cols-1"}>
                     {citiBuddyImageUrl && (
-                      <div className="relative bg-[#F7F2EA]">
+                      <div className="relative overflow-hidden bg-[#F7F2EA]">
                         <SafeImage
                           src={citiBuddyImageUrl}
                           alt="Citi Buddy resident concierge robot"
-                          className="h-[420px] lg:h-full min-h-[420px] w-full object-cover object-center p-0"
+                          className="h-[420px] lg:h-full min-h-[420px] w-full scale-[1.03] object-cover object-center p-0"
                           loading="eager"
                           decoding="async"
                         />
@@ -1890,8 +1888,8 @@ function ProjectDetailLayoutInner({
                           <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> All available even if you don't rent out your unit</li>
                         </ul>
                       </div>
-                      <div className="overflow-hidden rounded-xl border border-[#B89555]/35 bg-white">
-                        <SafeImage src={amraCitiApp} alt="Citi Developers app for Amra BnB property management" className="h-44 w-full object-cover" loading="lazy" />
+                       <div className="overflow-hidden rounded-xl border border-[#B89555]/35 bg-[#FDFBF7]">
+                         <SafeImage src={amraCitiApp} alt="Citi Developers app for Amra BnB property management" className="h-52 w-full scale-[1.06] object-cover" loading="lazy" />
                         <div className="p-5">
                         <div className="flex items-baseline justify-between gap-2 mb-3">
                           <div>
@@ -2356,8 +2354,8 @@ function ProjectDetailLayoutInner({
 
       {/* Recommended Projects — seamless champagne bg continuation */}
       <SectionDividerGoldFullBleed />
-      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
-      <div className="jj-project-shell">
+      <div className="pt-10 md:pt-14 pb-10 md:pb-14 jj-project-band jj-fullbleed-band px-4 sm:px-6" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
+      <div className="mx-auto w-full max-w-[1500px]">
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}

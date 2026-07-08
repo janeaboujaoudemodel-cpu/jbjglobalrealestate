@@ -126,11 +126,11 @@ export default function HouseDetailsSection({
       {/* Main Specifications Grid */}
       {details.length > 0 && (
         <div className="p-6 md:p-8">
-          <div className="grid gap-4 md:grid-cols-3 mb-5">
+          <div className="grid auto-rows-fr gap-4 md:grid-cols-3 mb-5">
             {featuredDetails.map((detail, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-[#B89555]/35 bg-[#F7F2EA] p-5 min-h-[150px] flex flex-col justify-between"
+                className="h-full rounded-xl border border-[#B89555]/35 bg-[#F7F2EA] p-5 min-h-[170px] flex flex-col justify-between"
               >
                 <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-full border border-[#B89555]/45 bg-[#FDFBF7]">
                   <detail.icon className="w-5 h-5 text-[#064E3B]" />
@@ -200,10 +200,12 @@ export default function HouseDetailsSection({
             {standardFeatures.filter((feature, index, list) => list.findIndex((item) => item.label.toLowerCase() === feature.label.toLowerCase()) === index).map((feature, idx) => (
               <div
                 key={idx}
-                className="jj-house-inclusion-pill flex items-center gap-2 px-4 py-2 rounded-full border border-[#B89555]/35 bg-[#FDFBF7]"
+                data-no-contrast-guard
+                data-emerald-action="true"
+                className="jj-house-inclusion-pill jj-emerald-action allow-white flex items-center gap-2 px-4 py-2 rounded-full border border-transparent"
               >
-                <feature.icon className="w-4 h-4 text-[#064E3B]" />
-                <span className="text-sm font-medium text-[#1A1A1A]">{feature.label}</span>
+                <feature.icon className="w-4 h-4 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+                <span className="text-sm font-medium allow-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{feature.label}</span>
               </div>
             ))}
           </div>

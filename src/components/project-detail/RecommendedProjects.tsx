@@ -139,10 +139,10 @@ export default function RecommendedProjects({
   if (recommendedProjects.length === 0) return null;
 
   return (
-    <section className="py-12 mx-4 md:mx-8 rounded-3xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/15 shadow-sm">
-      <div className="container mx-auto px-4 md:px-8">
+    <section className="py-10 sm:py-12 rounded-3xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-[#B89555]/15 shadow-sm overflow-hidden">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-full jj-pill-emerald-metallic" data-no-contrast-guard style={{ color: '#FFFFFF' }}>
               <Sparkles className="w-5 h-5" style={{ color: '#FFFFFF' }} />
@@ -161,7 +161,7 @@ export default function RecommendedProjects({
         </div>
 
         {/* Projects Grid — items-stretch ensures equal height columns */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-6 items-stretch">
           {recommendedProjects.map((project) => {
             const breakdown = (project as any).payment_breakdown;
             const percentages = breakdown && Array.isArray(breakdown)

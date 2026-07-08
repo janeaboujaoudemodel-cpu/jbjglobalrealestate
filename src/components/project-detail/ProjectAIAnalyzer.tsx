@@ -260,8 +260,8 @@ export const ProjectAIAnalyzer = ({
   }
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl">
-      <div className="container mx-auto px-4">
+    <section ref={sectionRef} className="py-12 md:py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl overflow-hidden">
+      <div className="w-full px-5 sm:px-7 md:px-9">
         <div className="flex items-center justify-center gap-3 mb-5 text-center">
           <Brain className="w-6 h-6 text-[#1A1A1A]" />
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
@@ -342,13 +342,13 @@ export const ProjectAIAnalyzer = ({
 
             {/* Row 1: Overview + Rating */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
+              <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#B89555]/20 rounded-2xl p-5 md:p-6 shadow-sm flex flex-col items-center justify-center text-center min-w-0">
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <Building2 className="w-5 h-5 text-[#1A1A1A]" />
                   <h3 className="font-bold text-[#1A1A1A] text-lg">Area Overview</h3>
                 </div>
                 {sections?.overview ? (
-                <p className="text-[#1A1A1A]/90 text-sm leading-relaxed max-w-3xl mx-auto">{cleanMarkdown(sections.overview)}</p>
+                <p className="text-[#1A1A1A]/90 text-sm leading-relaxed max-w-3xl mx-auto break-words">{cleanMarkdown(sections.overview)}</p>
                 ) : (
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}

@@ -104,7 +104,7 @@ export default function AmenitiesWithPhotos({ amenities, amenityImages, classNam
               key={`${currentPage}-${idx}-${amenity}`}
               className="group flex flex-col gap-0 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] hover:border-[#B89555]/55 transition-all overflow-hidden shadow-sm"
             >
-              <div className={`w-full h-40 overflow-hidden relative flex items-center justify-center ${isCitiBuddy ? "bg-[#F7F2EA]" : "bg-[#F7F2EA]"}`}>
+              <div className={`w-full ${/yacht|marina|lobby|entrance/i.test(amenity) ? "h-52" : "h-44"} overflow-hidden relative flex items-center justify-center bg-[#F7F2EA]`}>
                 {photoUrl ? (
                   <>
                     <img

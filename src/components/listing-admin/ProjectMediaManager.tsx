@@ -94,10 +94,10 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
     setIsDeletingId(img.id);
     try {
       // Remove from storage if it's our file
-      const urlParts = img.image_url.split("/project-files/");
-      if (urlParts[1]) {
-        await supabase.storage.from("project-files").remove([urlParts[1]]);
-      }
+      const relMediaParts = img.image_url.split("/rel-media/");
+      const legacyParts = img.image_url.split("/project-files/");
+      if (relMediaParts[1]) await supabase.storage.from("rel-media").remove([relMediaParts[1]]);
+      if (legacyParts[1]) await supabase.storage.from("project-files").remove([legacyParts[1]]);
 
       const { error } = await supabase.from("project_images").delete().eq("id", img.id);
       if (error) throw error;
@@ -139,17 +139,20 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
     try {
       for (const file of Array.from(files)) {
-        const fileName = `${project.id}/${Date.now()}-${file.name}`;
-        const { error: uploadError } = await supabase.storage.from("project-files").upload(fileName, file);
+        const fileName = `project-uploads/${project.id}/${Date.now()}-${file.name}`;
+        const { error: uploadError } = await supabase.storage.from("rel-media").upload(fileName, file);
         if (uploadError) continue;
 
-        const { data: urlData } = supabase.storage.from("project-files").getPublicUrl(fileName);
+        const { data: urlData } = supabase.storage.from("rel-media").getPublicUrl(fileName);
         const { error: dbError } = await supabase.from("project_images").insert({
           project_id: project.id,
           image_url: urlData.publicUrl,
           is_primary: false,
           display_order: images.length + successCount,
         } as any);
+        if (!project.cover_image_url && images.length === 0 && successCount === 0) {
+          await supabase.from("projects").update({ cover_image_url: urlData.publicUrl } as any).eq("id", project.id);
+        }
         if (!dbError) successCount++;
       }
 
