@@ -1522,6 +1522,7 @@ function ProjectDetailLayoutInner({
                saleStatus={project.sale_status}
                handoverDate={project.handover_date}
                updatedAt={project.updated_at}
+               showUpdated={isOwner}
              />
           </div>
 
