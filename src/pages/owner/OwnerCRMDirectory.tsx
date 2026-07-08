@@ -30,7 +30,7 @@ export default function OwnerCRMDirectory() {
   const load = async () => {
     setLoading(true);
     let query = supabase.from("crm_user_profiles").select("*").order("created_at", { ascending: false });
-    if (f.category) query = query.eq("category", f.category);
+    if (f.category) query = query.eq("category", f.category as any);
     if (f.position) query = query.eq("position", f.position);
     if (f.company) query = query.ilike("company_name", `%${f.company}%`);
     if (f.country) query = query.ilike("country", `%${f.country}%`);
