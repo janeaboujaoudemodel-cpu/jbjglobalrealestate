@@ -151,15 +151,8 @@ const DeveloperGrid = () => {
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
-                {developer.headquarters && (
-                  <div className="flex items-center gap-2 text-[#1A1A1A]/70">
-                    <span className="text-[#1A1A1A]">📍</span>
-                    <span>{(() => {
-                      const parts = developer.headquarters.split(',').map((s: string) => s.trim());
-                      return parts.length >= 2 ? `${parts[parts.length - 2]}, ${parts[parts.length - 1]}` : parts[parts.length - 1];
-                    })()}</span>
-                  </div>
-                )}
+                {/* Headquarters intentionally removed — never display developer office locations. */}
+
               </div>
             </div>
 
