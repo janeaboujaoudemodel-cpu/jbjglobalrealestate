@@ -152,17 +152,18 @@ const DeveloperLiveEditor = () => {
   });
 
   const { data: allProjects, isLoading } = useQuery({
-    queryKey: ["developer-projects", isOwner ? "owner-all" : devFilterId, pageSize, statusFilter, sortOrder],
+    queryKey: ["developer-projects", isOwner ? "owner-all" : devFilterId, pageSize, statusFilter, sortOrder, showMerged],
     queryFn: async () => {
       const sortCol = sortOrder === "name-asc" || sortOrder === "name-desc" ? "name" : "created_at";
       const asc = sortOrder === "oldest" || sortOrder === "name-asc";
       let query = supabase
         .from("projects")
-        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, description, source, data_quality_flags, created_at, updated_at")
+        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, description, source, data_quality_flags, is_manually_verified, merged_into_project_id, created_at, updated_at")
         .or("listing_kind.is.null,listing_kind.eq.offplan")
         .order(sortCol, { ascending: asc, nullsFirst: false })
         .limit(pageSize);
 
+      if (!showMerged) query = query.is("merged_into_project_id", null);
       if (!isOwner) query = query.eq("developer_id", devFilterId!);
       if (statusFilter === "live") query = query.eq("is_published", true);
       if (statusFilter === "draft") query = query.eq("is_published", false);
@@ -170,6 +171,23 @@ const DeveloperLiveEditor = () => {
       const { data, error } = await query;
       if (error) throw error;
       return (data || []) as Project[];
+    },
+    enabled: isOwner || !!devFilterId,
+  });
+
+  // Duplicate counts per keeper (how many rows were merged into each surviving project)
+  const { data: dupMap } = useQuery({
+    queryKey: ["project-duplicate-groups", isOwner ? "owner-all" : devFilterId],
+    queryFn: async () => {
+      let q = supabase.from("project_duplicate_groups").select("keeper_id, duplicate_count");
+      if (!isOwner) q = q.eq("developer_id", devFilterId!);
+      const { data, error } = await q;
+      if (error) return {} as Record<string, number>;
+      const m: Record<string, number> = {};
+      for (const r of (data || []) as { keeper_id: string; duplicate_count: number }[]) {
+        if (r.duplicate_count > 0) m[r.keeper_id] = Number(r.duplicate_count);
+      }
+      return m;
     },
     enabled: isOwner || !!devFilterId,
   });
