@@ -95,8 +95,8 @@ export default function ConstructionTimelineSection({
                 {stage.label}
               </span>
               {elapsedLabel && (
-                <span data-no-contrast-guard className="inline-flex items-center gap-1.5 rounded-full border border-[#B89555]/55 bg-[#FDFBF7] px-3 py-1 text-xs font-semibold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
-                  <Clock className="h-3.5 w-3.5" style={{ color: "#064E3B", stroke: "#064E3B" }} />
+                <span data-no-contrast-guard data-emerald-action="true" className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold jj-emerald-action allow-white border-transparent`} style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                  <Clock className="h-3.5 w-3.5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
                   {elapsedLabel}
                 </span>
               )}
