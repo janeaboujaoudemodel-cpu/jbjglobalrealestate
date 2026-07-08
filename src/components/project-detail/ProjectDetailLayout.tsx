@@ -121,7 +121,6 @@ import AmraFactSheetInsights from "@/components/project-detail/AmraFactSheetInsi
 // Every amenity below uses one of these — no generated stand-ins beyond Citi Buddy.
 import amraPoolCabanas from "@/assets/amra-brochure/pool-cabanas-marina.jpg";
 import amraAerialResort from "@/assets/amra-brochure/aerial-resort.jpg";
-import amraFurnishedApts from "@/assets/amra-brochure/furnished-serviced-apartments.jpg";
 import amraGrandLobbyHero from "@/assets/amra-brochure/grand-lobby-hero.jpg";
 import amraGrandLobby from "@/assets/amra-brochure/grand-lobby.jpg";
 import amraHallwayPassage from "@/assets/amra-brochure/hallway-passage.jpg";
@@ -596,7 +595,7 @@ function ProjectDetailLayoutInner({
     // Reelly-style sections
     const hasUnits = (project.unit_types?.length ?? 0) > 0;
     const hasConstruction = true; // Always show construction section
-    const hasMedia = isAmraProject || !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
+    const hasMedia = !!project.video_url || !!project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0;
     const hasInvestment = !!project.roi_estimate || !!project.rental_yield_estimate;
     const hasDeveloper = !!project.developer;
     const hasHouseDetails = !!project.floors || !!project.total_units || !!project.service_charge || !!project.finishing_standard || isAmraProject;
@@ -1840,18 +1839,18 @@ function ProjectDetailLayoutInner({
                   {/* Kitchen package — Smeg + Villeroy & Boch */}
                   <div className="bg-[#FDFBF7]">
                     <div className="grid lg:grid-cols-[0.9fr_1.1fr] overflow-hidden">
-                      <SafeImage src={amraSmegKitchen} alt="Premium Italian kitchen appliances and tableware" className="h-full min-h-[360px] w-full object-cover" loading="lazy" width={1400} height={900} />
+                      <SafeImage src={images[59]?.url || images[57]?.url || amraSmegKitchen} alt="Amra apartment interior with integrated kitchen palette" className="h-full min-h-[360px] w-full object-cover" loading="lazy" width={1400} height={900} />
                       <div className="p-6 md:p-8">
                         <div className="flex items-baseline justify-between flex-wrap gap-2 mb-4">
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Fully fitted kitchen · included</p>
                             <h4 className="text-xl md:text-3xl font-semibold text-[#1A1A1A] mt-1">Smeg Italian appliances & Villeroy &amp; Boch tableware</h4>
                           </div>
-                          <span className="rounded-full border border-[#B89555]/50 bg-white px-3 py-1 text-[11px] font-semibold text-[#064E3B]">Move-in ready</span>
+                          <span className="rounded-full border border-[#B89555]/50 bg-[#FDFBF7] px-3 py-1 text-[11px] font-semibold text-[#064E3B]">Move-in ready</span>
                         </div>
                         <div className="grid gap-2 sm:grid-cols-2">
                       {[
-                        "Smeg fridge / refrigerator",
+                        "Built-in Smeg fridge / refrigerator",
                         "Smeg dishwasher",
                         "Smeg washing machine",
                         "Gas cooker + electric cooktop",
@@ -1891,13 +1890,15 @@ function ProjectDetailLayoutInner({
                           <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> All available even if you don't rent out your unit</li>
                         </ul>
                       </div>
-                      <div className="rounded-xl border border-[#B89555]/35 bg-white p-5">
+                      <div className="overflow-hidden rounded-xl border border-[#B89555]/35 bg-white">
+                        <SafeImage src={amraCitiApp} alt="Citi Developers app for Amra BnB property management" className="h-44 w-full object-cover" loading="lazy" />
+                        <div className="p-5">
                         <div className="flex items-baseline justify-between gap-2 mb-3">
                           <div>
                             <p className="text-[10px] uppercase tracking-[0.3em] text-[#1A1A1A]/60 font-semibold">Optional rental program</p>
                             <h5 className="text-lg font-semibold text-[#1A1A1A] mt-1">Full property management</h5>
                           </div>
-                          <span className="rounded-full bg-[#064E3B] text-white px-3 py-1 text-[11px] font-semibold">12% fee</span>
+                          <span data-no-contrast-guard className="rounded-full bg-[#064E3B] px-3 py-1 text-[11px] font-semibold" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>12% fee</span>
                         </div>
                         <ul className="space-y-2 text-[13.5px] text-[#1A1A1A]/85">
                           <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Check-in & check-out handled for you</li>
@@ -1906,6 +1907,7 @@ function ProjectDetailLayoutInner({
                           <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Payouts sent straight to your bank</li>
                           <li className="flex gap-2"><Check className="h-4 w-4 text-[#064E3B] flex-shrink-0 mt-0.5" /> Only 12% of revenue — everything else stays yours</li>
                         </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1914,32 +1916,18 @@ function ProjectDetailLayoutInner({
             )}
 
            {/* PROJECT MEDIA SECTION (Reelly-style) */}
-            {(isAmraProject || project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
+            {(project.video_url || project.virtual_tour_url || videoDocs.length > 0 || uploadedVideos.length > 0) && (
              <div ref={mediaRef} id="media" className="mb-14 scroll-mt-40 relative">
                <div className="absolute right-0 -top-2 z-10"><OwnerSectionEditor projectId={project.id} section="media" initial={project as any} /></div>
-                 {(project.video_url || project.virtual_tour_url || isAmraProject) && (
-                  <ProjectMediaSection
-                    videoUrl={project.video_url || (isAmraProject ? amraFallbackVideoAsset.url : null)}
-                    virtualTourUrl={project.virtual_tour_url}
-                    projectName={project.name}
-                  />
-                )}
-                {(videoDocs.length > 0 || uploadedVideos.length > 0) && (
-                  <div className="jj-card-inner mt-6">
-                    <h3 className="text-h3-sm font-medium text-foreground flex items-center gap-2 mb-4">
-                      <Video className="w-5 h-5 text-[#064E3B]" />
-                      Project Videos Gallery
-                    </h3>
-                    <div className="grid gap-4 md:grid-cols-2">
-                      {[...uploadedVideos.map((v) => ({ id: v.id, url: v.url, title: v.title || "Uploaded project video" })), ...videoDocs.map((v) => ({ id: v.id, url: v.url, title: v.display_title || v.name || "Project video" }))].map((video) => (
-                        <div key={video.id} className="overflow-hidden rounded-lg border border-[#B89555]/35 bg-[#FDFBF7]">
-                          <video src={video.url} className="aspect-video w-full bg-[#021611] object-cover" controls playsInline preload="metadata" />
-                          <div className="p-3 text-sm font-semibold text-[#1A1A1A]">{video.title}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <ProjectMediaSection
+                  videoUrl={project.video_url}
+                  virtualTourUrl={project.virtual_tour_url}
+                  videos={[
+                    ...uploadedVideos.map((v) => ({ id: v.id, url: v.url, title: v.title || "Uploaded project video" })),
+                    ...videoDocs.map((v) => ({ id: v.id, url: v.url, title: v.display_title || v.name || "Project video" })),
+                  ]}
+                  projectName={project.name}
+                />
              </div>
            )}
 
