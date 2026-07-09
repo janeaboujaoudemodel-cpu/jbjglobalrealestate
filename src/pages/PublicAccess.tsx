@@ -460,23 +460,13 @@ html body #root [data-jbj-access-gold-badge] * {
   -webkit-text-fill-color: #0d3a2b !important;
   animation: username-pulse 4.8s ease-in-out infinite;
 }
-[data-broker-certificate-frame] .seal-outline svg circle {
-  stroke: url(#sealGold) !important;
-}
-[data-broker-certificate-frame] .seal-outline svg text {
-  fill: url(#sealGold) !important;
-  stroke: none !important;
-}
-html body #root [data-broker-certificate-frame] .seal-outline svg circle,
-html body #root [data-broker-certificate-frame] .seal-outline svg circle * {
+[data-broker-certificate-frame] .seal-outline svg circle[data-ring="1"] {
   stroke: url(#sealGold) !important;
   fill: none !important;
 }
-html body #root [data-broker-certificate-frame] .seal-outline svg text,
-html body #root [data-broker-certificate-frame] .seal-outline svg text * {
-  fill: url(#sealGold) !important;
-  stroke: none !important;
-  -webkit-text-fill-color: transparent !important;
+html body #root [data-broker-certificate-frame] .seal-outline svg circle[data-ring="1"] {
+  stroke: url(#sealGold) !important;
+  fill: none !important;
 }
 @keyframes certificate-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,79,0.0), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
