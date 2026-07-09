@@ -419,18 +419,29 @@ html body #root [data-jbj-access-gold-badge] * {
   -webkit-text-fill-color: #C9A84C !important;
 }
 .certificate-shimmer-frame {
-  border: 1px solid rgba(184,149,85,0.55);
+  border: 2px solid transparent;
+  border-radius: 6px;
   isolation: isolate;
-  box-shadow: 0 0 0 0 rgba(201,168,79,0.0);
+  background:
+    linear-gradient(135deg,#FDFBF7 0%,#F5EFE1 45%,#EFE6D6 100%) padding-box,
+    linear-gradient(135deg,#FBEAB4 0%,#C9A84C 25%,#8B6F3A 50%,#E8C877 75%,#A8842E 100%) border-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,240,200,0.55),
+    inset 0 0 30px rgba(184,149,85,0.14),
+    0 0 0 0 rgba(201,168,79,0.0),
+    0 60px 120px -40px rgba(6,78,59,0.55),
+    0 20px 50px -20px rgba(0,0,0,0.4);
   animation: certificate-glow 5.5s ease-in-out infinite;
   position: relative;
 }
 .certificate-shimmer-frame::after {
   content: "";
   position: absolute;
-  inset: 7px;
+  inset: 8px;
   pointer-events: none;
-  border: 1px solid rgba(184,149,85,0.28);
+  border-radius: 3px;
+  border: 1px solid rgba(184,149,85,0.55);
+  box-shadow: inset 0 0 0 1px rgba(255,240,200,0.35);
 }
 .certificate-shimmer-frame::before {
   content: "";
@@ -438,11 +449,11 @@ html body #root [data-jbj-access-gold-badge] * {
   inset: 0;
   pointer-events: none;
   z-index: 2;
-  background: linear-gradient(115deg, transparent 30%, rgba(251,234,180,0.28) 45%, rgba(232,200,119,0.42) 50%, rgba(251,234,180,0.28) 55%, transparent 70%);
+  background: linear-gradient(115deg, transparent 28%, rgba(251,234,180,0.35) 44%, rgba(232,200,119,0.6) 50%, rgba(251,234,180,0.35) 56%, transparent 72%);
   background-size: 260% 100%;
   background-position: 200% 0;
   mix-blend-mode: screen;
-  animation: certificate-metallic-sweep 6.5s ease-in-out infinite;
+  animation: certificate-metallic-sweep 5s ease-in-out infinite;
 }
 .username-shimmer {
   color: #0d3a2b !important;
