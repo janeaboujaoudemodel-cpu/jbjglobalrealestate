@@ -377,6 +377,13 @@ html body #root [data-jbj-access-gold-badge] * {
   -webkit-text-fill-color: #0d3a2b !important;
   animation: username-pulse 4.8s ease-in-out infinite;
 }
+[data-broker-certificate-frame] .seal-outline svg circle {
+  stroke: url(#sealGold) !important;
+}
+[data-broker-certificate-frame] .seal-outline svg text {
+  fill: url(#sealGold) !important;
+  stroke: none !important;
+}
 @keyframes certificate-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,79,0.0), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
   50% { box-shadow: 0 0 26px 2px rgba(201,168,79,0.35), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
