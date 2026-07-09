@@ -1052,7 +1052,7 @@ export default function PublicAccess() {
               <ul className="mt-6 space-y-3 text-sm">
                 {[
                   "Personalised & serial-numbered",
-                  "Signed by the JBJ Global principal",
+                  "Signed by our Founder & CEO with today's date",
                   "Recognised by developer partners",
                   "Digital + printed copy included",
                 ].map((f) => (
