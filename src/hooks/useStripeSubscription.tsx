@@ -18,7 +18,7 @@ export interface SubscriptionRow {
   updated_at: string;
 }
 
-export function useSubscription(userId?: string | null) {
+export function useStripeSubscription(userId?: string | null) {
   const [subscription, setSubscription] = useState<SubscriptionRow | null>(null);
   const [loading, setLoading] = useState<boolean>(Boolean(userId));
 

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import IconTile from "@/components/ui/icon-tile";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSubscription } from "@/hooks/useSubscription";
+import { useStripeSubscription } from "@/hooks/useStripeSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import { getStripeEnvironment, isPaymentsConfigured } from "@/lib/stripe";
 import {
@@ -46,7 +46,7 @@ function formatDate(iso?: string | null): string {
 
 export default function AccountBilling() {
   const { user } = useAuth();
-  const { subscription, isActive, loading } = useSubscription(user?.id);
+  const { subscription, isActive, loading } = useStripeSubscription(user?.id);
   const [openingPortal, setOpeningPortal] = useState(false);
 
   const tierInfo = useMemo(
