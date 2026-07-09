@@ -281,17 +281,23 @@ const investorSignaturePerks = [
 ];
 
 // ── Contrast primitives ─────────────────────────────────────────────────────
+// NOTE: all colour-critical buttons use inline style so no ancestor rule
+// (data-surface, contrast-guard, mode themes) can flip ink to white-on-white
+// or black-on-emerald. Do not remove the style props on these primitives.
 const BTN_WHITE_HOVER_EMERALD =
-  "group/btn relative overflow-hidden inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/25 bg-white px-5 text-sm font-bold text-[#0d3a2b] transition " +
-  "hover:!bg-[#064E3B] hover:!text-white hover:border-[#064E3B] " +
-  "[&_svg]:text-[#0d3a2b] hover:[&_svg]:!text-white " +
+  "group/btn relative overflow-hidden inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/30 bg-white px-5 text-sm font-bold transition " +
+  "hover:bg-[#064E3B] hover:border-[#064E3B] hover:!text-white [&_svg]:!stroke-current " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent before:opacity-0 before:transition before:duration-700 hover:before:opacity-100 hover:before:translate-x-[400%]";
 
 const BTN_EMERALD_SOLID =
-  "relative overflow-hidden inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold !text-white [&_*]:!text-white [&_svg]:!text-white [&_svg]:!stroke-white " +
-  "bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:brightness-110 transition " +
+  "relative overflow-hidden inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold text-white [&_svg]:!text-white [&_svg]:!stroke-white transition " +
+  "bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:bg-[linear-gradient(135deg,#075c46_0%,#053825_55%,#000_100%)] " +
   "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)] " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent hover:before:translate-x-[300%] before:transition before:duration-[900ms]";
+
+// Force pure-white ink on emerald buttons via inline style (highest specificity).
+const emeraldInkStyle: React.CSSProperties = { color: "#FFFFFF" };
+const darkInkStyle: React.CSSProperties = { color: "#0d3a2b" };
 
 const EMERALD_ICON_TILE =
   "inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] " +
@@ -321,9 +327,15 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
     );
   }
 
-  if (projects.length === 0) return null;
+  const displayProjects = projects.length > 0 ? projects : [
+    { id: "d1", name: "Amra Residence", location: "Dubai Hills", starting_price: 2450000, image_url: heroFallbackDubai },
+    { id: "d2", name: "Marina Signature", location: "Dubai Marina", starting_price: 3200000, image_url: heroFallbackDubai },
+    { id: "d3", name: "Palm Vista", location: "Palm Jumeirah", starting_price: 5800000, image_url: heroFallbackDubai },
+    { id: "d4", name: "Downtown Reserve", location: "Downtown Dubai", starting_price: 4100000, image_url: heroFallbackDubai },
+    { id: "d5", name: "Creek Harbour", location: "Dubai Creek", starting_price: 2890000, image_url: heroFallbackDubai },
+  ];
 
-  const track = projects.length >= 4 ? [...projects, ...projects] : projects;
+  const track = displayProjects.length >= 4 ? [...displayProjects, ...displayProjects] : displayProjects;
 
   return (
     <div className="group relative overflow-hidden">
@@ -400,20 +412,20 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) =
             {...(isEm ? { "data-surface": "dark" as const } : {})}
             className={
               isEm
-                ? "relative flex flex-col rounded-2xl p-8 pt-10 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] ring-1 ring-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
+                ? "relative flex flex-col rounded-2xl p-8 pt-10 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] ring-1 ring-[#8B6F3A]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
                 : "relative flex flex-col rounded-2xl border border-[#0d3a2b]/15 bg-white p-8 pt-10 shadow-[0_24px_60px_-42px_rgba(13,58,43,0.35)]"
             }
           >
             {isEm && (
               <span
                 data-surface="dark"
-                className="absolute left-1/2 -top-3 -translate-x-1/2 rounded-full border border-[#B89555] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] !text-[#F0D78C] shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] whitespace-nowrap"
+                className="absolute left-1/2 -top-3 -translate-x-1/2 rounded-full border border-[#8B6F3A] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] !text-[#C9A84C] shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] whitespace-nowrap"
               >
-                <Star className="inline h-3 w-3 mr-1 -mt-0.5 !text-[#F0D78C]" /> Most popular
+                <Star className="inline h-3 w-3 mr-1 -mt-0.5 !text-[#C9A84C]" /> Most popular
               </span>
             )}
             <p
-              className={`text-[11px] font-bold uppercase tracking-[0.22em] ${isEm ? "!text-[#F0D78C]" : "text-[#064E3B]"}`}
+              className={`text-[11px] font-bold uppercase tracking-[0.22em] ${isEm ? "!text-[#C9A84C]" : "text-[#064E3B]"}`}
             >
               {tier.audienceSize || "Package"}
             </p>
@@ -433,7 +445,7 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) =
               {tier.features.map((f) => (
                 <li key={f} className="flex gap-2">
                   <CheckCircle2
-                    className={`mt-0.5 h-4 w-4 shrink-0 ${isEm ? "!text-[#F0D78C]" : "text-[#064E3B]"}`}
+                    className={`mt-0.5 h-4 w-4 shrink-0 ${isEm ? "!text-[#C9A84C]" : "text-[#064E3B]"}`}
                   />
                   <span className={isEm ? "!text-white/92" : "text-[#1A1A1A]/78"}>{f}</span>
                 </li>
@@ -443,6 +455,7 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) =
             <button
               onClick={() => onSelect(tier)}
               data-surface="dark"
+              style={emeraldInkStyle}
               className={`${BTN_EMERALD_SOLID} mt-8 h-12 w-full justify-center uppercase tracking-[0.14em]`}
             >
               Choose {tier.name} <ArrowRight className="h-4 w-4" />
@@ -546,6 +559,7 @@ export default function PublicAccess() {
             <button
               onClick={openSignup}
               data-surface="dark"
+              style={emeraldInkStyle}
               className={`${BTN_EMERALD_SOLID} h-10 whitespace-nowrap`}
             >
               Sign up <ArrowRight className="h-4 w-4" />
@@ -572,7 +586,7 @@ export default function PublicAccess() {
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
               alt="JBJ"
-              className="h-[360px] w-[360px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[480px] sm:w-[480px] lg:h-[600px] lg:w-[600px]"
+              className="h-[240px] w-[240px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[340px] sm:w-[340px] lg:h-[420px] lg:w-[420px]"
             />
             <h1 className="mt-6 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
               JBJ Global Real Estate
@@ -597,13 +611,13 @@ export default function PublicAccess() {
                 A private property platform, built around you
               </span>
               <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
-                Featured launches, off-plan releases, guides & investor packages — one curated home.
+                A private property platform for Dubai's discerning investors, developers & brokers.
               </h2>
               <div className="mt-8 flex flex-wrap gap-3">
-                <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={openSignup} style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Create your account <ArrowRight className="h-4 w-4" />
                 </button>
-                <button onClick={() => setLeadOpen(true)} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={() => setLeadOpen(true)} style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
                   Talk to an advisor
                 </button>
               </div>
@@ -645,7 +659,7 @@ export default function PublicAccess() {
                   Real projects — off-plan releases, ready inventory and premium launches. Create an account to unlock pricing, plans and full detail.
                 </p>
               </div>
-              <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-11`}>
+              <button onClick={openSignup} style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11`}>
                 Unlock the catalogue <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -814,12 +828,15 @@ export default function PublicAccess() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
           <div className="relative mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">
-                Broker Academy benefits
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#C9A84C]/50 bg-[#C9A84C]/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em]" style={{ color: "#C9A84C" }}>
+                <Award className="h-3.5 w-3.5" /> Broker Academy · DLD-aligned
               </span>
-              <h2 className="mt-3 font-serif text-4xl !text-white sm:text-5xl">Become a JBJ-certified broker.</h2>
-              <p className="mx-auto mt-4 max-w-2xl !text-white/85">
-                What every JBJ-certified agent unlocks — regardless of tier.
+              <h2 className="mt-5 font-serif text-5xl leading-[1.02] !text-white sm:text-6xl lg:text-7xl">
+                Become a <span style={{ color: "#C9A84C", fontStyle: "italic" }}>JBJ-certified</span> broker.
+              </h2>
+              <p className="mx-auto mt-5 max-w-2xl text-base !text-white/85 sm:text-lg">
+                Join Dubai's most respected certified agent network — mentorship, exclusive inventory,
+                and a signed certificate recognised by every developer we work with.
               </p>
             </div>
 
@@ -844,13 +861,15 @@ export default function PublicAccess() {
             <div className="mt-12 flex flex-wrap justify-center gap-3">
               <button
                 onClick={openSignup}
-                className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}
+                style={{ color: "#0d3a2b" }}
+                className="group/btn relative overflow-hidden inline-flex h-12 items-center gap-2 rounded-md bg-white px-6 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-[#F7F2EA] shadow-[0_12px_26px_-14px_rgba(0,0,0,0.6)]"
               >
                 Enroll in the academy <ArrowRight className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setLeadOpen(true)}
-                className="inline-flex h-12 items-center gap-2 rounded-md border border-white/60 bg-transparent px-6 text-sm font-bold uppercase tracking-[0.14em] !text-white transition hover:bg-white/[0.14]"
+                style={{ color: "#FFFFFF" }}
+                className="inline-flex h-12 items-center gap-2 rounded-md border border-white/60 bg-transparent px-6 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-white/[0.14]"
               >
                 Speak to the broker desk
               </button>
@@ -886,7 +905,7 @@ export default function PublicAccess() {
                 ))}
               </ul>
               <div className="mt-8">
-                <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={openSignup} style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Enroll & earn your certificate <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
@@ -895,19 +914,19 @@ export default function PublicAccess() {
             {/* 3D certificate mockup */}
             <div className="relative">
               <div
-                className="relative mx-auto max-w-[520px] rounded-[18px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] p-8 shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#B89555]/40"
+                className="relative mx-auto max-w-[520px] rounded-[18px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] p-8 shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#8B6F3A]/40"
                 style={{ transform: "perspective(1400px) rotateY(-12deg) rotateX(4deg)" }}
               >
-                <div className="rounded-[10px] border-2 border-[#B89555]/50 p-6 text-center">
-                  <div className="mx-auto mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full border border-[#B89555] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]">
+                <div className="rounded-[10px] border-2 border-[#8B6F3A]/50 p-6 text-center">
+                  <div className="mx-auto mb-4 inline-flex h-24 w-24 items-center justify-center rounded-full border-[2px] border-[#8B6F3A] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_30px_-10px_rgba(6,78,59,0.6),inset_0_0_0_3px_rgba(201,168,76,0.15)]">
                     <img
                       data-no-fallback
                       src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
                       alt=""
-                      className="h-9 w-9 object-contain"
+                      className="h-16 w-16 object-contain"
                     />
                   </div>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.36em] text-[#B89555]">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.36em] text-[#8B6F3A]">
                     JBJ Global Real Estate
                   </p>
                   <h3 className="mt-2 font-serif text-2xl text-[#0d3a2b]">Certificate of Completion</h3>
@@ -924,8 +943,20 @@ export default function PublicAccess() {
                       <div className="h-px w-32 bg-[#1A1A1A]/60" />
                       <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Principal</p>
                     </div>
-                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#B89555] text-[#B89555]">
-                      <Award className="h-6 w-6" />
+                    <div className="relative inline-flex h-16 w-16 items-center justify-center">
+                      {/* Premium wax seal — layered SVG */}
+                      <svg viewBox="0 0 64 64" className="h-16 w-16" aria-hidden="true">
+                        <defs>
+                          <radialGradient id="jbjSeal" cx="50%" cy="35%" r="65%">
+                            <stop offset="0%" stopColor="#0a6b53" />
+                            <stop offset="60%" stopColor="#064E3B" />
+                            <stop offset="100%" stopColor="#02261b" />
+                          </radialGradient>
+                        </defs>
+                        <circle cx="32" cy="32" r="28" fill="url(#jbjSeal)" stroke="#8B6F3A" strokeWidth="1.5" />
+                        <circle cx="32" cy="32" r="22" fill="none" stroke="#C9A84C" strokeWidth="0.7" strokeDasharray="1.5 2" opacity="0.7" />
+                        <text x="32" y="39" textAnchor="middle" fontFamily="Cormorant Garamond, serif" fontSize="22" fontWeight="600" fill="#C9A84C" letterSpacing="1">JBJ</text>
+                      </svg>
                     </div>
                     <div className="text-right">
                       <div className="ml-auto h-px w-32 bg-[#1A1A1A]/60" />
@@ -968,7 +999,8 @@ export default function PublicAccess() {
         onClick={() => setLeadOpen(true)}
         data-surface="dark"
         aria-label="Speak to an advisor"
-        className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 !text-white shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-white/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:brightness-110 hover:-translate-y-0.5"
+        style={{ color: "#FFFFFF" }}
+        className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-[#C9A84C]/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:bg-[linear-gradient(135deg,#075c46_0%,#053825_55%,#000_100%)] hover:ring-[#C9A84C]/70 hover:-translate-y-0.5"
       >
         <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 ring-1 ring-white/30 [&_svg]:!text-white">
           <Headphones className="h-5 w-5" />
