@@ -1066,9 +1066,9 @@ export default function PublicAccess() {
       {/* Premium floating advisor button — headset avatar + live dot + phone */}
       <button
         onClick={() => setLeadOpen(true)}
-        data-surface="dark"
+        data-jbj-access-cta="emerald"
         aria-label="Speak to an advisor"
-        style={{ color: "#FFFFFF" }}
+        style={emeraldInkStyle}
         className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-[#C9A84C]/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:bg-[linear-gradient(135deg,#075c46_0%,#053825_55%,#000_100%)] hover:ring-[#C9A84C]/70 hover:-translate-y-0.5"
       >
         <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 ring-1 ring-white/30 [&_svg]:!text-white">
