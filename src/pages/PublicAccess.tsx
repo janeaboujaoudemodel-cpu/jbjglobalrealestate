@@ -397,7 +397,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   };
 
   const isReadyProject = (p: any) => {
-    const text = [p.sale_status, p.construction_status, p.status].map((v) => String(v || "").toLowerCase()).join(" ");
+    const text = [p.sale_status, p.construction_status, p.status, p.handover_date].map((v) => String(v || "").toLowerCase()).join(" ");
     if (/ready|complete|completed|delivered|handover/.test(text) && !/off[ -]?plan|under construction|new launch/.test(text)) return true;
     const ts = p.handover_date ? Date.parse(p.handover_date) : NaN;
     return Number.isFinite(ts) && ts < Date.now();
@@ -409,14 +409,18 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   };
   const completionText = (p: any) => {
     if (isReadyProject(p)) return "Ready";
-    return p.handover_date ? `Completion ${p.handover_date}` : null;
+    const raw = String(p.handover_date || "").trim();
+    if (!raw || /^ready$/i.test(raw)) return raw ? "Ready" : null;
+    return `Completion ${raw}`;
   };
 
-  const projects = (gateData ?? [])
+  const qualifiedProjects = (gateData ?? [])
     .map((p: any) => ({ ...p, __cover: pickCover(p) }))
     .filter((p: any) => !!p.__cover && !!(p.name || p.title) && !failedImageIds.has(String(p.id)))
-    .sort((a: any, b: any) => Number(!isOffPlanProject(a)) - Number(!isOffPlanProject(b)) || Number(isReadyProject(a)) - Number(isReadyProject(b)))
-    .slice(0, limit);
+    .sort((a: any, b: any) => Number(!isOffPlanProject(a)) - Number(!isOffPlanProject(b)) || Number(isReadyProject(a)) - Number(isReadyProject(b)));
+
+  const offPlanProjects = qualifiedProjects.filter(isOffPlanProject);
+  const projects = (offPlanProjects.length >= 4 ? offPlanProjects : qualifiedProjects).slice(0, limit);
 
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
   const resumeTimerRef = React.useRef<number | null>(null);
@@ -628,7 +632,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
     <section
       id="brokers"
       data-surface="dark"
-      className="relative overflow-hidden px-5 py-16 sm:px-8 lg:px-12"
+      className="relative overflow-hidden px-5 py-14 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(135deg,#042c1c 0%,#01140d 48%,#000 100%)" }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.10),transparent_36%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.14),transparent_42%)]" />
@@ -636,43 +640,41 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl">
+        <div className="mb-8 text-center">
+          <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">For Brokers</span>
+          <h2 className="mt-3 font-serif text-4xl leading-tight !text-white sm:text-5xl">Become a JBJ Certified Broker.</h2>
+        </div>
+
         <div className="grid items-stretch gap-6 lg:grid-cols-3">
-          <div className="relative overflow-hidden rounded-2xl border border-white/14 bg-white/[0.06] p-7 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8">
+          <div className="relative flex flex-col rounded-2xl border border-white/14 bg-white/[0.06] p-7 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8">
             <div className="mb-6 flex items-start justify-between gap-5">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">JBJ Global Real Estate</span>
-                <h2 className="mt-3 font-serif text-4xl leading-[1.02] !text-white sm:text-[44px]">
-                  Become a JBJ Certified Broker.
-                </h2>
+                <span className="text-[11px] font-bold uppercase tracking-[0.24em] !text-white/62">Credential</span>
+                <h3 className="mt-2 font-serif text-3xl leading-tight !text-white">Broker certificate</h3>
               </div>
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-white/18 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
                 <GraduationCap className="h-6 w-6" />
               </span>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="grid flex-1 gap-3">
               {brokerBenefits.map((b) => {
                 const Icon = b.icon;
                 return (
-                  <article key={b.title} className="rounded-md border border-white/12 bg-white/[0.075] p-4" data-surface="dark">
+                  <article key={b.title} className="flex gap-3 rounded-md border border-white/12 bg-white/[0.075] p-4" data-surface="dark">
                     <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
                       <Icon className="h-4 w-4" />
                     </span>
-                    <h3 className="font-serif text-lg leading-tight !text-white">{b.title}</h3>
-                    <p className="mt-2 text-[12px] leading-relaxed !text-white/66">{b.body}</p>
+                    <div>
+                      <h4 className="font-serif text-lg leading-tight !text-white">{b.title}</h4>
+                      <p className="mt-1 text-[12px] leading-relaxed !text-white/66">{b.body}</p>
+                    </div>
                   </article>
                 );
               })}
-              <article className="rounded-md border border-white/12 bg-white/[0.075] p-4" data-surface="dark">
-                <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                  <Sparkles className="h-4 w-4" />
-                </span>
-                <h3 className="font-serif text-lg leading-tight !text-white">Premium presentation</h3>
-                <p className="mt-2 text-[12px] leading-relaxed !text-white/66">Built for a professional profile, office wall and partner introduction pack.</p>
-              </article>
             </div>
 
-            <div className="mt-7 flex flex-wrap gap-3 border-t border-white/12 pt-6">
+            <div className="mt-6 flex flex-wrap gap-3 border-t border-white/12 pt-5">
               <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                 Enroll now <ArrowRight className="h-4 w-4" />
               </button>
@@ -711,7 +713,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
             </div>
           </div>
 
-          <div className="flex flex-col justify-between rounded-2xl border border-white/14 bg-white/[0.05] p-5 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:p-6">
+          <div className="flex flex-col rounded-2xl border border-white/14 bg-white/[0.05] p-5 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:p-6">
             <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Certificate preview</p>
@@ -721,7 +723,9 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
                 <FileCheck2 className="h-5 w-5" />
               </span>
             </div>
-            <CertificatePreview compact />
+            <div className="flex flex-1 items-center">
+              <CertificatePreview compact />
+            </div>
           </div>
         </div>
       </div>

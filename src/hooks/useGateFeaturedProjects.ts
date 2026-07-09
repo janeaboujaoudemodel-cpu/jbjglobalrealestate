@@ -81,13 +81,13 @@ const rankForGate = (project: GateFeaturedProject) => {
 const normalizeProject = (project: any): GateFeaturedProject | null => {
   if (!project?.id || !project?.name) return null;
   const cover = firstUsableMedia(
+    ...sortedGalleryUrls(project.project_images),
+    project.gallery_start_image_url,
     project.cover_image_url,
     project.card_image_url,
-    project.gallery_start_image_url,
     project.image_url,
     project.hero_image,
     project.cover_image,
-    ...sortedGalleryUrls(project.project_images),
     ...(Array.isArray(project.images) ? project.images : [])
   ) || null;
   const gallery = [
@@ -137,7 +137,11 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
         .map((r) => normalizeProject(r.project || r.projects))
         .filter(Boolean) as GateFeaturedProject[];
 
-      if (configured.length > 0) return configured.sort((a, b) => rankForGate(a) - rankForGate(b)).slice(0, 8);
+      if (configured.length > 0) {
+        const sorted = configured.sort((a, b) => rankForGate(a) - rankForGate(b));
+        const offPlanOnly = sorted.filter(isOffPlanProject);
+        return (offPlanOnly.length >= 4 ? offPlanOnly : sorted).slice(0, 8);
+      }
 
       // Real-data fallback for empty surfaces: newest published projects, with
       // Amra-style wellness launches promoted first. No fake/static cards.
@@ -164,7 +168,9 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
           if (project?.id && !byId.has(project.id)) byId.set(project.id, project);
         });
 
-      return Array.from(byId.values()).sort((a, b) => rankForGate(a) - rankForGate(b)).slice(0, 8);
+      const sorted = Array.from(byId.values()).sort((a, b) => rankForGate(a) - rankForGate(b));
+      const offPlanOnly = sorted.filter(isOffPlanProject);
+      return (offPlanOnly.length >= 4 ? offPlanOnly : sorted).slice(0, 8);
     },
     staleTime: 60_000,
   });
