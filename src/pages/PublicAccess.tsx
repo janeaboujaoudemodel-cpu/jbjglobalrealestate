@@ -733,7 +733,8 @@ export default function PublicAccess() {
           title="Investor packages"
           description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio."
           tiers={investorTiers}
-          onSelect={openSignup}
+          audience="Investor packages"
+          onSelect={openPayment}
         >
           {/* Signature perks — included with the SIGNATURE tier */}
           <div className="mt-16">
