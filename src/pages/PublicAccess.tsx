@@ -353,42 +353,30 @@ html body #root [data-jbj-access-gold-badge] * {
   -webkit-text-fill-color: #C9A84C !important;
 }
 .certificate-shimmer-frame {
-  border: 1px solid rgba(139,111,58,0.34);
+  border: 1px solid rgba(184,149,85,0.55);
   isolation: isolate;
-}
-.certificate-shimmer-frame::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  pointer-events: none;
-  background: linear-gradient(110deg, rgba(139,111,58,0.35), rgba(255,246,210,0.95), rgba(139,111,58,0.35), rgba(6,78,59,0.28));
-  background-size: 280% 100%;
-  animation: certificate-border-shimmer 6.5s linear infinite;
-  z-index: -1;
+  box-shadow: 0 0 0 0 rgba(201,168,79,0.0);
+  animation: certificate-glow 5.5s ease-in-out infinite;
 }
 .certificate-shimmer-frame::after {
   content: "";
   position: absolute;
   inset: 7px;
   pointer-events: none;
-  border: 1px solid rgba(139,111,58,0.18);
+  border: 1px solid rgba(184,149,85,0.28);
 }
 .username-shimmer {
-  background: linear-gradient(100deg, #0d3a2b 0%, #0d3a2b 34%, #b89555 49%, #0d3a2b 64%, #0d3a2b 100%);
-  background-size: 260% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: username-shimmer 5.5s ease-in-out infinite;
+  color: #0d3a2b !important;
+  -webkit-text-fill-color: #0d3a2b !important;
+  animation: username-pulse 4.8s ease-in-out infinite;
 }
-@keyframes certificate-border-shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 280% 50%; }
+@keyframes certificate-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,79,0.0), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
+  50% { box-shadow: 0 0 26px 2px rgba(201,168,79,0.35), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
 }
-@keyframes username-shimmer {
-  0%, 22% { background-position: 0% 50%; }
-  70%, 100% { background-position: 260% 50%; }
+@keyframes username-pulse {
+  0%, 100% { text-shadow: 0 0 0 rgba(201,168,79,0); opacity: 1; }
+  50% { text-shadow: 0 0 14px rgba(201,168,79,0.45); opacity: 0.94; }
 }
 `;
 
