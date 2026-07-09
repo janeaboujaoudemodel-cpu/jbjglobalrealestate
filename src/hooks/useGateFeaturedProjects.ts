@@ -59,24 +59,44 @@ const sortedGalleryUrls = (images: unknown) => {
 
 const normalizeStatus = (value: unknown) => String(value || "").trim().toLowerCase();
 
+const handoverTime = (project: any): number | null => {
+  const raw = project?.handover_date;
+  if (!raw) return null;
+  const t = Date.parse(raw);
+  return Number.isFinite(t) ? t : null;
+};
+
 const isReadyProject = (project: any) => {
-  const statusText = [project?.sale_status, project?.construction_status, project?.status, project?.handover_date].map(normalizeStatus).join(" ");
-  if (/ready|complete|completed|delivered|handover/.test(statusText) && !/off[ -]?plan|under construction|new launch/.test(statusText)) return true;
-  const rawDate = project?.handover_date ? Date.parse(project.handover_date) : NaN;
-  return Number.isFinite(rawDate) && rawDate < Date.now();
+  const statusText = [project?.sale_status, project?.construction_status, project?.status].map(normalizeStatus).join(" ");
+  if (/ready|complete|completed|delivered|handed[ -]?over/.test(statusText) && !/off[ -]?plan|under construction|new launch/.test(statusText)) return true;
+  const t = handoverTime(project);
+  return t !== null && t < Date.now();
 };
 
 const isOffPlanProject = (project: any) => {
+  if (isReadyProject(project)) return false;
   const statusText = [project?.sale_status, project?.construction_status, project?.status].map(normalizeStatus).join(" ");
-  if (/off[ -]?plan|under construction|new launch|launch/.test(statusText)) return true;
-  const rawDate = project?.handover_date ? Date.parse(project.handover_date) : NaN;
-  return Number.isFinite(rawDate) && rawDate >= Date.now();
+  const t = handoverTime(project);
+  // If handover date exists, it MUST be in the future for off-plan.
+  if (t !== null) return t >= Date.now();
+  // No date — trust the status label.
+  return /off[ -]?plan|under construction|new launch|launch|presale|eoi/.test(statusText);
+};
+
+/**
+ * Gate marquee only shows OFF-PLAN projects with a future handover.
+ * Projects with a past handover_date are excluded (they are either ready
+ * or stale data — either way they must not be labelled "Off-plan / launch").
+ */
+const isEligibleForGate = (project: GateFeaturedProject) => {
+  const t = handoverTime(project);
+  if (t !== null && t < Date.now()) return false; // never show past-handover as launch
+  return isOffPlanProject(project);
 };
 
 const rankForGate = (project: GateFeaturedProject) => {
-  if (isOffPlanProject(project)) return 0;
-  if (isReadyProject(project)) return 2;
-  return 1;
+  const t = handoverTime(project);
+  return t ?? Number.MAX_SAFE_INTEGER; // soonest future handover first
 };
 
 const normalizeProject = (project: any): GateFeaturedProject | null => {
