@@ -33,6 +33,11 @@ import {
   FileCheck2,
   Building2,
   Star,
+  Compass,
+  Landmark,
+  BarChart3,
+  Briefcase,
+  Globe2,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
