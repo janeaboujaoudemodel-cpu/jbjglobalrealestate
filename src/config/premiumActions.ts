@@ -19,7 +19,8 @@ export type PremiumActionKey =
   | "dashboard"
   | "crm"
   | "library_document"
-  | "insights_article";
+  | "insights_article"
+  | "purchase_membership";
 
 export const PREMIUM_ACTION_LABEL: Record<PremiumActionKey, string> = {
   view_property: "view this property",
@@ -39,6 +40,7 @@ export const PREMIUM_ACTION_LABEL: Record<PremiumActionKey, string> = {
   crm: "open the CRM",
   library_document: "open this Library document",
   insights_article: "read this insight",
+  purchase_membership: "complete your purchase",
 };
 
 export const CONVERSION_HEADLINES = [

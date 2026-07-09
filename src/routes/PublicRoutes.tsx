@@ -118,6 +118,10 @@ const Awards = lazy(() => import("@/pages/Awards"));
 const InsightsHub = lazy(() => import("@/pages/Insights"));
 const LibraryHub = lazy(() => import("@/pages/Library"));
 const SuccessStories = lazy(() => import("@/pages/SuccessStories"));
+const Membership = lazy(() => import("@/pages/Membership"));
+const Academy = lazy(() => import("@/pages/Academy"));
+const Agencies = lazy(() => import("@/pages/Agencies"));
+const CheckoutReturn = lazy(() => import("@/pages/CheckoutReturn"));
 
 const CompanyProfile = lazy(() => import("@/pages/CompanyProfile"));
 const News = lazy(() => import("@/pages/News"));
@@ -291,6 +295,10 @@ export const PublicRoutes = () => (
     <Route path="/insights" element={<InsightsHub />} />
     <Route path="/library" element={<LibraryHub />} />
     <Route path="/success-stories" element={<SuccessStories />} />
+    <Route path="/membership" element={<Membership />} />
+    <Route path="/academy" element={<Academy />} />
+    <Route path="/agencies" element={<Agencies />} />
+    <Route path="/checkout/return" element={<CheckoutReturn />} />
     <Route path="/insights/future-of-real-estate-2026" element={<InsightsPageScope><FutureOfRealEstate2026 /></InsightsPageScope>} />
     <Route path="/news/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
     <Route path="/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
