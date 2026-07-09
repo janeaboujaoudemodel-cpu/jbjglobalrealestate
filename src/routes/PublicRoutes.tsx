@@ -115,6 +115,9 @@ const Contact = lazy(() => import("@/pages/Contact"));
 const About = lazy(() => import("@/pages/About"));
 const Founder = lazy(() => import("@/pages/Founder"));
 const Awards = lazy(() => import("@/pages/Awards"));
+const InsightsHub = lazy(() => import("@/pages/Insights"));
+const LibraryHub = lazy(() => import("@/pages/Library"));
+const SuccessStories = lazy(() => import("@/pages/SuccessStories"));
 
 const CompanyProfile = lazy(() => import("@/pages/CompanyProfile"));
 const News = lazy(() => import("@/pages/News"));
@@ -285,6 +288,9 @@ export const PublicRoutes = () => (
     <Route path="/guides/dubai-rental-yield" element={<InsightsPageScope><DubaiRentalYieldGuide /></InsightsPageScope>} />
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/dubai-rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
+    <Route path="/insights" element={<InsightsHub />} />
+    <Route path="/library" element={<LibraryHub />} />
+    <Route path="/success-stories" element={<SuccessStories />} />
     <Route path="/insights/future-of-real-estate-2026" element={<InsightsPageScope><FutureOfRealEstate2026 /></InsightsPageScope>} />
     <Route path="/news/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
     <Route path="/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
