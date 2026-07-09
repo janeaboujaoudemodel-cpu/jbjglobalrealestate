@@ -33,6 +33,11 @@ import {
   FileCheck2,
   Building2,
   Star,
+  Compass,
+  Landmark,
+  BarChart3,
+  Briefcase,
+  Globe2,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
@@ -246,6 +251,15 @@ const brokerServices = [
   { icon: TrendingUp, title: "Investor advisory", body: "Portfolio language, yield framing and market positioning for serious buyers." },
   { icon: Handshake, title: "Developer partnerships", body: "Professional conduct and follow-up standards for partner networks." },
   { icon: ShieldCheck, title: "Document discipline", body: "Clean presentation of payment plans, brochures and client-facing material." },
+];
+
+const jbjServices = [
+  { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms." },
+  { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors." },
+  { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers." },
+  { icon: KeyRound, title: "Handover & resale", body: "Snagging, leasing readiness and resale positioning across the full ownership cycle." },
+  { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients." },
+  { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover." },
 ];
 
 const investorSignaturePerks = [
@@ -627,105 +641,97 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   );
 }
 
+function ServicesSection() {
+  return (
+    <section
+      id="services"
+      className="relative overflow-hidden px-5 py-16 sm:px-8 lg:px-12"
+      style={{ backgroundImage: "linear-gradient(180deg,#FDFBF7 0%,#F5EFE1 100%)" }}
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/40 to-transparent" />
+      <div className="relative mx-auto max-w-7xl">
+        <div className="mb-10 max-w-2xl">
+          <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#8B6F3A]">Our Services</span>
+          <h2 className="mt-3 font-serif text-4xl leading-tight text-[#0d3a2b] sm:text-5xl">A senior advisory desk for Dubai real estate.</h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-[#1A1A1A]/70">
+            Six disciplines, one desk. From first launch to final handover — sourced with discipline, delivered with discretion.
+          </p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {jbjServices.map((s) => {
+            const Icon = s.icon;
+            return (
+              <article
+                key={s.title}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#0d3a2b]/12 bg-white p-6 shadow-[0_18px_46px_-32px_rgba(13,58,43,0.4)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_60px_-32px_rgba(13,58,43,0.55)]"
+              >
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/50 to-transparent opacity-0 transition group-hover:opacity-100" />
+                <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-white [&_svg]:!stroke-white">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="font-serif text-xl leading-tight text-[#0d3a2b]">{s.title}</h3>
+                <p className="mt-2 text-[13px] leading-relaxed text-[#1A1A1A]/68">{s.body}</p>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; openLead: () => void }) {
   return (
     <section
       id="brokers"
       data-surface="dark"
-      className="relative overflow-hidden px-5 py-14 sm:px-8 lg:px-12"
+      className="relative overflow-hidden px-5 py-10 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(135deg,#042c1c 0%,#01140d 48%,#000 100%)" }}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.10),transparent_36%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.14),transparent_42%)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.08),transparent_38%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.12),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/18 to-transparent" />
 
-      <div className="relative mx-auto max-w-7xl">
-        <div className="mb-8 text-center">
+      <div className="relative mx-auto grid max-w-5xl items-center gap-8 rounded-2xl border border-white/12 bg-white/[0.045] p-6 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8 md:grid-cols-[1fr_auto]">
+        <div>
           <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">For Brokers</span>
-          <h2 className="mt-3 font-serif text-4xl leading-tight !text-white sm:text-5xl">Become a JBJ Certified Broker.</h2>
+          <h2 className="mt-2 font-serif text-3xl leading-tight !text-white sm:text-[34px]">Become a JBJ Certified Broker.</h2>
+          <p className="mt-3 max-w-lg text-[13px] leading-relaxed !text-white/72">
+            A recognised credential for licensed and aspiring UAE agents — mentorship, materials and a direct pathway into JBJ Global.
+          </p>
+
+          <ul className="mt-5 grid gap-2.5 sm:grid-cols-1">
+            {brokerBenefits.map((b) => {
+              const Icon = b.icon;
+              return (
+                <li key={b.title} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                    <Icon className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="text-[13px] leading-relaxed !text-white/82">
+                    <span className="font-serif !text-white">{b.title}.</span>{" "}
+                    <span className="!text-white/64">{b.body}</span>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11 uppercase tracking-[0.14em]`}>
+              Enroll now <ArrowRight className="h-4 w-4" />
+            </button>
+            <button onClick={openLead} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-11 uppercase tracking-[0.14em]`}>
+              Speak to broker desk
+            </button>
+          </div>
         </div>
 
-        <div className="grid items-stretch gap-6 lg:grid-cols-[0.95fr,0.95fr,1.1fr]">
-          <div className="relative flex flex-col rounded-2xl border border-white/14 bg-white/[0.06] p-7 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8">
-            <div className="mb-6 flex items-start justify-between gap-5">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-[0.24em] !text-white/62">Credential</span>
-                <h3 className="mt-2 font-serif text-3xl leading-tight !text-white">Broker certificate</h3>
-              </div>
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-white/18 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                <GraduationCap className="h-6 w-6" />
-              </span>
-            </div>
-
-            <div className="grid flex-1 gap-3">
-              {brokerBenefits.map((b) => {
-                const Icon = b.icon;
-                return (
-                  <article key={b.title} className="flex gap-3 rounded-md border border-white/12 bg-white/[0.075] p-4" data-surface="dark">
-                    <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <h4 className="font-serif text-lg leading-tight !text-white">{b.title}</h4>
-                      <p className="mt-1 text-[12px] leading-relaxed !text-white/66">{b.body}</p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-3 border-t border-white/12 pt-5">
-              <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
-                Enroll now <ArrowRight className="h-4 w-4" />
-              </button>
-              <button onClick={openLead} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
-                Speak to broker desk
-              </button>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-white/14 bg-white/[0.06] p-5 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:p-6" data-surface="dark">
-            <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Services card</p>
-                <h3 className="mt-1 font-serif text-2xl !text-white">Broker support</h3>
-              </div>
-              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                <Award className="h-5 w-5" />
-              </span>
-            </div>
-
-            <div className="grid gap-3">
-              {brokerServices.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <article key={s.title} className="relative flex gap-3 rounded-md border border-white/12 bg-white/[0.065] p-3.5" data-surface="dark">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white" data-surface="dark">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <div>
-                      <h4 className="font-serif text-lg leading-tight !text-white">{s.title}</h4>
-                      <p className="mt-1 text-[11px] leading-relaxed !text-white/64">{s.body}</p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="flex flex-col rounded-2xl border border-white/14 bg-white/[0.05] p-5 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:p-6">
-            <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Certificate preview</p>
-                <h3 className="mt-1 font-serif text-2xl !text-white">Issued in your name</h3>
-              </div>
-              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                <FileCheck2 className="h-5 w-5" />
-              </span>
-            </div>
-            <div className="flex flex-1 items-center py-3">
-              <CertificatePreview compact />
-            </div>
+        <div className="hidden md:block">
+          <div aria-hidden className="relative flex h-40 w-40 items-center justify-center rounded-full border border-white/15 bg-white/[0.06]">
+            <div className="absolute inset-3 rounded-full border border-[#C9A84C]/40" />
+            <GraduationCap className="h-14 w-14 !text-[#C9A84C]" />
           </div>
         </div>
       </div>
@@ -733,55 +739,88 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
   );
 }
 
-function CertificatePreview({ compact = false }: { compact?: boolean }) {
+function CertificateBand() {
+  return (
+    <section
+      id="broker-certificate"
+      className="relative overflow-hidden px-5 py-16 sm:px-8 lg:px-12"
+      style={{ backgroundImage: "linear-gradient(180deg,#01140d 0%,#042c1c 55%,#01140d 100%)" }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.14),transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/30 to-transparent" />
+
+      <div className="relative mx-auto max-w-6xl">
+        <div className="mb-8 text-center">
+          <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-[#C9A84C]">Certificate preview</span>
+          <h2 className="mt-3 font-serif text-3xl leading-tight !text-white sm:text-4xl">Issued in your name.</h2>
+        </div>
+        <CertificatePreview />
+      </div>
+    </section>
+  );
+}
+
+function CertificatePreview() {
   const today = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(new Date());
 
   return (
     <div className="relative">
       <div
         data-broker-certificate-frame
-        className={`certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ${compact ? "max-w-[620px]" : "max-w-[800px]"}`}
-        style={{ transform: compact ? "none" : "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.46 / 1" }}
+        className="certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
+        style={{ aspectRatio: "2.35 / 1", maxWidth: "1100px" }}
       >
-        <div className="pointer-events-none absolute inset-2 border border-[#8B6F3A]/55" />
-        <div className="pointer-events-none absolute inset-4 border border-[#8B6F3A]/25" />
+        {/* Ornate double border */}
+        <div className="pointer-events-none absolute inset-2 border-[1.5px] border-[#8B6F3A]/60" />
+        <div className="pointer-events-none absolute inset-[10px] border border-[#8B6F3A]/25" />
+        {/* Corner flourishes */}
+        <div className="pointer-events-none absolute left-4 top-4 h-4 w-4 border-l-[1.5px] border-t-[1.5px] border-[#8B6F3A]" />
+        <div className="pointer-events-none absolute right-4 top-4 h-4 w-4 border-r-[1.5px] border-t-[1.5px] border-[#8B6F3A]" />
+        <div className="pointer-events-none absolute left-4 bottom-4 h-4 w-4 border-l-[1.5px] border-b-[1.5px] border-[#8B6F3A]" />
+        <div className="pointer-events-none absolute right-4 bottom-4 h-4 w-4 border-r-[1.5px] border-b-[1.5px] border-[#8B6F3A]" />
 
-        <div className="relative flex h-full flex-col px-7 py-5 text-center sm:px-10 sm:py-6">
+        <div className="relative flex h-full flex-col px-8 py-5 text-center sm:px-14 sm:py-7">
+          {/* Header */}
           <div className="flex items-center justify-between text-left">
             <img
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt="JBJ Global Real Estate"
-              className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+              className="h-10 w-10 object-contain sm:h-12 sm:w-12"
             />
             <div className="text-right">
-              <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A]">JBJ Global Real Estate</p>
-              <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/45">Dubai · United Arab Emirates</p>
+              <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A] sm:text-[10px]">JBJ Global Real Estate</p>
+              <p className="mt-0.5 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/50 sm:text-[9px]">Dubai · United Arab Emirates</p>
             </div>
           </div>
 
-          <h3 className="mt-2 font-serif text-2xl text-[#0d3a2b] sm:text-[34px]">Certificate of Completion</h3>
-          <div className="mx-auto mt-2 flex items-center gap-2">
-            <span className="h-px w-12 bg-[#8B6F3A]/60" />
-            <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
-            <span className="h-px w-12 bg-[#8B6F3A]/60" />
+          {/* Title block */}
+          <div className="mt-2 flex flex-1 flex-col items-center justify-center">
+            <h3 className="font-serif text-2xl leading-none text-[#0d3a2b] sm:text-[32px]">Certificate of Completion</h3>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="h-px w-14 bg-[#8B6F3A]/60" />
+              <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
+              <span className="h-px w-14 bg-[#8B6F3A]/60" />
+            </div>
+            <p className="mt-2 text-[9px] uppercase tracking-[0.28em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
+            <p className="username-shimmer mt-1.5 inline-flex min-w-[260px] justify-center border-b border-[#8B6F3A]/50 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:min-w-[320px] sm:text-[30px]">
+              Your Name Here
+            </p>
+            <p className="mx-auto mt-2 max-w-xl text-[10px] leading-relaxed text-[#1A1A1A]/68 sm:text-[11px]">
+              for successfully completing the JBJ Global Broker Academy professional pathway.
+            </p>
           </div>
-          <p className="mt-1.5 text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
-          <p className="username-shimmer mx-auto mt-1 inline-flex min-w-[230px] justify-center border-b border-[#8B6F3A]/45 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:min-w-[260px] sm:text-[30px]">
-            Your Name Here
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-[10px] leading-relaxed text-[#1A1A1A]/70 sm:text-[11px]">
-            for successfully completing the JBJ Global Broker Academy professional pathway.
-          </p>
 
-          <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-3 pt-1 text-left sm:gap-4 sm:pt-2">
+          {/* Footer row */}
+          <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-4 text-left">
             <div>
-              <div className="h-7 sm:h-9" />
+              <div className="h-5 sm:h-6" />
               <div className="mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
-              <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 sm:text-[9px] sm:tracking-[0.22em]">Founder &amp; CEO</p>
+              <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-[88px] sm:w-[88px]">
+            <div aria-hidden className="seal-outline relative flex h-16 w-16 items-center justify-center rounded-full sm:h-[76px] sm:w-[76px]">
               <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_18px_rgba(90,69,21,0.28)]">
                 <defs>
                   <linearGradient id="sealGold" x1="18" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
@@ -791,8 +830,8 @@ function CertificatePreview({ compact = false }: { compact?: boolean }) {
                   </linearGradient>
                   <path id="sealTextPath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
                 </defs>
-                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="7" />
-                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="2" strokeDasharray="3 4" />
+                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="6" />
+                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="1.5" strokeDasharray="3 4" />
                 <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="#6A4E15">
                   <textPath href="#sealTextPath" startOffset="0%">JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·</textPath>
                 </text>
@@ -801,17 +840,17 @@ function CertificatePreview({ compact = false }: { compact?: boolean }) {
                 data-no-fallback
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
-                className="h-9 w-9 object-contain opacity-65 sm:h-10 sm:w-10"
+                className="h-8 w-8 object-contain opacity-70 sm:h-9 sm:w-9"
                 style={{ filter: "brightness(0) saturate(100%) invert(26%) sepia(35%) saturate(1050%) hue-rotate(12deg) brightness(72%)" }}
               />
             </div>
 
             <div className="text-right">
-              <div className="ml-auto flex h-7 items-end justify-end font-serif text-sm text-[#0d3a2b] leading-none sm:h-9 sm:text-base">
+              <div className="ml-auto flex h-5 items-end justify-end font-serif text-sm leading-none text-[#0d3a2b] sm:h-6 sm:text-base">
                 {today}
               </div>
               <div className="ml-auto mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
-              <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 sm:text-[9px] sm:tracking-[0.22em]">Date of issue</p>
+              <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Date of issue</p>
             </div>
           </div>
         </div>
@@ -1238,7 +1277,11 @@ export default function PublicAccess() {
           />
         </div>
 
+        <ServicesSection />
+
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
+
+        <CertificateBand />
 
         {/* Closing CTA — same animation/pattern as homepage "Ready to Get Started" */}
         <div className="bg-[#F7F2EA]">
