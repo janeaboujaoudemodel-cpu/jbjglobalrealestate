@@ -249,21 +249,18 @@ const investorSignaturePerks = [
 ];
 
 // ── Contrast primitives ─────────────────────────────────────────────────────
-// Buttons that idle white / hover emerald (used on all champagne surfaces).
 const BTN_WHITE_HOVER_EMERALD =
-  "group/btn inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/25 bg-white px-5 text-sm font-bold text-[#0d3a2b] transition " +
+  "group/btn relative overflow-hidden inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/25 bg-white px-5 text-sm font-bold text-[#0d3a2b] transition " +
   "hover:!bg-[#064E3B] hover:!text-white hover:border-[#064E3B] " +
-  "[&_svg]:text-[#0d3a2b] hover:[&_svg]:!text-white";
+  "[&_svg]:text-[#0d3a2b] hover:[&_svg]:!text-white " +
+  "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent before:opacity-0 before:transition before:duration-700 hover:before:opacity-100 hover:before:translate-x-[400%]";
 
-// Solid emerald button — always white content.
 const BTN_EMERALD_SOLID =
-  "inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold text-white [&_svg]:!text-white " +
-  "bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:brightness-110 " +
-  "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)]";
+  "relative overflow-hidden inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold !text-white [&_*]:!text-white [&_svg]:!text-white [&_svg]:!stroke-white " +
+  "bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:brightness-110 transition " +
+  "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)] " +
+  "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent hover:before:translate-x-[300%] before:transition before:duration-[900ms]";
 
-// Emerald icon tile — the descendants must render pure white icons even on
-// champagne parent sections. `data-surface="dark"` opts out of the global
-// bright-bg contrast contract.
 const EMERALD_ICON_TILE =
   "inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] " +
   "[&_svg]:!text-white [&_svg]:!stroke-white";
@@ -412,8 +409,8 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) 
               onClick={onSelect}
               className={
                 isEm
-                  ? "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#B89555] bg-white px-4 py-3 text-sm font-bold text-[#0d3a2b] transition hover:brightness-95 [&_svg]:text-[#0d3a2b]"
-                  : `mt-8 h-12 w-full justify-center ${BTN_WHITE_HOVER_EMERALD}`
+                  ? "group/btn relative overflow-hidden mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md border border-white bg-white px-5 text-sm font-bold uppercase tracking-[0.12em] text-[#0d3a2b] transition hover:!bg-[#F7F2EA] [&_svg]:text-[#0d3a2b] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-[#064E3B]/15 before:to-transparent before:opacity-0 hover:before:opacity-100 hover:before:translate-x-[400%] before:transition before:duration-700"
+                  : `mt-8 h-12 w-full justify-center uppercase tracking-[0.12em] ${BTN_WHITE_HOVER_EMERALD}`
               }
             >
               Choose {tier.name} <ArrowRight className="h-4 w-4" />
@@ -467,41 +464,51 @@ export default function PublicAccess() {
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#1A1A1A]">
       {/* Header */}
-      <header className="sticky top-0 z-40 border-b border-[#0d3a2b]/15 bg-[#FDFBF7]/95 backdrop-blur-md">
-        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-5 px-5 sm:px-8 lg:px-12">
-          <a href="/access" className="flex items-center gap-3" aria-label="JBJ Global Real Estate">
-            <JJLogoImage size="sm" showText={false} className="!items-start" />
-            <div className="hidden sm:flex flex-col leading-none">
-              <span className="font-serif text-[19px] text-[#0d3a2b]">JBJ Global Real Estate</span>
-              <span className="mt-0.5 text-[10px] uppercase tracking-[0.32em] text-[#0d3a2b]/60">Dubai · UAE</span>
-            </div>
+      <header className="sticky top-0 z-40 border-b border-[#0d3a2b]/10 bg-[#FDFBF7]/95 backdrop-blur-md">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+          <a href="/access" className="flex items-center gap-2.5 min-w-0" aria-label="JBJ Global Real Estate">
+            <img
+              src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
+              alt=""
+              width={36}
+              height={36}
+              className="h-9 w-9 object-contain shrink-0"
+            />
+            <span className="font-serif text-[16px] sm:text-[18px] text-[#0d3a2b] whitespace-nowrap truncate">
+              JBJ Global Real Estate
+            </span>
           </a>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-0.5 lg:flex shrink-0">
             {quickLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="rounded-full px-3 py-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-[#1A1A1A]/70 transition hover:bg-[#EFE6D6] hover:text-[#064E3B]"
+                className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1A1A1A]/70 transition hover:bg-[#EFE6D6] hover:text-[#064E3B]"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setLoginOpen(true)}
-              className="h-10 rounded-md border border-[#0d3a2b]/25 bg-transparent px-4 text-sm font-semibold text-[#0d3a2b] transition hover:bg-[#EFE6D6]"
+              className="h-10 whitespace-nowrap rounded-md border border-[#0d3a2b]/25 bg-transparent px-4 text-sm font-semibold text-[#0d3a2b] transition hover:bg-[#EFE6D6]"
             >
               Log in
             </button>
-            <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-10`}>
+            <button
+              onClick={openSignup}
+              data-surface="dark"
+              className={`${BTN_EMERALD_SOLID} h-10 whitespace-nowrap`}
+            >
               Sign up <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
       </header>
+
 
       <main>
         {/* HERO — Dubai video is the star. Logo + name only. */}
@@ -516,7 +523,7 @@ export default function PublicAccess() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
-            <JJLogoImage size="xl" showText={false} className="!items-center [&_img]:mx-auto" />
+            <JJLogoImage variant="dark" size="xl" showText={false} className="!items-center [&_img]:mx-auto" />
             <h1 className="mt-6 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
               JBJ Global Real Estate
             </h1>
@@ -556,10 +563,10 @@ export default function PublicAccess() {
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-l border-[#0d3a2b]/15 pl-8">
               {[
-                ["500+", "curated projects"],
                 ["120+", "developers"],
                 ["24/7", "advisor desk"],
                 ["AED", "backed reporting"],
+                ["100%", "verified inventory"],
               ].map(([v, l]) => (
                 <div key={l}>
                   <p className="font-serif text-3xl text-[#0d3a2b]">{v}</p>
@@ -666,14 +673,11 @@ export default function PublicAccess() {
           tiers={investorTiers}
           onSelect={openSignup}
         >
-          {/* Signature perks — now scoped to the investor section */}
-          <div className="mt-12 rounded-2xl border border-[#0d3a2b]/15 bg-[#F7F2EA] p-6 sm:p-8">
-            <div className="mb-5 flex items-center gap-3">
-              <TrendingUp className="h-5 w-5 text-[#064E3B]" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#064E3B]">
-                Signature JBJ perks · included on Signature & Private Office
-              </p>
-            </div>
+          {/* Signature perks — folded inside the Investor strap, edge to edge */}
+          <div className="mt-14">
+            <h3 className="mb-6 text-center font-serif text-2xl text-[#064E3B] sm:text-3xl">
+              Signature perks · included on Signature &amp; Private Office
+            </h3>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
               {investorSignaturePerks.map((perk) => {
                 const Icon = perk.icon;
@@ -682,10 +686,7 @@ export default function PublicAccess() {
                     key={perk.label}
                     className="flex items-center gap-3 rounded-xl border border-[#0d3a2b]/12 bg-white px-4 py-3"
                   >
-                    <span
-                      data-surface="dark"
-                      className={`${EMERALD_ICON_TILE} h-9 w-9`}
-                    >
+                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-9 w-9`}>
                       <Icon className="h-4 w-4" />
                     </span>
                     <span className="text-sm font-semibold text-[#0d3a2b]">{perk.label}</span>
@@ -832,18 +833,18 @@ export default function PublicAccess() {
         onClick={() => setLeadOpen(true)}
         data-surface="dark"
         aria-label="Speak to an advisor"
-        className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 !text-white shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-[#B89555]/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:brightness-110 hover:-translate-y-0.5"
+        className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 !text-white shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-white/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:brightness-110 hover:-translate-y-0.5"
       >
-        <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 ring-1 ring-white/25 [&_svg]:!text-white">
+        <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 ring-1 ring-white/30 [&_svg]:!text-white">
           <Headphones className="h-5 w-5" />
-          {/* live-line dot */}
+          {/* live dot — white only */}
           <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F0D78C] opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#F0D78C]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white ring-2 ring-[#064E3B]" />
           </span>
         </span>
         <span className="flex flex-col items-start leading-tight">
-          <span className="text-[9px] font-bold uppercase tracking-[0.28em] !text-[#F0D78C]">Live · 24/7</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.28em] !text-white/85">Live · 24/7</span>
           <span className="inline-flex items-center gap-1.5 text-[13px] font-bold !text-white">
             <PhoneCall className="h-3.5 w-3.5 !text-white" /> Speak to an advisor
           </span>
