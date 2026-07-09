@@ -421,7 +421,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     .sort((a: any, b: any) => Number(!isOffPlanProject(a)) - Number(!isOffPlanProject(b)) || Number(isReadyProject(a)) - Number(isReadyProject(b)));
 
   const offPlanProjects = qualifiedProjects.filter(isOffPlanProject);
-  const projects = (offPlanProjects.length ? offPlanProjects : qualifiedProjects).slice(0, limit);
+  const projects = (offPlanProjects.length >= limit ? offPlanProjects : qualifiedProjects).slice(0, limit);
 
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
   const resumeTimerRef = React.useRef<number | null>(null);

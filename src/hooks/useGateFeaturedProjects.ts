@@ -165,8 +165,7 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
         });
 
       const sorted = Array.from(byId.values()).sort((a, b) => rankForGate(a) - rankForGate(b));
-      const offPlanOnly = sorted.filter(isOffPlanProject);
-      return (offPlanOnly.length ? offPlanOnly : sorted).slice(0, 8);
+      return sorted.slice(0, 8);
     },
     staleTime: 60_000,
   });
