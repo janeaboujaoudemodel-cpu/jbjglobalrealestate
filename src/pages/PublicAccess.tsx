@@ -1110,10 +1110,10 @@ export default function PublicAccess() {
           <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.1fr,1fr] md:items-end">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#064E3B]">
-                A private property platform, built around you
+                A private property ecosystem, built around you
               </span>
               <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
-                A private property platform for Dubai's discerning investors, developers & brokers.
+                A private property ecosystem for Dubai's discerning investors, developers & brokers.
               </h2>
               <div className="mt-8 flex flex-wrap gap-3">
                 <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
