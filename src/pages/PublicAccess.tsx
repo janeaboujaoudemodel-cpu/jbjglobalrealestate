@@ -432,6 +432,7 @@ export default function PublicAccess() {
 
                     <Link
                       to={plan.href}
+                      data-surface="dark"
                       className={
                         featured
                           ? "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#D9C292]/60 bg-[#D9C292] px-4 py-3 text-sm font-bold !text-[#0d3a2b] transition hover:brightness-105"
