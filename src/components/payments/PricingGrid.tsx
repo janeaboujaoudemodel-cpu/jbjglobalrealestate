@@ -34,7 +34,7 @@ export function PricingGrid({
 }: Props) {
   const { user } = useAuth();
   const { openCheckout, checkoutElement } = useStripeCheckout();
-  const requireAuth = useRequireAuth();
+  const { requireAuth } = useRequireAuth();
 
   const availableIntervals: BillingInterval[] = useMemo(() => {
     if (intervals?.length) return intervals;
@@ -59,14 +59,9 @@ export function PricingGrid({
       interval: price.interval,
     });
 
-    requireAuth(
-      {
-        action: "purchase_membership",
-        title: `Sign in to unlock ${tier.name}`,
-        subtitle: "Create your free JBJ account to complete checkout.",
-        analyticsKey: `${analyticsContext}_gated`,
-      },
-      () => {
+    requireAuth({
+      action: "purchase_membership",
+      onAuthed: () => {
         openCheckout({
           priceId: price.priceId,
           userId: user?.id,
@@ -74,7 +69,7 @@ export function PricingGrid({
           title: tier.name,
         });
       },
-    );
+    });
   };
 
   return (
