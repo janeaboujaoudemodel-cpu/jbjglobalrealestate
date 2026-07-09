@@ -21,6 +21,26 @@ const PUBLIC_PATHS = [
   "/legal",
   "/privacy",
   "/terms",
+  "/cookies",
+  "/aml",
+  "/welcome",
+  "/oauth",
+  "/.lovable/oauth",
+  // Token-based public routes used by emailed action links —
+  // these carry their own auth (token/signature) and must remain
+  // reachable without a logged-in session.
+  "/sign",
+  "/documents/sign",
+  "/broker/agreement",
+  "/broker/activate",
+  "/card",
+  "/ticket-survey",
+  "/survey",
+  "/book",
+  "/d",
+  "/coming-soon",
+  "/maintenance",
+  "/403",
 ];
 
 function isPublicPath(pathname: string) {

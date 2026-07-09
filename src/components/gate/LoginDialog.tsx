@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Field from "@/components/signup/Field";
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 
 export default function LoginDialog({ open, onOpenChange }: Props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [reveal, setReveal] = useState(false);
@@ -27,7 +28,8 @@ export default function LoginDialog({ open, onOpenChange }: Props) {
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
     onOpenChange(false);
-    navigate("/", { replace: true });
+    const from = (location.state as { from?: string } | null)?.from;
+    navigate(from || "/", { replace: true });
   };
 
   return (
