@@ -646,7 +646,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
           <h2 className="mt-3 font-serif text-4xl leading-tight !text-white sm:text-5xl">Become a JBJ Certified Broker.</h2>
         </div>
 
-        <div className="grid items-stretch gap-6 lg:grid-cols-3">
+        <div className="grid items-stretch gap-6 lg:grid-cols-[0.95fr,0.95fr,1.1fr]">
           <div className="relative flex flex-col rounded-2xl border border-white/14 bg-white/[0.06] p-7 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8">
             <div className="mb-6 flex items-start justify-between gap-5">
               <div>
@@ -724,7 +724,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
                 <FileCheck2 className="h-5 w-5" />
               </span>
             </div>
-            <div className="flex flex-1 items-center">
+            <div className="flex flex-1 items-center py-3">
               <CertificatePreview compact />
             </div>
           </div>
