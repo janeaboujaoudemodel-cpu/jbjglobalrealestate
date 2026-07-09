@@ -388,7 +388,7 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
 }
 
 // ── Tier grid (reusable per audience) ───────────────────────────────────────
-function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) {
+function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) => void }) {
   return (
     <div className={`grid gap-6 ${tiers.length === 2 ? "md:grid-cols-2" : "lg:grid-cols-3"}`}>
       {tiers.map((tier) => {
@@ -440,7 +440,7 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) 
             </ul>
 
             <button
-              onClick={onSelect}
+              onClick={() => onSelect(tier)}
               data-surface="dark"
               className={`${BTN_EMERALD_SOLID} mt-8 h-12 w-full justify-center uppercase tracking-[0.14em]`}
             >
