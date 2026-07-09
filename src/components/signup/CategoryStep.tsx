@@ -21,8 +21,9 @@ export default function CategoryStep({ value, onChange }: Props) {
             key={c.value}
             type="button"
             onClick={() => onChange(c.value)}
+            style={{ display: "block", textAlign: "left" }}
             className={cn(
-              "text-left p-4 rounded-md border transition-all",
+              "w-full p-4 rounded-md border transition-all",
               value === c.value
                 ? "bg-[#064E3B] text-white border-[#064E3B] shadow-lg"
                 : "bg-white border-[#B89555]/40 hover:border-[#064E3B]"
