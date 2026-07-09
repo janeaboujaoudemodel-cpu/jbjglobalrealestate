@@ -295,6 +295,10 @@ export const PublicRoutes = () => (
     <Route path="/insights" element={<InsightsHub />} />
     <Route path="/library" element={<LibraryHub />} />
     <Route path="/success-stories" element={<SuccessStories />} />
+    <Route path="/membership" element={<Membership />} />
+    <Route path="/academy" element={<Academy />} />
+    <Route path="/agencies" element={<Agencies />} />
+    <Route path="/checkout/return" element={<CheckoutReturn />} />
     <Route path="/insights/future-of-real-estate-2026" element={<InsightsPageScope><FutureOfRealEstate2026 /></InsightsPageScope>} />
     <Route path="/news/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
     <Route path="/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
