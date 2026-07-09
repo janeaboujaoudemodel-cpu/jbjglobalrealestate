@@ -800,7 +800,8 @@ export default function PublicAccess() {
             title="Agency packages"
             description="Team seats, CRM segmentation and lead systems for boutique and established Dubai agencies."
             tiers={agencyTiers}
-            onSelect={openSignup}
+            audience="Agency packages"
+            onSelect={openPayment}
           />
         </div>
 
