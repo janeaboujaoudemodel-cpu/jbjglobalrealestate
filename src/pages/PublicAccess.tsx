@@ -34,7 +34,6 @@ import {
   Building2,
   Star,
   CalendarDays,
-  PenLine,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
@@ -405,6 +404,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     .slice(0, limit);
 
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
+  const resumeTimerRef = React.useRef<number | null>(null);
   const stateRef = React.useRef({
     dragging: false,
     paused: false,
@@ -412,6 +412,18 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     startScroll: 0,
     lastTs: 0,
   });
+
+  const pauseBriefly = React.useCallback(() => {
+    stateRef.current.paused = true;
+    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = window.setTimeout(() => {
+      stateRef.current.paused = false;
+    }, 2600);
+  }, []);
+
+  React.useEffect(() => () => {
+    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
+  }, []);
 
   // Auto-scroll loop (pauses on hover, drag, or reduced motion)
   React.useEffect(() => {
@@ -442,6 +454,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     const el = scrollerRef.current;
     if (!el) return;
     stateRef.current.dragging = true;
+    stateRef.current.paused = true;
     stateRef.current.startX = e.clientX;
     stateRef.current.startScroll = el.scrollLeft;
     el.setPointerCapture(e.pointerId);
@@ -459,6 +472,17 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     stateRef.current.dragging = false;
     try { el.releasePointerCapture(e.pointerId); } catch {}
     el.style.cursor = "grab";
+    pauseBriefly();
+  };
+
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    pauseBriefly();
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      el.scrollLeft += e.deltaY;
+      if (e.cancelable) e.preventDefault();
+    }
   };
 
   if (isLoading) {
@@ -482,8 +506,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
       onMouseLeave={() => { stateRef.current.paused = false; }}
       aria-label="Live property listings — drag to scroll"
     >
-      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
-      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
+      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#FDFBF7]"} to-transparent`} />
+      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#FDFBF7]"} to-transparent`} />
       <div
         ref={scrollerRef}
         onPointerDown={onPointerDown}
@@ -491,8 +515,9 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
-        className="flex gap-6 overflow-x-auto overflow-y-hidden pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ cursor: "grab", touchAction: "pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
+        onWheel={onWheel}
+        className="flex gap-7 overflow-x-auto overflow-y-hidden px-4 pb-6 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-6"
+        style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
       >
         {track.map((p: any, idx) => {
           const cover = p.__cover;
@@ -520,10 +545,10 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                 onClick();
               }}
               draggable={false}
-              className={`group/card relative flex w-[300px] shrink-0 flex-col overflow-hidden rounded-2xl p-0 text-left align-top transition duration-500 hover:-translate-y-1.5 sm:w-[340px] ${
+              className={`group/card relative flex w-[310px] shrink-0 flex-col overflow-hidden rounded-md p-0 text-left align-top transition duration-500 hover:-translate-y-1 sm:w-[360px] ${
                 isDark
                   ? "border border-white/12 bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-[0_30px_70px_-32px_rgba(0,0,0,0.85)] hover:border-[#c9a24a]/60"
-                  : "border border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_24px_50px_-30px_rgba(6,78,59,0.5)] hover:border-[#c9a24a]/70"
+                  : "border border-[#0d3a2b]/12 bg-[#FDFBF7] shadow-[0_28px_58px_-34px_rgba(6,78,59,0.55)] hover:border-[#8B6F3A]/65"
               }`}
             >
               <div className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#042c1c]">
@@ -577,8 +602,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
           );
         })}
       </div>
-      <p className={`mt-3 text-center text-[10px] font-bold uppercase tracking-[0.28em] ${isDark ? "!text-white/45" : "text-[#0d3a2b]/45"}`}>
-        Drag · Hold · Scroll
+      <p className={`mt-1 text-center text-[10px] font-bold uppercase tracking-[0.28em] ${isDark ? "!text-white/45" : "text-[#0d3a2b]/45"}`}>
+        Auto · Hold drag · Two-finger scroll
       </p>
     </div>
   );
@@ -592,29 +617,30 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px] opacity-20" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_10%,rgba(255,255,255,0.16),transparent_38%),radial-gradient(ellipse_at_82%_86%,rgba(184,149,85,0.20),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-8 flex items-end justify-between gap-6">
+        <div className="mb-10 flex items-end justify-between gap-6">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.32em] !text-white/70">Presentation 01 · Broker Academy</span>
-            <h2 className="mt-3 font-serif text-4xl leading-[1.02] !text-white sm:text-6xl lg:text-[72px]">
+            <span className="text-[11px] font-bold uppercase tracking-[0.32em] !text-white/72">JBJ Global Real Estate · Broker Academy</span>
+            <h2 className="mt-3 max-w-4xl font-serif text-4xl leading-[1.02] !text-white sm:text-6xl lg:text-[72px]">
               Become a JBJ-certified broker.
             </h2>
           </div>
-          <span className="hidden rounded-full border border-white/20 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] !text-white/70 md:inline-flex">
+          <span className="hidden rounded-full border border-white/18 bg-white/8 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] !text-white/76 md:inline-flex">
             DLD-aligned · Dubai
           </span>
         </div>
 
-        <div className="relative overflow-hidden rounded-md border border-white/18 bg-[#F7F2EA] p-3 shadow-[0_50px_110px_-46px_rgba(0,0,0,0.9)]">
-          <div className="grid min-h-[560px] overflow-hidden rounded-[4px] bg-[#FDFBF7] lg:grid-cols-[0.9fr,1.1fr]">
-            <div className="relative flex flex-col justify-between bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_62%,#000_100%)] p-8 sm:p-10">
+        <div className="relative overflow-hidden rounded-md border border-white/16 bg-white/[0.06] p-3 shadow-[0_60px_130px_-54px_rgba(0,0,0,0.95)] backdrop-blur-sm">
+          <div className="grid min-h-[590px] overflow-hidden rounded-[4px] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] lg:grid-cols-[0.88fr,1.12fr]">
+            <div className="relative flex flex-col justify-between border-b border-white/12 p-8 sm:p-10 lg:border-b-0 lg:border-r">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_0%_0%,rgba(255,255,255,0.14),transparent_42%)]" />
               <div>
-                <div className="flex items-center gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                <div className="relative flex items-center gap-3">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-md border border-white/22 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
                     <GraduationCap className="h-6 w-6" />
                   </span>
                   <div>
@@ -623,15 +649,15 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
                   </div>
                 </div>
 
-                <h3 className="mt-12 font-serif text-4xl leading-[1.04] !text-white sm:text-5xl">
+                <h3 className="relative mt-12 font-serif text-4xl leading-[1.04] !text-white sm:text-5xl">
                   A broker operating system, not a basic course.
                 </h3>
-                <p className="mt-5 max-w-md text-sm leading-relaxed !text-white/78">
+                <p className="relative mt-5 max-w-md text-sm leading-relaxed !text-white/78">
                   Training, launch access, document discipline, client routing, developer desk support and a signed JBJ Global certificate in one premium pathway.
                 </p>
               </div>
 
-              <div className="mt-10 grid grid-cols-3 gap-3 border-t border-white/15 pt-6">
+              <div className="relative mt-10 grid grid-cols-3 gap-3 border-t border-white/15 pt-6">
                 {[
                   ["01", "Enroll"],
                   ["02", "Certify"],
@@ -645,47 +671,52 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
               </div>
             </div>
 
-            <div className="relative bg-[#FDFBF7] p-7 sm:p-10" data-surface="champagne">
-              <div className="flex items-center justify-between gap-4 border-b border-[#0d3a2b]/12 pb-5">
+            <div className="relative p-7 sm:p-10" data-surface="dark">
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(255,255,255,0.12),rgba(255,255,255,0.045)_42%,rgba(0,0,0,0.22))]" />
+              <div className="relative flex items-center justify-between gap-4 border-b border-white/12 pb-5">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] !text-[#064E3B]">Services card</p>
-                  <h3 className="mt-1 font-serif text-3xl text-[#0d3a2b]">JBJ Certified Broker</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] !text-white/64">Services card</p>
+                  <h3 className="mt-1 font-serif text-3xl !text-white">JBJ Certified Broker</h3>
                 </div>
-                <Award className="h-10 w-10 text-[#064E3B]" />
+                <span className="flex h-12 w-12 items-center justify-center rounded-md border border-white/18 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                  <Award className="h-6 w-6" />
+                </span>
               </div>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="relative mt-8 grid gap-4 sm:grid-cols-2">
                 {brokerServices.map((s, i) => {
                   const Icon = s.icon;
                   return (
-                    <article key={s.title} className="group relative min-h-[132px] overflow-hidden rounded-md border border-[#0d3a2b]/12 bg-[#F7F2EA] p-5 transition hover:border-[#064E3B]/45 hover:bg-[#F2EBDD]" data-surface="champagne">
-                      <span className="absolute right-4 top-4 font-serif text-sm text-[#0d3a2b]/25">{String(i + 1).padStart(2, "0")}</span>
-                      <span className={`${EMERALD_ICON_TILE} h-10 w-10 rounded-md`} data-surface="dark">
+                    <article key={s.title} className="group relative min-h-[136px] overflow-hidden rounded-md border border-white/12 bg-white/[0.075] p-5 transition hover:border-white/30 hover:bg-white/[0.11]" data-surface="dark">
+                      <span className="absolute right-4 top-4 font-serif text-sm !text-white/24">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white" data-surface="dark">
                         <Icon className="h-4 w-4" />
                       </span>
-                      <h4 className="mt-4 font-serif text-xl leading-tight !text-[#0d3a2b]">{s.title}</h4>
-                      <p className="mt-2 text-[12px] leading-relaxed !text-[#1A1A1A]/66">{s.body}</p>
+                      <h4 className="mt-4 font-serif text-xl leading-tight !text-white">{s.title}</h4>
+                      <p className="mt-2 text-[12px] leading-relaxed !text-white/68">{s.body}</p>
                     </article>
                   );
                 })}
               </div>
 
-              <div className="mt-8 grid gap-4 border-t border-[#0d3a2b]/12 pt-6 sm:grid-cols-3">
+              <div className="relative mt-8 grid gap-4 border-t border-white/12 pt-6 sm:grid-cols-3">
                 {brokerBenefits.map((b) => {
                   const Icon = b.icon;
                   return (
                     <div key={b.title} className="flex gap-3">
-                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-[#064E3B]" />
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                        <Icon className="h-4 w-4" />
+                      </span>
                       <div>
-                        <p className="text-sm font-bold !text-[#0d3a2b]">{b.title}</p>
-                        <p className="mt-1 text-[11px] leading-relaxed !text-[#1A1A1A]/58">{b.body}</p>
+                        <p className="text-sm font-bold !text-white">{b.title}</p>
+                        <p className="mt-1 text-[11px] leading-relaxed !text-white/62">{b.body}</p>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="relative mt-8 flex flex-wrap gap-3">
                 <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Enroll in the academy <ArrowRight className="h-4 w-4" />
                 </button>
@@ -707,19 +738,19 @@ function CertificatePreview() {
   return (
     <div className="relative">
       <div
-        className="certificate-shimmer-frame relative mx-auto w-full max-w-[780px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
-        style={{ transform: "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.55 / 1" }}
+        className="certificate-shimmer-frame relative mx-auto w-full max-w-[800px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
+        style={{ transform: "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.46 / 1" }}
       >
         <div className="absolute inset-2 border border-[#8B6F3A]/55" />
         <div className="absolute inset-4 border border-[#8B6F3A]/25" />
 
-        <div className="relative flex h-full flex-col px-8 py-6 text-center sm:px-10">
+        <div className="relative flex h-full flex-col px-7 py-5 text-center sm:px-10 sm:py-7">
           <div className="flex items-center justify-between text-left">
             <img
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt="JBJ Global Real Estate"
-              className="h-14 w-14 object-contain"
+              className="h-12 w-12 object-contain sm:h-14 sm:w-14"
             />
             <div className="text-right">
               <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A]">JBJ Global Real Estate</p>
@@ -727,31 +758,28 @@ function CertificatePreview() {
             </div>
           </div>
 
-          <h3 className="mt-4 font-serif text-2xl text-[#0d3a2b] sm:text-4xl">Certificate of Completion</h3>
+          <h3 className="mt-3 font-serif text-2xl text-[#0d3a2b] sm:text-4xl">Certificate of Completion</h3>
           <div className="mx-auto mt-2 flex items-center gap-2">
             <span className="h-px w-12 bg-[#8B6F3A]/60" />
             <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
             <span className="h-px w-12 bg-[#8B6F3A]/60" />
           </div>
-          <p className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55">This is presented to</p>
-          <p className="username-shimmer mx-auto mt-1 inline-flex min-w-[260px] justify-center border-b border-[#8B6F3A]/45 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:text-3xl">
+          <p className="mt-2 text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
+          <p className="username-shimmer mx-auto mt-1 inline-flex min-w-[230px] justify-center border-b border-[#8B6F3A]/45 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:min-w-[260px] sm:text-3xl">
             Your Name Here
           </p>
-          <p className="mx-auto mt-3 max-w-md text-[11px] leading-relaxed text-[#1A1A1A]/70">
+          <p className="mx-auto mt-2 max-w-md text-[10px] leading-relaxed text-[#1A1A1A]/70 sm:text-[11px]">
             for successfully completing the JBJ Global Broker Academy in accordance with DLD-aligned professional standards.
           </p>
 
-          <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-4 pt-4 text-left">
+          <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-3 pt-2 text-left sm:gap-4 sm:pt-3">
             <div>
-              <div className="flex h-10 items-end gap-2 text-[#0d3a2b]/55">
-                <PenLine className="h-5 w-5" />
-              </div>
-              <div className="mt-1 h-px w-40 bg-[#1A1A1A]/60" />
-              <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Founder Signature</p>
-              <p className="text-[8px] uppercase tracking-[0.2em] text-[#1A1A1A]/40">Founder &amp; CEO</p>
+              <div className="h-7 sm:h-9" />
+              <div className="mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
+              <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 sm:text-[9px] sm:tracking-[0.22em]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-28 w-28 items-center justify-center rounded-full">
+            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-24 sm:w-24">
               <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_18px_rgba(90,69,21,0.28)]">
                 <defs>
                   <linearGradient id="sealGold" x1="18" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
@@ -771,17 +799,17 @@ function CertificatePreview() {
                 data-no-fallback
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
-                className="h-12 w-12 object-contain opacity-65"
+                className="h-9 w-9 object-contain opacity-65 sm:h-10 sm:w-10"
                 style={{ filter: "brightness(0) saturate(100%) invert(26%) sepia(35%) saturate(1050%) hue-rotate(12deg) brightness(72%)" }}
               />
             </div>
 
             <div className="text-right">
-              <div className="ml-auto flex h-10 items-end justify-end gap-2 font-serif text-lg text-[#0d3a2b] leading-none">
+              <div className="ml-auto flex h-7 items-end justify-end gap-1.5 font-serif text-sm text-[#0d3a2b] leading-none sm:h-9 sm:text-base">
                 <CalendarDays className="h-4 w-4" /> {today}
               </div>
-              <div className="ml-auto mt-1 h-px w-40 bg-[#1A1A1A]/60" />
-              <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Date of issue</p>
+              <div className="ml-auto mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
+              <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 sm:text-[9px] sm:tracking-[0.22em]">Date of issue</p>
             </div>
           </div>
         </div>
@@ -1080,7 +1108,7 @@ export default function PublicAccess() {
         {/* FEATURED PROPERTIES */}
         <section id="featured" className="bg-[#F7F2EA] px-5 py-20 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div className="relative z-20 rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] px-5 py-6 shadow-[0_26px_70px_-50px_rgba(6,78,59,0.55)] sm:px-7 md:flex md:items-end md:justify-between md:gap-6">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
                   Latest launches & featured
@@ -1092,18 +1120,20 @@ export default function PublicAccess() {
                   Real projects — off-plan releases, ready inventory and premium launches. Create an account to unlock pricing, plans and full detail.
                 </p>
               </div>
-              <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11`}>
+              <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} mt-5 h-11 shrink-0 md:mt-0`}>
                 Unlock the catalogue <ArrowRight className="h-4 w-4" />
               </button>
             </div>
 
-            <PropertyMarquee onClick={openSignup} />
+            <div className="relative z-10 mt-8 rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_26px_70px_-54px_rgba(6,78,59,0.5)]">
+              <PropertyMarquee onClick={openSignup} />
+            </div>
           </div>
         </section>
 
 
         {/* GUIDES — LOCKED per owner */}
-        <section id="guides" className="bg-[#F7F2EA] py-16">
+        <section id="guides" className="bg-[#F7F2EA] py-20">
           <div className="mx-auto mb-8 flex max-w-7xl flex-col justify-between gap-5 px-5 sm:px-8 md:flex-row md:items-end lg:px-12">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
@@ -1118,7 +1148,11 @@ export default function PublicAccess() {
               View library <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+            <div className="rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-5 shadow-[0_26px_70px_-54px_rgba(6,78,59,0.45)]">
+              <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
+            </div>
+          </div>
         </section>
 
         {/* PACKAGES — one strap per audience */}
