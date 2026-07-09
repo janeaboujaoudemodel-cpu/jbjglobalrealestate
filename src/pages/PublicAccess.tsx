@@ -459,6 +459,7 @@ export default function PublicAccess() {
               </div>
               <Link
                 to="/agencies"
+                data-surface="dark"
                 className={`inline-flex h-11 items-center gap-2 rounded-md px-5 text-sm font-bold ${EMERALD_BTN}`}
               >
                 Agency packages <ArrowRight className="h-4 w-4" />
