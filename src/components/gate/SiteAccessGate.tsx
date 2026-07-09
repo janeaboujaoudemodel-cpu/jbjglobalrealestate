@@ -34,13 +34,16 @@ export default function SiteAccessGate({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
-    supabase.auth.getSession().then(({ data }) => {
+    // Validate against auth server (getSession only reads storage and may return
+    // a stale/invalid token — leading the gate to think the user is signed in).
+    supabase.auth.getUser().then(({ data, error }) => {
       if (!mounted) return;
-      setAuthed(!!data.session);
+      setAuthed(!error && !!data.user);
       setReady(true);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      setAuthed(!!session);
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") setAuthed(false);
+      else if (session?.user) setAuthed(true);
     });
     return () => {
       mounted = false;
