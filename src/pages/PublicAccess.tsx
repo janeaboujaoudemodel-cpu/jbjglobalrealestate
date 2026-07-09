@@ -882,33 +882,48 @@ export default function PublicAccess() {
         <section
           id="brokers"
           data-surface="dark"
-          className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12"
+          className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12"
           style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),transparent_60%)]" />
+          {/* Champagne hairlines top + bottom for the premium 'plate' effect */}
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+
           <div className="relative mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#C9A84C]/50 bg-[#C9A84C]/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em]" style={{ color: "#C9A84C" }}>
-                <Award className="h-3.5 w-3.5" /> Broker Academy · DLD-aligned
+              <span
+                data-jbj-access-gold-badge
+                className="inline-flex items-center gap-2 rounded-full border border-[#C9A84C]/60 bg-[#C9A84C]/[0.08] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.32em]"
+              >
+                <Award className="h-3.5 w-3.5" style={{ color: "#C9A84C" }} /> Broker Academy · DLD-aligned
               </span>
-              <h2 className="mt-5 font-serif text-5xl leading-[1.02] !text-white sm:text-6xl lg:text-7xl">
-                Become a <span style={{ color: "#C9A84C", fontStyle: "italic" }}>JBJ-certified</span> broker.
+              <h2 className="mt-6 font-serif text-5xl leading-[1.02] !text-white sm:text-6xl lg:text-[76px]">
+                Become a <em style={{ color: "#C9A84C", fontStyle: "italic" }}>JBJ-certified</em>
+                <br />broker.
               </h2>
-              <p className="mx-auto mt-5 max-w-2xl text-base !text-white/85 sm:text-lg">
+              {/* Elegant champagne underline */}
+              <div className="mx-auto mt-6 flex items-center justify-center gap-3">
+                <span className="h-px w-16 bg-[#C9A84C]/60" />
+                <span className="h-1.5 w-1.5 rotate-45 bg-[#C9A84C]" />
+                <span className="h-px w-16 bg-[#C9A84C]/60" />
+              </div>
+              <p className="mx-auto mt-6 max-w-2xl text-base !text-white/85 sm:text-lg">
                 Join Dubai's most respected certified agent network — mentorship, exclusive inventory,
                 and a signed certificate recognised by every developer we work with.
               </p>
             </div>
 
-            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {brokerBenefits.map((b) => {
                 const Icon = b.icon;
                 return (
                   <div
                     key={b.title}
-                    className="rounded-2xl border border-white/15 bg-white/[0.06] p-7 backdrop-blur-sm transition hover:-translate-y-1 hover:border-white/45 hover:bg-white/[0.11]"
+                    className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.05] p-7 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#C9A84C]/50 hover:bg-white/[0.09]"
                   >
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                    <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[#C9A84C]/10 blur-2xl transition group-hover:bg-[#C9A84C]/20" />
+                    <div className="relative inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.04))] [&_svg]:!text-[#C9A84C] [&_svg]:!stroke-[#C9A84C]">
                       <Icon className="h-5 w-5" />
                     </div>
                     <h3 className="mt-5 font-serif text-xl !text-white">{b.title}</h3>
@@ -918,18 +933,20 @@ export default function PublicAccess() {
               })}
             </div>
 
-            <div className="mt-12 flex flex-wrap justify-center gap-3">
+            <div className="mt-14 flex flex-wrap justify-center gap-3">
               <button
                 onClick={openSignup}
-                style={{ color: "#0d3a2b" }}
-                className="group/btn relative overflow-hidden inline-flex h-12 items-center gap-2 rounded-md bg-white px-6 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-[#F7F2EA] shadow-[0_12px_26px_-14px_rgba(0,0,0,0.6)]"
+                data-jbj-access-cta="white"
+                style={darkInkStyle}
+                className="group/btn relative overflow-hidden inline-flex h-12 items-center gap-2 rounded-md bg-white px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-[#064E3B] shadow-[0_12px_26px_-14px_rgba(0,0,0,0.6)]"
               >
                 Enroll in the academy <ArrowRight className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setLeadOpen(true)}
-                style={{ color: "#FFFFFF" }}
-                className="inline-flex h-12 items-center gap-2 rounded-md border border-white/60 bg-transparent px-6 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-white/[0.14]"
+                data-jbj-access-cta="emerald"
+                style={emeraldInkStyle}
+                className="inline-flex h-12 items-center gap-2 rounded-md border border-[#C9A84C]/60 bg-transparent px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-white/[0.10] hover:border-[#C9A84C]"
               >
                 Speak to the broker desk
               </button>
@@ -965,61 +982,53 @@ export default function PublicAccess() {
                 ))}
               </ul>
               <div className="mt-8">
-                <button onClick={openSignup} style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={openSignup} data-jbj-access-cta="emerald" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Enroll & earn your certificate <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
 
-            {/* 3D certificate mockup */}
+            {/* 3D certificate mockup — monogram stands alone, no emerald circle */}
             <div className="relative">
               <div
                 className="relative mx-auto max-w-[520px] rounded-[18px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] p-8 shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#8B6F3A]/40"
                 style={{ transform: "perspective(1400px) rotateY(-12deg) rotateX(4deg)" }}
               >
-                <div className="rounded-[10px] border-2 border-[#8B6F3A]/50 p-6 text-center">
-                  <div className="mx-auto mb-4 inline-flex h-24 w-24 items-center justify-center rounded-full border-[2px] border-[#8B6F3A] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_30px_-10px_rgba(6,78,59,0.6),inset_0_0_0_3px_rgba(201,168,76,0.15)]">
-                    <img
-                      data-no-fallback
-                      src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
-                      alt=""
-                      className="h-16 w-16 object-contain"
-                    />
-                  </div>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.36em] text-[#8B6F3A]">
+                <div className="rounded-[10px] border-2 border-[#8B6F3A]/50 p-8 text-center">
+                  {/* Monogram — large, standalone, no circle */}
+                  <img
+                    data-no-fallback
+                    src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
+                    alt=""
+                    className="mx-auto h-24 w-24 object-contain"
+                  />
+                  <div className="mx-auto mt-4 h-px w-16 bg-[#8B6F3A]/50" />
+                  <p className="mt-4 text-[9px] font-bold uppercase tracking-[0.36em] text-[#8B6F3A]">
                     JBJ Global Real Estate
                   </p>
                   <h3 className="mt-2 font-serif text-2xl text-[#0d3a2b]">Certificate of Completion</h3>
                   <p className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55">
                     This is presented to
                   </p>
-                  <p className="mt-2 font-serif text-3xl text-[#0d3a2b]">Your Name Here</p>
+                  <p className="mt-2 font-serif text-3xl italic text-[#0d3a2b]">Your Name Here</p>
                   <p className="mx-auto mt-3 max-w-xs text-[11px] leading-relaxed text-[#1A1A1A]/70">
                     for successfully completing the JBJ Global Broker Academy in accordance with
                     DLD-aligned professional standards.
                   </p>
-                  <div className="mt-6 flex items-end justify-between gap-4 text-left">
+                  <div className="mt-8 flex items-end justify-between gap-4 text-left">
                     <div>
-                      <div className="h-px w-32 bg-[#1A1A1A]/60" />
+                      <div className="h-px w-28 bg-[#1A1A1A]/60" />
                       <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Principal</p>
                     </div>
-                    <div className="relative inline-flex h-16 w-16 items-center justify-center">
-                      {/* Premium wax seal — layered SVG */}
-                      <svg viewBox="0 0 64 64" className="h-16 w-16" aria-hidden="true">
-                        <defs>
-                          <radialGradient id="jbjSeal" cx="50%" cy="35%" r="65%">
-                            <stop offset="0%" stopColor="#0a6b53" />
-                            <stop offset="60%" stopColor="#064E3B" />
-                            <stop offset="100%" stopColor="#02261b" />
-                          </radialGradient>
-                        </defs>
-                        <circle cx="32" cy="32" r="28" fill="url(#jbjSeal)" stroke="#8B6F3A" strokeWidth="1.5" />
-                        <circle cx="32" cy="32" r="22" fill="none" stroke="#C9A84C" strokeWidth="0.7" strokeDasharray="1.5 2" opacity="0.7" />
-                        <text x="32" y="39" textAnchor="middle" fontFamily="Cormorant Garamond, serif" fontSize="22" fontWeight="600" fill="#C9A84C" letterSpacing="1">JBJ</text>
-                      </svg>
+                    {/* Clean champagne badge — no fake "JBJ" seal */}
+                    <div className="flex flex-col items-center">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8B6F3A]/70 bg-white px-3 py-1 text-[8px] font-bold uppercase tracking-[0.28em] text-[#8B6F3A]">
+                        <span className="h-1 w-1 rounded-full bg-[#8B6F3A]" /> Sealed
+                      </span>
+                      <span className="mt-1 text-[8px] uppercase tracking-[0.24em] text-[#1A1A1A]/45">Official</span>
                     </div>
                     <div className="text-right">
-                      <div className="ml-auto h-px w-32 bg-[#1A1A1A]/60" />
+                      <div className="ml-auto h-px w-28 bg-[#1A1A1A]/60" />
                       <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Date</p>
                     </div>
                   </div>
