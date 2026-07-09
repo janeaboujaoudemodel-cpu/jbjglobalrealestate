@@ -281,34 +281,77 @@ const investorSignaturePerks = [
 ];
 
 // ── Contrast primitives ─────────────────────────────────────────────────────
-// NOTE: all colour-critical buttons use inline style so no ancestor rule
-// (data-surface, contrast-guard, mode themes) can flip ink to white-on-white
-// or black-on-emerald. Do not remove the style props on these primitives.
+// NOTE: buttons use BOTH an inline style AND a data-jbj-access-cta attribute
+// so the scoped stylesheet at the top of the page (which uses
+// -webkit-text-fill-color !important) can defeat any global rule that would
+// otherwise flip ink to black-on-emerald or white-on-white.
 const BTN_WHITE_HOVER_EMERALD =
   "group/btn relative overflow-hidden inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/30 bg-white px-5 text-sm font-bold transition " +
-  "hover:bg-[#064E3B] hover:border-[#064E3B] hover:!text-white [&_svg]:!stroke-current " +
+  "hover:bg-[#064E3B] hover:border-[#064E3B] " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent before:opacity-0 before:transition before:duration-700 hover:before:opacity-100 hover:before:translate-x-[400%]";
 
 const BTN_EMERALD_SOLID =
-  "relative overflow-hidden inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold text-white [&_svg]:!text-white [&_svg]:!stroke-white transition " +
+  "relative overflow-hidden inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold transition " +
   "bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:bg-[linear-gradient(135deg,#075c46_0%,#053825_55%,#000_100%)] " +
   "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)] " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent hover:before:translate-x-[300%] before:transition before:duration-[900ms]";
 
-// Force pure-white ink on emerald buttons via inline style (highest specificity).
-const emeraldInkStyle: React.CSSProperties = { color: "#FFFFFF" };
-const darkInkStyle: React.CSSProperties = { color: "#0d3a2b" };
+// Inline styles that include -webkit-text-fill-color so global !important rules
+// that target that property cannot override us. React style keys are camelCase.
+const emeraldInkStyle: React.CSSProperties = {
+  color: "#FFFFFF",
+  WebkitTextFillColor: "#FFFFFF",
+};
+const darkInkStyle: React.CSSProperties = {
+  color: "#0d3a2b",
+  WebkitTextFillColor: "#0d3a2b",
+};
 
 const EMERALD_ICON_TILE =
   "inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] " +
   "[&_svg]:!text-white [&_svg]:!stroke-white";
 
-// ── Property marquee ────────────────────────────────────────────────────────
+// Page-scoped stylesheet — forces white ink on emerald CTAs and dark ink on
+// white CTAs no matter what a global data-surface / contrast-guard rule says.
+const ACCESS_CTA_STYLE = `
+[data-jbj-access-cta="emerald"],
+[data-jbj-access-cta="emerald"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+[data-jbj-access-cta="emerald"] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+[data-jbj-access-cta="white"],
+[data-jbj-access-cta="white"] :is(span,strong,em,small,p,div) {
+  color: #0d3a2b !important;
+  -webkit-text-fill-color: #0d3a2b !important;
+}
+[data-jbj-access-cta="white"] svg {
+  color: #0d3a2b !important;
+  stroke: #0d3a2b !important;
+}
+[data-jbj-access-cta="white"]:hover,
+[data-jbj-access-cta="white"]:hover * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+[data-jbj-access-cta="white"]:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+[data-jbj-access-gold-badge] {
+  color: #C9A84C !important;
+  -webkit-text-fill-color: #C9A84C !important;
+}
+`;
+
+// ── Property marquee — REAL projects only, no fake fallback ─────────────────
 function PropertyMarquee({ onClick }: { onClick: () => void }) {
   const { data, isLoading } = useHandpickedProjects();
 
-  // Only ship cards that have real pricing AND a real cover image.
-  // Broken/placeholder cards get filtered out entirely.
   const projects = (data?.projects ?? [])
     .filter((p: any) => {
       const cover = p.image_url || p.hero_image || p.cover_image || (Array.isArray(p.images) && p.images[0]);
@@ -327,15 +370,31 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
     );
   }
 
-  const displayProjects = projects.length > 0 ? projects : [
-    { id: "d1", name: "Amra Residence", location: "Dubai Hills", starting_price: 2450000, image_url: heroFallbackDubai },
-    { id: "d2", name: "Marina Signature", location: "Dubai Marina", starting_price: 3200000, image_url: heroFallbackDubai },
-    { id: "d3", name: "Palm Vista", location: "Palm Jumeirah", starting_price: 5800000, image_url: heroFallbackDubai },
-    { id: "d4", name: "Downtown Reserve", location: "Downtown Dubai", starting_price: 4100000, image_url: heroFallbackDubai },
-    { id: "d5", name: "Creek Harbour", location: "Dubai Creek", starting_price: 2890000, image_url: heroFallbackDubai },
-  ];
+  // No approved listings? Show a premium empty-state, NOT fake tiles.
+  if (projects.length === 0) {
+    return (
+      <div className="rounded-2xl border border-dashed border-[#0d3a2b]/25 bg-white/60 px-6 py-14 text-center">
+        <Building2 className="mx-auto h-9 w-9 text-[#064E3B]" />
+        <p className="mt-4 font-serif text-2xl text-[#0d3a2b]">
+          New inventory is being verified.
+        </p>
+        <p className="mx-auto mt-2 max-w-md text-sm text-[#1A1A1A]/70">
+          Create an account to be first in line — every listing on JBJ is manually
+          approved by our team before it appears here.
+        </p>
+        <button
+          onClick={onClick}
+          data-jbj-access-cta="emerald"
+          style={emeraldInkStyle}
+          className={`${BTN_EMERALD_SOLID} mt-6 h-11 uppercase tracking-[0.14em]`}
+        >
+          Get notified <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+    );
+  }
 
-  const track = displayProjects.length >= 4 ? [...displayProjects, ...displayProjects] : displayProjects;
+  const track = projects.length >= 4 ? [...projects, ...projects] : projects;
 
   return (
     <div className="group relative overflow-hidden">
@@ -366,12 +425,12 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                 <span
-                  data-surface="dark"
-                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] !text-white"
+                  data-jbj-access-cta="emerald"
+                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em]"
                 >
                   Featured
                 </span>
-                <div className="absolute inset-x-4 bottom-4 text-white">
+                <div className="absolute inset-x-4 bottom-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] !text-white/80">
                     {p.location || p.community || "Dubai"}
                   </p>
