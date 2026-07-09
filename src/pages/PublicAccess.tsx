@@ -1031,7 +1031,8 @@ function CertificatePreview() {
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt="JBJ Global Real Estate"
-              className="h-14 w-14 object-contain sm:h-20 sm:w-20"
+              className="h-16 w-16 object-contain drop-shadow-[0_2px_4px_rgba(139,111,58,0.35)] sm:h-24 sm:w-24"
+              style={{ filter: "drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 3px 6px rgba(0,0,0,0.18))" }}
             />
             <div className="text-right">
               <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A] sm:text-[10px]">JBJ Global Real Estate</p>
