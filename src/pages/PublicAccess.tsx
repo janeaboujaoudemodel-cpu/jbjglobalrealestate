@@ -757,22 +757,24 @@ function ServicesSection() {
                   type="button"
                   onClick={() => goto(i)}
                   data-no-contrast-guard
+                  {...(active ? { "data-allow-dark-cta": true, "data-cta": "dark", "data-surface": "dark" } : {})}
                   style={active ? emeraldInkStyle : darkInkStyle}
                   className={
                     "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition " +
                     (active
-                      ? "border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)]"
+                      ? "border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_*]:!text-white [&_svg]:!stroke-white"
                       : "border-[#0d3a2b]/25 bg-white hover:border-[#0d3a2b] hover:bg-[#FDFBF7]")
                   }
                 >
-                  <span className="font-serif text-[10px] tracking-[0.24em] opacity-80">
+                  <span className={"font-serif text-[10px] tracking-[0.24em] " + (active ? "!text-white opacity-90" : "opacity-80")}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span>{p.label}</span>
+                  <span className={active ? "!text-white" : ""}>{p.label}</span>
                 </button>
               );
             })}
           </div>
+
         </div>
 
         {/* Premium photo cards — magazine editorial grid */}
@@ -793,7 +795,11 @@ function ServicesSection() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
                   <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
-                  <span className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-[#C9A84C]/55 bg-black/40 px-3 font-serif text-[11px] tracking-[0.28em] text-[#EBD79A] backdrop-blur">
+                  <span
+                    data-surface="dark"
+                    className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-white/40 bg-black/50 px-3 font-serif text-[11px] tracking-[0.28em] !text-white backdrop-blur"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                  >
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
@@ -815,11 +821,15 @@ function ServicesSection() {
                     <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
                       Signature discipline
                     </span>
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white">
+                    <span
+                      data-surface="dark"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
+                    >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
                 </div>
+
               </article>
             );
           })}
@@ -842,31 +852,37 @@ function ServicesSection() {
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
               Page {pageIdx + 1} of {total}
             </span>
-            <div className="flex items-center gap-1.5">
-              {jbjServicePages.map((p, i) => (
-                <button
-                  key={p.key}
-                  type="button"
-                  onClick={() => goto(i)}
-                  aria-label={`Go to ${p.label}`}
-                  className={
-                    "h-1.5 rounded-full transition-all " +
-                    (i === pageIdx ? "w-8 bg-[#0d3a2b]" : "w-3 bg-[#0d3a2b]/25 hover:bg-[#0d3a2b]/50")
-                  }
-                />
-              ))}
+            <div className="flex items-center gap-2">
+              {jbjServicePages.map((p, i) => {
+                const dotActive = i === pageIdx;
+                return (
+                  <button
+                    key={p.key}
+                    type="button"
+                    onClick={() => goto(i)}
+                    aria-label={`Go to ${p.label}`}
+                    className={
+                      "rounded-full transition-all " +
+                      (dotActive
+                        ? "h-3 w-3 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] ring-2 ring-[#0d3a2b]/20 ring-offset-2 ring-offset-transparent"
+                        : "h-3 w-3 bg-[#0d3a2b]/20 hover:bg-[#0d3a2b]/45")
+                    }
+                  />
+                );
+              })}
             </div>
           </div>
 
           <button
             type="button"
             onClick={() => goto(pageIdx + 1)}
-            data-no-contrast-guard
+            data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
             style={emeraldInkStyle}
-            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em]`}
+            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em] !text-white [&_svg]:!text-white [&_svg]:!stroke-white`}
           >
-            Next <ChevronRight className="h-4 w-4" />
+            <span className="!text-white">Next</span> <ChevronRight className="h-4 w-4 !text-white" />
           </button>
+
         </div>
       </div>
     </section>
