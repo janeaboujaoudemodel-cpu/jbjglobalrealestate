@@ -373,15 +373,14 @@ html body #root [data-jbj-access-gold-badge] * {
 
 // ── Property marquee — REAL projects only, no fake fallback ─────────────────
 function PropertyMarquee({ onClick }: { onClick: () => void }) {
-  const { data, isLoading } = useHandpickedProjects();
+  const { data: gateData, isLoading } = useSurfaceFeaturedProjects("gate");
 
-  const projects = (data?.projects ?? [])
+  const projects = (gateData ?? [])
     .filter((p: any) => {
       const cover = p.image_url || p.hero_image || p.cover_image || (Array.isArray(p.images) && p.images[0]);
-      const priceVal = Number(p.starting_price ?? p.price ?? 0);
-      return !!cover && priceVal > 0 && !!(p.name || p.title);
+      return !!cover && !!(p.name || p.title);
     })
-    .slice(0, 10);
+    .slice(0, 12);
 
   if (isLoading) {
     return (
@@ -393,28 +392,9 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
     );
   }
 
-  // No approved listings? Show a premium empty-state, NOT fake tiles.
+  // Nothing configured for the gate surface — hide entirely (parent section will collapse).
   if (projects.length === 0) {
-    return (
-      <div className="rounded-2xl border border-dashed border-[#0d3a2b]/25 bg-white/60 px-6 py-14 text-center">
-        <Building2 className="mx-auto h-9 w-9 text-[#064E3B]" />
-        <p className="mt-4 font-serif text-2xl text-[#0d3a2b]">
-          New inventory is being verified.
-        </p>
-        <p className="mx-auto mt-2 max-w-md text-sm text-[#1A1A1A]/70">
-          Create an account to be first in line — every listing on JBJ is manually
-          approved by our team before it appears here.
-        </p>
-        <button
-          onClick={onClick}
-          data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-          style={emeraldInkStyle}
-          className={`${BTN_EMERALD_SOLID} mt-6 h-11 uppercase tracking-[0.14em]`}
-        >
-          Get notified <ArrowRight className="h-4 w-4" />
-        </button>
-      </div>
-    );
+    return null;
   }
 
   const track = projects.length >= 4 ? [...projects, ...projects] : projects;
