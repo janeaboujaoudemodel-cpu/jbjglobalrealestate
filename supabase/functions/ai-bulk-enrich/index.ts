@@ -77,16 +77,41 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
   const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
   const lovableApiKey = Deno.env.get("LOVABLE_API_KEY") || "";
 
-  if (!supabaseUrl || !supabaseKey) {
+  if (!supabaseUrl || !supabaseKey || !anonKey) {
     return json(500, { error: "Service configuration error" });
   }
   if (!lovableApiKey) {
     return json(500, { error: "Service configuration error" });
   }
 
+  // Require authenticated owner/admin caller
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return json(401, { error: "Unauthorized" });
+  }
+  const authClient = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+  });
+  const { data: userData, error: userErr } = await authClient.auth.getUser();
+  if (userErr || !userData?.user) {
+    return json(401, { error: "Unauthorized" });
+  }
   const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data: isOwner } = await supabase.rpc("has_role", {
+    _user_id: userData.user.id,
+    _role: "owner",
+  });
+  const { data: isAdmin } = await supabase.rpc("has_role", {
+    _user_id: userData.user.id,
+    _role: "admin",
+  });
+  if (!isOwner && !isAdmin) {
+    return json(403, { error: "Forbidden" });
+  }
+
 
   try {
     const body = await req.json().catch(() => ({}));
