@@ -459,6 +459,7 @@ function PackageStrap({
   title,
   description,
   tiers,
+  audience,
   onSelect,
   children,
 }: {
@@ -467,7 +468,8 @@ function PackageStrap({
   title: string;
   description: string;
   tiers: Tier[];
-  onSelect: () => void;
+  audience: string;
+  onSelect: (audience: string, tier: Tier, sectionId: string) => void;
   children?: React.ReactNode;
 }) {
   return (
@@ -478,7 +480,7 @@ function PackageStrap({
           <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">{title}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-[#1A1A1A]/72">{description}</p>
         </div>
-        <TierGrid tiers={tiers} onSelect={onSelect} />
+        <TierGrid tiers={tiers} onSelect={(tier) => onSelect(audience, tier, `#${id}`)} />
         {children}
       </div>
     </section>
@@ -489,8 +491,19 @@ export default function PublicAccess() {
   const [leadOpen, setLeadOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
 
   const openSignup = () => setSignupOpen(true);
+  const openPayment = (audience: string, tier: Tier, sectionId: string) => {
+    setPayCtx({
+      audience,
+      planName: tier.name,
+      price: tier.price,
+      cadence: tier.cadence,
+      sectionId,
+      extra: { audience_size: tier.audienceSize ?? null, features: tier.features },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#1A1A1A]">
