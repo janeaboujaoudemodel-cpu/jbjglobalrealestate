@@ -10,6 +10,7 @@ import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { BookCarousel } from "@/components/books/BookCarousel";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { useHandpickedProjects } from "@/hooks/useHandpickedProjects";
+import { useSurfaceFeaturedProjects } from "@/hooks/useGateFeaturedProjects";
 import type { BookData } from "@/types/books";
 
 import {
