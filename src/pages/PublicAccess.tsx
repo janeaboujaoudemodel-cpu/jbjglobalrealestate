@@ -382,46 +382,120 @@ html body #root [data-jbj-access-gold-badge] * {
 }
 `;
 
-// ── Property marquee — REAL projects only, no fake fallback ─────────────────
+// ── Property marquee — REAL projects only, drag-scrollable, photo-required ──
 function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () => void; theme?: "light" | "dark"; limit?: number }) {
   const { data: gateData, isLoading } = useSurfaceFeaturedProjects("gate");
   const isDark = theme === "dark";
 
+  const pickCover = (p: any): string | null => {
+    const raw =
+      p.image_url || p.hero_image || p.cover_image || p.cover_image_url || p.card_image_url ||
+      (Array.isArray(p.images) && p.images.find((v: any) => typeof v === "string" && v && !v.startsWith("data:")));
+    const url = typeof raw === "string" ? raw.trim() : "";
+    if (!url) return null;
+    if (url.startsWith("data:")) return null;
+    if (url.length > 900) return null;
+    if (!/^(https?:\/\/|\/)/i.test(url)) return null;
+    return url;
+  };
+
   const projects = (gateData ?? [])
-    .filter((p: any) => {
-      const cover = p.image_url || p.hero_image || p.cover_image || p.cover_image_url || p.card_image_url || (Array.isArray(p.images) && p.images[0]);
-      return !!cover && !String(cover).startsWith("data:") && String(cover).length < 900 && !!(p.name || p.title);
-    })
+    .map((p: any) => ({ ...p, __cover: pickCover(p) }))
+    .filter((p: any) => !!p.__cover && !!(p.name || p.title))
     .slice(0, limit);
+
+  const scrollerRef = React.useRef<HTMLDivElement | null>(null);
+  const stateRef = React.useRef({
+    dragging: false,
+    paused: false,
+    startX: 0,
+    startScroll: 0,
+    lastTs: 0,
+  });
+
+  // Auto-scroll loop (pauses on hover, drag, or reduced motion)
+  React.useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el || projects.length < 2) return;
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
+
+    let raf = 0;
+    const SPEED = 34; // px/sec
+
+    const step = (ts: number) => {
+      const s = stateRef.current;
+      if (!s.lastTs) s.lastTs = ts;
+      const dt = (ts - s.lastTs) / 1000;
+      s.lastTs = ts;
+      if (!s.paused && !s.dragging) {
+        el.scrollLeft += SPEED * dt;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [projects.length]);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    stateRef.current.dragging = true;
+    stateRef.current.startX = e.clientX;
+    stateRef.current.startScroll = el.scrollLeft;
+    el.setPointerCapture(e.pointerId);
+    el.style.cursor = "grabbing";
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    const s = stateRef.current;
+    if (!el || !s.dragging) return;
+    el.scrollLeft = s.startScroll - (e.clientX - s.startX);
+  };
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    stateRef.current.dragging = false;
+    try { el.releasePointerCapture(e.pointerId); } catch {}
+    el.style.cursor = "grab";
+  };
 
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4" aria-label="Loading real projects">
         {[0, 1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className={`aspect-[4/5] animate-pulse rounded-xl ${isDark ? "bg-white/10" : "bg-[#EFE6D6]"}`} />
+          <div key={i} className={`aspect-[4/5] animate-pulse rounded-2xl ${isDark ? "bg-white/10" : "bg-[#EFE6D6]"}`} />
         ))}
       </div>
     );
   }
 
-  // Nothing configured for the gate surface — hide entirely (parent section will collapse).
-  if (projects.length === 0) {
-    return null;
-  }
+  if (projects.length === 0) return null;
 
-  const track = projects.length >= 4 ? [...projects, ...projects] : projects;
+  const track = projects.length >= 3 ? [...projects, ...projects] : projects;
 
   return (
-    <div className="group relative overflow-hidden" aria-label="Live property listings">
-      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
-      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
+    <div
+      className="relative"
+      onMouseEnter={() => { stateRef.current.paused = true; }}
+      onMouseLeave={() => { stateRef.current.paused = false; }}
+      aria-label="Live property listings — drag to scroll"
+    >
+      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
+      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
       <div
-        className="flex w-max gap-5 [animation:jbj-marquee_52s_linear_infinite] group-hover:[animation-play-state:paused]"
-        style={{ willChange: "transform" }}
+        ref={scrollerRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
+        className="flex gap-6 overflow-x-auto overflow-y-hidden pb-3 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ cursor: "grab", touchAction: "pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
       >
         {track.map((p: any, idx) => {
-          const cover =
-            p.image_url || p.hero_image || p.cover_image || p.cover_image_url || p.card_image_url || (Array.isArray(p.images) && p.images[0]);
+          const cover = p.__cover;
           const priceVal = Number(p.starting_price ?? p.price_from ?? p.price ?? 0);
           const price = Number.isFinite(priceVal) && priceVal > 0 ? `AED ${priceVal.toLocaleString()}` : "Price on request";
           const bedroomText = (() => {
@@ -429,7 +503,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
             const max = Number(p.bedrooms_max);
             if (!Number.isFinite(min) && !Number.isFinite(max)) return null;
             const label = (value: number) => (value <= 0 ? "Studio" : `${value} BR`);
-            if (Number.isFinite(min) && Number.isFinite(max) && min !== max) return `${label(min)} - ${label(max)}`;
+            if (Number.isFinite(min) && Number.isFinite(max) && min !== max) return `${label(min)} – ${label(max)}`;
             return label(Number.isFinite(min) ? min : max);
           })();
           const place = [p.area_name || p.community || p.location, p.emirate].filter(Boolean).join(" · ") || "UAE";
@@ -437,59 +511,75 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
             <button
               type="button"
               key={`${p.id}-${idx}`}
-              onClick={onClick}
-              className={`group/card relative w-[270px] shrink-0 overflow-hidden rounded-xl text-left transition hover:-translate-y-1 sm:w-[315px] ${
+              onClick={(e) => {
+                // suppress click after drag
+                if (Math.abs(stateRef.current.startScroll - (scrollerRef.current?.scrollLeft ?? 0)) > 4) {
+                  e.preventDefault();
+                  return;
+                }
+                onClick();
+              }}
+              draggable={false}
+              className={`group/card relative flex w-[300px] shrink-0 flex-col overflow-hidden rounded-2xl p-0 text-left align-top transition duration-500 hover:-translate-y-1.5 sm:w-[340px] ${
                 isDark
-                  ? "border border-white/15 bg-white/[0.07] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.75)] hover:border-white/40"
-                  : "border border-[#0d3a2b]/12 bg-[#FDFBF7] shadow-[0_18px_40px_-28px_rgba(6,78,59,0.45)] hover:border-[#0d3a2b]/40"
-              } flex flex-col p-0 align-top`}
+                  ? "border border-white/12 bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-[0_30px_70px_-32px_rgba(0,0,0,0.85)] hover:border-[#c9a24a]/60"
+                  : "border border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_24px_50px_-30px_rgba(6,78,59,0.5)] hover:border-[#c9a24a]/70"
+              }`}
             >
-              <div className="relative block aspect-[16/11] w-full shrink-0 overflow-hidden bg-[#042c1c]">
+              <div className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-[#042c1c]">
                 <img
                   src={cover}
                   alt={p.name || "Featured project"}
                   loading="lazy"
-                  className="h-full w-full object-cover transition duration-700 group-hover/card:scale-[1.06]"
+                  draggable={false}
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = "hidden"; }}
+                  className="pointer-events-none h-full w-full select-none object-cover transition duration-[900ms] group-hover/card:scale-[1.08]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
                 <span
                   data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em]"
+                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
                 >
                   Live listing
                 </span>
-                <div className="absolute inset-x-4 bottom-4">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] !text-white/80">
+                <span className="absolute right-3 top-3 rounded-full border border-[#c9a24a]/70 bg-black/45 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] !text-[#EBD79A] backdrop-blur">
+                  Off-plan
+                </span>
+                <div className="absolute inset-x-5 bottom-5">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-[#EBD79A]/90">
                     {place}
                   </p>
-                  <h3 className="mt-1 line-clamp-2 font-serif text-xl leading-tight !text-white">
+                  <h3 className="mt-1.5 line-clamp-2 font-serif text-[22px] leading-tight !text-white">
                     {p.name || p.title}
                   </h3>
                 </div>
               </div>
-              <div className={`block w-full min-w-0 px-4 py-3 ${isDark ? "text-white" : "text-[#0d3a2b]"}`}>
-                <div className="flex items-center justify-between gap-3">
-                  <span className={`min-w-0 whitespace-nowrap text-sm font-bold ${isDark ? "!text-white" : "text-[#0d3a2b]"}`}>{price}</span>
-                  <span className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.16em] ${isDark ? "!text-white/80" : "text-[#064E3B]"}`}>
+              <div className={`flex w-full min-w-0 flex-col gap-3 px-5 py-4 ${isDark ? "text-white" : "text-[#0d3a2b]"}`}>
+                <div className="flex items-end justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className={`text-[10px] font-bold uppercase tracking-[0.22em] ${isDark ? "!text-white/55" : "text-[#0d3a2b]/55"}`}>Starting from</p>
+                    <p className={`mt-0.5 whitespace-nowrap font-serif text-lg font-semibold ${isDark ? "!text-white" : "text-[#0d3a2b]"}`}>{price}</p>
+                  </div>
+                  <span
+                    data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#064E3B] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+                  >
                     View <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
-                <div className={`mt-2 flex min-w-0 flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] ${isDark ? "!text-white/62" : "text-[#1A1A1A]/58"}`}>
+                <div className={`flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 border-t pt-3 text-[11px] font-semibold uppercase tracking-[0.12em] ${isDark ? "border-white/10 !text-white/65" : "border-[#0d3a2b]/10 text-[#1A1A1A]/60"}`}>
                   {bedroomText && <span>{bedroomText}</span>}
                   {bedroomText && p.handover_date && <span className="h-1 w-1 rounded-full bg-current opacity-50" />}
-                  {p.handover_date && <span>{p.handover_date}</span>}
+                  {p.handover_date && <span>Handover {p.handover_date}</span>}
                 </div>
               </div>
             </button>
           );
         })}
       </div>
-      <style>{`
-        @keyframes jbj-marquee {
-          from { transform: translate3d(0,0,0); }
-          to   { transform: translate3d(-50%,0,0); }
-        }
-      `}</style>
+      <p className={`mt-3 text-center text-[10px] font-bold uppercase tracking-[0.28em] ${isDark ? "!text-white/45" : "text-[#0d3a2b]/45"}`}>
+        Drag · Hold · Scroll
+      </p>
     </div>
   );
 }
