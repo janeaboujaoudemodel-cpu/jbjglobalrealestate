@@ -1101,37 +1101,6 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* REAL LISTING STRAP */}
-        <section
-          id="new-launch"
-          data-surface="dark"
-          className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12 bg-[#02100a]"
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_58%,#000_100%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:96px_96px] opacity-25" />
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-          <div className="relative mx-auto max-w-7xl">
-            <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-              <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">
-                Walking strap · real projects
-              </span>
-              <h2 className="mt-3 font-serif text-4xl leading-[1.05] !text-white sm:text-5xl">
-                Live listings moving through the platform.
-              </h2>
-              <p className="mt-4 max-w-2xl !text-white/78">
-                A single cinematic strap of real property cards from the database — including Amra and the newest published launches when available.
-              </p>
-              </div>
-              <button onClick={openSignup} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
-                Unlock listings <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-
-            <PropertyMarquee onClick={openSignup} theme="dark" limit={8} />
-          </div>
-        </section>
-
 
         {/* GUIDES — LOCKED per owner */}
         <section id="guides" className="bg-[#F7F2EA] py-16">
