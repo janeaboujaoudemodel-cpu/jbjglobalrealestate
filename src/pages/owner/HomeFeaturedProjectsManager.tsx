@@ -52,21 +52,27 @@ type FeaturedRow = {
   project_id: string | null;
   manual_project_id: string | null;
   device: Device;
+  surface: Surface;
   display_order: number;
   is_visible: boolean;
   owner_details: string | null;
+  auto_mode: string | null;
+  auto_count: number | null;
+  refresh_interval_days: number | null;
   project: ProjectOption | null;
   manual: ManualProject | null;
 };
 
 const featuredSelect = `
-  id, project_id, manual_project_id, device, display_order, is_visible, owner_details,
+  id, project_id, manual_project_id, device, surface, display_order, is_visible, owner_details,
+  auto_mode, auto_count, refresh_interval_days,
   project:projects(id, name, slug, developer_name, location, cover_image_url),
   manual:home_featured_manual_projects(id, title, developer_name, emirate, community, starting_price, hero_image_url, cta_url, owner_details)
 `;
 
 export default function HomeFeaturedProjectsManager() {
   const qc = useQueryClient();
+  const [surface, setSurface] = useState<Surface>("home");
   const [tab, setTab] = useState<Device>("desktop");
 
   const { data: featured = [], isLoading } = useQuery({
