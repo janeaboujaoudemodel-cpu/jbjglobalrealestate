@@ -776,7 +776,8 @@ export default function PublicAccess() {
             title="Developer programs"
             description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
             tiers={developerTiers}
-            onSelect={openSignup}
+            audience="Developer programs"
+            onSelect={openPayment}
           />
         </div>
 
