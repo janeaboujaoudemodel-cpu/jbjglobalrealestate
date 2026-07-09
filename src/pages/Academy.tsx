@@ -5,13 +5,10 @@ import { ACADEMY_BUNDLES } from "@/content/pricing";
 export default function Academy() {
   return (
     <>
-      <Helmet>
-        <title>Broker Academy | JBJ Global Real Estate</title>
-        <meta
-          name="description"
-          content="Live 90-minute sessions with senior JBJ brokers. Dubai market, RERA/DLD, off-plan, sales, AI. Certificate of Completion & JBJ interview funnel."
-        />
-      </Helmet>
+      <PageMeta
+        title="Broker Academy | JBJ Global Real Estate"
+        description="Live 90-minute sessions with senior JBJ brokers. Dubai market, RERA/DLD, off-plan, sales, AI. Certificate of Completion & JBJ interview funnel."
+      />
       <PricingGrid
         eyebrow="Broker Academy"
         title="Become a Dubai real estate professional"

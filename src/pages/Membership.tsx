@@ -5,13 +5,10 @@ import { INVESTOR_TIERS } from "@/content/pricing";
 export default function Membership() {
   return (
     <>
-      <Helmet>
-        <title>Investor Memberships | JBJ Global Real Estate</title>
-        <meta
-          name="description"
-          content="Choose the JBJ Investor Membership that fits your Dubai real estate goals — from a single 30-min consultation to unlimited founder-level advisory."
-        />
-      </Helmet>
+      <PageMeta
+        title="Investor Memberships | JBJ Global Real Estate"
+        description="Choose the JBJ Investor Membership that fits your Dubai real estate goals — from a single 30-min consultation to unlimited founder-level advisory."
+      />
       <PricingGrid
         eyebrow="Investor Memberships"
         title="Advisory built around your Dubai portfolio"

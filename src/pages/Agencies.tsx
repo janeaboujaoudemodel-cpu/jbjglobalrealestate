@@ -6,13 +6,10 @@ import { Button } from "@/components/ui/button";
 export default function Agencies() {
   return (
     <>
-      <Helmet>
-        <title>Agency Packages | JBJ Global Real Estate</title>
-        <meta
-          name="description"
-          content="Roll out the JBJ ecosystem across your brokerage — CRM, AI Toolkit, Matchmaker, Academy, and Library. Plans for 20, 50, or 100 users."
-        />
-      </Helmet>
+      <PageMeta
+        title="Agency Packages | JBJ Global Real Estate"
+        description="Roll out the JBJ ecosystem across your brokerage — CRM, AI Toolkit, Matchmaker, Academy, and Library. Plans for 20, 50, or 100 users."
+      />
       <PricingGrid
         eyebrow="Agency Packages"
         title="Deploy the JBJ ecosystem across your team"
