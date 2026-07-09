@@ -253,6 +253,15 @@ const brokerServices = [
   { icon: ShieldCheck, title: "Document discipline", body: "Clean presentation of payment plans, brochures and client-facing material." },
 ];
 
+const jbjServices = [
+  { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms." },
+  { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors." },
+  { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers." },
+  { icon: KeyRound, title: "Handover & resale", body: "Snagging, leasing readiness and resale positioning across the full ownership cycle." },
+  { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients." },
+  { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover." },
+];
+
 const investorSignaturePerks = [
   { icon: Gift, label: "Cash-back on qualifying deals" },
   { icon: Home, label: "Fully-furnished unit upgrades" },
