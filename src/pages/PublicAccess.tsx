@@ -308,10 +308,8 @@ export default function PublicAccess() {
 
         {/* NEW LAUNCH / PLATFORM PILLARS — premium emerald surface */}
         <section id="new-launch" data-surface="dark" className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12" style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}>
-          <div className="pointer-events-none absolute inset-0 opacity-[0.10] mix-blend-overlay">
-            <img src="/services/property-management-bg.jpg" alt="" className="h-full w-full object-cover" />
-          </div>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
+          
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(217,194,146,0.14),transparent_60%)]" />
 
           <div className="relative mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
@@ -506,10 +504,8 @@ export default function PublicAccess() {
 
         {/* Closing CTA */}
         <section data-surface="dark" className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12" style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}>
-          <div className="pointer-events-none absolute inset-0 opacity-[0.10] mix-blend-overlay">
-            <img src="/services/buy-property-bg.jpg" alt="" className="h-full w-full object-cover" />
-          </div>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+          
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(217,194,146,0.14),transparent_60%)]" />
           <div className="relative mx-auto max-w-4xl text-center">
             <Users className="mx-auto h-9 w-9 !text-[#D9C292]" />
             <h2 className="mt-5 font-serif text-4xl !text-white sm:text-5xl">Ready to step inside JBJ?</h2>
