@@ -72,11 +72,9 @@ const TARGET_CONFIG: Record<DataTarget, {
     encryptedFields: ["phone_encrypted", "email_encrypted", "cv_url_encrypted"],
     dataClass: "hr_employee",
   },
-  resale_listings: {
-    plainFields: ["investor_phone", "investor_email", "investor_name"],
-    encryptedFields: ["phone_encrypted", "email_encrypted", "name_encrypted"],
-    dataClass: "resale_listing",
-  },
+  // resale_listings plaintext PII columns have been removed; encryption is
+  // now performed at write time via the client-side crm-data-encrypt helper
+  // before insert. No server-side backfill target remains.
 };
 
 // ── Main handler ──
