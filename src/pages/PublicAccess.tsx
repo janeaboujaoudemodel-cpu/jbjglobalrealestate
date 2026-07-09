@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import LeadFormDialog from "@/components/gate/LeadFormDialog";
 import PaymentRequestDialog, { type PaymentRequestContext } from "@/components/gate/PaymentRequestDialog";
