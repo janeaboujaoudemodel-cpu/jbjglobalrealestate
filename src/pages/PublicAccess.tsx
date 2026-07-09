@@ -1069,55 +1069,111 @@ export default function PublicAccess() {
               </div>
             </div>
 
-            {/* 3D certificate mockup — monogram stands alone, no emerald circle */}
+            {/* Certificate — sharp horizontal frame, gold 3D wax stamp, auto date */}
             <div className="relative">
               <div
-                className="relative mx-auto max-w-[520px] rounded-[18px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] p-8 shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#8B6F3A]/40"
-                style={{ transform: "perspective(1400px) rotateY(-12deg) rotateX(4deg)" }}
+                className="relative mx-auto w-full max-w-[720px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#8B6F3A]/40"
+                style={{ transform: "perspective(1600px) rotateY(-10deg) rotateX(3deg)", aspectRatio: "1.414 / 1" }}
               >
-                <div className="rounded-[10px] border-2 border-[#8B6F3A]/50 p-8 text-center">
-                  {/* Monogram — large, standalone, no circle */}
+                {/* Sharp double-hairline gold border */}
+                <div className="absolute inset-3 border border-[#8B6F3A]/70" />
+                <div className="absolute inset-4 border border-[#8B6F3A]/30" />
+
+                <div className="relative h-full px-8 py-6 text-center flex flex-col">
                   <img
                     data-no-fallback
                     src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                     alt=""
-                    className="mx-auto h-24 w-24 object-contain"
+                    className="mx-auto h-16 w-16 object-contain"
                   />
-                  <div className="mx-auto mt-4 h-px w-16 bg-[#8B6F3A]/50" />
-                  <p className="mt-4 text-[9px] font-bold uppercase tracking-[0.36em] text-[#8B6F3A]">
+                  <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.36em] text-[#8B6F3A]">
                     JBJ Global Real Estate
                   </p>
-                  <h3 className="mt-2 font-serif text-2xl text-[#0d3a2b]">Certificate of Completion</h3>
+                  <h3 className="mt-1 font-serif text-2xl text-[#0d3a2b] sm:text-3xl">Certificate of Completion</h3>
+                  <div className="mx-auto mt-2 flex items-center gap-2">
+                    <span className="h-px w-10 bg-[#8B6F3A]/60" />
+                    <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
+                    <span className="h-px w-10 bg-[#8B6F3A]/60" />
+                  </div>
                   <p className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55">
                     This is presented to
                   </p>
-                  <p className="mt-2 font-serif text-3xl italic text-[#0d3a2b]">Your Name Here</p>
-                  <p className="mx-auto mt-3 max-w-xs text-[11px] leading-relaxed text-[#1A1A1A]/70">
+                  <p className="mt-1 font-serif text-2xl italic text-[#0d3a2b] sm:text-3xl">Your Name Here</p>
+                  <p className="mx-auto mt-2 max-w-md text-[11px] leading-relaxed text-[#1A1A1A]/70">
                     for successfully completing the JBJ Global Broker Academy in accordance with
                     DLD-aligned professional standards.
                   </p>
-                  <div className="mt-8 flex items-end justify-between gap-4 text-left">
+
+                  <div className="mt-auto relative flex items-end justify-between gap-4 pt-6 text-left">
+                    {/* Founder signature */}
                     <div>
-                      <div className="h-px w-28 bg-[#1A1A1A]/60" />
-                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Principal</p>
+                      <p className="font-serif text-2xl italic text-[#0d3a2b] leading-none" style={{ fontFamily: '"Great Vibes","Allura","Dancing Script",cursive' }}>
+                        Jane B. Jaber
+                      </p>
+                      <div className="mt-1 h-px w-36 bg-[#1A1A1A]/60" />
+                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Founder &amp; CEO</p>
                     </div>
-                    {/* Clean champagne badge — no fake "JBJ" seal */}
-                    <div className="flex flex-col items-center">
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8B6F3A]/70 bg-white px-3 py-1 text-[8px] font-bold uppercase tracking-[0.28em] text-[#8B6F3A]">
-                        <span className="h-1 w-1 rounded-full bg-[#8B6F3A]" /> Sealed
-                      </span>
-                      <span className="mt-1 text-[8px] uppercase tracking-[0.24em] text-[#1A1A1A]/45">Official</span>
-                    </div>
+
+                    {/* Date — auto today */}
                     <div className="text-right">
-                      <div className="ml-auto h-px w-28 bg-[#1A1A1A]/60" />
-                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Date</p>
+                      <p className="font-serif text-lg text-[#0d3a2b] leading-none">
+                        {new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(new Date())}
+                      </p>
+                      <div className="ml-auto mt-1 h-px w-36 bg-[#1A1A1A]/60" />
+                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Date of issue</p>
+                    </div>
+
+                    {/* Gold 3D circular wax stamp — anchored bottom-center, overlaps signature area */}
+                    <div
+                      aria-hidden
+                      className="absolute left-1/2 -top-4 -translate-x-1/2"
+                      style={{ transform: "translate(-50%, 0) rotate(-8deg)" }}
+                    >
+                      <div
+                        className="relative flex h-24 w-24 items-center justify-center rounded-full"
+                        style={{
+                          background:
+                            "radial-gradient(circle at 32% 28%, #F6DF9B 0%, #E8C674 22%, #C79A3E 55%, #8B6A22 85%, #5A4515 100%)",
+                          boxShadow:
+                            "0 10px 22px -6px rgba(90,69,21,0.55), inset 0 2px 4px rgba(255,240,200,0.9), inset 0 -3px 6px rgba(0,0,0,0.35)",
+                        }}
+                      >
+                        {/* Embossed ring text */}
+                        <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+                          <defs>
+                            <path id="jbj-stamp-ring" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
+                          </defs>
+                          <text fontSize="8.5" fontWeight="800" letterSpacing="2.2" fill="#3d2d0b" style={{ textShadow: "0 1px 0 rgba(255,230,170,0.4)" }}>
+                            <textPath href="#jbj-stamp-ring" startOffset="0%">
+                              JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·
+                            </textPath>
+                          </text>
+                        </svg>
+                        {/* Inner disc + monogram */}
+                        <div
+                          className="relative flex h-14 w-14 items-center justify-center rounded-full"
+                          style={{
+                            background:
+                              "radial-gradient(circle at 35% 30%, #F0D488 0%, #B8892E 65%, #6A4E15 100%)",
+                            boxShadow: "inset 0 1px 2px rgba(255,240,200,0.7), inset 0 -2px 4px rgba(0,0,0,0.4)",
+                          }}
+                        >
+                          <img
+                            data-no-fallback
+                            src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
+                            alt=""
+                            className="h-9 w-9 object-contain"
+                            style={{ filter: "brightness(0) saturate(100%) invert(18%) sepia(38%) saturate(1200%) hue-rotate(15deg) brightness(60%)" }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div
                 aria-hidden
-                className="absolute -inset-8 -z-10 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.28),transparent_70%)] blur-2xl"
+                className="absolute -inset-8 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.28),transparent_70%)] blur-2xl"
               />
             </div>
           </div>
