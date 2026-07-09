@@ -40269,6 +40269,7 @@ export type Database = {
       }
     }
     Functions: {
+      _caller_is_privileged: { Args: never; Returns: boolean }
       _esign_envelope_has_token_recipient: {
         Args: { _envelope_id: string }
         Returns: boolean
