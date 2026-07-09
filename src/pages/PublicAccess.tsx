@@ -1076,7 +1076,7 @@ function CertificatePreview() {
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
                 className="h-10 w-10 object-contain sm:h-12 sm:w-12"
-                style={{ filter: "brightness(0) saturate(100%) invert(72%) sepia(38%) saturate(520%) hue-rotate(2deg) brightness(96%) contrast(92%)" }}
+                style={{ filter: "brightness(0) saturate(100%) invert(82%) sepia(18%) saturate(280%) hue-rotate(2deg) brightness(94%) contrast(84%)", opacity: 0.82 }}
               />
             </div>
 
