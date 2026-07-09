@@ -788,7 +788,8 @@ export default function PublicAccess() {
           title="Broker Academy & enrollment"
           description="Yearly enrollment for licensed and aspiring UAE agents. Mentorship, exclusive materials, and a direct pathway into JBJ Global."
           tiers={brokerTiers}
-          onSelect={openSignup}
+          audience="Broker Academy"
+          onSelect={openPayment}
         />
 
         {/* AGENCY */}
