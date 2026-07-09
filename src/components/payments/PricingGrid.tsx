@@ -29,9 +29,7 @@ export function PricingGrid({
   ctaLabel = "Get started",
   analyticsContext,
 }: Props) {
-  const { user } = useAuth();
-  const { openCheckout, checkoutElement } = useStripeCheckout();
-  const { requireAuth } = useRequireAuth();
+  const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
 
   const availableIntervals: BillingInterval[] = useMemo(() => {
     if (intervals?.length) return intervals;
@@ -56,15 +54,16 @@ export function PricingGrid({
       interval: price.interval,
     });
 
-    requireAuth({
-      action: "purchase_membership",
-      onAuthed: () => {
-        openCheckout({
-          priceId: price.priceId,
-          userId: user?.id,
-          customerEmail: user?.email ?? undefined,
-          title: tier.name,
-        });
+    setPayCtx({
+      audience: analyticsContext,
+      planName: tier.name,
+      price: formatAed(price.amountAed),
+      cadence: price.label,
+      extra: {
+        tier_key: tier.key,
+        price_id: price.priceId,
+        interval: price.interval,
+        features: tier.features,
       },
     });
   };
