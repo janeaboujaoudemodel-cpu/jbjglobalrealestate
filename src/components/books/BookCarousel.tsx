@@ -56,6 +56,10 @@ export function BookCarousel({
     resumeTimerRef.current = window.setTimeout(() => setPaused(false), 2600);
   }, []);
 
+  useEffect(() => () => {
+    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
+  }, []);
+
   const onPointerDown = (e: React.PointerEvent) => {
     if (books.length <= 1) return;
     dragState.current.dragging = true;
@@ -91,7 +95,6 @@ export function BookCarousel({
       shell.scrollLeft += delta;
       dragState.current.offset = shell.scrollLeft;
       applyOffset(shell.scrollLeft);
-      if (e.cancelable && Math.abs(e.deltaY) > Math.abs(e.deltaX)) e.preventDefault();
     }
   };
 
