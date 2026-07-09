@@ -176,7 +176,11 @@ export function PricingGrid({
           </div>
         </div>
       </section>
-      {checkoutElement}
+      <PaymentRequestDialog
+        open={!!payCtx}
+        onOpenChange={(o) => { if (!o) setPayCtx(null); }}
+        context={payCtx}
+      />
     </>
   );
 }
