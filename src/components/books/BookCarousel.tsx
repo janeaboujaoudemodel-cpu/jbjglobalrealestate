@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookCard, type BookCardSize } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books";
@@ -29,6 +29,8 @@ export function BookCarousel({
   compact = false,
 }: BookCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
+  const resumeTimerRef = useRef<number | null>(null);
   const navigate = useNavigate();
   const [paused, setPaused] = useState(false);
 
@@ -48,12 +50,23 @@ export function BookCarousel({
     el.style.animationDelay = `${-((px / Math.max(1, el.scrollWidth / 2)) * durationSec)}s`;
   }, [durationSec]);
 
+  const pauseBriefly = useCallback(() => {
+    setPaused(true);
+    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = window.setTimeout(() => setPaused(false), 2600);
+  }, []);
+
+  useEffect(() => () => {
+    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
+  }, []);
+
   const onPointerDown = (e: React.PointerEvent) => {
     if (books.length <= 1) return;
     dragState.current.dragging = true;
     dragState.current.moved = false;
     dragState.current.startX = e.clientX;
     dragState.current.startOffset = dragState.current.offset;
+    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
     setPaused(true);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
@@ -70,7 +83,19 @@ export function BookCarousel({
     dragState.current.dragging = false;
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
     // Resume animation from the scrubbed position
-    setPaused(false);
+    pauseBriefly();
+  };
+
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const shell = shellRef.current;
+    if (!shell) return;
+    pauseBriefly();
+    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (delta !== 0) {
+      shell.scrollLeft += delta;
+      dragState.current.offset = shell.scrollLeft;
+      applyOffset(shell.scrollLeft);
+    }
   };
 
   const handleCardClick = (book: BookData) => () => {
@@ -84,12 +109,14 @@ export function BookCarousel({
 
   return (
     <div
-      className={`w-full select-none overflow-x-auto md:overflow-hidden cursor-grab active:cursor-grabbing snap-x snap-mandatory md:snap-none [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
+      ref={shellRef}
+      className={`w-full select-none overflow-x-auto overflow-y-hidden cursor-grab active:cursor-grabbing snap-x snap-mandatory md:snap-none [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
       style={{ touchAction: "pan-x pan-y" }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
+      onWheel={onWheel}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
