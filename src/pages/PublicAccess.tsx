@@ -43,6 +43,8 @@ import {
   Wrench,
   ChevronLeft,
   ChevronRight,
+  Scale,
+  BookOpenCheck,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
@@ -274,7 +276,7 @@ import svcGoldenVisa from "@/assets/services/golden-visa-bg.jpg";
 import svcCompanySetup from "@/assets/services/partner-introduction-bg.jpg";
 import svcRelocation from "@/assets/services/passport-visa-bg.jpg";
 import svcInsurance from "@/assets/services/general-inquiries-bg.jpg";
-import svcBizDev from "@/assets/founder-jet-boarding.jpeg";
+import svcBizDev from "@/assets/menu-corporate-office.jpg";
 import svcLifestyle from "@/assets/founder-jet-interior.jpeg";
 
 type JbjService = { icon: React.ElementType; title: string; body: string; image: string };
@@ -283,32 +285,32 @@ type JbjServicePage = { key: string; label: string; kicker: string; heading: str
 const jbjServicePages: JbjServicePage[] = [
   {
     key: "advisory",
-    label: "Sourcing & Advisory",
+    label: "Real Estate Services",
     kicker: "Our Practice · 01",
-    heading: "Sourcing & senior advisory.",
-    blurb: "Curation and counsel — where every private mandate begins.",
+    heading: "Real estate advisory, handled properly.",
+    blurb: "Principal-side service across acquisition, leasing, exits, management and cross-market investment decisions.",
     items: [
-      { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms.", image: svcOffPlan },
-      { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors.", image: svcAdvisory },
-      { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers.", image: svcDeveloper },
-      { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients.", image: svcGlobal },
-      { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover.", image: svcConcierge },
-      { icon: Wallet, title: "UHNW portfolio wallet", body: "A private investment wallet for ultra-high-net-worth clients — allocation, reporting and off-market access under one desk.", image: svcWallet },
+      { icon: Building2, title: "Primary market sourcing", body: "Curated off-plan and new-build opportunities from vetted developers, structured around payment terms, absorption and exit logic.", image: svcOffPlan },
+      { icon: Handshake, title: "Acquisition representation", body: "Private-client guidance for selecting, negotiating and securing the right address with disciplined due diligence.", image: svcBuySell },
+      { icon: Home, title: "Residential leasing advisory", body: "Landlord and tenant placement across annual leases, furnished homes and premium long-stay requirements.", image: svcLeasing },
+      { icon: TrendingUp, title: "Exit & resale strategy", body: "Pricing, positioning and buyer qualification for owners preparing a clean secondary-market sale.", image: svcResale },
+      { icon: KeyRound, title: "Asset management desk", body: "Property custody, maintenance coordination, tenant relations and owner reporting under one accountable team.", image: svcHandover },
+      { icon: Globe2, title: "Cross-market investment desk", body: "Portfolio guidance for clients comparing Dubai opportunities with international real estate exposure and long-term capital planning.", image: svcGlobal },
     ],
   },
   {
     key: "ownership",
-    label: "Ownership Lifecycle",
+    label: "Investment Support",
     kicker: "Our Practice · 02",
-    heading: "Ownership, end to end.",
-    blurb: "Buy, sell, lease, manage — one senior team across every stage of the asset.",
+    heading: "Investment support, end to end.",
+    blurb: "Financial, legal and operational support for clients who want decisions prepared before they commit.",
     items: [
-      { icon: Handshake, title: "Buy & sell representation", body: "Principal-side representation for acquisitions and disposals across primary and secondary Dubai stock.", image: svcBuySell },
-      { icon: Home, title: "Leasing & long-term rentals", body: "Landlord representation, qualified tenants and annual leasing across residential and commercial mandates.", image: svcLeasing },
-      { icon: KeyRound, title: "Property management", body: "Institutional-grade custody of your asset — maintenance, tenant relations, statements and compliance.", image: svcHandover },
-      { icon: Ticket, title: "Holiday homes & short-let", body: "Fully-serviced short-term rental operation — pricing, listing, guest experience and full P&L.", image: svcHoliday },
-      { icon: Wrench, title: "Handover & resale", body: "Snagging, defect resolution and resale positioning — moving the asset cleanly into leasing or exit.", image: svcResale },
-      { icon: Coins, title: "Mortgage & financing", body: "Access to lender panels, pre-approvals and structuring — for residents, non-residents and companies.", image: svcMortgage },
+      { icon: BarChart3, title: "Investment strategy", body: "Yield framing, hold-period planning, comparable analysis and risk notes prepared for serious investors.", image: svcAdvisory },
+      { icon: Wallet, title: "UHNW portfolio wallet", body: "A private investment wallet for ultra-high-net-worth clients — allocation, reporting and off-market access under one desk.", image: svcWallet },
+      { icon: Coins, title: "Mortgage & financing", body: "Access to lender panels, pre-approvals and ownership structuring for residents, non-residents and companies.", image: svcMortgage },
+      { icon: Scale, title: "Legal coordination", body: "Conveyancing, document flow, contract review coordination and settlement support through trusted specialists.", image: svcInsurance },
+      { icon: Ticket, title: "Holiday-home operation", body: "Serviced short-stay management with pricing, listing, guest experience and owner-level performance reporting.", image: svcHoliday },
+      { icon: BookOpenCheck, title: "Investment courses", body: "Training sessions for investors and teams covering Dubai market basics, launch discipline, payment plans and portfolio thinking.", image: svcDeveloper },
     ],
   },
   {
@@ -320,7 +322,7 @@ const jbjServicePages: JbjServicePage[] = [
     items: [
       { icon: FileCheck2, title: "Golden Visa & residency", body: "10-year Golden Visa, investor and property-linked residency — end-to-end filing and family sponsorship.", image: svcGoldenVisa },
       { icon: Briefcase, title: "Company setup & branding", body: "Mainland, free-zone and offshore incorporation, plus identity, licensing and website foundation.", image: svcCompanySetup },
-      { icon: TrendingUp, title: "Business development", body: "Introductions, joint ventures and market-entry strategy for operators expanding into the UAE.", image: svcBizDev },
+      { icon: TrendingUp, title: "Business development", body: "Introductions, partnerships, growth strategy and investor-facing preparation for operators expanding into the UAE.", image: svcBizDev },
       { icon: Users, title: "Relocation & PRO services", body: "Family relocation, schooling, PRO paperwork, Emirates ID, medicals and government liaison.", image: svcRelocation },
       { icon: ShieldCheck, title: "Insurance advisory", body: "Property, life, professional and health cover — arranged through vetted regional insurers.", image: svcInsurance },
       { icon: Sparkles, title: "Concierge & lifestyle", body: "Private jets, yachts, chauffeured cars, dining and events — the day-to-day discretion behind the address.", image: svcLifestyle },
@@ -417,6 +419,26 @@ html body #root [data-jbj-access-gold-badge],
 html body #root [data-jbj-access-gold-badge] * {
   color: #C9A84C !important;
   -webkit-text-fill-color: #C9A84C !important;
+}
+html body #root [data-service-card] [data-service-arrow] {
+  background: #FFFFFF !important;
+  border-color: rgba(26,26,26,0.30) !important;
+}
+html body #root [data-service-card] [data-service-arrow] svg,
+html body #root [data-service-card] [data-service-arrow] svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
+html body #root [data-service-card]:hover [data-service-arrow] {
+  background: linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%) !important;
+  border-color: #0d3a2b !important;
+}
+html body #root [data-service-card]:hover [data-service-arrow] svg,
+html body #root [data-service-card]:hover [data-service-arrow] svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
 }
 .certificate-shimmer-frame {
   border: 2px solid transparent;
@@ -803,6 +825,7 @@ function ServicesSection() {
             return (
               <article
                 key={`${page.key}-${s.title}`}
+                data-service-card
                 className="group relative flex flex-col overflow-hidden rounded-[20px] border border-[#0d3a2b]/12 bg-[#0d3a2b] shadow-[0_28px_60px_-32px_rgba(6,78,59,0.55)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_44px_90px_-36px_rgba(6,78,59,0.75)]"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -841,8 +864,9 @@ function ServicesSection() {
                       Signature discipline
                     </span>
                     <span
+                      data-service-arrow
                       data-no-contrast-guard
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#1A1A1A]/30 bg-white transition group-hover:border-[#0d3a2b] group-hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-[#1A1A1A] [&_svg]:!stroke-[#1A1A1A] group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition"
                     >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
