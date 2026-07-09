@@ -630,7 +630,6 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
 }
 
 function ServicesSection() {
-  // Rotate through the six services to feature one in a large animated card.
   const [featureIdx, setFeatureIdx] = React.useState(0);
   React.useEffect(() => {
     const id = window.setInterval(() => {
@@ -644,47 +643,56 @@ function ServicesSection() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden px-5 py-20 sm:px-8 lg:px-12"
-      style={{ backgroundImage: "linear-gradient(180deg,#FDFBF7 0%,#F5EFE1 100%)" }}
+      className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12"
+      style={{ backgroundImage: "linear-gradient(180deg,#FDFBF7 0%,#F3EEE4 100%)" }}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/40 to-transparent" />
-      <div className="pointer-events-none absolute -left-40 top-24 h-[440px] w-[440px] rounded-full bg-[radial-gradient(circle,rgba(6,78,59,0.09),transparent_70%)]" />
-      <div className="pointer-events-none absolute -right-40 bottom-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(184,149,85,0.10),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#0d3a2b]/25 to-transparent" />
+      <div className="pointer-events-none absolute -left-40 top-24 h-[440px] w-[440px] rounded-full bg-[radial-gradient(circle,rgba(6,78,59,0.08),transparent_70%)]" />
+      <div className="pointer-events-none absolute -right-40 bottom-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(6,78,59,0.06),transparent_70%)]" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-12 max-w-3xl">
-          <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#8B6F3A]">Our Services</span>
-          <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
-            A senior desk for every stage of Dubai real estate.
+        {/* Eyebrow + heading */}
+        <div className="mb-14 max-w-3xl">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[#0d3a2b]/50" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.42em] text-[#0d3a2b]">Our Practice</span>
+          </div>
+          <h2 className="mt-4 font-serif text-4xl leading-[1.02] text-[#0d3a2b] sm:text-[54px]">
+            One private desk. Six senior disciplines.
           </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-[#1A1A1A]/70">
-            Six disciplines, one desk. Sourced with discipline, delivered with discretion — from first launch to final handover.
+          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-[#1A1A1A]/72">
+            Sourced with discipline, delivered with discretion — from first launch to final handover.
           </p>
         </div>
 
-        {/* Featured animated services card — moves alone, changes every few seconds */}
+        {/* Featured animated card — premium ink-emerald, ivory accents, no mustard */}
         <article
           data-surface="dark"
-          className="relative mb-10 overflow-hidden rounded-3xl border border-[#8B6F3A]/40 shadow-[0_40px_100px_-42px_rgba(6,78,59,0.55)]"
-          style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
+          data-ink-emerald-opt-out
+          className="relative mb-12 overflow-hidden rounded-[28px] border border-white/10 shadow-[0_60px_140px_-50px_rgba(6,78,59,0.7)]"
+          style={{ backgroundImage: "linear-gradient(135deg,#053a2c 0%,#021a12 60%,#000 100%)" }}
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_0%,rgba(255,255,255,0.10),transparent_45%),radial-gradient(ellipse_at_88%_100%,rgba(184,149,85,0.22),transparent_50%)]" />
-          <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/12 to-transparent animate-[jbj-shine_5s_ease-in-out_infinite]" />
-          <style>{`@keyframes jbj-shine { 0% { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 60% { transform: translateX(560%); opacity: 0.3; } 100% { transform: translateX(600%); opacity: 0; } }`}</style>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_15%_0%,rgba(255,255,255,0.10),transparent_45%),radial-gradient(ellipse_at_88%_100%,rgba(6,78,59,0.55),transparent_55%)]" />
+          <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+          <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/8 to-transparent animate-[jbj-shine_6s_ease-in-out_infinite]" />
+          <style>{`@keyframes jbj-shine { 0% { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 60% { transform: translateX(560%); opacity: 0.25; } 100% { transform: translateX(600%); opacity: 0; } }`}</style>
 
-          <div className="relative grid gap-8 p-8 sm:p-12 md:grid-cols-[auto,1fr,auto] md:items-center">
+          <div className="relative grid gap-10 p-10 sm:p-14 md:grid-cols-[auto,1fr,auto] md:items-center">
             <div
               key={featured.title}
               aria-hidden
-              className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-[#C9A84C]/50 bg-white/[0.06] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.7)] animate-[fade-in_0.6s_ease-out]"
+              className="relative flex h-28 w-28 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_20px_50px_-24px_rgba(0,0,0,0.8)] animate-[fade-in_0.6s_ease-out]"
             >
-              <span className="absolute inset-1.5 rounded-xl border border-white/10" />
-              <FeaturedIcon className="h-11 w-11 !text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
+              <span className="absolute inset-2 rounded-xl border border-white/8" />
+              <FeaturedIcon className="h-12 w-12" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
             </div>
             <div key={`${featured.title}-body`} className="min-w-0 animate-[fade-in_0.6s_ease-out]">
-              <span className="text-[10px] font-bold uppercase tracking-[0.32em] !text-[#C9A84C]">JBJ Signature Service</span>
-              <h3 className="mt-2 font-serif text-3xl leading-tight !text-white sm:text-[38px]">{featured.title}</h3>
-              <p className="mt-3 max-w-xl text-[14px] leading-relaxed !text-white/78">{featured.body}</p>
+              <div className="flex items-center gap-3">
+                <span className="h-px w-8 bg-white/40" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.38em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Signature Service · {String(featureIdx + 1).padStart(2, "0")} / {String(jbjServices.length).padStart(2, "0")}</span>
+              </div>
+              <h3 className="mt-3 font-serif text-3xl leading-[1.1] sm:text-[42px]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{featured.title}</h3>
+              <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>{featured.body}</p>
             </div>
             <div className="flex md:flex-col md:items-end gap-1.5">
               {jbjServices.map((s, i) => (
@@ -693,13 +701,14 @@ function ServicesSection() {
                   type="button"
                   aria-label={`Show ${s.title}`}
                   onClick={() => setFeatureIdx(i)}
-                  className={`h-1.5 rounded-full transition-all ${i === featureIdx ? "w-10 bg-[#C9A84C]" : "w-4 bg-white/25 hover:bg-white/50"}`}
+                  className={`h-1 rounded-full transition-all ${i === featureIdx ? "w-10 bg-white" : "w-4 bg-white/25 hover:bg-white/55"}`}
                 />
               ))}
             </div>
           </div>
         </article>
 
+        {/* Grid of six services — clean ivory cards, emerald accents only */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {jbjServices.map((s, i) => {
             const Icon = s.icon;
@@ -708,17 +717,18 @@ function ServicesSection() {
               <article
                 key={s.title}
                 onMouseEnter={() => setFeatureIdx(i)}
-                className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white p-6 shadow-[0_18px_46px_-32px_rgba(13,58,43,0.4)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_60px_-32px_rgba(13,58,43,0.55)] ${isActive ? "border-[#8B6F3A]/60 ring-1 ring-[#8B6F3A]/35" : "border-[#0d3a2b]/12"}`}
+                className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white p-7 shadow-[0_18px_46px_-32px_rgba(13,58,43,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_36px_70px_-32px_rgba(13,58,43,0.55)] ${isActive ? "border-[#0d3a2b]/40 ring-1 ring-[#0d3a2b]/25" : "border-[#0d3a2b]/10"}`}
               >
-                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/60 to-transparent" />
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#0d3a2b]/60 to-transparent opacity-70" />
                 <span
                   data-surface="dark"
-                  className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl [&_svg]:!text-white [&_svg]:!stroke-white [&_svg]:!fill-none"
+                  className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl [&_svg]:!text-white [&_svg]:!stroke-white [&_svg]:!fill-none"
                   style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
                 >
                   <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
                 </span>
-                <h3 className="font-serif text-xl leading-tight text-[#0d3a2b]">{s.title}</h3>
+                <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">{String(i + 1).padStart(2, "0")}</p>
+                <h3 className="mt-1.5 font-serif text-xl leading-tight text-[#0d3a2b]">{s.title}</h3>
                 <p className="mt-2 text-[13px] leading-relaxed text-[#1A1A1A]/68">{s.body}</p>
               </article>
             );
