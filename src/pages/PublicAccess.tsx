@@ -327,29 +327,33 @@ html body #root [data-jbj-access-cta="emerald"] svg * {
   stroke: #FFFFFF !important;
   fill: none !important;
 }
-html body #root [data-jbj-access-cta="white"],
-html body #root [data-jbj-access-cta="white"] :is(span,strong,em,small,p,div) {
+html body #root [data-jbj-access-cta="white"] {
   color: #0d3a2b !important;
   -webkit-text-fill-color: #0d3a2b !important;
   background-color: #FFFFFF !important;
 }
-html body #root [data-jbj-access-cta="white"] :is(span,strong,em,small,p,div) {
+html body #root [data-jbj-access-cta="white"] * {
+  color: #0d3a2b !important;
+  -webkit-text-fill-color: #0d3a2b !important;
   background-color: transparent !important;
+  opacity: 1 !important;
 }
-html body #root [data-jbj-access-cta="white"] svg {
+html body #root [data-jbj-access-cta="white"] svg,
+html body #root [data-jbj-access-cta="white"] svg * {
   color: #0d3a2b !important;
   stroke: #0d3a2b !important;
+  fill: none !important;
+}
+html body #root [data-jbj-access-cta="white"]:hover {
+  background-color: #064E3B !important;
 }
 html body #root [data-jbj-access-cta="white"]:hover,
 html body #root [data-jbj-access-cta="white"]:hover * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  background-color: transparent !important;
 }
-html body #root [data-jbj-access-cta="white"]:hover {
-  background-color: #064E3B !important;
-}
-html body #root [data-jbj-access-cta="white"]:hover svg {
+html body #root [data-jbj-access-cta="white"]:hover svg,
+html body #root [data-jbj-access-cta="white"]:hover svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
