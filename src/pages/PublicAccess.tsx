@@ -898,7 +898,8 @@ export default function PublicAccess() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
 
-  const openSignup = () => setSignupOpen(true);
+  const navigate = useNavigate();
+  const openSignup = () => navigate("/signup");
   const openPayment = (audience: string, tier: Tier, sectionId: string) => {
     setPayCtx({
       audience,
