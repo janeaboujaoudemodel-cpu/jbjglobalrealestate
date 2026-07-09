@@ -33,7 +33,6 @@ import {
   FileCheck2,
   Building2,
   Star,
-  CalendarDays,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
@@ -237,18 +236,16 @@ const agencyTiers: Tier[] = [
 ];
 
 const brokerBenefits = [
-  { icon: Award, title: "JBJ certification", body: "DLD-aligned coursework and a formal JBJ Global Broker Certificate signed by the founder." },
-  { icon: Users, title: "Warm client intros", body: "Qualified investor and buyer leads routed to certified agents from the JBJ CRM." },
-  { icon: Trophy, title: "Direct developer lines", body: "Principal-desk access, launch-day allocations and mortgage & legal partners." },
+  { icon: Award, title: "Recognized by developer partners", body: "A polished credential designed for launch rooms, agency desks and client meetings." },
+  { icon: FileCheck2, title: "Digital and printed copy included", body: "Issued as a profile-ready digital file with a premium printed certificate option." },
+  { icon: Trophy, title: "Personalized and serial numbered", body: "Your name and certificate number are placed cleanly into the final document." },
 ];
 
 const brokerServices = [
-  { icon: Building2, title: "Off-plan brokerage", body: "Direct developer allocations across every DLD-registered launch." },
-  { icon: Home, title: "Secondary sales", body: "Verified ready inventory across Dubai's blue-chip communities." },
-  { icon: KeyRound, title: "Leasing desk", body: "Long-term & premium short-let placements for landlords and tenants." },
-  { icon: TrendingUp, title: "Investor advisory", body: "Portfolio structuring, yield modelling and market-timing intelligence." },
-  { icon: Handshake, title: "Developer partnerships", body: "Exclusive JV mandates, launch marketing and channel-partner programmes." },
-  { icon: ShieldCheck, title: "Legal & mortgage concierge", body: "End-to-end conveyancing, escrow, mortgage pre-approval and residency." },
+  { icon: Building2, title: "Off-plan launches", body: "Developer inventory, allocation discipline and launch-room readiness." },
+  { icon: TrendingUp, title: "Investor advisory", body: "Portfolio language, yield framing and market positioning for serious buyers." },
+  { icon: Handshake, title: "Developer partnerships", body: "Professional conduct and follow-up standards for partner networks." },
+  { icon: ShieldCheck, title: "Document discipline", body: "Clean presentation of payment plans, brochures and client-facing material." },
 ];
 
 const investorSignaturePerks = [
@@ -385,6 +382,7 @@ html body #root [data-jbj-access-gold-badge] * {
 function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () => void; theme?: "light" | "dark"; limit?: number }) {
   const { data: gateData, isLoading } = useSurfaceFeaturedProjects("gate");
   const isDark = theme === "dark";
+  const [failedImageIds, setFailedImageIds] = React.useState<Set<string>>(() => new Set());
 
   const pickCover = (p: any): string | null => {
     const raw =
@@ -398,9 +396,26 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     return url;
   };
 
+  const isReadyProject = (p: any) => {
+    const text = [p.sale_status, p.construction_status, p.status].map((v) => String(v || "").toLowerCase()).join(" ");
+    if (/ready|complete|completed|delivered|handover/.test(text) && !/off[ -]?plan|under construction|new launch/.test(text)) return true;
+    const ts = p.handover_date ? Date.parse(p.handover_date) : NaN;
+    return Number.isFinite(ts) && ts < Date.now();
+  };
+  const isOffPlanProject = (p: any) => {
+    const text = [p.sale_status, p.construction_status, p.status].map((v) => String(v || "").toLowerCase()).join(" ");
+    if (/off[ -]?plan|under construction|new launch|launch/.test(text)) return true;
+    return !isReadyProject(p);
+  };
+  const completionText = (p: any) => {
+    if (isReadyProject(p)) return "Ready";
+    return p.handover_date ? `Completion ${p.handover_date}` : null;
+  };
+
   const projects = (gateData ?? [])
     .map((p: any) => ({ ...p, __cover: pickCover(p) }))
-    .filter((p: any) => !!p.__cover && !!(p.name || p.title))
+    .filter((p: any) => !!p.__cover && !!(p.name || p.title) && !failedImageIds.has(String(p.id)))
+    .sort((a: any, b: any) => Number(!isOffPlanProject(a)) - Number(!isOffPlanProject(b)) || Number(isReadyProject(a)) - Number(isReadyProject(b)))
     .slice(0, limit);
 
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
@@ -531,6 +546,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
             return label(Number.isFinite(min) ? min : max);
           })();
           const place = [p.area_name || p.community || p.location, p.emirate].filter(Boolean).join(" · ") || "UAE";
+          const statusLabel = isReadyProject(p) ? "Ready" : isOffPlanProject(p) ? "Off-plan" : "Launch";
+          const timing = completionText(p);
           return (
             <button
               type="button"
@@ -557,7 +574,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                   alt={p.name || "Featured project"}
                   loading="lazy"
                   draggable={false}
-                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = "hidden"; }}
+                  onError={() => setFailedImageIds((prev) => new Set(prev).add(String(p.id)))}
                   className="pointer-events-none h-full w-full select-none object-cover transition duration-[900ms] group-hover/card:scale-[1.08]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
@@ -565,10 +582,10 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                   data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
                   className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
                 >
-                  Live listing
+                  Launch
                 </span>
                 <span className="absolute right-3 top-3 rounded-full border border-[#c9a24a]/70 bg-black/45 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] !text-[#EBD79A] backdrop-blur">
-                  Off-plan
+                  {statusLabel}
                 </span>
                 <div className="absolute inset-x-5 bottom-5">
                   <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-[#EBD79A]/90">
@@ -594,17 +611,14 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                 </div>
                 <div className={`flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 border-t pt-3 text-[11px] font-semibold uppercase tracking-[0.12em] ${isDark ? "border-white/10 !text-white/65" : "border-[#0d3a2b]/10 text-[#1A1A1A]/60"}`}>
                   {bedroomText && <span>{bedroomText}</span>}
-                  {bedroomText && p.handover_date && <span className="h-1 w-1 rounded-full bg-current opacity-50" />}
-                  {p.handover_date && <span>Handover {p.handover_date}</span>}
+                  {bedroomText && timing && <span className="h-1 w-1 rounded-full bg-current opacity-50" />}
+                  {timing && <span>{timing}</span>}
                 </div>
               </div>
             </button>
           );
         })}
       </div>
-      <p className={`mt-1 text-center text-[10px] font-bold uppercase tracking-[0.28em] ${isDark ? "!text-white/45" : "text-[#0d3a2b]/45"}`}>
-        Auto · Hold drag · Two-finger scroll
-      </p>
     </div>
   );
 }
@@ -614,116 +628,92 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
     <section
       id="brokers"
       data-surface="dark"
-      className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12"
-      style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#021d13 52%,#000 100%)" }}
+      className="relative overflow-hidden px-5 py-20 sm:px-8 lg:px-12"
+      style={{ backgroundImage: "linear-gradient(135deg,#042c1c 0%,#01140d 48%,#000 100%)" }}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_10%,rgba(255,255,255,0.16),transparent_38%),radial-gradient(ellipse_at_82%_86%,rgba(184,149,85,0.20),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.10),transparent_36%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.14),transparent_42%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-10 flex items-end justify-between gap-6">
-          <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.32em] !text-white/72">JBJ Global Real Estate · Broker Academy</span>
-            <h2 className="mt-3 max-w-4xl font-serif text-4xl leading-[1.02] !text-white sm:text-6xl lg:text-[72px]">
-              Become a JBJ-certified broker.
-            </h2>
-          </div>
-          <span className="hidden rounded-full border border-white/18 bg-white/8 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] !text-white/76 md:inline-flex">
-            DLD-aligned · Dubai
-          </span>
-        </div>
-
-        <div className="relative overflow-hidden rounded-md border border-white/16 bg-white/[0.06] p-3 shadow-[0_60px_130px_-54px_rgba(0,0,0,0.95)] backdrop-blur-sm">
-          <div className="grid min-h-[590px] overflow-hidden rounded-[4px] bg-[linear-gradient(135deg,#064E3B_0%,#021d13_52%,#000_100%)] lg:grid-cols-[0.88fr,1.12fr]">
-            <div className="relative flex flex-col justify-between border-b border-white/12 p-8 sm:p-10 lg:border-b-0 lg:border-r">
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_0%_0%,rgba(255,255,255,0.14),transparent_42%)]" />
+        <div className="grid items-stretch gap-6 lg:grid-cols-[0.92fr,1.08fr]">
+          <div className="relative overflow-hidden rounded-2xl border border-white/14 bg-white/[0.06] p-7 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8">
+            <div className="mb-7 flex items-start justify-between gap-5">
               <div>
-                <div className="relative flex items-center gap-3">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-md border border-white/22 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                    <GraduationCap className="h-6 w-6" />
-                  </span>
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] !text-white/65">JBJ Global Real Estate</p>
-                    <p className="font-serif text-xl !text-white">Broker Services Desk</p>
-                  </div>
-                </div>
-
-                <h3 className="relative mt-12 font-serif text-4xl leading-[1.04] !text-white sm:text-5xl">
-                  A broker operating system, not a basic course.
-                </h3>
-                <p className="relative mt-5 max-w-md text-sm leading-relaxed !text-white/78">
-                  Training, launch access, document discipline, client routing, developer desk support and a signed JBJ Global certificate in one premium pathway.
-                </p>
+                <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">JBJ Global Real Estate</span>
+                <h2 className="mt-3 font-serif text-4xl leading-[1.02] !text-white sm:text-5xl">
+                  Become a JBJ Certified Broker.
+                </h2>
               </div>
-
-              <div className="relative mt-10 grid grid-cols-3 gap-3 border-t border-white/15 pt-6">
-                {[
-                  ["01", "Enroll"],
-                  ["02", "Certify"],
-                  ["03", "Receive leads"],
-                ].map(([n, label]) => (
-                  <div key={label}>
-                    <p className="font-serif text-3xl !text-white">{n}</p>
-                    <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] !text-white/60">{label}</p>
-                  </div>
-                ))}
-              </div>
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-white/18 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                <GraduationCap className="h-6 w-6" />
+              </span>
             </div>
 
-            <div className="relative p-7 sm:p-10" data-surface="dark">
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(160deg,rgba(255,255,255,0.12),rgba(255,255,255,0.045)_42%,rgba(0,0,0,0.22))]" />
-              <div className="relative flex items-center justify-between gap-4 border-b border-white/12 pb-5">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {brokerBenefits.map((b) => {
+                const Icon = b.icon;
+                return (
+                  <article key={b.title} className="rounded-md border border-white/12 bg-white/[0.075] p-4" data-surface="dark">
+                    <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <h3 className="font-serif text-lg leading-tight !text-white">{b.title}</h3>
+                    <p className="mt-2 text-[12px] leading-relaxed !text-white/66">{b.body}</p>
+                  </article>
+                );
+              })}
+              <article className="rounded-md border border-white/12 bg-white/[0.075] p-4" data-surface="dark">
+                <span className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                  <Sparkles className="h-4 w-4" />
+                </span>
+                <h3 className="font-serif text-lg leading-tight !text-white">Premium presentation</h3>
+                <p className="mt-2 text-[12px] leading-relaxed !text-white/66">Built for a professional profile, office wall and partner introduction pack.</p>
+              </article>
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3 border-t border-white/12 pt-6">
+              <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                Enroll now <ArrowRight className="h-4 w-4" />
+              </button>
+              <button onClick={openLead} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                Speak to broker desk
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[0.88fr,1.12fr]">
+            <div className="rounded-2xl border border-white/14 bg-white/[0.06] p-5 sm:p-6" data-surface="dark">
+              <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] !text-white/64">Services card</p>
-                  <h3 className="mt-1 font-serif text-3xl !text-white">JBJ Certified Broker</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Services card</p>
+                  <h3 className="mt-1 font-serif text-2xl !text-white">Broker support</h3>
                 </div>
-                <span className="flex h-12 w-12 items-center justify-center rounded-md border border-white/18 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                  <Award className="h-6 w-6" />
+                <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                  <Award className="h-5 w-5" />
                 </span>
               </div>
 
-              <div className="relative mt-8 grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-3">
                 {brokerServices.map((s, i) => {
                   const Icon = s.icon;
                   return (
-                    <article key={s.title} className="group relative min-h-[136px] overflow-hidden rounded-md border border-white/12 bg-white/[0.075] p-5 transition hover:border-white/30 hover:bg-white/[0.11]" data-surface="dark">
-                      <span className="absolute right-4 top-4 font-serif text-sm !text-white/24">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white" data-surface="dark">
+                    <article key={s.title} className="relative flex gap-3 rounded-md border border-white/12 bg-white/[0.065] p-3.5" data-surface="dark">
+                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white" data-surface="dark">
                         <Icon className="h-4 w-4" />
                       </span>
-                      <h4 className="mt-4 font-serif text-xl leading-tight !text-white">{s.title}</h4>
-                      <p className="mt-2 text-[12px] leading-relaxed !text-white/68">{s.body}</p>
+                      <div>
+                        <h4 className="font-serif text-lg leading-tight !text-white">{s.title}</h4>
+                        <p className="mt-1 text-[11px] leading-relaxed !text-white/64">{s.body}</p>
+                      </div>
                     </article>
                   );
                 })}
               </div>
+            </div>
 
-              <div className="relative mt-8 grid gap-4 border-t border-white/12 pt-6 sm:grid-cols-3">
-                {brokerBenefits.map((b) => {
-                  const Icon = b.icon;
-                  return (
-                    <div key={b.title} className="flex gap-3">
-                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/14 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                        <Icon className="h-4 w-4" />
-                      </span>
-                      <div>
-                        <p className="text-sm font-bold !text-white">{b.title}</p>
-                        <p className="mt-1 text-[11px] leading-relaxed !text-white/62">{b.body}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="relative mt-8 flex flex-wrap gap-3">
-                <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
-                  Enroll in the academy <ArrowRight className="h-4 w-4" />
-                </button>
-                <button onClick={openLead} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
-                  Speak to broker desk
-                </button>
-              </div>
+            <div className="flex items-center rounded-2xl border border-white/14 bg-white/[0.05] p-5 sm:p-6">
+              <CertificatePreview compact />
             </div>
           </div>
         </div>
@@ -732,15 +722,15 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
   );
 }
 
-function CertificatePreview() {
+function CertificatePreview({ compact = false }: { compact?: boolean }) {
   const today = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(new Date());
 
   return (
     <div className="relative">
       <div
         data-broker-certificate-frame
-        className="certificate-shimmer-frame relative mx-auto w-full max-w-[800px] overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
-        style={{ transform: "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.46 / 1" }}
+        className={`certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ${compact ? "max-w-[620px]" : "max-w-[800px]"}`}
+        style={{ transform: compact ? "none" : "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.46 / 1" }}
       >
         <div className="pointer-events-none absolute inset-2 border border-[#8B6F3A]/55" />
         <div className="pointer-events-none absolute inset-4 border border-[#8B6F3A]/25" />
@@ -770,7 +760,7 @@ function CertificatePreview() {
             Your Name Here
           </p>
           <p className="mx-auto mt-2 max-w-md text-[10px] leading-relaxed text-[#1A1A1A]/70 sm:text-[11px]">
-            for successfully completing the JBJ Global Broker Academy in accordance with DLD-aligned professional standards.
+            for successfully completing the JBJ Global Broker Academy professional pathway.
           </p>
 
           <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-3 pt-1 text-left sm:gap-4 sm:pt-2">
@@ -1107,18 +1097,18 @@ export default function PublicAccess() {
         </section>
 
         {/* FEATURED PROPERTIES */}
-        <section id="featured" className="overflow-hidden bg-[#F7F2EA] px-5 py-20 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-7xl">
-            <div className="relative z-20 rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] px-5 py-6 shadow-[0_26px_70px_-50px_rgba(6,78,59,0.55)] sm:px-7 md:flex md:items-end md:justify-between md:gap-6">
-              <div>
+        <section id="featured" className="overflow-hidden bg-[#F7F2EA] px-5 py-16 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] shadow-[0_26px_70px_-54px_rgba(6,78,59,0.5)]">
+            <div className="relative z-20 px-5 pb-4 pt-6 sm:px-7 md:flex md:items-end md:justify-between md:gap-6">
+              <div className="max-w-3xl">
                 <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
-                  Latest launches & featured
+                  Latest off-plan launches
                 </span>
-                <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">
+                <h2 className="mt-2 font-serif text-3xl leading-tight text-[#0d3a2b] sm:text-4xl">
                   Live inventory from Dubai's top developers.
                 </h2>
-                <p className="mt-3 max-w-2xl text-[#1A1A1A]/70">
-                  Real projects — off-plan releases, ready inventory and premium launches. Create an account to unlock pricing, plans and full detail.
+                <p className="mt-2 max-w-2xl text-sm text-[#1A1A1A]/68">
+                  Off-plan releases and premium new launches. Create an account to unlock pricing, plans and full detail.
                 </p>
               </div>
               <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} mt-5 h-11 shrink-0 md:mt-0`}>
@@ -1126,7 +1116,7 @@ export default function PublicAccess() {
               </button>
             </div>
 
-            <div className="relative z-10 mt-14 overflow-hidden rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_26px_70px_-54px_rgba(6,78,59,0.5)]">
+            <div className="relative z-10 border-t border-[#0d3a2b]/10 bg-[#FBF7EF] py-4">
               <PropertyMarquee onClick={openSignup} />
             </div>
           </div>
@@ -1238,44 +1228,6 @@ export default function PublicAccess() {
         </div>
 
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
-
-        {/* CERTIFICATE preview — 3D-style JBJ broker certificate */}
-        <section className="bg-[#F7F2EA] px-5 py-24 sm:px-8 lg:px-12">
-          <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1fr,1.1fr]">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
-                JBJ Global Broker Certificate
-              </span>
-              <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
-                A signed, DLD-aligned certificate — issued in your name.
-              </h2>
-              <p className="mt-4 max-w-xl text-[#1A1A1A]/72">
-                Every graduate of the Broker Academy receives a personally issued JBJ Global certificate,
-                recognised across our developer network and printed on premium paper for your office wall.
-              </p>
-              <ul className="mt-6 space-y-3 text-sm">
-                {[
-                  "Personalised & serial-numbered",
-                  "Signed by our Founder & CEO with today's date",
-                  "Recognised by developer partners",
-                  "Digital + printed copy included",
-                ].map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-[#1A1A1A]/82">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#064E3B]" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8">
-                <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
-                  Enroll & earn your certificate <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            <CertificatePreview />
-          </div>
-        </section>
 
         {/* Closing CTA — same animation/pattern as homepage "Ready to Get Started" */}
         <div className="bg-[#F7F2EA]">

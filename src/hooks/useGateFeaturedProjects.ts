@@ -16,6 +16,9 @@ export interface GateFeaturedProject {
   bedrooms_min?: number | null;
   bedrooms_max?: number | null;
   handover_date?: string | null;
+  status?: string | null;
+  sale_status?: string | null;
+  construction_status?: string | null;
   image_url?: string | null;
   hero_image?: string | null;
   cover_image?: string | null;
@@ -23,13 +26,16 @@ export interface GateFeaturedProject {
   card_image_url?: string | null;
   gallery_start_image_url?: string | null;
   images?: string[] | null;
+  project_images?: Array<{ image_url?: string | null; is_primary?: boolean | null; display_order?: number | null }> | null;
 }
 
 const PROJECT_SELECT = `
   id, name, slug, developer_name, location, area_name, emirate,
   price_from, price_to, bedrooms_min, bedrooms_max, handover_date,
+  construction_status,
   cover_image_url, card_image_url, gallery_start_image_url,
-  is_published, status, sale_status, created_at, updated_at
+  is_published, status, sale_status, created_at, updated_at,
+  project_images(image_url, is_primary, display_order)
 `;
 
 const isUsableMediaUrl = (value: unknown) => {
@@ -42,6 +48,36 @@ const isUsableMediaUrl = (value: unknown) => {
 
 const firstUsableMedia = (...values: unknown[]) => values.find(isUsableMediaUrl) as string | undefined;
 
+const sortedGalleryUrls = (images: unknown) => {
+  if (!Array.isArray(images)) return [];
+  return images
+    .filter((img): img is { image_url?: string | null; is_primary?: boolean | null; display_order?: number | null } => !!img && typeof img === "object")
+    .sort((a, b) => Number(b.is_primary === true) - Number(a.is_primary === true) || Number(a.display_order ?? 999) - Number(b.display_order ?? 999))
+    .map((img) => img.image_url)
+    .filter(isUsableMediaUrl) as string[];
+};
+
+const normalizeStatus = (value: unknown) => String(value || "").trim().toLowerCase();
+
+const isReadyProject = (project: any) => {
+  const statusText = [project?.sale_status, project?.construction_status, project?.status].map(normalizeStatus).join(" ");
+  if (/ready|complete|completed|delivered|handover/.test(statusText) && !/off[ -]?plan|under construction|new launch/.test(statusText)) return true;
+  const rawDate = project?.handover_date ? Date.parse(project.handover_date) : NaN;
+  return Number.isFinite(rawDate) && rawDate < Date.now();
+};
+
+const isOffPlanProject = (project: any) => {
+  const statusText = [project?.sale_status, project?.construction_status, project?.status].map(normalizeStatus).join(" ");
+  if (/off[ -]?plan|under construction|new launch|launch/.test(statusText)) return true;
+  return !isReadyProject(project);
+};
+
+const rankForGate = (project: GateFeaturedProject) => {
+  if (isOffPlanProject(project)) return 0;
+  if (isReadyProject(project)) return 2;
+  return 1;
+};
+
 const normalizeProject = (project: any): GateFeaturedProject | null => {
   if (!project?.id || !project?.name) return null;
   const cover = firstUsableMedia(
@@ -51,8 +87,13 @@ const normalizeProject = (project: any): GateFeaturedProject | null => {
     project.image_url,
     project.hero_image,
     project.cover_image,
+    ...sortedGalleryUrls(project.project_images),
     ...(Array.isArray(project.images) ? project.images : [])
   ) || null;
+  const gallery = [
+    ...sortedGalleryUrls(project.project_images),
+    ...(Array.isArray(project.images) ? project.images.filter(isUsableMediaUrl) : []),
+  ];
 
   return {
     ...project,
@@ -61,7 +102,7 @@ const normalizeProject = (project: any): GateFeaturedProject | null => {
     image_url: cover,
     hero_image: project.gallery_start_image_url || project.hero_image || cover,
     cover_image: cover,
-    images: Array.isArray(project.images) ? project.images.filter(isUsableMediaUrl) : cover ? [cover] : [],
+    images: gallery.length ? gallery : cover ? [cover] : [],
   } as GateFeaturedProject;
 };
 
@@ -96,7 +137,7 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
         .map((r) => normalizeProject(r.project || r.projects))
         .filter(Boolean) as GateFeaturedProject[];
 
-      if (configured.length > 0) return configured.slice(0, 8);
+      if (configured.length > 0) return configured.sort((a, b) => rankForGate(a) - rankForGate(b)).slice(0, 8);
 
       // Real-data fallback for empty surfaces: newest published projects, with
       // Amra-style wellness launches promoted first. No fake/static cards.
@@ -118,12 +159,12 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
       const byId = new Map<string, GateFeaturedProject>();
       [...((amraRes.data as any[]) ?? []), ...((latestRes.data as any[]) ?? [])]
         .map(normalizeProject)
-        .filter(Boolean)
+        .filter((project): project is GateFeaturedProject => !!project && !!project.cover_image)
         .forEach((project) => {
           if (project?.id && !byId.has(project.id)) byId.set(project.id, project);
         });
 
-      return Array.from(byId.values()).slice(0, 8);
+      return Array.from(byId.values()).sort((a, b) => rankForGate(a) - rankForGate(b)).slice(0, 8);
     },
     staleTime: 60_000,
   });
