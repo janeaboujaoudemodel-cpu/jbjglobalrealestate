@@ -400,7 +400,7 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
         </p>
         <button
           onClick={onClick}
-          data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+          data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
           style={emeraldInkStyle}
           className={`${BTN_EMERALD_SOLID} mt-6 h-11 uppercase tracking-[0.14em]`}
         >
@@ -441,7 +441,7 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
                 <span
-                  data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+                  data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
                   className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em]"
                 >
                   Featured
@@ -529,7 +529,7 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) =
 
             <button
               onClick={() => onSelect(tier)}
-              data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+              data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
               style={emeraldInkStyle}
               className={`${BTN_EMERALD_SOLID} mt-8 h-12 w-full justify-center uppercase tracking-[0.14em]`}
             >
@@ -634,7 +634,7 @@ export default function PublicAccess() {
             </button>
             <button
               onClick={openSignup}
-              data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+              data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
               style={emeraldInkStyle}
               className={`${BTN_EMERALD_SOLID} h-10 whitespace-nowrap`}
             >
@@ -690,10 +690,10 @@ export default function PublicAccess() {
                 A private property platform for Dubai's discerning investors, developers & brokers.
               </h2>
               <div className="mt-8 flex flex-wrap gap-3">
-                <button onClick={openSignup} data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Create your account <ArrowRight className="h-4 w-4" />
                 </button>
-                <button onClick={() => setLeadOpen(true)} data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={() => setLeadOpen(true)} data-jbj-cta-white="" data-no-contrast-guard data-allow-dark-cta style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
                   Talk to an advisor
                 </button>
               </div>
@@ -735,7 +735,7 @@ export default function PublicAccess() {
                   Real projects — off-plan releases, ready inventory and premium launches. Create an account to unlock pricing, plans and full detail.
                 </p>
               </div>
-              <button onClick={openSignup} data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11`}>
+              <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11`}>
                 Unlock the catalogue <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -952,7 +952,7 @@ export default function PublicAccess() {
             <div className="mt-14 flex flex-wrap justify-center gap-3">
               <button
                 onClick={openSignup}
-                data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta
+                data-jbj-cta-white="" data-no-contrast-guard data-allow-dark-cta
                 style={darkInkStyle}
                 className="group/btn relative overflow-hidden inline-flex h-12 items-center gap-2 rounded-md bg-white px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-[#064E3B] shadow-[0_12px_26px_-14px_rgba(0,0,0,0.6)]"
               >
@@ -960,7 +960,7 @@ export default function PublicAccess() {
               </button>
               <button
                 onClick={() => setLeadOpen(true)}
-                data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+                data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
                 style={emeraldInkStyle}
                 className="inline-flex h-12 items-center gap-2 rounded-md border border-[#C9A84C]/60 bg-transparent px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-white/[0.10] hover:border-[#C9A84C]"
               >
@@ -998,7 +998,7 @@ export default function PublicAccess() {
                 ))}
               </ul>
               <div className="mt-8">
-                <button onClick={openSignup} data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Enroll & earn your certificate <ArrowRight className="h-4 w-4" />
                 </button>
               </div>
@@ -1082,7 +1082,7 @@ export default function PublicAccess() {
       {/* Premium floating advisor button — headset avatar + live dot + phone */}
       <button
         onClick={() => setLeadOpen(true)}
-        data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+        data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
         aria-label="Speak to an advisor"
         style={emeraldInkStyle}
         className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-[#C9A84C]/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:bg-[linear-gradient(135deg,#075c46_0%,#053825_55%,#000_100%)] hover:ring-[#C9A84C]/70 hover:-translate-y-0.5"
