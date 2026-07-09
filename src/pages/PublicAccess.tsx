@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import LeadFormDialog from "@/components/gate/LeadFormDialog";
+import PaymentRequestDialog, { type PaymentRequestContext } from "@/components/gate/PaymentRequestDialog";
 import SignupDialog from "@/components/gate/SignupDialog";
 import LoginDialog from "@/components/gate/LoginDialog";
 import VideoBackground from "@/components/VideoBackground";
