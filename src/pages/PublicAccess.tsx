@@ -738,13 +738,14 @@ function CertificatePreview() {
   return (
     <div className="relative">
       <div
-        className="certificate-shimmer-frame relative mx-auto w-full max-w-[800px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
+        data-broker-certificate-frame
+        className="certificate-shimmer-frame relative mx-auto w-full max-w-[800px] overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
         style={{ transform: "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.46 / 1" }}
       >
-        <div className="absolute inset-2 border border-[#8B6F3A]/55" />
-        <div className="absolute inset-4 border border-[#8B6F3A]/25" />
+        <div className="pointer-events-none absolute inset-2 border border-[#8B6F3A]/55" />
+        <div className="pointer-events-none absolute inset-4 border border-[#8B6F3A]/25" />
 
-        <div className="relative flex h-full flex-col px-7 py-5 text-center sm:px-10 sm:py-7">
+        <div className="relative flex h-full flex-col px-7 py-5 text-center sm:px-10 sm:py-6">
           <div className="flex items-center justify-between text-left">
             <img
               data-no-fallback
@@ -758,28 +759,28 @@ function CertificatePreview() {
             </div>
           </div>
 
-          <h3 className="mt-3 font-serif text-2xl text-[#0d3a2b] sm:text-4xl">Certificate of Completion</h3>
+          <h3 className="mt-2 font-serif text-2xl text-[#0d3a2b] sm:text-[34px]">Certificate of Completion</h3>
           <div className="mx-auto mt-2 flex items-center gap-2">
             <span className="h-px w-12 bg-[#8B6F3A]/60" />
             <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
             <span className="h-px w-12 bg-[#8B6F3A]/60" />
           </div>
-          <p className="mt-2 text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
-          <p className="username-shimmer mx-auto mt-1 inline-flex min-w-[230px] justify-center border-b border-[#8B6F3A]/45 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:min-w-[260px] sm:text-3xl">
+          <p className="mt-1.5 text-[9px] uppercase tracking-[0.24em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
+          <p className="username-shimmer mx-auto mt-1 inline-flex min-w-[230px] justify-center border-b border-[#8B6F3A]/45 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:min-w-[260px] sm:text-[30px]">
             Your Name Here
           </p>
           <p className="mx-auto mt-2 max-w-md text-[10px] leading-relaxed text-[#1A1A1A]/70 sm:text-[11px]">
             for successfully completing the JBJ Global Broker Academy in accordance with DLD-aligned professional standards.
           </p>
 
-          <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-3 pt-2 text-left sm:gap-4 sm:pt-3">
+          <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-3 pt-1 text-left sm:gap-4 sm:pt-2">
             <div>
               <div className="h-7 sm:h-9" />
               <div className="mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
               <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 sm:text-[9px] sm:tracking-[0.22em]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-24 sm:w-24">
+            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-[88px] sm:w-[88px]">
               <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_18px_rgba(90,69,21,0.28)]">
                 <defs>
                   <linearGradient id="sealGold" x1="18" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
@@ -805,8 +806,8 @@ function CertificatePreview() {
             </div>
 
             <div className="text-right">
-              <div className="ml-auto flex h-7 items-end justify-end gap-1.5 font-serif text-sm text-[#0d3a2b] leading-none sm:h-9 sm:text-base">
-                <CalendarDays className="h-4 w-4" /> {today}
+              <div className="ml-auto flex h-7 items-end justify-end font-serif text-sm text-[#0d3a2b] leading-none sm:h-9 sm:text-base">
+                {today}
               </div>
               <div className="ml-auto mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
               <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-[#1A1A1A]/60 sm:text-[9px] sm:tracking-[0.22em]">Date of issue</p>
