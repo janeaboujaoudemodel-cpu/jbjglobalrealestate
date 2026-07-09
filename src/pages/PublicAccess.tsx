@@ -479,10 +479,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     const el = scrollerRef.current;
     if (!el) return;
     pauseBriefly();
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      el.scrollLeft += e.deltaY;
-      if (e.cancelable) e.preventDefault();
-    }
+    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (delta !== 0) el.scrollLeft += delta;
   };
 
   if (isLoading) {
@@ -516,7 +514,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
         onPointerCancel={endDrag}
         onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
         onWheel={onWheel}
-        className="flex gap-7 overflow-x-auto overflow-y-hidden px-4 pb-6 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-6"
+        data-property-scroller
+        className="flex gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
         style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
       >
         {track.map((p: any, idx) => {
@@ -615,7 +614,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       id="brokers"
       data-surface="dark"
       className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12"
-      style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
+      style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#021d13 52%,#000 100%)" }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_10%,rgba(255,255,255,0.16),transparent_38%),radial-gradient(ellipse_at_82%_86%,rgba(184,149,85,0.20),transparent_42%)]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
@@ -635,7 +634,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
         </div>
 
         <div className="relative overflow-hidden rounded-md border border-white/16 bg-white/[0.06] p-3 shadow-[0_60px_130px_-54px_rgba(0,0,0,0.95)] backdrop-blur-sm">
-          <div className="grid min-h-[590px] overflow-hidden rounded-[4px] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] lg:grid-cols-[0.88fr,1.12fr]">
+          <div className="grid min-h-[590px] overflow-hidden rounded-[4px] bg-[linear-gradient(135deg,#064E3B_0%,#021d13_52%,#000_100%)] lg:grid-cols-[0.88fr,1.12fr]">
             <div className="relative flex flex-col justify-between border-b border-white/12 p-8 sm:p-10 lg:border-b-0 lg:border-r">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_0%_0%,rgba(255,255,255,0.14),transparent_42%)]" />
               <div>
@@ -1106,7 +1105,7 @@ export default function PublicAccess() {
         </section>
 
         {/* FEATURED PROPERTIES */}
-        <section id="featured" className="bg-[#F7F2EA] px-5 py-20 sm:px-8 lg:px-12">
+        <section id="featured" className="overflow-hidden bg-[#F7F2EA] px-5 py-20 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-7xl">
             <div className="relative z-20 rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] px-5 py-6 shadow-[0_26px_70px_-50px_rgba(6,78,59,0.55)] sm:px-7 md:flex md:items-end md:justify-between md:gap-6">
               <div>
@@ -1125,7 +1124,7 @@ export default function PublicAccess() {
               </button>
             </div>
 
-            <div className="relative z-10 mt-8 rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_26px_70px_-54px_rgba(6,78,59,0.5)]">
+            <div className="relative z-10 mt-14 overflow-hidden rounded-md border border-[#0d3a2b]/10 bg-[#FDFBF7] py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_26px_70px_-54px_rgba(6,78,59,0.5)]">
               <PropertyMarquee onClick={openSignup} />
             </div>
           </div>
