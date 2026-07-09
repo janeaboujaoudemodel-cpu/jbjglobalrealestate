@@ -1397,9 +1397,13 @@ export default function PublicAccess() {
           </div>
         </section>
 
+        {/* SERVICES — lifted above all packages */}
+        <ServicesSection />
+
         {/* PACKAGES — one strap per audience */}
 
         {/* INVESTOR */}
+
         <PackageStrap
           id="investor-packages"
           eyebrow="For Investors"
@@ -1478,9 +1482,8 @@ export default function PublicAccess() {
           />
         </div>
 
-        <ServicesSection />
-
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
+
 
         <CertificateBand />
 
