@@ -693,7 +693,7 @@ export default function PublicAccess() {
                 <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Create your account <ArrowRight className="h-4 w-4" />
                 </button>
-                <button onClick={() => setLeadOpen(true)} data-jbj-cta-white="" data-no-contrast-guard data-allow-dark-cta style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={() => setLeadOpen(true)} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
                   Talk to an advisor
                 </button>
               </div>
@@ -952,7 +952,7 @@ export default function PublicAccess() {
             <div className="mt-14 flex flex-wrap justify-center gap-3">
               <button
                 onClick={openSignup}
-                data-jbj-cta-white="" data-no-contrast-guard data-allow-dark-cta
+                data-jbj-cta-white="" data-no-contrast-guard
                 style={darkInkStyle}
                 className="group/btn relative overflow-hidden inline-flex h-12 items-center gap-2 rounded-md bg-white px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-[#064E3B] shadow-[0_12px_26px_-14px_rgba(0,0,0,0.6)]"
               >
