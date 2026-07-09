@@ -419,18 +419,29 @@ html body #root [data-jbj-access-gold-badge] * {
   -webkit-text-fill-color: #C9A84C !important;
 }
 .certificate-shimmer-frame {
-  border: 1px solid rgba(184,149,85,0.55);
+  border: 2px solid transparent;
+  border-radius: 6px;
   isolation: isolate;
-  box-shadow: 0 0 0 0 rgba(201,168,79,0.0);
+  background:
+    linear-gradient(135deg,#FDFBF7 0%,#F5EFE1 45%,#EFE6D6 100%) padding-box,
+    linear-gradient(135deg,#FBEAB4 0%,#C9A84C 25%,#8B6F3A 50%,#E8C877 75%,#A8842E 100%) border-box;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,240,200,0.55),
+    inset 0 0 30px rgba(184,149,85,0.14),
+    0 0 0 0 rgba(201,168,79,0.0),
+    0 60px 120px -40px rgba(6,78,59,0.55),
+    0 20px 50px -20px rgba(0,0,0,0.4);
   animation: certificate-glow 5.5s ease-in-out infinite;
   position: relative;
 }
 .certificate-shimmer-frame::after {
   content: "";
   position: absolute;
-  inset: 7px;
+  inset: 8px;
   pointer-events: none;
-  border: 1px solid rgba(184,149,85,0.28);
+  border-radius: 3px;
+  border: 1px solid rgba(184,149,85,0.55);
+  box-shadow: inset 0 0 0 1px rgba(255,240,200,0.35);
 }
 .certificate-shimmer-frame::before {
   content: "";
@@ -438,34 +449,24 @@ html body #root [data-jbj-access-gold-badge] * {
   inset: 0;
   pointer-events: none;
   z-index: 2;
-  background: linear-gradient(115deg, transparent 30%, rgba(251,234,180,0.28) 45%, rgba(232,200,119,0.42) 50%, rgba(251,234,180,0.28) 55%, transparent 70%);
+  background: linear-gradient(115deg, transparent 28%, rgba(251,234,180,0.35) 44%, rgba(232,200,119,0.6) 50%, rgba(251,234,180,0.35) 56%, transparent 72%);
   background-size: 260% 100%;
   background-position: 200% 0;
   mix-blend-mode: screen;
-  animation: certificate-metallic-sweep 6.5s ease-in-out infinite;
+  animation: certificate-metallic-sweep 5s ease-in-out infinite;
 }
 .username-shimmer {
   color: #0d3a2b !important;
   -webkit-text-fill-color: #0d3a2b !important;
   animation: username-pulse 4.8s ease-in-out infinite;
 }
-[data-broker-certificate-frame] .seal-outline svg circle {
-  stroke: url(#sealGold) !important;
-}
-[data-broker-certificate-frame] .seal-outline svg text {
-  fill: url(#sealGold) !important;
-  stroke: none !important;
-}
-html body #root [data-broker-certificate-frame] .seal-outline svg circle,
-html body #root [data-broker-certificate-frame] .seal-outline svg circle * {
+[data-broker-certificate-frame] .seal-outline svg circle[data-ring="1"] {
   stroke: url(#sealGold) !important;
   fill: none !important;
 }
-html body #root [data-broker-certificate-frame] .seal-outline svg text,
-html body #root [data-broker-certificate-frame] .seal-outline svg text * {
-  fill: url(#sealGold) !important;
-  stroke: none !important;
-  -webkit-text-fill-color: transparent !important;
+html body #root [data-broker-certificate-frame] .seal-outline svg circle[data-ring="1"] {
+  stroke: url(#sealGold) !important;
+  fill: none !important;
 }
 @keyframes certificate-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,79,0.0), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
@@ -840,8 +841,8 @@ function ServicesSection() {
                       Signature discipline
                     </span>
                     <span
-                      data-surface="dark"
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
+                      data-no-contrast-guard
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#1A1A1A]/30 bg-white transition group-hover:border-[#0d3a2b] group-hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-[#1A1A1A] [&_svg]:!stroke-[#1A1A1A] group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
                     >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
@@ -859,18 +860,17 @@ function ServicesSection() {
             type="button"
             onClick={() => goto(pageIdx - 1)}
             data-no-contrast-guard
-            style={darkInkStyle}
-            className="inline-flex items-center gap-2 rounded-full border border-[#0d3a2b]/25 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition hover:border-[#0d3a2b] hover:bg-[#FDFBF7]"
             aria-label="Previous chapter"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#1A1A1A]/25 bg-white transition hover:border-[#0d3a2b] hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-[#1A1A1A] [&_svg]:!stroke-[#1A1A1A] hover:[&_svg]:!text-white hover:[&_svg]:!stroke-white"
           >
-            <ChevronLeft className="h-4 w-4" /> Prev
+            <ChevronLeft className="h-5 w-5" />
           </button>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-3">
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
               Page {pageIdx + 1} of {total}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {jbjServicePages.map((p, i) => {
                 const dotActive = i === pageIdx;
                 return (
@@ -879,13 +879,18 @@ function ServicesSection() {
                     type="button"
                     onClick={() => goto(i)}
                     aria-label={`Go to ${p.label}`}
+                    data-no-contrast-guard
+                    {...(dotActive ? { "data-allow-dark-cta": true, "data-surface": "dark" } : {})}
+                    style={dotActive ? emeraldInkStyle : undefined}
                     className={
-                      "rounded-full transition-all " +
+                      "inline-flex items-center justify-center rounded-full font-serif text-[13px] leading-none aspect-square h-10 w-10 min-w-[40px] min-h-[40px] transition " +
                       (dotActive
-                        ? "h-3 w-3 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] ring-2 ring-[#0d3a2b]/20 ring-offset-2 ring-offset-transparent"
-                        : "h-3 w-3 bg-[#0d3a2b]/20 hover:bg-[#0d3a2b]/45")
+                        ? "border border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_*]:!text-white"
+                        : "border border-[#1A1A1A]/25 bg-white text-[#1A1A1A] hover:border-[#0d3a2b] hover:text-[#0d3a2b]")
                     }
-                  />
+                  >
+                    <span className={dotActive ? "!text-white" : ""}>{i + 1}</span>
+                  </button>
                 );
               })}
             </div>
@@ -896,9 +901,10 @@ function ServicesSection() {
             onClick={() => goto(pageIdx + 1)}
             data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
             style={emeraldInkStyle}
-            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em] !text-white [&_svg]:!text-white [&_svg]:!stroke-white`}
+            aria-label="Next chapter"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_svg]:!text-white [&_svg]:!stroke-white"
           >
-            <span className="!text-white">Next</span> <ChevronRight className="h-4 w-4 !text-white" />
+            <ChevronRight className="h-5 w-5 !text-white" />
           </button>
 
         </div>
@@ -1015,7 +1021,8 @@ function CertificatePreview() {
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt="JBJ Global Real Estate"
-              className="h-14 w-14 object-contain sm:h-20 sm:w-20"
+              className="h-16 w-16 object-contain drop-shadow-[0_2px_4px_rgba(139,111,58,0.35)] sm:h-24 sm:w-24"
+              style={{ filter: "drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 3px 6px rgba(0,0,0,0.18))" }}
             />
             <div className="text-right">
               <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A] sm:text-[10px]">JBJ Global Real Estate</p>
@@ -1048,27 +1055,35 @@ function CertificatePreview() {
               <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-[104px] sm:w-[104px]">
-              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_20px_rgba(184,149,85,0.35)]">
+            <div aria-hidden className="seal-outline relative flex h-24 w-24 items-center justify-center rounded-full sm:h-[120px] sm:w-[120px]">
+              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_14px_24px_rgba(184,149,85,0.5)]">
                 <defs>
                   <linearGradient id="sealGold" x1="12" y1="8" x2="108" y2="112" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#FBEAB4" />
                     <stop offset="0.35" stopColor="#E8C877" />
                     <stop offset="0.7" stopColor="#C9A84C" />
-                    <stop offset="1" stopColor="#A8842E" />
+                    <stop offset="1" stopColor="#8B6F3A" />
                   </linearGradient>
                   <linearGradient id="sealGoldSoft" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
                     <stop stopColor="#E8C877" />
                     <stop offset="1" stopColor="#C9A84C" />
                   </linearGradient>
+                  <radialGradient id="sealDisc" cx="42%" cy="38%" r="70%">
+                    <stop offset="0%" stopColor="#FBEAB4" />
+                    <stop offset="45%" stopColor="#E8C877" />
+                    <stop offset="80%" stopColor="#C9A84C" />
+                    <stop offset="100%" stopColor="#8B6F3A" />
+                  </radialGradient>
                   <path id="sealTextPath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
                 </defs>
-                {/* outer premium gold ring */}
+                {/* filled metallic disc for engraved look */}
+                <circle cx="60" cy="60" r="56" fill="url(#sealDisc)" opacity="0.98" />
+                {/* rings */}
                 <circle cx="60" cy="60" r="56" fill="none" stroke="url(#sealGold)" strokeWidth="2" />
-                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="5" />
-                <circle cx="60" cy="60" r="47" fill="none" stroke="url(#sealGoldSoft)" strokeWidth="0.8" opacity="0.7" />
-                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="1.2" strokeDasharray="2.4 3.2" />
-                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="url(#sealGold)">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#8B6F3A" strokeWidth="0.6" opacity="0.7" />
+                <circle cx="60" cy="60" r="47" fill="none" stroke="url(#sealGoldSoft)" strokeWidth="0.8" opacity="0.9" />
+                <circle cx="60" cy="60" r="39" fill="none" stroke="#8B6F3A" strokeWidth="1" strokeDasharray="2.4 3.2" opacity="0.85" />
+                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="#5C4620">
                   <textPath href="#sealTextPath" startOffset="0%">JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·</textPath>
                 </text>
               </svg>
@@ -1076,8 +1091,11 @@ function CertificatePreview() {
                 data-no-fallback
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
-                className="h-10 w-10 object-contain sm:h-12 sm:w-12"
-                style={{ filter: "brightness(0) saturate(100%) invert(82%) sepia(18%) saturate(280%) hue-rotate(2deg) brightness(94%) contrast(84%)", opacity: 0.82 }}
+                className="relative h-12 w-12 object-contain sm:h-16 sm:w-16"
+                style={{
+                  filter: "brightness(0) saturate(100%) invert(28%) sepia(45%) saturate(720%) hue-rotate(5deg) brightness(78%) contrast(96%) drop-shadow(0 1px 0 rgba(255,240,200,0.55)) drop-shadow(0 -1px 0 rgba(80,55,20,0.35))",
+                  opacity: 0.96,
+                }}
               />
             </div>
 
