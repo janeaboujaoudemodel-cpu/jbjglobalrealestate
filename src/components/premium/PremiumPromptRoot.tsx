@@ -16,14 +16,15 @@ export default function PremiumPromptRoot() {
   const [payload, setPayload] = useState<PremiumPromptPayload | null>(null);
   const navigate = useNavigate();
 
-  useEffect(
-    () =>
-      subscribePremiumPrompt((p) => {
-        setPayload(p);
-        logAnalytics("auth_prompt_shown", { action: p.actionKey });
-      }),
-    [],
-  );
+  useEffect(() => {
+    const unsub = subscribePremiumPrompt((p) => {
+      setPayload(p);
+      logAnalytics("auth_prompt_shown", { action: p.actionKey });
+    });
+    return () => {
+      unsub();
+    };
+  }, []);
 
   if (!payload) return null;
 
