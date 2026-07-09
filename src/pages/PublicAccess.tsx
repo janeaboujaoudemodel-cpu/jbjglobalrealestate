@@ -314,35 +314,47 @@ const EMERALD_ICON_TILE =
 // Page-scoped stylesheet — forces white ink on emerald CTAs and dark ink on
 // white CTAs no matter what a global data-surface / contrast-guard rule says.
 const ACCESS_CTA_STYLE = `
-[data-jbj-access-cta="emerald"],
-[data-jbj-access-cta="emerald"] * {
+html body #root [data-jbj-access-cta="emerald"],
+html body #root [data-jbj-access-cta="emerald"] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: none !important;
+  opacity: 1 !important;
 }
-[data-jbj-access-cta="emerald"] svg {
+html body #root [data-jbj-access-cta="emerald"] svg,
+html body #root [data-jbj-access-cta="emerald"] svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+  fill: none !important;
 }
-[data-jbj-access-cta="white"],
-[data-jbj-access-cta="white"] :is(span,strong,em,small,p,div) {
+html body #root [data-jbj-access-cta="white"],
+html body #root [data-jbj-access-cta="white"] :is(span,strong,em,small,p,div) {
   color: #0d3a2b !important;
   -webkit-text-fill-color: #0d3a2b !important;
+  background-color: #FFFFFF !important;
 }
-[data-jbj-access-cta="white"] svg {
+html body #root [data-jbj-access-cta="white"] :is(span,strong,em,small,p,div) {
+  background-color: transparent !important;
+}
+html body #root [data-jbj-access-cta="white"] svg {
   color: #0d3a2b !important;
   stroke: #0d3a2b !important;
 }
-[data-jbj-access-cta="white"]:hover,
-[data-jbj-access-cta="white"]:hover * {
+html body #root [data-jbj-access-cta="white"]:hover,
+html body #root [data-jbj-access-cta="white"]:hover * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+  background-color: transparent !important;
 }
-[data-jbj-access-cta="white"]:hover svg {
+html body #root [data-jbj-access-cta="white"]:hover {
+  background-color: #064E3B !important;
+}
+html body #root [data-jbj-access-cta="white"]:hover svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
-[data-jbj-access-gold-badge] {
+html body #root [data-jbj-access-gold-badge],
+html body #root [data-jbj-access-gold-badge] * {
   color: #C9A84C !important;
   -webkit-text-fill-color: #C9A84C !important;
 }
