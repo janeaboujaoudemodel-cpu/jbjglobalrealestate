@@ -840,8 +840,8 @@ function ServicesSection() {
                       Signature discipline
                     </span>
                     <span
-                      data-surface="dark"
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
+                      data-no-contrast-guard
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#1A1A1A]/30 bg-white transition group-hover:border-[#0d3a2b] group-hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-[#1A1A1A] [&_svg]:!stroke-[#1A1A1A] group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
                     >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
