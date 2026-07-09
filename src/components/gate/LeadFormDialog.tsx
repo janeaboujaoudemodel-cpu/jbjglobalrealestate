@@ -99,7 +99,7 @@ function UserTypePicker({ value, onChange }: { value: string; onChange: (v: stri
                   key={t}
                   value={t}
                   onSelect={() => { onChange(t); setOpen(false); }}
-                  className="capitalize cursor-pointer"
+                  className="capitalize cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                 >
                   {t}
                   {t === value && <Check className="ml-auto w-4 h-4 text-[#064E3B]" />}
