@@ -420,6 +420,26 @@ html body #root [data-jbj-access-gold-badge] * {
   color: #C9A84C !important;
   -webkit-text-fill-color: #C9A84C !important;
 }
+html body #root [data-service-card] [data-service-arrow] {
+  background: #FFFFFF !important;
+  border-color: rgba(26,26,26,0.30) !important;
+}
+html body #root [data-service-card] [data-service-arrow] svg,
+html body #root [data-service-card] [data-service-arrow] svg * {
+  color: #1A1A1A !important;
+  stroke: #1A1A1A !important;
+  fill: none !important;
+}
+html body #root [data-service-card]:hover [data-service-arrow] {
+  background: linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%) !important;
+  border-color: #0d3a2b !important;
+}
+html body #root [data-service-card]:hover [data-service-arrow] svg,
+html body #root [data-service-card]:hover [data-service-arrow] svg * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
 .certificate-shimmer-frame {
   border: 2px solid transparent;
   border-radius: 6px;
@@ -805,6 +825,7 @@ function ServicesSection() {
             return (
               <article
                 key={`${page.key}-${s.title}`}
+                data-service-card
                 className="group relative flex flex-col overflow-hidden rounded-[20px] border border-[#0d3a2b]/12 bg-[#0d3a2b] shadow-[0_28px_60px_-32px_rgba(6,78,59,0.55)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_44px_90px_-36px_rgba(6,78,59,0.75)]"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
@@ -843,8 +864,9 @@ function ServicesSection() {
                       Signature discipline
                     </span>
                     <span
+                      data-service-arrow
                       data-no-contrast-guard
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#1A1A1A]/30 bg-white transition group-hover:border-[#0d3a2b] group-hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-[#1A1A1A] [&_svg]:!stroke-[#1A1A1A] group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border transition"
                     >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
