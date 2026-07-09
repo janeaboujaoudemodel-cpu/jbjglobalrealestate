@@ -287,17 +287,17 @@ export default function AmraFactSheetInsights({ projectName }: Props) {
               </div>
             </div>
           </div>
-          <div className="relative min-h-[300px] lg:min-h-[520px]">
+          <div className="relative min-h-[300px] lg:min-h-[520px] overflow-hidden rounded-md">
             <img
               src={brochureDesignArches}
               alt="Amra brochure — travertine arched corridor (Design Ethos & Partners slide)"
-              className="absolute inset-0 w-full h-full scale-[1.02] object-cover"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               loading="lazy"
             />
             <img
               src={brochureYacht}
               alt="Amra brochure — yacht partnership lifestyle (Brand Partnerships slide)"
-              className="absolute bottom-4 right-4 w-40 h-28 scale-[1.02] object-cover rounded-md shadow-lg hidden md:block"
+              className="absolute bottom-4 right-4 w-40 h-28 object-cover object-center rounded-md shadow-lg hidden md:block"
               loading="lazy"
             />
           </div>
