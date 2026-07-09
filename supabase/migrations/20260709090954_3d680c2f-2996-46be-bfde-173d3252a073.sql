@@ -1,0 +1,1 @@
+GRANT INSERT ON public.forms_submissions TO anon, authenticated;
