@@ -580,6 +580,7 @@ export default function PublicAccess() {
 
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#1A1A1A]">
+      <style>{ACCESS_CTA_STYLE}</style>
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-[#0d3a2b]/10 bg-[#FDFBF7]/95 backdrop-blur-md">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
