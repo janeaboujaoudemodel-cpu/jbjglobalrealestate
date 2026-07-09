@@ -33,7 +33,12 @@ import {
   Trophy,
   BookOpen,
   Ticket,
+  ShieldCheck,
+  FileCheck2,
+  Building2,
+  Star,
 } from "lucide-react";
+import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
 const HERO_VIDEO_URL =
   "https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4";
@@ -176,6 +181,19 @@ const brokerTiers: Tier[] = [
       "Exclusive JBJ agent books & DLD references",
     ],
   },
+  {
+    name: "Elite",
+    audienceSize: "Senior top-producer",
+    price: "AED 2,999",
+    cadence: "/year",
+    features: [
+      "Everything in Professional",
+      "First-look on JBJ private mandates",
+      "1:1 principal advisor coaching",
+      "Personal broker page inside JBJ",
+      "Co-marketing with JBJ on flagship launches",
+    ],
+  },
 ];
 
 const agencyTiers: Tier[] = [
@@ -204,6 +222,19 @@ const agencyTiers: Tier[] = [
       "Co-branded launches with developers",
       "Advanced analytics & attribution",
       "Priority hiring pipeline into JBJ Global",
+    ],
+  },
+  {
+    name: "Network",
+    audienceSize: "Multi-branch group · 50+ agents",
+    price: "Custom",
+    cadence: "annual",
+    features: [
+      "Everything in Brokerage",
+      "Multi-branch CRM & role permissions",
+      "Executive partnership with JBJ Global",
+      "Enterprise SLA & onboarding program",
+      "Featured on JBJ agency directory",
     ],
   },
 ];
@@ -368,13 +399,16 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) 
             {...(isEm ? { "data-surface": "dark" as const } : {})}
             className={
               isEm
-                ? "relative flex flex-col overflow-hidden rounded-2xl p-8 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] ring-1 ring-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
-                : "relative flex flex-col overflow-hidden rounded-2xl border border-[#0d3a2b]/15 bg-white p-8 shadow-[0_24px_60px_-42px_rgba(13,58,43,0.35)]"
+                ? "relative flex flex-col rounded-2xl p-8 pt-10 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] ring-1 ring-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
+                : "relative flex flex-col rounded-2xl border border-[#0d3a2b]/15 bg-white p-8 pt-10 shadow-[0_24px_60px_-42px_rgba(13,58,43,0.35)]"
             }
           >
             {isEm && (
-              <span className="absolute right-5 top-5 rounded-full border border-[#B89555]/60 bg-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] !text-[#F0D78C]">
-                Most popular
+              <span
+                data-surface="dark"
+                className="absolute left-1/2 -top-3 -translate-x-1/2 rounded-full border border-[#B89555] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] !text-[#F0D78C] shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] whitespace-nowrap"
+              >
+                <Star className="inline h-3 w-3 mr-1 -mt-0.5 !text-[#F0D78C]" /> Most popular
               </span>
             )}
             <p
@@ -407,11 +441,8 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) 
 
             <button
               onClick={onSelect}
-              className={
-                isEm
-                  ? "group/btn relative overflow-hidden mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md border border-white bg-white px-5 text-sm font-bold uppercase tracking-[0.12em] text-[#0d3a2b] transition hover:!bg-[#F7F2EA] [&_svg]:text-[#0d3a2b] before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/3 before:bg-gradient-to-r before:from-transparent before:via-[#064E3B]/15 before:to-transparent before:opacity-0 hover:before:opacity-100 hover:before:translate-x-[400%] before:transition before:duration-700"
-                  : `mt-8 h-12 w-full justify-center uppercase tracking-[0.12em] ${BTN_WHITE_HOVER_EMERALD}`
-              }
+              data-surface="dark"
+              className={`${BTN_EMERALD_SOLID} mt-8 h-12 w-full justify-center uppercase tracking-[0.14em]`}
             >
               Choose {tier.name} <ArrowRight className="h-4 w-4" />
             </button>
@@ -523,8 +554,13 @@ export default function PublicAccess() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
-            <JJLogoImage variant="dark" size="xl" showText={false} className="!items-center [&_img]:mx-auto" />
-            <h1 className="mt-6 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
+            <img
+              data-no-fallback
+              src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
+              alt="JBJ"
+              className="h-[220px] w-[220px] object-contain drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] sm:h-[280px] sm:w-[280px] lg:h-[340px] lg:w-[340px]"
+            />
+            <h1 className="mt-8 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
               JBJ Global Real Estate
             </h1>
             <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.42em] !text-white/85 sm:text-[13px]">
@@ -563,14 +599,19 @@ export default function PublicAccess() {
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-l border-[#0d3a2b]/15 pl-8">
               {[
-                ["120+", "developers"],
-                ["24/7", "advisor desk"],
-                ["AED", "backed reporting"],
-                ["100%", "verified inventory"],
-              ].map(([v, l]) => (
-                <div key={l}>
-                  <p className="font-serif text-3xl text-[#0d3a2b]">{v}</p>
-                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/60">{l}</p>
+                { icon: Building2, v: "600+", l: "developers" },
+                { icon: Headphones, v: "24/7", l: "advisor desk" },
+                { icon: ShieldCheck, v: "AED", l: "backed reporting" },
+                { icon: FileCheck2, v: "100%", l: "verified inventory" },
+              ].map(({ icon: Icon, v, l }) => (
+                <div key={l} className="flex items-start gap-3">
+                  <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 shrink-0`}>
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="font-serif text-3xl text-[#0d3a2b] leading-none">{v}</p>
+                    <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/60">{l}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -605,9 +646,16 @@ export default function PublicAccess() {
         <section
           id="new-launch"
           data-surface="dark"
-          className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12"
-          style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
+          className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12 bg-[#02100a]"
         >
+          {/* Background: latest project photo (Dubai skyline fallback) */}
+          <img
+            src={heroFallbackDubai}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover opacity-[0.22]"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(4,22,16,0.88)_0%,rgba(2,16,10,0.94)_60%,rgba(0,0,0,0.98)_100%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
           <div className="relative mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
@@ -643,6 +691,7 @@ export default function PublicAccess() {
           </div>
         </section>
 
+
         {/* GUIDES — LOCKED per owner */}
         <section id="guides" className="bg-[#F7F2EA] py-16">
           <div className="mx-auto mb-8 flex max-w-7xl flex-col justify-between gap-5 px-5 sm:px-8 md:flex-row md:items-end lg:px-12">
@@ -673,23 +722,31 @@ export default function PublicAccess() {
           tiers={investorTiers}
           onSelect={openSignup}
         >
-          {/* Signature perks — folded inside the Investor strap, edge to edge */}
-          <div className="mt-14">
-            <h3 className="mb-6 text-center font-serif text-2xl text-[#064E3B] sm:text-3xl">
-              Signature perks · included on Signature &amp; Private Office
-            </h3>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {/* Signature perks — included with the SIGNATURE tier */}
+          <div className="mt-16">
+            <div className="mb-8 text-center">
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
+                Included with the Signature tier
+              </span>
+              <h3 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">
+                Signature perks
+              </h3>
+              <p className="mx-auto mt-2 max-w-xl text-sm text-[#1A1A1A]/70">
+                Automatically unlocked on the Signature package (also included with Private Office).
+              </p>
+            </div>
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
               {investorSignaturePerks.map((perk) => {
                 const Icon = perk.icon;
                 return (
                   <div
                     key={perk.label}
-                    className="flex items-center gap-3 rounded-xl border border-[#0d3a2b]/12 bg-white px-4 py-3"
+                    className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl border border-[#0d3a2b]/12 bg-white p-4 text-center shadow-[0_18px_40px_-30px_rgba(6,78,59,0.35)] transition hover:-translate-y-1 hover:border-[#064E3B]/40"
                   >
-                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-9 w-9`}>
-                      <Icon className="h-4 w-4" />
+                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-14 w-14 rounded-xl`}>
+                      <Icon className="h-6 w-6" />
                     </span>
-                    <span className="text-sm font-semibold text-[#0d3a2b]">{perk.label}</span>
+                    <span className="text-xs font-semibold leading-snug text-[#0d3a2b]">{perk.label}</span>
                   </div>
                 );
               })}
@@ -769,16 +826,15 @@ export default function PublicAccess() {
             </div>
 
             <div className="mt-12 flex flex-wrap justify-center gap-3">
-              {/* White idle → emerald hover per owner spec */}
               <button
                 onClick={openSignup}
-                className="group inline-flex h-12 items-center gap-2 rounded-md border border-white bg-white px-6 text-sm font-bold uppercase tracking-[0.14em] !text-[#0d3a2b] transition hover:!bg-[#064E3B] hover:!text-white [&_svg]:!text-[#0d3a2b] hover:[&_svg]:!text-white"
+                className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}
               >
                 Enroll in the academy <ArrowRight className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setLeadOpen(true)}
-                className="inline-flex h-12 items-center gap-2 rounded-md border border-white/40 bg-transparent px-6 text-sm font-bold uppercase tracking-[0.14em] !text-white transition hover:bg-white/[0.10]"
+                className="inline-flex h-12 items-center gap-2 rounded-md border border-white/60 bg-transparent px-6 text-sm font-bold uppercase tracking-[0.14em] !text-white transition hover:bg-white/[0.14]"
               >
                 Speak to the broker desk
               </button>
@@ -786,36 +842,99 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* Closing CTA */}
-        <section
-          data-surface="dark"
-          className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12"
-          style={{ backgroundImage: "linear-gradient(135deg,#000 0%,#042c1c 45%,#064E3B 100%)" }}
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08),transparent_65%)]" />
-          <div className="relative mx-auto max-w-4xl text-center">
-            <Users className="mx-auto h-9 w-9 !text-white" />
-            <h2 className="mt-5 font-serif text-4xl !text-white sm:text-5xl">Ready to step inside JBJ?</h2>
-            <p className="mx-auto mt-4 max-w-2xl !text-white/85">
-              Create an account to unlock featured properties, launches, guides and packages — or speak with an advisor first.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              {/* White idle → emerald hover */}
-              <button
-                onClick={openSignup}
-                className="group inline-flex h-12 items-center gap-2 rounded-md border border-white bg-white px-6 text-sm font-bold uppercase tracking-[0.14em] !text-[#0d3a2b] transition hover:!bg-[#064E3B] hover:!text-white [&_svg]:!text-[#0d3a2b] hover:[&_svg]:!text-white"
+        {/* CERTIFICATE preview — 3D-style JBJ broker certificate */}
+        <section className="bg-[#F7F2EA] px-5 py-24 sm:px-8 lg:px-12">
+          <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1fr,1.1fr]">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
+                JBJ Global Broker Certificate
+              </span>
+              <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
+                A signed, DLD-aligned certificate — issued in your name.
+              </h2>
+              <p className="mt-4 max-w-xl text-[#1A1A1A]/72">
+                Every graduate of the Broker Academy receives a personally issued JBJ Global certificate,
+                recognised across our developer network and printed on premium paper for your office wall.
+              </p>
+              <ul className="mt-6 space-y-3 text-sm">
+                {[
+                  "Personalised & serial-numbered",
+                  "Signed by the JBJ Global principal",
+                  "Recognised by developer partners",
+                  "Digital + printed copy included",
+                ].map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-[#1A1A1A]/82">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#064E3B]" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8">
+                <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                  Enroll & earn your certificate <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* 3D certificate mockup */}
+            <div className="relative">
+              <div
+                className="relative mx-auto max-w-[520px] rounded-[18px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] p-8 shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#B89555]/40"
+                style={{ transform: "perspective(1400px) rotateY(-12deg) rotateX(4deg)" }}
               >
-                Create account <ArrowRight className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => setLeadOpen(true)}
-                className="inline-flex h-12 items-center gap-2 rounded-md border border-white/40 bg-transparent px-6 text-sm font-bold uppercase tracking-[0.14em] !text-white transition hover:bg-white/[0.10]"
-              >
-                Request a call back
-              </button>
+                <div className="rounded-[10px] border-2 border-[#B89555]/50 p-6 text-center">
+                  <div className="mx-auto mb-3 inline-flex h-14 w-14 items-center justify-center rounded-full border border-[#B89555] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]">
+                    <img
+                      data-no-fallback
+                      src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
+                      alt=""
+                      className="h-9 w-9 object-contain"
+                    />
+                  </div>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.36em] text-[#B89555]">
+                    JBJ Global Real Estate
+                  </p>
+                  <h3 className="mt-2 font-serif text-2xl text-[#0d3a2b]">Certificate of Completion</h3>
+                  <p className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55">
+                    This is presented to
+                  </p>
+                  <p className="mt-2 font-serif text-3xl text-[#0d3a2b]">Your Name Here</p>
+                  <p className="mx-auto mt-3 max-w-xs text-[11px] leading-relaxed text-[#1A1A1A]/70">
+                    for successfully completing the JBJ Global Broker Academy in accordance with
+                    DLD-aligned professional standards.
+                  </p>
+                  <div className="mt-6 flex items-end justify-between gap-4 text-left">
+                    <div>
+                      <div className="h-px w-32 bg-[#1A1A1A]/60" />
+                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Principal</p>
+                    </div>
+                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#B89555] text-[#B89555]">
+                      <Award className="h-6 w-6" />
+                    </div>
+                    <div className="text-right">
+                      <div className="ml-auto h-px w-32 bg-[#1A1A1A]/60" />
+                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/55">Date</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                aria-hidden
+                className="absolute -inset-8 -z-10 rounded-[32px] bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.28),transparent_70%)] blur-2xl"
+              />
             </div>
           </div>
         </section>
+
+        {/* Closing CTA — same animation/pattern as homepage "Ready to Get Started" */}
+        <div className="bg-[#F7F2EA]">
+          <CombinedContactNewsletter
+            title="Ready to step inside JBJ?"
+            subtitle="Create an account to unlock featured properties, launches, guides and packages — or speak with an advisor first."
+            id="access-ready"
+          />
+        </div>
+
       </main>
 
       <footer className="border-t border-[#0d3a2b]/15 bg-[#F7F2EA] px-5 py-8 sm:px-8 lg:px-12">
