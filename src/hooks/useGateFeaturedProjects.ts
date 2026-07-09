@@ -179,6 +179,7 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
       [...configured, ...((amraRes.data as any[]) ?? []), ...((latestRes.data as any[]) ?? [])]
         .map(normalizeProject)
         .filter((project): project is GateFeaturedProject => !!project && !!project.cover_image)
+        .filter(isEligibleForGate)
         .forEach((project) => {
           if (project?.id && !byId.has(project.id)) byId.set(project.id, project);
         });
