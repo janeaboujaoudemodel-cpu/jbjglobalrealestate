@@ -618,7 +618,7 @@ export default function PublicAccess() {
             </button>
             <button
               onClick={openSignup}
-              data-surface="dark"
+              data-jbj-access-cta="emerald"
               style={emeraldInkStyle}
               className={`${BTN_EMERALD_SOLID} h-10 whitespace-nowrap`}
             >
