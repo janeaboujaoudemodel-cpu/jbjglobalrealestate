@@ -928,13 +928,13 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
             A recognised credential for licensed and aspiring UAE agents — mentorship, materials and a direct pathway into JBJ Global.
           </p>
 
-          <ul className="mt-5 grid gap-2.5 sm:grid-cols-1">
+          <ul className="mt-5 grid gap-3">
             {brokerBenefits.map((b) => {
               const Icon = b.icon;
               return (
-                <li key={b.title} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                    <Icon className="h-3.5 w-3.5" />
+                <li key={b.title} className="grid grid-cols-[36px_1fr] items-center gap-3">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#C9A84C]/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] [&_svg]:!text-white [&_svg]:!stroke-white">
+                    <Icon className="h-[18px] w-[18px]" />
                   </span>
                   <span className="text-[13px] leading-relaxed !text-white/82">
                     <span className="font-serif !text-white">{b.title}.</span>{" "}
@@ -944,6 +944,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
               );
             })}
           </ul>
+
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11 uppercase tracking-[0.14em]`}>
