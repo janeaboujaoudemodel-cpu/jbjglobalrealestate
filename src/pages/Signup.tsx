@@ -84,24 +84,22 @@ export default function Signup() {
               <li key={label} className="flex-1 flex items-center gap-2">
                 <div
                   className={cn(
-                    "w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium border transition-colors",
-                    i < step
-                      ? "bg-[#064E3B] border-[#064E3B] text-white"
-                      : i === step
-                      ? "bg-white border-[#064E3B] text-[#064E3B]"
-                      : "bg-white border-[#B89555]/40 text-[#1A1A1A]/40"
+                    "w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold border transition-all",
+                    i <= step
+                      ? "bg-[#064E3B] border-[#064E3B] text-white shadow-[0_6px_16px_-6px_rgba(6,78,59,0.55)]"
+                      : "bg-[#064E3B]/25 border-[#064E3B]/40 text-white"
                   )}
                 >
-                  {i < step ? <Check className="w-4 h-4" /> : i + 1}
+                  {i < step ? <Check className="w-4 h-4 text-white" /> : <span className="text-white">{i + 1}</span>}
                 </div>
                 <div className={cn(
-                  "text-[11px] tracking-[0.18em] uppercase hidden sm:block",
-                  i === step ? "text-[#0d3a2b]" : "text-[#1A1A1A]/50"
+                  "text-[11px] tracking-[0.18em] uppercase hidden sm:block font-semibold",
+                  i <= step ? "text-[#064E3B]" : "text-[#1A1A1A]/45"
                 )}>{label}</div>
                 {i < STEPS.length - 1 && (
                   <div className={cn(
-                    "flex-1 h-px",
-                    i < step ? "bg-[#064E3B]" : "bg-[#B89555]/30"
+                    "flex-1 h-[2px] rounded-full",
+                    i < step ? "bg-[#064E3B]" : "bg-[#064E3B]/20"
                   )} />
                 )}
               </li>
