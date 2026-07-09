@@ -674,10 +674,10 @@ export default function PublicAccess() {
                 A private property platform for Dubai's discerning investors, developers & brokers.
               </h2>
               <div className="mt-8 flex flex-wrap gap-3">
-                <button onClick={openSignup} style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={openSignup} data-jbj-access-cta="emerald" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Create your account <ArrowRight className="h-4 w-4" />
                 </button>
-                <button onClick={() => setLeadOpen(true)} style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                <button onClick={() => setLeadOpen(true)} data-jbj-access-cta="white" style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
                   Talk to an advisor
                 </button>
               </div>
