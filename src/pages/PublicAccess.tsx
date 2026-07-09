@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { JJLogoImage } from "@/components/JJLogoImage";
 import LeadFormDialog from "@/components/gate/LeadFormDialog";
+import PaymentRequestDialog, { type PaymentRequestContext } from "@/components/gate/PaymentRequestDialog";
 import SignupDialog from "@/components/gate/SignupDialog";
 import LoginDialog from "@/components/gate/LoginDialog";
 import VideoBackground from "@/components/VideoBackground";
@@ -388,7 +389,7 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
 }
 
 // ── Tier grid (reusable per audience) ───────────────────────────────────────
-function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) {
+function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) => void }) {
   return (
     <div className={`grid gap-6 ${tiers.length === 2 ? "md:grid-cols-2" : "lg:grid-cols-3"}`}>
       {tiers.map((tier) => {
@@ -440,7 +441,7 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) 
             </ul>
 
             <button
-              onClick={onSelect}
+              onClick={() => onSelect(tier)}
               data-surface="dark"
               className={`${BTN_EMERALD_SOLID} mt-8 h-12 w-full justify-center uppercase tracking-[0.14em]`}
             >
@@ -459,6 +460,7 @@ function PackageStrap({
   title,
   description,
   tiers,
+  audience,
   onSelect,
   children,
 }: {
@@ -467,7 +469,8 @@ function PackageStrap({
   title: string;
   description: string;
   tiers: Tier[];
-  onSelect: () => void;
+  audience: string;
+  onSelect: (audience: string, tier: Tier, sectionId: string) => void;
   children?: React.ReactNode;
 }) {
   return (
@@ -478,7 +481,7 @@ function PackageStrap({
           <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">{title}</h2>
           <p className="mx-auto mt-4 max-w-2xl text-[#1A1A1A]/72">{description}</p>
         </div>
-        <TierGrid tiers={tiers} onSelect={onSelect} />
+        <TierGrid tiers={tiers} onSelect={(tier) => onSelect(audience, tier, `#${id}`)} />
         {children}
       </div>
     </section>
@@ -489,8 +492,19 @@ export default function PublicAccess() {
   const [leadOpen, setLeadOpen] = useState(false);
   const [signupOpen, setSignupOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
 
   const openSignup = () => setSignupOpen(true);
+  const openPayment = (audience: string, tier: Tier, sectionId: string) => {
+    setPayCtx({
+      audience,
+      planName: tier.name,
+      price: tier.price,
+      cadence: tier.cadence,
+      sectionId,
+      extra: { audience_size: tier.audienceSize ?? null, features: tier.features },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#1A1A1A]">
@@ -720,7 +734,8 @@ export default function PublicAccess() {
           title="Investor packages"
           description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio."
           tiers={investorTiers}
-          onSelect={openSignup}
+          audience="Investor packages"
+          onSelect={openPayment}
         >
           {/* Signature perks — included with the SIGNATURE tier */}
           <div className="mt-16">
@@ -762,7 +777,8 @@ export default function PublicAccess() {
             title="Developer programs"
             description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
             tiers={developerTiers}
-            onSelect={openSignup}
+            audience="Developer programs"
+            onSelect={openPayment}
           />
         </div>
 
@@ -773,7 +789,8 @@ export default function PublicAccess() {
           title="Broker Academy & enrollment"
           description="Yearly enrollment for licensed and aspiring UAE agents. Mentorship, exclusive materials, and a direct pathway into JBJ Global."
           tiers={brokerTiers}
-          onSelect={openSignup}
+          audience="Broker Academy"
+          onSelect={openPayment}
         />
 
         {/* AGENCY */}
@@ -784,7 +801,8 @@ export default function PublicAccess() {
             title="Agency packages"
             description="Team seats, CRM segmentation and lead systems for boutique and established Dubai agencies."
             tiers={agencyTiers}
-            onSelect={openSignup}
+            audience="Agency packages"
+            onSelect={openPayment}
           />
         </div>
 
@@ -971,6 +989,12 @@ export default function PublicAccess() {
       </button>
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
+      <PaymentRequestDialog
+        open={!!payCtx}
+        onOpenChange={(o) => { if (!o) setPayCtx(null); }}
+        context={payCtx}
+        sourcePage="/access"
+      />
       <SignupDialog open={signupOpen} onOpenChange={setSignupOpen} />
       <LoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
     </div>

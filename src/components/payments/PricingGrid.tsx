@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useStripeCheckout } from "@/hooks/useStripeCheckout";
-import { useRequireAuth } from "@/hooks/useRequireAuth";
-import { PaymentTestModeBanner } from "@/components/payments/PaymentTestModeBanner";
+import PaymentRequestDialog, { type PaymentRequestContext } from "@/components/gate/PaymentRequestDialog";
 import { formatAed, type BillingInterval, type PricingTier } from "@/content/pricing";
 import { cn } from "@/lib/utils";
 import { logAnalytics } from "@/lib/analytics";
@@ -32,9 +29,7 @@ export function PricingGrid({
   ctaLabel = "Get started",
   analyticsContext,
 }: Props) {
-  const { user } = useAuth();
-  const { openCheckout, checkoutElement } = useStripeCheckout();
-  const { requireAuth } = useRequireAuth();
+  const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
 
   const availableIntervals: BillingInterval[] = useMemo(() => {
     if (intervals?.length) return intervals;
@@ -59,23 +54,23 @@ export function PricingGrid({
       interval: price.interval,
     });
 
-    requireAuth({
-      action: "purchase_membership",
-      onAuthed: () => {
-        openCheckout({
-          priceId: price.priceId,
-          userId: user?.id,
-          customerEmail: user?.email ?? undefined,
-          title: tier.name,
-        });
+    setPayCtx({
+      audience: analyticsContext,
+      planName: tier.name,
+      price: formatAed(price.amountAed),
+      cadence: price.label,
+      extra: {
+        tier_key: tier.key,
+        price_id: price.priceId,
+        interval: price.interval,
+        features: tier.features,
       },
     });
   };
 
   return (
     <>
-      <PaymentTestModeBanner />
-      <section className="jj-section py-16 md:py-24">
+      <section className="jj-section py-16 md:py-24">{/* payment-request flow (Stripe temporarily disabled) */}
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-10 md:mb-14">
             {eyebrow ? (
@@ -181,7 +176,11 @@ export function PricingGrid({
           </div>
         </div>
       </section>
-      {checkoutElement}
+      <PaymentRequestDialog
+        open={!!payCtx}
+        onOpenChange={(o) => { if (!o) setPayCtx(null); }}
+        context={payCtx}
+      />
     </>
   );
 }
