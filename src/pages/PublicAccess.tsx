@@ -830,7 +830,7 @@ function CertificatePreview() {
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt="JBJ Global Real Estate"
-              className="h-10 w-10 object-contain sm:h-12 sm:w-12"
+              className="h-14 w-14 object-contain sm:h-20 sm:w-20"
             />
             <div className="text-right">
               <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A] sm:text-[10px]">JBJ Global Real Estate</p>
