@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { PageMeta } from "@/components/seo/PageMeta";
 import { PricingGrid } from "@/components/payments/PricingGrid";
 import { AGENCY_PACKAGES } from "@/content/pricing";
 import { Button } from "@/components/ui/button";
