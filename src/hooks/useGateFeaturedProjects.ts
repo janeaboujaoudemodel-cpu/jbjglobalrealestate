@@ -61,7 +61,7 @@ const sortedGalleryUrls = (images: unknown) => {
 const normalizeStatus = (value: unknown) => String(value || "").trim().toLowerCase();
 
 const isReadyProject = (project: any) => {
-  const statusText = [project?.sale_status, project?.construction_status, project?.status].map(normalizeStatus).join(" ");
+  const statusText = [project?.sale_status, project?.construction_status, project?.status, project?.handover_date].map(normalizeStatus).join(" ");
   if (/ready|complete|completed|delivered|handover/.test(statusText) && !/off[ -]?plan|under construction|new launch/.test(statusText)) return true;
   const rawDate = project?.handover_date ? Date.parse(project.handover_date) : NaN;
   return Number.isFinite(rawDate) && rawDate < Date.now();
@@ -70,7 +70,8 @@ const isReadyProject = (project: any) => {
 const isOffPlanProject = (project: any) => {
   const statusText = [project?.sale_status, project?.construction_status, project?.status].map(normalizeStatus).join(" ");
   if (/off[ -]?plan|under construction|new launch|launch/.test(statusText)) return true;
-  return !isReadyProject(project);
+  const rawDate = project?.handover_date ? Date.parse(project.handover_date) : NaN;
+  return Number.isFinite(rawDate) && rawDate >= Date.now();
 };
 
 const rankForGate = (project: GateFeaturedProject) => {
