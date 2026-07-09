@@ -501,3 +501,52 @@ function DeviceFrameToolbar({
     </Card>
   );
 }
+
+function AutomationPanel({
+  device, rows, onAutoFill,
+}: {
+  device: Device;
+  rows: FeaturedRow[];
+  onAutoFill: (count: number, intervalDays: number | null) => void;
+}) {
+  const [count, setCount] = useState<number>(6);
+  const [interval, setInterval] = useState<string>("lifetime");
+  const auto = rows.find((r) => r.auto_mode === "newest");
+
+  return (
+    <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-4 rounded-xl">
+      <div className="flex flex-wrap items-end gap-3">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.22em] font-black text-[#1A1A1A]/60">Automation · {device}</p>
+          <p className="text-sm text-[#1A1A1A]/75">
+            {auto
+              ? `Auto: newest ${auto.auto_count || count}, refresh ${auto.refresh_interval_days ? `${auto.refresh_interval_days}d` : "lifetime"}`
+              : "Off · currently manual selection"}
+          </p>
+        </div>
+        <div>
+          <Label className="text-[#1A1A1A]">Newest</Label>
+          <Input type="number" min={1} max={30} value={count} onChange={(e) => setCount(Math.max(1, Number(e.target.value) || 1))} className="mt-1 w-24 bg-white border-[#B89555]/40 text-[#1A1A1A]" />
+        </div>
+        <div>
+          <Label className="text-[#1A1A1A]">Refresh</Label>
+          <Select value={interval} onValueChange={setInterval}>
+            <SelectTrigger className="mt-1 w-40 bg-white border-[#B89555]/40 text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="15">Every 15 days</SelectItem>
+              <SelectItem value="30">Every 30 days</SelectItem>
+              <SelectItem value="60">Every 60 days</SelectItem>
+              <SelectItem value="lifetime">Lifetime (until I change)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <Button
+          onClick={() => onAutoFill(count, interval === "lifetime" ? null : Number(interval))}
+          className="bg-[#064E3B] text-white hover:bg-[#053f30]"
+        >
+          Replace with newest {count}
+        </Button>
+      </div>
+    </Card>
+  );
+}
