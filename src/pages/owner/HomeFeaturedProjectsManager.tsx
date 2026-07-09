@@ -254,8 +254,34 @@ export default function HomeFeaturedProjectsManager() {
         </div>
       </div>
 
+      {/* Surface selector — choose which public strap you're editing */}
+      <div className="rounded-2xl border border-[#B89555]/35 bg-white p-3 flex flex-wrap items-center gap-2">
+        <span className="text-[11px] uppercase tracking-[0.22em] font-black text-[#1A1A1A]/60 pr-2">Surface</span>
+        {SURFACES.map((s) => {
+          const active = s.id === surface;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setSurface(s.id)}
+              className={`rounded-lg px-3 py-2 text-sm font-bold transition ${active ? "bg-[#064E3B] text-white" : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"}`}
+            >
+              {s.label}
+              <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[10px] ${active ? "bg-white/20" : "bg-[#B89555]/20 text-[#1A1A1A]"}`}>{s.hint}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Automation panel — auto-fill newest N with refresh interval, per surface + current device */}
+      <AutomationPanel
+        device={tab}
+        rows={byDevice(tab)}
+        onAutoFill={(count, intervalDays) => autoFillNewest.mutate({ device: tab, count, intervalDays })}
+      />
+
       {/* Device tabs */}
       <Tabs value={tab} onValueChange={(v) => setTab(v as Device)}>
+
         <TabsList data-surface="emerald" className="jj-emerald-metallic p-1 rounded-xl inline-flex gap-1">
           {DEVICES.map((d) => {
             const Icon = d.icon;
