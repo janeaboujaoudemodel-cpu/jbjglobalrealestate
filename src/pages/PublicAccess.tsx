@@ -308,7 +308,7 @@ export default function PublicAccess() {
 
         {/* NEW LAUNCH / PLATFORM PILLARS — premium emerald surface */}
         <section id="new-launch" data-surface="dark" className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12" style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}>
-          <div className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-luminosity">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.10] mix-blend-overlay">
             <img src="/services/property-management-bg.jpg" alt="" className="h-full w-full object-cover" />
           </div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
@@ -506,7 +506,7 @@ export default function PublicAccess() {
 
         {/* Closing CTA */}
         <section data-surface="dark" className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12" style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}>
-          <div className="pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-luminosity">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.10] mix-blend-overlay">
             <img src="/services/buy-property-bg.jpg" alt="" className="h-full w-full object-cover" />
           </div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
