@@ -43,7 +43,6 @@ const isUsableMediaUrl = (value: unknown) => {
   if (!url) return false;
   if (/^data:/i.test(url)) return false;
   if (url.length > 900) return false;
-  if (/api\.reelly\.io\/vault/i.test(url)) return false;
   return /^(https?:\/\/|\/)/i.test(url);
 };
 
@@ -153,7 +152,7 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
           .eq("is_published", true)
           .is("deleted_at", null)
           .order("created_at", { ascending: false })
-          .limit(12),
+          .limit(80),
       ]);
 
       const byId = new Map<string, GateFeaturedProject>();

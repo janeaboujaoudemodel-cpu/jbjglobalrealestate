@@ -392,7 +392,6 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
     if (!url) return null;
     if (url.startsWith("data:")) return null;
     if (url.length > 900) return null;
-    if (/api\.reelly\.io\/vault/i.test(url)) return null;
     if (!/^(https?:\/\/|\/)/i.test(url)) return null;
     return url;
   };
