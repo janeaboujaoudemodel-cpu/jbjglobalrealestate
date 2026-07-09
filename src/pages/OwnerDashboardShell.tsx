@@ -17,12 +17,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import OwnerSidebarNav from "@/components/owner-dashboard/OwnerSidebarNav";
 import { OwnerTasksPopupAlert } from "@/components/owner-dashboard/OwnerTasksPopupAlert";
+import GlobalVerticalNav from "@/components/navigation/GlobalVerticalNav";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 const OwnerDashboardShell = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [frontSidebarCollapsed, setFrontSidebarCollapsed] = useState(() => {
+    try { return localStorage.getItem("jj_nav_collapsed") === "1"; } catch { return false; }
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
   const [fullscreen] = useState<boolean>(false);
   const isMobile = useIsMobile();
@@ -33,6 +37,21 @@ const OwnerDashboardShell = () => {
     // by default per the global PASS XX rule. Fullscreen is now click-only.
     try { window.localStorage.removeItem("owner.fullscreen"); } catch {}
   }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const sync = () => {
+      setFrontSidebarCollapsed(
+        document.body.classList.contains("jj-vertical-nav-collapsed") ||
+        (!document.body.classList.contains("jj-vertical-nav-active") && localStorage.getItem("jj_nav_collapsed") === "1")
+      );
+    };
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    const id = window.setTimeout(sync, 250);
+    return () => { observer.disconnect(); window.clearTimeout(id); };
+  }, [isMobile]);
 
 
   const handleSignOut = async () => {
@@ -171,9 +190,9 @@ const OwnerDashboardShell = () => {
   // Expose content-area offsets so the global BrandedLoader centers in the
   // visible main area (right of sidebar, below the top bar) rather than over
   // the whole viewport.
-  const contentLeft = isMobile || fullscreen ? "0px" : sidebarCollapsed ? "72px" : "200px";
-  const contentTop = "var(--shell-header-h)";
-  const mainWidth = isMobile || fullscreen ? "100%" : sidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 200px)";
+  const contentLeft = isMobile || fullscreen ? "0px" : frontSidebarCollapsed ? "72px" : "264px";
+  const contentTop = "88px";
+  const mainWidth = isMobile || fullscreen ? "100%" : frontSidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 264px)";
 
   return (
     <div
@@ -202,14 +221,11 @@ const OwnerDashboardShell = () => {
           data-chrome="sidebar"
           data-backend-sidebar="owner"
           data-surface="champagne"
-          className={cn(
-              "owner-shell-surface fixed left-0 top-0 h-full bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-[#B89555]/30 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
-              sidebarCollapsed ? "w-[72px]" : "w-[200px]"
-          )}
+          className="fixed left-0 top-0 h-full z-[9997]"
           role="navigation"
           aria-label="Owner dashboard navigation"
         >
-          <SidebarContent collapsed={sidebarCollapsed} />
+          <GlobalVerticalNav />
         </aside>
       )}
 
@@ -217,7 +233,7 @@ const OwnerDashboardShell = () => {
       <main 
         className={cn(
           "flex-1 min-w-0 overflow-x-hidden transition-all duration-300 overscroll-contain",
-          isMobile || fullscreen ? "ml-0" : (sidebarCollapsed ? "ml-[72px]" : "ml-[200px]")
+          isMobile || fullscreen ? "ml-0" : (frontSidebarCollapsed ? "ml-[72px]" : "ml-[264px]")
         )}
         style={{ width: mainWidth, maxWidth: mainWidth }}
         role="main"
@@ -227,7 +243,7 @@ const OwnerDashboardShell = () => {
         <header
           data-no-contrast-guard
           className="owner-shell-surface bg-[#F7F2EA] border-b border-[#B89555]/40 sticky top-0 z-30 flex items-center justify-between px-3 md:px-6 shadow-sm min-w-0"
-          style={{ height: "var(--shell-header-h)", minHeight: "var(--shell-header-h)", maxHeight: "var(--shell-header-h)" }}
+          style={{ height: "88px", minHeight: "88px", maxHeight: "88px" }}
         >
           <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-shrink-1">
             {isMobile && (
