@@ -253,13 +253,20 @@ const brokerServices = [
   { icon: ShieldCheck, title: "Document discipline", body: "Clean presentation of payment plans, brochures and client-facing material." },
 ];
 
+import svcOffPlan from "@/assets/menu-luxury-penthouse.jpg";
+import svcAdvisory from "@/assets/luxury-villa-hero.jpeg";
+import svcDeveloper from "@/assets/menu-projects-hero.jpg";
+import svcHandover from "@/assets/services/property-management-bg.jpg";
+import svcGlobal from "@/assets/dubai-plane-view.png";
+import svcConcierge from "@/assets/concierge-hero.jpeg";
+
 const jbjServices = [
-  { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms." },
-  { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors." },
-  { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers." },
-  { icon: KeyRound, title: "Handover & resale", body: "Snagging, leasing readiness and resale positioning across the full ownership cycle." },
-  { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients." },
-  { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover." },
+  { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms.", image: svcOffPlan },
+  { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors.", image: svcAdvisory },
+  { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers.", image: svcDeveloper },
+  { icon: KeyRound, title: "Handover & resale", body: "Snagging, leasing readiness and resale positioning across the full ownership cycle.", image: svcHandover },
+  { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients.", image: svcGlobal },
+  { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover.", image: svcConcierge },
 ];
 
 const investorSignaturePerks = [
@@ -369,6 +376,24 @@ html body #root [data-jbj-access-gold-badge] * {
   color: #0d3a2b !important;
   -webkit-text-fill-color: #0d3a2b !important;
   animation: username-pulse 4.8s ease-in-out infinite;
+}
+[data-broker-certificate-frame] .seal-outline svg circle {
+  stroke: url(#sealGold) !important;
+}
+[data-broker-certificate-frame] .seal-outline svg text {
+  fill: url(#sealGold) !important;
+  stroke: none !important;
+}
+html body #root [data-broker-certificate-frame] .seal-outline svg circle,
+html body #root [data-broker-certificate-frame] .seal-outline svg circle * {
+  stroke: url(#sealGold) !important;
+  fill: none !important;
+}
+html body #root [data-broker-certificate-frame] .seal-outline svg text,
+html body #root [data-broker-certificate-frame] .seal-outline svg text * {
+  fill: url(#sealGold) !important;
+  stroke: none !important;
+  -webkit-text-fill-color: transparent !important;
 }
 @keyframes certificate-glow {
   0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,79,0.0), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
@@ -630,16 +655,6 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
 }
 
 function ServicesSection() {
-  const [featureIdx, setFeatureIdx] = React.useState(0);
-  React.useEffect(() => {
-    const id = window.setInterval(() => {
-      setFeatureIdx((i) => (i + 1) % jbjServices.length);
-    }, 4200);
-    return () => window.clearInterval(id);
-  }, []);
-  const featured = jbjServices[featureIdx];
-  const FeaturedIcon = featured.icon;
-
   return (
     <section
       id="services"
@@ -665,71 +680,58 @@ function ServicesSection() {
           </p>
         </div>
 
-        {/* Featured animated card — premium ink-emerald, ivory accents, no mustard */}
-        <article
-          data-surface="dark"
-          data-ink-emerald-opt-out
-          className="relative mb-12 overflow-hidden rounded-[28px] border border-white/10 shadow-[0_60px_140px_-50px_rgba(6,78,59,0.7)]"
-          style={{ backgroundImage: "linear-gradient(135deg,#053a2c 0%,#021a12 60%,#000 100%)" }}
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_15%_0%,rgba(255,255,255,0.10),transparent_45%),radial-gradient(ellipse_at_88%_100%,rgba(6,78,59,0.55),transparent_55%)]" />
-          <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
-          <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/8 to-transparent animate-[jbj-shine_6s_ease-in-out_infinite]" />
-          <style>{`@keyframes jbj-shine { 0% { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 60% { transform: translateX(560%); opacity: 0.25; } 100% { transform: translateX(600%); opacity: 0; } }`}</style>
-
-          <div className="relative grid gap-10 p-10 sm:p-14 md:grid-cols-[auto,1fr,auto] md:items-center">
-            <div
-              key={featured.title}
-              aria-hidden
-              className="relative flex h-28 w-28 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_20px_50px_-24px_rgba(0,0,0,0.8)] animate-[fade-in_0.6s_ease-out]"
-            >
-              <span className="absolute inset-2 rounded-xl border border-white/8" />
-              <FeaturedIcon className="h-12 w-12" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
-            </div>
-            <div key={`${featured.title}-body`} className="min-w-0 animate-[fade-in_0.6s_ease-out]">
-              <div className="flex items-center gap-3">
-                <span className="h-px w-8 bg-white/40" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.38em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Signature Service · {String(featureIdx + 1).padStart(2, "0")} / {String(jbjServices.length).padStart(2, "0")}</span>
-              </div>
-              <h3 className="mt-3 font-serif text-3xl leading-[1.1] sm:text-[42px]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{featured.title}</h3>
-              <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.78)", WebkitTextFillColor: "rgba(255,255,255,0.78)" }}>{featured.body}</p>
-            </div>
-            <div className="flex md:flex-col md:items-end gap-1.5">
-              {jbjServices.map((s, i) => (
-                <button
-                  key={s.title}
-                  type="button"
-                  aria-label={`Show ${s.title}`}
-                  onClick={() => setFeatureIdx(i)}
-                  className={`h-1 rounded-full transition-all ${i === featureIdx ? "w-10 bg-white" : "w-4 bg-white/25 hover:bg-white/55"}`}
-                />
-              ))}
-            </div>
-          </div>
-        </article>
-
-        {/* Grid of six services — clean ivory cards, emerald accents only */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Premium photo cards — magazine editorial grid */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {jbjServices.map((s, i) => {
             const Icon = s.icon;
-            const isActive = i === featureIdx;
             return (
               <article
                 key={s.title}
-                onMouseEnter={() => setFeatureIdx(i)}
-                className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white p-7 shadow-[0_18px_46px_-32px_rgba(13,58,43,0.35)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_36px_70px_-32px_rgba(13,58,43,0.55)] ${isActive ? "border-[#0d3a2b]/40 ring-1 ring-[#0d3a2b]/25" : "border-[#0d3a2b]/10"}`}
+                className="group relative flex flex-col overflow-hidden rounded-[20px] border border-[#0d3a2b]/12 bg-[#0d3a2b] shadow-[0_28px_60px_-32px_rgba(6,78,59,0.55)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_44px_90px_-36px_rgba(6,78,59,0.75)]"
               >
-                <span className="pointer-events-none absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#0d3a2b]/60 to-transparent opacity-70" />
-                <span
-                  data-surface="dark"
-                  className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl [&_svg]:!text-white [&_svg]:!stroke-white [&_svg]:!fill-none"
-                  style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
-                >
-                  <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
-                </span>
-                <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">{String(i + 1).padStart(2, "0")}</p>
-                <h3 className="mt-1.5 font-serif text-xl leading-tight text-[#0d3a2b]">{s.title}</h3>
-                <p className="mt-2 text-[13px] leading-relaxed text-[#1A1A1A]/68">{s.body}</p>
+                {/* Photo */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <img
+                    src={s.image}
+                    alt={s.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.08]"
+                  />
+                  {/* Gradient wash for legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
+                  {/* Gold hairline top */}
+                  <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
+                  {/* Number badge */}
+                  <span className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-[#C9A84C]/55 bg-black/40 px-3 font-serif text-[11px] tracking-[0.28em] text-[#EBD79A] backdrop-blur">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {/* Icon medallion */}
+                  <span
+                    data-surface="dark"
+                    className="absolute right-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md [&_svg]:!text-white [&_svg]:!stroke-white [&_svg]:!fill-none"
+                  >
+                    <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
+                  </span>
+                  {/* Title on photo */}
+                  <div className="absolute inset-x-6 bottom-5">
+                    <h3 className="font-serif text-[24px] leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                      {s.title}
+                    </h3>
+                    <span aria-hidden className="mt-2 block h-px w-10 bg-[#C9A84C]" />
+                  </div>
+                </div>
+                {/* Body panel */}
+                <div className="relative flex flex-1 flex-col gap-4 bg-[#FDFBF7] px-6 py-6">
+                  <p className="text-[13.5px] leading-relaxed text-[#1A1A1A]/72">{s.body}</p>
+                  <div className="mt-auto flex items-center justify-between border-t border-[#0d3a2b]/10 pt-4">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
+                      Signature discipline
+                    </span>
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white">
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
+                </div>
               </article>
             );
           })}
@@ -738,6 +740,7 @@ function ServicesSection() {
     </section>
   );
 }
+
 
 function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; openLead: () => void }) {
   return (
@@ -845,7 +848,7 @@ function CertificatePreview() {
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
               alt="JBJ Global Real Estate"
-              className="h-10 w-10 object-contain sm:h-12 sm:w-12"
+              className="h-14 w-14 object-contain sm:h-20 sm:w-20"
             />
             <div className="text-right">
               <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A] sm:text-[10px]">JBJ Global Real Estate</p>
@@ -878,19 +881,27 @@ function CertificatePreview() {
               <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-16 w-16 items-center justify-center rounded-full sm:h-[76px] sm:w-[76px]">
-              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_18px_rgba(90,69,21,0.28)]">
+            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-[104px] sm:w-[104px]">
+              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_20px_rgba(184,149,85,0.35)]">
                 <defs>
-                  <linearGradient id="sealGold" x1="18" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#F7DEA0" />
-                    <stop offset="0.45" stopColor="#C99A3F" />
-                    <stop offset="1" stopColor="#7A5A1E" />
+                  <linearGradient id="sealGold" x1="12" y1="8" x2="108" y2="112" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FBEAB4" />
+                    <stop offset="0.35" stopColor="#E8C877" />
+                    <stop offset="0.7" stopColor="#C9A84C" />
+                    <stop offset="1" stopColor="#A8842E" />
+                  </linearGradient>
+                  <linearGradient id="sealGoldSoft" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#E8C877" />
+                    <stop offset="1" stopColor="#C9A84C" />
                   </linearGradient>
                   <path id="sealTextPath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
                 </defs>
-                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="6" />
-                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="1.5" strokeDasharray="3 4" />
-                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="#6A4E15">
+                {/* outer premium gold ring */}
+                <circle cx="60" cy="60" r="56" fill="none" stroke="url(#sealGold)" strokeWidth="2" />
+                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="5" />
+                <circle cx="60" cy="60" r="47" fill="none" stroke="url(#sealGoldSoft)" strokeWidth="0.8" opacity="0.7" />
+                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="1.2" strokeDasharray="2.4 3.2" />
+                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="url(#sealGold)">
                   <textPath href="#sealTextPath" startOffset="0%">JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·</textPath>
                 </text>
               </svg>
@@ -898,8 +909,8 @@ function CertificatePreview() {
                 data-no-fallback
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
-                className="h-8 w-8 object-contain opacity-70 sm:h-9 sm:w-9"
-                style={{ filter: "brightness(0) saturate(100%) invert(26%) sepia(35%) saturate(1050%) hue-rotate(12deg) brightness(72%)" }}
+                className="h-10 w-10 object-contain sm:h-12 sm:w-12"
+                style={{ filter: "brightness(0) saturate(100%) invert(72%) sepia(38%) saturate(520%) hue-rotate(2deg) brightness(96%) contrast(92%)" }}
               />
             </div>
 
