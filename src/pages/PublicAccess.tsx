@@ -423,6 +423,7 @@ html body #root [data-jbj-access-gold-badge] * {
   isolation: isolate;
   box-shadow: 0 0 0 0 rgba(201,168,79,0.0);
   animation: certificate-glow 5.5s ease-in-out infinite;
+  position: relative;
 }
 .certificate-shimmer-frame::after {
   content: "";
@@ -430,6 +431,18 @@ html body #root [data-jbj-access-gold-badge] * {
   inset: 7px;
   pointer-events: none;
   border: 1px solid rgba(184,149,85,0.28);
+}
+.certificate-shimmer-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 30%, rgba(251,234,180,0.28) 45%, rgba(232,200,119,0.42) 50%, rgba(251,234,180,0.28) 55%, transparent 70%);
+  background-size: 260% 100%;
+  background-position: 200% 0;
+  mix-blend-mode: screen;
+  animation: certificate-metallic-sweep 6.5s ease-in-out infinite;
 }
 .username-shimmer {
   color: #0d3a2b !important;
@@ -458,11 +471,16 @@ html body #root [data-broker-certificate-frame] .seal-outline svg text * {
   0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,79,0.0), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
   50% { box-shadow: 0 0 26px 2px rgba(201,168,79,0.35), 0 60px 120px -40px rgba(6,78,59,0.55), 0 20px 50px -20px rgba(0,0,0,0.35); }
 }
+@keyframes certificate-metallic-sweep {
+  0% { background-position: 200% 0; }
+  55%, 100% { background-position: -100% 0; }
+}
 @keyframes username-pulse {
   0%, 100% { text-shadow: 0 0 0 rgba(201,168,79,0); opacity: 1; }
   50% { text-shadow: 0 0 14px rgba(201,168,79,0.45); opacity: 0.94; }
 }
 `;
+
 
 // ── Property marquee — REAL projects only, drag-scrollable, photo-required ──
 function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () => void; theme?: "light" | "dark"; limit?: number }) {
@@ -757,22 +775,24 @@ function ServicesSection() {
                   type="button"
                   onClick={() => goto(i)}
                   data-no-contrast-guard
+                  {...(active ? { "data-allow-dark-cta": true, "data-cta": "dark", "data-surface": "dark" } : {})}
                   style={active ? emeraldInkStyle : darkInkStyle}
                   className={
                     "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition " +
                     (active
-                      ? "border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)]"
+                      ? "border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_*]:!text-white [&_svg]:!stroke-white"
                       : "border-[#0d3a2b]/25 bg-white hover:border-[#0d3a2b] hover:bg-[#FDFBF7]")
                   }
                 >
-                  <span className="font-serif text-[10px] tracking-[0.24em] opacity-80">
+                  <span className={"font-serif text-[10px] tracking-[0.24em] " + (active ? "!text-white opacity-90" : "opacity-80")}>
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span>{p.label}</span>
+                  <span className={active ? "!text-white" : ""}>{p.label}</span>
                 </button>
               );
             })}
           </div>
+
         </div>
 
         {/* Premium photo cards — magazine editorial grid */}
@@ -793,7 +813,11 @@ function ServicesSection() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
                   <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
-                  <span className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-[#C9A84C]/55 bg-black/40 px-3 font-serif text-[11px] tracking-[0.28em] text-[#EBD79A] backdrop-blur">
+                  <span
+                    data-surface="dark"
+                    className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-white/40 bg-black/50 px-3 font-serif text-[11px] tracking-[0.28em] !text-white backdrop-blur"
+                    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                  >
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
@@ -815,11 +839,15 @@ function ServicesSection() {
                     <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
                       Signature discipline
                     </span>
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white">
+                    <span
+                      data-surface="dark"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[#0d3a2b]/25 text-[#0d3a2b] transition group-hover:border-[#0d3a2b] group-hover:bg-[#0d3a2b] group-hover:!text-white group-hover:[&_svg]:!text-white group-hover:[&_svg]:!stroke-white"
+                    >
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>
                 </div>
+
               </article>
             );
           })}
@@ -842,31 +870,37 @@ function ServicesSection() {
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
               Page {pageIdx + 1} of {total}
             </span>
-            <div className="flex items-center gap-1.5">
-              {jbjServicePages.map((p, i) => (
-                <button
-                  key={p.key}
-                  type="button"
-                  onClick={() => goto(i)}
-                  aria-label={`Go to ${p.label}`}
-                  className={
-                    "h-1.5 rounded-full transition-all " +
-                    (i === pageIdx ? "w-8 bg-[#0d3a2b]" : "w-3 bg-[#0d3a2b]/25 hover:bg-[#0d3a2b]/50")
-                  }
-                />
-              ))}
+            <div className="flex items-center gap-2">
+              {jbjServicePages.map((p, i) => {
+                const dotActive = i === pageIdx;
+                return (
+                  <button
+                    key={p.key}
+                    type="button"
+                    onClick={() => goto(i)}
+                    aria-label={`Go to ${p.label}`}
+                    className={
+                      "rounded-full transition-all " +
+                      (dotActive
+                        ? "h-3 w-3 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] ring-2 ring-[#0d3a2b]/20 ring-offset-2 ring-offset-transparent"
+                        : "h-3 w-3 bg-[#0d3a2b]/20 hover:bg-[#0d3a2b]/45")
+                    }
+                  />
+                );
+              })}
             </div>
           </div>
 
           <button
             type="button"
             onClick={() => goto(pageIdx + 1)}
-            data-no-contrast-guard
+            data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
             style={emeraldInkStyle}
-            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em]`}
+            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em] !text-white [&_svg]:!text-white [&_svg]:!stroke-white`}
           >
-            Next <ChevronRight className="h-4 w-4" />
+            <span className="!text-white">Next</span> <ChevronRight className="h-4 w-4 !text-white" />
           </button>
+
         </div>
       </div>
     </section>
@@ -894,13 +928,13 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
             A recognised credential for licensed and aspiring UAE agents — mentorship, materials and a direct pathway into JBJ Global.
           </p>
 
-          <ul className="mt-5 grid gap-2.5 sm:grid-cols-1">
+          <ul className="mt-5 grid gap-3">
             {brokerBenefits.map((b) => {
               const Icon = b.icon;
               return (
-                <li key={b.title} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                    <Icon className="h-3.5 w-3.5" />
+                <li key={b.title} className="grid grid-cols-[36px_1fr] items-center gap-3">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#C9A84C]/45 bg-[linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.02))] [&_svg]:!text-white [&_svg]:!stroke-white">
+                    <Icon className="h-[18px] w-[18px]" />
                   </span>
                   <span className="text-[13px] leading-relaxed !text-white/82">
                     <span className="font-serif !text-white">{b.title}.</span>{" "}
@@ -910,6 +944,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
               );
             })}
           </ul>
+
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11 uppercase tracking-[0.14em]`}>
@@ -1042,7 +1077,7 @@ function CertificatePreview() {
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
                 className="h-10 w-10 object-contain sm:h-12 sm:w-12"
-                style={{ filter: "brightness(0) saturate(100%) invert(72%) sepia(38%) saturate(520%) hue-rotate(2deg) brightness(96%) contrast(92%)" }}
+                style={{ filter: "brightness(0) saturate(100%) invert(82%) sepia(18%) saturate(280%) hue-rotate(2deg) brightness(94%) contrast(84%)", opacity: 0.82 }}
               />
             </div>
 
@@ -1397,9 +1432,13 @@ export default function PublicAccess() {
           </div>
         </section>
 
+        {/* SERVICES — lifted above all packages */}
+        <ServicesSection />
+
         {/* PACKAGES — one strap per audience */}
 
         {/* INVESTOR */}
+
         <PackageStrap
           id="investor-packages"
           eyebrow="For Investors"
@@ -1478,9 +1517,8 @@ export default function PublicAccess() {
           />
         </div>
 
-        <ServicesSection />
-
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
+
 
         <CertificateBand />
 
