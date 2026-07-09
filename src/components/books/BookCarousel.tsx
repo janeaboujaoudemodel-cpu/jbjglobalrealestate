@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookCard, type BookCardSize } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books";
