@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookCard, type BookCardSize } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books";
@@ -6,146 +6,152 @@ import type { BookData } from "@/types/books";
 interface BookCarouselProps {
   books: BookData[];
   size?: BookCardSize;
-  /** Animation duration in seconds for one full loop. Lower = faster. */
-  durationSec?: number;
+  /** Auto-scroll speed in px/sec. Lower = slower. */
+  speed?: number;
   className?: string;
-  /** Optional click handler — if omitted, the card navigates to book.href. */
   onBookClick?: (book: BookData) => void;
-  /** Pass-through to BookCard: render clean homepage variant (title only). */
   compact?: boolean;
+  /** kept for API compat — no longer used */
+  durationSec?: number;
 }
 
 /**
- * Canonical horizontal book strip. CSS-keyframe marquee on a duplicated track
- * — buttery smooth, pause on hover, pointer-drag scrub. Single source of truth
- * used by the homepage and anywhere else a guide strip appears.
+ * Canonical horizontal book strip. Native scrollLeft + RAF auto-scroll — the
+ * same pattern used by the /access PropertyMarquee. Buttery smooth, pauses on
+ * hover / drag / wheel, and always responds to wheel + pointer drag without
+ * getting "stuck" on a CSS keyframe.
  */
 export function BookCarousel({
   books,
   size = "sm",
-  durationSec = 38,
+  speed = 34,
   className,
   onBookClick,
   compact = false,
 }: BookCarouselProps) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const shellRef = useRef<HTMLDivElement>(null);
-  const resumeTimerRef = useRef<number | null>(null);
   const navigate = useNavigate();
-  const [paused, setPaused] = useState(false);
-
-  const dragState = useRef({
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const resumeTimerRef = useRef<number | null>(null);
+  const stateRef = useRef({
     dragging: false,
+    paused: false,
     moved: false,
     startX: 0,
-    startOffset: 0,
-    offset: 0,
+    startScroll: 0,
+    lastTs: 0,
   });
 
-  const applyOffset = useCallback((px: number) => {
-    const el = trackRef.current;
-    if (!el) return;
-    // Negative animation-delay shifts the marquee start position, letting us
-    // "scrub" without fighting the keyframe.
-    el.style.animationDelay = `${-((px / Math.max(1, el.scrollWidth / 2)) * durationSec)}s`;
-  }, [durationSec]);
-
   const pauseBriefly = useCallback(() => {
-    setPaused(true);
+    stateRef.current.paused = true;
     if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
-    resumeTimerRef.current = window.setTimeout(() => setPaused(false), 2600);
+    resumeTimerRef.current = window.setTimeout(() => {
+      stateRef.current.paused = false;
+    }, 2200);
   }, []);
 
   useEffect(() => () => {
     if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
   }, []);
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (books.length <= 1) return;
-    dragState.current.dragging = true;
-    dragState.current.moved = false;
-    dragState.current.startX = e.clientX;
-    dragState.current.startOffset = dragState.current.offset;
-    if (resumeTimerRef.current) window.clearTimeout(resumeTimerRef.current);
-    setPaused(true);
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  // Auto-scroll loop (pauses on hover, drag, or reduced motion)
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el || books.length < 2) return;
+    if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) return;
+
+    let raf = 0;
+    const step = (ts: number) => {
+      const s = stateRef.current;
+      if (!s.lastTs) s.lastTs = ts;
+      const dt = (ts - s.lastTs) / 1000;
+      s.lastTs = ts;
+      if (!s.paused && !s.dragging) {
+        el.scrollLeft += speed * dt;
+        const half = el.scrollWidth / 2;
+        if (half > 0 && el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [books.length, speed]);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    stateRef.current.dragging = true;
+    stateRef.current.paused = true;
+    stateRef.current.moved = false;
+    stateRef.current.startX = e.clientX;
+    stateRef.current.startScroll = el.scrollLeft;
+    try { el.setPointerCapture(e.pointerId); } catch {}
+    el.style.cursor = "grabbing";
   };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragState.current.dragging) return;
-    const dx = e.clientX - dragState.current.startX;
-    if (Math.abs(dx) > 4) dragState.current.moved = true;
-    const next = dragState.current.startOffset - dx;
-    dragState.current.offset = next;
-    applyOffset(next);
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    const s = stateRef.current;
+    if (!el || !s.dragging) return;
+    const dx = e.clientX - s.startX;
+    if (Math.abs(dx) > 4) s.moved = true;
+    el.scrollLeft = s.startScroll - dx;
   };
-  const onPointerUp = (e: React.PointerEvent) => {
-    if (!dragState.current.dragging) return;
-    dragState.current.dragging = false;
-    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
-    // Resume animation from the scrubbed position
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    stateRef.current.dragging = false;
+    try { el.releasePointerCapture(e.pointerId); } catch {}
+    el.style.cursor = "grab";
     pauseBriefly();
   };
 
-  // Non-passive wheel listener so we can preventDefault and hijack vertical
-  // scroll into horizontal marquee scrubbing while the cursor is over the strip.
+  // Non-passive wheel listener to hijack vertical wheel into horizontal scroll.
   useEffect(() => {
-    const shell = shellRef.current;
-    if (!shell || books.length <= 1) return;
+    const el = scrollerRef.current;
+    if (!el || books.length < 2) return;
     const handler = (e: WheelEvent) => {
       const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       if (delta === 0) return;
       e.preventDefault();
       pauseBriefly();
-      const next = dragState.current.offset + delta;
-      dragState.current.offset = next;
-      applyOffset(next);
+      el.scrollLeft += delta;
     };
-    shell.addEventListener("wheel", handler, { passive: false });
-    return () => shell.removeEventListener("wheel", handler);
-  }, [books.length, applyOffset, pauseBriefly]);
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [books.length, pauseBriefly]);
 
   const handleCardClick = (book: BookData) => () => {
-    if (dragState.current.moved) return;
+    if (stateRef.current.moved) return;
     if (onBookClick) onBookClick(book);
     else if (book.href) navigate(book.href);
   };
 
-  // Duplicate the track so 0 → -50% loops seamlessly.
-  const duplicated = books.length <= 1 ? books : [...books, ...books];
+  // Duplicate so scroll wraps seamlessly
+  const track = books.length >= 3 ? [...books, ...books] : books;
 
   return (
     <div
-      ref={shellRef}
-      className={`w-full select-none overflow-x-auto overflow-y-hidden cursor-grab active:cursor-grabbing snap-x snap-mandatory md:snap-none [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
-      style={{ touchAction: "pan-x pan-y" }}
+      ref={scrollerRef}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
+      onMouseEnter={() => { stateRef.current.paused = true; }}
+      onMouseLeave={() => { stateRef.current.paused = false; }}
+      className={`flex w-full gap-6 md:gap-8 overflow-x-auto overflow-y-hidden px-4 py-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
+      style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto" }}
     >
-      <div
-        ref={trackRef}
-        className="flex w-max gap-6 md:gap-8 will-change-transform px-4 md:px-0"
-        style={{
-          animation: books.length > 1
-            ? `jbj-book-marquee ${durationSec}s linear infinite`
-            : undefined,
-          animationPlayState: paused ? "paused" : "running",
-        }}
-      >
-        {duplicated.map((book, i) => (
+      {track.map((book, i) => (
+        <div key={`${book.title}-${i}`} className="shrink-0" draggable={false}>
           <BookCard
-            key={`${book.title}-${i}`}
             book={book}
             size={size}
             onClick={handleCardClick(book)}
             flat
             compact={compact}
           />
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

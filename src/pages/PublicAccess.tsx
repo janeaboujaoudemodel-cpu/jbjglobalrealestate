@@ -642,33 +642,93 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
 }
 
 function ServicesSection() {
+  // Rotate through the six services to feature one in a large animated card.
+  const [featureIdx, setFeatureIdx] = React.useState(0);
+  React.useEffect(() => {
+    const id = window.setInterval(() => {
+      setFeatureIdx((i) => (i + 1) % jbjServices.length);
+    }, 4200);
+    return () => window.clearInterval(id);
+  }, []);
+  const featured = jbjServices[featureIdx];
+  const FeaturedIcon = featured.icon;
+
   return (
     <section
       id="services"
-      className="relative overflow-hidden px-5 py-16 sm:px-8 lg:px-12"
+      className="relative overflow-hidden px-5 py-20 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(180deg,#FDFBF7 0%,#F5EFE1 100%)" }}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/40 to-transparent" />
+      <div className="pointer-events-none absolute -left-40 top-24 h-[440px] w-[440px] rounded-full bg-[radial-gradient(circle,rgba(6,78,59,0.09),transparent_70%)]" />
+      <div className="pointer-events-none absolute -right-40 bottom-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(184,149,85,0.10),transparent_70%)]" />
+
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-10 max-w-2xl">
+        <div className="mb-12 max-w-3xl">
           <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#8B6F3A]">Our Services</span>
-          <h2 className="mt-3 font-serif text-4xl leading-tight text-[#0d3a2b] sm:text-5xl">A senior advisory desk for Dubai real estate.</h2>
+          <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
+            A senior desk for every stage of Dubai real estate.
+          </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-[#1A1A1A]/70">
-            Six disciplines, one desk. From first launch to final handover — sourced with discipline, delivered with discretion.
+            Six disciplines, one desk. Sourced with discipline, delivered with discretion — from first launch to final handover.
           </p>
         </div>
 
+        {/* Featured animated services card — moves alone, changes every few seconds */}
+        <article
+          data-surface="dark"
+          className="relative mb-10 overflow-hidden rounded-3xl border border-[#8B6F3A]/40 shadow-[0_40px_100px_-42px_rgba(6,78,59,0.55)]"
+          style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
+        >
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_0%,rgba(255,255,255,0.10),transparent_45%),radial-gradient(ellipse_at_88%_100%,rgba(184,149,85,0.22),transparent_50%)]" />
+          <span aria-hidden className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 bg-gradient-to-r from-transparent via-white/12 to-transparent animate-[jbj-shine_5s_ease-in-out_infinite]" />
+          <style>{`@keyframes jbj-shine { 0% { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } 60% { transform: translateX(560%); opacity: 0.3; } 100% { transform: translateX(600%); opacity: 0; } }`}</style>
+
+          <div className="relative grid gap-8 p-8 sm:p-12 md:grid-cols-[auto,1fr,auto] md:items-center">
+            <div
+              key={featured.title}
+              aria-hidden
+              className="relative flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-[#C9A84C]/50 bg-white/[0.06] shadow-[0_18px_40px_-18px_rgba(0,0,0,0.7)] animate-[fade-in_0.6s_ease-out]"
+            >
+              <span className="absolute inset-1.5 rounded-xl border border-white/10" />
+              <FeaturedIcon className="h-11 w-11 !text-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
+            </div>
+            <div key={`${featured.title}-body`} className="min-w-0 animate-[fade-in_0.6s_ease-out]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.32em] !text-[#C9A84C]">JBJ Signature Service</span>
+              <h3 className="mt-2 font-serif text-3xl leading-tight !text-white sm:text-[38px]">{featured.title}</h3>
+              <p className="mt-3 max-w-xl text-[14px] leading-relaxed !text-white/78">{featured.body}</p>
+            </div>
+            <div className="flex md:flex-col md:items-end gap-1.5">
+              {jbjServices.map((s, i) => (
+                <button
+                  key={s.title}
+                  type="button"
+                  aria-label={`Show ${s.title}`}
+                  onClick={() => setFeatureIdx(i)}
+                  className={`h-1.5 rounded-full transition-all ${i === featureIdx ? "w-10 bg-[#C9A84C]" : "w-4 bg-white/25 hover:bg-white/50"}`}
+                />
+              ))}
+            </div>
+          </div>
+        </article>
+
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {jbjServices.map((s) => {
+          {jbjServices.map((s, i) => {
             const Icon = s.icon;
+            const isActive = i === featureIdx;
             return (
               <article
                 key={s.title}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#0d3a2b]/12 bg-white p-6 shadow-[0_18px_46px_-32px_rgba(13,58,43,0.4)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_60px_-32px_rgba(13,58,43,0.55)]"
+                onMouseEnter={() => setFeatureIdx(i)}
+                className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white p-6 shadow-[0_18px_46px_-32px_rgba(13,58,43,0.4)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_60px_-32px_rgba(13,58,43,0.55)] ${isActive ? "border-[#8B6F3A]/60 ring-1 ring-[#8B6F3A]/35" : "border-[#0d3a2b]/12"}`}
               >
-                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/50 to-transparent opacity-0 transition group-hover:opacity-100" />
-                <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-white [&_svg]:!stroke-white">
-                  <Icon className="h-5 w-5" />
+                <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8B6F3A]/60 to-transparent" />
+                <span
+                  data-surface="dark"
+                  className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl [&_svg]:!text-white [&_svg]:!stroke-white [&_svg]:!fill-none"
+                  style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
+                >
+                  <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
                 </span>
                 <h3 className="font-serif text-xl leading-tight text-[#0d3a2b]">{s.title}</h3>
                 <p className="mt-2 text-[13px] leading-relaxed text-[#1A1A1A]/68">{s.body}</p>
@@ -769,7 +829,7 @@ function CertificatePreview() {
       <div
         data-broker-certificate-frame
         className="certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
-        style={{ aspectRatio: "2.35 / 1", maxWidth: "1100px" }}
+        style={{ aspectRatio: "1.72 / 1", maxWidth: "1040px" }}
       >
         {/* Ornate double border */}
         <div className="pointer-events-none absolute inset-2 border-[1.5px] border-[#8B6F3A]/60" />
@@ -1110,10 +1170,10 @@ export default function PublicAccess() {
           <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.1fr,1fr] md:items-end">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#064E3B]">
-                A private property platform, built around you
+                A private property ecosystem, built around you
               </span>
               <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
-                A private property platform for Dubai's discerning investors, developers & brokers.
+                A private property ecosystem for Dubai's discerning investors, developers & brokers.
               </h2>
               <div className="mt-8 flex flex-wrap gap-3">
                 <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
