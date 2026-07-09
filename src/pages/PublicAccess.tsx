@@ -829,7 +829,7 @@ function CertificatePreview() {
       <div
         data-broker-certificate-frame
         className="certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
-        style={{ aspectRatio: "2.35 / 1", maxWidth: "1100px" }}
+        style={{ aspectRatio: "1.72 / 1", maxWidth: "1040px" }}
       >
         {/* Ornate double border */}
         <div className="pointer-events-none absolute inset-2 border-[1.5px] border-[#8B6F3A]/60" />
