@@ -26,7 +26,7 @@ export interface GateFeaturedProject {
   card_image_url?: string | null;
   gallery_start_image_url?: string | null;
   images?: string[] | null;
-  project_images?: Array<{ image_url?: string | null; is_primary?: boolean | null; display_order?: number | null }> | null;
+  project_images?: Array<{ image_url?: string | null; display_order?: number | null }> | null;
 }
 
 const PROJECT_SELECT = `
@@ -35,7 +35,7 @@ const PROJECT_SELECT = `
   construction_status,
   cover_image_url, card_image_url, gallery_start_image_url,
   is_published, status, sale_status, created_at, updated_at,
-  project_images(image_url, is_primary, display_order)
+  project_images(image_url, display_order)
 `;
 
 const isUsableMediaUrl = (value: unknown) => {
@@ -51,8 +51,8 @@ const firstUsableMedia = (...values: unknown[]) => values.find(isUsableMediaUrl)
 const sortedGalleryUrls = (images: unknown) => {
   if (!Array.isArray(images)) return [];
   return images
-    .filter((img): img is { image_url?: string | null; is_primary?: boolean | null; display_order?: number | null } => !!img && typeof img === "object")
-    .sort((a, b) => Number(b.is_primary === true) - Number(a.is_primary === true) || Number(a.display_order ?? 999) - Number(b.display_order ?? 999))
+    .filter((img): img is { image_url?: string | null; display_order?: number | null } => !!img && typeof img === "object")
+    .sort((a, b) => Number(a.display_order ?? 999) - Number(b.display_order ?? 999))
     .map((img) => img.image_url)
     .filter(isUsableMediaUrl) as string[];
 };

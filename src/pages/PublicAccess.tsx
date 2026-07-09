@@ -628,7 +628,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
     <section
       id="brokers"
       data-surface="dark"
-      className="relative overflow-hidden px-5 py-20 sm:px-8 lg:px-12"
+      className="relative overflow-hidden px-5 py-16 sm:px-8 lg:px-12"
       style={{ backgroundImage: "linear-gradient(135deg,#042c1c 0%,#01140d 48%,#000 100%)" }}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_16%_0%,rgba(255,255,255,0.10),transparent_36%),radial-gradient(ellipse_at_86%_100%,rgba(184,149,85,0.14),transparent_42%)]" />
@@ -636,12 +636,12 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="grid items-stretch gap-6 lg:grid-cols-[0.92fr,1.08fr]">
+        <div className="grid items-stretch gap-6 lg:grid-cols-3">
           <div className="relative overflow-hidden rounded-2xl border border-white/14 bg-white/[0.06] p-7 shadow-[0_30px_80px_-42px_rgba(0,0,0,0.95)] sm:p-8">
-            <div className="mb-7 flex items-start justify-between gap-5">
+            <div className="mb-6 flex items-start justify-between gap-5">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/62">JBJ Global Real Estate</span>
-                <h2 className="mt-3 font-serif text-4xl leading-[1.02] !text-white sm:text-5xl">
+                <h2 className="mt-3 font-serif text-4xl leading-[1.02] !text-white sm:text-[44px]">
                   Become a JBJ Certified Broker.
                 </h2>
               </div>
@@ -650,7 +650,7 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
               </span>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
               {brokerBenefits.map((b) => {
                 const Icon = b.icon;
                 return (
@@ -682,39 +682,46 @@ function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; 
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[0.88fr,1.12fr]">
-            <div className="rounded-2xl border border-white/14 bg-white/[0.06] p-5 sm:p-6" data-surface="dark">
-              <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Services card</p>
-                  <h3 className="mt-1 font-serif text-2xl !text-white">Broker support</h3>
-                </div>
-                <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                  <Award className="h-5 w-5" />
-                </span>
+          <div className="rounded-2xl border border-white/14 bg-white/[0.06] p-5 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:p-6" data-surface="dark">
+            <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Services card</p>
+                <h3 className="mt-1 font-serif text-2xl !text-white">Broker support</h3>
               </div>
-
-              <div className="grid gap-3">
-                {brokerServices.map((s, i) => {
-                  const Icon = s.icon;
-                  return (
-                    <article key={s.title} className="relative flex gap-3 rounded-md border border-white/12 bg-white/[0.065] p-3.5" data-surface="dark">
-                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white" data-surface="dark">
-                        <Icon className="h-4 w-4" />
-                      </span>
-                      <div>
-                        <h4 className="font-serif text-lg leading-tight !text-white">{s.title}</h4>
-                        <p className="mt-1 text-[11px] leading-relaxed !text-white/64">{s.body}</p>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                <Award className="h-5 w-5" />
+              </span>
             </div>
 
-            <div className="flex items-center rounded-2xl border border-white/14 bg-white/[0.05] p-5 sm:p-6">
-              <CertificatePreview compact />
+            <div className="grid gap-3">
+              {brokerServices.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <article key={s.title} className="relative flex gap-3 rounded-md border border-white/12 bg-white/[0.065] p-3.5" data-surface="dark">
+                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white" data-surface="dark">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <h4 className="font-serif text-lg leading-tight !text-white">{s.title}</h4>
+                      <p className="mt-1 text-[11px] leading-relaxed !text-white/64">{s.body}</p>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
+          </div>
+
+          <div className="flex flex-col justify-between rounded-2xl border border-white/14 bg-white/[0.05] p-5 shadow-[0_30px_80px_-48px_rgba(0,0,0,0.95)] sm:p-6">
+            <div className="mb-5 flex items-center justify-between gap-3 border-b border-white/12 pb-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] !text-white/62">Certificate preview</p>
+                <h3 className="mt-1 font-serif text-2xl !text-white">Issued in your name</h3>
+              </div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/16 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                <FileCheck2 className="h-5 w-5" />
+              </span>
+            </div>
+            <CertificatePreview compact />
           </div>
         </div>
       </div>
