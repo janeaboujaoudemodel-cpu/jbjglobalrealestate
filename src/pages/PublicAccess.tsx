@@ -18,9 +18,11 @@ import {
   CheckCircle2,
   CreditCard,
   GraduationCap,
+  Headphones,
   Home,
   KeyRound,
   Lock,
+  PhoneCall,
   Sparkles,
   TrendingUp,
   Users,
@@ -40,61 +42,169 @@ const quickLinks = [
   { label: "Featured", href: "#featured" },
   { label: "New Launch", href: "#new-launch" },
   { label: "Guides", href: "#guides" },
-  { label: "Packages", href: "#packages" },
-  { label: "Brokers", href: "#brokers" },
+  { label: "Investors", href: "#investor-packages" },
+  { label: "Developers", href: "#developer-packages" },
+  { label: "Brokers", href: "#broker-packages" },
 ];
 
-// Same books strip as the homepage marquee
+// Same books strip as the homepage marquee — LOCKED per owner request
 const ACCESS_BOOKS: BookData[] = INVESTOR_BOOKS.filter(
   (b) => b.title !== "Guides Library" && b.title !== "Company Profile"
 );
 
-const packages = [
+// ── PACKAGES ────────────────────────────────────────────────────────────────
+type Tier = {
+  name: string;
+  audienceSize?: string;
+  price: string;
+  cadence: string;
+  featured?: boolean;
+  features: string[];
+};
+
+const investorTiers: Tier[] = [
   {
-    audience: "For Investors",
-    name: "Investor Access",
+    name: "Starter",
+    audienceSize: "Individual investor · 1 seat",
+    price: "AED 199",
+    cadence: "/month",
+    features: [
+      "Access to featured launches & inventory",
+      "Basic advisor support (business hours)",
+      "Monthly market briefing",
+      "1 saved shortlist",
+    ],
+  },
+  {
+    name: "Signature",
+    audienceSize: "Serious investor · up to 2 seats",
     price: "AED 499",
     cadence: "/month",
-    icon: TrendingUp,
+    featured: true,
     features: [
-      "Daily priority advisor support & monthly strategy calls",
-      "Early access to featured launches before public release",
-      "Exclusive investor discounts on selected units",
+      "Priority daily advisor support & monthly strategy call",
+      "Early access to launches before public release",
       "Cash-back or fully-furnished apartment perks on select deals",
       "Reimbursed inspection trips for qualifying purchases",
-      "Invitations to private dinners, launches & investor events",
+      "Private investor dinners, launches & events",
+      "Unlimited shortlists & saved reports",
     ],
-    href: "/membership",
   },
   {
-    audience: "For Developers",
-    name: "Developer Program",
+    name: "Private Office",
+    audienceSize: "Family office · up to 5 seats",
+    price: "AED 1,499",
+    cadence: "/month",
+    features: [
+      "Dedicated principal advisor + WhatsApp line",
+      "White-glove sourcing across all developers",
+      "Portfolio reporting & performance reviews",
+      "All Signature perks included",
+      "Legal, mortgage & concierge coordination",
+    ],
+  },
+];
+
+const developerTiers: Tier[] = [
+  {
+    name: "Launch",
+    audienceSize: "Boutique developer · 1-3 projects",
+    price: "AED 2,499",
+    cadence: "/month",
+    features: [
+      "1 active project showcase",
+      "Distribution to core JBJ broker network",
+      "Verified developer profile",
+      "Monthly lead & analytics report",
+    ],
+  },
+  {
+    name: "Growth",
+    audienceSize: "Mid-market developer · up to 10 projects",
     price: "AED 4,999",
     cadence: "/month",
-    icon: Building,
+    featured: true,
     features: [
-      "Full project showcase & inventory pages",
-      "Distribution to the JBJ broker network",
-      "Verified developer profile & credentials",
-      "Lead routing, analytics & buyer insights",
+      "Unlimited active project pages",
+      "Full JBJ broker network distribution",
+      "Dedicated account manager",
+      "Weekly lead routing & buyer insights",
+      "Featured placement rotation on /access",
+      "Co-marketing on launches & events",
     ],
-    href: "/agencies",
   },
   {
-    audience: "For Brokers",
-    name: "Broker Academy",
+    name: "Enterprise",
+    audienceSize: "Master developer · unlimited",
+    price: "Custom",
+    cadence: "annual",
+    features: [
+      "Portfolio-wide distribution + priority placement",
+      "Custom API & CRM integration",
+      "Direct broker training on your inventory",
+      "On-site launch events with JBJ",
+      "SLA-backed advisor coverage",
+    ],
+  },
+];
+
+const brokerTiers: Tier[] = [
+  {
+    name: "Associate",
+    audienceSize: "New / independent agent",
+    price: "AED 799",
+    cadence: "/year",
+    features: [
+      "DLD-aligned coursework & agent playbook",
+      "JBJ-certified broker badge",
+      "Access to JBJ inventory & payment plans",
+      "Community & mentor Q&A",
+    ],
+  },
+  {
+    name: "Professional",
+    audienceSize: "Licensed producing agent",
     price: "AED 1,499",
     cadence: "/year",
-    icon: GraduationCap,
+    featured: true,
     features: [
-      "Yearly enrollment with continuous mentorship & support",
-      "DLD-aligned coursework + exclusive JBJ agent books",
-      "Hiring pathway to join JBJ Global as a licensed agent",
-      "Warm client introductions & shared deal pipeline",
-      "Invites to every major UAE real-estate industry event",
-      "Direct access to developer network & principal desks",
+      "Everything in Associate",
+      "Warm client introductions & shared pipeline",
+      "Invitations to every major UAE launch & gala",
+      "Direct access to developer principal desks",
+      "Hiring pathway into JBJ Global",
+      "Exclusive JBJ agent books & DLD references",
     ],
-    href: "/academy",
+  },
+];
+
+const agencyTiers: Tier[] = [
+  {
+    name: "Team",
+    audienceSize: "Boutique agency · up to 10 agents",
+    price: "AED 2,999",
+    cadence: "/month",
+    features: [
+      "Team seats on JBJ inventory",
+      "Shared CRM segmentation",
+      "Lead routing & performance dashboard",
+      "Group broker certification discount",
+    ],
+  },
+  {
+    name: "Brokerage",
+    audienceSize: "Established agency · up to 50 agents",
+    price: "AED 6,999",
+    cadence: "/month",
+    featured: true,
+    features: [
+      "Everything in Team",
+      "Dedicated agency account manager",
+      "Custom agency page inside JBJ",
+      "Co-branded launches with developers",
+      "Advanced analytics & attribution",
+      "Priority hiring pipeline into JBJ Global",
+    ],
   },
 ];
 
@@ -122,58 +232,57 @@ const platformPillars = [
 ];
 
 const brokerBenefits = [
-  {
-    icon: Award,
-    title: "JBJ certification",
-    body: "Complete the DLD-aligned coursework and receive a formal JBJ Global Broker Certificate.",
-  },
-  {
-    icon: BookOpen,
-    title: "Exclusive agent books",
-    body: "Private JBJ playbooks, DLD reference material, and scripts not available anywhere on the public site.",
-  },
-  {
-    icon: Handshake,
-    title: "Hiring pathway",
-    body: "Top performers get onboarded directly into JBJ Global with a client book on day one.",
-  },
-  {
-    icon: Ticket,
-    title: "Industry events",
-    body: "Invitations to every developer launch, gala, and UAE real-estate industry event we attend.",
-  },
-  {
-    icon: Users,
-    title: "Warm client intros",
-    body: "We route qualified investor and buyer leads directly to JBJ-certified agents.",
-  },
-  {
-    icon: Trophy,
-    title: "Network access",
-    body: "Direct lines to developer principal desks, mortgage partners, and legal advisors.",
-  },
+  { icon: Award, title: "JBJ certification", body: "DLD-aligned coursework and a formal JBJ Global Broker Certificate." },
+  { icon: BookOpen, title: "Exclusive agent books", body: "Private JBJ playbooks, DLD reference material, and scripts." },
+  { icon: Handshake, title: "Hiring pathway", body: "Top performers get onboarded directly into JBJ Global." },
+  { icon: Ticket, title: "Industry events", body: "Invitations to every developer launch, gala, and industry event." },
+  { icon: Users, title: "Warm client intros", body: "Qualified investor and buyer leads routed to certified agents." },
+  { icon: Trophy, title: "Network access", body: "Direct lines to developer principal desks, mortgage & legal partners." },
 ];
 
-const investorPerks = [
-  { icon: Sparkles, label: "Priority daily support" },
+const investorSignaturePerks = [
   { icon: Gift, label: "Cash-back on qualifying deals" },
   { icon: Home, label: "Fully-furnished unit upgrades" },
   { icon: Plane, label: "Reimbursed inspection trips" },
   { icon: Ticket, label: "Private events & dinners" },
+  { icon: Sparkles, label: "Priority daily advisor" },
 ];
 
-// Utility class strings for enforced white-on-emerald contrast
-const EMERALD_BTN =
-  "!text-white [&_svg]:!text-white [&_*]:!text-white bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:brightness-110";
-const WHITE_BTN =
-  "!text-[#0d3a2b] [&_svg]:!text-[#0d3a2b] [&_*]:!text-[#0d3a2b] bg-white hover:bg-[#F5EFE3] border border-[#0d3a2b]/15";
+// ── Contrast primitives ─────────────────────────────────────────────────────
+// Buttons that idle white / hover emerald (used on all champagne surfaces).
+const BTN_WHITE_HOVER_EMERALD =
+  "group/btn inline-flex items-center gap-2 rounded-md border border-[#0d3a2b]/25 bg-white px-5 text-sm font-bold text-[#0d3a2b] transition " +
+  "hover:!bg-[#064E3B] hover:!text-white hover:border-[#064E3B] " +
+  "[&_svg]:text-[#0d3a2b] hover:[&_svg]:!text-white";
+
+// Solid emerald button — always white content.
+const BTN_EMERALD_SOLID =
+  "inline-flex items-center gap-2 rounded-md px-5 text-sm font-bold text-white [&_svg]:!text-white " +
+  "bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] hover:brightness-110 " +
+  "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)]";
+
+// Emerald icon tile — the descendants must render pure white icons even on
+// champagne parent sections. `data-surface="dark"` opts out of the global
+// bright-bg contrast contract.
+const EMERALD_ICON_TILE =
+  "inline-flex items-center justify-center rounded-xl bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] " +
+  "[&_svg]:!text-white [&_svg]:!stroke-white";
 
 // ── Property marquee ────────────────────────────────────────────────────────
 function PropertyMarquee({ onClick }: { onClick: () => void }) {
   const { data, isLoading } = useHandpickedProjects();
-  const projects = (data?.projects ?? []).slice(0, 10);
 
-  if (isLoading || projects.length === 0) {
+  // Only ship cards that have real pricing AND a real cover image.
+  // Broken/placeholder cards get filtered out entirely.
+  const projects = (data?.projects ?? [])
+    .filter((p: any) => {
+      const cover = p.image_url || p.hero_image || p.cover_image || (Array.isArray(p.images) && p.images[0]);
+      const priceVal = Number(p.starting_price ?? p.price ?? 0);
+      return !!cover && priceVal > 0 && !!(p.name || p.title);
+    })
+    .slice(0, 10);
+
+  if (isLoading) {
     return (
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
@@ -183,7 +292,9 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
     );
   }
 
-  const track = [...projects, ...projects];
+  if (projects.length === 0) return null;
+
+  const track = projects.length >= 4 ? [...projects, ...projects] : projects;
 
   return (
     <div className="group relative overflow-hidden">
@@ -195,16 +306,9 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
       >
         {track.map((p: any, idx) => {
           const cover =
-            p.image_url ||
-            p.hero_image ||
-            p.cover_image ||
-            (Array.isArray(p.images) && p.images[0]) ||
-            heroFallbackDubai;
-          const price = p.starting_price
-            ? `AED ${Number(p.starting_price).toLocaleString()}`
-            : p.price
-              ? `AED ${Number(p.price).toLocaleString()}`
-              : "Price on request";
+            p.image_url || p.hero_image || p.cover_image || (Array.isArray(p.images) && p.images[0]);
+          const priceVal = Number(p.starting_price ?? p.price ?? 0);
+          const price = `AED ${priceVal.toLocaleString()}`;
           return (
             <button
               type="button"
@@ -220,15 +324,18 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
                   className="h-full w-full object-cover transition duration-700 group-hover/card:scale-[1.06]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-                <span className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white">
+                <span
+                  data-surface="dark"
+                  className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] !text-white"
+                >
                   Featured
                 </span>
                 <div className="absolute inset-x-4 bottom-4 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] !text-white/80">
                     {p.location || p.community || "Dubai"}
                   </p>
-                  <h3 className="mt-1 line-clamp-2 font-serif text-lg leading-tight">
-                    {p.name || p.title || "New launch"}
+                  <h3 className="mt-1 line-clamp-2 font-serif text-lg leading-tight !text-white">
+                    {p.name || p.title}
                   </h3>
                 </div>
               </div>
@@ -249,6 +356,104 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
         }
       `}</style>
     </div>
+  );
+}
+
+// ── Tier grid (reusable per audience) ───────────────────────────────────────
+function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: () => void }) {
+  return (
+    <div className={`grid gap-6 ${tiers.length === 2 ? "md:grid-cols-2" : "lg:grid-cols-3"}`}>
+      {tiers.map((tier) => {
+        const isEm = !!tier.featured;
+        return (
+          <article
+            key={tier.name}
+            {...(isEm ? { "data-surface": "dark" as const } : {})}
+            className={
+              isEm
+                ? "relative flex flex-col overflow-hidden rounded-2xl p-8 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] ring-1 ring-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
+                : "relative flex flex-col overflow-hidden rounded-2xl border border-[#0d3a2b]/15 bg-white p-8 shadow-[0_24px_60px_-42px_rgba(13,58,43,0.35)]"
+            }
+          >
+            {isEm && (
+              <span className="absolute right-5 top-5 rounded-full border border-[#B89555]/60 bg-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] !text-[#F0D78C]">
+                Most popular
+              </span>
+            )}
+            <p
+              className={`text-[11px] font-bold uppercase tracking-[0.22em] ${isEm ? "!text-[#F0D78C]" : "text-[#064E3B]"}`}
+            >
+              {tier.audienceSize || "Package"}
+            </p>
+            <h3 className={`mt-2 font-serif text-3xl ${isEm ? "!text-white" : "text-[#0d3a2b]"}`}>
+              {tier.name}
+            </h3>
+            <div className="mt-5 flex items-end gap-2">
+              <span className={`font-serif text-4xl ${isEm ? "!text-white" : "text-[#1A1A1A]"}`}>
+                {tier.price}
+              </span>
+              <span className={`pb-1 text-sm ${isEm ? "!text-white/70" : "text-[#1A1A1A]/62"}`}>
+                {tier.cadence}
+              </span>
+            </div>
+
+            <ul className="mt-6 flex-1 space-y-3 text-sm">
+              {tier.features.map((f) => (
+                <li key={f} className="flex gap-2">
+                  <CheckCircle2
+                    className={`mt-0.5 h-4 w-4 shrink-0 ${isEm ? "!text-[#F0D78C]" : "text-[#064E3B]"}`}
+                  />
+                  <span className={isEm ? "!text-white/92" : "text-[#1A1A1A]/78"}>{f}</span>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={onSelect}
+              className={
+                isEm
+                  ? "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-[#B89555] bg-white px-4 py-3 text-sm font-bold text-[#0d3a2b] transition hover:brightness-95 [&_svg]:text-[#0d3a2b]"
+                  : `mt-8 h-12 w-full justify-center ${BTN_WHITE_HOVER_EMERALD}`
+              }
+            >
+              Choose {tier.name} <ArrowRight className="h-4 w-4" />
+            </button>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function PackageStrap({
+  id,
+  eyebrow,
+  title,
+  description,
+  tiers,
+  onSelect,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  tiers: Tier[];
+  onSelect: () => void;
+  children?: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="bg-[#FDFBF7] px-5 py-20 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 text-center">
+          <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">{eyebrow}</span>
+          <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">{title}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[#1A1A1A]/72">{description}</p>
+        </div>
+        <TierGrid tiers={tiers} onSelect={onSelect} />
+        {children}
+      </div>
+    </section>
   );
 }
 
@@ -291,10 +496,7 @@ export default function PublicAccess() {
             >
               Log in
             </button>
-            <button
-              onClick={openSignup}
-              className={`inline-flex h-10 items-center gap-1.5 rounded-md px-4 text-sm font-semibold shadow-[0_10px_24px_-12px_rgba(6,78,59,0.85)] transition ${EMERALD_BTN}`}
-            >
+            <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-10`}>
               Sign up <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -302,73 +504,88 @@ export default function PublicAccess() {
       </header>
 
       <main>
-        {/* HERO — clean Dubai video, logo + company name only */}
-        <section data-surface="dark" className="relative min-h-[calc(100vh-76px)] overflow-hidden bg-black">
+        {/* HERO — Dubai video is the star. Logo + name only. */}
+        <section
+          data-surface="dark"
+          className="relative min-h-[calc(100vh-76px)] overflow-hidden bg-black"
+        >
           <div className="absolute inset-0">
             <VideoBackground src={HERO_VIDEO_URL} poster={heroFallbackDubai} eager />
           </div>
-          {/* Cinematic emerald wash for text contrast */}
-          <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(4,44,28,0.72)_0%,rgba(6,78,59,0.42)_45%,rgba(0,0,0,0.85)_100%)]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+          {/* Minimal wash — keep the video readable */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
-          <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col justify-end px-5 pb-16 pt-24 sm:px-8 sm:pb-24 lg:px-12">
-            <div className="max-w-3xl text-white">
-              <span className="mb-6 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.32em] !text-white/80">
-                <Sparkles className="h-3.5 w-3.5" /> JBJ Global Real Estate
+          <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
+            <JJLogoImage size="xl" showText={false} className="!items-center [&_img]:mx-auto" />
+            <h1 className="mt-6 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
+              JBJ Global Real Estate
+            </h1>
+            <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.42em] !text-white/85 sm:text-[13px]">
+              Dubai · United Arab Emirates
+            </p>
+          </div>
+
+          {/* Scroll cue */}
+          <a
+            href="#intro"
+            className="absolute inset-x-0 bottom-8 mx-auto flex w-fit items-center gap-2 text-[10px] font-bold uppercase tracking-[0.32em] !text-white/70 hover:!text-white"
+          >
+            Scroll <ArrowRight className="h-3 w-3 rotate-90" />
+          </a>
+        </section>
+
+        {/* Intro band — copy that used to overlay the video, now clean below it */}
+        <section id="intro" className="bg-[#F7F2EA] px-5 py-16 sm:px-8 lg:px-12">
+          <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.1fr,1fr] md:items-end">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#064E3B]">
+                A private property platform, built around you
               </span>
-              <h1 className="font-serif text-5xl leading-[1.02] !text-white sm:text-6xl lg:text-[84px]">
-                A private property platform,<br className="hidden md:block" /> built around you.
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
-                Featured launches, off-plan releases, guides, and investor packages — all curated for buyers, brokers, developers, and investors in the UAE.
-              </p>
-              <div className="mt-9 flex flex-wrap gap-3">
-                <button
-                  onClick={openSignup}
-                  className={`inline-flex h-12 items-center gap-2 rounded-md px-6 text-sm font-bold uppercase tracking-[0.14em] ${EMERALD_BTN}`}
-                >
+              <h2 className="mt-3 font-serif text-4xl leading-[1.05] text-[#0d3a2b] sm:text-5xl">
+                Featured launches, off-plan releases, guides & investor packages — one curated home.
+              </h2>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
                   Create your account <ArrowRight className="h-4 w-4" />
                 </button>
-                <button
-                  onClick={() => setLeadOpen(true)}
-                  className="inline-flex h-12 items-center gap-2 rounded-md border border-white/40 bg-white/[0.06] px-6 text-sm font-bold uppercase tracking-[0.14em] text-white backdrop-blur-sm transition hover:bg-white/[0.14]"
-                >
+                <button onClick={() => setLeadOpen(true)} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
                   Talk to an advisor
                 </button>
               </div>
+            </div>
 
-              <div className="mt-14 grid max-w-3xl grid-cols-2 gap-x-8 gap-y-4 border-t border-white/20 pt-6 text-white/80 sm:grid-cols-4">
-                {[
-                  ["500+", "curated projects"],
-                  ["120+", "developers"],
-                  ["24/7", "advisor desk"],
-                  ["AED", "backed reporting"],
-                ].map(([v, l]) => (
-                  <div key={l}>
-                    <p className="font-serif text-2xl !text-white">{v}</p>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">{l}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-6 border-l border-[#0d3a2b]/15 pl-8">
+              {[
+                ["500+", "curated projects"],
+                ["120+", "developers"],
+                ["24/7", "advisor desk"],
+                ["AED", "backed reporting"],
+              ].map(([v, l]) => (
+                <div key={l}>
+                  <p className="font-serif text-3xl text-[#0d3a2b]">{v}</p>
+                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/60">{l}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* FEATURED PROPERTIES — real property marquee */}
-        <section id="featured" className="bg-[#F7F2EA] px-5 py-24 sm:px-8 lg:px-12">
+        {/* FEATURED PROPERTIES */}
+        <section id="featured" className="bg-[#F7F2EA] px-5 py-20 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">Latest launches & featured</span>
-                <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">Live inventory from Dubai's top developers.</h2>
+                <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
+                  Latest launches & featured
+                </span>
+                <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">
+                  Live inventory from Dubai's top developers.
+                </h2>
                 <p className="mt-3 max-w-2xl text-[#1A1A1A]/70">
-                  Real projects — off-plan releases, ready inventory, and premium launches. Create an account to unlock pricing, plans and full detail.
+                  Real projects — off-plan releases, ready inventory and premium launches. Create an account to unlock pricing, plans and full detail.
                 </p>
               </div>
-              <button
-                onClick={openSignup}
-                className={`inline-flex h-11 items-center gap-2 rounded-md px-5 text-sm font-bold ${EMERALD_BTN}`}
-              >
+              <button onClick={openSignup} className={`${BTN_EMERALD_SOLID} h-11`}>
                 Unlock the catalogue <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -377,7 +594,7 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* NEW LAUNCH / PLATFORM PILLARS — premium emerald surface */}
+        {/* NEW LAUNCH pillars */}
         <section
           id="new-launch"
           data-surface="dark"
@@ -385,13 +602,16 @@ export default function PublicAccess() {
           style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
-
           <div className="relative mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">New launches on JBJ</span>
-              <h2 className="mt-3 font-serif text-4xl !text-white sm:text-5xl">Every launch, structured the same way.</h2>
+              <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">
+                New launches on JBJ
+              </span>
+              <h2 className="mt-3 font-serif text-4xl !text-white sm:text-5xl">
+                Every launch, structured the same way.
+              </h2>
               <p className="mx-auto mt-4 max-w-2xl !text-white/80">
-                Inventory, payment plans, verified access, and private documents — the four building blocks behind every project on the platform.
+                Inventory, payment plans, verified access and private documents — the four blocks behind every project.
               </p>
             </div>
 
@@ -404,11 +624,11 @@ export default function PublicAccess() {
                     className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] p-7 backdrop-blur-sm transition hover:-translate-y-1 hover:border-white/45 hover:bg-white/[0.11]"
                   >
                     <span className="absolute right-5 top-5 font-serif text-sm !text-white/40">0{i + 1}</span>
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/10">
-                      <Icon className="h-5 w-5" style={{ color: "#ffffff", stroke: "#ffffff" }} />
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                      <Icon className="h-5 w-5" />
                     </div>
                     <h3 className="mt-5 font-serif text-2xl !text-white">{p.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed !text-white/78">{p.body}</p>
+                    <p className="mt-3 text-sm leading-relaxed !text-white/80">{p.body}</p>
                   </div>
                 );
               })}
@@ -416,11 +636,13 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* GUIDES — the exact same book strip used on the homepage */}
+        {/* GUIDES — LOCKED per owner */}
         <section id="guides" className="bg-[#F7F2EA] py-16">
           <div className="mx-auto mb-8 flex max-w-7xl flex-col justify-between gap-5 px-5 sm:px-8 md:flex-row md:items-end lg:px-12">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">Guides & reports</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
+                Guides & reports
+              </span>
               <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">Explore the JBJ library.</h2>
             </div>
             <Link
@@ -433,112 +655,82 @@ export default function PublicAccess() {
           <BookCarousel books={ACCESS_BOOKS} size="sm" durationSec={38} compact />
         </section>
 
-        {/* PACKAGES: Investor / Developer / Broker */}
-        <section id="packages" className="bg-[#FDFBF7] px-5 py-24 sm:px-8 lg:px-12">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12 text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">What we offer</span>
-              <h2 className="mt-3 font-serif text-4xl text-[#0d3a2b] sm:text-5xl">Packages for every role.</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-[#1A1A1A]/72">
-                Whether you invest, develop, or broker deals in Dubai, JBJ has a dedicated program tailored to how you work.
+        {/* PACKAGES — one strap per audience */}
+
+        {/* INVESTOR */}
+        <PackageStrap
+          id="investor-packages"
+          eyebrow="For Investors"
+          title="Investor packages"
+          description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio."
+          tiers={investorTiers}
+          onSelect={openSignup}
+        >
+          {/* Signature perks — now scoped to the investor section */}
+          <div className="mt-12 rounded-2xl border border-[#0d3a2b]/15 bg-[#F7F2EA] p-6 sm:p-8">
+            <div className="mb-5 flex items-center gap-3">
+              <TrendingUp className="h-5 w-5 text-[#064E3B]" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#064E3B]">
+                Signature JBJ perks · included on Signature & Private Office
               </p>
             </div>
-
-            <div className="grid gap-6 lg:grid-cols-3">
-              {packages.map((plan) => {
-                const Icon = plan.icon;
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {investorSignaturePerks.map((perk) => {
+                const Icon = perk.icon;
                 return (
-                  <article
-                    key={plan.name}
-                    className="relative flex flex-col overflow-hidden rounded-2xl border border-[#0d3a2b]/15 bg-white p-7 shadow-[0_24px_60px_-42px_rgba(13,58,43,0.35)]"
+                  <div
+                    key={perk.label}
+                    className="flex items-center gap-3 rounded-xl border border-[#0d3a2b]/12 bg-white px-4 py-3"
                   >
-                    <div
-                      className="inline-flex h-12 w-12 items-center justify-center rounded-xl"
-                      style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
-                    >
-                      <Icon className="h-5 w-5" style={{ color: "#ffffff", stroke: "#ffffff" }} />
-                    </div>
-
-                    <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.22em] text-[#064E3B]">
-                      {plan.audience}
-                    </p>
-                    <h3 className="mt-2 font-serif text-3xl text-[#0d3a2b]">{plan.name}</h3>
-                    <div className="mt-5 flex items-end gap-2">
-                      <span className="font-serif text-4xl text-[#1A1A1A]">{plan.price}</span>
-                      <span className="pb-1 text-sm text-[#1A1A1A]/62">{plan.cadence}</span>
-                    </div>
-
-                    <ul className="mt-6 flex-1 space-y-3 text-sm text-[#1A1A1A]/78">
-                      {plan.features.map((feature) => (
-                        <li key={feature} className="flex gap-2">
-                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#064E3B]" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <button
-                      onClick={openSignup}
+                    <span
                       data-surface="dark"
-                      className={`mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-bold shadow-[0_12px_26px_-16px_rgba(6,78,59,0.8)] ${EMERALD_BTN}`}
+                      className={`${EMERALD_ICON_TILE} h-9 w-9`}
                     >
-                      Start with {plan.name} <ArrowRight className="h-4 w-4" />
-                    </button>
-                  </article>
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="text-sm font-semibold text-[#0d3a2b]">{perk.label}</span>
+                  </div>
                 );
               })}
             </div>
-
-            {/* Add-on line: agency */}
-            <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-2xl border border-[#0d3a2b]/15 bg-white px-6 py-5 sm:flex-row">
-              <div className="flex items-center gap-4">
-                <div
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-xl"
-                  style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
-                >
-                  <Briefcase className="h-5 w-5" style={{ color: "#ffffff", stroke: "#ffffff" }} />
-                </div>
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#064E3B]">For Agencies</p>
-                  <p className="font-serif text-lg text-[#0d3a2b]">Team enablement, CRM segmentation, lead systems — from AED 2,999/month.</p>
-                </div>
-              </div>
-              <Link
-                to="/agencies"
-                data-surface="dark"
-                className={`inline-flex h-11 items-center gap-2 rounded-md px-5 text-sm font-bold ${EMERALD_BTN}`}
-              >
-                Agency packages <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            {/* Investor perks strip */}
-            <div className="mt-10 rounded-2xl border border-[#0d3a2b]/15 bg-[#F7F2EA] p-6 sm:p-8">
-              <div className="mb-5 flex items-center gap-3">
-                <TrendingUp className="h-5 w-5 text-[#064E3B]" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#064E3B]">Investor Access — signature perks</p>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                {investorPerks.map((perk) => {
-                  const Icon = perk.icon;
-                  return (
-                    <div key={perk.label} className="flex items-center gap-3 rounded-xl border border-[#0d3a2b]/12 bg-white px-4 py-3">
-                      <div
-                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg"
-                        style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
-                      >
-                        <Icon className="h-4 w-4" style={{ color: "#ffffff", stroke: "#ffffff" }} />
-                      </div>
-                      <span className="text-sm font-semibold text-[#0d3a2b]">{perk.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
-        </section>
+        </PackageStrap>
 
-        {/* BROKER CERTIFICATION & ENROLLMENT */}
+        {/* DEVELOPER */}
+        <div className="bg-[#F7F2EA]">
+          <PackageStrap
+            id="developer-packages"
+            eyebrow="For Developers"
+            title="Developer programs"
+            description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
+            tiers={developerTiers}
+            onSelect={openSignup}
+          />
+        </div>
+
+        {/* BROKER */}
+        <PackageStrap
+          id="broker-packages"
+          eyebrow="For Brokers"
+          title="Broker Academy & enrollment"
+          description="Yearly enrollment for licensed and aspiring UAE agents. Mentorship, exclusive materials, and a direct pathway into JBJ Global."
+          tiers={brokerTiers}
+          onSelect={openSignup}
+        />
+
+        {/* AGENCY */}
+        <div className="bg-[#F7F2EA]">
+          <PackageStrap
+            id="agency-packages"
+            eyebrow="For Agencies"
+            title="Agency packages"
+            description="Team seats, CRM segmentation and lead systems for boutique and established Dubai agencies."
+            tiers={agencyTiers}
+            onSelect={openSignup}
+          />
+        </div>
+
+        {/* BROKER CERTIFICATION deep-dive */}
         <section
           id="brokers"
           data-surface="dark"
@@ -548,10 +740,12 @@ export default function PublicAccess() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
           <div className="relative mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">Broker Academy & Enrollment</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">
+                Broker Academy benefits
+              </span>
               <h2 className="mt-3 font-serif text-4xl !text-white sm:text-5xl">Become a JBJ-certified broker.</h2>
               <p className="mx-auto mt-4 max-w-2xl !text-white/85">
-                A yearly enrollment for licensed and aspiring UAE agents — with ongoing mentorship, exclusive materials, and a direct pathway into JBJ Global.
+                What every JBJ-certified agent unlocks — regardless of tier.
               </p>
             </div>
 
@@ -563,8 +757,8 @@ export default function PublicAccess() {
                     key={b.title}
                     className="rounded-2xl border border-white/15 bg-white/[0.06] p-7 backdrop-blur-sm transition hover:-translate-y-1 hover:border-white/45 hover:bg-white/[0.11]"
                   >
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/10">
-                      <Icon className="h-5 w-5" style={{ color: "#ffffff", stroke: "#ffffff" }} />
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                      <Icon className="h-5 w-5" />
                     </div>
                     <h3 className="mt-5 font-serif text-xl !text-white">{b.title}</h3>
                     <p className="mt-3 text-sm leading-relaxed !text-white/80">{b.body}</p>
@@ -574,10 +768,10 @@ export default function PublicAccess() {
             </div>
 
             <div className="mt-12 flex flex-wrap justify-center gap-3">
+              {/* White idle → emerald hover per owner spec */}
               <button
                 onClick={openSignup}
-                data-surface="dark"
-                className={`inline-flex h-12 items-center gap-2 rounded-md px-6 text-sm font-bold uppercase tracking-[0.14em] ${WHITE_BTN}`}
+                className="group inline-flex h-12 items-center gap-2 rounded-md border border-white bg-white px-6 text-sm font-bold uppercase tracking-[0.14em] !text-[#0d3a2b] transition hover:!bg-[#064E3B] hover:!text-white [&_svg]:!text-[#0d3a2b] hover:[&_svg]:!text-white"
               >
                 Enroll in the academy <ArrowRight className="h-4 w-4" />
               </button>
@@ -599,16 +793,16 @@ export default function PublicAccess() {
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.08),transparent_65%)]" />
           <div className="relative mx-auto max-w-4xl text-center">
-            <Users className="mx-auto h-9 w-9" style={{ color: "#ffffff", stroke: "#ffffff" }} />
+            <Users className="mx-auto h-9 w-9 !text-white" />
             <h2 className="mt-5 font-serif text-4xl !text-white sm:text-5xl">Ready to step inside JBJ?</h2>
             <p className="mx-auto mt-4 max-w-2xl !text-white/85">
-              Create an account to unlock featured properties, launches, guides, and packages — or speak with an advisor who can guide you first.
+              Create an account to unlock featured properties, launches, guides and packages — or speak with an advisor first.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
+              {/* White idle → emerald hover */}
               <button
                 onClick={openSignup}
-                data-surface="dark"
-                className={`inline-flex h-12 items-center gap-2 rounded-md px-6 text-sm font-bold uppercase tracking-[0.14em] ${WHITE_BTN}`}
+                className="group inline-flex h-12 items-center gap-2 rounded-md border border-white bg-white px-6 text-sm font-bold uppercase tracking-[0.14em] !text-[#0d3a2b] transition hover:!bg-[#064E3B] hover:!text-white [&_svg]:!text-[#0d3a2b] hover:[&_svg]:!text-white"
               >
                 Create account <ArrowRight className="h-4 w-4" />
               </button>
@@ -633,11 +827,27 @@ export default function PublicAccess() {
         </div>
       </footer>
 
+      {/* Premium floating advisor button — headset avatar + live dot + phone */}
       <button
         onClick={() => setLeadOpen(true)}
-        className={`fixed bottom-5 right-5 z-30 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-bold shadow-[0_14px_34px_-16px_rgba(6,78,59,0.85)] ${EMERALD_BTN}`}
+        data-surface="dark"
+        aria-label="Speak to an advisor"
+        className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 !text-white shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-[#B89555]/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:brightness-110 hover:-translate-y-0.5"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-white" /> Speak to an advisor
+        <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 ring-1 ring-white/25 [&_svg]:!text-white">
+          <Headphones className="h-5 w-5" />
+          {/* live-line dot */}
+          <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F0D78C] opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#F0D78C]" />
+          </span>
+        </span>
+        <span className="flex flex-col items-start leading-tight">
+          <span className="text-[9px] font-bold uppercase tracking-[0.28em] !text-[#F0D78C]">Live · 24/7</span>
+          <span className="inline-flex items-center gap-1.5 text-[13px] font-bold !text-white">
+            <PhoneCall className="h-3.5 w-3.5 !text-white" /> Speak to an advisor
+          </span>
+        </span>
       </button>
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
