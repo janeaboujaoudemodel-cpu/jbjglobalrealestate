@@ -46,6 +46,7 @@ import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
 import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
 import { DevelopersPortalRoutes } from "@/routes/DevelopersPortalRoutes";
 import SiteAccessGate from "@/components/gate/SiteAccessGate";
+import PremiumPromptRoot from "@/components/premium/PremiumPromptRoot";
 
 
 // Owner-only + post-paint extras (lazy, idle-mounted — never blocks FCP)
@@ -156,6 +157,8 @@ const App = () => {
               </Route>
             </Routes>
             </SiteAccessGate>
+            <PremiumPromptRoot />
+
 
                   <GlobalSupportMount />
                   </PopupCoordinatorProvider>

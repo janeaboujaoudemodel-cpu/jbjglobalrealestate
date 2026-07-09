@@ -1,42 +1,17 @@
 import { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 
-// Paths that unauthenticated visitors are allowed to see.
-const PUBLIC_PATH_PREFIXES = [
-  "/access",
-  "/signup",
-  "/welcome",
-  "/auth",
-  "/reset-password",
-  "/oauth",
-  "/legal",
-  "/privacy",
-  "/terms",
-  "/cookies",
-  "/aml",
-];
-
-function isPublicPath(pathname: string) {
-  if (pathname === "/") return false;
-  return PUBLIC_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"));
-}
-
+/**
+ * SiteAccessGate — SaaS flow (Phase 2)
+ *
+ * The public site is fully browseable. This wrapper does NOT redirect
+ * anonymous visitors anywhere. Premium routes and actions are gated
+ * individually via:
+ *   - `<AuthRequiredRoute>` for route-level protection
+ *   - `<PremiumGate>` / `useRequireAuth()` for interaction-level gating
+ *
+ * Returning users with a valid session enter directly. Only anonymous
+ * users who click a premium trigger are prompted to sign up/in.
+ */
 export default function SiteAccessGate({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth();
-  const location = useLocation();
-
-  const publicPath = isPublicPath(location.pathname);
-  if (publicPath) return <>{children}</>;
-  if (loading) {
-    return (
-      <div className="min-h-screen grid place-items-center bg-[#FDFBF7]">
-        <div className="w-10 h-10 rounded-full border-2 border-[#B89555]/30 border-t-[#064E3B] animate-spin" />
-      </div>
-    );
-  }
-  if (user) return <>{children}</>;
-
-  return <Navigate to="/access" replace state={{ from: location.pathname + location.search }} />;
+  return <>{children}</>;
 }
-

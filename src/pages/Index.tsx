@@ -17,6 +17,7 @@ import HeroPropertySearch from "@/components/home/HeroPropertySearch";
 import HomeHeroSearch from "@/components/home/HomeHeroSearch";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
+import ConversionBand from "@/components/marketing/ConversionBand";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Chunk imports — stored so we can preload them all after hero renders
@@ -499,6 +500,11 @@ const Index = () => {
           </Suspense>
         </LazyVisible>
       </PremiumSectionCard>
+
+      {/* Conversion band for anonymous visitors */}
+      <ConversionBand />
+
+
 
 
 
