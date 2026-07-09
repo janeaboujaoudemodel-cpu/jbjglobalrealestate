@@ -499,10 +499,10 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
 
   return (
     <div
-      className="relative"
+      className="relative w-full min-w-0"
       onMouseEnter={() => { stateRef.current.paused = true; }}
       onMouseLeave={() => { stateRef.current.paused = false; }}
-      aria-label="Live property listings — drag to scroll"
+      aria-label="Live property listings carousel"
     >
       <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#FDFBF7]"} to-transparent`} />
       <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#FDFBF7]"} to-transparent`} />
@@ -515,7 +515,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
         onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
         onWheel={onWheel}
         data-property-scroller
-        className="flex gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
+        className="flex w-full gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
         style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
       >
         {track.map((p: any, idx) => {
@@ -544,7 +544,8 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
                 onClick();
               }}
               draggable={false}
-              className={`group/card relative flex w-[310px] shrink-0 flex-col overflow-hidden rounded-md p-0 text-left align-top transition duration-500 hover:-translate-y-1 sm:w-[360px] ${
+              data-property-card
+              className={`group/card relative !flex w-[310px] shrink-0 !flex-col !items-stretch !justify-start !gap-0 overflow-hidden rounded-md !p-0 !text-left align-top transition duration-500 hover:-translate-y-1 sm:w-[360px] ${
                 isDark
                   ? "border border-white/12 bg-gradient-to-b from-white/[0.08] to-white/[0.02] shadow-[0_30px_70px_-32px_rgba(0,0,0,0.85)] hover:border-[#c9a24a]/60"
                   : "border border-[#0d3a2b]/12 bg-[#FDFBF7] shadow-[0_28px_58px_-34px_rgba(6,78,59,0.55)] hover:border-[#8B6F3A]/65"
