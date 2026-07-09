@@ -14,6 +14,7 @@ interface Props {
 
 export default function LoginDialog({ open, onOpenChange }: Props) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [reveal, setReveal] = useState(false);
