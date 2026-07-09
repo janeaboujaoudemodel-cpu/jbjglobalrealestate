@@ -9,9 +9,7 @@ export default function CheckoutReturn() {
 
   return (
     <>
-      <Helmet>
-        <title>Payment complete | JBJ Global Real Estate</title>
-      </Helmet>
+      <PageMeta title="Payment complete | JBJ Global Real Estate" />
       <main className="min-h-[70vh] grid place-items-center px-4 py-16">
         <div className="max-w-lg w-full text-center bg-white/80 backdrop-blur rounded-2xl border border-[#B89555]/30 p-8 shadow-[0_20px_60px_-30px_rgba(6,78,59,0.25)]">
           <CheckCircle2 className="mx-auto h-14 w-14 text-[#064E3B] mb-4" />
