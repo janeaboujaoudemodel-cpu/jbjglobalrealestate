@@ -989,6 +989,12 @@ export default function PublicAccess() {
       </button>
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
+      <PaymentRequestDialog
+        open={!!payCtx}
+        onOpenChange={(o) => { if (!o) setPayCtx(null); }}
+        context={payCtx}
+        sourcePage="/access"
+      />
       <SignupDialog open={signupOpen} onOpenChange={setSignupOpen} />
       <LoginDialog open={loginOpen} onOpenChange={setLoginOpen} />
     </div>
