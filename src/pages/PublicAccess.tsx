@@ -390,7 +390,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   const projects = (gateData ?? [])
     .filter((p: any) => {
       const cover = p.image_url || p.hero_image || p.cover_image || p.cover_image_url || p.card_image_url || (Array.isArray(p.images) && p.images[0]);
-      return !!cover && !!(p.name || p.title);
+      return !!cover && !String(cover).startsWith("data:") && String(cover).length < 900 && !!(p.name || p.title);
     })
     .slice(0, limit);
 
