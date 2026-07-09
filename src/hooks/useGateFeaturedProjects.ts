@@ -43,6 +43,7 @@ const isUsableMediaUrl = (value: unknown) => {
   if (!url) return false;
   if (/^data:/i.test(url)) return false;
   if (url.length > 900) return false;
+  if (/api\.reelly\.io\/vault/i.test(url)) return false;
   return /^(https?:\/\/|\/)/i.test(url);
 };
 
@@ -137,12 +138,6 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
         .map((r) => normalizeProject(r.project || r.projects))
         .filter(Boolean) as GateFeaturedProject[];
 
-      if (configured.length > 0) {
-        const sorted = configured.sort((a, b) => rankForGate(a) - rankForGate(b));
-        const offPlanOnly = sorted.filter(isOffPlanProject);
-        return (offPlanOnly.length >= 4 ? offPlanOnly : sorted).slice(0, 8);
-      }
-
       // Real-data fallback for empty surfaces: newest published projects, with
       // Amra-style wellness launches promoted first. No fake/static cards.
       const base = (supabase.from("projects" as any) as any)
@@ -161,7 +156,7 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
       ]);
 
       const byId = new Map<string, GateFeaturedProject>();
-      [...((amraRes.data as any[]) ?? []), ...((latestRes.data as any[]) ?? [])]
+      [...configured, ...((amraRes.data as any[]) ?? []), ...((latestRes.data as any[]) ?? [])]
         .map(normalizeProject)
         .filter((project): project is GateFeaturedProject => !!project && !!project.cover_image)
         .forEach((project) => {
@@ -170,7 +165,7 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
 
       const sorted = Array.from(byId.values()).sort((a, b) => rankForGate(a) - rankForGate(b));
       const offPlanOnly = sorted.filter(isOffPlanProject);
-      return (offPlanOnly.length >= 4 ? offPlanOnly : sorted).slice(0, 8);
+      return (offPlanOnly.length ? offPlanOnly : sorted).slice(0, 8);
     },
     staleTime: 60_000,
   });
