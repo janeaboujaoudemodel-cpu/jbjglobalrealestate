@@ -594,6 +594,46 @@ export default function PublicAccess() {
     });
   };
 
+  // Nuclear contrast lock — walks all access CTAs after paint and forces color/bg
+  // with priority 'important' via inline style, defeating ALL global rules.
+  React.useEffect(() => {
+    const paint = () => {
+      document.querySelectorAll<HTMLElement>("[data-jbj-cta-emerald]").forEach((el) => {
+        el.style.setProperty("color", "#FFFFFF", "important");
+        el.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+        el.querySelectorAll<HTMLElement>("*").forEach((c) => {
+          c.style.setProperty("color", "#FFFFFF", "important");
+          c.style.setProperty("-webkit-text-fill-color", "#FFFFFF", "important");
+          if (c.tagName === "svg" || c.tagName === "SVG" || c.tagName.toLowerCase() === "svg" || c instanceof SVGElement) {
+            c.style.setProperty("stroke", "#FFFFFF", "important");
+          }
+        });
+      });
+      document.querySelectorAll<HTMLElement>("[data-jbj-cta-white]").forEach((el) => {
+        const hovered = el.matches(":hover");
+        const ink = hovered ? "#FFFFFF" : "#0d3a2b";
+        el.style.setProperty("color", ink, "important");
+        el.style.setProperty("-webkit-text-fill-color", ink, "important");
+        el.style.setProperty("background-color", hovered ? "#064E3B" : "#FFFFFF", "important");
+        el.querySelectorAll<HTMLElement>("*").forEach((c) => {
+          c.style.setProperty("color", ink, "important");
+          c.style.setProperty("-webkit-text-fill-color", ink, "important");
+          if (c instanceof SVGElement) c.style.setProperty("stroke", ink, "important");
+        });
+      });
+    };
+    paint();
+    const t = setInterval(paint, 400);
+    document.addEventListener("mouseover", paint);
+    document.addEventListener("mouseout", paint);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener("mouseover", paint);
+      document.removeEventListener("mouseout", paint);
+    };
+  }, []);
+
+
   return (
     <div className="min-h-screen bg-[#F7F2EA] text-[#1A1A1A]">
       <style>{ACCESS_CTA_STYLE}</style>
