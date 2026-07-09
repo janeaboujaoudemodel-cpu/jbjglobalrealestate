@@ -513,7 +513,7 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) =
 
             <button
               onClick={() => onSelect(tier)}
-              data-surface="dark"
+              data-jbj-access-cta="emerald"
               style={emeraldInkStyle}
               className={`${BTN_EMERALD_SOLID} mt-8 h-12 w-full justify-center uppercase tracking-[0.14em]`}
             >
