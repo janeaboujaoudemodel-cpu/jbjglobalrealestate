@@ -859,18 +859,17 @@ function ServicesSection() {
             type="button"
             onClick={() => goto(pageIdx - 1)}
             data-no-contrast-guard
-            style={darkInkStyle}
-            className="inline-flex items-center gap-2 rounded-full border border-[#0d3a2b]/25 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition hover:border-[#0d3a2b] hover:bg-[#FDFBF7]"
             aria-label="Previous chapter"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#1A1A1A]/25 bg-white transition hover:border-[#0d3a2b] hover:bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] [&_svg]:!text-[#1A1A1A] [&_svg]:!stroke-[#1A1A1A] hover:[&_svg]:!text-white hover:[&_svg]:!stroke-white"
           >
-            <ChevronLeft className="h-4 w-4" /> Prev
+            <ChevronLeft className="h-5 w-5" />
           </button>
 
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-3">
             <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
               Page {pageIdx + 1} of {total}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {jbjServicePages.map((p, i) => {
                 const dotActive = i === pageIdx;
                 return (
@@ -879,13 +878,18 @@ function ServicesSection() {
                     type="button"
                     onClick={() => goto(i)}
                     aria-label={`Go to ${p.label}`}
+                    data-no-contrast-guard
+                    {...(dotActive ? { "data-allow-dark-cta": true, "data-surface": "dark" } : {})}
+                    style={dotActive ? emeraldInkStyle : undefined}
                     className={
-                      "rounded-full transition-all " +
+                      "inline-flex items-center justify-center rounded-full font-serif text-[13px] leading-none aspect-square h-10 w-10 min-w-[40px] min-h-[40px] transition " +
                       (dotActive
-                        ? "h-3 w-3 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] ring-2 ring-[#0d3a2b]/20 ring-offset-2 ring-offset-transparent"
-                        : "h-3 w-3 bg-[#0d3a2b]/20 hover:bg-[#0d3a2b]/45")
+                        ? "border border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_*]:!text-white"
+                        : "border border-[#1A1A1A]/25 bg-white text-[#1A1A1A] hover:border-[#0d3a2b] hover:text-[#0d3a2b]")
                     }
-                  />
+                  >
+                    <span className={dotActive ? "!text-white" : ""}>{i + 1}</span>
+                  </button>
                 );
               })}
             </div>
@@ -896,9 +900,10 @@ function ServicesSection() {
             onClick={() => goto(pageIdx + 1)}
             data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
             style={emeraldInkStyle}
-            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em] !text-white [&_svg]:!text-white [&_svg]:!stroke-white`}
+            aria-label="Next chapter"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_svg]:!text-white [&_svg]:!stroke-white"
           >
-            <span className="!text-white">Next</span> <ChevronRight className="h-4 w-4 !text-white" />
+            <ChevronRight className="h-5 w-5 !text-white" />
           </button>
 
         </div>
