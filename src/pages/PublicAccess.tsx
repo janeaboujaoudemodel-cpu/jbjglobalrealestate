@@ -9,36 +9,32 @@ import VideoBackground from "@/components/VideoBackground";
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import { BookCarousel } from "@/components/books/BookCarousel";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
-import { useHandpickedProjects } from "@/hooks/useHandpickedProjects";
 import { useSurfaceFeaturedProjects } from "@/hooks/useGateFeaturedProjects";
 import type { BookData } from "@/types/books";
 
 import {
   ArrowRight,
   Award,
-  Building,
   CheckCircle2,
-  CreditCard,
   GraduationCap,
   Headphones,
   Home,
   KeyRound,
-  Lock,
   PhoneCall,
   Sparkles,
   TrendingUp,
   Users,
-  Briefcase,
   Gift,
   Plane,
   Handshake,
   Trophy,
-  BookOpen,
   Ticket,
   ShieldCheck,
   FileCheck2,
   Building2,
   Star,
+  CalendarDays,
+  PenLine,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
@@ -241,29 +237,6 @@ const agencyTiers: Tier[] = [
   },
 ];
 
-const platformPillars = [
-  {
-    icon: Home,
-    title: "Launch inventory",
-    body: "Availability snapshots, release highlights, and floor-plan availability across new project launches.",
-  },
-  {
-    icon: CreditCard,
-    title: "Payment plans",
-    body: "Structured down payment, construction milestone, handover, and post-handover breakdowns per project.",
-  },
-  {
-    icon: KeyRound,
-    title: "Verified access",
-    body: "Curated listings and developer records are validated before they reach the platform.",
-  },
-  {
-    icon: Lock,
-    title: "Private documents",
-    body: "Investor books, factsheets, PDFs, and legal documents in one organised library.",
-  },
-];
-
 const brokerBenefits = [
   { icon: Award, title: "JBJ certification", body: "DLD-aligned coursework and a formal JBJ Global Broker Certificate signed by the founder." },
   { icon: Users, title: "Warm client intros", body: "Qualified investor and buyer leads routed to certified agents from the JBJ CRM." },
@@ -369,24 +342,63 @@ html body #root [data-jbj-access-gold-badge] * {
   color: #C9A84C !important;
   -webkit-text-fill-color: #C9A84C !important;
 }
+.certificate-shimmer-frame {
+  border: 1px solid rgba(139,111,58,0.34);
+  isolation: isolate;
+}
+.certificate-shimmer-frame::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: linear-gradient(110deg, rgba(139,111,58,0.35), rgba(255,246,210,0.95), rgba(139,111,58,0.35), rgba(6,78,59,0.28));
+  background-size: 280% 100%;
+  animation: certificate-border-shimmer 6.5s linear infinite;
+  z-index: -1;
+}
+.certificate-shimmer-frame::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  pointer-events: none;
+  border: 1px solid rgba(139,111,58,0.18);
+}
+.username-shimmer {
+  background: linear-gradient(100deg, #0d3a2b 0%, #0d3a2b 34%, #b89555 49%, #0d3a2b 64%, #0d3a2b 100%);
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: username-shimmer 5.5s ease-in-out infinite;
+}
+@keyframes certificate-border-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 280% 50%; }
+}
+@keyframes username-shimmer {
+  0%, 22% { background-position: 0% 50%; }
+  70%, 100% { background-position: 260% 50%; }
+}
 `;
 
 // ── Property marquee — REAL projects only, no fake fallback ─────────────────
-function PropertyMarquee({ onClick }: { onClick: () => void }) {
+function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () => void; theme?: "light" | "dark"; limit?: number }) {
   const { data: gateData, isLoading } = useSurfaceFeaturedProjects("gate");
+  const isDark = theme === "dark";
 
   const projects = (gateData ?? [])
     .filter((p: any) => {
-      const cover = p.image_url || p.hero_image || p.cover_image || (Array.isArray(p.images) && p.images[0]);
-      return !!cover && !!(p.name || p.title);
+      const cover = p.image_url || p.hero_image || p.cover_image || p.cover_image_url || p.card_image_url || (Array.isArray(p.images) && p.images[0]);
+      return !!cover && !String(cover).startsWith("data:") && String(cover).length < 900 && !!(p.name || p.title);
     })
-    .slice(0, 12);
+    .slice(0, limit);
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="aspect-[4/5] animate-pulse rounded-2xl bg-[#EFE6D6]" />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4" aria-label="Loading real projects">
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className={`aspect-[4/5] animate-pulse rounded-xl ${isDark ? "bg-white/10" : "bg-[#EFE6D6]"}`} />
         ))}
       </div>
     );
@@ -400,26 +412,39 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
   const track = projects.length >= 4 ? [...projects, ...projects] : projects;
 
   return (
-    <div className="group relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#F7F2EA] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#F7F2EA] to-transparent" />
+    <div className="group relative overflow-hidden" aria-label="Live property listings">
+      <div className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
+      <div className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l ${isDark ? "from-[#02100a]" : "from-[#F7F2EA]"} to-transparent`} />
       <div
-        className="flex w-max gap-5 [animation:jbj-marquee_46s_linear_infinite] group-hover:[animation-play-state:paused]"
+        className="flex w-max gap-5 [animation:jbj-marquee_52s_linear_infinite] group-hover:[animation-play-state:paused]"
         style={{ willChange: "transform" }}
       >
         {track.map((p: any, idx) => {
           const cover =
-            p.image_url || p.hero_image || p.cover_image || (Array.isArray(p.images) && p.images[0]);
-          const priceVal = Number(p.starting_price ?? p.price ?? 0);
-          const price = `AED ${priceVal.toLocaleString()}`;
+            p.image_url || p.hero_image || p.cover_image || p.cover_image_url || p.card_image_url || (Array.isArray(p.images) && p.images[0]);
+          const priceVal = Number(p.starting_price ?? p.price_from ?? p.price ?? 0);
+          const price = Number.isFinite(priceVal) && priceVal > 0 ? `AED ${priceVal.toLocaleString()}` : "Price on request";
+          const bedroomText = (() => {
+            const min = Number(p.bedrooms_min);
+            const max = Number(p.bedrooms_max);
+            if (!Number.isFinite(min) && !Number.isFinite(max)) return null;
+            const label = (value: number) => (value <= 0 ? "Studio" : `${value} BR`);
+            if (Number.isFinite(min) && Number.isFinite(max) && min !== max) return `${label(min)} - ${label(max)}`;
+            return label(Number.isFinite(min) ? min : max);
+          })();
+          const place = [p.area_name || p.community || p.location, p.emirate].filter(Boolean).join(" · ") || "UAE";
           return (
             <button
               type="button"
               key={`${p.id}-${idx}`}
               onClick={onClick}
-              className="group/card relative w-[260px] shrink-0 overflow-hidden rounded-2xl border border-[#0d3a2b]/12 bg-[#FDFBF7] text-left shadow-[0_18px_40px_-28px_rgba(6,78,59,0.45)] transition hover:-translate-y-1 hover:border-[#0d3a2b]/40 sm:w-[300px]"
+              className={`group/card relative w-[270px] shrink-0 overflow-hidden rounded-xl text-left transition hover:-translate-y-1 sm:w-[315px] ${
+                isDark
+                  ? "border border-white/15 bg-white/[0.07] shadow-[0_24px_60px_-30px_rgba(0,0,0,0.75)] hover:border-white/40"
+                  : "border border-[#0d3a2b]/12 bg-[#FDFBF7] shadow-[0_18px_40px_-28px_rgba(6,78,59,0.45)] hover:border-[#0d3a2b]/40"
+              } flex flex-col p-0 align-top`}
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#042c1c]">
+              <div className="relative block aspect-[16/11] w-full shrink-0 overflow-hidden bg-[#042c1c]">
                 <img
                   src={cover}
                   alt={p.name || "Featured project"}
@@ -431,22 +456,29 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
                   data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
                   className="absolute left-3 top-3 rounded-full bg-[#064E3B]/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em]"
                 >
-                  Featured
+                  Live listing
                 </span>
                 <div className="absolute inset-x-4 bottom-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] !text-white/80">
-                    {p.location || p.community || "Dubai"}
+                    {place}
                   </p>
-                  <h3 className="mt-1 line-clamp-2 font-serif text-lg leading-tight !text-white">
+                  <h3 className="mt-1 line-clamp-2 font-serif text-xl leading-tight !text-white">
                     {p.name || p.title}
                   </h3>
                 </div>
               </div>
-              <div className="flex items-center justify-between gap-3 px-4 py-3">
-                <span className="text-sm font-bold text-[#0d3a2b]">{price}</span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.16em] text-[#064E3B]">
-                  View <ArrowRight className="h-3.5 w-3.5" />
-                </span>
+              <div className={`block w-full min-w-0 px-4 py-3 ${isDark ? "text-white" : "text-[#0d3a2b]"}`}>
+                <div className="flex items-center justify-between gap-3">
+                  <span className={`min-w-0 whitespace-nowrap text-sm font-bold ${isDark ? "!text-white" : "text-[#0d3a2b]"}`}>{price}</span>
+                  <span className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.16em] ${isDark ? "!text-white/80" : "text-[#064E3B]"}`}>
+                    View <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </div>
+                <div className={`mt-2 flex min-w-0 flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] ${isDark ? "!text-white/62" : "text-[#1A1A1A]/58"}`}>
+                  {bedroomText && <span>{bedroomText}</span>}
+                  {bedroomText && p.handover_date && <span className="h-1 w-1 rounded-full bg-current opacity-50" />}
+                  {p.handover_date && <span>{p.handover_date}</span>}
+                </div>
               </div>
             </button>
           );
@@ -458,6 +490,213 @@ function PropertyMarquee({ onClick }: { onClick: () => void }) {
           to   { transform: translate3d(-50%,0,0); }
         }
       `}</style>
+    </div>
+  );
+}
+
+function BrokerAcademySlide({ openSignup, openLead }: { openSignup: () => void; openLead: () => void }) {
+  return (
+    <section
+      id="brokers"
+      data-surface="dark"
+      className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12"
+      style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:72px_72px] opacity-20" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+
+      <div className="relative mx-auto max-w-7xl">
+        <div className="mb-8 flex items-end justify-between gap-6">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-[0.32em] !text-white/70">Presentation 01 · Broker Academy</span>
+            <h2 className="mt-3 font-serif text-4xl leading-[1.02] !text-white sm:text-6xl lg:text-[72px]">
+              Become a JBJ-certified broker.
+            </h2>
+          </div>
+          <span className="hidden rounded-full border border-white/20 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] !text-white/70 md:inline-flex">
+            DLD-aligned · Dubai
+          </span>
+        </div>
+
+        <div className="relative overflow-hidden rounded-md border border-white/18 bg-[#F7F2EA] p-3 shadow-[0_50px_110px_-46px_rgba(0,0,0,0.9)]">
+          <div className="grid min-h-[560px] overflow-hidden rounded-[4px] bg-[#FDFBF7] lg:grid-cols-[0.9fr,1.1fr]">
+            <div className="relative flex flex-col justify-between bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_62%,#000_100%)] p-8 sm:p-10">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
+                    <GraduationCap className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] !text-white/65">JBJ Global Real Estate</p>
+                    <p className="font-serif text-xl !text-white">Broker Services Desk</p>
+                  </div>
+                </div>
+
+                <h3 className="mt-12 font-serif text-4xl leading-[1.04] !text-white sm:text-5xl">
+                  A broker operating system, not a basic course.
+                </h3>
+                <p className="mt-5 max-w-md text-sm leading-relaxed !text-white/78">
+                  Training, launch access, document discipline, client routing, developer desk support and a signed JBJ Global certificate in one premium pathway.
+                </p>
+              </div>
+
+              <div className="mt-10 grid grid-cols-3 gap-3 border-t border-white/15 pt-6">
+                {[
+                  ["01", "Enroll"],
+                  ["02", "Certify"],
+                  ["03", "Receive leads"],
+                ].map(([n, label]) => (
+                  <div key={label}>
+                    <p className="font-serif text-3xl !text-white">{n}</p>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] !text-white/60">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative bg-[#FDFBF7] p-7 sm:p-10" data-surface="champagne">
+              <div className="flex items-center justify-between gap-4 border-b border-[#0d3a2b]/12 pb-5">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] !text-[#064E3B]">Services card</p>
+                  <h3 className="mt-1 font-serif text-3xl text-[#0d3a2b]">JBJ Certified Broker</h3>
+                </div>
+                <Award className="h-10 w-10 text-[#064E3B]" />
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {brokerServices.map((s, i) => {
+                  const Icon = s.icon;
+                  return (
+                    <article key={s.title} className="group relative min-h-[132px] overflow-hidden rounded-md border border-[#0d3a2b]/12 bg-[#F7F2EA] p-5 transition hover:border-[#064E3B]/45 hover:bg-[#F2EBDD]" data-surface="champagne">
+                      <span className="absolute right-4 top-4 font-serif text-sm text-[#0d3a2b]/25">{String(i + 1).padStart(2, "0")}</span>
+                      <span className={`${EMERALD_ICON_TILE} h-10 w-10 rounded-md`} data-surface="dark">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <h4 className="mt-4 font-serif text-xl leading-tight !text-[#0d3a2b]">{s.title}</h4>
+                      <p className="mt-2 text-[12px] leading-relaxed !text-[#1A1A1A]/66">{s.body}</p>
+                    </article>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 grid gap-4 border-t border-[#0d3a2b]/12 pt-6 sm:grid-cols-3">
+                {brokerBenefits.map((b) => {
+                  const Icon = b.icon;
+                  return (
+                    <div key={b.title} className="flex gap-3">
+                      <Icon className="mt-0.5 h-5 w-5 shrink-0 text-[#064E3B]" />
+                      <div>
+                        <p className="text-sm font-bold !text-[#0d3a2b]">{b.title}</p>
+                        <p className="mt-1 text-[11px] leading-relaxed !text-[#1A1A1A]/58">{b.body}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button onClick={openSignup} data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-12 uppercase tracking-[0.14em]`}>
+                  Enroll in the academy <ArrowRight className="h-4 w-4" />
+                </button>
+                <button onClick={openLead} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                  Speak to broker desk
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CertificatePreview() {
+  const today = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(new Date());
+
+  return (
+    <div className="relative">
+      <div
+        className="certificate-shimmer-frame relative mx-auto w-full max-w-[780px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
+        style={{ transform: "perspective(1600px) rotateY(-7deg) rotateX(2deg)", aspectRatio: "1.55 / 1" }}
+      >
+        <div className="absolute inset-2 border border-[#8B6F3A]/55" />
+        <div className="absolute inset-4 border border-[#8B6F3A]/25" />
+
+        <div className="relative flex h-full flex-col px-8 py-6 text-center sm:px-10">
+          <div className="flex items-center justify-between text-left">
+            <img
+              data-no-fallback
+              src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
+              alt="JBJ Global Real Estate"
+              className="h-14 w-14 object-contain"
+            />
+            <div className="text-right">
+              <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#8B6F3A]">JBJ Global Real Estate</p>
+              <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/45">Dubai · United Arab Emirates</p>
+            </div>
+          </div>
+
+          <h3 className="mt-4 font-serif text-2xl text-[#0d3a2b] sm:text-4xl">Certificate of Completion</h3>
+          <div className="mx-auto mt-2 flex items-center gap-2">
+            <span className="h-px w-12 bg-[#8B6F3A]/60" />
+            <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
+            <span className="h-px w-12 bg-[#8B6F3A]/60" />
+          </div>
+          <p className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55">This is presented to</p>
+          <p className="username-shimmer mx-auto mt-1 inline-flex min-w-[260px] justify-center border-b border-[#8B6F3A]/45 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:text-3xl">
+            Your Name Here
+          </p>
+          <p className="mx-auto mt-3 max-w-md text-[11px] leading-relaxed text-[#1A1A1A]/70">
+            for successfully completing the JBJ Global Broker Academy in accordance with DLD-aligned professional standards.
+          </p>
+
+          <div className="relative mt-auto grid grid-cols-[1fr_auto_1fr] items-end gap-4 pt-4 text-left">
+            <div>
+              <div className="flex h-10 items-end gap-2 text-[#0d3a2b]/55">
+                <PenLine className="h-5 w-5" />
+              </div>
+              <div className="mt-1 h-px w-40 bg-[#1A1A1A]/60" />
+              <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Founder Signature</p>
+              <p className="text-[8px] uppercase tracking-[0.2em] text-[#1A1A1A]/40">Founder &amp; CEO</p>
+            </div>
+
+            <div aria-hidden className="seal-outline relative flex h-28 w-28 items-center justify-center rounded-full">
+              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_18px_rgba(90,69,21,0.28)]">
+                <defs>
+                  <linearGradient id="sealGold" x1="18" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#F7DEA0" />
+                    <stop offset="0.45" stopColor="#C99A3F" />
+                    <stop offset="1" stopColor="#7A5A1E" />
+                  </linearGradient>
+                  <path id="sealTextPath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
+                </defs>
+                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="7" />
+                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="2" strokeDasharray="3 4" />
+                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="#6A4E15">
+                  <textPath href="#sealTextPath" startOffset="0%">JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·</textPath>
+                </text>
+              </svg>
+              <img
+                data-no-fallback
+                src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
+                alt=""
+                className="h-12 w-12 object-contain opacity-65"
+                style={{ filter: "brightness(0) saturate(100%) invert(26%) sepia(35%) saturate(1050%) hue-rotate(12deg) brightness(72%)" }}
+              />
+            </div>
+
+            <div className="text-right">
+              <div className="ml-auto flex h-10 items-end justify-end gap-2 font-serif text-lg text-[#0d3a2b] leading-none">
+                <CalendarDays className="h-4 w-4" /> {today}
+              </div>
+              <div className="ml-auto mt-1 h-px w-40 bg-[#1A1A1A]/60" />
+              <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Date of issue</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div aria-hidden className="absolute -inset-8 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.28),transparent_70%)] blur-2xl" />
     </div>
   );
 }
@@ -771,52 +1010,34 @@ export default function PublicAccess() {
           </div>
         </section>
 
-        {/* NEW LAUNCH pillars */}
+        {/* REAL LISTING STRAP */}
         <section
           id="new-launch"
           data-surface="dark"
           className="relative overflow-hidden px-5 py-24 sm:px-8 lg:px-12 bg-[#02100a]"
         >
-          {/* Background: latest project photo (Dubai skyline fallback) */}
-          <img
-            src={heroFallbackDubai}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-[0.22]"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(4,22,16,0.88)_0%,rgba(2,16,10,0.94)_60%,rgba(0,0,0,0.98)_100%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.08),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_58%,#000_100%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:96px_96px] opacity-25" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
           <div className="relative mx-auto max-w-7xl">
-            <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+              <div>
               <span className="text-[11px] font-bold uppercase tracking-[0.28em] !text-white/80">
-                New launches on JBJ
+                Walking strap · real projects
               </span>
-              <h2 className="mt-3 font-serif text-4xl !text-white sm:text-5xl">
-                Every launch, structured the same way.
+              <h2 className="mt-3 font-serif text-4xl leading-[1.05] !text-white sm:text-5xl">
+                Live listings moving through the platform.
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl !text-white/80">
-                Inventory, payment plans, verified access and private documents — the four blocks behind every project.
+              <p className="mt-4 max-w-2xl !text-white/78">
+                A single cinematic strap of real property cards from the database — including Amra and the newest published launches when available.
               </p>
+              </div>
+              <button onClick={openSignup} data-jbj-cta-white="" data-no-contrast-guard style={darkInkStyle} className={`${BTN_WHITE_HOVER_EMERALD} h-12 uppercase tracking-[0.14em]`}>
+                Unlock listings <ArrowRight className="h-4 w-4" />
+              </button>
             </div>
 
-            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {platformPillars.map((p, i) => {
-                const Icon = p.icon;
-                return (
-                  <div
-                    key={p.title}
-                    className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] p-7 backdrop-blur-sm transition hover:-translate-y-1 hover:border-white/45 hover:bg-white/[0.11]"
-                  >
-                    <span className="absolute right-5 top-5 font-serif text-sm !text-white/40">0{i + 1}</span>
-                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/25 bg-white/10 [&_svg]:!text-white [&_svg]:!stroke-white">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="mt-5 font-serif text-2xl !text-white">{p.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed !text-white/80">{p.body}</p>
-                  </div>
-                );
-              })}
-            </div>
+            <PropertyMarquee onClick={openSignup} theme="dark" limit={8} />
           </div>
         </section>
 
@@ -921,119 +1142,7 @@ export default function PublicAccess() {
           />
         </div>
 
-        {/* BROKER CERTIFICATION deep-dive */}
-        <section
-          id="brokers"
-          data-surface="dark"
-          className="relative overflow-hidden px-5 py-28 sm:px-8 lg:px-12"
-          style={{ backgroundImage: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)" }}
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.10),transparent_60%)]" />
-          {/* Champagne hairlines top + bottom for the premium 'plate' effect */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
-
-          <div className="relative mx-auto max-w-7xl">
-            <div className="mx-auto max-w-3xl text-center">
-              <span
-                data-jbj-access-gold-badge
-                className="inline-flex items-center gap-2 rounded-full border border-[#C9A84C]/60 bg-[#C9A84C]/[0.08] px-5 py-2 text-[10px] font-bold uppercase tracking-[0.32em]"
-              >
-                <Award className="h-3.5 w-3.5" style={{ color: "#C9A84C" }} /> Broker Academy · DLD-aligned
-              </span>
-              <h2 className="mt-6 font-serif text-5xl leading-[1.02] !text-white sm:text-6xl lg:text-[76px]">
-                Become a <em style={{ color: "#C9A84C", fontStyle: "italic" }}>JBJ-certified</em>
-                <br />broker.
-              </h2>
-              {/* Elegant champagne underline */}
-              <div className="mx-auto mt-6 flex items-center justify-center gap-3">
-                <span className="h-px w-16 bg-[#C9A84C]/60" />
-                <span className="h-1.5 w-1.5 rotate-45 bg-[#C9A84C]" />
-                <span className="h-px w-16 bg-[#C9A84C]/60" />
-              </div>
-              <p className="mx-auto mt-6 max-w-2xl text-base !text-white/85 sm:text-lg">
-                Join Dubai's most respected certified agent network — mentorship, exclusive inventory,
-                and a signed certificate recognised by every developer we work with.
-              </p>
-            </div>
-
-            {/* Two-column: services (left) + benefits (right) */}
-            <div className="mt-16 grid gap-8 lg:grid-cols-[1.15fr,1fr]">
-              {/* SERVICES CARD — premium single card */}
-              <div className="relative overflow-hidden rounded-2xl border border-[#C9A84C]/40 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-8 backdrop-blur-sm">
-                <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#C9A84C]/10 blur-3xl" />
-                <div className="relative">
-                  <span data-jbj-access-gold-badge className="text-[10px] font-bold uppercase tracking-[0.32em]">
-                    What we offer
-                  </span>
-                  <h3 className="mt-2 font-serif text-3xl !text-white">JBJ broker services</h3>
-                  <p className="mt-2 max-w-md text-sm !text-white/75">
-                    A full-stack Dubai real-estate desk supporting every certified JBJ broker end-to-end.
-                  </p>
-                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-                    {brokerServices.map((s) => {
-                      const Icon = s.icon;
-                      return (
-                        <li key={s.title} className="flex gap-3">
-                          <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#C9A84C]/40 bg-[rgba(201,168,76,0.08)] [&_svg]:!text-[#C9A84C] [&_svg]:!stroke-[#C9A84C]">
-                            <Icon className="h-4 w-4" />
-                          </span>
-                          <div>
-                            <p className="text-sm font-bold !text-white">{s.title}</p>
-                            <p className="mt-1 text-[12px] leading-relaxed !text-white/70">{s.body}</p>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </div>
-
-              {/* BENEFITS — 3 tight cards */}
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
-                {brokerBenefits.map((b) => {
-                  const Icon = b.icon;
-                  return (
-                    <div
-                      key={b.title}
-                      className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#C9A84C]/50 hover:bg-white/[0.08]"
-                    >
-                      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
-                      <div className="flex items-start gap-4">
-                        <div className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.04))] [&_svg]:!text-[#C9A84C] [&_svg]:!stroke-[#C9A84C]">
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-serif text-lg !text-white">{b.title}</h4>
-                          <p className="mt-1.5 text-sm leading-relaxed !text-white/75">{b.body}</p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="mt-14 flex flex-wrap justify-center gap-3">
-              <button
-                onClick={openSignup}
-                data-jbj-cta-white="" data-no-contrast-guard
-                style={darkInkStyle}
-                className="group/btn relative overflow-hidden inline-flex h-12 items-center gap-2 rounded-md bg-white px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-[#064E3B] shadow-[0_12px_26px_-14px_rgba(0,0,0,0.6)]"
-              >
-                Enroll in the academy <ArrowRight className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => setLeadOpen(true)}
-                data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-                style={emeraldInkStyle}
-                className="inline-flex h-12 items-center gap-2 rounded-md border border-[#C9A84C]/60 bg-transparent px-7 text-sm font-bold uppercase tracking-[0.14em] transition hover:bg-white/[0.10] hover:border-[#C9A84C]"
-              >
-                Speak to the broker desk
-              </button>
-            </div>
-          </div>
-        </section>
+        <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
 
         {/* CERTIFICATE preview — 3D-style JBJ broker certificate */}
         <section className="bg-[#F7F2EA] px-5 py-24 sm:px-8 lg:px-12">
@@ -1069,113 +1178,7 @@ export default function PublicAccess() {
               </div>
             </div>
 
-            {/* Certificate — sharp horizontal frame, gold 3D wax stamp, auto date */}
-            <div className="relative">
-              <div
-                className="relative mx-auto w-full max-w-[720px] bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] ring-1 ring-[#8B6F3A]/40"
-                style={{ transform: "perspective(1600px) rotateY(-10deg) rotateX(3deg)", aspectRatio: "1.414 / 1" }}
-              >
-                {/* Sharp double-hairline gold border */}
-                <div className="absolute inset-3 border border-[#8B6F3A]/70" />
-                <div className="absolute inset-4 border border-[#8B6F3A]/30" />
-
-                <div className="relative h-full px-8 py-6 text-center flex flex-col">
-                  <img
-                    data-no-fallback
-                    src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
-                    alt=""
-                    className="mx-auto h-16 w-16 object-contain"
-                  />
-                  <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.36em] text-[#8B6F3A]">
-                    JBJ Global Real Estate
-                  </p>
-                  <h3 className="mt-1 font-serif text-2xl text-[#0d3a2b] sm:text-3xl">Certificate of Completion</h3>
-                  <div className="mx-auto mt-2 flex items-center gap-2">
-                    <span className="h-px w-10 bg-[#8B6F3A]/60" />
-                    <span className="h-1 w-1 rotate-45 bg-[#8B6F3A]" />
-                    <span className="h-px w-10 bg-[#8B6F3A]/60" />
-                  </div>
-                  <p className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#1A1A1A]/55">
-                    This is presented to
-                  </p>
-                  <p className="mt-1 font-serif text-2xl italic text-[#0d3a2b] sm:text-3xl">Your Name Here</p>
-                  <p className="mx-auto mt-2 max-w-md text-[11px] leading-relaxed text-[#1A1A1A]/70">
-                    for successfully completing the JBJ Global Broker Academy in accordance with
-                    DLD-aligned professional standards.
-                  </p>
-
-                  <div className="mt-auto relative flex items-end justify-between gap-4 pt-6 text-left">
-                    {/* Founder signature */}
-                    <div>
-                      <p className="font-serif text-2xl italic text-[#0d3a2b] leading-none" style={{ fontFamily: '"Great Vibes","Allura","Dancing Script",cursive' }}>
-                        Jane B. Jaber
-                      </p>
-                      <div className="mt-1 h-px w-36 bg-[#1A1A1A]/60" />
-                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Founder &amp; CEO</p>
-                    </div>
-
-                    {/* Date — auto today */}
-                    <div className="text-right">
-                      <p className="font-serif text-lg text-[#0d3a2b] leading-none">
-                        {new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(new Date())}
-                      </p>
-                      <div className="ml-auto mt-1 h-px w-36 bg-[#1A1A1A]/60" />
-                      <p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-[#1A1A1A]/60">Date of issue</p>
-                    </div>
-
-                    {/* Gold 3D circular wax stamp — anchored bottom-center, overlaps signature area */}
-                    <div
-                      aria-hidden
-                      className="absolute left-1/2 -top-4 -translate-x-1/2"
-                      style={{ transform: "translate(-50%, 0) rotate(-8deg)" }}
-                    >
-                      <div
-                        className="relative flex h-24 w-24 items-center justify-center rounded-full"
-                        style={{
-                          background:
-                            "radial-gradient(circle at 32% 28%, #F6DF9B 0%, #E8C674 22%, #C79A3E 55%, #8B6A22 85%, #5A4515 100%)",
-                          boxShadow:
-                            "0 10px 22px -6px rgba(90,69,21,0.55), inset 0 2px 4px rgba(255,240,200,0.9), inset 0 -3px 6px rgba(0,0,0,0.35)",
-                        }}
-                      >
-                        {/* Embossed ring text */}
-                        <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
-                          <defs>
-                            <path id="jbj-stamp-ring" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
-                          </defs>
-                          <text fontSize="8.5" fontWeight="800" letterSpacing="2.2" fill="#3d2d0b" style={{ textShadow: "0 1px 0 rgba(255,230,170,0.4)" }}>
-                            <textPath href="#jbj-stamp-ring" startOffset="0%">
-                              JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·
-                            </textPath>
-                          </text>
-                        </svg>
-                        {/* Inner disc + monogram */}
-                        <div
-                          className="relative flex h-14 w-14 items-center justify-center rounded-full"
-                          style={{
-                            background:
-                              "radial-gradient(circle at 35% 30%, #F0D488 0%, #B8892E 65%, #6A4E15 100%)",
-                            boxShadow: "inset 0 1px 2px rgba(255,240,200,0.7), inset 0 -2px 4px rgba(0,0,0,0.4)",
-                          }}
-                        >
-                          <img
-                            data-no-fallback
-                            src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
-                            alt=""
-                            className="h-9 w-9 object-contain"
-                            style={{ filter: "brightness(0) saturate(100%) invert(18%) sepia(38%) saturate(1200%) hue-rotate(15deg) brightness(60%)" }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                aria-hidden
-                className="absolute -inset-8 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.28),transparent_70%)] blur-2xl"
-              />
-            </div>
+            <CertificatePreview />
           </div>
         </section>
 
