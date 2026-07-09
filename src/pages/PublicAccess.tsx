@@ -572,14 +572,12 @@ export default function PublicAccess() {
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
               alt="JBJ"
-              className="h-[220px] w-[220px] object-contain drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] sm:h-[280px] sm:w-[280px] lg:h-[340px] lg:w-[340px]"
+              className="h-[360px] w-[360px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[480px] sm:w-[480px] lg:h-[600px] lg:w-[600px]"
             />
-            <h1 className="mt-8 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
+            <h1 className="mt-6 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
               JBJ Global Real Estate
             </h1>
-            <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.42em] !text-white/85 sm:text-[13px]">
-              Dubai · United Arab Emirates
-            </p>
+
           </div>
 
           {/* Scroll cue */}
