@@ -118,6 +118,10 @@ const Awards = lazy(() => import("@/pages/Awards"));
 const InsightsHub = lazy(() => import("@/pages/Insights"));
 const LibraryHub = lazy(() => import("@/pages/Library"));
 const SuccessStories = lazy(() => import("@/pages/SuccessStories"));
+const Membership = lazy(() => import("@/pages/Membership"));
+const Academy = lazy(() => import("@/pages/Academy"));
+const Agencies = lazy(() => import("@/pages/Agencies"));
+const CheckoutReturn = lazy(() => import("@/pages/CheckoutReturn"));
 
 const CompanyProfile = lazy(() => import("@/pages/CompanyProfile"));
 const News = lazy(() => import("@/pages/News"));
