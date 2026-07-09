@@ -14,6 +14,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type Device = "mobile" | "tablet" | "desktop";
+type Surface = "home" | "gate" | "website";
+const SURFACES: { id: Surface; label: string; hint: string }[] = [
+  { id: "home",    label: "Homepage",     hint: "Handpicked strap on jbj.ae" },
+  { id: "gate",    label: "Access Gate",  hint: "Property strap on /access" },
+  { id: "website", label: "Website Feed", hint: "General site placements" },
+];
 const DEVICES: { id: Device; label: string; width: number; icon: typeof Smartphone }[] = [
   { id: "mobile",  label: "Mobile",  width: 390,  icon: Smartphone },
   { id: "tablet",  label: "Tablet",  width: 834,  icon: Tablet },
