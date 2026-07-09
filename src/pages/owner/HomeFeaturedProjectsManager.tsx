@@ -76,11 +76,12 @@ export default function HomeFeaturedProjectsManager() {
   const [tab, setTab] = useState<Device>("desktop");
 
   const { data: featured = [], isLoading } = useQuery({
-    queryKey: ["owner-home-featured-projects-v2"],
+    queryKey: ["owner-home-featured-projects-v2", surface],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("home_featured_projects" as any)
         .select(featuredSelect)
+        .eq("surface", surface)
         .order("device", { ascending: true })
         .order("display_order", { ascending: true });
       if (error) throw error;
@@ -112,6 +113,7 @@ export default function HomeFeaturedProjectsManager() {
       const nextOrder = rows.length ? Math.max(...rows.map((r) => r.display_order || 0)) + 1 : 1;
       const { error } = await supabase.from("home_featured_projects" as any).insert({
         device,
+        surface,
         project_id: projectId ?? null,
         manual_project_id: manualId ?? null,
         display_order: nextOrder,
@@ -152,7 +154,7 @@ export default function HomeFeaturedProjectsManager() {
       const rows = byDevice(device);
       const nextOrder = rows.length ? Math.max(...rows.map((r) => r.display_order || 0)) + 1 : 1;
       const { error: linkErr } = await supabase.from("home_featured_projects" as any).insert({
-        device, project_id: null, manual_project_id: (data as any).id, display_order: nextOrder, is_visible: true,
+        device, surface, project_id: null, manual_project_id: (data as any).id, display_order: nextOrder, is_visible: true,
       });
       if (linkErr) throw linkErr;
     },
@@ -173,7 +175,6 @@ export default function HomeFeaturedProjectsManager() {
   const copyFromDesktop = useMutation({
     mutationFn: async (target: Device) => {
       const source = byDevice("desktop");
-      // wipe target first
       const targetRows = byDevice(target);
       for (const r of targetRows) {
         await supabase.from("home_featured_projects" as any).delete().eq("id", r.id);
@@ -182,6 +183,7 @@ export default function HomeFeaturedProjectsManager() {
         const s = source[i];
         await supabase.from("home_featured_projects" as any).insert({
           device: target,
+          surface,
           project_id: s.project_id,
           manual_project_id: s.manual_project_id,
           display_order: i + 1,
@@ -191,6 +193,41 @@ export default function HomeFeaturedProjectsManager() {
       }
     },
     onSuccess: () => { invalidate(); toast.success("Desktop layout copied"); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  // Auto-fill from newest N published projects
+  const autoFillNewest = useMutation({
+    mutationFn: async ({ device, count, intervalDays }: { device: Device; count: number; intervalDays: number | null }) => {
+      const { data: newest, error: e1 } = await supabase
+        .from("projects")
+        .select("id")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false })
+        .limit(count);
+      if (e1) throw e1;
+
+      const targetRows = byDevice(device);
+      for (const r of targetRows) {
+        await supabase.from("home_featured_projects" as any).delete().eq("id", r.id);
+      }
+      const rows = (newest || []).map((p, i) => ({
+        device, surface,
+        project_id: p.id,
+        manual_project_id: null,
+        display_order: i + 1,
+        is_visible: true,
+        auto_mode: "newest",
+        auto_count: count,
+        refresh_interval_days: intervalDays,
+        last_auto_refresh_at: new Date().toISOString(),
+      }));
+      if (rows.length) {
+        const { error: e2 } = await supabase.from("home_featured_projects" as any).insert(rows);
+        if (e2) throw e2;
+      }
+    },
+    onSuccess: () => { invalidate(); toast.success("Auto-filled with newest projects"); },
     onError: (e: Error) => toast.error(e.message),
   });
 
