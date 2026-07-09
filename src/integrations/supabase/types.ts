@@ -31080,9 +31080,6 @@ export type Database = {
           images: string[] | null
           import_batch_id: string | null
           imported_from: string | null
-          investor_email: string | null
-          investor_name: string | null
-          investor_phone: string | null
           investor_user_id: string | null
           location: string | null
           name_encrypted: string | null
@@ -31114,9 +31111,6 @@ export type Database = {
           images?: string[] | null
           import_batch_id?: string | null
           imported_from?: string | null
-          investor_email?: string | null
-          investor_name?: string | null
-          investor_phone?: string | null
           investor_user_id?: string | null
           location?: string | null
           name_encrypted?: string | null
@@ -31148,9 +31142,6 @@ export type Database = {
           images?: string[] | null
           import_batch_id?: string | null
           imported_from?: string | null
-          investor_email?: string | null
-          investor_name?: string | null
-          investor_phone?: string | null
           investor_user_id?: string | null
           location?: string | null
           name_encrypted?: string | null
@@ -40181,9 +40172,6 @@ export type Database = {
           images: string[] | null
           import_batch_id: string | null
           imported_from: string | null
-          investor_email: string | null
-          investor_name: string | null
-          investor_phone: string | null
           investor_user_id: string | null
           location: string | null
           name_encrypted: string | null
@@ -40216,9 +40204,6 @@ export type Database = {
           images?: string[] | null
           import_batch_id?: string | null
           imported_from?: string | null
-          investor_email?: string | null
-          investor_name?: string | null
-          investor_phone?: string | null
           investor_user_id?: string | null
           location?: string | null
           name_encrypted?: string | null
@@ -40251,9 +40236,6 @@ export type Database = {
           images?: string[] | null
           import_batch_id?: string | null
           imported_from?: string | null
-          investor_email?: string | null
-          investor_name?: string | null
-          investor_phone?: string | null
           investor_user_id?: string | null
           location?: string | null
           name_encrypted?: string | null
