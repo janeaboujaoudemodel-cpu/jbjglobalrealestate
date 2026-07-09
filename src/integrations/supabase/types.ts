@@ -19160,53 +19160,68 @@ export type Database = {
       }
       home_featured_projects: {
         Row: {
+          auto_count: number | null
+          auto_mode: string | null
           created_at: string
           created_by: string | null
           device: string
           display_order: number
           id: string
           is_visible: boolean
+          last_auto_refresh_at: string | null
           manual_project_id: string | null
           owner_details: string | null
           project_id: string | null
+          refresh_interval_days: number | null
+          surface: string
           updated_at: string
         }
         Insert: {
+          auto_count?: number | null
+          auto_mode?: string | null
           created_at?: string
           created_by?: string | null
           device?: string
           display_order?: number
           id?: string
           is_visible?: boolean
+          last_auto_refresh_at?: string | null
           manual_project_id?: string | null
           owner_details?: string | null
           project_id?: string | null
+          refresh_interval_days?: number | null
+          surface?: string
           updated_at?: string
         }
         Update: {
+          auto_count?: number | null
+          auto_mode?: string | null
           created_at?: string
           created_by?: string | null
           device?: string
           display_order?: number
           id?: string
           is_visible?: boolean
+          last_auto_refresh_at?: string | null
           manual_project_id?: string | null
           owner_details?: string | null
           project_id?: string | null
+          refresh_interval_days?: number | null
+          surface?: string
           updated_at?: string
         }
         Relationships: [
           {
             foreignKeyName: "home_featured_projects_project_id_fkey"
             columns: ["project_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "project_duplicate_groups"
             referencedColumns: ["keeper_id"]
           },
           {
             foreignKeyName: "home_featured_projects_project_id_fkey"
             columns: ["project_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["id"]
           },
@@ -41300,6 +41315,7 @@ export type Database = {
         Args: { p_transcript: string }
         Returns: string
       }
+      refresh_auto_featured: { Args: { p_surface: string }; Returns: undefined }
       refresh_vault_ranking: { Args: never; Returns: undefined }
       rel_followup_due_sends: {
         Args: never
