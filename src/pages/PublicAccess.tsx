@@ -265,12 +265,18 @@ const platformPillars = [
 ];
 
 const brokerBenefits = [
-  { icon: Award, title: "JBJ certification", body: "DLD-aligned coursework and a formal JBJ Global Broker Certificate." },
-  { icon: BookOpen, title: "Exclusive agent books", body: "Private JBJ playbooks, DLD reference material, and scripts." },
-  { icon: Handshake, title: "Hiring pathway", body: "Top performers get onboarded directly into JBJ Global." },
-  { icon: Ticket, title: "Industry events", body: "Invitations to every developer launch, gala, and industry event." },
-  { icon: Users, title: "Warm client intros", body: "Qualified investor and buyer leads routed to certified agents." },
-  { icon: Trophy, title: "Network access", body: "Direct lines to developer principal desks, mortgage & legal partners." },
+  { icon: Award, title: "JBJ certification", body: "DLD-aligned coursework and a formal JBJ Global Broker Certificate signed by the founder." },
+  { icon: Users, title: "Warm client intros", body: "Qualified investor and buyer leads routed to certified agents from the JBJ CRM." },
+  { icon: Trophy, title: "Direct developer lines", body: "Principal-desk access, launch-day allocations and mortgage & legal partners." },
+];
+
+const brokerServices = [
+  { icon: Building2, title: "Off-plan brokerage", body: "Direct developer allocations across every DLD-registered launch." },
+  { icon: Home, title: "Secondary sales", body: "Verified ready inventory across Dubai's blue-chip communities." },
+  { icon: KeyRound, title: "Leasing desk", body: "Long-term & premium short-let placements for landlords and tenants." },
+  { icon: TrendingUp, title: "Investor advisory", body: "Portfolio structuring, yield modelling and market-timing intelligence." },
+  { icon: Handshake, title: "Developer partnerships", body: "Exclusive JV mandates, launch marketing and channel-partner programmes." },
+  { icon: ShieldCheck, title: "Legal & mortgage concierge", body: "End-to-end conveyancing, escrow, mortgage pre-approval and residency." },
 ];
 
 const investorSignaturePerks = [
