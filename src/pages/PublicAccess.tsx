@@ -863,19 +863,27 @@ function CertificatePreview() {
               <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-16 w-16 items-center justify-center rounded-full sm:h-[76px] sm:w-[76px]">
-              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_18px_rgba(90,69,21,0.28)]">
+            <div aria-hidden className="seal-outline relative flex h-20 w-20 items-center justify-center rounded-full sm:h-[104px] sm:w-[104px]">
+              <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_10px_20px_rgba(184,149,85,0.35)]">
                 <defs>
-                  <linearGradient id="sealGold" x1="18" y1="12" x2="98" y2="108" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#F7DEA0" />
-                    <stop offset="0.45" stopColor="#C99A3F" />
-                    <stop offset="1" stopColor="#7A5A1E" />
+                  <linearGradient id="sealGold" x1="12" y1="8" x2="108" y2="112" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FBEAB4" />
+                    <stop offset="0.35" stopColor="#E8C877" />
+                    <stop offset="0.7" stopColor="#C9A84C" />
+                    <stop offset="1" stopColor="#A8842E" />
+                  </linearGradient>
+                  <linearGradient id="sealGoldSoft" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#E8C877" />
+                    <stop offset="1" stopColor="#C9A84C" />
                   </linearGradient>
                   <path id="sealTextPath" d="M 60,60 m -44,0 a 44,44 0 1,1 88,0 a 44,44 0 1,1 -88,0" />
                 </defs>
-                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="6" />
-                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="1.5" strokeDasharray="3 4" />
-                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="#6A4E15">
+                {/* outer premium gold ring */}
+                <circle cx="60" cy="60" r="56" fill="none" stroke="url(#sealGold)" strokeWidth="2" />
+                <circle cx="60" cy="60" r="52" fill="none" stroke="url(#sealGold)" strokeWidth="5" />
+                <circle cx="60" cy="60" r="47" fill="none" stroke="url(#sealGoldSoft)" strokeWidth="0.8" opacity="0.7" />
+                <circle cx="60" cy="60" r="39" fill="none" stroke="url(#sealGold)" strokeWidth="1.2" strokeDasharray="2.4 3.2" />
+                <text fontSize="8.4" fontWeight="800" letterSpacing="2" fill="url(#sealGold)">
                   <textPath href="#sealTextPath" startOffset="0%">JBJ GLOBAL REAL ESTATE · OFFICIAL SEAL · DUBAI ·</textPath>
                 </text>
               </svg>
@@ -883,8 +891,8 @@ function CertificatePreview() {
                 data-no-fallback
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
-                className="h-8 w-8 object-contain opacity-70 sm:h-9 sm:w-9"
-                style={{ filter: "brightness(0) saturate(100%) invert(26%) sepia(35%) saturate(1050%) hue-rotate(12deg) brightness(72%)" }}
+                className="h-10 w-10 object-contain sm:h-12 sm:w-12"
+                style={{ filter: "brightness(0) saturate(100%) invert(72%) sepia(38%) saturate(520%) hue-rotate(2deg) brightness(96%) contrast(92%)" }}
               />
             </div>
 
