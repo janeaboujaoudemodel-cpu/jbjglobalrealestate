@@ -38,6 +38,11 @@ import {
   BarChart3,
   Briefcase,
   Globe2,
+  Wallet,
+  Coins,
+  Wrench,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 
@@ -259,14 +264,68 @@ import svcDeveloper from "@/assets/menu-projects-hero.jpg";
 import svcHandover from "@/assets/services/property-management-bg.jpg";
 import svcGlobal from "@/assets/dubai-plane-view.png";
 import svcConcierge from "@/assets/concierge-hero.jpeg";
+import svcWallet from "@/assets/founder-yacht-dubai.jpg";
+import svcBuySell from "@/assets/services/buy-property-bg.jpg";
+import svcLeasing from "@/assets/services/rent-property-bg.jpg";
+import svcHoliday from "@/assets/services/list-rental-bg.jpg";
+import svcResale from "@/assets/services/sell-property-bg.jpg";
+import svcMortgage from "@/assets/services/mortgage-bg.jpg";
+import svcGoldenVisa from "@/assets/services/golden-visa-bg.jpg";
+import svcCompanySetup from "@/assets/services/partner-introduction-bg.jpg";
+import svcRelocation from "@/assets/services/passport-visa-bg.jpg";
+import svcInsurance from "@/assets/services/general-inquiries-bg.jpg";
+import svcBizDev from "@/assets/founder-jet-boarding.jpeg";
+import svcLifestyle from "@/assets/founder-jet-interior.jpeg";
 
-const jbjServices = [
-  { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms.", image: svcOffPlan },
-  { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors.", image: svcAdvisory },
-  { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers.", image: svcDeveloper },
-  { icon: KeyRound, title: "Handover & resale", body: "Snagging, leasing readiness and resale positioning across the full ownership cycle.", image: svcHandover },
-  { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients.", image: svcGlobal },
-  { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover.", image: svcConcierge },
+type JbjService = { icon: React.ElementType; title: string; body: string; image: string };
+type JbjServicePage = { key: string; label: string; kicker: string; heading: string; blurb: string; items: JbjService[] };
+
+const jbjServicePages: JbjServicePage[] = [
+  {
+    key: "advisory",
+    label: "Sourcing & Advisory",
+    kicker: "Our Practice · 01",
+    heading: "Sourcing & senior advisory.",
+    blurb: "Curation and counsel — where every private mandate begins.",
+    items: [
+      { icon: Building2, title: "Off-plan sourcing", body: "Curated Dubai launches from vetted developers, prioritised for yield, absorption and payment terms.", image: svcOffPlan },
+      { icon: BarChart3, title: "Investment advisory", body: "Portfolio framing, yield modelling and market positioning tailored to serious investors.", image: svcAdvisory },
+      { icon: Landmark, title: "Developer partnerships", body: "Structured allocations, launch-room access and disciplined co-broking with tier-one developers.", image: svcDeveloper },
+      { icon: Globe2, title: "Global buyer desk", body: "Cross-border onboarding, KYC and remote transaction support for international clients.", image: svcGlobal },
+      { icon: Compass, title: "Concierge advisory", body: "Discreet, senior-led guidance from first viewing through to keys, financing and post-handover.", image: svcConcierge },
+      { icon: Wallet, title: "UHNW portfolio wallet", body: "A private investment wallet for ultra-high-net-worth clients — allocation, reporting and off-market access under one desk.", image: svcWallet },
+    ],
+  },
+  {
+    key: "ownership",
+    label: "Ownership Lifecycle",
+    kicker: "Our Practice · 02",
+    heading: "Ownership, end to end.",
+    blurb: "Buy, sell, lease, manage — one senior team across every stage of the asset.",
+    items: [
+      { icon: Handshake, title: "Buy & sell representation", body: "Principal-side representation for acquisitions and disposals across primary and secondary Dubai stock.", image: svcBuySell },
+      { icon: Home, title: "Leasing & long-term rentals", body: "Landlord representation, qualified tenants and annual leasing across residential and commercial mandates.", image: svcLeasing },
+      { icon: KeyRound, title: "Property management", body: "Institutional-grade custody of your asset — maintenance, tenant relations, statements and compliance.", image: svcHandover },
+      { icon: Ticket, title: "Holiday homes & short-let", body: "Fully-serviced short-term rental operation — pricing, listing, guest experience and full P&L.", image: svcHoliday },
+      { icon: Wrench, title: "Handover & resale", body: "Snagging, defect resolution and resale positioning — moving the asset cleanly into leasing or exit.", image: svcResale },
+      { icon: Coins, title: "Mortgage & financing", body: "Access to lender panels, pre-approvals and structuring — for residents, non-residents and companies.", image: svcMortgage },
+    ],
+  },
+  {
+    key: "corporate",
+    label: "Corporate & Lifestyle",
+    kicker: "Our Practice · 03",
+    heading: "Corporate, residency & lifestyle.",
+    blurb: "The full private-office spine — residency, entity, insurance and lifestyle logistics.",
+    items: [
+      { icon: FileCheck2, title: "Golden Visa & residency", body: "10-year Golden Visa, investor and property-linked residency — end-to-end filing and family sponsorship.", image: svcGoldenVisa },
+      { icon: Briefcase, title: "Company setup & branding", body: "Mainland, free-zone and offshore incorporation, plus identity, licensing and website foundation.", image: svcCompanySetup },
+      { icon: TrendingUp, title: "Business development", body: "Introductions, joint ventures and market-entry strategy for operators expanding into the UAE.", image: svcBizDev },
+      { icon: Users, title: "Relocation & PRO services", body: "Family relocation, schooling, PRO paperwork, Emirates ID, medicals and government liaison.", image: svcRelocation },
+      { icon: ShieldCheck, title: "Insurance advisory", body: "Property, life, professional and health cover — arranged through vetted regional insurers.", image: svcInsurance },
+      { icon: Sparkles, title: "Concierge & lifestyle", body: "Private jets, yachts, chauffeured cars, dining and events — the day-to-day discretion behind the address.", image: svcLifestyle },
+    ],
+  },
 ];
 
 const investorSignaturePerks = [
@@ -655,6 +714,11 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
 }
 
 function ServicesSection() {
+  const [pageIdx, setPageIdx] = useState(0);
+  const page = jbjServicePages[pageIdx];
+  const total = jbjServicePages.length;
+  const goto = (i: number) => setPageIdx(((i % total) + total) % total);
+
   return (
     <section
       id="services"
@@ -667,29 +731,59 @@ function ServicesSection() {
 
       <div className="relative mx-auto max-w-7xl">
         {/* Eyebrow + heading */}
-        <div className="mb-14 max-w-3xl">
-          <div className="flex items-center gap-3">
-            <span className="h-px w-10 bg-[#0d3a2b]/50" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.42em] text-[#0d3a2b]">Our Practice</span>
+        <div className="mb-10 flex flex-col gap-8 md:mb-14 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-10 bg-[#0d3a2b]/50" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.42em] text-[#0d3a2b]">
+                {page.kicker}
+              </span>
+            </div>
+            <h2 className="mt-4 font-serif text-4xl leading-[1.02] text-[#0d3a2b] sm:text-[54px]">
+              {page.heading}
+            </h2>
+            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-[#1A1A1A]/72">
+              {page.blurb}
+            </p>
           </div>
-          <h2 className="mt-4 font-serif text-4xl leading-[1.02] text-[#0d3a2b] sm:text-[54px]">
-            One private desk. Six senior disciplines.
-          </h2>
-          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-[#1A1A1A]/72">
-            Sourced with discipline, delivered with discretion — from first launch to final handover.
-          </p>
+
+          {/* Chapter tabs */}
+          <div className="flex flex-wrap gap-2">
+            {jbjServicePages.map((p, i) => {
+              const active = i === pageIdx;
+              return (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => goto(i)}
+                  data-no-contrast-guard
+                  style={active ? emeraldInkStyle : darkInkStyle}
+                  className={
+                    "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition " +
+                    (active
+                      ? "border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)]"
+                      : "border-[#0d3a2b]/25 bg-white hover:border-[#0d3a2b] hover:bg-[#FDFBF7]")
+                  }
+                >
+                  <span className="font-serif text-[10px] tracking-[0.24em] opacity-80">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>{p.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Premium photo cards — magazine editorial grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {jbjServices.map((s, i) => {
+          {page.items.map((s, i) => {
             const Icon = s.icon;
             return (
               <article
-                key={s.title}
+                key={`${page.key}-${s.title}`}
                 className="group relative flex flex-col overflow-hidden rounded-[20px] border border-[#0d3a2b]/12 bg-[#0d3a2b] shadow-[0_28px_60px_-32px_rgba(6,78,59,0.55)] transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_44px_90px_-36px_rgba(6,78,59,0.75)]"
               >
-                {/* Photo */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden">
                   <img
                     src={s.image}
@@ -697,22 +791,17 @@ function ServicesSection() {
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.08]"
                   />
-                  {/* Gradient wash for legibility */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
-                  {/* Gold hairline top */}
                   <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
-                  {/* Number badge */}
                   <span className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-[#C9A84C]/55 bg-black/40 px-3 font-serif text-[11px] tracking-[0.28em] text-[#EBD79A] backdrop-blur">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  {/* Icon medallion */}
                   <span
                     data-surface="dark"
                     className="absolute right-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md [&_svg]:!text-white [&_svg]:!stroke-white [&_svg]:!fill-none"
                   >
                     <Icon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
                   </span>
-                  {/* Title on photo */}
                   <div className="absolute inset-x-6 bottom-5">
                     <h3 className="font-serif text-[24px] leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                       {s.title}
@@ -720,7 +809,6 @@ function ServicesSection() {
                     <span aria-hidden className="mt-2 block h-px w-10 bg-[#C9A84C]" />
                   </div>
                 </div>
-                {/* Body panel */}
                 <div className="relative flex flex-1 flex-col gap-4 bg-[#FDFBF7] px-6 py-6">
                   <p className="text-[13.5px] leading-relaxed text-[#1A1A1A]/72">{s.body}</p>
                   <div className="mt-auto flex items-center justify-between border-t border-[#0d3a2b]/10 pt-4">
@@ -735,6 +823,50 @@ function ServicesSection() {
               </article>
             );
           })}
+        </div>
+
+        {/* Pager */}
+        <div className="mt-12 flex items-center justify-between gap-4 border-t border-[#0d3a2b]/15 pt-6">
+          <button
+            type="button"
+            onClick={() => goto(pageIdx - 1)}
+            data-no-contrast-guard
+            style={darkInkStyle}
+            className="inline-flex items-center gap-2 rounded-full border border-[#0d3a2b]/25 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition hover:border-[#0d3a2b] hover:bg-[#FDFBF7]"
+            aria-label="Previous chapter"
+          >
+            <ChevronLeft className="h-4 w-4" /> Prev
+          </button>
+
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#0d3a2b]/70">
+              Page {pageIdx + 1} of {total}
+            </span>
+            <div className="flex items-center gap-1.5">
+              {jbjServicePages.map((p, i) => (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => goto(i)}
+                  aria-label={`Go to ${p.label}`}
+                  className={
+                    "h-1.5 rounded-full transition-all " +
+                    (i === pageIdx ? "w-8 bg-[#0d3a2b]" : "w-3 bg-[#0d3a2b]/25 hover:bg-[#0d3a2b]/50")
+                  }
+                />
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => goto(pageIdx + 1)}
+            data-no-contrast-guard
+            style={emeraldInkStyle}
+            className={`${BTN_EMERALD_SOLID} h-10 uppercase tracking-[0.14em]`}
+          >
+            Next <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </section>
