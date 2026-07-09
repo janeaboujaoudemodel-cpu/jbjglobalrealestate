@@ -9,7 +9,7 @@ export default function SuccessStories() {
       <SEOHead
         title="Success Stories — JBJ Global Real Estate"
         description="Case studies from investors and family offices who partnered with JBJ Global Real Estate."
-        canonical="/success-stories"
+        
       />
       <section className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-[#000000] text-white">
         <div className="absolute inset-0 opacity-20 [background:radial-gradient(60%_80%_at_15%_20%,rgba(184,149,85,0.35),transparent),radial-gradient(50%_60%_at_85%_85%,rgba(184,149,85,0.2),transparent)]" />

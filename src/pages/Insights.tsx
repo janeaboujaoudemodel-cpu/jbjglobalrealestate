@@ -18,7 +18,7 @@ export default function Insights() {
       <SEOHead
         title="Market Insights & Guides — JBJ Global Real Estate"
         description="Dubai market reports, area guides, investment insights, Golden Visa, tax, rental and off-plan guides. The JBJ knowledge hub."
-        canonical="/insights"
+        
       />
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#032A1E] to-[#000000] text-white">
