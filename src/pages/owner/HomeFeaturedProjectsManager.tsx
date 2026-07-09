@@ -14,6 +14,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 type Device = "mobile" | "tablet" | "desktop";
+type Surface = "home" | "gate" | "website";
+const SURFACES: { id: Surface; label: string; hint: string }[] = [
+  { id: "home",    label: "Homepage",     hint: "Handpicked strap on jbj.ae" },
+  { id: "gate",    label: "Access Gate",  hint: "Property strap on /access" },
+  { id: "website", label: "Website Feed", hint: "General site placements" },
+];
 const DEVICES: { id: Device; label: string; width: number; icon: typeof Smartphone }[] = [
   { id: "mobile",  label: "Mobile",  width: 390,  icon: Smartphone },
   { id: "tablet",  label: "Tablet",  width: 834,  icon: Tablet },
@@ -46,29 +52,36 @@ type FeaturedRow = {
   project_id: string | null;
   manual_project_id: string | null;
   device: Device;
+  surface: Surface;
   display_order: number;
   is_visible: boolean;
   owner_details: string | null;
+  auto_mode: string | null;
+  auto_count: number | null;
+  refresh_interval_days: number | null;
   project: ProjectOption | null;
   manual: ManualProject | null;
 };
 
 const featuredSelect = `
-  id, project_id, manual_project_id, device, display_order, is_visible, owner_details,
+  id, project_id, manual_project_id, device, surface, display_order, is_visible, owner_details,
+  auto_mode, auto_count, refresh_interval_days,
   project:projects(id, name, slug, developer_name, location, cover_image_url),
   manual:home_featured_manual_projects(id, title, developer_name, emirate, community, starting_price, hero_image_url, cta_url, owner_details)
 `;
 
 export default function HomeFeaturedProjectsManager() {
   const qc = useQueryClient();
+  const [surface, setSurface] = useState<Surface>("home");
   const [tab, setTab] = useState<Device>("desktop");
 
   const { data: featured = [], isLoading } = useQuery({
-    queryKey: ["owner-home-featured-projects-v2"],
+    queryKey: ["owner-home-featured-projects-v2", surface],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("home_featured_projects" as any)
         .select(featuredSelect)
+        .eq("surface", surface)
         .order("device", { ascending: true })
         .order("display_order", { ascending: true });
       if (error) throw error;
@@ -100,6 +113,7 @@ export default function HomeFeaturedProjectsManager() {
       const nextOrder = rows.length ? Math.max(...rows.map((r) => r.display_order || 0)) + 1 : 1;
       const { error } = await supabase.from("home_featured_projects" as any).insert({
         device,
+        surface,
         project_id: projectId ?? null,
         manual_project_id: manualId ?? null,
         display_order: nextOrder,
@@ -140,7 +154,7 @@ export default function HomeFeaturedProjectsManager() {
       const rows = byDevice(device);
       const nextOrder = rows.length ? Math.max(...rows.map((r) => r.display_order || 0)) + 1 : 1;
       const { error: linkErr } = await supabase.from("home_featured_projects" as any).insert({
-        device, project_id: null, manual_project_id: (data as any).id, display_order: nextOrder, is_visible: true,
+        device, surface, project_id: null, manual_project_id: (data as any).id, display_order: nextOrder, is_visible: true,
       });
       if (linkErr) throw linkErr;
     },
@@ -161,7 +175,6 @@ export default function HomeFeaturedProjectsManager() {
   const copyFromDesktop = useMutation({
     mutationFn: async (target: Device) => {
       const source = byDevice("desktop");
-      // wipe target first
       const targetRows = byDevice(target);
       for (const r of targetRows) {
         await supabase.from("home_featured_projects" as any).delete().eq("id", r.id);
@@ -170,6 +183,7 @@ export default function HomeFeaturedProjectsManager() {
         const s = source[i];
         await supabase.from("home_featured_projects" as any).insert({
           device: target,
+          surface,
           project_id: s.project_id,
           manual_project_id: s.manual_project_id,
           display_order: i + 1,
@@ -179,6 +193,41 @@ export default function HomeFeaturedProjectsManager() {
       }
     },
     onSuccess: () => { invalidate(); toast.success("Desktop layout copied"); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  // Auto-fill from newest N published projects
+  const autoFillNewest = useMutation({
+    mutationFn: async ({ device, count, intervalDays }: { device: Device; count: number; intervalDays: number | null }) => {
+      const { data: newest, error: e1 } = await supabase
+        .from("projects")
+        .select("id")
+        .eq("is_published", true)
+        .order("created_at", { ascending: false })
+        .limit(count);
+      if (e1) throw e1;
+
+      const targetRows = byDevice(device);
+      for (const r of targetRows) {
+        await supabase.from("home_featured_projects" as any).delete().eq("id", r.id);
+      }
+      const rows = (newest || []).map((p, i) => ({
+        device, surface,
+        project_id: p.id,
+        manual_project_id: null,
+        display_order: i + 1,
+        is_visible: true,
+        auto_mode: "newest",
+        auto_count: count,
+        refresh_interval_days: intervalDays,
+        last_auto_refresh_at: new Date().toISOString(),
+      }));
+      if (rows.length) {
+        const { error: e2 } = await supabase.from("home_featured_projects" as any).insert(rows);
+        if (e2) throw e2;
+      }
+    },
+    onSuccess: () => { invalidate(); toast.success("Auto-filled with newest projects"); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -205,8 +254,34 @@ export default function HomeFeaturedProjectsManager() {
         </div>
       </div>
 
+      {/* Surface selector — choose which public strap you're editing */}
+      <div className="rounded-2xl border border-[#B89555]/35 bg-white p-3 flex flex-wrap items-center gap-2">
+        <span className="text-[11px] uppercase tracking-[0.22em] font-black text-[#1A1A1A]/60 pr-2">Surface</span>
+        {SURFACES.map((s) => {
+          const active = s.id === surface;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setSurface(s.id)}
+              className={`rounded-lg px-3 py-2 text-sm font-bold transition ${active ? "bg-[#064E3B] text-white" : "bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#EFE6D6]"}`}
+            >
+              {s.label}
+              <span className={`ml-2 rounded-full px-1.5 py-0.5 text-[10px] ${active ? "bg-white/20" : "bg-[#B89555]/20 text-[#1A1A1A]"}`}>{s.hint}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Automation panel — auto-fill newest N with refresh interval, per surface + current device */}
+      <AutomationPanel
+        device={tab}
+        rows={byDevice(tab)}
+        onAutoFill={(count, intervalDays) => autoFillNewest.mutate({ device: tab, count, intervalDays })}
+      />
+
       {/* Device tabs */}
       <Tabs value={tab} onValueChange={(v) => setTab(v as Device)}>
+
         <TabsList data-surface="emerald" className="jj-emerald-metallic p-1 rounded-xl inline-flex gap-1">
           {DEVICES.map((d) => {
             const Icon = d.icon;
@@ -422,6 +497,55 @@ function DeviceFrameToolbar({
             </DialogContent>
           </Dialog>
         </div>
+      </div>
+    </Card>
+  );
+}
+
+function AutomationPanel({
+  device, rows, onAutoFill,
+}: {
+  device: Device;
+  rows: FeaturedRow[];
+  onAutoFill: (count: number, intervalDays: number | null) => void;
+}) {
+  const [count, setCount] = useState<number>(6);
+  const [interval, setInterval] = useState<string>("lifetime");
+  const auto = rows.find((r) => r.auto_mode === "newest");
+
+  return (
+    <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-4 rounded-xl">
+      <div className="flex flex-wrap items-end gap-3">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.22em] font-black text-[#1A1A1A]/60">Automation · {device}</p>
+          <p className="text-sm text-[#1A1A1A]/75">
+            {auto
+              ? `Auto: newest ${auto.auto_count || count}, refresh ${auto.refresh_interval_days ? `${auto.refresh_interval_days}d` : "lifetime"}`
+              : "Off · currently manual selection"}
+          </p>
+        </div>
+        <div>
+          <Label className="text-[#1A1A1A]">Newest</Label>
+          <Input type="number" min={1} max={30} value={count} onChange={(e) => setCount(Math.max(1, Number(e.target.value) || 1))} className="mt-1 w-24 bg-white border-[#B89555]/40 text-[#1A1A1A]" />
+        </div>
+        <div>
+          <Label className="text-[#1A1A1A]">Refresh</Label>
+          <Select value={interval} onValueChange={setInterval}>
+            <SelectTrigger className="mt-1 w-40 bg-white border-[#B89555]/40 text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="15">Every 15 days</SelectItem>
+              <SelectItem value="30">Every 30 days</SelectItem>
+              <SelectItem value="60">Every 60 days</SelectItem>
+              <SelectItem value="lifetime">Lifetime (until I change)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <Button
+          onClick={() => onAutoFill(count, interval === "lifetime" ? null : Number(interval))}
+          className="bg-[#064E3B] text-white hover:bg-[#053f30]"
+        >
+          Replace with newest {count}
+        </Button>
       </div>
     </Card>
   );
