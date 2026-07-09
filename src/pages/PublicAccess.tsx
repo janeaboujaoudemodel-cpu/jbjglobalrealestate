@@ -719,7 +719,7 @@ export default function PublicAccess() {
                   Real projects — off-plan releases, ready inventory and premium launches. Create an account to unlock pricing, plans and full detail.
                 </p>
               </div>
-              <button onClick={openSignup} style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11`}>
+              <button onClick={openSignup} data-jbj-access-cta="emerald" style={emeraldInkStyle} className={`${BTN_EMERALD_SOLID} h-11`}>
                 Unlock the catalogue <ArrowRight className="h-4 w-4" />
               </button>
             </div>
