@@ -28,7 +28,8 @@ export default function LoginDialog({ open, onOpenChange }: Props) {
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
     onOpenChange(false);
-    navigate("/", { replace: true });
+    const from = (location.state as { from?: string } | null)?.from;
+    navigate(from || "/", { replace: true });
   };
 
   return (
