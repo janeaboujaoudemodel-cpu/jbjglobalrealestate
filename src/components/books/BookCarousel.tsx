@@ -86,17 +86,23 @@ export function BookCarousel({
     pauseBriefly();
   };
 
-  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+  // Non-passive wheel listener so we can preventDefault and hijack vertical
+  // scroll into horizontal marquee scrubbing while the cursor is over the strip.
+  useEffect(() => {
     const shell = shellRef.current;
-    if (!shell) return;
-    pauseBriefly();
-    const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (delta !== 0) {
-      shell.scrollLeft += delta;
-      dragState.current.offset = shell.scrollLeft;
-      applyOffset(shell.scrollLeft);
-    }
-  };
+    if (!shell || books.length <= 1) return;
+    const handler = (e: WheelEvent) => {
+      const delta = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if (delta === 0) return;
+      e.preventDefault();
+      pauseBriefly();
+      const next = dragState.current.offset + delta;
+      dragState.current.offset = next;
+      applyOffset(next);
+    };
+    shell.addEventListener("wheel", handler, { passive: false });
+    return () => shell.removeEventListener("wheel", handler);
+  }, [books.length, applyOffset, pauseBriefly]);
 
   const handleCardClick = (book: BookData) => () => {
     if (dragState.current.moved) return;
