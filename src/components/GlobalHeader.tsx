@@ -1429,6 +1429,19 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 </button>
                 {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
 
+                {/* Pricing / Membership */}
+                <Link
+                  to="/membership"
+                  className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-md cursor-pointer ${
+                    isFullyTransparent
+                      ? 'text-white hover:text-[#1A1A1A]'
+                      : 'text-[#1A1A1A] hover:bg-[#F7F2EA]'
+                  }`}
+                >
+                  Pricing
+                </Link>
+                {isFullyTransparent && <span className="text-white/85 text-xs px-1">|</span>}
+
                 {/* Insights (News & Market Intelligence) */}
                 <button
                   onPointerEnter={() => handleMegaMenuEnter('insights')}
