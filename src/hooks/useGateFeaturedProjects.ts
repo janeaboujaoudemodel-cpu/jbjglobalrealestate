@@ -30,12 +30,12 @@ export function useSurfaceFeaturedProjects(surface: "home" | "gate" | "website")
         /* ignore — read still returns whatever exists */
       }
 
-      const { data, error } = await supabase
-        .from("home_featured_projects" as any)
+      const q: any = supabase.from("home_featured_projects" as any);
+      const { data, error } = await q
         .select(
           "id, display_order, is_visible, project_id, projects:project_id (id, name, developer_name, location, community, starting_price, image_url, hero_image, cover_image, images)"
         )
-        .eq("surface" as any, surface)
+        .eq("surface", surface)
         .eq("is_visible", true)
         .order("display_order", { ascending: true });
 
