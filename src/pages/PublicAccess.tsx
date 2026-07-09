@@ -1277,7 +1277,11 @@ export default function PublicAccess() {
           />
         </div>
 
+        <ServicesSection />
+
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
+
+        <CertificateBand />
 
         {/* Closing CTA — same animation/pattern as homepage "Ready to Get Started" */}
         <div className="bg-[#F7F2EA]">
