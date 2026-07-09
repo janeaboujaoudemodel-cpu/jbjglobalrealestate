@@ -957,23 +957,61 @@ export default function PublicAccess() {
               </p>
             </div>
 
-            <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {brokerBenefits.map((b) => {
-                const Icon = b.icon;
-                return (
-                  <div
-                    key={b.title}
-                    className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.05] p-7 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#C9A84C]/50 hover:bg-white/[0.09]"
-                  >
-                    <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[#C9A84C]/10 blur-2xl transition group-hover:bg-[#C9A84C]/20" />
-                    <div className="relative inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.04))] [&_svg]:!text-[#C9A84C] [&_svg]:!stroke-[#C9A84C]">
-                      <Icon className="h-5 w-5" />
+            {/* Two-column: services (left) + benefits (right) */}
+            <div className="mt-16 grid gap-8 lg:grid-cols-[1.15fr,1fr]">
+              {/* SERVICES CARD — premium single card */}
+              <div className="relative overflow-hidden rounded-2xl border border-[#C9A84C]/40 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-8 backdrop-blur-sm">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-[#C9A84C]/10 blur-3xl" />
+                <div className="relative">
+                  <span data-jbj-access-gold-badge className="text-[10px] font-bold uppercase tracking-[0.32em]">
+                    What we offer
+                  </span>
+                  <h3 className="mt-2 font-serif text-3xl !text-white">JBJ broker services</h3>
+                  <p className="mt-2 max-w-md text-sm !text-white/75">
+                    A full-stack Dubai real-estate desk supporting every certified JBJ broker end-to-end.
+                  </p>
+                  <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                    {brokerServices.map((s) => {
+                      const Icon = s.icon;
+                      return (
+                        <li key={s.title} className="flex gap-3">
+                          <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#C9A84C]/40 bg-[rgba(201,168,76,0.08)] [&_svg]:!text-[#C9A84C] [&_svg]:!stroke-[#C9A84C]">
+                            <Icon className="h-4 w-4" />
+                          </span>
+                          <div>
+                            <p className="text-sm font-bold !text-white">{s.title}</p>
+                            <p className="mt-1 text-[12px] leading-relaxed !text-white/70">{s.body}</p>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+
+              {/* BENEFITS — 3 tight cards */}
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                {brokerBenefits.map((b) => {
+                  const Icon = b.icon;
+                  return (
+                    <div
+                      key={b.title}
+                      className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.04] p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-[#C9A84C]/50 hover:bg-white/[0.08]"
+                    >
+                      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/60 to-transparent" />
+                      <div className="flex items-start gap-4">
+                        <div className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#C9A84C]/40 bg-[linear-gradient(135deg,rgba(201,168,76,0.18),rgba(201,168,76,0.04))] [&_svg]:!text-[#C9A84C] [&_svg]:!stroke-[#C9A84C]">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-serif text-lg !text-white">{b.title}</h4>
+                          <p className="mt-1.5 text-sm leading-relaxed !text-white/75">{b.body}</p>
+                        </div>
+                      </div>
                     </div>
-                    <h3 className="mt-5 font-serif text-xl !text-white">{b.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed !text-white/80">{b.body}</p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
 
             <div className="mt-14 flex flex-wrap justify-center gap-3">
