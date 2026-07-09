@@ -314,46 +314,46 @@ const EMERALD_ICON_TILE =
 // Page-scoped stylesheet — forces white ink on emerald CTAs and dark ink on
 // white CTAs no matter what a global data-surface / contrast-guard rule says.
 const ACCESS_CTA_STYLE = `
-html body #root [data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"],
-html body #root [data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"] * {
+html body #root [data-jbj-cta-emerald],
+html body #root [data-jbj-cta-emerald] * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   text-shadow: none !important;
   opacity: 1 !important;
 }
-html body #root [data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"] svg,
-html body #root [data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"][data-jbj-access-cta="emerald" data-no-contrast-guard data-allow-dark-cta data-surface="dark"] svg * {
+html body #root [data-jbj-cta-emerald] svg,
+html body #root [data-jbj-cta-emerald] svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
 }
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta] {
+html body #root [data-jbj-cta-white] {
   color: #0d3a2b !important;
   -webkit-text-fill-color: #0d3a2b !important;
   background-color: #FFFFFF !important;
 }
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta] * {
+html body #root [data-jbj-cta-white] * {
   color: #0d3a2b !important;
   -webkit-text-fill-color: #0d3a2b !important;
   background-color: transparent !important;
   opacity: 1 !important;
 }
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta] svg,
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta] svg * {
+html body #root [data-jbj-cta-white] svg,
+html body #root [data-jbj-cta-white] svg * {
   color: #0d3a2b !important;
   stroke: #0d3a2b !important;
   fill: none !important;
 }
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta]:hover {
+html body #root [data-jbj-cta-white]:hover {
   background-color: #064E3B !important;
 }
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta]:hover,
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta]:hover * {
+html body #root [data-jbj-cta-white]:hover,
+html body #root [data-jbj-cta-white]:hover * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta]:hover svg,
-html body #root [data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta][data-jbj-access-cta="white" data-no-contrast-guard data-allow-dark-cta]:hover svg * {
+html body #root [data-jbj-cta-white]:hover svg,
+html body #root [data-jbj-cta-white]:hover svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
