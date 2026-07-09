@@ -70,8 +70,7 @@ export function PricingGrid({
 
   return (
     <>
-      <PaymentTestModeBanner />
-      <section className="jj-section py-16 md:py-24">
+      <section className="jj-section py-16 md:py-24">{/* payment-request flow (Stripe temporarily disabled) */}
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center mb-10 md:mb-14">
             {eyebrow ? (
