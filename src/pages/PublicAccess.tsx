@@ -1462,9 +1462,11 @@ export default function PublicAccess() {
               </button>
               <button
                 onClick={() => setLoginOpen(true)}
-                className="inline-flex h-12 flex-1 sm:flex-none min-w-[140px] items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] !text-white backdrop-blur-md transition hover:bg-white/20"
+                data-no-contrast-guard
+                style={emeraldInkStyle}
+                className={`${BTN_DARK_OUTLINE} h-12 flex-1 sm:flex-none min-w-[160px]`}
               >
-                Log in
+                Log in <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
