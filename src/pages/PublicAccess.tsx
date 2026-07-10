@@ -1197,16 +1197,17 @@ function TierGrid({ tiers, onSelect }: { tiers: Tier[]; onSelect: (tier: Tier) =
             {...(isEm ? { "data-surface": "dark" as const } : {})}
             className={
               isEm
-                ? "relative flex flex-col rounded-2xl p-8 pt-10 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] ring-1 ring-[#8B6F3A]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
+                ? "relative flex flex-col rounded-2xl p-8 pt-10 shadow-[0_30px_60px_-32px_rgba(6,78,59,0.55)] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)]"
                 : "relative flex flex-col rounded-2xl border border-[#0d3a2b]/15 bg-white p-8 pt-10 shadow-[0_24px_60px_-42px_rgba(13,58,43,0.35)]"
             }
           >
             {isEm && (
               <span
                 data-surface="dark"
-                className="absolute left-1/2 -top-3 -translate-x-1/2 rounded-full border border-[#8B6F3A] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] !text-[#C9A84C] shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] whitespace-nowrap"
+                data-no-contrast-guard
+                className="allow-white absolute left-1/2 -top-3 -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] !text-white shadow-[0_10px_24px_-10px_rgba(0,0,0,0.6)] whitespace-nowrap"
               >
-                <Star className="inline h-3 w-3 mr-1 -mt-0.5 !text-[#C9A84C]" /> Most popular
+                <Star className="inline h-3 w-3 mr-1 -mt-0.5 !text-white" /> Most popular
               </span>
             )}
             <p
