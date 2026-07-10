@@ -159,9 +159,9 @@ export const GuideTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div data-guide-tooltip data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-xl p-4 shadow-xl">
+            <div data-guide-tooltip data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-white/10 rounded-none flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -192,7 +192,7 @@ export const GuideTableOfContents = ({
         <button
           onClick={() => setIsMinimized(false)}
           data-surface="emerald"
-          className="h-12 w-12 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+          className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
           aria-label="Expand navigation"
         >
           <ChevronDown className="w-5 h-5 text-white" />
@@ -203,7 +203,7 @@ export const GuideTableOfContents = ({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         data-surface="emerald"
-        className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
+        className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
       >
         {/* Header with minimize button */}
         <div data-guide-toc-header data-surface="emerald" className="flex items-center justify-between p-3 border-b border-white/15 bg-black/10 flex-shrink-0">
@@ -214,7 +214,7 @@ export const GuideTableOfContents = ({
           <button
             onClick={() => setIsMinimized(!isMinimized)}
               data-surface="emerald"
-            className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-none bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             <ChevronUp className="w-4 h-4 text-white" />
@@ -240,14 +240,14 @@ export const GuideTableOfContents = ({
                 data-toc-item
                 data-toc-state={activeId === item.id ? "active" : "inactive"}
                 className={cn(
-                  "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
+                  "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-none text-left text-sm transition-colors border box-border overflow-hidden",
                   activeId === item.id
-                    ? "bg-white/12 text-white font-semibold border-white/10"
-                    : "text-white hover:text-white hover:bg-white/10 border-transparent"
+                    ? "bg-white/12 text-white font-semibold border-white/15"
+                    : "text-white hover:text-white hover:bg-white/10 border-white/10 bg-black/10"
                 )}
               >
                 <span data-toc-number className={cn(
-                  "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
+                  "w-7 h-7 rounded-none flex items-center justify-center text-[11px] font-bold",
                   activeId === item.id
                     ? "bg-white/15 text-white border border-white/20"
                     : "bg-black/15 text-white border border-white/10"

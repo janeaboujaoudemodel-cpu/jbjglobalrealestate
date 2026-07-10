@@ -133,7 +133,7 @@ export const MarketIntelligenceTableOfContents = ({
         <button
           onClick={() => setIsMinimized(false)}
           data-surface="emerald"
-          className="h-12 w-12 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+          className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
           aria-label="Expand navigation"
         >
           <ChevronDown className="w-5 h-5 text-white" />
@@ -143,7 +143,8 @@ export const MarketIntelligenceTableOfContents = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
+        data-surface="emerald"
+        className="rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
       >
         <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
@@ -178,30 +179,34 @@ export const MarketIntelligenceTableOfContents = ({
                       onClick={() => scrollToSection(item.id)}
                       data-toc-item
                       data-toc-state={isActive ? "active" : "inactive"}
-                      data-surface={isActive ? "emerald" : "light"}
-                      data-allow-white={isActive ? "true" : undefined}
+                      data-surface="emerald"
+                      data-allow-white="true"
                       data-no-contrast-guard
                       className={cn(
-                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left transition-colors border text-[13px] box-border overflow-hidden",
+                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-none text-left transition-colors border text-[13px] box-border overflow-hidden",
                         isActive
-                          ? "font-semibold border-white/10 bg-white/12"
-                          : "border-transparent bg-transparent hover:bg-white/10"
+                          ? "font-semibold border-white/15 bg-white/12"
+                          : "border-white/10 bg-black/10 hover:bg-white/10"
                       )}
                       style={
                         isActive
                           ? {
-                              backgroundColor: 'rgba(255,255,255,0.12)',
+                              backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%)',
                               color: '#FFFFFF',
                               WebkitTextFillColor: '#FFFFFF',
                             }
-                          : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
+                          : {
+                              backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 100%)',
+                              color: '#FFFFFF',
+                              WebkitTextFillColor: '#FFFFFF',
+                            }
                       }
                     >
                       <span
                         data-toc-number
                         data-no-contrast-guard
                         className={cn(
-                          "h-7 w-7 rounded-lg flex items-center justify-center text-[11px] font-bold leading-none",
+                          "h-7 w-7 rounded-none flex items-center justify-center text-[11px] font-bold leading-none",
                           isActive
                             ? "bg-white/15 text-white border border-white/20"
                             : "bg-black/15 text-white border border-white/10"

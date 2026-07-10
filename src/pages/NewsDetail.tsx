@@ -1,7 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Landmark, ExternalLink, Newspaper, Sparkles, TrendingUp, CheckCircle, BarChart3, Lightbulb, Building2, Banknote, Gift, MapPin, Globe } from "lucide-react";
+import { ArrowLeft, Calendar, Landmark, ExternalLink, Newspaper, Sparkles, TrendingUp, CheckCircle, BarChart3, Lightbulb, Building2, Banknote, Gift, MapPin, Globe, PhoneCall } from "lucide-react";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +9,8 @@ import { renderMarkdownToHtml } from "@/lib/markdownUtils";
 import { HtmlT } from "@/i18n/HtmlT";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
+import { MarketIntelligenceHero } from "@/components/market-intelligence/MarketIntelligenceHero";
+import { MarketIntelligenceTableOfContents } from "@/components/market-intelligence/MarketIntelligenceTableOfContents";
 
 const CATEGORY_IMAGES: Record<string, string> = {
   "Policy": "https://images.unsplash.com/photo-1582672060674-bc2bd808a8b5?w=1920&q=90",
@@ -167,6 +168,14 @@ const NewsDetail = () => {
 
   const keyStats = (article.key_stats || []) as { label: string; value: string }[];
   const keyTakeaways = (article.key_takeaways || []) as string[];
+  const tocItems = [
+    { id: "article-summary", title: "Article Summary", icon: Newspaper },
+    keyStats.length > 0 ? { id: "article-stats", title: "Key Statistics", icon: BarChart3 } : null,
+    keyTakeaways.length > 0 ? { id: "article-takeaways", title: "Key Takeaways", icon: Lightbulb } : null,
+    analysisPoints.length > 0 ? { id: "article-impact", title: "Market Impact", icon: TrendingUp } : null,
+    { id: "article-dld", title: "Dubai Intelligence", icon: Landmark },
+    { id: "article-source", title: "Source", icon: ExternalLink },
+  ].filter(Boolean) as Array<{ id: string; title: string; icon: typeof Newspaper }>;
 
   const articleUrl = `https://jbj.ae/news/${article.id}`;
   const articleSchema = {
@@ -206,50 +215,29 @@ const NewsDetail = () => {
       />
 
       <article className="min-h-screen bg-[#FDFBF7]">
-        {/* Full-Screen Hero Image */}
-        <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
-          <img
-            src={heroImage}
-            alt={article.title}
-            className="w-full h-full object-cover"
-            loading="eager"
-           decoding="async" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-
-          <div className="absolute top-6 left-6 z-10">
-            <Link
-              to="/news"
-              className="inline-flex items-center gap-2.5 text-white/90 hover:text-[#1A1A1A] transition-all duration-300 bg-[#1A1A1A]/30 backdrop-blur-xl px-6 py-3 rounded-full border border-white/15 hover:border-[#B89555]/40 hover:bg-[#1A1A1A]/50 font-medium text-sm shadow-lg"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              All News
+        <MarketIntelligenceHero
+          badge={`${article.category} · ${formattedDate}`}
+          badgeIcon={Newspaper}
+          title={article.title}
+          description={article.excerpt}
+          actions={
+            <Link to="/news">
+              <Button variant="primary" className="rounded-none px-6">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                All News
+              </Button>
             </Link>
-          </div>
+          }
+        />
 
-          <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-            <div className="container mx-auto max-w-4xl">
-              <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <Badge className="bg-[#EFE6D6] text-[#1A1A1A] px-3 py-1 text-xs font-medium">
-                  {article.category}
-                </Badge>
-                <Badge variant="outline" className="text-white/80 border-white/30 px-3 py-1 text-xs backdrop-blur-sm">
-                  <Landmark className="w-3 h-3 mr-1" />
-                  {article.source}
-                </Badge>
-              </div>
-              <h1
-                className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
-              >
-                {article.title}
-              </h1>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-8 md:h-12 bg-[#FDFBF7]" />
+        <MarketIntelligenceTableOfContents
+          items={tocItems}
+          title="In This Article"
+          ctaAction={{ label: "Speak With Our Team", href: "/contact", icon: PhoneCall }}
+        />
 
         {/* Article Body */}
-        <div className="jj-layer-2 !bg-transparent relative z-10">
+        <div id="article-summary" className="jj-layer-2 !bg-transparent relative z-10 scroll-mt-24">
           <div className="jj-layer-active rounded-2xl p-6 md:p-10 lg:p-14 max-w-4xl mx-auto">
             {/* Meta row */}
             <div className="flex items-center gap-4 text-sm text-[#1A1A1A]/70 mb-8 pb-6 border-b border-[#B89555]/20 flex-wrap">
@@ -266,7 +254,7 @@ const NewsDetail = () => {
 
             {/* Key Stats Banner */}
             {keyStats.length > 0 && (
-              <div className="mb-8 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl p-5 border border-[#B89555]/30">
+              <div id="article-stats" className="mb-8 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl p-5 border border-[#B89555]/30 scroll-mt-24">
                 <div className="flex items-center gap-2 mb-4">
                   <BarChart3 className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Key Statistics</span>
@@ -284,7 +272,7 @@ const NewsDetail = () => {
 
             {/* Key Takeaways Box */}
             {keyTakeaways.length > 0 && (
-              <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-5 border border-[#B89555]/20">
+              <div id="article-takeaways" className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-5 border border-[#B89555]/20 scroll-mt-24">
                 <div className="flex items-center gap-2 mb-4">
                   <Lightbulb className="w-4 h-4 text-[#1A1A1A]" />
                   <span className="text-xs font-semibold text-[#1A1A1A] uppercase tracking-wider">Key Takeaways</span>
@@ -316,7 +304,7 @@ const NewsDetail = () => {
 
             {/* AI Analysis Section - Green Theme */}
             {analysisPoints.length > 0 && (
-              <div className="mt-12 pt-8 border-t border-[color:var(--emerald-1)]/30">
+              <div id="article-impact" className="mt-12 pt-8 border-t border-[color:var(--emerald-1)]/30 scroll-mt-24">
                 <div className="bg-gradient-to-r from-emerald-50 to-emerald-100/80 rounded-xl p-4 mb-6 border border-[color:var(--emerald-1)]/30 flex items-center gap-3">
                   <Sparkles className="w-5 h-5 text-[color:var(--emerald-1)] flex-shrink-0" />
                   <p className="text-[color:var(--emerald-1)] font-medium text-sm">
@@ -352,7 +340,7 @@ const NewsDetail = () => {
             )}
 
             {/* Dubai Market Intelligence Section */}
-            <div className="mt-12 pt-8 border-t border-[#B89555]/20">
+            <div id="article-dld" className="mt-12 pt-8 border-t border-[#B89555]/20 scroll-mt-24">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8] border border-[#B89555]/30 flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
@@ -481,7 +469,7 @@ const NewsDetail = () => {
             </div>
 
             {/* Source Attribution */}
-            <div className="mt-12 pt-8 border-t border-[#B89555]/20">
+            <div id="article-source" className="mt-12 pt-8 border-t border-[#B89555]/20 scroll-mt-24">
               <div className="jj-card-inner rounded-xl p-6">
                 <p className="text-sm text-[#1A1A1A]/70 mb-2">Source</p>
                 <p className="text-[#1A1A1A] font-medium text-lg">{article.source}</p>

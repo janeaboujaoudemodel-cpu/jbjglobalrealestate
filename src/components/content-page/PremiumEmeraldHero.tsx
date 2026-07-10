@@ -18,9 +18,9 @@ interface PremiumEmeraldHeroProps {
 }
 
 const HEIGHTS: Record<NonNullable<PremiumEmeraldHeroProps["height"]>, string> = {
-  sm: "",
-  md: "",
-  lg: "",
+  sm: "min-h-[100svh]",
+  md: "min-h-[100svh]",
+  lg: "min-h-[100svh]",
 };
 
 const HEADING_FONT = {
@@ -41,7 +41,7 @@ export function PremiumEmeraldHero({
       data-surface="emerald"
       data-no-contrast-guard
       data-premium-emerald-hero
-      className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden border-b border-[#B89555]/25"
+      className={`jj-hero-fullscreen relative flex items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
       style={{
         background:
           "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)",
@@ -56,36 +56,35 @@ export function PremiumEmeraldHero({
         }}
         aria-hidden
       />
-      <div
-        className={`relative z-10 w-full max-w-4xl mx-auto px-6 text-center ${HEIGHTS[height]}`}
-      >
+      <div className="relative z-10 flex min-h-[100svh] w-full items-center justify-center px-6 py-28 text-center">
         <motion.div
+          className="mx-auto flex w-full max-w-[58rem] flex-col items-center justify-center"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/45 bg-white/5 px-3.5 py-1.5 mb-6 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-7 backdrop-blur-sm">
             <EyebrowIcon className="h-3.5 w-3.5 text-[#E8CF8A]" />
-            <span className="text-[11px] uppercase tracking-[0.22em] text-[#E8CF8A] font-medium">
+            <span className="text-[11px] uppercase tracking-[0.18em] text-[#E8CF8A] font-medium">
               {eyebrow}
             </span>
           </div>
           <h1
             data-no-contrast-guard
-            className="mx-auto text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.08] tracking-tight mb-5 text-center"
+            className="mx-auto max-w-[16ch] text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.04] mb-6 text-center"
             style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textAlign: "center" }}
           >
             {title}
           </h1>
           {subtitle && (
             <p
-              className="text-base sm:text-lg md:text-xl text-[#E8CF8A] italic max-w-3xl mx-auto"
-              style={HEADING_FONT}
+              className="mx-auto max-w-[42rem] text-base sm:text-lg md:text-xl text-[#F7F2EA] leading-relaxed"
+              style={{ ...HEADING_FONT, color: "#F7F2EA", WebkitTextFillColor: "#F7F2EA" }}
             >
               {subtitle}
             </p>
           )}
-          {meta && <div className="mt-6 text-sm text-white/75">{meta}</div>}
+          {meta && <div className="mt-8 flex w-full justify-center text-sm text-white/90">{meta}</div>}
         </motion.div>
       </div>
     </section>
