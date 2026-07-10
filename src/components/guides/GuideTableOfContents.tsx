@@ -42,23 +42,23 @@ export const GuideTableOfContents = ({
 
   useEffect(() => {
     const HERO_SEL = '[data-guide-hero], [data-premium-emerald-hero], [data-mi-hero], [data-faq-hero], [data-hero-dark]';
-    const check = () => {
-      // Re-query every tick so we never keep a stale/detached hero ref.
+    let io: IntersectionObserver | null = null;
+    let raf = 0;
+    const attach = () => {
       const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
       if (!hero) {
-        setPastHero(window.scrollY > 120);
+        if (raf < 30) { raf++; requestAnimationFrame(attach); }
+        else setPastHero(true);
         return;
       }
-      const rect = hero.getBoundingClientRect();
-      setPastHero(rect.bottom <= 8);
+      io = new IntersectionObserver(
+        (entries) => setPastHero(!entries[0].isIntersecting),
+        { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
+      );
+      io.observe(hero);
     };
-    check();
-    window.addEventListener('scroll', check, { passive: true });
-    window.addEventListener('resize', check);
-    return () => {
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('resize', check);
-    };
+    attach();
+    return () => { io?.disconnect(); };
   }, []);
 
 
