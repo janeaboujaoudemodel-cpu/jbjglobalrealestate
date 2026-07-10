@@ -1655,16 +1655,39 @@ export default function PublicAccess() {
 }
 
 /* ============================================================================
- * SpeakToAdvisorLauncher — mirrors the SupportLauncher "Contact Us" edge tag
- * on the LEFT side, opens the LeadFormDialog as a popup, and includes attention
- * pulse rings identical in animation to the Contact Us tag.
+ * SpeakToAdvisorLauncher — phone icon anchored to the bottom-right corner.
+ * Hover reveals a "Speak to an advisor" bubble above the icon.
+ * The tooltip is a sibling of the emerald-metallic button so the global
+ * contrast-guard opacity rules cannot force it visible.
  * ==========================================================================*/
 function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
-  // Single floating phone icon anchored to the bottom-right corner.
-  // Hover reveals a tooltip bubble reading "Speak to an advisor".
-  // Pulse rings match the Contact Us tag animation.
   return (
-    <div className="fixed bottom-5 right-5 z-[60]" data-no-contrast-guard>
+    <div
+      className="group fixed bottom-5 right-5 z-[60] flex h-12 w-12 items-end justify-end"
+      data-no-contrast-guard
+    >
+      {/* Hover bubble — sibling, not child, of the emerald button */}
+      <span
+        role="tooltip"
+        data-surface="emerald"
+        data-allow-dark-cta
+        data-no-contrast-guard
+        className="allow-white pointer-events-none invisible absolute bottom-full left-1/2 z-[61] mb-3 -translate-x-1/2 translate-y-1.5 whitespace-nowrap rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+        style={{
+          backgroundImage: "var(--jj-emerald-ombre)",
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
+          boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+        }}
+      >
+        Speak to an advisor
+        <span
+          aria-hidden
+          className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-1/2 h-2 w-2 rotate-45"
+          style={{ background: "#042c1c" }}
+        />
+      </span>
+
       <button
         type="button"
         onClick={onOpen}
@@ -1672,7 +1695,7 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
         data-surface="emerald"
         data-allow-dark-cta
         data-no-contrast-guard
-        className="allow-white jj-emerald-metallic group relative inline-flex items-center justify-center h-12 w-12 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-transform active:scale-95 hover:scale-105"
+        className="allow-white jj-emerald-metallic relative inline-flex h-12 w-12 items-center justify-center rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-transform active:scale-95 hover:scale-105"
         style={{
           color: "#FFFFFF",
           WebkitTextFillColor: "#FFFFFF",
@@ -1687,25 +1710,6 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
           className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
           style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8, zIndex: 2 }}
         />
-
-        {/* Hover bubble */}
-        <span
-          role="tooltip"
-          className="pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.2em] text-white opacity-0 translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0"
-          style={{
-            backgroundImage: "var(--jj-emerald-ombre)",
-            color: "#FFFFFF",
-            WebkitTextFillColor: "#FFFFFF",
-            boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-          }}
-        >
-          Speak to an advisor
-          <span
-            aria-hidden
-            className="absolute top-1/2 -right-1 -translate-y-1/2 h-2 w-2 rotate-45"
-            style={{ background: "#042c1c" }}
-          />
-        </span>
       </button>
     </div>
   );
