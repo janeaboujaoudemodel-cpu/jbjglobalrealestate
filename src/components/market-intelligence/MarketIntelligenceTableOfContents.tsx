@@ -38,19 +38,29 @@ export const MarketIntelligenceTableOfContents = ({
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
-    const hero = document.querySelector('[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]') as HTMLElement | null;
-    if (!hero) {
-      setPastHero(true);
-      return;
-    }
-    const check = () => setPastHero(hero.getBoundingClientRect().bottom <= 8);
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
+    const HERO_SEL = '[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]';
+    let io: IntersectionObserver | null = null;
+    let raf = 0;
+    const attach = () => {
+      const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
+      if (!hero) {
+        // No hero found yet — retry a few frames, then default to visible.
+        if (raf < 30) { raf++; requestAnimationFrame(attach); }
+        else setPastHero(true);
+        return;
+      }
+      io = new IntersectionObserver(
+        (entries) => {
+          const e = entries[0];
+          // pastHero = hero no longer intersecting viewport (scrolled past).
+          setPastHero(!e.isIntersecting);
+        },
+        { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
+      );
+      io.observe(hero);
     };
+    attach();
+    return () => { io?.disconnect(); };
   }, []);
 
   const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
@@ -105,15 +115,17 @@ export const MarketIntelligenceTableOfContents = ({
     }, 650);
   };
 
+  // Do not mount the TOC while the hero is still in view. Rendering + then
+  // hiding via opacity is unreliable because global !important CSS forces
+  // opacity:1 on emerald surfaces. Unmounting is the guaranteed hide.
+  if (!pastHero) return null;
+
   return (
     <div
       className={cn(
-        "fixed right-4 top-28 z-[80] hidden lg:block transition-opacity duration-300",
-        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64",
-        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        "fixed right-4 top-28 z-[80] hidden lg:block",
+        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64"
       )}
-      aria-hidden={!pastHero}
-      data-surface="emerald"
       data-mi-toc
       data-premium-navigator
     >

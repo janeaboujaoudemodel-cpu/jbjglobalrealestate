@@ -171,7 +171,11 @@ const MarketIntelligence = () => {
       />
 
 
-      <MarketIntelligenceTableOfContents items={MI_TOC_ITEMS} title="In This Section" />
+      <MarketIntelligenceTableOfContents
+        items={MI_TOC_ITEMS}
+        title="In This Section"
+        ctaAction={{ label: "Speak With Our Team", href: "/contact", icon: PhoneCall }}
+      />
 
       {/* Market Overview Dashboard - Edge to Edge */}
       <div id="overview" className="scroll-mt-24">

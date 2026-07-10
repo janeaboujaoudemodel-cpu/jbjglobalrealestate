@@ -41,23 +41,24 @@ export const GuideTableOfContents = ({
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
-    const hero = document.querySelector('[data-guide-hero], [data-premium-emerald-hero], [data-faq-hero], [data-hero-dark]') as HTMLElement | null;
-    if (!hero) {
-      setPastHero(true);
-      return;
-    }
-    const check = () => {
-      const rect = hero.getBoundingClientRect();
-      // Reveal only after the hero is fully behind the viewport/header area.
-      setPastHero(rect.bottom <= 8);
+    const HERO_SEL = '[data-guide-hero], [data-premium-emerald-hero], [data-mi-hero], [data-faq-hero], [data-hero-dark]';
+    let io: IntersectionObserver | null = null;
+    let raf = 0;
+    const attach = () => {
+      const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
+      if (!hero) {
+        if (raf < 30) { raf++; requestAnimationFrame(attach); }
+        else setPastHero(true);
+        return;
+      }
+      io = new IntersectionObserver(
+        (entries) => setPastHero(!entries[0].isIntersecting),
+        { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
+      );
+      io.observe(hero);
     };
-    check();
-    window.addEventListener('scroll', check, { passive: true });
-    window.addEventListener('resize', check);
-    return () => {
-      window.removeEventListener('scroll', check);
-      window.removeEventListener('resize', check);
-    };
+    attach();
+    return () => { io?.disconnect(); };
   }, []);
 
 
@@ -135,16 +136,18 @@ export const GuideTableOfContents = ({
     localStorage.setItem(TOOLTIP_DISMISSED_KEY, "true");
   };
 
+  // Do not mount the TOC while the hero is still in view. Global !important
+  // CSS forces opacity:1 on emerald surfaces, so opacity-based hiding is
+  // unreliable — unmounting is the guaranteed hide.
+  if (!pastHero) return null;
+
   return (
     <div
       className={cn(
-        "fixed right-4 top-28 z-[80] hidden lg:block transition-opacity duration-300",
-        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64",
-        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        "fixed right-4 top-28 z-[80] hidden lg:block",
+        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64"
       )}
-      aria-hidden={!pastHero}
       data-guide-toc
-      data-surface="emerald"
       data-premium-navigator
     >
       {/* Tooltip */}
