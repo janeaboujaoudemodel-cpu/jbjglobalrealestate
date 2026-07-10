@@ -99,7 +99,7 @@ const AmlKycPolicy = () => {
         canonicalPath="/aml-kyc"
       />
 
-      <main className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+      <main data-no-contrast-guard className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* ─── Hero (emerald ink) ─── */}
         <section
           data-hero-dark
