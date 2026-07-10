@@ -38920,10 +38920,10 @@ export type Database = {
           bathrooms?: number | null
           bedrooms?: number | null
           cheques?: number | null
-          contact_email?: string | null
+          contact_email?: never
           contact_mode?: string | null
-          contact_name?: string | null
-          contact_phone?: string | null
+          contact_name?: never
+          contact_phone?: never
           created_at?: string | null
           currency?: string | null
           deleted_at?: string | null
@@ -38975,10 +38975,10 @@ export type Database = {
           bathrooms?: number | null
           bedrooms?: number | null
           cheques?: number | null
-          contact_email?: string | null
+          contact_email?: never
           contact_mode?: string | null
-          contact_name?: string | null
-          contact_phone?: string | null
+          contact_name?: never
+          contact_phone?: never
           created_at?: string | null
           currency?: string | null
           deleted_at?: string | null
