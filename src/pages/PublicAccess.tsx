@@ -1636,29 +1636,10 @@ export default function PublicAccess() {
         </div>
       </footer>
 
-      {/* Premium floating advisor button — headset avatar + live dot + phone */}
-      <button
-        onClick={() => setLeadOpen(true)}
-        data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
-        aria-label="Speak to an advisor"
-        style={emeraldInkStyle}
-        className="group fixed bottom-6 right-6 z-30 inline-flex items-center gap-3 rounded-full pl-2 pr-5 py-2 shadow-[0_20px_44px_-18px_rgba(6,78,59,0.9)] ring-1 ring-[#C9A84C]/40 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] transition hover:bg-[linear-gradient(135deg,#075c46_0%,#053825_55%,#000_100%)] hover:ring-[#C9A84C]/70 hover:-translate-y-0.5"
-      >
-        <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/12 ring-1 ring-white/30 [&_svg]:!text-white">
-          <Headphones className="h-5 w-5" />
-          {/* live dot — white only */}
-          <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white ring-2 ring-[#064E3B]" />
-          </span>
-        </span>
-        <span className="flex flex-col items-start leading-tight">
-          <span className="text-[9px] font-bold uppercase tracking-[0.28em] !text-white/85">Live · 24/7</span>
-          <span className="inline-flex items-center gap-1.5 text-[13px] font-bold !text-white">
-            <PhoneCall className="h-3.5 w-3.5 !text-white" /> Speak to an advisor
-          </span>
-        </span>
-      </button>
+      {/* Speak to an Advisor — vertical LEFT edge tag (desktop) + bottom-left phone icon (mobile) */}
+      <SpeakToAdvisorLauncher onOpen={() => setLeadOpen(true)} />
+      {/* First-visit guide explaining Contact Us vs Speak to an Advisor */}
+      <SupportGuideOverlay />
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
       <PaymentRequestDialog
