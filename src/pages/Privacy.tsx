@@ -1,248 +1,221 @@
-import { motion } from "framer-motion";
-import { Shield, Sparkles, Lock, Mail } from "lucide-react";
+/**
+ * Privacy Policy — rebuilt on ContentPageShell (LOCKED layout).
+ * Centered full-height emerald hero, floating right-side emerald TOC.
+ */
+import { Shield, Mail, FileText, Lock, Cookie, Baby, RefreshCcw, Users, MapPin, Database, Eye, Scale, Globe2, Archive, Info } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import { Link } from "react-router-dom";
+import ContentPageShell, { ContentSection } from "@/components/content-page/ContentPageShell";
+import { SectionCard, SectionHeading, SectionDivider, BulletList, LegalFooter, HEADING_FONT } from "@/components/content-page/LegalParts";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-
-const tocItems = [
-  { id: "definitions", label: "1. Definitions" },
-  { id: "scope", label: "2. Scope of Policy" },
-  { id: "collect", label: "3. Information We Collect" },
-  { id: "how-collect", label: "4. How We Collect Information" },
-  { id: "legal-basis", label: "5. Legal Basis for Processing" },
-  { id: "use", label: "6. How We Use Your Information" },
-  { id: "sharing", label: "7. Data Sharing & Third Parties" },
-  { id: "transfers", label: "8. International Transfers" },
-  { id: "retention", label: "9. Data Retention" },
-  { id: "security", label: "10. Data Security" },
-  { id: "rights", label: "11. Your Rights" },
-  { id: "cookies", label: "12. Cookies & Tracking" },
-  { id: "children", label: "13. Children's Privacy" },
-  { id: "changes", label: "14. Changes to This Policy" },
-  { id: "contact-info", label: "15. Contact Information" },
+const SECTIONS: ContentSection[] = [
+  { id: "definitions",  title: "Definitions",                    icon: Info },
+  { id: "scope",        title: "Scope of Policy",                icon: FileText },
+  { id: "collect",      title: "Information We Collect",         icon: Database },
+  { id: "how-collect",  title: "How We Collect Information",     icon: Eye },
+  { id: "legal-basis",  title: "Legal Basis for Processing",     icon: Scale },
+  { id: "use",          title: "How We Use Your Information",    icon: Shield },
+  { id: "sharing",      title: "Data Sharing & Third Parties",   icon: Users },
+  { id: "transfers",    title: "International Transfers",        icon: Globe2 },
+  { id: "retention",    title: "Data Retention",                 icon: Archive },
+  { id: "security",     title: "Data Security",                  icon: Lock },
+  { id: "rights",       title: "Your Rights",                    icon: Shield },
+  { id: "cookies",      title: "Cookies & Tracking",             icon: Cookie },
+  { id: "children",     title: "Children's Privacy",             icon: Baby },
+  { id: "changes",      title: "Changes to This Policy",         icon: RefreshCcw },
+  { id: "contact-info", title: "Contact Information",            icon: Mail },
 ];
 
-const GoldDivider = () => (
-  <div className="py-6">
-    <div className="flex items-center gap-6">
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
-      <Sparkles className="w-3 h-3 text-[#B89555]/40" />
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
-    </div>
-  </div>
-);
+const Privacy = () => (
+  <>
+    <SEOHead
+      title="Privacy Policy | JBJ Global Real Estate"
+      description="Learn how JBJ Global Real Estate collects, uses, processes, and protects your personal data in accordance with UAE data protection principles."
+      canonicalPath="/privacy"
+    />
 
-const ClauseTitle = ({ id, number, children }: { id: string; number: number; children: React.ReactNode }) => (
-  <h2 id={id} className="scroll-mt-24 text-2xl md:text-3xl font-bold text-white mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
-    <span className="text-[#B89555] mr-2">{number}.</span>{children}
-  </h2>
-);
+    <ContentPageShell
+      hero={{
+        eyebrow: "Legal",
+        eyebrowIcon: Shield,
+        title: "Privacy Policy",
+        subtitle: "Your Data. Your Rights. Our Responsibility.",
+        height: "lg",
+      }}
+      sections={SECTIONS}
+      tocTitle="In This Policy"
+    >
+      <section id="definitions" className="scroll-mt-28">
+        <SectionHeading number={1} icon={Info}>Definitions</SectionHeading>
+        <SectionCard className="space-y-3 text-[#1A1A1A]/80 leading-relaxed text-[15px]">
+          <p><strong className="text-[#0d3a2b]">"Personal Data"</strong> — any information that identifies or can identify an individual.</p>
+          <p><strong className="text-[#0d3a2b]">"Processing"</strong> — collection, storage, usage, disclosure, or deletion of personal data.</p>
+          <p><strong className="text-[#0d3a2b]">"User"</strong> — any website visitor or service client.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-const BulletList = ({ items }: { items: string[] }) => (
-  <ul className="space-y-2 ml-1">
-    {items.map((item, i) => (
-      <li key={i} className="flex items-start gap-3 text-[#1A1A1A]/70 leading-relaxed text-[15px]">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#FFC56B]/300 shrink-0 mt-2" />
-        <span>{item}</span>
-      </li>
-    ))}
-  </ul>
-);
+      <section id="scope" className="scroll-mt-28">
+        <SectionHeading number={2} icon={FileText}>Scope of Policy</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">This Policy applies to:</p>
+          <BulletList items={["Website visitors","Clients","Inquiry form submissions","Newsletter subscribers","Service applicants"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-/* Champagne card wrapper — unified with AI Comparison shell */
-const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`relative overflow-hidden p-6 rounded-2xl bg-[#F7F2EA] ${className}`}>
-    <div className="pointer-events-none absolute top-0 right-0 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
-    <div className="pointer-events-none absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
-    <div className="relative z-10">{children}</div>
-  </div>
-);
+      <section id="collect" className="scroll-mt-28">
+        <SectionHeading number={3} icon={Database}>Information We Collect</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-5">We may collect the following categories of personal data:</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {[
+              { title: "A. Identity", items: ["Full name", "Nationality", "Passport copy (where required)"] },
+              { title: "B. Contact", items: ["Email address", "Phone number", "Mailing address"] },
+              { title: "C. Financial", items: ["Investment preferences", "Budget range", "Secure payment provider data"] },
+              { title: "D. Technical", items: ["IP address", "Browser type", "Device type", "Usage analytics"] },
+              { title: "E. Transaction", items: ["Property interests", "Service requests", "Consultation notes"] },
+            ].map((cat) => (
+              <div key={cat.title} className="rounded-xl bg-[#F7F2EA] border border-[#B89555]/20 p-4">
+                <p className="font-semibold text-[#0d3a2b] mb-2" style={HEADING_FONT}>{cat.title}</p>
+                <BulletList items={cat.items} />
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-const Privacy = () => {
-  return (
-    <>
-      <SEOHead title="Privacy Policy | JBJ Global Real Estate" description="Learn how JBJ Global Real Estate collects, uses, processes, and protects your personal data in accordance with UAE data protection principles." canonicalPath="/privacy" />
+      <section id="how-collect" className="scroll-mt-28">
+        <SectionHeading number={4} icon={Eye}>How We Collect Information</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We collect data:</p>
+          <BulletList items={["When you submit inquiry forms","When you request services","When you subscribe to updates","Through cookies and analytics tools","Through direct communication"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-      {/* HERO */}
-      <section data-hero-dark data-surface="dark" className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7E9CC] to-[#EFD9A3] border-b border-[#B89555]/20">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FFD27A]/35 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-[#FFC56B]/30 rounded-full blur-[100px]" />
-        <div className="max-w-5xl mx-auto px-4 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>Privacy Policy</h1>
-            <p className="text-lg md:text-xl text-[#B89555]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>Your Data. Your Rights. Our Responsibility.</p>
-            <p className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl leading-relaxed mb-2">This Privacy Policy explains how we collect, use, process, and protect personal data when you interact with our website and services.</p>
-            <p className="text-[#1A1A1A]/70 text-base max-w-3xl leading-relaxed">We are committed to safeguarding your information in accordance with applicable UAE data protection principles.</p>
-          </motion.div>
-        </div>
+      <section id="legal-basis" className="scroll-mt-28">
+        <SectionHeading number={5} icon={Scale}>Legal Basis for Processing</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We process personal data based on:</p>
+          <BulletList items={["Consent","Contractual necessity","Legal obligations","Legitimate business interests"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="use" className="scroll-mt-28">
+        <SectionHeading number={6} icon={Shield}>How We Use Your Information</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We use data to:</p>
+          <BulletList items={["Provide real estate services","Facilitate Golden Visa applications (via licensed partners)","Provide property management services","Conduct valuations","Respond to inquiries","Improve website functionality","Send relevant communications (if consented)"]} />
+          <div className="mt-6 flex items-start gap-3 rounded-xl border-l-2 border-[#064E3B] bg-[#F7F2EA] p-4">
+            <Shield className="w-5 h-5 text-[#064E3B] shrink-0 mt-0.5" />
+            <p className="text-sm text-[#0d3a2b] font-medium">We do not sell personal data.</p>
+          </div>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="sharing" className="scroll-mt-28">
+        <SectionHeading number={7} icon={Users}>Data Sharing &amp; Third Parties</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We may share data with:</p>
+          <BulletList items={["Licensed immigration consultants","Real estate developers","Legal advisors","Government authorities (where required)","Technology service providers"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">All sharing is done only as necessary and under appropriate safeguards.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="transfers" className="scroll-mt-28">
+        <SectionHeading number={8} icon={Globe2}>International Transfers</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">If data is transferred outside the UAE:</p>
+          <BulletList items={["Reasonable safeguards will be applied","Transfers will comply with applicable laws"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="retention" className="scroll-mt-28">
+        <SectionHeading number={9} icon={Archive}>Data Retention</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We retain personal data only for as long as:</p>
+          <BulletList items={["Necessary to provide services","Required by law","Required for dispute resolution"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">Afterward, data will be securely deleted.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="security" className="scroll-mt-28">
+        <SectionHeading number={10} icon={Lock}>Data Security</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We implement:</p>
+          <BulletList items={["Secure servers","Encrypted communications","Access controls","Internal confidentiality protocols"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">No online transmission is 100% secure, but we apply reasonable protection measures.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="rights" className="scroll-mt-28">
+        <SectionHeading number={11} icon={Shield}>Your Rights</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">Users may have the right to:</p>
+          <BulletList items={["Access their personal data","Request correction","Request deletion (where legally permissible)","Withdraw consent","Request restriction of processing"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">Requests may be submitted via official contact channels.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="cookies" className="scroll-mt-28">
+        <SectionHeading number={12} icon={Cookie}>Cookies &amp; Tracking</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">This website uses cookies for:</p>
+          <BulletList items={["Functionality","Analytics","Performance optimisation"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">
+            Users may manage cookie preferences via browser settings. See our{" "}
+            <a href="/cookies" className="text-[#064E3B] font-medium hover:underline">Cookie Policy</a> for details.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="children" className="scroll-mt-28">
+        <SectionHeading number={13} icon={Baby}>Children's Privacy</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 leading-relaxed">
+            This website is not intended for individuals under 18 years of age. We do not knowingly collect personal data from minors.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="changes" className="scroll-mt-28">
+        <SectionHeading number={14} icon={RefreshCcw}>Changes to This Policy</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 leading-relaxed">
+            We may update this Privacy Policy periodically. Updated versions will be posted on this page.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="contact-info" className="scroll-mt-28">
+        <SectionHeading number={15} icon={Mail}>Contact Information</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">For privacy-related inquiries:</p>
+          <div className="rounded-xl border-l-2 border-[#064E3B] bg-[#F7F2EA] px-4 py-3 space-y-1.5">
+            <p className="flex items-center gap-2 text-[#0d3a2b] font-semibold"><MapPin className="w-4 h-4 text-[#B89555]" />JBJ Global Real Estate</p>
+            <p className="text-[#1A1A1A]/75 text-sm">Dubai, United Arab Emirates</p>
+            <p className="text-sm mt-1">Email: <a href="mailto:privacy@jbj.ae" className="text-[#064E3B] font-medium hover:underline">privacy@jbj.ae</a></p>
+          </div>
+        </SectionCard>
       </section>
 
-      <div className="bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 flex gap-8">
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80 backdrop-blur-sm">
-              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Contents</p>
-              <nav className="space-y-1">
-                {tocItems.map(item => (
-                  <button key={item.id} onClick={() => scrollTo(item.id)} className="block w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] hover:bg-[#EFE6D6]/5 px-3 py-1.5 rounded-lg transition-colors">{item.label}</button>
-                ))}
-              </nav>
-            </div>
-          </aside>
-
-          <main className="flex-1 min-w-0">
-            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80">
-              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                {tocItems.map(item => (<button key={item.id} onClick={() => scrollTo(item.id)} className="text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] px-3 py-1.5 rounded-lg hover:bg-[#EFE6D6]/5 transition-colors">{item.label}</button>))}
-              </div>
-            </div>
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="definitions" number={1}>Definitions</ClauseTitle>
-              <CCard className="space-y-4">
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"Personal Data"</strong> means any information that identifies or can identify an individual.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"Processing"</strong> means collection, storage, usage, disclosure, or deletion of personal data.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"User"</strong> refers to any website visitor or service client.</p>
-              </CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="scope" number={2}>Scope of Policy</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">This Policy applies to:</p><BulletList items={["Website visitors","Clients","Inquiry form submissions","Newsletter subscribers","Service applicants"]} /></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="collect" number={3}>Information We Collect</ClauseTitle>
-              <CCard>
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-6">We may collect the following categories of personal data:</p>
-                <div className="space-y-5">
-                  {[
-                    { title: "A. Identity Information", items: ["Full name", "Nationality", "Passport copy (where required)"] },
-                    { title: "B. Contact Information", items: ["Email address", "Phone number", "Mailing address"] },
-                    { title: "C. Financial Information", items: ["Investment preferences", "Budget range", "Payment method data (where applicable via secure providers)"] },
-                    { title: "D. Technical Information", items: ["IP address", "Browser type", "Device type", "Usage analytics"] },
-                    { title: "E. Transaction Information", items: ["Property interests", "Service requests", "Consultation notes"] },
-                  ].map((cat, i) => (
-                    <div key={i} className="p-5 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
-                      <h3 className="font-semibold text-[#1A1A1A] mb-3" style={{ fontFamily: "Playfair Display, serif" }}>{cat.title}</h3>
-                      <BulletList items={cat.items} />
-                    </div>
-                  ))}
-                </div>
-              </CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="how-collect" number={4}>How We Collect Information</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We collect data:</p><BulletList items={["When you submit inquiry forms","When you request services","When you subscribe to updates","Through cookies and analytics tools","Through direct communication"]} /></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="legal-basis" number={5}>Legal Basis for Processing</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We process personal data based on:</p><BulletList items={["Consent","Contractual necessity","Legal obligations","Legitimate business interests"]} /></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="use" number={6}>How We Use Your Information</ClauseTitle>
-              <CCard>
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We use data to:</p>
-                <BulletList items={["Provide real estate services","Facilitate Golden Visa applications (via licensed partners)","Provide property management services","Conduct valuations","Respond to inquiries","Improve website functionality","Send relevant communications (if consented)"]} />
-                <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
-                  <Shield className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
-                  <p className="text-sm text-[#1A1A1A]/70 font-medium">We do not sell personal data.</p>
-                </div>
-              </CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="sharing" number={7}>Data Sharing & Third Parties</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We may share data with:</p><BulletList items={["Licensed immigration consultants","Real estate developers","Legal advisors","Government authorities (where required)","Technology service providers"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">All sharing is done only as necessary and under appropriate safeguards.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="transfers" number={8}>International Transfers</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">If data is transferred outside the UAE:</p><BulletList items={["Reasonable safeguards will be applied","Transfers will comply with applicable laws"]} /></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="retention" number={9}>Data Retention</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We retain personal data only for as long as:</p><BulletList items={["Necessary to provide services","Required by law","Required for dispute resolution"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">Afterward, data will be securely deleted.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="security" number={10}>Data Security</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">We implement:</p><BulletList items={["Secure servers","Encrypted communications","Access controls","Internal confidentiality protocols"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">No online transmission is 100% secure, but we apply reasonable protection measures.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="rights" number={11}>Your Rights</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">Users may have the right to:</p><BulletList items={["Access their personal data","Request correction","Request deletion (where legally permissible)","Withdraw consent","Request restriction of processing"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">Requests may be submitted via official contact channels.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="cookies" number={12}>Cookies & Tracking</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed mb-4">This website uses cookies for:</p><BulletList items={["Functionality","Analytics","Performance optimization"]} /><p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">Users may manage cookie preferences via browser settings. A detailed <Link to="/cookies" className="text-[#B89555] hover:underline">Cookie Policy</Link> page provides further breakdown.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="children" number={13}>Children's Privacy</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed">This website is not intended for individuals under 18 years of age. We do not knowingly collect personal data from minors.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="changes" number={14}>Changes to This Policy</ClauseTitle>
-              <CCard><p className="text-[#1A1A1A]/70 leading-relaxed">We may update this Privacy Policy periodically. Updated versions will be posted on this page.</p></CCard>
-            </motion.div>
-            <GoldDivider />
-
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="contact-info" number={15}>Contact Information</ClauseTitle>
-              <CCard>
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">For privacy-related inquiries:</p>
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
-                  <Mail className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</p>
-                    <p className="text-[#1A1A1A]/70 text-sm">Dubai, United Arab Emirates</p>
-                    <p className="text-[#1A1A1A]/70 text-sm mt-1">Email: <a href="mailto:privacy@JBJ.ae" className="text-[#B89555] hover:underline">privacy@JBJ.ae</a></p>
-                  </div>
-                </div>
-              </CCard>
-            </motion.div>
-
-            <div className="mt-16 pt-8 border-t border-[#B89555]/15 text-center">
-              <p className="text-[#1A1A1A]/70 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
-              <div className="flex justify-center gap-4 mt-3 text-sm">
-                <Link to="/terms" className="text-[#B89555] hover:underline">Terms of Service</Link>
-                <span className="text-[#1A1A1A]/70">|</span>
-                <Link to="/cookies" className="text-[#B89555] hover:underline">Cookie Policy</Link>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-    </>
-  );
-};
+      <LegalFooter
+        leftLink={{ to: "/terms", label: "Terms of Service" }}
+        rightLink={{ to: "/cookies", label: "Cookie Policy" }}
+      />
+    </ContentPageShell>
+  </>
+);
 
 export default Privacy;
