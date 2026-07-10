@@ -239,7 +239,7 @@ function ServiceCategorySelector({ value, onChange }: { value: string[]; onChang
                         className={
                           "inline-flex min-h-9 items-center gap-2 rounded-full border px-3.5 text-[12px] font-semibold transition " +
                           (active
-                            ? "border-[#064E3B] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_58%,#000_100%)] text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                            ? "allow-white border-[#064E3B] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_58%,#000_100%)] text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                             : "border-[#B89555]/45 bg-white text-[#1A1A1A] hover:border-[#064E3B] hover:bg-[#FDFBF7]")
                         }
                       >
@@ -341,7 +341,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
             data-no-contrast-guard
             data-surface="dark"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-            className="relative isolate inline-flex h-12 w-full overflow-hidden rounded-md items-center justify-center gap-2 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] text-sm font-bold uppercase tracking-[0.14em] !text-white shadow-[0_16px_30px_-14px_rgba(6,78,59,0.85)] transition hover:brightness-110 disabled:opacity-70 [&_svg]:!text-white"
+            className="allow-white relative isolate inline-flex h-12 w-full overflow-hidden rounded-md items-center justify-center gap-2 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] text-sm font-bold uppercase tracking-[0.14em] !text-white shadow-[0_16px_30px_-14px_rgba(6,78,59,0.85)] transition hover:brightness-110 disabled:opacity-70 [&_svg]:!text-white"
           >
             {loading ? (
               <><Loader2 className="w-4 h-4 animate-spin" />Sending…</>
