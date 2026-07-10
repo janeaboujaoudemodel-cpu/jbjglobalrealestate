@@ -34,7 +34,24 @@ export const MarketIntelligenceTableOfContents = ({
 }: MarketIntelligenceTableOfContentsProps) => {
   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const isScrollingRef = useRef(false);
+
+  useEffect(() => {
+    const hero = document.querySelector('[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]') as HTMLElement | null;
+    if (!hero) {
+      setPastHero(true);
+      return;
+    }
+    const check = () => setPastHero(hero.getBoundingClientRect().bottom <= 8);
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
 
   const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
     const target = event.currentTarget;
@@ -89,8 +106,28 @@ export const MarketIntelligenceTableOfContents = ({
   };
 
   return (
-    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-surface="emerald" data-mi-toc data-premium-navigator>
-      {/* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */}
+    <div
+      className={cn(
+        "fixed right-4 top-28 z-[80] hidden lg:block transition-opacity duration-300",
+        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64",
+        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      )}
+      aria-hidden={!pastHero}
+      data-surface="emerald"
+      data-mi-toc
+      data-premium-navigator
+    >
+      {isMinimized ? (
+        <button
+          onClick={() => setIsMinimized(false)}
+          data-surface="emerald"
+          className="h-12 w-12 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+          aria-label="Expand navigation"
+        >
+          <ChevronDown className="w-5 h-5 text-white" />
+        </button>
+      ) : (
+      /* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -102,15 +139,11 @@ export const MarketIntelligenceTableOfContents = ({
             <h3 className="text-sm font-semibold leading-snug text-white">{title}</h3>
           </div>
           <button
-            onClick={() => setIsMinimized(!isMinimized)}
+            onClick={() => setIsMinimized(true)}
             className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors bg-white/10 hover:bg-white/15"
-            aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
+            aria-label="Minimize navigation"
           >
-            {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-white" />
-            ) : (
-              <ChevronUp className="w-4 h-4 text-white" />
-            )}
+            <ChevronUp className="w-4 h-4 text-white" />
           </button>
         </div>
 
@@ -206,6 +239,7 @@ export const MarketIntelligenceTableOfContents = ({
           )}
         </AnimatePresence>
       </motion.div>
+      )}
     </div>
   );
 };

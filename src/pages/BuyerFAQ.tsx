@@ -203,9 +203,7 @@ const BuyerFAQ = () => {
         }
       />
 
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}>
-        <FAQFloatingSidebar categories={categories} title="Navigator" />
-      </div>
+      <FAQFloatingSidebar categories={categories} title="Navigator" />
 
       <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">

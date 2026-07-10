@@ -233,17 +233,14 @@ const RentGuide = () => {
       {/* 3D Book Cover + Table of Contents */}
       <GuideBookSection book={rentGuideBook} sectionIds={tocItems.map(i => i.id)} />
 
-      {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
-        <GuideTableOfContents 
-          items={tocItems}
-          ctaAction={{
-            label: "Find Rentals Now",
-            href: "/properties?transaction=rent",
-            icon: Home
-          }}
-        />
-      </div>
+      <GuideTableOfContents 
+        items={tocItems}
+        ctaAction={{
+          label: "Find Rentals Now",
+          href: "/properties?transaction=rent",
+          icon: Home
+        }}
+      />
 
       {/* How Renting Works in Dubai */}
       <section id="how-renting-works" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">

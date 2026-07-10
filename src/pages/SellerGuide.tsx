@@ -357,17 +357,14 @@ const SellerGuide = () => {
         {/* 3D Book Cover + Table of Contents */}
         <GuideBookSection book={sellerGuideBook} sectionIds={tocItems.map(i => i.id)} />
 
-        {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
-        <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
-          <GuideTableOfContents 
-            items={tocItems}
-            ctaAction={{
-              label: "List Your Property Now",
-              href: "/seller-listing",
-              icon: Building2
-            }}
-          />
-        </div>
+        <GuideTableOfContents 
+          items={tocItems}
+          ctaAction={{
+            label: "List Your Property Now",
+            href: "/seller-listing",
+            icon: Building2
+          }}
+        />
 
         {/* Who This Guide Is For */}
         <section id="who-is-this-for" className="py-16 jj-section-champagne scroll-mt-20">

@@ -226,17 +226,14 @@ const TenantGuide = () => {
       {/* 3D Book Cover + Table of Contents */}
       <GuideBookSection book={tenantGuideBook} sectionIds={tocItems.map(i => i.id)} />
 
-      {/* Sticky Table of Contents */}
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
-        <GuideTableOfContents 
-          items={tocItems}
-          ctaAction={{
-            label: "Find Rentals Now",
-            href: "/properties?transaction=rent",
-            icon: Home
-          }}
-        />
-      </div>
+      <GuideTableOfContents 
+        items={tocItems}
+        ctaAction={{
+          label: "Find Rentals Now",
+          href: "/properties?transaction=rent",
+          icon: Home
+        }}
+      />
 
       {/* Section 1: Understanding the Rental Market */}
       <section id="rental-market" className="jj-section-champagne py-16 md:py-24 scroll-mt-20">

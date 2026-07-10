@@ -41,43 +41,24 @@ export const GuideHero = ({
       data-guide-hero
       data-unified-hero
       data-faq-hero
-      data-surface="champagne"
-      className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden w-screen left-1/2 -translate-x-1/2"
+      data-hero-dark
+      data-surface="emerald"
+      className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden w-screen left-1/2 -translate-x-1/2"
     >
-      {/* Champagne cream base — light hero with black text */}
+      {/* Premium emerald base — no line/grid/stripe overlays. */}
       <div
         className="absolute inset-0"
         aria-hidden="true"
-        style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)" }}
+        style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)" }}
       />
-      <div className="absolute inset-0 z-0">
-        {videoSrc ? (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-25 mix-blend-multiply"
-            poster={videoPoster}
-          >
-            <source src={videoSrc} type="video/mp4" />
-          </video>
-        ) : backgroundImage ? (
-          <div
-            className="w-full h-full bg-cover bg-center opacity-20 mix-blend-multiply"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-          />
-        ) : null}
-      </div>
-      {/* Soft champagne wash to keep text on black readable */}
       <div
-        className="absolute inset-0"
-        aria-hidden="true"
-        style={{ background: "linear-gradient(180deg, rgba(253,251,247,0.55) 0%, rgba(239,230,214,0.65) 100%)" }}
+        className="pointer-events-none absolute inset-0 opacity-45"
+        aria-hidden
+        style={{ background: "radial-gradient(ellipse at 22% 22%, rgba(110,231,183,0.18), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(184,149,85,0.16), transparent 60%)" }}
       />
 
       <motion.div
-        className="relative z-10 w-full py-20 md:py-24"
+        className="relative z-10 w-full"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
@@ -85,27 +66,27 @@ export const GuideHero = ({
         <div className="max-w-4xl mx-auto text-center px-4">
           <motion.div
             className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-sm"
-            style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(26,26,26,0.18)" }}
+            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(184,149,85,0.45)" }}
             variants={fadeInUp}
           >
-            <BadgeIcon className="w-4 h-4" style={{ color: "#1A1A1A" }} />
-            <span className="text-sm font-semibold tracking-wide uppercase" style={{ color: "#1A1A1A" }}>
+            <BadgeIcon className="w-4 h-4" style={{ color: "#E8CF8A" }} />
+            <span className="text-sm font-semibold tracking-wide uppercase" style={{ color: "#E8CF8A" }}>
               {badge}
             </span>
           </motion.div>
 
           <motion.h1
             data-no-contrast-guard
-            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight [&_*]:!text-[#1A1A1A]"
-            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight text-center [&_*]:!text-white"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
           <motion.p
             data-no-contrast-guard
-            className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10"
-            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+            className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10 text-center"
+            style={{ color: "#E8CF8A", WebkitTextFillColor: "#E8CF8A", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             variants={fadeInUp}
           >
             {description}

@@ -18,9 +18,9 @@ interface PremiumEmeraldHeroProps {
 }
 
 const HEIGHTS: Record<NonNullable<PremiumEmeraldHeroProps["height"]>, string> = {
-  sm: "py-14 md:py-16",
-  md: "py-16 md:py-20 lg:py-24",
-  lg: "py-20 md:py-28 lg:py-32",
+  sm: "",
+  md: "",
+  lg: "",
 };
 
 const HEADING_FONT = {
@@ -41,7 +41,7 @@ export function PremiumEmeraldHero({
       data-surface="emerald"
       data-no-contrast-guard
       data-premium-emerald-hero
-      className="relative overflow-hidden border-b border-[#B89555]/25"
+      className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden border-b border-[#B89555]/25"
       style={{
         background:
           "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)",
@@ -57,7 +57,7 @@ export function PremiumEmeraldHero({
         aria-hidden
       />
       <div
-        className={`relative z-10 max-w-4xl mx-auto px-6 text-center ${HEIGHTS[height]}`}
+        className={`relative z-10 w-full max-w-4xl mx-auto px-6 text-center ${HEIGHTS[height]}`}
       >
         <motion.div
           initial={{ opacity: 0, y: 14 }}
@@ -72,7 +72,7 @@ export function PremiumEmeraldHero({
           </div>
           <h1
             data-no-contrast-guard
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.08] tracking-tight mb-5 text-center"
+            className="mx-auto text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.08] tracking-tight mb-5 text-center"
             style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textAlign: "center" }}
           >
             {title}

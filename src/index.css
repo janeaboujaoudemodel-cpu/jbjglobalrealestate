@@ -1905,6 +1905,18 @@ html body [data-radix-checkbox-root][data-state="checked"] svg * {
     }
   }
 
+  /* Centered content-page heroes: the title must sit in the true viewport
+     center while the fixed header floats above it. */
+  html body #root
+    :is([data-premium-emerald-hero], [data-guide-hero], [data-faq-hero], [data-mi-hero]) {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
   /* ============================================================
    * GLOBAL 3-LAYER UI SYSTEM (LOCKED) - v2.0
    * 

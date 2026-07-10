@@ -209,13 +209,10 @@ const FAQ = () => {
       </section>
 
 
-      {/* Floating Sidebar Navigation - Like Buyer Guide (Right Side) - Positioned above chat widget */}
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}>
-        <FAQFloatingSidebar 
-          categories={categories}
-          title="Navigator"
-        />
-      </div>
+      <FAQFloatingSidebar 
+        categories={categories}
+        title="Navigator"
+      />
 
       {/* FAQ Content with Sticky TOC Above */}
       <section id="faq-content" className="bg-[#1A1A1A] relative">

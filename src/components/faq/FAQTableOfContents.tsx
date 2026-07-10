@@ -78,6 +78,22 @@ export const FAQTableOfContents = ({
     setSearchResults(results.slice(0, 5));
   };
 
+  if (isMinimized) {
+    return (
+      <button
+        onClick={() => setIsMinimized(false)}
+        data-surface="emerald"
+        className={cn(
+          "h-12 w-12 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform",
+          sticky ? "sticky top-28 z-40" : ""
+        )}
+        aria-label="Expand navigation"
+      >
+        <ChevronDown className="w-5 h-5 text-white" />
+      </button>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -92,13 +108,12 @@ export const FAQTableOfContents = ({
           <List className="w-4 h-4 text-white" />
           <h3 className="text-sm font-semibold text-white">{title}</h3>
         </div>
-        <button onClick={() => setIsMinimized(!isMinimized)} className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors">
-          {isMinimized ? <ChevronDown className="w-4 h-4 text-white" /> : <ChevronUp className="w-4 h-4 text-white" />}
+        <button onClick={() => setIsMinimized(true)} className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors" aria-label="Minimize navigation">
+          <ChevronUp className="w-4 h-4 text-white" />
         </button>
       </div>
       
       <AnimatePresence initial={false}>
-        {!isMinimized && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col min-h-0 flex-1 overflow-hidden p-2.5">
             <div className="relative mb-3">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/70" />
@@ -137,7 +152,6 @@ export const FAQTableOfContents = ({
               })}
             </nav>
           </motion.div>
-        )}
       </AnimatePresence>
     </motion.div>
   );

@@ -35,39 +35,15 @@ export const FAQHero = ({
   actions 
 }: FAQHeroProps) => {
   return (
-    <section data-hero-dark data-faq-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
+    <section data-hero-dark data-faq-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
 
       {/* Video Background */}
-      {videoUrl && (
-        <div className="absolute inset-0 overflow-hidden">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute w-full h-full object-cover"
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-[#1A1A1A]/70" />
-        </div>
-      )}
-      
-      {/* Image Background Fallback */}
-      {!videoUrl && (
-        <>
-          <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" />
-          {backgroundImage && (
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-30"
-              style={{ backgroundImage: `url(${backgroundImage})` }}
-            />
-          )}
-        </>
-      )}
-      
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+      <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-45"
+        aria-hidden
+        style={{ background: "radial-gradient(ellipse at 22% 22%, rgba(110,231,183,0.18), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(184,149,85,0.16), transparent 60%)" }}
+      />
       
       <motion.div 
         className="container mx-auto px-4 relative z-10"
@@ -78,7 +54,7 @@ export const FAQHero = ({
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div 
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-white/35"
+             className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-[#B89555]/45"
             variants={fadeInUp}
           >
             <BadgeIcon className="w-4 h-4 text-white" />
@@ -87,8 +63,8 @@ export const FAQHero = ({
           
           {/* Title */}
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight allow-white"
-            style={{ color: "#F6FBF8" }}
+            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight allow-white text-center"
+            style={{ color: "#F6FBF8", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             data-no-contrast-guard
             variants={fadeInUp}
           >
@@ -98,7 +74,7 @@ export const FAQHero = ({
           {/* Description */}
           <motion.p 
             className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10 allow-white"
-            style={{ color: "rgba(246,251,248,0.85)" }}
+            style={{ color: "#E8CF8A", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             data-no-contrast-guard
             variants={fadeInUp}
           >
