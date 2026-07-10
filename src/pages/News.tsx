@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { Newspaper, ChevronRight, ArrowLeft, Calendar, TrendingUp, Landmark, Building2, Banknote, Gift, MapPin, Globe } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Newspaper, ChevronRight, Calendar, TrendingUp, Landmark, Building2, Banknote, Gift, MapPin, Globe, Star, PhoneCall, Users } from "lucide-react";
 import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 as topAreas2025Data, topNationalities as topNationalitiesData } from "@/constants/dldMarketData";
 import { isRealEstateArticle } from "@/lib/news/realEstateFilter";
-import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
+import { MarketIntelligenceHero } from "@/components/market-intelligence/MarketIntelligenceHero";
+import { MarketIntelligenceTableOfContents } from "@/components/market-intelligence/MarketIntelligenceTableOfContents";
 
 interface MarketNews {
   id: string;
@@ -228,32 +229,35 @@ const News = () => {
     </div>
   );
 
+  const TOC_ITEMS = [
+    { id: "news-featured", title: "Featured Story", icon: Star },
+    { id: "news-articles", title: "All Articles", icon: Newspaper },
+    { id: "dld-stats-2026", title: "2026 Market Stats", icon: TrendingUp },
+    { id: "nationalities", title: "Top Buyer Nationalities", icon: Globe },
+    { id: "top-areas-2026", title: "Top Areas — 2026", icon: MapPin },
+    { id: "recap-2025", title: "2025 Full Year Recap", icon: Calendar },
+    { id: "top-areas-2025", title: "Top Areas — 2025", icon: MapPin },
+    { id: "reporter", title: "About the Reporter", icon: Users },
+  ];
+
   return (
     <>
       <SEOHead {...pagesSEO.news} />
       <section className="min-h-screen bg-[#FDFBF7]">
-        {/* Dark emerald hero — aligned with Insights/Guides contrast contract */}
-        <section data-guide-hero data-hero-dark className="relative overflow-hidden border-b-0 bg-[linear-gradient(135deg,#064E3B_0%,#022C22_56%,#010806_100%)]">
-          <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_34%),radial-gradient(circle_at_80%_15%,rgba(6,78,59,0.85),transparent_38%)]" aria-hidden="true" />
-          <div className="max-w-[1200px] mx-auto px-6 py-16 md:py-20 relative z-10">
-            <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-8 transition-colors group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span>Back to Home</span>
-            </Link>
+        <MarketIntelligenceHero
+          badge="Dubai Real Estate — Official Sources"
+          badgeIcon={Landmark}
+          title={<>News &amp; Insights</>}
+          description="Curated Dubai & UAE real-estate updates — DLD, RERA, developer launches, off-plan, mortgages, market reports and investor briefings."
+        />
 
-            <div className="max-w-3xl">
-              <SectionEyebrow icon={Landmark} className="mb-5">Dubai Real Estate — Official Sources</SectionEyebrow>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.05] mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
-                News &amp; Insights
-              </h1>
-              <p className="text-white/85 text-lg max-w-2xl leading-relaxed">
-                Curated Dubai &amp; UAE real-estate updates — DLD, RERA, developer launches, off-plan, mortgages, market reports and investor briefings.
-              </p>
-            </div>
-          </div>
-        </section>
+        <MarketIntelligenceTableOfContents
+          items={TOC_ITEMS}
+          title="In This Section"
+          ctaAction={{ label: "Speak With Our Team", href: "/contact", icon: PhoneCall }}
+        />
 
-        {/* Category filter — single champagne pill row, emerald active state via primitive */}
+        {/* Category filter — sticky pill row */}
         <div className="sticky top-0 z-20 bg-[#FDFBF7]/95 backdrop-blur-md border-b border-[#064E3B]/20">
           <div className="max-w-[1200px] mx-auto px-6 py-3">
             <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pr-4">
@@ -281,6 +285,7 @@ const News = () => {
             </div>
           </div>
         </div>
+
 
 
 
@@ -313,6 +318,7 @@ const News = () => {
           </div>
 
           {/* Featured Article */}
+            <div id="news-featured" className="scroll-mt-24" />
           {filteredNews.length > 0 && (
             <div className="mb-12">
               <div className="py-6 px-4 md:px-6">
@@ -389,6 +395,7 @@ const News = () => {
           )}
 
           {/* Rest of Articles Grid */}
+          <div id="news-articles" className="scroll-mt-24" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredNews.slice(1).map((article) => (
               <article 
@@ -474,6 +481,7 @@ const News = () => {
           )}
 
           {/* ===== DLD MARKET STATISTICS SECTION ===== */}
+          <div id="dld-stats-2026" className="scroll-mt-24" />
           
           {/* 2026 YTD Market Stats with YTD / Daily Toggle */}
           <div className="mt-16">
@@ -590,6 +598,7 @@ const News = () => {
           </div>
 
           {/* Top Buyer Nationalities */}
+          <div id="nationalities" className="scroll-mt-24" />
           <div className="mt-6">
             <div className="p-3 md:p-4">
               <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
@@ -625,6 +634,7 @@ const News = () => {
           </div>
 
           {/* Top Areas Performance Table - 2026 */}
+          <div id="top-areas-2026" className="scroll-mt-24" />
           <div className="mt-6">
             <div className="p-3 md:p-4">
               <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
@@ -652,6 +662,7 @@ const News = () => {
           </div>
 
           {/* 2025 Full Year Recap Card — Unified UI */}
+          <div id="recap-2025" className="scroll-mt-24" />
           <div className="mt-4">
             <div className="p-3 md:p-4">
               <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-8 md:p-10 opacity-90">
@@ -711,6 +722,7 @@ const News = () => {
           </div>
 
           {/* Top 10 Areas 2025 */}
+          <div id="top-areas-2025" className="scroll-mt-24" />
           <div className="mt-6">
             <div className="p-3 md:p-4">
               <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8 opacity-90">
@@ -731,6 +743,7 @@ const News = () => {
           </div>
 
           {/* News Reporter Info - Victoria Hayes */}
+          <div id="reporter" className="scroll-mt-24" />
           <div className="mt-8">
             <div className="p-3 md:p-4">
               <div className="bg-[#FDFBF7]/80 border border-[hsl(43,45%,54%)]/15 rounded-2xl p-6 md:p-8">
