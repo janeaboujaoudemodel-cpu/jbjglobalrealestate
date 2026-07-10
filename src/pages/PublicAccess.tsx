@@ -341,7 +341,7 @@ const jbjServicePages: JbjServicePage[] = [
       { icon: TrendingUp, title: "Marketing & campaigns", body: "Performance and brand campaigns across search, social and offline — planned, produced and reported end-to-end.", image: svcBizDev },
       { icon: Globe2, title: "Web development", body: "Corporate sites, landing pages and marketplaces built on modern stacks with SEO, analytics and CMS handover.", image: svcAdvisory },
       { icon: Wrench, title: "App & software development", body: "iOS, Android and web apps — CRM, portals, dashboards and custom software delivered by a senior product team.", image: svcDeveloper },
-      { icon: BookOpenCheck, title: "Content & media production", body: "Photography, film, drone, editorial and social content — everything a premium brand needs to publish consistently.", image: svcLifestyle },
+      { icon: BookOpenCheck, title: "Content & media production", body: "Photography, film, drone, editorial and social content — everything a premium brand needs to publish consistently.", image: svcMediaProduction },
       { icon: Handshake, title: "Business development for brands", body: "Go-to-market strategy, partnerships and launch support for founders scaling a new venture from the UAE.", image: svcBizDev },
     ],
   },
