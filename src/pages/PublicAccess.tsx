@@ -1695,6 +1695,150 @@ export default function PublicAccess() {
 
 
 /* ============================================================================
+ * WelcomePortalOverlay — entry pop-up that explains this is the private access
+ * portal to the full JBJ platform. Shown once per browser, then dismissed.
+ * ==========================================================================*/
+const WELCOME_PORTAL_KEY = "jbj_welcome_portal_dismissed";
+
+function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: () => void; onLogin: () => void }) {
+  const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
+      setOpen(false);
+      return;
+    }
+    try {
+      const dismissed = localStorage.getItem(WELCOME_PORTAL_KEY);
+      if (!dismissed) {
+        const t = window.setTimeout(() => {
+          setOpen(true);
+          // small fade-in staging
+          window.setTimeout(() => setMounted(true), 30);
+        }, 900);
+        return () => window.clearTimeout(t);
+      }
+    } catch {
+      // silent fail
+    }
+  }, [user]);
+
+  const dismiss = () => {
+    try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
+    setMounted(false);
+    const t = window.setTimeout(() => setOpen(false), 220);
+    return () => window.clearTimeout(t);
+  };
+
+  const handleCreateAccount = () => {
+    dismiss();
+    onCreateAccount();
+  };
+
+  const handleLogin = () => {
+    dismiss();
+    onLogin();
+  };
+
+  if (!open) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="jbj-welcome-portal-title"
+      className="fixed inset-0 z-[110] flex items-center justify-center px-4"
+    >
+      <div
+        className={`
+          absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300
+          ${mounted ? "opacity-100" : "opacity-0"}
+        `}
+        onClick={dismiss}
+        aria-hidden
+      />
+      <div
+        data-no-contrast-guard
+        className={`
+          jbj-emerald-animated-border relative w-full max-w-md rounded-2xl p-[2px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55),0_0_40px_rgba(16,185,129,0.28)]
+          transition-all duration-300
+          ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
+        `}
+      >
+        <div
+          data-emerald="true"
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="jj-emerald-metallic allow-white relative flex flex-col items-center rounded-[14px] px-6 py-8 text-center text-white sm:px-8 sm:py-10"
+        >
+          <button
+            type="button"
+            onClick={dismiss}
+            aria-label="Close welcome portal"
+            className="allow-white absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 hover:text-white hover:bg-white/10"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+          </button>
+
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-white backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+            Welcome · Private access portal
+          </span>
+
+          <img
+            data-no-fallback
+            src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
+            alt="JBJ"
+            className="h-20 w-20 object-contain opacity-95 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-24 sm:w-24"
+          />
+
+          <h2 id="jbj-welcome-portal-title" className="mt-5 font-serif text-2xl leading-tight text-white sm:text-3xl">
+            Welcome to JBJ Global Real Estate
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-white/85">
+            This is your private access portal. Create an account or log in to explore the complete property platform, live opportunities, and advisory tools.
+          </p>
+          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#EBD79A]">
+            Unlock the full ecosystem
+          </p>
+
+          <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={handleCreateAccount}
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                backgroundImage: "var(--jj-emerald-ombre)",
+                border: 0,
+                boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+              }}
+            >
+              Create account <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={handleLogin}
+              className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-white/20"
+            >
+              Log in
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ============================================================================
  * SupportGuideOverlay — first-visit modal that explains the difference between
  * the "Contact Us" support hub (WhatsApp/Call/Concierge) and the "Speak to an
  * Advisor" lead form. After "Okay":
