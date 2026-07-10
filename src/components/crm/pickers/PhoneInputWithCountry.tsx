@@ -2,11 +2,12 @@ import { useState, useMemo } from "react";
 import { ChevronsUpDown, Check } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
 import { COUNTRIES, splitE164, findCountryByDial } from "@/data/countries";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  value: string; // E.164 like "+971501234567"
+  value: string;
   onChange: (e164: string) => void;
   placeholder?: string;
   className?: string;
@@ -14,10 +15,8 @@ interface Props {
 }
 
 /**
- * Premium two-field phone input:
- * - Field 1: Country/dial code picker (separate premium field with flag + dial)
- * - Field 2: National mobile number (separate premium field)
- * Both share the same visual system as other form fields.
+ * Premium two-field phone input — both fields share the exact same shape,
+ * size, border, radius and background as every other form field (shadcn Input).
  */
 export default function PhoneInputWithCountry({
   value,
@@ -45,15 +44,20 @@ export default function PhoneInputWithCountry({
     onChange(cleaned ? `${dial}${cleaned}` : "");
   };
 
+  // Trigger mirrors shadcn Input exactly: min-h-11, rounded-lg, px-4, same border via jbj-form-field.
+  const triggerCls =
+    "jbj-form-field flex min-h-11 w-full items-center justify-between gap-2 rounded-lg px-4 py-2 text-base md:text-sm text-[#1A1A1A] transition-all duration-200 focus-visible:outline-none";
+
   return (
     <div className={cn("grid grid-cols-[140px_1fr] gap-3 w-full", className)}>
-      {/* Field 1 — dial code picker */}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
             type="button"
             aria-label="Select country dial code"
-            className="h-10 w-full inline-flex items-center justify-between gap-2 rounded-md border border-[#B89555]/35 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] hover:border-[#B89555]/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/25 transition"
+            data-surface="light"
+            data-jbj-field
+            className={triggerCls}
           >
             <span className="inline-flex items-center gap-2 min-w-0">
               <span className="text-base leading-none">{selectedCountry?.flag || "🏳️"}</span>
@@ -96,15 +100,14 @@ export default function PhoneInputWithCountry({
         </PopoverContent>
       </Popover>
 
-      {/* Field 2 — national number */}
-      <input
+      {/* National number — shadcn Input so shape/size/border match every other field */}
+      <Input
         type="tel"
         inputMode="tel"
         autoComplete="tel-national"
         value={national}
         onChange={(e) => setNational(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-md border border-[#B89555]/35 bg-[#FDFBF7] px-3 text-sm text-[#1A1A1A] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] placeholder:text-[#1A1A1A]/40 hover:border-[#B89555]/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/25 transition"
       />
     </div>
   );
