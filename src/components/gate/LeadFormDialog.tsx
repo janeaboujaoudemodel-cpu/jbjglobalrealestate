@@ -205,7 +205,17 @@ function UserTypePicker({ value, onChange }: { value: string; onChange: (v: stri
   );
 }
 
-function ServiceCategorySelector({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+function ServiceCategorySelector({
+  value,
+  onChange,
+  otherText,
+  onOtherChange,
+}: {
+  value: string[];
+  onChange: (v: string[]) => void;
+  otherText: string;
+  onOtherChange: (v: string) => void;
+}) {
   const [openCategory, setOpenCategory] = useState(SERVICE_CATEGORIES[0].title);
   const toggle = (service: string) => {
     onChange(value.includes(service) ? value.filter((item) => item !== service) : [...value, service]);
@@ -217,7 +227,9 @@ function ServiceCategorySelector({ value, onChange }: { value: string[]; onChang
         {SERVICE_CATEGORIES.map((category) => {
           const Icon = category.icon;
           const isOpen = openCategory === category.title;
+          const isOther = category.title === "Other";
           const selectedCount = category.services.filter((service) => value.includes(service)).length;
+          const otherSummary = isOther && otherText.trim() ? "Custom request added" : null;
           return (
             <div key={category.title} className="overflow-hidden rounded-xl border border-[#B89555]/25 bg-[#FDFBF7]">
               <button
@@ -232,7 +244,7 @@ function ServiceCategorySelector({ value, onChange }: { value: string[]; onChang
                   <span className="min-w-0">
                     <span className="block truncate font-serif text-[17px] leading-tight text-[#0d3a2b]">{category.title}</span>
                     <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[#1A1A1A]/52">
-                      {selectedCount ? `${selectedCount} selected` : "Choose services"}
+                      {otherSummary ?? (selectedCount ? `${selectedCount} selected` : isOther ? "Write your own request" : "Choose services")}
                     </span>
                   </span>
                 </span>
@@ -240,29 +252,40 @@ function ServiceCategorySelector({ value, onChange }: { value: string[]; onChang
               </button>
 
               {isOpen && (
-                <div className="flex flex-wrap gap-2 border-t border-[#B89555]/20 bg-white p-3">
-                  {category.services.map((service) => {
-                    const active = value.includes(service);
-                    return (
-                      <button
-                        key={service}
-                        type="button"
-                        onClick={() => toggle(service)}
-                        data-service-chip={active ? "active" : "inactive"}
-                        {...(active ? { "data-no-contrast-guard": true, "data-surface": "dark" } : {})}
-                        style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
-                        className={
-                          "inline-flex min-h-9 items-center gap-2 rounded-full border px-3.5 text-[12px] font-semibold transition " +
-                          (active
-                            ? "allow-white border-[#064E3B] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_58%,#000_100%)] text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
-                            : "border-[#B89555]/45 bg-white text-[#1A1A1A] hover:border-[#064E3B] hover:bg-[#FDFBF7]")
-                        }
-                      >
-                        {active && <Check className="h-3.5 w-3.5" />}
-                        {service}
-                      </button>
-                    );
-                  })}
+                <div className="border-t border-[#B89555]/20 bg-white p-3">
+                  {isOther ? (
+                    <Textarea
+                      rows={3}
+                      value={otherText}
+                      onChange={(e) => onOtherChange(e.target.value)}
+                      placeholder="Tell us what you need — any service, project or partnership request."
+                    />
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      {category.services.map((service) => {
+                        const active = value.includes(service);
+                        return (
+                          <button
+                            key={service}
+                            type="button"
+                            onClick={() => toggle(service)}
+                            data-service-chip={active ? "active" : "inactive"}
+                            {...(active ? { "data-no-contrast-guard": true, "data-surface": "dark" } : {})}
+                            style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                            className={
+                              "inline-flex min-h-9 items-center gap-2 rounded-full border px-3.5 text-[12px] font-semibold transition " +
+                              (active
+                                ? "allow-white border-[#064E3B] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_58%,#000_100%)] text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                                : "border-[#B89555]/45 bg-white text-[#1A1A1A] hover:border-[#064E3B] hover:bg-[#FDFBF7]")
+                            }
+                          >
+                            {active && <Check className="h-3.5 w-3.5" />}
+                            {service}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
