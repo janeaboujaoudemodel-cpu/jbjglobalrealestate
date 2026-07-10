@@ -138,6 +138,17 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Cron-only authorization: this function performs paid Firecrawl scrapes + AI summarization.
+  // Callers must present the shared NEWS_CRON_SECRET header. Rotates independently of user auth.
+  const cronSecret = Deno.env.get("NEWS_CRON_SECRET");
+  const providedSecret = req.headers.get("x-cron-secret");
+  if (!cronSecret || !providedSecret || providedSecret !== cronSecret) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), {
+      status: 403,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const { action, sources } = await req.json().catch(() => ({ action: "collect" }));
 

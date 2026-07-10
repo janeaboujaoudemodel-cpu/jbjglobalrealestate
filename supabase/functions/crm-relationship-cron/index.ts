@@ -21,7 +21,8 @@ serve(async (req: Request) => {
   try {
     const expected = Deno.env.get("CRM_CRON_SECRET");
     const provided = req.headers.get("x-cron-secret");
-    if (expected && provided && provided !== expected) {
+    // Fail closed: require the secret to be configured AND the header to be present AND matching.
+    if (!expected || !provided || provided !== expected) {
       return new Response(JSON.stringify({ error: "Forbidden" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
