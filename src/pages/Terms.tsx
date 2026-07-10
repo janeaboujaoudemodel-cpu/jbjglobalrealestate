@@ -1,371 +1,210 @@
-import { motion } from "framer-motion";
-import { Scale, Sparkles, Mail } from "lucide-react";
+/**
+ * Terms of Service — rebuilt on ContentPageShell (LOCKED layout).
+ */
+import { Scale, Mail, FileText, User, Ban, Building2, Globe, Handshake, Lock, ShieldAlert, ShieldCheck, Power, Landmark, RefreshCcw, MapPin, Info } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
-import { Link } from "react-router-dom";
+import ContentPageShell, { ContentSection } from "@/components/content-page/ContentPageShell";
+import { SectionCard, SectionHeading, SectionDivider, BulletList, LegalFooter } from "@/components/content-page/LegalParts";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-
-const tocItems = [
-  { id: "definitions", label: "1. Definitions" },
-  { id: "scope", label: "2. Scope of Services" },
-  { id: "eligibility", label: "3. Eligibility" },
-  { id: "responsibilities", label: "4. User Responsibilities" },
-  { id: "listings", label: "5. Property Listings Disclaimer" },
-  { id: "golden-visa", label: "6. Golden Visa & Immigration Disclaimer" },
-  { id: "third-party", label: "7. Third-Party Services" },
-  { id: "ip", label: "8. Intellectual Property" },
-  { id: "liability", label: "9. Limitation of Liability" },
-  { id: "indemnification", label: "10. Indemnification" },
-  { id: "privacy-ref", label: "11. Privacy" },
-  { id: "termination", label: "12. Termination of Access" },
-  { id: "governing-law", label: "13. Governing Law" },
-  { id: "amendments", label: "14. Amendments" },
-  { id: "contact-info", label: "15. Contact Information" },
+const SECTIONS: ContentSection[] = [
+  { id: "definitions",       title: "Definitions",                   icon: Info },
+  { id: "scope",             title: "Scope of Services",             icon: FileText },
+  { id: "eligibility",       title: "Eligibility",                   icon: User },
+  { id: "responsibilities",  title: "User Responsibilities",         icon: ShieldAlert },
+  { id: "listings",          title: "Property Listings Disclaimer",  icon: Building2 },
+  { id: "golden-visa",       title: "Golden Visa Disclaimer",        icon: Globe },
+  { id: "third-party",       title: "Third-Party Services",          icon: Handshake },
+  { id: "ip",                title: "Intellectual Property",         icon: Lock },
+  { id: "liability",         title: "Limitation of Liability",       icon: ShieldAlert },
+  { id: "indemnification",   title: "Indemnification",               icon: ShieldCheck },
+  { id: "privacy-ref",       title: "Privacy",                       icon: Lock },
+  { id: "termination",       title: "Termination of Access",         icon: Power },
+  { id: "governing-law",     title: "Governing Law",                 icon: Landmark },
+  { id: "amendments",        title: "Amendments",                    icon: RefreshCcw },
+  { id: "contact-info",      title: "Contact Information",           icon: Mail },
 ];
 
-const GoldDivider = () => (
-  <div className="py-6">
-    <div className="flex items-center gap-6">
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
-      <Sparkles className="w-3 h-3 text-[#B89555]/40" />
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
-    </div>
-  </div>
-);
+const Terms = () => (
+  <>
+    <SEOHead
+      title="Terms of Service | JBJ Global Real Estate"
+      description="Terms and conditions governing use of the JBJ Global Real Estate platform, services, and related advisory offerings in the UAE."
+      canonicalPath="/terms"
+    />
 
-const ClauseTitle = ({ id, number, children }: { id: string; number: number; children: React.ReactNode }) => (
-  <h2 id={id} className="scroll-mt-24 text-2xl md:text-3xl font-bold text-white mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
-    <span className="text-[#B89555] mr-2">{number}.</span>{children}
-  </h2>
-);
+    <ContentPageShell
+      hero={{
+        eyebrow: "Legal",
+        eyebrowIcon: Scale,
+        title: "Terms of Service",
+        subtitle: "Conditions Governing Use of Our Platform",
+        height: "lg",
+      }}
+      sections={SECTIONS}
+      tocTitle="In These Terms"
+    >
+      <section id="definitions" className="scroll-mt-28">
+        <SectionHeading number={1} icon={Info}>Definitions</SectionHeading>
+        <SectionCard className="space-y-3 text-[#1A1A1A]/80 leading-relaxed text-[15px]">
+          <p><strong className="text-[#0d3a2b]">"Platform"</strong> — this website and all digital services operated by the Company.</p>
+          <p><strong className="text-[#0d3a2b]">"Company"</strong> — JBJ Global Real Estate L.L.C. S.O.C, a licensed real estate brokerage registered in the United Arab Emirates.</p>
+          <p><strong className="text-[#0d3a2b]">"User"</strong> — any individual or entity accessing or using the Platform.</p>
+          <p><strong className="text-[#0d3a2b]">"Services"</strong> — the real estate advisory, consultancy, coordination, and digital tools provided through the Platform.</p>
+          <p><strong className="text-[#0d3a2b]">"Third-Party Providers"</strong> — external service providers, developers, legal firms, or government-approved entities engaged in connection with our Services.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-const BulletList = ({ items }: { items: string[] }) => (
-  <ul className="space-y-2 ml-1">
-    {items.map((item, i) => (
-      <li key={i} className="flex items-start gap-3 text-[#1A1A1A]/70 leading-relaxed text-[15px]">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#FFC56B]/300 shrink-0 mt-2" />
-        <span>{item}</span>
-      </li>
-    ))}
-  </ul>
-);
+      <section id="scope" className="scroll-mt-28">
+        <SectionHeading number={2} icon={FileText}>Scope of Services</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">The Platform provides:</p>
+          <BulletList items={["Real estate listings and property information","Property consultancy and advisory services","Developer information and project intelligence","Property management services","Valuation coordination","Golden Visa assistance coordination (via licensed partners)","Related advisory and digital tools"]} />
+          <div className="mt-6 flex items-start gap-3 rounded-xl border-l-2 border-[#064E3B] bg-[#F7F2EA] p-4">
+            <Scale className="w-5 h-5 text-[#064E3B] shrink-0 mt-0.5" />
+            <p className="text-sm text-[#0d3a2b]">The Company is a licensed real estate brokerage. It is not a government authority, legal firm, or financial institution.</p>
+          </div>
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-const Terms = () => {
-  return (
-    <>
-      <SEOHead
-        title="Terms of Service | JBJ Global Real Estate"
-        description="Terms and conditions governing use of the JBJ Global Real Estate platform, services, and related advisory offerings in the UAE."
-        canonicalPath="/terms"
-      />
+      <section id="eligibility" className="scroll-mt-28">
+        <SectionHeading number={3} icon={User}>Eligibility</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">By using this Platform, you confirm that you:</p>
+          <BulletList items={["Are at least 18 years of age","Will use the Platform and Services lawfully and in good faith","Will provide accurate and truthful information in all submissions"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-      {/* HERO */}
-      <section data-hero-dark data-surface="dark" className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7E9CC] to-[#EFD9A3] border-b border-[#B89555]/20">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FFD27A]/35 via-transparent to-transparent" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-[#FFC56B]/30 rounded-full blur-[100px]" />
+      <section id="responsibilities" className="scroll-mt-28">
+        <SectionHeading number={4} icon={ShieldAlert}>User Responsibilities</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">Users shall not:</p>
+          <BulletList items={["Misuse or interfere with the Platform's functionality or security","Provide false, misleading, or fraudulent documents or information","Attempt to deceive the Company, its partners, or other users","Engage in any activity that violates applicable UAE law or regulations","Reproduce, redistribute, or commercially exploit Platform content without authorisation"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-        <div className="max-w-5xl mx-auto px-4 relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
-              Terms of Service
-            </h1>
+      <section id="listings" className="scroll-mt-28">
+        <SectionHeading number={5} icon={Building2}>Property Listings &amp; Information Accuracy</SectionHeading>
+        <SectionCard>
+          <BulletList items={["Property listings are provided for informational purposes only","Prices, availability, specifications, and imagery may change without notice","No guarantee of transaction completion is implied or provided","Final agreements are executed between buyer, seller, and relevant transacting parties","The Company does not warrant the accuracy of third-party information displayed on the Platform"]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-            <p className="text-lg md:text-xl text-[#B89555]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
-              Conditions Governing Use of Our Platform
-            </p>
+      <section id="golden-visa" className="scroll-mt-28">
+        <SectionHeading number={6} icon={Globe}>Golden Visa &amp; Immigration Disclaimer</SectionHeading>
+        <SectionCard className="space-y-4 text-[#1A1A1A]/80 leading-relaxed">
+          <p>The Platform does not grant, issue, or approve visas or residency permits.</p>
+          <p>We coordinate with licensed, government-approved immigration partners to facilitate the application process on behalf of eligible clients.</p>
+          <p>Final approval of any visa or residency application rests solely with the relevant UAE government authorities, including the Federal Authority for Identity, Citizenship, Customs &amp; Port Security (ICP) and the General Directorate of Residency and Foreigners Affairs (GDRFA).</p>
+          <p className="font-medium text-[#0d3a2b]">We do not guarantee approval of any application.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-            <p className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl leading-relaxed mb-2">
-              These Terms of Service ("Terms") govern your access to and use of this website and all related services. By accessing or using the platform, you agree to be legally bound by these Terms.
-            </p>
-            <p className="text-[#1A1A1A]/70 text-base max-w-3xl leading-relaxed">
-              If you do not agree, you must discontinue use immediately.
-            </p>
-          </motion.div>
-        </div>
+      <section id="third-party" className="scroll-mt-28">
+        <SectionHeading number={7} icon={Handshake}>Third-Party Services</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">In delivering our Services, we may engage or coordinate with:</p>
+          <BulletList items={["Real estate developers","Licensed legal firms","Certified valuation companies","Government processing and immigration partners","Technology and payment service providers"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">The Company is not liable for delays, errors, omissions, or outcomes arising from third-party services.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="ip" className="scroll-mt-28">
+        <SectionHeading number={8} icon={Lock}>Intellectual Property</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">All content on this Platform, including but not limited to:</p>
+          <BulletList items={["Branding, logos, and trademarks","Website design and user interface","Written content, reports, and analyses","Graphics, images, and visual assets","Platform architecture and proprietary tools"]} />
+          <p className="text-[#1A1A1A]/80 mt-4">is the exclusive property of the Company and is protected under applicable intellectual property laws.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="liability" className="scroll-mt-28">
+        <SectionHeading number={9} icon={ShieldAlert}>Limitation of Liability</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">To the maximum extent permitted by applicable law, the Company shall not be held liable for:</p>
+          <BulletList items={["Changes in market conditions or property values","Developer delays, construction issues, or project cancellations","Changes in government policy, regulation, or visa requirements","Rejection or non-approval of visa or residency applications","Investment losses or financial outcomes arising from property transactions","Service interruptions, technical errors, or data loss on the Platform"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">Users acknowledge that real estate transactions and immigration processes carry inherent risks and should seek independent professional advice.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="indemnification" className="scroll-mt-28">
+        <SectionHeading number={10} icon={ShieldCheck}>Indemnification</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 leading-relaxed">
+            Users agree to indemnify, defend, and hold harmless the Company, its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, or expenses arising from or related to the User's misuse of the Platform, violation of these Terms, or breach of applicable law.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="privacy-ref" className="scroll-mt-28">
+        <SectionHeading number={11} icon={Lock}>Privacy</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 leading-relaxed">
+            Your use of this Platform is also governed by our{" "}
+            <a href="/privacy" className="text-[#064E3B] font-medium hover:underline">Privacy Policy</a>,
+            which outlines how we collect, use, process, and protect your personal data.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="termination" className="scroll-mt-28">
+        <SectionHeading number={12} icon={Power}>Termination of Access</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">The Company reserves the right, at its sole discretion, to:</p>
+          <BulletList items={["Suspend or terminate user accounts","Restrict access to the Platform or specific features","Remove content that violates these Terms or applicable law"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">Such actions may be taken without prior notice where reasonably necessary.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="governing-law" className="scroll-mt-28">
+        <SectionHeading number={13} icon={Landmark}>Governing Law</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 leading-relaxed">
+            These Terms shall be governed by and construed in accordance with the laws of the United Arab Emirates. Any disputes arising from or in connection with these Terms shall be subject to the exclusive jurisdiction of the competent courts in the UAE.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="amendments" className="scroll-mt-28">
+        <SectionHeading number={14} icon={RefreshCcw}>Amendments</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 leading-relaxed">
+            The Company reserves the right to update or modify these Terms at any time. Updated Terms will be posted on this page. Continued use of the Platform following any changes constitutes acceptance of those changes.
+          </p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="contact-info" className="scroll-mt-28">
+        <SectionHeading number={15} icon={Mail}>Contact Information</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">For questions regarding these Terms:</p>
+          <div className="rounded-xl border-l-2 border-[#064E3B] bg-[#F7F2EA] px-4 py-3 space-y-1.5">
+            <p className="flex items-center gap-2 text-[#0d3a2b] font-semibold"><MapPin className="w-4 h-4 text-[#B89555]" />JBJ Global Real Estate</p>
+            <p className="text-[#1A1A1A]/75 text-sm">Dubai, United Arab Emirates</p>
+            <p className="text-sm mt-1">Email: <a href="mailto:legal@jbj.ae" className="text-[#064E3B] font-medium hover:underline">legal@jbj.ae</a></p>
+          </div>
+        </SectionCard>
       </section>
 
-      {/* LAYOUT */}
-      <div className="bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 flex gap-8">
-
-          {/* Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80 backdrop-blur-sm">
-              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Contents</p>
-              <nav className="space-y-1">
-                {tocItems.map(item => (
-                  <button key={item.id} onClick={() => scrollTo(item.id)}
-                    className="block w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] hover:bg-[#EFE6D6]/5 px-3 py-1.5 rounded-lg transition-colors"
-                  >{item.label}</button>
-                ))}
-              </nav>
-            </div>
-          </aside>
-
-          {/* Main */}
-          <main className="flex-1 min-w-0">
-
-            {/* Mobile TOC */}
-            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80">
-              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                {tocItems.map(item => (
-                  <button key={item.id} onClick={() => scrollTo(item.id)}
-                    className="text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] px-3 py-1.5 rounded-lg hover:bg-[#EFE6D6]/5 transition-colors"
-                  >{item.label}</button>
-                ))}
-              </div>
-            </div>
-
-            {/* 1 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="definitions" number={1}>Definitions</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA] space-y-4">
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"Platform"</strong> refers to this website and all digital services operated by the Company.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"Company"</strong> refers to JBJ Global Real Estate L.L.C. S.O.C, a licensed real estate brokerage registered in the United Arab Emirates.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"User"</strong> refers to any individual or entity accessing or using the Platform.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"Services"</strong> refers to the real estate advisory, consultancy, coordination, and digital tools provided through the Platform.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed"><strong className="text-[#1A1A1A]">"Third-Party Providers"</strong> refers to external service providers, developers, legal firms, or government-approved entities engaged in connection with our Services.</p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 2 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="scope" number={2}>Scope of Services</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">The Platform provides:</p>
-                <BulletList items={[
-                  "Real estate listings and property information",
-                  "Property consultancy and advisory services",
-                  "Developer information and project intelligence",
-                  "Property management services",
-                  "Valuation coordination",
-                  "Golden Visa assistance coordination (via licensed partners)",
-                  "Related advisory and digital tools",
-                ]} />
-                <div className="mt-6 flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
-                  <Scale className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
-                  <p className="text-sm text-[#1A1A1A]/70">The Company is a licensed real estate brokerage. It is not a government authority, legal firm, or financial institution.</p>
-                </div>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 3 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="eligibility" number={3}>Eligibility</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">By using this Platform, you confirm that you:</p>
-                <BulletList items={[
-                  "Are at least 18 years of age",
-                  "Will use the Platform and Services lawfully and in good faith",
-                  "Will provide accurate and truthful information in all submissions",
-                ]} />
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 4 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="responsibilities" number={4}>User Responsibilities</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">Users shall not:</p>
-                <BulletList items={[
-                  "Misuse or interfere with the Platform's functionality or security",
-                  "Provide false, misleading, or fraudulent documents or information",
-                  "Attempt to deceive the Company, its partners, or other users",
-                  "Engage in any activity that violates applicable UAE law or regulations",
-                  "Reproduce, redistribute, or commercially exploit Platform content without authorization",
-                ]} />
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 5 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="listings" number={5}>Property Listings & Information Accuracy</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <BulletList items={[
-                  "Property listings are provided for informational purposes only",
-                  "Prices, availability, specifications, and imagery may change without notice",
-                  "No guarantee of transaction completion is implied or provided",
-                  "Final agreements are executed between buyer, seller, and relevant transacting parties",
-                  "The Company does not warrant the accuracy of third-party information displayed on the Platform",
-                ]} />
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 6 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="golden-visa" number={6}>Golden Visa & Immigration Disclaimer</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA] space-y-4">
-                <p className="text-[#1A1A1A]/70 leading-relaxed">The Platform does not grant, issue, or approve visas or residency permits.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed">We coordinate with licensed, government-approved immigration partners to facilitate the application process on behalf of eligible clients.</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed">Final approval of any visa or residency application rests solely with the relevant UAE government authorities, including the Federal Authority for Identity, Citizenship, Customs & Port Security (ICP) and the General Directorate of Residency and Foreigners Affairs (GDRFA).</p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed font-medium">We do not guarantee approval of any application.</p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 7 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="third-party" number={7}>Third-Party Services</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">In delivering our Services, we may engage or coordinate with:</p>
-                <BulletList items={[
-                  "Real estate developers",
-                  "Licensed legal firms",
-                  "Certified valuation companies",
-                  "Government processing and immigration partners",
-                  "Technology and payment service providers",
-                ]} />
-                <p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">
-                  The Company is not liable for delays, errors, omissions, or outcomes arising from third-party services.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 8 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="ip" number={8}>Intellectual Property</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">All content on this Platform, including but not limited to:</p>
-                <BulletList items={[
-                  "Branding, logos, and trademarks",
-                  "Website design and user interface",
-                  "Written content, reports, and analyses",
-                  "Graphics, images, and visual assets",
-                  "Platform architecture and proprietary tools",
-                ]} />
-                <p className="text-[#1A1A1A]/70 leading-relaxed mt-4">
-                  is the exclusive property of the Company and is protected under applicable intellectual property laws. Users may not copy, reproduce, distribute, or commercially exploit any content without prior written authorization.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 9 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="liability" number={9}>Limitation of Liability</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">To the maximum extent permitted by applicable law, the Company shall not be held liable for:</p>
-                <BulletList items={[
-                  "Changes in market conditions or property values",
-                  "Developer delays, construction issues, or project cancellations",
-                  "Changes in government policy, regulation, or visa requirements",
-                  "Rejection or non-approval of visa or residency applications",
-                  "Investment losses or financial outcomes arising from property transactions",
-                  "Service interruptions, technical errors, or data loss on the Platform",
-                ]} />
-                <p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">
-                  Users acknowledge that real estate transactions and immigration processes carry inherent risks and should seek independent professional advice where appropriate.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 10 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="indemnification" number={10}>Indemnification</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed">
-                  Users agree to indemnify, defend, and hold harmless the Company, its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, or expenses arising from or related to the User's misuse of the Platform, violation of these Terms, or breach of applicable law.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 11 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="privacy-ref" number={11}>Privacy</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed">
-                  Your use of this Platform is also governed by our <Link to="/privacy" className="text-[#B89555] font-medium hover:underline">Privacy Policy</Link>, which outlines how we collect, use, process, and protect your personal data.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 12 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="termination" number={12}>Termination of Access</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">The Company reserves the right to, at its sole discretion:</p>
-                <BulletList items={[
-                  "Suspend or terminate user accounts",
-                  "Restrict access to the Platform or specific features",
-                  "Remove content that violates these Terms or applicable law",
-                ]} />
-                <p className="text-[#1A1A1A]/70 text-sm mt-4 leading-relaxed">
-                  Such actions may be taken without prior notice where reasonably necessary.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 13 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="governing-law" number={13}>Governing Law</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed">
-                  These Terms shall be governed by and construed in accordance with the laws of the United Arab Emirates. Any disputes arising from or in connection with these Terms shall be subject to the exclusive jurisdiction of the competent courts in the UAE.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 14 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="amendments" number={14}>Amendments</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed">
-                  The Company reserves the right to update or modify these Terms at any time. Updated Terms will be posted on this page. Continued use of the Platform following any changes constitutes acceptance of those changes.
-                </p>
-              </div>
-            </motion.div>
-            <GoldDivider />
-
-            {/* 15 */}
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              <ClauseTitle id="contact-info" number={15}>Contact Information</ClauseTitle>
-              <div className="p-6 rounded-2xl bg-[#F7F2EA]">
-                <p className="text-[#1A1A1A]/70 leading-relaxed mb-4">For questions regarding these Terms:</p>
-                <div className="flex items-start gap-3 p-4 rounded-xl bg-[#EFE6D6]/10 border border-[#B89555]/20">
-                  <Mail className="w-5 h-5 text-[#B89555] shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-[#1A1A1A] font-semibold">JBJ Global Real Estate</p>
-                    <p className="text-[#1A1A1A]/70 text-sm">Dubai, United Arab Emirates</p>
-                    <p className="text-[#1A1A1A]/70 text-sm mt-1">Email: <a href="mailto:legal@JBJ.ae" className="text-[#B89555] hover:underline">legal@JBJ.ae</a></p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Footer */}
-            <div className="mt-16 pt-8 border-t border-[#B89555]/15 text-center">
-              <p className="text-[#1A1A1A]/70 text-sm">
-                &copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
-              </p>
-              <div className="flex justify-center gap-4 mt-3 text-sm">
-                <Link to="/privacy" className="text-[#B89555] hover:underline">Privacy Policy</Link>
-                <span className="text-[#1A1A1A]/70">|</span>
-                <Link to="/cookies" className="text-[#B89555] hover:underline">Cookie Policy</Link>
-              </div>
-            </div>
-
-          </main>
-        </div>
-      </div>
-    </>
-  );
-};
+      <LegalFooter
+        leftLink={{ to: "/privacy", label: "Privacy Policy" }}
+        rightLink={{ to: "/cookies", label: "Cookie Policy" }}
+      />
+    </ContentPageShell>
+  </>
+);
 
 export default Terms;

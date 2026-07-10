@@ -1,218 +1,145 @@
-import { Link } from "react-router-dom";
-import { ChevronLeft, Scale } from "lucide-react";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+/**
+ * Cookie Policy — rebuilt on ContentPageShell (LOCKED layout).
+ */
+import { Cookie, Layers, Settings2, Handshake, SlidersHorizontal, Database, RefreshCcw, Mail, MapPin } from "lucide-react";
 import SEOHead from "@/components/SEOHead";
+import ContentPageShell, { ContentSection } from "@/components/content-page/ContentPageShell";
+import { SectionCard, SectionHeading, SectionDivider, BulletList, LegalFooter, HEADING_FONT } from "@/components/content-page/LegalParts";
 
-const GoldDivider = () => (
-  <div className="py-6">
-    <div className="flex items-center gap-6">
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
-      <div className="w-1.5 h-1.5 rounded-full bg-[#EFE6D6]/40" />
-      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#EFE6D6]/30 to-transparent" />
-    </div>
-  </div>
-);
-
-const tocItems = [
-  { id: "what-are-cookies", label: "What Are Cookies" },
-  { id: "types-of-cookies", label: "Types of Cookies We Use" },
-  { id: "how-we-use-cookies", label: "How We Use Cookies" },
-  { id: "third-party-cookies", label: "Third-Party Cookies" },
-  { id: "managing-cookies", label: "Managing Cookies" },
-  { id: "data-collected", label: "Data Collected Through Cookies" },
-  { id: "changes", label: "Changes to This Policy" },
-  { id: "contact", label: "Contact Information" },
+const SECTIONS: ContentSection[] = [
+  { id: "what-are-cookies",   title: "What Are Cookies",             icon: Cookie },
+  { id: "types-of-cookies",   title: "Types of Cookies We Use",      icon: Layers },
+  { id: "how-we-use-cookies", title: "How We Use Cookies",           icon: Settings2 },
+  { id: "third-party-cookies",title: "Third-Party Cookies",          icon: Handshake },
+  { id: "managing-cookies",   title: "Managing Cookies",             icon: SlidersHorizontal },
+  { id: "data-collected",     title: "Data Collected",               icon: Database },
+  { id: "changes",            title: "Changes to This Policy",       icon: RefreshCcw },
+  { id: "contact",            title: "Contact Information",          icon: Mail },
 ];
 
-const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`relative overflow-hidden bg-[#F7F2EA] rounded-2xl p-6 ${className}`}>
-    <div className="pointer-events-none absolute top-0 right-0 w-64 h-64 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
-    <div className="pointer-events-none absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-3xl" />
-    <div className="relative z-10">{children}</div>
-  </div>
-);
+const Cookies = () => (
+  <>
+    <SEOHead
+      title="Cookie Policy | JBJ Global Real Estate"
+      description="How JBJ Global Real Estate uses cookies and similar technologies to enhance your experience on our platform."
+      canonicalPath="/cookies"
+    />
 
-const Cookies = () => {
-  const [activeSection, setActiveSection] = useState("");
+    <ContentPageShell
+      hero={{
+        eyebrow: "Legal",
+        eyebrowIcon: Cookie,
+        title: "Cookie Policy",
+        subtitle: "Transparency in How We Use Technology",
+        height: "lg",
+      }}
+      sections={SECTIONS}
+      tocTitle="In This Policy"
+    >
+      <section id="what-are-cookies" className="scroll-mt-28">
+        <SectionHeading number={1} icon={Cookie}>What Are Cookies</SectionHeading>
+        <SectionCard className="space-y-4 text-[#1A1A1A]/80 leading-relaxed">
+          <p>Cookies are small text files placed on your device when you visit a website. They help websites function properly, improve user experience, and gather analytics data.</p>
+          <p>Cookies may be:</p>
+          <BulletList items={[
+            <><strong className="text-[#0d3a2b]">Session-based</strong> — deleted when the browser is closed</>,
+            <><strong className="text-[#0d3a2b]">Persistent</strong> — remain on the device for a defined period</>,
+          ]} />
+        </SectionCard>
+      </section>
+      <SectionDivider />
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach((entry) => { if (entry.isIntersecting) setActiveSection(entry.target.id); }); },
-      { rootMargin: "-20% 0px -60% 0px" }
-    );
-    tocItems.forEach(({ id }) => { const el = document.getElementById(id); if (el) observer.observe(el); });
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollTo = (id: string) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); };
-
-  return (
-    <>
-      <SEOHead
-        title="Cookie Policy | JBJ Global Real Estate"
-        description="How JBJ Global Real Estate uses cookies and similar technologies to enhance your experience on our platform."
-        canonicalPath="/cookies"
-      />
-
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-        {/* Hero — standardized */}
-        <section data-hero-dark data-surface="dark" className="relative py-28 md:py-36 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7E9CC] to-[#EFD9A3] border-b border-[#B89555]/20">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#FFD27A]/35 via-transparent to-transparent" />
-          <div className="absolute top-20 right-20 w-72 h-72 bg-[#FFC56B]/30 rounded-full blur-[100px]" />
-          <div className="max-w-5xl mx-auto px-4 relative z-10">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1A1A1A] mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>
-                Cookie Policy
-              </h1>
-              <p className="text-lg md:text-xl text-[#B89555]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
-                Transparency in How We Use Technology
-              </p>
-              <p className="text-[#1A1A1A]/70 text-base md:text-lg max-w-3xl leading-relaxed">
-                This Cookie Policy explains how our website uses cookies and similar technologies to enhance user experience, analyse performance, and deliver relevant services.
-              </p>
-              <p className="text-[#1A1A1A]/70 text-sm mt-6">Last updated: February 2026</p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Body — standardized layout */}
-        <div className="max-w-6xl mx-auto px-4 py-12 md:py-16 flex gap-8">
-          {/* Sidebar TOC */}
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80 backdrop-blur-sm">
-              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Contents</p>
-              <nav className="space-y-1 border-l border-[#B89555]/20">
-                {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#B89555] text-[#B89555] font-medium" : "border-transparent text-[#1A1A1A]/70 hover:text-[#B89555] hover:bg-[#EFE6D6]/5"}`}>{label}</button>
-                ))}
-              </nav>
-            </div>
-          </aside>
-
-          <main className="flex-1 min-w-0">
-            {/* Mobile TOC */}
-            <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#B89555]/20 bg-[#1a1714]/80">
-              <p className="text-xs text-[#B89555] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">
-                {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-[#1A1A1A]/70 hover:text-[#B89555] px-3 py-1.5 rounded-lg transition-colors">{label}</button>
-                ))}
-              </nav>
-            </div>
-
-            <section id="what-are-cookies" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">1.</span>What Are Cookies</h2>
-              <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">
-                <p>Cookies are small text files placed on your device when you visit a website. They help websites function properly, improve user experience, and gather analytics data.</p>
-                <p>Cookies may be:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong className="text-[#1A1A1A]">Session-based</strong> — deleted when the browser is closed</li>
-                  <li><strong className="text-[#1A1A1A]">Persistent</strong> — remain on the device for a defined period</li>
-                </ul>
-              </CCard>
-            </section>
-            <GoldDivider />
-
-            <section id="types-of-cookies" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">2.</span>Types of Cookies We Use</h2>
-              <div className="space-y-4">
-                {[
-                  { title: "A. Essential Cookies", desc: "These cookies are required for basic website functionality, including:", items: ["Secure login sessions", "Form submissions", "Navigation functionality"], note: "Without these cookies, the website may not function properly." },
-                  { title: "B. Performance & Analytics Cookies", desc: "These cookies collect anonymised data to:", items: ["Understand user behaviour", "Measure traffic", "Improve website performance"], note: "Examples include analytics tools that track page views and interactions." },
-                  { title: "C. Functional Cookies", desc: "These cookies allow:", items: ["Language preferences", "Saved settings", "User experience customisation"], note: "" },
-                  { title: "D. Marketing / Advertising Cookies", desc: "If used, these cookies may:", items: ["Track engagement", "Provide targeted advertising", "Measure campaign performance"], note: "Marketing cookies are only activated where applicable and with appropriate consent mechanisms in place." },
-                ].map((c, i) => (
-                  <CCard key={i}>
-                    <h3 className="text-lg font-semibold text-[#1A1A1A] mb-3">{c.title}</h3>
-                    <p className="text-[#1A1A1A]/70 leading-relaxed mb-3">{c.desc}</p>
-                    <ul className="list-disc pl-6 space-y-1.5 text-[#1A1A1A]/70">{c.items.map((it, j) => <li key={j}>{it}</li>)}</ul>
-                    {c.note && <p className="text-[#1A1A1A]/70 text-sm mt-3 italic">{c.note}</p>}
-                  </CCard>
-                ))}
-              </div>
-            </section>
-            <GoldDivider />
-
-            <section id="how-we-use-cookies" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">3.</span>How We Use Cookies</h2>
-              <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">
-                <p>Cookies are used to:</p>
-                <ul className="list-disc pl-6 space-y-1.5"><li>Ensure website stability</li><li>Enhance security</li><li>Improve user navigation</li><li>Analyse performance</li><li>Optimise digital services</li></ul>
-                <p className="text-[#1A1A1A]/70 text-sm mt-2">Cookies do not grant us access to your device beyond stored cookie data.</p>
-              </CCard>
-            </section>
-            <GoldDivider />
-
-            <section id="third-party-cookies" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">4.</span>Third-Party Cookies</h2>
-              <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">
-                <p>We may use trusted third-party providers for:</p>
-                <ul className="list-disc pl-6 space-y-1.5"><li>Analytics</li><li>Security monitoring</li><li>Hosting infrastructure</li></ul>
-                <p>These providers may place their own cookies subject to their respective privacy policies.</p>
-                <p className="text-[#1A1A1A]/70 text-sm">We do not control third-party cookie practices.</p>
-              </CCard>
-            </section>
-            <GoldDivider />
-
-            <section id="managing-cookies" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">5.</span>Managing Cookies</h2>
-              <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">
-                <p>Users can:</p>
-                <ul className="list-disc pl-6 space-y-1.5"><li>Accept or reject cookies via browser settings</li><li>Delete existing cookies</li><li>Configure cookie alerts</li></ul>
-                <div className="mt-4 bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg p-4">
-                  <p className="text-[#1A1A1A]/70 text-sm">Please note that disabling certain cookies may impact website functionality and your overall experience.</p>
-                </div>
-              </CCard>
-            </section>
-            <GoldDivider />
-
-            <section id="data-collected" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">6.</span>Data Collected Through Cookies</h2>
-              <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">
-                <p>Cookies may collect:</p>
-                <ul className="list-disc pl-6 space-y-1.5"><li>IP address</li><li>Browser type</li><li>Device type</li><li>Session duration</li><li>Referring URLs</li></ul>
-                <p className="text-[#1A1A1A]/70 text-sm mt-2">This data is typically aggregated and anonymised.</p>
-              </CCard>
-            </section>
-            <GoldDivider />
-
-            <section id="changes" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">7.</span>Changes to This Policy</h2>
-              <CCard className="space-y-4 text-[#1A1A1A]/70 leading-relaxed">
-                <p>We may update this Cookie Policy to reflect:</p>
-                <ul className="list-disc pl-6 space-y-1.5"><li>Legal updates</li><li>Technology changes</li><li>Website functionality updates</li></ul>
-                <p>Revisions will be posted on this page.</p>
-              </CCard>
-            </section>
-            <GoldDivider />
-
-            <section id="contact" className="scroll-mt-8">
-              <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#B89555] mr-3">8.</span>Contact Information</h2>
-              <CCard className="text-[#1A1A1A]/70 leading-relaxed">
-                <p className="mb-4">For questions regarding our use of cookies, please contact us:</p>
-                <div className="bg-[#EFE6D6]/10 border border-[#B89555]/20 rounded-lg p-5">
-                  <p className="font-semibold text-[#1A1A1A]">JBJ Global Real Estate</p>
-                  <p className="text-sm text-[#1A1A1A]/70 mt-1">Real Estate Brokerage</p>
-                  <p className="text-sm text-[#1A1A1A]/70">Dubai, United Arab Emirates</p>
-                  <p className="mt-3">Email: <a href="mailto:privacy@JBJ.ae" className="text-[#B89555] hover:underline">privacy@JBJ.ae</a></p>
-                </div>
-              </CCard>
-            </section>
-
-            <div className="mt-16 pt-8 border-t border-[#B89555]/15 text-center">
-              <p className="text-[#1A1A1A]/70 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
-              <div className="flex justify-center gap-4 mt-3 text-sm">
-                <Link to="/privacy" className="text-[#B89555] hover:underline">Privacy Policy</Link>
-                <span className="text-[#1A1A1A]/70">|</span>
-                <Link to="/terms" className="text-[#B89555] hover:underline">Terms of Service</Link>
-              </div>
-            </div>
-          </main>
+      <section id="types-of-cookies" className="scroll-mt-28">
+        <SectionHeading number={2} icon={Layers}>Types of Cookies We Use</SectionHeading>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            { title: "A. Essential Cookies", desc: "Required for basic website functionality:", items: ["Secure login sessions","Form submissions","Navigation functionality"], note: "Without these cookies, the website may not function properly." },
+            { title: "B. Performance & Analytics", desc: "Collect anonymised data to:", items: ["Understand user behaviour","Measure traffic","Improve website performance"], note: "Examples include analytics tools that track page views and interactions." },
+            { title: "C. Functional Cookies", desc: "Allow:", items: ["Language preferences","Saved settings","User experience customisation"], note: "" },
+            { title: "D. Marketing / Advertising", desc: "If used, these cookies may:", items: ["Track engagement","Provide targeted advertising","Measure campaign performance"], note: "Only activated where applicable and with appropriate consent." },
+          ].map((c) => (
+            <SectionCard key={c.title}>
+              <p className="text-lg font-semibold text-[#0d3a2b] mb-2" style={HEADING_FONT}>{c.title}</p>
+              <p className="text-[#1A1A1A]/80 leading-relaxed mb-3">{c.desc}</p>
+              <BulletList items={c.items} />
+              {c.note && <p className="text-[#1A1A1A]/70 text-sm mt-3 italic">{c.note}</p>}
+            </SectionCard>
+          ))}
         </div>
       </section>
-    </>
-  );
-};
+      <SectionDivider />
+
+      <section id="how-we-use-cookies" className="scroll-mt-28">
+        <SectionHeading number={3} icon={Settings2}>How We Use Cookies</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">Cookies are used to:</p>
+          <BulletList items={["Ensure website stability","Enhance security","Improve user navigation","Analyse performance","Optimise digital services"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">Cookies do not grant us access to your device beyond stored cookie data.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="third-party-cookies" className="scroll-mt-28">
+        <SectionHeading number={4} icon={Handshake}>Third-Party Cookies</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We may use trusted third-party providers for:</p>
+          <BulletList items={["Analytics","Security monitoring","Hosting infrastructure"]} />
+          <p className="text-[#1A1A1A]/80 mt-4">These providers may place their own cookies subject to their respective privacy policies.</p>
+          <p className="text-[#1A1A1A]/75 text-sm mt-2">We do not control third-party cookie practices.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="managing-cookies" className="scroll-mt-28">
+        <SectionHeading number={5} icon={SlidersHorizontal}>Managing Cookies</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">Users can:</p>
+          <BulletList items={["Accept or reject cookies via browser settings","Delete existing cookies","Configure cookie alerts"]} />
+          <div className="mt-4 rounded-xl border-l-2 border-[#064E3B] bg-[#F7F2EA] p-4">
+            <p className="text-[#1A1A1A]/80 text-sm">Please note that disabling certain cookies may impact website functionality and your overall experience.</p>
+          </div>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="data-collected" className="scroll-mt-28">
+        <SectionHeading number={6} icon={Database}>Data Collected Through Cookies</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">Cookies may collect:</p>
+          <BulletList items={["IP address","Browser type","Device type","Session duration","Referring URLs"]} />
+          <p className="text-[#1A1A1A]/75 text-sm mt-4">This data is typically aggregated and anonymised.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="changes" className="scroll-mt-28">
+        <SectionHeading number={7} icon={RefreshCcw}>Changes to This Policy</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">We may update this Cookie Policy to reflect:</p>
+          <BulletList items={["Legal updates","Technology changes","Website functionality updates"]} />
+          <p className="text-[#1A1A1A]/80 mt-4">Revisions will be posted on this page.</p>
+        </SectionCard>
+      </section>
+      <SectionDivider />
+
+      <section id="contact" className="scroll-mt-28">
+        <SectionHeading number={8} icon={Mail}>Contact Information</SectionHeading>
+        <SectionCard>
+          <p className="text-[#1A1A1A]/80 mb-4">For questions regarding our use of cookies, please contact us:</p>
+          <div className="rounded-xl border-l-2 border-[#064E3B] bg-[#F7F2EA] px-4 py-3 space-y-1.5">
+            <p className="flex items-center gap-2 text-[#0d3a2b] font-semibold"><MapPin className="w-4 h-4 text-[#B89555]" />JBJ Global Real Estate</p>
+            <p className="text-[#1A1A1A]/75 text-sm">Real Estate Brokerage — Dubai, United Arab Emirates</p>
+            <p className="text-sm mt-1">Email: <a href="mailto:privacy@jbj.ae" className="text-[#064E3B] font-medium hover:underline">privacy@jbj.ae</a></p>
+          </div>
+        </SectionCard>
+      </section>
+
+      <LegalFooter
+        leftLink={{ to: "/privacy", label: "Privacy Policy" }}
+        rightLink={{ to: "/terms", label: "Terms of Service" }}
+      />
+    </ContentPageShell>
+  </>
+);
 
 export default Cookies;
