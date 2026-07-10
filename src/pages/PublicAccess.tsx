@@ -1826,7 +1826,7 @@ function SupportGuideOverlay() {
             <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
               <div className="flex items-center gap-2">
                 <PhoneCall className="h-4 w-4 text-white" />
-                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Speak to an Advisor <span className="text-white/70">· left side</span></span>
+                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Speak to an Advisor <span className="text-white/70">· bottom-right</span></span>
               </div>
               <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
                 A short form for a scheduled callback from a senior advisor — best for property, investment or brokerage requests.
