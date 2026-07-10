@@ -1431,10 +1431,6 @@ export default function PublicAccess() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] !text-white backdrop-blur-md sm:text-[11px]">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
-              Welcome · Private access portal
-            </span>
             <img
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
@@ -1442,14 +1438,10 @@ export default function PublicAccess() {
               className="h-[200px] w-[200px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[300px] sm:w-[300px] lg:h-[380px] lg:w-[380px]"
             />
             <h1 className="mt-6 font-serif text-3xl leading-[1.05] !text-white sm:text-6xl lg:text-[76px]">
-              Welcome to JBJ Global Real Estate
+              JBJ Global Real Estate
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed !text-white/85 sm:text-base lg:text-lg">
-              Explore our complete property platform, access live opportunities, use our real estate tools,
-              browse exclusive guides, and connect with our advisory team.
-            </p>
-            <p className="mx-auto mt-3 max-w-xl text-[11px] font-semibold uppercase tracking-[0.22em] !text-[#EBD79A] sm:text-xs">
-              Create an account or log in to unlock the full ecosystem
+              A private property ecosystem for Dubai's discerning investors, developers & brokers.
             </p>
             <div className="mt-7 flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
               <button
@@ -1680,6 +1672,9 @@ export default function PublicAccess() {
         </div>
       </footer>
 
+      {/* Welcome portal pop-up — explains this is the access gate, not the full site. */}
+      <WelcomePortalOverlay onCreateAccount={openSignup} onLogin={() => setLoginOpen(true)} />
+
       {/* Unified Contact widget lives globally (SupportLauncher). This page just
           listens so the "Speak to an advisor" channel opens our LeadFormDialog. */}
       <SupportGuideOverlay />
@@ -1700,6 +1695,150 @@ export default function PublicAccess() {
 /* SpeakToAdvisorLauncher removed — the global Contact Us widget
  * (SupportLauncher) is now the single unified entry point across the site.
  * It dispatches "jbj:open-advisor" for the advisor lead form. */
+
+
+/* ============================================================================
+ * WelcomePortalOverlay — entry pop-up that explains this is the private access
+ * portal to the full JBJ platform. Shown once per browser, then dismissed.
+ * ==========================================================================*/
+const WELCOME_PORTAL_KEY = "jbj_welcome_portal_dismissed";
+
+function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: () => void; onLogin: () => void }) {
+  const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
+      setOpen(false);
+      return;
+    }
+    try {
+      const dismissed = localStorage.getItem(WELCOME_PORTAL_KEY);
+      if (!dismissed) {
+        const t = window.setTimeout(() => {
+          setOpen(true);
+          // small fade-in staging
+          window.setTimeout(() => setMounted(true), 30);
+        }, 900);
+        return () => window.clearTimeout(t);
+      }
+    } catch {
+      // silent fail
+    }
+  }, [user]);
+
+  const dismiss = () => {
+    try { localStorage.setItem(WELCOME_PORTAL_KEY, "1"); } catch {}
+    setMounted(false);
+    const t = window.setTimeout(() => setOpen(false), 220);
+    return () => window.clearTimeout(t);
+  };
+
+  const handleCreateAccount = () => {
+    dismiss();
+    onCreateAccount();
+  };
+
+  const handleLogin = () => {
+    dismiss();
+    onLogin();
+  };
+
+  if (!open) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="jbj-welcome-portal-title"
+      className="fixed inset-0 z-[110] flex items-center justify-center px-4"
+    >
+      <div
+        className={`
+          absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300
+          ${mounted ? "opacity-100" : "opacity-0"}
+        `}
+        onClick={dismiss}
+        aria-hidden
+      />
+      <div
+        data-no-contrast-guard
+        className={`
+          jbj-emerald-animated-border relative w-full max-w-md rounded-2xl p-[2px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55),0_0_40px_rgba(16,185,129,0.28)]
+          transition-all duration-300
+          ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
+        `}
+      >
+        <div
+          data-emerald="true"
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="jj-emerald-metallic allow-white relative flex flex-col items-center rounded-[14px] px-6 py-8 text-center text-white sm:px-8 sm:py-10"
+        >
+          <button
+            type="button"
+            onClick={dismiss}
+            aria-label="Close welcome portal"
+            className="allow-white absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 hover:text-white hover:bg-white/10"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+          </button>
+
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-white backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+            Welcome · Private access portal
+          </span>
+
+          <img
+            data-no-fallback
+            src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
+            alt="JBJ"
+            className="h-20 w-20 object-contain opacity-95 drop-shadow-[0_12px_30px_rgba(0,0,0,0.45)] sm:h-24 sm:w-24"
+          />
+
+          <h2 id="jbj-welcome-portal-title" className="mt-5 font-serif text-2xl leading-tight text-white sm:text-3xl">
+            Welcome to JBJ Global Real Estate
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-white/85">
+            This is your private access portal. Create an account or log in to explore the complete property platform, live opportunities, and advisory tools.
+          </p>
+          <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#EBD79A]">
+            Unlock the full ecosystem
+          </p>
+
+          <div className="mt-6 flex w-full flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={handleCreateAccount}
+              data-allow-dark-cta
+              data-no-contrast-guard
+              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
+              style={{
+                color: "#FFFFFF",
+                WebkitTextFillColor: "#FFFFFF",
+                backgroundImage: "var(--jj-emerald-ombre)",
+                border: 0,
+                boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+              }}
+            >
+              Create account <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={handleLogin}
+              className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-white/20"
+            >
+              Log in
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 
 /* ============================================================================
