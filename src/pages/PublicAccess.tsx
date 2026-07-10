@@ -373,6 +373,12 @@ const BTN_EMERALD_SOLID =
   "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)] " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent hover:before:translate-x-[300%] before:transition before:duration-[900ms]";
 
+const BTN_DARK_OUTLINE =
+  "relative inline-flex items-center justify-center gap-2 rounded-md border border-white/40 bg-transparent px-5 text-sm font-bold uppercase tracking-[0.14em] text-white transition hover:bg-white/15";
+
+const BTN_LIGHT_OUTLINE =
+  "relative inline-flex items-center justify-center gap-2 rounded-md border border-[#0d3a2b]/30 bg-transparent px-5 text-sm font-bold text-[#0d3a2b] transition hover:bg-[#EFE6D6]";
+
 // Inline styles that include -webkit-text-fill-color so global !important rules
 // that target that property cannot override us. React style keys are camelCase.
 const emeraldInkStyle: React.CSSProperties = {
@@ -1401,9 +1407,11 @@ export default function PublicAccess() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setLoginOpen(true)}
-              className="h-10 whitespace-nowrap rounded-md border border-[#0d3a2b]/25 bg-transparent px-4 text-sm font-semibold text-[#0d3a2b] transition hover:bg-[#EFE6D6]"
+              data-no-contrast-guard
+              style={darkInkStyle}
+              className={`${BTN_LIGHT_OUTLINE} h-10 whitespace-nowrap`}
             >
-              Log in
+              Log in <ArrowRight className="h-4 w-4" />
             </button>
             <button
               onClick={openSignup}
@@ -1454,9 +1462,11 @@ export default function PublicAccess() {
               </button>
               <button
                 onClick={() => setLoginOpen(true)}
-                className="inline-flex h-12 flex-1 sm:flex-none min-w-[140px] items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] !text-white backdrop-blur-md transition hover:bg-white/20"
+                data-no-contrast-guard
+                style={emeraldInkStyle}
+                className={`${BTN_DARK_OUTLINE} h-12 flex-1 sm:flex-none min-w-[160px]`}
               >
-                Log in
+                Log in <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -1814,7 +1824,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
               onClick={handleCreateAccount}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
+              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
@@ -1828,9 +1838,11 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
             <button
               type="button"
               onClick={handleLogin}
-              className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-white/20"
+              data-no-contrast-guard
+              style={emeraldInkStyle}
+              className={`${BTN_DARK_OUTLINE} h-12 flex-1`}
             >
-              Log in
+              Log in <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
