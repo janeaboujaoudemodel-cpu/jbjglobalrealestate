@@ -1691,39 +1691,37 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
       </div>
 
       {/* DESKTOP — vertical LEFT edge tag "Speak to an Advisor" */}
-      <div className="hidden lg:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
-        <button
-          type="button"
-          onClick={onOpen}
-          aria-label="Speak to an advisor"
-          data-surface="dark"
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="allow-white jj-emerald-metallic group fixed left-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-r-xl text-white transform-gpu pointer-events-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]"
-          style={{
-            position: "fixed",
-            left: 0,
-            right: "auto",
-            top: "50%",
-            zIndex: 60,
-            writingMode: "vertical-rl",
-            transform: "translate3d(0, -50%, 0)",
-            backgroundImage: "var(--jj-emerald-ombre)",
-            border: 0,
-            color: "#FFFFFF",
-            WebkitTextFillColor: "#FFFFFF",
-            boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-          }}
-        >
-          <PhoneCall className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-          <span className="inline allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-            Speak to an Advisor
-          </span>
-          <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
-          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-r-xl ring-2 ring-emerald-300/60 animate-ping" />
-          <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-r-xl ring-2 ring-emerald-400/30 animate-ping" style={{ animationDelay: "0.5s" }} />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label="Speak to an advisor"
+        data-surface="dark"
+        data-allow-dark-cta
+        data-no-contrast-guard
+        className="allow-white jj-emerald-metallic group fixed left-0 top-1/2 hidden lg:flex items-center gap-2 px-2 py-4 rounded-r-xl text-white transform-gpu focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]"
+        style={{
+          position: "fixed",
+          left: 0,
+          right: "auto",
+          top: "50%",
+          zIndex: 60,
+          writingMode: "vertical-rl",
+          transform: "translate3d(0, -50%, 0)",
+          backgroundImage: "var(--jj-emerald-ombre)",
+          border: 0,
+          color: "#FFFFFF",
+          WebkitTextFillColor: "#FFFFFF",
+          boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+        }}
+      >
+        <PhoneCall className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+        <span className="inline allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+          Speak to an Advisor
+        </span>
+        <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-r-xl ring-2 ring-emerald-300/60 animate-ping" />
+        <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-r-xl ring-2 ring-emerald-400/30 animate-ping" style={{ animationDelay: "0.5s" }} />
+      </button>
     </>
   );
 }
