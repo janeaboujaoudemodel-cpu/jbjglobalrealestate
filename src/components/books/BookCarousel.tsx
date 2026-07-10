@@ -79,29 +79,34 @@ export function BookCarousel({
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
-    stateRef.current.dragging = true;
-    stateRef.current.paused = true;
+    // Don't pause on a simple tap — only when the user actually drags.
+    stateRef.current.dragging = false;
     stateRef.current.moved = false;
     stateRef.current.startX = e.clientX;
     stateRef.current.startScroll = el.scrollLeft;
-    try { el.setPointerCapture(e.pointerId); } catch {}
-    el.style.cursor = "grabbing";
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     const s = stateRef.current;
-    if (!el || !s.dragging) return;
+    if (!el) return;
     const dx = e.clientX - s.startX;
-    if (Math.abs(dx) > 4) s.moved = true;
-    el.scrollLeft = s.startScroll - dx;
+    if (!s.dragging && Math.abs(dx) > 6) {
+      s.dragging = true;
+      s.paused = true;
+      s.moved = true;
+      try { el.setPointerCapture(e.pointerId); } catch {}
+      el.style.cursor = "grabbing";
+    }
+    if (s.dragging) el.scrollLeft = s.startScroll - dx;
   };
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
+    const wasDragging = stateRef.current.dragging;
     stateRef.current.dragging = false;
     try { el.releasePointerCapture(e.pointerId); } catch {}
     el.style.cursor = "grab";
-    pauseBriefly();
+    if (wasDragging) pauseBriefly();
   };
 
   // Non-passive wheel listener to hijack vertical wheel into horizontal scroll.

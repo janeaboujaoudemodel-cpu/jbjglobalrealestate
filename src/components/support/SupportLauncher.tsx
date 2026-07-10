@@ -15,6 +15,28 @@ import ChannelCard, { ChannelDef } from "./ChannelCard";
 function useChannels(closeAfter: () => void): ChannelDef[] {
   return [
     {
+      id: "advisor",
+      label: "Speak to an advisor",
+      description: "Scheduled callback from a senior advisor",
+      responseTime: "Same day · Mon–Sat",
+      Icon: PhoneCall,
+      action: () => {
+        closeAfter();
+        window.dispatchEvent(new CustomEvent("jbj:open-advisor"));
+      },
+    },
+    {
+      id: "callback",
+      label: "Request a callback",
+      description: "Leave your number — we'll call you back",
+      responseTime: "Within 1 business hour",
+      Icon: Phone,
+      action: () => {
+        closeAfter();
+        window.dispatchEvent(new CustomEvent("jbj:open-advisor"));
+      },
+    },
+    {
       id: "concierge",
       label: "JBJ Concierge",
       description: "Smart shortcuts & guided filters",
@@ -36,7 +58,7 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
     },
     {
       id: "call",
-      label: "Call Us",
+      label: "Call now",
       description: CONTACT_INFO.phone,
       responseTime: "",
       Icon: Phone,
