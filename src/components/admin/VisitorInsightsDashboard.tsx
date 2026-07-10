@@ -67,9 +67,9 @@ interface VisitorDocument {
 interface ContactSubmission {
   id: string;
   session_id: string;
-  full_name: string | null;
-  email: string | null;
-  phone: string | null;
+  full_name?: string | null;
+  email?: string | null;
+  phone?: string | null;
   nationality: string | null;
   location: string | null;
   preferred_language: string | null;
