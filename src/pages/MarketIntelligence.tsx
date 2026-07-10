@@ -1,4 +1,4 @@
-import { ArrowUpRight, Info } from "lucide-react";
+import { ArrowUpRight, Info, BarChart3, MapPin, Sparkles, FileText, Database, ShieldCheck, PhoneCall } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
@@ -11,6 +11,7 @@ import {
   MarketReports,
   DataSourcesPanel,
   MarketIntelligenceHero,
+  MarketIntelligenceTableOfContents,
 } from "@/components/market-intelligence";
 import DLDDailySnapshot from "@/components/market-intelligence/DLDDailySnapshot";
 import {
@@ -19,6 +20,17 @@ import {
 } from "@/components/market-intelligence/MarketIntelligenceTypography";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { IconTile } from "@/components/ui/icon-tile";
+
+const MI_TOC_ITEMS = [
+  { id: "overview", title: "Market Overview", icon: BarChart3 },
+  { id: "dld-snapshot", title: "DLD Daily Snapshot", icon: Database },
+  { id: "areas", title: "Area Intelligence", icon: MapPin },
+  { id: "ai-insights", title: "AI Market Insights", icon: Sparkles },
+  { id: "reports", title: "Market Reports", icon: FileText },
+  { id: "sources", title: "Data Sources", icon: Database },
+  { id: "compliance", title: "Compliance", icon: ShieldCheck },
+  { id: "cta", title: "Speak With Our Team", icon: PhoneCall },
+];
 
 // Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
 // matches the other dark hero sections. NO champagne fill, NO ink-guard classes.
