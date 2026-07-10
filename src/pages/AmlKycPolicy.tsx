@@ -160,10 +160,10 @@ const AmlKycPolicy = () => {
           <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
             {/* Desktop sticky TOC */}
             <aside className="hidden lg:block">
-              <div className="sticky top-24 rounded-2xl border border-[#B89555]/25 bg-[#FDFBF7] p-5 shadow-[0_1px_0_rgba(184,149,85,0.08)]">
+              <div data-no-contrast-guard className="sticky top-24 rounded-2xl border border-[#B89555]/25 bg-[#FDFBF7] p-5 shadow-[0_1px_0_rgba(184,149,85,0.08)]">
                 <p
-                  className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#064E3B] mb-4"
-                  style={HEADING_FONT}
+                  className="text-[11px] uppercase tracking-[0.2em] font-semibold mb-4"
+                  style={{ ...HEADING_FONT, color: "#064E3B" }}
                 >
                   Contents
                 </p>
@@ -174,26 +174,24 @@ const AmlKycPolicy = () => {
                       <button
                         key={id}
                         onClick={() => scrollTo(id)}
-                        className={
-                          "group flex items-center gap-2 w-full text-left px-2.5 py-2 rounded-md text-sm transition-colors " +
-                          (isActive
-                            ? "bg-[#064E3B]/8 text-[#064E3B] font-medium"
-                            : "text-[#1A1A1A]/70 hover:text-[#064E3B] hover:bg-[#EFE6D6]/60")
-                        }
+                        style={{
+                          background: isActive ? "rgba(6,78,59,0.08)" : "transparent",
+                          color: isActive ? "#064E3B" : "rgba(26,26,26,0.75)",
+                        }}
+                        className="group flex items-center gap-2 w-full text-left px-2.5 py-2 rounded-md text-sm transition-colors hover:!bg-[#EFE6D6]/60 hover:!text-[#064E3B]"
                       >
                         <ChevronRight
-                          className={
-                            "h-3.5 w-3.5 shrink-0 transition-transform " +
-                            (isActive ? "text-[#064E3B]" : "text-[#B89555]/60 group-hover:text-[#064E3B]")
-                          }
+                          className="h-3.5 w-3.5 shrink-0 transition-transform"
+                          style={{ color: isActive ? "#064E3B" : "rgba(184,149,85,0.7)" }}
                         />
-                        <span className="min-w-0">{label}</span>
+                        <span className="min-w-0" style={{ color: "inherit" }}>{label}</span>
                       </button>
                     );
                   })}
                 </nav>
               </div>
             </aside>
+
 
             {/* Mobile / tablet TOC (horizontal chips) */}
             <div className="lg:hidden mb-8 -mx-4 sm:mx-0">
