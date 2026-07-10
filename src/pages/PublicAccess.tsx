@@ -1660,69 +1660,54 @@ export default function PublicAccess() {
  * pulse rings identical in animation to the Contact Us tag.
  * ==========================================================================*/
 function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
+  // Single floating phone icon anchored to the bottom-right corner.
+  // Hover reveals a tooltip bubble reading "Speak to an advisor".
+  // Pulse rings match the Contact Us tag animation.
   return (
-    <>
-      {/* MOBILE / TABLET portrait — bottom-LEFT phone icon (mirror of Contact Us) */}
-      <div className="fixed bottom-5 left-4 z-[60] block lg:hidden pointer-events-none" data-no-contrast-guard>
-        <button
-          type="button"
-          onClick={onOpen}
-          aria-label="Speak to an advisor"
-          data-surface="emerald"
-          data-allow-dark-cta
-          data-no-contrast-guard
-          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center h-12 w-12 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors active:scale-95"
-          style={{
-            color: "#FFFFFF",
-            WebkitTextFillColor: "#FFFFFF",
-            borderColor: "rgba(52,211,153,0.55)",
-            padding: 0,
-            gap: 0,
-          }}
-        >
-          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-emerald-300/70 animate-ping" />
-          <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-emerald-400/40 animate-ping" style={{ animationDelay: "0.4s" }} />
-          <PhoneCall aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", position: "relative", zIndex: 1 }} />
-          <span
-            className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
-            style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8, zIndex: 2 }}
-          />
-        </button>
-      </div>
-
-      {/* DESKTOP — vertical LEFT edge tag "Speak to an Advisor" */}
+    <div className="fixed bottom-5 right-5 z-[60]" data-no-contrast-guard>
       <button
         type="button"
         onClick={onOpen}
         aria-label="Speak to an advisor"
-        data-surface="dark"
+        data-surface="emerald"
         data-allow-dark-cta
         data-no-contrast-guard
-        className="allow-white jj-emerald-metallic group fixed left-0 top-1/2 hidden lg:flex items-center gap-2 px-2 py-4 rounded-r-xl text-white transform-gpu focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]"
+        className="allow-white jj-emerald-metallic group relative inline-flex items-center justify-center h-12 w-12 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-transform active:scale-95 hover:scale-105"
         style={{
-          position: "fixed",
-          left: 0,
-          right: "auto",
-          top: "50%",
-          zIndex: 60,
-          writingMode: "vertical-rl",
-          transform: "translate3d(0, -50%, 0)",
-          backgroundImage: "var(--jj-emerald-ombre)",
-          border: 0,
           color: "#FFFFFF",
           WebkitTextFillColor: "#FFFFFF",
-          boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+          borderColor: "rgba(52,211,153,0.55)",
+          padding: 0,
         }}
       >
-        <PhoneCall className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
-        <span className="inline allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
-          Speak to an Advisor
+        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-emerald-300/70 animate-ping" />
+        <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-emerald-400/40 animate-ping" style={{ animationDelay: "0.4s" }} />
+        <PhoneCall aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", position: "relative", zIndex: 1 }} />
+        <span
+          className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
+          style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8, zIndex: 2 }}
+        />
+
+        {/* Hover bubble */}
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.2em] text-white opacity-0 translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0"
+          style={{
+            backgroundImage: "var(--jj-emerald-ombre)",
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+          }}
+        >
+          Speak to an advisor
+          <span
+            aria-hidden
+            className="absolute top-1/2 -right-1 -translate-y-1/2 h-2 w-2 rotate-45"
+            style={{ background: "#042c1c" }}
+          />
         </span>
-        <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
-        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-r-xl ring-2 ring-emerald-300/60 animate-ping" />
-        <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-r-xl ring-2 ring-emerald-400/30 animate-ping" style={{ animationDelay: "0.5s" }} />
       </button>
-    </>
+    </div>
   );
 }
 
