@@ -1,73 +1,93 @@
-## Scope
 
-Two work streams on `/access`:
+## Goal
 
-**A. Certificate + Broker section (visual only)**
-**B. Featured Properties system rebuild (backend + gate strap + owner manager)**
+One locked layout standard for every content page (Guides, Insights, Services, Company, Legal, Help & Support). No more broken vertical crops, no more striped emerald hero, no more TOC scroll bugs.
 
----
+## The 3 locked rules (system-wide)
 
-### A. Certificate & "Become a JBJ-Certified Broker" section — `src/pages/PublicAccess.tsx`
+1. **Hero** — solid premium emerald ombré only. No diagonal lines, no cubes, no grid pattern, no oblique sweeps, no shimmer bars. Title is **center-aligned**. Small compliance/eyebrow chip centered above title. Sub-line centered below.
+2. **Content width** — content column is **full page width** (max-w-4xl centered, or the Buyer's Guide card width). TOC does **NOT** shrink the content — TOC floats on top.
+3. **TOC / "In This Guide"** — fixed floating panel, **right side**, emerald-filled (`--jj-emerald-ombre`) with pure white text, `z-index: 60` (above every section), collapsible, and each item uses `scrollIntoView` with the exact section id — no offset drift, no jumping 3 sections.
 
-Certificate mockup (right column):
-- Remove the rounded outer radius — make it a **sharp-cornered horizontal certificate** (wider aspect, e.g. `max-w-[640px]`, `rounded-none` or `rounded-sm`, inner border also sharp).
-- Reduce inner padding / border thickness so the print area is wider and closer to the edge (more real-certificate proportions).
-- Replace the "Sealed / Official" pill with a **circular 3D gold wax stamp** on the bottom-right, layered over the signature line:
-  - Circular SVG stamp, radial gold gradient (`#E8C674 → #B8892E → #7A5518`), embossed ring text "JBJ GLOBAL REAL ESTATE · OFFICIAL", and the JBJ monogram (pulled from the existing brand asset used in the hero) centered inside — this is the "official stamp saved in the database" (uses the same monogram asset already in the repo, no new upload needed).
-  - 3D effect via layered drop-shadow + inner highlight + slight `rotate(-8deg)`.
-- Signature block: change "Principal" label → **"Founder & CEO"** and italic script line above it reading "Jane B. Jaber" (founder signature style).
-- Date block: auto-render **today's date** using `new Intl.DateTimeFormat("en-GB", { day:"2-digit", month:"long", year:"numeric" }).format(new Date())` — recomputed on every mount so every visitor sees a fresh date. Locked as a rule.
-- Keep everything else (headline copy, list bullets, CTA button) untouched per user.
+Lock these in a new file `.lovable/memory/ui-ux/visual-standards/content-page-layout-standard.md` so the rules survive future edits.
 
-"Become a JBJ-Certified Broker" section rebuild:
-- Rebuild layout: dark emerald backdrop kept, but restructure into a **two-column premium hero** — left: heading + underline + copy + CTAs; right: a **new "Our Broker Services" card** — a single premium card listing services (Off-plan brokerage, Secondary sales, Leasing desk, Investor advisory, Developer partnerships, Legal & mortgage concierge) each with a champagne icon tile + one-line description, so users understand what JBJ offers.
-- Refine benefit grid below into 3 tighter cards (not 6 loose ones), with clearer typography hierarchy and a champagne top-hairline per card.
-- Keep the two CTAs (Enroll / Speak to broker desk) with existing contrast lock.
+## Deliverables
 
----
+### A. New shared primitives (build once, reuse everywhere)
 
-### B. Featured Properties system rebuild
+1. `src/components/content-page/PremiumEmeraldHero.tsx`
+   - Solid emerald ombré background (`#064E3B → #042c1c → #000`), **no SVG pattern, no stripe overlay, no motion sweep**.
+   - Center-aligned: eyebrow chip → H1 (Cormorant Garamond) → italic sub-line → optional meta row.
+   - Props: `eyebrow`, `title`, `subtitle`, `meta?`, `height` (`sm` | `md` | `lg`).
 
-**B1. Database migration** (`home_featured_projects` upgrade)
-Add columns:
-- `surface text not null default 'home'` — one of `'home'` | `'gate'` | `'website'` (drops the `device` split for gate; gate uses a single strap).
-- `auto_mode text` — `null` = manual, else `'newest'`.
-- `auto_count int` — e.g. 6 or 10 (only when auto_mode is set).
-- `refresh_interval_days int` — `null` = lifetime, else 15 / 30 / 60.
-- `last_auto_refresh_at timestamptz`.
-- Update the unique index to `(project_id, surface)` so the same project can appear on multiple surfaces.
-- Add DB function `refresh_auto_featured(surface text)` that, when the interval elapsed, replaces auto-mode rows for that surface with the newest N approved projects.
-- Add scheduled trigger (pg_cron if available, else client-side "refresh on read" fallback in the hook).
+2. `src/components/content-page/FloatingTOC.tsx`
+   - Fixed panel `right: 24px; top: 50%; transform: translateY(-50%); z-index: 60`.
+   - Emerald ombré background, white text, gold hairline, collapsible (chevron), scrollable when >8 items.
+   - Sticky above every section; never falls behind.
+   - Items: `{ id, label, icon? }`. Click → smooth `scrollIntoView({ block: "start" })` with correct 96px header offset via `scroll-mt-24` on target sections.
+   - Active-section highlight via `IntersectionObserver` (rootMargin `-40% 0px -55% 0px`) so highlight matches the section actually in view — no 3-section drift.
+   - Mobile: collapses into a bottom-sheet trigger (same emerald, white text).
 
-**B2. Owner manager rebuild** — `src/pages/owner/HomeFeaturedProjectsManager.tsx`
-- Add a **surface tab switcher**: `Homepage` | `Gate (/access)` | `Website`.
-- Per surface: mode toggle **Manual** vs **Auto (newest N)**.
-  - Auto mode: number input (last N projects), refresh dropdown (Lifetime / 15 days / 30 days / 60 days), "Refresh now" button.
-  - Manual mode: ordered list with `Add more` button + project search-picker (uses `useLocalProjectSearch`), drag/up-down reorder, remove, per-slot visibility toggle.
-- Save writes to `home_featured_projects` with the appropriate `surface`.
+3. `src/components/content-page/ContentPageShell.tsx`
+   - Wraps hero + main content + `FloatingTOC`.
+   - Main content: `max-w-4xl mx-auto px-6` (Buyer's Guide card size). Sections wrapped in champagne cards with the standard gold hairline.
+   - Guarantees content is **not** squeezed by the TOC.
 
-**B3. Gate strap** — `src/pages/PublicAccess.tsx` → `PropertyMarquee`
-- Replace the empty state "New inventory is being verified" with the real strap.
-- New hook `useGateFeaturedProjects()` that reads `home_featured_projects` where `surface='gate'`, resolves auto-mode if due, joins to `projects`, returns approved projects only.
-- Render a horizontally scrolling marquee (same walking-strap pattern as the book library / `DeveloperPartnersMarquee`), duplicated track for seamless loop, pausing on hover. Each card: project image, name, developer, starting price, "View" chip (locked → opens signup).
-- If truly nothing is configured on the gate surface, hide the section entirely rather than showing the "verified" empty card.
+### B. Retire the striped hero
 
----
+Delete/replace usages of `GuideHero`, `FAQHero`, `MarketIntelligenceHero`, `BrandEmeraldPage` hero variant, and any inline hero using `data-*-hero` with diagonal-line SVG/`bg-[image:...]` stripes. Route them all through `PremiumEmeraldHero`.
+
+Also delete the offending stripe SVG/pattern layers inside those components so no other page can accidentally re-import them.
+
+### C. Migrate pages to `ContentPageShell` + `FloatingTOC`
+
+Batch 1 — **Legal** (currently broken, per screenshots):
+`AmlKycPolicy`, `Terms`, `Privacy`, `Cookies`, `Disclaimers`, `IntellectualProperty`.
+
+Batch 2 — **Guides**:
+`Guides`, `BuyerGuide`, `SellerGuide`, `RentGuide`, `TenantGuide`, `LandlordGuide`, `InvestorEducation`, `GoldenVisaGuide`, `DubaiRentalYieldGuide`, `SellingOffPlanBeforeHandover`, `AreaGuides`.
+
+Batch 3 — **Insights**:
+`Insights`, `FutureOfRealEstate2026`, `News`, `AINeighborhoodInsightsPage`.
+
+Batch 4 — **Services**: all 18 files under `src/pages/services/*` + `Services.tsx`, `InvestorServices.tsx`, `BrokerResources.tsx`, `BrokerEducation.tsx`.
+
+Batch 5 — **Company**: `About`, `CompanyProfile`, `MeetTheTeam`, `Developers`, `Sitemap`.
+
+Batch 6 — **Help & Support**: `FAQ`, `BuyerFAQ`, `SellerFAQ`, `LandlordFAQ`, `TenantFAQ`, `InvestorFAQ`, `BrokerFAQ`.
+
+### D. Buyer's Guide fix (also referenced in screenshots)
+
+Its hero currently pushes the book cover / title to the left because the old TOC steals column space. After migration the hero returns to full-width centered and the TOC floats over the section — matching the reference the user marked as correct.
+
+### E. Validation (per batch, before moving to next batch)
+
+Playwright script at `/tmp/browser/content-layout-audit.py`:
+- Loads each migrated route at 390 / 820 / 1440.
+- Asserts: (1) no `<svg>` inside the hero with `pattern`/`line`/`stripe` markers, (2) hero H1 `text-align: center`, (3) main content column ≥ 720px wide at 1440, (4) TOC element has `position: fixed`, `z-index >= 60`, right offset < 40px, (5) clicking a TOC item scrolls to a section whose `getBoundingClientRect().top` is between 80 and 140px.
+- Saves screenshots for every route in `/tmp/browser/content-layout/` and I attach them per batch.
+
+## Execution order
+
+I'll ship in this order and pause for approval after each batch so you can eyeball screenshots:
+
+1. Build primitives + retire striped hero component + lock memory rule.
+2. Batch 1 Legal (starts with `/aml-kyc` — the one you flagged).
+3. Batch 2 Guides (fixes `/buyer-guide`).
+4. Batch 3 Insights.
+5. Batch 4 Services.
+6. Batch 5 Company.
+7. Batch 6 Help & Support.
+
+## Out of scope
+
+- No backend/schema changes.
+- No copy rewrites — only layout, hero, and TOC.
+- Owner/CRM backend pages untouched.
 
 ## Technical notes
 
-- Migration file will follow the standard `CREATE`/`GRANT`/`RLS`/`POLICY` order for any new helper table; existing RLS on `home_featured_projects` already covers new columns.
-- Auto-refresh implemented as a security-definer SQL function invoked on read (idempotent, cheap) — no external scheduler required.
-- Certificate stamp is an inline SVG component (no image upload); monogram uses the existing `@/assets/jbj-monogram-nobuffer.png`.
-- Date auto-refresh: computed in-render, not memoized to a build-time constant.
-
----
-
-## Files touched
-
-- `src/pages/PublicAccess.tsx` — certificate + broker section + gate strap wiring
-- `src/pages/owner/HomeFeaturedProjectsManager.tsx` — surface tabs + auto/manual modes
-- `src/hooks/useHandpickedProjects.ts` — respect `surface` column
-- New `src/hooks/useGateFeaturedProjects.ts`
-- New `src/components/access/GatePropertyMarquee.tsx` (optional extraction)
-- One Supabase migration adding columns + `refresh_auto_featured` function
+- `FloatingTOC` uses one shared `IntersectionObserver` per page; unmount cleanup on route change.
+- Section ids come from a single `sections` prop passed to `ContentPageShell` so the TOC and DOM ids can never drift out of sync (root cause of the "jumps 3 sections" bug).
+- `scroll-mt-24` applied to every section via the shell wrapper, so anchor navigation lands cleanly below the sticky header.
+- Hero uses CSS var `--jj-emerald-ombre` already defined in tokens — zero new colors.
