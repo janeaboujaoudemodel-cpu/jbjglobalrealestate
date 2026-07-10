@@ -107,11 +107,12 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
         .single();
 
       if (data) {
-        // User already submitted, auto-complete
+        // Plaintext PII columns removed for security — values live encrypted server-side.
+        // Auto-complete with only the non-PII fields we can safely read.
         const savedData: ContactGatingData = {
-          fullName: data.full_name || '',
-          email: data.email || '',
-          phone: data.phone || '',
+          fullName: '',
+          email: '',
+          phone: '',
           nationality: data.nationality || '',
           location: data.location || '',
           preferredLanguage: data.preferred_language || 'English',

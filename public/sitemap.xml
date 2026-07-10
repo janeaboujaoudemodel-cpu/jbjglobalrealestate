@@ -144,10 +144,34 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://jbj.ae/guides/selling-off-plan-dubai-before-handover</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://jbj.ae/insights/future-of-real-estate-2026</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/ai-hub</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/toolkit/voice-studio</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://jbj.ae/toolkit/background-ai</loc>
+    <lastmod>2026-07-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
   </url>
   <url>
     <loc>https://jbj.ae/communities/palm-jumeirah-guide</loc>

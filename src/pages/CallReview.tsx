@@ -39,7 +39,7 @@ interface CallLogMasked {
   caller_name_masked: string | null;
   duration_seconds: number | null;
   transcript_masked: string;
-  summary: string | null;
+  // `summary` plaintext column removed — use `ai_summary` instead.
   recording_url: string | null;
   ai_score: number | null;
   ai_issues: string[] | null;
@@ -459,7 +459,7 @@ export default function CallReview() {
                       {/* AI Summary */}
                       <div className="p-4 bg-muted rounded-lg">
                         <h4 className="font-medium mb-2">AI Summary</h4>
-                        <p className="text-sm">{selectedCall.ai_summary || selectedCall.summary || 'No summary available'}</p>
+                        <p className="text-sm">{selectedCall.ai_summary || 'No summary available'}</p>
                       </div>
 
                       {/* Issues & Highlights */}

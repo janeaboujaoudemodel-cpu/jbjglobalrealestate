@@ -990,15 +990,14 @@ YOUR STYLE:
           const recordingUrl = sanitizeString(message?.recordingUrl, 500);
           const callStatus = sanitizeString(callData?.status, 50);
           
-          // Save to database
+          // Save to database — plaintext caller_name/caller_phone/summary columns removed;
+          // extracted_* + ai_summary + transcript_encrypted are the authoritative PII carriers.
           const { data: callLog, error: saveError } = await supabase
             .from('vapi_call_logs')
             .insert({
               call_id: callId,
-              caller_phone: callerPhone,
               duration_seconds: durationSeconds,
               transcript: transcript,
-              summary: summary,
               recording_url: recordingUrl,
               call_status: callStatus,
               ended_reason: endedReason,

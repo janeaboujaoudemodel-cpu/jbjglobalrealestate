@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 // ============================================================================
 // CORS CONFIGURATION
@@ -162,6 +163,11 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // WAF: apply rate limit + bot filter to BOTH public and internal modes
+  // so unauthenticated callers cannot spam AI credits via `mode='public'`.
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-market-narratives");
+  if (waf.blocked) return waf.response!;
 
   try {
     const { 

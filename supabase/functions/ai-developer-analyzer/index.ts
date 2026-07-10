@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { callLovableAI, sanitizeForPrompt } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -21,6 +22,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // WAF: rate limit, bot filter, IP blocklist — protect AI credits from abuse.
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-developer-analyzer");
+  if (waf.blocked) return waf.response!;
 
   try {
     const body: DeveloperAnalysisRequest = await req.json();
