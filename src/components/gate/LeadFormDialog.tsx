@@ -6,7 +6,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowRight, Building2, Check, ChevronsUpDown, Globe2, Home, KeyRound, Loader2, ShieldCheck, TrendingUp, Wallet } from "lucide-react";
+import { ArrowRight, Building2, Check, ChevronsUpDown, Home, Loader2, ShieldCheck, Wallet } from "lucide-react";
 import Field from "@/components/signup/Field";
 import NationalityPicker from "@/components/crm/pickers/NationalityPicker";
 import PhoneInputWithCountry from "@/components/crm/pickers/PhoneInputWithCountry";
