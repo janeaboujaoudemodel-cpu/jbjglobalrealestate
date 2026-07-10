@@ -80,6 +80,7 @@ export default function PhoneInputWithCountry({
                   <CommandItem
                     key={c.code}
                     value={`${c.name} ${c.nationality} ${c.dial} ${c.code}`}
+                    data-no-contrast-guard
                     onSelect={() => setDial(c.dial)}
                     className="flex items-center gap-2 cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                   >

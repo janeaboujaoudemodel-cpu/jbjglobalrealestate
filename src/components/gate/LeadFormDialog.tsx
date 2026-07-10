@@ -134,6 +134,7 @@ function LanguagePicker({ value, onChange }: { value: string; onChange: (v: stri
                 <CommandItem
                   key={l.code}
                   value={`${l.name} ${l.code}`}
+                  data-no-contrast-guard
                   onSelect={() => { onChange(l.name); setOpen(false); }}
                   className="flex items-center gap-2 cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                 >
@@ -173,6 +174,7 @@ function UserTypePicker({ value, onChange }: { value: string; onChange: (v: stri
                 <CommandItem
                   key={t}
                   value={t}
+                  data-no-contrast-guard
                   onSelect={() => { onChange(t); setOpen(false); }}
                   className="capitalize cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                 >
@@ -232,6 +234,8 @@ function ServiceCategorySelector({ value, onChange }: { value: string[]; onChang
                         type="button"
                         onClick={() => toggle(service)}
                         data-service-chip={active ? "active" : "inactive"}
+                        {...(active ? { "data-no-contrast-guard": true, "data-surface": "dark" } : {})}
+                        style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
                         className={
                           "inline-flex min-h-9 items-center gap-2 rounded-full border px-3.5 text-[12px] font-semibold transition " +
                           (active
@@ -334,6 +338,9 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
             type="submit"
             disabled={loading}
             data-advisor-submit
+            data-no-contrast-guard
+            data-surface="dark"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             className="relative isolate inline-flex h-12 w-full overflow-hidden rounded-md items-center justify-center gap-2 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] text-sm font-bold uppercase tracking-[0.14em] !text-white shadow-[0_16px_30px_-14px_rgba(6,78,59,0.85)] transition hover:brightness-110 disabled:opacity-70 [&_svg]:!text-white"
           >
             {loading ? (

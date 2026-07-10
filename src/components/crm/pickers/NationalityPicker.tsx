@@ -66,6 +66,7 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
                   <CommandItem
                     key={c.code}
                     value={`${c.name} ${c.nationality} ${c.code}`}
+                    data-no-contrast-guard
                     onSelect={() => { onChange(c.name); setOpen(false); }}
                     className="flex items-center gap-2 cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                   >
