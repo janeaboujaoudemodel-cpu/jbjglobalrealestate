@@ -79,17 +79,32 @@ const SERVICE_CATEGORIES = [
   {
     title: "Investment",
     icon: Wallet,
-    services: ["Investment Advisory", "Portfolio Wallet", "Cross-Market Strategy", "Exit & Resale Strategy"],
+    services: ["Investment Advisory", "Portfolio Wallet", "Cross-Market Strategy", "Exit & Resale Strategy", "Mortgage & Financing"],
   },
   {
     title: "Ownership Support",
     icon: ShieldCheck,
-    services: ["Property Management", "Mortgage Support", "Legal Coordination", "Holiday Home Operations"],
+    services: ["Property Management", "Holiday Home Operations", "Insurance Advisory", "Concierge Services"],
   },
   {
-    title: "Residency & Corporate",
+    title: "Legal & Residency",
+    icon: Scale,
+    services: ["Legal Firm & Coordination", "Conveyancing & Contracts", "Golden Visa", "Relocation / PRO Services", "Family Sponsorship"],
+  },
+  {
+    title: "Corporate & Business",
     icon: Building2,
-    services: ["Golden Visa", "Company Setup", "Business Development", "Relocation / PRO Services", "Insurance Advisory", "Concierge Services"],
+    services: ["Company Setup", "Foundation Setup", "Business Development", "Partnerships & Introductions"],
+  },
+  {
+    title: "JBJ Media — Branding & Digital",
+    icon: Megaphone,
+    services: ["Branding & Identity", "Marketing & Campaigns", "Web Development", "App Development", "Software Solutions", "Content & Media Production"],
+  },
+  {
+    title: "Other",
+    icon: Sparkles,
+    services: [],
   },
 ];
 export const SERVICES = SERVICE_CATEGORIES.flatMap((category) => category.services);
