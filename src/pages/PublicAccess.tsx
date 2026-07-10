@@ -1672,7 +1672,7 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
         data-surface="emerald"
         data-allow-dark-cta
         data-no-contrast-guard
-        className="allow-white pointer-events-none invisible absolute bottom-full right-0 z-[61] mb-3 translate-y-2 rounded-2xl px-4 py-3 text-center text-[11px] font-semibold uppercase leading-[1.35] tracking-[0.14em] text-white opacity-0 shadow-[0_10px_28px_-8px_rgba(6,78,59,0.75)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+        className="jj-advisor-bubble allow-white pointer-events-none invisible absolute bottom-full right-0 z-[61] mb-3 translate-y-2 rounded-2xl px-4 py-3 text-center text-[11px] font-semibold uppercase leading-[1.35] tracking-[0.14em] text-white opacity-0 shadow-[0_10px_28px_-8px_rgba(6,78,59,0.75)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
         style={{
           backgroundImage: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
