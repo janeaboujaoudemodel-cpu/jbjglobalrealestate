@@ -5911,17 +5911,14 @@ export type Database = {
       contact_gating_submissions: {
         Row: {
           created_at: string
-          email: string | null
           email_encrypted: string | null
           email_hash: string | null
           email_verified: boolean | null
-          full_name: string | null
           full_name_encrypted: string | null
           honeypot_field: string | null
           id: string
           location: string | null
           nationality: string | null
-          phone: string | null
           phone_encrypted: string | null
           phone_verified: boolean | null
           preferred_language: string | null
@@ -5930,17 +5927,14 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email?: string | null
           email_encrypted?: string | null
           email_hash?: string | null
           email_verified?: boolean | null
-          full_name?: string | null
           full_name_encrypted?: string | null
           honeypot_field?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
-          phone?: string | null
           phone_encrypted?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
@@ -5949,17 +5943,14 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string | null
           email_encrypted?: string | null
           email_hash?: string | null
           email_verified?: boolean | null
-          full_name?: string | null
           full_name_encrypted?: string | null
           honeypot_field?: string | null
           id?: string
           location?: string | null
           nationality?: string | null
-          phone?: string | null
           phone_encrypted?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
@@ -36373,8 +36364,6 @@ export type Database = {
           assistant_name: string | null
           call_id: string
           call_status: string | null
-          caller_name: string | null
-          caller_phone: string | null
           created_at: string
           duration_seconds: number | null
           ended_reason: string | null
@@ -36395,7 +36384,6 @@ export type Database = {
           retention_expires_at: string | null
           reviewed_at: string | null
           reviewed_by: string | null
-          summary: string | null
           transcript_encrypted: string | null
           updated_at: string
         }
@@ -36412,8 +36400,6 @@ export type Database = {
           assistant_name?: string | null
           call_id: string
           call_status?: string | null
-          caller_name?: string | null
-          caller_phone?: string | null
           created_at?: string
           duration_seconds?: number | null
           ended_reason?: string | null
@@ -36434,7 +36420,6 @@ export type Database = {
           retention_expires_at?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
-          summary?: string | null
           transcript_encrypted?: string | null
           updated_at?: string
         }
@@ -36451,8 +36436,6 @@ export type Database = {
           assistant_name?: string | null
           call_id?: string
           call_status?: string | null
-          caller_name?: string | null
-          caller_phone?: string | null
           created_at?: string
           duration_seconds?: number | null
           ended_reason?: string | null
@@ -36473,7 +36456,6 @@ export type Database = {
           retention_expires_at?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
-          summary?: string | null
           transcript_encrypted?: string | null
           updated_at?: string
         }
@@ -38040,13 +38022,10 @@ export type Database = {
       contact_gating_submissions_secure: {
         Row: {
           created_at: string | null
-          email_masked: string | null
           email_verified: boolean | null
-          full_name: string | null
           id: string | null
           location: string | null
           nationality: string | null
-          phone_masked: string | null
           phone_verified: boolean | null
           preferred_language: string | null
           service_interest: string | null
@@ -38054,13 +38033,10 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          email_masked?: string | null
           email_verified?: boolean | null
-          full_name?: string | null
           id?: string | null
           location?: string | null
           nationality?: string | null
-          phone_masked?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
           service_interest?: string | null
@@ -38068,13 +38044,10 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          email_masked?: string | null
           email_verified?: boolean | null
-          full_name?: string | null
           id?: string | null
           location?: string | null
           nationality?: string | null
-          phone_masked?: string | null
           phone_verified?: boolean | null
           preferred_language?: string | null
           service_interest?: string | null
