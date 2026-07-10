@@ -171,29 +171,41 @@ const MarketIntelligence = () => {
       />
 
 
+      <MarketIntelligenceTableOfContents items={MI_TOC_ITEMS} title="In This Section" />
+
       {/* Market Overview Dashboard - Edge to Edge */}
-      <div id="overview">
+      <div id="overview" className="scroll-mt-24">
         <MarketOverviewDashboard />
       </div>
 
       {/* DLD Daily Snapshot — KPI strip, Cash vs Mortgage, Top-10, Notice + Consultation */}
-      <DLDDailySnapshot />
+      <div id="dld-snapshot" className="scroll-mt-24">
+        <DLDDailySnapshot />
+      </div>
 
 
       {/* Area Intelligence Grid - Edge to Edge */}
-      <AreaIntelligenceGrid />
+      <div id="areas" className="scroll-mt-24">
+        <AreaIntelligenceGrid />
+      </div>
 
       {/* AI Market Insights - Edge to Edge */}
-      <AIMarketInsights />
+      <div id="ai-insights" className="scroll-mt-24">
+        <AIMarketInsights />
+      </div>
 
       {/* Market Reports - Edge to Edge */}
-      <MarketReports />
+      <div id="reports" className="scroll-mt-24">
+        <MarketReports />
+      </div>
 
       {/* Data Sources Panel - Edge to Edge */}
-      <DataSourcesPanel />
+      <div id="sources" className="scroll-mt-24">
+        <DataSourcesPanel />
+      </div>
 
       {/* Compliance Disclaimer */}
-      <section className="surface-light py-12 bg-[#FDFBF7]" data-surface="light">
+      <section id="compliance" className="scroll-mt-24 surface-light py-12 bg-[#FDFBF7]" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="mi-gold-frame mi-gold-frame-corners max-w-5xl mx-auto p-10 text-center rounded-2xl">
             <div className="mx-auto mb-4 flex justify-center">
@@ -213,14 +225,16 @@ const MarketIntelligence = () => {
 
 
       {/* Pre-Footer White Section with CTA */}
-      <PreFooterSeparator 
-        title="Ready to Make Informed Decisions?"
-        subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
-        primaryLink="/contact"
-        primaryText="Speak With Our Team"
-        secondaryLink="/ai-home-finder"
-        secondaryText="AI Home Finder"
-      />
+      <div id="cta" className="scroll-mt-24">
+        <PreFooterSeparator 
+          title="Ready to Make Informed Decisions?"
+          subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
+          primaryLink="/contact"
+          primaryText="Speak With Our Team"
+          secondaryLink="/ai-home-finder"
+          secondaryText="AI Home Finder"
+        />
+      </div>
     </div>
   );
 };
