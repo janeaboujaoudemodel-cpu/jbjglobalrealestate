@@ -302,6 +302,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
     preferred_language: "English", user_type: "buyer", notes: "",
   });
   const [services, setServices] = useState<string[]>([]);
+  const [otherService, setOtherService] = useState("");
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
