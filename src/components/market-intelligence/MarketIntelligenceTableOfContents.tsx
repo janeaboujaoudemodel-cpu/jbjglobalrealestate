@@ -39,24 +39,28 @@ export const MarketIntelligenceTableOfContents = ({
 
   useEffect(() => {
     const HERO_SEL = '[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]';
-    const check = () => {
-      // Re-query every tick so we never keep a stale/detached hero ref.
+    let io: IntersectionObserver | null = null;
+    let raf = 0;
+    const attach = () => {
       const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
       if (!hero) {
-        // No hero on this page → keep TOC hidden until the user scrolls a bit.
-        setPastHero(window.scrollY > 120);
+        // No hero found yet — retry a few frames, then default to visible.
+        if (raf < 30) { raf++; requestAnimationFrame(attach); }
+        else setPastHero(true);
         return;
       }
-      const rect = hero.getBoundingClientRect();
-      setPastHero(rect.bottom <= 8);
+      io = new IntersectionObserver(
+        (entries) => {
+          const e = entries[0];
+          // pastHero = hero no longer intersecting viewport (scrolled past).
+          setPastHero(!e.isIntersecting);
+        },
+        { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
+      );
+      io.observe(hero);
     };
-    check();
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-    return () => {
-      window.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
+    attach();
+    return () => { io?.disconnect(); };
   }, []);
 
   const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
