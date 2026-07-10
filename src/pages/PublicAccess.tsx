@@ -1775,7 +1775,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
           type="button"
           onClick={dismiss}
           aria-label="Close welcome portal"
-          className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full text-white opacity-0 transition-opacity duration-200 hover:bg-white/15 hover:text-white focus-visible:opacity-100 group-hover:opacity-100 sm:right-3 sm:top-3"
+          className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 origin-center scale-0 items-center justify-center rounded-full text-white transition-all duration-200 hover:bg-white/15 hover:text-white focus-visible:scale-100 group-hover:scale-100 sm:right-3 sm:top-3"
           style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
         >
           <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
