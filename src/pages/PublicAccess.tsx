@@ -287,15 +287,15 @@ const jbjServicePages: JbjServicePage[] = [
     key: "advisory",
     label: "Real Estate Services",
     kicker: "Our Practice · 01",
-    heading: "Real estate advisory, handled properly.",
-    blurb: "Principal-side service across acquisition, leasing, exits, management and cross-market investment decisions.",
+    heading: "Real estate services, handled properly.",
+    blurb: "A full real estate practice for buying, selling, leasing, listing, portfolio growth and cross-market investment decisions.",
     items: [
-      { icon: Building2, title: "Primary market sourcing", body: "Curated off-plan and new-build opportunities from vetted developers, structured around payment terms, absorption and exit logic.", image: svcOffPlan },
-      { icon: Handshake, title: "Acquisition representation", body: "Private-client guidance for selecting, negotiating and securing the right address with disciplined due diligence.", image: svcBuySell },
-      { icon: Home, title: "Residential leasing advisory", body: "Landlord and tenant placement across annual leases, furnished homes and premium long-stay requirements.", image: svcLeasing },
+      { icon: Building2, title: "Property acquisition", body: "Private-client guidance for buying ready homes, off-plan launches and prime addresses with disciplined due diligence and negotiation support.", image: svcBuySell },
+      { icon: Handshake, title: "Sales representation", body: "Premium seller representation for preparing, pricing and presenting properties to qualified local and international buyers.", image: svcResale },
+      { icon: Home, title: "Leasing & listing advisory", body: "Landlord and tenant placement across annual leases, furnished homes and premium long-stay requirements, including listing preparation.", image: svcLeasing },
+      { icon: Wallet, title: "Investment portfolio wallet", body: "A private portfolio layer for serious investors — acquisition planning, reporting, rental performance and next-move strategy in one place.", image: svcWallet },
       { icon: TrendingUp, title: "Exit & resale strategy", body: "Pricing, positioning and buyer qualification for owners preparing a clean secondary-market sale.", image: svcResale },
-      { icon: KeyRound, title: "Asset management desk", body: "Property custody, maintenance coordination, tenant relations and owner reporting under one accountable team.", image: svcHandover },
-      { icon: Globe2, title: "Cross-market investment desk", body: "Portfolio guidance for clients comparing Dubai opportunities with international real estate exposure and long-term capital planning.", image: svcGlobal },
+      { icon: Globe2, title: "Cross-market investment strategy", body: "Advisory for clients comparing Dubai with selected international real estate opportunities, including currency exposure, holding structure, exit timing and portfolio balance.", image: svcGlobal },
     ],
   },
   {
@@ -439,6 +439,35 @@ html body #root [data-service-card]:hover [data-service-arrow] svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
   fill: none !important;
+}
+html body #root [data-service-page-dot] {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  max-width: 38px !important;
+  max-height: 38px !important;
+  padding: 0 !important;
+  border-radius: 9999px !important;
+  aspect-ratio: 1 / 1 !important;
+  line-height: 1 !important;
+}
+html body #root [data-service-page-dot] span {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+html body #root [data-service-page-dot][data-active="true"],
+html body #root [data-service-page-dot][data-active="true"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
 }
 .certificate-shimmer-frame {
   border: 2px solid transparent;
@@ -903,11 +932,13 @@ function ServicesSection() {
                     type="button"
                     onClick={() => goto(i)}
                     aria-label={`Go to ${p.label}`}
+                    data-service-page-dot
+                    data-active={dotActive ? "true" : "false"}
                     data-no-contrast-guard
                     {...(dotActive ? { "data-allow-dark-cta": true, "data-surface": "dark" } : {})}
                     style={dotActive ? emeraldInkStyle : undefined}
                     className={
-                      "inline-flex items-center justify-center rounded-full font-serif text-[13px] leading-none aspect-square h-10 w-10 min-w-[40px] min-h-[40px] transition " +
+                      "inline-flex items-center justify-center rounded-full font-serif transition " +
                       (dotActive
                         ? "border border-[#0d3a2b] bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_55%,#000_100%)] shadow-[0_10px_22px_-14px_rgba(6,78,59,0.85)] !text-white [&_*]:!text-white"
                         : "border border-[#1A1A1A]/25 bg-white text-[#1A1A1A] hover:border-[#0d3a2b] hover:text-[#0d3a2b]")
