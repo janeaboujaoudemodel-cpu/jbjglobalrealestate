@@ -145,7 +145,6 @@ export const GuideTableOfContents = ({
       )}
       aria-hidden={!pastHero}
       data-guide-toc
-      data-surface="emerald"
       data-premium-navigator
     >
       {/* Tooltip */}
