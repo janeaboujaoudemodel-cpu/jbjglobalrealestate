@@ -1653,3 +1653,206 @@ export default function PublicAccess() {
     </div>
   );
 }
+
+/* ============================================================================
+ * SpeakToAdvisorLauncher — mirrors the SupportLauncher "Contact Us" edge tag
+ * on the LEFT side, opens the LeadFormDialog as a popup, and includes attention
+ * pulse rings identical in animation to the Contact Us tag.
+ * ==========================================================================*/
+function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
+  return (
+    <>
+      {/* MOBILE / TABLET portrait — bottom-LEFT phone icon (mirror of Contact Us) */}
+      <div className="fixed bottom-5 left-4 z-[60] block lg:hidden pointer-events-none" data-no-contrast-guard>
+        <button
+          type="button"
+          onClick={onOpen}
+          aria-label="Speak to an advisor"
+          data-surface="emerald"
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="allow-white jj-emerald-metallic pointer-events-auto relative inline-flex items-center justify-center h-12 w-12 rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-colors active:scale-95"
+          style={{
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            borderColor: "rgba(52,211,153,0.55)",
+            padding: 0,
+            gap: 0,
+          }}
+        >
+          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-emerald-300/70 animate-ping" />
+          <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-emerald-400/40 animate-ping" style={{ animationDelay: "0.4s" }} />
+          <PhoneCall aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", position: "relative", zIndex: 1 }} />
+          <span
+            className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
+            style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8, zIndex: 2 }}
+          />
+        </button>
+      </div>
+
+      {/* DESKTOP — vertical LEFT edge tag "Speak to an Advisor" */}
+      <div className="hidden lg:block fixed inset-0 z-[60] pointer-events-none" data-no-contrast-guard>
+        <button
+          type="button"
+          onClick={onOpen}
+          aria-label="Speak to an advisor"
+          data-surface="dark"
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="allow-white jj-emerald-metallic group fixed left-0 top-1/2 flex items-center gap-2 px-2 py-4 rounded-r-xl text-white transform-gpu pointer-events-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34D399]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#064E3B]"
+          style={{
+            position: "fixed",
+            left: 0,
+            right: "auto",
+            top: "50%",
+            zIndex: 60,
+            writingMode: "vertical-rl",
+            transform: "translate3d(0, -50%, 0) rotate(180deg)",
+            backgroundImage: "var(--jj-emerald-ombre)",
+            border: 0,
+            color: "#FFFFFF",
+            WebkitTextFillColor: "#FFFFFF",
+            boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+          }}
+        >
+          <PhoneCall className="h-3.5 w-3.5 rotate-90 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+          <span className="inline allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+            Speak to an Advisor
+          </span>
+          <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-r-xl ring-2 ring-emerald-300/60 animate-ping" />
+          <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-r-xl ring-2 ring-emerald-400/30 animate-ping" style={{ animationDelay: "0.5s" }} />
+        </button>
+      </div>
+    </>
+  );
+}
+
+/* ============================================================================
+ * SupportGuideOverlay — first-visit modal that explains the difference between
+ * the "Contact Us" support hub (WhatsApp/Call/Concierge) and the "Speak to an
+ * Advisor" lead form. After "Okay":
+ *   • Anonymous visitor → hidden for 24h, re-shown after that if still signed out.
+ *   • Signed-in user   → never shown again.
+ * ==========================================================================*/
+const SUPPORT_GUIDE_KEY = "jbj_support_guide_dismissed_at";
+const SUPPORT_GUIDE_TTL_MS = 24 * 60 * 60 * 1000;
+
+function SupportGuideOverlay() {
+  const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    // Signed-in users: never show, and clear any stale flag.
+    if (user) {
+      try { localStorage.removeItem(SUPPORT_GUIDE_KEY); } catch {}
+      setOpen(false);
+      return;
+    }
+    try {
+      const raw = localStorage.getItem(SUPPORT_GUIDE_KEY);
+      if (!raw) {
+        // First visit — small delay so the page paints first
+        const t = window.setTimeout(() => setOpen(true), 1500);
+        return () => window.clearTimeout(t);
+      }
+      const dismissedAt = parseInt(raw, 10);
+      if (Number.isFinite(dismissedAt) && Date.now() - dismissedAt >= SUPPORT_GUIDE_TTL_MS) {
+        const t = window.setTimeout(() => setOpen(true), 1500);
+        return () => window.clearTimeout(t);
+      }
+    } catch {
+      // Silent fail — never block UX
+    }
+  }, [user]);
+
+  const handleOkay = () => {
+    try { localStorage.setItem(SUPPORT_GUIDE_KEY, String(Date.now())); } catch {}
+    setOpen(false);
+  };
+
+  if (!open) return null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="jbj-support-guide-title"
+      className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+    >
+      <div
+        className="absolute inset-0 bg-black/55 backdrop-blur-sm"
+        onClick={handleOkay}
+        aria-hidden
+      />
+      <div
+        data-no-contrast-guard
+        className="jbj-emerald-animated-border relative w-full max-w-lg rounded-2xl p-[2px] shadow-[0_30px_60px_rgba(0,0,0,0.45),0_0_34px_rgba(16,185,129,0.35)]"
+      >
+        <div
+          data-emerald="true"
+          data-allow-dark-cta
+          data-no-contrast-guard
+          className="jj-emerald-metallic allow-white relative flex flex-col rounded-[14px] p-6 text-white sm:p-8"
+        >
+          <button
+            type="button"
+            onClick={handleOkay}
+            aria-label="Close guide"
+            className="allow-white absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 hover:text-white hover:bg-white/10"
+            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+          >
+            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+          </button>
+
+          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80">Quick guide</span>
+          <h3 id="jbj-support-guide-title" className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl">
+            Two ways to reach JBJ
+          </h3>
+          <p className="mt-2 text-sm text-white/80">
+            So you know exactly where to tap — here is the difference between the two buttons on this page.
+          </p>
+
+          <div className="mt-5 grid gap-3">
+            <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-white" />
+                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Contact Us <span className="text-white/70">· right side</span></span>
+              </div>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
+                Instant support — WhatsApp, call, live voice agent or JBJ Concierge. Best for quick questions and after-hours help, 24/7.
+              </p>
+            </div>
+            <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
+              <div className="flex items-center gap-2">
+                <PhoneCall className="h-4 w-4 text-white" />
+                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Speak to an Advisor <span className="text-white/70">· left side</span></span>
+              </div>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
+                A short form for a scheduled callback from a senior advisor — best for property, investment or brokerage requests.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleOkay}
+            data-allow-dark-cta
+            data-no-contrast-guard
+            className="allow-white mt-6 inline-flex h-12 w-full items-center justify-center rounded-full text-[13px] font-bold uppercase tracking-[0.22em] text-white transition-[filter] hover:brightness-110"
+            style={{
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+              backgroundImage: "var(--jj-emerald-ombre)",
+              border: 0,
+              boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+            }}
+          >
+            Okay, got it
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
