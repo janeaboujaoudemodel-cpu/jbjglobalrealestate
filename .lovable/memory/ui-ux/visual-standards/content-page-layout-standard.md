@@ -13,7 +13,8 @@ Guides · Insights · Services · Company (About, Team, Developers) · Legal (Te
 - Background: solid emerald ombré only via `--jj-emerald-ombre` (or `linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)`).
 - **FORBIDDEN**: `repeating-linear-gradient`, diagonal line SVGs, grid overlays, cube/oblique/vertical/horizontal line patterns, shimmer bars, animated stripe sweeps.
 - Title, eyebrow chip, and subtitle must be `text-align: center`.
-- Use `<GuideHero>` or `<PremiumEmeraldHero>` — do not write inline hero markup.
+- Use `<GuideHero>`, `<FAQHero>`, or `<PremiumEmeraldHero>` — do not write inline hero markup.
+- Hero height is full viewport (`100dvh`/`100vh`) and title/subtitle must be visually centered in the hero.
 
 ## Rule 2 — Content Column
 - Content is full page width, `max-w-4xl mx-auto px-6` (Buyer's Guide card size).
@@ -21,7 +22,9 @@ Guides · Insights · Services · Company (About, Team, Developers) · Legal (Te
 - No `lg:grid-cols-[Xpx_1fr]` alongside a sidebar TOC on these pages.
 
 ## Rule 3 — Floating TOC ("In This Guide")
-- Position: `fixed`, right side, `z-index: 60`+ (must sit above every section, never behind).
+- Position: `fixed`, right side, `z-index: 80`+ (must sit above every section, never behind).
+- Visibility: hidden throughout the entire hero; it may appear only after the first content section starts.
+- Minimized state: show only a compact expand/minimize button — never leave the full header bar covering content.
 - Fill: `--jj-emerald-ombre`, text pure white, gold hairline.
 - Use `<GuideTableOfContents>` (existing) or the shared `<FloatingTOC>` wrapper.
 - Collapsible with chevron. Mobile: bottom-sheet trigger, same emerald/white.

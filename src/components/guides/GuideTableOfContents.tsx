@@ -41,15 +41,15 @@ export const GuideTableOfContents = ({
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
-    const hero = document.querySelector('[data-guide-hero], [data-premium-emerald-hero], [data-hero-dark]') as HTMLElement | null;
+    const hero = document.querySelector('[data-guide-hero], [data-premium-emerald-hero], [data-faq-hero], [data-hero-dark]') as HTMLElement | null;
     if (!hero) {
       setPastHero(true);
       return;
     }
     const check = () => {
       const rect = hero.getBoundingClientRect();
-      // Reveal only once the hero is mostly scrolled past (bottom edge above ~120px from top)
-      setPastHero(rect.bottom < 120);
+      // Reveal only after the hero is fully behind the viewport/header area.
+      setPastHero(rect.bottom <= 8);
     };
     check();
     window.addEventListener('scroll', check, { passive: true });
@@ -138,7 +138,8 @@ export const GuideTableOfContents = ({
   return (
     <div
       className={cn(
-        "fixed right-4 top-28 z-[80] hidden w-60 lg:block xl:right-6 xl:w-64 transition-opacity duration-300",
+        "fixed right-4 top-28 z-[80] hidden lg:block transition-opacity duration-300",
+        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64",
         pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       )}
       aria-hidden={!pastHero}
@@ -183,7 +184,18 @@ export const GuideTableOfContents = ({
         )}
       </AnimatePresence>
 
-      {/* Main TOC Container - fixed position with emerald scrollbar */}
+      {/* Minimized state: only the compact expand control remains visible. */}
+      {isMinimized ? (
+        <button
+          onClick={() => setIsMinimized(false)}
+          data-surface="emerald"
+          className="h-12 w-12 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+          aria-label="Expand navigation"
+        >
+          <ChevronDown className="w-5 h-5 text-white" />
+        </button>
+      ) : (
+      /* Main TOC Container - fixed position with emerald scrollbar */
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -202,75 +214,70 @@ export const GuideTableOfContents = ({
             className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
-            {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-white" />
-            ) : (
-              <ChevronUp className="w-4 h-4 text-white" />
-            )}
+            <ChevronUp className="w-4 h-4 text-white" />
           </button>
         </div>
         
         {/* Collapsible content — stable scroll box; active rows never resize the container */}
         <AnimatePresence initial={false}>
-          {!isMinimized && (
-            <motion.nav
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
-              onWheel={passBoundaryWheelToPage}
-              data-surface="emerald"
-              className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
-            >
-              {items.map((item, index) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
+          <motion.nav
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.12 }}
+            onWheel={passBoundaryWheelToPage}
+            data-surface="emerald"
+            className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
+          >
+            {items.map((item, index) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                data-surface="emerald"
+                data-toc-item
+                data-toc-state={activeId === item.id ? "active" : "inactive"}
+                className={cn(
+                  "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
+                  activeId === item.id
+                    ? "bg-white/12 text-white font-semibold border-white/10"
+                    : "text-white hover:text-white hover:bg-white/10 border-transparent"
+                )}
+              >
+                <span data-toc-number className={cn(
+                  "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
+                  activeId === item.id
+                    ? "bg-white/15 text-white border border-white/20"
+                    : "bg-black/15 text-white border border-white/10"
+                )}>
+                  {index + 1}
+                </span>
+                {item.icon && <item.icon data-toc-icon className={cn(
+                  "w-4 h-4",
+                  "text-white"
+                )} />}
+                {!item.icon && <span aria-hidden />}
+                <span data-toc-label className="min-w-0 leading-snug">{item.title}</span>
+              </button>
+            ))}
+            
+            {/* CTA Action Button - Premium 3D Glow Style */}
+            {ctaAction && (
+              <Link to={ctaAction.href} className="block mt-4">
+                <Button 
+                  variant="primary"
                   data-surface="emerald"
-                  data-toc-item
-                  data-toc-state={activeId === item.id ? "active" : "inactive"}
-                  className={cn(
-                    "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-xl text-left text-sm transition-colors border box-border overflow-hidden",
-                    activeId === item.id
-                      ? "bg-white/12 text-white font-semibold border-white/10"
-                      : "text-white hover:text-white hover:bg-white/10 border-transparent"
-                  )}
+                  className="w-full relative py-3 mi-cta-emerald"
                 >
-                  <span data-toc-number className={cn(
-                    "w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-bold",
-                    activeId === item.id
-                      ? "bg-white/15 text-white border border-white/20"
-                      : "bg-black/15 text-white border border-white/10"
-                  )}>
-                    {index + 1}
-                  </span>
-                  {item.icon && <item.icon data-toc-icon className={cn(
-                    "w-4 h-4",
-                    "text-white"
-                  )} />}
-                  {!item.icon && <span aria-hidden />}
-                  <span data-toc-label className="min-w-0 leading-snug">{item.title}</span>
-                </button>
-              ))}
-              
-              {/* CTA Action Button - Premium 3D Glow Style */}
-              {ctaAction && (
-                <Link to={ctaAction.href} className="block mt-4">
-                  <Button 
-                    variant="primary"
-                    data-surface="emerald"
-                    className="w-full relative py-3 mi-cta-emerald"
-                  >
-                    {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}
-                    <span>{ctaAction.label}</span>
-                    <ArrowUpRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </Link>
-              )}
-            </motion.nav>
-          )}
+                  {ctaAction.icon && <ctaAction.icon className="w-4 h-4 mr-2" />}
+                  <span>{ctaAction.label}</span>
+                  <ArrowUpRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            )}
+          </motion.nav>
         </AnimatePresence>
       </motion.div>
+      )}
     </div>
   );
 };

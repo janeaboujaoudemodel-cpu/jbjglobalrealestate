@@ -26,7 +26,24 @@ export const FAQFloatingSidebar = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const isScrollingRef = useRef(false);
+
+  useEffect(() => {
+    const hero = document.querySelector('[data-faq-hero], [data-guide-hero], [data-premium-emerald-hero], [data-hero-dark]') as HTMLElement | null;
+    if (!hero) {
+      setPastHero(true);
+      return;
+    }
+    const check = () => setPastHero(hero.getBoundingClientRect().bottom <= 8);
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
 
   useEffect(() => {
     const dismissed = localStorage.getItem(TOOLTIP_DISMISSED_KEY);
@@ -71,7 +88,17 @@ export const FAQFloatingSidebar = ({
   };
 
   return (
-    <div className="fixed right-4 top-28 z-40 hidden w-60 lg:block xl:right-6 xl:w-64" data-faq-toc data-surface="emerald" data-premium-navigator>
+    <div
+      className={cn(
+        "fixed right-4 top-28 z-[80] hidden lg:block xl:right-6 transition-opacity duration-300",
+        isMinimized ? "w-auto" : "w-60 xl:w-64",
+        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      )}
+      aria-hidden={!pastHero}
+      data-faq-toc
+      data-surface="emerald"
+      data-premium-navigator
+    >
       <AnimatePresence>
         {showTooltip && !isMinimized && (
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="absolute right-full mr-4 top-0 w-64 z-50">
@@ -89,18 +116,27 @@ export const FAQFloatingSidebar = ({
         )}
       </AnimatePresence>
 
+      {isMinimized ? (
+        <button
+          onClick={() => setIsMinimized(false)}
+          data-surface="emerald"
+          className="h-12 w-12 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+          aria-label="Expand navigation"
+        >
+          <ChevronDown className="w-5 h-5 text-white" />
+        </button>
+      ) : (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex flex-col jj-scrollbar-emerald max-h-[56dvh]">
         <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4 text-white" />
             <h3 className="text-sm font-semibold text-white">{title}</h3>
           </div>
-          <button onClick={() => setIsMinimized(!isMinimized)} className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors">
-            {isMinimized ? <ChevronDown className="w-4 h-4 text-white" /> : <ChevronUp className="w-4 h-4 text-white" />}
+          <button onClick={() => setIsMinimized(true)} className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors" aria-label="Minimize navigation">
+            <ChevronUp className="w-4 h-4 text-white" />
           </button>
         </div>
         
-        {!isMinimized && (
           <nav className="p-2.5 space-y-1 overflow-y-auto flex-1 jj-scrollbar-emerald">
             {categories.map((category, index) => {
               const isActive = activeId === `category-${index}`;
@@ -121,8 +157,8 @@ export const FAQFloatingSidebar = ({
               );
             })}
           </nav>
-        )}
       </motion.div>
+      )}
     </div>
   );
 };
