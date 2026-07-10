@@ -115,7 +115,7 @@ const SellerFAQ = () => {
           <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3)] hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"><Link to="/contact"><Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" /><span className="text-[#1A1A1A] font-semibold">Ask Our Team</span></Link></Button>
         </>}
       />
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[55] max-w-xs" style={{ marginBottom: '180px' }}><FAQFloatingSidebar categories={categories} title="Navigator" /></div>
+      <FAQFloatingSidebar categories={categories} title="Navigator" />
       <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F7F1E6]/95 via-[#ECE2D2]/95 to-[#D8C7A6]/95 backdrop-blur-sm border-b border-[#B89555]/20 shadow-lg"><FAQTableOfContents categories={categories} title="FAQ Quick Access" sticky={true} /></div>

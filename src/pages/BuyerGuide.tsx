@@ -358,17 +358,14 @@ const BuyerGuide = () => {
       {/* Divider between Book Section and Who This Guide Is For */}
       <SectionDivider />
 
-      {/* Sticky Table of Contents - z-[60] to appear above JBJ support widget */}
-      <div className="hidden lg:block fixed right-8 top-1/4 z-[60] max-w-xs">
-        <GuideTableOfContents 
-          items={tocItems}
-          ctaAction={{
-            label: "Find Your Property Now",
-            href: "/properties?transaction=buy",
-            icon: Sparkles
-          }}
-        />
-      </div>
+      <GuideTableOfContents 
+        items={tocItems}
+        ctaAction={{
+          label: "Find Your Property Now",
+          href: "/properties?transaction=buy",
+          icon: Sparkles
+        }}
+      />
 
       {/* Introduction - Who This Guide Is For */}
       <section id="who-this-guide-for" className="py-16 md:py-24 jj-section-champagne scroll-mt-20">
