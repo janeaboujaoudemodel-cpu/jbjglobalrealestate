@@ -1746,6 +1746,22 @@ html body #root button[aria-label="Talk to JBJ support"] {
   white-space: nowrap !important;
 }
 
+/* Same escape hatch for the LEFT-edge "Speak to an advisor" tag on /access (desktop only) */
+@media (min-width: 1024px) {
+  html body button[aria-label="Speak to an advisor"].jj-emerald-metallic.lg\:flex,
+  html body button[aria-label="Speak to an advisor"].lg\:flex,
+  html body #root button[aria-label="Speak to an advisor"].lg\:flex {
+    display: flex !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: auto !important;
+    top: 50% !important;
+    writing-mode: vertical-rl !important;
+    text-orientation: mixed !important;
+    white-space: nowrap !important;
+  }
+}
+
 
 /* Radix Checkbox: force the tick to be pure white on ANY checked state so it never
    renders dark on the emerald filled background (My Projects, CRM tables, bulk toolbars). */
