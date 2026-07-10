@@ -1746,12 +1746,22 @@ html body #root button[aria-label="Talk to JBJ support"] {
   white-space: nowrap !important;
 }
 
-/* Speak-to-advisor tooltip must never inherit vertical writing mode from any global rule */
-html body [role="tooltip"][data-surface="emerald"],
-html body #root [role="tooltip"][data-surface="emerald"] {
+/* Speak-to-advisor tooltip must never inherit vertical writing mode from any global rule,
+   and must be allowed to fade/translate via opacity/visibility instead of being locked visible. */
+html body #root [role="tooltip"][data-surface="emerald"].jj-advisor-bubble {
   writing-mode: horizontal-tb !important;
   text-orientation: mixed !important;
   white-space: normal !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(0.5rem) !important;
+  transition: opacity 200ms ease, visibility 200ms ease, transform 200ms ease !important;
+}
+html body #root .group:hover [role="tooltip"][data-surface="emerald"].jj-advisor-bubble,
+html body #root .group:focus-within [role="tooltip"][data-surface="emerald"].jj-advisor-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
 }
 
 
