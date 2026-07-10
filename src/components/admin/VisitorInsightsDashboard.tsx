@@ -62,12 +62,14 @@ interface VisitorDocument {
   created_at: string;
 }
 
+// Plaintext PII columns (full_name, email, phone) have been removed from
+// contact_gating_submissions — access encrypted values via decrypt RPC only.
 interface ContactSubmission {
   id: string;
   session_id: string;
-  full_name: string;
-  email: string;
-  phone: string;
+  full_name: string | null;
+  email: string | null;
+  phone: string | null;
   nationality: string | null;
   location: string | null;
   preferred_language: string | null;
@@ -183,9 +185,9 @@ const VisitorInsightsDashboard = () => {
 
   const filteredContacts = useMemo(() => {
     return contacts.filter(contact =>
-      contact.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      contact.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      contact.phone.includes(searchQuery)
+      (contact.full_name ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (contact.email ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (contact.phone ?? '').includes(searchQuery)
     );
   }, [contacts, searchQuery]);
 
