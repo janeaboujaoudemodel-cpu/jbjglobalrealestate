@@ -1669,13 +1669,12 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
       {/* Hover bubble — sibling, not child, of the emerald button */}
       <span
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-[61] mb-3 -translate-x-1/2 whitespace-nowrap rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0"
+        className="pointer-events-none absolute bottom-full left-1/2 z-[61] mb-3 -translate-x-1/2 translate-y-1.5 whitespace-nowrap rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100"
         style={{
           backgroundImage: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
           WebkitTextFillColor: "#FFFFFF",
           boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
-          transform: "translate(-50%, 6px)",
         }}
       >
         Speak to an advisor
