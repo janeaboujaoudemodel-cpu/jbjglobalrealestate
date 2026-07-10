@@ -88,7 +88,7 @@ const ListingsApproval = () => {
     try {
       const { data, error } = await supabase
         .from("projects")
-        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at")
+        .select("id,name,slug,developer_name,city,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at,community:communities(name)")
         .order("updated_at", { ascending: false })
         .limit(500);
       if (error) throw error;
