@@ -72,8 +72,8 @@ export function PremiumEmeraldHero({
           </div>
           <h1
             data-no-contrast-guard
-            className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.08] tracking-tight mb-5"
-            style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+            className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.08] tracking-tight mb-5 text-center"
+            style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textAlign: "center" }}
           >
             {title}
           </h1>
