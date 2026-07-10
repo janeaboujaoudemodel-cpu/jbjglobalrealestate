@@ -107,7 +107,12 @@ const ListingsApproval = () => {
           counts[`doc:${row.project_id}`] = (counts[`doc:${row.project_id}`] || 0) + 1;
         });
       }
-      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0, documents_count: counts[`doc:${p.id}`] || 0 })));
+      setProjects((data || []).map((p: any) => ({
+        ...p,
+        community: p.community?.name ?? null,
+        gallery_count: counts[p.id] || 0,
+        documents_count: counts[`doc:${p.id}`] || 0,
+      })));
     } catch (e: any) {
       toast.error(e.message || "Failed to load listings");
     } finally {
