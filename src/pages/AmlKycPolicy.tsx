@@ -4,6 +4,7 @@
  * full-width content column with premium champagne cards.
  */
 import { Link } from "react-router-dom";
+import { ReactNode } from "react";
 import {
   ShieldCheck, Scale, UserCheck, Search, FileWarning, Archive, Handshake,
 } from "lucide-react";
