@@ -47,8 +47,9 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
         </button>
       </PopoverTrigger>
       <PopoverContent
+        data-advisor-popover
         align="start"
-        className="p-0 w-[var(--radix-popover-trigger-width)] min-w-[260px] bg-[#FDFBF7] border-[#B89555]/40"
+        className="p-0 w-[var(--radix-popover-trigger-width)] min-w-[260px] bg-[#FDFBF7] border-[#B89555]/40 z-[10200]"
       >
         <Command>
           <CommandInput placeholder="Search country…" className="text-[#1A1A1A]" />
@@ -65,12 +66,13 @@ export default function NationalityPicker({ value, onChange, placeholder = "Sele
                   <CommandItem
                     key={c.code}
                     value={`${c.name} ${c.nationality} ${c.code}`}
+                    data-no-contrast-guard
                     onSelect={() => { onChange(c.name); setOpen(false); }}
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex items-center gap-2 cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                   >
                     <span className="text-base leading-none">{c.flag}</span>
                     <span className="flex-1 truncate">{c.name}</span>
-                    {isSelected && <Check className="w-4 h-4 text-[#B89555]" />}
+                    {isSelected && <Check className="w-4 h-4" />}
                   </CommandItem>
                 );
               })}

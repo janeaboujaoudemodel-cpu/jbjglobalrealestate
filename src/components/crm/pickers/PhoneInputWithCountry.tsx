@@ -63,6 +63,7 @@ export default function PhoneInputWithCountry({
           </button>
         </PopoverTrigger>
         <PopoverContent
+          data-advisor-popover
           align="start"
           className="p-0 w-[300px] bg-[#FDFBF7] border-[#B89555]/40 z-[10200] shadow-[0_20px_50px_-20px_rgba(6,78,59,0.35)]"
         >
@@ -79,13 +80,14 @@ export default function PhoneInputWithCountry({
                   <CommandItem
                     key={c.code}
                     value={`${c.name} ${c.nationality} ${c.dial} ${c.code}`}
+                    data-no-contrast-guard
                     onSelect={() => setDial(c.dial)}
                     className="flex items-center gap-2 cursor-pointer data-[selected=true]:!bg-[#064E3B] data-[selected=true]:!text-white data-[selected=true]:[&_*]:!text-white data-[selected=true]:[&_svg]:!stroke-white"
                   >
                     <span className="text-base leading-none">{c.flag}</span>
                     <span className="flex-1 truncate">{c.name}</span>
-                    <span className="text-xs text-[#1A1A1A]/60">{c.dial}</span>
-                    {c.dial === dial && <Check className="w-4 h-4 text-[#064E3B]" />}
+                    <span className="text-xs">{c.dial}</span>
+                    {c.dial === dial && <Check className="w-4 h-4" />}
                   </CommandItem>
                 ))}
               </CommandGroup>
