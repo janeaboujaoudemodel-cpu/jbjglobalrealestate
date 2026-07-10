@@ -1431,10 +1431,6 @@ export default function PublicAccess() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] !text-white backdrop-blur-md sm:text-[11px]">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
-              Welcome · Private access portal
-            </span>
             <img
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
@@ -1442,14 +1438,10 @@ export default function PublicAccess() {
               className="h-[200px] w-[200px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[300px] sm:w-[300px] lg:h-[380px] lg:w-[380px]"
             />
             <h1 className="mt-6 font-serif text-3xl leading-[1.05] !text-white sm:text-6xl lg:text-[76px]">
-              Welcome to JBJ Global Real Estate
+              JBJ Global Real Estate
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed !text-white/85 sm:text-base lg:text-lg">
-              Explore our complete property platform, access live opportunities, use our real estate tools,
-              browse exclusive guides, and connect with our advisory team.
-            </p>
-            <p className="mx-auto mt-3 max-w-xl text-[11px] font-semibold uppercase tracking-[0.22em] !text-[#EBD79A] sm:text-xs">
-              Create an account or log in to unlock the full ecosystem
+              A private property ecosystem for Dubai's discerning investors, developers & brokers.
             </p>
             <div className="mt-7 flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
               <button
