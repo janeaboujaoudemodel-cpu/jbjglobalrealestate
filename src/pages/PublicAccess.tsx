@@ -1771,22 +1771,21 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
           ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
         `}
       >
+        <button
+          type="button"
+          onClick={dismiss}
+          aria-label="Close welcome portal"
+          className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full text-white opacity-0 transition-opacity duration-200 hover:bg-white/15 hover:text-white focus-visible:opacity-100 group-hover:opacity-100 sm:right-3 sm:top-3"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
+          <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+        </button>
         <div
           data-emerald="true"
           data-allow-dark-cta
           data-no-contrast-guard
           className="jj-emerald-metallic allow-white relative flex flex-col items-center rounded-[14px] px-6 py-8 text-center text-white sm:px-8 sm:py-10"
         >
-          <button
-            type="button"
-            onClick={dismiss}
-            aria-label="Close welcome portal"
-            className="allow-white absolute right-2 top-2 inline-flex h-9 w-9 items-center justify-center rounded-full text-white opacity-0 transition-opacity duration-200 hover:bg-white/15 hover:text-white focus-visible:opacity-100 group-hover:opacity-100 sm:right-3 sm:top-3"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
-          </button>
-
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-white backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
             Welcome · Private access portal
