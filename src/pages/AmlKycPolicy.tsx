@@ -28,7 +28,7 @@ const SectionCard = ({
   children,
   className = "",
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }) => (
   <div
@@ -50,7 +50,7 @@ const SectionHeading = ({
   children,
 }: {
   number: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) => (
   <div className="flex items-baseline gap-3 sm:gap-4 mb-4 sm:mb-5">
     <span
