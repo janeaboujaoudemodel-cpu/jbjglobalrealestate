@@ -1666,25 +1666,37 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
       className="group fixed bottom-5 right-5 z-[60] flex h-12 w-12 items-end justify-end"
       data-no-contrast-guard
     >
-      {/* Hover bubble — sibling, not child, of the emerald button */}
+      {/* Hover bubble — compact speech bubble above the phone icon */}
       <span
         role="tooltip"
         data-surface="emerald"
         data-allow-dark-cta
         data-no-contrast-guard
-        className="allow-white pointer-events-none invisible absolute bottom-full left-1/2 z-[61] mb-3 -translate-x-1/2 translate-y-1.5 whitespace-nowrap rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+        className="allow-white pointer-events-none invisible absolute bottom-full left-1/2 z-[61] mb-3 -translate-x-1/2 translate-y-2 rounded-2xl px-4 py-3 text-center text-[11px] font-semibold uppercase leading-[1.35] tracking-[0.14em] text-white opacity-0 shadow-[0_10px_28px_-8px_rgba(6,78,59,0.75)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
         style={{
           backgroundImage: "var(--jj-emerald-ombre)",
           color: "#FFFFFF",
           WebkitTextFillColor: "#FFFFFF",
-          boxShadow: "0 10px 24px -14px rgba(6,78,59,0.92), inset 0 1px 0 rgba(255,255,255,0.14)",
+          writingMode: "horizontal-tb",
+          textOrientation: "mixed",
+          whiteSpace: "normal",
+          minWidth: "120px",
+          maxWidth: "160px",
         }}
       >
-        Speak to an advisor
+        <span className="block">Speak to an</span>
+        <span className="block">advisor</span>
+        {/* Downward tail */}
         <span
           aria-hidden
-          className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-1/2 h-2 w-2 rotate-45"
-          style={{ background: "#042c1c" }}
+          className="absolute left-1/2 top-full -translate-x-1/2 -translate-y-1/2"
+          style={{
+            width: 0,
+            height: 0,
+            borderLeft: "7px solid transparent",
+            borderRight: "7px solid transparent",
+            borderTop: "8px solid #042c1c",
+          }}
         />
       </span>
 
