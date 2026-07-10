@@ -309,8 +309,11 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
     e.preventDefault();
     setLoading(true);
     try {
+      const finalServices = otherService.trim()
+        ? [...services, `Other: ${otherService.trim()}`]
+        : services;
       const { data, error } = await supabase.functions.invoke("submit-lead", {
-        body: { ...form, services, source_page: sourcePage ?? window.location.pathname },
+        body: { ...form, services: finalServices, source_page: sourcePage ?? window.location.pathname },
       });
       if (error || (data && (data as any).error)) {
         throw new Error((data as any)?.error ?? error?.message ?? "Submission failed");
@@ -319,6 +322,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
       onOpenChange(false);
       setForm({ full_name: "", email: "", phone: "", nationality: "", preferred_language: "English", user_type: "buyer", notes: "" });
       setServices([]);
+      setOtherService("");
     } catch (err) {
       toast.error((err as Error).message);
     } finally {
