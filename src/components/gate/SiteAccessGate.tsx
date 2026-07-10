@@ -23,6 +23,7 @@ const PUBLIC_PATHS = [
   "/terms",
   "/cookies",
   "/aml",
+  "/aml-kyc",
   "/welcome",
   "/oauth",
   "/.lovable/oauth",
