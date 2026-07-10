@@ -153,7 +153,8 @@ export const MarketIntelligenceTableOfContents = ({
           </div>
           <button
             onClick={() => setIsMinimized(true)}
-            className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors bg-white/10 hover:bg-white/15"
+            data-surface="emerald"
+            className="w-7 h-7 rounded-none flex items-center justify-center transition-colors bg-white/10 hover:bg-white/15"
             aria-label="Minimize navigation"
           >
             <ChevronUp className="w-4 h-4 text-white" />

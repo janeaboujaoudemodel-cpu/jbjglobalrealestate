@@ -56,14 +56,14 @@ export function PremiumEmeraldHero({
         }}
         aria-hidden
       />
-      <div className="relative z-10 flex min-h-[100svh] w-full items-center justify-center px-6 py-28 text-center">
+      <div className="relative z-10 flex min-h-[100svh] w-full items-center justify-center px-6 py-20 text-center">
         <motion.div
-          className="mx-auto flex w-full max-w-[58rem] flex-col items-center justify-center"
+          className="mx-auto flex w-full max-w-[54rem] flex-col items-center justify-center"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-7 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-6 backdrop-blur-sm">
             <EyebrowIcon className="h-3.5 w-3.5 text-[#E8CF8A]" />
             <span className="text-[11px] uppercase tracking-[0.18em] text-[#E8CF8A] font-medium">
               {eyebrow}
@@ -71,20 +71,20 @@ export function PremiumEmeraldHero({
           </div>
           <h1
             data-no-contrast-guard
-            className="mx-auto max-w-[16ch] text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.04] mb-6 text-center"
+            className="mx-auto max-w-[15ch] text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.04] mb-5 text-center"
             style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textAlign: "center" }}
           >
             {title}
           </h1>
           {subtitle && (
             <p
-              className="mx-auto max-w-[42rem] text-base sm:text-lg md:text-xl text-[#F7F2EA] leading-relaxed"
+              className="mx-auto max-w-[38rem] text-base sm:text-lg md:text-xl text-[#F7F2EA] leading-relaxed"
               style={{ ...HEADING_FONT, color: "#F7F2EA", WebkitTextFillColor: "#F7F2EA" }}
             >
               {subtitle}
             </p>
           )}
-          {meta && <div className="mt-8 flex w-full justify-center text-sm text-white/90">{meta}</div>}
+          {meta && <div className="mt-7 flex w-full justify-center text-sm text-white/90">{meta}</div>}
         </motion.div>
       </div>
     </section>

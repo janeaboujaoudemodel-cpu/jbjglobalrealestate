@@ -136,13 +136,16 @@ export const FAQFloatingSidebar = ({
           </button>
         </div>
         
-          <nav className="p-2.5 space-y-1 overflow-y-auto flex-1 jj-scrollbar-emerald">
+          <nav data-surface="emerald" className="p-2.5 space-y-1 overflow-y-auto flex-1 jj-scrollbar-emerald">
             {categories.map((category, index) => {
               const isActive = activeId === `category-${index}`;
               return (
                 <button
                   key={category.id}
                   onClick={() => scrollToSection(`category-${index}`)}
+                  data-toc-item
+                  data-toc-state={isActive ? "active" : "inactive"}
+                  data-surface="emerald"
                   className={cn(
                     "w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-none text-left text-xs transition-colors border",
                     isActive ? "bg-white/12 text-white font-semibold border-white/15" : "bg-black/10 text-white hover:bg-white/10 border-white/10"

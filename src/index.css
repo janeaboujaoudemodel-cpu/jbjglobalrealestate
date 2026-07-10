@@ -34574,7 +34574,7 @@ html body #root .group:focus-within [role="tooltip"][data-surface="emerald"].jj-
    Hero: full viewport, centered. Navigator: emerald-only, white text,
    square/sharp edges, no champagne/white inactive rows.
    ============================================================= */
-html body #root [data-insights-page] :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) {
+html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) {
   min-height: 100svh !important;
   height: auto !important;
   display: flex !important;
@@ -34588,7 +34588,7 @@ html body #root [data-insights-page] :is([data-premium-emerald-hero], [data-mi-h
   border-radius: 0 !important;
 }
 
-html body #root [data-insights-page] :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) > :not(.absolute) {
+html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) > :not(.absolute) {
   min-height: 100svh !important;
   display: flex !important;
   align-items: center !important;
@@ -34598,7 +34598,7 @@ html body #root [data-insights-page] :is([data-premium-emerald-hero], [data-mi-h
   text-align: center !important;
 }
 
-html body #root [data-insights-page] :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) :is(h1, p) {
+html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) :is(h1, p) {
   margin-left: auto !important;
   margin-right: auto !important;
   text-align: center !important;
@@ -34607,13 +34607,13 @@ html body #root [data-insights-page] :is([data-premium-emerald-hero], [data-mi-h
   text-wrap: balance;
 }
 
-html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) {
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) {
   border-radius: 0 !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(> div, nav, [class*="overflow-y-auto"], [data-guide-tooltip]) {
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(> div, nav, [class*="overflow-y-auto"], [data-guide-tooltip]) {
   background: var(--jj-emerald-ombre) !important;
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
@@ -34623,7 +34623,7 @@ html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]) {
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]) {
   background: linear-gradient(135deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.10) 100%) !important;
   background-image: linear-gradient(135deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.10) 100%) !important;
   border: 1px solid rgba(255,255,255,0.12) !important;
@@ -34633,8 +34633,8 @@ html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]):hover,
-html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) [data-toc-state="active"] {
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]):hover,
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) [data-toc-state="active"] {
   background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%) !important;
   background-image: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%) !important;
   border-color: rgba(255,255,255,0.18) !important;
@@ -34642,7 +34642,7 @@ html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root [data-insights-page] :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is([data-toc-number], button > span:first-child, svg, path, circle, rect, line, polyline, polygon, h3, p, span, div) {
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is([data-toc-number], button > span:first-child, svg, path, circle, rect, line, polyline, polygon, h3, p, span, div) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: currentColor !important;
