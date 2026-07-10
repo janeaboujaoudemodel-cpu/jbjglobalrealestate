@@ -1,4 +1,4 @@
-import { ArrowUpRight, Info } from "lucide-react";
+import { ArrowUpRight, Info, BarChart3, MapPin, Sparkles, FileText, Database, ShieldCheck, PhoneCall } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { SEOHead } from "@/components/SEOHead";
@@ -11,6 +11,7 @@ import {
   MarketReports,
   DataSourcesPanel,
   MarketIntelligenceHero,
+  MarketIntelligenceTableOfContents,
 } from "@/components/market-intelligence";
 import DLDDailySnapshot from "@/components/market-intelligence/DLDDailySnapshot";
 import {
@@ -19,6 +20,17 @@ import {
 } from "@/components/market-intelligence/MarketIntelligenceTypography";
 import { MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { IconTile } from "@/components/ui/icon-tile";
+
+const MI_TOC_ITEMS = [
+  { id: "overview", title: "Market Overview", icon: BarChart3 },
+  { id: "dld-snapshot", title: "DLD Daily Snapshot", icon: Database },
+  { id: "areas", title: "Area Intelligence", icon: MapPin },
+  { id: "ai-insights", title: "AI Market Insights", icon: Sparkles },
+  { id: "reports", title: "Market Reports", icon: FileText },
+  { id: "sources", title: "Data Sources", icon: Database },
+  { id: "compliance", title: "Compliance", icon: ShieldCheck },
+  { id: "cta", title: "Speak With Our Team", icon: PhoneCall },
+];
 
 // Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
 // matches the other dark hero sections. NO champagne fill, NO ink-guard classes.
@@ -159,29 +171,41 @@ const MarketIntelligence = () => {
       />
 
 
+      <MarketIntelligenceTableOfContents items={MI_TOC_ITEMS} title="In This Section" />
+
       {/* Market Overview Dashboard - Edge to Edge */}
-      <div id="overview">
+      <div id="overview" className="scroll-mt-24">
         <MarketOverviewDashboard />
       </div>
 
       {/* DLD Daily Snapshot — KPI strip, Cash vs Mortgage, Top-10, Notice + Consultation */}
-      <DLDDailySnapshot />
+      <div id="dld-snapshot" className="scroll-mt-24">
+        <DLDDailySnapshot />
+      </div>
 
 
       {/* Area Intelligence Grid - Edge to Edge */}
-      <AreaIntelligenceGrid />
+      <div id="areas" className="scroll-mt-24">
+        <AreaIntelligenceGrid />
+      </div>
 
       {/* AI Market Insights - Edge to Edge */}
-      <AIMarketInsights />
+      <div id="ai-insights" className="scroll-mt-24">
+        <AIMarketInsights />
+      </div>
 
       {/* Market Reports - Edge to Edge */}
-      <MarketReports />
+      <div id="reports" className="scroll-mt-24">
+        <MarketReports />
+      </div>
 
       {/* Data Sources Panel - Edge to Edge */}
-      <DataSourcesPanel />
+      <div id="sources" className="scroll-mt-24">
+        <DataSourcesPanel />
+      </div>
 
       {/* Compliance Disclaimer */}
-      <section className="surface-light py-12 bg-[#FDFBF7]" data-surface="light">
+      <section id="compliance" className="scroll-mt-24 surface-light py-12 bg-[#FDFBF7]" data-surface="light">
         <div className="container mx-auto px-4">
           <div className="mi-gold-frame mi-gold-frame-corners max-w-5xl mx-auto p-10 text-center rounded-2xl">
             <div className="mx-auto mb-4 flex justify-center">
@@ -201,14 +225,16 @@ const MarketIntelligence = () => {
 
 
       {/* Pre-Footer White Section with CTA */}
-      <PreFooterSeparator 
-        title="Ready to Make Informed Decisions?"
-        subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
-        primaryLink="/contact"
-        primaryText="Speak With Our Team"
-        secondaryLink="/ai-home-finder"
-        secondaryText="AI Home Finder"
-      />
+      <div id="cta" className="scroll-mt-24">
+        <PreFooterSeparator 
+          title="Ready to Make Informed Decisions?"
+          subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
+          primaryLink="/contact"
+          primaryText="Speak With Our Team"
+          secondaryLink="/ai-home-finder"
+          secondaryText="AI Home Finder"
+        />
+      </div>
     </div>
   );
 };

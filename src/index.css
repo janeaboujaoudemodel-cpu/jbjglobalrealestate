@@ -1302,13 +1302,38 @@ All colors MUST be HSL.
     max-width: 100vw;
   }
 
-  /* Remove browser autofill blue/yellow glow and match champagne theme */
+  /* Remove browser autofill blue/yellow glow and match champagne theme.
+     Exclude emerald-surface inputs (newsletter / hero search) so autofill
+     doesn't paint a white block over the emerald pill. */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px #FDFBF7 inset !important;
     -webkit-text-fill-color: #1A1A1A;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+  .jj-newsletter-emerald input:-webkit-autofill,
+  .jj-newsletter-emerald input:-webkit-autofill:hover,
+  .jj-newsletter-emerald input:-webkit-autofill:focus,
+  .jj-newsletter-emerald input:-webkit-autofill:active,
+  .jj-hero-search-bar input:-webkit-autofill,
+  .jj-hero-search-bar input:-webkit-autofill:hover,
+  .jj-hero-search-bar input:-webkit-autofill:focus,
+  .jj-hero-search-bar input:-webkit-autofill:active,
+  [data-surface="emerald"] input:-webkit-autofill,
+  [data-surface="emerald"] input:-webkit-autofill:hover,
+  [data-surface="emerald"] input:-webkit-autofill:focus,
+  [data-surface="emerald"] input:-webkit-autofill:active,
+  [data-surface="dark"] input:-webkit-autofill,
+  [data-surface="dark"] input:-webkit-autofill:hover,
+  [data-surface="dark"] input:-webkit-autofill:focus,
+  [data-surface="dark"] input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+    box-shadow: 0 0 0 30px transparent inset !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    caret-color: #FFFFFF !important;
+    background-color: transparent !important;
     transition: background-color 5000s ease-in-out 0s;
   }
 
