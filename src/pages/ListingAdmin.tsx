@@ -447,7 +447,6 @@ const ListingAdmin = () => {
           .insert({
             project_id: selectedProject.id,
             image_url: urlData.publicUrl,
-            is_primary: false,
           } as any);
 
         successCount++;
