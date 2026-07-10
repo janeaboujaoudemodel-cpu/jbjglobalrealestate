@@ -1824,7 +1824,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
               onClick={handleCreateAccount}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
+              className="allow-white inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-md text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-[filter] hover:brightness-110"
               style={{
                 color: "#FFFFFF",
                 WebkitTextFillColor: "#FFFFFF",
@@ -1838,9 +1838,11 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
             <button
               type="button"
               onClick={handleLogin}
-              className="inline-flex h-12 flex-1 items-center justify-center rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition hover:bg-white/20"
+              data-no-contrast-guard
+              style={emeraldInkStyle}
+              className={`${BTN_DARK_OUTLINE} h-12 flex-1`}
             >
-              Log in
+              Log in <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </div>
