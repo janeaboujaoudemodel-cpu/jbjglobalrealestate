@@ -324,6 +324,9 @@ export default function SupportLauncher() {
               Visible from large landscape tablet / desktop up. */}
           <span className="inline allow-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.22em] text-white" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Contact Us</span>
           <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+          {/* Outer pulse rings for attention */}
+          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-l-xl ring-2 ring-emerald-300/60 animate-ping" />
+          <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-l-xl ring-2 ring-emerald-400/30 animate-ping" style={{ animationDelay: "0.5s" }} />
         </button>
 
 
