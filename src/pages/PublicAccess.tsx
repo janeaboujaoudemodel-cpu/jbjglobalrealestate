@@ -1672,6 +1672,9 @@ export default function PublicAccess() {
         </div>
       </footer>
 
+      {/* Welcome portal pop-up — explains this is the access gate, not the full site. */}
+      <WelcomePortalOverlay onCreateAccount={openSignup} onLogin={() => setLoginOpen(true)} />
+
       {/* Unified Contact widget lives globally (SupportLauncher). This page just
           listens so the "Speak to an advisor" channel opens our LeadFormDialog. */}
       <SupportGuideOverlay />
