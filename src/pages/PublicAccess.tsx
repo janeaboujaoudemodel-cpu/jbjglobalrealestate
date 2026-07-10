@@ -1766,27 +1766,26 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
       <div
         data-no-contrast-guard
         className={`
-          jbj-emerald-animated-border relative w-full max-w-md rounded-2xl p-[2px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55),0_0_40px_rgba(16,185,129,0.28)]
+          jbj-emerald-animated-border group relative w-full max-w-md rounded-2xl p-[2px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55),0_0_40px_rgba(16,185,129,0.28)]
           transition-all duration-300
           ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
         `}
       >
+        <button
+          type="button"
+          onClick={dismiss}
+          aria-label="Close welcome portal"
+          className="allow-white absolute right-2 top-2 z-20 inline-flex h-9 w-9 origin-center scale-0 items-center justify-center rounded-full text-white transition-all duration-200 hover:bg-white/15 hover:text-white focus-visible:scale-100 group-hover:scale-100 sm:right-3 sm:top-3"
+          style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+        >
+          <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
+        </button>
         <div
           data-emerald="true"
           data-allow-dark-cta
           data-no-contrast-guard
           className="jj-emerald-metallic allow-white relative flex flex-col items-center rounded-[14px] px-6 py-8 text-center text-white sm:px-8 sm:py-10"
         >
-          <button
-            type="button"
-            onClick={dismiss}
-            aria-label="Close welcome portal"
-            className="allow-white absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 hover:text-white hover:bg-white/10"
-            style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
-          >
-            <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
-          </button>
-
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-white backdrop-blur-md">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
             Welcome · Private access portal
