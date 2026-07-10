@@ -647,26 +647,34 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
-    stateRef.current.dragging = true;
-    stateRef.current.paused = true;
+    // Do NOT pause on simple taps — only on real drags. This keeps the mobile
+    // carousel visibly auto-scrolling even when users tap a card.
+    stateRef.current.dragging = false;
     stateRef.current.startX = e.clientX;
     stateRef.current.startScroll = el.scrollLeft;
-    el.setPointerCapture(e.pointerId);
-    el.style.cursor = "grabbing";
   };
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     const s = stateRef.current;
-    if (!el || !s.dragging) return;
-    el.scrollLeft = s.startScroll - (e.clientX - s.startX);
+    if (!el) return;
+    const dx = e.clientX - s.startX;
+    // Promote to a drag only after 6px of horizontal movement.
+    if (!s.dragging && Math.abs(dx) > 6) {
+      s.dragging = true;
+      s.paused = true;
+      try { el.setPointerCapture(e.pointerId); } catch {}
+      el.style.cursor = "grabbing";
+    }
+    if (s.dragging) el.scrollLeft = s.startScroll - dx;
   };
   const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollerRef.current;
     if (!el) return;
+    const wasDragging = stateRef.current.dragging;
     stateRef.current.dragging = false;
     try { el.releasePointerCapture(e.pointerId); } catch {}
     el.style.cursor = "grab";
-    pauseBriefly();
+    if (wasDragging) pauseBriefly();
   };
 
   const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -1309,6 +1317,16 @@ export default function PublicAccess() {
     });
   };
 
+  // Global event bridge: the unified Contact Us widget (SupportLauncher) fires
+  // "jbj:open-advisor" when the visitor picks the "Speak to an advisor" or
+  // "Request a callback" channel.
+  React.useEffect(() => {
+    const onOpen = () => setLeadOpen(true);
+    window.addEventListener("jbj:open-advisor", onOpen as EventListener);
+    return () => window.removeEventListener("jbj:open-advisor", onOpen as EventListener);
+  }, []);
+
+
   // Nuclear contrast lock — walks all access CTAs after paint and forces color/bg
   // with priority 'important' via inline style, defeating ALL global rules.
   React.useEffect(() => {
@@ -1413,16 +1431,42 @@ export default function PublicAccess() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.15)_45%,rgba(0,0,0,0.75)_100%)]" />
 
           <div className="relative mx-auto flex min-h-[calc(100vh-76px)] max-w-7xl flex-col items-center justify-center px-5 text-center sm:px-8 lg:px-12">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] !text-white backdrop-blur-md sm:text-[11px]">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
+              Welcome · Private access portal
+            </span>
             <img
               data-no-fallback
               src={new URL("@/assets/jbj-monogram-light-transparent.png", import.meta.url).href}
               alt="JBJ"
-              className="h-[240px] w-[240px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[340px] sm:w-[340px] lg:h-[420px] lg:w-[420px]"
+              className="h-[200px] w-[200px] object-contain drop-shadow-[0_28px_60px_rgba(0,0,0,0.6)] sm:h-[300px] sm:w-[300px] lg:h-[380px] lg:w-[380px]"
             />
-            <h1 className="mt-6 font-serif text-4xl leading-[1.05] !text-white sm:text-6xl lg:text-[80px]">
-              JBJ Global Real Estate
+            <h1 className="mt-6 font-serif text-3xl leading-[1.05] !text-white sm:text-6xl lg:text-[76px]">
+              Welcome to JBJ Global Real Estate
             </h1>
-
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed !text-white/85 sm:text-base lg:text-lg">
+              Explore our complete property platform, access live opportunities, use our real estate tools,
+              browse exclusive guides, and connect with our advisory team.
+            </p>
+            <p className="mx-auto mt-3 max-w-xl text-[11px] font-semibold uppercase tracking-[0.22em] !text-[#EBD79A] sm:text-xs">
+              Create an account or log in to unlock the full ecosystem
+            </p>
+            <div className="mt-7 flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
+              <button
+                onClick={openSignup}
+                data-jbj-cta-emerald="" data-no-contrast-guard data-allow-dark-cta data-surface="dark"
+                style={emeraldInkStyle}
+                className={`${BTN_EMERALD_SOLID} h-12 flex-1 sm:flex-none uppercase tracking-[0.14em] min-w-[160px]`}
+              >
+                Create account <ArrowRight className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setLoginOpen(true)}
+                className="inline-flex h-12 flex-1 sm:flex-none min-w-[140px] items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[13px] font-bold uppercase tracking-[0.14em] !text-white backdrop-blur-md transition hover:bg-white/20"
+              >
+                Log in
+              </button>
+            </div>
           </div>
 
           {/* Scroll cue */}
@@ -1636,9 +1680,8 @@ export default function PublicAccess() {
         </div>
       </footer>
 
-      {/* Speak to an Advisor — vertical LEFT edge tag (desktop) + bottom-left phone icon (mobile) */}
-      <SpeakToAdvisorLauncher onOpen={() => setLeadOpen(true)} />
-      {/* First-visit guide explaining Contact Us vs Speak to an Advisor */}
+      {/* Unified Contact widget lives globally (SupportLauncher). This page just
+          listens so the "Speak to an advisor" channel opens our LeadFormDialog. */}
       <SupportGuideOverlay />
 
       <LeadFormDialog open={leadOpen} onOpenChange={setLeadOpen} sourcePage="/access" />
@@ -1654,79 +1697,10 @@ export default function PublicAccess() {
   );
 }
 
-/* ============================================================================
- * SpeakToAdvisorLauncher — phone icon anchored to the bottom-right corner.
- * Hover reveals a "Speak to an advisor" bubble above the icon.
- * The tooltip is a sibling of the emerald-metallic button so the global
- * contrast-guard opacity rules cannot force it visible.
- * ==========================================================================*/
-function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
-  return (
-    <div
-      className="group fixed bottom-5 right-5 z-[60] flex h-12 w-12 items-end justify-end"
-      data-no-contrast-guard
-    >
-      {/* Hover bubble — compact speech bubble above the phone icon, right-aligned to the button so it never clips the viewport edge */}
-      <span
-        role="tooltip"
-        data-surface="emerald"
-        data-allow-dark-cta
-        data-no-contrast-guard
-        className="jj-advisor-bubble allow-white pointer-events-none invisible absolute bottom-full right-0 z-[61] mb-3 translate-y-2 rounded-2xl px-4 py-3 text-center text-[11px] font-semibold uppercase leading-[1.35] tracking-[0.14em] text-white opacity-0 shadow-[0_10px_28px_-8px_rgba(6,78,59,0.75)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
-        style={{
-          backgroundImage: "var(--jj-emerald-ombre)",
-          color: "#FFFFFF",
-          WebkitTextFillColor: "#FFFFFF",
-          writingMode: "horizontal-tb",
-          textOrientation: "mixed",
-          whiteSpace: "normal",
-          minWidth: "120px",
-          maxWidth: "160px",
-        }}
-      >
-        <span className="block">Speak to an</span>
-        <span className="block">advisor</span>
-        {/* Downward tail — anchored to the button center (24px from the right edge of the parent) */}
-        <span
-          aria-hidden
-          className="absolute top-full -translate-y-1/2"
-          style={{
-            right: "24px",
-            width: 0,
-            height: 0,
-            borderLeft: "7px solid transparent",
-            borderRight: "7px solid transparent",
-            borderTop: "8px solid #042c1c",
-          }}
-        />
-      </span>
+/* SpeakToAdvisorLauncher removed — the global Contact Us widget
+ * (SupportLauncher) is now the single unified entry point across the site.
+ * It dispatches "jbj:open-advisor" for the advisor lead form. */
 
-      <button
-        type="button"
-        onClick={onOpen}
-        aria-label="Speak to an advisor"
-        data-surface="emerald"
-        data-allow-dark-cta
-        data-no-contrast-guard
-        className="allow-white jj-emerald-metallic relative inline-flex h-12 w-12 items-center justify-center rounded-full border text-white shadow-[0_10px_28px_rgba(6,78,59,0.35)] transition-transform active:scale-95 hover:scale-105"
-        style={{
-          color: "#FFFFFF",
-          WebkitTextFillColor: "#FFFFFF",
-          borderColor: "rgba(52,211,153,0.55)",
-          padding: 0,
-        }}
-      >
-        <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-emerald-300/70 animate-ping" />
-        <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-emerald-400/40 animate-ping" style={{ animationDelay: "0.4s" }} />
-        <PhoneCall aria-hidden style={{ color: "#FFFFFF", stroke: "#FFFFFF", width: 18, height: 18, display: "block", position: "relative", zIndex: 1 }} />
-        <span
-          className="pointer-events-none rounded-full bg-emerald-300 animate-pulse ring-2 ring-[#064E3B]"
-          style={{ position: "absolute", top: 2, right: 2, width: 8, height: 8, zIndex: 2 }}
-        />
-      </button>
-    </div>
-  );
-}
 
 /* ============================================================================
  * SupportGuideOverlay — first-visit modal that explains the difference between
@@ -1807,32 +1781,33 @@ function SupportGuideOverlay() {
 
           <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80">Quick guide</span>
           <h3 id="jbj-support-guide-title" className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl">
-            Two ways to reach JBJ
+            One widget. Every way to reach JBJ.
           </h3>
           <p className="mt-2 text-sm text-white/80">
-            So you know exactly where to tap — here is the difference between the two buttons on this page.
+            Tap the <span className="font-semibold text-white">Contact Us</span> control (right edge on desktop, bottom-right on mobile) to open every support channel in one place.
           </p>
 
           <div className="mt-5 grid gap-3">
             <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-white" />
-                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Contact Us <span className="text-white/70">· right side</span></span>
+                <PhoneCall className="h-4 w-4 text-white" />
+                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Speak to an advisor</span>
               </div>
               <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
-                Instant support — WhatsApp, call, live voice agent or JBJ Concierge. Best for quick questions and after-hours help, 24/7.
+                Scheduled callback from a senior advisor — best for property, investment or brokerage requests.
               </p>
             </div>
             <div className="rounded-xl bg-white/8 p-4 ring-1 ring-white/15">
               <div className="flex items-center gap-2">
-                <PhoneCall className="h-4 w-4 text-white" />
-                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Speak to an Advisor <span className="text-white/70">· bottom-right</span></span>
+                <Sparkles className="h-4 w-4 text-white" />
+                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">Instant support · 24/7</span>
               </div>
               <p className="mt-1.5 text-[13px] leading-relaxed text-white/80">
-                A short form for a scheduled callback from a senior advisor — best for property, investment or brokerage requests.
+                WhatsApp, call now, live voice agent or JBJ Concierge — all inside the same panel.
               </p>
             </div>
           </div>
+
 
           <button
             type="button"

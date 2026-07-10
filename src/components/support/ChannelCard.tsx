@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { LucideIcon } from "lucide-react";
 
 export type ChannelDef = {
-  id: "concierge" | "chat-support" | "whatsapp" | "call" | "voice-ai";
+  id: "concierge" | "chat-support" | "whatsapp" | "call" | "voice-ai" | "advisor" | "callback";
   label: string;
   description: string;
   responseTime: string;
