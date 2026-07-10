@@ -266,7 +266,7 @@ import svcDeveloper from "@/assets/menu-projects-hero.jpg";
 import svcHandover from "@/assets/services/property-management-bg.jpg";
 import svcGlobal from "@/assets/dubai-plane-view.png";
 import svcConcierge from "@/assets/concierge-hero.jpeg";
-import svcWallet from "@/assets/founder-yacht-dubai.jpg";
+import svcWallet from "@/assets/svc-portfolio-wallet.jpg";
 import svcBuySell from "@/assets/services/buy-property-bg.jpg";
 import svcLeasing from "@/assets/services/rent-property-bg.jpg";
 import svcHoliday from "@/assets/services/list-rental-bg.jpg";
