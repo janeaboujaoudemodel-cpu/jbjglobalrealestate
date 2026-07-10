@@ -1407,9 +1407,11 @@ export default function PublicAccess() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setLoginOpen(true)}
-              className="h-10 whitespace-nowrap rounded-md border border-[#0d3a2b]/25 bg-transparent px-4 text-sm font-semibold text-[#0d3a2b] transition hover:bg-[#EFE6D6]"
+              data-no-contrast-guard
+              style={darkInkStyle}
+              className={`${BTN_LIGHT_OUTLINE} h-10 whitespace-nowrap`}
             >
-              Log in
+              Log in <ArrowRight className="h-4 w-4" />
             </button>
             <button
               onClick={openSignup}
