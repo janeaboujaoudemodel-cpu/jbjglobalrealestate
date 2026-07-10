@@ -111,14 +111,17 @@ export const MarketIntelligenceTableOfContents = ({
     }, 650);
   };
 
+  // Do not mount the TOC while the hero is still in view. Rendering + then
+  // hiding via opacity is unreliable because global !important CSS forces
+  // opacity:1 on emerald surfaces. Unmounting is the guaranteed hide.
+  if (!pastHero) return null;
+
   return (
     <div
       className={cn(
-        "fixed right-4 top-28 z-[80] hidden lg:block transition-opacity duration-300",
-        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64",
-        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        "fixed right-4 top-28 z-[80] hidden lg:block",
+        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64"
       )}
-      aria-hidden={!pastHero}
       data-mi-toc
       data-premium-navigator
     >
