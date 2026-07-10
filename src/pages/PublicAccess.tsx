@@ -1766,7 +1766,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
       <div
         data-no-contrast-guard
         className={`
-          jbj-emerald-animated-border relative w-full max-w-md rounded-2xl p-[2px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55),0_0_40px_rgba(16,185,129,0.28)]
+          jbj-emerald-animated-border group relative w-full max-w-md rounded-2xl p-[2px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.55),0_0_40px_rgba(16,185,129,0.28)]
           transition-all duration-300
           ${mounted ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}
         `}
@@ -1781,7 +1781,7 @@ function WelcomePortalOverlay({ onCreateAccount, onLogin }: { onCreateAccount: (
             type="button"
             onClick={dismiss}
             aria-label="Close welcome portal"
-            className="allow-white absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full text-white/85 hover:text-white hover:bg-white/10"
+            className="allow-white absolute right-2 top-2 inline-flex h-9 w-9 items-center justify-center rounded-full text-white opacity-0 transition-opacity duration-200 hover:bg-white/15 hover:text-white focus-visible:opacity-100 group-hover:opacity-100 sm:right-3 sm:top-3"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
             <X className="h-4 w-4" style={{ stroke: "#FFFFFF" }} />
