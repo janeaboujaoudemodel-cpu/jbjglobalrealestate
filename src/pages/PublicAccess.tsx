@@ -1707,7 +1707,7 @@ function SpeakToAdvisorLauncher({ onOpen }: { onOpen: () => void }) {
             top: "50%",
             zIndex: 60,
             writingMode: "vertical-rl",
-            transform: "translate3d(0, -50%, 0) rotate(180deg)",
+            transform: "translate3d(0, -50%, 0)",
             backgroundImage: "var(--jj-emerald-ombre)",
             border: 0,
             color: "#FFFFFF",
