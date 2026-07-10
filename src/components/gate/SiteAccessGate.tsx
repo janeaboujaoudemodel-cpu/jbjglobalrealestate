@@ -41,6 +41,13 @@ const PUBLIC_PATHS = [
   "/coming-soon",
   "/maintenance",
   "/403",
+  // Public marketing / conversion surfaces — reachable without a session.
+  "/membership",
+  "/insights",
+  "/library",
+  "/academy",
+  "/agencies",
+  "/success-stories",
 ];
 
 function isPublicPath(pathname: string) {

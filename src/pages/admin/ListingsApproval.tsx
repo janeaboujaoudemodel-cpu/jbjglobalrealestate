@@ -88,7 +88,7 @@ const ListingsApproval = () => {
     try {
       const { data, error } = await supabase
         .from("projects")
-        .select("id,name,slug,developer_name,city,community,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at")
+        .select("id,name,slug,developer_name,city,is_published,cover_image_url,card_image_url,description,price_from,location,area_name,bedrooms_min,bedrooms_max,property_type_label,payment_plan,updated_at,created_at,community:communities(name)")
         .order("updated_at", { ascending: false })
         .limit(500);
       if (error) throw error;
@@ -107,7 +107,12 @@ const ListingsApproval = () => {
           counts[`doc:${row.project_id}`] = (counts[`doc:${row.project_id}`] || 0) + 1;
         });
       }
-      setProjects((data || []).map((p: any) => ({ ...p, gallery_count: counts[p.id] || 0, documents_count: counts[`doc:${p.id}`] || 0 })));
+      setProjects((data || []).map((p: any) => ({
+        ...p,
+        community: p.community?.name ?? null,
+        gallery_count: counts[p.id] || 0,
+        documents_count: counts[`doc:${p.id}`] || 0,
+      })));
     } catch (e: any) {
       toast.error(e.message || "Failed to load listings");
     } finally {
