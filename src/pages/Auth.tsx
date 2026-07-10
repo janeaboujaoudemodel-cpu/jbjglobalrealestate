@@ -415,7 +415,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const handleSocialSignIn = async (provider: "google" | "apple") => {
     setIsSubmitting(true);
     try {
-      const result = await lovable.auth.signInWithOAuth(provider);
+      const result = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: `${window.location.origin}/welcome`,
+      });
       if (result?.error) {
         toast.error(`There was an issue with ${provider === "google" ? "Google" : "Apple"} sign-in. Please try again.`);
       }
