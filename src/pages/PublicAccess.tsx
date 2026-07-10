@@ -278,6 +278,7 @@ import svcRelocation from "@/assets/services/passport-visa-bg.jpg";
 import svcInsurance from "@/assets/services/general-inquiries-bg.jpg";
 import svcBizDev from "@/assets/menu-corporate-office.jpg";
 import svcLifestyle from "@/assets/founder-jet-interior.jpeg";
+import svcMediaProduction from "@/assets/svc-media-production.jpg";
 
 type JbjService = { icon: React.ElementType; title: string; body: string; image: string };
 type JbjServicePage = { key: string; label: string; kicker: string; heading: string; blurb: string; items: JbjService[] };
