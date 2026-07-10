@@ -290,9 +290,9 @@ const jbjServicePages: JbjServicePage[] = [
     heading: "Real estate services, handled properly.",
     blurb: "A full real estate practice for buying, selling, leasing, listing, portfolio growth and cross-market investment decisions.",
     items: [
-      { icon: Building2, title: "Property acquisition", body: "Private-client guidance for buying ready homes, off-plan launches and prime addresses with disciplined due diligence and negotiation support.", image: svcBuySell },
-      { icon: Handshake, title: "Sales representation", body: "Premium seller representation for preparing, pricing and presenting properties to qualified local and international buyers.", image: svcResale },
-      { icon: Home, title: "Leasing & listing advisory", body: "Landlord and tenant placement across annual leases, furnished homes and premium long-stay requirements, including listing preparation.", image: svcLeasing },
+      { icon: Building2, title: "Buy property advisory", body: "Private-client guidance for buying ready homes, off-plan launches and prime addresses with disciplined due diligence and negotiation support.", image: svcBuySell },
+      { icon: Handshake, title: "Sell & list representation", body: "Premium owner representation for preparing, pricing and listing properties to reach qualified local and international buyers.", image: svcResale },
+      { icon: Home, title: "Rent & leasing advisory", body: "Landlord and tenant placement across annual leases, furnished homes and premium long-stay requirements, with clean listing preparation.", image: svcLeasing },
       { icon: Wallet, title: "Investment portfolio wallet", body: "A private portfolio layer for serious investors — acquisition planning, reporting, rental performance and next-move strategy in one place.", image: svcWallet },
       { icon: TrendingUp, title: "Exit & resale strategy", body: "Pricing, positioning and buyer qualification for owners preparing a clean secondary-market sale.", image: svcResale },
       { icon: Globe2, title: "Cross-market investment strategy", body: "Advisory for clients comparing Dubai with selected international real estate opportunities, including currency exposure, holding structure, exit timing and portfolio balance.", image: svcGlobal },
@@ -458,7 +458,7 @@ html body #root [data-service-page-dot] span {
   justify-content: center !important;
   width: 100% !important;
   height: 100% !important;
-  font-size: 16px !important;
+  font-size: 18px !important;
   line-height: 1 !important;
   font-weight: 700 !important;
   color: inherit !important;
