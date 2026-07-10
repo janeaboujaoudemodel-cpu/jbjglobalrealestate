@@ -365,7 +365,7 @@ export default function LeadFormDialog({ open, onOpenChange, sourcePage }: Props
             <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#064E3B] mb-3">
               Services you're interested in
             </p>
-            <ServiceCategorySelector value={services} onChange={setServices} />
+            <ServiceCategorySelector value={services} onChange={setServices} otherText={otherService} onOtherChange={setOtherService} />
           </div>
 
           <Field label="Notes">
