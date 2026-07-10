@@ -321,11 +321,27 @@ const jbjServicePages: JbjServicePage[] = [
     blurb: "The full private-office spine — residency, entity, insurance and lifestyle logistics.",
     items: [
       { icon: FileCheck2, title: "Golden Visa & residency", body: "10-year Golden Visa, investor and property-linked residency — end-to-end filing and family sponsorship.", image: svcGoldenVisa },
-      { icon: Briefcase, title: "Company setup & branding", body: "Mainland, free-zone and offshore incorporation, plus identity, licensing and website foundation.", image: svcCompanySetup },
+      { icon: Scale, title: "Legal firm & coordination", body: "In-house legal firm coordination — conveyancing, contract review, corporate structuring, dispute avoidance and settlement support through licensed counsel.", image: svcInsurance },
+      { icon: Briefcase, title: "Company & foundation setup", body: "Mainland, free-zone, offshore and foundation incorporation — licensing, banking introductions and governance from day one.", image: svcCompanySetup },
       { icon: TrendingUp, title: "Business development", body: "Introductions, partnerships, growth strategy and investor-facing preparation for operators expanding into the UAE.", image: svcBizDev },
       { icon: Users, title: "Relocation & PRO services", body: "Family relocation, schooling, PRO paperwork, Emirates ID, medicals and government liaison.", image: svcRelocation },
       { icon: ShieldCheck, title: "Insurance advisory", body: "Property, life, professional and health cover — arranged through vetted regional insurers.", image: svcInsurance },
       { icon: Sparkles, title: "Concierge & lifestyle", body: "Private jets, yachts, chauffeured cars, dining and events — the day-to-day discretion behind the address.", image: svcLifestyle },
+    ],
+  },
+  {
+    key: "media",
+    label: "JBJ Media · Branding & Digital",
+    kicker: "Our Practice · 04",
+    heading: "Branding, marketing & technology — by JBJ Media.",
+    blurb: "Our sister studio delivers branding, marketing and technology for founders, developers and corporate clients — from identity to full software builds.",
+    items: [
+      { icon: Sparkles, title: "Branding & identity", body: "Naming, logo systems, guidelines and brand books — built to hold up next to institutional peers.", image: svcCompanySetup },
+      { icon: TrendingUp, title: "Marketing & campaigns", body: "Performance and brand campaigns across search, social and offline — planned, produced and reported end-to-end.", image: svcBizDev },
+      { icon: Globe2, title: "Web development", body: "Corporate sites, landing pages and marketplaces built on modern stacks with SEO, analytics and CMS handover.", image: svcAdvisory },
+      { icon: Wrench, title: "App & software development", body: "iOS, Android and web apps — CRM, portals, dashboards and custom software delivered by a senior product team.", image: svcDeveloper },
+      { icon: BookOpenCheck, title: "Content & media production", body: "Photography, film, drone, editorial and social content — everything a premium brand needs to publish consistently.", image: svcLifestyle },
+      { icon: Handshake, title: "Business development for brands", body: "Go-to-market strategy, partnerships and launch support for founders scaling a new venture from the UAE.", image: svcBizDev },
     ],
   },
 ];
