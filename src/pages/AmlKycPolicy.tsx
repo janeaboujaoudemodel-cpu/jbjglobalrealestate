@@ -32,6 +32,8 @@ const SectionCard = ({
   className?: string;
 }) => (
   <div
+    data-no-contrast-guard
+    style={{ color: "#1A1A1A" }}
     className={
       "relative rounded-2xl bg-[#FDFBF7] border border-[#B89555]/25 " +
       "shadow-[0_1px_0_rgba(184,149,85,0.08),0_20px_40px_-30px_rgba(6,78,59,0.25)] " +
