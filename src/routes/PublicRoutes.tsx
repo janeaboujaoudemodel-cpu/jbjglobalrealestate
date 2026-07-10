@@ -47,6 +47,7 @@ const SellerGuide = lazy(() => import("@/pages/SellerGuide"));
 const SellerListing = lazy(() => import("@/pages/SellerListing"));
 const GoldenVisaGuide = lazy(() => import("@/pages/guides/GoldenVisaGuide"));
 const DubaiRentalYieldGuide = lazy(() => import("@/pages/guides/DubaiRentalYieldGuide"));
+const SellingOffPlanBeforeHandover = lazy(() => import("@/pages/guides/SellingOffPlanBeforeHandover"));
 const FutureOfRealEstate2026 = lazy(() => import("@/pages/insights/FutureOfRealEstate2026"));
 const Guides = lazy(() => import("@/pages/Guides"));
 const RentGuide = lazy(() => import("@/pages/RentGuide"));
@@ -290,6 +291,7 @@ export const PublicRoutes = () => (
     <Route path="/guides" element={<InsightsPageScope><Guides /></InsightsPageScope>} />
     <Route path="/guides/golden-visa-uae" element={<InsightsPageScope><GoldenVisaGuide /></InsightsPageScope>} />
     <Route path="/guides/dubai-rental-yield" element={<InsightsPageScope><DubaiRentalYieldGuide /></InsightsPageScope>} />
+    <Route path="/guides/selling-off-plan-dubai-before-handover" element={<InsightsPageScope><SellingOffPlanBeforeHandover /></InsightsPageScope>} />
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/dubai-rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/insights" element={<InsightsHub />} />

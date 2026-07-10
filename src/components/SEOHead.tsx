@@ -258,13 +258,13 @@ export const pagesSEO = {
     canonicalPath: '/areas',
   },
   buyerGuide: {
-    title: 'How to Buy Property in Dubai - Buyer Guide',
+    title: 'Dubai Property Buyer Guide',
     description: 'Complete guide to buying property in Dubai by JBJ Global Real Estate. Step-by-step process, costs, and documentation for UAE property purchase.',
     keywords: 'how to buy property Dubai, Dubai property buying guide, buy apartment Dubai, purchase property UAE, property buying process Dubai, foreigner buy Dubai, JBJ buyer guide',
     canonicalPath: '/buyer-guide',
   },
   sellerGuide: {
-    title: 'How to Sell Property in Dubai - Seller Guide',
+    title: 'Dubai Property Seller Guide',
     description: 'Expert guide to selling property in Dubai by JBJ Global Real Estate. Pricing, marketing, documentation, and transfer process for UAE property sales.',
     keywords: 'sell property Dubai, how to sell house Dubai, Dubai property selling guide, property sale process UAE, sell apartment Dubai, JBJ seller guide, selling property UAE',
     canonicalPath: '/seller-guide',
