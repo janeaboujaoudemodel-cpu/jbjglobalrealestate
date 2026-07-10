@@ -1,107 +1,48 @@
-import { motion } from "framer-motion";
-import { LucideIcon } from "lucide-react";
+/**
+ * MarketIntelligenceHero — now a thin wrapper over the LOCKED
+ * PremiumEmeraldHero. Solid emerald ombré, centered title, NO photo,
+ * NO stripe overlays. Keeps the legacy prop surface so all MI pages
+ * (Market Intelligence, Overview, Areas, Reports, Methodology)
+ * inherit the fix without changes.
+ *
+ * Data attributes are preserved so:
+ *  - MarketIntelligenceTableOfContents "pastHero" logic keeps working
+ *    ([data-mi-hero], [data-hero-dark]).
+ *  - GuideTableOfContents also detects it via [data-premium-emerald-hero].
+ */
 import { ReactNode } from "react";
+import { LucideIcon } from "lucide-react";
+import PremiumEmeraldHero from "@/components/content-page/PremiumEmeraldHero";
 
 interface MarketIntelligenceHeroProps {
   badge: string;
   badgeIcon: LucideIcon;
   title: ReactNode;
   description: string;
+  /** Legacy props — intentionally ignored to enforce the locked emerald hero. */
   videoSrc?: string;
   videoPoster?: string;
   backgroundImage?: string;
   actions?: ReactNode;
 }
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 15 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 }
-  }
-};
-
-export const MarketIntelligenceHero = ({ 
-  badge, 
-  badgeIcon: BadgeIcon, 
-  title, 
-  description, 
-  videoSrc,
-  videoPoster,
-  backgroundImage,
-  actions 
+export const MarketIntelligenceHero = ({
+  badge,
+  badgeIcon,
+  title,
+  description,
+  actions,
 }: MarketIntelligenceHeroProps) => {
   return (
-    <section
-      data-mi-hero
-      data-unified-hero
-      data-faq-hero
-      data-hero-dark
-      data-no-compare-frame
-      data-no-section-frame
-      data-surface="emerald"
-      className="jj-hero-fullscreen jj-hero-compact relative flex w-full items-center overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" aria-hidden="true" />
-      {(videoSrc || backgroundImage) && (
-        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-          {videoSrc ? (
-            <video autoPlay muted loop playsInline preload="auto" poster={videoPoster} className="absolute inset-0 h-full w-full object-cover opacity-30">
-              <source src={videoSrc} type="video/mp4" />
-            </video>
-          ) : (
-            <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${backgroundImage})` }} />
-          )}
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" aria-hidden="true" />
-
-      <motion.div 
-        className="relative z-10 w-full py-20 md:py-24"
-        initial="hidden"
-        animate="visible"
-        variants={staggerContainer}
-      >
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <motion.div 
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-white/35"
-            variants={fadeInUp}
-          >
-            <BadgeIcon className="w-4 h-4 text-white" />
-            <span className="text-white text-sm font-semibold tracking-wide uppercase">{badge}</span>
-          </motion.div>
-          
-          <motion.h1
-            data-no-contrast-guard
-            className="allow-white text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight"
-            style={{ color: "#F6FBF8", WebkitTextFillColor: "#F6FBF8" }}
-            variants={fadeInUp}
-          >
-            {title}
-          </motion.h1>
-
-          <motion.p
-            data-no-contrast-guard
-            className="allow-white text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10"
-            style={{ color: "rgba(246,251,248,0.85)", WebkitTextFillColor: "rgba(246,251,248,0.85)" }}
-            variants={fadeInUp}
-          >
-            {description}
-          </motion.p>
-          
-          {actions && (
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-              {actions}
-            </motion.div>
-          )}
-        </div>
-      </motion.div>
-    </section>
+    <div data-mi-hero data-unified-hero data-faq-hero data-hero-dark>
+      <PremiumEmeraldHero
+        eyebrow={badge}
+        eyebrowIcon={badgeIcon}
+        title={title}
+        subtitle={description}
+        meta={actions ? <div className="flex flex-wrap justify-center gap-4">{actions}</div> : undefined}
+      />
+    </div>
   );
 };
 

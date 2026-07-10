@@ -38,12 +38,18 @@ export const MarketIntelligenceTableOfContents = ({
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
-    const hero = document.querySelector('[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]') as HTMLElement | null;
-    if (!hero) {
-      setPastHero(true);
-      return;
-    }
-    const check = () => setPastHero(hero.getBoundingClientRect().bottom <= 8);
+    const HERO_SEL = '[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]';
+    const check = () => {
+      // Re-query every tick so we never keep a stale/detached hero ref.
+      const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
+      if (!hero) {
+        // No hero on this page → keep TOC hidden until the user scrolls a bit.
+        setPastHero(window.scrollY > 120);
+        return;
+      }
+      const rect = hero.getBoundingClientRect();
+      setPastHero(rect.bottom <= 8);
+    };
     check();
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
