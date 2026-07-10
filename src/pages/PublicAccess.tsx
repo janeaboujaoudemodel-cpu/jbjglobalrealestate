@@ -373,6 +373,12 @@ const BTN_EMERALD_SOLID =
   "shadow-[0_12px_26px_-14px_rgba(6,78,59,0.85)] " +
   "before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/2 before:w-1/2 before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent hover:before:translate-x-[300%] before:transition before:duration-[900ms]";
 
+const BTN_DARK_OUTLINE =
+  "relative inline-flex items-center justify-center gap-2 rounded-md border border-white/40 bg-transparent px-5 text-sm font-bold uppercase tracking-[0.14em] text-white transition hover:bg-white/15";
+
+const BTN_LIGHT_OUTLINE =
+  "relative inline-flex items-center justify-center gap-2 rounded-md border border-[#0d3a2b]/30 bg-transparent px-5 text-sm font-bold text-[#0d3a2b] transition hover:bg-[#EFE6D6]";
+
 // Inline styles that include -webkit-text-fill-color so global !important rules
 // that target that property cannot override us. React style keys are camelCase.
 const emeraldInkStyle: React.CSSProperties = {
