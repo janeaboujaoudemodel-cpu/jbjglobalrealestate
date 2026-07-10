@@ -57,10 +57,20 @@ const CATEGORIES: CategoryOption[] = [
 export default function Welcome() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { setMode } = useUserModeContext();
   const [selected, setSelected] = useState<SelectableCategory | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Strip stray hash left over from OAuth (e.g. "/welcome#" or "#access_token=...")
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      try {
+        const clean = window.location.pathname + window.location.search;
+        window.history.replaceState(null, "", clean);
+      } catch { /* ignore */ }
+    }
+  }, []);
 
   // Pre-select category from URL (?preselect=investor|broker|developer|visitor)
   useEffect(() => {
@@ -70,11 +80,25 @@ export default function Welcome() {
     }
   }, [searchParams]);
 
-  // If not logged in, redirect to auth
-  if (!user) {
-    navigate('/auth', { replace: true });
-    return null;
+  // Redirect unauthenticated users to /auth (as an effect, not during render)
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/auth?next=/welcome', { replace: true });
+    }
+  }, [loading, user, navigate]);
+
+  // Visible loading state while auth resolves — never render blank
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+        <div className="flex flex-col items-center gap-4 text-[#1A1A1A]">
+          <Loader2 className="w-8 h-8 animate-spin" />
+          <p className="text-sm tracking-[0.2em] uppercase">Preparing your experience…</p>
+        </div>
+      </div>
+    );
   }
+
 
   const handleContinue = async () => {
     if (!selected) return;
