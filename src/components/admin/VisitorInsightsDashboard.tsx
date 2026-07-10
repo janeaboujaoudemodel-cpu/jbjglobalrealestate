@@ -450,9 +450,9 @@ const VisitorInsightsDashboard = () => {
                     <tbody>
                       {filteredContacts.map((contact) => (
                         <tr key={contact.id} className="border-t border-[#B89555]/10 hover:bg-[#EFE6D6]/5">
-                          <td className="p-4"><p className="text-[#1A1A1A] font-medium">{contact.full_name}</p></td>
-                          <td className="p-4"><a href={`mailto:${contact.email}`} className="text-[#1A1A1A] hover:underline text-sm">{contact.email}</a></td>
-                          <td className="p-4"><a href={`tel:${contact.phone}`} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm">{contact.phone}</a></td>
+                          <td className="p-4"><p className="text-[#1A1A1A] font-medium">{contact.full_name ?? '— encrypted —'}</p></td>
+                          <td className="p-4">{contact.email ? <a href={`mailto:${contact.email}`} className="text-[#1A1A1A] hover:underline text-sm">{contact.email}</a> : <span className="text-[#1A1A1A]/50 text-sm">— encrypted —</span>}</td>
+                          <td className="p-4">{contact.phone ? <a href={`tel:${contact.phone}`} className="text-[#1A1A1A]/70 hover:text-[#1A1A1A] text-sm">{contact.phone}</a> : <span className="text-[#1A1A1A]/50 text-sm">— encrypted —</span>}</td>
                           <td className="p-4"><span className="text-[#1A1A1A]/60 text-sm">{contact.nationality || 'N/A'}</span></td>
                           <td className="p-4"><Badge className="bg-[#EFE6D6]/20 text-[#1A1A1A]/80 border-[#B89555]/30">{contact.service_interest || 'General'}</Badge></td>
                           <td className="p-4"><div className="text-sm text-[#1A1A1A]/60">{format(new Date(contact.created_at), 'MMM d, yyyy')}</div></td>
