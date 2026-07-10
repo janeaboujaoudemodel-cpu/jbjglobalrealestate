@@ -136,14 +136,17 @@ export const GuideTableOfContents = ({
     localStorage.setItem(TOOLTIP_DISMISSED_KEY, "true");
   };
 
+  // Do not mount the TOC while the hero is still in view. Global !important
+  // CSS forces opacity:1 on emerald surfaces, so opacity-based hiding is
+  // unreliable — unmounting is the guaranteed hide.
+  if (!pastHero) return null;
+
   return (
     <div
       className={cn(
-        "fixed right-4 top-28 z-[80] hidden lg:block transition-opacity duration-300",
-        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64",
-        pastHero ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        "fixed right-4 top-28 z-[80] hidden lg:block",
+        isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64"
       )}
-      aria-hidden={!pastHero}
       data-guide-toc
       data-premium-navigator
     >
