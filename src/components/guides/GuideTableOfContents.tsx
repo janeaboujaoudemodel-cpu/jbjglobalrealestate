@@ -41,7 +41,7 @@ export const GuideTableOfContents = ({
   const isScrollingRef = useRef(false);
 
   useEffect(() => {
-    const hero = document.querySelector('[data-guide-hero]') as HTMLElement | null;
+    const hero = document.querySelector('[data-guide-hero], [data-premium-emerald-hero], [data-hero-dark]') as HTMLElement | null;
     if (!hero) {
       setPastHero(true);
       return;
