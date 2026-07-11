@@ -127,18 +127,23 @@ export const MarketIntelligenceTableOfContents = ({
         isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64"
       )}
       data-mi-toc
+      data-toc-collapsed={isMinimized ? "true" : "false"}
       data-premium-navigator
+      style={isMinimized ? { width: "auto", right: "24px" } : undefined}
     >
       {isMinimized ? (
-        <button
-          onClick={() => setIsMinimized(false)}
-          data-surface="emerald"
-          className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
-          aria-label="Expand navigation"
-        >
-          <ChevronDown className="w-5 h-5 text-white" />
-        </button>
+        <div className="flex justify-end">
+          <button
+            onClick={() => setIsMinimized(false)}
+            data-surface="emerald"
+            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            aria-label="Expand navigation"
+          >
+            <ChevronDown className="w-5 h-5 text-white" />
+          </button>
+        </div>
       ) : (
+
       /* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */
       <motion.div
         initial={{ opacity: 0, y: 20 }}
