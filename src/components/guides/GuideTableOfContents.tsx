@@ -148,8 +148,11 @@ export const GuideTableOfContents = ({
         isMinimized ? "w-auto" : "w-60 xl:right-6 xl:w-64"
       )}
       data-guide-toc
+      data-toc-collapsed={isMinimized ? "true" : "false"}
       data-premium-navigator
+      style={isMinimized ? { width: "auto", right: "24px" } : undefined}
     >
+
       {/* Tooltip */}
       <AnimatePresence>
         {showTooltip && !isMinimized && (
