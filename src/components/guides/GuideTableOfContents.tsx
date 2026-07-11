@@ -192,15 +192,18 @@ export const GuideTableOfContents = ({
 
       {/* Minimized state: only the compact expand control remains visible. */}
       {isMinimized ? (
-        <button
-          onClick={() => setIsMinimized(false)}
-          data-surface="emerald"
-          className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
-          aria-label="Expand navigation"
-        >
-          <ChevronDown className="w-5 h-5 text-white" />
-        </button>
+        <div className="flex justify-end">
+          <button
+            onClick={() => setIsMinimized(false)}
+            data-surface="emerald"
+            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            aria-label="Expand navigation"
+          >
+            <ChevronDown className="w-5 h-5 text-white" />
+          </button>
+        </div>
       ) : (
+
       /* Main TOC Container - fixed position with emerald scrollbar */
       <motion.div
         initial={{ opacity: 0, y: 20 }}
