@@ -96,7 +96,9 @@ export const FAQFloatingSidebar = ({
         isMinimized ? "w-auto" : "w-60 xl:w-64"
       )}
       data-faq-toc
+      data-toc-collapsed={isMinimized ? "true" : "false"}
       data-premium-navigator
+      style={isMinimized ? { width: "auto", right: "24px" } : undefined}
     >
       <AnimatePresence>
         {showTooltip && !isMinimized && (
@@ -116,15 +118,18 @@ export const FAQFloatingSidebar = ({
       </AnimatePresence>
 
       {isMinimized ? (
-        <button
-          onClick={() => setIsMinimized(false)}
-          data-surface="emerald"
-          className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
-          aria-label="Expand navigation"
-        >
-          <ChevronDown className="w-5 h-5 text-white" />
-        </button>
+        <div className="flex justify-end">
+          <button
+            onClick={() => setIsMinimized(false)}
+            data-surface="emerald"
+            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            aria-label="Expand navigation"
+          >
+            <ChevronDown className="w-5 h-5 text-white" />
+          </button>
+        </div>
       ) : (
+
       <motion.div data-surface="emerald" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex flex-col jj-scrollbar-emerald max-h-[56dvh]">
         <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
