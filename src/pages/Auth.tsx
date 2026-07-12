@@ -198,7 +198,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
     try {
       switch (mode) {
         case "signup": {
-          const { error } = await signUp(email, password);
+          const trimmedName = fullName.trim();
+          const trimmedPhone = phoneNumber.trim();
+          const { error } = await signUp(email, password, {
+            full_name: trimmedName,
+            phone_number: trimmedPhone,
+          });
           if (error) {
             const msg = (error.message || "").toLowerCase();
             if (msg.includes("already registered")) {
@@ -222,7 +227,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             // Send welcome email
             try {
               await supabase.functions.invoke("send-welcome-email", {
-                body: { userId: "pending", email, fullName: email.split("@")[0] },
+                body: { userId: "pending", email, fullName: trimmedName || email.split("@")[0] },
               });
             } catch { /* non-critical */ }
             setMode("verify-email");
