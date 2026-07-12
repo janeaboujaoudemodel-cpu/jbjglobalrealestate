@@ -145,6 +145,30 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
     if (fsIndex >= total) setFsIndex(0);
   }, [total, pageIndex, fsIndex]);
 
+  // Preload adjacent hi-res images so clicking a thumbnail (or arrow) swaps
+  // instantly from the browser cache instead of triggering a fresh 1920×1080
+  // fetch each time.
+  useEffect(() => {
+    if (total < 2) return;
+    const toPreload = new Set<number>();
+    for (let offset = -2; offset <= 2; offset++) {
+      if (offset === 0) continue;
+      toPreload.add((pageIndex + offset + total) % total);
+    }
+    const loaders: HTMLImageElement[] = [];
+    toPreload.forEach((i) => {
+      const url = getHighResImageUrl(images[i].image_url);
+      if (!url) return;
+      const img = new Image();
+      img.decoding = "async";
+      img.src = url;
+      loaders.push(img);
+    });
+    return () => {
+      loaders.forEach((img) => { img.src = ""; });
+    };
+  }, [pageIndex, images, total]);
+
   /* ---------- Inline carousel navigation ---------- */
   const pagePrev = () => hasMultiple && setPageIndex((i) => (i === 0 ? total - 1 : i - 1));
   const pageNext = () => hasMultiple && setPageIndex((i) => (i === total - 1 ? 0 : i + 1));
