@@ -190,9 +190,10 @@ const OwnerDashboardShell = () => {
   // Expose content-area offsets so the global BrandedLoader centers in the
   // visible main area (right of sidebar, below the top bar) rather than over
   // the whole viewport.
-  const contentLeft = isMobile || fullscreen ? "0px" : frontSidebarCollapsed ? "72px" : "264px";
+  const sidebarWidth = sidebarCollapsed ? 72 : 264;
+  const contentLeft = isMobile || fullscreen ? "0px" : `${sidebarWidth}px`;
   const contentTop = "88px";
-  const mainWidth = isMobile || fullscreen ? "100%" : frontSidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 264px)";
+  const mainWidth = isMobile || fullscreen ? "100%" : `calc(100vw - ${sidebarWidth}px)`;
 
   return (
     <div
