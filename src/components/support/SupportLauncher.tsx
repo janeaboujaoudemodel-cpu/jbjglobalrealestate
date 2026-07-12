@@ -353,18 +353,18 @@ export default function SupportLauncher() {
               />
               <motion.div
                 key="dpanel"
-                initial={{ opacity: 0, x: 18, y: "-50%", scale: 0.99 }}
-                animate={{ opacity: 1, x: 0, y: "-50%", scale: 1 }}
-                exit={{ opacity: 0, x: 18, y: "-50%", scale: 0.99 }}
+                initial={{ opacity: 0, x: 18, scale: 0.99 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 18, scale: 0.99 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
                 data-no-contrast-guard
-                className="jbj-emerald-animated-border fixed right-11 sm:right-14 top-1/2 w-[min(320px,calc(100vw-4rem))] max-h-[calc(100dvh-6rem)] rounded-2xl p-[2px] pointer-events-auto shadow-[0_30px_60px_rgba(0,0,0,0.35),0_0_34px_rgba(16,185,129,0.35)]"
+                className="jbj-emerald-animated-border fixed right-11 sm:right-14 top-[88px] bottom-4 w-[min(320px,calc(100vw-4rem))] rounded-2xl p-[2px] pointer-events-auto shadow-[0_30px_60px_rgba(0,0,0,0.35),0_0_34px_rgba(16,185,129,0.35)]"
               >
                 <div
                   data-emerald="true"
                   data-allow-dark-cta
                   data-no-contrast-guard
-                  className="jj-emerald-metallic allow-white flex flex-col overflow-hidden rounded-[14px] p-3 text-white max-h-[calc(100dvh-6.5rem)]"
+                  className="jj-emerald-metallic allow-white flex h-full flex-col overflow-hidden rounded-[14px] p-3 text-white"
                 >
                   <div className="flex shrink-0 items-center justify-between gap-2 px-1 pb-3 mb-2">
                     <span
