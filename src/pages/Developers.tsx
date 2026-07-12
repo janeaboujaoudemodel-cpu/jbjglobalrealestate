@@ -26,7 +26,7 @@ import {
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
-import developersHeroVideoAsset from "@/assets/videos/dubai-landmarks-hero.mp4.asset.json";
+import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
 // Developer tier classification for filtering
