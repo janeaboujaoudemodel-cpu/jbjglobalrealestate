@@ -82,7 +82,7 @@ serve(async (req: Request) => {
             title: `${label} expiring for ${b.display_name}`,
             body: `Expires on ${expiry}. Renew within ${Math.ceil(ms / (24 * 60 * 60 * 1000))} days.`,
             due_at: expiry,
-            broker_profile_id: b.id,
+            metadata: { broker_profile_id: b.id, document: label },
             ai_generated: true,
           });
         }
