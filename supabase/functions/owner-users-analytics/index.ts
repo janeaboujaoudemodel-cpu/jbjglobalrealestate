@@ -22,17 +22,18 @@ Deno.serve(async (req) => {
     if (!authHeader?.startsWith('Bearer ')) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-    const userClient = createClient(
+    const admin = createClient(
       Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_ANON_KEY')!,
-      { global: { headers: { Authorization: authHeader } } }
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
-    const { data: claims, error: cErr } = await userClient.auth.getClaims(authHeader.replace('Bearer ', ''));
-    if (cErr || !claims?.claims?.sub) {
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: userData, error: uErr } = await admin.auth.getUser(token);
+    if (uErr || !userData?.user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-    const callerId = claims.claims.sub;
-    const callerEmail = String(claims.claims.email || '').toLowerCase().trim();
+    const callerId = userData.user.id;
+    const callerEmail = String(userData.user.email || '').toLowerCase().trim();
 
     const OWNER_BACKEND_EMAILS = [
       'janeaboujaoudenails@gmail.com',
@@ -41,15 +42,15 @@ Deno.serve(async (req) => {
       'infoo.jane@gmail.com',
     ];
 
-    const admin = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    );
-
     const emailAllowed = OWNER_BACKEND_EMAILS.includes(callerEmail);
-    const { data: isOwner } = await admin.rpc('has_role', { _user_id: callerId, _role: 'owner' });
-    const { data: isAdmin } = await admin.rpc('has_role', { _user_id: callerId, _role: 'admin' });
-    if (!emailAllowed && !isOwner && !isAdmin) {
+    let hasRole = false;
+    try {
+      const { data: isOwner } = await admin.rpc('has_role', { _user_id: callerId, _role: 'owner' });
+      const { data: isAdmin } = await admin.rpc('has_role', { _user_id: callerId, _role: 'admin' });
+      hasRole = !!isOwner || !!isAdmin;
+    } catch (_) { /* ignore */ }
+    if (!emailAllowed && !hasRole) {
+      console.log('Forbidden for', callerEmail, callerId);
       return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
