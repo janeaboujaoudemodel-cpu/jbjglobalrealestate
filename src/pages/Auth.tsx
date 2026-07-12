@@ -57,10 +57,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string; otp?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string; fullName?: string; phoneNumber?: string; otp?: string }>({});
   const [showReactivationDialog, setShowReactivationDialog] = useState(false);
   const [reactivationEmail, setReactivationEmail] = useState("");
   const [reactivationPassword, setReactivationPassword] = useState("");
