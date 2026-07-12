@@ -280,16 +280,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <CommandPaletteRoot />
         </Suspense>
       )}
-       {/* Compact phone (<640): mobile header | Tablet/desktop (sm 640px+): reference L-shape sidebar + utility bar */}
+       {/* Phone + tablet (<lg 1024): mobile header | Desktop (lg 1024+): reference L-shape sidebar + utility bar */}
       {!usesStandalonePortalChrome && (
         <>
-          <div data-chrome="header" className="sm:hidden">
+          <div data-chrome="header" className="lg:hidden">
             <GlobalHeader forceSolid={needsHeaderSpacing} />
           </div>
-          <div data-chrome="sidebar" className="hidden sm:block fixed left-0 top-0 h-[100dvh] z-[9997]">
+          <div data-chrome="sidebar" className="hidden lg:block fixed left-0 top-0 h-[100dvh] z-[9997]">
             <GlobalVerticalNav />
           </div>
-          <div data-chrome="utility-bar" className="hidden sm:block">
+          <div data-chrome="utility-bar" className="hidden lg:block">
             <HorizontalUtilityBar />
           </div>
         </>
@@ -303,7 +303,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main data-company-legal-page={isCompanyLegalPage ? "true" : undefined} className={`jj-main-shell w-full max-w-full overflow-x-clip bg-[#F7F2EA] min-h-screen transition-[margin-left,width,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-24 sm:pt-[88px] [body.jj-vertical-nav-collapsed_&]:sm:pt-[48px]" : "pt-0"}`}>
+        <main data-company-legal-page={isCompanyLegalPage ? "true" : undefined} className={`jj-main-shell w-full max-w-full overflow-x-clip bg-[#F7F2EA] min-h-screen transition-[margin-left,width,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-24 lg:pt-[88px] [body.jj-vertical-nav-collapsed_&]:lg:pt-[48px]" : "pt-0"}`}>
           <div data-content-gutter="1" className="w-full max-w-full">
 
 
