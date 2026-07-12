@@ -120,7 +120,22 @@ const VisitorInsightsDashboard = () => {
       if (sessionsRes.error) throw sessionsRes.error;
       if (contactsRes.error) throw contactsRes.error;
       setSessions(sessionsRes.data || []);
-      setContacts(contactsRes.data || []);
+
+      // Decrypt PII per submission via SECURITY DEFINER RPC (owner/admin/listing_admin only).
+      const rawContacts = contactsRes.data || [];
+      const decrypted = await Promise.all(
+        rawContacts.map(async (row: any) => {
+          const { data: dec } = await supabase.rpc('decrypt_contact_gating_pii', { submission_id: row.id });
+          const d = Array.isArray(dec) ? dec[0] : dec;
+          return {
+            ...row,
+            full_name: d?.full_name ?? null,
+            email: d?.email ?? null,
+            phone: d?.phone ?? null,
+          } as ContactSubmission;
+        })
+      );
+      setContacts(decrypted);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to fetch visitor data');
