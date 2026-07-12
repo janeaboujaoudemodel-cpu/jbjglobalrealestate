@@ -26,6 +26,7 @@ import { useUserModeContext, type UserMode as PlatformUserMode } from "@/context
 import PasswordStrengthMeter from "@/components/auth/PasswordStrengthMeter";
 import PasskeyButton from "@/components/auth/PasskeyButton";
 import { isPasskeySupported, registerPasskey } from "@/lib/passkeys";
+import { OWNER_BACKEND_EMAILS } from "@/config/ownerEmails";
 
 const PRESELECT_MODES: PlatformUserMode[] = ['investor', 'broker', 'developer'];
 const isValidPreselect = (v: string | null): v is PlatformUserMode =>
