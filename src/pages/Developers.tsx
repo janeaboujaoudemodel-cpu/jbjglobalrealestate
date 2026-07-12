@@ -270,12 +270,9 @@ const Developers = () => {
           </motion.div>
         </section>
 
-        {/* Scroll sentinel for two-phase filter fix */}
-        <div ref={filterSentinelRef} className="h-0" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }} />
-
-        {/* Filters Section — emerald rail (never near-black), no gold/double borders */}
+        {/* Filters Section — sticky emerald rail (single instance, no portal duplication) */}
         <section
-          className="relative z-40 pt-8 pb-5 border-y border-white/12"
+          className="sticky top-[88px] z-40 pt-4 pb-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
           style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
         >
           <div className="w-full px-3 sm:px-4">
