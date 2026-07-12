@@ -59,7 +59,7 @@ const ListingPortal = () => {
   const fetchListings = async () => {
     setLoading(true);
     let query = supabase
-      .from('portal_listings')
+      .from('portal_listings_public')
       .select('*')
       .eq('status', 'approved')
       .order('is_featured', { ascending: false })
