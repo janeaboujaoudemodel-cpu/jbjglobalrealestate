@@ -707,6 +707,46 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           ) : (
             /* ─── Standard Form ─────────────────────────────── */
             <form onSubmit={handleSubmit} className="jj-auth-form space-y-4" autoComplete="on">
+              {/* Full name + phone — signup only. Persisted to profiles via handle_new_user trigger. */}
+              {mode === "signup" && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName" className="text-[#1A1A1A] font-medium">Full Name</Label>
+                    <div className="relative">
+                      <UserCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
+                      <Input
+                        id="fullName"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Your full name"
+                        className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300"
+                      />
+                    </div>
+                    {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phoneNumber" className="text-[#1A1A1A] font-medium">Phone Number</Label>
+                    <div className="relative">
+                      <Shield className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#1A1A1A]/70" />
+                      <Input
+                        id="phoneNumber"
+                        name="tel"
+                        type="tel"
+                        autoComplete="tel"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        placeholder="+971 5X XXX XXXX"
+                        className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300"
+                      />
+                    </div>
+                    {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
+                  </div>
+                </>
+              )}
+
               {/* Email field — shown on signin, signup, forgot, otp-login */}
               {["signin", "signup", "forgot", "otp-login"].includes(mode) && (
                 <div className="space-y-2">
