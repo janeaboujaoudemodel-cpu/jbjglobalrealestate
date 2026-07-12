@@ -139,6 +139,12 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
+    if (mode === "signup") {
+      if (fullName.trim().length < 2) newErrors.fullName = "Please enter your full name";
+      const digits = phoneNumber.replace(/\D/g, "");
+      if (digits.length < 7) newErrors.phoneNumber = "Please enter a valid phone number";
+    }
+
     if ((mode === "signup" || mode === "reset") && !passwordSafe) {
       newErrors.password = "This password appears in public breach lists. Choose a stronger, unique one.";
     }
