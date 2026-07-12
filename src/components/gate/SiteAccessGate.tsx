@@ -62,11 +62,26 @@ export default function SiteAccessGate({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
-    // Validate against auth server (getSession only reads storage and may return
-    // a stale/invalid token — leading the gate to think the user is signed in).
+    // Fast path: if a locally-persisted session exists, treat the visitor as
+    // authenticated immediately so that the redirect-to-/access race after
+    // sign-in doesn't fire. We still revalidate with getUser() in the
+    // background and only sign the user out if the server explicitly rejects
+    // the session (SIGNED_OUT via onAuthStateChange also clears it).
+    supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      if (data.session?.user) {
+        setAuthed(true);
+        setReady(true);
+      }
+    });
     supabase.auth.getUser().then(({ data, error }) => {
       if (!mounted) return;
-      setAuthed(!error && !!data.user);
+      // Only downgrade to unauth if the auth server explicitly says the token
+      // is invalid (401 / user missing). Network hiccups must not evict the
+      // user — the session listener will catch a real sign-out.
+      const invalidToken = error && /jwt|token|expired|invalid|not.?found/i.test(error.message ?? "");
+      if (data.user) setAuthed(true);
+      else if (invalidToken) setAuthed(false);
       setReady(true);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
