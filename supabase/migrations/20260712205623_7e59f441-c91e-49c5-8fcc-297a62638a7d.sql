@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS crm_leads_self_insert ON public.crm_leads;
