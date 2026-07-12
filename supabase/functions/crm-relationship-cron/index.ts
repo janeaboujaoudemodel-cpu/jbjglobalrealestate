@@ -61,27 +61,28 @@ serve(async (req: Request) => {
       });
     }
 
-    // 2. Expiring brokerage documents
-    const { data: brokerages } = await service
-      .from("crm_brokerages")
-      .select("id, owner_id, company_name, rera_expiry, trade_license_expiry");
+    // 2. Expiring broker documents (RERA card + Emirates ID)
+    // Expiry dates live on broker_profiles, not crm_brokerages.
+    const { data: brokers } = await service
+      .from("broker_profiles")
+      .select("id, user_id, display_name, rera_expiry_date, id_expiry_date");
 
-    for (const b of brokerages ?? []) {
+    for (const b of brokers ?? []) {
       const checks: Array<[string, string | null]> = [
-        ["RERA license", (b.rera_expiry as string | null) ?? null],
-        ["Trade license", (b.trade_license_expiry as string | null) ?? null],
+        ["RERA card", (b.rera_expiry_date as string | null) ?? null],
+        ["Emirates ID", (b.id_expiry_date as string | null) ?? null],
       ];
       for (const [label, expiry] of checks) {
         if (!expiry) continue;
         const ms = new Date(expiry).getTime() - now;
         if (ms > 0 && ms < THIRTY_DAYS) {
           reminders.push({
-            owner_id: b.owner_id,
+            owner_id: b.user_id,
             kind: "document_expiry",
-            title: `${label} expiring for ${b.company_name}`,
+            title: `${label} expiring for ${b.display_name}`,
             body: `Expires on ${expiry}. Renew within ${Math.ceil(ms / (24 * 60 * 60 * 1000))} days.`,
             due_at: expiry,
-            brokerage_id: b.id,
+            metadata: { broker_profile_id: b.id, document: label },
             ai_generated: true,
           });
         }
@@ -91,17 +92,17 @@ serve(async (req: Request) => {
     let inserted = 0;
     for (const r of reminders) {
       // Avoid duplicates: skip if an open AI-generated reminder of the same kind exists for the same ref
-      const refField = r.dev_registry_id ? "dev_registry_id" : "brokerage_id";
-      const refVal = r[refField];
-      const { data: existing } = await service
+      const refField = r.dev_registry_id ? "dev_registry_id" : null;
+      let query = service
         .from("crm_relationship_reminders")
         .select("id")
         .eq("owner_id", r.owner_id)
         .eq("kind", r.kind)
-        .eq(refField, refVal)
         .eq("is_done", false)
-        .eq("ai_generated", true)
-        .limit(1);
+        .eq("ai_generated", true);
+      if (refField) query = query.eq(refField, r[refField]);
+      else query = query.eq("title", r.title as string);
+      const { data: existing } = await query.limit(1);
       if (existing && existing.length > 0) continue;
       const { error } = await service.from("crm_relationship_reminders").insert(r);
       if (!error) inserted++;
