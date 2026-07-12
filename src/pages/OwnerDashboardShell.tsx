@@ -190,9 +190,10 @@ const OwnerDashboardShell = () => {
   // Expose content-area offsets so the global BrandedLoader centers in the
   // visible main area (right of sidebar, below the top bar) rather than over
   // the whole viewport.
-  const contentLeft = isMobile || fullscreen ? "0px" : frontSidebarCollapsed ? "72px" : "264px";
+  const sidebarWidth = sidebarCollapsed ? 72 : 264;
+  const contentLeft = isMobile || fullscreen ? "0px" : `${sidebarWidth}px`;
   const contentTop = "88px";
-  const mainWidth = isMobile || fullscreen ? "100%" : frontSidebarCollapsed ? "calc(100vw - 72px)" : "calc(100vw - 264px)";
+  const mainWidth = isMobile || fullscreen ? "100%" : `calc(100vw - ${sidebarWidth}px)`;
 
   return (
     <div
@@ -200,8 +201,11 @@ const OwnerDashboardShell = () => {
       className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex overflow-x-hidden"
       style={{ ["--app-content-left" as never]: contentLeft, ["--app-content-top" as never]: contentTop }}
     >
-      {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
-      <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
+      {/* Owner Tasks Popup Alert — offset by sidebar so it centers in visible content area */}
+      <div
+        className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto"
+        style={{ paddingLeft: contentLeft }}
+      >
         <OwnerTasksPopupAlert />
       </div>
       {/* Mobile Sidebar */}
@@ -215,27 +219,28 @@ const OwnerDashboardShell = () => {
         </Sheet>
       )}
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar — owner-specific navigation (not the public site nav) */}
       {!isMobile && !fullscreen && (
-        <aside 
+        <aside
           data-chrome="sidebar"
           data-backend-sidebar="owner"
           data-surface="champagne"
-          className="fixed left-0 top-0 h-full z-[9997]"
+          className="owner-shell-surface fixed left-0 top-0 h-full z-[9997] flex flex-col bg-[#F7F2EA] border-r border-[#B89555]/40 transition-[width] duration-300"
+          style={{ width: sidebarWidth }}
           role="navigation"
           aria-label="Owner dashboard navigation"
         >
-          <GlobalVerticalNav />
+          <SidebarContent collapsed={sidebarCollapsed} />
         </aside>
       )}
 
       {/* Main Content */}
-      <main 
+      <main
         className={cn(
           "flex-1 min-w-0 overflow-x-hidden transition-all duration-300 overscroll-contain",
-          isMobile || fullscreen ? "ml-0" : (frontSidebarCollapsed ? "ml-[72px]" : "ml-[264px]")
+          isMobile || fullscreen ? "ml-0" : ""
         )}
-        style={{ width: mainWidth, maxWidth: mainWidth }}
+        style={{ width: mainWidth, maxWidth: mainWidth, marginLeft: isMobile || fullscreen ? 0 : sidebarWidth }}
         role="main"
       >
         {/* Top Bar — height locked to --shell-header-h so its bottom border aligns
