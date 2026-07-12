@@ -339,66 +339,8 @@ const Developers = () => {
           onFilterChange={setShortcutFilters}
         />
 
-        {/* Fixed portal copy of filters when scrolled past —
-            rendered into #root so the .jj-utility-shell sidebar-safe left
-            offset applies and the bar stops before the vertical sidebar. */}
-        {isFilterFixed && createPortal(
-          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/12 shadow-lg" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}>
-            <div className="w-full px-3 sm:px-4">
-              <div className="p-0">
-                <FilterShortcutBar
-                  variant="dark"
-                  filters={shortcutFilters}
-                  onFilterChange={(f) => {
-                    setShortcutFilters(f);
-                    setSearchQuery(f.searchQuery || '');
-                    if (f.sortBy === 'alpha') setSortBy('alpha');
-                    else if (f.sortBy === 'most_projects') setSortBy('most_projects');
-                    else if (f.sortBy) setSortBy('default');
-                  }}
-                  priorityFilter="developers"
-                  resultsCount={filteredDevelopers.length}
-                  resultsLabel="Developers"
-                />
 
-                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
-                  <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md transition-none duration-0 [&>svg]:text-white">
-                      <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
-                      <span className="truncate text-left flex-1 text-white font-semibold">
-                        {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
-                      </span>
-                    </SelectTrigger>
-                    <SelectContent className="duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none">
-                      {TIER_FILTERS.map((tier) => (
-                        <SelectItem key={tier.value} value={tier.value}>
-                          {tier.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
 
-                  <div className="allow-white flex-1 text-white text-sm font-semibold" style={{ color: '#FFFFFF' }}>
-                    {filteredDevelopers.length.toLocaleString()} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
-                  </div>
-
-                  {activeFilterCount > 0 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={clearFilters}
-                      className="allow-white h-9 px-3 bg-[#04241C] border-0 text-white hover:bg-[#064E3B] rounded-full flex items-center gap-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] [&_svg]:text-white"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                      Clear ({activeFilterCount})
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section>,
-          document.getElementById('root') || document.body
-        )}
 
         {/* Developer Cards Grid */}
         <section className="py-12 md:py-16">
