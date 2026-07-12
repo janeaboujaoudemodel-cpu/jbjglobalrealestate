@@ -452,18 +452,10 @@ export default function CompareProjectPicker({
               {!requestOpen ? (
                 <div className="mx-auto max-w-xl space-y-4">
                   <p>No projects match "{query || activeDeveloperName || countryFilter || emirateFilter}".</p>
-                  {isOwner ? (
-                    <button type="button" onClick={openOwnerAddProject} className="allow-white mx-auto inline-flex h-12 min-w-[190px] items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold" data-no-contrast-guard style={{ background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.24)", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.7)" }}>
+                  {isOwner && (
+                    <button type="button" onClick={openOwnerAddProject} data-owner-add-project className="allow-white mx-auto inline-flex h-12 min-w-[190px] items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold" data-no-contrast-guard style={{ background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.24)", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.7)" }}>
                       <Plus className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                      <span style={{ color: "#FFFFFF" }}>Add project as owner</span>
-                    </button>
-                  ) : (
-                    <button type="button" onClick={() => {
-                      setRequestOpen(true);
-                      setRequestForm((prev) => ({ ...prev, projectName: prev.projectName || query.trim(), developerName: prev.developerName || activeDeveloperName, country: prev.country || (countryFilter !== "all" ? countryFilter : ""), emirate: prev.emirate || (emirateFilter !== "all" ? emirateFilter : ""), email: prev.email || user?.email || "" }));
-                    }} className="allow-white mx-auto inline-flex h-12 min-w-[210px] items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold" data-no-contrast-guard style={{ background: "linear-gradient(135deg, #064E3B 0%, #042C1C 55%, #010806 100%)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.24)", boxShadow: "0 10px 24px -12px rgba(6,78,59,0.7)" }}>
-                      <Send className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                      <span style={{ color: "#FFFFFF" }}>Request this project</span>
+                      <span style={{ color: "#FFFFFF" }}>Add project (owner)</span>
                     </button>
                   )}
                 </div>
