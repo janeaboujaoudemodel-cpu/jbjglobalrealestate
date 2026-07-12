@@ -34,6 +34,7 @@ import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShel
 import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
 import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
 import CompareCTA from "@/components/compare/CompareCTA";
+import ComparisonExportBar from "@/components/compare/ComparisonExportBar";
 import MarketContextStrip from "@/components/compare/MarketContextStrip";
 import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
 import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
@@ -1021,6 +1022,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     <Mail className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Share via Email
                   </button>
+                  <ComparisonExportBar targetSelector="[data-compare-content-frame]" projects={projects as any} />
                 </>
               )}
             </div>
