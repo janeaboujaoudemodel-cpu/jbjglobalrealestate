@@ -271,39 +271,44 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
         <button
           ref={setActiveRefCallback(item.path)}
           data-sidebar-owner-item
+          data-jjds-sidebar-item=""
+          data-jjds-level={depth === 0 ? "root" : "sub"}
+          data-jjds-active={active ? "true" : "false"}
           data-surface={active ? "emerald" : "light"}
           data-emerald={active ? "true" : undefined}
+          data-no-contrast-guard={active ? "" : undefined}
           onClick={() => {
-            // Always navigate to the parent's own path. Expansion is automatic
-            // (parent is active or a child is active), and the chevron handles
-            // explicit collapse — clicking the row never just collapses without
-            // also navigating, so e.g. "CRM" always opens the CRM page.
             handleNavClick(item.path);
             if (hasChildren && !collapsed && !isOpen(item)) {
               setOpenMap((m) => ({ ...m, [item.path]: true }));
             }
           }}
           className={cn(
-            "group w-full flex items-center gap-2.5 px-3 min-h-10 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 border relative",
+            "group relative w-full flex items-center gap-3 rounded-[10px] transition-[background-color,color,box-shadow] duration-150 ease-out select-none",
+            collapsed ? "justify-center px-0 w-10 h-10" : "h-10 px-3 text-[13.5px] font-medium",
             active
-              ? "jj-emerald-metallic allow-white !text-white border-transparent font-semibold shadow-[0_10px_22px_-12px_rgba(6,78,59,0.85)]"
-              : "bg-transparent !text-[#1A1A1A] border-transparent hover:border-[#B89555]/50 hover:!text-[#064E3B] hover:bg-[#EFE6D6]/55",
+              ? "text-white shadow-[0_8px_20px_-14px_rgba(6,78,59,0.85),inset_0_1px_0_rgba(255,255,255,0.18)]"
+              : "text-[#1A1A1A] hover:bg-[#1A1A1A]/[0.045] hover:text-[#1A1A1A]",
           )}
-          style={depth > 0 ? { paddingLeft: `${12 + depth * 14}px` } : undefined}
+          style={{
+            ...(active ? { backgroundImage: "var(--jj-emerald-ombre)", color: "#FFFFFF" } : {}),
+            ...(depth > 0 && !collapsed ? { paddingLeft: `${12 + depth * 14}px` } : {}),
+          }}
           title={collapsed ? item.label : undefined}
+          aria-label={item.label}
         >
           <span
-            data-backend-sidebar-icon-tile
-            data-surface="emerald"
+            data-jjds-sidebar-icon=""
             className={cn(
-              "allow-white w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-white/15 bg-[image:var(--jj-emerald-ombre)] shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),inset_0_1px_0_rgba(255,255,255,0.18)]",
-              item.premium && !active && "shadow-[0_8px_18px_-12px_rgba(6,78,59,0.75),0_0_8px_rgba(184,149,85,0.25),inset_0_1px_0_rgba(255,255,255,0.18)]"
+              "inline-flex items-center justify-center shrink-0 w-[18px] h-[18px]",
+              active ? "text-white allow-white" : "text-[#1A1A1A]"
             )}
+            aria-hidden
           >
             <item.icon
-              className="allow-white w-3.5 h-3.5 flex-shrink-0 text-white transition-colors duration-200"
-              strokeWidth={2.25}
-              style={{ color: "#FFFFFF", stroke: "#FFFFFF" }}
+              className={cn("w-[18px] h-[18px]", active && "allow-white")}
+              strokeWidth={2.1}
+              style={active ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined}
             />
           </span>
           {!collapsed && (
@@ -311,10 +316,10 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
               <span
                 data-jbj-allow-shrink
                 className={cn(
-                  "min-w-0 flex-1 text-left whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15] transition-colors duration-200",
-                  item.premium && "font-semibold",
-                  active ? "text-white" : "text-[#1A1A1A] group-hover:text-[#064E3B]"
+                  "flex-1 min-w-0 text-left whitespace-normal break-words [overflow-wrap:anywhere] leading-[1.15]",
+                  item.premium && "font-semibold"
                 )}
+                style={active ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
               >
                 {item.label}
               </span>
@@ -328,7 +333,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
               )}
               {hasChildren && (
                 <ChevronRight
-                  className={cn("w-4 h-4 flex-shrink-0 transition-transform", active ? "text-white" : "text-[#064E3B]", expanded && "rotate-90")}
+                  className={cn("w-4 h-4 flex-shrink-0 transition-transform", active ? "text-white" : "text-[#1A1A1A]/60", expanded && "rotate-90")}
                   onClick={(e) => { e.stopPropagation(); toggleOpen(item.path); }}
                 />
               )}
