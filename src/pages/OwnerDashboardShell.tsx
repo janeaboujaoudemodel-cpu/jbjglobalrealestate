@@ -219,27 +219,28 @@ const OwnerDashboardShell = () => {
         </Sheet>
       )}
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar — owner-specific navigation (not the public site nav) */}
       {!isMobile && !fullscreen && (
-        <aside 
+        <aside
           data-chrome="sidebar"
           data-backend-sidebar="owner"
           data-surface="champagne"
-          className="fixed left-0 top-0 h-full z-[9997]"
+          className="owner-shell-surface fixed left-0 top-0 h-full z-[9997] flex flex-col bg-[#F7F2EA] border-r border-[#B89555]/40 transition-[width] duration-300"
+          style={{ width: sidebarWidth }}
           role="navigation"
           aria-label="Owner dashboard navigation"
         >
-          <GlobalVerticalNav />
+          <SidebarContent collapsed={sidebarCollapsed} />
         </aside>
       )}
 
       {/* Main Content */}
-      <main 
+      <main
         className={cn(
           "flex-1 min-w-0 overflow-x-hidden transition-all duration-300 overscroll-contain",
-          isMobile || fullscreen ? "ml-0" : (frontSidebarCollapsed ? "ml-[72px]" : "ml-[264px]")
+          isMobile || fullscreen ? "ml-0" : ""
         )}
-        style={{ width: mainWidth, maxWidth: mainWidth }}
+        style={{ width: mainWidth, maxWidth: mainWidth, marginLeft: isMobile || fullscreen ? 0 : sidebarWidth }}
         role="main"
       >
         {/* Top Bar — height locked to --shell-header-h so its bottom border aligns
