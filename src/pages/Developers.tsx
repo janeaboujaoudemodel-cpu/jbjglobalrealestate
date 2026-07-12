@@ -1,6 +1,5 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
 import VideoBackground from "@/components/VideoBackground";
-import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import {
   Search,
