@@ -703,6 +703,21 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                     <Input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-12 h-12 bg-[#F7F2EA] border-[#B89555]/30 text-[#1A1A1A] placeholder:text-[#1A1A1A]/70 focus:border-[#B89555] focus:ring-gold/20 rounded-xl transition-all duration-300" />
                   </div>
                   {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                  {mode === "signin" && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {OWNER_BACKEND_EMAILS.map((oe) => (
+                        <button
+                          key={oe}
+                          type="button"
+                          onClick={() => setEmail(oe)}
+                          className="text-xs px-3 py-1 rounded-full border border-[#B89555]/40 bg-[#F7F2EA] text-[#1A1A1A] hover:bg-[#B89555]/15 transition-colors"
+                          aria-label={`Use ${oe}`}
+                        >
+                          {oe}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
