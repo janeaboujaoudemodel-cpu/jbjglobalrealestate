@@ -34,6 +34,7 @@ import CompareAIShell, { GradientText } from "@/components/compare/CompareAIShel
 import AnimatedStepLine from "@/components/compare/AnimatedStepLine";
 import SampleComparisonPreview from "@/components/compare/SampleComparisonPreview";
 import CompareCTA from "@/components/compare/CompareCTA";
+import ComparisonExportBar from "@/components/compare/ComparisonExportBar";
 import MarketContextStrip from "@/components/compare/MarketContextStrip";
 import RiskScoreGauge from "@/components/compare/RiskScoreGauge";
 import CompareAccessGate from "@/components/compare/units/CompareAccessGate";
