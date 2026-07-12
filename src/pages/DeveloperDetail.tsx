@@ -278,21 +278,15 @@ const DeveloperDetail = () => {
   const [visibleCount, setVisibleCount] = useState(6);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
 
-  // IntersectionObserver for fixed filter positioning
-  const hasProjects = !!projects;
+  // Show the sticky replacement filter/tab bar on any scroll — matches the
+  // project-page standard so developer pages get the same immediate access
+  // to relevant filters.
   useEffect(() => {
-    const sentinel = filterSentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFilterFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
-      },
-      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [hasProjects]);
+    const onScroll = () => setIsFilterFixed(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Bottom sentinel: hide fixed bar when "Ready to Get Started" enters viewport
   useEffect(() => {

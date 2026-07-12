@@ -92,20 +92,15 @@ const AreaDetail = () => {
   const [bottomReached, setBottomReached] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // IntersectionObserver for fixed positioning
+  // Show the sticky replacement filter/tab bar on any scroll — matches the
+  // project-page standard so area pages get the same immediate access to
+  // relevant filters.
   useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
-      },
-      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [area]);
+    const onScroll = () => setIsFixed(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
    // Bottom sentinel: hide fixed bar when "Ready to Get Started" section enters viewport
   useEffect(() => {
