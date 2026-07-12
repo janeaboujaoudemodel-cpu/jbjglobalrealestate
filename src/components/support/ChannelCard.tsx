@@ -66,7 +66,7 @@ export default function ChannelCard({
               className="allow-white inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.16em] font-semibold text-white/80"
               style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+              <span className="h-1.5 w-1.5 rounded-full bg-white" style={{ backgroundColor: "#FFFFFF" }} />
               {channel.responseTime}
             </span>
           )}

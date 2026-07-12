@@ -18,19 +18,8 @@ function useChannels(closeAfter: () => void): ChannelDef[] {
       id: "advisor",
       label: "Speak to an advisor",
       description: "Scheduled callback from a senior advisor",
-      responseTime: "Same day · Mon–Sat",
+      responseTime: "Within 1 business hour · Mon–Sat",
       Icon: PhoneCall,
-      action: () => {
-        closeAfter();
-        window.dispatchEvent(new CustomEvent("jbj:open-advisor"));
-      },
-    },
-    {
-      id: "callback",
-      label: "Request a callback",
-      description: "Leave your number — we'll call you back",
-      responseTime: "Within 1 business hour",
-      Icon: Phone,
       action: () => {
         closeAfter();
         window.dispatchEvent(new CustomEvent("jbj:open-advisor"));

@@ -115,31 +115,36 @@ const CookiesConsentBanner = () => {
           data-chrome="cookie-banner"
         >
           <div
-            data-surface="champagne"
-            className="surface-champagne pointer-events-auto mx-auto flex max-w-[24rem] items-center gap-2 rounded-2xl border border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EEF7F3] px-3 py-2.5 shadow-[0_18px_45px_-22px_rgba(4,44,28,0.45)] sm:max-w-lg sm:gap-3 sm:px-4 sm:py-3"
+            data-surface="emerald"
+            data-emerald="true"
+            data-no-contrast-guard
+            className="jj-emerald-metallic allow-white pointer-events-auto mx-auto flex max-w-[24rem] items-center gap-2 rounded-2xl border border-white/25 px-3 py-2.5 shadow-[0_18px_45px_-22px_rgba(4,44,28,0.55)] sm:max-w-lg sm:gap-3 sm:px-4 sm:py-3"
+            style={{ color: "#FFFFFF" }}
           >
-            <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#EAF4EF] sm:h-7 sm:w-7">
-              <Cookie className="h-3.5 w-3.5 text-[#064E3B] sm:h-4 sm:w-4" />
+            <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/15 border border-white/30 sm:h-7 sm:w-7">
+              <Cookie className="h-3.5 w-3.5 sm:h-4 sm:w-4 allow-white" style={{ color: "#FFFFFF" }} />
             </div>
-            <div className="flex-1 text-[#1A1A1A]">
-              <p className="text-[11px] font-semibold leading-tight sm:text-xs">We use essential cookies to keep this experience secure and reliable.</p>
-              <p className="mt-0.5 text-[10px] leading-tight text-[#1A1A1A]/70 sm:text-[11px]">
+            <div className="flex-1 allow-white" style={{ color: "#FFFFFF" }}>
+              <p className="allow-white text-[11px] font-semibold leading-tight sm:text-xs" style={{ color: "#FFFFFF" }}>We use essential cookies to keep this experience secure and reliable.</p>
+              <p className="allow-white mt-0.5 text-[10px] leading-tight sm:text-[11px]" style={{ color: "rgba(255,255,255,0.85)" }}>
                 By selecting Okay, your consent is recorded with date, time, browser and policy version. Read our{" "}
-                <a href="/cookies" className="font-semibold underline decoration-[#B89555] underline-offset-2 hover:text-[#064E3B]">Cookies Policy</a>
+                <a href="/cookies" className="allow-white font-semibold underline underline-offset-2" style={{ color: "#FFFFFF" }}>Cookies Policy</a>
                 {" "}and{" "}
-                <a href="/privacy" className="font-semibold underline decoration-[#B89555] underline-offset-2 hover:text-[#064E3B]">Privacy Policy</a>.
+                <a href="/privacy" className="allow-white font-semibold underline underline-offset-2" style={{ color: "#FFFFFF" }}>Privacy Policy</a>.
               </p>
             </div>
             <Button
               onClick={handleOkay}
-              className="jj-official-emerald allow-white h-7 flex-none rounded-full px-3 text-[10px] sm:h-8 sm:px-4 sm:text-xs"
+              className="allow-white h-7 flex-none rounded-full bg-white/15 hover:bg-white/25 border border-white/40 px-3 text-[10px] sm:h-8 sm:px-4 sm:text-xs"
               data-cta="primary"
               data-surface="emerald"
               data-no-contrast-guard
+              style={{ color: "#FFFFFF" }}
             >
-              <span className="allow-white">Okay</span>
+              <span className="allow-white" style={{ color: "#FFFFFF" }}>Okay</span>
             </Button>
           </div>
+
         </motion.div>
       )}
     </AnimatePresence>
