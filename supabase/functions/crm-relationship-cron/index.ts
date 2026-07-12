@@ -92,17 +92,17 @@ serve(async (req: Request) => {
     let inserted = 0;
     for (const r of reminders) {
       // Avoid duplicates: skip if an open AI-generated reminder of the same kind exists for the same ref
-      const refField = r.dev_registry_id ? "dev_registry_id" : "brokerage_id";
-      const refVal = r[refField];
-      const { data: existing } = await service
+      const refField = r.dev_registry_id ? "dev_registry_id" : null;
+      let query = service
         .from("crm_relationship_reminders")
         .select("id")
         .eq("owner_id", r.owner_id)
         .eq("kind", r.kind)
-        .eq(refField, refVal)
         .eq("is_done", false)
-        .eq("ai_generated", true)
-        .limit(1);
+        .eq("ai_generated", true);
+      if (refField) query = query.eq(refField, r[refField]);
+      else query = query.eq("title", r.title as string);
+      const { data: existing } = await query.limit(1);
       if (existing && existing.length > 0) continue;
       const { error } = await service.from("crm_relationship_reminders").insert(r);
       if (!error) inserted++;
