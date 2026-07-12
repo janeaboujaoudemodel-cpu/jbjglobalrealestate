@@ -71,37 +71,11 @@ const Developers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState("all");
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
-  const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
   const [currentPage, setCurrentPage] = useState(1);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const ITEMS_PER_PAGE = 24;
-  const filterSentinelRef = useRef<HTMLDivElement>(null);
-
-  // Toggle header visibility when filter is fixed
-  useEffect(() => {
-    if (isFilterFixed) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
-    return () => document.body.classList.remove('filter-bar-fixed');
-  }, [isFilterFixed]);
-
-  // Two-phase scroll-to-fix filter logic
-  useEffect(() => {
-    const sentinel = filterSentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFilterFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
-      },
-      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
 
   // Developer names list for dropdown
   const developerNames = useMemo(() => {
