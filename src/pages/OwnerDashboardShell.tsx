@@ -201,8 +201,11 @@ const OwnerDashboardShell = () => {
       className="owner-dashboard-shell owner-shell-surface min-h-screen bg-[#F7F2EA] flex overflow-x-hidden"
       style={{ ["--app-content-left" as never]: contentLeft, ["--app-content-top" as never]: contentTop }}
     >
-      {/* Owner Tasks Popup Alert — wrapped to never block scroll/wheel events */}
-      <div className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto">
+      {/* Owner Tasks Popup Alert — offset by sidebar so it centers in visible content area */}
+      <div
+        className="pointer-events-none fixed inset-0 z-50 [&>*]:pointer-events-auto"
+        style={{ paddingLeft: contentLeft }}
+      >
         <OwnerTasksPopupAlert />
       </div>
       {/* Mobile Sidebar */}
