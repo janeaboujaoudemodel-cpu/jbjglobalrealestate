@@ -32,15 +32,24 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     const callerId = claims.claims.sub;
+    const callerEmail = String(claims.claims.email || '').toLowerCase().trim();
+
+    const OWNER_BACKEND_EMAILS = [
+      'janeaboujaoudenails@gmail.com',
+      'janeaboujaoudemodel@gmail.com',
+      'contact@janeaboujaoude.net',
+      'infoo.jane@gmail.com',
+    ];
 
     const admin = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
+    const emailAllowed = OWNER_BACKEND_EMAILS.includes(callerEmail);
     const { data: isOwner } = await admin.rpc('has_role', { _user_id: callerId, _role: 'owner' });
     const { data: isAdmin } = await admin.rpc('has_role', { _user_id: callerId, _role: 'admin' });
-    if (!isOwner && !isAdmin) {
+    if (!emailAllowed && !isOwner && !isAdmin) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
