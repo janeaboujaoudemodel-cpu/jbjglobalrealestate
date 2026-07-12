@@ -38,7 +38,7 @@ export default function ChannelCard({
         data-no-contrast-guard
         data-support-channel-card
         className={`group/channel grid h-full w-full min-w-0 grid-cols-[44px_minmax(0,1fr)] items-center gap-3 text-left
-          rounded-[10px] px-3.5 py-2.5
+          rounded-[10px] px-3.5 py-3
           jj-emerald-metallic text-white allow-white
           transition-[filter,box-shadow] duration-200
           hover:brightness-110
@@ -48,26 +48,26 @@ export default function ChannelCard({
         <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/40 bg-white/12 text-white allow-white transition-colors group-hover/channel:bg-white/20 group-hover/channel:border-white/70">
           <channel.Icon className="h-5 w-5 allow-white" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
         </span>
-        <div className="flex min-w-0 flex-col justify-center gap-0.5 overflow-hidden">
+        <div className="flex min-w-0 flex-col justify-center gap-1">
           <span
-            className="allow-white text-[14px] font-semibold leading-tight text-white truncate"
+            className="allow-white text-[14px] font-semibold leading-snug text-white break-words"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
           >
             {channel.label}
           </span>
           <span
-            className="allow-white text-[12px] leading-tight text-white/85 truncate"
+            className="allow-white text-[12px] leading-snug text-white/85 break-words"
             style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
           >
             {channel.description}
           </span>
           {channel.responseTime && (
             <span
-              className="allow-white inline-flex items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.16em] font-semibold text-white/80"
+              className="allow-white inline-flex flex-wrap items-center gap-1 pt-0.5 text-[10px] uppercase tracking-[0.14em] font-semibold text-white/80 break-words"
               style={{ color: "rgba(255,255,255,0.82)", WebkitTextFillColor: "rgba(255,255,255,0.82)" }}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-white" style={{ backgroundColor: "#FFFFFF" }} />
-              {channel.responseTime}
+              <span className="h-1.5 w-1.5 rounded-full bg-white shrink-0" style={{ backgroundColor: "#FFFFFF" }} />
+              <span className="break-words">{channel.responseTime}</span>
             </span>
           )}
         </div>
