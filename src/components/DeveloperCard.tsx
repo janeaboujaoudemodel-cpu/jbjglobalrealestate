@@ -184,39 +184,39 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99, heroImageUrl }
           )}
         </div>
 
-        {/* Content section */}
-        <div className="allow-white flex-1 p-4 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex flex-col">
-          <h3 className="text-white font-bold text-base md:text-lg mb-1.5 line-clamp-1">
+        {/* Content section — white surface with black text & icons */}
+        <div className="flex-1 p-4 bg-white flex flex-col">
+          <h3 className="text-[#0A0A0A] font-bold text-base md:text-lg mb-1.5 line-clamp-1">
             {developer.name}
           </h3>
 
           <div className="flex-1 min-h-[36px]">
             {safeDescription ? (
-              <p className="text-white text-xs line-clamp-2 leading-relaxed">
+              <p className="text-[#0A0A0A]/75 text-xs line-clamp-2 leading-relaxed">
                 {safeDescription}
               </p>
             ) : (
-              <p className="text-white text-xs italic">
+              <p className="text-[#0A0A0A]/60 text-xs italic">
                 Premier developer in the UAE market
               </p>
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-white text-xs mt-3 pt-3 border-t border-white/18">
+          <div className="flex items-center gap-3 text-[#0A0A0A]/80 text-xs mt-3 pt-3 border-t border-[#0A0A0A]/10">
             {projectCount > 0 ? (
               <div className="flex items-center gap-1">
-                <Building2 className="w-3.5 h-3.5 text-white" />
+                <Building2 className="w-3.5 h-3.5 text-[#0A0A0A]" />
                 <span>{projectCount} Projects</span>
               </div>
             ) : null}
             {developer.completed_projects && developer.completed_projects > 0 ? (
               <div className="flex items-center gap-1">
-                <TrendingUp className="w-3.5 h-3.5 text-white" />
+                <TrendingUp className="w-3.5 h-3.5 text-[#0A0A0A]" />
                 <span>{developer.completed_projects.toLocaleString()}+ Delivered</span>
               </div>
             ) : null}
             {!projectCount && (!developer.completed_projects || developer.completed_projects === 0) && (
-              <span className="text-white text-xs">View developer portfolio</span>
+              <span className="text-[#0A0A0A]/70 text-xs">View developer portfolio</span>
             )}
           </div>
         </div>
