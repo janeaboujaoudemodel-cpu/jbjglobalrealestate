@@ -1,6 +1,5 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import VideoBackground from "@/components/VideoBackground";
-import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -27,7 +26,7 @@ import {
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
-import developersHeroVideoAsset from "@/assets/videos/dubai-landmarks-hero.mp4.asset.json";
+import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
 // Developer tier classification for filtering
@@ -72,37 +71,11 @@ const Developers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [tierFilter, setTierFilter] = useState("all");
   const [selectedDeveloper, setSelectedDeveloper] = useState("");
-  const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "alpha" | "most_projects">("default");
   const [currentPage, setCurrentPage] = useState(1);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const ITEMS_PER_PAGE = 24;
-  const filterSentinelRef = useRef<HTMLDivElement>(null);
-
-  // Toggle header visibility when filter is fixed
-  useEffect(() => {
-    if (isFilterFixed) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
-    return () => document.body.classList.remove('filter-bar-fixed');
-  }, [isFilterFixed]);
-
-  // Two-phase scroll-to-fix filter logic
-  useEffect(() => {
-    const sentinel = filterSentinelRef.current;
-    if (!sentinel) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFilterFixed(!entry.isIntersecting && entry.boundingClientRect.top < 140);
-      },
-      { threshold: 0, rootMargin: "-140px 0px 0px 0px" }
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, []);
 
   // Developer names list for dropdown
   const developerNames = useMemo(() => {
@@ -297,12 +270,9 @@ const Developers = () => {
           </motion.div>
         </section>
 
-        {/* Scroll sentinel for two-phase filter fix */}
-        <div ref={filterSentinelRef} className="h-0" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }} />
-
-        {/* Filters Section — emerald rail (never near-black), no gold/double borders */}
+        {/* Filters Section — sticky emerald rail (single instance, no portal duplication) */}
         <section
-          className="relative z-40 pt-8 pb-5 border-y border-white/12"
+          className="sticky top-[88px] z-40 pt-4 pb-4 border-y border-white/12 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.5)]"
           style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}
         >
           <div className="w-full px-3 sm:px-4">
@@ -369,66 +339,8 @@ const Developers = () => {
           onFilterChange={setShortcutFilters}
         />
 
-        {/* Fixed portal copy of filters when scrolled past —
-            rendered into #root so the .jj-utility-shell sidebar-safe left
-            offset applies and the bar stops before the vertical sidebar. */}
-        {isFilterFixed && createPortal(
-          <section className="jj-utility-shell fixed top-[88px] right-0 z-[9998] backdrop-blur-md py-3 border-b border-white/12 shadow-lg" style={{ background: "linear-gradient(180deg,#064E3B 0%,#042C1C 55%,#031E14 100%)" }}>
-            <div className="w-full px-3 sm:px-4">
-              <div className="p-0">
-                <FilterShortcutBar
-                  variant="dark"
-                  filters={shortcutFilters}
-                  onFilterChange={(f) => {
-                    setShortcutFilters(f);
-                    setSearchQuery(f.searchQuery || '');
-                    if (f.sortBy === 'alpha') setSortBy('alpha');
-                    else if (f.sortBy === 'most_projects') setSortBy('most_projects');
-                    else if (f.sortBy) setSortBy('default');
-                  }}
-                  priorityFilter="developers"
-                  resultsCount={filteredDevelopers.length}
-                  resultsLabel="Developers"
-                />
 
-                <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-white/10">
-                  <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[200px] h-11 jj-pill-emerald-metallic allow-white text-white border-0 rounded-full text-sm shadow-md transition-none duration-0 [&>svg]:text-white">
-                      <Crown className="w-4 h-4 mr-2 text-white flex-shrink-0" />
-                      <span className="truncate text-left flex-1 text-white font-semibold">
-                        {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
-                      </span>
-                    </SelectTrigger>
-                    <SelectContent className="duration-0 data-[state=open]:animate-none data-[state=closed]:animate-none">
-                      {TIER_FILTERS.map((tier) => (
-                        <SelectItem key={tier.value} value={tier.value}>
-                          {tier.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
 
-                  <div className="allow-white flex-1 text-white text-sm font-semibold" style={{ color: '#FFFFFF' }}>
-                    {filteredDevelopers.length.toLocaleString()} developer{filteredDevelopers.length !== 1 ? 's' : ''} found
-                  </div>
-
-                  {activeFilterCount > 0 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={clearFilters}
-                      className="allow-white h-9 px-3 bg-[#04241C] border-0 text-white hover:bg-[#064E3B] rounded-full flex items-center gap-1.5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.16)] [&_svg]:text-white"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                      Clear ({activeFilterCount})
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section>,
-          document.getElementById('root') || document.body
-        )}
 
         {/* Developer Cards Grid */}
         <section className="py-12 md:py-16">

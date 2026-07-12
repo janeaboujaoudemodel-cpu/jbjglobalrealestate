@@ -406,15 +406,15 @@ const AreaGuides = () => {
                           </div>
                         </div>
 
-                        {/* Content Section */}
-                        <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col flex-1">
-                          <h3 className="text-[#1A1A1A] font-bold text-lg mb-2 line-clamp-1 group-hover:text-[#1A1A1A] transition-colors">
+                        {/* Content Section — white surface, black text & icons */}
+                        <div className="p-4 bg-white flex flex-col flex-1">
+                          <h3 className="text-[#0A0A0A] font-bold text-lg mb-2 line-clamp-1">
                             {area.name}
                           </h3>
 
                           <div className="flex-1 min-h-[40px]">
                             {area.description ? (
-                              <p className="text-[#1A1A1A]/70 text-xs line-clamp-2">
+                              <p className="text-[#0A0A0A]/75 text-xs line-clamp-2">
                                 {area.description
                                   .replace(/!\[.*?\]\(.*?\)/g, "")
                                   .replace(/provident\s*(estate)?/gi, "")
@@ -423,23 +423,23 @@ const AreaGuides = () => {
                                   .trim()}
                               </p>
                             ) : (
-                              <p className="text-[#1A1A1A]/70 text-xs italic">
+                              <p className="text-[#0A0A0A]/60 text-xs italic">
                                 Explore properties in {area.name}
                               </p>
                             )}
                           </div>
 
                           {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-[#1A1A1A]/70 text-xs mt-3 pt-3 border-t border-[#064E3B]/20">
+                          <div className="flex items-center gap-3 text-[#0A0A0A]/80 text-xs mt-3 pt-3 border-t border-[#0A0A0A]/10">
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <Building2 className="w-3.5 h-3.5 text-[#1A1A1A]" />
+                                <Building2 className="w-3.5 h-3.5 text-[#0A0A0A]" />
                                 <span>{area.property_count} Projects</span>
                               </div>
                             )}
                             {(area.developer_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <span className="text-[#1A1A1A]/70">{area.developer_count} Developers</span>
+                                <span>{area.developer_count} Developers</span>
                               </div>
                             )}
                             {area.is_trending && (
@@ -455,7 +455,7 @@ const AreaGuides = () => {
                               </div>
                             )}
                             {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
-                              <span className="text-[#1A1A1A]/70 text-xs">View area details</span>
+                              <span className="text-[#0A0A0A]/70 text-xs">View area details</span>
                             )}
                           </div>
                         </div>
