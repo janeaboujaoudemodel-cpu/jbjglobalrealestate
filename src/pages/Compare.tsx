@@ -1022,8 +1022,10 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
                     <Mail className="w-4 h-4" style={{ color: "#064E3B" }} />
                     Share via Email
                   </button>
-                  <ComparisonExportBar targetSelector="[data-compare-content-frame]" projects={projects as any} />
                 </>
+              )}
+              {projects.length > 0 && (
+                <ComparisonExportBar targetSelector="[data-compare-content-frame]" projects={projects as any} />
               )}
             </div>
           </div>
