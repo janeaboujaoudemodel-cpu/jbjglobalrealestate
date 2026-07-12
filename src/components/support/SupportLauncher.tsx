@@ -399,13 +399,13 @@ export default function SupportLauncher() {
                   </div>
 
                   <div
-                    className="grid w-full grid-cols-[minmax(0,1fr)] auto-rows-[86px] items-stretch justify-stretch gap-2.5 overflow-y-auto overflow-x-hidden pr-0.5"
+                    className="grid w-full grid-cols-[minmax(0,1fr)] auto-rows-min items-stretch justify-stretch gap-2.5 overflow-y-auto overflow-x-hidden pr-0.5"
                     style={{ gridTemplateColumns: "minmax(0, 1fr)" }}
                   >
                     {channels.map((c) => (
                       <div
                         key={c.id}
-                        className="block h-[86px] w-full min-w-0 max-w-full self-stretch justify-self-stretch [&>*]:!block [&>*]:!h-full [&>*]:!w-full [&>*]:!min-w-0 [&>*]:!max-w-full [&>*]:!box-border"
+                        className="block w-full min-w-0 max-w-full self-stretch justify-self-stretch [&>*]:!block [&>*]:!w-full [&>*]:!min-w-0 [&>*]:!max-w-full [&>*]:!box-border"
                         style={{ width: "100%", inlineSize: "100%" }}
                       >
                         <ChannelCard channel={c} onActivate={close} />
