@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import OwnerCompanyProfileUploader from "@/components/owner/OwnerCompanyProfileUploader";
+import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFieldsSection";
 
 interface Developer {
   id: string;
@@ -545,6 +546,13 @@ export default function DeveloperProfilePage() {
                 <Field label="Notable projects (free text)">
                   <Textarea rows={3} disabled={!canEdit} value={form.notable_projects ?? ""} onChange={(e) => setForm((f) => ({ ...f, notable_projects: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                 </Field>
+
+                <DeveloperCustomFieldsSection
+                  developerId={developer.id}
+                  canEdit={canEdit}
+                  initialValues={(developer as any).custom_fields}
+                />
+
 
                 {canEdit && (
                   <div className="flex justify-end gap-2 pt-2">
