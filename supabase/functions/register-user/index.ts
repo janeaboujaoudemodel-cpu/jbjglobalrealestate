@@ -57,8 +57,17 @@ Deno.serve(async (req) => {
     }
     const userId = created.user.id;
 
-    // Keep the base account row complete as well, so owner analytics still
-    // show contact/category data even before opening the full CRM profile.
+    // 2. Derive denormalized filter values FIRST (services is referenced below)
+    const services: string[] = Array.isArray(common.services) ? common.services : [];
+    const position = String(category_data.position ?? "");
+    const company_name = String(category_data.company_name ?? "");
+    const years_experience = num(category_data.years_experience);
+    const investment_experience = String(category_data.investment_experience ?? "");
+    const communities: string[] = Array.isArray(category_data.communities)
+      ? category_data.communities : [];
+    const { budget_min, budget_max } = parseBudget(category_data.budget);
+
+    // 3. Keep the base account row complete (mirrors CRM data for analytics).
     await admin.from("profiles").upsert({
       id: userId,
       email,
@@ -79,18 +88,11 @@ Deno.serve(async (req) => {
       dashboard_config: { category, category_data, services },
     }, { onConflict: "user_id" });
 
-    // 2. Assign client role
-    await admin.from("user_roles").upsert({ user_id: userId, role: "client" }, { onConflict: "user_id,role" });
+    await admin.from("user_roles").upsert(
+      { user_id: userId, role: "client" },
+      { onConflict: "user_id,role" },
+    );
 
-    // 3. Derive denormalized filter values
-    const services: string[] = Array.isArray(common.services) ? common.services : [];
-    const position = String(category_data.position ?? "");
-    const company_name = String(category_data.company_name ?? "");
-    const years_experience = num(category_data.years_experience);
-    const investment_experience = String(category_data.investment_experience ?? "");
-    const communities: string[] = Array.isArray(category_data.communities)
-      ? category_data.communities : [];
-    const { budget_min, budget_max } = parseBudget(category_data.budget);
 
     // 4. Insert CRM profile
     const profileRow = {
