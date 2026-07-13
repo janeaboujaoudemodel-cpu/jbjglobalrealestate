@@ -20,7 +20,7 @@ const corsHeaders = {
 };
 
 const AI_TIMEOUT_MS = 90_000;
-const MAX_FILE_BYTES = 20 * 1024 * 1024;
+const MAX_FILE_BYTES = 50 * 1024 * 1024;
 
 const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not stated. Never invent values.
 {
