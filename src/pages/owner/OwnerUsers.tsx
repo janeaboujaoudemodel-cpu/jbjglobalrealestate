@@ -103,7 +103,10 @@ export default function OwnerUsers() {
   }
 
   const counts = useMemo(() => {
-    const c: Record<Category, number> = { investor: 0, broker: 0, developer: 0, unassigned: 0 };
+    const c: Record<Category, number> = {
+      investor: 0, broker: 0, developer: 0, buyer: 0, seller: 0,
+      landlord: 0, tenant: 0, partner: 0, service_provider: 0, media: 0, other: 0, unassigned: 0,
+    };
     for (const r of rows) c[r.category]++;
     return c;
   }, [rows]);
@@ -116,14 +119,6 @@ export default function OwnerUsers() {
       return (r.full_name || "").toLowerCase().includes(q) || (r.email || "").toLowerCase().includes(q);
     });
   }, [rows, filter, search]);
-
-  function toggleReveal(id: string) {
-    setRevealedIds((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
-  }
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A] p-4 md:p-8">
