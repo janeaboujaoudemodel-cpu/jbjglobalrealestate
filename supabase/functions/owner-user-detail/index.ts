@@ -36,16 +36,24 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'user_id required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const [sessions, events, daily] = await Promise.all([
+    const [sessions, events, daily, crmProfile, baseProfile, roles, activity] = await Promise.all([
       admin.from('user_sessions').select('started_at, ended_at, duration_seconds, device_type, country, pages_visited').eq('user_id', user_id).order('started_at', { ascending: false }).limit(100),
       admin.from('user_events').select('event_time, event_name, page_path, metadata').eq('user_id', user_id).order('event_time', { ascending: false }).limit(50),
       admin.from('user_daily_activity').select('day_date, sessions_count, total_duration_seconds, total_events').eq('user_id', user_id).order('day_date', { ascending: false }).limit(90),
+      admin.from('crm_user_profiles').select('*').eq('user_id', user_id).maybeSingle(),
+      admin.from('profiles').select('*').eq('id', user_id).maybeSingle(),
+      admin.from('user_roles').select('role').eq('user_id', user_id),
+      admin.from('crm_profile_activity').select('*').eq('user_id', user_id).order('created_at', { ascending: false }).limit(50),
     ]);
 
     return new Response(JSON.stringify({
       sessions: sessions.data || [],
       events: events.data || [],
       daily: daily.data || [],
+      crm_profile: crmProfile.data || null,
+      profile: baseProfile.data || null,
+      roles: (roles.data || []).map((r: any) => r.role),
+      activity: activity.data || [],
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
