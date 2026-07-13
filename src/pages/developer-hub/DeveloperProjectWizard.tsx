@@ -164,6 +164,7 @@ const DeveloperProjectWizard = () => {
   const [smartFiles, setSmartFiles] = useState<Uploaded[]>([]);
   const [extracting, setExtracting] = useState(false);
   const [lastExtractedFields, setLastExtractedFields] = useState<string[]>([]);
+  const [smartExtractOpen, setSmartExtractOpen] = useState(true);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [additionalInfoMode, setAdditionalInfoMode] = useState<"keep" | "enrich">("enrich");
   const [publishResult, setPublishResult] = useState<AutoPublishResponse | null>(null);
