@@ -174,7 +174,7 @@ export const AreaIntelligenceGrid = () => {
           </motion.div>
 
           {/* Grid */}
-          <div className="mi-area-grid grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <div className="mi-area-grid grid sm:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
             {DUBAI_AREAS_MARKET_DATA.map((area) => (
               <AreaCard key={area.area} area={area} />
             ))}
