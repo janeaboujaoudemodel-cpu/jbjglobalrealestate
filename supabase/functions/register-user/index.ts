@@ -67,6 +67,33 @@ Deno.serve(async (req) => {
       ? category_data.communities : [];
     const { budget_min, budget_max } = parseBudget(category_data.budget);
 
+    // 3. Keep the base account row complete (mirrors CRM data for analytics).
+    await admin.from("profiles").upsert({
+      id: userId,
+      email,
+      full_name,
+      phone_number: phone,
+      user_type: "client",
+      mode_default: category,
+      picked_role: category,
+      first_signup_source: String(source_page ?? "signup_wizard"),
+      last_signup_source: String(source_page ?? "signup_wizard"),
+      signup_source_label: "CRM registration wizard",
+    }, { onConflict: "id" });
+
+    await admin.from("user_preferences").upsert({
+      user_id: userId,
+      selected_mode: category,
+      preferred_language: String(common.preferred_language ?? "English"),
+      dashboard_config: { category, category_data, services },
+    }, { onConflict: "user_id" });
+
+    await admin.from("user_roles").upsert(
+      { user_id: userId, role: "client" },
+      { onConflict: "user_id,role" },
+    );
+
+
     // 4. Insert CRM profile
     const profileRow = {
       user_id: userId,
