@@ -57,32 +57,7 @@ Deno.serve(async (req) => {
     }
     const userId = created.user.id;
 
-    // Keep the base account row complete as well, so owner analytics still
-    // show contact/category data even before opening the full CRM profile.
-    await admin.from("profiles").upsert({
-      id: userId,
-      email,
-      full_name,
-      phone_number: phone,
-      user_type: "client",
-      mode_default: category,
-      picked_role: category,
-      first_signup_source: String(source_page ?? "signup_wizard"),
-      last_signup_source: String(source_page ?? "signup_wizard"),
-      signup_source_label: "CRM registration wizard",
-    }, { onConflict: "id" });
-
-    await admin.from("user_preferences").upsert({
-      user_id: userId,
-      selected_mode: category,
-      preferred_language: String(common.preferred_language ?? "English"),
-      dashboard_config: { category, category_data, services },
-    }, { onConflict: "user_id" });
-
-    // 2. Assign client role
-    await admin.from("user_roles").upsert({ user_id: userId, role: "client" }, { onConflict: "user_id,role" });
-
-    // 3. Derive denormalized filter values
+    // 2. Derive denormalized filter values FIRST (services is referenced below)
     const services: string[] = Array.isArray(common.services) ? common.services : [];
     const position = String(category_data.position ?? "");
     const company_name = String(category_data.company_name ?? "");
