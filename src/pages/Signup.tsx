@@ -46,8 +46,29 @@ export default function Signup() {
           source_page: window.location.pathname,
         },
       });
-      if (error || (data && (data as any).error)) {
-        throw new Error((data as any)?.error ?? error?.message ?? "Registration failed");
+      // supabase-js surfaces non-2xx as `error` but still returns the parsed body in `data`.
+      // Try to pull a readable message out of either place, and also read the raw context body
+      // when the body couldn't be parsed (some runtimes stash it on error.context).
+      let serverMsg: string | undefined = (data as any)?.error;
+      if (!serverMsg && error && (error as any).context) {
+        try {
+          const ctx = (error as any).context;
+          if (typeof ctx.json === "function") {
+            const parsed = await ctx.json();
+            serverMsg = parsed?.error ?? parsed?.message;
+          } else if (typeof ctx.text === "function") {
+            const raw = await ctx.text();
+            try { serverMsg = JSON.parse(raw)?.error; } catch { serverMsg = raw; }
+          }
+        } catch { /* ignore */ }
+      }
+      if (error || serverMsg) {
+        const msg = serverMsg ?? error?.message ?? "Registration failed";
+        // Friendly copy for common cases
+        const friendly = /already been registered|already exists|duplicate/i.test(msg)
+          ? "An account with this email already exists. Please sign in instead."
+          : msg;
+        throw new Error(friendly);
       }
       const { error: signInErr } = await supabase.auth.signInWithPassword({
         email: (common.email as string).toLowerCase(),
