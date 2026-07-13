@@ -75,11 +75,38 @@ function extractJson(v: string): string {
 }
 
 async function fetchFile(url: string) {
-  const r = await fetch(url, { signal: AbortSignal.timeout(45_000) });
+  const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
   if (!r.ok) throw new Error(`File fetch failed (${r.status})`);
   const buf = new Uint8Array(await r.arrayBuffer());
-  if (buf.byteLength > MAX_FILE_BYTES) throw new Error(`File larger than 50MB — please upload a smaller PDF`);
   return { b64: toBase64(buf), mime: r.headers.get("content-type") || "application/pdf" };
+}
+
+/** POST to the AI gateway with retries for transient upstream failures (429/500/502/503/504). */
+async function callGatewayWithRetry(body: unknown, key: string) {
+  const attempts = 4;
+  let lastStatus = 0;
+  let lastText = "";
+  for (let i = 0; i < attempts; i++) {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      signal: AbortSignal.timeout(AI_TIMEOUT_MS),
+      headers: {
+        "Content-Type": "application/json",
+        "Lovable-API-Key": key,
+        "X-Lovable-AIG-SDK": "supabase-edge-function",
+      },
+      body: JSON.stringify(body),
+    });
+    if (res.ok) return res;
+    lastStatus = res.status;
+    lastText = await res.text().catch(() => "");
+    if (![429, 500, 502, 503, 504].includes(res.status)) {
+      return new Response(lastText, { status: res.status });
+    }
+    // Exponential backoff: 1.5s, 3s, 6s
+    await new Promise((r) => setTimeout(r, 1500 * Math.pow(2, i)));
+  }
+  return new Response(lastText || "upstream unavailable", { status: lastStatus || 502 });
 }
 
 /** Map the AI JSON to actual `developers` table columns. */
