@@ -77,7 +77,7 @@ async function fetchFile(url: string) {
   const r = await fetch(url, { signal: AbortSignal.timeout(45_000) });
   if (!r.ok) throw new Error(`File fetch failed (${r.status})`);
   const buf = new Uint8Array(await r.arrayBuffer());
-  if (buf.byteLength > MAX_FILE_BYTES) throw new Error(`File larger than 20MB`);
+  if (buf.byteLength > MAX_FILE_BYTES) throw new Error(`File larger than 50MB — please upload a smaller PDF`);
   return { b64: toBase64(buf), mime: r.headers.get("content-type") || "application/pdf" };
 }
 
