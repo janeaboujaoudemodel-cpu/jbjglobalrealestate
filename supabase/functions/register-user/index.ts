@@ -187,22 +187,10 @@ Deno.serve(async (req) => {
       { onConflict: "email_lower", ignoreDuplicates: true },
     );
 
-    // 6c. Queue welcome tasks (welcome email + WhatsApp greeting) — actual delivery
-    // fires once the email domain + Twilio WhatsApp channel are configured.
-    await admin.from("assistant_tasks").insert([
-      {
-        title: `Send welcome email to ${full_name}`,
-        task_type: "welcome_email",
-        status: "queued",
-        metadata: { user_id: userId, email, full_name, category, source_page },
-      },
-      {
-        title: `Send WhatsApp welcome to ${full_name}`,
-        task_type: "welcome_whatsapp",
-        status: "queued",
-        metadata: { user_id: userId, phone, full_name, category },
-      },
-    ]).then(() => {}, () => {}); // best-effort; ignore if table shape differs
+    // 6c. Welcome delivery: crm_leads with tag `account_created` and no `last_contacted_at`
+    // is the queue. Once the email domain + Twilio WhatsApp channel are configured,
+    // a scheduled job dispatches the branded welcome and prequalification flow.
+
 
     return json({ ok: true, user_id: userId, profile_id: profile!.id }, 200);
   } catch (err) {
