@@ -57,6 +57,14 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Rate limit: cap AI generations per IP (10/hour) using existing DB helper.
+    // Cache hits below are exempt so returning visitors aren't blocked.
+    const clientIp =
+      req.headers.get("cf-connecting-ip") ||
+      (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
+      "anon";
+    const rateKey = `ai_market_analyzer:${clientIp}`;
+
     const { data: cached } = await supabase
       .from("project_ai_cache")
       .select("analysis_json, generated_at")
