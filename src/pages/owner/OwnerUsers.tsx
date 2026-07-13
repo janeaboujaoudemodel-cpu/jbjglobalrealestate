@@ -18,6 +18,9 @@ interface UserRow {
   phone: string | null;
   company_name: string | null;
   category: Category;
+  position?: string | null;
+  has_signup_profile?: boolean;
+  account_type?: string | null;
   created_at: string;
   last_login_at: string | null;
   total_login_days: number | null;
@@ -34,6 +37,7 @@ interface DetailPayload {
   daily: Array<{ day_date: string; sessions_count: number; total_duration_seconds: number; total_events: number }>;
   crm_profile: any | null;
   profile: any | null;
+  preferences?: any | null;
   roles: string[];
   activity: Array<{ created_at: string; activity_type?: string; description?: string; metadata?: any }>;
 }
@@ -50,8 +54,14 @@ const CATEGORY_META: Record<Category, { label: string; icon: any; cls: string }>
   service_provider: { label: "Service Provider", icon: Wrench, cls: "bg-rose-500/15 text-rose-800 border-rose-500/40" },
   media: { label: "Media", icon: Newspaper, cls: "bg-slate-500/15 text-slate-800 border-slate-500/40" },
   other: { label: "Other", icon: HelpCircle, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/80 border-[#1A1A1A]/25" },
-  unassigned: { label: "Unassigned", icon: UserX, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/70 border-[#1A1A1A]/20" },
+  unassigned: { label: "Profile pending", icon: UserX, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/70 border-[#1A1A1A]/20" },
 };
+
+const CATEGORY_ORDER: Category[] = [
+  "investor","broker","developer","buyer","seller","landlord","tenant","partner","service_provider","media","other","unassigned",
+];
+
+const tableColumns = 7;
 
 function fmtDuration(seconds: number) {
   if (!seconds || seconds < 60) return `${seconds || 0}s`;
@@ -116,7 +126,10 @@ export default function OwnerUsers() {
     return rows.filter((r) => {
       if (filter !== "all" && r.category !== filter) return false;
       if (!q) return true;
-      return (r.full_name || "").toLowerCase().includes(q) || (r.email || "").toLowerCase().includes(q);
+      return (r.full_name || "").toLowerCase().includes(q)
+        || (r.email || "").toLowerCase().includes(q)
+        || (r.phone || "").toLowerCase().includes(q)
+        || (r.company_name || "").toLowerCase().includes(q);
     });
   }, [rows, filter, search]);
 
@@ -138,7 +151,7 @@ export default function OwnerUsers() {
 
         {/* Segment summary */}
         <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
-          {(["investor","broker","developer","buyer","seller","landlord","tenant","partner","service_provider","media","other","unassigned"] as Category[]).filter(c => counts[c] > 0 || c === "investor" || c === "broker" || c === "developer" || c === "unassigned").map((c) => {
+          {CATEGORY_ORDER.filter(c => counts[c] > 0 || c === "investor" || c === "broker" || c === "developer" || c === "unassigned").map((c) => {
             const meta = CATEGORY_META[c];
             const Icon = meta.icon;
             const active = filter === c;
@@ -151,7 +164,7 @@ export default function OwnerUsers() {
  }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">{meta.label}s</span>
+                  <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">{c === "unassigned" ? "Profile pending" : `${meta.label}s`}</span>
                   <Icon className="w-4 h-4 text-[#1A1A1A]/60" />
                 </div>
                 <div className="text-3xl font-bold mt-2">{counts[c]}</div>
@@ -167,7 +180,7 @@ export default function OwnerUsers() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search name or email…"
+              placeholder="Search name, email, phone or company…"
               className="pl-9 bg-[#FDFBF7] border-[#B89555]/30"
             />
           </div>
@@ -185,23 +198,22 @@ export default function OwnerUsers() {
             <table className="w-full text-sm">
               <thead className="bg-[#EFE6D6] text-[#1A1A1A]/80">
                 <tr className="text-left">
-                  <th className="px-4 py-3 font-semibold">Name</th>
-                  <th className="px-4 py-3 font-semibold">Email</th>
+                  <th className="px-4 py-3 font-semibold min-w-[260px]">Contact</th>
                   <th className="px-4 py-3 font-semibold">Category</th>
+                  <th className="px-4 py-3 font-semibold">Phone</th>
                   <th className="px-4 py-3 font-semibold">Registered</th>
                   <th className="px-4 py-3 font-semibold">Last seen</th>
                   <th className="px-4 py-3 font-semibold text-right">Sessions</th>
                   <th className="px-4 py-3 font-semibold text-right">Time on site</th>
-                  <th className="px-4 py-3 font-semibold text-right">Days (30d)</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="px-4 py-12 text-center">
+                  <tr><td colSpan={tableColumns} className="px-4 py-12 text-center">
                     <Loader2 className="w-5 h-5 animate-spin inline" />
                   </td></tr>
                 ) : filtered.length === 0 ? (
-                  <tr><td colSpan={8} className="px-4 py-12 text-center text-[#1A1A1A]/60">No users found.</td></tr>
+                  <tr><td colSpan={tableColumns} className="px-4 py-12 text-center text-[#1A1A1A]/60">No users found.</td></tr>
                 ) : filtered.map((u) => {
                   const meta = CATEGORY_META[u.category];
                   return (
@@ -210,8 +222,8 @@ export default function OwnerUsers() {
                       className="border-t border-[#B89555]/20 hover:bg-[#EFE6D6]/50 cursor-pointer"
                       onClick={() => openUser(u)}
                     >
-                      <td className="px-4 py-3 font-medium whitespace-nowrap">{u.full_name || "—"}</td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 align-top">
+                        <div className="font-medium text-[#1A1A1A]">{u.full_name || "Name not provided"}</div>
                         <a
                           href={`mailto:${u.email ?? ""}`}
                           onClick={(e) => e.stopPropagation()}
@@ -219,16 +231,17 @@ export default function OwnerUsers() {
                         >
                           {u.email || "—"}
                         </a>
-                        {u.phone && <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">{u.phone}</div>}
+                        {u.company_name && <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">{u.company_name}</div>}
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant="outline" className={`${meta.cls} whitespace-nowrap`}>{meta.label}</Badge>
+                        {!u.has_signup_profile && <div className="text-[10px] text-[#1A1A1A]/55 mt-1 whitespace-nowrap">Account form pending</div>}
                       </td>
+                      <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">{u.phone || "Not provided"}</td>
                       <td className="px-4 py-3 text-xs whitespace-nowrap">{new Date(u.created_at).toLocaleDateString()}</td>
                       <td className="px-4 py-3 text-xs whitespace-nowrap">{u.last_login_at ? new Date(u.last_login_at).toLocaleString() : "—"}</td>
                       <td className="px-4 py-3 text-right">{u.sessions_count}</td>
                       <td className="px-4 py-3 text-right whitespace-nowrap">{fmtDuration(u.total_minutes * 60)}</td>
-                      <td className="px-4 py-3 text-right">{u.days_active_30d}</td>
                     </tr>
                   );
                 })}
@@ -249,7 +262,9 @@ export default function OwnerUsers() {
               <div className="space-y-5 mt-4">
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <Field label="Email" value={selected.email || "—"} mono />
+                  <Field label="Phone" value={selected.phone || "Not provided"} mono />
                   <Field label="Category" value={CATEGORY_META[selected.category].label} />
+                  <Field label="Account form" value={selected.has_signup_profile ? "Submitted" : "Pending / social account only"} />
                   <Field label="Registered" value={new Date(selected.created_at).toLocaleString()} />
                   <Field label="Last seen" value={selected.last_login_at ? new Date(selected.last_login_at).toLocaleString() : "—"} />
                   <Field label="Total sessions" value={String(selected.sessions_count)} />
@@ -267,6 +282,11 @@ export default function OwnerUsers() {
                     {detail.crm_profile && (
                       <section>
                         <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Signup profile</h3>
+                        {detail.crm_profile._missing_signup_profile && (
+                          <div className="mb-3 border border-[#B89555]/30 bg-[#EFE6D6]/60 px-3 py-2 text-xs text-[#1A1A1A]/75">
+                            This account was created without completing the registration wizard, so the account form is marked pending until the user submits their category profile.
+                          </div>
+                        )}
                         <div className="border border-[#B89555]/30 rounded bg-[#F7F2EA] p-3 grid grid-cols-2 gap-3 text-sm">
                           <Field label="Category" value={detail.crm_profile.category || "—"} />
                           <Field label="Status" value={detail.crm_profile.status || "—"} />
