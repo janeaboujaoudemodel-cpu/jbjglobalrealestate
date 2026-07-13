@@ -34,7 +34,11 @@ const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not 
   "website": string|null,
   "email": string|null,
   "phone": string|null,
+  "whatsapp": string|null,
+  "whatsapp_group_url": string|null,
+  "telegram_group_url": string|null,
   "ceo_name": string|null,
+  "founder_name": string|null,
   "parent_company": string|null,
   "license_number": string|null,
   "total_projects": number|null,
@@ -121,8 +125,60 @@ async function callGatewayWithRetry(body: unknown, key: string) {
   return new Response(lastText || "upstream unavailable", { status: lastStatus || 502 });
 }
 
+/**
+ * Deterministic safety net after the model response: owner-uploaded company
+ * profiles are often written in first person, but JBJ presents developers in
+ * third person. Never save "we / our / us" language into the profile.
+ */
+function enforceThirdPersonVoice(text: unknown, developerName?: string): string | null {
+  if (typeof text !== "string") return null;
+  const name = developerName || "The developer";
+  let out = text.trim();
+  if (!out) return null;
+
+  out = out
+    .replace(/\bwe\s+have\s+always\s+envisioned\b/gi, `${name} has always envisioned`)
+    .replace(/\bwe\s+have\s+earned\b/gi, `${name} has earned`)
+    .replace(/\bwe\s+are\b/gi, `${name} is`)
+    .replace(/\bwe\s+were\b/gi, `${name} was`)
+    .replace(/\bwe\s+have\b/gi, `${name} has`)
+    .replace(/\bwe\s+do\b/gi, `${name} does`)
+    .replace(/\bwe\s+understand\b/gi, `${name} understands`)
+    .replace(/\bwe\s+know\b/gi, `${name} knows`)
+    .replace(/\bwe\s+apply\b/gi, `${name} applies`)
+    .replace(/\bwe\s+proudly\s+stand\b/gi, `${name} stands`)
+    .replace(/\bwe\s+passionately\s+develop\b/gi, `${name} develops`)
+    .replace(/\bwe\s+develop\b/gi, `${name} develops`)
+    .replace(/\bwe\s+build\b/gi, `${name} builds`)
+    .replace(/\bwe\s+create\b/gi, `${name} creates`)
+    .replace(/\bwe\s+deliver\b/gi, `${name} delivers`)
+    .replace(/\bwe\s+offer\b/gi, `${name} offers`)
+    .replace(/\bwe\s+provide\b/gi, `${name} provides`)
+    .replace(/\bwe\s+believe\b/gi, `${name} believes`)
+    .replace(/\bwe\s+envision(?:ed)?\b/gi, `${name} envisions`)
+    .replace(/\bwe\s+earned\b/gi, `${name} earned`)
+    .replace(/\bour\s+leadership\s+team\b/gi, `${name}'s leadership team`)
+    .replace(/\bour\s+residents\b/gi, "their residents")
+    .replace(/\bour\s+investors\b/gi, "their investors")
+    .replace(/\bour\s+clients\b/gi, "their clients")
+    .replace(/\bour\s+customers\b/gi, "their customers")
+    .replace(/\bour\s+vision\b/gi, "the company's vision")
+    .replace(/\bour\s+mission\b/gi, "the company's mission")
+    .replace(/\bour\s+foundation\b/gi, "the company's foundation")
+    .replace(/\bour\s+currency\b/gi, "the company's currency")
+    .replace(/\bour\s+portfolio\b/gi, "their portfolio")
+    .replace(/\bour\s+projects\b/gi, "their projects")
+    .replace(/\bour\s+communities\b/gi, "their communities")
+    .replace(/\bour\s+([a-z])/gi, "their $1")
+    .replace(/\bus\b/gi, "them")
+    .replace(/\bjoin\s+(?:us|them)\s+on\s+this\s+journey[^.]*\.?/gi, "");
+
+  out = out.replace(/(^|[.!?]\s+)We\s+/g, `$1${name} `);
+  return out.replace(/[ \t]{2,}/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+}
+
 /** Map the AI JSON to actual `developers` table columns. */
-function mapToDeveloperColumns(ex: Record<string, unknown>): Record<string, unknown> {
+function mapToDeveloperColumns(ex: Record<string, unknown>, developerName?: string): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   const put = (col: string, val: unknown) => {
     if (val === undefined || val === null) return;
@@ -131,12 +187,17 @@ function mapToDeveloperColumns(ex: Record<string, unknown>): Record<string, unkn
     out[col] = val;
   };
 
-  put("description", ex.description);
+  put("description", enforceThirdPersonVoice(ex.description, developerName));
   put("founded_year", ex.founded_year);
   put("headquarters", ex.headquarters);
   put("website_url", ex.website);
   put("ceo_name", ex.ceo_name);
   put("parent_company", ex.parent_company);
+  put("office_phone", ex.phone);
+  put("admin_email", ex.email);
+  put("whatsapp", ex.whatsapp);
+  put("whatsapp_group_url", ex.whatsapp_group_url);
+  put("telegram_group_url", ex.telegram_group_url);
   put("license_number", ex.license_number);
   put("completed_projects", ex.completed_projects);
   put("offplan_projects", ex.offplan_projects);
