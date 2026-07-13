@@ -65,7 +65,7 @@ export default function OwnerUsers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Category | "all">("all");
-  const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
+  
   const [selected, setSelected] = useState<UserRow | null>(null);
   const [detail, setDetail] = useState<DetailPayload | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
