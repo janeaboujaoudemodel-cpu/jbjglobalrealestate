@@ -264,6 +264,60 @@ export default function OwnerUsers() {
 
                 {detail && (
                   <>
+                    {detail.crm_profile && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Signup profile</h3>
+                        <div className="border border-[#B89555]/30 rounded bg-[#F7F2EA] p-3 grid grid-cols-2 gap-3 text-sm">
+                          <Field label="Category" value={detail.crm_profile.category || "—"} />
+                          <Field label="Status" value={detail.crm_profile.status || "—"} />
+                          <Field label="Phone" value={detail.crm_profile.phone || "—"} mono />
+                          <Field label="WhatsApp" value={detail.crm_profile.whatsapp || "—"} mono />
+                          <Field label="Country" value={detail.crm_profile.country || "—"} />
+                          <Field label="Nationality" value={detail.crm_profile.nationality || "—"} />
+                          <Field label="Preferred language" value={detail.crm_profile.preferred_language || "—"} />
+                          <Field label="Preferred contact" value={`${detail.crm_profile.preferred_contact_method || "—"} · ${detail.crm_profile.preferred_contact_time || "—"}`} />
+                          <Field label="Company" value={detail.crm_profile.company_name || "—"} />
+                          <Field label="Position" value={detail.crm_profile.position || "—"} />
+                          <Field label="Years of experience" value={detail.crm_profile.years_experience != null ? String(detail.crm_profile.years_experience) : "—"} />
+                          <Field label="Budget" value={detail.crm_profile.budget_min || detail.crm_profile.budget_max ? `${detail.crm_profile.budget_min ?? "—"} - ${detail.crm_profile.budget_max ?? "—"}` : "—"} />
+                          <div className="col-span-2">
+                            <Field label="Services requested" value={(detail.crm_profile.services || []).join(", ") || "—"} />
+                          </div>
+                          <div className="col-span-2">
+                            <Field label="Communities" value={(detail.crm_profile.communities || []).join(", ") || "—"} />
+                          </div>
+                          <div className="col-span-2">
+                            <Field label="Notes" value={detail.crm_profile.notes || "—"} />
+                          </div>
+                          <div className="col-span-2">
+                            <Field label="Source page" value={detail.crm_profile.source_page || "—"} mono />
+                          </div>
+                        </div>
+                        {detail.crm_profile.category_data && Object.keys(detail.crm_profile.category_data).length > 0 && (
+                          <div className="mt-3">
+                            <div className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60 mb-1">Category-specific answers</div>
+                            <div className="border border-[#B89555]/30 rounded bg-white p-3 grid grid-cols-1 gap-1.5 text-xs">
+                              {Object.entries(detail.crm_profile.category_data).map(([k, v]) => (
+                                <div key={k} className="flex justify-between gap-3 border-b border-[#B89555]/15 pb-1 last:border-0">
+                                  <span className="text-[#1A1A1A]/60">{k.replace(/_/g, " ")}</span>
+                                  <span className="font-medium text-right break-all">{Array.isArray(v) ? v.join(", ") : (v == null ? "—" : String(v))}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </section>
+                    )}
+
+                    <section>
+                      <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Roles</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {detail.roles.length > 0 ? detail.roles.map((r) => (
+                          <Badge key={r} variant="outline" className="bg-[#064E3B]/10 text-[#064E3B] border-[#064E3B]/30">{r}</Badge>
+                        )) : <span className="text-xs text-[#1A1A1A]/60">No roles assigned.</span>}
+                      </div>
+                    </section>
+
                     <section>
                       <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Daily activity (last 30d)</h3>
                       <div className="flex items-end gap-1 h-16 border border-[#B89555]/30 rounded p-2 bg-[#F7F2EA]">
@@ -290,7 +344,7 @@ export default function OwnerUsers() {
                     </section>
 
                     <section>
-                      <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Recent events ({detail.events.length})</h3>
+                      <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Pages visited & events ({detail.events.length})</h3>
                       <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-60 overflow-y-auto">
                         {detail.events.map((e, i) => (
                           <div key={i} className="px-3 py-2 text-xs flex justify-between gap-2">
