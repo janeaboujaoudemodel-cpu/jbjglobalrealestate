@@ -154,6 +154,44 @@ Deno.serve(async (req) => {
       { onConflict: "email", ignoreDuplicates: true },
     );
 
+    // 6b. Auto-create CRM lead (pipeline_stage='new', tagged as account_created)
+    // so every registered user shows up in the CRM under the "Account created" segment.
+    const emailLower = email.toLowerCase();
+    const contactType = category === "broker" ? "broker"
+      : category === "developer" ? "developer"
+      : category === "seller" || category === "landlord" ? "seller"
+      : category === "buyer" || category === "tenant" ? "buyer"
+      : category === "investor" ? "investor"
+      : "client";
+    await admin.from("crm_leads").upsert(
+      {
+        full_name,
+        email_lower: emailLower,
+        email_normalized: emailLower,
+        phone_e164: phone,
+        phone_normalized: phone,
+        nationality: profileRow.nationality || null,
+        preferred_language: profileRow.preferred_language || "en",
+        company_name: company_name || null,
+        source: "account_created",
+        lead_source_type: "website",
+        source_page: source_page || "signup_wizard",
+        pipeline_stage: "new",
+        contact_type: contactType,
+        tags: ["account_created", "website_signup", category],
+        raw_import: { services, category_data, budget_min, budget_max, communities },
+        created_by_user_id: userId,
+        owner_user_id: userId,
+        notes: profileRow.notes || null,
+      },
+      { onConflict: "email_lower", ignoreDuplicates: true },
+    );
+
+    // 6c. Welcome delivery: crm_leads with tag `account_created` and no `last_contacted_at`
+    // is the queue. Once the email domain + Twilio WhatsApp channel are configured,
+    // a scheduled job dispatches the branded welcome and prequalification flow.
+
+
     return json({ ok: true, user_id: userId, profile_id: profile!.id }, 200);
   } catch (err) {
     return json({ error: (err as Error).message }, 500);

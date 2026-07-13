@@ -40,6 +40,10 @@ interface DetailPayload {
   preferences?: any | null;
   roles: string[];
   activity: Array<{ created_at: string; activity_type?: string; description?: string; metadata?: any }>;
+  consents?: Array<{ consent_status: string; preferences: any; policy_version: string; consent_source: string; page_url: string | null; referrer: string | null; accepted_at: string; user_agent: string | null }>;
+  signup_events?: Array<{ signup_source: string; signup_source_label: string; picked_role: string | null; page_path: string | null; referrer: string | null; created_at: string }>;
+  crm_lead?: { id: string; pipeline_stage: string; tags: string[] | null; source: string | null; source_page: string | null; contact_type: string | null; ai_score: number | null; priority_score: number | null; last_contacted_at: string | null; created_at: string } | null;
+  activity_log?: Array<{ event_type: string; activity_type: string | null; page_path: string | null; activity_data: any; created_at: string }>;
 }
 
 const CATEGORY_META: Record<Category, { label: string; icon: any; cls: string }> = {
@@ -82,6 +86,9 @@ export default function OwnerUsers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Category | "all">("all");
+  const [formStatus, setFormStatus] = useState<"all" | "submitted" | "pending">("all");
+  const [dateRange, setDateRange] = useState<"all" | "7d" | "30d" | "90d">("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
   
   const [selected, setSelected] = useState<UserRow | null>(null);
   const [detail, setDetail] = useState<DetailPayload | null>(null);
@@ -130,15 +137,24 @@ export default function OwnerUsers() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const cutoff = dateRange === "all" ? 0
+      : Date.now() - (dateRange === "7d" ? 7 : dateRange === "30d" ? 30 : 90) * 86400_000;
     return rows.filter((r) => {
       if (filter !== "all" && r.category !== filter) return false;
+      if (formStatus === "submitted" && !r.has_signup_profile) return false;
+      if (formStatus === "pending" && r.has_signup_profile) return false;
+      if (cutoff && new Date(r.created_at).getTime() < cutoff) return false;
+      if (sourceFilter !== "all") {
+        const src = String((r as any).source_page || (r as any).account_type || "").toLowerCase();
+        if (!src.includes(sourceFilter.toLowerCase())) return false;
+      }
       if (!q) return true;
       return (r.full_name || "").toLowerCase().includes(q)
         || (r.email || "").toLowerCase().includes(q)
         || (r.phone || "").toLowerCase().includes(q)
         || (r.company_name || "").toLowerCase().includes(q);
     });
-  }, [rows, filter, search]);
+  }, [rows, filter, search, formStatus, dateRange, sourceFilter]);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A] p-4 md:p-8">
@@ -191,13 +207,48 @@ export default function OwnerUsers() {
               className="pl-9 bg-[#FDFBF7] border-[#B89555]/30"
             />
           </div>
-          {filter !== "all" && (
-            <Button variant="outline" size="sm" onClick={() => setFilter("all")}>
-              Clear filter
+          <select
+            value={formStatus}
+            onChange={(e) => setFormStatus(e.target.value as any)}
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 text-xs"
+            aria-label="Filter by form status"
+          >
+            <option value="all">Form: All</option>
+            <option value="submitted">Form: Submitted</option>
+            <option value="pending">Form: Pending</option>
+          </select>
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value as any)}
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 text-xs"
+            aria-label="Filter by registration date"
+          >
+            <option value="all">Registered: Anytime</option>
+            <option value="7d">Registered: Last 7 days</option>
+            <option value="30d">Registered: Last 30 days</option>
+            <option value="90d">Registered: Last 90 days</option>
+          </select>
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value)}
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 text-xs"
+            aria-label="Filter by source"
+          >
+            <option value="all">Source: All</option>
+            <option value="signup_wizard">Signup wizard</option>
+            <option value="homepage">Homepage</option>
+            <option value="property">Property inquiry</option>
+            <option value="footer">Footer CTA</option>
+            <option value="social">Social sign-in</option>
+          </select>
+          {(filter !== "all" || formStatus !== "all" || dateRange !== "all" || sourceFilter !== "all") && (
+            <Button variant="outline" size="sm" onClick={() => { setFilter("all"); setFormStatus("all"); setDateRange("all"); setSourceFilter("all"); }}>
+              Clear filters
             </Button>
           )}
           <span className="text-xs text-[#1A1A1A]/60 ml-auto">{filtered.length} of {rows.length}</span>
         </div>
+
 
         {/* Users table */}
         <Card className="overflow-hidden bg-[#F7F2EA] border-[#B89555]/30">
@@ -397,6 +448,84 @@ export default function OwnerUsers() {
                         {detail.events.length === 0 && <div className="px-3 py-4 text-xs text-[#1A1A1A]/60 text-center">No events.</div>}
                       </div>
                     </section>
+
+                    {detail.crm_lead && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">CRM lead</h3>
+                        <div className="border border-[#B89555]/30 rounded bg-[#F7F2EA] p-3 grid grid-cols-2 gap-3 text-sm">
+                          <Field label="Pipeline stage" value={detail.crm_lead.pipeline_stage || "—"} />
+                          <Field label="Contact type" value={detail.crm_lead.contact_type || "—"} />
+                          <Field label="Source" value={detail.crm_lead.source || "—"} />
+                          <Field label="Source page" value={detail.crm_lead.source_page || "—"} mono />
+                          <Field label="AI score" value={String(detail.crm_lead.ai_score ?? "—")} />
+                          <Field label="Priority score" value={String(detail.crm_lead.priority_score ?? "—")} />
+                          <Field label="Last contacted" value={detail.crm_lead.last_contacted_at ? new Date(detail.crm_lead.last_contacted_at).toLocaleString() : "—"} />
+                          <Field label="Lead since" value={new Date(detail.crm_lead.created_at).toLocaleString()} />
+                          <div className="col-span-2">
+                            <Field label="Tags" value={(detail.crm_lead.tags || []).join(", ") || "—"} />
+                          </div>
+                        </div>
+                      </section>
+                    )}
+
+                    {detail.signup_events && detail.signup_events.length > 0 && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Signup source trail ({detail.signup_events.length})</h3>
+                        <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-56 overflow-y-auto">
+                          {detail.signup_events.map((s, i) => (
+                            <div key={i} className="px-3 py-2 text-xs">
+                              <div className="flex justify-between gap-2">
+                                <span className="font-medium">{s.signup_source_label || s.signup_source}</span>
+                                <span className="text-[#1A1A1A]/60">{new Date(s.created_at).toLocaleString()}</span>
+                              </div>
+                              <div className="text-[#1A1A1A]/60 mt-0.5 truncate">
+                                {s.picked_role ? `role: ${s.picked_role} · ` : ""}{s.page_path || s.referrer || "—"}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {detail.consents && detail.consents.length > 0 && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Cookie & consent audit ({detail.consents.length})</h3>
+                        <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-56 overflow-y-auto">
+                          {detail.consents.map((c, i) => (
+                            <div key={i} className="px-3 py-2 text-xs">
+                              <div className="flex justify-between gap-2">
+                                <span className="font-semibold">
+                                  {c.consent_status === "all" ? "Accepted all" : c.consent_status === "essential" ? "Essential only" : "Custom"}
+                                  <span className="ml-2 text-[#1A1A1A]/60">v{c.policy_version}</span>
+                                </span>
+                                <span className="text-[#1A1A1A]/60">{new Date(c.accepted_at).toLocaleString()}</span>
+                              </div>
+                              <div className="text-[#1A1A1A]/60 mt-0.5 truncate">{c.consent_source} · {c.page_url || "—"}</div>
+                              {c.preferences && Object.keys(c.preferences).length > 0 && (
+                                <div className="mt-1 font-mono text-[10px] text-[#1A1A1A]/70 break-all">
+                                  {Object.entries(c.preferences).map(([k, v]) => `${k}:${v}`).join(" · ")}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {detail.activity_log && detail.activity_log.length > 0 && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Full activity log ({detail.activity_log.length})</h3>
+                        <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-64 overflow-y-auto">
+                          {detail.activity_log.map((a, i) => (
+                            <div key={i} className="px-3 py-2 text-xs flex justify-between gap-2">
+                              <span className="font-mono">{a.event_type || a.activity_type}</span>
+                              <span className="text-[#1A1A1A]/70 truncate flex-1 mx-2">{a.page_path || "—"}</span>
+                              <span>{new Date(a.created_at).toLocaleString()}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
                   </>
                 )}
               </div>
