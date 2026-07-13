@@ -56,7 +56,7 @@ export function PremiumEmeraldHero({
         }}
         aria-hidden
       />
-      <div className="relative z-10 flex min-h-[100svh] w-full items-center justify-center px-6 py-20 text-center">
+      <div className="relative z-10 flex w-full items-center justify-center px-6 py-16 md:py-20 text-center">
         <motion.div
           className="mx-auto flex w-full max-w-[54rem] flex-col items-center justify-center"
           initial={{ opacity: 0, y: 14 }}
