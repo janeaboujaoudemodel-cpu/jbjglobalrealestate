@@ -11,7 +11,7 @@ const corsHeaders = {
 
 interface FileRef { url: string; name: string; type?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
 
-const MAX_FILE_BYTES = 20 * 1024 * 1024;
+const MAX_FILE_BYTES = 50 * 1024 * 1024;
 const AI_TIMEOUT_MS = 95_000;
 
 const SCHEMA_HINT = `Return ONLY valid minified JSON matching this shape. Use null when unknown. Never invent values.
@@ -65,10 +65,10 @@ async function fileToBase64(url: string): Promise<{ b64: string; mime: string; b
     const r = await fetch(url, { signal: AbortSignal.timeout(45_000) });
     if (!r.ok) return { error: `File fetch failed (${r.status})` };
     const length = Number(r.headers.get("content-length") || "0");
-    if (length > MAX_FILE_BYTES) return { error: `File is larger than 20MB (${Math.ceil(length / 1024 / 1024)}MB)` };
+    if (length > MAX_FILE_BYTES) return { error: `File is larger than 50MB (${Math.ceil(length / 1024 / 1024)}MB)` };
     const mime = r.headers.get("content-type") || "application/pdf";
     const buf = new Uint8Array(await r.arrayBuffer());
-    if (buf.byteLength > MAX_FILE_BYTES) return { error: `File is larger than 20MB (${Math.ceil(buf.byteLength / 1024 / 1024)}MB)` };
+    if (buf.byteLength > MAX_FILE_BYTES) return { error: `File is larger than 50MB (${Math.ceil(buf.byteLength / 1024 / 1024)}MB)` };
     return { b64: toBase64(buf), mime, bytes: buf.byteLength };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "File could not be read" };
