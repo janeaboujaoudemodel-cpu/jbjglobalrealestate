@@ -143,8 +143,11 @@ export function BookCarousel({
       onPointerLeave={(e) => { if (stateRef.current.dragging) endDrag(e); }}
       onMouseEnter={() => { stateRef.current.paused = true; }}
       onMouseLeave={() => { stateRef.current.paused = false; }}
-      className={`flex w-full gap-6 md:gap-8 overflow-x-auto overflow-y-hidden px-4 py-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
-      style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto" }}
+      className={`flex w-full gap-6 md:gap-8 overflow-x-auto overflow-y-hidden px-4 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
+      // NOTE: WebkitOverflowScrolling must stay "auto" — the legacy "touch"
+      // value freezes programmatic scrollLeft repaints on iOS, which stops the
+      // strip from visibly walking on iPhone/iPad.
+      style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto" }}
     >
       {track.map((book, i) => (
         <div key={`${book.title}-${i}`} className="shrink-0" draggable={false}>

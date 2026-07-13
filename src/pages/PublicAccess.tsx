@@ -724,7 +724,9 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
         onWheel={onWheel}
         data-property-scroller
         className="flex w-full gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
-        style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "touch" }}
+        // NOTE: do NOT set -webkit-overflow-scrolling: touch here. On iOS it freezes
+        // programmatic scrollLeft repaints and the auto-scroll "walk" stops visibly.
+        style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto" }}
       >
         {track.map((p: any, idx) => {
           const cover = p.__cover;
