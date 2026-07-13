@@ -222,14 +222,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   }, [pinnedMenu]);
 
   // Locked rule:
-  // - Desktop header (pill nav) must show on desktop-width screens.
-  // - Only when the screen is reduced (below lg) do we switch to the mobile header.
+  // - Desktop header (pill nav) must show only when there is enough horizontal room.
+  // - Below lg/tablet widths, use the mobile header so nav labels never stack vertically.
   // - Touch/coarse-pointer devices always use the mobile header.
   const headerViewportRef = useRef<HTMLElement | null>(null);
   const headerContentRef = useRef<HTMLDivElement | null>(null);
   const [isDesktopWidth, setIsDesktopWidth] = useState(() => {
     if (typeof window === "undefined") return false;
-    return window.innerWidth >= 768;
+    return window.innerWidth >= 1024;
   });
 
   useLayoutEffect(() => {
@@ -241,7 +241,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         setIsDesktopWidth((prev) => {
-          const next = getViewportWidth() >= 768;
+          const next = getViewportWidth() >= 1024;
           return prev === next ? prev : next;
         });
       });

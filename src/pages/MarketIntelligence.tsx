@@ -35,7 +35,7 @@ const MI_TOC_ITEMS = [
 // Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
 // matches the other dark hero sections. NO champagne fill, NO ink-guard classes.
 const heroCtaClass =
-  "allow-white group inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/20 md:px-8 md:py-4 md:text-base";
+  "jj-mi-hero-cta allow-white group inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold backdrop-blur-md transition-all hover:-translate-y-0.5 md:px-8 md:py-4 md:text-base";
 
 // Organization schema for main Market Intelligence page
 const organizationSchema = {
@@ -139,7 +139,7 @@ const MarketIntelligence = () => {
 
       {/* Premium full-screen emerald hero — title + description + CTAs only.
           Locked by mem://constraints/market-intelligence-hero-rules — no eyebrow,
-          no badge, no logo, no keyword marquee, no photo. Deep emerald ombré only. */}
+          no badge, no logo, no keyword marquee, no photo. Deep emerald marble only. */}
       <section
         data-mi-hero
         data-unified-hero
@@ -147,64 +147,26 @@ const MarketIntelligence = () => {
         data-surface="emerald"
         data-no-contrast-guard
         data-premium-emerald-hero
-        className="jj-hero-fullscreen relative flex min-h-screen w-full items-center justify-center overflow-hidden"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, #0B6B4F 0%, #064E3B 28%, #042c1c 58%, #010A07 100%)",
-        }}
+        className="jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
       >
-        {/* Layered radial glows for depth */}
+        <div aria-hidden className="jj-mi-marble-depth pointer-events-none absolute inset-0" />
+        <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 18% 22%, rgba(110,231,183,0.16), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(184,149,85,0.14), transparent 60%)",
-          }}
-        />
-        {/* Subtle gold vignette hairline at the bottom */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(184,149,85,0.55), transparent)" }}
-        />
-        {/* Grain / noise for premium feel */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/></svg>\")",
-          }}
+          className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay"
         />
 
         <div className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center">
           <h1
             data-no-contrast-guard
-            className="mx-auto max-w-[16ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02] tracking-tight"
-            style={{
-              color: "#FFFFFF",
-              WebkitTextFillColor: "#FFFFFF",
-              fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif',
-              textShadow: "0 2px 40px rgba(0,0,0,0.4)",
-            }}
+            className="jj-mi-hero-title mx-auto max-w-[16ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02]"
           >
             Market Intelligence
           </h1>
-          {/* Gold hairline divider */}
-          <div
-            aria-hidden
-            className="my-8 h-px w-24"
-            style={{ background: "linear-gradient(90deg, transparent, #B89555, transparent)" }}
-          />
+          <div aria-hidden className="jj-mi-title-rule my-8 h-px w-24" />
           <p
             data-no-contrast-guard
-            className="mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed"
-            style={{
-              color: "#E8CF8A",
-              WebkitTextFillColor: "#E8CF8A",
-              fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif',
-            }}
+            className="jj-mi-hero-copy mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed"
           >
             Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
           </p>
@@ -214,20 +176,18 @@ const MarketIntelligence = () => {
               data-no-contrast-guard
               data-on-dark
               className={heroCtaClass}
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Explore Market Dashboard</span>
-              <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span>Explore Market Dashboard</span>
+              <ArrowUpRight className="w-5 h-5" />
             </a>
             <Link
               to="/market-report"
               data-no-contrast-guard
               data-on-dark
               className={heroCtaClass}
-              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>View Daily Reports</span>
-              <ArrowUpRight className="w-5 h-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />
+              <span>View Daily Reports</span>
+              <ArrowUpRight className="w-5 h-5" />
             </Link>
           </div>
         </div>
