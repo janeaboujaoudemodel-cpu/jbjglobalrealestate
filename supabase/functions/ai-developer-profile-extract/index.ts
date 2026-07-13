@@ -323,7 +323,10 @@ Deno.serve(async (req) => {
           { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the ENTIRE uploaded document for developer "${dev.name}" and return ONLY minified JSON per the schema below.
 
 VOICE RULE — CRITICAL:
-JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I". Always rewrite first-person marketing copy into third person: "we build" → "${dev.name} builds"; "our vision" → "their vision" / "the company's vision"; "our residents" → "their residents". Keep the facts and numbers verbatim from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, or projects.
+JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I", "join us", or any first-person language in the description. Always rewrite first-person marketing copy into third person: "we understand" → "${dev.name} understands"; "we build" → "${dev.name} builds"; "our vision" → "the company's vision"; "our residents" → "their residents". Keep the facts and numbers from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, contacts, founders, CEOs, or projects.
+
+FOUNDERS / LEADERSHIP / CONTACT RULE:
+Extract founder, chairman, CEO, managing director, parent company, phone, email, WhatsApp, LinkedIn, Instagram, group links, founded year, and website ONLY when explicitly stated in the uploaded company profile. If a founder is stated but no CEO is stated, put the founder in "founder_name" and propose a durable custom field {"key":"founder_name","label":"Founder","field_type":"text","value":"..."}; do not invent a CEO. If a field is not stated, return null so the UI can show it under "Missing — please add manually".
 
 KNOWN_CUSTOM_FIELDS (reuse these exact keys inside "custom_fields" — do NOT propose them as new):
 ${knownList}
@@ -347,7 +350,7 @@ ${SCHEMA}` },
     for (const k of Object.keys(extracted)) current[k] = (dev as any)[k] ?? null;
 
     // 1) Native columns
-    const patch = mapToDeveloperColumns(extracted);
+    const patch = mapToDeveloperColumns(extracted, dev.name);
     let updatedFields: string[] = [];
 
     // 2) Custom-field values from the AI (existing registry keys)
