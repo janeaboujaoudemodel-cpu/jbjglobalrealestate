@@ -50,15 +50,37 @@ Deno.serve(async (req) => {
       email,
       password,
       email_confirm: true,
-      user_metadata: { full_name, category },
+      user_metadata: { full_name, category, phone },
     });
     if (createErr || !created.user) {
       return json({ error: createErr?.message ?? "Failed to create user" }, 400);
     }
     const userId = created.user.id;
 
+    // Keep the base account row complete as well, so owner analytics still
+    // show contact/category data even before opening the full CRM profile.
+    await admin.from("profiles").upsert({
+      id: userId,
+      email,
+      full_name,
+      phone_number: phone,
+      user_type: "client",
+      mode_default: category,
+      picked_role: category,
+      first_signup_source: String(source_page ?? "signup_wizard"),
+      last_signup_source: String(source_page ?? "signup_wizard"),
+      signup_source_label: "CRM registration wizard",
+    }, { onConflict: "id" });
+
+    await admin.from("user_preferences").upsert({
+      user_id: userId,
+      selected_mode: category,
+      preferred_language: String(common.preferred_language ?? "English"),
+      dashboard_config: { category, category_data, services },
+    }, { onConflict: "user_id" });
+
     // 2. Assign client role
-    await admin.from("user_roles").insert({ user_id: userId, role: "client" });
+    await admin.from("user_roles").upsert({ user_id: userId, role: "client" }, { onConflict: "user_id,role" });
 
     // 3. Derive denormalized filter values
     const services: string[] = Array.isArray(common.services) ? common.services : [];

@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: 'user_id required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const [sessions, events, daily, crmProfile, baseProfile, roles, activity] = await Promise.all([
+    const [sessions, events, daily, crmProfile, baseProfile, roles, activity, preferences, authUser] = await Promise.all([
       admin.from('user_sessions').select('started_at, ended_at, duration_seconds, device_type, country, pages_visited').eq('user_id', user_id).order('started_at', { ascending: false }).limit(100),
       admin.from('user_events').select('event_time, event_name, page_path, metadata').eq('user_id', user_id).order('event_time', { ascending: false }).limit(50),
       admin.from('user_daily_activity').select('day_date, sessions_count, total_duration_seconds, total_events').eq('user_id', user_id).order('day_date', { ascending: false }).limit(90),
@@ -44,14 +44,77 @@ Deno.serve(async (req) => {
       admin.from('profiles').select('*').eq('id', user_id).maybeSingle(),
       admin.from('user_roles').select('role').eq('user_id', user_id),
       admin.from('crm_profile_activity').select('*').eq('user_id', user_id).order('created_at', { ascending: false }).limit(50),
+      admin.from('user_preferences').select('*').eq('user_id', user_id).maybeSingle(),
+      admin.auth.admin.getUserById(user_id),
     ]);
+
+    const profile = baseProfile.data || null;
+    const pref = preferences.data || null;
+    const auth = authUser.data?.user || null;
+    const md = auth?.user_metadata || {};
+    const authFullName = md.full_name || md.name || [md.first_name, md.last_name].filter(Boolean).join(' ') || null;
+    const authPhone = auth?.phone || md.phone || md.phone_number || md.mobile || md.whatsapp || null;
+    const synthesizedProfile = crmProfile.data || (profile ? {
+      user_id,
+      category: normalizeCategory(profile.picked_role) || normalizeCategory(pref?.selected_mode) || normalizeCategory(md.category) || null,
+      full_name: profile.full_name || [profile.first_name, profile.last_name].filter(Boolean).join(' ') || authFullName,
+      email: profile.email || auth?.email || null,
+      phone: profile.phone_number || authPhone,
+      whatsapp: md.whatsapp || null,
+      country: null,
+      nationality: null,
+      preferred_language: pref?.preferred_language || profile.language || null,
+      preferred_contact_method: null,
+      preferred_contact_time: null,
+      services: [],
+      notes: null,
+      source_page: profile.first_signup_source || profile.last_signup_source || 'direct account / social sign-in',
+      category_data: pref?.dashboard_config || {},
+      position: null,
+      company_name: null,
+      years_experience: null,
+      budget_min: null,
+      budget_max: null,
+      investment_experience: null,
+      communities: [],
+      status: 'profile_pending',
+      _missing_signup_profile: true,
+      auth_metadata: md,
+    } : (auth ? {
+      user_id,
+      category: normalizeCategory(md.category) || normalizeCategory(md.selected_mode) || null,
+      full_name: authFullName,
+      email: auth.email || null,
+      phone: authPhone,
+      whatsapp: md.whatsapp || null,
+      country: null,
+      nationality: null,
+      preferred_language: pref?.preferred_language || null,
+      preferred_contact_method: null,
+      preferred_contact_time: null,
+      services: [],
+      notes: null,
+      source_page: 'direct account / social sign-in',
+      category_data: pref?.dashboard_config || {},
+      position: null,
+      company_name: null,
+      years_experience: null,
+      budget_min: null,
+      budget_max: null,
+      investment_experience: null,
+      communities: [],
+      status: 'profile_pending',
+      auth_metadata: md,
+      _missing_signup_profile: true,
+    } : null));
 
     return new Response(JSON.stringify({
       sessions: sessions.data || [],
       events: events.data || [],
       daily: daily.data || [],
-      crm_profile: crmProfile.data || null,
-      profile: baseProfile.data || null,
+      crm_profile: synthesizedProfile,
+      profile,
+      preferences: pref,
       roles: (roles.data || []).map((r: any) => r.role),
       activity: activity.data || [],
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -59,3 +122,9 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 });
+
+function normalizeCategory(value?: string | null) {
+  const c = (value || '').toLowerCase().trim().replace(/[\s-]+/g, '_');
+  const known = ['investor','broker','developer','buyer','seller','landlord','tenant','partner','service_provider','media','other'];
+  return known.includes(c) ? c : null;
+}
