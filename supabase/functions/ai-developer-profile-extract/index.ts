@@ -345,6 +345,7 @@ ${SCHEMA}` },
     const raw = data?.choices?.[0]?.message?.content || "{}";
     let extracted: Record<string, unknown> = {};
     try { extracted = JSON.parse(extractJson(raw)); } catch { extracted = {}; }
+    extracted.description = enforceThirdPersonVoice(extracted.description, dev.name);
 
     const current: Record<string, unknown> = {};
     for (const k of Object.keys(extracted)) current[k] = (dev as any)[k] ?? null;

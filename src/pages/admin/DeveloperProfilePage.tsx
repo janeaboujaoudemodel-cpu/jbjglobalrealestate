@@ -487,11 +487,11 @@ export default function DeveloperProfilePage() {
               <CardHeader>
                 <CardTitle className="text-base text-[#1A1A1A]">Developer information</CardTitle>
                 <p className="text-xs text-[#1A1A1A]/60">
-                  The description must match the developer's official website verbatim — do not paraphrase.
+                  The description is written in third person from the company profile. Keep only verified facts; never paste first-person “we / our” copy.
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Field label="Description (as per the developer's official website)">
+                <Field label="Description (third-person verified company profile copy)">
                   <Textarea
                     rows={8}
                     disabled={!canEdit}
@@ -599,8 +599,7 @@ export default function DeveloperProfilePage() {
                           className="mt-0.5 h-5 w-5 border-[#1A1A1A]/40 data-[state=checked]:jj-surface-emerald data-[state=checked]:border-[color:var(--emerald-1)]/30 data-[state=checked]:text-white"
                         />
                         <span className="text-sm text-[#1A1A1A] flex-1 leading-relaxed">
-                          I confirm that the description, website, logo and headquarters above match the developer's official website,
-                          and I have verified this information directly with the developer.
+                          I confirm that the description, website, logo and profile fields above are verified from the company profile or directly with the developer.
                         </span>
                       </label>
                       <div className="flex justify-end">
