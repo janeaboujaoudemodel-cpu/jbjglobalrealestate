@@ -44,7 +44,6 @@ export const MarketIntelligenceTableOfContents = ({
     const attach = () => {
       const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
       if (!hero) {
-        // No hero found yet — retry a few frames, then default to visible.
         if (raf < 30) { raf++; requestAnimationFrame(attach); }
         else setPastHero(true);
         return;
@@ -52,8 +51,9 @@ export const MarketIntelligenceTableOfContents = ({
       io = new IntersectionObserver(
         (entries) => {
           const e = entries[0];
-          // pastHero = hero no longer intersecting viewport (scrolled past).
-          setPastHero(!e.isIntersecting);
+          // Latch to visible once past hero — never re-hide from a
+          // programmatic scroll to top-of-page sections.
+          if (!e.isIntersecting) setPastHero(true);
         },
         { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
       );
