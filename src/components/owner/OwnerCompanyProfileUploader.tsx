@@ -200,13 +200,23 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       </label>
 
       {lastExtraction && lastExtraction.length > 0 && (
-        <div className="mt-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-900">
-          <span className="font-semibold">AI updated {lastExtraction.length} field{lastExtraction.length > 1 ? "s" : ""}:</span>{" "}
-          {lastExtraction.join(", ")}
+        <div
+          data-no-contrast-guard
+          className="mt-3 rounded-md px-3 py-2 text-xs"
+          style={{ backgroundColor: "#FFFFFF", color: "#064E3B", border: "1px solid rgba(6,78,59,0.25)" }}
+        >
+          <span className="font-semibold" style={{ color: "#064E3B" }}>
+            AI updated {lastExtraction.length} field{lastExtraction.length > 1 ? "s" : ""}:
+          </span>{" "}
+          <span style={{ color: "#1A1A1A" }}>{lastExtraction.join(", ")}</span>
         </div>
       )}
       {lastExtraction && lastExtraction.length === 0 && (
-        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+        <div
+          data-no-contrast-guard
+          className="mt-3 rounded-md px-3 py-2 text-xs"
+          style={{ backgroundColor: "#FFFFFF", color: "#92400E", border: "1px solid rgba(180,83,9,0.3)" }}
+        >
           AI ran but did not find any new fields in the uploaded file.
         </div>
       )}
