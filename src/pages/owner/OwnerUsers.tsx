@@ -204,32 +204,30 @@ export default function OwnerUsers() {
                   <tr><td colSpan={8} className="px-4 py-12 text-center text-[#1A1A1A]/60">No users found.</td></tr>
                 ) : filtered.map((u) => {
                   const meta = CATEGORY_META[u.category];
-                  const revealed = revealedIds.has(u.id);
                   return (
                     <tr
                       key={u.id}
                       className="border-t border-[#B89555]/20 hover:bg-[#EFE6D6]/50 cursor-pointer"
                       onClick={() => openUser(u)}
                     >
-                      <td className="px-4 py-3 font-medium">{u.full_name || "—"}</td>
+                      <td className="px-4 py-3 font-medium whitespace-nowrap">{u.full_name || "—"}</td>
                       <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs">{maskEmail(u.email, revealed)}</span>
-                          <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); toggleReveal(u.id); }}
-                            className="text-[#1A1A1A]/50 hover:text-[#1A1A1A]"
-                            title={revealed ? "Hide email" : "Reveal email"}
-                          >
-                            {revealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                          </button>
-                        </div>
+                        <a
+                          href={`mailto:${u.email ?? ""}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-mono text-xs text-[#064E3B] hover:underline break-all"
+                        >
+                          {u.email || "—"}
+                        </a>
+                        {u.phone && <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">{u.phone}</div>}
                       </td>
-                      <td className="px-4 py-3"><Badge variant="outline" className={meta.cls}>{meta.label}</Badge></td>
-                      <td className="px-4 py-3 text-xs">{new Date(u.created_at).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 text-xs">{u.last_login_at ? new Date(u.last_login_at).toLocaleString() : "—"}</td>
+                      <td className="px-4 py-3">
+                        <Badge variant="outline" className={`${meta.cls} whitespace-nowrap`}>{meta.label}</Badge>
+                      </td>
+                      <td className="px-4 py-3 text-xs whitespace-nowrap">{new Date(u.created_at).toLocaleDateString()}</td>
+                      <td className="px-4 py-3 text-xs whitespace-nowrap">{u.last_login_at ? new Date(u.last_login_at).toLocaleString() : "—"}</td>
                       <td className="px-4 py-3 text-right">{u.sessions_count}</td>
-                      <td className="px-4 py-3 text-right">{fmtDuration(u.total_minutes * 60)}</td>
+                      <td className="px-4 py-3 text-right whitespace-nowrap">{fmtDuration(u.total_minutes * 60)}</td>
                       <td className="px-4 py-3 text-right">{u.days_active_30d}</td>
                     </tr>
                   );
