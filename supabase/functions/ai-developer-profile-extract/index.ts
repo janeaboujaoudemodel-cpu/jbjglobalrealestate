@@ -368,6 +368,8 @@ ${SCHEMA}` },
       await admin.from("developer_documents").update({ extracted_at: new Date().toISOString() }).eq("id", documentId);
     }
 
+    const report = buildReport(extracted);
+
     return json({
       ok: true,
       draftId: draft?.id ?? null,
@@ -375,6 +377,8 @@ ${SCHEMA}` },
       newCustomFields: registeredNew,
       customValues,
       extracted,
+      foundFields: report.found,
+      missingFields: report.missing,
     });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "unknown" }, 500);
