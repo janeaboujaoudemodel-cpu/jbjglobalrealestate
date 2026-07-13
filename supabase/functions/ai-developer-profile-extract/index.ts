@@ -171,21 +171,21 @@ Deno.serve(async (req) => {
       ? { type: "image_url", image_url: { url: `data:${fetched.mime};base64,${fetched.b64}` } }
       : { type: "file", file: { filename: fileName || "profile.pdf", file_data: `data:${fetched.mime};base64,${fetched.b64}` } };
 
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      signal: AbortSignal.timeout(AI_TIMEOUT_MS),
-      headers: { "Content-Type": "application/json", "Lovable-API-Key": LOVABLE_KEY, "X-Lovable-AIG-SDK": "supabase-edge-function" },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [{
-          role: "user",
-          content: [
-            { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the entire uploaded document for developer "${dev.name}" and return ONLY the JSON per schema. Copy text verbatim from the document (do not paraphrase). The "description" MUST be a 2–4 paragraph verbatim / near-verbatim company overview taken from the document (About / Overview / Who We Are / Vision sections). Unknown fields = null. Never fabricate.\n\n${SCHEMA}` },
-            filePart,
-          ],
-        }],
-      }),
-    });
+    const aiRes = await callGatewayWithRetry({
+      model: "google/gemini-2.5-flash",
+      messages: [{
+        role: "user",
+        content: [
+          { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the ENTIRE uploaded document for developer "${dev.name}" and return ONLY minified JSON per the schema below.
+
+VOICE RULE — CRITICAL:
+JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I". Always rewrite first-person marketing copy into third person: "we build" → "${dev.name} builds"; "our vision" → "their vision" / "the company's vision"; "our residents" → "their residents". Keep the facts and numbers verbatim from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, or projects.
+
+${SCHEMA}` },
+          filePart,
+        ],
+      }],
+    }, LOVABLE_KEY);
 
     if (!aiRes.ok) {
       const text = await aiRes.text().catch(() => "");
