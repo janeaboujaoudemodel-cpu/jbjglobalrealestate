@@ -31993,8 +31993,14 @@ html body #root .jj-hero-search-premium.jj-emerald-glow-wrap::before {
   filter: none !important;
 }
 html body #root .jj-hero-search-premium .jj-hero-search-bar {
-  border-top: 0 !important;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.36), inset 0 0 0 1px rgba(4,78,59,0.38), inset 0 -1px 0 rgba(0,0,0,0.25) !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.36) !important;
+}
+html body #root .jj-hero-search-premium .jj-hero-search-bar:is(:hover,:focus-within,:focus,:active) {
+  box-shadow: 0 18px 40px rgba(0,0,0,0.36) !important;
+  border: 0 !important;
+  outline: 0 !important;
 }
 
 /* Developer/project filter rail: every visible pill is emerald with white
