@@ -18603,9 +18603,19 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
   color: rgba(26, 26, 26, 0.58) !important;
   -webkit-text-fill-color: rgba(26, 26, 26, 0.58) !important;
 }
-:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i] input) {
+:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]:not(.jj-hero-search-bar):not(.jj-hero-search-premium):not(.jj-newsletter-emerald):not(.jj-emerald-pill) input:not(.jj-hero-search-input):not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
   background: rgba(253,251,247,0.98) !important;
+}
+/* Newsletter / hero pill inputs are transparent on the emerald ombre — never white. */
+html body .jj-hero-search-bar input,
+html body .jj-newsletter-emerald input,
+html body .jj-emerald-pill input,
+html body .jj-hero-search-premium input {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 /* Progress indicators — Market Intelligence, dashboards, scores. */
