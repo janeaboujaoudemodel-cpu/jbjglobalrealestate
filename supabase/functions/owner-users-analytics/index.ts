@@ -68,9 +68,10 @@ Deno.serve(async (req) => {
     const ids = (profiles || []).map((p: any) => p.id);
     const since30 = new Date(Date.now() - 30 * 86400 * 1000).toISOString();
 
-    const [sessAgg, dailyAgg] = await Promise.all([
+    const [sessAgg, dailyAgg, crmAgg] = await Promise.all([
       admin.from('user_sessions').select('user_id, duration_seconds, country, device_type').in('user_id', ids),
       admin.from('user_daily_activity').select('user_id, day_date, total_duration_seconds').in('user_id', ids).gte('day_date', since30.slice(0, 10)),
+      admin.from('crm_user_profiles').select('user_id, category, phone, country, company_name').in('user_id', ids),
     ]);
 
     const sessMap: Record<string, { count: number; minutes: number; country: string | null; device: string | null }> = {};
@@ -87,21 +88,28 @@ Deno.serve(async (req) => {
       const k = d.user_id; if (!k) continue;
       (dayMap[k] ||= new Set()).add(d.day_date);
     }
+    const crmMap: Record<string, any> = {};
+    for (const c of crmAgg.data || []) {
+      if (c.user_id) crmMap[c.user_id] = c;
+    }
 
     const rows = (profiles || []).map((p: any) => {
       const s = sessMap[p.id] || { count: 0, minutes: 0, country: null, device: null };
+      const crm = crmMap[p.id];
       return {
         id: p.id,
         full_name: p.full_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || null,
         email: p.email,
-        category: categorize(p),
+        phone: crm?.phone || null,
+        company_name: crm?.company_name || null,
+        category: categorize(p, crm?.category),
         created_at: p.created_at,
         last_login_at: p.last_login_at,
         total_login_days: p.total_login_days,
         sessions_count: s.count,
         total_minutes: s.minutes,
         days_active_30d: (dayMap[p.id]?.size) || 0,
-        country: s.country,
+        country: crm?.country || s.country,
         device: s.device,
       };
     });
