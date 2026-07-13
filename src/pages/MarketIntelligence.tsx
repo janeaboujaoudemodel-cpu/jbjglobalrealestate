@@ -147,7 +147,7 @@ const MarketIntelligence = () => {
         data-surface="emerald"
         data-no-contrast-guard
         data-premium-emerald-hero
-        className="jj-hero-fullscreen relative flex min-h-screen w-screen left-1/2 -translate-x-1/2 items-center justify-center overflow-hidden"
+        className="jj-hero-fullscreen relative flex min-h-screen w-full items-center justify-center overflow-hidden"
         style={{
           background:
             "radial-gradient(ellipse at 50% 0%, #0B6B4F 0%, #064E3B 28%, #042c1c 58%, #010A07 100%)",
