@@ -51,8 +51,20 @@ const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not 
   "tagline": string|null,
   "mission": string|null,
   "linkedin_url": string|null,
-  "instagram_url": string|null
-}`;
+  "instagram_url": string|null,
+  "custom_fields": { [key: string]: string|number|string[]|null } | null,
+  "proposed_new_fields": [ { "key": string, "label": string, "field_type": "text"|"longtext"|"number"|"url"|"list"|"date", "value": string|number|string[]|null } ] | null
+}
+
+Notes:
+- "custom_fields" — put values for any key listed in KNOWN_CUSTOM_FIELDS below.
+- "proposed_new_fields" — for any material piece of information you find in the
+  document that is NOT covered by the schema above AND NOT in KNOWN_CUSTOM_FIELDS
+  (e.g. "sister_companies", "projects_by_country", "number_of_employees",
+  "sustainability_certifications"), propose it with a stable snake_case key,
+  a human label, a field type, and the extracted value. Do not propose fields
+  for trivia or marketing fluff — only durable facts that would apply to any
+  developer.`;
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
