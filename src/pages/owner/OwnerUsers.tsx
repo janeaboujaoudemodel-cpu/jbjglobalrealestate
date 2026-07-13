@@ -5,14 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Loader2, Search, Eye, EyeOff, Users as UsersIcon, TrendingUp, Handshake, Building2, UserX } from "lucide-react";
+import { Loader2, Search, Users as UsersIcon, TrendingUp, Handshake, Building2, UserX, Home, KeyRound, DoorOpen, Briefcase, Wrench, Newspaper, HelpCircle } from "lucide-react";
 
-type Category = "investor" | "broker" | "developer" | "unassigned";
+type Category =
+  | "investor" | "broker" | "developer" | "buyer" | "seller"
+  | "landlord" | "tenant" | "partner" | "service_provider" | "media" | "other" | "unassigned";
 
 interface UserRow {
   id: string;
   full_name: string | null;
   email: string | null;
+  phone: string | null;
+  company_name: string | null;
   category: Category;
   created_at: string;
   last_login_at: string | null;
@@ -25,16 +29,27 @@ interface UserRow {
 }
 
 interface DetailPayload {
-  profile: UserRow;
   sessions: Array<{ started_at: string; ended_at: string | null; duration_seconds: number; device_type: string | null; country: string | null; pages_visited: number }>;
   events: Array<{ event_time: string; event_name: string; page_path: string | null; metadata: any }>;
   daily: Array<{ day_date: string; sessions_count: number; total_duration_seconds: number; total_events: number }>;
+  crm_profile: any | null;
+  profile: any | null;
+  roles: string[];
+  activity: Array<{ created_at: string; activity_type?: string; description?: string; metadata?: any }>;
 }
 
 const CATEGORY_META: Record<Category, { label: string; icon: any; cls: string }> = {
-  investor: { label: "Investor", icon: TrendingUp, cls: "jj-surface-emerald/15 text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30/40" },
+  investor: { label: "Investor", icon: TrendingUp, cls: "bg-[#064E3B]/10 text-[#064E3B] border-[#064E3B]/30" },
   broker: { label: "Broker", icon: Handshake, cls: "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40" },
   developer: { label: "Developer", icon: Building2, cls: "bg-purple-500/15 text-purple-700 border-purple-500/40" },
+  buyer: { label: "Buyer", icon: Home, cls: "bg-blue-500/10 text-blue-700 border-blue-500/30" },
+  seller: { label: "Seller", icon: KeyRound, cls: "bg-amber-500/15 text-amber-800 border-amber-500/40" },
+  landlord: { label: "Landlord", icon: Building2, cls: "bg-teal-500/15 text-teal-800 border-teal-500/40" },
+  tenant: { label: "Tenant", icon: DoorOpen, cls: "bg-sky-500/15 text-sky-800 border-sky-500/40" },
+  partner: { label: "Partner", icon: Briefcase, cls: "bg-indigo-500/15 text-indigo-800 border-indigo-500/40" },
+  service_provider: { label: "Service Provider", icon: Wrench, cls: "bg-rose-500/15 text-rose-800 border-rose-500/40" },
+  media: { label: "Media", icon: Newspaper, cls: "bg-slate-500/15 text-slate-800 border-slate-500/40" },
+  other: { label: "Other", icon: HelpCircle, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/80 border-[#1A1A1A]/25" },
   unassigned: { label: "Unassigned", icon: UserX, cls: "bg-[#1A1A1A]/10 text-[#1A1A1A]/70 border-[#1A1A1A]/20" },
 };
 
@@ -43,14 +58,6 @@ function fmtDuration(seconds: number) {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   return h > 0 ? `${h}h ${m}m` : `${m}m`;
-}
-
-function maskEmail(email: string | null, revealed: boolean) {
-  if (!email) return "—";
-  if (revealed) return email;
-  const [u, d] = email.split("@");
-  if (!d) return "•••";
-  return `${u.slice(0, 2)}•••@${d}`;
 }
 
 export default function OwnerUsers() {
