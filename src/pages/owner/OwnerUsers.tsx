@@ -137,8 +137,8 @@ export default function OwnerUsers() {
         </header>
 
         {/* Segment summary */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {(["investor", "broker", "developer", "unassigned"] as Category[]).map((c) => {
+        <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
+          {(["investor","broker","developer","buyer","seller","landlord","tenant","partner","service_provider","media","other","unassigned"] as Category[]).filter(c => counts[c] > 0 || c === "investor" || c === "broker" || c === "developer" || c === "unassigned").map((c) => {
             const meta = CATEGORY_META[c];
             const Icon = meta.icon;
             const active = filter === c;
