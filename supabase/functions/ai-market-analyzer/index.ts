@@ -57,6 +57,14 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Rate limit: cap AI generations per IP (10/hour) using existing DB helper.
+    // Cache hits below are exempt so returning visitors aren't blocked.
+    const clientIp =
+      req.headers.get("cf-connecting-ip") ||
+      (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
+      "anon";
+    const rateKey = `ai_market_analyzer:${clientIp}`;
+
     const { data: cached } = await supabase
       .from("project_ai_cache")
       .select("analysis_json, generated_at")
@@ -71,6 +79,23 @@ serve(async (req) => {
         });
       }
     }
+
+    // Enforce rate limit only for cache-miss (i.e. real AI generations)
+    const { data: allowed, error: rlErr } = await supabase.rpc("check_rate_limit", {
+      p_identifier: rateKey,
+      p_action_type: "ai_market_analyzer",
+      p_max_requests: 10,
+      p_window_minutes: 60,
+    });
+    if (rlErr) {
+      console.error("Rate limit check failed:", rlErr);
+    } else if (allowed === false) {
+      return new Response(
+        JSON.stringify({ error: "Rate limit exceeded. Please try again in an hour." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
     
     // Build the analysis prompt based on request type
     const todayDate = new Date().toISOString().split('T')[0];
