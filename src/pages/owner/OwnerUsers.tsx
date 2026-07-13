@@ -63,6 +63,13 @@ const CATEGORY_ORDER: Category[] = [
 
 const tableColumns = 7;
 
+function summaryLabel(category: Category) {
+  if (category === "unassigned") return "Profile pending";
+  if (category === "buyer") return "Buyers";
+  if (category === "media") return "Media";
+  return `${CATEGORY_META[category].label}s`;
+}
+
 function fmtDuration(seconds: number) {
   if (!seconds || seconds < 60) return `${seconds || 0}s`;
   const h = Math.floor(seconds / 3600);
@@ -150,7 +157,7 @@ export default function OwnerUsers() {
         </header>
 
         {/* Segment summary */}
-        <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
           {CATEGORY_ORDER.filter(c => counts[c] > 0 || c === "investor" || c === "broker" || c === "developer" || c === "unassigned").map((c) => {
             const meta = CATEGORY_META[c];
             const Icon = meta.icon;
@@ -159,15 +166,15 @@ export default function OwnerUsers() {
               <button
                 key={c}
                 onClick={() => setFilter(active ? "all" : c)}
-                className={`text-left p-4 rounded-xl border bg-[#F7F2EA] transition-all hover:border-[#B89555] ${
+                className={`text-left p-4 rounded-md border bg-[#F7F2EA] transition-all hover:border-[#B89555] min-h-[86px] ${
  active ? "border-[#B89555] ring-2 ring-[#B89555]/30" : "border-[#B89555]/30"
  }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-wider text-[#1A1A1A]/70">{c === "unassigned" ? "Profile pending" : `${meta.label}s`}</span>
-                  <Icon className="w-4 h-4 text-[#1A1A1A]/60" />
+                <div className="flex items-start justify-between gap-3">
+                  <span className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/70 leading-tight break-normal">{summaryLabel(c)}</span>
+                  <Icon className="w-4 h-4 text-[#1A1A1A]/60 shrink-0" />
                 </div>
-                <div className="text-3xl font-bold mt-2">{counts[c]}</div>
+                <div className="text-3xl font-bold mt-2 leading-none tabular-nums">{counts[c]}</div>
               </button>
             );
           })}
@@ -199,7 +206,7 @@ export default function OwnerUsers() {
               <thead className="bg-[#EFE6D6] text-[#1A1A1A]/80">
                 <tr className="text-left">
                   <th className="px-4 py-3 font-semibold min-w-[260px]">Contact</th>
-                  <th className="px-4 py-3 font-semibold">Category</th>
+                  <th className="px-4 py-3 font-semibold min-w-[150px]">Category</th>
                   <th className="px-4 py-3 font-semibold">Phone</th>
                   <th className="px-4 py-3 font-semibold">Registered</th>
                   <th className="px-4 py-3 font-semibold">Last seen</th>
@@ -233,8 +240,10 @@ export default function OwnerUsers() {
                         </a>
                         {u.company_name && <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">{u.company_name}</div>}
                       </td>
-                      <td className="px-4 py-3">
-                        <Badge variant="outline" className={`${meta.cls} whitespace-nowrap`}>{meta.label}</Badge>
+                      <td className="px-4 py-3 align-top">
+                        <Badge variant="outline" className={`${meta.cls} inline-flex min-w-[92px] justify-center whitespace-nowrap break-normal [overflow-wrap:normal] rounded-full px-3 py-1 text-[11px] leading-none`}>
+                          {meta.label}
+                        </Badge>
                         {!u.has_signup_profile && <div className="text-[10px] text-[#1A1A1A]/55 mt-1 whitespace-nowrap">Account form pending</div>}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">{u.phone || "Not provided"}</td>
