@@ -6,11 +6,16 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-function categorize(p: any): 'investor' | 'broker' | 'developer' | 'unassigned' {
+function categorize(p: any, crmCat?: string | null): 'investor' | 'broker' | 'developer' | 'buyer' | 'seller' | 'landlord' | 'tenant' | 'partner' | 'service_provider' | 'media' | 'other' | 'unassigned' {
+  const c = (crmCat || '').toLowerCase();
+  const known = ['investor','broker','developer','buyer','seller','landlord','tenant','partner','service_provider','media','other'];
+  if (known.includes(c)) return c as any;
   const m = (p.mode_default || p.user_type || '').toLowerCase();
   if (m.includes('broker')) return 'broker';
   if (m.includes('develop')) return 'developer';
   if (m.includes('invest') || m === 'client') return 'investor';
+  if (m.includes('buyer')) return 'buyer';
+  if (m.includes('seller')) return 'seller';
   return 'unassigned';
 }
 
