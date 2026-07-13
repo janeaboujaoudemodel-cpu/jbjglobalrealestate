@@ -163,6 +163,62 @@ function mapToDeveloperColumns(ex: Record<string, unknown>): Record<string, unkn
   return out;
 }
 
+/**
+ * Canonical list of important developer-profile fields the owner cares about.
+ * Used to build a "found vs missing" report the UI shows after extraction.
+ */
+const REPORT_FIELDS: Array<{ key: string; label: string }> = [
+  { key: "description", label: "Company description" },
+  { key: "founded_year", label: "Founded year" },
+  { key: "headquarters", label: "Headquarters" },
+  { key: "website", label: "Website" },
+  { key: "email", label: "Email" },
+  { key: "phone", label: "Office phone" },
+  { key: "ceo_name", label: "CEO / Chairman" },
+  { key: "parent_company", label: "Parent company" },
+  { key: "license_number", label: "License number" },
+  { key: "total_projects", label: "Total projects" },
+  { key: "completed_projects", label: "Completed projects" },
+  { key: "offplan_projects", label: "Off-plan projects" },
+  { key: "units_delivered", label: "Units delivered" },
+  { key: "portfolio_worth", label: "Portfolio worth" },
+  { key: "years_of_experience", label: "Years of experience" },
+  { key: "specializations", label: "Specialisations" },
+  { key: "signature_projects", label: "Signature projects" },
+  { key: "awards", label: "Awards" },
+  { key: "leadership", label: "Leadership team" },
+  { key: "linkedin_url", label: "LinkedIn" },
+  { key: "instagram_url", label: "Instagram" },
+];
+
+function isPresent(v: unknown): boolean {
+  if (v === null || v === undefined) return false;
+  if (typeof v === "string") return v.trim() !== "";
+  if (Array.isArray(v)) return v.length > 0;
+  if (typeof v === "number") return Number.isFinite(v);
+  return true;
+}
+
+function previewValue(v: unknown): string {
+  if (v === null || v === undefined) return "";
+  if (Array.isArray(v)) return v.slice(0, 4).map(String).join(", ");
+  const s = String(v);
+  return s.length > 140 ? s.slice(0, 137) + "…" : s;
+}
+
+function buildReport(extracted: Record<string, unknown>) {
+  const found: Array<{ key: string; label: string; preview: string }> = [];
+  const missing: Array<{ key: string; label: string }> = [];
+  for (const f of REPORT_FIELDS) {
+    if (isPresent(extracted[f.key])) {
+      found.push({ key: f.key, label: f.label, preview: previewValue(extracted[f.key]) });
+    } else {
+      missing.push({ key: f.key, label: f.label });
+    }
+  }
+  return { found, missing };
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
