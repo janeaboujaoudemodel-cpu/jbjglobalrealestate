@@ -171,10 +171,10 @@ export default function OwnerUsers() {
  }`}
               >
                 <div className="flex items-start justify-between gap-3">
-                  <span className="text-[11px] uppercase tracking-[0.14em] text-[#1A1A1A]/70 leading-tight break-normal">{summaryLabel(c)}</span>
+                  <span className="text-[11px] uppercase tracking-[0.08em] text-[#1A1A1A]/70 leading-tight whitespace-nowrap">{summaryLabel(c)}</span>
                   <Icon className="w-4 h-4 text-[#1A1A1A]/60 shrink-0" />
                 </div>
-                <div className="text-3xl font-bold mt-2 leading-none tabular-nums">{counts[c]}</div>
+                <div className="text-3xl font-bold mt-2 leading-none tabular-nums whitespace-nowrap">{counts[c]}</div>
               </button>
             );
           })}
@@ -206,7 +206,7 @@ export default function OwnerUsers() {
               <thead className="bg-[#EFE6D6] text-[#1A1A1A]/80">
                 <tr className="text-left">
                   <th className="px-4 py-3 font-semibold min-w-[260px]">Contact</th>
-                  <th className="px-4 py-3 font-semibold min-w-[150px]">Category</th>
+                  <th className="px-4 py-3 font-semibold min-w-[170px]">Category</th>
                   <th className="px-4 py-3 font-semibold">Phone</th>
                   <th className="px-4 py-3 font-semibold">Registered</th>
                   <th className="px-4 py-3 font-semibold">Last seen</th>
@@ -240,10 +240,13 @@ export default function OwnerUsers() {
                         </a>
                         {u.company_name && <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">{u.company_name}</div>}
                       </td>
-                      <td className="px-4 py-3 align-top">
-                        <Badge variant="outline" className={`${meta.cls} inline-flex min-w-[92px] justify-center whitespace-nowrap break-normal [overflow-wrap:normal] rounded-full px-3 py-1 text-[11px] leading-none`}>
+                      <td className="px-4 py-3 align-top min-w-[170px]">
+                        <span
+                          className={`${meta.cls} inline-flex w-[128px] items-center justify-center rounded-md border px-3 py-1 text-[11px] font-semibold leading-none`}
+                          style={{ whiteSpace: "nowrap", wordBreak: "normal", overflowWrap: "normal" }}
+                        >
                           {meta.label}
-                        </Badge>
+                        </span>
                         {!u.has_signup_profile && <div className="text-[10px] text-[#1A1A1A]/55 mt-1 whitespace-nowrap">Account form pending</div>}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs whitespace-nowrap">{u.phone || "Not provided"}</td>
@@ -283,7 +286,16 @@ export default function OwnerUsers() {
                 </div>
 
                 {detailLoading && (
-                  <div className="text-center py-8"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+                  <section>
+                    <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Account form snapshot</h3>
+                    <div className="border border-[#B89555]/30 rounded bg-[#F7F2EA] p-3 grid grid-cols-2 gap-3 text-sm">
+                      <Field label="Category" value={CATEGORY_META[selected.category].label} />
+                      <Field label="Form status" value={selected.has_signup_profile ? "Submitted" : "Pending"} />
+                      <Field label="Phone" value={selected.phone || "Not provided"} mono />
+                      <Field label="Company" value={selected.company_name || "—"} />
+                    </div>
+                    <div className="text-center py-5"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+                  </section>
                 )}
 
                 {detail && (
