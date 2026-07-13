@@ -19,8 +19,9 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const AI_TIMEOUT_MS = 90_000;
-const MAX_FILE_BYTES = 50 * 1024 * 1024;
+const AI_TIMEOUT_MS = 180_000;
+// No hard file-size cap for owner-uploaded company profiles. Some developer
+// profile PDFs are large — the AI gateway itself is the only real ceiling.
 
 const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not stated. Never invent values.
 {
