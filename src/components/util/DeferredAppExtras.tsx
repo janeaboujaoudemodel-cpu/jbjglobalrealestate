@@ -5,6 +5,7 @@
  * never request the JS at all.
  */
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { isOwnerEmail } from "@/config/ownerEmails";
 
@@ -18,7 +19,12 @@ const WebDevChangeHighlight = lazy(() => import("@/components/owner-webdev/WebDe
 export default function DeferredAppExtras() {
   const [ready, setReady] = useState(false);
   const { user } = useAuth();
-  const ownerGate = !!user && isOwnerEmail(user.email);
+  const { pathname } = useLocation();
+  // Owner-only surfaces (WebDev dock, change highlight, UI overrides) must
+  // NEVER render on public routes — even for the owner. Restrict to the
+  // owner backend surface (/owner/*) only.
+  const isOwnerSurface = pathname.startsWith("/owner");
+  const ownerGate = !!user && isOwnerEmail(user.email) && isOwnerSurface;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
