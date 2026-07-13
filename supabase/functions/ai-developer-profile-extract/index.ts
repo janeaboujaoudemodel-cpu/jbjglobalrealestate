@@ -183,6 +183,17 @@ Deno.serve(async (req) => {
       ? { type: "image_url", image_url: { url: `data:${fetched.mime};base64,${fetched.b64}` } }
       : { type: "file", file: { filename: fileName || "profile.pdf", file_data: `data:${fetched.mime};base64,${fetched.b64}` } };
 
+    // Load the global custom-field registry so the AI reuses stable keys.
+    const { data: registryRows } = await admin
+      .from("developer_custom_field_defs")
+      .select("key, label, field_type, is_active");
+    const registry = (registryRows ?? []) as Array<{
+      key: string; label: string; field_type: string; is_active: boolean;
+    }>;
+    const knownList = registry.length
+      ? registry.map((r) => `- ${r.key} (${r.field_type}): ${r.label}`).join("\n")
+      : "(none yet — feel free to propose new fields)";
+
     const aiRes = await callGatewayWithRetry({
       model: "google/gemini-2.5-flash",
       messages: [{
@@ -192,6 +203,9 @@ Deno.serve(async (req) => {
 
 VOICE RULE — CRITICAL:
 JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I". Always rewrite first-person marketing copy into third person: "we build" → "${dev.name} builds"; "our vision" → "their vision" / "the company's vision"; "our residents" → "their residents". Keep the facts and numbers verbatim from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, or projects.
+
+KNOWN_CUSTOM_FIELDS (reuse these exact keys inside "custom_fields" — do NOT propose them as new):
+${knownList}
 
 ${SCHEMA}` },
           filePart,
@@ -208,14 +222,71 @@ ${SCHEMA}` },
     let extracted: Record<string, unknown> = {};
     try { extracted = JSON.parse(extractJson(raw)); } catch { extracted = {}; }
 
-    // Snapshot of current developer values for the audit row.
     const current: Record<string, unknown> = {};
     for (const k of Object.keys(extracted)) current[k] = (dev as any)[k] ?? null;
 
-    // Map to actual columns and apply directly. Description is always replaced
-    // (when non-empty) because the owner uploaded the official profile.
+    // 1) Native columns
     const patch = mapToDeveloperColumns(extracted);
     let updatedFields: string[] = [];
+
+    // 2) Custom-field values from the AI (existing registry keys)
+    const customValues: Record<string, unknown> = {};
+    const knownKeys = new Set(registry.map((r) => r.key));
+    const aiCustom = (extracted.custom_fields as Record<string, unknown> | null) ?? null;
+    if (aiCustom && typeof aiCustom === "object") {
+      for (const [k, v] of Object.entries(aiCustom)) {
+        if (v === null || v === undefined) continue;
+        if (typeof v === "string" && v.trim() === "") continue;
+        if (Array.isArray(v) && v.length === 0) continue;
+        if (knownKeys.has(k)) customValues[k] = v;
+      }
+    }
+
+    // 3) Proposed new fields — register globally and store their values.
+    const proposed = Array.isArray(extracted.proposed_new_fields)
+      ? (extracted.proposed_new_fields as Array<any>)
+      : [];
+    const registeredNew: string[] = [];
+    for (const p of proposed) {
+      if (!p || typeof p !== "object") continue;
+      const rawKey = String(p.key || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 60);
+      const label = String(p.label || "").trim();
+      const allowedTypes = ["text", "longtext", "number", "url", "list", "date"];
+      const ftype = allowedTypes.includes(p.field_type) ? p.field_type : "text";
+      if (!rawKey || !label) continue;
+      if (knownKeys.has(rawKey)) {
+        // treat as value only
+        if (p.value !== undefined && p.value !== null && p.value !== "") {
+          customValues[rawKey] = p.value;
+        }
+        continue;
+      }
+      // Insert new registry entry (dedupe on key via unique constraint)
+      const { error: insErr } = await admin
+        .from("developer_custom_field_defs")
+        .insert({
+          key: rawKey,
+          label,
+          field_type: ftype,
+          source: "ai_discovered",
+          discovered_from_developer_id: developerId,
+          sort_order: 100 + registeredNew.length,
+        } as any);
+      if (!insErr) {
+        registeredNew.push(rawKey);
+        knownKeys.add(rawKey);
+      }
+      if (p.value !== undefined && p.value !== null && p.value !== "") {
+        customValues[rawKey] = p.value;
+      }
+    }
+
+    // 4) Merge custom values into the developer's JSON column and write patch.
+    if (Object.keys(customValues).length > 0) {
+      const existing = ((dev as any).custom_fields as Record<string, unknown>) || {};
+      patch.custom_fields = { ...existing, ...customValues };
+    }
+
     if (Object.keys(patch).length > 0) {
       patch.last_enriched_at = new Date().toISOString();
       patch.enrichment_source = "ai_company_profile";
@@ -224,7 +295,6 @@ ${SCHEMA}` },
       updatedFields = Object.keys(patch).filter((k) => k !== "last_enriched_at" && k !== "enrichment_source");
     }
 
-    // Audit trail — mark as applied so it doesn't clutter the pending queue.
     const { data: draft } = await admin.from("enrichment_review_drafts").insert({
       target_type: "developer",
       target_id: developerId,
@@ -242,7 +312,14 @@ ${SCHEMA}` },
       await admin.from("developer_documents").update({ extracted_at: new Date().toISOString() }).eq("id", documentId);
     }
 
-    return json({ ok: true, draftId: draft?.id ?? null, updatedFields, extracted });
+    return json({
+      ok: true,
+      draftId: draft?.id ?? null,
+      updatedFields,
+      newCustomFields: registeredNew,
+      customValues,
+      extracted,
+    });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "unknown" }, 500);
   }
