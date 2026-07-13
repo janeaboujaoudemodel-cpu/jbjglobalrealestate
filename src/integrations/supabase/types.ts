@@ -41198,6 +41198,7 @@ export type Database = {
       is_owner_user: { Args: never; Returns: boolean }
       is_partner_owner: { Args: { _partner_id: string }; Returns: boolean }
       is_portal_owner: { Args: { _uid: string }; Returns: boolean }
+      is_privileged_writer: { Args: never; Returns: boolean }
       is_sales_director: { Args: { _user_id: string }; Returns: boolean }
       is_team_admin: {
         Args: { _team_id: string; _user_id: string }
