@@ -65,6 +65,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
     if (!files || (files as FileList).length === 0) return;
     setBusy(true);
     setLastExtraction(null);
+    setFoundFields(null);
+    setMissingFields(null);
     let ok = 0;
     for (const file of Array.from(files)) {
       try {
