@@ -219,13 +219,62 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           <span style={{ color: "#1A1A1A" }}>{lastExtraction.join(", ")}</span>
         </div>
       )}
-      {lastExtraction && lastExtraction.length === 0 && (
+      {lastExtraction && lastExtraction.length === 0 && !foundFields && (
         <div
           data-no-contrast-guard
           className="mt-3 rounded-md px-3 py-2 text-xs"
           style={{ backgroundColor: "#FFFFFF", color: "#92400E", border: "1px solid rgba(180,83,9,0.3)" }}
         >
           AI ran but did not find any new fields in the uploaded file.
+        </div>
+      )}
+
+      {(foundFields || missingFields) && (
+        <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+          {/* FOUND */}
+          <div
+            data-no-contrast-guard
+            className="rounded-md border p-3"
+            style={{ backgroundColor: "#FFFFFF", borderColor: "rgba(6,78,59,0.25)" }}
+          >
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: "#064E3B" }}>
+              Found in the PDF ({foundFields?.length ?? 0})
+            </div>
+            {foundFields && foundFields.length > 0 ? (
+              <ul className="space-y-1.5">
+                {foundFields.map((f) => (
+                  <li key={f.key} className="text-xs leading-snug">
+                    <span className="font-semibold" style={{ color: "#064E3B" }}>✓ {f.label}:</span>{" "}
+                    <span style={{ color: "#1A1A1A" }}>{f.preview}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-xs" style={{ color: "#1A1A1A" }}>Nothing extracted — try a clearer profile PDF.</div>
+            )}
+          </div>
+
+          {/* MISSING */}
+          <div
+            data-no-contrast-guard
+            className="rounded-md border p-3"
+            style={{ backgroundColor: "#FFFFFF", borderColor: "rgba(180,83,9,0.3)" }}
+          >
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] mb-2" style={{ color: "#92400E" }}>
+              Missing — please add manually ({missingFields?.length ?? 0})
+            </div>
+            {missingFields && missingFields.length > 0 ? (
+              <ul className="grid grid-cols-1 gap-1">
+                {missingFields.map((f) => (
+                  <li key={f.key} className="text-xs" style={{ color: "#1A1A1A" }}>
+                    <span style={{ color: "#92400E" }}>✗</span> {f.label}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-xs" style={{ color: "#1A1A1A" }}>Every field was found — no manual entry needed.</div>
+            )}
+          </div>
         </div>
       )}
 
