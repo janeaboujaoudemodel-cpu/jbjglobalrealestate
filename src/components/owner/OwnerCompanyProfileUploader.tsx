@@ -5,7 +5,7 @@
  * writes an entry into enrichment_review_drafts for owner review.
  */
 import { useCallback, useState } from "react";
-import { Upload, Loader2, FileText, Eye, EyeOff, Trash2, Sparkles } from "lucide-react";
+import { Upload, Loader2, FileText, Eye, EyeOff, Trash2, Sparkles, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
