@@ -209,8 +209,11 @@ export const MarketReports = () => {
             variants={fadeInUp}
           >
             <div className="flex justify-center mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 border border-white/30">
-                <FileText className="w-6 h-6 text-white" />
+              <div
+                className="flex h-14 w-14 items-center justify-center rounded-full ring-2 ring-white/80 shadow-[0_10px_28px_rgba(0,0,0,0.35)]"
+                style={{ background: "linear-gradient(135deg, #065F46 0%, #064E3B 55%, #032A1E 100%)" }}
+              >
+                <FileText className="w-6 h-6 text-white" strokeWidth={2.25} />
               </div>
             </div>
             <h4 className="text-base md:text-lg font-bold mb-2 text-white">
