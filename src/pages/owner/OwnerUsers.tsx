@@ -142,7 +142,7 @@ export default function OwnerUsers() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A] p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full max-w-[1600px] mx-auto space-y-6">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Users</h1>
@@ -157,7 +157,7 @@ export default function OwnerUsers() {
         </header>
 
         {/* Segment summary */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-3">
           {CATEGORY_ORDER.filter(c => counts[c] > 0 || c === "investor" || c === "broker" || c === "developer" || c === "unassigned").map((c) => {
             const meta = CATEGORY_META[c];
             const Icon = meta.icon;
@@ -166,15 +166,15 @@ export default function OwnerUsers() {
               <button
                 key={c}
                 onClick={() => setFilter(active ? "all" : c)}
-                className={`text-left p-4 rounded-md border bg-[#F7F2EA] transition-all hover:border-[#B89555] min-h-[86px] ${
+                className={`text-left p-4 rounded-md border bg-[#F7F2EA] transition-all hover:border-[#B89555] min-h-[96px] overflow-hidden ${
  active ? "border-[#B89555] ring-2 ring-[#B89555]/30" : "border-[#B89555]/30"
  }`}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <span className="text-[11px] uppercase tracking-[0.08em] text-[#1A1A1A]/70 leading-tight whitespace-nowrap">{summaryLabel(c)}</span>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="min-w-0 truncate text-[11px] uppercase tracking-[0.08em] text-[#1A1A1A]/70 leading-tight whitespace-nowrap">{summaryLabel(c)}</span>
                   <Icon className="w-4 h-4 text-[#1A1A1A]/60 shrink-0" />
                 </div>
-                <div className="text-3xl font-bold mt-2 leading-none tabular-nums whitespace-nowrap">{counts[c]}</div>
+                <div className="mt-3 text-4xl font-bold leading-none tabular-nums whitespace-nowrap tracking-normal">{counts[c]}</div>
               </button>
             );
           })}
@@ -205,13 +205,13 @@ export default function OwnerUsers() {
             <table className="w-full text-sm">
               <thead className="bg-[#EFE6D6] text-[#1A1A1A]/80">
                 <tr className="text-left">
-                  <th className="px-4 py-3 font-semibold min-w-[260px]">Contact</th>
+                  <th className="px-4 py-3 font-semibold min-w-[300px]">Contact</th>
                   <th className="px-4 py-3 font-semibold min-w-[170px]">Category</th>
-                  <th className="px-4 py-3 font-semibold">Phone</th>
-                  <th className="px-4 py-3 font-semibold">Registered</th>
-                  <th className="px-4 py-3 font-semibold">Last seen</th>
-                  <th className="px-4 py-3 font-semibold text-right">Sessions</th>
-                  <th className="px-4 py-3 font-semibold text-right">Time on site</th>
+                  <th className="px-4 py-3 font-semibold min-w-[150px]">Phone</th>
+                  <th className="px-4 py-3 font-semibold min-w-[120px]">Registered</th>
+                  <th className="px-4 py-3 font-semibold min-w-[180px]">Last seen</th>
+                  <th className="px-4 py-3 font-semibold text-right min-w-[90px]">Sessions</th>
+                  <th className="px-4 py-3 font-semibold text-right min-w-[120px]">Time on site</th>
                 </tr>
               </thead>
               <tbody>
