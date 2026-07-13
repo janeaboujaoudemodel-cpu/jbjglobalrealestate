@@ -38,7 +38,7 @@ Deno.serve(async (req) => {
 
     const [sessions, events, daily, crmProfile, baseProfile, roles, activity, preferences, authUser] = await Promise.all([
       admin.from('user_sessions').select('started_at, ended_at, duration_seconds, device_type, country, pages_visited').eq('user_id', user_id).order('started_at', { ascending: false }).limit(100),
-      admin.from('user_events').select('event_time, event_name, page_path, metadata').eq('user_id', user_id).order('event_time', { ascending: false }).limit(50),
+      admin.from('user_events').select('event_time, event_name, page_path, metadata').eq('user_id', user_id).order('event_time', { ascending: false }).limit(100),
       admin.from('user_daily_activity').select('day_date, sessions_count, total_duration_seconds, total_events').eq('user_id', user_id).order('day_date', { ascending: false }).limit(90),
       admin.from('crm_user_profiles').select('*').eq('user_id', user_id).maybeSingle(),
       admin.from('profiles').select('*').eq('id', user_id).maybeSingle(),
@@ -46,6 +46,17 @@ Deno.serve(async (req) => {
       admin.from('crm_profile_activity').select('*').eq('user_id', user_id).order('created_at', { ascending: false }).limit(50),
       admin.from('user_preferences').select('*').eq('user_id', user_id).maybeSingle(),
       admin.auth.admin.getUserById(user_id),
+    ]);
+
+    // Best-effort enrichment: consents, signup source trail, lead record, activity log by email
+    const authEmail = authUser.data?.user?.email?.toLowerCase() || null;
+    const [consents, signupEvents, leadRow, activityLog] = await Promise.all([
+      admin.from('cookie_consents').select('consent_status, preferences, policy_version, consent_source, page_url, referrer, accepted_at, user_agent').eq('user_id', user_id).order('accepted_at', { ascending: false }).limit(20),
+      admin.from('signup_source_events').select('signup_source, signup_source_label, picked_role, page_path, referrer, created_at').eq('user_id', user_id).order('created_at', { ascending: false }).limit(20),
+      admin.from('crm_leads').select('id, pipeline_stage, tags, source, source_page, contact_type, ai_score, priority_score, last_contacted_at, created_at').eq('email_lower', authEmail || '').is('deleted_at', null).maybeSingle(),
+      authEmail
+        ? admin.from('user_activity_log').select('event_type, activity_type, page_path, activity_data, created_at').eq('lead_email', authEmail).order('created_at', { ascending: false }).limit(100)
+        : Promise.resolve({ data: [] } as any),
     ]);
 
     const profile = baseProfile.data || null;
@@ -117,6 +128,10 @@ Deno.serve(async (req) => {
       preferences: pref,
       roles: (roles.data || []).map((r: any) => r.role),
       activity: activity.data || [],
+      consents: consents.data || [],
+      signup_events: signupEvents.data || [],
+      crm_lead: leadRow.data || null,
+      activity_log: activityLog.data || [],
     }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (e) {
     return new Response(JSON.stringify({ error: String(e) }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

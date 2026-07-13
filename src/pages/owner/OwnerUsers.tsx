@@ -40,6 +40,10 @@ interface DetailPayload {
   preferences?: any | null;
   roles: string[];
   activity: Array<{ created_at: string; activity_type?: string; description?: string; metadata?: any }>;
+  consents?: Array<{ consent_status: string; preferences: any; policy_version: string; consent_source: string; page_url: string | null; referrer: string | null; accepted_at: string; user_agent: string | null }>;
+  signup_events?: Array<{ signup_source: string; signup_source_label: string; picked_role: string | null; page_path: string | null; referrer: string | null; created_at: string }>;
+  crm_lead?: { id: string; pipeline_stage: string; tags: string[] | null; source: string | null; source_page: string | null; contact_type: string | null; ai_score: number | null; priority_score: number | null; last_contacted_at: string | null; created_at: string } | null;
+  activity_log?: Array<{ event_type: string; activity_type: string | null; page_path: string | null; activity_data: any; created_at: string }>;
 }
 
 const CATEGORY_META: Record<Category, { label: string; icon: any; cls: string }> = {
@@ -82,6 +86,9 @@ export default function OwnerUsers() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Category | "all">("all");
+  const [formStatus, setFormStatus] = useState<"all" | "submitted" | "pending">("all");
+  const [dateRange, setDateRange] = useState<"all" | "7d" | "30d" | "90d">("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
   
   const [selected, setSelected] = useState<UserRow | null>(null);
   const [detail, setDetail] = useState<DetailPayload | null>(null);
@@ -130,15 +137,24 @@ export default function OwnerUsers() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
+    const cutoff = dateRange === "all" ? 0
+      : Date.now() - (dateRange === "7d" ? 7 : dateRange === "30d" ? 30 : 90) * 86400_000;
     return rows.filter((r) => {
       if (filter !== "all" && r.category !== filter) return false;
+      if (formStatus === "submitted" && !r.has_signup_profile) return false;
+      if (formStatus === "pending" && r.has_signup_profile) return false;
+      if (cutoff && new Date(r.created_at).getTime() < cutoff) return false;
+      if (sourceFilter !== "all") {
+        const src = String((r as any).source_page || (r as any).account_type || "").toLowerCase();
+        if (!src.includes(sourceFilter.toLowerCase())) return false;
+      }
       if (!q) return true;
       return (r.full_name || "").toLowerCase().includes(q)
         || (r.email || "").toLowerCase().includes(q)
         || (r.phone || "").toLowerCase().includes(q)
         || (r.company_name || "").toLowerCase().includes(q);
     });
-  }, [rows, filter, search]);
+  }, [rows, filter, search, formStatus, dateRange, sourceFilter]);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A] p-4 md:p-8">
@@ -191,13 +207,48 @@ export default function OwnerUsers() {
               className="pl-9 bg-[#FDFBF7] border-[#B89555]/30"
             />
           </div>
-          {filter !== "all" && (
-            <Button variant="outline" size="sm" onClick={() => setFilter("all")}>
-              Clear filter
+          <select
+            value={formStatus}
+            onChange={(e) => setFormStatus(e.target.value as any)}
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 text-xs"
+            aria-label="Filter by form status"
+          >
+            <option value="all">Form: All</option>
+            <option value="submitted">Form: Submitted</option>
+            <option value="pending">Form: Pending</option>
+          </select>
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value as any)}
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 text-xs"
+            aria-label="Filter by registration date"
+          >
+            <option value="all">Registered: Anytime</option>
+            <option value="7d">Registered: Last 7 days</option>
+            <option value="30d">Registered: Last 30 days</option>
+            <option value="90d">Registered: Last 90 days</option>
+          </select>
+          <select
+            value={sourceFilter}
+            onChange={(e) => setSourceFilter(e.target.value)}
+            className="h-9 rounded-md border border-[#B89555]/30 bg-[#FDFBF7] px-2 text-xs"
+            aria-label="Filter by source"
+          >
+            <option value="all">Source: All</option>
+            <option value="signup_wizard">Signup wizard</option>
+            <option value="homepage">Homepage</option>
+            <option value="property">Property inquiry</option>
+            <option value="footer">Footer CTA</option>
+            <option value="social">Social sign-in</option>
+          </select>
+          {(filter !== "all" || formStatus !== "all" || dateRange !== "all" || sourceFilter !== "all") && (
+            <Button variant="outline" size="sm" onClick={() => { setFilter("all"); setFormStatus("all"); setDateRange("all"); setSourceFilter("all"); }}>
+              Clear filters
             </Button>
           )}
           <span className="text-xs text-[#1A1A1A]/60 ml-auto">{filtered.length} of {rows.length}</span>
         </div>
+
 
         {/* Users table */}
         <Card className="overflow-hidden bg-[#F7F2EA] border-[#B89555]/30">
