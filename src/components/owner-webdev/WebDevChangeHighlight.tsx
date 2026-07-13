@@ -5,7 +5,7 @@
  *   1. Scrolls the target into view
  *   2. Draws a pulsing gold ring around it for 4s
  *   3. Shows a floating Before / After toggle card (CSS preview off vs on)
- *      with Save / Cancel actions that map to the existing override row.
+  *      with Apply / Reset actions that map to the existing override row.
  *
  * Mounted once at app root, gated by owner/admin role.
  */
@@ -128,7 +128,7 @@ export default function WebDevChangeHighlight() {
     }
   }, [showAfter, active]);
 
-  const save = async () => {
+  const apply = async () => {
     if (!active?.overrideId) return;
     await supabase
       .from("owner_ui_overrides")
@@ -143,12 +143,12 @@ export default function WebDevChangeHighlight() {
         })
         .eq("id", active.requestId);
     }
-    toast({ title: "Saved", description: "Change is now live." });
+    toast({ title: "Applied", description: "Change is now live." });
     window.dispatchEvent(new CustomEvent("jbj:webdev-refresh"));
     setActive(null);
   };
 
-  const cancel = async () => {
+  const reset = async () => {
     if (!active?.overrideId) return;
     await supabase
       .from("owner_ui_overrides")
@@ -211,20 +211,20 @@ export default function WebDevChangeHighlight() {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={save}
+            onClick={apply}
               className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-md jj-surface-emerald hover:jj-surface-emerald text-white text-xs font-semibold allow-white"
               data-no-contrast-guard
               data-allow-dark-cta
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             >
-              <Check className="w-3.5 h-3.5" /> Save
+              <Check className="w-3.5 h-3.5" /> Apply
             </button>
             <button
               type="button"
-              onClick={cancel}
+              onClick={reset}
               className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-md border border-[#B89555]/40 bg-white hover:bg-red-50 text-red-700 text-xs font-semibold"
             >
-              <X className="w-3.5 h-3.5" /> Cancel
+              <X className="w-3.5 h-3.5" /> Reset
             </button>
           </div>
           <button
