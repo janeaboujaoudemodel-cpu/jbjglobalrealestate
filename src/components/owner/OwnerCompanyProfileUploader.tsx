@@ -214,16 +214,38 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       {docs.length > 0 && (
         <div className="mt-3 divide-y divide-[#B89555]/15 rounded-md border border-[#B89555]/20 bg-white">
           {docs.map((d) => (
-            <div key={d.id} className="flex items-center gap-3 px-3 py-2 text-sm">
+            <div key={d.id} className="flex items-center gap-2 px-3 py-2 text-sm">
               <FileText className="w-4 h-4 text-[#B89555] shrink-0" />
               <span className="font-medium text-[#1A1A1A] truncate flex-1">{d.file_name || d.doc_type}</span>
               {d.extracted_at && <span className="text-[10px] text-emerald-800 uppercase tracking-wider">AI ✓</span>}
-              <button onClick={() => togglePublic(d)}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-[#B89555]/40 bg-[#F7F2EA] hover:bg-[#EFE6D6] text-[#1A1A1A]">
+              <a
+                href={d.file_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Preview"
+                className="inline-grid place-items-center w-7 h-7 rounded-full border border-[#B89555]/40 bg-white hover:bg-[#F7F2EA] text-[#064E3B]"
+              >
+                <Eye className="w-3.5 h-3.5" />
+              </a>
+              <button
+                onClick={() => reExtract(d)}
+                disabled={reExtractingId === d.id}
+                title="Re-run AI extraction"
+                className="inline-grid place-items-center w-7 h-7 rounded-full border border-[#064E3B]/30 bg-white hover:bg-[#F7F2EA] text-[#064E3B] disabled:opacity-50"
+              >
+                {reExtractingId === d.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
+              </button>
+              <button
+                onClick={() => togglePublic(d)}
+                data-no-contrast-guard
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold border border-[#B89555]/40 bg-white hover:bg-[#F7F2EA] text-[#064E3B]"
+                style={{ backgroundColor: "#FFFFFF", color: "#064E3B" }}
+              >
                 {d.is_public ? <><Eye className="w-3.5 h-3.5" /> Public</> : <><EyeOff className="w-3.5 h-3.5" /> Hidden</>}
               </button>
               <button onClick={() => remove(d)}
-                className="inline-grid place-items-center w-7 h-7 rounded-full border border-[#B91C1C]/30 text-[#B91C1C] hover:bg-[#FCE8E8]">
+                title="Delete"
+                className="inline-grid place-items-center w-7 h-7 rounded-full border border-[#B91C1C]/30 bg-white text-[#B91C1C] hover:bg-[#FCE8E8]">
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
