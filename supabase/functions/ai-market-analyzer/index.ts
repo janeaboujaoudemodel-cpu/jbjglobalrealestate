@@ -84,7 +84,7 @@ serve(async (req) => {
     const { data: allowed, error: rlErr } = await supabase.rpc("check_rate_limit", {
       p_identifier: rateKey,
       p_action_type: "ai_market_analyzer",
-      p_max_attempts: 10,
+      p_max_requests: 10,
       p_window_minutes: 60,
     });
     if (rlErr) {
