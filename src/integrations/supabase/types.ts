@@ -41167,6 +41167,7 @@ export type Database = {
         Returns: undefined
       }
       is_active_crm_member: { Args: { _user_id: string }; Returns: boolean }
+      is_admin_or_owner: { Args: never; Returns: boolean }
       is_authorized_staff: { Args: never; Returns: boolean }
       is_crm_admin: { Args: { _user_id: string }; Returns: boolean }
       is_crm_owner: { Args: { check_user_id: string }; Returns: boolean }
