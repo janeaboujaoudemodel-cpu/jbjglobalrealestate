@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, Check, Video, Mic, Maximize2 } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronRight, Upload, X, ShieldCheck, Clock, Save, Sparkles, FileText, Building2, ExternalLink, Copy, CheckCircle2, Image as ImageIcon, Images, FolderUp, MessageCircle, Mail, Phone, Check, Video, Mic, Maximize2, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { useDeveloperAutoPublish, type AutoPublishResponse } from "@/hooks/useDeveloperAutoPublish";
 import { validateFile } from "@/utils/developerFileValidation";
@@ -164,6 +164,7 @@ const DeveloperProjectWizard = () => {
   const [smartFiles, setSmartFiles] = useState<Uploaded[]>([]);
   const [extracting, setExtracting] = useState(false);
   const [lastExtractedFields, setLastExtractedFields] = useState<string[]>([]);
+  const [smartExtractOpen, setSmartExtractOpen] = useState(true);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [additionalInfoMode, setAdditionalInfoMode] = useState<"keep" | "enrich">("enrich");
   const [publishResult, setPublishResult] = useState<AutoPublishResponse | null>(null);
@@ -818,7 +819,7 @@ const DeveloperProjectWizard = () => {
     </div>
   );
 
-  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, files = [], statusRows = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; files?: Uploaded[]; statusRows?: UploadStatus[] }) => {
+  const UploadTile = ({ icon: Icon, title, note, accept, multiple, onFiles, onRemove, files = [], statusRows = [] }: { icon: typeof Upload; title: string; note: string; accept?: string; multiple?: boolean; onFiles: (files: FileList) => void; onRemove?: (file: Uploaded) => void; files?: Uploaded[]; statusRows?: UploadStatus[] }) => {
     const pendingRows = statusRows.filter((row) => !files.some((file) => file.name === row.name && file.size === row.size));
     const visibleCount = files.length + pendingRows.length;
     const pendingPreviewRows = pendingRows.slice(0, 2);
@@ -861,7 +862,28 @@ const DeveloperProjectWizard = () => {
               {isImageUpload(f) ? <img src={f.url} alt="" className="h-8 w-10 rounded object-cover" /> : isVideoUpload(f) ? <Video className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
               <span className="min-w-0 flex-1 truncate">{f.name}</span>
               <span className="shrink-0 text-white/75">{formatBytes(f.size)}</span>
-              <Check className="h-3.5 w-3.5" />
+              {f.url && (
+                <a
+                  href={f.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Preview"
+                  className="inline-grid place-items-center h-6 w-6 rounded-full border border-white/35 bg-white/10 hover:bg-white/25 text-white"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Eye className="h-3 w-3" />
+                </a>
+              )}
+              {onRemove && (
+                <button
+                  type="button"
+                  title="Remove"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(f); }}
+                  className="inline-grid place-items-center h-6 w-6 rounded-full border border-white/35 bg-white/10 hover:bg-red-500/70 text-white"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              )}
             </div>
           ))}
           {hiddenCount > 0 && <div className="rounded border border-white/18 bg-white/10 p-2 text-xs font-semibold text-white">+{hiddenCount} more file{hiddenCount === 1 ? "" : "s"}</div>}
@@ -990,9 +1012,18 @@ const DeveloperProjectWizard = () => {
       </div>
 
       {/* Smart brochure extract */}
-      {step === 0 && (
-        <Card data-surface="emerald" data-project-upload-emerald className="bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
-          <div className="flex items-start justify-between gap-4 flex-wrap">
+      {step === 0 && smartExtractOpen && (
+        <Card data-surface="emerald" data-project-upload-emerald className="relative bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-5 rounded-lg border-[#064E3B]">
+          <button
+            type="button"
+            onClick={() => setSmartExtractOpen(false)}
+            title="Hide this panel"
+            aria-label="Hide smart brochure extract"
+            className="absolute top-3 right-3 inline-grid place-items-center h-7 w-7 rounded-full border border-white/35 bg-white/10 hover:bg-white/25 text-white"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+          <div className="flex items-start justify-between gap-4 flex-wrap pr-8">
             <div className="flex items-start gap-3">
               <div className="rounded-full p-2 bg-white/10"><Sparkles className="w-5 h-5" /></div>
               <div>
@@ -1004,11 +1035,11 @@ const DeveloperProjectWizard = () => {
             </div>
           </div>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} statusRows={uploadStatuses.filter((u) => u.role === "cover")} onFiles={(files) => files[0] && onCover(files[0])} />
-            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*" files={gallery.filter((g) => g.type.startsWith("image/"))} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
-            <UploadTile icon={Video} title="Gallery videos" note="Adds walkthroughs and project videos to a separate public video gallery." accept="video/*" files={gallery.filter((g) => g.type.startsWith("video/"))} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} />
-            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} statusRows={uploadStatuses.filter((u) => u.role === "fact_sheet" || u.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} />
-            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document" || b.role === "floor_plan" || b.role === "payment_plan")} statusRows={uploadStatuses.filter((u) => u.role === "document" || u.role === "floor_plan" || u.role === "payment_plan")} multiple onFiles={onSmartUpload} />
+            <UploadTile icon={ImageIcon} title="Main cover photo" note="Used immediately on the listing preview card." accept="image/*" files={cover ? [cover] : []} statusRows={uploadStatuses.filter((u) => u.role === "cover")} onFiles={(files) => files[0] && onCover(files[0])} onRemove={() => setCover(null)} />
+            <UploadTile icon={Images} title="Gallery photos" note="Adds project gallery images and floor-plan visuals." accept="image/*" files={gallery.filter((g) => g.type.startsWith("image/"))} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} onRemove={(f) => setGallery((items) => items.filter((it) => fileKey(it) !== fileKey(f)))} />
+            <UploadTile icon={Video} title="Gallery videos" note="Adds walkthroughs and project videos to a separate public video gallery." accept="video/*" files={gallery.filter((g) => g.type.startsWith("video/"))} statusRows={uploadStatuses.filter((u) => u.role === "gallery")} multiple onFiles={onGallery} onRemove={(f) => setGallery((items) => items.filter((it) => fileKey(it) !== fileKey(f)))} />
+            <UploadTile icon={FileText} title="Fact sheet / brochure" note="Reads the official project facts first." accept="*/*" files={brochures.filter((b) => b.role === "fact_sheet" || b.role === "brochure")} statusRows={uploadStatuses.filter((u) => u.role === "fact_sheet" || u.role === "brochure")} multiple onFiles={(files) => onBrochures(files, "fact_sheet", true)} onRemove={(f) => setBrochures((items) => items.filter((it) => fileKey(it) !== fileKey(f)))} />
+            <UploadTile icon={FolderUp} title={extracting ? "Extracting…" : "All documents"} note="Bulk upload videos, payment plans, floor plans and all documents together." accept="*/*" files={brochures.filter((b) => b.role === "document" || b.role === "floor_plan" || b.role === "payment_plan")} statusRows={uploadStatuses.filter((u) => u.role === "document" || u.role === "floor_plan" || u.role === "payment_plan")} multiple onFiles={onSmartUpload} onRemove={(f) => setBrochures((items) => items.filter((it) => fileKey(it) !== fileKey(f)))} />
           </div>
           {uploadStatuses.length > 0 && (
             <div data-upload-summary className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-5">
