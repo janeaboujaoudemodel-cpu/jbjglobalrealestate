@@ -34,7 +34,11 @@ const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not 
   "website": string|null,
   "email": string|null,
   "phone": string|null,
+  "whatsapp": string|null,
+  "whatsapp_group_url": string|null,
+  "telegram_group_url": string|null,
   "ceo_name": string|null,
+  "founder_name": string|null,
   "parent_company": string|null,
   "license_number": string|null,
   "total_projects": number|null,
@@ -121,8 +125,60 @@ async function callGatewayWithRetry(body: unknown, key: string) {
   return new Response(lastText || "upstream unavailable", { status: lastStatus || 502 });
 }
 
+/**
+ * Deterministic safety net after the model response: owner-uploaded company
+ * profiles are often written in first person, but JBJ presents developers in
+ * third person. Never save "we / our / us" language into the profile.
+ */
+function enforceThirdPersonVoice(text: unknown, developerName?: string): string | null {
+  if (typeof text !== "string") return null;
+  const name = developerName || "The developer";
+  let out = text.trim();
+  if (!out) return null;
+
+  out = out
+    .replace(/\bwe\s+have\s+always\s+envisioned\b/gi, `${name} has always envisioned`)
+    .replace(/\bwe\s+have\s+earned\b/gi, `${name} has earned`)
+    .replace(/\bwe\s+are\b/gi, `${name} is`)
+    .replace(/\bwe\s+were\b/gi, `${name} was`)
+    .replace(/\bwe\s+have\b/gi, `${name} has`)
+    .replace(/\bwe\s+do\b/gi, `${name} does`)
+    .replace(/\bwe\s+understand\b/gi, `${name} understands`)
+    .replace(/\bwe\s+know\b/gi, `${name} knows`)
+    .replace(/\bwe\s+apply\b/gi, `${name} applies`)
+    .replace(/\bwe\s+proudly\s+stand\b/gi, `${name} stands`)
+    .replace(/\bwe\s+passionately\s+develop\b/gi, `${name} develops`)
+    .replace(/\bwe\s+develop\b/gi, `${name} develops`)
+    .replace(/\bwe\s+build\b/gi, `${name} builds`)
+    .replace(/\bwe\s+create\b/gi, `${name} creates`)
+    .replace(/\bwe\s+deliver\b/gi, `${name} delivers`)
+    .replace(/\bwe\s+offer\b/gi, `${name} offers`)
+    .replace(/\bwe\s+provide\b/gi, `${name} provides`)
+    .replace(/\bwe\s+believe\b/gi, `${name} believes`)
+    .replace(/\bwe\s+envision(?:ed)?\b/gi, `${name} envisions`)
+    .replace(/\bwe\s+earned\b/gi, `${name} earned`)
+    .replace(/\bour\s+leadership\s+team\b/gi, `${name}'s leadership team`)
+    .replace(/\bour\s+residents\b/gi, "their residents")
+    .replace(/\bour\s+investors\b/gi, "their investors")
+    .replace(/\bour\s+clients\b/gi, "their clients")
+    .replace(/\bour\s+customers\b/gi, "their customers")
+    .replace(/\bour\s+vision\b/gi, "the company's vision")
+    .replace(/\bour\s+mission\b/gi, "the company's mission")
+    .replace(/\bour\s+foundation\b/gi, "the company's foundation")
+    .replace(/\bour\s+currency\b/gi, "the company's currency")
+    .replace(/\bour\s+portfolio\b/gi, "their portfolio")
+    .replace(/\bour\s+projects\b/gi, "their projects")
+    .replace(/\bour\s+communities\b/gi, "their communities")
+    .replace(/\bour\s+([a-z])/gi, "their $1")
+    .replace(/\bus\b/gi, "them")
+    .replace(/\bjoin\s+(?:us|them)\s+on\s+this\s+journey[^.]*\.?/gi, "");
+
+  out = out.replace(/(^|[.!?]\s+)We\s+/g, `$1${name} `);
+  return out.replace(/[ \t]{2,}/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+}
+
 /** Map the AI JSON to actual `developers` table columns. */
-function mapToDeveloperColumns(ex: Record<string, unknown>): Record<string, unknown> {
+function mapToDeveloperColumns(ex: Record<string, unknown>, developerName?: string): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   const put = (col: string, val: unknown) => {
     if (val === undefined || val === null) return;
@@ -131,12 +187,17 @@ function mapToDeveloperColumns(ex: Record<string, unknown>): Record<string, unkn
     out[col] = val;
   };
 
-  put("description", ex.description);
+  put("description", enforceThirdPersonVoice(ex.description, developerName));
   put("founded_year", ex.founded_year);
   put("headquarters", ex.headquarters);
   put("website_url", ex.website);
   put("ceo_name", ex.ceo_name);
   put("parent_company", ex.parent_company);
+  put("office_phone", ex.phone);
+  put("admin_email", ex.email);
+  put("whatsapp", ex.whatsapp);
+  put("whatsapp_group_url", ex.whatsapp_group_url);
+  put("telegram_group_url", ex.telegram_group_url);
   put("license_number", ex.license_number);
   put("completed_projects", ex.completed_projects);
   put("offplan_projects", ex.offplan_projects);
@@ -174,7 +235,11 @@ const REPORT_FIELDS: Array<{ key: string; label: string }> = [
   { key: "website", label: "Website" },
   { key: "email", label: "Email" },
   { key: "phone", label: "Office phone" },
+  { key: "whatsapp", label: "WhatsApp" },
+  { key: "whatsapp_group_url", label: "WhatsApp group" },
+  { key: "telegram_group_url", label: "Telegram group / channel" },
   { key: "ceo_name", label: "CEO / Chairman" },
+  { key: "founder_name", label: "Founder" },
   { key: "parent_company", label: "Parent company" },
   { key: "license_number", label: "License number" },
   { key: "total_projects", label: "Total projects" },
@@ -258,7 +323,10 @@ Deno.serve(async (req) => {
           { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the ENTIRE uploaded document for developer "${dev.name}" and return ONLY minified JSON per the schema below.
 
 VOICE RULE — CRITICAL:
-JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I". Always rewrite first-person marketing copy into third person: "we build" → "${dev.name} builds"; "our vision" → "their vision" / "the company's vision"; "our residents" → "their residents". Keep the facts and numbers verbatim from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, or projects.
+JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I", "join us", or any first-person language in the description. Always rewrite first-person marketing copy into third person: "we understand" → "${dev.name} understands"; "we build" → "${dev.name} builds"; "our vision" → "the company's vision"; "our residents" → "their residents". Keep the facts and numbers from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, contacts, founders, CEOs, or projects.
+
+FOUNDERS / LEADERSHIP / CONTACT RULE:
+Extract founder, chairman, CEO, managing director, parent company, phone, email, WhatsApp, LinkedIn, Instagram, group links, founded year, and website ONLY when explicitly stated in the uploaded company profile. If a founder is stated but no CEO is stated, put the founder in "founder_name" and propose a durable custom field {"key":"founder_name","label":"Founder","field_type":"text","value":"..."}; do not invent a CEO. If a field is not stated, return null so the UI can show it under "Missing — please add manually".
 
 KNOWN_CUSTOM_FIELDS (reuse these exact keys inside "custom_fields" — do NOT propose them as new):
 ${knownList}
@@ -277,12 +345,13 @@ ${SCHEMA}` },
     const raw = data?.choices?.[0]?.message?.content || "{}";
     let extracted: Record<string, unknown> = {};
     try { extracted = JSON.parse(extractJson(raw)); } catch { extracted = {}; }
+    extracted.description = enforceThirdPersonVoice(extracted.description, dev.name);
 
     const current: Record<string, unknown> = {};
     for (const k of Object.keys(extracted)) current[k] = (dev as any)[k] ?? null;
 
     // 1) Native columns
-    const patch = mapToDeveloperColumns(extracted);
+    const patch = mapToDeveloperColumns(extracted, dev.name);
     let updatedFields: string[] = [];
 
     // 2) Custom-field values from the AI (existing registry keys)
