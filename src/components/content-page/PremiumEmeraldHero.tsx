@@ -18,9 +18,9 @@ interface PremiumEmeraldHeroProps {
 }
 
 const HEIGHTS: Record<NonNullable<PremiumEmeraldHeroProps["height"]>, string> = {
-  sm: "min-h-[100svh]",
-  md: "min-h-[100svh]",
-  lg: "min-h-[100svh]",
+  sm: "min-h-[52vh] md:min-h-[56vh]",
+  md: "min-h-[60vh] md:min-h-[64vh]",
+  lg: "min-h-[70vh] md:min-h-[74vh]",
 };
 
 const HEADING_FONT = {
