@@ -157,6 +157,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       } else {
         const updated: string[] = (aiData as any)?.updatedFields ?? [];
         setLastExtraction(updated);
+        setFoundFields((aiData as any)?.foundFields ?? null);
+        setMissingFields((aiData as any)?.missingFields ?? null);
         if (updated.length > 0) toast.success(`AI wrote ${updated.length} field${updated.length > 1 ? "s" : ""}`);
         else toast.message("AI ran but found no new information");
       }
