@@ -136,7 +136,7 @@ export const MarketIntelligenceTableOfContents = ({
           <button
             onClick={() => setIsMinimized(false)}
             data-surface="emerald"
-            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            className="h-11 w-11 rounded-2xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.05] transition-transform duration-150"
             aria-label="Expand navigation"
           >
             <ChevronDown className="w-5 h-5 text-white" />
@@ -146,10 +146,11 @@ export const MarketIntelligenceTableOfContents = ({
 
       /* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
         data-surface="emerald"
-        className="rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
+        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
       >
         <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
@@ -159,7 +160,7 @@ export const MarketIntelligenceTableOfContents = ({
           <button
             onClick={() => setIsMinimized(true)}
             data-surface="emerald"
-            className="w-7 h-7 rounded-none flex items-center justify-center transition-colors bg-white/10 hover:bg-white/15"
+            className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors bg-white/10 hover:bg-white/20"
             aria-label="Minimize navigation"
           >
             <ChevronUp className="w-4 h-4 text-white" />
