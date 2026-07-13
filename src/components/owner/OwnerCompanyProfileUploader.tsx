@@ -131,6 +131,37 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
     refresh();
   };
 
+  const [reExtractingId, setReExtractingId] = useState<string | null>(null);
+  const reExtract = async (d: DocRow) => {
+    setReExtractingId(d.id);
+    try {
+      // Regenerate a fresh signed URL — the one stored in file_url may have expired.
+      let fileUrl = d.file_url;
+      if (d.storage_path) {
+        const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrl(d.storage_path, 60 * 60 * 6);
+        if (signed?.signedUrl) fileUrl = signed.signedUrl;
+      }
+      toast.message(`Re-reading ${d.file_name || "profile"} with AI…`);
+      const { data: aiData, error: aiErr } = await supabase.functions.invoke(
+        "ai-developer-profile-extract",
+        { body: { developerId, fileUrl, fileName: d.file_name, documentId: d.id } },
+      );
+      if (aiErr) {
+        toast.error(`AI extraction failed: ${aiErr.message}`);
+      } else {
+        const updated: string[] = (aiData as any)?.updatedFields ?? [];
+        setLastExtraction(updated);
+        if (updated.length > 0) toast.success(`AI wrote ${updated.length} field${updated.length > 1 ? "s" : ""}`);
+        else toast.message("AI ran but found no new information");
+      }
+      refresh();
+    } catch (e: any) {
+      toast.error(e.message || "Re-extraction failed");
+    } finally {
+      setReExtractingId(null);
+    }
+  };
+
   return (
     <div className="rounded-xl border border-[#B89555]/40 bg-[#FDFBF7] p-4">
       <div className="flex items-center justify-between gap-3 mb-3">
