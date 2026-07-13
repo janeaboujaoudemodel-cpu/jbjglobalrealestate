@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
@@ -44,7 +44,6 @@ export const MarketIntelligenceTableOfContents = ({
     const attach = () => {
       const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
       if (!hero) {
-        // No hero found yet — retry a few frames, then default to visible.
         if (raf < 30) { raf++; requestAnimationFrame(attach); }
         else setPastHero(true);
         return;
@@ -52,8 +51,9 @@ export const MarketIntelligenceTableOfContents = ({
       io = new IntersectionObserver(
         (entries) => {
           const e = entries[0];
-          // pastHero = hero no longer intersecting viewport (scrolled past).
-          setPastHero(!e.isIntersecting);
+          // Latch to visible once past hero — never re-hide from a
+          // programmatic scroll to top-of-page sections.
+          if (!e.isIntersecting) setPastHero(true);
         },
         { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
       );
@@ -136,7 +136,7 @@ export const MarketIntelligenceTableOfContents = ({
           <button
             onClick={() => setIsMinimized(false)}
             data-surface="emerald"
-            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            className="h-11 w-11 rounded-2xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.05] transition-transform duration-150"
             aria-label="Expand navigation"
           >
             <ChevronDown className="w-5 h-5 text-white" />
@@ -146,10 +146,11 @@ export const MarketIntelligenceTableOfContents = ({
 
       /* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
         data-surface="emerald"
-        className="rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
+        className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
       >
         <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
@@ -159,23 +160,15 @@ export const MarketIntelligenceTableOfContents = ({
           <button
             onClick={() => setIsMinimized(true)}
             data-surface="emerald"
-            className="w-7 h-7 rounded-none flex items-center justify-center transition-colors bg-white/10 hover:bg-white/15"
+            className="w-7 h-7 rounded-lg flex items-center justify-center transition-colors bg-white/10 hover:bg-white/20"
             aria-label="Minimize navigation"
           >
             <ChevronUp className="w-4 h-4 text-white" />
           </button>
         </div>
 
-        {/* Collapsible content — no height animation, so the internal list keeps a stable scroll box */}
-        <AnimatePresence initial={false}>
-          {!isMinimized && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
-              className="flex flex-col min-h-0 flex-1 overflow-hidden"
-            >
+        {/* Collapsible content — instant swap, no AnimatePresence delay */}
+        <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
               <nav onWheel={passBoundaryWheelToPage} className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald bg-transparent">
                 {items.map((item, index) => {
                   const isActive = activeId === item.id;
@@ -189,9 +182,9 @@ export const MarketIntelligenceTableOfContents = ({
                       data-allow-white="true"
                       data-no-contrast-guard
                       className={cn(
-                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-none text-left transition-colors border text-[13px] box-border overflow-hidden",
+                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-lg text-left transition-colors border text-[13px] box-border overflow-hidden",
                         isActive
-                          ? "font-semibold border-white/15 bg-white/12"
+                          ? "font-semibold border-white/25 bg-white/12"
                           : "border-white/10 bg-black/10 hover:bg-white/10"
                       )}
                       style={
@@ -212,16 +205,12 @@ export const MarketIntelligenceTableOfContents = ({
                         data-toc-number
                         data-no-contrast-guard
                         className={cn(
-                          "h-7 w-7 rounded-none flex items-center justify-center text-[11px] font-bold leading-none",
+                          "h-7 w-7 rounded-md flex items-center justify-center text-[11px] font-bold leading-none",
                           isActive
                             ? "bg-white/15 text-white border border-white/20"
                             : "bg-black/15 text-white border border-white/10"
                         )}
-                        style={
-                          isActive
-                            ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                            : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                        }
+                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                       >
                         {index + 1}
                       </span>
@@ -243,14 +232,13 @@ export const MarketIntelligenceTableOfContents = ({
                     </button>
                   );
                 })}
-
               </nav>
 
               {/* Sticky CTA footer — never cropped */}
               {ctaAction && (
                 <div className="border-t border-white/15 p-2.5 bg-black/10 flex-shrink-0">
                   <Link to={ctaAction.href} className="block">
-                    <Button variant="primary" size="sm" className="w-full mi-cta-emerald">
+                    <Button variant="primary" size="sm" className="w-full mi-cta-emerald jj-emerald-metallic rounded-xl">
                       {ctaAction.icon && <ctaAction.icon className="w-3.5 h-3.5 mr-1.5" />}
                       <span className="text-xs">{ctaAction.label}</span>
                       <ArrowUpRight className="w-3.5 h-3.5 ml-1.5" />
@@ -258,9 +246,7 @@ export const MarketIntelligenceTableOfContents = ({
                   </Link>
                 </div>
               )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        </div>
       </motion.div>
       )}
     </div>

@@ -8719,13 +8719,13 @@ html body footer p:last-child {
   inset: 0;
   background-image: linear-gradient(
     115deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0) 38%,
-    rgba(4,78,59,0.45) 48%,
-    rgba(255,255,255,0.55) 52%,
-    rgba(4,78,59,0.45) 56%,
-    rgba(255,255,255,0) 70%,
-    rgba(255,255,255,0) 100%
+    rgba(6,78,59,0) 0%,
+    rgba(6,78,59,0) 40%,
+    rgba(16,185,129,0.18) 48%,
+    rgba(110,231,183,0.32) 52%,
+    rgba(16,185,129,0.18) 56%,
+    rgba(6,78,59,0) 68%,
+    rgba(6,78,59,0) 100%
   );
   background-size: 220% 100%;
   background-repeat: no-repeat;
@@ -18603,9 +18603,19 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
   color: rgba(26, 26, 26, 0.58) !important;
   -webkit-text-fill-color: rgba(26, 26, 26, 0.58) !important;
 }
-:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i] input) {
+:where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]:not(.jj-hero-search-bar):not(.jj-hero-search-premium):not(.jj-newsletter-emerald):not(.jj-emerald-pill) input:not(.jj-hero-search-input):not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
   background: rgba(253,251,247,0.98) !important;
+}
+/* Newsletter / hero pill inputs are transparent on the emerald ombre — never white. */
+html body .jj-hero-search-bar input,
+html body .jj-newsletter-emerald input,
+html body .jj-emerald-pill input,
+html body .jj-hero-search-premium input {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 /* Progress indicators — Market Intelligence, dashboards, scores. */
