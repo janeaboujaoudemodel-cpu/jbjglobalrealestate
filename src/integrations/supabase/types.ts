@@ -12814,6 +12814,51 @@ export type Database = {
           },
         ]
       }
+      developer_custom_field_defs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          discovered_from_developer_id: string | null
+          field_type: string
+          id: string
+          is_active: boolean
+          key: string
+          label: string
+          sort_order: number
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discovered_from_developer_id?: string | null
+          field_type?: string
+          id?: string
+          is_active?: boolean
+          key: string
+          label: string
+          sort_order?: number
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          discovered_from_developer_id?: string | null
+          field_type?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          label?: string
+          sort_order?: number
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       developer_documents: {
         Row: {
           created_at: string
@@ -14649,6 +14694,7 @@ export type Database = {
           completed_projects: number | null
           confirmation_source: string | null
           created_at: string
+          custom_fields: Json
           description: string | null
           description_languages: string[] | null
           enrichment_source: string | null
@@ -14716,6 +14762,7 @@ export type Database = {
           completed_projects?: number | null
           confirmation_source?: string | null
           created_at?: string
+          custom_fields?: Json
           description?: string | null
           description_languages?: string[] | null
           enrichment_source?: string | null
@@ -14783,6 +14830,7 @@ export type Database = {
           completed_projects?: number | null
           confirmation_source?: string | null
           created_at?: string
+          custom_fields?: Json
           description?: string | null
           description_languages?: string[] | null
           enrichment_source?: string | null
