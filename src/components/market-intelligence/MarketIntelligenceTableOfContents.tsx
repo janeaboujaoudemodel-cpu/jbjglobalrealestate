@@ -167,16 +167,8 @@ export const MarketIntelligenceTableOfContents = ({
           </button>
         </div>
 
-        {/* Collapsible content — no height animation, so the internal list keeps a stable scroll box */}
-        <AnimatePresence initial={false}>
-          {!isMinimized && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
-              className="flex flex-col min-h-0 flex-1 overflow-hidden"
-            >
+        {/* Collapsible content — instant swap, no AnimatePresence delay */}
+        <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
               <nav onWheel={passBoundaryWheelToPage} className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald bg-transparent">
                 {items.map((item, index) => {
                   const isActive = activeId === item.id;
@@ -190,9 +182,9 @@ export const MarketIntelligenceTableOfContents = ({
                       data-allow-white="true"
                       data-no-contrast-guard
                       className={cn(
-                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-none text-left transition-colors border text-[13px] box-border overflow-hidden",
+                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-lg text-left transition-colors border text-[13px] box-border overflow-hidden",
                         isActive
-                          ? "font-semibold border-white/15 bg-white/12"
+                          ? "font-semibold border-white/25 bg-white/12"
                           : "border-white/10 bg-black/10 hover:bg-white/10"
                       )}
                       style={
@@ -213,16 +205,12 @@ export const MarketIntelligenceTableOfContents = ({
                         data-toc-number
                         data-no-contrast-guard
                         className={cn(
-                          "h-7 w-7 rounded-none flex items-center justify-center text-[11px] font-bold leading-none",
+                          "h-7 w-7 rounded-md flex items-center justify-center text-[11px] font-bold leading-none",
                           isActive
                             ? "bg-white/15 text-white border border-white/20"
                             : "bg-black/15 text-white border border-white/10"
                         )}
-                        style={
-                          isActive
-                            ? { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                            : { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }
-                        }
+                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                       >
                         {index + 1}
                       </span>
@@ -244,14 +232,13 @@ export const MarketIntelligenceTableOfContents = ({
                     </button>
                   );
                 })}
-
               </nav>
 
               {/* Sticky CTA footer — never cropped */}
               {ctaAction && (
                 <div className="border-t border-white/15 p-2.5 bg-black/10 flex-shrink-0">
                   <Link to={ctaAction.href} className="block">
-                    <Button variant="primary" size="sm" className="w-full mi-cta-emerald">
+                    <Button variant="primary" size="sm" className="w-full mi-cta-emerald jj-emerald-metallic rounded-xl">
                       {ctaAction.icon && <ctaAction.icon className="w-3.5 h-3.5 mr-1.5" />}
                       <span className="text-xs">{ctaAction.label}</span>
                       <ArrowUpRight className="w-3.5 h-3.5 ml-1.5" />
@@ -259,9 +246,7 @@ export const MarketIntelligenceTableOfContents = ({
                   </Link>
                 </div>
               )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        </div>
       </motion.div>
       )}
     </div>
