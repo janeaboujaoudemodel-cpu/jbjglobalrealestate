@@ -19,8 +19,9 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const AI_TIMEOUT_MS = 90_000;
-const MAX_FILE_BYTES = 50 * 1024 * 1024;
+const AI_TIMEOUT_MS = 180_000;
+// No hard file-size cap for owner-uploaded company profiles. Some developer
+// profile PDFs are large — the AI gateway itself is the only real ceiling.
 
 const SCHEMA = `Return ONLY valid minified JSON. Use null when the field is not stated. Never invent values.
 {
@@ -74,11 +75,38 @@ function extractJson(v: string): string {
 }
 
 async function fetchFile(url: string) {
-  const r = await fetch(url, { signal: AbortSignal.timeout(45_000) });
+  const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
   if (!r.ok) throw new Error(`File fetch failed (${r.status})`);
   const buf = new Uint8Array(await r.arrayBuffer());
-  if (buf.byteLength > MAX_FILE_BYTES) throw new Error(`File larger than 50MB — please upload a smaller PDF`);
   return { b64: toBase64(buf), mime: r.headers.get("content-type") || "application/pdf" };
+}
+
+/** POST to the AI gateway with retries for transient upstream failures (429/500/502/503/504). */
+async function callGatewayWithRetry(body: unknown, key: string) {
+  const attempts = 4;
+  let lastStatus = 0;
+  let lastText = "";
+  for (let i = 0; i < attempts; i++) {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      signal: AbortSignal.timeout(AI_TIMEOUT_MS),
+      headers: {
+        "Content-Type": "application/json",
+        "Lovable-API-Key": key,
+        "X-Lovable-AIG-SDK": "supabase-edge-function",
+      },
+      body: JSON.stringify(body),
+    });
+    if (res.ok) return res;
+    lastStatus = res.status;
+    lastText = await res.text().catch(() => "");
+    if (![429, 500, 502, 503, 504].includes(res.status)) {
+      return new Response(lastText, { status: res.status });
+    }
+    // Exponential backoff: 1.5s, 3s, 6s
+    await new Promise((r) => setTimeout(r, 1500 * Math.pow(2, i)));
+  }
+  return new Response(lastText || "upstream unavailable", { status: lastStatus || 502 });
 }
 
 /** Map the AI JSON to actual `developers` table columns. */
@@ -143,21 +171,21 @@ Deno.serve(async (req) => {
       ? { type: "image_url", image_url: { url: `data:${fetched.mime};base64,${fetched.b64}` } }
       : { type: "file", file: { filename: fileName || "profile.pdf", file_data: `data:${fetched.mime};base64,${fetched.b64}` } };
 
-    const aiRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      signal: AbortSignal.timeout(AI_TIMEOUT_MS),
-      headers: { "Content-Type": "application/json", "Lovable-API-Key": LOVABLE_KEY, "X-Lovable-AIG-SDK": "supabase-edge-function" },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [{
-          role: "user",
-          content: [
-            { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the entire uploaded document for developer "${dev.name}" and return ONLY the JSON per schema. Copy text verbatim from the document (do not paraphrase). The "description" MUST be a 2–4 paragraph verbatim / near-verbatim company overview taken from the document (About / Overview / Who We Are / Vision sections). Unknown fields = null. Never fabricate.\n\n${SCHEMA}` },
-            filePart,
-          ],
-        }],
-      }),
-    });
+    const aiRes = await callGatewayWithRetry({
+      model: "google/gemini-2.5-flash",
+      messages: [{
+        role: "user",
+        content: [
+          { type: "text", text: `You are a strict UAE property developer company-profile extractor. Read the ENTIRE uploaded document for developer "${dev.name}" and return ONLY minified JSON per the schema below.
+
+VOICE RULE — CRITICAL:
+JBJ Global Real Estate is presenting this developer to clients. You are describing "${dev.name}" from the OUTSIDE, in the THIRD person. Never use "we", "our", "us", "I". Always rewrite first-person marketing copy into third person: "we build" → "${dev.name} builds"; "our vision" → "their vision" / "the company's vision"; "our residents" → "their residents". Keep the facts and numbers verbatim from the document, but shift the pronouns. The "description" MUST be 2–4 paragraphs of company overview in this third-person voice, drawn from About / Overview / Who We Are / Vision sections. Unknown fields = null. Never fabricate numbers, awards, or projects.
+
+${SCHEMA}` },
+          filePart,
+        ],
+      }],
+    }, LOVABLE_KEY);
 
     if (!aiRes.ok) {
       const text = await aiRes.text().catch(() => "");
