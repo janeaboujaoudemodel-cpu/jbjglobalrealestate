@@ -58,6 +58,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
   };
 
   const [lastExtraction, setLastExtraction] = useState<string[] | null>(null);
+  const [foundFields, setFoundFields] = useState<Array<{ key: string; label: string; preview: string }> | null>(null);
+  const [missingFields, setMissingFields] = useState<Array<{ key: string; label: string }> | null>(null);
 
   const upload = useCallback(async (files: FileList | File[]) => {
     if (!files || (files as FileList).length === 0) return;
