@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
@@ -124,11 +123,11 @@ export const GuideTableOfContents = ({
     isScrollingRef.current = true;
     setActiveId(id);
     
-    scrollToId(id, { extraOffset: 20 });
+    scrollToId(id, { extraOffset: 20, behavior: "auto" });
 
     setTimeout(() => {
       isScrollingRef.current = false;
-    }, 650);
+    }, 120);
   };
 
   const handleDismissTooltip = () => {
@@ -154,17 +153,11 @@ export const GuideTableOfContents = ({
     >
 
       {/* Tooltip */}
-      <AnimatePresence>
-        {showTooltip && !isMinimized && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="absolute right-full mr-4 top-0 w-64 z-50"
-          >
-            <div data-guide-tooltip data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none p-4 shadow-xl">
+      {showTooltip && !isMinimized && (
+          <div className="absolute right-full mr-4 top-0 w-64 z-50">
+            <div data-guide-tooltip data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-white/10 rounded-none flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
                   <HelpCircle className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -186,9 +179,8 @@ export const GuideTableOfContents = ({
             </div>
             {/* Arrow pointing to nav */}
             <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#064E3B]" />
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {/* Minimized state: only the compact expand control remains visible. */}
       {isMinimized ? (
@@ -196,7 +188,7 @@ export const GuideTableOfContents = ({
           <button
             onClick={() => setIsMinimized(false)}
             data-surface="emerald"
-            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            className="h-11 w-11 rounded-2xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform duration-100"
             aria-label="Expand navigation"
           >
             <ChevronDown className="w-5 h-5 text-white" />
@@ -205,11 +197,9 @@ export const GuideTableOfContents = ({
       ) : (
 
       /* Main TOC Container - fixed position with emerald scrollbar */
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
         data-surface="emerald"
-        className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
+        className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[52dvh] flex flex-col jj-scrollbar-emerald"
       >
         {/* Header with minimize button */}
         <div data-guide-toc-header data-surface="emerald" className="flex items-center justify-between p-3 border-b border-white/15 bg-black/10 flex-shrink-0">
@@ -220,7 +210,7 @@ export const GuideTableOfContents = ({
           <button
             onClick={() => setIsMinimized(!isMinimized)}
               data-surface="emerald"
-            className="w-8 h-8 rounded-none bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors duration-100"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             <ChevronUp className="w-4 h-4 text-white" />
@@ -228,12 +218,7 @@ export const GuideTableOfContents = ({
         </div>
         
         {/* Collapsible content — stable scroll box; active rows never resize the container */}
-        <AnimatePresence initial={false}>
-          <motion.nav
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
+          <nav
             onWheel={passBoundaryWheelToPage}
             data-surface="emerald"
             className="p-2.5 space-y-1 overflow-y-auto overscroll-contain min-h-0 flex-1 jj-scrollbar-emerald"
@@ -246,14 +231,14 @@ export const GuideTableOfContents = ({
                 data-toc-item
                 data-toc-state={activeId === item.id ? "active" : "inactive"}
                 className={cn(
-                  "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-none text-left text-sm transition-colors border box-border overflow-hidden",
+                  "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-lg text-left text-sm transition-colors border box-border overflow-hidden",
                   activeId === item.id
                     ? "bg-white/12 text-white font-semibold border-white/15"
                     : "text-white hover:text-white hover:bg-white/10 border-white/10 bg-black/10"
                 )}
               >
                 <span data-toc-number className={cn(
-                  "w-7 h-7 rounded-none flex items-center justify-center text-[11px] font-bold",
+                  "w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-bold",
                   activeId === item.id
                     ? "bg-white/15 text-white border border-white/20"
                     : "bg-black/15 text-white border border-white/10"
@@ -283,9 +268,8 @@ export const GuideTableOfContents = ({
                 </Button>
               </Link>
             )}
-          </motion.nav>
-        </AnimatePresence>
-      </motion.div>
+            </nav>
+      </div>
       )}
     </div>
   );

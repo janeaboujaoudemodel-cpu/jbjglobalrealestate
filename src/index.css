@@ -34591,13 +34591,12 @@ html body #root .group:focus-within [role="tooltip"][data-surface="emerald"].jj-
 }
 
 /* =============================================================
-   PASS 260 — Content hero + floating navigator hard lock.
-   Applies to Insights, Guides, Services, Company, Legal, Help, News.
-   Hero: full viewport, centered. Navigator: emerald-only, white text,
-   square/sharp edges, no champagne/white inactive rows.
+   PASS 261 — responsive content-page repair.
+   Compact emerald heroes, premium-soft navigators, transparent search inputs,
+   and tablet-safe card grids across Insights, Guides, Legal, Help, and News.
    ============================================================= */
 html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) {
-  min-height: 100svh !important;
+  min-height: clamp(420px, 54svh, 620px) !important;
   height: auto !important;
   display: flex !important;
   align-items: center !important;
@@ -34611,12 +34610,14 @@ html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscr
 }
 
 html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscreen, [data-guide-hero], [data-faq-hero], [data-hero-dark].jj-hero-fullscreen) > :not(.absolute) {
-  min-height: 100svh !important;
+  min-height: clamp(420px, 54svh, 620px) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  padding-top: clamp(2.5rem, 6vh, 4rem) !important;
+  padding-bottom: clamp(2.5rem, 6vh, 4rem) !important;
   text-align: center !important;
 }
 
@@ -34629,8 +34630,9 @@ html body #root :is([data-premium-emerald-hero], [data-mi-hero] .jj-hero-fullscr
   text-wrap: balance;
 }
 
-html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) {
-  border-radius: 0 !important;
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]),
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(> div, nav, [class*="overflow-y-auto"], [data-guide-tooltip]) {
+  border-radius: 1rem !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
@@ -34640,19 +34642,21 @@ html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premi
   background-image: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
   border-color: rgba(255,255,255,0.16) !important;
-  border-radius: 0 !important;
+}
+
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]),
+html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is([data-toc-number], button > span:first-child, svg, path, circle, rect, line, polyline, polygon, h3, p, span, div) {
+  border-radius: 0.75rem !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
 }
 
 html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]) {
   background: linear-gradient(135deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.10) 100%) !important;
   background-image: linear-gradient(135deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.10) 100%) !important;
   border: 1px solid rgba(255,255,255,0.12) !important;
-  border-radius: 0 !important;
   box-shadow: none !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
 html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is(button, a, [data-toc-item]):hover,
@@ -34660,13 +34664,57 @@ html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premi
   background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%) !important;
   background-image: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%) !important;
   border-color: rgba(255,255,255,0.18) !important;
-  color: #FFFFFF !important;
-  -webkit-text-fill-color: #FFFFFF !important;
 }
 
-html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premium-navigator]) :is([data-toc-number], button > span:first-child, svg, path, circle, rect, line, polyline, polygon, h3, p, span, div) {
-  color: #FFFFFF !important;
+html body #root .jj-newsletter-emerald,
+html body #root .jj-newsletter-emerald .jj-hero-search-bar,
+html body #root .jj-newsletter-emerald input,
+html body #root .jj-newsletter-emerald input:focus,
+html body #root .jj-newsletter-emerald input:focus-visible,
+html body #root .jj-newsletter-emerald input:hover,
+html body #root .jj-hero-search-premium input,
+html body #root .jj-hero-search-premium input:focus,
+html body #root .jj-hero-search-premium input:focus-visible,
+html body #root .jj-hero-search-premium input:hover {
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+html body #root .jj-newsletter-emerald .jj-hero-search-bar {
+  background-image: var(--jj-emerald-ombre) !important;
+}
+
+html body #root .jj-newsletter-emerald input:-webkit-autofill,
+html body #root .jj-newsletter-emerald input:-webkit-autofill:hover,
+html body #root .jj-newsletter-emerald input:-webkit-autofill:focus,
+html body #root .jj-hero-search-premium input:-webkit-autofill,
+html body #root .jj-hero-search-premium input:-webkit-autofill:hover,
+html body #root .jj-hero-search-premium input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  stroke: currentColor !important;
-  border-radius: 0 !important;
+  transition: background-color 999999s ease-out 0s !important;
+}
+
+html body #root [data-ai-tools-disclaimer] > div:first-child > div:first-child,
+html body #root .jj-disclaimer-icon {
+  border-radius: 999px !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  border: 2px solid rgba(255,255,255,0.92) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.34), 0 0 0 1px rgba(6,78,59,0.28) !important;
+}
+
+@media (min-width: 640px) and (max-width: 1279px) {
+  html body #root .grid:is(.grid-cols-3, .grid-cols-4, .sm\:grid-cols-3, .sm\:grid-cols-4, .md\:grid-cols-3, .md\:grid-cols-4, .lg\:grid-cols-3, .lg\:grid-cols-4) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 639px) {
+  html body #root .grid:is(.grid-cols-2, .grid-cols-3, .grid-cols-4, .sm\:grid-cols-2, .sm\:grid-cols-3, .sm\:grid-cols-4, .md\:grid-cols-2, .md\:grid-cols-3, .md\:grid-cols-4, .lg\:grid-cols-2, .lg\:grid-cols-3, .lg\:grid-cols-4, .xl\:grid-cols-2, .xl\:grid-cols-3, .xl\:grid-cols-4) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
 }

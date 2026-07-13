@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -78,8 +77,8 @@ export const FAQFloatingSidebar = ({
   const scrollToSection = (id: string) => {
     isScrollingRef.current = true;
     setActiveId(id);
-    scrollToId(id, { extraOffset: 20 });
-    setTimeout(() => { isScrollingRef.current = false; }, 900);
+    scrollToId(id, { extraOffset: 20, behavior: "auto" });
+    setTimeout(() => { isScrollingRef.current = false; }, 120);
   };
 
   const handleDismissTooltip = () => {
@@ -100,10 +99,9 @@ export const FAQFloatingSidebar = ({
       data-premium-navigator
       style={isMinimized ? { width: "auto", right: "24px" } : undefined}
     >
-      <AnimatePresence>
-        {showTooltip && !isMinimized && (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="absolute right-full mr-4 top-0 w-64 z-50">
-            <div data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none p-4 shadow-xl">
+      {showTooltip && !isMinimized && (
+          <div className="absolute right-full mr-4 top-0 w-64 z-50">
+            <div data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl p-4 shadow-xl">
               <div className="flex items-start gap-3 mb-3">
                 <HelpCircle className="w-4 h-4 text-white shrink-0 mt-0.5" />
                 <div>
@@ -111,18 +109,17 @@ export const FAQFloatingSidebar = ({
                   <p className="text-white/80 text-xs">Jump to any FAQ category directly.</p>
                 </div>
               </div>
-              <Button onClick={handleDismissTooltip} size="sm" className="w-full rounded-none text-xs bg-[image:var(--jj-emerald-ombre)] text-white hover:opacity-90">I Understand</Button>
+              <Button onClick={handleDismissTooltip} size="sm" className="w-full rounded-lg text-xs bg-[image:var(--jj-emerald-ombre)] text-white hover:opacity-90">I Understand</Button>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
 
       {isMinimized ? (
         <div className="flex justify-end">
           <button
             onClick={() => setIsMinimized(false)}
             data-surface="emerald"
-            className="h-12 w-12 rounded-none bg-[image:var(--jj-emerald-ombre)] border border-white/15 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform"
+            className="h-11 w-11 rounded-2xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform duration-100"
             aria-label="Expand navigation"
           >
             <ChevronDown className="w-5 h-5 text-white" />
@@ -130,13 +127,13 @@ export const FAQFloatingSidebar = ({
         </div>
       ) : (
 
-      <motion.div data-surface="emerald" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-none overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex flex-col jj-scrollbar-emerald max-h-[56dvh]">
+      <div data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex flex-col jj-scrollbar-emerald max-h-[56dvh]">
         <div data-surface="emerald" className="flex items-center justify-between px-3 py-2.5 border-b border-white/15 bg-black/10 flex-shrink-0">
           <div className="flex items-center gap-2">
             <List className="w-4 h-4 text-white" />
             <h3 className="text-sm font-semibold text-white">{title}</h3>
           </div>
-          <button onClick={() => setIsMinimized(true)} className="w-7 h-7 rounded-none bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors" aria-label="Minimize navigation">
+          <button onClick={() => setIsMinimized(true)} className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/15 flex items-center justify-center transition-colors duration-100" aria-label="Minimize navigation">
             <ChevronUp className="w-4 h-4 text-white" />
           </button>
         </div>
@@ -152,11 +149,11 @@ export const FAQFloatingSidebar = ({
                   data-toc-state={isActive ? "active" : "inactive"}
                   data-surface="emerald"
                   className={cn(
-                    "w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-none text-left text-xs transition-colors border",
+                    "w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg text-left text-xs transition-colors border",
                     isActive ? "bg-white/12 text-white font-semibold border-white/15" : "bg-black/10 text-white hover:bg-white/10 border-white/10"
                   )}
                 >
-                  <span className={cn("w-6 h-6 rounded-none flex items-center justify-center text-[10px] font-bold flex-shrink-0", isActive ? "bg-white/15 text-white border border-white/20" : "bg-black/15 text-white border border-white/10")}>
+                  <span className={cn("w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-bold flex-shrink-0", isActive ? "bg-white/15 text-white border border-white/20" : "bg-black/15 text-white border border-white/10")}>
                     {index + 1}
                   </span>
                   <span className="truncate flex-1">{category.title}</span>
@@ -164,7 +161,7 @@ export const FAQFloatingSidebar = ({
               );
             })}
           </nav>
-      </motion.div>
+      </div>
       )}
     </div>
   );

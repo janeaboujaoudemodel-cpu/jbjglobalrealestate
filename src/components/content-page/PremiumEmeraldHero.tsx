@@ -18,9 +18,9 @@ interface PremiumEmeraldHeroProps {
 }
 
 const HEIGHTS: Record<NonNullable<PremiumEmeraldHeroProps["height"]>, string> = {
-  sm: "min-h-[52vh] md:min-h-[56vh]",
-  md: "min-h-[60vh] md:min-h-[64vh]",
-  lg: "min-h-[70vh] md:min-h-[74vh]",
+  sm: "min-h-[44svh] md:min-h-[48svh]",
+  md: "min-h-[52svh] md:min-h-[56svh]",
+  lg: "min-h-[60svh] md:min-h-[64svh]",
 };
 
 const HEADING_FONT = {
@@ -41,7 +41,7 @@ export function PremiumEmeraldHero({
       data-surface="emerald"
       data-no-contrast-guard
       data-premium-emerald-hero
-      className={`jj-hero-fullscreen relative flex items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
+      className={`jj-hero-fullscreen jj-hero-content-compact relative flex items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
       style={{
         background:
           "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)",
@@ -56,7 +56,7 @@ export function PremiumEmeraldHero({
         }}
         aria-hidden
       />
-      <div className="relative z-10 flex w-full items-center justify-center px-6 py-16 md:py-20 text-center">
+      <div className="relative z-10 flex w-full items-center justify-center px-6 py-12 md:py-14 text-center">
         <motion.div
           className="mx-auto flex w-full max-w-[54rem] flex-col items-center justify-center"
           initial={{ opacity: 0, y: 14 }}
@@ -71,7 +71,7 @@ export function PremiumEmeraldHero({
           </div>
           <h1
             data-no-contrast-guard
-            className="mx-auto max-w-[15ch] text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.04] mb-5 text-center"
+            className="mx-auto max-w-[15ch] text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.04] mb-4 text-center"
             style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textAlign: "center" }}
           >
             {title}
@@ -84,7 +84,7 @@ export function PremiumEmeraldHero({
               {subtitle}
             </p>
           )}
-          {meta && <div className="mt-7 flex w-full justify-center text-sm text-white/90">{meta}</div>}
+          {meta && <div className="mt-6 flex w-full justify-center text-sm text-white/90">{meta}</div>}
         </motion.div>
       </div>
     </section>
