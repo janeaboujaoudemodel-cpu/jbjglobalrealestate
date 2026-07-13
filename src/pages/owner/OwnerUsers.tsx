@@ -448,6 +448,84 @@ export default function OwnerUsers() {
                         {detail.events.length === 0 && <div className="px-3 py-4 text-xs text-[#1A1A1A]/60 text-center">No events.</div>}
                       </div>
                     </section>
+
+                    {detail.crm_lead && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">CRM lead</h3>
+                        <div className="border border-[#B89555]/30 rounded bg-[#F7F2EA] p-3 grid grid-cols-2 gap-3 text-sm">
+                          <Field label="Pipeline stage" value={detail.crm_lead.pipeline_stage || "—"} />
+                          <Field label="Contact type" value={detail.crm_lead.contact_type || "—"} />
+                          <Field label="Source" value={detail.crm_lead.source || "—"} />
+                          <Field label="Source page" value={detail.crm_lead.source_page || "—"} mono />
+                          <Field label="AI score" value={String(detail.crm_lead.ai_score ?? "—")} />
+                          <Field label="Priority score" value={String(detail.crm_lead.priority_score ?? "—")} />
+                          <Field label="Last contacted" value={detail.crm_lead.last_contacted_at ? new Date(detail.crm_lead.last_contacted_at).toLocaleString() : "—"} />
+                          <Field label="Lead since" value={new Date(detail.crm_lead.created_at).toLocaleString()} />
+                          <div className="col-span-2">
+                            <Field label="Tags" value={(detail.crm_lead.tags || []).join(", ") || "—"} />
+                          </div>
+                        </div>
+                      </section>
+                    )}
+
+                    {detail.signup_events && detail.signup_events.length > 0 && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Signup source trail ({detail.signup_events.length})</h3>
+                        <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-56 overflow-y-auto">
+                          {detail.signup_events.map((s, i) => (
+                            <div key={i} className="px-3 py-2 text-xs">
+                              <div className="flex justify-between gap-2">
+                                <span className="font-medium">{s.signup_source_label || s.signup_source}</span>
+                                <span className="text-[#1A1A1A]/60">{new Date(s.created_at).toLocaleString()}</span>
+                              </div>
+                              <div className="text-[#1A1A1A]/60 mt-0.5 truncate">
+                                {s.picked_role ? `role: ${s.picked_role} · ` : ""}{s.page_path || s.referrer || "—"}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {detail.consents && detail.consents.length > 0 && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Cookie & consent audit ({detail.consents.length})</h3>
+                        <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-56 overflow-y-auto">
+                          {detail.consents.map((c, i) => (
+                            <div key={i} className="px-3 py-2 text-xs">
+                              <div className="flex justify-between gap-2">
+                                <span className="font-semibold">
+                                  {c.consent_status === "all" ? "Accepted all" : c.consent_status === "essential" ? "Essential only" : "Custom"}
+                                  <span className="ml-2 text-[#1A1A1A]/60">v{c.policy_version}</span>
+                                </span>
+                                <span className="text-[#1A1A1A]/60">{new Date(c.accepted_at).toLocaleString()}</span>
+                              </div>
+                              <div className="text-[#1A1A1A]/60 mt-0.5 truncate">{c.consent_source} · {c.page_url || "—"}</div>
+                              {c.preferences && Object.keys(c.preferences).length > 0 && (
+                                <div className="mt-1 font-mono text-[10px] text-[#1A1A1A]/70 break-all">
+                                  {Object.entries(c.preferences).map(([k, v]) => `${k}:${v}`).join(" · ")}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
+
+                    {detail.activity_log && detail.activity_log.length > 0 && (
+                      <section>
+                        <h3 className="font-semibold text-sm mb-2 uppercase tracking-wider text-[#1A1A1A]/70">Full activity log ({detail.activity_log.length})</h3>
+                        <div className="border border-[#B89555]/30 rounded divide-y divide-[#B89555]/20 bg-[#F7F2EA] max-h-64 overflow-y-auto">
+                          {detail.activity_log.map((a, i) => (
+                            <div key={i} className="px-3 py-2 text-xs flex justify-between gap-2">
+                              <span className="font-mono">{a.event_type || a.activity_type}</span>
+                              <span className="text-[#1A1A1A]/70 truncate flex-1 mx-2">{a.page_path || "—"}</span>
+                              <span>{new Date(a.created_at).toLocaleString()}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
+                    )}
                   </>
                 )}
               </div>
