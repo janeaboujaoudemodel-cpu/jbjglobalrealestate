@@ -13,8 +13,23 @@ function normalizeCategory(value?: string | null): 'investor' | 'broker' | 'deve
   return null;
 }
 
-function categorize(p: any, crmCat?: string | null, selectedMode?: string | null): 'investor' | 'broker' | 'developer' | 'buyer' | 'seller' | 'landlord' | 'tenant' | 'partner' | 'service_provider' | 'media' | 'other' | 'unassigned' {
-  const direct = normalizeCategory(crmCat) || normalizeCategory(p.picked_role) || normalizeCategory(selectedMode);
+function authName(u: any): string | null {
+  const md = u?.user_metadata || {};
+  return md.full_name || md.name || [md.first_name, md.last_name].filter(Boolean).join(' ') || null;
+}
+
+function authPhone(u: any): string | null {
+  const md = u?.user_metadata || {};
+  return u?.phone || md.phone || md.phone_number || md.mobile || md.whatsapp || null;
+}
+
+function authCategory(u: any): string | null {
+  const md = u?.user_metadata || {};
+  return md.category || md.selected_mode || md.role || null;
+}
+
+function categorize(p: any, crmCat?: string | null, selectedMode?: string | null, authCat?: string | null): 'investor' | 'broker' | 'developer' | 'buyer' | 'seller' | 'landlord' | 'tenant' | 'partner' | 'service_provider' | 'media' | 'other' | 'unassigned' {
+  const direct = normalizeCategory(crmCat) || normalizeCategory(p.picked_role) || normalizeCategory(selectedMode) || normalizeCategory(authCat);
   if (direct) return direct;
 
   // `client` is an account type, not a CRM category. Do not display it as Investor.
@@ -74,7 +89,27 @@ Deno.serve(async (req) => {
       .order('created_at', { ascending: false })
       .limit(2000);
 
-    const ids = (profiles || []).map((p: any) => p.id);
+    const { data: authList } = await admin.auth.admin.listUsers({ page: 1, perPage: 2000 });
+    const authUsers = authList?.users || [];
+    const authMap: Record<string, any> = {};
+    for (const u of authUsers) authMap[u.id] = u;
+
+    const profileMap: Record<string, any> = {};
+    for (const p of profiles || []) profileMap[p.id] = p;
+
+    const mergedProfiles = authUsers.map((u: any) => ({
+      id: u.id,
+      email: u.email,
+      created_at: u.created_at,
+      last_login_at: u.last_sign_in_at || null,
+      total_login_days: 0,
+      ...(profileMap[u.id] || {}),
+    }));
+    for (const p of profiles || []) {
+      if (!authMap[p.id]) mergedProfiles.push(p);
+    }
+
+    const ids = mergedProfiles.map((p: any) => p.id);
     const since30 = new Date(Date.now() - 30 * 86400 * 1000).toISOString();
 
     const [sessAgg, dailyAgg, crmAgg, prefAgg] = await Promise.all([
@@ -107,22 +142,23 @@ Deno.serve(async (req) => {
       if (pref.user_id) prefMap[pref.user_id] = pref;
     }
 
-    const rows = (profiles || []).map((p: any) => {
+    const rows = mergedProfiles.map((p: any) => {
       const s = sessMap[p.id] || { count: 0, minutes: 0, country: null, device: null };
       const crm = crmMap[p.id];
       const pref = prefMap[p.id];
+      const auth = authMap[p.id];
       return {
         id: p.id,
-        full_name: crm?.full_name || p.full_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || null,
-        email: crm?.email || p.email,
-        phone: crm?.phone || crm?.whatsapp || p.phone_number || null,
+        full_name: crm?.full_name || p.full_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || authName(auth) || null,
+        email: crm?.email || p.email || auth?.email || null,
+        phone: crm?.phone || crm?.whatsapp || p.phone_number || authPhone(auth) || null,
         company_name: crm?.company_name || null,
-        category: categorize(p, crm?.category, pref?.selected_mode),
+        category: categorize(p, crm?.category, pref?.selected_mode, authCategory(auth)),
         position: crm?.position || null,
         has_signup_profile: !!crm,
         account_type: p.user_type || p.mode_default || null,
-        created_at: p.created_at,
-        last_login_at: p.last_login_at,
+        created_at: p.created_at || auth?.created_at,
+        last_login_at: p.last_login_at || auth?.last_sign_in_at || null,
         total_login_days: p.total_login_days,
         sessions_count: s.count,
         total_minutes: s.minutes,
