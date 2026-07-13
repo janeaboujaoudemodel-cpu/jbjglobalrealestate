@@ -62,13 +62,10 @@ function toBase64(bytes: Uint8Array): string {
 
 async function fileToBase64(url: string): Promise<{ b64: string; mime: string; bytes: number } | { error: string }> {
   try {
-    const r = await fetch(url, { signal: AbortSignal.timeout(45_000) });
+    const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
     if (!r.ok) return { error: `File fetch failed (${r.status})` };
-    const length = Number(r.headers.get("content-length") || "0");
-    if (length > MAX_FILE_BYTES) return { error: `File is larger than 50MB (${Math.ceil(length / 1024 / 1024)}MB)` };
     const mime = r.headers.get("content-type") || "application/pdf";
     const buf = new Uint8Array(await r.arrayBuffer());
-    if (buf.byteLength > MAX_FILE_BYTES) return { error: `File is larger than 50MB (${Math.ceil(buf.byteLength / 1024 / 1024)}MB)` };
     return { b64: toBase64(buf), mime, bytes: buf.byteLength };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "File could not be read" };
