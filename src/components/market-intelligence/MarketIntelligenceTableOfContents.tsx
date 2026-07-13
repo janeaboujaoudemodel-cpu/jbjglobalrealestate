@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
@@ -108,11 +107,11 @@ export const MarketIntelligenceTableOfContents = ({
     isScrollingRef.current = true;
     setActiveId(id);
 
-    scrollToId(id, { extraOffset: 20, behavior: "smooth" });
+    scrollToId(id, { extraOffset: 20, behavior: "auto" });
 
     setTimeout(() => {
       isScrollingRef.current = false;
-    }, 650);
+    }, 120);
   };
 
   // Do not mount the TOC while the hero is still in view. Rendering + then
@@ -136,7 +135,7 @@ export const MarketIntelligenceTableOfContents = ({
           <button
             onClick={() => setIsMinimized(false)}
             data-surface="emerald"
-            className="h-11 w-11 rounded-2xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.05] transition-transform duration-150"
+            className="h-11 w-11 rounded-2xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 shadow-[0_18px_40px_rgba(0,0,0,0.28)] flex items-center justify-center hover:scale-[1.03] transition-transform duration-100"
             aria-label="Expand navigation"
           >
             <ChevronDown className="w-5 h-5 text-white" />
@@ -145,10 +144,7 @@ export const MarketIntelligenceTableOfContents = ({
       ) : (
 
       /* Main TOC Container — internal scroll, stable active rows, sticky CTA footer */
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.18, ease: "easeOut" }}
+      <div
         data-surface="emerald"
         className="rounded-2xl overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.28)] max-h-[56dvh] border border-white/15 bg-[image:var(--jj-emerald-ombre)] flex flex-col"
       >
@@ -247,7 +243,7 @@ export const MarketIntelligenceTableOfContents = ({
                 </div>
               )}
         </div>
-      </motion.div>
+      </div>
       )}
     </div>
   );

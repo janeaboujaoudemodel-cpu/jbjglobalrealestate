@@ -181,7 +181,7 @@ export const DLDDailySnapshot = () => {
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 md:gap-4"
         >
           {[
             { label: "Total Transactions", value: total.toLocaleString("en-AE"), Icon: Building2 },
@@ -211,7 +211,7 @@ export const DLDDailySnapshot = () => {
         </motion.div>
 
         {/* Charts: Cash vs Mortgage + Top-10 Areas (items #8) */}
-        <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="mt-8 grid grid-cols-1 gap-5 xl:grid-cols-2">
           {/* Cash vs Mortgage — black filled bar = cash, gold hairline bar = mortgage */}
           <BlackCard className="p-6">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A1A1A]/70">
@@ -297,7 +297,7 @@ export const DLDDailySnapshot = () => {
                     key={`${row.area}-${i}`}
                     data-dld-area-row
                     className="grid items-center gap-3 rounded-lg px-2 py-1.5"
-                    style={{ gridTemplateColumns: "2.75rem minmax(180px, 180px) minmax(0, 1fr) 3.75rem" }}
+                    style={{ gridTemplateColumns: "2.75rem minmax(110px, 180px) minmax(0, 1fr) 3.75rem" }}
                   >
                     <span
                       data-no-contrast-guard

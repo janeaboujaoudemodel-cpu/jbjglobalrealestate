@@ -100,7 +100,7 @@ export const MarketOverviewDashboard = () => {
           </motion.div>
 
           {/* Stats Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 md:gap-6 mb-12">
             <StatCard
               title="Annual Transactions"
               value={MARKET_OVERVIEW_STATS.totalTransactions}

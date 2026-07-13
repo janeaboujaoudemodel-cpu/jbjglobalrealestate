@@ -396,7 +396,7 @@ const News = () => {
 
           {/* Rest of Articles Grid */}
           <div id="news-articles" className="scroll-mt-24" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredNews.slice(1).map((article) => (
               <article 
                 key={article.id}
@@ -516,7 +516,7 @@ const News = () => {
 
                   <TabsContent value="ytd">
                     {/* Primary KPIs */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-1">{ytd2026.value}</p>
                         <p className="text-sm text-[#1A1A1A]/70">YTD Transaction Value</p>
@@ -553,7 +553,7 @@ const News = () => {
 
                   <TabsContent value="daily">
                     {/* Daily KPIs */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-1">{daily2026.valuePerDay}</p>
                         <p className="text-sm text-[#1A1A1A]/70">Avg Daily Value</p>
@@ -679,7 +679,7 @@ const News = () => {
                 </div>
 
                 {/* Primary KPIs */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-1">AED 761B</p>
                     <p className="text-sm text-[#1A1A1A]/70">Total Transaction Value</p>
