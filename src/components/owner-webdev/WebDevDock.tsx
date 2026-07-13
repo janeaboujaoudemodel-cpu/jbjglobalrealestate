@@ -16,11 +16,12 @@ import {
   Check,
   X,
   ExternalLink,
+  Eye,
+  EyeOff,
   Loader2,
   Minus,
   Camera,
   MousePointerClick,
-  Image as ImageIcon,
   Trash2,
   Mic,
   Square,
@@ -46,6 +47,15 @@ type ChangeRequest = {
   status: string;
   override_id: string | null;
   created_at: string;
+};
+
+type OverrideRow = {
+  id: string;
+  route_pattern: string;
+  selector: string;
+  css: Record<string, string>;
+  status: string;
+  label?: string | null;
 };
 
 function buildSelector(el: Element): string {
@@ -87,6 +97,7 @@ export default function WebDevDock() {
   const [targetSelector, setTargetSelector] = useState<string | null>(null);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
+  const [activePreviewId, setActivePreviewId] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -130,16 +141,10 @@ export default function WebDevDock() {
 
   useEffect(() => {
     if (!allowed) return;
-    (async () => {
-      const { data } = await supabase
-        .from("owner_ui_overrides")
-        .select("id, route_pattern, selector, css, status")
-        .eq("status", "pending");
-      window.dispatchEvent(
-        new CustomEvent("jbj:override-preview", { detail: data ?? [] }),
-      );
-    })();
-  }, [allowed, pathname, requests]);
+    return () => {
+      window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
+    };
+  }, [allowed]);
 
   // Element picker
   useEffect(() => {
@@ -313,12 +318,19 @@ export default function WebDevDock() {
       if (!resp.ok) throw new Error(json.error ?? "Failed");
       toast({
         title: "Preview ready",
-        description: "Review the change, then Save to keep it.",
+        description: "Review Before/After, then Apply or Reset.",
       });
       setInstruction("");
       setScreenshot(null);
       setTargetSelector(null);
       await loadRequests();
+
+      if (json?.override && json?.request_id) {
+        setActivePreviewId(json.request_id);
+        window.dispatchEvent(
+          new CustomEvent("jbj:override-preview", { detail: [json.override] }),
+        );
+      }
 
       // Auto-highlight if the change applies to the current route
       if (json?.override_id && json?.selector && json?.route === pathname) {
@@ -346,16 +358,46 @@ export default function WebDevDock() {
     }
   };
 
+  const fetchOverride = async (overrideId: string): Promise<OverrideRow | null> => {
+    const { data } = await supabase
+      .from("owner_ui_overrides")
+      .select("id, route_pattern, selector, css, status, label")
+      .eq("id", overrideId)
+      .maybeSingle();
+    return (data as OverrideRow | null) ?? null;
+  };
+
+  const showAfter = async (cr: ChangeRequest) => {
+    if (!cr.override_id) return;
+    const row = await fetchOverride(cr.override_id);
+    if (!row) return;
+    setActivePreviewId(cr.id);
+    window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [row] }));
+    takeMeThere(cr);
+  };
+
+  const showBefore = () => {
+    setActivePreviewId(null);
+    window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
+  };
+
   const decide = async (cr: ChangeRequest, status: "approved" | "rejected") => {
     if (!cr.override_id) return;
     if (status === "approved") {
       await supabase.from("owner_ui_overrides").update({ status: "approved" }).eq("id", cr.override_id);
       await supabase.from("owner_change_requests").update({ status: "approved", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
-      toast({ title: "Saved", description: "Change is now live." });
+      const row = await fetchOverride(cr.override_id);
+      if (row) {
+        window.dispatchEvent(
+          new CustomEvent("jbj:override-preview", { detail: [{ ...row, status: "approved" }] }),
+        );
+      }
+      toast({ title: "Applied", description: "Change is now live." });
     } else {
       await supabase.from("owner_ui_overrides").delete().eq("id", cr.override_id);
       await supabase.from("owner_change_requests").update({ status: "rejected", reviewed_at: new Date().toISOString() }).eq("id", cr.id);
       window.dispatchEvent(new CustomEvent("jbj:override-preview", { detail: [] }));
+      setActivePreviewId(null);
       // Silent cancel — dock UI reflects the change; no floating toast (was rendering behind dock)
     }
     await loadRequests();
@@ -431,7 +473,7 @@ export default function WebDevDock() {
                   JBJ Web Developer
                 </div>
                 <div className="text-[10px] text-[#1A1A1A]/60 truncate">
-                  Owner-only · soft CSS overlay
+                  Developer-only · preview → apply · reset anytime
                 </div>
               </div>
             </div>
@@ -557,7 +599,7 @@ export default function WebDevDock() {
                 ) : (
                   <Send className="w-3.5 h-3.5 mr-1.5" style={{ color: "#FFFFFF" }} />
                 )}
-                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Send</span>
+                <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Preview</span>
               </button>
             </div>
           </div>
@@ -582,7 +624,7 @@ export default function WebDevDock() {
  : "bg-[#EFE6D6] text-[#1A1A1A]"
  }`}
                     >
-                      {cr.status === "ready" ? "preview" : cr.status}
+                      {cr.status === "ready" ? "pending" : cr.status}
                     </span>
                     <span className="text-[10px] text-[#1A1A1A]/50 truncate">
                       {cr.route}
@@ -596,10 +638,27 @@ export default function WebDevDock() {
                       <Button
                         size="sm"
                         variant="ghost"
+                        onClick={() => showAfter(cr)}
+                        className="h-7 text-xs px-2 text-[#1A1A1A] hover:bg-[#EFE6D6]"
+                      >
+                        <Eye className="w-3 h-3 mr-1" /> After
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={showBefore}
+                        disabled={activePreviewId !== cr.id}
+                        className="h-7 text-xs px-2 text-[#1A1A1A] hover:bg-[#EFE6D6] disabled:opacity-45"
+                      >
+                        <EyeOff className="w-3 h-3 mr-1" /> Before
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
                         onClick={() => takeMeThere(cr)}
                         className="h-7 text-xs px-2 text-[#1A1A1A] hover:bg-[#EFE6D6]"
                       >
-                        <ExternalLink className="w-3 h-3 mr-1" /> Take me there
+                        <ExternalLink className="w-3 h-3 mr-1" /> Locate
                       </Button>
                       <Button
                         size="sm"
@@ -610,7 +669,7 @@ export default function WebDevDock() {
                         style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
                       >
                         <Check className="w-3 h-3 mr-1" style={{ color: "#FFFFFF" }} />
-                        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Save</span>
+                        <span style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Apply</span>
                       </Button>
                       <Button
                         size="sm"
@@ -618,7 +677,7 @@ export default function WebDevDock() {
                         onClick={() => decide(cr, "rejected")}
                         className="h-7 text-xs px-2 text-red-700 hover:bg-red-50"
                       >
-                        <Trash2 className="w-3 h-3 mr-1" /> Cancel
+                        <Trash2 className="w-3 h-3 mr-1" /> Reset
                       </Button>
                     </div>
                   )}
@@ -657,7 +716,7 @@ export default function WebDevDock() {
         <button
           onClick={openDock}
           aria-label="Open Web Developer (owner)"
-          title="Web Developer"
+          title="Developer preview tool"
           className="pointer-events-auto inline-flex items-center justify-center h-11 w-11 rounded-full bg-[#0A0A0A] shadow-lg border border-[#B89555]/40 allow-white hover:bg-[#1F1F1F] transition-colors"
           data-owner-webdev-dock
           data-no-contrast-guard

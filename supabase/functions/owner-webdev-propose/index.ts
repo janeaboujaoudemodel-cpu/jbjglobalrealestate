@@ -29,18 +29,25 @@ async function requireOwner(req: Request) {
   const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     global: { headers: { Authorization: auth } },
   });
-  const { data } = await userClient.auth.getClaims(auth.replace("Bearer ", ""));
-  const userId = data?.claims?.sub;
-  if (!userId) return null;
+  const { data: { user } } = await userClient.auth.getUser();
+  if (!user?.id) return null;
+  const allowedEmails = new Set([
+    "janeaboujaoudemodel@gmail.com",
+    "janeaboujaoudenails@gmail.com",
+    "contact@janeaboujaoude.net",
+    "infoo.jane@gmail.com",
+  ]);
+  const email = (user.email || "").toLowerCase().trim();
+  if (!allowedEmails.has(email)) return null;
   const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
   const { data: roles } = await admin
     .from("user_roles")
     .select("role")
-    .eq("user_id", userId);
+    .eq("user_id", user.id);
   const isOwner = (roles ?? []).some(
     (r: { role: string }) => r.role === "owner" || r.role === "admin",
   );
-  return isOwner ? { userId, admin } : null;
+  return isOwner ? { userId: user.id, admin } : null;
 }
 
 Deno.serve(async (req) => {

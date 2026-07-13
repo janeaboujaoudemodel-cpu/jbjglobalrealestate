@@ -26,6 +26,7 @@ Deno.serve(async (req) => {
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const SUPABASE_SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -38,7 +39,22 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { data: roles } = await supabase
+    const allowedEmails = new Set([
+      "janeaboujaoudemodel@gmail.com",
+      "janeaboujaoudenails@gmail.com",
+      "contact@janeaboujaoude.net",
+      "infoo.jane@gmail.com",
+    ]);
+    const email = (user.email || "").toLowerCase().trim();
+    if (!allowedEmails.has(email)) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE);
+    const { data: roles } = await admin
       .from("user_roles")
       .select("role")
       .eq("user_id", user.id);

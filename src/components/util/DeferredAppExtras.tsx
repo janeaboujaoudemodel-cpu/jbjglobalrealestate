@@ -5,9 +5,10 @@
  * never request the JS at all.
  */
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { isOwnerEmail } from "@/config/ownerEmails";
+import { useIsAppOwner } from "@/hooks/useIsAppOwner";
+import { useUserMode } from "@/hooks/useUserMode";
 
 const GlobalVisitorTracking = lazy(() => import("@/components/GlobalVisitorTracking"));
 // OwnerVisitorToggle removed — Owner/Visitor view is now driven by the header mode switcher.
@@ -18,13 +19,22 @@ const WebDevChangeHighlight = lazy(() => import("@/components/owner-webdev/WebDe
 
 export default function DeferredAppExtras() {
   const [ready, setReady] = useState(false);
-  const { user } = useAuth();
-  const { pathname } = useLocation();
-  // Owner-only surfaces (WebDev dock, change highlight, UI overrides) must
-  // NEVER render on public routes — even for the owner. Restrict to the
-  // owner backend surface (/owner/*) only.
-  const isOwnerSurface = pathname.startsWith("/owner");
-  const ownerGate = !!user && isOwnerEmail(user.email) && isOwnerSurface;
+  const { user, isOwner: authIsOwner, loading: authLoading, ownerLoading } = useAuth();
+  const { isOwner: roleIsOwner, isLoading: roleLoading } = useIsAppOwner();
+  const { mode, isLoading: modeLoading } = useUserMode();
+  // Approved visual overrides are public because they are the applied website
+  // changes. The editing dock/highlight are developer-only and fail closed
+  // until auth, owner verification, role lookup, and Owner mode are settled.
+  const ownerToolsGate =
+    !authLoading &&
+    !ownerLoading &&
+    !roleLoading &&
+    !modeLoading &&
+    !!user &&
+    isOwnerEmail(user.email) &&
+    authIsOwner &&
+    roleIsOwner &&
+    mode === "owner";
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -57,10 +67,10 @@ export default function DeferredAppExtras() {
       <GlobalVisitorTracking />
       {/* OwnerVisitorToggle removed — Mode switcher in header now controls Owner/Visitor view */}
       <SeoHighlightOverlay />
-      {/* Owner-only chunks: not even imported for non-owners */}
-      {ownerGate && (
+      <OwnerOverrideLoader />
+      {/* Developer tools: not even imported for non-owners/non-developers */}
+      {ownerToolsGate && (
         <>
-          <OwnerOverrideLoader />
           <WebDevDock />
           <WebDevChangeHighlight />
         </>
