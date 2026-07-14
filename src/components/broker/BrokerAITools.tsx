@@ -51,6 +51,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [recommendationType, setRecommendationType] = useState<"ai" | "manual">("ai");
+  const spendCredits = useSpendBrokerCredits();
 
   const canUseAI = subscription.ai_credits_limit === null || 
     subscription.ai_credits_used < subscription.ai_credits_limit;
