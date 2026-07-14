@@ -205,7 +205,7 @@ export const MarketReports = () => {
           <motion.div
             data-no-contrast-guard
             data-surface="emerald"
-            className="mi-emerald-panel mt-8 p-6 max-w-3xl mx-auto text-center rounded-2xl"
+            className="mi-emerald-panel mt-8 p-8 md:p-10 max-w-4xl mx-auto text-center rounded-2xl"
             variants={fadeInUp}
           >
             <div className="flex justify-center mb-4">
