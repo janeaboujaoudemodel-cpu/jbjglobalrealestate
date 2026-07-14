@@ -239,7 +239,7 @@ const FutureOfRealEstate2026 = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <>
       <SEOHead
         title="The Future of Real Estate: 5 Trends to Watch in 2026"
         description="Discover the future of real estate with key trends for 2026, including sustainable practices and the growth of luxury properties. Learn more!"
@@ -253,29 +253,11 @@ const FutureOfRealEstate2026 = () => {
           { name: "The Future of Real Estate: 5 Trends to Watch in 2026", path: "/insights/future-of-real-estate-2026" },
         ]}
       />
-
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0d1f18] via-[#0a1712] to-[#0a1712] text-white">
-        <div className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_top,_rgba(184,149,85,0.35),_transparent_60%)]" />
-        <div className="relative max-w-5xl mx-auto px-6 md:px-8 py-20 md:py-28 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89555]/60 text-[#E9D9AE] text-xs tracking-widest uppercase mb-6">
-            <Sparkles className="w-3.5 h-3.5" /> 2026 Market Outlook
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight mb-6">
-            The Future of Real Estate: <span className="text-[#E9D9AE]">5 Trends to Watch in 2026</span>
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-8">
-            Where global real estate is heading in 2026 — sustainable buildings, luxury demand, digital brokerage, new commercial frontiers, and the residential impact of remote work. Written for investors, homebuyers and real estate consultants operating in the UAE and beyond.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 text-xs uppercase tracking-widest text-[#E9D9AE]/80">
-            <span>Published {PUBLISHED}</span>
-            <span>·</span>
-            <span>JBJ Global Real Estate</span>
-            <span>·</span>
-            <span>~9 min read</span>
-          </div>
-        </div>
-      </section>
+      <MIPageShell
+        heroTitle={<>Future of Real Estate <span className="italic">2026</span></>}
+        heroDescription="Where global real estate is heading in 2026 — sustainable buildings, luxury demand, digital brokerage, new commercial frontiers, and the residential impact of remote work."
+      >
+      <div className="bg-[#FDFBF7]">
 
       {/* Introduction */}
       <section className="py-14 md:py-16">
