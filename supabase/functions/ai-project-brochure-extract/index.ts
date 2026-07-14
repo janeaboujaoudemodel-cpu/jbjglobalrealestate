@@ -11,7 +11,9 @@ const corsHeaders = {
 
 interface FileRef { url: string; name: string; type?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
 
-const MAX_FILE_BYTES = 50 * 1024 * 1024;
+// Gemini inline file parts via the Lovable AI Gateway are capped near 20MB
+// (base64 payload). Anything above that is rejected before extraction.
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const AI_TIMEOUT_MS = 95_000;
 
 const SCHEMA_HINT = `Return ONLY valid minified JSON matching this shape. Use null when unknown. Never invent values.
@@ -62,10 +64,21 @@ function toBase64(bytes: Uint8Array): string {
 
 async function fileToBase64(url: string): Promise<{ b64: string; mime: string; bytes: number } | { error: string }> {
   try {
+    // Cheap size probe first so we don't buffer a 58MB PDF just to reject it.
+    try {
+      const head = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(15_000) });
+      const len = Number(head.headers.get("content-length") || 0);
+      if (len && len > MAX_FILE_BYTES) {
+        return { error: `File is larger than ${Math.round(MAX_FILE_BYTES / 1024 / 1024)}MB (${Math.round(len / 1024 / 1024)}MB). Please compress the PDF (e.g. iLovePDF "Compress PDF") and re-upload.` };
+      }
+    } catch { /* fall through to GET */ }
     const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
     if (!r.ok) return { error: `File fetch failed (${r.status})` };
     const mime = r.headers.get("content-type") || "application/pdf";
     const buf = new Uint8Array(await r.arrayBuffer());
+    if (buf.byteLength > MAX_FILE_BYTES) {
+      return { error: `File is larger than ${Math.round(MAX_FILE_BYTES / 1024 / 1024)}MB (${Math.round(buf.byteLength / 1024 / 1024)}MB). Please compress the PDF and re-upload.` };
+    }
     return { b64: toBase64(buf), mime, bytes: buf.byteLength };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "File could not be read" };
@@ -368,11 +381,11 @@ Deno.serve(async (req) => {
     }
 
     if (filesRead.length === 0) {
-      return response({
-        error: "No uploaded files could be read for extraction. Please retry upload or use smaller files.",
-        files_read: 0,
-        files_skipped: filesSkipped,
-      }, 422);
+      const oversize = filesSkipped.filter((f) => /larger than/i.test(f.reason));
+      const primary = oversize.length
+        ? `Some files are too large for AI extraction (max ${Math.round(MAX_FILE_BYTES / 1024 / 1024)}MB per file). Compress the PDF (e.g. iLovePDF "Compress PDF") and re-upload: ${oversize.map((f) => f.name).join(", ")}.`
+        : "No uploaded files could be read for extraction. Please retry upload or use smaller files.";
+      return response({ error: primary, files_read: 0, files_skipped: filesSkipped }, 422);
     }
 
     const finalExtracted = applyProjectMajorityRule(await reconcileExtracted(LOVABLE_API_KEY, perFile), perFile);
