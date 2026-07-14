@@ -3224,6 +3224,132 @@ export type Database = {
           },
         ]
       }
+      broker_credit_action_costs: {
+        Row: {
+          action_key: string
+          cost: number
+          description: string | null
+        }
+        Insert: {
+          action_key: string
+          cost: number
+          description?: string | null
+        }
+        Update: {
+          action_key?: string
+          cost?: number
+          description?: string | null
+        }
+        Relationships: []
+      }
+      broker_credit_ledger: {
+        Row: {
+          action_key: string | null
+          balance_after: number
+          created_at: string
+          delta: number
+          id: string
+          metadata: Json
+          reason: string
+          related_id: string | null
+          user_id: string
+        }
+        Insert: {
+          action_key?: string | null
+          balance_after: number
+          created_at?: string
+          delta: number
+          id?: string
+          metadata?: Json
+          reason: string
+          related_id?: string | null
+          user_id: string
+        }
+        Update: {
+          action_key?: string | null
+          balance_after?: number
+          created_at?: string
+          delta?: number
+          id?: string
+          metadata?: Json
+          reason?: string
+          related_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      broker_credit_pack_definitions: {
+        Row: {
+          created_at: string
+          credits: number
+          display_name: string
+          display_order: number
+          pack_key: string
+          price_aed: number
+          stripe_price_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          credits: number
+          display_name: string
+          display_order?: number
+          pack_key: string
+          price_aed: number
+          stripe_price_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          display_name?: string
+          display_order?: number
+          pack_key?: string
+          price_aed?: number
+          stripe_price_id?: string | null
+        }
+        Relationships: []
+      }
+      broker_credit_wallets: {
+        Row: {
+          active_tier: string | null
+          created_at: string
+          id: string
+          last_refill_at: string | null
+          monthly_allowance: number
+          next_refill_at: string | null
+          purchased_credits: number
+          refill_anchor_day: number
+          subscription_credits: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_tier?: string | null
+          created_at?: string
+          id?: string
+          last_refill_at?: string | null
+          monthly_allowance?: number
+          next_refill_at?: string | null
+          purchased_credits?: number
+          refill_anchor_day?: number
+          subscription_credits?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_tier?: string | null
+          created_at?: string
+          id?: string
+          last_refill_at?: string | null
+          monthly_allowance?: number
+          next_refill_at?: string | null
+          purchased_credits?: number
+          refill_anchor_day?: number
+          subscription_credits?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       broker_daily_stats: {
         Row: {
           avg_response_time_seconds: number | null
@@ -4864,6 +4990,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      broker_tier_definitions: {
+        Row: {
+          created_at: string
+          display_name: string
+          display_order: number
+          features: Json
+          is_popular: boolean
+          monthly_credit_allowance: number
+          monthly_price_aed: number
+          stripe_price_id_monthly: string | null
+          stripe_price_id_yearly: string | null
+          tagline: string | null
+          tier_key: string
+          updated_at: string
+          yearly_price_aed: number
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          display_order?: number
+          features?: Json
+          is_popular?: boolean
+          monthly_credit_allowance: number
+          monthly_price_aed: number
+          stripe_price_id_monthly?: string | null
+          stripe_price_id_yearly?: string | null
+          tagline?: string | null
+          tier_key: string
+          updated_at?: string
+          yearly_price_aed: number
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          display_order?: number
+          features?: Json
+          is_popular?: boolean
+          monthly_credit_allowance?: number
+          monthly_price_aed?: number
+          stripe_price_id_monthly?: string | null
+          stripe_price_id_yearly?: string | null
+          tagline?: string | null
+          tier_key?: string
+          updated_at?: string
+          yearly_price_aed?: number
+        }
+        Relationships: []
       }
       broker_training_assignments: {
         Row: {
@@ -41111,6 +41285,17 @@ export type Database = {
         Args: { p_answers: Json; p_module_id: string; p_question_ids: string[] }
         Returns: Json
       }
+      grant_broker_credits: {
+        Args: {
+          p_bucket?: string
+          p_credits: number
+          p_metadata?: Json
+          p_reason: string
+          p_related_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
@@ -41358,6 +41543,10 @@ export type Database = {
         Args: { p_owner_id: string }
         Returns: number
       }
+      set_broker_wallet_tier: {
+        Args: { p_tier_key: string; p_user_id: string }
+        Returns: undefined
+      }
       set_cons_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_database_rows_junk: {
         Args: { junk: boolean; row_ids: string[] }
@@ -41369,6 +41558,10 @@ export type Database = {
       set_team_page_visibility: { Args: { p_enabled: boolean }; Returns: Json }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      spend_broker_credits: {
+        Args: { p_action_key: string; p_related_id?: string }
+        Returns: Json
+      }
       start_module: {
         Args: { _book_id: string; _module_id: string }
         Returns: undefined
