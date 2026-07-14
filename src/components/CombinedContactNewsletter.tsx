@@ -1,6 +1,6 @@
 /**
- * CombinedContactNewsletter — emerald-ombre card with white text and white
- * icons. No gold borders, no light-green outlines. Used for the
+ * CombinedContactNewsletter — full-width emerald-ombre band with white text
+ * and icons. No gold/champagne card behind it. Used for the
  * "Ready to Get Started" / "Get in touch" / "Stay in the Loop" block.
  */
 
@@ -47,15 +47,16 @@ const CombinedContactNewsletter = ({
     <section
       id={id}
       data-no-section-frame
-      className={`w-full py-12 md:py-20 bg-transparent border-0 shadow-none ${className}`}
-      style={{ background: "transparent", border: 0, boxShadow: "none", padding: undefined }}
+      data-surface="emerald"
+      data-emerald="true"
+      className={`jj-newsletter-emerald w-full py-12 md:py-20 border-0 shadow-none overflow-hidden ${className}`}
     >
       <ContentTrack>
         <div
           data-ink-emerald
           data-surface="emerald"
           data-emerald="true"
-          className="jj-emerald-card jj-loop-block relative w-full rounded-[28px] p-6 md:p-10 lg:p-12 overflow-hidden"
+          className="jj-loop-block relative w-full px-0 py-0"
         >
 
 

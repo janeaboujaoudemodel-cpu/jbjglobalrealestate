@@ -1309,8 +1309,11 @@ All colors MUST be HSL.
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #FDFBF7 inset !important;
-    -webkit-text-fill-color: #1A1A1A;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: currentColor !important;
+    caret-color: currentColor !important;
+    background-color: transparent !important;
     transition: background-color 5000s ease-in-out 0s;
   }
   .jj-newsletter-emerald input:-webkit-autofill,
@@ -1329,8 +1332,8 @@ All colors MUST be HSL.
   [data-surface="dark"] input:-webkit-autofill:hover,
   [data-surface="dark"] input:-webkit-autofill:focus,
   [data-surface="dark"] input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px transparent inset !important;
-    box-shadow: 0 0 0 30px transparent inset !important;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
     -webkit-text-fill-color: #FFFFFF !important;
     caret-color: #FFFFFF !important;
     background-color: transparent !important;
@@ -18605,7 +18608,8 @@ html body .jj-hero-search-bar input.jj-hero-search-input:hover {
 }
 :where([type="search"], [data-search], .jj-search, .search-input, [class*="search" i]:not(.jj-hero-search-bar):not(.jj-hero-search-premium):not(.jj-newsletter-emerald):not(.jj-emerald-pill) input:not(.jj-hero-search-input):not([data-no-contrast-guard])) {
   border-color: rgba(184,149,85,0.30) !important;
-  background: rgba(253,251,247,0.98) !important;
+  background: transparent !important;
+  background-image: none !important;
 }
 /* Newsletter / hero pill inputs are transparent on the emerald ombre — never white. */
 html body .jj-hero-search-bar input,

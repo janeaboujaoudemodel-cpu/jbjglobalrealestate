@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
 import { LucideIcon, List, ChevronDown, ChevronUp, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -61,17 +60,6 @@ export const MarketIntelligenceTableOfContents = ({
     attach();
     return () => { io?.disconnect(); };
   }, []);
-
-  const passBoundaryWheelToPage = (event: WheelEvent<HTMLElement>) => {
-    const target = event.currentTarget;
-    const hasLocalScroll = target.scrollHeight > target.clientHeight + 2;
-    const atTop = target.scrollTop <= 0;
-    const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 2;
-    if (!hasLocalScroll || (event.deltaY < 0 && atTop) || (event.deltaY > 0 && atBottom)) {
-      event.preventDefault();
-      window.scrollBy({ top: event.deltaY, behavior: "auto" });
-    }
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -165,7 +153,7 @@ export const MarketIntelligenceTableOfContents = ({
 
         {/* Collapsible content — instant swap, no AnimatePresence delay */}
         <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
-              <nav onWheel={passBoundaryWheelToPage} className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-contain flex-1 min-h-0 jj-scrollbar-emerald bg-transparent">
+              <nav className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-auto flex-1 min-h-0 jj-scrollbar-emerald bg-transparent">
                 {items.map((item, index) => {
                   const isActive = activeId === item.id;
                   return (
