@@ -90,7 +90,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
                 alt="UAE Real Estate Market Intelligence Book Cover"
                 className="w-full h-52 md:h-60 object-cover opacity-60"
                 loading="eager"
-                fetchPriority="high"
+                {...({ fetchpriority: "high" } as any)}
                 decoding="sync"
               />
 
