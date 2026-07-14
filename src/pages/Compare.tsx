@@ -827,7 +827,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             <span className="allow-white" style={{ color: "#FFFFFF" }}>Back to Previous Page</span>
           </button>
 
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
             {/* Eyebrow pill — white on white/10 */}
             <div
               data-no-contrast-guard
