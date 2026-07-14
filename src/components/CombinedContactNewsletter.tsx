@@ -56,7 +56,7 @@ const CombinedContactNewsletter = ({
           data-ink-emerald
           data-surface="emerald"
           data-emerald="true"
-          className="jj-loop-block relative w-full px-0 py-0"
+          className="jj-loop-block relative w-full max-w-4xl mx-auto px-4 sm:px-8 py-2 sm:py-4"
         >
 
 
