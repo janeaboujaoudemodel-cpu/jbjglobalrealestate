@@ -112,12 +112,18 @@ Deno.serve(async (req) => {
     const ids = mergedProfiles.map((p: any) => p.id);
     const since30 = new Date(Date.now() - 30 * 86400 * 1000).toISOString();
 
-    const [sessAgg, dailyAgg, crmAgg, prefAgg] = await Promise.all([
+    const [sessAgg, dailyAgg, crmAgg, prefAgg, signupAgg] = await Promise.all([
       admin.from('user_sessions').select('user_id, duration_seconds, country, device_type').in('user_id', ids),
       admin.from('user_daily_activity').select('user_id, day_date, total_duration_seconds').in('user_id', ids).gte('day_date', since30.slice(0, 10)),
       admin.from('crm_user_profiles').select('user_id, category, full_name, email, phone, whatsapp, country, company_name, position, source_page, created_at, updated_at').in('user_id', ids),
       admin.from('user_preferences').select('user_id, selected_mode').in('user_id', ids),
+      admin.from('signup_source_events').select('user_id, source, page_path, created_at').in('user_id', ids).order('created_at', { ascending: false }),
     ]);
+    const signupMap: Record<string, { source: string | null; page_path: string | null }> = {};
+    for (const ev of signupAgg.data || []) {
+      const k = ev.user_id; if (!k || signupMap[k]) continue;
+      signupMap[k] = { source: ev.source || null, page_path: ev.page_path || null };
+    }
 
     const sessMap: Record<string, { count: number; minutes: number; country: string | null; device: string | null }> = {};
     for (const s of sessAgg.data || []) {
