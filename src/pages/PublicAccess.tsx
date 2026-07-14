@@ -1398,7 +1398,7 @@ export default function PublicAccess() {
           <nav className="hidden items-center gap-0.5 lg:flex shrink-0">
             {quickLinks.map((link) => (
               <a
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1A1A1A]/70 transition hover:bg-[#EFE6D6] hover:text-[#064E3B]"
               >
