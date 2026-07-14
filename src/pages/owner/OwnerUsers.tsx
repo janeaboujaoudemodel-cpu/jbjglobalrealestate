@@ -145,8 +145,27 @@ export default function OwnerUsers() {
       if (formStatus === "pending" && r.has_signup_profile) return false;
       if (cutoff && new Date(r.created_at).getTime() < cutoff) return false;
       if (sourceFilter !== "all") {
-        const src = String((r as any).source_page || (r as any).account_type || "").toLowerCase();
-        if (!src.includes(sourceFilter.toLowerCase())) return false;
+        const signupSource = String((r as any).signup_source || "").toLowerCase();
+        const pagePath = String((r as any).source_page || "").toLowerCase();
+        const provider = String((r as any).auth_provider || "").toLowerCase();
+        const hay = `${signupSource} ${pagePath}`;
+        const matches = (() => {
+          switch (sourceFilter) {
+            case "signup_wizard":
+              return signupSource === "auth_signup" || signupSource === "mode_picker" || pagePath.includes("/auth") || pagePath.includes("/signup") || pagePath.includes("/register");
+            case "homepage":
+              return signupSource === "homepage_role_card" || pagePath === "/" || pagePath === "" || pagePath.startsWith("/?");
+            case "property":
+              return signupSource === "property_inquiry" || pagePath.includes("/project") || pagePath.includes("/propert");
+            case "footer":
+              return signupSource === "footer_cta" || hay.includes("footer");
+            case "social":
+              return provider && provider !== "email" && provider !== "phone";
+            default:
+              return hay.includes(sourceFilter.toLowerCase());
+          }
+        })();
+        if (!matches) return false;
       }
       if (!q) return true;
       return (r.full_name || "").toLowerCase().includes(q)
