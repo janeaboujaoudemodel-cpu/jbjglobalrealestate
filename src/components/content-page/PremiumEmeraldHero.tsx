@@ -15,6 +15,8 @@ interface PremiumEmeraldHeroProps {
   subtitle?: string;
   meta?: ReactNode;
   height?: "sm" | "md" | "lg";
+  /** Marks the hero as the Market Intelligence canonical hero so route locks apply directly. */
+  miHero?: boolean;
 }
 
 const HEIGHTS: Record<NonNullable<PremiumEmeraldHeroProps["height"]>, string> = {
@@ -34,9 +36,13 @@ export function PremiumEmeraldHero({
   subtitle,
   meta,
   height = "md",
+  miHero = false,
 }: PremiumEmeraldHeroProps) {
   return (
     <section
+      data-mi-hero={miHero ? true : undefined}
+      data-unified-hero={miHero ? true : undefined}
+      data-faq-hero={miHero ? true : undefined}
       data-hero-dark
       data-surface="emerald"
       data-no-contrast-guard
