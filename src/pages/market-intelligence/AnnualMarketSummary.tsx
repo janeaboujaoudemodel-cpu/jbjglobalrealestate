@@ -190,7 +190,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A]">Executive Summary</CardTitle>
               </CardHeader>
@@ -208,7 +208,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.15 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-[#1A1A1A]" />
@@ -236,7 +236,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Building className="w-4 h-4" />
@@ -251,7 +251,7 @@ const AnnualMarketSummary = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Home className="w-4 h-4" />
@@ -266,7 +266,7 @@ const AnnualMarketSummary = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]/70 flex items-center gap-2">
                   <Key className="w-4 h-4" />
@@ -290,7 +290,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.25 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-[#1A1A1A]" />
@@ -318,7 +318,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader>
                 <CardTitle className="text-lg text-[#1A1A1A] flex items-center gap-2">
                   <Key className="w-5 h-5 text-[#1A1A1A]" />
@@ -339,7 +339,7 @@ const AnnualMarketSummary = () => {
             transition={{ delay: 0.35 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader>
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]">Regulatory Context</CardTitle>
               </CardHeader>
@@ -348,7 +348,7 @@ const AnnualMarketSummary = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardHeader>
                 <CardTitle className="text-sm font-medium text-[#1A1A1A]">Demographic Context</CardTitle>
               </CardHeader>
@@ -372,7 +372,7 @@ const AnnualMarketSummary = () => {
             </h2>
             <div className="space-y-4">
               {data.keyAreas.map((area, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+                <Card key={index} className="bg-[#FDFBF7] border border-[#B89555]/60">
                   <CardContent className="pt-4">
                     <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{area.name}</h3>
                     <p className="text-[#1A1A1A]/70">{area.narrative}</p>
@@ -389,7 +389,7 @@ const AnnualMarketSummary = () => {
             variants={fadeInUp}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
+            <Card className="bg-[#FDFBF7] border border-[#B89555]/60">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Methodology & Disclaimer</h3>
                 <p className="text-sm text-[#1A1A1A]/70 mb-4">
