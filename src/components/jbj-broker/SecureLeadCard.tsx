@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { useSpendBrokerCredits } from "@/hooks/useSpendBrokerCredits";
 import { 
   User, 
   Phone, 
