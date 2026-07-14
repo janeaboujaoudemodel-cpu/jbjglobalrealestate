@@ -27,11 +27,24 @@ interface MarketNews {
 }
 
 // Unified champagne badge — single visual language for every category.
+// Locked against the site-wide Contrast Guard so the champagne/dark-ink combo
+// can never be repainted to emerald-on-emerald.
 const CategoryBadge = ({ category }: { category: string }) => (
-  <span className="text-xs text-[#1A1A1A] bg-[#F7F2EA] px-3 py-1 rounded-full border border-[#B89555]/40 font-medium">
+  <span
+    data-no-contrast-guard=""
+    data-surface="champagne"
+    className="text-xs px-3 py-1 rounded-full border font-medium"
+    style={{
+      backgroundColor: "#F7F2EA",
+      color: "#1A1A1A",
+      WebkitTextFillColor: "#1A1A1A",
+      borderColor: "rgba(184,149,85,0.4)",
+    }}
+  >
     {category}
   </span>
 );
+
 
 const News = () => {
   const [searchParams] = useSearchParams();
