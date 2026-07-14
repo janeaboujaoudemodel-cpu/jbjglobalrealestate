@@ -29,7 +29,6 @@ const MI_TOC_ITEMS = [
   { id: "reports", title: "Market Reports", icon: FileText },
   { id: "sources", title: "Data Sources", icon: Database },
   { id: "compliance", title: "Compliance", icon: ShieldCheck },
-  { id: "cta", title: "Speak With Our Team", icon: PhoneCall },
 ];
 
 // Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
