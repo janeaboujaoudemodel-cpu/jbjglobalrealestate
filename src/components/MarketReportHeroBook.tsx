@@ -71,8 +71,10 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span
-                    className="text-[#1A1A1A] text-[9px] font-bold tracking-[0.15em] uppercase whitespace-nowrap"
-                    style={{ transform: "rotate(-90deg)", textShadow: "0 0 10px rgba(200,167,102,0.5)" }}
+                    data-no-contrast-guard=""
+                    className="text-[9px] font-bold tracking-[0.15em] uppercase whitespace-nowrap"
+                    style={{ transform: "rotate(-90deg)", color: "#E8CFA0", WebkitTextFillColor: "#E8CFA0", textShadow: "0 0 10px rgba(200,167,102,0.5)" }}
+
                   >
                     JBJ Global Real Estate 2026
                   </span>
