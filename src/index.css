@@ -34952,3 +34952,19 @@ html body #root :is([type="search"], [data-search], .jj-search, .search-input) i
   box-shadow: 0 0 0 1000px transparent inset !important;
   transition: background-color 999999s ease-out 0s !important;
 }
+
+html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input,
+html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input:hover,
+html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input:focus,
+html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-hero-search-input:focus-visible {
+  opacity: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  caret-color: transparent !important;
+}
