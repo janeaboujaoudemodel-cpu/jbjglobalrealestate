@@ -339,7 +339,15 @@ ${SCHEMA}` },
 
     if (!aiRes.ok) {
       const text = await aiRes.text().catch(() => "");
-      return json({ error: `AI gateway ${aiRes.status}`, detail: text.slice(0, 400) }, aiRes.status === 429 ? 429 : 502);
+      const transient = [429, 500, 502, 503, 504].includes(aiRes.status);
+      // Return 200 with a fallback signal so the client can handle it gracefully
+      // instead of crashing on a non-2xx edge function response.
+      return json({
+        error: `AI gateway ${aiRes.status}`,
+        detail: text.slice(0, 400),
+        fallback: transient,
+        status: "unavailable",
+      }, 200);
     }
     const data = await aiRes.json();
     const raw = data?.choices?.[0]?.message?.content || "{}";
