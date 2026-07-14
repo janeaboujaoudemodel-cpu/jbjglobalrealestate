@@ -35803,3 +35803,38 @@ html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#064E3B]"] {
 html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#064E3B]"] svg {
   color: #ffffff !important;
 }
+
+/* Highest-specificity champagne pill guard for sign-up services chips. */
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"],
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"]:focus,
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"]:focus-visible {
+  background-image: none !important;
+  background-color: #F7F2EA !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"]:hover {
+  background-image: none !important;
+  background-color: #F1E9D8 !important;
+  border-color: #064E3B !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"] svg,
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"] span {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="true"] {
+  background-image: none !important;
+  background-color: #064E3B !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #064E3B !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="true"] svg,
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="true"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
