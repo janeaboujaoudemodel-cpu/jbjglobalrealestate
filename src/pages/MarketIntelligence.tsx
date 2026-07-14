@@ -34,7 +34,7 @@ const MI_TOC_ITEMS = [
 // Glass / fiberglass hero CTA — clear backdrop-blur surface, white text+icons,
 // matches the other dark hero sections. NO champagne fill, NO ink-guard classes.
 const heroCtaClass =
-  "jj-mi-hero-cta allow-white group inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold backdrop-blur-md transition-all hover:-translate-y-0.5 md:px-8 md:py-4 md:text-base";
+  "jj-mi-hero-cta allow-white group inline-flex items-center justify-center gap-2 whitespace-nowrap px-6 py-3 text-sm font-semibold backdrop-blur-md transition-all hover:-translate-y-0.5 md:px-8 md:py-4 md:text-base";
 
 // Organization schema for main Market Intelligence page
 const organizationSchema = {
@@ -169,7 +169,7 @@ const MarketIntelligence = () => {
           >
             Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
           </p>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:flex-nowrap">
             <a
               href="#overview"
               data-no-contrast-guard

@@ -37,29 +37,40 @@ export const MarketIntelligenceTableOfContents = ({
 
   useEffect(() => {
     const HERO_SEL = '[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]';
-    let io: IntersectionObserver | null = null;
     let raf = 0;
+    let retry = 0;
+    let hero: HTMLElement | null = null;
+    let firstSection: HTMLElement | null = null;
+
+    const updateContentBoundary = () => {
+      if (!hero || !firstSection) return;
+      setPastHero(firstSection.getBoundingClientRect().top <= 112);
+    };
+
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(updateContentBoundary);
+    };
+
     const attach = () => {
-      const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
-      if (!hero) {
-        if (raf < 30) { raf++; requestAnimationFrame(attach); }
+      hero = document.querySelector(HERO_SEL) as HTMLElement | null;
+      firstSection = document.getElementById(items[0]?.id ?? "") as HTMLElement | null;
+      if (!hero || !firstSection) {
+        if (retry < 30) { retry++; raf = requestAnimationFrame(attach); }
         else setPastHero(true);
         return;
       }
-      io = new IntersectionObserver(
-        (entries) => {
-          const e = entries[0];
-          // Latch to visible once past hero — never re-hide from a
-          // programmatic scroll to top-of-page sections.
-          if (!e.isIntersecting) setPastHero(true);
-        },
-        { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
-      );
-      io.observe(hero);
+      updateContentBoundary();
+      window.addEventListener("scroll", onScrollOrResize, { passive: true });
+      window.addEventListener("resize", onScrollOrResize, { passive: true });
     };
     attach();
-    return () => { io?.disconnect(); };
-  }, []);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
+  }, [items]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
