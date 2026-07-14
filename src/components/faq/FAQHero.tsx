@@ -35,26 +35,23 @@ export const FAQHero = ({
   actions 
 }: FAQHeroProps) => {
   return (
-    <section data-hero-dark data-faq-hero className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden">
+    <section data-hero-dark data-faq-hero data-premium-emerald-hero data-surface="emerald" className="jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden">
 
-      {/* Video Background */}
-      <div className="absolute inset-0 bg-[image:var(--jj-emerald-ombre)]" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-45"
-        aria-hidden
-        style={{ background: "radial-gradient(ellipse at 22% 22%, rgba(110,231,183,0.18), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(184,149,85,0.16), transparent 60%)" }}
-      />
+      <div aria-hidden className="jj-mi-marble-depth pointer-events-none absolute inset-0" />
+      <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
+      <div aria-hidden className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay" />
       
       <motion.div 
-        className="container mx-auto px-4 relative z-10"
+        className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="mx-auto flex w-full flex-col items-center justify-center text-center">
           {/* Badge */}
           <motion.div 
-             className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-lg bg-white/10 border border-[#B89555]/45"
+             data-no-contrast-guard
+             className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-6 backdrop-blur-sm"
             variants={fadeInUp}
           >
             <BadgeIcon className="w-4 h-4 text-white" />
@@ -63,7 +60,7 @@ export const FAQHero = ({
           
           {/* Title */}
           <motion.h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight allow-white text-center"
+            className="jj-mi-hero-title mx-auto max-w-[16ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02] allow-white text-center"
             style={{ color: "#F6FBF8", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             data-no-contrast-guard
             variants={fadeInUp}
@@ -72,8 +69,9 @@ export const FAQHero = ({
           </motion.h1>
           
           {/* Description */}
+          <div aria-hidden className="jj-mi-title-rule my-8 h-px w-24" />
           <motion.p 
-            className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10 allow-white"
+            className="jj-mi-hero-copy mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed allow-white"
             style={{ color: "#E8CF8A", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             data-no-contrast-guard
             variants={fadeInUp}
@@ -83,7 +81,7 @@ export const FAQHero = ({
           
           {/* Actions */}
           {actions && (
-            <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
+            <motion.div variants={fadeInUp} className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:flex-nowrap">
               {actions}
             </motion.div>
           )}

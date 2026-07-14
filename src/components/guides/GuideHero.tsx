@@ -43,30 +43,23 @@ export const GuideHero = ({
       data-faq-hero
       data-hero-dark
       data-surface="emerald"
-      className="jj-hero-fullscreen jj-hero-compact relative flex items-center justify-center overflow-hidden w-screen left-1/2 -translate-x-1/2"
+      data-premium-emerald-hero
+      className="jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
     >
-      {/* Premium emerald base — no line/grid/stripe overlays. */}
-      <div
-        className="absolute inset-0"
-        aria-hidden="true"
-        style={{ background: "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)" }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-45"
-        aria-hidden
-        style={{ background: "radial-gradient(ellipse at 22% 22%, rgba(110,231,183,0.18), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(184,149,85,0.16), transparent 60%)" }}
-      />
+      <div aria-hidden className="jj-mi-marble-depth pointer-events-none absolute inset-0" />
+      <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
+      <div aria-hidden className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay" />
 
       <motion.div
-        className="relative z-10 w-full"
+        className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
-        <div className="max-w-4xl mx-auto text-center px-4">
+        <div className="mx-auto flex w-full flex-col items-center justify-center text-center">
           <motion.div
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-6 shadow-sm"
-            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(184,149,85,0.45)" }}
+            data-no-contrast-guard
+            className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-6 backdrop-blur-sm"
             variants={fadeInUp}
           >
             <BadgeIcon className="w-4 h-4" style={{ color: "#E8CF8A" }} />
@@ -77,15 +70,16 @@ export const GuideHero = ({
 
           <motion.h1
             data-no-contrast-guard
-            className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight text-center [&_*]:!text-white"
+            className="jj-mi-hero-title mx-auto max-w-[16ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02] text-center [&_*]:!text-white"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             variants={fadeInUp}
           >
             {title}
           </motion.h1>
+          <div aria-hidden className="jj-mi-title-rule my-8 h-px w-24" />
           <motion.p
             data-no-contrast-guard
-            className="text-lg md:text-xl font-light leading-relaxed max-w-3xl mx-auto mb-10 text-center"
+            className="jj-mi-hero-copy mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed text-center"
             style={{ color: "#E8CF8A", WebkitTextFillColor: "#E8CF8A", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             variants={fadeInUp}
           >
@@ -96,7 +90,7 @@ export const GuideHero = ({
             <motion.div
               data-guide-hero-actions
               variants={fadeInUp}
-              className="flex flex-wrap justify-center gap-4"
+              className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:flex-nowrap"
             >
               {actions}
             </motion.div>

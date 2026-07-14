@@ -210,8 +210,8 @@ const Services = () => {
         data-hero-dark
         data-surface="emerald"
         data-no-contrast-guard
-        className="jj-services-hero relative grid min-h-[100svh] h-[100svh] w-full max-w-none place-items-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 55%, #000000 100%)" }}
+        data-premium-emerald-hero
+        className="jj-services-hero jj-mi-prada-hero relative grid min-h-[100svh] h-[100svh] w-full max-w-none place-items-center overflow-hidden"
       >
         <video
           autoPlay
@@ -225,10 +225,11 @@ const Services = () => {
           <source src={servicesHeroVideo} type="video/mp4" />
         </video>
         <div
-          className="absolute inset-0"
+          className="jj-mi-marble-depth absolute inset-0"
           aria-hidden="true"
-          style={{ background: "linear-gradient(180deg, rgba(4,44,28,0.55) 0%, rgba(0,0,0,0.75) 100%)" }}
         />
+        <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
+        <div aria-hidden className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay" />
 
         <motion.div
           className="jj-services-hero-inner relative z-10 mx-auto w-full max-w-5xl px-5 py-20 text-center flex min-h-[100svh] flex-col items-center justify-center"
@@ -249,7 +250,7 @@ const Services = () => {
 
           <motion.h1
             data-no-contrast-guard
-            className="allow-white mx-auto text-center text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight whitespace-nowrap"
+            className="jj-mi-hero-title allow-white mx-auto max-w-[16ch] text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02]"
             style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
             variants={fadeInUp}
           >
@@ -258,19 +259,19 @@ const Services = () => {
 
           <motion.p
             data-no-contrast-guard
-            className="allow-white text-base md:text-lg max-w-3xl mx-auto mb-0 text-center"
-            style={{ color: "rgba(255,255,255,0.88)", WebkitTextFillColor: "rgba(255,255,255,0.88)" }}
+            className="jj-mi-hero-copy allow-white mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed text-center"
+            style={{ color: "#E8CF8A", WebkitTextFillColor: "#E8CF8A" }}
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
           </motion.p>
 
-          <motion.div variants={fadeInUp} className="flex flex-row flex-nowrap items-center justify-center gap-2.5 sm:gap-4 mt-32 md:mt-40 w-full">
+          <motion.div variants={fadeInUp} className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:flex-nowrap">
             <Link
               to="/contact"
               data-no-contrast-guard
               data-surface="emerald"
-              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
+              className="jj-mi-hero-cta jj-mi-hero-cta-emerald jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
             >
               <span>Request a Service</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -279,7 +280,7 @@ const Services = () => {
               to="/contact"
               data-no-contrast-guard
               data-surface="emerald"
-              className="jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
+              className="jj-mi-hero-cta jj-mi-hero-cta-emerald jj-services-emerald-cta allow-white inline-flex min-w-0 items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-7 py-3 sm:py-3.5 rounded-lg font-semibold text-[13px] sm:text-base whitespace-nowrap transition-transform hover:-translate-y-0.5"
             >
               <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Contact Support</span>
@@ -416,10 +417,10 @@ const Services = () => {
             >
               <Card
                 data-no-contrast-guard
-                className="jj-scope-card jj-emerald-border-animated border shadow-xl overflow-hidden rounded-2xl"
+                className="jj-scope-card border shadow-xl overflow-hidden rounded-2xl"
                 style={{
                   background: "#FDFBF7",
-                  borderColor: "rgba(6,78,59,0.15)",
+                  borderColor: "rgba(184,149,85,0.35)",
                 }}
               >
                 <CardContent className="p-8" data-no-contrast-guard>
@@ -462,7 +463,7 @@ const Services = () => {
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t text-center" style={{ borderColor: "rgba(6,78,59,0.15)" }}>
+                  <div className="mt-8 pt-6 border-t text-center" style={{ borderColor: "rgba(184,149,85,0.30)" }}>
                     <p className="text-sm" style={{ color: "rgba(26,26,26,0.7)" }}>
                       Where regulated services are required, we introduce independent licensed partners.
                       Clients contract directly with those partners.
@@ -481,8 +482,8 @@ const Services = () => {
           <p
             data-no-contrast-guard
             data-service-disclaimer
-            className="jj-disclaimer-card jj-emerald-border-animated text-sm max-w-3xl mx-auto rounded-2xl px-5 py-5"
-            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: "#FDFBF7" }}
+            className="jj-disclaimer-card text-sm max-w-3xl mx-auto rounded-2xl px-5 py-5 border"
+            style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}
           >
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided
             within brokerage scope. Partner services are delivered independently under partner licenses.

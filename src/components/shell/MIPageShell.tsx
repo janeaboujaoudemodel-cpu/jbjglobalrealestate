@@ -2,9 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { ArrowUpRight, type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PreFooterSeparator } from "@/components/PreFooterSeparator";
-import {
-  MarketIntelligenceTableOfContents,
-} from "@/components/market-intelligence";
+import { MarketIntelligenceTableOfContents } from "@/components/market-intelligence/MarketIntelligenceTableOfContents";
 import { PhoneCall } from "lucide-react";
 
 export interface MIShellHeroCTA {
