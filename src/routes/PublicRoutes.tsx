@@ -295,11 +295,11 @@ export const PublicRoutes = () => (
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/dubai-rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/insights" element={<InsightsPageScope><InsightsHub /></InsightsPageScope>} />
-    <Route path="/library" element={<LibraryHub />} />
-    <Route path="/success-stories" element={<SuccessStories />} />
-    <Route path="/membership" element={<Membership />} />
-    <Route path="/academy" element={<Academy />} />
-    <Route path="/agencies" element={<Agencies />} />
+    <Route path="/library" element={<InsightsPageScope><LibraryHub /></InsightsPageScope>} />
+    <Route path="/success-stories" element={<InsightsPageScope><SuccessStories /></InsightsPageScope>} />
+    <Route path="/membership" element={<InsightsPageScope><Membership /></InsightsPageScope>} />
+    <Route path="/academy" element={<InsightsPageScope><Academy /></InsightsPageScope>} />
+    <Route path="/agencies" element={<InsightsPageScope><Agencies /></InsightsPageScope>} />
     <Route path="/checkout/return" element={<CheckoutReturn />} />
     <Route path="/insights/future-of-real-estate-2026" element={<InsightsPageScope><FutureOfRealEstate2026 /></InsightsPageScope>} />
     <Route path="/news/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
@@ -364,17 +364,17 @@ export const PublicRoutes = () => (
     <Route path="/services/complaint-procedures" element={<InsightsPageScope><ComplaintProcedures /></InsightsPageScope>} />
     <Route path="/services/customer-happiness-center" element={<InsightsPageScope><CustomerHappinessCenter /></InsightsPageScope>} />
     <Route path="/services/testimonials" element={<InsightsPageScope><TestimonialsPage /></InsightsPageScope>} />
-    <Route path="/referral-partner" element={<ReferralPartner />} />
+    <Route path="/referral-partner" element={<InsightsPageScope><ReferralPartner /></InsightsPageScope>} />
     <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
-    <Route path="/investors" element={<InvestorServices />} />
-    <Route path="/investors/join" element={<JoinInvestorList />} />
-    <Route path="/brokers/join" element={<JoinBrokerList />} />
-    <Route path="/developers/join" element={<JoinDeveloperList />} />
-    <Route path="/partners" element={<Partners />} />
-    <Route path="/partners/mortgage" element={<PartnerMortgage />} />
-    <Route path="/partners/legal" element={<PartnerLegal />} />
-    <Route path="/partners/company-setup" element={<PartnerCompanySetup />} />
-    <Route path="/partners/visa-services" element={<PartnerVisaServices />} />
+    <Route path="/investors" element={<InsightsPageScope><InvestorServices /></InsightsPageScope>} />
+    <Route path="/investors/join" element={<InsightsPageScope><JoinInvestorList /></InsightsPageScope>} />
+    <Route path="/brokers/join" element={<InsightsPageScope><JoinBrokerList /></InsightsPageScope>} />
+    <Route path="/developers/join" element={<InsightsPageScope><JoinDeveloperList /></InsightsPageScope>} />
+    <Route path="/partners" element={<InsightsPageScope><Partners /></InsightsPageScope>} />
+    <Route path="/partners/mortgage" element={<InsightsPageScope><PartnerMortgage /></InsightsPageScope>} />
+    <Route path="/partners/legal" element={<InsightsPageScope><PartnerLegal /></InsightsPageScope>} />
+    <Route path="/partners/company-setup" element={<InsightsPageScope><PartnerCompanySetup /></InsightsPageScope>} />
+    <Route path="/partners/visa-services" element={<InsightsPageScope><PartnerVisaServices /></InsightsPageScope>} />
 
     {/* ── Company ── (wrapped in InsightsPageScope for MI brand contract) */}
     <Route path="/contact" element={<InsightsPageScope><Contact /></InsightsPageScope>} />
@@ -385,7 +385,7 @@ export const PublicRoutes = () => (
     <Route path="/company-profile" element={<InsightsPageScope><CompanyProfile /></InsightsPageScope>} />
     <Route path="/news" element={<InsightsPageScope><News /></InsightsPageScope>} />
     <Route path="/news/:id" element={<InsightsPageScope><NewsDetail /></InsightsPageScope>} />
-    <Route path="/team" element={<TeamRouteGate />} />
+    <Route path="/team" element={<InsightsPageScope><TeamRouteGate /></InsightsPageScope>} />
     {/* /meet-the-team retired — gate via TeamRouteGate */}
     {/* /brokers and /our-brokers retired — no redirect; 404 via NotFound catch-all */}
     {/* /philanthropy, /reviews, /governance/partners, /trust-and-audit-center, /trust-compliance, /accessibility retired — 404 via NotFound */}
@@ -443,11 +443,12 @@ export const PublicRoutes = () => (
      <Route path="/billing" element={<Navigate to="/account/billing" replace />} />
     <Route path="/client-portal" element={<AuthRequiredRoute><ClientPortal /></AuthRequiredRoute>} />
     <Route path="/my-tickets" element={<Navigate to="/ticket-hub?tab=track" replace />} />
-    <Route path="/ticket-hub" element={<AuthRequiredRoute><TicketHub /></AuthRequiredRoute>} />
-    <Route path="/reopen-ticket" element={<AuthRequiredRoute><ReopenTicket /></AuthRequiredRoute>} />
+    <Route path="/ticket-hub" element={<AuthRequiredRoute><InsightsPageScope><TicketHub /></InsightsPageScope></AuthRequiredRoute>} />
+    <Route path="/reopen-ticket" element={<AuthRequiredRoute><InsightsPageScope><ReopenTicket /></InsightsPageScope></AuthRequiredRoute>} />
+    <Route path="/faqs" element={<Navigate to="/faq" replace />} />
     <Route path="/join" element={<Navigate to="/careers" replace />} />
-    <Route path="/careers" element={<ModeRequiredRoute modes={['broker','developer']}><JoinApplication /></ModeRequiredRoute>} />
-    <Route path="/careers/apply" element={<ModeRequiredRoute modes={['broker','developer']}><JoinApplication /></ModeRequiredRoute>} />
+    <Route path="/careers" element={<InsightsPageScope><ModeRequiredRoute modes={['broker','developer']}><JoinApplication /></ModeRequiredRoute></InsightsPageScope>} />
+    <Route path="/careers/apply" element={<InsightsPageScope><ModeRequiredRoute modes={['broker','developer']}><JoinApplication /></ModeRequiredRoute></InsightsPageScope>} />
 
     <Route path="/careers/intake/:token" element={<CareersIntake />} />
     <Route path="/careers/developer-representative" element={<ModeRequiredRoute modes={['developer']}><CareersDeveloperRep /></ModeRequiredRoute>} />

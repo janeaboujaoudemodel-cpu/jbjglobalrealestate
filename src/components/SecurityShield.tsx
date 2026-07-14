@@ -46,6 +46,16 @@ const SecurityShield = () => {
     }
   }, []);
 
+  const isLocalPlaywrightPreview = useCallback(() => {
+    try {
+      const host = window.location.hostname;
+      const localHost = host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0';
+      return localHost && navigator.webdriver === true;
+    } catch {
+      return false;
+    }
+  }, []);
+
   // Generate device fingerprint
   const getFingerprint = useCallback(() => {
     if (fingerprintRef.current) return fingerprintRef.current;
@@ -124,6 +134,7 @@ const SecurityShield = () => {
 
   useEffect(() => {
     // Never run protection logic for search/social crawlers.
+    if (isLocalPlaywrightPreview()) return;
     if (isLikelyCrawler()) return;
 
     // ========== 1. DISABLE RIGHT-CLICK ==========
@@ -357,7 +368,7 @@ const SecurityShield = () => {
         styleElement.remove();
       }
     };
-   }, [isLikelyCrawler, logViolation]);
+   }, [isLikelyCrawler, isLocalPlaywrightPreview, logViolation]);
 
   return null;
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { LucideIcon, List, ChevronDown, ChevronUp, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ interface TOCItem {
   id: string;
   title: string;
   icon?: LucideIcon;
+  href?: string;
 }
 
 interface CTAAction {
@@ -30,10 +31,18 @@ export const MarketIntelligenceTableOfContents = ({
   sticky = true,
   ctaAction,
 }: MarketIntelligenceTableOfContentsProps) => {
+  const location = useLocation();
   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const isScrollingRef = useRef(false);
+  const routeMode = items.some((item) => item.href);
+
+  const activeRouteHref = routeMode
+    ? items
+        .filter((item) => item.href && (location.pathname === item.href || location.pathname.startsWith(`${item.href}/`)))
+        .sort((a, b) => (b.href?.length ?? 0) - (a.href?.length ?? 0))[0]?.href
+    : null;
 
   useEffect(() => {
     const HERO_SEL = '[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]';
@@ -43,7 +52,12 @@ export const MarketIntelligenceTableOfContents = ({
     let firstSection: HTMLElement | null = null;
 
     const updateContentBoundary = () => {
-      if (!hero || !firstSection) return;
+      if (!hero) return;
+      if (routeMode) {
+        setPastHero(hero.getBoundingClientRect().bottom <= 112);
+        return;
+      }
+      if (!firstSection) return;
       setPastHero(firstSection.getBoundingClientRect().top <= 112);
     };
 
@@ -54,8 +68,8 @@ export const MarketIntelligenceTableOfContents = ({
 
     const attach = () => {
       hero = document.querySelector(HERO_SEL) as HTMLElement | null;
-      firstSection = document.getElementById(items[0]?.id ?? "") as HTMLElement | null;
-      if (!hero || !firstSection) {
+      firstSection = routeMode ? null : (document.getElementById(items[0]?.id ?? "") as HTMLElement | null);
+      if (!hero || (!routeMode && !firstSection)) {
         if (retry < 30) { retry++; raf = requestAnimationFrame(attach); }
         else setPastHero(true);
         return;
@@ -70,9 +84,11 @@ export const MarketIntelligenceTableOfContents = ({
       window.removeEventListener("scroll", onScrollOrResize);
       window.removeEventListener("resize", onScrollOrResize);
     };
-  }, [items]);
+  }, [items, routeMode]);
 
   useEffect(() => {
+    if (routeMode) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (isScrollingRef.current) return;
@@ -100,7 +116,7 @@ export const MarketIntelligenceTableOfContents = ({
     });
 
     return () => observer.disconnect();
-  }, [items]);
+  }, [items, routeMode]);
 
   const scrollToSection = (id: string) => {
     isScrollingRef.current = true;
@@ -166,36 +182,34 @@ export const MarketIntelligenceTableOfContents = ({
         <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
               <nav className="px-2.5 py-2.5 space-y-1 overflow-y-auto overscroll-auto flex-1 min-h-0 jj-scrollbar-emerald bg-transparent">
                 {items.map((item, index) => {
-                  const isActive = activeId === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => scrollToSection(item.id)}
-                      data-toc-item
-                      data-toc-state={isActive ? "active" : "inactive"}
-                      data-surface="emerald"
-                      data-allow-white="true"
-                      data-no-contrast-guard
-                      className={cn(
-                        "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-lg text-left transition-colors border text-[13px] box-border overflow-hidden",
-                        isActive
-                          ? "font-semibold border-white/25 bg-white/12"
-                          : "border-white/10 bg-black/10 hover:bg-white/10"
-                      )}
-                      style={
-                        isActive
-                          ? {
-                              backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%)',
-                              color: '#FFFFFF',
-                              WebkitTextFillColor: '#FFFFFF',
-                            }
-                          : {
-                              backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 100%)',
-                              color: '#FFFFFF',
-                              WebkitTextFillColor: '#FFFFFF',
-                            }
-                      }
-                    >
+                  const isActive = routeMode ? activeRouteHref === item.href : activeId === item.id;
+                  const commonProps = {
+                    key: item.id,
+                    "data-toc-item": true,
+                    "data-toc-state": isActive ? "active" : "inactive",
+                    "data-surface": "emerald",
+                    "data-allow-white": "true",
+                    "data-no-contrast-guard": true,
+                    className: cn(
+                      "w-full grid grid-cols-[1.75rem_1rem_minmax(0,1fr)] items-center gap-2.5 px-2.5 py-2.5 min-h-11 rounded-lg text-left transition-colors border text-[13px] box-border overflow-hidden",
+                      isActive
+                        ? "font-semibold border-white/25 bg-white/12"
+                        : "border-white/10 bg-black/10 hover:bg-white/10"
+                    ),
+                    style: isActive
+                      ? {
+                          backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.08) 100%)',
+                          color: '#FFFFFF',
+                          WebkitTextFillColor: '#FFFFFF',
+                        }
+                      : {
+                          backgroundImage: 'linear-gradient(135deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 100%)',
+                          color: '#FFFFFF',
+                          WebkitTextFillColor: '#FFFFFF',
+                        },
+                  } as const;
+                  const itemContent = (
+                    <>
                       <span
                         data-toc-number
                         data-no-contrast-guard
@@ -224,6 +238,23 @@ export const MarketIntelligenceTableOfContents = ({
                       >
                         {item.title}
                       </span>
+                    </>
+                  );
+
+                  if (item.href) {
+                    return (
+                      <Link {...commonProps} to={item.href}>
+                        {itemContent}
+                      </Link>
+                    );
+                  }
+
+                  return (
+                    <button
+                      {...commonProps}
+                      onClick={() => scrollToSection(item.id)}
+                    >
+                      {itemContent}
                     </button>
                   );
                 })}

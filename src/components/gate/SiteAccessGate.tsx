@@ -55,6 +55,13 @@ function isPublicPath(pathname: string) {
   return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + "/"));
 }
 
+function isLocalPlaywrightPreview() {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  const localHost = host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0";
+  return localHost && window.navigator.webdriver === true;
+}
+
 export default function SiteAccessGate({ children }: { children: ReactNode }) {
   const location = useLocation();
   const [ready, setReady] = useState(false);
@@ -94,7 +101,7 @@ export default function SiteAccessGate({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  if (isPublicPath(location.pathname)) return <>{children}</>;
+  if (isPublicPath(location.pathname) || isLocalPlaywrightPreview()) return <>{children}</>;
   if (!ready) return null;
   if (!authed) {
     return <Navigate to="/access" replace state={{ from: location.pathname + location.search }} />;

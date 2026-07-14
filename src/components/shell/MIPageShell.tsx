@@ -71,6 +71,7 @@ export default function MIPageShell({
   return (
     <div
       data-mi-page
+      data-category-shell
       className="min-h-screen bg-background [--mi-gold:40_35%_53%] [--mi-navy:0_0%_4%] [--mi-navy-soft:0_0%_12%]"
     >
       {/* Premium full-screen emerald hero — LOCKED to MI hero contract. */}
