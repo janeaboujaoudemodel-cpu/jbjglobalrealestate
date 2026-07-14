@@ -57,9 +57,9 @@ const quickLinks = [
   { label: "Featured", href: "#featured" },
   { label: "New Launch", href: "#new-launch" },
   { label: "Guides", href: "#guides" },
-  { label: "Investors", href: "#investor-packages" },
-  { label: "Developers", href: "#developer-packages" },
-  { label: "Brokers", href: "#broker-packages" },
+  { label: "Investors", href: "#packages" },
+  { label: "Developers", href: "#packages" },
+  { label: "Brokers", href: "#packages" },
 ];
 
 // Same books strip as the homepage marquee — LOCKED per owner request
@@ -1311,6 +1311,7 @@ export default function PublicAccess() {
   const [signupOpen, setSignupOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [payCtx, setPayCtx] = useState<PaymentRequestContext | null>(null);
+  const [selectedAudience, setSelectedAudience] = useState<"investor" | "developer" | "broker" | "agency" | null>(null);
 
   const navigate = useNavigate();
   const openSignup = () => navigate("/signup");
@@ -1576,88 +1577,143 @@ export default function PublicAccess() {
         {/* SERVICES — lifted above all packages */}
         <ServicesSection />
 
-        {/* PACKAGES — one strap per audience */}
-
-        {/* INVESTOR */}
-
-        <PackageStrap
-          id="investor-packages"
-          eyebrow="For Investors"
-          title="Investor packages"
-          description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio."
-          tiers={investorTiers}
-          audience="Investor packages"
-          onSelect={openPayment}
-        >
-          {/* Signature perks — included with the SIGNATURE tier */}
-          <div className="mt-16">
-            <div className="mb-8 text-center">
-              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
-                Included with the Signature tier
-              </span>
-              <h3 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">
-                Signature perks
-              </h3>
-              <p className="mx-auto mt-2 max-w-xl text-sm text-[#1A1A1A]/70">
-                Automatically unlocked on the Signature package (also included with Private Office).
+        {/* PACKAGES — choose an audience, then reveal its tiers */}
+        <section id="packages" className="scroll-mt-24 bg-[#F7F2EA] px-5 py-16 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">Packages</span>
+              <h2 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">Choose your path</h2>
+              <p className="mx-auto mt-2 max-w-2xl text-sm text-[#1A1A1A]/70">
+                Select a category to see its tiers, pricing and inclusions.
               </p>
             </div>
-            <div className="grid gap-3 grid-cols-2 sm:grid-cols-5">
-              {investorSignaturePerks.map((perk) => {
-                const Icon = perk.icon;
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {([
+                { key: "investor", label: "For Investors", desc: "Single-property to family office.", icon: TrendingUp },
+                { key: "broker", label: "For Brokers", desc: "Academy & JBJ enrollment.", icon: Users },
+                { key: "agency", label: "For Agencies", desc: "Team seats, CRM & lead systems.", icon: Briefcase },
+                { key: "developer", label: "For Developers", desc: "Launch distribution & reach.", icon: Building2 },
+              ] as const).map(({ key, label, desc, icon: Icon }) => {
+                const active = selectedAudience === key;
                 return (
-                  <div
-                    key={perk.label}
-                    className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#0d3a2b]/12 bg-white px-3 py-4 text-center shadow-[0_10px_24px_-20px_rgba(6,78,59,0.35)] transition hover:-translate-y-0.5 hover:border-[#064E3B]/40"
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => {
+                      setSelectedAudience(active ? null : key);
+                      if (!active) {
+                        setTimeout(() => {
+                          document.getElementById(`${key}-packages`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }, 60);
+                      }
+                    }}
+                    className={`group flex flex-col items-start gap-3 rounded-2xl border p-6 text-left transition ${
+                      active
+                        ? "border-[#064E3B] bg-[#064E3B] text-white shadow-[0_24px_60px_-30px_rgba(6,78,59,0.55)]"
+                        : "border-[#0d3a2b]/12 bg-white text-[#0d3a2b] hover:-translate-y-0.5 hover:border-[#064E3B]/50 hover:shadow-[0_18px_40px_-28px_rgba(6,78,59,0.45)]"
+                    }`}
                   >
-                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 rounded-lg`}>
+                    <span
+                      className={`inline-flex h-11 w-11 items-center justify-center rounded-lg ${
+                        active ? "bg-white/12 text-white" : "bg-[#064E3B] text-white"
+                      }`}
+                    >
                       <Icon className="h-5 w-5" />
                     </span>
-                    <span className="text-[11px] font-semibold leading-snug text-[#0d3a2b]">{perk.label}</span>
-                  </div>
+                    <div>
+                      <div className="font-serif text-xl leading-tight">{label}</div>
+                      <div className={`mt-1 text-xs ${active ? "text-white/75" : "text-[#1A1A1A]/65"}`}>{desc}</div>
+                    </div>
+                    <span className={`mt-auto text-[11px] font-semibold uppercase tracking-[0.22em] ${active ? "text-white/85" : "text-[#064E3B]"}`}>
+                      {active ? "Showing tiers ↓" : "View tiers →"}
+                    </span>
+                  </button>
                 );
               })}
             </div>
-
           </div>
-        </PackageStrap>
+        </section>
 
-        {/* DEVELOPER */}
-        <div className="bg-[#F7F2EA]">
+        {selectedAudience === "investor" && (
           <PackageStrap
-            id="developer-packages"
-            eyebrow="For Developers"
-            title="Developer programs"
-            description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
-            tiers={developerTiers}
-            audience="Developer programs"
+            id="investor-packages"
+            eyebrow="For Investors"
+            title="Investor packages"
+            description="Three tiers, from single-property investors to family offices. Pick the level of support that matches your portfolio."
+            tiers={investorTiers}
+            audience="Investor packages"
+            onSelect={openPayment}
+          >
+            <div className="mt-16">
+              <div className="mb-8 text-center">
+                <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#064E3B]">
+                  Included with the Signature tier
+                </span>
+                <h3 className="mt-2 font-serif text-3xl text-[#0d3a2b] sm:text-4xl">Signature perks</h3>
+                <p className="mx-auto mt-2 max-w-xl text-sm text-[#1A1A1A]/70">
+                  Automatically unlocked on the Signature package (also included with Private Office).
+                </p>
+              </div>
+              <div className="grid gap-3 grid-cols-2 sm:grid-cols-5">
+                {investorSignaturePerks.map((perk) => {
+                  const Icon = perk.icon;
+                  return (
+                    <div
+                      key={perk.label}
+                      className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#0d3a2b]/12 bg-white px-3 py-4 text-center shadow-[0_10px_24px_-20px_rgba(6,78,59,0.35)] transition hover:-translate-y-0.5 hover:border-[#064E3B]/40"
+                    >
+                      <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 rounded-lg`}>
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="text-[11px] font-semibold leading-snug text-[#0d3a2b]">{perk.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </PackageStrap>
+        )}
+
+        {selectedAudience === "developer" && (
+          <div className="bg-[#F7F2EA]">
+            <PackageStrap
+              id="developer-packages"
+              eyebrow="For Developers"
+              title="Developer programs"
+              description="From boutique launches to master developers — distribution, verified profile, and JBJ broker reach at every scale."
+              tiers={developerTiers}
+              audience="Developer programs"
+              onSelect={openPayment}
+            />
+          </div>
+        )}
+
+        {selectedAudience === "broker" && (
+          <PackageStrap
+            id="broker-packages"
+            eyebrow="For Brokers"
+            title="Broker Academy & enrollment"
+            description="Yearly enrollment for licensed and aspiring UAE agents. Mentorship, exclusive materials, and a direct pathway into JBJ Global."
+            tiers={brokerTiers}
+            audience="Broker Academy"
             onSelect={openPayment}
           />
-        </div>
+        )}
 
-        {/* BROKER */}
-        <PackageStrap
-          id="broker-packages"
-          eyebrow="For Brokers"
-          title="Broker Academy & enrollment"
-          description="Yearly enrollment for licensed and aspiring UAE agents. Mentorship, exclusive materials, and a direct pathway into JBJ Global."
-          tiers={brokerTiers}
-          audience="Broker Academy"
-          onSelect={openPayment}
-        />
-
-        {/* AGENCY */}
-        <div className="bg-[#F7F2EA]">
-          <PackageStrap
-            id="agency-packages"
-            eyebrow="For Agencies"
-            title="Agency packages"
-            description="Team seats, CRM segmentation and lead systems for boutique and established Dubai agencies."
-            tiers={agencyTiers}
-            audience="Agency packages"
-            onSelect={openPayment}
-          />
-        </div>
+        {selectedAudience === "agency" && (
+          <div className="bg-[#F7F2EA]">
+            <PackageStrap
+              id="agency-packages"
+              eyebrow="For Agencies"
+              title="Agency packages"
+              description="Team seats, CRM segmentation and lead systems for boutique and established Dubai agencies."
+              tiers={agencyTiers}
+              audience="Agency packages"
+              onSelect={openPayment}
+            />
+          </div>
+        )}
 
         <BrokerAcademySlide openSignup={openSignup} openLead={() => setLeadOpen(true)} />
 
