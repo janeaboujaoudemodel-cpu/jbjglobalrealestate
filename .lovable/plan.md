@@ -1,101 +1,52 @@
-I will fix the current content-page styling by rebuilding the shared hero/CTA/page-shell rules first, then applying them page-by-page across the requested sections only.
+## Goal
+Every route in the Insights sidebar group renders with the **same structure as `/market-intelligence`**:
 
-## Scope to fix
+1. Full-screen emerald Prada hero (title + description + optional CTA row) — from `MIPageShell`
+2. MI-style right-side navigator (`MarketIntelligenceTableOfContents`) that hides while in hero
+3. Body sections framed by a single **champagne surface + gold hairline** card (`bg:#FDFBF7`, `border:1px solid #B89555`) — never a beige-inside-beige double card
+4. Canonical `PreFooterSeparator` "Ready to Make Informed Decisions?" CTA
+5. Contrast-guard rules already in `index.css` remain the only source of colors
 
-### Insights / Market Intelligence
-- `/market-intelligence`
-- `/market-report`
-- `/market-intelligence/overview`
-- `/market-intelligence/areas`
-- `/market-intelligence/reports`
-- `/market-intelligence/methodology`
-- `/insights`
-- `/insights/future-of-real-estate-2026`
-- `/news`
-- `/news/:id` sample route
+Everything runs through `src/components/shell/MIPageShell.tsx`. Pages that already use it inherit fixes for free; pages that don't get refactored to use it.
 
-### Guides
-- `/guides`
-- `/buyer-guide`
-- `/seller-guide`
-- `/rent-guide`
-- `/tenant-guide`
-- `/landlord-guide`
-- `/investor-education`
-- `/guides/golden-visa-uae`
-- `/guides/dubai-rental-yield`
-- `/guides/selling-off-plan-dubai-before-handover`
-- FAQ/help guide routes: `/faq`, `/buyer-faq`, `/seller-faq`, `/landlord-faq`, `/tenant-faq`, `/broker-faq`
+## Card style (locked)
+Single card, no nesting:
+```
+bg-[#FDFBF7]  border border-[#B89555]/60  shadow-none  rounded-none
+```
+No inner champagne panel. No `bg-muted` inner surface. No emerald tile behind the card. I will add a shared class `.jj-mi-section-card` in `index.css` and swap page-level card wrappers to use it.
 
-### Services
-- `/services`
-- All direct service pages under `/services/...` currently registered in routing, including property management, snagging, buying/selling/rental advisory, law firm, company setup, concierge, short-term rentals, complaint procedures, customer happiness center, and testimonials.
+## Route inventory (Insights sidebar, 26 routes)
+Group A — Market Intelligence family (7): `/market-intelligence`, `/market-intelligence/overview`, `/market-intelligence/areas`, `/market-intelligence/areas/:slug`, `/market-intelligence/reports`, `/market-intelligence/reports/monthly/:period` (+ quarterly, annual), `/market-intelligence/methodology`, `/market-report`
+Group B — News (2): `/news`, `/news/:id`
+Group C — Insights hub + articles (2): `/insights`, `/insights/future-of-real-estate-2026`
+Group D — Guides (7): `/guides`, `/buyer-guide`, `/seller-guide`, `/rent-guide`, `/tenant-guide`, `/landlord-guide`, `/guides/golden-visa-uae`, `/guides/dubai-rental-yield`, `/guides/selling-off-plan-dubai-before-handover`
+Group E — FAQ (6): `/faq`, `/buyer-faq`, `/seller-faq`, `/landlord-faq`, `/tenant-faq`, `/broker-faq`
+Group F — Education (1): `/investor-education`
 
-### Company
-- `/contact`
-- `/about`
-- `/founder`
-- `/awards`
-- `/company-profile`
+## Execution — one PR per group
+For each group I will:
+1. Refactor pages onto `MIPageShell` (hero + `tocItems` + pre-footer already handled by the shell).
+2. Replace body wrappers with the shared `.jj-mi-section-card` class. No emerald backgrounds behind content, no double-card nesting.
+3. Run Playwright headless against localhost:8080 for **every route in the group** at 1440×1100 desktop and 390×844 mobile. Capture:
+   - Hero screenshot
+   - First body section screenshot (validates single-card style)
+   - Pre-footer screenshot
+4. Post the screenshot paths in chat. Only after all routes in the group pass do I move to the next group.
 
-### Legal
-- `/terms`
-- `/privacy`
-- `/cookies`
-- `/disclaimers`
-- `/aml-kyc`
-- `/intellectual-property`
+## Technical details
+- `src/index.css`: add `.jj-mi-section-card { background:#FDFBF7; border:1px solid rgba(184,149,85,.6); }` and a `[data-insights-page] .jj-mi-section-card > .jj-mi-section-card { background:transparent; border:0; }` guard to auto-flatten any accidental nested cards on Insights routes.
+- `MIPageShell`: no changes needed (already emerald hero + MI navigator + pre-footer). Verify `bodyClassName` defaults to `"mx-auto max-w-6xl px-4 md:px-6 py-16 md:py-24 space-y-16"`.
+- Per page: strip custom hero components (`GuideHero`, `FAQHero`, ad-hoc emerald headers) and pass their content into `MIPageShell` props. Keep TOC items already defined per page.
+- No business-logic changes. No data fetching changes. Presentation only.
 
-## Implementation plan
+## Out of scope (per your answer)
+Services, Products/Tools, Company, Legal, Help & Support. Those come in follow-ups after Insights is green.
 
-1. **Stabilize the broken shared shell first**
-   - Repair the current Insights/Shell mount issue so `/insights` and `/insights/future-of-real-estate-2026` no longer hang in the loading state.
-   - Make the shared shell lightweight and safe: no heavy or circular imports from the market-intelligence barrel.
-   - Keep the route wrappers where useful, but remove anything that creates Suspense hangs or blank screens.
+## Deliverable per group
+A single message in chat with:
+- List of routes touched
+- One `code--view` screenshot per route (desktop) + one mobile
+- Explicit "Group X validated — moving to Group Y" line
 
-2. **Lock one canonical Market Intelligence hero style**
-   - Full-screen emerald/dark-black gradient.
-   - White title and white supporting copy only.
-   - Gold hairline/rule allowed, but no faded white overlays and no pale/washed hero text.
-   - CTA buttons use the same dark emerald-black gradient as the collapsed sidebar active button, not bright green.
-   - Desktop CTAs stay side-by-side; mobile can stack/wrap safely.
-
-3. **Apply the same hero style to all requested page families**
-   - Replace broken cream/white/photo/low-contrast heroes on Insights, Guides, Services, Company, Legal, and Help/Support pages with the same canonical emerald hero treatment.
-   - Keep good existing body content where it is already strong, such as Area Intelligence; only replace the hero and broken contrast/layout parts there.
-   - Remove black-on-white or white-on-cream hero title fragments such as the broken Seller Guide title.
-
-4. **Standardize CTAs and buttons**
-   - Hero CTAs: dark emerald-black gradient, white text/icons, matching Market Intelligence/collapsed sidebar color.
-   - Champagne page CTAs: premium champagne/gold bordered style, never faded black buttons.
-   - Emerald surfaces: icons/text must be pure white, never black on emerald.
-   - Fix known broken areas: Market Report “Need a custom report”, Market Intelligence lower button/icon contrast, Guides “Not sure where to start?”, Services final CTA.
-
-5. **Fix card borders and page section consistency**
-   - Champagne/light cards use premium gold borders/hairlines, not green borders.
-   - Emerald cards only appear when the card itself is intentionally on an emerald/black surface.
-   - Normalize content widths, padding, title scale, card edge alignment, and section spacing so cards line up cleanly across pages.
-   - Remove nested-card or mismatched-width effects where they visually break the layout.
-
-6. **Targeted page rebuilds where needed**
-   - Rebuild `/guides` final CTA to match the canonical “Ready to Get Started” style, removing the current faded black button.
-   - Rebuild `/seller-guide` hero, because it currently has broken contrast and split black/white title text.
-   - Rework `/services` cards so champagne cards use gold borders instead of green borders.
-   - Adjust `/market-report` hero/CTA/card contrast to match Market Intelligence while preserving the report/book functionality.
-
-7. **Visual validation before reporting complete**
-   - Use Playwright only after code changes.
-   - Capture screenshot proof for every named route family:
-     - desktop hero screenshot
-     - desktop lower-section/CTA screenshot
-     - mobile hero screenshot for representative routes in each family
-   - For long page groups like Services, validate every registered service route at least with hero + first content section screenshots, and capture additional screenshots for pages with failures.
-   - Check screenshots manually before claiming completion.
-   - Report with screenshot file paths and a short list of routes validated.
-
-## Technical notes
-
-- I will edit only frontend presentation/layout files and shared content-page components/CSS.
-- I will not change backend logic, security policies, or unrelated app areas.
-- I will avoid using green borders on champagne cards; champagne surfaces get gold borders.
-- I will keep the Market Intelligence emerald gradient as the source of truth: `#064E3B → #042c1c → #000000`, with white foreground on dark/emerald surfaces.
+Reply **Approve** to start with **Group A (Market Intelligence family, 7 routes)**, or tell me to reorder.
