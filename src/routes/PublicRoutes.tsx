@@ -337,6 +337,17 @@ export const PublicRoutes = () => (
     <Route path="/market-intelligence/reports/quarterly/:period" element={<InsightsPageScope><QuarterlyMarketReview /></InsightsPageScope>} />
     <Route path="/market-intelligence/reports/annual/:year" element={<InsightsPageScope><AnnualMarketSummary /></InsightsPageScope>} />
     <Route path="/market-intelligence/methodology" element={<InsightsPageScope><Methodology /></InsightsPageScope>} />
+    {/* Top-level MI aliases (previously 404) */}
+    <Route path="/market-overview" element={<Navigate to="/market-intelligence/overview" replace />} />
+    <Route path="/area-intelligence" element={<Navigate to="/market-intelligence/areas" replace />} />
+    <Route path="/reports-archive" element={<Navigate to="/market-intelligence/reports" replace />} />
+    <Route path="/methodology" element={<Navigate to="/market-intelligence/methodology" replace />} />
+    <Route path="/rental-guide" element={<Navigate to="/rent-guide" replace />} />
+    <Route path="/golden-visa-guide" element={<Navigate to="/guides/golden-visa-uae" replace />} />
+    <Route path="/referral-partners" element={<Navigate to="/referral-partner" replace />} />
+    <Route path="/support" element={<Navigate to="/ticket-hub" replace />} />
+    <Route path="/help" element={<Navigate to="/faq" replace />} />
+    
     
 
     {/* ── Services ── (wrapped in InsightsPageScope so every services page inherits
