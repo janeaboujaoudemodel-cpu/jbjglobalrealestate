@@ -180,6 +180,7 @@ const BreakfastBooking = lazy(() => import("@/pages/BreakfastBooking"));
 const DocumentStudio = lazy(() => import("@/pages/DocumentStudio"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
+const BrokerPricing = lazy(() => import("@/pages/BrokerPricing"));
 
 // ── Broker Pages ──
 const BrokerToolkit = lazy(() => import("@/pages/BrokerToolkit"));
