@@ -400,34 +400,20 @@ const FutureOfRealEstate2026 = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-[#0d1f18] via-[#0a1712] to-black text-white">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-            Ready to act on the <span className="text-[#E9D9AE]">2026 real estate outlook?</span>
-          </h2>
-          <p className="text-white/70 mb-8 leading-relaxed">
-            Whether you're a first-time homebuyer, a landlord optimising rental yield, or a family office rebalancing into Dubai real estate, JBJ Global Real Estate — a RERA-licensed real estate brokerage — will build a shortlist and yield model tailored to your goals.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#B89555] text-[#0a1712] font-semibold hover:bg-[#C9A66B] transition">
-              Speak to a Consultant <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link to="/properties" className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/30 text-white hover:bg-white/10 transition">
-              Browse Dubai Properties
-            </Link>
-          </div>
-          <div className="mt-10 pt-8 border-t border-white/10 text-sm text-white/60 flex flex-wrap justify-center gap-x-6 gap-y-2">
-            <Link to="/guides/dubai-rental-yield" className="hover:text-[#E9D9AE]"><MapPin className="w-3 h-3 inline mr-1" />Rental Yield Guide</Link>
-            <Link to="/buyer-guide" className="hover:text-[#E9D9AE]">Buyer Guide</Link>
-            <Link to="/investor-hub" className="hover:text-[#E9D9AE]">Investor Hub</Link>
-            <Link to="/communities/palm-jumeirah-guide" className="hover:text-[#E9D9AE]">Palm Jumeirah</Link>
-            <Link to="/communities/downtown-dubai-guide" className="hover:text-[#E9D9AE]">Downtown Dubai</Link>
-            <Link to="/news" className="hover:text-[#E9D9AE]">Dubai Real Estate News</Link>
-          </div>
+      {/* Related links strip (CTA card is provided by MIPageShell PreFooter) */}
+      <section className="py-12 bg-[#FDFBF7]">
+        <div className="max-w-4xl mx-auto px-6 text-sm text-[#1A1A1A]/70 flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <Link to="/guides/dubai-rental-yield" className="hover:text-[#064E3B]"><MapPin className="w-3 h-3 inline mr-1" />Rental Yield Guide</Link>
+          <Link to="/buyer-guide" className="hover:text-[#064E3B]">Buyer Guide</Link>
+          <Link to="/investor-hub" className="hover:text-[#064E3B]">Investor Hub</Link>
+          <Link to="/communities/palm-jumeirah-guide" className="hover:text-[#064E3B]">Palm Jumeirah</Link>
+          <Link to="/communities/downtown-dubai-guide" className="hover:text-[#064E3B]">Downtown Dubai</Link>
+          <Link to="/news" className="hover:text-[#064E3B]">Dubai Real Estate News</Link>
         </div>
       </section>
-    </div>
+      </div>
+      </MIPageShell>
+    </>
   );
 };
 
