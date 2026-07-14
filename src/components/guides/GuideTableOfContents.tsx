@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { WheelEvent } from "react";
 import { Link } from "react-router-dom";
-import { LucideIcon, List, ChevronDown, ChevronUp, HelpCircle, ArrowUpRight } from "lucide-react";
+import { LucideIcon, List, ChevronDown, ChevronUp, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { scrollToId } from "@/lib/scroll";
@@ -25,8 +25,6 @@ interface GuideTableOfContentsProps {
   ctaAction?: CTAAction;
 }
 
-const TOOLTIP_DISMISSED_KEY = "jbj_guide_nav_tooltip_dismissed";
-
 export const GuideTableOfContents = ({ 
   items, 
   title = "In This Guide",
@@ -35,7 +33,6 @@ export const GuideTableOfContents = ({
 }: GuideTableOfContentsProps) => {
   const [activeId, setActiveId] = useState<string | null>(items[0]?.id ?? null);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const isScrollingRef = useRef(false);
 
@@ -71,16 +68,6 @@ export const GuideTableOfContents = ({
       window.scrollBy({ top: event.deltaY, behavior: "auto" });
     }
   };
-
-  useEffect(() => {
-    // Check if tooltip was already dismissed
-    const dismissed = localStorage.getItem(TOOLTIP_DISMISSED_KEY);
-    if (!dismissed) {
-      // Show tooltip after a short delay
-      const timer = setTimeout(() => setShowTooltip(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -130,11 +117,6 @@ export const GuideTableOfContents = ({
     }, 120);
   };
 
-  const handleDismissTooltip = () => {
-    setShowTooltip(false);
-    localStorage.setItem(TOOLTIP_DISMISSED_KEY, "true");
-  };
-
   // Do not mount the TOC while the hero is still in view. Global !important
   // CSS forces opacity:1 on emerald surfaces, so opacity-based hiding is
   // unreliable — unmounting is the guaranteed hide.
@@ -151,37 +133,6 @@ export const GuideTableOfContents = ({
       data-premium-navigator
       style={isMinimized ? { width: "auto", right: "24px" } : undefined}
     >
-
-      {/* Tooltip */}
-      {showTooltip && !isMinimized && (
-          <div className="absolute right-full mr-4 top-0 w-64 z-50">
-            <div data-guide-tooltip data-surface="emerald" className="bg-[image:var(--jj-emerald-ombre)] border border-white/15 rounded-2xl p-4 shadow-xl">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-white text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-white/80 text-xs leading-relaxed">
-                    Click any section button to jump directly to that part of the guide. The active section is highlighted in emerald.
-                  </p>
-                </div>
-              </div>
-              <Button
-                onClick={handleDismissTooltip}
-                size="sm"
-                variant="primary"
-                data-guide-tooltip-button
-                className="w-full text-xs"
-              >
-                I Understand
-              </Button>
-            </div>
-            {/* Arrow pointing to nav */}
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#064E3B]" />
-          </div>
-        )}
-
       {/* Minimized state: only the compact expand control remains visible. */}
       {isMinimized ? (
         <div className="flex justify-end">
@@ -228,6 +179,7 @@ export const GuideTableOfContents = ({
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
                 data-surface="emerald"
+                data-no-contrast-guard
                 data-toc-item
                 data-toc-state={activeId === item.id ? "active" : "inactive"}
                 className={cn(
@@ -236,21 +188,22 @@ export const GuideTableOfContents = ({
                     ? "bg-white/12 text-white font-semibold border-white/15"
                     : "text-white hover:text-white hover:bg-white/10 border-white/10 bg-black/10"
                 )}
+                style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
               >
                 <span data-toc-number className={cn(
                   "w-7 h-7 rounded-md flex items-center justify-center text-[11px] font-bold",
                   activeId === item.id
                     ? "bg-white/15 text-white border border-white/20"
                     : "bg-black/15 text-white border border-white/10"
-                )}>
+                )} style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   {index + 1}
                 </span>
                 {item.icon && <item.icon data-toc-icon className={cn(
                   "w-4 h-4",
                   "text-white"
-                )} />}
+                )} style={{ color: "#FFFFFF", stroke: "#FFFFFF" }} />}
                 {!item.icon && <span aria-hidden />}
-                <span data-toc-label className="min-w-0 leading-snug">{item.title}</span>
+                <span data-toc-label className="min-w-0 leading-snug" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{item.title}</span>
               </button>
             ))}
             

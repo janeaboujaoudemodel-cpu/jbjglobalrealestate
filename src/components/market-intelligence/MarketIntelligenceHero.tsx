@@ -34,15 +34,14 @@ export const MarketIntelligenceHero = ({
   actions,
 }: MarketIntelligenceHeroProps) => {
   return (
-    <div data-mi-hero data-unified-hero data-faq-hero data-hero-dark>
-      <PremiumEmeraldHero
-        eyebrow={badge}
-        eyebrowIcon={badgeIcon}
-        title={title}
-        subtitle={description}
-        meta={actions ? <div className="flex flex-wrap justify-center gap-4">{actions}</div> : undefined}
-      />
-    </div>
+    <PremiumEmeraldHero
+      miHero
+      eyebrow={badge}
+      eyebrowIcon={badgeIcon}
+      title={title}
+      subtitle={description}
+      meta={actions ? <div className="flex flex-wrap justify-center gap-4">{actions}</div> : undefined}
+    />
   );
 };
 
