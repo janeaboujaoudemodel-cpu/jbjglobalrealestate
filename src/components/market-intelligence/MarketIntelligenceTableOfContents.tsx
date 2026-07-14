@@ -37,28 +37,37 @@ export const MarketIntelligenceTableOfContents = ({
 
   useEffect(() => {
     const HERO_SEL = '[data-mi-hero], [data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-hero-dark]';
-    let io: IntersectionObserver | null = null;
     let raf = 0;
+    let retry = 0;
+    let hero: HTMLElement | null = null;
+
+    const updateHeroBoundary = () => {
+      if (!hero) return;
+      setPastHero(hero.getBoundingClientRect().bottom <= 1);
+    };
+
+    const onScrollOrResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(updateHeroBoundary);
+    };
+
     const attach = () => {
-      const hero = document.querySelector(HERO_SEL) as HTMLElement | null;
+      hero = document.querySelector(HERO_SEL) as HTMLElement | null;
       if (!hero) {
-        if (raf < 30) { raf++; requestAnimationFrame(attach); }
+        if (retry < 30) { retry++; raf = requestAnimationFrame(attach); }
         else setPastHero(true);
         return;
       }
-      io = new IntersectionObserver(
-        (entries) => {
-          const e = entries[0];
-          // Latch to visible once past hero — never re-hide from a
-          // programmatic scroll to top-of-page sections.
-          if (!e.isIntersecting) setPastHero(true);
-        },
-        { threshold: 0, rootMargin: "-8px 0px 0px 0px" }
-      );
-      io.observe(hero);
+      updateHeroBoundary();
+      window.addEventListener("scroll", onScrollOrResize, { passive: true });
+      window.addEventListener("resize", onScrollOrResize, { passive: true });
     };
     attach();
-    return () => { io?.disconnect(); };
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
   }, []);
 
   useEffect(() => {
