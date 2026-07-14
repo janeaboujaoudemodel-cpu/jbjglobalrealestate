@@ -156,7 +156,7 @@ export const NewsletterBrevo = ({
                 style={{ color: '#FFFFFF' }}
                 strokeWidth={2.2}
               />
-              {!email && !isEmailFocused && (
+              {!email && (
                 <span
                   className="allow-white pointer-events-none absolute left-5 sm:left-[52px] top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] font-normal tracking-[-0.005em] whitespace-nowrap overflow-hidden z-[1]"
                   aria-hidden="true"
@@ -166,8 +166,18 @@ export const NewsletterBrevo = ({
                   <span className="jj-type-caret" aria-hidden="true">|</span>
                 </span>
               )}
+              {email && (
+                <span
+                  className="allow-white pointer-events-none absolute left-5 sm:left-[52px] top-1/2 -translate-y-1/2 max-w-[calc(100%-16px)] truncate text-[15px] sm:text-[15.5px] font-normal tracking-[-0.005em] z-[1]"
+                  aria-hidden="true"
+                  style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                >
+                  {email}
+                </span>
+              )}
               <input
                 type="email"
+                data-no-contrast-guard
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onFocus={() => setIsEmailFocused(true)}
@@ -175,8 +185,23 @@ export const NewsletterBrevo = ({
                 aria-label="Email address"
                 required
                 disabled={isSubmitting}
-                className="allow-white jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] tracking-[-0.005em] font-normal cursor-text sm:pl-[34px]"
-                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', caretColor: '#FFFFFF', pointerEvents: 'auto', border: 'none', outline: 'none', boxShadow: 'none', background: 'transparent' }}
+                className="allow-white jj-hero-search-input absolute inset-0 z-10 h-full w-full appearance-none bg-transparent text-[15px] sm:text-[15.5px] tracking-[-0.005em] font-normal cursor-text"
+                style={{
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                  opacity: 0,
+                  color: 'transparent',
+                  WebkitTextFillColor: 'transparent',
+                  caretColor: 'transparent',
+                  pointerEvents: 'auto',
+                  border: 'none',
+                  outline: 'none',
+                  boxShadow: 'none',
+                  WebkitBoxShadow: 'none',
+                  background: 'transparent',
+                  backgroundColor: 'transparent',
+                  backgroundImage: 'none',
+                }}
               />
             </div>
             <button
