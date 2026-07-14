@@ -180,6 +180,7 @@ const BreakfastBooking = lazy(() => import("@/pages/BreakfastBooking"));
 const DocumentStudio = lazy(() => import("@/pages/DocumentStudio"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
+const BrokerPricing = lazy(() => import("@/pages/BrokerPricing"));
 
 // ── Broker Pages ──
 const BrokerToolkit = lazy(() => import("@/pages/BrokerToolkit"));
@@ -521,6 +522,7 @@ export const PublicRoutes = () => (
     {/* ── Misc ── */}
     <Route path="/sitemap" element={<Sitemap />} />
     <Route path="/pricing" element={<Pricing />} />
+    <Route path="/broker-pricing" element={<BrokerPricing />} />
     <Route path="/api-access" element={<ApiAccess />} />
     <Route path="/cv-builder" element={<CVBuilder />} />
 

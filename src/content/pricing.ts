@@ -268,6 +268,91 @@ export const AGENCY_PACKAGES: PricingTier[] = [
   },
 ];
 
+// Broker Subscriptions (wired to seamless Stripe — priceIds match products
+// created via payments--batch_create_product). Placeholder pricing; edit in
+// the Lovable payments dashboard as needed.
+export const BROKER_TIERS: PricingTier[] = [
+  {
+    key: "broker_starter",
+    name: "Broker Starter",
+    tagline: "Solo brokers getting started",
+    headline: "Portal access + CRM basics",
+    description:
+      "Everything a new broker needs: CRM, listings sync, market data, and library access.",
+    features: [
+      "CRM with up to 500 leads",
+      "Listings sync (Property Finder, Bayut)",
+      "Weekly market briefings",
+      "Library & guide downloads",
+      "Email support",
+    ],
+    prices: [
+      { priceId: "broker_starter_monthly", interval: "monthly", amountAed: 199, label: "per month" },
+      {
+        priceId: "broker_starter_yearly",
+        interval: "yearly",
+        amountAed: 1990,
+        label: "per year",
+        savingsNote: "Save AED 398 vs monthly",
+      },
+    ],
+  },
+  {
+    key: "broker_pro",
+    name: "Broker Pro",
+    tagline: "Growing brokers & small teams",
+    headline: "AI tools + advanced CRM + priority intel",
+    description:
+      "AI email drafting, advanced CRM automation, and priority access to market intelligence.",
+    features: [
+      "Everything in Starter",
+      "Unlimited CRM leads",
+      "AI email & WhatsApp drafts",
+      "Advanced automations & pipelines",
+      "Daily market intelligence",
+      "Priority chat support",
+    ],
+    featured: true,
+    badge: "Most popular",
+    prices: [
+      { priceId: "broker_pro_monthly", interval: "monthly", amountAed: 499, label: "per month" },
+      {
+        priceId: "broker_pro_yearly",
+        interval: "yearly",
+        amountAed: 4990,
+        label: "per year",
+        savingsNote: "Save AED 998 vs monthly",
+      },
+    ],
+  },
+  {
+    key: "broker_elite",
+    name: "Broker Elite",
+    tagline: "Top performers & brokerage leads",
+    headline: "Concierge + elite developer access + VIP invites",
+    description:
+      "White-glove concierge, elite developer channels, and VIP event invitations.",
+    features: [
+      "Everything in Pro",
+      "Elite developer allocation access",
+      "Dedicated concierge",
+      "VIP event & launch invitations",
+      "Custom market reports",
+      "Phone support",
+    ],
+    prices: [
+      { priceId: "broker_elite_monthly", interval: "monthly", amountAed: 1499, label: "per month" },
+      {
+        priceId: "broker_elite_yearly",
+        interval: "yearly",
+        amountAed: 14990,
+        label: "per year",
+        savingsNote: "Save AED 2,998 vs monthly",
+      },
+    ],
+  },
+];
+
 export function formatAed(amount: number): string {
   return `AED ${amount.toLocaleString("en-AE")}`;
 }
