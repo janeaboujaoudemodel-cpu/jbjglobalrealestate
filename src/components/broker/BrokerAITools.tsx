@@ -20,6 +20,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import { useSpendBrokerCredits } from "@/hooks/useSpendBrokerCredits";
 
 interface Subscription {
   id: string;
@@ -50,6 +51,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [recommendationType, setRecommendationType] = useState<"ai" | "manual">("ai");
+  const spendCredits = useSpendBrokerCredits();
 
   const canUseAI = subscription.ai_credits_limit === null || 
     subscription.ai_credits_used < subscription.ai_credits_limit;
@@ -113,6 +115,11 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
       toast.error("You've reached your AI credits limit. Please upgrade your plan.");
       return;
     }
+
+    // Debit credits BEFORE running the compare — server enforces cost & balance.
+    // Toast on failure is handled inside the hook.
+    const spend = await spendCredits("comparison");
+    if (!spend.ok) return;
 
     setIsAnalyzing(true);
     setAnalysisResult(null);
