@@ -27,11 +27,24 @@ interface MarketNews {
 }
 
 // Unified champagne badge — single visual language for every category.
+// Locked against the site-wide Contrast Guard so the champagne/dark-ink combo
+// can never be repainted to emerald-on-emerald.
 const CategoryBadge = ({ category }: { category: string }) => (
-  <span className="text-xs text-[#1A1A1A] bg-[#F7F2EA] px-3 py-1 rounded-full border border-[#B89555]/40 font-medium">
+  <span
+    data-no-contrast-guard=""
+    data-surface="champagne"
+    className="text-xs px-3 py-1 rounded-full border font-medium"
+    style={{
+      backgroundColor: "#F7F2EA",
+      color: "#1A1A1A",
+      WebkitTextFillColor: "#1A1A1A",
+      borderColor: "rgba(184,149,85,0.4)",
+    }}
+  >
     {category}
   </span>
 );
+
 
 const News = () => {
   const [searchParams] = useSearchParams();
@@ -270,16 +283,37 @@ const News = () => {
                     onClick={() => setSelectedCategory(category === "All" ? null : category)}
                     data-emerald={isActive ? "true" : undefined}
                     data-surface={isActive ? "emerald" : undefined}
-                    data-no-contrast-guard={isActive ? "" : undefined}
-                    className={`allow-white px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
+                    data-no-contrast-guard=""
+                    className={`${isActive ? "allow-white " : ""}px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
                       isActive
-                        ? "jj-cta-primary border-transparent text-white shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
-                        : "bg-white text-[#1A1A1A] border-[#064E3B]/25 hover:bg-[#F7F2EA]"
+                        ? "jj-cta-primary border-transparent shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
+                        : "border-[#064E3B]/25 hover:bg-[#F7F2EA]"
                     }`}
-                    style={isActive ? { backgroundImage: "var(--jj-emerald-ombre, linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%))", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
+                    style={
+                      isActive
+                        ? {
+                            backgroundImage:
+                              "var(--jj-emerald-ombre, linear-gradient(135deg,#047857 0%,#064E3B 55%,#022C22 100%))",
+                            color: "#FFFFFF",
+                            WebkitTextFillColor: "#FFFFFF",
+                          }
+                        : {
+                            backgroundColor: "#FFFFFF",
+                            color: "#1A1A1A",
+                            WebkitTextFillColor: "#1A1A1A",
+                          }
+                    }
                   >
-                    <span style={isActive ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>{category}</span>
+                    <span
+                      style={{
+                        color: isActive ? "#FFFFFF" : "#1A1A1A",
+                        WebkitTextFillColor: isActive ? "#FFFFFF" : "#1A1A1A",
+                      }}
+                    >
+                      {category}
+                    </span>
                   </button>
+
                 );
               })}
             </div>
