@@ -294,7 +294,7 @@ export const PublicRoutes = () => (
     <Route path="/guides/selling-off-plan-dubai-before-handover" element={<InsightsPageScope><SellingOffPlanBeforeHandover /></InsightsPageScope>} />
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
     <Route path="/dubai-rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
-    <Route path="/insights" element={<InsightsHub />} />
+    <Route path="/insights" element={<InsightsPageScope><InsightsHub /></InsightsPageScope>} />
     <Route path="/library" element={<LibraryHub />} />
     <Route path="/success-stories" element={<SuccessStories />} />
     <Route path="/membership" element={<Membership />} />
