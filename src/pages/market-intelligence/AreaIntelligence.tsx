@@ -230,13 +230,26 @@ const AreaIntelligence = () => {
                         { num: "4", title: "Supply Status", desc: "Existing stock versus registered handovers and newly delivered units, as published by DLD." },
                         { num: "5", title: "Cost Structure", desc: "Approved service charges and municipality fees applicable to properties within the area." }
                       ].map((item, idx) => (
-                        <div key={idx} data-surface="emerald" className="flex gap-4 p-4 bg-[image:var(--jj-emerald-ombre)] border border-white/20 rounded-xl shadow-sm">
-                          <div className="w-10 h-10 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 flex items-center justify-center flex-shrink-0">
-                            <span className="text-white font-bold">{item.num}</span>
+                        <div
+                          key={idx}
+                          className="flex gap-4 p-4 rounded-xl shadow-sm bg-[#FDFBF7] border border-[#B89555]/30"
+                        >
+                          <div
+                            data-no-contrast-guard
+                            data-icon-tone="emerald"
+                            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
+                            style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
+                          >
+                            <span
+                              className="font-bold"
+                              style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                            >
+                              {item.num}
+                            </span>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-white">{item.title}</h4>
-                            <p className="text-white/85 text-sm mt-1">{item.desc}</p>
+                            <h4 className="font-semibold text-[#1A1A1A]">{item.title}</h4>
+                            <p className="text-[#1A1A1A]/75 text-sm mt-1">{item.desc}</p>
                           </div>
                         </div>
                       ))}
