@@ -1602,22 +1602,23 @@ export default function PublicAccess() {
                 Automatically unlocked on the Signature package (also included with Private Office).
               </p>
             </div>
-            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
               {investorSignaturePerks.map((perk) => {
                 const Icon = perk.icon;
                 return (
                   <div
                     key={perk.label}
-                    className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl border border-[#0d3a2b]/12 bg-white p-4 text-center shadow-[0_18px_40px_-30px_rgba(6,78,59,0.35)] transition hover:-translate-y-1 hover:border-[#064E3B]/40"
+                    className="flex flex-col items-center justify-center gap-2 rounded-xl border border-[#0d3a2b]/12 bg-white px-3 py-4 text-center shadow-[0_10px_24px_-20px_rgba(6,78,59,0.35)] transition hover:-translate-y-0.5 hover:border-[#064E3B]/40"
                   >
-                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-14 w-14 rounded-xl`}>
-                      <Icon className="h-6 w-6" />
+                    <span data-surface="dark" className={`${EMERALD_ICON_TILE} h-11 w-11 rounded-lg`}>
+                      <Icon className="h-5 w-5" />
                     </span>
-                    <span className="text-xs font-semibold leading-snug text-[#0d3a2b]">{perk.label}</span>
+                    <span className="text-[11px] font-semibold leading-snug text-[#0d3a2b]">{perk.label}</span>
                   </div>
                 );
               })}
             </div>
+
           </div>
         </PackageStrap>
 
