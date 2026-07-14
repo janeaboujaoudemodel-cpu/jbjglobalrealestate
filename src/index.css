@@ -8404,10 +8404,21 @@ html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
    and the newsletter input/submit. Sits behind the inner element so
    it does NOT recolor the inner fill. */
 @keyframes jj-emerald-border-pulse {
-  0%,100% { opacity: 0.55; }
+  0%,100% { opacity: 0.92; }
   50%     { opacity: 1; }
 }
 .jj-emerald-glow-wrap { position: relative; isolation: isolate; }
+/* Ambient emerald highlighter halo behind the bar — matches homepage hero feel. */
+.jj-emerald-glow-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: inherit;
+  background: radial-gradient(60% 120% at 50% 50%, rgba(6,78,59,0.55) 0%, rgba(4,44,28,0.35) 45%, rgba(0,0,0,0) 75%);
+  filter: blur(14px);
+  pointer-events: none;
+  z-index: 0;
+}
 .jj-emerald-glow-wrap::before {
   content: "";
   position: absolute;
@@ -8421,10 +8432,10 @@ html body .jj-newsletter-emerald .jj-newsletter-placeholder::before {
   pointer-events: none;
   z-index: 1;
   animation: jj-emerald-border-pulse 3.6s ease-in-out infinite;
-  filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.45));
+  filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.6));
 }
 .jj-emerald-glow-wrap > * { position: relative; z-index: 2; }
-.jj-emerald-glow-wrap:hover::before { filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.75)); }
+.jj-emerald-glow-wrap:hover::before { filter: drop-shadow(0 0 22px rgba(52, 211, 153, 0.85)); }
 
 /* Newsletter container shouldn't add its own border now that the
    glow-wrap supplies the outline. */
@@ -8650,18 +8661,15 @@ html body footer p:last-child {
    • Animated metallic emerald fill for contact tiles
    ──────────────────────────────────────────────────────────────── */
 
-/* Tighter, single-line emerald hairline on glow-wrap (replaces the
-   2px halo + heavy drop-shadow). Hover gives a subtle bloom only. */
+/* Emerald hairline + ambient highlighter halo (matches homepage hero feel).
+   Keeps opacity locked at 1 so the border never starts faded. */
 .jj-emerald-glow-wrap::before {
-  inset: 0 !important;
-  padding: 0 !important;
-  filter: none !important;
   opacity: 1 !important;
   animation: none !important;
-  background: var(--jj-emerald-ombre) !important;
+  filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.55)) !important;
 }
 .jj-emerald-glow-wrap:hover::before {
-  filter: none !important;
+  filter: drop-shadow(0 0 24px rgba(52, 211, 153, 0.8)) !important;
 }
 
 /* Kill ANY border / ring / outline inside a unified emerald pill,
