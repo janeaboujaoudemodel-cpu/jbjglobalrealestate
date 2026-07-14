@@ -102,7 +102,7 @@ export function DeveloperLogo({
       return renderNameLabel(cn(UNIFIED_PLATE, className));
     }
     return (
-      <div className={cn(UNIFIED_PLATE, className)} data-keep-gold={dataKeepGold}>
+      <div className={cn(UNIFIED_PLATE, "p-1.5 sm:p-2", className)} data-keep-gold={dataKeepGold}>
         <img
           src={src as string}
           alt={alt}
