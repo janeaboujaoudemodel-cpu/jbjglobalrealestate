@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import PremiumEmeraldHero from "@/components/content-page/PremiumEmeraldHero";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
