@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DUBAI_AREAS_MARKET_DATA, MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { sanitizeMarkdownHtml } from "@/utils/secureInputValidation";
+import PremiumEmeraldHero from "@/components/content-page/PremiumEmeraldHero";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
