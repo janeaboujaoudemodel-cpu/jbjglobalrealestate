@@ -1659,14 +1659,64 @@ export default function PublicAccess() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2">
               {([
-                { key: "investor", label: "For Investors", desc: "Single-property to family office.", icon: TrendingUp },
-                { key: "broker", label: "For Brokers", desc: "Academy & JBJ enrollment.", icon: Users },
-                { key: "agency", label: "For Agencies", desc: "Team seats, CRM & lead systems.", icon: Briefcase },
-                { key: "developer", label: "For Developers", desc: "Launch distribution & reach.", icon: Building2 },
-              ] as const).map(({ key, label, desc, icon: Icon }) => {
+                {
+                  key: "investor",
+                  label: "For Investors",
+                  desc: "From single-property investors to family offices — advisor support, early access to launches, and Signature perks.",
+                  icon: TrendingUp,
+                  tiers: investorTiers,
+                  highlights: [
+                    "Early access to launches before public release",
+                    "Cash-back or fully-furnished apartment perks",
+                    "Private investor dinners, launches & events",
+                    "Dedicated principal advisor for family offices",
+                  ],
+                },
+                {
+                  key: "broker",
+                  label: "For Brokers",
+                  desc: "Yearly enrollment for licensed and aspiring UAE agents — DLD-aligned coursework, mentorship, and a direct pathway into JBJ Global.",
+                  icon: Users,
+                  tiers: brokerTiers,
+                  highlights: [
+                    "JBJ-certified broker badge & agent playbook",
+                    "Warm client introductions & shared pipeline",
+                    "Invitations to every major UAE launch & gala",
+                    "First-look on JBJ private mandates (Elite)",
+                  ],
+                },
+                {
+                  key: "agency",
+                  label: "For Agencies",
+                  desc: "Team seats, shared CRM and lead systems for boutique and established Dubai agencies scaling their transaction volume.",
+                  icon: Briefcase,
+                  tiers: agencyTiers,
+                  highlights: [
+                    "Team seats on full JBJ inventory",
+                    "Shared CRM segmentation & lead routing",
+                    "Custom agency page inside JBJ",
+                    "Priority hiring pipeline into JBJ Global",
+                  ],
+                },
+                {
+                  key: "developer",
+                  label: "For Developers",
+                  desc: "From boutique launches to master developers — distribution to the JBJ broker network with verified profile and dedicated account management.",
+                  icon: Building2,
+                  tiers: developerTiers,
+                  highlights: [
+                    "Distribution to the full JBJ broker network",
+                    "Verified developer profile & analytics",
+                    "Featured placement rotation on /access",
+                    "Co-marketing on launches & events",
+                  ],
+                },
+              ] as const).map(({ key, label, desc, icon: Icon, tiers, highlights }) => {
                 const active = selectedAudience === key;
+                const startPrice = tiers[0]?.price;
+                const startCadence = tiers[0]?.cadence ?? "";
                 return (
                   <button
                     key={key}
@@ -1679,25 +1729,63 @@ export default function PublicAccess() {
                         }, 60);
                       }
                     }}
-                    className={`group flex flex-col items-start gap-3 rounded-2xl border p-6 text-left transition ${
+                    aria-expanded={active}
+                    className={`group flex h-full flex-col gap-5 rounded-2xl border p-7 text-left transition sm:p-8 ${
                       active
-                        ? "border-[#064E3B] bg-[#064E3B] text-white shadow-[0_24px_60px_-30px_rgba(6,78,59,0.55)]"
-                        : "border-[#0d3a2b]/12 bg-white text-[#0d3a2b] hover:-translate-y-0.5 hover:border-[#064E3B]/50 hover:shadow-[0_18px_40px_-28px_rgba(6,78,59,0.45)]"
+                        ? "border-[#064E3B] bg-[#064E3B] text-white shadow-[0_28px_70px_-32px_rgba(6,78,59,0.6)]"
+                        : "border-[#0d3a2b]/12 bg-white text-[#0d3a2b] hover:-translate-y-0.5 hover:border-[#064E3B]/50 hover:shadow-[0_22px_50px_-30px_rgba(6,78,59,0.5)]"
                     }`}
                   >
-                    <span
-                      className={`inline-flex h-11 w-11 items-center justify-center rounded-lg ${
-                        active ? "bg-white/12 text-white" : "bg-[#064E3B] text-white"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <div className="font-serif text-xl leading-tight">{label}</div>
-                      <div className={`mt-1 text-xs ${active ? "text-white/75" : "text-[#1A1A1A]/65"}`}>{desc}</div>
+                    <div className="flex items-start justify-between gap-4">
+                      <span
+                        className={`inline-flex h-14 w-14 items-center justify-center rounded-xl ${
+                          active ? "bg-white/12 text-white" : "bg-[#064E3B] text-white"
+                        }`}
+                      >
+                        <Icon className="h-6 w-6" />
+                      </span>
+                      <div className={`text-right text-[11px] font-semibold uppercase tracking-[0.22em] ${active ? "text-white/70" : "text-[#064E3B]/70"}`}>
+                        <div>Starts at</div>
+                        <div className={`mt-0.5 font-serif text-lg tracking-normal normal-case ${active ? "text-white" : "text-[#0d3a2b]"}`}>
+                          {startPrice}
+                          <span className={`ml-1 text-[11px] font-normal ${active ? "text-white/75" : "text-[#1A1A1A]/55"}`}>{startCadence}</span>
+                        </div>
+                      </div>
                     </div>
-                    <span className={`mt-auto text-[11px] font-semibold uppercase tracking-[0.22em] ${active ? "text-white/85" : "text-[#064E3B]"}`}>
-                      {active ? "Showing tiers ↓" : "View tiers →"}
+
+                    <div>
+                      <div className="font-serif text-2xl leading-tight sm:text-[26px]">{label}</div>
+                      <p className={`mt-2 text-sm leading-relaxed ${active ? "text-white/80" : "text-[#1A1A1A]/70"}`}>{desc}</p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {tiers.map((t) => (
+                        <span
+                          key={t.name}
+                          className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
+                            active
+                              ? "border-white/25 bg-white/10 text-white"
+                              : t.featured
+                                ? "border-[#064E3B] bg-[#064E3B] text-white"
+                                : "border-[#0d3a2b]/20 bg-[#F7F2EA] text-[#0d3a2b]"
+                          }`}
+                        >
+                          {t.name}
+                        </span>
+                      ))}
+                    </div>
+
+                    <ul className={`space-y-2 text-sm ${active ? "text-white/85" : "text-[#1A1A1A]/75"}`}>
+                      {highlights.map((h) => (
+                        <li key={h} className="flex items-start gap-2">
+                          <span className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${active ? "bg-white/80" : "bg-[#064E3B]"}`} />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <span className={`mt-auto inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] ${active ? "text-white" : "text-[#064E3B]"}`}>
+                      {active ? "Showing tiers below ↓" : "View tiers & pricing →"}
                     </span>
                   </button>
                 );
