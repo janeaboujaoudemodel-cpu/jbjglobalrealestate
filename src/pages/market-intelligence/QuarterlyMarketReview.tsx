@@ -178,46 +178,28 @@ const QuarterlyMarketReview = () => {
         keywords="Dubai quarterly review, real estate analysis, institutional report, Jane Bou Jaoude"
       />
 
-      {/* Main Content - 3-layer system */}
-      <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] min-h-screen">
+      <PremiumEmeraldHero
+        miHero
+        eyebrow="Quarterly Market Review"
+        eyebrowIcon={BarChart3}
+        title={data.period}
+        subtitle={`Published ${new Date(data.publishDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}`}
+      />
+
+      <div className="jj-section-champagne">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Header */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="mb-8"
-          >
+          <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="mb-8 flex items-center justify-between gap-4">
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A] transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
             </Link>
-
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <Badge className="mb-3 bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40">
-                  QUARTERLY MARKET REVIEW
-                </Badge>
-                <h1 className="text-3xl md:text-4xl font-bold text-[#1A1A1A]">
-                  {data.period}
-                </h1>
-                <p className="text-[#1A1A1A]/70 mt-2 flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
-                    year: "numeric", 
-                    month: "long", 
-                    day: "numeric" 
-                  })}
-                </p>
-              </div>
-              <Button variant="primary">
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </Button>
-            </div>
+            <Button variant="primary">
+              <Download className="w-4 h-4 mr-2" />
+              Download PDF
+            </Button>
           </motion.div>
 
           {/* Executive Summary */}
