@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DUBAI_AREAS_MARKET_DATA, MARKET_DISCLAIMER } from "@/config/open-data-config";
 import { sanitizeMarkdownHtml } from "@/utils/secureInputValidation";
+import PremiumEmeraldHero from "@/components/content-page/PremiumEmeraldHero";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -81,54 +82,26 @@ const MarketAreaDetail = () => {
         description={`${area.area} real estate market analysis with historical price trends, rent analysis, and demand indicators.`}
       />
 
-      {/* Hero */}
-      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/50 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,149,85,0.16),transparent_62%)]" />
-        
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-24"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-        >
-          <motion.div variants={fadeInUp}>
-            <Link to="/market-intelligence/areas" className="allow-white inline-flex items-center gap-2 text-[#F7F2EA] hover:text-white mb-6">
-              <ArrowLeft className="w-4 h-4" />
-              Back to All Areas
-            </Link>
-          </motion.div>
+      {/* Hero — unified emerald Prada hero (Market Intelligence contract) */}
+      <PremiumEmeraldHero
+        miHero
+        eyebrow="Area Intelligence"
+        eyebrowIcon={MapPin}
+        title={area.area}
+        subtitle={`${area.yoyChange > 0 ? "+" : ""}${area.yoyChange}% YoY · Price Index ${area.priceIndex}`}
+      />
 
-          <motion.div className="flex items-center gap-3 mb-4" variants={fadeInUp}>
-            <MapPin className="allow-white w-8 h-8 text-[#F7F2EA]" />
-            <span className="allow-white text-[#F7F2EA] text-sm uppercase tracking-[0.3em]">Area Intelligence</span>
-          </motion.div>
-
-          <motion.h1 
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-            variants={fadeInUp}
-          >
-            {area.area}
-          </motion.h1>
-
-          <motion.div className="flex items-center gap-4" variants={fadeInUp}>
-            {getTrendBadge(area.trend)}
-            <div className="flex items-center gap-2">
-              {area.yoyChange > 0 ? (
-                <TrendingUp className="w-5 h-5 text-[#B89555]" />
-              ) : (
-                <TrendingDown className="w-5 h-5 text-[#F7F2EA]" />
-              )}
-              <span className="text-lg font-semibold text-[#F7F2EA]">
-                {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}% YoY
-              </span>
-            </div>
-          </motion.div>
-        </motion.div>
-      </section>
+      <div className="bg-[#FDFBF7] py-6">
+        <div className="container mx-auto px-4">
+          <Link to="/market-intelligence/areas" className="inline-flex items-center gap-2 text-[#1A1A1A]/70 hover:text-[#1A1A1A]">
+            <ArrowLeft className="w-4 h-4" />
+            Back to All Areas
+          </Link>
+        </div>
+      </div>
 
       {/* Key Metrics - 3-layer system with proper gutters */}
-      <section className="pt-16 py-12 bg-[#F7F2EA]">
+      <section className="pt-16 py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="jj-card-inner">
@@ -172,7 +145,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* AI Explanation - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <Card className="jj-card-inner max-w-4xl mx-auto">
             <CardHeader>
@@ -200,7 +173,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Key Highlights - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <h2 className="text-[#1A1A1A] text-2xl font-bold mb-8 text-center">
             <span className="text-[#1A1A1A]">Market</span> Highlights
@@ -219,7 +192,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* CTA - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <div className="max-w-2xl mx-auto text-center jj-card-inner p-8">
             <h3 className="text-[#1A1A1A] text-xl font-bold mb-4">Interested in {area.area}?</h3>
@@ -241,7 +214,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Internal Links - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <h3 className="text-[#1A1A1A] text-xl font-bold mb-6 text-center">
             <span className="text-[#1A1A1A]">Continue</span> Exploring
