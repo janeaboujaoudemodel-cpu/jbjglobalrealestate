@@ -131,6 +131,7 @@ export default function Signup() {
         <form
           onSubmit={(e) => { e.preventDefault(); if (step === 2 && !loading) submit(); }}
           autoComplete="on"
+          data-jbj-signup
           className="animate-fade-in"
         >
           {/* Hidden username hint so Chrome pairs email+password on the last step */}

@@ -5,7 +5,8 @@ import Field from "./Field";
 import PillGroup from "./PillGroup";
 import PasswordField from "./PasswordField";
 import PhoneField from "./PhoneField";
-import { SERVICES, LANGUAGES, CONTACT_METHODS, CONTACT_TIMES } from "./constants";
+import LightSearchableSelect from "./LightSearchableSelect";
+import { SERVICES, CONTACT_METHODS, CONTACT_TIMES } from "./constants";
 
 interface Props {
   data: Record<string, any>;
@@ -74,21 +75,31 @@ export default function CommonStep({ data, onChange, services, setServices }: Pr
           />
         </Field>
         <Field label="Country" required>
-          <Input
-            required
-            autoComplete="country-name"
+          <LightSearchableSelect
+            variant="country"
             value={data.country || ""}
-            onChange={(e) => set("country")(e.target.value)}
+            onChange={set("country")}
+            placeholder="Select your country"
+            searchPlaceholder="Search country…"
           />
         </Field>
         <Field label="Nationality">
-          <Input value={data.nationality || ""} onChange={(e) => set("nationality")(e.target.value)} />
+          <LightSearchableSelect
+            variant="nationality"
+            value={data.nationality || ""}
+            onChange={set("nationality")}
+            placeholder="Select your nationality"
+            searchPlaceholder="Search nationality…"
+          />
         </Field>
         <Field label="Preferred language">
-          <Select value={data.preferred_language || "English"} onValueChange={set("preferred_language")}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
-            <S>{LANGUAGES.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</S>
-          </Select>
+          <LightSearchableSelect
+            variant="language"
+            value={data.preferred_language || "English"}
+            onChange={set("preferred_language")}
+            placeholder="Select language"
+            searchPlaceholder="Search language…"
+          />
         </Field>
         <Field label="Preferred contact method">
           <Select value={data.preferred_contact_method || ""} onValueChange={set("preferred_contact_method")}>

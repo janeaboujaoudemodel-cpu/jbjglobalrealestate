@@ -20,13 +20,15 @@ export default function PillGroup({ options, value, onChange }: Props) {
             type="button"
             key={o}
             onClick={() => toggle(o)}
+            data-signup-pill
+            data-active={active ? "true" : "false"}
             className={cn(
               "group inline-flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-full border",
               "transition-all duration-200 ease-out will-change-transform",
               "active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]/30",
               active
                 ? "bg-[#064E3B] border-[#064E3B] text-white shadow-[0_6px_14px_-6px_rgba(6,78,59,0.45)]"
-                : "bg-white border-[#B89555]/45 text-[#1A1A1A] hover:border-[#064E3B] hover:-translate-y-0.5 hover:shadow-[0_4px_10px_-4px_rgba(6,78,59,0.18)]"
+                : "bg-[#F7F2EA] border-[#B89555]/55 text-[#1A1A1A] hover:border-[#064E3B] hover:bg-[#F1E9D8] hover:-translate-y-0.5 hover:shadow-[0_4px_10px_-4px_rgba(6,78,59,0.18)]"
             )}
           >
             <Check
