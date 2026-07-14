@@ -35686,3 +35686,186 @@ html body [data-radix-accordion-root] > [data-radix-accordion-item] + [data-radi
 html body [data-radix-accordion-item]:not(.no-faq-emerald *):not(.no-faq-emerald) + [data-radix-accordion-item] {
   margin-top: 0.75rem !important;
 }
+
+/* ============================================================
+   JBJ Sign-up form — scoped no-blue policy + emerald focus
+   Kills all browser defaults (autofill blue, focus blue, dropdown
+   accents) inside [data-jbj-signup] and the associated Radix
+   popover surfaces opened from within it.
+   ============================================================ */
+[data-jbj-signup],
+.jbj-signup-dropdown {
+  accent-color: #064E3B;
+  caret-color: #064E3B;
+}
+
+/* Remove Chrome autofill blue background/text */
+[data-jbj-signup] input:-webkit-autofill,
+[data-jbj-signup] input:-webkit-autofill:hover,
+[data-jbj-signup] input:-webkit-autofill:focus,
+[data-jbj-signup] input:-webkit-autofill:active,
+[data-jbj-signup] textarea:-webkit-autofill,
+[data-jbj-signup] select:-webkit-autofill {
+  -webkit-text-fill-color: #1A1A1A !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #064E3B !important;
+}
+
+/* Force emerald focus rings — never blue */
+[data-jbj-signup] input:focus,
+[data-jbj-signup] input:focus-visible,
+[data-jbj-signup] textarea:focus,
+[data-jbj-signup] textarea:focus-visible,
+[data-jbj-signup] select:focus,
+[data-jbj-signup] select:focus-visible,
+[data-jbj-signup] button:focus-visible,
+[data-jbj-signup] [role="combobox"]:focus,
+[data-jbj-signup] [role="combobox"]:focus-visible,
+.jbj-signup-dropdown input:focus,
+.jbj-signup-dropdown button:focus-visible {
+  outline: none !important;
+  border-color: #064E3B !important;
+  box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.20) !important;
+}
+
+/* PhoneInput selector focus ring uses focus-within */
+[data-jbj-signup] .PhoneInputCountry:focus-within {
+  outline: none !important;
+  border-color: #064E3B !important;
+  box-shadow: 0 0 0 3px rgba(6, 78, 59, 0.20) !important;
+}
+
+/* Native <select> dropdown pop-up (country picker inside PhoneInput):
+   arrow color to emerald, kill blue highlight where supported */
+[data-jbj-signup] .PhoneInputCountrySelectArrow {
+  border-color: #0d3a2b !important;
+  opacity: 0.85 !important;
+}
+[data-jbj-signup] select option {
+  color: #1A1A1A;
+  background: #ffffff;
+}
+
+/* Force champagne background for INACTIVE pills inside sign-up form.
+   Overrides the global "focus-ring-emerald ⇒ emerald bg" contrast-guard rule. */
+html body [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"] {
+  background: #F7F2EA !important;
+  background-image: none !important;
+  color: #1A1A1A !important;
+  border-color: rgba(184, 149, 85, 0.55) !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"]:hover {
+  background: #F1E9D8 !important;
+  border-color: #064E3B !important;
+  color: #1A1A1A !important;
+}
+html body [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"] svg {
+  color: #1A1A1A !important;
+}
+/* Active pill stays emerald with white text */
+html body [data-jbj-signup] button.rounded-full[class*="bg-[#064E3B]"] {
+  background: #064E3B !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #064E3B !important;
+}
+html body [data-jbj-signup] button.rounded-full[class*="bg-[#064E3B]"] svg {
+  color: #ffffff !important;
+}
+
+/* Escalate specificity above the global champagne-chip gradient guard (#root prefix). */
+html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"],
+html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"]:hover {
+  background-image: none !important;
+  background: #F7F2EA !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"]:hover {
+  background: #F1E9D8 !important;
+  border-color: #064E3B !important;
+}
+html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#F7F2EA]"] svg {
+  color: #1A1A1A !important;
+}
+html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#064E3B]"] {
+  background-image: none !important;
+  background: #064E3B !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #064E3B !important;
+}
+html body #root [data-jbj-signup] button.rounded-full[class*="bg-[#064E3B]"] svg {
+  color: #ffffff !important;
+}
+
+/* Highest-specificity champagne pill guard for sign-up services chips. */
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"],
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"]:focus,
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"]:focus-visible {
+  background-image: none !important;
+  background-color: #F7F2EA !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"]:hover {
+  background-image: none !important;
+  background-color: #F1E9D8 !important;
+  border-color: #064E3B !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"] svg,
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="false"] span {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="true"] {
+  background-image: none !important;
+  background-color: #064E3B !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #064E3B !important;
+}
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="true"] svg,
+html body #root [data-jbj-signup] button[data-signup-pill][data-active="true"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Highest-specificity pill guard (5 classes/attrs to beat guard rules). */
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="false"] {
+  background-image: none !important;
+  background-color: #F7F2EA !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+  border-color: rgba(184,149,85,0.55) !important;
+}
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="false"]:hover {
+  background-image: none !important;
+  background-color: #F1E9D8 !important;
+  border-color: #064E3B !important;
+}
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="false"] svg,
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="false"] span {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="true"] {
+  background-image: none !important;
+  background-color: #064E3B !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border-color: #064E3B !important;
+}
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="true"] svg,
+html body #root [data-jbj-signup] button.rounded-full.inline-flex[data-signup-pill][data-active="true"] span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
