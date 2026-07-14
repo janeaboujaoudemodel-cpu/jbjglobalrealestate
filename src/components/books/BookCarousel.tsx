@@ -147,7 +147,7 @@ export function BookCarousel({
       // NOTE: WebkitOverflowScrolling must stay "auto" — the legacy "touch"
       // value freezes programmatic scrollLeft repaints on iOS, which stops the
       // strip from visibly walking on iPhone/iPad.
-      style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto" }}
+      style={{ cursor: "grab", touchAction: "pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto", willChange: "scroll-position", transform: "translateZ(0)" }}
     >
       {track.map((book, i) => (
         <div key={`${book.title}-${i}`} className="shrink-0" draggable={false}>

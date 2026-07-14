@@ -15,6 +15,7 @@ import { useSurfaceFeaturedProjects } from "@/hooks/useGateFeaturedProjects";
 import type { BookData } from "@/types/books";
 
 import {
+  ArrowLeft,
   ArrowRight,
   Award,
   CheckCircle2,
@@ -726,7 +727,7 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
         className="flex w-full gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
         // NOTE: do NOT set -webkit-overflow-scrolling: touch here. On iOS it freezes
         // programmatic scrollLeft repaints and the auto-scroll "walk" stops visibly.
-        style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto" }}
+        style={{ cursor: "grab", touchAction: "pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto", willChange: "scroll-position", transform: "translateZ(0)" }}
       >
         {track.map((p: any, idx) => {
           const cover = p.__cover;
@@ -824,6 +825,23 @@ function ServicesSection() {
   const total = jbjServicePages.length;
   const goto = (i: number) => setPageIdx(((i % total) + total) % total);
 
+  // ── Mobile single-card auto-rotating carousel ──
+  const [mobileIdx, setMobileIdx] = useState(0);
+  const [mobilePaused, setMobilePaused] = useState(false);
+  const itemsLen = page.items.length;
+  useEffect(() => { setMobileIdx(0); }, [pageIdx]);
+  useEffect(() => {
+    if (mobilePaused || itemsLen < 2) return;
+    const t = window.setInterval(() => {
+      setMobileIdx((i) => (i + 1) % itemsLen);
+    }, 4200);
+    return () => window.clearInterval(t);
+  }, [mobilePaused, itemsLen, pageIdx]);
+  const mobilePrev = () => setMobileIdx((i) => (i - 1 + itemsLen) % itemsLen);
+  const mobileNext = () => setMobileIdx((i) => (i + 1) % itemsLen);
+  const mobileItem = page.items[mobileIdx];
+  const MobileIcon = mobileItem.icon;
+
   return (
     <section
       id="services"
@@ -882,8 +900,61 @@ function ServicesSection() {
 
         </div>
 
-        {/* Premium photo cards — magazine editorial grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Mobile: single auto-rotating service card with arrows */}
+        <div
+          className="relative sm:hidden"
+          onTouchStart={() => setMobilePaused(true)}
+          onTouchEnd={() => window.setTimeout(() => setMobilePaused(false), 2500)}
+        >
+          <article
+            key={`m-${page.key}-${mobileIdx}`}
+            data-service-card
+            className="group relative flex animate-fade-in flex-col overflow-hidden rounded-[20px] border border-[#0d3a2b]/12 bg-[#0d3a2b] shadow-[0_28px_60px_-32px_rgba(6,78,59,0.55)]"
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <img src={mobileItem.image} alt={mobileItem.title} loading="lazy" className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#01140d] via-[#01140d]/45 to-transparent" />
+              <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A84C]/55 to-transparent" />
+              <span data-surface="dark" className="absolute left-5 top-5 inline-flex h-9 items-center rounded-full border border-white/40 bg-black/50 px-3 font-serif text-[11px] tracking-[0.28em] !text-white backdrop-blur" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
+                {String(mobileIdx + 1).padStart(2, "0")} / {String(itemsLen).padStart(2, "0")}
+              </span>
+              <span data-surface="dark" className="absolute right-5 top-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md">
+                <MobileIcon className="h-5 w-5" style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
+              </span>
+              <div className="absolute inset-x-6 bottom-5">
+                <h3 className="font-serif text-[22px] leading-tight" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{mobileItem.title}</h3>
+                <span aria-hidden className="mt-2 block h-px w-10 bg-[#C9A84C]" />
+              </div>
+            </div>
+            <div className="relative flex flex-1 flex-col gap-4 bg-[#FDFBF7] px-6 py-6">
+              <p className="text-[13.5px] leading-relaxed text-[#1A1A1A]/75">{mobileItem.body}</p>
+              <div className="mt-2 flex items-center justify-center gap-1.5">
+                {page.items.map((_, i) => (
+                  <span key={i} className={`h-1.5 rounded-full transition-all ${i === mobileIdx ? "w-6 bg-[#0d3a2b]" : "w-1.5 bg-[#0d3a2b]/25"}`} />
+                ))}
+              </div>
+            </div>
+          </article>
+          <button
+            type="button"
+            aria-label="Previous service"
+            onClick={mobilePrev}
+            className="absolute left-2 top-[22%] inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/45 text-white backdrop-blur-md active:scale-95"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="Next service"
+            onClick={mobileNext}
+            className="absolute right-2 top-[22%] inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-black/45 text-white backdrop-blur-md active:scale-95"
+          >
+            <ArrowRight className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Desktop/tablet: magazine editorial grid */}
+        <div className="hidden gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3">
           {page.items.map((s, i) => {
             const Icon = s.icon;
             return (
@@ -1092,8 +1163,8 @@ function CertificatePreview() {
     <div className="relative">
       <div
         data-broker-certificate-frame
-        className="certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)]"
-        style={{ aspectRatio: "1.72 / 1", maxWidth: "1040px" }}
+        className="certificate-shimmer-frame relative mx-auto w-full overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EFE1] to-[#EFE6D6] shadow-[0_60px_120px_-40px_rgba(6,78,59,0.55),0_20px_50px_-20px_rgba(0,0,0,0.35)] min-h-[380px] sm:min-h-0 sm:[aspect-ratio:1.72/1]"
+        style={{ maxWidth: "1040px" }}
       >
         {/* Ornate double border */}
         <div className="pointer-events-none absolute inset-2 border-[1.5px] border-[#8B6F3A]/60" />
@@ -1104,7 +1175,7 @@ function CertificatePreview() {
         <div className="pointer-events-none absolute left-4 bottom-4 h-4 w-4 border-l-[1.5px] border-b-[1.5px] border-[#8B6F3A]" />
         <div className="pointer-events-none absolute right-4 bottom-4 h-4 w-4 border-r-[1.5px] border-b-[1.5px] border-[#8B6F3A]" />
 
-        <div className="relative flex h-full flex-col px-8 py-5 text-center sm:px-14 sm:py-7">
+        <div className="relative flex h-full flex-col px-4 py-4 text-center sm:px-14 sm:py-7">
           {/* Header */}
           <div className="flex items-center justify-between text-left">
             <img
@@ -1129,7 +1200,7 @@ function CertificatePreview() {
               <span className="h-px w-14 bg-[#8B6F3A]/60" />
             </div>
             <p className="mt-2 text-[9px] uppercase tracking-[0.28em] text-[#1A1A1A]/55 sm:text-[10px]">This is presented to</p>
-            <p className="username-shimmer mt-1.5 inline-flex min-w-[260px] justify-center border-b border-[#8B6F3A]/50 pb-1 font-serif text-2xl italic text-[#0d3a2b] sm:min-w-[320px] sm:text-[30px]">
+            <p className="username-shimmer mt-1.5 inline-flex min-w-[200px] justify-center border-b border-[#8B6F3A]/50 pb-1 font-serif text-xl italic text-[#0d3a2b] sm:min-w-[320px] sm:text-[30px]">
               Your Name Here
             </p>
             <p className="mx-auto mt-2 max-w-xl text-[10px] leading-relaxed text-[#1A1A1A]/68 sm:text-[11px]">
@@ -1138,14 +1209,14 @@ function CertificatePreview() {
           </div>
 
           {/* Footer row */}
-          <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-4 text-left">
+          <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-end gap-2 text-left sm:mt-0 sm:gap-4">
             <div>
               <div className="h-5 sm:h-6" />
-              <div className="mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
+              <div className="mt-1 h-px w-20 bg-[#1A1A1A]/60 sm:w-40" />
               <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Founder &amp; CEO</p>
             </div>
 
-            <div aria-hidden className="seal-outline relative flex h-24 w-24 items-center justify-center rounded-full sm:h-[120px] sm:w-[120px]">
+            <div aria-hidden className="seal-outline relative flex h-16 w-16 items-center justify-center rounded-full sm:h-[120px] sm:w-[120px]">
               <svg viewBox="0 0 120 120" className="absolute inset-0 h-full w-full drop-shadow-[0_14px_24px_rgba(184,149,85,0.5)]">
                 <defs>
                   <linearGradient id="sealGold" x1="12" y1="8" x2="108" y2="112" gradientUnits="userSpaceOnUse">
@@ -1181,7 +1252,7 @@ function CertificatePreview() {
                 data-no-fallback
                 src={new URL("@/assets/jbj-monogram-nobuffer.png", import.meta.url).href}
                 alt=""
-                className="relative h-12 w-12 object-contain sm:h-16 sm:w-16"
+                className="relative h-8 w-8 object-contain sm:h-16 sm:w-16"
                 style={{
                   filter: "brightness(0) saturate(100%) invert(28%) sepia(45%) saturate(720%) hue-rotate(5deg) brightness(78%) contrast(96%) drop-shadow(0 1px 0 rgba(255,240,200,0.55)) drop-shadow(0 -1px 0 rgba(80,55,20,0.35))",
                   opacity: 0.96,
@@ -1190,10 +1261,10 @@ function CertificatePreview() {
             </div>
 
             <div className="text-right">
-              <div className="ml-auto flex h-5 items-end justify-end font-serif text-sm leading-none text-[#0d3a2b] sm:h-6 sm:text-base">
+              <div className="ml-auto flex h-5 items-end justify-end font-serif text-xs leading-none text-[#0d3a2b] sm:h-6 sm:text-base">
                 {today}
               </div>
-              <div className="ml-auto mt-1 h-px w-28 bg-[#1A1A1A]/60 sm:w-40" />
+              <div className="ml-auto mt-1 h-px w-20 bg-[#1A1A1A]/60 sm:w-40" />
               <p className="mt-1 text-[8px] uppercase tracking-[0.22em] text-[#1A1A1A]/60 sm:text-[9px]">Date of issue</p>
             </div>
           </div>
