@@ -130,11 +130,31 @@ const PAGES_WITH_OWN_HERO = new Set<string>([
   "/insights",
   "/news",
   "/market-report",
+  "/guides",
+  "/buyer-guide",
+  "/seller-guide",
+  "/rent-guide",
+  "/rental-guide",
+  "/tenant-guide",
+  "/landlord-guide",
+  "/investor-education",
+  "/golden-visa-guide",
+  "/faq",
+  "/services",
+  "/about",
+  "/terms",
+  "/privacy",
+  "/cookies",
+  "/disclaimers",
+  "/aml-kyc",
+  "/intellectual-property",
 ]);
 
 const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null => {
   if (pathname === "/market-intelligence" || pathname.startsWith("/market-intelligence/")) return null;
   if (PAGES_WITH_OWN_HERO.has(pathname)) return null;
+  if (pathname.startsWith("/guides/")) return null;
+  if (pathname.startsWith("/services/")) return null;
   if (pathname.startsWith("/news/")) return null; // news detail pages provide their own hero
 
 
