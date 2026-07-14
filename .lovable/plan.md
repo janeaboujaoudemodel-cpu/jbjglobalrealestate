@@ -1,52 +1,68 @@
+
 ## Goal
-Every route in the Insights sidebar group renders with the **same structure as `/market-intelligence`**:
 
-1. Full-screen emerald Prada hero (title + description + optional CTA row) — from `MIPageShell`
-2. MI-style right-side navigator (`MarketIntelligenceTableOfContents`) that hides while in hero
-3. Body sections framed by a single **champagne surface + gold hairline** card (`bg:#FDFBF7`, `border:1px solid #B89555`) — never a beige-inside-beige double card
-4. Canonical `PreFooterSeparator` "Ready to Make Informed Decisions?" CTA
-5. Contrast-guard rules already in `index.css` remain the only source of colors
+Every page under Insights, Guides, Services, Company, Legal, and Help & Support renders with the exact same structure as `/market-intelligence`:
 
-Everything runs through `src/components/shell/MIPageShell.tsx`. Pages that already use it inherit fixes for free; pages that don't get refactored to use it.
+1. Full-screen deep emerald Prada hero (title + subtitle + CTAs)
+2. MI-style right-side navigator ("In This Section") that hides while inside the hero
+3. Champagne body sections at `max-w-4xl`, consistent padding/rhythm
+4. Single-card style — champagne surface + 1px gold hairline border. No nested double-cards, no beige-inside-beige.
+5. Pre-footer "Ready to…" CTA (`PreFooterSeparator`) before the global footer
+6. Hero CTAs locked to the sidebar obsidian-emerald gradient
 
-## Card style (locked)
-Single card, no nesting:
-```
-bg-[#FDFBF7]  border border-[#B89555]/60  shadow-none  rounded-none
-```
-No inner champagne panel. No `bg-muted` inner surface. No emerald tile behind the card. I will add a shared class `.jj-mi-section-card` in `index.css` and swap page-level card wrappers to use it.
+The canonical implementation is `src/components/shell/MIPageShell.tsx`. Every migrated page will render through it — no per-page hero components, no per-page card variants.
 
-## Route inventory (Insights sidebar, 26 routes)
-Group A — Market Intelligence family (7): `/market-intelligence`, `/market-intelligence/overview`, `/market-intelligence/areas`, `/market-intelligence/areas/:slug`, `/market-intelligence/reports`, `/market-intelligence/reports/monthly/:period` (+ quarterly, annual), `/market-intelligence/methodology`, `/market-report`
-Group B — News (2): `/news`, `/news/:id`
-Group C — Insights hub + articles (2): `/insights`, `/insights/future-of-real-estate-2026`
-Group D — Guides (7): `/guides`, `/buyer-guide`, `/seller-guide`, `/rent-guide`, `/tenant-guide`, `/landlord-guide`, `/guides/golden-visa-uae`, `/guides/dubai-rental-yield`, `/guides/selling-off-plan-dubai-before-handover`
-Group E — FAQ (6): `/faq`, `/buyer-faq`, `/seller-faq`, `/landlord-faq`, `/tenant-faq`, `/broker-faq`
-Group F — Education (1): `/investor-education`
+## Execution — one group per turn, screenshot proof per route
 
-## Execution — one PR per group
-For each group I will:
-1. Refactor pages onto `MIPageShell` (hero + `tocItems` + pre-footer already handled by the shell).
-2. Replace body wrappers with the shared `.jj-mi-section-card` class. No emerald backgrounds behind content, no double-card nesting.
-3. Run Playwright headless against localhost:8080 for **every route in the group** at 1440×1100 desktop and 390×844 mobile. Capture:
-   - Hero screenshot
-   - First body section screenshot (validates single-card style)
-   - Pre-footer screenshot
-4. Post the screenshot paths in chat. Only after all routes in the group pass do I move to the next group.
+I ship in six groups. For each group I:
+
+1. Migrate every route in the group to `MIPageShell` (or wrap it, when the page has heavy custom body content).
+2. Delete legacy hero components and nested card wrappers inside that group.
+3. Run Playwright with the authenticated session, capture hero + body screenshot for every route in the group at 1280×1800.
+4. Post the screenshots inline before moving to the next group.
+5. Stop and wait for your ✅ before starting the next group.
+
+### Groups
+
+**Group A — Insights (Market Intelligence family)** — DONE last turn (9 routes: MI, Overview, Areas, Area Detail, Reports, Monthly, Quarterly, Annual, Methodology). I'll re-shoot with the auth session and re-post proof.
+
+**Group B — Insights (News + Guides articles)** — News list, News detail, all Guides landing + article routes (`buyer-guide`, `investor-guide`, `off-plan-guide`, `future-of-real-estate-2026`, etc.).
+
+**Group C — Services + Products** — every route under Services and Products in the sidebar.
+
+**Group D — Company** — About, Careers, Contact, Team, Press, Partners, Media, etc.
+
+**Group E — Legal** — Terms, Privacy, Cookies, Disclaimers, DIFC, RERA, all legal pages.
+
+**Group F — Help & Support** — FAQ, Help Center, Contact Support, all help routes.
+
+## Card style — locked default
+
+Single champagne card everywhere:
+
+- Surface: `#FDFBF7`
+- Border: `1px solid #B89555 / 60%`
+- No nested cards. No inner beige panels. No gradient wrappers around cards.
+
+Applied via a single utility class in `src/index.css` (`.jj-mi-card`) so every page picks it up automatically.
+
+## What I will NOT touch
+
+- Backend, data, RLS, auth — none of it
+- Business logic inside these pages (charts, calculators, forms keep working)
+- `/access` gate portal
+- Owner / broker / developer portals
+- Any route not in the six groups above
 
 ## Technical details
-- `src/index.css`: add `.jj-mi-section-card { background:#FDFBF7; border:1px solid rgba(184,149,85,.6); }` and a `[data-insights-page] .jj-mi-section-card > .jj-mi-section-card { background:transparent; border:0; }` guard to auto-flatten any accidental nested cards on Insights routes.
-- `MIPageShell`: no changes needed (already emerald hero + MI navigator + pre-footer). Verify `bodyClassName` defaults to `"mx-auto max-w-6xl px-4 md:px-6 py-16 md:py-24 space-y-16"`.
-- Per page: strip custom hero components (`GuideHero`, `FAQHero`, ad-hoc emerald headers) and pass their content into `MIPageShell` props. Keep TOC items already defined per page.
-- No business-logic changes. No data fetching changes. Presentation only.
 
-## Out of scope (per your answer)
-Services, Products/Tools, Company, Legal, Help & Support. Those come in follow-ups after Insights is green.
+- Canonical shell: `src/components/shell/MIPageShell.tsx` (already exists, verified against `/market-intelligence`).
+- Delete/short-circuit these legacy heroes so nothing else can render a different hero: `GuideHero`, `FAQHero`, `PremiumEmeraldHero` custom overrides — all re-export `MIPageShell`'s hero.
+- Card style enforced via `src/index.css` `.jj-mi-card` class and a `[data-mi-page] .card` fallback selector so accidental legacy cards still conform.
+- Navigator: reuse `MarketIntelligenceTableOfContents` unchanged. Each migrated page supplies its own `tocItems` list (section id + title + icon).
+- Hero CTA: `.jj-mi-hero-cta-emerald` class already locked to the obsidian-emerald gradient; every migrated page uses it.
+- Validation: Playwright script under `/tmp/browser/group-{X}/` with Supabase session injection (auth is currently `injected`), viewport 1280×1800, one hero shot + one body shot per route. Screenshots posted inline before I mark the group done.
 
-## Deliverable per group
-A single message in chat with:
-- List of routes touched
-- One `code--view` screenshot per route (desktop) + one mobile
-- Explicit "Group X validated — moving to Group Y" line
+## Order of operations for this turn
 
-Reply **Approve** to start with **Group A (Market Intelligence family, 7 routes)**, or tell me to reorder.
+Confirm this plan → I re-shoot Group A with the auth session and post proof → wait for your ✅ → start Group B.
