@@ -381,11 +381,11 @@ Deno.serve(async (req) => {
     }
 
     if (filesRead.length === 0) {
-      return response({
-        error: "No uploaded files could be read for extraction. Please retry upload or use smaller files.",
-        files_read: 0,
-        files_skipped: filesSkipped,
-      }, 422);
+      const oversize = filesSkipped.filter((f) => /larger than/i.test(f.reason));
+      const primary = oversize.length
+        ? `Some files are too large for AI extraction (max ${Math.round(MAX_FILE_BYTES / 1024 / 1024)}MB per file). Compress the PDF (e.g. iLovePDF "Compress PDF") and re-upload: ${oversize.map((f) => f.name).join(", ")}.`
+        : "No uploaded files could be read for extraction. Please retry upload or use smaller files.";
+      return response({ error: primary, files_read: 0, files_skipped: filesSkipped }, 422);
     }
 
     const finalExtracted = applyProjectMajorityRule(await reconcileExtracted(LOVABLE_API_KEY, perFile), perFile);
