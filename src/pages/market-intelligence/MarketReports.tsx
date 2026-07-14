@@ -404,31 +404,31 @@ const MarketReportsPage = () => {
                   Report Archive
                 </h2>
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
                   {/* Monthly Reports Selector */}
-                  <Card className="jj-mi-archive-card bg-[#FDFBF7] border-2 border-[#064E3B]/25 hover:border-[#064E3B]/45 transition-all">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div data-surface="emerald" className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/20">
-                          <Calendar className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 
-                            className="text-lg font-bold"
-                            style={{ 
-                              background: "linear-gradient(135deg, #B89555, #E8D5B0, #B89555)",
-                              WebkitBackgroundClip: "text",
-                              WebkitTextFillColor: "transparent"
-                            }}
-                          >
-                            Monthly Snapshots
-                          </h3>
-                          <p className="text-[#1A1A1A]/70 text-sm">Quick monthly market overviews</p>
-                        </div>
+                  <div className="jj-mi-archive-card rounded-2xl p-6 md:p-7 bg-[#FDFBF7] border border-[#B89555]/35 shadow-[0_2px_10px_rgba(6,78,59,0.06)] transition-all hover:border-[#064E3B]/45 hover:shadow-[0_4px_18px_rgba(6,78,59,0.10)] flex flex-col h-full">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div data-surface="emerald" className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/20 shrink-0" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}>
+                        <Calendar className="w-6 h-6" style={{ color: "#FFFFFF" }} />
                       </div>
-                      <p className="text-[#1A1A1A]/70 text-sm mb-4">Download any monthly report from our archive. Data sourced from Dubai Government Open Data.</p>
-                      <select 
-                        className="w-full p-3 border-2 border-[#B89555]/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-[#B89555] focus:ring-1 focus:ring-gold"
+                      <div className="min-w-0">
+                        <h3
+                          className="text-lg font-bold leading-tight"
+                          style={{
+                            background: "linear-gradient(135deg, #B89555, #E8D5B0, #B89555)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent"
+                          }}
+                        >
+                          Monthly Snapshots
+                        </h3>
+                        <p className="text-[#1A1A1A]/70 text-sm">Quick monthly market overviews</p>
+                      </div>
+                    </div>
+                    <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-grow">Download any monthly report from our archive. Data sourced from Dubai Government Open Data.</p>
+                    <div className="jj-select-wrap relative mb-4">
+                      <select
+                        className="jj-native-select w-full appearance-none pl-4 pr-10 py-3 border border-[#B89555]/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] focus:border-[#064E3B] focus:outline-none focus:ring-1 focus:ring-[#064E3B]"
                         value={selectedMonthlyDownload || ''}
                         onChange={(e) => setSelectedMonthlyDownload(e.target.value)}
                       >
@@ -437,39 +437,40 @@ const MarketReportsPage = () => {
                           <option key={item.month} value={item.date}>{item.month}</option>
                         ))}
                       </select>
-                      <Link to="/market-report">
-                        <Button variant="primary" className="w-full" disabled={!selectedMonthlyDownload}>
-                          <Download className="w-4 h-4 mr-2" />
-                          Download Report
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
+                      <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#064E3B]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 011.08 1.04l-4.24 4.38a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
+                    </div>
+                    <Link to="/market-report" className="mt-auto">
+                      <Button variant="primary" className="w-full mi-cta-emerald" disabled={!selectedMonthlyDownload}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Report
+                      </Button>
+                    </Link>
+                  </div>
 
                   {/* Quarterly Reports Selector */}
-                  <Card className="jj-mi-archive-card bg-[#FDFBF7] border-2 border-[#064E3B]/25 hover:border-[#064E3B]/45 transition-all">
-                    <CardContent className="p-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div data-surface="emerald" className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/20">
-                          <FileText className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 
-                            className="text-lg font-bold"
-                            style={{ 
-                              background: "linear-gradient(135deg, #B89555, #E8D5B0, #B89555)",
-                              WebkitBackgroundClip: "text",
-                              WebkitTextFillColor: "transparent"
-                            }}
-                          >
-                            Quarterly Reviews
-                          </h3>
-                          <p className="text-[#1A1A1A]/70 text-sm">In-depth quarterly analysis</p>
-                        </div>
+                  <div className="jj-mi-archive-card rounded-2xl p-6 md:p-7 bg-[#FDFBF7] border border-[#B89555]/35 shadow-[0_2px_10px_rgba(6,78,59,0.06)] transition-all hover:border-[#064E3B]/45 hover:shadow-[0_4px_18px_rgba(6,78,59,0.10)] flex flex-col h-full">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div data-surface="emerald" className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/20 shrink-0" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)" }}>
+                        <FileText className="w-6 h-6" style={{ color: "#FFFFFF" }} />
                       </div>
-                      <p className="text-[#1A1A1A]/70 text-sm mb-4">Comprehensive quarterly reports with area breakdowns and property type analysis.</p>
-                      <select 
-                        className="w-full p-3 border-2 border-[#B89555]/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] mb-4 focus:border-[#B89555] focus:ring-1 focus:ring-gold"
+                      <div className="min-w-0">
+                        <h3
+                          className="text-lg font-bold leading-tight"
+                          style={{
+                            background: "linear-gradient(135deg, #B89555, #E8D5B0, #B89555)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent"
+                          }}
+                        >
+                          Quarterly Reviews
+                        </h3>
+                        <p className="text-[#1A1A1A]/70 text-sm">In-depth quarterly analysis</p>
+                      </div>
+                    </div>
+                    <p className="text-[#1A1A1A]/70 text-sm mb-4 flex-grow">Comprehensive quarterly reports with area breakdowns and property type analysis.</p>
+                    <div className="jj-select-wrap relative mb-4">
+                      <select
+                        className="jj-native-select w-full appearance-none pl-4 pr-10 py-3 border border-[#B89555]/40 rounded-lg text-[#1A1A1A] bg-[#FDFBF7] focus:border-[#064E3B] focus:outline-none focus:ring-1 focus:ring-[#064E3B]"
                         value={selectedQuarterlyDownload || ''}
                         onChange={(e) => setSelectedQuarterlyDownload(e.target.value)}
                       >
@@ -478,14 +479,15 @@ const MarketReportsPage = () => {
                           <option key={item.quarter} value={item.date}>{item.quarter}</option>
                         ))}
                       </select>
-                      <Link to="/market-report">
-                        <Button variant="primary" className="w-full" disabled={!selectedQuarterlyDownload}>
-                          <Download className="w-4 h-4 mr-2" />
-                          Download Report
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
+                      <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#064E3B]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.06l3.71-3.83a.75.75 0 011.08 1.04l-4.24 4.38a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z" clipRule="evenodd" /></svg>
+                    </div>
+                    <Link to="/market-report" className="mt-auto">
+                      <Button variant="primary" className="w-full mi-cta-emerald" disabled={!selectedQuarterlyDownload}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Report
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
 
                 {/* Data source note */}
