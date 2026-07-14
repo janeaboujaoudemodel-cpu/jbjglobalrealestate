@@ -11,7 +11,9 @@ const corsHeaders = {
 
 interface FileRef { url: string; name: string; type?: string; role?: "cover" | "gallery" | "fact_sheet" | "brochure" | "document" }
 
-const MAX_FILE_BYTES = 50 * 1024 * 1024;
+// Gemini inline file parts via the Lovable AI Gateway are capped near 20MB
+// (base64 payload). Anything above that is rejected before extraction.
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const AI_TIMEOUT_MS = 95_000;
 
 const SCHEMA_HINT = `Return ONLY valid minified JSON matching this shape. Use null when unknown. Never invent values.
