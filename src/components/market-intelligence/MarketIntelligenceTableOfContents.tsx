@@ -218,15 +218,24 @@ export const MarketIntelligenceTableOfContents = ({
                 })}
               </nav>
 
-              {/* Sticky CTA footer — never cropped */}
+              {/* Sticky CTA footer — solid emerald, no gap, metallic sweep button */}
               {ctaAction && (
-                <div className="border-t border-white/15 p-2.5 bg-black/10 flex-shrink-0">
-                  <Link to={ctaAction.href} className="block">
-                    <Button variant="primary" size="sm" className="w-full mi-cta-emerald jj-emerald-metallic rounded-xl">
-                      {ctaAction.icon && <ctaAction.icon className="w-3.5 h-3.5 mr-1.5" />}
-                      <span className="text-xs">{ctaAction.label}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 ml-1.5" />
-                    </Button>
+                <div
+                  data-surface="emerald"
+                  data-emerald="true"
+                  className="border-t border-white/15 p-2.5 flex-shrink-0"
+                  style={{ backgroundImage: 'var(--jj-emerald-ombre)' }}
+                >
+                  <Link
+                    to={ctaAction.href}
+                    data-surface="emerald"
+                    data-emerald-ok="button"
+                    data-no-contrast-guard
+                    className="jj-emerald-metallic w-full flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-xs font-semibold"
+                  >
+                    {ctaAction.icon && <ctaAction.icon className="w-3.5 h-3.5" />}
+                    <span>{ctaAction.label}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               )}
