@@ -827,7 +827,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             <span className="allow-white" style={{ color: "#FFFFFF" }}>Back to Previous Page</span>
           </button>
 
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
             {/* Eyebrow pill — white on white/10 */}
             <div
               data-no-contrast-guard
@@ -850,13 +850,13 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             </h1>
             <p
               data-no-contrast-guard
-              className="allow-white text-base md:text-lg leading-relaxed max-w-2xl"
+              className="allow-white text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
               style={{ color: "rgba(255,255,255,0.85)" }}
             >
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
 
-            <div className="flex items-center gap-3 mt-5">
+            <div className="flex items-center justify-center gap-3 mt-5">
               <div className="h-px w-12" style={{ background: "rgba(255,255,255,0.55)" }} />
               <span className="allow-white text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "rgba(255,255,255,0.75)" }}>
                 Powered by
@@ -899,7 +899,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             </div>
 
             {/* CTA row — primary emerald metallic (white ink), secondary champagne (black ink) */}
-            <div className="flex flex-wrap gap-3 mt-8">
+            <div className="flex flex-wrap justify-center gap-3 mt-8">
               <button
                 onClick={openMultiPicker}
                 disabled={isGenerating}
