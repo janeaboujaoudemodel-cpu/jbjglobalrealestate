@@ -850,7 +850,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             </h1>
             <p
               data-no-contrast-guard
-              className="allow-white text-base md:text-lg leading-relaxed max-w-2xl"
+              className="allow-white text-base md:text-lg leading-relaxed max-w-2xl mx-auto"
               style={{ color: "rgba(255,255,255,0.85)" }}
             >
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
