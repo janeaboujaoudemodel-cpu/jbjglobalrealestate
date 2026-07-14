@@ -101,7 +101,7 @@ const MarketAreaDetail = () => {
       </div>
 
       {/* Key Metrics - 3-layer system with proper gutters */}
-      <section className="pt-16 py-12 bg-[#F7F2EA]">
+      <section className="pt-16 py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="jj-card-inner">
@@ -145,7 +145,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* AI Explanation - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <Card className="jj-card-inner max-w-4xl mx-auto">
             <CardHeader>
@@ -173,7 +173,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Key Highlights - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <h2 className="text-[#1A1A1A] text-2xl font-bold mb-8 text-center">
             <span className="text-[#1A1A1A]">Market</span> Highlights
@@ -192,7 +192,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* CTA - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <div className="max-w-2xl mx-auto text-center jj-card-inner p-8">
             <h3 className="text-[#1A1A1A] text-xl font-bold mb-4">Interested in {area.area}?</h3>
@@ -214,7 +214,7 @@ const MarketAreaDetail = () => {
       </section>
 
       {/* Internal Links - 3-layer system */}
-      <section className="py-12 bg-[#F7F2EA]">
+      <section className="py-12 jj-section-champagne">
         <div className="jj-layer-2">
           <h3 className="text-[#1A1A1A] text-xl font-bold mb-6 text-center">
             <span className="text-[#1A1A1A]">Continue</span> Exploring
