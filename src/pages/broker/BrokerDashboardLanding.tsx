@@ -324,6 +324,9 @@ export default function BrokerDashboardLanding() {
                 <DropdownMenuItem asChild className="cursor-pointer focus:bg-[#EFE6D6] focus:text-[#1A1A1A]">
                   <Link to="/broker/settings"><SettingsIcon className="mr-2 h-4 w-4 text-[#1A1A1A]" /> Settings</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer focus:bg-[#EFE6D6] focus:text-[#1A1A1A]">
+                  <Link to="/account/billing"><Briefcase className="mr-2 h-4 w-4 text-[#1A1A1A]" /> Billing & subscription</Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-[#B89555]/25" />
                 <DropdownMenuItem
                   onSelect={(e) => { e.preventDefault(); handleSignOut(); }}
