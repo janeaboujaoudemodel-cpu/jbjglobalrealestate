@@ -114,7 +114,7 @@ const Architecture = () => {
           <motion.div variants={fadeInUp}>
             <Link 
               to="/services/design-build" 
-              className="inline-flex items-center gap-2 text-[#1A1A1A] hover:text-white transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-white hover:text-white transition-colors mb-6"
             >
               <ChevronLeft className="w-4 h-4" />
               Back to Design & Build
@@ -125,8 +125,8 @@ const Architecture = () => {
             className="flex items-center gap-2 mb-6"
             variants={fadeInUp}
           >
-            <PenTool className="w-6 h-6 text-[#1A1A1A]" />
-            <span className="text-[#1A1A1A] text-sm uppercase tracking-[0.3em]">
+            <PenTool className="w-6 h-6 text-white" />
+            <span className="text-white text-sm uppercase tracking-[0.3em]">
               Partner Network
             </span>
           </motion.div>
@@ -149,7 +149,7 @@ const Architecture = () => {
           <motion.div variants={fadeInUp}>
             <Button variant="primary" size="lg" asChild>
               <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                <span className="text-[#1A1A1A]">Start Your</span><span className="text-[#1A1A1A]"> Project</span>
+                <span>Start Your</span><span> Project</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </a>
             </Button>
@@ -279,7 +279,7 @@ const Architecture = () => {
               </p>
               <Button variant="primary" size="lg" asChild>
                 <a href={CONTACT_INFO.inquiryFormUrl} target="_blank" rel="noopener noreferrer">
-                  <span className="text-[#1A1A1A]">Schedule</span><span className="text-[#1A1A1A]"> Consultation</span>
+                  <span>Schedule</span><span> Consultation</span>
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </a>
               </Button>

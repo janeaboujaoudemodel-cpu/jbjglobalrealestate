@@ -406,11 +406,11 @@ const MarketReportsPage = () => {
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                   {/* Monthly Reports Selector */}
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="jj-mi-archive-card bg-[#FDFBF7] border-2 border-[#064E3B]/25 hover:border-[#064E3B]/45 transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-[#B89555]/30">
-                          <Calendar className="w-6 h-6 text-[#1A1A1A]" />
+                        <div data-surface="emerald" className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/20">
+                          <Calendar className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <h3 
@@ -447,11 +447,11 @@ const MarketReportsPage = () => {
                   </Card>
 
                   {/* Quarterly Reports Selector */}
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 hover:border-[#B89555] hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="jj-mi-archive-card bg-[#FDFBF7] border-2 border-[#064E3B]/25 hover:border-[#064E3B]/45 transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-[#B89555]/30">
-                          <FileText className="w-6 h-6 text-[#1A1A1A]" />
+                        <div data-surface="emerald" className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/20">
+                          <FileText className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <h3 
@@ -513,8 +513,8 @@ const MarketReportsPage = () => {
                   <Card className="jj-card-inner overflow-hidden">
                     <CardContent className="p-8 md:p-10 text-center relative">
                       <div className="relative z-10">
-                        <div className="jj-icon-box-active w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5">
-                          <FileText className="w-7 h-7" />
+                        <div data-surface="emerald" className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5 border border-white/20">
+                          <FileText className="w-7 h-7 text-white" />
                         </div>
                         <h3 
                           className="text-2xl md:text-3xl font-bold mb-4"
@@ -531,7 +531,7 @@ const MarketReportsPage = () => {
                           Our market intelligence team can prepare bespoke analysis for specific areas, property types, or investment scenarios tailored to your requirements.
                         </p>
                         <Link to="/contact">
-                          <Button variant="primary" size="lg" className="font-semibold px-8">
+                          <Button variant="primary" size="lg" className="mi-cta-emerald font-semibold px-8 rounded-xl">
                             Request Custom Report
                             <ExternalLink className="w-4 h-4 ml-2" />
                           </Button>

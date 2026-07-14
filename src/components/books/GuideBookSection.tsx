@@ -80,7 +80,7 @@ export function GuideBookSection({ book }: GuideBookSectionProps) {
                   onClick={() => openAt(idx)}
                   className="w-full flex items-center gap-3 p-3 rounded-xl transition-all group hover:bg-[#EFE6D6]/70 cursor-pointer"
                 >
-                  <span className="w-8 h-8 rounded-lg bg-[#EFE6D6] border border-[#B89555]/30 flex items-center justify-center text-[#1A1A1A] text-sm font-semibold flex-shrink-0">
+                  <span data-surface="emerald" className="w-8 h-8 rounded-lg border border-white/20 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                     {idx + 1}
                   </span>
                   <span className="flex-1 text-sm text-left text-[#1A1A1A] font-medium group-hover:text-[#B89555] transition-colors">
@@ -101,7 +101,8 @@ export function GuideBookSection({ book }: GuideBookSectionProps) {
               type="button"
               onClick={() => openAt(0)}
               data-cta="open-book"
-              className="jj-cta-champagne mt-6 inline-flex items-center gap-2 h-11 px-6 rounded-full text-sm font-semibold"
+              data-surface="emerald"
+              className="jj-cta-emerald mt-6 inline-flex items-center gap-2 h-11 px-6 rounded-full text-sm font-semibold text-white"
             >
               <Sparkles className="w-4 h-4" />
               Open the Book

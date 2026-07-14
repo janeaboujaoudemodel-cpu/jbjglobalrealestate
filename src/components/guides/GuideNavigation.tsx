@@ -30,7 +30,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
       <div className="max-w-4xl mx-auto">
         {/* Start Here Block */}
         {showStartHere && (
-          <div className="mb-8 jj-card-inner border-2 border-[#B89555]/50 rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
+            <div className="mb-8 jj-card-inner border-2 border-[#064E3B]/25 rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(6,78,59,0.12)]">
             {/* Active color icon box */}
             <div className="jj-icon-box-active w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Home className="w-7 h-7 text-[#1A1A1A]" />
@@ -41,11 +41,12 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
             </p>
             <Link 
               to="/buyer-guide"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-xl transition-all text-sm font-semibold shadow-[0_8px_25px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.12)] hover:shadow-[0_12px_35px_rgba(200,167,102,0.45),0_8px_25px_rgba(0,0,0,0.18)] hover:-translate-y-1"
+              data-surface="emerald"
+              className="jj-cta-emerald inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all text-sm font-semibold hover:-translate-y-1"
             >
-              <span className="text-[#1A1A1A]">Start Here:</span>
-              <span className="text-[#1A1A1A]">Buyer Guide</span>
-              <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
+              <span className="text-white">Start Here:</span>
+              <span className="text-white">Buyer Guide</span>
+              <ArrowRight className="w-4 h-4 text-white" />
             </Link>
           </div>
         )}
@@ -111,7 +112,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                 to={guide.path}
                 className={`px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border-2 ${
                   guide.path === current
-                    ? "bg-gradient-to-br from-[#D8C7A6] via-[#C8B89A] to-[#B8A888] text-[#1A1A1A] border-[#B89555] shadow-[0_6px_20px_rgba(200,167,102,0.35)]"
+                    ? "jj-cta-emerald text-white border-transparent shadow-[0_6px_20px_rgba(6,78,59,0.28)]"
                     : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border-[#B89555]/50 hover:border-[#B89555] shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5"
                 }`}
               >

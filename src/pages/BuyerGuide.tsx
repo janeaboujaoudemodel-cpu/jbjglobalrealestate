@@ -403,8 +403,8 @@ const BuyerGuide = () => {
                 >
                   <div className="flex flex-col md:flex-row md:items-start gap-6">
                     <div className="flex-shrink-0">
-                      <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-gold/5 border border-[#B89555]/30 rounded-2xl flex items-center justify-center">
-                        <span className="text-[#1A1A1A] text-2xl font-semibold">{step.number}</span>
+                      <div data-surface="emerald" className="w-16 h-16 border border-white/20 rounded-2xl flex items-center justify-center">
+                        <span className="text-white text-2xl font-semibold">{step.number}</span>
                       </div>
                     </div>
                     <div className="flex-1">
@@ -414,7 +414,7 @@ const BuyerGuide = () => {
                           {step.title}
                         </h3>
                       </div>
-                      <p className="text-white/90 mb-4">{step.description}</p>
+                      <p className="text-[#1A1A1A]/70 mb-4">{step.description}</p>
                       
                       {step.items && (
                         <ul className="grid md:grid-cols-2 gap-3">
@@ -429,7 +429,7 @@ const BuyerGuide = () => {
 
                       {step.isComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                          <div className="jj-buyer-comparison-card rounded-xl p-5 border border-[#064E3B]/20">
                             <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.offPlan?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlan?.points.map((point, idx) => (
@@ -440,7 +440,7 @@ const BuyerGuide = () => {
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                          <div className="jj-buyer-comparison-card rounded-xl p-5 border border-[#064E3B]/20">
                             <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.ready?.title}</h4>
                             <ul className="space-y-2">
                               {step.ready?.points.map((point, idx) => (
@@ -456,7 +456,7 @@ const BuyerGuide = () => {
 
                       {step.isOfferComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                          <div className="jj-buyer-comparison-card rounded-xl p-5 border border-[#064E3B]/20">
                             <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.readyOffer?.title}</h4>
                             <ul className="space-y-2">
                               {step.readyOffer?.points.map((point, idx) => (
@@ -467,7 +467,7 @@ const BuyerGuide = () => {
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                          <div className="jj-buyer-comparison-card rounded-xl p-5 border border-[#064E3B]/20">
                             <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.offPlanOffer?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlanOffer?.points.map((point, idx) => (
@@ -483,7 +483,7 @@ const BuyerGuide = () => {
 
                       {step.isTransferComparison && (
                         <div className="grid md:grid-cols-2 gap-4 mt-4">
-                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                          <div className="jj-buyer-comparison-card rounded-xl p-5 border border-[#064E3B]/20">
                             <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.readyTransfer?.title}</h4>
                             <ul className="space-y-2">
                               {step.readyTransfer?.points.map((point, idx) => (
@@ -494,7 +494,7 @@ const BuyerGuide = () => {
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-[#1A1A1A]/5 rounded-xl p-5 border border-[#1A1A1A]/10">
+                          <div className="jj-buyer-comparison-card rounded-xl p-5 border border-[#064E3B]/20">
                             <h4 className="font-semibold text-[#1A1A1A] mb-3">{step.offPlanTransfer?.title}</h4>
                             <ul className="space-y-2">
                               {step.offPlanTransfer?.points.map((point, idx) => (
@@ -741,8 +741,8 @@ const BuyerGuide = () => {
                 >
                   <Link to="/contact">
                     <Phone className="w-4 h-4 mr-2" />
-                    <span className="text-[#1A1A1A]">Book a</span>
-                    <span className="text-[#1A1A1A] ml-1">Consultation</span>
+                    <span>Book a</span>
+                    <span className="ml-1">Consultation</span>
                   </Link>
                 </Button>
                 
