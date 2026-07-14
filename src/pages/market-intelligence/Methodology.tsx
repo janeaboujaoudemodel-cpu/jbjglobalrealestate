@@ -305,7 +305,7 @@ const Methodology = () => {
                   </h2>
                 </div>
                 
-                <div className="bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-10 md:p-12">
+                <div className="jj-methodology-standards-panel bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-10 md:p-12">
                   <p className="text-[#1A1A1A] leading-relaxed mb-4">
                     Market intelligence content follows these fixed rules:
                   </p>
