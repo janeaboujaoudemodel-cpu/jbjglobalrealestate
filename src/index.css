@@ -34982,22 +34982,34 @@ html body #root section#ready-to-get-started .jj-newsletter-emerald input.jj-her
    Newsletter pill must keep the emerald highlighter border/glow, not a flat block. */
 /* Match the vertical sidebar's active "Market Intelligence" pill exactly:
    same emerald ombre, same rounded-lg, no oversized glow. */
+html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald,
+html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald:is(:hover,:focus,:focus-visible,:active),
 html body #root [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald,
 html body #root [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald:is(:hover,:focus,:focus-visible,:active) {
   min-height: 3.25rem !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
   border-radius: 0.5rem !important;
   background: var(--jj-emerald-ombre) !important;
   background-color: #064E3B !important;
   background-image: var(--jj-emerald-ombre) !important;
+  background-blend-mode: normal !important;
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  box-shadow: 0 8px 20px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.14) !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 
+html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald:hover,
 html body #root [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald:hover {
-  filter: brightness(1.06) !important;
-  box-shadow: 0 10px 24px -12px rgba(6,78,59,0.75), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  border-color: rgba(255,255,255,0.20) !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-image: var(--jj-emerald-ombre) !important;
+  filter: none !important;
+  box-shadow: 0 8px 18px -12px rgba(6,78,59,0.65), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 
 html body #root [data-mi-hero].jj-mi-prada-hero .jj-mi-hero-cta.jj-mi-hero-cta-emerald :is(span, svg, path, line, polyline) {
