@@ -64,10 +64,21 @@ function toBase64(bytes: Uint8Array): string {
 
 async function fileToBase64(url: string): Promise<{ b64: string; mime: string; bytes: number } | { error: string }> {
   try {
+    // Cheap size probe first so we don't buffer a 58MB PDF just to reject it.
+    try {
+      const head = await fetch(url, { method: "HEAD", signal: AbortSignal.timeout(15_000) });
+      const len = Number(head.headers.get("content-length") || 0);
+      if (len && len > MAX_FILE_BYTES) {
+        return { error: `File is larger than ${Math.round(MAX_FILE_BYTES / 1024 / 1024)}MB (${Math.round(len / 1024 / 1024)}MB). Please compress the PDF (e.g. iLovePDF "Compress PDF") and re-upload.` };
+      }
+    } catch { /* fall through to GET */ }
     const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
     if (!r.ok) return { error: `File fetch failed (${r.status})` };
     const mime = r.headers.get("content-type") || "application/pdf";
     const buf = new Uint8Array(await r.arrayBuffer());
+    if (buf.byteLength > MAX_FILE_BYTES) {
+      return { error: `File is larger than ${Math.round(MAX_FILE_BYTES / 1024 / 1024)}MB (${Math.round(buf.byteLength / 1024 / 1024)}MB). Please compress the PDF and re-upload.` };
+    }
     return { b64: toBase64(buf), mime, bytes: buf.byteLength };
   } catch (e) {
     return { error: e instanceof Error ? e.message : "File could not be read" };
