@@ -116,6 +116,11 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
       return;
     }
 
+    // Debit credits BEFORE running the compare — server enforces cost & balance.
+    // Toast on failure is handled inside the hook.
+    const spend = await spendCredits("comparison");
+    if (!spend.ok) return;
+
     setIsAnalyzing(true);
     setAnalysisResult(null);
 
