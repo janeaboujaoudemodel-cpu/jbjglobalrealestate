@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import { useSpendBrokerCredits } from "@/hooks/useSpendBrokerCredits";
 import { 
   User, 
   Phone, 
@@ -41,11 +42,19 @@ interface SecureLeadCardProps {
 
 export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProps) {
   const [isContacting, setIsContacting] = useState(false);
+  const spend = useSpendBrokerCredits();
 
   const handleCompanyWhatsApp = async () => {
     setIsContacting(true);
-    
+
     try {
+      // Charge lead unlock credits (server enforces cost + idempotency via related_id)
+      const spendResult = await spend("lead_unlock", lead.id);
+      if (!spendResult.ok) {
+        setIsContacting(false);
+        return;
+      }
+
       // Log the access attempt
       await supabase.from("jbj_lead_access_log").insert({
         broker_id: brokerId,
@@ -56,9 +65,9 @@ export function SecureLeadCard({ lead, brokerId, onContact }: SecureLeadCardProp
       // Open company WhatsApp with pre-filled message
       const message = `Hi, I'm reaching out regarding a property inquiry from ${lead.first_name}. Lead ID: ${lead.id}`;
       const whatsappUrl = getWhatsAppUrl(message);
-      
+
       window.location.href = whatsappUrl;
-      
+
       onContact?.();
       toast.success("Opening company WhatsApp...");
     } catch (error) {
