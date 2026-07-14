@@ -69,7 +69,8 @@ export const FounderPhilosophySection = () => {
               <Link
                 to="/founder"
                 data-cta="founder-learn-more"
-                className="jj-cta-champagne inline-flex items-center justify-center gap-3 h-12 px-7 mt-6 rounded-xl text-sm sm:text-base font-semibold"
+                data-surface="emerald"
+                className="jj-cta-emerald inline-flex items-center justify-center gap-3 h-12 px-7 mt-6 rounded-xl text-sm sm:text-base font-semibold text-white"
               >
                 <User className="w-4 h-4" />
                 <span className="tracking-wide">Learn More About the Founder</span>

@@ -96,7 +96,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
               <div className="p-6 md:p-8 relative">
                 <div className="w-16 h-1 bg-gradient-to-r from-gold to-gold-dark mb-4" />
 
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 text-[#1A1A1A] text-[10px] uppercase tracking-[0.2em] mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EFE6D6]/10 border border-[#B89555]/30 text-white text-[10px] uppercase tracking-[0.2em] mb-4">
                   <Sparkles className="w-3 h-3" />
                   Latest Edition 2026
                 </div>
@@ -105,14 +105,14 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
                   className="text-white text-xl md:text-2xl font-bold leading-tight mb-2"
                 >
                   UAE Real Estate
-                  <span className="block text-[#1A1A1A]">Market Intelligence</span>
+                  <span className="block text-white">Market Intelligence</span>
                 </h3>
 
                 <FounderContent fallback={null}>
                   <p className="text-white/90 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
                 </FounderContent>
 
-                <div className="mt-6 pt-4 border-t border-[#1A1A1A]">
+                <div className="mt-6 pt-4 border-t border-white/25">
                   <p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>
                 </div>
               </div>

@@ -135,7 +135,7 @@ const AreaIntelligence = () => {
                         "Official rental benchmarks"
                       ].map((item, idx) => (
                         <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
-                          <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -235,8 +235,8 @@ const AreaIntelligence = () => {
                             <span className="text-white font-bold">{item.num}</span>
                           </div>
                           <div>
-                            <h4 className="font-semibold text-[#1A1A1A]">{item.title}</h4>
-                            <p className="text-[#1A1A1A]/70 text-sm mt-1">{item.desc}</p>
+                            <h4 className="font-semibold text-white">{item.title}</h4>
+                            <p className="text-white/85 text-sm mt-1">{item.desc}</p>
                           </div>
                         </div>
                       ))}
@@ -276,7 +276,7 @@ const AreaIntelligence = () => {
                       ].map((item, idx) => (
                         <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
                           <div className="w-6 h-6 rounded-full bg-white/15 border border-white/35 flex items-center justify-center flex-shrink-0">
-                            <span className="text-[#1A1A1A] text-xs font-bold">✕</span>
+                            <span className="text-white text-xs font-bold">✕</span>
                           </div>
                           <span>{item}</span>
                         </li>
@@ -322,7 +322,7 @@ const AreaIntelligence = () => {
                         "Approved pricing benchmarks"
                       ].map((item, idx) => (
                         <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
-                          <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}

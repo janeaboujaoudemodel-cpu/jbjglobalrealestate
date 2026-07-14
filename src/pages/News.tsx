@@ -243,7 +243,7 @@ const News = () => {
   return (
     <>
       <SEOHead {...pagesSEO.news} />
-      <section className="min-h-screen bg-[#FDFBF7]">
+      <main data-news-page className="bg-[#FDFBF7]">
         <MarketIntelligenceHero
           badge="Dubai Real Estate — Official Sources"
           badgeIcon={Landmark}
@@ -777,7 +777,7 @@ const News = () => {
           </div>
         </div>
       )}
-      </section>
+      </main>
     </>
   );
 };
