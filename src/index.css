@@ -8661,18 +8661,15 @@ html body footer p:last-child {
    • Animated metallic emerald fill for contact tiles
    ──────────────────────────────────────────────────────────────── */
 
-/* Tighter, single-line emerald hairline on glow-wrap (replaces the
-   2px halo + heavy drop-shadow). Hover gives a subtle bloom only. */
+/* Emerald hairline + ambient highlighter halo (matches homepage hero feel).
+   Keeps opacity locked at 1 so the border never starts faded. */
 .jj-emerald-glow-wrap::before {
-  inset: 0 !important;
-  padding: 0 !important;
-  filter: none !important;
   opacity: 1 !important;
   animation: none !important;
-  background: var(--jj-emerald-ombre) !important;
+  filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.55)) !important;
 }
 .jj-emerald-glow-wrap:hover::before {
-  filter: none !important;
+  filter: drop-shadow(0 0 24px rgba(52, 211, 153, 0.8)) !important;
 }
 
 /* Kill ANY border / ring / outline inside a unified emerald pill,
