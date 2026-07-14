@@ -378,7 +378,7 @@ export const PublicRoutes = () => (
 
     {/* ── Company ── (wrapped in InsightsPageScope for MI brand contract) */}
     <Route path="/contact" element={<InsightsPageScope><Contact /></InsightsPageScope>} />
-    <Route path="/about" element={<About />} />
+    <Route path="/about" element={<InsightsPageScope><About /></InsightsPageScope>} />
     <Route path="/founder" element={<InsightsPageScope><Founder /></InsightsPageScope>} />
     <Route path="/awards" element={<InsightsPageScope><Awards /></InsightsPageScope>} />
     <Route path="/press-kit" element={<Navigate to="/company-profile" replace />} />
@@ -397,7 +397,7 @@ export const PublicRoutes = () => (
     <Route path="/terms" element={<InsightsPageScope><Terms /></InsightsPageScope>} />
     <Route path="/privacy" element={<InsightsPageScope><Privacy /></InsightsPageScope>} />
     <Route path="/cookies" element={<InsightsPageScope><Cookies /></InsightsPageScope>} />
-    <Route path="/disclaimers" element={<Disclaimers />} />
+    <Route path="/disclaimers" element={<InsightsPageScope><Disclaimers /></InsightsPageScope>} />
 
     <Route path="/aml-kyc" element={<InsightsPageScope><AmlKycPolicy /></InsightsPageScope>} />
     <Route path="/intellectual-property" element={<InsightsPageScope><IntellectualProperty /></InsightsPageScope>} />

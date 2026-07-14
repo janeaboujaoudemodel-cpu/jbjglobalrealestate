@@ -35082,3 +35082,130 @@ html body #root .jj-emerald-glow-wrap.jj-newsletter-emerald .jj-hero-search-acti
   -webkit-text-fill-color: #FFFFFF !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 24px -14px rgba(0,0,0,0.88) !important;
 }
+
+/* =========================================================================
+   FINAL CONTENT-LIBRARY LOCK — Insights, Guides, Services, Company, Legal,
+   and Help/FAQ inherit the Market Intelligence Prada emerald contract.
+   ========================================================================= */
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen),
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen).jj-mi-prada-hero {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100svh !important;
+  height: 100svh !important;
+  margin: 0 !important;
+  padding: 88px clamp(1.25rem, 4vw, 4rem) 0 !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  text-align: center !important;
+  background-color: #020504 !important;
+  background-image:
+    radial-gradient(ellipse at 18% 8%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.035) 20%, transparent 45%),
+    radial-gradient(ellipse at 77% 18%, rgba(184,149,85,0.14) 0%, rgba(184,149,85,0.045) 24%, transparent 48%),
+    radial-gradient(ellipse at 48% 42%, rgba(6,78,59,0.92) 0%, rgba(4,44,28,0.78) 36%, transparent 68%),
+    linear-gradient(122deg, #020504 0%, #03120D 19%, #064E3B 44%, #042C1C 68%, #000000 100%) !important;
+}
+
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) > :not(.absolute):not(video),
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) > .relative.z-10 {
+  width: 100% !important;
+  max-width: min(64rem, 100%) !important;
+  min-height: calc(100svh - 88px) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-top: clamp(1.5rem, 4vh, 3rem) !important;
+  padding-bottom: clamp(2rem, 5vh, 4rem) !important;
+  text-align: center !important;
+}
+
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) :is(.jj-mi-hero-title, h1) {
+  max-width: 16ch !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-shadow: 0 2px 44px rgba(0,0,0,0.58), 0 0 1px rgba(255,255,255,0.55) !important;
+}
+
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) :is(.jj-mi-hero-title, h1) :is(span, strong, em) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) :is(.jj-mi-hero-copy, p) {
+  max-width: 42rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  color: #E8CF8A !important;
+  -webkit-text-fill-color: #E8CF8A !important;
+  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif !important;
+  font-weight: 300 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  text-shadow: 0 2px 22px rgba(0,0,0,0.56) !important;
+}
+
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) :is(a, button, .jj-mi-hero-cta, .jj-cta-emerald, .jj-cta-champagne, .jj-cta-outline, .jj-services-emerald-cta):not([aria-label^="Minimize"]):not([aria-label^="Expand"]),
+html body #root :is(.jj-mi-hero-cta.jj-mi-hero-cta-emerald, .jj-services-emerald-cta, .jj-cta-emerald):is(:hover,:focus,:focus-visible,:active) {
+  min-height: 3.25rem !important;
+  border: 0 !important;
+  border-radius: 0.5rem !important;
+  background: linear-gradient(135deg, #042c1c 0%, #031b12 58%, #000000 100%) !important;
+  background-color: #042c1c !important;
+  background-image: linear-gradient(135deg, #042c1c 0%, #031b12 58%, #000000 100%) !important;
+  opacity: 1 !important;
+  filter: none !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  box-shadow: 0 4px 12px -4px rgba(4,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.15) !important;
+}
+
+html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) :is(a, button, .jj-mi-hero-cta, .jj-cta-emerald, .jj-cta-champagne, .jj-cta-outline, .jj-services-emerald-cta) :is(span, svg, path, line, polyline) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inner, .jj-scope-card, .jj-disclaimer-card, article[class*="rounded"], div[class*="rounded-2xl"][class*="border"]):not([data-surface="emerald"]):not(.jj-newsletter-emerald):not([data-guide-toc] *):not([data-mi-toc] *) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border-color: rgba(184,149,85,0.35) !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inner, .jj-scope-card, .jj-disclaimer-card) :is(h1,h2,h3,h4,p,span,li,div):not(.allow-white):not([data-surface="emerald"] *):not(.jj-emerald-metallic *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inner, .jj-scope-card, .jj-disclaimer-card) :is([data-surface="emerald"], .jj-icon-tile-emerald, .jj-emerald-metallic),
+html body #root [data-insights-page] :is(.jj-service-card-animated, .jj-card-inner, .jj-scope-card, .jj-disclaimer-card) :is([data-surface="emerald"], .jj-icon-tile-emerald, .jj-emerald-metallic) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+@media (max-width: 1023px) {
+  html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) {
+    min-height: 100svh !important;
+    height: 100svh !important;
+    padding-top: 72px !important;
+    padding-left: clamp(1rem, 5vw, 2rem) !important;
+    padding-right: clamp(1rem, 5vw, 2rem) !important;
+  }
+
+  html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) > :not(.absolute):not(video),
+  html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) > .relative.z-10 {
+    min-height: calc(100svh - 72px) !important;
+  }
+}

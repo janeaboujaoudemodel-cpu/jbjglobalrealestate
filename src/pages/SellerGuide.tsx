@@ -48,6 +48,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
 import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
 import { GuideSectionHeader } from "@/components/guides/GuideSectionHeader";
+import { GuideHero } from "@/components/guides/GuideHero";
 
 
 const fadeInUp = {
@@ -268,91 +269,24 @@ const SellerGuide = () => {
       />
       
       <main data-neon-page className="min-h-screen">
-        {/* Premium Hero with Background */}
-        <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
-          {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-black" />
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20"
-            style={{ backgroundImage: `url(https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920)` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-          
-          {/* Decorative elements */}
-          <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#EFE6D6]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EFE6D6]/3 rounded-full blur-3xl" />
-          
-          <motion.div 
-            className="container mx-auto px-4 relative z-10"
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-          >
-            <div className="max-w-4xl mx-auto text-center">
-              {/* Badge */}
-              <motion.div 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-full px-5 py-2.5 mb-6 shadow-lg hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
-                variants={fadeInUp}
-              >
-                <Building2 className="w-4 h-4 text-[#1A1A1A]" />
-                <span className="text-[#1A1A1A] text-sm font-semibold tracking-wide uppercase">Complete Seller's Guide</span>
-              </motion.div>
-              
-              {/* Title */}
-              <motion.h1 
-                className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight"
-                variants={fadeInUp}
-              >
-                Selling Property in Dubai —{" "}
-                <span className="text-[#1A1A1A]">A Structured, Transparent Guide for Owners</span>
-              </motion.h1>
-              
-              {/* Description */}
-              <motion.p 
-                className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10"
-                variants={fadeInUp}
-              >
-                Selling property in Dubai is a regulated, process-driven transaction. Whether you are selling an investment unit or an end-user property, understanding pricing, timing, costs, and legal steps is essential to protect your value and close efficiently.
-              </motion.p>
-
-              <motion.p 
-                className="text-base text-white/70 font-light leading-relaxed max-w-3xl mx-auto mb-10"
-                variants={fadeInUp}
-              >
-                This guide explains how to sell, what you pay, how pricing works, and how JBJ Global Real Estate manages the process from listing to transfer.
-              </motion.p>
-              
-              {/* Actions - Hero style buttons matching homepage */}
-              <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-                <button 
-                  onClick={scrollToGuide}
-                  className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.8)',
-                    boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  <ArrowDown className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                  <span className="text-white group-hover:text-[#1A1A1A] transition-colors">Start the Guide</span>
-                  <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-                </button>
-                <Link to="/seller-listing">
-                  <button 
-                    className="group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-bold rounded-lg md:rounded-xl transition-all duration-300 bg-transparent"
-                    style={{
-                      border: '2px solid rgba(255,255,255,0.8)',
-                      boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2), inset 0 -1px 2px rgba(0,0,0,0.3), 0 4px 15px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    <Building2 className="w-4 h-4 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
-                    <span className="text-white group-hover:text-[#1A1A1A] transition-colors">List Your Property</span>
-                    <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
-                  </button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-        </section>
+        <GuideHero
+          badge="Complete Seller's Guide"
+          badgeIcon={Building2}
+          title="Selling Property in Dubai — A Structured, Transparent Guide for Owners"
+          description="Selling property in Dubai is a regulated, process-driven transaction. This guide explains how to sell, what you pay, how pricing works, and how JBJ Global Real Estate manages the process from listing to transfer."
+          actions={
+            <>
+              <button onClick={scrollToGuide} className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex items-center justify-center gap-2 px-7 py-3 rounded-lg font-semibold text-sm tracking-wide transition-all">
+                <ArrowDown className="w-4 h-4" />
+                <span>Start the Guide</span>
+              </button>
+              <Link to="/seller-listing" className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex items-center justify-center gap-2 px-7 py-3 rounded-lg font-semibold text-sm tracking-wide transition-all">
+                <Building2 className="w-4 h-4" />
+                <span>List Your Property</span>
+              </Link>
+            </>
+          }
+        />
 
         {/* 3D Book Cover + Table of Contents */}
         <GuideBookSection book={sellerGuideBook} sectionIds={tocItems.map(i => i.id)} />

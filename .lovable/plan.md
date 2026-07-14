@@ -1,83 +1,101 @@
+I will fix the current content-page styling by rebuilding the shared hero/CTA/page-shell rules first, then applying them page-by-page across the requested sections only.
 
-## Scope
+## Scope to fix
 
-Upgrade the `/compare` (Projects) experience so a JBJ user can:
+### Insights / Market Intelligence
+- `/market-intelligence`
+- `/market-report`
+- `/market-intelligence/overview`
+- `/market-intelligence/areas`
+- `/market-intelligence/reports`
+- `/market-intelligence/methodology`
+- `/insights`
+- `/insights/future-of-real-estate-2026`
+- `/news`
+- `/news/:id` sample route
 
-1. Search & pick properties from the existing database picker.
-2. If the property doesn't exist:
-   - **Owner** sees an inline "Add this project" CTA (wired to the existing `AddProjectDialog` / `compare-extract` flow) that writes into the backend `projects` table.
-   - **Non-owner** sees only a neutral empty-state ("No results") — no add prompt, no message, nothing hinting the ability exists.
-3. Export the comparison in every requested format, in two color themes.
-4. Send a branded report to a client with a live listing link auto-attached.
+### Guides
+- `/guides`
+- `/buyer-guide`
+- `/seller-guide`
+- `/rent-guide`
+- `/tenant-guide`
+- `/landlord-guide`
+- `/investor-education`
+- `/guides/golden-visa-uae`
+- `/guides/dubai-rental-yield`
+- `/guides/selling-off-plan-dubai-before-handover`
+- FAQ/help guide routes: `/faq`, `/buyer-faq`, `/seller-faq`, `/landlord-faq`, `/tenant-faq`, `/broker-faq`
 
-## New export suite
+### Services
+- `/services`
+- All direct service pages under `/services/...` currently registered in routing, including property management, snagging, buying/selling/rental advisory, law firm, company setup, concierge, short-term rentals, complaint procedures, customer happiness center, and testimonials.
 
-A single `ComparisonExportBar` component replaces the current scattered Download/Excel/WhatsApp/Email buttons and adds:
+### Company
+- `/contact`
+- `/about`
+- `/founder`
+- `/awards`
+- `/company-profile`
 
-- **PDF** (rasterised, hi-DPI via `html2canvas` + `jspdf`, existing pattern in codebase)
-- **PNG** (single-image capture of the report frame)
-- **JPG** (same, JPEG encoder, quality 0.95)
-- **PowerPoint (.pptx)** — via `pptxgenjs` (already available per skills)
-- **Slides link** — Google Slides deep-link seeded from the same pptx (fallback: uploads pptx and opens `slides.new`)
-- **Excel** (keep existing `exportPremiumXlsx`)
-- **WhatsApp / Email share** (keep, but auto-append the auto-generated public comparison URL + per-project listing URLs)
+### Legal
+- `/terms`
+- `/privacy`
+- `/cookies`
+- `/disclaimers`
+- `/aml-kyc`
+- `/intellectual-property`
 
-Each export offers a theme toggle:
+## Implementation plan
 
-- **Emerald** (`#064E3B → #042c1c → #000` — same tokens as AI tools, `REPORT_TOKENS.emeraldGradient`)
-- **White** (page `#FDFBF7`, ink `#1A1A1A`, emerald accents only on headers/rules)
+1. **Stabilize the broken shared shell first**
+   - Repair the current Insights/Shell mount issue so `/insights` and `/insights/future-of-real-estate-2026` no longer hang in the loading state.
+   - Make the shared shell lightweight and safe: no heavy or circular imports from the market-intelligence barrel.
+   - Keep the route wrappers where useful, but remove anything that creates Suspense hangs or blank screens.
 
-Theme is picked once in a small popover before export; the export renders an offscreen "print frame" (`ComparisonReportFrame`) styled with the chosen theme so the on-screen UI is unaffected.
+2. **Lock one canonical Market Intelligence hero style**
+   - Full-screen emerald/dark-black gradient.
+   - White title and white supporting copy only.
+   - Gold hairline/rule allowed, but no faded white overlays and no pale/washed hero text.
+   - CTA buttons use the same dark emerald-black gradient as the collapsed sidebar active button, not bright green.
+   - Desktop CTAs stay side-by-side; mobile can stack/wrap safely.
 
-### Auto-generated listing links
+3. **Apply the same hero style to all requested page families**
+   - Replace broken cream/white/photo/low-contrast heroes on Insights, Guides, Services, Company, Legal, and Help/Support pages with the same canonical emerald hero treatment.
+   - Keep good existing body content where it is already strong, such as Area Intelligence; only replace the hero and broken contrast/layout parts there.
+   - Remove black-on-white or white-on-cream hero title fragments such as the broken Seller Guide title.
 
-For every project in the comparison, `getListingUrl(project)` resolves to:
+4. **Standardize CTAs and buttons**
+   - Hero CTAs: dark emerald-black gradient, white text/icons, matching Market Intelligence/collapsed sidebar color.
+   - Champagne page CTAs: premium champagne/gold bordered style, never faded black buttons.
+   - Emerald surfaces: icons/text must be pure white, never black on emerald.
+   - Fix known broken areas: Market Report “Need a custom report”, Market Intelligence lower button/icon contrast, Guides “Not sure where to start?”, Services final CTA.
 
-```
-${window.location.origin}/projects/${project.slug || project.id}
-```
+5. **Fix card borders and page section consistency**
+   - Champagne/light cards use premium gold borders/hairlines, not green borders.
+   - Emerald cards only appear when the card itself is intentionally on an emerald/black surface.
+   - Normalize content widths, padding, title scale, card edge alignment, and section spacing so cards line up cleanly across pages.
+   - Remove nested-card or mismatched-width effects where they visually break the layout.
 
-Both the PDF/PPTX report and the WhatsApp/Email body list each project with its clickable listing URL, plus a top-level `share url` that links back to the current `/compare?ids=…` state (already encoded in query params).
+6. **Targeted page rebuilds where needed**
+   - Rebuild `/guides` final CTA to match the canonical “Ready to Get Started” style, removing the current faded black button.
+   - Rebuild `/seller-guide` hero, because it currently has broken contrast and split black/white title text.
+   - Rework `/services` cards so champagne cards use gold borders instead of green borders.
+   - Adjust `/market-report` hero/CTA/card contrast to match Market Intelligence while preserving the report/book functionality.
 
-## Owner-only "add project" from search
+7. **Visual validation before reporting complete**
+   - Use Playwright only after code changes.
+   - Capture screenshot proof for every named route family:
+     - desktop hero screenshot
+     - desktop lower-section/CTA screenshot
+     - mobile hero screenshot for representative routes in each family
+   - For long page groups like Services, validate every registered service route at least with hero + first content section screenshots, and capture additional screenshots for pages with failures.
+   - Check screenshots manually before claiming completion.
+   - Report with screenshot file paths and a short list of routes validated.
 
-Update `CompareProjectPicker`:
+## Technical notes
 
-- Read `useIsAppOwner()` (already imported).
-- When search yields 0 results:
-  - Owner → render an emerald "Add \"{query}\" to the database" card that opens `AddProjectDialog` prefilled with the query. On success it re-queries and auto-selects the new project.
-  - Non-owner → render only the plain "No projects match your search" line. No CTA, no hint.
-
-No RLS changes — insert already goes through the existing `compare-extract` / owner-only paths.
-
-## Files
-
-New:
-- `src/components/compare/ComparisonExportBar.tsx` — export button group + theme popover.
-- `src/components/compare/ComparisonReportFrame.tsx` — offscreen printable frame (emerald + white variants) using `REPORT_TOKENS`.
-- `src/utils/exportComparison.ts` — `exportPdf`, `exportImage('png'|'jpg')`, `exportPptx`, `buildShareText`.
-
-Edited:
-- `src/pages/Compare.tsx` — replace inline CTA export buttons (lines ~963–1024) with `<ComparisonExportBar analysis={aiAnalysis} projects={projects} />`.
-- `src/components/compare/CompareProjectPicker.tsx` — owner-gated empty-state add card.
-
-Deps: `pptxgenjs`, `html2canvas`, `jspdf` (add only if missing).
-
-## E2E validation (mandatory)
-
-Playwright script at `/tmp/browser/compare-e2e/run.py`:
-
-1. Restore Supabase session (owner) → visit `/compare`.
-2. Open picker, select 2 projects → screenshot `1_selected.png`.
-3. Trigger AI analysis (or use fixture) → screenshot `2_analysis.png`.
-4. Click export bar → screenshot `3_export_menu.png`.
-5. Export each format (PDF, PNG, JPG, PPTX) in emerald theme, then white theme; save files to `/tmp/browser/compare-e2e/out/` and screenshot the offscreen frame in both themes → `4_emerald.png`, `5_white.png`.
-6. Second run in a fresh context with **no session** (visitor): search for a non-existent project → screenshot `6_visitor_empty.png` proving no add CTA.
-7. Third run authed as owner: same empty search → screenshot `7_owner_empty.png` showing the add CTA.
-8. `code--view` every screenshot to confirm; only then report success.
-
-## Non-goals
-
-- No changes to `/compare-manual`.
-- No new RLS / migration.
-- No changes to unit-compare mode.
+- I will edit only frontend presentation/layout files and shared content-page components/CSS.
+- I will not change backend logic, security policies, or unrelated app areas.
+- I will avoid using green borders on champagne cards; champagne surfaces get gold borders.
+- I will keep the Market Intelligence emerald gradient as the source of truth: `#064E3B → #042c1c → #000000`, with white foreground on dark/emerald surfaces.

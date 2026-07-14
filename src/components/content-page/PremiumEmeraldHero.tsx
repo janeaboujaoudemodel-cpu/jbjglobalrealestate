@@ -41,29 +41,19 @@ export function PremiumEmeraldHero({
       data-surface="emerald"
       data-no-contrast-guard
       data-premium-emerald-hero
-      className={`jj-hero-fullscreen jj-hero-content-compact relative flex items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
-      style={{
-        background:
-          "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000000 100%)",
-      }}
+      className={`jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden ${HEIGHTS[height]}`}
     >
-      {/* Soft radial glow only — NO stripe/grid/diagonal overlays (locked). */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-45"
-        style={{
-          background:
-            "radial-gradient(ellipse at 22% 22%, rgba(110,231,183,0.18), transparent 55%), radial-gradient(ellipse at 82% 78%, rgba(184,149,85,0.16), transparent 60%)",
-        }}
-        aria-hidden
-      />
-      <div className="relative z-10 flex w-full items-center justify-center px-6 py-12 md:py-14 text-center">
+      <div aria-hidden className="jj-mi-marble-depth pointer-events-none absolute inset-0" />
+      <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
+      <div aria-hidden className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay" />
+      <div className="relative z-10 flex w-full items-center justify-center px-6 text-center">
         <motion.div
-          className="mx-auto flex w-full max-w-[54rem] flex-col items-center justify-center"
+          className="mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-6 backdrop-blur-sm">
+          <div data-no-contrast-guard className="inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 mb-6 backdrop-blur-sm">
             <EyebrowIcon className="h-3.5 w-3.5 text-[#E8CF8A]" />
             <span className="text-[11px] uppercase tracking-[0.18em] text-[#E8CF8A] font-medium">
               {eyebrow}
@@ -71,20 +61,24 @@ export function PremiumEmeraldHero({
           </div>
           <h1
             data-no-contrast-guard
-            className="mx-auto max-w-[15ch] text-4xl sm:text-5xl md:text-6xl font-semibold text-white leading-[1.04] mb-4 text-center"
+            className="jj-mi-hero-title mx-auto max-w-[16ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-white leading-[1.02] text-center"
             style={{ ...HEADING_FONT, color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", textAlign: "center" }}
           >
             {title}
           </h1>
           {subtitle && (
-            <p
-              className="mx-auto max-w-[38rem] text-base sm:text-lg md:text-xl text-[#F7F2EA] leading-relaxed"
-              style={{ ...HEADING_FONT, color: "#F7F2EA", WebkitTextFillColor: "#F7F2EA" }}
-            >
-              {subtitle}
-            </p>
+            <>
+              <div aria-hidden className="jj-mi-title-rule my-8 h-px w-24" />
+              <p
+                data-no-contrast-guard
+                className="jj-mi-hero-copy mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light text-[#E8CF8A] leading-relaxed"
+                style={{ ...HEADING_FONT, color: "#E8CF8A", WebkitTextFillColor: "#E8CF8A" }}
+              >
+                {subtitle}
+              </p>
+            </>
           )}
-          {meta && <div className="mt-6 flex w-full justify-center text-sm text-white/90">{meta}</div>}
+          {meta && <div className="mt-12 flex w-full justify-center text-sm text-white/90">{meta}</div>}
         </motion.div>
       </div>
     </section>

@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
-import VideoBackground from "@/components/VideoBackground";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   BookOpen, ArrowRight, HelpCircle, FileText, DollarSign, Shield, BarChart3, CheckCircle, Clock, ChevronRight, X
 } from "lucide-react";
-import { SectionEyebrow } from "@/components/ui/SectionEyebrow";
 import { SEOHead } from "@/components/SEOHead";
-import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +12,7 @@ import { SectionDivider } from "@/components/ui/section-divider";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCard } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books"; // used for selectedBook state typing
+import { GuideHero } from "@/components/guides/GuideHero";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -67,76 +65,22 @@ const Guides = () => {
         canonicalPath="/guides"
       />
 
-      {/* Hero */}
-      <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-[#1A1A1A]">
-          {/* Drone zoom effect on poster image while video loads */}
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.img
-              src="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80"
-              alt=""
-              className="w-full h-full object-cover"
-              initial={{ scale: 1 }}
-              animate={{ scale: 1.15 }}
-              transition={{ duration: 20, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
-              loading="eager"
-            />
-          </div>
-          <VideoBackground 
-            src="https://videos.pexels.com/video-files/3629519/3629519-uhd_2560_1440_25fps.mp4"
-            poster="https://images.unsplash.com/photo-1518684079-3c830dcef090?w=1920&q=80"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/10 via-transparent to-transparent" />
-        </div>
-
-        <motion.div 
-          className="relative z-10 container mx-auto px-4 py-16 md:py-20 text-center max-w-4xl"
-          initial="hidden" animate="visible" variants={staggerContainer}
-        >
-          <motion.div variants={fadeInUp} className="mb-6">
-          <SectionEyebrow icon={BookOpen}>Guides</SectionEyebrow>
-          </motion.div>
-          <motion.h1
-            className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]"
-            style={{ textShadow: "0 2px 14px rgba(0,0,0,0.7)" }}
-            variants={fadeInUp}
-          >
-            Guides Library
-          </motion.h1>
-          <motion.p
-            className="text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed"
-            style={{ color: "#F7F2EA", textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}
-            variants={fadeInUp}
-          >
-            Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing.
-          </motion.p>
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
-            <a
-              href="#guides-library"
-              data-no-contrast-guard
-              data-surface="light"
-              className="inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
-              style={{ background: "#F7F2EA", color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A", boxShadow: "0 0 0 1px #B89555 inset, 0 8px 24px rgba(0,0,0,0.35)" }}
-            >
+      <GuideHero
+        badge="Guides"
+        badgeIcon={BookOpen}
+        title="Guides Library"
+        description="Structured guides built to answer real questions—fees, steps, timelines, and best-practice workflows across buying, selling, renting, and investing."
+        actions={
+          <>
+            <a href="#guides-library" className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex items-center justify-center gap-2 px-7 py-3 rounded-lg font-semibold text-sm tracking-wide transition-all">
               Browse Guides
             </a>
-            <Link
-              to="/contact"
-              data-no-contrast-guard
-              className="allow-white inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
-              style={{ background: "transparent", color: "#F7F2EA", boxShadow: "0 0 0 1px #B89555 inset" }}
-            >
+            <Link to="/contact" className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex items-center justify-center gap-2 px-7 py-3 rounded-lg font-semibold text-sm tracking-wide transition-all">
               Ask a Question
             </Link>
-          </motion.div>
-        </motion.div>
-
-        <motion.div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1, duration: 0.6 }}>
-          <span className="text-xs tracking-widest uppercase" style={{ color: "rgba(247,242,234,0.8)" }}>Explore</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/60 to-transparent" />
-        </motion.div>
-      </section>
+          </>
+        }
+      />
 
 
       {/* How This Library Works — surface band */}
@@ -251,8 +195,8 @@ const Guides = () => {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/contact"
-                className="inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
-                style={{ background: "#1A1A1A", color: "#F7F2EA", boxShadow: "0 0 0 1px #B89555 inset" }}
+                data-surface="emerald"
+                className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex items-center justify-center px-7 py-3 rounded-lg font-semibold text-sm tracking-wide transition-all"
               >
                 Ask a Question
               </Link>

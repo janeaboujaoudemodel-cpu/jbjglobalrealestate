@@ -55,14 +55,17 @@ export const PremiumHeroButton = ({
     "rounded-xl transition-all duration-300 cursor-pointer",
     isLight 
       ? "bg-[#FDFBF7] border-2 border-[#B89555]/30 hover:border-[#B89555]/30 hover:-translate-y-1"
-      : "bg-transparent border-2 border-white/70 hover:border-white hover:-translate-y-0.5",
+      : "jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white border-0 hover:-translate-y-0.5",
     className
   );
 
   const sharedStyle = {
+    background: isLight ? undefined : 'linear-gradient(135deg, #042c1c 0%, #031b12 58%, #000000 100%)',
+    color: isLight ? undefined : '#FFFFFF',
+    WebkitTextFillColor: isLight ? undefined : '#FFFFFF',
     boxShadow: isLight
       ? '0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06)'
-      : 'inset 0 1px 2px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)',
+      : '0 4px 12px -4px rgba(4,78,59,0.55), inset 0 1px 0 rgba(255,255,255,0.15)',
   };
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
@@ -81,21 +84,17 @@ export const PremiumHeroButton = ({
     <>
       {iconPosition === "left" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-[#1A1A1A]/70" : "text-white/80 group-hover:text-[#1A1A1A]")}
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-[#1A1A1A]/70" : "text-white")}
         />
       )}
-      <span className={cn("transition-colors", isLight ? "text-[#1A1A1A]" : "text-white group-hover:text-[#1A1A1A]")}>{children}</span>
+      <span className={cn("transition-colors", isLight ? "text-[#1A1A1A]" : "text-white")}>{children}</span>
       {iconPosition === "right" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-[#1A1A1A]/70" : "text-white/80 group-hover:text-[#1A1A1A]")}
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-[#1A1A1A]/70" : "text-white")}
         />
       )}
       {/* Hover fill effect (only for dark-bg variant) */}
-      {!isLight && (
-        <span 
-          className="absolute inset-0 rounded-xl bg-[#FDFBF7] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-[#B89555]/30" 
-        />
-      )}
+      {!isLight && <span className="absolute inset-0 rounded-xl opacity-0 -z-10" />}
     </>
   );
 
