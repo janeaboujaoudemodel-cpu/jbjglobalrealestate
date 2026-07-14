@@ -65,52 +65,55 @@ export default function ComparisonExportBar({ targetSelector, projects }: Props)
   };
 
   return (
-    <div className="inline-flex gap-2 flex-wrap">
-      {(["emerald", "white"] as ExportTheme[]).map((theme) => (
-        <DropdownMenu key={theme}>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              data-no-contrast-guard
-              data-allow-dark-cta
-              className="allow-white inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
-              style={theme === "emerald" ? btnEmerald : {
-                background: "#FFFFFF",
-                color: "#064E3B",
-                border: "1px solid rgba(6,78,59,0.35)",
-                boxShadow: "0 10px 24px -12px rgba(0,0,0,0.15)",
-              }}
+    <div className="inline-flex">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            type="button"
+            data-no-contrast-guard
+            data-allow-dark-cta
+            className="allow-white inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl"
+            style={btnEmerald}
+          >
+            {busy ? (
+              <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#FFFFFF" }} />
+            ) : (
+              <Download className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+            )}
+            <span style={{ color: "#FFFFFF" }}>Export</span>
+            <ChevronDown className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-64">
+          <DropdownMenuLabel>Emerald Presentation</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {FORMATS.map(({ key, label, icon: Icon }) => (
+            <DropdownMenuItem
+              key={`emerald-${key}`}
+              disabled={busy !== null}
+              onClick={() => run(key, "emerald")}
+              className="cursor-pointer"
             >
-              {busy?.endsWith(theme) ? (
-                <Loader2 className="w-4 h-4 animate-spin" style={{ color: theme === "emerald" ? "#FFFFFF" : "#064E3B" }} />
-              ) : (
-                <Download className="w-4 h-4" style={{ color: theme === "emerald" ? "#FFFFFF" : "#064E3B" }} />
-              )}
-              <span style={{ color: theme === "emerald" ? "#FFFFFF" : "#064E3B" }}>
-                Export · {theme === "emerald" ? "Emerald" : "White"}
-              </span>
-              <ChevronDown className="w-4 h-4" style={{ color: theme === "emerald" ? "#FFFFFF" : "#064E3B" }} />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-64">
-            <DropdownMenuLabel>
-              {theme === "emerald" ? "Emerald Presentation" : "White Clean Report"}
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {FORMATS.map(({ key, label, icon: Icon }) => (
-              <DropdownMenuItem
-                key={key}
-                disabled={busy !== null}
-                onClick={() => run(key, theme)}
-                className="cursor-pointer"
-              >
-                <Icon className="w-4 h-4 mr-2 text-[#064E3B]" />
-                {label}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ))}
+              <Icon className="w-4 h-4 mr-2 text-[#064E3B]" />
+              {label}
+            </DropdownMenuItem>
+          ))}
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel>White Clean Report</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {FORMATS.map(({ key, label, icon: Icon }) => (
+            <DropdownMenuItem
+              key={`white-${key}`}
+              disabled={busy !== null}
+              onClick={() => run(key, "white")}
+              className="cursor-pointer"
+            >
+              <Icon className="w-4 h-4 mr-2 text-[#064E3B]" />
+              {label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
