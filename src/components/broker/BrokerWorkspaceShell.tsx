@@ -5,6 +5,7 @@ import {
   LayoutDashboard, Database, Users, Calendar, Inbox, ListTodo,
   StickyNote, Building2, GraduationCap, LogOut, Settings,
 } from "lucide-react";
+import BrokerCreditBadge from "@/components/broker/BrokerCreditBadge";
 
 const NAV = [
   { to: "/broker/crm", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -35,6 +36,7 @@ export default function BrokerWorkspaceShell() {
         </div>
         <div className="flex-1" />
         <div className="flex items-center gap-3 text-xs">
+          <BrokerCreditBadge />
           <span className="text-[#1A1A1A]/70 max-w-[200px] truncate">{user?.email}</span>
           <button
             onClick={async () => { await supabase.auth.signOut(); navigate("/auth"); }}
