@@ -20,6 +20,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import { useSpendBrokerCredits } from "@/hooks/useSpendBrokerCredits";
 
 interface Subscription {
   id: string;
