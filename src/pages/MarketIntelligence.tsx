@@ -233,7 +233,7 @@ const MarketIntelligence = () => {
       {/* Compliance Disclaimer */}
       <section id="compliance" className="scroll-mt-24 surface-light py-12 bg-[#FDFBF7]" data-surface="light">
         <div className="container mx-auto px-4">
-          <div className="mi-gold-frame mi-gold-frame-corners max-w-5xl mx-auto p-10 text-center rounded-2xl">
+          <div className="mi-gold-frame mi-gold-frame-corners max-w-4xl mx-auto p-8 md:p-10 text-center rounded-2xl">
             <div className="mx-auto mb-4 flex justify-center">
               <div className="mi-icon-tile mi-icon-tile-lg">
                 <Info className="w-5 h-5" />
