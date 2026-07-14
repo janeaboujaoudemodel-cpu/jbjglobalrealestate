@@ -6,6 +6,7 @@ import {
   ArrowRight, CheckCircle2, Sparkles, MapPin, LineChart, Rocket,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import MIPageShell from "@/components/shell/MIPageShell";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
@@ -239,7 +240,7 @@ const FutureOfRealEstate2026 = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7]">
+    <>
       <SEOHead
         title="The Future of Real Estate: 5 Trends to Watch in 2026"
         description="Discover the future of real estate with key trends for 2026, including sustainable practices and the growth of luxury properties. Learn more!"
@@ -253,29 +254,11 @@ const FutureOfRealEstate2026 = () => {
           { name: "The Future of Real Estate: 5 Trends to Watch in 2026", path: "/insights/future-of-real-estate-2026" },
         ]}
       />
-
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0d1f18] via-[#0a1712] to-[#0a1712] text-white">
-        <div className="absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_top,_rgba(184,149,85,0.35),_transparent_60%)]" />
-        <div className="relative max-w-5xl mx-auto px-6 md:px-8 py-20 md:py-28 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B89555]/60 text-[#E9D9AE] text-xs tracking-widest uppercase mb-6">
-            <Sparkles className="w-3.5 h-3.5" /> 2026 Market Outlook
-          </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight mb-6">
-            The Future of Real Estate: <span className="text-[#E9D9AE]">5 Trends to Watch in 2026</span>
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed mb-8">
-            Where global real estate is heading in 2026 — sustainable buildings, luxury demand, digital brokerage, new commercial frontiers, and the residential impact of remote work. Written for investors, homebuyers and real estate consultants operating in the UAE and beyond.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 text-xs uppercase tracking-widest text-[#E9D9AE]/80">
-            <span>Published {PUBLISHED}</span>
-            <span>·</span>
-            <span>JBJ Global Real Estate</span>
-            <span>·</span>
-            <span>~9 min read</span>
-          </div>
-        </div>
-      </section>
+      <MIPageShell
+        heroTitle={<>Future of Real Estate <span className="italic">2026</span></>}
+        heroDescription="Where global real estate is heading in 2026 — sustainable buildings, luxury demand, digital brokerage, new commercial frontiers, and the residential impact of remote work."
+      >
+      <div className="bg-[#FDFBF7]">
 
       {/* Introduction */}
       <section className="py-14 md:py-16">
@@ -418,34 +401,20 @@ const FutureOfRealEstate2026 = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-[#0d1f18] via-[#0a1712] to-black text-white">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-            Ready to act on the <span className="text-[#E9D9AE]">2026 real estate outlook?</span>
-          </h2>
-          <p className="text-white/70 mb-8 leading-relaxed">
-            Whether you're a first-time homebuyer, a landlord optimising rental yield, or a family office rebalancing into Dubai real estate, JBJ Global Real Estate — a RERA-licensed real estate brokerage — will build a shortlist and yield model tailored to your goals.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#B89555] text-[#0a1712] font-semibold hover:bg-[#C9A66B] transition">
-              Speak to a Consultant <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link to="/properties" className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/30 text-white hover:bg-white/10 transition">
-              Browse Dubai Properties
-            </Link>
-          </div>
-          <div className="mt-10 pt-8 border-t border-white/10 text-sm text-white/60 flex flex-wrap justify-center gap-x-6 gap-y-2">
-            <Link to="/guides/dubai-rental-yield" className="hover:text-[#E9D9AE]"><MapPin className="w-3 h-3 inline mr-1" />Rental Yield Guide</Link>
-            <Link to="/buyer-guide" className="hover:text-[#E9D9AE]">Buyer Guide</Link>
-            <Link to="/investor-hub" className="hover:text-[#E9D9AE]">Investor Hub</Link>
-            <Link to="/communities/palm-jumeirah-guide" className="hover:text-[#E9D9AE]">Palm Jumeirah</Link>
-            <Link to="/communities/downtown-dubai-guide" className="hover:text-[#E9D9AE]">Downtown Dubai</Link>
-            <Link to="/news" className="hover:text-[#E9D9AE]">Dubai Real Estate News</Link>
-          </div>
+      {/* Related links strip (CTA card is provided by MIPageShell PreFooter) */}
+      <section className="py-12 bg-[#FDFBF7]">
+        <div className="max-w-4xl mx-auto px-6 text-sm text-[#1A1A1A]/70 flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <Link to="/guides/dubai-rental-yield" className="hover:text-[#064E3B]"><MapPin className="w-3 h-3 inline mr-1" />Rental Yield Guide</Link>
+          <Link to="/buyer-guide" className="hover:text-[#064E3B]">Buyer Guide</Link>
+          <Link to="/investor-hub" className="hover:text-[#064E3B]">Investor Hub</Link>
+          <Link to="/communities/palm-jumeirah-guide" className="hover:text-[#064E3B]">Palm Jumeirah</Link>
+          <Link to="/communities/downtown-dubai-guide" className="hover:text-[#064E3B]">Downtown Dubai</Link>
+          <Link to="/news" className="hover:text-[#064E3B]">Dubai Real Estate News</Link>
         </div>
       </section>
-    </div>
+      </div>
+      </MIPageShell>
+    </>
   );
 };
 
