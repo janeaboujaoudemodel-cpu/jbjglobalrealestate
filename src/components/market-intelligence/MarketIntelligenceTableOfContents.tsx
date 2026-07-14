@@ -40,25 +40,27 @@ export const MarketIntelligenceTableOfContents = ({
     let raf = 0;
     let retry = 0;
     let hero: HTMLElement | null = null;
+    let firstSection: HTMLElement | null = null;
 
-    const updateHeroBoundary = () => {
-      if (!hero) return;
-      setPastHero(hero.getBoundingClientRect().bottom <= 1);
+    const updateContentBoundary = () => {
+      if (!hero || !firstSection) return;
+      setPastHero(firstSection.getBoundingClientRect().top <= 112);
     };
 
     const onScrollOrResize = () => {
       cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(updateHeroBoundary);
+      raf = requestAnimationFrame(updateContentBoundary);
     };
 
     const attach = () => {
       hero = document.querySelector(HERO_SEL) as HTMLElement | null;
-      if (!hero) {
+      firstSection = document.getElementById(items[0]?.id ?? "") as HTMLElement | null;
+      if (!hero || !firstSection) {
         if (retry < 30) { retry++; raf = requestAnimationFrame(attach); }
         else setPastHero(true);
         return;
       }
-      updateHeroBoundary();
+      updateContentBoundary();
       window.addEventListener("scroll", onScrollOrResize, { passive: true });
       window.addEventListener("resize", onScrollOrResize, { passive: true });
     };
@@ -68,7 +70,7 @@ export const MarketIntelligenceTableOfContents = ({
       window.removeEventListener("scroll", onScrollOrResize);
       window.removeEventListener("resize", onScrollOrResize);
     };
-  }, []);
+  }, [items]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
