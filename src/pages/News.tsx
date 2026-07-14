@@ -145,7 +145,7 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Off-plan</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
-                <span className="text-xs text-[color:var(--emerald-1)] font-medium jj-emerald-soft px-1.5 py-0.5 rounded">{offPlanPct}%</span>
+                <span data-no-contrast-guard className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{offPlanPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
