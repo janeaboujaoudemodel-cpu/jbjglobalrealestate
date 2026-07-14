@@ -31,11 +31,11 @@ const AreaIntelligence = () => {
   const getTrendBadge = (trend: string) => {
     switch (trend) {
       case 'bullish':
-        return <Badge variant="secondary" className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/45">Bullish</Badge>;
+        return <Badge data-surface="emerald" className="jj-stat-badge-emerald border-0 font-semibold">Bullish</Badge>;
       case 'bearish':
-        return <Badge variant="outline" className="bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/35">Bearish</Badge>;
+        return <Badge data-surface="emerald" className="jj-stat-badge-emerald border-0 font-semibold">Bearish</Badge>;
       default:
-        return <Badge variant="secondary" className="bg-[#F7F2EA] text-[#1A1A1A] border border-[#B89555]/35">Neutral</Badge>;
+        return <Badge data-surface="emerald" className="jj-stat-badge-emerald border-0 font-semibold">Neutral</Badge>;
     }
   };
 
@@ -235,9 +235,9 @@ const AreaIntelligence = () => {
                           className="flex gap-4 p-4 rounded-xl shadow-sm bg-[#FDFBF7] border border-[#B89555]/30"
                         >
                           <div
-                            data-no-contrast-guard
+                            data-surface="emerald"
                             data-icon-tone="emerald"
-                            className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
+                            className="jj-number-emerald w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-[0_4px_12px_rgba(6,78,59,0.25)]"
                             style={{ backgroundImage: "var(--jj-emerald-ombre)" }}
                           >
                             <span
@@ -379,7 +379,7 @@ const AreaIntelligence = () => {
                         "Avoid misrepresentation or over-marketing"
                       ].map((item, idx) => (
                         <li key={idx} data-surface="emerald" className="flex items-center gap-3 rounded-xl bg-[image:var(--jj-emerald-ombre)] border border-white/20 px-4 py-3 text-white shadow-sm">
-                          <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -440,7 +440,7 @@ const AreaIntelligence = () => {
                                       ) : (
                                         <TrendingDown className="w-4 h-4 text-[#064E3B]" />
                                       )}
-                                      <span className="text-[#1A1A1A] font-medium">
+                                      <span data-surface="emerald" className="jj-stat-badge-emerald inline-flex rounded-full px-3 py-1 text-xs font-semibold">
                                         {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
                                       </span>
                                     </div>
@@ -523,14 +523,16 @@ const AreaIntelligence = () => {
         </div>
       </section>
 
-      <PreFooterSeparator 
-        title="Explore More Market Intelligence"
-        subtitle="Get a high-level overview of the market or download detailed reports."
-        primaryLink="/market-intelligence/overview"
-        primaryText="Market Overview"
-        secondaryLink="/market-intelligence/reports"
-        secondaryText="Market Reports"
-      />
+      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
+        <PreFooterSeparator 
+          title="Explore More Market Intelligence"
+          subtitle="Get a high-level overview of the market or download detailed reports."
+          primaryLink="/market-intelligence/overview"
+          primaryText="Market Overview"
+          secondaryLink="/market-intelligence/reports"
+          secondaryText="Market Reports"
+        />
+      </div>
     </div>
   );
 };

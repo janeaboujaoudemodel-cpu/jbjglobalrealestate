@@ -263,19 +263,19 @@ const Methodology = () => {
                   </p>
                   <ol className="space-y-4">
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">1</span>
+                      <span data-surface="emerald" className="jj-number-emerald flex-shrink-0 w-8 h-8 rounded-full font-bold flex items-center justify-center text-sm">1</span>
                       <span className="text-[#1A1A1A] pt-1">Cross-checked against its original government source</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">2</span>
+                      <span data-surface="emerald" className="jj-number-emerald flex-shrink-0 w-8 h-8 rounded-full font-bold flex items-center justify-center text-sm">2</span>
                       <span className="text-[#1A1A1A] pt-1">Verified for publication date and scope</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">3</span>
+                      <span data-surface="emerald" className="jj-number-emerald flex-shrink-0 w-8 h-8 rounded-full font-bold flex items-center justify-center text-sm">3</span>
                       <span className="text-[#1A1A1A] pt-1">Reviewed for consistency with regulatory definitions</span>
                     </li>
                     <li className="flex items-start gap-4">
-                      <span className="flex-shrink-0 w-8 h-8 rounded-full bg-[#EFE6D6] border border-[#B89555] text-[#B89555] font-bold flex items-center justify-center text-sm">4</span>
+                      <span data-surface="emerald" className="jj-number-emerald flex-shrink-0 w-8 h-8 rounded-full font-bold flex items-center justify-center text-sm">4</span>
                       <span className="text-[#1A1A1A] pt-1">Used exactly as published, without reinterpretation</span>
                     </li>
                   </ol>
@@ -305,7 +305,7 @@ const Methodology = () => {
                   </h2>
                 </div>
                 
-                <div className="bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-10 md:p-12">
+                <div className="jj-methodology-standards-panel bg-[#EFE6D6] border border-[#B89555]/40 rounded-2xl p-10 md:p-12">
                   <p className="text-[#1A1A1A] leading-relaxed mb-4">
                     Market intelligence content follows these fixed rules:
                   </p>
@@ -449,14 +449,16 @@ const Methodology = () => {
         </div>
       </section>
 
-      <PreFooterSeparator 
-        title="Explore More Market Intelligence"
-        subtitle="Get a high-level overview or dive into area-specific data."
-        primaryLink="/market-intelligence/overview"
-        primaryText="Market Overview"
-        secondaryLink="/market-intelligence/areas"
-        secondaryText="Area Intelligence"
-      />
+      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
+        <PreFooterSeparator 
+          title="Explore More Market Intelligence"
+          subtitle="Get a high-level overview or dive into area-specific data."
+          primaryLink="/market-intelligence/overview"
+          primaryText="Market Overview"
+          secondaryLink="/market-intelligence/areas"
+          secondaryText="Area Intelligence"
+        />
+      </div>
     </div>
   );
 };

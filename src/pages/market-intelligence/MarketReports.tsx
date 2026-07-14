@@ -100,11 +100,11 @@ const MarketReportsPage = () => {
   const getTypeBadge = (type: string) => {
     switch (type) {
       case 'monthly':
-        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 font-medium">Monthly</Badge>;
+        return <Badge data-surface="emerald" className="jj-stat-badge-emerald border-0 font-semibold">Monthly</Badge>;
       case 'quarterly':
-        return <Badge className="bg-[#F7F2EA] text-[#1A1A1A] border-[#B89555]/40 font-medium">Quarterly</Badge>;
+        return <Badge data-surface="emerald" className="jj-stat-badge-emerald border-0 font-semibold">Quarterly</Badge>;
       case 'annual':
-        return <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555]/40 font-medium">Annual</Badge>;
+        return <Badge data-surface="emerald" className="jj-stat-badge-emerald border-0 font-semibold">Annual</Badge>;
       default:
         return null;
     }
@@ -377,7 +377,7 @@ const MarketReportsPage = () => {
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </div>
                             <Link to="/market-report">
-                              <Button size="sm" variant="primary">
+                              <Button size="sm" variant="primary" className="mi-cta-emerald">
                                 <Download className="w-4 h-4 mr-2" />
                                 Download
                               </Button>
@@ -564,14 +564,16 @@ const MarketReportsPage = () => {
         </div>
       </section>
 
-      <PreFooterSeparator 
-        title="Explore More Market Intelligence"
-        subtitle="Understand our data methodology or browse area-specific insights."
-        primaryLink="/market-intelligence/methodology"
-        primaryText="Our Methodology"
-        secondaryLink="/market-intelligence/areas"
-        secondaryText="Area Intelligence"
-      />
+      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
+        <PreFooterSeparator 
+          title="Explore More Market Intelligence"
+          subtitle="Understand our data methodology or browse area-specific insights."
+          primaryLink="/market-intelligence/methodology"
+          primaryText="Our Methodology"
+          secondaryLink="/market-intelligence/areas"
+          secondaryText="Area Intelligence"
+        />
+      </div>
     </div>
   );
 };
