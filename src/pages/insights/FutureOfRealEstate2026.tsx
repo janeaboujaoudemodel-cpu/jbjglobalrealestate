@@ -6,6 +6,7 @@ import {
   ArrowRight, CheckCircle2, Sparkles, MapPin, LineChart, Rocket,
 } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
+import MIPageShell from "@/components/shell/MIPageShell";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
