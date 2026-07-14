@@ -129,9 +129,9 @@ const MarketOverview = () => {
   ];
 
   const getTrendIcon = (change: number) => {
-    if (change > 0) return <TrendingUp className="w-4 h-4 text-[#B89555]" />;
-    if (change < 0) return <TrendingDown className="w-4 h-4 text-[#064E3B]" />;
-    return <Minus className="w-4 h-4 text-[#1A1A1A]/60" />;
+    if (change > 0) return <TrendingUp className="w-4 h-4" />;
+    if (change < 0) return <TrendingDown className="w-4 h-4" />;
+    return <Minus className="w-4 h-4" />;
   };
 
   return (
@@ -339,9 +339,9 @@ const MarketOverview = () => {
                         {stat.label}
                       </p>
                       <p className="text-[#1A1A1A] text-3xl font-bold mb-2">{stat.value}</p>
-                      <div className="flex items-center justify-center gap-2">
+                      <div data-surface="emerald" className="jj-stat-badge-emerald mx-auto inline-flex items-center justify-center gap-2 rounded-full px-3 py-1.5 text-sm font-semibold">
                         {getTrendIcon(stat.change)}
-                        <span className="text-sm font-semibold text-[#1A1A1A]">
+                        <span>
                           {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
                         </span>
                       </div>
@@ -389,7 +389,7 @@ const MarketOverview = () => {
                           style={{ width: `${quarter.index}%` }}
                         />
                       </div>
-                      <p className="text-[#1A1A1A]/70 text-xs mt-1">Index: {quarter.index}</p>
+                      <p data-surface="emerald" className="jj-stat-badge-emerald mt-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold">Index: {quarter.index}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -417,14 +417,16 @@ const MarketOverview = () => {
         </section>
       </div>
 
-      <PreFooterSeparator 
-        title="Explore More Market Intelligence"
-        subtitle="Dive deeper into area-specific data and detailed market reports."
-        primaryLink="/market-intelligence/areas"
-        primaryText="View Area Intelligence"
-        secondaryLink="/market-intelligence/reports"
-        secondaryText="Browse Reports"
-      />
+      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
+        <PreFooterSeparator 
+          title="Explore More Market Intelligence"
+          subtitle="Dive deeper into area-specific data and detailed market reports."
+          primaryLink="/market-intelligence/areas"
+          primaryText="View Area Intelligence"
+          secondaryLink="/market-intelligence/reports"
+          secondaryText="Browse Reports"
+        />
+      </div>
     </div>
   );
 };
