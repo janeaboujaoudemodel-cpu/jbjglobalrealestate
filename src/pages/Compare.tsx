@@ -899,7 +899,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
             </div>
 
             {/* CTA row — primary emerald metallic (white ink), secondary champagne (black ink) */}
-            <div className="flex flex-wrap gap-3 mt-8">
+            <div className="flex flex-wrap justify-center gap-3 mt-8">
               <button
                 onClick={openMultiPicker}
                 disabled={isGenerating}
