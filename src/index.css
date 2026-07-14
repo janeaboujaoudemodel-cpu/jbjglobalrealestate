@@ -35359,3 +35359,84 @@ html body #root :is([data-mi-toc], [data-guide-toc], [data-faq-toc], [data-premi
     padding-right: clamp(1rem, 5vw, 2rem) !important;
   }
 }
+
+/* =========================================================================
+   CATEGORY SHELL LOCK — all Insights, Guides, Services, Company, Legal, and
+   Help pages now inherit the Market Intelligence hero + route navigator.
+   Native legacy heroes/floating navigators inside the body are suppressed so
+   each page has one structure: emerald hero, emerald navigator, champagne body,
+   canonical final CTA.
+   ========================================================================= */
+html body #root [data-category-shell-body] {
+  background: #F7F2EA !important;
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [data-category-shell-body] :is(
+  [data-mi-hero],
+  [data-guide-hero],
+  [data-faq-hero],
+  [data-market-report-hero],
+  [data-brand-hero],
+  .jj-hero-fullscreen,
+  .jj-services-hero,
+  .jj-about-emerald-hero
+) {
+  display: none !important;
+}
+
+html body #root [data-category-shell-body] :is(
+  [data-mi-toc],
+  [data-guide-toc],
+  [data-faq-toc],
+  [data-premium-navigator],
+  .faq-floating-sidebar,
+  .guide-floating-sidebar
+) {
+  display: none !important;
+}
+
+html body #root [data-category-shell-body] :is(section, main, article, [data-marketing-page], [data-guides-page], [data-faq-page], [data-services-page]) {
+  background: #F7F2EA !important;
+  background-image: none !important;
+}
+
+html body #root [data-category-shell-body] :is(.container, .jj-section-gutter, .jj-band, section > div):not([data-no-category-width]) {
+  max-width: min(68rem, calc(100% - clamp(2rem, 6vw, 5rem))) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+html body #root [data-category-shell-body] :is(
+  .mi-gold-frame,
+  .jj-service-card-animated,
+  .jj-card-inner,
+  .jj-scope-card,
+  .jj-disclaimer-card,
+  article[class*="rounded"],
+  div[class*="rounded"][class*="border"]
+):not([data-surface="emerald"]):not(.jj-newsletter-emerald) {
+  background: #FDFBF7 !important;
+  background-image: none !important;
+  border: 1px solid rgba(184,149,85,0.35) !important;
+  box-shadow: 0 18px 44px -34px rgba(26,26,26,0.42) !important;
+}
+
+html body #root [data-category-shell-body] :is(h1,h2,h3,h4,h5,h6,p,span,li,div,a):not([data-surface="emerald"] *):not(.allow-white):not(.jj-emerald-metallic *):not([data-no-contrast-guard] *) {
+  color: #1A1A1A !important;
+  -webkit-text-fill-color: #1A1A1A !important;
+}
+
+html body #root [data-category-shell-body] :is(.jj-mi-hero-cta, .jj-mi-hero-cta-emerald, .jj-emerald-metallic, [data-surface="emerald"]),
+html body #root [data-category-shell-body] :is(.jj-mi-hero-cta, .jj-mi-hero-cta-emerald, .jj-emerald-metallic, [data-surface="emerald"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+@media (max-width: 1023px) {
+  html body #root [data-category-shell-body] :is(.container, .jj-section-gutter, .jj-band, section > div):not([data-no-category-width]) {
+    max-width: min(100%, calc(100% - 2rem)) !important;
+  }
+}
