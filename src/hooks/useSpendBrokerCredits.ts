@@ -34,7 +34,7 @@ export function useSpendBrokerCredits() {
         toast.error(error.message || "Could not spend credits");
         return { ok: false, reason: error.message };
       }
-      const result = (data as SpendResult) ?? { ok: false };
+      const result = (data as unknown as SpendResult) ?? { ok: false };
       qc.invalidateQueries({ queryKey: ["broker-credit-wallet", user.id] });
       if (!result.ok) {
         toast.error(
