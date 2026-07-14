@@ -1602,7 +1602,7 @@ export default function PublicAccess() {
                 Automatically unlocked on the Signature package (also included with Private Office).
               </p>
             </div>
-            <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid gap-3 grid-cols-2 sm:grid-cols-5">
               {investorSignaturePerks.map((perk) => {
                 const Icon = perk.icon;
                 return (
