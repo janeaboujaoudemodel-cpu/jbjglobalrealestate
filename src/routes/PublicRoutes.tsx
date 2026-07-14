@@ -522,6 +522,7 @@ export const PublicRoutes = () => (
     {/* ── Misc ── */}
     <Route path="/sitemap" element={<Sitemap />} />
     <Route path="/pricing" element={<Pricing />} />
+    <Route path="/broker-pricing" element={<BrokerPricing />} />
     <Route path="/api-access" element={<ApiAccess />} />
     <Route path="/cv-builder" element={<CVBuilder />} />
 
