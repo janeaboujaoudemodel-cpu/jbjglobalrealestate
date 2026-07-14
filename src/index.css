@@ -34892,3 +34892,53 @@ html body #root main.jj-main-shell [data-mi-page] > [data-mi-hero].jj-mi-prada-h
     padding-top: 72px !important;
   }
 }
+
+/* FINAL SHARED CTA / FILTER REPAIR — no champagne card, no white input blocks. */
+html body #root .jj-newsletter-emerald {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  background: var(--jj-emerald-ombre) !important;
+  background-color: #064E3B !important;
+  background-image: var(--jj-emerald-ombre) !important;
+}
+
+html body #root .jj-newsletter-emerald .jj-hero-search-bar,
+html body #root .jj-newsletter-emerald .jj-emerald-glow-wrap,
+html body #root .jj-newsletter-emerald .jj-emerald-pill,
+html body #root .jj-newsletter-emerald .jj-hero-search-premium {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+html body #root .jj-newsletter-emerald .jj-emerald-glow-wrap::before {
+  display: none !important;
+}
+
+html body #root .jj-newsletter-emerald input,
+html body #root .jj-newsletter-emerald input:hover,
+html body #root .jj-newsletter-emerald input:focus,
+html body #root .jj-newsletter-emerald input:focus-visible,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:hover,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+html body #root .jj-newsletter-emerald input:-webkit-autofill,
+html body #root .jj-newsletter-emerald input:-webkit-autofill:hover,
+html body #root .jj-newsletter-emerald input:-webkit-autofill:focus,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill:hover,
+html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  transition: background-color 999999s ease-out 0s !important;
+}
