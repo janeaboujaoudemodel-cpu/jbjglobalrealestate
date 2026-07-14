@@ -231,7 +231,7 @@ const News = () => {
               <td className="py-3 px-2 text-[#1A1A1A] font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-[#1A1A1A] font-bold">{area.transactions.toLocaleString()}</td>
               <td className="py-3 px-2 text-right">
-                <span className="text-[color:var(--emerald-1)] font-medium text-xs jj-emerald-soft px-2 py-0.5 rounded-full">
+                <span data-no-contrast-guard className="inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   {area.change}
                 </span>
               </td>
