@@ -856,7 +856,7 @@ const ProjectsCompare = ({ onModeChange }: ProjectsCompareProps) => {
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
 
-            <div className="flex items-center gap-3 mt-5">
+            <div className="flex items-center justify-center gap-3 mt-5">
               <div className="h-px w-12" style={{ background: "rgba(255,255,255,0.55)" }} />
               <span className="allow-white text-[10px] uppercase tracking-[0.22em] font-semibold" style={{ color: "rgba(255,255,255,0.75)" }}>
                 Powered by
