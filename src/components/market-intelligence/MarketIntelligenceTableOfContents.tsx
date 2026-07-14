@@ -213,13 +213,14 @@ export const MarketIntelligenceTableOfContents = ({
                       <span
                         data-toc-number
                         data-no-contrast-guard
-                        className={cn(
-                          "h-7 w-7 rounded-md flex items-center justify-center text-[11px] font-bold leading-none",
-                          isActive
-                            ? "bg-white/15 text-white border border-white/20"
-                            : "bg-black/15 text-white border border-white/10"
-                        )}
-                        style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+                        className="h-7 w-7 rounded-md flex items-center justify-center text-[11px] font-bold leading-none border border-white/25"
+                        style={{
+                          backgroundImage: 'var(--jj-emerald-ombre)',
+                          backgroundColor: '#064E3B',
+                          color: '#FFFFFF',
+                          WebkitTextFillColor: '#FFFFFF',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
+                        }}
                       >
                         {index + 1}
                       </span>

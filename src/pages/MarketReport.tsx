@@ -249,7 +249,8 @@ const MarketReport = () => {
                       src={luxuryVilla1}
                       alt="UAE Luxury Real Estate"
                       className="absolute inset-0 w-full h-full object-cover"
-                      loading="lazy"
+                      loading="eager"
+                      fetchPriority="high"
                       decoding="async"
                     />
                     {/* Bottom-only gradient so title is legible without darkening the photo */}
@@ -344,10 +345,18 @@ const MarketReport = () => {
               <SectionEyebrow icon={FileText} className="mb-6">
                 Exclusive Market Report
               </SectionEyebrow>
-              <h1 className="text-[#1A1A1A] text-3xl md:text-5xl lg:text-[3.4rem] font-bold leading-[1.05] mb-6 tracking-tight">
-                Unlock Your<span className="block">Investment Edge</span>
+              <h1
+                className="text-3xl md:text-5xl lg:text-[3.4rem] font-bold leading-[1.05] mb-6 tracking-tight"
+                data-no-contrast-guard
+                style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+              >
+                Unlock Your<span className="block" data-no-contrast-guard style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Investment Edge</span>
               </h1>
-              <p className="text-[#1A1A1A]/75 text-base md:text-lg leading-relaxed mb-8 max-w-xl lg:max-w-none">
+              <p
+                className="text-base md:text-lg leading-relaxed mb-8 max-w-xl lg:max-w-none"
+                data-no-contrast-guard
+                style={{ color: "rgba(26,26,26,0.78)", WebkitTextFillColor: "rgba(26,26,26,0.78)" }}
+              >
                 An educational, founder-led overview designed around government-led sources and
                 structured decision frameworks — created exclusively for clients of JBJ Global
                 Real Estate.
@@ -630,8 +639,17 @@ const MarketReport = () => {
               className="lg:col-span-2 space-y-6"
             >
               {/* What You'll Receive — champagne card, emerald tick tiles, ink text */}
-              <div className={`${CARD_BASE} p-8`}>
-                <h2 className="text-[#1A1A1A] text-xl md:text-2xl font-bold mb-6">
+              <div
+                className={`${CARD_BASE} p-8`}
+                data-no-contrast-guard
+                data-surface="light"
+                style={{ background: "#FFFFFF" }}
+              >
+                <h2
+                  className="text-xl md:text-2xl font-bold mb-6"
+                  data-no-contrast-guard
+                  style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
+                >
                   What You&apos;ll Receive
                 </h2>
                 <ul className="space-y-4">

@@ -112,21 +112,39 @@ export const MarketIntelligenceNavigation = ({
         <div className="mt-6 pt-5 border-t border-[#B89555]/25">
           <p className={`${MI_EYEBROW} text-center mb-4`}>Market Intelligence</p>
           <div className="flex flex-wrap justify-center gap-3">
-            {MARKET_INTELLIGENCE_LINKS.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                data-active={link.path === current ? "true" : undefined}
-                aria-current={link.path === current ? "page" : undefined}
-                className={`px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border-2 ${
-                  link.path === current
-                    ? "bg-[#EFE6D6] text-[#1A1A1A] border-[#B89555] shadow-sm"
-                    : "bg-[#FDFBF7] text-[#1A1A1A]/70 hover:text-[#1A1A1A] border-[#B89555]/40 hover:border-[#B89555] shadow-sm hover:-translate-y-0.5"
-                }`}
-              >
-                {link.title}
-              </Link>
-            ))}
+            {MARKET_INTELLIGENCE_LINKS.map((link) => {
+              const isActive = link.path === current;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-active={isActive ? "true" : undefined}
+                  aria-current={isActive ? "page" : undefined}
+                  data-no-contrast-guard
+                  data-surface="light"
+                  className="px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border-2 shadow-sm hover:-translate-y-0.5"
+                  style={
+                    isActive
+                      ? {
+                          background: "#EFE6D6",
+                          backgroundImage: "none",
+                          color: "#1A1A1A",
+                          WebkitTextFillColor: "#1A1A1A",
+                          borderColor: "#B89555",
+                        }
+                      : {
+                          background: "#FDFBF7",
+                          backgroundImage: "none",
+                          color: "#1A1A1A",
+                          WebkitTextFillColor: "#1A1A1A",
+                          borderColor: "rgba(184,149,85,0.4)",
+                        }
+                  }
+                >
+                  {link.title}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
