@@ -284,7 +284,7 @@ const News = () => {
                     data-emerald={isActive ? "true" : undefined}
                     data-surface={isActive ? "emerald" : undefined}
                     data-no-contrast-guard=""
-                    className={`${isActive ? "allow-white " : ""}px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
+                    className={`${isActive ? "allow-white " : ""}shrink-0 px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
                       isActive
                         ? "jj-cta-primary border-transparent shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                         : "border-[#064E3B]/25 hover:bg-[#F7F2EA]"
