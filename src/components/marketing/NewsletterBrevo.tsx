@@ -168,6 +168,7 @@ export const NewsletterBrevo = ({
               )}
               <input
                 type="email"
+                data-no-contrast-guard
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onFocus={() => setIsEmailFocused(true)}
@@ -175,8 +176,22 @@ export const NewsletterBrevo = ({
                 aria-label="Email address"
                 required
                 disabled={isSubmitting}
-                className="allow-white jj-hero-search-input relative z-10 flex-1 min-w-0 h-full bg-transparent text-[15px] sm:text-[15.5px] tracking-[-0.005em] font-normal cursor-text sm:pl-[34px]"
-                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', caretColor: '#FFFFFF', pointerEvents: 'auto', border: 'none', outline: 'none', boxShadow: 'none', background: 'transparent' }}
+                className="allow-white jj-hero-search-input relative z-10 flex-1 min-w-0 h-full appearance-none bg-transparent text-[15px] sm:text-[15.5px] tracking-[-0.005em] font-normal cursor-text sm:pl-[34px]"
+                style={{
+                  appearance: 'none',
+                  WebkitAppearance: 'none',
+                  color: '#FFFFFF',
+                  WebkitTextFillColor: '#FFFFFF',
+                  caretColor: '#FFFFFF',
+                  pointerEvents: 'auto',
+                  border: 'none',
+                  outline: 'none',
+                  boxShadow: 'none',
+                  WebkitBoxShadow: 'none',
+                  background: 'transparent',
+                  backgroundColor: 'transparent',
+                  backgroundImage: 'none',
+                }}
               />
             </div>
             <button

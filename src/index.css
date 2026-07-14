@@ -34922,14 +34922,24 @@ html body #root .jj-newsletter-emerald input,
 html body #root .jj-newsletter-emerald input:hover,
 html body #root .jj-newsletter-emerald input:focus,
 html body #root .jj-newsletter-emerald input:focus-visible,
+html body #root .jj-newsletter-emerald input.jj-hero-search-input,
+html body #root .jj-newsletter-emerald input.jj-hero-search-input:hover,
+html body #root .jj-newsletter-emerald input.jj-hero-search-input:focus,
+html body #root .jj-newsletter-emerald input.jj-hero-search-input:focus-visible,
 html body #root :is([type="search"], [data-search], .jj-search, .search-input) input,
 html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:hover,
 html body #root :is([type="search"], [data-search], .jj-search, .search-input) input:focus {
+  appearance: none !important;
+  -webkit-appearance: none !important;
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
+  background-clip: padding-box !important;
+  border: 0 !important;
   box-shadow: none !important;
+  -webkit-box-shadow: none !important;
   outline: 0 !important;
+  filter: none !important;
 }
 
 html body #root .jj-newsletter-emerald input:-webkit-autofill,
