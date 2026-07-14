@@ -145,7 +145,7 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Off-plan</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
-                <span className="text-xs text-[color:var(--emerald-1)] font-medium jj-emerald-soft px-1.5 py-0.5 rounded">{offPlanPct}%</span>
+                <span data-no-contrast-guard className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{offPlanPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -155,7 +155,7 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Secondary</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${secondary}` : `~${secondary.toLocaleString()}`}</span>
-                <span className="text-xs text-[#1A1A1A]/70 font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{secondaryPct}%</span>
+                <span data-no-contrast-guard className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: "linear-gradient(135deg, #B89555 0%, #8a6a3a 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{secondaryPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -176,7 +176,7 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Cash</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${cash}` : `~${cash.toLocaleString()}`}</span>
-                <span className="text-xs text-[color:var(--emerald-1)] font-medium jj-emerald-soft px-1.5 py-0.5 rounded">{cashPct}%</span>
+                <span data-no-contrast-guard className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{cashPct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -186,7 +186,7 @@ const News = () => {
               <span className="text-sm text-[#1A1A1A]/70">Mortgage</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#1A1A1A]">{isDaily ? `~${mortgage}` : `~${mortgage.toLocaleString()}`}</span>
-                <span className="text-xs text-[#1A1A1A]/70 font-medium bg-[#F7F2EA] px-1.5 py-0.5 rounded">{mortgagePct}%</span>
+                <span data-no-contrast-guard className="text-xs font-semibold px-2 py-0.5 rounded" style={{ background: "linear-gradient(135deg, #B89555 0%, #8a6a3a 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{mortgagePct}%</span>
               </div>
             </div>
             <div className="w-full bg-[#EFE6D6] rounded-full h-2">
@@ -231,7 +231,7 @@ const News = () => {
               <td className="py-3 px-2 text-[#1A1A1A] font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-[#1A1A1A] font-bold">{area.transactions.toLocaleString()}</td>
               <td className="py-3 px-2 text-right">
-                <span className="text-[color:var(--emerald-1)] font-medium text-xs jj-emerald-soft px-2 py-0.5 rounded-full">
+                <span data-no-contrast-guard className="inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: "linear-gradient(135deg, #064E3B 0%, #042c1c 60%, #000000 100%)", color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
                   {area.change}
                 </span>
               </td>
@@ -284,7 +284,7 @@ const News = () => {
                     data-emerald={isActive ? "true" : undefined}
                     data-surface={isActive ? "emerald" : undefined}
                     data-no-contrast-guard=""
-                    className={`${isActive ? "allow-white " : ""}px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
+                    className={`${isActive ? "allow-white " : ""}shrink-0 px-4 py-2 text-sm whitespace-nowrap transition-colors rounded-full font-medium border ${
                       isActive
                         ? "jj-cta-primary border-transparent shadow-[0_8px_18px_-12px_rgba(6,78,59,0.85)]"
                         : "border-[#064E3B]/25 hover:bg-[#F7F2EA]"

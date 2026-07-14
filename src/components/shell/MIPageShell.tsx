@@ -151,7 +151,7 @@ export default function MIPageShell({
       <div className={bodyClassName}>{children}</div>
 
       {showPreFooter ? (
-        <div id="cta" className="scroll-mt-24">
+        <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
           <PreFooterSeparator
             title={preFooterTitle ?? "Ready to Make Informed Decisions?"}
             subtitle={
