@@ -9,17 +9,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import { Send, Loader2, CheckCircle, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { PhoneInput, getPhoneValidation } from "@/components/ui/phone-input";
+import LightSearchableSelect from "@/components/signup/LightSearchableSelect";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
-import { getCountryList, getLanguageList, COUNTRY_FLAGS, LANGUAGE_FLAGS } from "@/constants/localeOptions";
 
 const consultationSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
@@ -102,6 +101,10 @@ interface ConsultationRequestFormProps {
   subtitle?: string;
   projectId?: string;
   projectName?: string;
+  serviceOptions?: string[];
+  defaultServiceNeeded?: string;
+  messagePlaceholder?: string;
+  formSource?: string;
 }
 
 export const ConsultationRequestForm = ({
@@ -110,12 +113,18 @@ export const ConsultationRequestForm = ({
   subtitle = "Connect with our expert team for personalized guidance on your property journey.",
   projectId,
   projectName,
+  serviceOptions,
+  defaultServiceNeeded = "",
+  messagePlaceholder = "Additional details (optional)",
+  formSource,
 }: ConsultationRequestFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
-  const countryList = useMemo(() => getCountryList(), []);
-  const languageList = useMemo(() => getLanguageList(), []);
+  const serviceLabels = useMemo(
+    () => serviceOptions && serviceOptions.length ? serviceOptions : SERVICE_OPTIONS.map((opt) => opt.label),
+    [serviceOptions],
+  );
 
   const form = useForm<ConsultationFormData>({
     resolver: zodResolver(consultationSchema),
@@ -123,7 +132,7 @@ export const ConsultationRequestForm = ({
       fullName: "",
       email: "",
       phone: "",
-      serviceNeeded: "",
+      serviceNeeded: defaultServiceNeeded,
       bedrooms: "",
       sizeBucket: "any",
       nationality: "",
@@ -140,9 +149,9 @@ export const ConsultationRequestForm = ({
   const onSubmit = async (data: ConsultationFormData) => {
     setIsSubmitting(true);
     try {
-      const source = projectId 
+      const source = formSource || (projectId 
         ? `project-interest-${projectId}` 
-        : "properties-consultation";
+        : "properties-consultation");
 
       const leadCaptured = await captureLead({
         email: data.email,
@@ -237,6 +246,8 @@ export const ConsultationRequestForm = ({
       viewport={{ once: true }}
         data-form-shell
         data-jbj-consultation-form
+        data-surface="champagne-raised"
+        data-allow-ink
         className={`jbj-form-shell bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/35 rounded-2xl p-7 sm:p-10 md:p-12 shadow-[0_18px_46px_rgba(184,149,85,0.16),0_2px_8px_rgba(0,0,0,0.06)] max-w-4xl mx-auto ${className}`}
     >
       {/* Local pill lock — force gold champagne on inactive & pure emerald+white on active,
@@ -332,18 +343,17 @@ export const ConsultationRequestForm = ({
               name="serviceNeeded"
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className={selectTriggerClass}>
-                        <SelectValue placeholder="Service Needed *" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className={selectContentClass}>
-                      {SERVICE_OPTIONS.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <LightSearchableSelect
+                      value={field.value}
+                      onChange={field.onChange}
+                      options={serviceLabels}
+                      variant="plain"
+                      placeholder="Service Needed *"
+                      searchPlaceholder="Search services…"
+                      ariaLabel="Service Needed"
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -478,18 +488,16 @@ export const ConsultationRequestForm = ({
               name="nationality"
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className={selectTriggerClass}>
-                        <SelectValue placeholder="Nationality" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
-                      {countryList.map((n) => (
-                        <SelectItem key={n} value={n}>{COUNTRY_FLAGS[n] ? `${COUNTRY_FLAGS[n]} ${n}` : n}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <LightSearchableSelect
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      variant="nationality"
+                      placeholder="Nationality"
+                      searchPlaceholder="Search nationality…"
+                      ariaLabel="Nationality"
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -499,18 +507,16 @@ export const ConsultationRequestForm = ({
               name="preferredLanguage"
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className={selectTriggerClass}>
-                        <SelectValue placeholder="Preferred Language" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className={`${selectContentClass} max-h-[300px] overflow-y-auto`}>
-                      {languageList.map((l) => (
-                        <SelectItem key={l} value={l}>{LANGUAGE_FLAGS[l] ? `${LANGUAGE_FLAGS[l]} ${l}` : l}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <LightSearchableSelect
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      variant="language"
+                      placeholder="Preferred Language"
+                      searchPlaceholder="Search language…"
+                      ariaLabel="Preferred Language"
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
@@ -588,7 +594,7 @@ export const ConsultationRequestForm = ({
               <FormItem>
                 <FormControl>
                   <Textarea
-                    placeholder="Additional details (optional)"
+                    placeholder={messagePlaceholder}
                     {...field}
                     className="min-h-[92px] bg-transparent text-[#1A1A1A] resize-none rounded-lg px-4 py-3"
                   />

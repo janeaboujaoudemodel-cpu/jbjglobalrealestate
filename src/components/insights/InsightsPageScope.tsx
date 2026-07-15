@@ -236,6 +236,15 @@ const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null =>
 
 export function InsightsPageScope({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
+
+  if (pathname === "/services/property-management") {
+    return (
+      <div data-insights-page className="contents">
+        {children}
+      </div>
+    );
+  }
+
   const shellConfig = getCategoryShellConfig(pathname);
 
   if (shellConfig) {
