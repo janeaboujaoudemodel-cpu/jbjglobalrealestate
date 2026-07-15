@@ -190,15 +190,12 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Currency Exchange", href: "/services/currency-exchange", icon: HandCoins },
   { label: "Signature Collection", href: "/services/signature-collection", icon: FileSignature },
   { label: "AI Tools Service", href: "/ai-hub", icon: Bot },
-  { label: "Broker Certification", href: "/services/broker-certification", icon: BadgeCheck },
-  { label: "Complaint Procedures", href: "/services/complaint-procedures", icon: ScrollText },
-  { label: "Customer Happiness", href: "/services/customer-happiness-center", icon: SmilePlus },
-  { label: "Testimonials", href: "/services/testimonials", icon: Heart },
   { label: "Referral Partner", href: "/services/referral-partner", icon: Handshake },
 
   // ── Broker & Academy ──
   { label: "Broker Portal", href: "/broker/portal", icon: Handshake, section: "BROKER & ACADEMY", megaMenu: 'broker' },
   { label: "Broker Toolkit", href: "/broker-toolkit", icon: Wrench },
+  { label: "Broker Certification", href: "/services/broker-certification", icon: BadgeCheck },
   // Broker Hub removed — duplicates Broker Portal.
   // Note: "Broker Dashboard" removed from this section — it's the user's personal dashboard, not a broker-only tool.
   { label: "JBJ Academy", href: "/jbj-academy", icon: GraduationCap },
@@ -214,7 +211,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "About", href: "/about", icon: Users, megaMenu: 'company', section: "COMPANY" },
   { label: "Team", href: "/team", icon: Users },
   { label: "Founder", href: "/founder", icon: Crown },
-  { label: "Contact", href: "/contact", icon: Phone },
   { label: "Awards", href: "/awards", icon: Award },
   
   { label: "Company Profile", href: "/company-profile", icon: Building },
@@ -232,6 +228,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Contact Us", href: "/contact", icon: Phone, section: "HELP & SUPPORT" },
   { label: "Support Center", href: "/ticket-hub", icon: Ticket },
   { label: "FAQs", href: "/faqs", icon: Lightbulb },
+  { label: "Customer Happiness", href: "/services/customer-happiness-center", icon: SmilePlus },
+  { label: "Complaint Procedures", href: "/services/complaint-procedures", icon: ScrollText },
+  { label: "Testimonials", href: "/services/testimonials", icon: Heart },
 
 
   
@@ -404,11 +403,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   company: [
     { label: 'About JBJ', icon: Users, href: '/about' },
     { label: 'The Founder', icon: User, href: '/founder' },
-    { label: 'Contact Us', icon: Phone, href: '/contact' },
     { label: 'Careers', icon: GraduationCap, href: '/join' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
-    
-    { label: 'Testimonials', icon: Heart, href: '/services/testimonials' },
   ],
   legal: [
     { label: 'Terms of Service', icon: Scale, href: '/terms' },
@@ -460,6 +456,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   broker: [
     { label: 'Broker Portal', icon: Handshake, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
+    { label: 'Broker Certification', icon: BadgeCheck, href: '/services/broker-certification' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
     { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
   ],
