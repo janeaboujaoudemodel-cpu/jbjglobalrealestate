@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import ConsultationRequestForm from "@/components/ConsultationRequestForm";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 import { SEOHead } from "@/components/SEOHead";
 import { scrollToId } from "@/lib/scroll";
 import {
@@ -298,18 +299,24 @@ export default function PropertyManagement() {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
         }
+        [data-pm-page] [data-pm-faq-item] {
+          background: rgba(255,253,248,0.72);
+        }
         [data-pm-page] [data-pm-faq-trigger],
         [data-pm-page] [data-pm-faq-trigger] *:not(svg):not(path) {
           color: ${INK} !important;
           -webkit-text-fill-color: ${INK} !important;
         }
-        [data-pm-page] [data-pm-faq-trigger][data-state="open"],
-        [data-pm-page] [data-pm-faq-trigger][data-state="open"] * {
+        [data-pm-page] [data-pm-faq-item][data-state="open"] {
+          background: ${EMERALD_GRADIENT} !important;
+          border-color: rgba(255,255,255,0.22) !important;
+        }
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger],
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] *,
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer],
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer] * {
           color: ${WHITE} !important;
           -webkit-text-fill-color: ${WHITE} !important;
-        }
-        [data-pm-page] [data-pm-faq-trigger][data-state="open"] {
-          background: ${EMERALD_GRADIENT} !important;
         }
         html body #root [data-service-page="property-management"] [data-pm-toc-button],
         html body #root [data-service-page="property-management"] [data-pm-toc-button] *,
@@ -332,6 +339,17 @@ export default function PropertyManagement() {
         [data-pm-page] [data-jbj-consultation-form] {
           box-shadow: none !important;
           border-radius: 24px !important;
+        }
+        /* Form field padding — placeholders must not touch borders */
+        [data-pm-page] [data-jbj-consultation-form] input,
+        [data-pm-page] [data-jbj-consultation-form] textarea,
+        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"] {
+          padding-left: 1.15rem !important;
+          padding-right: 1.15rem !important;
+        }
+        [data-pm-page] [data-jbj-consultation-form] textarea {
+          padding-top: 0.9rem !important;
+          padding-bottom: 0.9rem !important;
         }
       `}</style>
 
@@ -545,26 +563,22 @@ export default function PropertyManagement() {
         <Section id="faq" eyebrow="FAQ" title="Frequently Asked Questions">
           <Accordion type="single" collapsible className="space-y-3">
             {faqData.map((faq, index) => (
-              <AccordionItem key={faq.q} value={`faq-${index}`} className="overflow-hidden rounded-2xl border" style={{ borderColor: "rgba(184,149,85,0.38)", background: "rgba(255,253,248,0.72)" }}>
+              <AccordionItem key={faq.q} value={`faq-${index}`} data-pm-faq-item className="overflow-hidden rounded-2xl border" style={{ borderColor: "rgba(184,149,85,0.38)" }}>
                 <AccordionTrigger data-pm-faq-trigger className="min-h-[64px] px-5 py-4 text-left font-semibold hover:no-underline">{faq.q}</AccordionTrigger>
-                <AccordionContent className="px-5 pb-5 pt-0"><p className="text-sm leading-relaxed" style={{ color: INK_SOFT }}>{faq.a}</p></AccordionContent>
+                <AccordionContent className="px-5 pb-5 pt-0"><p data-pm-faq-answer className="text-sm leading-relaxed" style={{ color: INK_SOFT }}>{faq.a}</p></AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </Section>
 
-        <section id="ready-to-get-started" className="scroll-mt-28 pb-16 pt-6 md:pb-24 md:pt-8">
-          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-            <div data-pm-emerald className="rounded-3xl border p-7 text-center md:p-10" style={{ background: EMERALD_GRADIENT, borderColor: "rgba(255,255,255,0.22)", color: WHITE }}>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em]">Ready to Get Started</p>
-              <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-semibold md:text-5xl" style={{ fontFamily: '"Cormorant Garamond", serif' }}>Ready to Structure Your Property Management?</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed md:text-base">Share your asset details and our management desk will confirm the correct service path, reporting structure, and next step.</p>
-              <div className="mt-7 flex justify-center">
-                <HeroButton to="#proposal">Request Management Proposal</HeroButton>
-              </div>
-            </div>
-          </div>
-        </section>
+        <MIPreFooterCard
+          title="Ready to Structure Your Property Management?"
+          subtitle="Share your asset details and our management desk will confirm the correct service path, reporting structure, and next step."
+          primaryLink="#proposal"
+          primaryText="Request Management Proposal"
+          secondaryLink="/contact"
+          secondaryText="Speak With Our Team"
+        />
       </main>
     </div>
   );
