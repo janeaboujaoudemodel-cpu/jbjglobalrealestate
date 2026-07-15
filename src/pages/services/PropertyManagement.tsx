@@ -353,22 +353,24 @@ export default function PropertyManagement() {
         }
         /* PM form: keep only the outer form container border; strip all inner
            field borders and unify their background to the gold-champagne tone. */
-        [data-pm-page] [data-jbj-consultation-form] input,
-        [data-pm-page] [data-jbj-consultation-form] textarea,
-        [data-pm-page] [data-jbj-consultation-form] select,
-        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"],
-        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
-        [data-pm-page] [data-jbj-consultation-form] [data-field-group],
-        [data-pm-page] [data-jbj-consultation-form] .form-checkbox-row,
-        [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger],
-        [data-pm-page] [data-jbj-consultation-form] [data-light-select-trigger],
-        [data-pm-page] [data-jbj-consultation-form] .jbj-form-field,
-        [data-pm-page] [data-jbj-consultation-form] [data-jbj-field] {
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] select,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .form-checkbox-row,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-phone-code-trigger],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-light-select-trigger],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .jbj-form-field,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-jbj-field] {
           border: 0 !important;
+          border-color: transparent !important;
           box-shadow: none !important;
-          outline: none !important;
-          background: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
+          outline: 0 !important;
+          background: #F3E4C2 !important;
           background-color: #F3E4C2 !important;
+          background-image: none !important;
         }
         [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
         [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger] *,
@@ -419,10 +421,14 @@ export default function PropertyManagement() {
           border-color: rgba(255,255,255,0.22) !important;
         }
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-trigger],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover *:not(svg):not(path),
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-trigger] *,
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-answer],
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-answer] *,
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] *:not(svg):not(path),
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] *,
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer],
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer] *,
