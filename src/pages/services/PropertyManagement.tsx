@@ -311,6 +311,20 @@ export default function PropertyManagement() {
         [data-pm-page] [data-pm-faq-trigger][data-state="open"] {
           background: ${EMERALD_GRADIENT} !important;
         }
+        html body #root [data-service-page="property-management"] [data-pm-toc-button],
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] *:not(input):not(textarea) {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] svg,
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg * {
+          color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+        }
         [data-pm-page] [data-jbj-consultation-form] {
           box-shadow: none !important;
           border-radius: 24px !important;
