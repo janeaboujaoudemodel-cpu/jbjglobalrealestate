@@ -569,7 +569,7 @@ export default function PropertyManagement() {
         <section className="pt-14 md:pt-20">
           <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
             <div data-pm-panel className="rounded-3xl border p-6 md:p-9" style={{ background: PANEL_GRADIENT, borderColor: "rgba(184,149,85,0.42)", boxShadow: "0 24px 56px -36px rgba(44,31,13,0.34)" }}>
-              <h2 className="mb-6 text-center text-2xl font-semibold md:text-3xl" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>Table of Contents</h2>
+              <h2 className="mb-8 text-center text-3xl font-light tracking-tight md:text-4xl" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>Table of Contents</h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {tocSections.map((section, index) => {
                   const Icon = section.icon;
@@ -579,12 +579,24 @@ export default function PropertyManagement() {
                       type="button"
                       data-pm-toc-button
                       onClick={() => scrollToId(section.id)}
-                      className="grid min-h-[74px] grid-cols-[38px_1fr_20px] items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold transition-transform hover:-translate-y-0.5"
-                      style={{ background: EMERALD_GRADIENT, border: "1px solid rgba(255,255,255,0.18)", color: WHITE }}
+                      className="group flex min-h-[68px] items-center gap-3 rounded-xl px-4 py-3 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                      style={{ background: EMERALD_GRADIENT, border: "1px solid rgba(232,207,138,0.28)", color: WHITE }}
                     >
-                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[11px] font-bold" style={{ background: "rgba(255,255,255,0.18)" }}>{String(index + 1).padStart(2, "0")}</span>
-                      <span className="leading-tight">{section.label}</span>
-                      <Icon className="h-4 w-4" />
+                      <span
+                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums tracking-wider"
+                        style={{ background: "rgba(232,207,138,0.16)", color: "#E8CF8A", border: "1px solid rgba(232,207,138,0.35)" }}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium leading-tight tracking-[0.005em]" style={{ color: WHITE }}>
+                        {section.label}
+                      </span>
+                      <span
+                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-[rgba(232,207,138,0.22)]"
+                        style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(232,207,138,0.28)" }}
+                      >
+                        <Icon className="h-[15px] w-[15px]" style={{ color: "#E8CF8A" }} />
+                      </span>
                     </button>
                   );
                 })}
