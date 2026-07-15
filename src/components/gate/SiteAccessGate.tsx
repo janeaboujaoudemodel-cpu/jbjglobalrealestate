@@ -1,6 +1,6 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 /**
  * SiteAccessGate — Gated access
@@ -64,46 +64,11 @@ function isLocalPlaywrightPreview() {
 
 export default function SiteAccessGate({ children }: { children: ReactNode }) {
   const location = useLocation();
-  const [ready, setReady] = useState(false);
-  const [authed, setAuthed] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    // Fast path: if a locally-persisted session exists, treat the visitor as
-    // authenticated immediately so that the redirect-to-/access race after
-    // sign-in doesn't fire. We still revalidate with getUser() in the
-    // background and only sign the user out if the server explicitly rejects
-    // the session (SIGNED_OUT via onAuthStateChange also clears it).
-    supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      if (data.session?.user) {
-        setAuthed(true);
-        setReady(true);
-      }
-    });
-    supabase.auth.getUser().then(({ data, error }) => {
-      if (!mounted) return;
-      // Only downgrade to unauth if the auth server explicitly says the token
-      // is invalid (401 / user missing). Network hiccups must not evict the
-      // user — the session listener will catch a real sign-out.
-      const invalidToken = error && /jwt|token|expired|invalid|not.?found/i.test(error.message ?? "");
-      if (data.user) setAuthed(true);
-      else if (invalidToken) setAuthed(false);
-      setReady(true);
-    });
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") setAuthed(false);
-      else if (session?.user) setAuthed(true);
-    });
-    return () => {
-      mounted = false;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+  const { user, loading } = useAuth();
 
   if (isPublicPath(location.pathname) || isLocalPlaywrightPreview()) return <>{children}</>;
-  if (!ready) return null;
-  if (!authed) {
+  if (loading) return null;
+  if (!user) {
     return <Navigate to="/access" replace state={{ from: location.pathname + location.search }} />;
   }
   return <>{children}</>;

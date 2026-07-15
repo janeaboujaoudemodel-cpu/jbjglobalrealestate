@@ -35985,3 +35985,25 @@ html body #root main.jj-main-shell [data-content-gutter="1"] [data-brand-hero] {
   max-width: 100%;
   border-radius: 0 !important;
 }
+
+/* FINAL LOCK — MI hero parity + sidebar-safe service heroes.
+   No gold dividers, no texture/line overlays, and never extend behind the fixed sidebar. */
+html body #root :is([data-premium-emerald-hero], [data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero].jj-mi-prada-hero) :is(.jj-mi-gold-hairline, .jj-mi-title-rule, .jj-mi-marble-depth, .jj-mi-marble-grain),
+html body #root :is([data-premium-emerald-hero], [data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero].jj-mi-prada-hero)::before,
+html body #root :is([data-premium-emerald-hero], [data-mi-hero], [data-guide-hero], [data-faq-hero], [data-brand-hero].jj-mi-prada-hero)::after {
+  display: none !important;
+  opacity: 0 !important;
+  content: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+}
+
+html body #root main.jj-main-shell [data-service-page="property-management"] [data-brand-hero].jj-mi-prada-hero {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  left: auto !important;
+  transform: none !important;
+}
