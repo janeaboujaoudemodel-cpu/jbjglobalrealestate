@@ -534,6 +534,11 @@ const Founder = () => {
           </div>
         </div>
       </section>
+      <MIPreFooterCard
+        title="Speak directly with our leadership"
+        subtitle="Book a private consultation with the JBJ founding team about your Dubai portfolio."
+        maxWidthClass="max-w-6xl"
+      />
     </div>
   );
 };
