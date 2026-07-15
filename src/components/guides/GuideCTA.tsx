@@ -32,7 +32,7 @@ export const GuideCTA = ({
   return (
     <section className="jj-band jj-band--surface py-12 md:py-16">
       <div className="container mx-auto px-4">
-        <div className="max-w-[1100px] mx-auto">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
