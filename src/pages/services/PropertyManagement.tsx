@@ -32,7 +32,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 const INK = "#1A1A1A";
@@ -259,6 +259,32 @@ function HeroButton({ to, children, variant: _variant = "solid" }: { to: string;
 }
 
 export default function PropertyManagement() {
+  // Neutralize the shared phone country-code trigger's emerald/gold styling
+  // inside the PM consultation form so it matches the surrounding champagne fields.
+  useEffect(() => {
+    let done = false;
+    const apply = () => {
+      const btn = document.querySelector<HTMLButtonElement>(
+        '[data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger]'
+      );
+      if (!btn || done) return;
+      done = true;
+      btn.classList.remove("jj-emerald-action", "jj-cta-gold-metallic");
+      btn.removeAttribute("data-emerald-action");
+      btn.style.setProperty("background", "#F7F2EA", "important");
+      btn.style.setProperty("background-image", "none", "important");
+      btn.style.setProperty("border", "1px solid rgba(184,149,85,0.42)", "important");
+      btn.style.setProperty("border-radius", "12px", "important");
+      btn.style.setProperty("color", "#1A1A1A", "important");
+      btn.style.setProperty("animation", "none", "important");
+    };
+    apply();
+    if (done) return;
+    const obs = new MutationObserver(() => { apply(); if (done) obs.disconnect(); });
+    obs.observe(document.body, { subtree: true, childList: true });
+    const t = window.setTimeout(() => obs.disconnect(), 8000);
+    return () => { obs.disconnect(); clearTimeout(t); };
+  }, []);
   return (
     <div data-service-page="property-management" data-pm-page style={{ background: CHAMPAGNE }}>
       <SEOHead
@@ -351,26 +377,29 @@ export default function PropertyManagement() {
           padding-top: 0.9rem !important;
           padding-bottom: 0.9rem !important;
         }
-        /* PM form: keep only the outer form container border; remove every
-           inner field frame/edge so the controls sit directly on the existing
-           champagne form surface. */
+        /* PM form: restore subtle individual field borders on champagne background.
+           Outer form container border is preserved. Inner fields get a soft gold
+           hairline + unified champagne fill, consistent height + radius. */
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] select,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"],
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .form-checkbox-row,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-phone-code-trigger],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-light-select-trigger],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .jbj-form-field,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-jbj-field] {
-          border: 0 !important;
-          border-color: transparent !important;
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-light-select-trigger] {
+          border: 1px solid rgba(184,149,85,0.42) !important;
+          border-radius: 12px !important;
+          background: #F7F2EA !important;
+          background-color: #F7F2EA !important;
+          background-image: none !important;
           box-shadow: none !important;
           outline: 0 !important;
+        }
+        /* Remove wrapper/group borders so we don't get double frames around a field */
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group] {
+          border: 0 !important;
+          box-shadow: none !important;
           background: transparent !important;
-          background-color: transparent !important;
           background-image: none !important;
         }
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input::before,
@@ -380,16 +409,21 @@ export default function PropertyManagement() {
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"]::before,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"]::after,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]::before,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]::after,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group]::before,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group]::after,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .form-checkbox-row::before,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .form-checkbox-row::after {
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]::after {
           content: none !important;
           border: 0 !important;
           box-shadow: none !important;
           background: transparent !important;
           background-image: none !important;
+        }
+        /* Consistent field height for single-line controls; textarea keeps auto */
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input:not([type="checkbox"]):not([type="radio"]),
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-phone-code-trigger],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-light-select-trigger] {
+          height: 3rem !important;
+          min-height: 3rem !important;
         }
         [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
         [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger] *,
@@ -405,13 +439,38 @@ export default function PropertyManagement() {
           color: ${INK} !important;
           stroke: ${INK} !important;
         }
-        [data-pm-page] [data-jbj-consultation-form] input:focus,
-        [data-pm-page] [data-jbj-consultation-form] textarea:focus,
-        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger]:focus,
-        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger]:focus-visible,
-        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus,
-        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus-visible {
-          border: 0 !important;
+        /* Neutralize any metallic sweep/animation on the phone country code trigger.
+           Use extra attribute chains + class hooks to outweigh the global emerald-action rules. */
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger][data-emerald-action],
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger].jj-emerald-action,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger].jj-cta-gold-metallic,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger] {
+          background: #F7F2EA !important;
+          background-color: #F7F2EA !important;
+          background-image: none !important;
+          animation: none !important;
+          transform: none !important;
+          border: 1px solid rgba(184,149,85,0.42) !important;
+          border-radius: 12px !important;
+          color: ${INK} !important;
+          -webkit-text-fill-color: ${INK} !important;
+        }
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger] *,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-phone-code-trigger] svg {
+          color: ${INK} !important;
+          -webkit-text-fill-color: ${INK} !important;
+          stroke: ${INK} !important;
+        }
+        /* Focus: brighten the same hairline; no double-ring */
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input:focus,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea:focus,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]:focus,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]:focus-visible,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"]:focus,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"]:focus-visible,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-phone-code-trigger]:focus,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-phone-code-trigger]:focus-visible {
+          border-color: rgba(184,149,85,0.9) !important;
           box-shadow: none !important;
           outline: none !important;
         }
