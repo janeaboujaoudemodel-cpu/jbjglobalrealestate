@@ -366,6 +366,14 @@ export default function PropertyManagement() {
           box-shadow: none !important;
           border-radius: 24px !important;
         }
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] form[data-form-shell] {
+          border: 0 !important;
+          border-color: transparent !important;
+          box-shadow: none !important;
+          background: transparent !important;
+          background-image: none !important;
+          padding: 0 !important;
+        }
         /* Form field padding — placeholders must not touch borders */
         [data-pm-page] [data-jbj-consultation-form] input,
         [data-pm-page] [data-jbj-consultation-form] textarea,
