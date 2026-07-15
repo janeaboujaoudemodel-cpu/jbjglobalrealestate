@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -54,8 +55,8 @@ const ABOUT_TILE_CLASS =
  * important.
  */
 const AboutMedia = ({ src, alt }: { src: string; alt: string }) => {
-  const ref = React.useRef<HTMLDivElement | null>(null);
-  React.useEffect(() => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
     if (!ref.current) return;
     ref.current.style.setProperty(
       "background-image",
