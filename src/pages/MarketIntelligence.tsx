@@ -253,6 +253,7 @@ const MarketIntelligence = () => {
               primaryText="Speak With Our Team"
               secondaryLink="/ai-home-finder"
               secondaryText="AI Home Finder"
+              fitContainer
             />
           </div>
         </div>

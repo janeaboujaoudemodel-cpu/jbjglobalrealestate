@@ -35662,6 +35662,16 @@ html body #root [data-insights-page] #cta .jj-newsletter-emerald {
   margin-inline: auto !important;
 }
 
+/* CTA alignment lock — when the ready/contact card sits inside an existing
+   CTA wrapper, the emerald card must fill that wrapper exactly instead of
+   rendering as a smaller nested rail. */
+html body #root :is(#cta, #ready-to-get-started, #section-cta) .jj-newsletter-emerald,
+html body #root :is(#cta, #ready-to-get-started, #section-cta) .jj-loop-block {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
 /* PASS 218 — specific override wins over older MI KPI emerald-card rules. */
 html body #root [data-insights-page] [data-mi-page] :is(#key-stats, #quarterly-trends, #area-grid) :is(.jj-card-inner, .card):not([data-surface="emerald"]):not([data-emerald="true"]):not(.jj-stat-badge-emerald):not(.jj-number-emerald) {
   background: #FDFBF7 !important;
