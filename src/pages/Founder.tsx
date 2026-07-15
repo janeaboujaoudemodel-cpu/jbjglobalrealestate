@@ -22,6 +22,7 @@ import founderHero from "@/assets/founder-hero.png";
 import founderPremium from "@/assets/founder-premium.png";
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import ceoHeroOfficeFlags from "@/assets/ceo-hero-office-flags.jpg";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 // Animation variants - NO y-axis animations to avoid "broken/falling" effect
 const fadeInUp = {
