@@ -456,6 +456,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   broker: [
     { label: 'Broker Portal', icon: Handshake, href: '/broker/portal' },
     { label: 'Broker Toolkit', icon: Wrench, href: '/broker-toolkit' },
+    { label: 'Broker Certification', icon: BadgeCheck, href: '/services/broker-certification' },
     { label: 'JBJ Academy', icon: GraduationCap, href: '/jbj-academy' },
     { label: 'Broker Dashboard', icon: LayoutDashboard, href: '/broker-dashboard' },
   ],
