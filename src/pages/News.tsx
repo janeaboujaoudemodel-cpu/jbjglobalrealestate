@@ -813,6 +813,14 @@ const News = () => {
         </div>
       )}
       </main>
+      <MIPreFooterCard
+        title="Ready to Make Informed Decisions?"
+        subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
+        primaryLink="/contact"
+        primaryText="Speak With Our Team"
+        secondaryLink="/ai-home-finder"
+        secondaryText="AI Home Finder"
+      />
     </>
   );
 };
