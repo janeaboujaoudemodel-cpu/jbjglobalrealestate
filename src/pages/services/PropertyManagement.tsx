@@ -273,24 +273,28 @@ export default function PropertyManagement() {
           background: ${CHAMPAGNE} !important;
           background-image: linear-gradient(180deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_DEEP} 100%) !important;
         }
-        [data-pm-page] [data-pm-panel],
-        [data-pm-page] [data-pm-panel] *:not(svg):not(path):not(line):not(polyline):not(circle):not(rect) {
+        [data-service-page="property-management"] [data-pm-panel],
+        [data-service-page="property-management"] [data-pm-panel] *:not(svg):not(path):not(line):not(polyline):not(circle):not(rect):not([data-pm-emerald]):not([data-pm-emerald] *):not([data-pm-toc-button]):not([data-pm-toc-button] *) {
           color: ${INK} !important;
           -webkit-text-fill-color: ${INK} !important;
         }
-        [data-pm-page] [data-pm-emerald],
-        [data-pm-page] [data-pm-emerald] *:not(input):not(textarea),
-        [data-pm-page] [data-pm-toc-button],
-        [data-pm-page] [data-pm-toc-button] * {
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald],
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] *:not(input):not(textarea),
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-toc-button],
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-toc-button] *,
+        [data-service-page="property-management"] [data-pm-emerald],
+        [data-service-page="property-management"] [data-pm-emerald] *:not(input):not(textarea),
+        [data-service-page="property-management"] [data-pm-toc-button],
+        [data-service-page="property-management"] [data-pm-toc-button] * {
           color: ${WHITE} !important;
           -webkit-text-fill-color: ${WHITE} !important;
         }
-        [data-pm-page] [data-pm-emerald] svg,
-        [data-pm-page] [data-pm-emerald] path,
-        [data-pm-page] [data-pm-emerald] line,
-        [data-pm-page] [data-pm-emerald] polyline,
-        [data-pm-page] [data-pm-toc-button] svg,
-        [data-pm-page] [data-pm-toc-button] path {
+        [data-service-page="property-management"] [data-pm-emerald] svg,
+        [data-service-page="property-management"] [data-pm-emerald] path,
+        [data-service-page="property-management"] [data-pm-emerald] line,
+        [data-service-page="property-management"] [data-pm-emerald] polyline,
+        [data-service-page="property-management"] [data-pm-toc-button] svg,
+        [data-service-page="property-management"] [data-pm-toc-button] path {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
         }
