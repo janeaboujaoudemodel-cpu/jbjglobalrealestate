@@ -25400,6 +25400,33 @@ html body #root [data-brand-emerald-page] svg:not([data-surface="champagne"] svg
 }
 /* END PASS 165.2 */
 
+/* PROPERTY MANAGEMENT REBUILD LOCK — final local override for the approved
+   service-page structure: full-height emerald hero, no inset/radius, and pure
+   white text/icons/numbers inside emerald controls even when nested in a
+   champagne card. */
+html body #root main.jj-main-shell [data-service-page="property-management"] [data-brand-hero] {
+  height: 100svh !important;
+  min-height: 100svh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+html body #root main.jj-main-shell [data-service-page="property-management"] [data-brand-hero] > * {
+  padding-left: max(24px, env(safe-area-inset-left)) !important;
+  padding-right: max(24px, env(safe-area-inset-right)) !important;
+}
+html body #root [data-service-page="property-management"] [data-service-emerald-control],
+html body #root [data-service-page="property-management"] [data-service-emerald-control] :is(span, svg, path, circle, rect, line, polyline, polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html body #root [data-service-page="property-management"] [data-service-emerald-control] {
+  background: linear-gradient(135deg, #064E3B 0%, #042c1c 58%, #000000 100%) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
 /* PASS 166 — NO GOLD BORDERS ON EMERALD SURFACES
    Emerald/tool surfaces use white translucent hairlines only. Champagne cards
    keep their own premium gold hairline outside emerald surfaces. */
