@@ -889,6 +889,11 @@ END:VCARD`;
       </Dialog>
 
       </div>
+      <MIPreFooterCard
+        title="Prefer to talk directly?"
+        subtitle="Reach our team any time — we respond within hours across WhatsApp, phone and email."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 };
