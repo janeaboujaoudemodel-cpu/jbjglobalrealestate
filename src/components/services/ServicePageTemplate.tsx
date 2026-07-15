@@ -720,6 +720,8 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
           secondaryLink={config.preFooter.secondaryLink}
           secondaryText={config.preFooter.secondaryText}
           maxWidthClass="max-w-6xl"
+          innerInset
+
         />
       </main>
     </div>
