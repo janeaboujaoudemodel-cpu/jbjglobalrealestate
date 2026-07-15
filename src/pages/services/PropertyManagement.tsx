@@ -163,40 +163,59 @@ const PropertyManagement = () => {
         canonicalPath="/services/property-management"
       />
 
-      {/* ═══ 1. HERO ═══ */}
-      <section data-brand-hero data-surface="emerald" className="relative border-b border-white/10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="text-center max-w-3xl mx-auto">
-                        <SectionEyebrow icon={Building2} className="mb-6">Property Management</SectionEyebrow>
+      {/* ═══ 1. HERO — full-screen edge-to-edge emerald→black gradient ═══ */}
+      <section
+        data-brand-hero
+        data-surface="emerald"
+        data-no-contrast-guard
+        className="relative w-full min-h-[100svh] flex items-center justify-center overflow-hidden"
+      >
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-24 text-center">
+          <div data-no-contrast-guard className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-[11px] tracking-[0.22em] uppercase font-semibold" style={{ background: "rgba(255,255,255,0.08)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.18)" }}>
+            <Building2 className="w-3.5 h-3.5" style={{ color: "#FFFFFF" }} />
+            Property Management
+          </div>
 
-            <h1 className="text-[2.25rem] leading-[1.1] sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-5 tracking-[-0.025em]">
-              Property Management &<br className="hidden sm:block" /> Asset Stewardship
-            </h1>
+          <h1 data-no-contrast-guard className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-[-0.02em] mb-6" style={{ color: "#FFFFFF", fontFamily: '"Cormorant Garamond", serif' }}>
+            Property Management &<br className="hidden sm:block" /> Asset Stewardship
+          </h1>
 
-            <p className="text-foreground text-base sm:text-lg md:text-xl font-semibold mb-3 max-w-2xl mx-auto tracking-tight">
-              Structured. Transparent. Performance-Driven.
-            </p>
+          <div aria-hidden className="mx-auto my-8 h-px w-24" style={{ background: "rgba(255,255,255,0.35)" }} />
 
-            <p className="text-muted-foreground text-[0.95rem] sm:text-base md:text-lg font-normal max-w-2xl mx-auto leading-relaxed sm:leading-[1.65] mb-8">
-              Comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE.
-            </p>
+          <p data-no-contrast-guard className="text-lg sm:text-xl md:text-2xl font-light leading-relaxed mb-4" style={{ color: "#FFFFFF" }}>
+            Structured. Transparent. Performance-Driven.
+          </p>
+          <p data-no-contrast-guard className="text-base md:text-lg font-light max-w-2xl mx-auto leading-relaxed mb-10" style={{ color: "rgba(255,255,255,0.82)" }}>
+            Comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE.
+          </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button asChild size="lg">
-                <Link to="/contact?service=property-management">Request Management Proposal</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/contact">Schedule Asset Consultation</Link>
-              </Button>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Link
+              to="/contact?service=property-management"
+              data-no-contrast-guard
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-sm font-semibold transition-all hover:-translate-y-0.5"
+              style={{ background: "linear-gradient(135deg, #064E3B 0%, #032820 55%, #010806 100%)", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.28)" }}
+            >
+              Request Management Proposal
+              <ArrowRight className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+            </Link>
+            <Link
+              to="/contact"
+              data-no-contrast-guard
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-sm font-semibold transition-all hover:-translate-y-0.5"
+              style={{ background: "transparent", color: "#FFFFFF", border: "1px solid rgba(255,255,255,0.55)" }}
+            >
+              Schedule Asset Consultation
+              <ArrowRight className="w-4 h-4" style={{ color: "#FFFFFF" }} />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ═══ BODY ═══ */}
-      <div className="bg-background">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
-          <div className="bg-card border border-border rounded-2xl overflow-hidden">
+      {/* ═══ BODY — single emerald shell, no nested card wrapper ═══ */}
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <div>
+
 
         {/* ═══ 2. TABLE OF CONTENTS ═══ */}
         <section className="py-12 md:py-16 border-b border-border">
@@ -737,10 +756,10 @@ const PropertyManagement = () => {
           </div>
         </Section>
 
-          </div>{/* close rounded card */}
-        </div>{/* close max-w container */}
-      </div>{/* close bg-background */}
+        </div>{/* close inner body wrapper */}
+      </div>{/* close max-w container */}
     </div>
+
   );
 };
 

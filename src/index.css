@@ -25355,6 +25355,51 @@ html body #root [data-brand-emerald-page] [data-surface="champagne-raised"] :whe
 }
 /* END PASS 165.1 */
 
+/* PASS 165.2 — SERVICES/BRAND-EMERALD HERO FULLSCREEN + NO DOUBLE-BG
+   User-visible fixes:
+     - Every [data-brand-hero] is edge-to-edge full-viewport height.
+     - The inner "bg-background wrapping bg-card rounded-2xl" double layer
+       collapses to transparent so only the emerald shell shows through.
+     - All text/icons inside a brand emerald page (outside champagne cards)
+       are pure white, including SVGs that use currentColor.
+   ============================================================ */
+html body #root [data-brand-emerald-page] [data-brand-hero] {
+  min-height: 100svh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(6,95,70,0.55) 0%, rgba(6,95,70,0) 60%),
+    linear-gradient(180deg, #065F46 0%, #044C39 22%, #022820 55%, #010806 100%) !important;
+  color: #FFFFFF !important;
+  overflow: hidden !important;
+}
+html body #root [data-brand-emerald-page] [data-brand-hero] > * {
+  width: 100%;
+}
+/* Neutralize the legacy body wrapper pattern:
+     <div class="bg-background">
+       <div class="max-w-[1400px] ...">
+         <div class="bg-card border border-border rounded-2xl overflow-hidden">
+   All three collapse to transparent so the emerald shell is the only bg. */
+html body #root [data-brand-emerald-page] :where(.bg-background, .bg-card):not([data-surface="champagne"]):not([data-surface="champagne-raised"]):not([data-surface="emerald"]):not([data-allow-bg]) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,0.10) !important;
+}
+/* Pure white for SVG icons drawn with currentColor / stroke=currentColor */
+html body #root [data-brand-emerald-page] svg:not([data-surface="champagne"] svg):not([data-surface="champagne-raised"] svg):not([data-allow-ink] svg):not([data-allow-ink]) {
+  color: #FFFFFF !important;
+}
+/* END PASS 165.2 */
+
 /* PASS 166 — NO GOLD BORDERS ON EMERALD SURFACES
    Emerald/tool surfaces use white translucent hairlines only. Champagne cards
    keep their own premium gold hairline outside emerald surfaces. */
