@@ -40,21 +40,16 @@ export function useSaveBrokerOAuthApp() {
   return useMutation({
     mutationFn: async (v: { provider: OAuthProvider; client_id: string; client_secret: string; label?: string }) => {
       if (!user?.id) throw new Error("Not signed in");
-      const base: Record<string, unknown> = {
-        user_id: user.id,
-        provider: v.provider,
-        client_id: v.client_id.trim(),
-        label: v.label?.trim() || null,
-        is_active: true,
-      };
-      // SECURITY: only write client_secret when the user typed a new one.
-      // The stored secret is never returned to the client, so blank means "keep current".
-      if (v.client_secret && v.client_secret.trim()) {
-        base.client_secret = v.client_secret.trim();
-      }
-      const { error } = await supabase
-        .from("broker_email_oauth_apps")
-        .upsert(base as any, { onConflict: "user_id,provider" });
+      // SECURITY: client_secret is stored encrypted in Supabase Vault via the
+      // SECURITY DEFINER RPC `save_broker_oauth_app`. The table no longer holds
+      // a plaintext `client_secret` column. Passing an empty secret keeps the
+      // existing Vault entry unchanged.
+      const { error } = await (supabase.rpc as any)("save_broker_oauth_app", {
+        _provider: v.provider,
+        _client_id: v.client_id.trim(),
+        _client_secret: v.client_secret?.trim() || "",
+        _label: v.label?.trim() || null,
+      });
       if (error) throw error;
     },
     onSuccess: () => {
