@@ -21,6 +21,7 @@ import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { useToast } from "@/hooks/use-toast";
 import { PartnerApplicationPortal } from "@/components/partners/PartnerApplicationPortal";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
