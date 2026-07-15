@@ -377,6 +377,12 @@ export const PublicRoutes = () => (
     <Route path="/services/concierge" element={<InsightsPageScope><Concierge /></InsightsPageScope>} />
     <Route path="/services/company-setup" element={<InsightsPageScope><CompanySetup /></InsightsPageScope>} />
     <Route path="/services/signature-collection" element={<InsightsPageScope><SignatureCollection /></InsightsPageScope>} />
+    <Route path="/services/golden-visa" element={<InsightsPageScope><GoldenVisa /></InsightsPageScope>} />
+    <Route path="/services/mortgage-advisory" element={<InsightsPageScope><MortgageAdvisory /></InsightsPageScope>} />
+    <Route path="/services/legal-services" element={<InsightsPageScope><LegalServices /></InsightsPageScope>} />
+    <Route path="/services/visa-services" element={<InsightsPageScope><VisaServices /></InsightsPageScope>} />
+    <Route path="/services/valuation" element={<InsightsPageScope><Valuation /></InsightsPageScope>} />
+    <Route path="/services/referral-partner" element={<InsightsPageScope><ServiceReferralPartner /></InsightsPageScope>} />
 
     <Route path="/services/broker-certification" element={<InsightsPageScope><BrokerCertification /></InsightsPageScope>} />
     <Route path="/services/complaint-procedures" element={<InsightsPageScope><ComplaintProcedures /></InsightsPageScope>} />
