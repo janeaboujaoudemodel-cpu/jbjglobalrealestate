@@ -366,7 +366,7 @@ export default function PropertyManagement() {
           border: 1px solid rgba(184,149,85,0.38) !important;
           border-radius: 12px !important;
           background: #F7F2EA !important;
-          background-color: #F7F2EA !important;
+          background-color: red !important;
           background-image: none !important;
           box-shadow: none !important;
           outline: 0 !important;
