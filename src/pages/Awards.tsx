@@ -221,6 +221,11 @@ const Awards = () => {
           </div>
         </section>
       </div>
+      <MIPreFooterCard
+        title="Experience award-winning service"
+        subtitle="Join the clients who trust JBJ with their most important property decisions."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 };
