@@ -165,7 +165,8 @@ export function BrandPanel({
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div
           data-pm-panel
-          className="rounded-3xl border p-6 md:p-9"
+          data-no-section-frame
+          className="overflow-hidden rounded-3xl border p-6 md:p-9"
           style={{
             background: PANEL_GRADIENT,
             borderColor: "rgba(184,149,85,0.42)",
