@@ -95,6 +95,12 @@ const CurrencyExchange = lazy(() => import("@/pages/services/CurrencyExchange"))
 const Concierge = lazy(() => import("@/pages/services/Concierge"));
 const CompanySetup = lazy(() => import("@/pages/services/CompanySetup"));
 const SignatureCollection = lazy(() => import("@/pages/services/SignatureCollection"));
+const GoldenVisa = lazy(() => import("@/pages/services/GoldenVisa"));
+const MortgageAdvisory = lazy(() => import("@/pages/services/MortgageAdvisory"));
+const LegalServices = lazy(() => import("@/pages/services/LegalServices"));
+const VisaServices = lazy(() => import("@/pages/services/VisaServices"));
+const Valuation = lazy(() => import("@/pages/services/Valuation"));
+const ServiceReferralPartner = lazy(() => import("@/pages/services/ReferralPartner"));
 
 const BrokerCertification = lazy(() => import("@/pages/services/BrokerCertification"));
 const ComplaintProcedures = lazy(() => import("@/pages/services/ComplaintProcedures"));
@@ -371,6 +377,12 @@ export const PublicRoutes = () => (
     <Route path="/services/concierge" element={<InsightsPageScope><Concierge /></InsightsPageScope>} />
     <Route path="/services/company-setup" element={<InsightsPageScope><CompanySetup /></InsightsPageScope>} />
     <Route path="/services/signature-collection" element={<InsightsPageScope><SignatureCollection /></InsightsPageScope>} />
+    <Route path="/services/golden-visa" element={<InsightsPageScope><GoldenVisa /></InsightsPageScope>} />
+    <Route path="/services/mortgage-advisory" element={<InsightsPageScope><MortgageAdvisory /></InsightsPageScope>} />
+    <Route path="/services/legal-services" element={<InsightsPageScope><LegalServices /></InsightsPageScope>} />
+    <Route path="/services/visa-services" element={<InsightsPageScope><VisaServices /></InsightsPageScope>} />
+    <Route path="/services/valuation" element={<InsightsPageScope><Valuation /></InsightsPageScope>} />
+    <Route path="/services/referral-partner" element={<InsightsPageScope><ServiceReferralPartner /></InsightsPageScope>} />
 
     <Route path="/services/broker-certification" element={<InsightsPageScope><BrokerCertification /></InsightsPageScope>} />
     <Route path="/services/complaint-procedures" element={<InsightsPageScope><ComplaintProcedures /></InsightsPageScope>} />
