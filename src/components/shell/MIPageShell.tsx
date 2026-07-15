@@ -151,18 +151,22 @@ export default function MIPageShell({
       <div className={bodyClassName}>{children}</div>
 
       {showPreFooter ? (
-        <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
-          <PreFooterSeparator
-            title={preFooterTitle ?? "Ready to Make Informed Decisions?"}
-            subtitle={
-              preFooterSubtitle ??
-              "Speak with our team for personalized guidance based on your investment goals and market conditions."
-            }
-            primaryLink="/contact"
-            primaryText="Speak With Our Team"
-            secondaryLink="/ai-home-finder"
-            secondaryText="AI Home Finder"
-          />
+        <div id="cta" className="scroll-mt-24 bg-[#F7F2EA] py-12 md:py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="rounded-2xl overflow-hidden shadow-sm">
+              <PreFooterSeparator
+                title={preFooterTitle ?? "Ready to Make Informed Decisions?"}
+                subtitle={
+                  preFooterSubtitle ??
+                  "Speak with our team for personalized guidance based on your investment goals and market conditions."
+                }
+                primaryLink="/contact"
+                primaryText="Speak With Our Team"
+                secondaryLink="/ai-home-finder"
+                secondaryText="AI Home Finder"
+              />
+            </div>
+          </div>
         </div>
       ) : null}
     </div>
