@@ -212,7 +212,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Team", href: "/team", icon: Users },
   { label: "Founder", href: "/founder", icon: Crown },
   { label: "Awards", href: "/awards", icon: Award },
-  { label: "Awards", href: "/awards", icon: Award },
   
   { label: "Company Profile", href: "/company-profile", icon: Building },
   { label: "Career Portal", href: "/join", icon: GraduationCap },
