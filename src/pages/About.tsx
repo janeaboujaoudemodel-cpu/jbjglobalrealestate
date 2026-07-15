@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -29,8 +30,8 @@ import { useFounderPhoto } from "@/hooks/useFounderPhoto";
 
 import founderProfessional from "@/assets/founder-professional.jpeg";
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
-import luxuryVilla1 from "@/assets/luxury-villa-1.jpeg";
-import luxuryVilla2 from "@/assets/luxury-villa-2.jpeg";
+import officeLounge from "@/assets/jbj-office-lounge.jpg";
+import officeMeeting from "@/assets/jbj-office-meeting.jpg";
 import aboutHeroVideoAsset from "@/assets/videos/dubai-landmarks-hero.mp4.asset.json";
 const aboutHeroVideo = aboutHeroVideoAsset.url;
 
@@ -43,34 +44,47 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 };
 
-const ABOUT_TILE_CLASS = "min-h-[154px] p-6 md:min-h-[170px] md:p-7";
+// Emerald tiles: expanded 50% horizontally, ~10% vertically per owner directive.
+const ABOUT_TILE_CLASS =
+  "min-h-[172px] px-9 py-6 md:min-h-[186px] md:px-12 md:py-7";
 
-const AboutMedia = ({ src, alt }: { src: string; alt: string }) => (
-  <motion.div
-    data-no-section-frame
-    variants={fadeInUp}
-    className="relative min-h-[320px] overflow-hidden rounded-2xl border md:min-h-[380px] lg:min-h-[430px]"
-    style={{
-      background: EMERALD_GRADIENT,
-      borderColor: "rgba(184,149,85,0.46)",
-      boxShadow: "0 22px 52px -34px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14)",
-    }}
-  >
-    <img
-      src={src}
-      alt={alt}
-      className="absolute inset-0 h-full w-full object-cover"
-      style={{ opacity: 1, visibility: "visible" }}
-      loading="eager"
-      decoding="async"
+/**
+ * AboutMedia — renders a real office photo. Uses a ref + inline `!important`
+ * cssText because the insights-hub CSS guard blanks `background-image` on any
+ * rounded+bordered div via `!important`, and inline important beats stylesheet
+ * important.
+ */
+const AboutMedia = ({ src, alt }: { src: string; alt: string }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    ref.current.style.setProperty(
+      "background-image",
+      `linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 100%), url(${src})`,
+      "important",
+    );
+    ref.current.style.setProperty("background-size", "cover", "important");
+    ref.current.style.setProperty("background-position", "center", "important");
+    ref.current.style.setProperty("background-repeat", "no-repeat", "important");
+  }, [src]);
+  return (
+    <motion.div
+      ref={ref}
+      data-no-section-frame
+      data-allow-bg
+      role="img"
+      aria-label={alt}
+      variants={fadeInUp}
+      className="relative min-h-[320px] overflow-hidden rounded-2xl border md:min-h-[380px] lg:min-h-[440px]"
+      style={{
+        borderColor: "rgba(184,149,85,0.46)",
+        boxShadow:
+          "0 22px 52px -34px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14)",
+      }}
     />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-  </motion.div>
-);
+  );
+};
 
-// Founder portrait honoring the owner-uploaded override.
-// Fixed: removed scale(1.25) that caused the head to bleed out of the frame,
-// and object-position now sits at 25% so the face is properly framed.
 const FounderAboutPortrait = () => {
   const { photoUrl } = useFounderPhoto();
   const src = photoUrl || founderProfessional;
@@ -86,7 +100,7 @@ const FounderAboutPortrait = () => {
   );
 };
 
-// Reusable emerald feature card — matches services template contrast.
+// Emerald feature card — expanded padding to match tile size directive.
 const FeatureCard = ({
   icon: Icon,
   title,
@@ -100,7 +114,7 @@ const FeatureCard = ({
     data-pm-emerald
     data-surface="emerald"
     data-no-section-frame
-    className="rounded-2xl border p-6 transition-transform duration-300 hover:-translate-y-1"
+    className="rounded-2xl border px-9 py-7 md:px-12 md:py-8 transition-transform duration-300 hover:-translate-y-1"
     style={{
       background: EMERALD_GRADIENT,
       borderColor: "rgba(255,255,255,0.22)",
@@ -180,14 +194,14 @@ const About = () => {
               verified market data and disciplined execution.
             </motion.p>
             <motion.div
-              className="grid w-full max-w-[560px] grid-cols-2 gap-3"
+              className="mx-auto flex w-full max-w-[620px] flex-row flex-nowrap items-stretch justify-center gap-3"
               variants={fadeInUp}
             >
               <Link
                 to="/services"
                 data-pm-emerald
                 data-no-contrast-guard
-                className="allow-white group inline-flex min-h-[52px] min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-3 text-[11px] font-semibold uppercase tracking-[0.04em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-sm"
+                className="allow-white group inline-flex h-[54px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-[13px]"
                 style={{ background: EMERALD_GRADIENT, color: "#FFFFFF", border: "1px solid rgba(184,149,85,0.5)" }}
               >
                 <span className="whitespace-nowrap">Explore Our Services</span>
@@ -197,7 +211,7 @@ const About = () => {
                 to="/contact"
                 data-pm-emerald
                 data-no-contrast-guard
-                className="allow-white group inline-flex min-h-[52px] min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-3 text-[11px] font-semibold uppercase tracking-[0.04em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-sm"
+                className="allow-white group inline-flex h-[54px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-[13px]"
                 style={{ background: EMERALD_GRADIENT, color: "#FFFFFF", border: "1px solid rgba(184,149,85,0.5)" }}
               >
                 <span className="whitespace-nowrap">Contact Our Team</span>
@@ -291,7 +305,7 @@ const About = () => {
                 ))}
               </motion.div>
 
-              <AboutMedia src={luxuryVilla1} alt="Premium Advisory Services" />
+              <AboutMedia src={officeLounge} alt="JBJ Global Real Estate — Dubai office lounge" />
             </motion.div>
           </BrandPanel>
 
@@ -335,7 +349,7 @@ const About = () => {
               variants={staggerContainer}
               className="grid items-stretch gap-5 lg:grid-cols-[0.95fr_1.45fr]"
             >
-              <AboutMedia src={luxuryVilla2} alt="Market Intelligence Analysis" />
+              <AboutMedia src={officeMeeting} alt="JBJ Global Real Estate — Dubai executive meeting room" />
               <motion.div variants={fadeInUp} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {[
                   { Icon: BarChart3, label: "Government Data" },
@@ -382,19 +396,18 @@ const About = () => {
             </div>
           </BrandPanel>
 
-          {/* ── TRUST & GOVERNANCE ── 4 cards ── */}
+          {/* ── TRUST & GOVERNANCE ── 3 cards per owner directive ── */}
           <BrandPanel eyebrow="Trust & Governance" title="Trust, governance, and accountability">
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2"
+              className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-3"
             >
               <FeatureCard icon={Shield} title="AI Tools Monitored" description="AI-assisted tools are monitored and logged for transparency and accuracy." />
               <FeatureCard icon={FileCheck} title="Intelligence Reviewed" description="Market intelligence is reviewed before publication to ensure quality." />
-              <FeatureCard icon={Scale} title="Data Confidentiality" description="Client data is handled with confidentiality and access controls." />
-              <FeatureCard icon={Target} title="Licensed Scope" description="All activities remain within licensed scope. Trust built through discipline." />
+              <FeatureCard icon={Target} title="Licensed Scope" description="Client data is handled with confidentiality and access controls. All activities remain within licensed scope." />
             </motion.div>
           </BrandPanel>
 

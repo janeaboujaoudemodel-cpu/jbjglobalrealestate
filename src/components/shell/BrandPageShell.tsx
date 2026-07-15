@@ -161,12 +161,12 @@ export function BrandPanel({
   className?: string;
 }) {
   return (
-    <section id={id} className={`scroll-mt-28 py-6 md:py-8 ${className}`}>
+    <section id={id} className={`scroll-mt-28 py-5 md:py-6 ${className}`}>
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div
           data-pm-panel
           data-no-section-frame
-          className="overflow-hidden rounded-3xl border p-6 md:p-9"
+          className="overflow-hidden rounded-3xl border p-4 sm:p-5 md:p-6"
           style={{
             background: PANEL_GRADIENT,
             borderColor: "rgba(184,149,85,0.42)",
