@@ -9,6 +9,7 @@ interface PreFooterSeparatorProps {
   primaryText?: string;
   secondaryLink?: string;
   secondaryText?: string;
+  fitContainer?: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ export const PreFooterSeparator = ({
   showCTA = true,
   title,
   subtitle,
+  fitContainer = false,
 }: PreFooterSeparatorProps) => {
   if (!showCTA) {
     return (
@@ -39,6 +41,7 @@ export const PreFooterSeparator = ({
     <CombinedContactNewsletter
       title={title}
       subtitle={subtitle}
+      fitContainer={fitContainer}
     />
   );
 };
