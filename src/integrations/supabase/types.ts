@@ -3817,7 +3817,7 @@ export type Database = {
       broker_email_oauth_apps: {
         Row: {
           client_id: string
-          client_secret: string
+          client_secret_id: string | null
           created_at: string
           id: string
           is_active: boolean
@@ -3828,7 +3828,7 @@ export type Database = {
         }
         Insert: {
           client_id: string
-          client_secret: string
+          client_secret_id?: string | null
           created_at?: string
           id?: string
           is_active?: boolean
@@ -3839,7 +3839,7 @@ export type Database = {
         }
         Update: {
           client_id?: string
-          client_secret?: string
+          client_secret_id?: string | null
           created_at?: string
           id?: string
           is_active?: boolean
@@ -41541,6 +41541,15 @@ export type Database = {
       }
       restore_esign_envelopes: { Args: { p_ids: string[] }; Returns: Json }
       reveal_module_answers: { Args: { p_attempt_id: string }; Returns: Json }
+      save_broker_oauth_app: {
+        Args: {
+          _client_id: string
+          _client_secret: string
+          _label?: string
+          _provider: string
+        }
+        Returns: string
+      }
       seed_crm_developer_registry: {
         Args: { p_owner_id: string }
         Returns: number
