@@ -542,11 +542,17 @@ const About = () => {
           </motion.div>
         </Section>
 
-        {/* SECTION 9: CTA — standardized "Ready to Get Started" block for site-wide consistency */}
-        <CombinedContactNewsletter
+        {/* SECTION 9: CTA — canonical MIPreFooterCard (matches services) */}
+        <MIPreFooterCard
           title="Not Sure Where to Start?"
           subtitle="Whether you are buying, renting, investing, or simply seeking clarity, our role is to guide you with precision, not pressure."
+          primaryLink="/contact"
+          primaryText="Speak With Our Team"
+          secondaryLink="/ai-home-finder"
+          secondaryText="AI Home Finder"
+          maxWidthClass="max-w-6xl"
         />
+
       </div>
     </>
   );
