@@ -34,6 +34,11 @@ export default function Agencies() {
           </Button>
         </div>
       </section>
+      <MIPreFooterCard
+        title="Rolling out JBJ across your agency?"
+        subtitle="Speak with our team about custom deployment, SLAs, and onboarding for your brokers."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 }
