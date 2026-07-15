@@ -13,6 +13,8 @@ import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCard } from "@/components/books/BookCard";
 import type { BookData } from "@/types/books"; // used for selectedBook state typing
 import { GuideHero } from "@/components/guides/GuideHero";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
+
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
