@@ -229,6 +229,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const needsHeaderSpacing = usesStandalonePortalChrome ? false : shouldAddHeaderSpacing(location.pathname);
 
   useEffect(() => {
+    if (location.pathname === '/services/property-management') {
+      setLayoutGuardTriggered(false);
+      return;
+    }
     if (isBackOfficeRoute || !isServiceRoute) {
       setLayoutGuardTriggered(false);
       return;
