@@ -1,6 +1,7 @@
 import { PageMeta } from "@/components/seo/PageMeta";
 import { PricingGrid } from "@/components/payments/PricingGrid";
 import { INVESTOR_TIERS } from "@/content/pricing";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 export default function Membership() {
   return (
@@ -15,6 +16,11 @@ export default function Membership() {
         subtitle="Start with a single call or scale up to unlimited founder-level access. Cancel anytime."
         tiers={INVESTOR_TIERS}
         analyticsContext="membership"
+      />
+      <MIPreFooterCard
+        title="Not sure which membership fits?"
+        subtitle="Speak with our team and we'll help you choose the right tier for your goals."
+        maxWidthClass="max-w-6xl"
       />
     </>
   );

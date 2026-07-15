@@ -2,6 +2,7 @@ import { PageMeta } from "@/components/seo/PageMeta";
 import { PricingGrid } from "@/components/payments/PricingGrid";
 import { AGENCY_PACKAGES } from "@/content/pricing";
 import { Button } from "@/components/ui/button";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 export default function Agencies() {
   return (
@@ -33,6 +34,11 @@ export default function Agencies() {
           </Button>
         </div>
       </section>
+      <MIPreFooterCard
+        title="Rolling out JBJ across your agency?"
+        subtitle="Speak with our team about custom deployment, SLAs, and onboarding for your brokers."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 }

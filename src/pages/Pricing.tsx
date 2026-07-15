@@ -27,6 +27,7 @@ import { useSubscription, formatSubscriptionPrice, calculateYearlySavings } from
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import SEOHead from "@/components/SEOHead";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 const TIER_ICONS: Record<string, React.ReactNode> = {
   starter: <Zap className="w-6 h-6" />,
@@ -333,6 +334,11 @@ export default function Pricing() {
           </div>
         </section>
       </div>
+      <MIPreFooterCard
+        title="Not sure which plan fits?"
+        subtitle="Speak with our team and we'll design the right package for your goals."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 }

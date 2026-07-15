@@ -25,6 +25,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import { IconTile } from "@/components/ui/icon-tile";
 import contactHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const contactHeroVideo = contactHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
@@ -888,6 +889,11 @@ END:VCARD`;
       </Dialog>
 
       </div>
+      <MIPreFooterCard
+        title="Prefer to talk directly?"
+        subtitle="Reach our team any time — we respond within hours across WhatsApp, phone and email."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 };

@@ -40,6 +40,7 @@ import TeamVisibilityBar from "@/components/team/TeamVisibilityBar";
 import VisibilityToggleButton from "@/components/team/VisibilityToggleButton";
 import BrokersTeamSection from "@/components/team/BrokersTeamSection";
 import NotFound from "@/pages/NotFound";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 
 const fadeInUp = {
@@ -669,6 +670,11 @@ const MeetTheTeam: React.FC = () => {
           setIsContactFormOpen(true);
         }}
         isInternalUser={isInternalUser}
+      />
+      <MIPreFooterCard
+        title="Ready to work with our team?"
+        subtitle="Speak with a JBJ advisor about your next Dubai property move."
+        maxWidthClass="max-w-6xl"
       />
     </>
   );

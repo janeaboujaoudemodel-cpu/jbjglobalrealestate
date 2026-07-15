@@ -1,6 +1,7 @@
 import { PageMeta } from "@/components/seo/PageMeta";
 import { PricingGrid } from "@/components/payments/PricingGrid";
 import { ACADEMY_BUNDLES } from "@/content/pricing";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 export default function Academy() {
   return (
@@ -16,6 +17,11 @@ export default function Academy() {
         tiers={ACADEMY_BUNDLES}
         analyticsContext="academy"
         ctaLabel="Enroll"
+      />
+      <MIPreFooterCard
+        title="Have questions about the Academy?"
+        subtitle="Talk to our team about enrolment, schedules and the JBJ career pathway."
+        maxWidthClass="max-w-6xl"
       />
     </>
   );

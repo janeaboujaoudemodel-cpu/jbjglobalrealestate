@@ -27,6 +27,7 @@ import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 
 import developersHeroVideoAsset from "@/assets/videos/dubai-investment-hero.mp4.asset.json";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const developersHeroVideo = developersHeroVideoAsset.url;
 
 // Developer tier classification for filtering
@@ -446,6 +447,11 @@ const Developers = () => {
         {/* DLD Market Intelligence */}
         <DLDMarketWidget />
       </div>
+      <MIPreFooterCard
+        title="Launching a new development?"
+        subtitle="Partner with JBJ to reach qualified investors and brokers across the region."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 };

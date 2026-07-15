@@ -21,6 +21,7 @@ import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 import { useToast } from "@/hooks/use-toast";
 import { PartnerApplicationPortal } from "@/components/partners/PartnerApplicationPortal";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -420,6 +421,11 @@ const Partners = () => {
           </div>
         </section>
       </main>
+      <MIPreFooterCard
+        title="Ready to partner with JBJ?"
+        subtitle="Tell us about your firm and we'll design a partnership that fits."
+        maxWidthClass="max-w-6xl"
+      />
     </div>
   );
 };
