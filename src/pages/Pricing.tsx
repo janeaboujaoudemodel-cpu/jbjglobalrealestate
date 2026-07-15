@@ -334,6 +334,11 @@ export default function Pricing() {
           </div>
         </section>
       </div>
+      <MIPreFooterCard
+        title="Not sure which plan fits?"
+        subtitle="Speak with our team and we'll design the right package for your goals."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 }
