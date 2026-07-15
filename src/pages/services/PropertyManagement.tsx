@@ -272,12 +272,14 @@ const PropertyManagement = () => {
         data-brand-hero
         data-surface="emerald"
         data-no-contrast-guard
-        className="jj-fullbleed-band relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden px-0"
+        className="jj-fullbleed-band relative flex h-[100svh] min-h-[100svh] w-full items-center justify-center overflow-hidden px-0"
         style={{
           background:
             "radial-gradient(110% 72% at 50% 0%, rgba(6,95,70,0.62) 0%, rgba(6,95,70,0) 62%), linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
           borderRadius: 0,
           color: WHITE,
+          height: "100svh",
+          minHeight: "100svh",
         }}
       >
         <div aria-hidden className="absolute inset-0 opacity-[0.16]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px)", backgroundSize: "74px 74px" }} />
@@ -319,6 +321,7 @@ const PropertyManagement = () => {
                   <button
                     key={section.id}
                     type="button"
+                    data-service-emerald-control
                     onClick={() => scrollTo(section.id)}
                     className="flex min-h-12 items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold shadow-[0_10px_24px_-18px_rgba(0,0,0,0.42)] transition-transform hover:-translate-y-0.5"
                     style={{ background: EMERALD_GRADIENT, color: WHITE, WebkitTextFillColor: WHITE, border: "1px solid rgba(255,255,255,0.18)" }}
