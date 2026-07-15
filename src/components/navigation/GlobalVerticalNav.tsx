@@ -403,11 +403,8 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   company: [
     { label: 'About JBJ', icon: Users, href: '/about' },
     { label: 'The Founder', icon: User, href: '/founder' },
-    { label: 'Contact Us', icon: Phone, href: '/contact' },
     { label: 'Careers', icon: GraduationCap, href: '/join' },
     { label: 'JBJ Email', icon: Mail, href: '/crm/employees' },
-    
-    { label: 'Testimonials', icon: Heart, href: '/services/testimonials' },
   ],
   legal: [
     { label: 'Terms of Service', icon: Scale, href: '/terms' },
