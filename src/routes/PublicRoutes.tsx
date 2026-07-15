@@ -95,6 +95,12 @@ const CurrencyExchange = lazy(() => import("@/pages/services/CurrencyExchange"))
 const Concierge = lazy(() => import("@/pages/services/Concierge"));
 const CompanySetup = lazy(() => import("@/pages/services/CompanySetup"));
 const SignatureCollection = lazy(() => import("@/pages/services/SignatureCollection"));
+const GoldenVisa = lazy(() => import("@/pages/services/GoldenVisa"));
+const MortgageAdvisory = lazy(() => import("@/pages/services/MortgageAdvisory"));
+const LegalServices = lazy(() => import("@/pages/services/LegalServices"));
+const VisaServices = lazy(() => import("@/pages/services/VisaServices"));
+const Valuation = lazy(() => import("@/pages/services/Valuation"));
+const ServiceReferralPartner = lazy(() => import("@/pages/services/ReferralPartner"));
 
 const BrokerCertification = lazy(() => import("@/pages/services/BrokerCertification"));
 const ComplaintProcedures = lazy(() => import("@/pages/services/ComplaintProcedures"));
