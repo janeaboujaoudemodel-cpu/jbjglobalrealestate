@@ -23,6 +23,7 @@ import award14 from "@/assets/awards/jbj-trophy.png";
 import award15 from "@/assets/awards/sobha-top-broker.png";
 import award16 from "@/assets/awards/emaar-q3-no2-2024a.png";
 import award18 from "@/assets/awards/sobha-3rd-partner-2024.png";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 const AWARDS_DATA = [
   { image: award01, title: "Partnership Recognition", organization: "Dubai Holding", year: "2018" },
