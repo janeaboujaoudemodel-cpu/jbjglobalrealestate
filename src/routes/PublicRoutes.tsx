@@ -296,7 +296,7 @@ export const PublicRoutes = () => (
     <Route path="/seller-guide" element={<InsightsPageScope><SellerGuide /></InsightsPageScope>} />
     <Route path="/seller-listing" element={<Navigate to="/list-property?mode=manual" replace />} />
     <Route path="/guides" element={<InsightsPageScope><Guides /></InsightsPageScope>} />
-    <Route path="/guides/golden-visa-uae" element={<InsightsPageScope><GoldenVisaGuide /></InsightsPageScope>} />
+    <Route path="/guides/golden-visa-uae" element={<Navigate to="/services/golden-visa" replace />} />
     <Route path="/guides/dubai-rental-yield" element={<InsightsPageScope><DubaiRentalYieldGuide /></InsightsPageScope>} />
     <Route path="/guides/selling-off-plan-dubai-before-handover" element={<InsightsPageScope><SellingOffPlanBeforeHandover /></InsightsPageScope>} />
     <Route path="/rental-yield" element={<Navigate to="/guides/dubai-rental-yield" replace />} />
@@ -311,7 +311,7 @@ export const PublicRoutes = () => (
     <Route path="/insights/future-of-real-estate-2026" element={<InsightsPageScope><FutureOfRealEstate2026 /></InsightsPageScope>} />
     <Route path="/news/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
     <Route path="/future-of-real-estate-2026" element={<Navigate to="/insights/future-of-real-estate-2026" replace />} />
-    <Route path="/golden-visa" element={<Navigate to="/guides/golden-visa-uae" replace />} />
+    <Route path="/golden-visa" element={<Navigate to="/services/golden-visa" replace />} />
     {/* Books Library consolidated into Guides Library — single canonical hub. */}
     <Route path="/education-hub" element={<Navigate to="/guides" replace />} />
     <Route path="/books-library" element={<Navigate to="/guides" replace />} />
@@ -350,8 +350,8 @@ export const PublicRoutes = () => (
     <Route path="/reports-archive" element={<Navigate to="/market-intelligence/reports" replace />} />
     <Route path="/methodology" element={<Navigate to="/market-intelligence/methodology" replace />} />
     <Route path="/rental-guide" element={<Navigate to="/rent-guide" replace />} />
-    <Route path="/golden-visa-guide" element={<Navigate to="/guides/golden-visa-uae" replace />} />
-    <Route path="/referral-partners" element={<Navigate to="/referral-partner" replace />} />
+    <Route path="/golden-visa-guide" element={<Navigate to="/services/golden-visa" replace />} />
+    <Route path="/referral-partners" element={<Navigate to="/services/referral-partner" replace />} />
     <Route path="/support" element={<Navigate to="/ticket-hub" replace />} />
     <Route path="/help" element={<Navigate to="/faq" replace />} />
     
@@ -369,7 +369,7 @@ export const PublicRoutes = () => (
     <Route path="/services/selling-advisory" element={<InsightsPageScope><SellingAdvisory /></InsightsPageScope>} />
     <Route path="/services/rental-advisory" element={<InsightsPageScope><RentalAdvisory /></InsightsPageScope>} />
     <Route path="/services/investment-advisory" element={<InsightsPageScope><InvestmentAdvisory /></InsightsPageScope>} />
-    <Route path="/services/partner-introductions" element={<Navigate to="/partners" replace />} />
+    <Route path="/services/partner-introductions" element={<Navigate to="/services/referral-partner" replace />} />
     <Route path="/services/snagging" element={<InsightsPageScope><Snagging /></InsightsPageScope>} />
     <Route path="/services/property-management" element={<InsightsPageScope><PropertyManagement /></InsightsPageScope>} />
     <Route path="/services/short-term-rentals" element={<InsightsPageScope><ShortTermRentals /></InsightsPageScope>} />
@@ -388,17 +388,17 @@ export const PublicRoutes = () => (
     <Route path="/services/complaint-procedures" element={<InsightsPageScope><ComplaintProcedures /></InsightsPageScope>} />
     <Route path="/services/customer-happiness-center" element={<InsightsPageScope><CustomerHappinessCenter /></InsightsPageScope>} />
     <Route path="/services/testimonials" element={<InsightsPageScope><TestimonialsPage /></InsightsPageScope>} />
-    <Route path="/referral-partner" element={<InsightsPageScope><ReferralPartner /></InsightsPageScope>} />
+    <Route path="/referral-partner" element={<Navigate to="/services/referral-partner" replace />} />
     <Route path="/referral" element={<Navigate to="/referral-onboarding" replace />} />
     <Route path="/investors" element={<InsightsPageScope><InvestorServices /></InsightsPageScope>} />
     <Route path="/investors/join" element={<InsightsPageScope><JoinInvestorList /></InsightsPageScope>} />
     <Route path="/brokers/join" element={<InsightsPageScope><JoinBrokerList /></InsightsPageScope>} />
     <Route path="/developers/join" element={<InsightsPageScope><JoinDeveloperList /></InsightsPageScope>} />
     <Route path="/partners" element={<InsightsPageScope><Partners /></InsightsPageScope>} />
-    <Route path="/partners/mortgage" element={<InsightsPageScope><PartnerMortgage /></InsightsPageScope>} />
-    <Route path="/partners/legal" element={<InsightsPageScope><PartnerLegal /></InsightsPageScope>} />
-    <Route path="/partners/company-setup" element={<InsightsPageScope><PartnerCompanySetup /></InsightsPageScope>} />
-    <Route path="/partners/visa-services" element={<InsightsPageScope><PartnerVisaServices /></InsightsPageScope>} />
+    <Route path="/partners/mortgage" element={<Navigate to="/services/mortgage-advisory" replace />} />
+    <Route path="/partners/legal" element={<Navigate to="/services/legal-services" replace />} />
+    <Route path="/partners/company-setup" element={<Navigate to="/services/company-setup" replace />} />
+    <Route path="/partners/visa-services" element={<Navigate to="/services/visa-services" replace />} />
 
     {/* ── Company ── (wrapped in InsightsPageScope for MI brand contract) */}
     <Route path="/contact" element={<InsightsPageScope><Contact /></InsightsPageScope>} />
