@@ -351,8 +351,9 @@ export default function PropertyManagement() {
           padding-top: 0.9rem !important;
           padding-bottom: 0.9rem !important;
         }
-        /* PM form: keep only the outer form container border; strip all inner
-           field borders and unify their background to the gold-champagne tone. */
+        /* PM form: keep only the outer form container border; remove every
+           inner field frame/edge so the controls sit directly on the existing
+           champagne form surface. */
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea,
         html body #root [data-service-page="property-management"] [data-jbj-consultation-form] select,
@@ -368,8 +369,26 @@ export default function PropertyManagement() {
           border-color: transparent !important;
           box-shadow: none !important;
           outline: 0 !important;
-          background: #F3E4C2 !important;
-          background-color: #F3E4C2 !important;
+          background: transparent !important;
+          background-color: transparent !important;
+          background-image: none !important;
+        }
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input::before,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input::after,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea::before,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea::after,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"]::before,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"]::after,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]::before,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger]::after,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group]::before,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-field-group]::after,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .form-checkbox-row::before,
+        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] .form-checkbox-row::after {
+          content: none !important;
+          border: 0 !important;
+          box-shadow: none !important;
+          background: transparent !important;
           background-image: none !important;
         }
         [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
