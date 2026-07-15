@@ -36,6 +36,12 @@ const consultationSchema = z.object({
   contactMethod: z.string().optional(),
   budgetRange: z.string().optional(),
   timeline: z.string().optional(),
+  propertyType: z.string().optional(),
+  propertyStatus: z.string().optional(),
+  ownershipProfile: z.string().optional(),
+  unitCount: z.string().optional(),
+  propertyArea: z.string().optional(),
+  managementScope: z.string().optional(),
   message: z.string().max(500).optional(),
   agreeTerms: z.boolean().refine((val) => val === true, {
     message: "You must agree to the Terms of Service and Privacy Policy",
@@ -95,6 +101,32 @@ const BUDGET_RANGES = [
   "AED 5M - 10M", "AED 10M+",
 ];
 
+const PM_PROPERTY_TYPES = [
+  "Apartment", "Villa", "Townhouse", "Penthouse", "Office", "Retail Unit", "Whole Building", "Portfolio / Multiple Units",
+];
+
+const PM_PROPERTY_STATUSES = [
+  "Vacant", "Tenanted", "Owner Occupied", "Short-Term Rental", "Handover Soon", "Under Maintenance",
+];
+
+const PM_OWNERSHIP_PROFILES = [
+  "Individual Owner", "Overseas Owner", "Portfolio Owner", "Family Office", "Company Owned", "Developer / Landlord",
+];
+
+const PM_UNIT_COUNTS = [
+  "1 Unit", "2 - 5 Units", "6 - 10 Units", "11 - 25 Units", "25+ Units",
+];
+
+const PM_MANAGEMENT_SCOPE = [
+  "Full Property Management",
+  "Tenant Placement + Management",
+  "Rent Collection & Reporting",
+  "Maintenance Coordination",
+  "Handover Inspection & Snagging",
+  "Lease Renewal Support",
+  "Portfolio Management",
+];
+
 interface ConsultationRequestFormProps {
   className?: string;
   title?: string;
@@ -105,6 +137,8 @@ interface ConsultationRequestFormProps {
   defaultServiceNeeded?: string;
   messagePlaceholder?: string;
   formSource?: string;
+  variant?: "default" | "property-management";
+  showHeader?: boolean;
 }
 
 export const ConsultationRequestForm = ({
@@ -117,10 +151,13 @@ export const ConsultationRequestForm = ({
   defaultServiceNeeded = "",
   messagePlaceholder = "Additional details (optional)",
   formSource,
+  variant = "default",
+  showHeader = true,
 }: ConsultationRequestFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { captureLead } = useLeadCapture();
+  const isPropertyManagement = variant === "property-management" || formSource === "property-management-proposal";
   const serviceLabels = useMemo(
     () => serviceOptions && serviceOptions.length ? serviceOptions : SERVICE_OPTIONS.map((opt) => opt.label),
     [serviceOptions],
@@ -141,6 +178,12 @@ export const ConsultationRequestForm = ({
       contactMethod: "",
       budgetRange: "",
       timeline: "",
+      propertyType: "",
+      propertyStatus: "",
+      ownershipProfile: "",
+      unitCount: "",
+      propertyArea: "",
+      managementScope: defaultServiceNeeded,
       message: "",
       agreeTerms: false,
     },
@@ -168,6 +211,12 @@ export const ConsultationRequestForm = ({
           budgetRange: data.budgetRange,
           bedrooms: data.bedrooms,
           sizeBucket: data.sizeBucket,
+          propertyType: data.propertyType,
+          propertyStatus: data.propertyStatus,
+          ownershipProfile: data.ownershipProfile,
+          unitCount: data.unitCount,
+          propertyArea: data.propertyArea,
+          managementScope: data.managementScope,
           projectName,
           projectId,
         },
@@ -192,6 +241,12 @@ export const ConsultationRequestForm = ({
               preferredTime: data.preferredTime || "Not specified",
               contactMethod: data.contactMethod || "Not specified",
               budgetRange: data.budgetRange || "Not specified",
+              propertyType: data.propertyType || "Not specified",
+              propertyStatus: data.propertyStatus || "Not specified",
+              ownershipProfile: data.ownershipProfile || "Not specified",
+              unitCount: data.unitCount || "Not specified",
+              propertyArea: data.propertyArea || "Not specified",
+              managementScope: data.managementScope || "Not specified",
               projectName: projectName || undefined,
               projectId: projectId || undefined,
             },
@@ -275,21 +330,22 @@ export const ConsultationRequestForm = ({
           box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset, 0 4px 12px rgba(4,44,28,0.35) !important;
         }
       `}</style>
-      {/* Header */}
-      <div className="text-center mb-6">
-        <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-3">
-          <Calendar className="w-3 h-3" />
-          Expert Consultation
+      {showHeader && (
+        <div className="text-center mb-6">
+          <div data-emerald-action="true" className="jj-emerald-action inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs uppercase tracking-wider mb-3">
+            <Calendar className="w-3 h-3" />
+            {isPropertyManagement ? "Owner Management Request" : "Expert Consultation"}
+          </div>
+          <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
+            {projectName ? (
+              <>Register Interest in <span className="text-[#1A1A1A]">{projectName}</span></>
+            ) : (
+              title
+            )}
+          </h3>
+          {subtitle ? <p className="text-[#1A1A1A]/70 text-sm mt-2">{subtitle}</p> : null}
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A]">
-          {projectName ? (
-            <>Register Interest in <span className="text-[#1A1A1A]">{projectName}</span></>
-          ) : (
-            title
-          )}
-        </h3>
-        <p className="text-[#1A1A1A]/70 text-sm mt-2">{subtitle}</p>
-      </div>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5" data-form-shell>
@@ -381,105 +437,222 @@ export const ConsultationRequestForm = ({
             />
           </div>
 
-          {/* Bedrooms — multi-select segmented pills */}
-          <FormField
-            control={form.control}
-            name="bedrooms"
-            render={({ field }) => {
-              const selected = (field.value || "")
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean);
-              const toggle = (v: string) => {
-                const next = selected.includes(v)
-                  ? selected.filter((x) => x !== v)
-                  : [...selected, v];
-                field.onChange(next.join(","));
-              };
-              return (
-                <FormItem>
-                  <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
-              <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
-                    <div className="flex flex-wrap gap-2">
-                      {BEDROOM_OPTIONS.map((b) => {
-                        const active = selected.includes(b.value);
-                        return (
-                          <button
-                            key={b.value}
-                            type="button"
-                            onClick={() => toggle(b.value)}
-                            data-emerald-action={active ? "true" : undefined}
-                            className={
-                              active
-                                ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
-                                : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
-                            }
-                            style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
-                          >
-                            {b.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </FormItem>
-              );
-            }}
-          />
+          {isPropertyManagement ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <FormField
+                  control={form.control}
+                  name="propertyType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className={selectTriggerClass}>
+                            <SelectValue placeholder="Property Type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className={selectContentClass}>
+                          {PM_PROPERTY_TYPES.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="propertyStatus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className={selectTriggerClass}>
+                            <SelectValue placeholder="Current Occupancy Status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className={selectContentClass}>
+                          {PM_PROPERTY_STATUSES.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-          {/* Preferred Size — multi-select bucket pills */}
-          <FormField
-            control={form.control}
-            name="sizeBucket"
-            render={({ field }) => {
-              const selected = (field.value || "")
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean);
-              const toggle = (v: string) => {
-                if (v === "any") {
-                  field.onChange("any");
-                  return;
-                }
-                const without = selected.filter((x) => x !== "any");
-                const next = without.includes(v)
-                  ? without.filter((x) => x !== v)
-                  : [...without, v];
-                field.onChange(next.length ? next.join(",") : "any");
-              };
-              return (
-                <FormItem>
-                  <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <FormField
+                  control={form.control}
+                  name="unitCount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className={selectTriggerClass}>
+                            <SelectValue placeholder="Number of Units" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className={selectContentClass}>
+                          {PM_UNIT_COUNTS.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ownershipProfile"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger className={selectTriggerClass}>
+                            <SelectValue placeholder="Owner Profile" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className={selectContentClass}>
+                          {PM_OWNERSHIP_PROFILES.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <FormField
+                  control={form.control}
+                  name="managementScope"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <LightSearchableSelect
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          options={PM_MANAGEMENT_SCOPE}
+                          variant="plain"
+                          placeholder="Management Scope"
+                          searchPlaceholder="Search management scope…"
+                          ariaLabel="Management Scope"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="propertyArea"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input placeholder="Area / Community" {...field} className={inputClass} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Bedrooms — multi-select segmented pills */}
+              <FormField
+                control={form.control}
+                name="bedrooms"
+                render={({ field }) => {
+                  const selected = (field.value || "")
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                  const toggle = (v: string) => {
+                    const next = selected.includes(v)
+                      ? selected.filter((x) => x !== v)
+                      : [...selected, v];
+                    field.onChange(next.join(","));
+                  };
+                  return (
+                    <FormItem>
+                      <p className="text-[#1A1A1A] text-sm font-medium mb-2">Bedrooms <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
                   <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
-                    <div className="flex flex-wrap gap-2">
-                      {SIZE_BUCKETS.map((b) => {
-                        const active =
-                          (b.value === "any" && (!selected.length || selected.includes("any"))) ||
-                          selected.includes(b.value);
-                        return (
-                          <button
-                            key={b.value}
-                            type="button"
-                            onClick={() => toggle(b.value)}
-                            data-emerald-action={active ? "true" : undefined}
-                            className={
-                              active
-                                ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
-                                : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
-                            }
-                            style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
-                          >
-                            {b.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  <p className="text-[#1A1A1A]/60 text-xs mt-2">Optional — helps us match you to the right unit mix.</p>
-                </FormItem>
-              );
-            }}
-          />
+                        <div className="flex flex-wrap gap-2">
+                          {BEDROOM_OPTIONS.map((b) => {
+                            const active = selected.includes(b.value);
+                            return (
+                              <button
+                                key={b.value}
+                                type="button"
+                                onClick={() => toggle(b.value)}
+                                data-emerald-action={active ? "true" : undefined}
+                                className={
+                                  active
+                                    ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
+                                    : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
+                                }
+                                style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
+                              >
+                                {b.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </FormItem>
+                  );
+                }}
+              />
+
+              {/* Preferred Size — multi-select bucket pills */}
+              <FormField
+                control={form.control}
+                name="sizeBucket"
+                render={({ field }) => {
+                  const selected = (field.value || "")
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean);
+                  const toggle = (v: string) => {
+                    if (v === "any") {
+                      field.onChange("any");
+                      return;
+                    }
+                    const without = selected.filter((x) => x !== "any");
+                    const next = without.includes(v)
+                      ? without.filter((x) => x !== v)
+                      : [...without, v];
+                    field.onChange(next.length ? next.join(",") : "any");
+                  };
+                  return (
+                    <FormItem>
+                      <p className="text-[#1A1A1A] text-sm font-medium mb-2">Preferred Size <span className="text-[#1A1A1A]/55 font-normal">(select one or more)</span></p>
+                      <div data-field-group className="rounded-xl border border-[#B89555]/40 p-3 md:p-4 bg-[#FDFBF7]">
+                        <div className="flex flex-wrap gap-2">
+                          {SIZE_BUCKETS.map((b) => {
+                            const active =
+                              (b.value === "any" && (!selected.length || selected.includes("any"))) ||
+                              selected.includes(b.value);
+                            return (
+                              <button
+                                key={b.value}
+                                type="button"
+                                onClick={() => toggle(b.value)}
+                                data-emerald-action={active ? "true" : undefined}
+                                className={
+                                  active
+                                    ? "jbj-pill-active jj-emerald-action h-9 px-3.5 rounded-full text-[13px] font-semibold"
+                                    : "jbj-pill-inactive h-9 px-3.5 rounded-full text-[13px] font-semibold transition-colors"
+                                }
+                                style={active ? undefined : { background: "linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%)" }}
+                              >
+                                {b.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <p className="text-[#1A1A1A]/60 text-xs mt-2">Optional — helps us match you to the right unit mix.</p>
+                    </FormItem>
+                  );
+                }}
+              />
+            </>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <FormField
@@ -566,26 +739,28 @@ export const ConsultationRequestForm = ({
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="budgetRange"
-            render={({ field }) => (
-              <FormItem>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className={selectTriggerClass}>
-                      <SelectValue placeholder="Budget Range (optional)" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className={selectContentClass}>
-                    {BUDGET_RANGES.map((b) => (
-                      <SelectItem key={b} value={b}>{b}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
+          {!isPropertyManagement && (
+            <FormField
+              control={form.control}
+              name="budgetRange"
+              render={({ field }) => (
+                <FormItem>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className={selectTriggerClass}>
+                        <SelectValue placeholder="Budget Range (optional)" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className={selectContentClass}>
+                      {BUDGET_RANGES.map((b) => (
+                        <SelectItem key={b} value={b}>{b}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}
@@ -641,7 +816,7 @@ export const ConsultationRequestForm = ({
                 </>
               ) : (
                 <>
-                  <span>Request Consultation</span>
+                  <span>{isPropertyManagement ? "Request Management Proposal" : "Request Consultation"}</span>
                   <Send className="w-4 h-4" />
                 </>
               )}
