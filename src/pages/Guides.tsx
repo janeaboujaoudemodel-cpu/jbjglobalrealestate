@@ -173,44 +173,17 @@ const Guides = () => {
         </motion.div>
       </section>
 
-      {/* CTA Block — surface band */}
-      <section className="jj-band jj-band--surface">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center">
-          <div
-            className="max-w-4xl mx-auto rounded-2xl px-6 py-12 md:px-12 md:py-14"
-            style={{ background: "#FDFBF7", border: "1px solid rgba(184,149,85,0.35)" }}
-          >
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6"
-              style={{ background: "#F7F2EA", border: "1px solid rgba(184,149,85,0.45)" }}
-            >
-              <HelpCircle className="w-6 h-6" style={{ color: "#1A1A1A" }} />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-semibold mb-3 text-[#1A1A1A] tracking-[-0.02em]">
-              Not sure where to start?
-            </h2>
-            <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto">
-              Tell us your goal — buy, sell, rent, or invest — and we'll route you to the right guide.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                to="/contact"
-                data-surface="emerald"
-                className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex items-center justify-center px-7 py-3 rounded-lg font-semibold text-sm tracking-wide transition-all"
-              >
-                Ask a Question
-              </Link>
-              <Link
-                to="/contact?type=support"
-                className="inline-flex items-center justify-center px-7 py-3 rounded-full font-semibold text-sm tracking-wide transition-all"
-                style={{ background: "transparent", color: "#1A1A1A", boxShadow: "0 0 0 1px #B89555 inset" }}
-              >
-                Contact Support
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-      </section>
+      {/* CTA — canonical MIPreFooterCard (matches services / MI) */}
+      <MIPreFooterCard
+        title="Not sure where to start?"
+        subtitle="Tell us your goal — buy, sell, rent, or invest — and we'll route you to the right guide."
+        primaryLink="/contact"
+        primaryText="Ask a Question"
+        secondaryLink="/contact?type=support"
+        secondaryText="Contact Support"
+        maxWidthClass="max-w-6xl"
+      />
+
 
 
       {/* TOC Modal */}
