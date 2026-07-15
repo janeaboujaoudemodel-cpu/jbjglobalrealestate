@@ -21,7 +21,6 @@ import {
   FileText,
   Globe,
   Headphones,
-  Home,
   Key,
   Percent,
   RefreshCw,
@@ -36,6 +35,7 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
+import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { scrollToId } from "@/lib/scroll";
 
@@ -167,7 +167,7 @@ const faqData = [
   { q: "Is this the same as brokerage?", a: "No. Property management is ongoing operational stewardship, separate from a sales or leasing transaction." },
 ];
 
-function Section({ id, children, className = "" }: { id: string; children: React.ReactNode; className?: string }) {
+function Section({ id, children, className = "" }: { id: string; children: ReactNode; className?: string }) {
   return (
     <section id={id} className={`scroll-mt-28 py-10 md:py-14 ${className}`}>
       <div data-service-track className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -177,7 +177,7 @@ function Section({ id, children, className = "" }: { id: string; children: React
   );
 }
 
-function SectionHeading({ children, centered = false, eyebrow }: { children: React.ReactNode; centered?: boolean; eyebrow?: string }) {
+function SectionHeading({ children, centered = false, eyebrow }: { children: ReactNode; centered?: boolean; eyebrow?: string }) {
   return (
     <div className={`mb-7 ${centered ? "text-center" : ""}`}>
       {eyebrow ? (
@@ -192,7 +192,7 @@ function SectionHeading({ children, centered = false, eyebrow }: { children: Rea
   );
 }
 
-function ChampagneCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function ChampagneCard({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
       data-surface="champagne"
@@ -240,7 +240,7 @@ function BulletList({ items, icon: Icon = CheckCircle2 }: { items: string[]; ico
   );
 }
 
-function CTAButton({ to, children, variant = "solid" }: { to: string; children: React.ReactNode; variant?: "solid" | "outline" }) {
+function CTAButton({ to, children, variant = "solid" }: { to: string; children: ReactNode; variant?: "solid" | "outline" }) {
   return (
     <Link
       to={to}
