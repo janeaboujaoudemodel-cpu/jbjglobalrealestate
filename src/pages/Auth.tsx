@@ -34,6 +34,34 @@ const isValidPreselect = (v: string | null): v is PlatformUserMode =>
 
 const emailSchema = z.string().email("Please enter a valid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
+const RECENT_LOGIN_EMAILS_KEY = "jbj_recent_login_emails";
+
+const readRecentLoginEmails = (): string[] => {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(RECENT_LOGIN_EMAILS_KEY) || "[]");
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string" && item.includes("@")) : [];
+  } catch {
+    return [];
+  }
+};
+
+const rememberRecentLoginEmail = (rawEmail: string) => {
+  const normalized = rawEmail.trim().toLowerCase();
+  if (!normalized || !normalized.includes("@")) return readRecentLoginEmails();
+
+  const next = [normalized, ...readRecentLoginEmails().filter((item) => item.toLowerCase() !== normalized)].slice(0, 8);
+  try { localStorage.setItem(RECENT_LOGIN_EMAILS_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+  return next;
+};
+
+const getSafeReturnPath = () => {
+  const params = new URLSearchParams(window.location.search);
+  let returnTo = params.get("returnTo") || params.get("redirect");
+  if (!returnTo) {
+    try { returnTo = sessionStorage.getItem("jbj_post_login_redirect"); } catch { /* ignore */ }
+  }
+  return returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
+};
 
 type AuthMode =
   | "signin"
@@ -69,6 +97,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const [reactivating, setReactivating] = useState(false);
   const [isReactivationPreview, setIsReactivationPreview] = useState(false);
   const [passwordSafe, setPasswordSafe] = useState(true);
+  const [recentLoginEmails, setRecentLoginEmails] = useState<string[]>([]);
 
   // Resend cooldown
   const [resendCooldown, setResendCooldown] = useState(0);
@@ -90,6 +119,10 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   }, []);
 
   useEffect(() => () => { if (cooldownRef.current) clearInterval(cooldownRef.current); }, []);
+
+  useEffect(() => {
+    setRecentLoginEmails(readRecentLoginEmails());
+  }, []);
 
   // Handle mode from URL (e.g. magic link redirect)
   useEffect(() => {
@@ -251,6 +284,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               toast.error(error.message);
             }
           } else {
+            setRecentLoginEmails(rememberRecentLoginEmail(email));
             toast.success("Welcome back!");
             await offerPasskeyUpgrade();
             // Honor ?returnTo (canonical), ?redirect (legacy alias), or the
@@ -429,8 +463,11 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   const handleSocialSignIn = async (provider: "google" | "apple") => {
     setIsSubmitting(true);
     try {
+      const safeReturnPath = getSafeReturnPath();
+      const redirectUrl = `${window.location.origin}/auth?returnTo=${encodeURIComponent(safeReturnPath)}`;
       const result = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: `${window.location.origin}/welcome`,
+        redirect_uri: redirectUrl,
+        ...(provider === "google" ? { extraParams: { prompt: "select_account" } } : {}),
       });
       if (result?.error) {
         toast.error(`There was an issue with ${provider === "google" ? "Google" : "Apple"} sign-in. Please try again.`);
@@ -626,6 +663,28 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <h1 className="text-[#1A1A1A] text-2xl font-semibold mb-3">{getTitle()}</h1>
             <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">{getSubtitle()}</p>
           </div>
+
+          {mode === "signin" && recentLoginEmails.length > 0 && (
+            <div className="mb-5 rounded-xl border border-[#B89555]/30 bg-[#F7F2EA]/70 p-3">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#064E3B]">Recent accounts</p>
+              <div className="flex max-h-28 flex-col gap-2 overflow-y-auto pr-1">
+                {recentLoginEmails.map((savedEmail) => (
+                  <button
+                    key={savedEmail}
+                    type="button"
+                    onClick={() => {
+                      setEmail(savedEmail);
+                      setErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    className="flex min-h-9 items-center gap-2 rounded-lg border border-[#B89555]/25 bg-[#FDFBF7] px-3 py-2 text-left text-sm font-medium text-[#1A1A1A] transition-colors hover:border-[#064E3B]/45 hover:bg-[#EFE6D6]/50"
+                  >
+                    <Mail className="h-4 w-4 shrink-0 text-[#064E3B]" />
+                    <span className="min-w-0 truncate">{savedEmail}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Social + Biometric (signin / signup only) */}
           {(mode === "signin" || mode === "signup") && (

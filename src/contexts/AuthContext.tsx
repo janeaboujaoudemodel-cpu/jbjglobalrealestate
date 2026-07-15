@@ -4,6 +4,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 import { isOwnerBackendEmail } from "@/config/ownerEmails";
 
+const RECENT_LOGIN_EMAILS_KEY = "jbj_recent_login_emails";
+
+const rememberLoginEmail = (rawEmail?: string | null) => {
+  const normalized = rawEmail?.trim().toLowerCase();
+  if (!normalized || !normalized.includes("@")) return;
+
+  try {
+    const parsed = JSON.parse(localStorage.getItem(RECENT_LOGIN_EMAILS_KEY) || "[]");
+    const existing = Array.isArray(parsed) ? parsed.filter((item) => typeof item === "string") : [];
+    const next = [normalized, ...existing.filter((item) => item.toLowerCase() !== normalized)].slice(0, 8);
+    localStorage.setItem(RECENT_LOGIN_EMAILS_KEY, JSON.stringify(next));
+  } catch {
+    try { localStorage.setItem(RECENT_LOGIN_EMAILS_KEY, JSON.stringify([normalized])); } catch { /* ignore */ }
+  }
+};
+
 /**
  * Owner verification
  *
@@ -231,6 +247,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true;
     let verifyInFlight = false;
     let latestSessionId: string | null = null;
+    let bootstrapped = false;
 
     const applySession = async (nextSession: Session | null) => {
       if (!mounted) return;
@@ -240,6 +257,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Set session and user immediately
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
+
+      if (nextSession?.user?.email) {
+        rememberLoginEmail(nextSession.user.email);
+      }
 
       // If no session, we're done loading
       if (!nextSession?.user) {
@@ -292,17 +313,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // Set up auth state listener FIRST
+    // Set up auth state listener first, but do not let a premature empty
+    // INITIAL_SESSION event clear a valid stored session before getSession()
+    // has finished restoring it from browser storage.
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (!bootstrapped && event === "INITIAL_SESSION" && !nextSession) {
+        return;
+      }
       void applySession(nextSession);
     });
 
-    // THEN check for existing session
+    // THEN deterministically restore the existing session.
     supabase.auth
       .getSession()
-      .then(({ data: { session: existingSession } }) => applySession(existingSession));
+      .then(({ data: { session: existingSession } }) => {
+        bootstrapped = true;
+        return applySession(existingSession);
+      })
+      .catch(() => {
+        bootstrapped = true;
+        return applySession(null);
+      });
 
     return () => {
       mounted = false;
@@ -376,7 +409,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = async () => {
     const { lovable } = await import("@/integrations/lovable");
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}/welcome`,
+      redirect_uri: `${window.location.origin}/auth`,
+      extraParams: {
+        prompt: "select_account",
+      },
     });
     if (result.error) {
       return { error: result.error instanceof Error ? result.error : new Error(String(result.error)) };

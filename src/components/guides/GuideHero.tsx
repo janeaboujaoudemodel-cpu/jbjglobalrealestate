@@ -46,10 +46,6 @@ export const GuideHero = ({
       data-premium-emerald-hero
       className="jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
     >
-      <div aria-hidden className="jj-mi-marble-depth pointer-events-none absolute inset-0" />
-      <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
-      <div aria-hidden className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay" />
-
       <motion.div
         className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center"
         initial="hidden"
@@ -76,10 +72,9 @@ export const GuideHero = ({
           >
             {title}
           </motion.h1>
-          <div aria-hidden className="jj-mi-title-rule my-8 h-px w-24" />
           <motion.p
             data-no-contrast-guard
-            className="jj-mi-hero-copy mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed text-center"
+            className="jj-mi-hero-copy mx-auto mt-8 max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed text-center"
             style={{ color: "#E8CF8A", WebkitTextFillColor: "#E8CF8A", fontFamily: '"Cormorant Garamond", "Playfair Display", Georgia, serif' }}
             variants={fadeInUp}
           >

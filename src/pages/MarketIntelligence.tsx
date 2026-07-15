@@ -148,13 +148,6 @@ const MarketIntelligence = () => {
         data-premium-emerald-hero
         className="jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
       >
-        <div aria-hidden className="jj-mi-marble-depth pointer-events-none absolute inset-0" />
-        <div aria-hidden className="jj-mi-gold-hairline pointer-events-none absolute inset-x-0 bottom-0 h-px" />
-        <div
-          aria-hidden
-          className="jj-mi-marble-grain pointer-events-none absolute inset-0 mix-blend-overlay"
-        />
-
         <div className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center">
           <h1
             data-no-contrast-guard
@@ -162,10 +155,9 @@ const MarketIntelligence = () => {
           >
             Market Intelligence
           </h1>
-          <div aria-hidden className="jj-mi-title-rule my-8 h-px w-24" />
           <p
             data-no-contrast-guard
-            className="jj-mi-hero-copy mx-auto max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed"
+            className="jj-mi-hero-copy mx-auto mt-8 max-w-[42rem] text-lg md:text-xl lg:text-2xl font-light leading-relaxed"
           >
             Daily refreshed Dubai real estate intelligence powered by official government sources, licensed market data partners, and JBJ editorial review.
           </p>

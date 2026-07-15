@@ -8,7 +8,7 @@ import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { SEOHead } from "@/components/SEOHead";
 import { scrollToId } from "@/lib/scroll";
 import {
-  ArrowRight,
+  ArrowUpRight,
   Award,
   BarChart3,
   BriefcaseBusiness,
@@ -42,9 +42,7 @@ const BLACK = "#000000";
 const WHITE = "#FFFFFF";
 const CHAMPAGNE = "#F7F2EA";
 const CHAMPAGNE_DEEP = "#EFE3CF";
-const GOLD = "#B89555";
 const EMERALD_GRADIENT = `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DARK} 58%, ${BLACK} 100%)`;
-const HERO_GRADIENT = `radial-gradient(95% 72% at 50% 0%, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0) 58%), linear-gradient(180deg, ${EMERALD} 0%, ${EMERALD_DARK} 50%, ${BLACK} 100%)`;
 const PANEL_GRADIENT = "linear-gradient(160deg, #FFFDF8 0%, #F7F2EA 48%, #EFE3CF 100%)";
 
 const tocSections = [
@@ -239,20 +237,22 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
-function HeroButton({ to, children, variant = "solid" }: { to: string; children: ReactNode; variant?: "solid" | "outline" }) {
+function HeroButton({ to, children, variant: _variant = "solid" }: { to: string; children: ReactNode; variant?: "solid" | "outline" }) {
   return (
     <Link
       to={to}
       data-pm-emerald
-      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold transition-transform hover:-translate-y-0.5 sm:w-auto"
+      data-no-contrast-guard
+      data-on-dark
+      className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex min-h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 sm:w-auto md:px-8 md:py-4 md:text-base"
       style={{
-        background: variant === "solid" ? EMERALD_GRADIENT : "rgba(255,255,255,0.08)",
-        borderColor: "rgba(255,255,255,0.48)",
+        background: EMERALD_GRADIENT,
+        border: 0,
         color: WHITE,
       }}
     >
       <span>{children}</span>
-      <ArrowRight className="h-4 w-4" />
+      <ArrowUpRight className="h-4 w-4" />
     </Link>
   );
 }
@@ -336,25 +336,29 @@ export default function PropertyManagement() {
       `}</style>
 
       <section
+        data-mi-hero
+        data-unified-hero
+        data-hero-dark
+        data-surface="emerald"
+        data-no-contrast-guard
+        data-premium-emerald-hero
         data-brand-hero
         data-pm-emerald
-        className="relative grid place-items-center overflow-hidden px-4 text-center sm:px-6 lg:px-8"
-        style={{ minHeight: "calc(100svh - 0px)", background: HERO_GRADIENT, color: WHITE, borderRadius: 0 }}
+        className="jj-hero-fullscreen jj-mi-prada-hero relative flex min-h-[100svh] w-full items-center justify-center overflow-hidden px-4 text-center sm:px-6 lg:px-8"
+        style={{ color: WHITE, borderRadius: 0 }}
       >
-        <div aria-hidden className="absolute inset-0 opacity-[0.14]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.10) 1px, transparent 1px)", backgroundSize: "76px 76px" }} />
-        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center py-28 md:py-32">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em]" style={{ borderColor: "rgba(255,255,255,0.34)", background: "rgba(255,255,255,0.08)" }}>
+        <div className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center">
+          <div data-no-contrast-guard className="mb-6 inline-flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.18em] backdrop-blur-sm">
             <Building2 className="h-4 w-4" />
             Property Management
           </div>
-          <h1 className="max-w-[13ch] text-5xl font-light leading-[0.98] sm:text-6xl md:text-7xl lg:text-8xl" style={{ fontFamily: '"Cormorant Garamond", serif', color: WHITE }}>
-            Property Management & Asset Stewardship
+          <h1 data-no-contrast-guard className="jj-mi-hero-title mx-auto max-w-[16ch] text-5xl font-light leading-[1.02] sm:text-6xl md:text-7xl lg:text-8xl" style={{ fontFamily: '"Cormorant Garamond", serif', color: WHITE }}>
+            Property Management
           </h1>
-          <div aria-hidden className="my-8 h-px w-24" style={{ background: "rgba(255,255,255,0.5)" }} />
-          <p className="max-w-2xl text-lg leading-relaxed sm:text-xl md:text-2xl" style={{ color: "rgba(255,255,255,0.9)" }}>
+          <p data-no-contrast-guard className="jj-mi-hero-copy mx-auto mt-8 max-w-[42rem] text-lg font-light leading-relaxed md:text-xl lg:text-2xl" style={{ color: "#E8CF8A" }}>
             Structured ownership support for leasing, tenant care, maintenance, finance, compliance, and reporting.
           </p>
-          <div className="mt-9 flex w-full max-w-xl flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:flex-nowrap">
             <HeroButton to="#proposal">Request Management Proposal</HeroButton>
             <HeroButton to="/contact?service=property-management" variant="outline">Speak With a Manager</HeroButton>
           </div>
@@ -362,8 +366,6 @@ export default function PropertyManagement() {
       </section>
 
       <main data-service-body>
-        <div aria-hidden className="h-4 w-full" style={{ background: `linear-gradient(90deg, ${GOLD}, #F4E7C8, ${GOLD})` }} />
-
         <section className="pt-14 md:pt-20">
           <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
             <div data-pm-panel className="rounded-3xl border p-6 md:p-9" style={{ background: PANEL_GRADIENT, borderColor: "rgba(184,149,85,0.42)", boxShadow: "0 24px 56px -36px rgba(44,31,13,0.34)" }}>

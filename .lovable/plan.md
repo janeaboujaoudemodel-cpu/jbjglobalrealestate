@@ -1,95 +1,75 @@
-# Sign-up + Auth Premium Upgrade
+I will fix this in two tracks: authentication stability first, then the shared hero standardization.
 
-## What I found in the current form
+## 1. Stop the unexpected logout / auth race
 
-- **Mobile / WhatsApp number**: rendered as a single field with a dial-code selector _inside_ the same rounded border → looks like one broken field with an internal seam.
-- **Country / Nationality / Preferred Language / Preferred Contact Method / Preferred Contact Time**: plain `<select>` or short lists — no flags, no search, no proper premium dropdown.
-- **Blue focus/hover** leaking through — most likely Chrome's autofill blue on `input`s + shadcn's default focus ring `--ring` on this route.
-- **Password field**: single input, no strength meter, no show/hide, "Generate strong password" is a plain text button.
-- **Services chips**: all rendering as emerald-filled — the default state is wrong; only the _selected_ one should be emerald-filled-white.
-- **Layout**: page is very tall because every field is stacked full-width instead of using the existing two-column grid tightly.
+I found multiple places that can make the app appear logged out even when the user did not intentionally log out:
 
-## Fix plan — Account step (`PublicAccess.tsx` account step block)
+- `SiteAccessGate` runs its own direct backend session checks separately from `AuthContext`, so it can redirect before the main auth state finishes restoring.
+- `AuthContext` subscribes to auth events and then calls `getSession()`, which can allow an early empty auth event to briefly set `user = null` before storage restoration finishes.
+- Google login redirects to `/welcome`, which adds an unnecessary extra step and can lose the exact page the user came from.
+- Broker/session tracking can force sign-out on a 403 response; I will keep that only for truly explicit blocked/revoked cases, not transient failures.
 
-1. **Phone / WhatsApp input**
-   - Split into two visually distinct controls with a small gap: a flag-dial-code picker (searchable, showing country flag + name + `+xxx`) and a plain phone-number input.
-   - Remove the shared bordered wrapper. Each control gets its own champagne border, focus = emerald hairline (no blue).
-   - Default dial code: UAE (+971), matches current preview.
+Implementation:
+- Make `AuthContext` perform a deterministic initial restore: wait for stored session first, ignore premature null initial events until bootstrap completes, then listen for later changes.
+- Convert `SiteAccessGate` to rely on `useAuth()` instead of running a second independent session check.
+- Keep the user on protected routes until auth is known; no redirect while auth is still restoring.
+- Preserve the intended route through login using `returnTo`/session storage consistently.
+- Change Google sign-in to use a public same-origin redirect and navigate only after the session is confirmed.
 
-2. **Country / Nationality**
-   - Replace with a searchable Command/Popover dropdown listing all ~250 countries with SVG flag + English name.
-   - Same primitive reused for both fields.
+## 2. Make re-login faster and simpler
 
-3. **Preferred Language**
-   - Searchable dropdown with the full language list from `src/data/languages.ts`, each row showing the language name + native script.
+Implementation:
+- Add a remembered-account strip/card on `/auth` that stores recent successful login emails locally on that browser.
+- Tapping a remembered email pre-fills the email field immediately.
+- Keep “Continue with Google” prominent so users who do not know their password can use Google without going through password reset.
+- Add Google `prompt: select_account` so Google shows the account chooser whenever possible.
+- Make clear in the app flow that Google’s external chooser/“continue to jbj.ae” screen is controlled by Google/OAuth branding, while the JBJ-controlled `/auth` card will be fully branded.
 
-4. **Preferred Contact Method / Preferred Contact Time**
-   - Same premium dropdown primitive, static option lists (Method: Call / WhatsApp / Email / SMS; Time: Morning / Afternoon / Evening / Anytime).
+## 3. Fix Property Management hero to match Market Intelligence exactly
 
-5. **Kill blue**
-   - Scope override on the sign-up page root: `input, [role="combobox"], [data-slot="trigger"] { --ring: 6 78 59; }` and `input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #F7F2EA inset !important; -webkit-text-fill-color: #1A1A1A !important; caret-color: #1A1A1A; }`. Removes both the focus ring blue and Chrome autofill blue.
+Implementation:
+- Remove the current custom Property Management hero markup.
+- Replace it with the same canonical MI hero component/structure used by Market Intelligence.
+- Remove the bottom gold divider/hairline under the hero.
+- Remove internal decorative lines/patterns/grid overlays from the hero.
+- Match MI CTA buttons: emerald/black gradient, no gold borders around CTAs.
+- Reduce title wrapping with responsive title width/font rules so it does not become a huge four-line title.
 
-6. **Password**
-   - Show/hide eye toggle inside the field.
-   - Live strength meter (4 emerald segments) with label (Weak → Strong) based on length + character classes.
-   - "Generate strong password" becomes a compact champagne pill with a spark icon that fills the field and reveals it.
-   - Minimum 8, but real feedback via meter.
+## 4. Standardize the hero for the requested page families
 
-7. **Services chips**
-   - Default: champagne background `#F7F2EA`, gold border `#B89555`, ink text.
-   - Hover: subtle champagne raise, gold ring.
-   - Active: emerald `#064E3B` fill, pure white text, white check icon.
-   - Never blue at any state.
+Scope to standardize using the shared MI hero contract:
+- Guides pages
+- Insights pages
+- Services pages
+- Company pages
+- My Account/account pages that use public shell styling
+- Vehicle/tool pages where this same public/content shell is used
+- Help & Support / FAQ pages
 
-8. **Layout tightening**
-   - Two-column grid on desktop, single column ≤640px. Password stays full-width. Reduces vertical length by ~35%.
+Implementation:
+- Update the shared hero primitives instead of manually editing every page one by one:
+  - `PremiumEmeraldHero`
+  - `GuideHero`
+  - `FAQHero`
+  - `MIPageShell`
+- Remove shared hero gold divider/hairline and title-rule line from those components.
+- Remove shared marble/grain/line overlays that create the unwanted hero lines.
+- Align hero typography and CTA styling with the current Market Intelligence hero.
+- Keep the vertical sidebar boundary safe: heroes must start after the left sidebar and never go behind it.
 
-## OAuth branded consent screen ("Continue to …")
+## 5. Validation before reporting completion
 
-- The text on Google's consent screen is driven by the app name registered on Google's side, not by our code. On Lovable's **managed** Google OAuth (what this project uses today), the displayed app name is fixed by the shared broker and cannot be changed to "JBJ Global Real Estate" without switching to your own Google Cloud OAuth client. I will:
-  - Set the project's public site metadata (title, description, support email) so anything Supabase controls (magic-link emails, auth callback page) reads "JBJ Global Real Estate · support: contact@jbj.ae".
-  - Ship a **branded in-app auth callback page** at `/auth/callback` that shows the JBJ crest, "Continuing to JBJ Global Real Estate", support email, and a spinner while the session settles — this is what the user actually sees inside our app after Google bounces back.
-  - Note in the reply that to change the Google-side "Continue to jbj.ae" wording you must provide your own Google OAuth client ID/secret and I'll wire them in.
-
-## Welcome email
-
-- Verify email infra is set up (`setup_email_infra` + `scaffold_transactional_email`). If not, run those first.
-- Add a `welcome-signup.tsx` template: JBJ crest, greeting by first name, what happens next (verification, access, contact CTA), signature block with contact@jbj.ae. React Email inline styles, white body, emerald accents.
-- Trigger `send-transactional-email` on successful signup from the account step submit handler, with `idempotencyKey: welcome-${user.id}`.
-- Send a real test to **infoo.jane@gmail.com** as part of validation.
-
-## Validation (E2E, with proof)
-
-Playwright script `/tmp/browser/signup-e2e/run.py`:
-1. Open `/access`, step through Category → Profile → Account.
-2. Screenshot: full form default state (proof of chip colors, dial-code split, dropdowns).
-3. Open each dropdown (country, nationality, language, contact method, contact time) → screenshot each open state.
-4. Focus phone, password, name → screenshot to prove no blue focus ring.
-5. Type into password → screenshot strength meter transitions Weak → Medium → Strong.
-6. Click a service chip → screenshot showing emerald-filled active + others still champagne.
-7. Fill form with a throwaway email, submit → screenshot success state, then verify welcome email in the send-transactional-email logs.
-8. Attach all screenshots in the reply so you can see the fix, not just take my word for it.
-
-## Technical notes (for the record)
-
-- New primitives added under `src/components/access/`:
-  - `PhoneField.tsx` (flag dial-code + number)
-  - `SearchableCountrySelect.tsx`
-  - `SearchableLanguageSelect.tsx`
-  - `SearchableOptionSelect.tsx` (reused for method/time)
-  - `PasswordField.tsx` (meter + toggle + generator)
-  - `ServiceChip.tsx`
-- Country list source: reuse existing dial-code / country data if present under `src/data/`; otherwise add a single `src/data/countries.ts` (name, ISO2, dial code, emoji flag).
-- No changes to other pages' focus/blue behavior — scoped override lives on the sign-up route root only.
-
-## Out of scope (explicitly not touched)
-
-- Category and Profile steps' internals (only visually consistent chip/dropdown styling if they use the same primitives).
-- Any other page's dropdowns or password fields.
-- Any other email template.
-
----
-
-**Please confirm** before I start:
-- OK to add the `/auth/callback` branded page and note that the "Continue to jbj.ae" wording on Google's own screen requires your own Google OAuth client to change?
-- OK to send the E2E welcome-email test to **infoo.jane@gmail.com**?
+I will validate with Playwright and screenshots, not just code inspection:
+- Auth restore on refresh while logged in.
+- Protected route refresh does not bounce to `/access` or `/auth` during session restore.
+- `/auth` shows the branded card and remembered account choices.
+- Google button starts the correct Google account chooser flow with account selection requested.
+- Property Management hero screenshot: no gold divider, no lines, no CTA gold border, title wraps correctly.
+- Representative screenshots across:
+  - `/market-intelligence`
+  - `/services/property-management`
+  - `/guides/golden-visa-uae`
+  - `/faq`
+  - `/about` or `/company-profile`
+  - `/my-account` or `/account/passkeys` if authenticated session is available
+- Record geometry checks for sidebar-safe hero boundaries and screenshot paths.
