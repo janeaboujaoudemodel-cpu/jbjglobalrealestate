@@ -756,10 +756,10 @@ const PropertyManagement = () => {
           </div>
         </Section>
 
-          </div>{/* close rounded card */}
-        </div>{/* close max-w container */}
-      </div>{/* close bg-background */}
+        </div>{/* close inner body wrapper */}
+      </div>{/* close max-w container */}
     </div>
+
   );
 };
 
