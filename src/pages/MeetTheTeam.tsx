@@ -40,6 +40,7 @@ import TeamVisibilityBar from "@/components/team/TeamVisibilityBar";
 import VisibilityToggleButton from "@/components/team/VisibilityToggleButton";
 import BrokersTeamSection from "@/components/team/BrokersTeamSection";
 import NotFound from "@/pages/NotFound";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 
 const fadeInUp = {
