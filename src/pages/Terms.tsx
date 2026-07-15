@@ -5,6 +5,7 @@ import { Scale, Mail, FileText, User, Ban, Building2, Globe, Handshake, Lock, Sh
 import SEOHead from "@/components/SEOHead";
 import ContentPageShell, { ContentSection } from "@/components/content-page/ContentPageShell";
 import { SectionCard, SectionHeading, SectionDivider, BulletList, LegalFooter } from "@/components/content-page/LegalParts";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 const SECTIONS: ContentSection[] = [
   { id: "definitions",       title: "Definitions",                   icon: Info },
