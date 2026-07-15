@@ -41,10 +41,11 @@ const EMERALD_DARK = "#042C1C";
 const BLACK = "#000000";
 const WHITE = "#FFFFFF";
 const CHAMPAGNE = "#F7F2EA";
-const PEARL = "linear-gradient(160deg, #FFFDFA 0%, #F9F3E8 55%, #F3ECDE 100%)";
-const PEARL_BORDER = "rgba(184,149,85,0.28)";
+const CHAMPAGNE_DEEP = "#EFE3CF";
+const GOLD = "#B89555";
 const EMERALD_GRADIENT = `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DARK} 58%, ${BLACK} 100%)`;
 const HERO_GRADIENT = `radial-gradient(95% 72% at 50% 0%, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0) 58%), linear-gradient(180deg, ${EMERALD} 0%, ${EMERALD_DARK} 50%, ${BLACK} 100%)`;
+const PANEL_GRADIENT = "linear-gradient(160deg, #FFFDF8 0%, #F7F2EA 48%, #EFE3CF 100%)";
 
 const tocSections = [
   { id: "overview", label: "Management Overview", icon: Home },
@@ -109,7 +110,7 @@ const reporting = [
 ];
 
 const trustSignals = [
-  { icon: ShieldCheck, title: "Compliance First", text: "Dubai property procedures, tenancy documents, and owner approvals are handled through a documented workflow." },
+  { icon: ShieldCheck, title: "Compliance First", text: "Tenancy documents, approvals, and property procedures are handled through a documented workflow." },
   { icon: Award, title: "Licensed Standards", text: "Service delivery follows UAE real estate operating standards with clear accountability." },
   { icon: Headphones, title: "Dedicated Manager", text: "Owners receive one accountable contact for tenant, maintenance, reporting, and renewal updates." },
 ];
@@ -133,10 +134,7 @@ const managementServices = [
   "Portfolio Management",
 ];
 
-/* ------------------------------------------------------------------ */
-/* Single "mother of pearl" card — one per section, no nested boxes    */
-/* ------------------------------------------------------------------ */
-function PearlSection({
+function Section({
   id,
   eyebrow,
   title,
@@ -152,46 +150,30 @@ function PearlSection({
   className?: string;
 }) {
   return (
-    <section id={id} className={`scroll-mt-28 py-6 md:py-9 ${className}`}>
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+    <section id={id} className={`scroll-mt-28 py-6 md:py-8 ${className}`}>
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div
-          data-surface="pearl"
-          data-allow-ink
-          className="rounded-3xl border p-6 md:p-10"
+          data-pm-panel
+          className="rounded-3xl border p-6 md:p-9"
           style={{
-            background: PEARL,
-            borderColor: PEARL_BORDER,
-            boxShadow:
-              "0 30px 60px -40px rgba(6,78,59,0.25), inset 0 1px 0 rgba(255,255,255,0.85)",
-            color: INK,
+            background: PANEL_GRADIENT,
+            borderColor: "rgba(184,149,85,0.42)",
+            boxShadow: "0 24px 56px -36px rgba(44,31,13,0.34), inset 0 1px 0 rgba(255,255,255,0.78)",
           }}
         >
           {(eyebrow || title || text) && (
             <div className="mb-7">
               {eyebrow ? (
-                <p
-                  className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em]"
-                  style={{ color: EMERALD }}
-                >
+                <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: EMERALD }}>
                   {eyebrow}
                 </p>
               ) : null}
               {title ? (
-                <h2
-                  className="text-3xl font-semibold leading-tight md:text-4xl"
-                  style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}
-                >
+                <h2 className="text-3xl font-semibold leading-tight md:text-4xl" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>
                   {title}
                 </h2>
               ) : null}
-              {text ? (
-                <p
-                  className="mt-3 max-w-2xl text-base leading-relaxed"
-                  style={{ color: INK_SOFT }}
-                >
-                  {text}
-                </p>
-              ) : null}
+              {text ? <p className="mt-3 max-w-3xl text-base leading-relaxed" style={{ color: INK_SOFT }}>{text}</p> : null}
             </div>
           )}
           {children}
@@ -201,17 +183,31 @@ function PearlSection({
   );
 }
 
+function EmeraldTile({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return (
+    <div
+      data-pm-emerald
+      className={`rounded-2xl border p-5 ${className}`}
+      style={{
+        background: EMERALD_GRADIENT,
+        borderColor: "rgba(255,255,255,0.22)",
+        boxShadow: "0 18px 38px -28px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.13)",
+        color: WHITE,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function EmeraldIcon({ icon: Icon, large = false }: { icon: LucideIcon; large?: boolean }) {
   return (
     <span
+      data-pm-emerald
       className={`${large ? "h-14 w-14" : "h-11 w-11"} inline-flex shrink-0 items-center justify-center rounded-full`}
-      style={{ background: EMERALD_GRADIENT }}
+      style={{ background: EMERALD_GRADIENT, color: WHITE }}
     >
-      <Icon
-        className={large ? "h-6 w-6" : "h-5 w-5"}
-        style={{ color: WHITE, stroke: WHITE }}
-        strokeWidth={2.2}
-      />
+      <Icon className={large ? "h-6 w-6" : "h-5 w-5"} strokeWidth={2.2} />
     </span>
   );
 }
@@ -219,8 +215,9 @@ function EmeraldIcon({ icon: Icon, large = false }: { icon: LucideIcon; large?: 
 function NumberBadge({ value }: { value: number | string }) {
   return (
     <span
+      data-pm-emerald
       className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold"
-      style={{ background: EMERALD_GRADIENT, color: WHITE, WebkitTextFillColor: WHITE }}
+      style={{ background: EMERALD_GRADIENT, color: WHITE }}
     >
       {value}
     </span>
@@ -231,16 +228,9 @@ function BulletList({ items }: { items: string[] }) {
   return (
     <ul className="space-y-3">
       {items.map((item) => (
-        <li
-          key={item}
-          className="flex items-start gap-3 text-sm leading-relaxed"
-          style={{ color: INK }}
-        >
-          <span
-            className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-            style={{ background: EMERALD_GRADIENT }}
-          >
-            <CheckCircle2 className="h-3.5 w-3.5" style={{ color: WHITE, stroke: WHITE }} />
+        <li key={item} className="flex items-start gap-3 text-sm leading-relaxed" style={{ color: INK }}>
+          <span data-pm-emerald className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full" style={{ background: EMERALD_GRADIENT }}>
+            <CheckCircle2 className="h-3.5 w-3.5" />
           </span>
           <span>{item}</span>
         </li>
@@ -249,42 +239,27 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
-function HeroButton({
-  to,
-  children,
-  variant = "solid",
-}: {
-  to: string;
-  children: ReactNode;
-  variant?: "solid" | "outline";
-}) {
+function HeroButton({ to, children, variant = "solid" }: { to: string; children: ReactNode; variant?: "solid" | "outline" }) {
   return (
     <Link
       to={to}
-      data-no-contrast-guard
+      data-pm-emerald
       className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold transition-transform hover:-translate-y-0.5 sm:w-auto"
       style={{
         background: variant === "solid" ? EMERALD_GRADIENT : "rgba(255,255,255,0.08)",
         borderColor: "rgba(255,255,255,0.48)",
         color: WHITE,
-        WebkitTextFillColor: WHITE,
       }}
     >
-      <span style={{ color: WHITE, WebkitTextFillColor: WHITE }}>{children}</span>
-      <ArrowRight className="h-4 w-4" style={{ color: WHITE, stroke: WHITE }} />
+      <span>{children}</span>
+      <ArrowRight className="h-4 w-4" />
     </Link>
   );
 }
 
-/* ------------------------------------------------------------------ */
 export default function PropertyManagement() {
   return (
-    <div
-      data-brand-emerald-page
-      data-service-page="property-management"
-      data-pm-page
-      style={{ background: CHAMPAGNE }}
-    >
+    <div data-service-page="property-management" data-pm-page style={{ background: CHAMPAGNE }}>
       <SEOHead
         title="Property Management Dubai | JBJ Global Real Estate"
         description="Premium property management in Dubai and the UAE with tenant care, maintenance, financial reporting, compliance, and asset stewardship."
@@ -293,123 +268,106 @@ export default function PropertyManagement() {
 
       <style>{`
         [data-pm-page], [data-pm-page] * { box-sizing: border-box; }
-        [data-pm-page] [data-surface="pearl"],
-        [data-pm-page] [data-surface="pearl"] *:not(svg):not(path),
-        [data-pm-page] [data-allow-ink],
-        [data-pm-page] [data-allow-ink] *:not(svg):not(path) {
+        [data-pm-page] { background: ${CHAMPAGNE} !important; }
+        [data-pm-page] main[data-service-body] {
+          background: ${CHAMPAGNE} !important;
+          background-image: linear-gradient(180deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_DEEP} 100%) !important;
+        }
+        [data-service-page="property-management"] [data-pm-panel],
+        [data-service-page="property-management"] [data-pm-panel] *:not(svg):not(path):not(line):not(polyline):not(circle):not(rect):not([data-pm-emerald]):not([data-pm-emerald] *):not([data-pm-toc-button]):not([data-pm-toc-button] *) {
           color: ${INK} !important;
           -webkit-text-fill-color: ${INK} !important;
         }
-        [data-pm-page] [data-emerald-surface],
-        [data-pm-page] [data-emerald-surface] *:not(input):not(textarea),
-        [data-pm-page] [data-pm-toc-button],
-        [data-pm-page] [data-pm-toc-button] * {
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald],
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] *:not(input):not(textarea),
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-toc-button],
+        [data-service-page="property-management"] [data-pm-panel] [data-pm-toc-button] *,
+        [data-service-page="property-management"] [data-pm-emerald],
+        [data-service-page="property-management"] [data-pm-emerald] *:not(input):not(textarea),
+        [data-service-page="property-management"] [data-pm-toc-button],
+        [data-service-page="property-management"] [data-pm-toc-button] * {
           color: ${WHITE} !important;
           -webkit-text-fill-color: ${WHITE} !important;
         }
-        [data-pm-page] [data-emerald-surface] svg,
-        [data-pm-page] [data-emerald-surface] path,
-        [data-pm-page] [data-pm-toc-button] svg,
-        [data-pm-page] [data-pm-toc-button] path {
+        [data-service-page="property-management"] [data-pm-emerald] svg,
+        [data-service-page="property-management"] [data-pm-emerald] path,
+        [data-service-page="property-management"] [data-pm-emerald] line,
+        [data-service-page="property-management"] [data-pm-emerald] polyline,
+        [data-service-page="property-management"] [data-pm-toc-button] svg,
+        [data-service-page="property-management"] [data-pm-toc-button] path {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
+        }
+        [data-pm-page] [data-pm-faq-trigger],
+        [data-pm-page] [data-pm-faq-trigger] *:not(svg):not(path) {
+          color: ${INK} !important;
+          -webkit-text-fill-color: ${INK} !important;
+        }
+        [data-pm-page] [data-pm-faq-trigger][data-state="open"],
+        [data-pm-page] [data-pm-faq-trigger][data-state="open"] * {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
         }
         [data-pm-page] [data-pm-faq-trigger][data-state="open"] {
           background: ${EMERALD_GRADIENT} !important;
+        }
+        html body #root [data-service-page="property-management"] [data-pm-toc-button],
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] *,
+        html body #root [data-service-page="property-management"] [data-pm-emerald],
+        html body #root [data-service-page="property-management"] [data-pm-emerald] *:not(input):not(textarea),
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] *:not(input):not(textarea) {
           color: ${WHITE} !important;
           -webkit-text-fill-color: ${WHITE} !important;
         }
-        [data-pm-page] [data-pm-faq-trigger][data-state="open"] *,
-        [data-pm-page] [data-pm-faq-trigger][data-state="open"] svg,
-        [data-pm-page] [data-pm-faq-trigger][data-state="open"] path {
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] svg,
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-emerald] svg,
+        html body #root [data-service-page="property-management"] [data-pm-emerald] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg * {
           color: ${WHITE} !important;
-          -webkit-text-fill-color: ${WHITE} !important;
           stroke: ${WHITE} !important;
         }
-        [data-pm-page] [data-jbj-consultation-form],
-        [data-pm-page] [data-jbj-consultation-form] *:not(svg):not(path) {
-          color: ${INK} !important;
-          -webkit-text-fill-color: ${INK} !important;
-        }
-        [data-pm-page] [data-jbj-consultation-form] .jj-emerald-action,
-        [data-pm-page] [data-jbj-consultation-form] .jj-emerald-action * {
-          color: ${WHITE} !important;
-          -webkit-text-fill-color: ${WHITE} !important;
+        [data-pm-page] [data-jbj-consultation-form] {
+          box-shadow: none !important;
+          border-radius: 24px !important;
         }
       `}</style>
 
-      {/* ============ HERO — TRUE EDGE-TO-EDGE ============ */}
       <section
         data-brand-hero
-        data-emerald-surface
+        data-pm-emerald
         className="relative grid place-items-center overflow-hidden px-4 text-center sm:px-6 lg:px-8"
-        style={{
-          minHeight: "100svh",
-          background: HERO_GRADIENT,
-          color: WHITE,
-          borderRadius: 0,
-        }}
+        style={{ minHeight: "calc(100svh - 0px)", background: HERO_GRADIENT, color: WHITE, borderRadius: 0 }}
       >
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-[0.14]"
-          style={{
-            backgroundImage:
-              "linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.10) 1px, transparent 1px)",
-            backgroundSize: "76px 76px",
-          }}
-        />
+        <div aria-hidden className="absolute inset-0 opacity-[0.14]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.10) 1px, transparent 1px)", backgroundSize: "76px 76px" }} />
         <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center py-28 md:py-32">
-          <div
-            className="mb-7 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em]"
-            style={{ borderColor: "rgba(255,255,255,0.34)", background: "rgba(255,255,255,0.08)" }}
-          >
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em]" style={{ borderColor: "rgba(255,255,255,0.34)", background: "rgba(255,255,255,0.08)" }}>
             <Building2 className="h-4 w-4" />
             Property Management
           </div>
-          <h1
-            className="max-w-[13ch] text-5xl font-light leading-[0.98] sm:text-6xl md:text-7xl lg:text-8xl"
-            style={{ fontFamily: '"Cormorant Garamond", serif', color: WHITE, WebkitTextFillColor: WHITE }}
-          >
+          <h1 className="max-w-[13ch] text-5xl font-light leading-[0.98] sm:text-6xl md:text-7xl lg:text-8xl" style={{ fontFamily: '"Cormorant Garamond", serif', color: WHITE }}>
             Property Management & Asset Stewardship
           </h1>
           <div aria-hidden className="my-8 h-px w-24" style={{ background: "rgba(255,255,255,0.5)" }} />
-          <p
-            className="max-w-2xl text-lg leading-relaxed sm:text-xl md:text-2xl"
-            style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}
-          >
+          <p className="max-w-2xl text-lg leading-relaxed sm:text-xl md:text-2xl" style={{ color: "rgba(255,255,255,0.9)" }}>
             Structured ownership support for leasing, tenant care, maintenance, finance, compliance, and reporting.
           </p>
           <div className="mt-9 flex w-full max-w-xl flex-col items-center justify-center gap-3 sm:flex-row">
             <HeroButton to="#proposal">Request Management Proposal</HeroButton>
-            <HeroButton to="/contact?service=property-management" variant="outline">
-              Speak With a Manager
-            </HeroButton>
+            <HeroButton to="/contact?service=property-management" variant="outline">Speak With a Manager</HeroButton>
           </div>
         </div>
       </section>
 
-      {/* ============ CONTINUOUS CHAMPAGNE BODY ============ */}
-      <main data-service-body style={{ background: CHAMPAGNE }}>
-        {/* TOC — single pearl card */}
+      <main data-service-body>
+        <div aria-hidden className="h-4 w-full" style={{ background: `linear-gradient(90deg, ${GOLD}, #F4E7C8, ${GOLD})` }} />
+
         <section className="pt-14 md:pt-20">
-          <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-            <div
-              data-surface="pearl"
-              data-allow-ink
-              className="rounded-3xl border p-6 md:p-10"
-              style={{
-                background: PEARL,
-                borderColor: PEARL_BORDER,
-                boxShadow: "0 30px 60px -40px rgba(6,78,59,0.25), inset 0 1px 0 rgba(255,255,255,0.85)",
-              }}
-            >
-              <h2
-                className="mb-6 text-center text-2xl font-semibold md:text-3xl"
-                style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}
-              >
-                Table of Contents
-              </h2>
+          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div data-pm-panel className="rounded-3xl border p-6 md:p-9" style={{ background: PANEL_GRADIENT, borderColor: "rgba(184,149,85,0.42)", boxShadow: "0 24px 56px -36px rgba(44,31,13,0.34)" }}>
+              <h2 className="mb-6 text-center text-2xl font-semibold md:text-3xl" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>Table of Contents</h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {tocSections.map((section, index) => {
                   const Icon = section.icon;
@@ -419,15 +377,10 @@ export default function PropertyManagement() {
                       type="button"
                       data-pm-toc-button
                       onClick={() => scrollToId(section.id)}
-                      className="grid min-h-[74px] grid-cols-[34px_1fr_20px] items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold shadow-[0_12px_26px_-20px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5"
+                      className="grid min-h-[74px] grid-cols-[38px_1fr_20px] items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold transition-transform hover:-translate-y-0.5"
                       style={{ background: EMERALD_GRADIENT, border: "1px solid rgba(255,255,255,0.18)", color: WHITE }}
                     >
-                      <span
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold"
-                        style={{ background: "rgba(255,255,255,0.16)" }}
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[11px] font-bold" style={{ background: "rgba(255,255,255,0.18)" }}>{String(index + 1).padStart(2, "0")}</span>
                       <span className="leading-tight">{section.label}</span>
                       <Icon className="h-4 w-4" />
                     </button>
@@ -438,115 +391,86 @@ export default function PropertyManagement() {
           </div>
         </section>
 
-        <PearlSection
-          id="overview"
-          eyebrow="Overview"
-          title="Management Overview"
-          text="A single accountable operating model for owners who want their asset protected, leased correctly, maintained properly, and reported with clarity."
-        >
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {[
-              { title: "Clients We Serve", points: ["Individual investors", "Portfolio owners", "Family offices", "Overseas owners", "Corporate landlords"] },
-              { title: "Designed to Protect", points: ["Rental yield", "Tenant quality", "Maintenance standards", "Compliance records", "Asset condition"] },
-            ].map((item) => (
-              <div key={item.title}>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>
-                  {item.title}
-                </h3>
-                <BulletList items={item.points} />
-              </div>
-            ))}
+        <Section id="overview" eyebrow="Overview" title="Management Overview" text="A single accountable operating model for owners who want their asset protected, leased correctly, maintained properly, and reported with clarity.">
+          <div className="grid grid-cols-1 gap-7 md:grid-cols-2">
+            <EmeraldTile>
+              <h3 className="mb-4 text-xl font-semibold">Clients We Serve</h3>
+              <ul className="space-y-3 text-sm font-semibold leading-relaxed">
+                {['Individual investors', 'Portfolio owners', 'Family offices', 'Overseas owners', 'Corporate landlords'].map((item) => <li key={item} className="flex items-center gap-3"><CheckCircle2 className="h-4 w-4 shrink-0" />{item}</li>)}
+              </ul>
+            </EmeraldTile>
+            <EmeraldTile>
+              <h3 className="mb-4 text-xl font-semibold">Designed to Protect</h3>
+              <ul className="space-y-3 text-sm font-semibold leading-relaxed">
+                {['Rental yield', 'Tenant quality', 'Maintenance standards', 'Compliance records', 'Asset condition'].map((item) => <li key={item} className="flex items-center gap-3"><CheckCircle2 className="h-4 w-4 shrink-0" />{item}</li>)}
+              </ul>
+            </EmeraldTile>
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="metrics"
-          eyebrow="Performance"
-          title="Performance Metrics"
-          text="Operational indicators are tracked to keep ownership decisions clear and measurable."
-        >
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-8">
-            {metrics.map((metric) => (
-              <div key={metric.label} className="flex flex-col items-center text-center">
-                <EmeraldIcon icon={metric.icon} large />
-                <p className="mt-4 text-3xl font-bold" style={{ color: EMERALD, WebkitTextFillColor: EMERALD }}>
-                  {metric.value}
-                </p>
-                <p className="mt-1 text-sm font-semibold" style={{ color: INK }}>
-                  {metric.label}
-                </p>
+        <Section id="metrics" eyebrow="Performance" title="Performance Metrics" text="Operational indicators are tracked to keep ownership decisions clear and measurable.">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.9fr_1.6fr]">
+            <EmeraldTile className="flex min-h-[240px] flex-col justify-between">
+              <BarChart3 className="h-10 w-10" />
+              <div>
+                <p className="text-4xl font-semibold" style={{ fontFamily: '"Cormorant Garamond", serif' }}>Owner Clarity</p>
+                <p className="mt-3 text-sm leading-relaxed">Each metric is tied to rent, maintenance, compliance, or reporting accountability.</p>
               </div>
-            ))}
+            </EmeraldTile>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {metrics.map((metric) => {
+                const Icon = metric.icon;
+                return (
+                  <EmeraldTile key={metric.label} className="min-h-[136px]">
+                    <Icon className="h-5 w-5" />
+                    <p className="mt-4 text-3xl font-bold">{metric.value}</p>
+                    <p className="mt-1 text-sm font-semibold leading-tight">{metric.label}</p>
+                  </EmeraldTile>
+                );
+              })}
+            </div>
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="services"
-          eyebrow="Scope"
-          title="Service Scope"
-          text="Residential, commercial, leasing, and tenant-care workstreams are handled in one owner-first system."
-        >
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {serviceScope.map((service, idx) => (
-              <div
-                key={service.title}
-                className={idx > 1 ? "pt-8 md:pt-0 md:border-l-0" : ""}
-                style={{
-                  borderTop: idx > 1 ? `1px solid ${PEARL_BORDER}` : undefined,
-                }}
-              >
+        <Section id="services" eyebrow="Scope" title="Service Scope" text="Residential, commercial, leasing, and tenant-care workstreams are handled in one owner-first system.">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-9 md:grid-cols-2">
+            {serviceScope.map((service) => (
+              <div key={service.title} className="grid grid-cols-[48px_1fr] gap-4">
                 <EmeraldIcon icon={service.icon} />
-                <h3 className="mt-4 text-lg font-semibold" style={{ color: INK }}>
-                  {service.title}
-                </h3>
-                <div className="mt-4">
-                  <BulletList items={service.points} />
+                <div>
+                  <h3 className="text-lg font-semibold" style={{ color: INK }}>{service.title}</h3>
+                  <div className="mt-4"><BulletList items={service.points} /></div>
                 </div>
               </div>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="leasing"
-          eyebrow="Placement"
-          title="Leasing & Tenant Placement"
-          text="Every leasing action is structured around market positioning, tenant quality, compliant paperwork, and clean handover records."
-        >
-          <div className="space-y-4">
+        <Section id="leasing" eyebrow="Placement" title="Leasing & Tenant Placement" text="Every leasing action is structured around market positioning, tenant quality, compliant paperwork, and clean handover records.">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
             {["Market rent assessment", "Pricing and listing preparation", "Tenant screening", "Contract and Ejari coordination", "Handover and condition report"].map((step, index) => (
-              <div key={step} className="flex items-center gap-4">
+              <div key={step} className="flex items-start gap-3 md:block md:text-center">
                 <NumberBadge value={index + 1} />
-                <p className="font-semibold" style={{ color: INK }}>{step}</p>
+                <p className="mt-0 font-semibold leading-tight md:mt-4" style={{ color: INK }}>{step}</p>
               </div>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="finance"
-          eyebrow="Finance"
-          title="Financial Management"
-          text="Owners receive disciplined collection tracking, expense visibility, and monthly reporting."
-        >
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <Section id="finance" eyebrow="Finance" title="Financial Management" text="Owners receive disciplined collection tracking, expense visibility, and monthly reporting.">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {financeItems.map((item) => (
-              <div key={item.title}>
-                <EmeraldIcon icon={item.icon} />
-                <h3 className="mt-4 font-semibold" style={{ color: INK }}>{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: INK_SOFT }}>{item.text}</p>
-              </div>
+              <EmeraldTile key={item.title}>
+                <item.icon className="h-6 w-6" />
+                <h3 className="mt-4 font-semibold">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed">{item.text}</p>
+              </EmeraldTile>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="operations"
-          eyebrow="Operations"
-          title="Maintenance & Operations"
-          text="Every action has an approval path, visible owner updates, and clean maintenance records."
-        >
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <Section id="operations" eyebrow="Operations" title="Maintenance & Operations" text="Every action has an approval path, visible owner updates, and clean maintenance records.">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {operationsItems.map((item) => (
               <div key={item.title}>
                 <h3 className="font-semibold" style={{ color: INK }}>{item.title}</h3>
@@ -554,26 +478,21 @@ export default function PropertyManagement() {
               </div>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection id="workflow" eyebrow="Workflow" title="Management Workflow">
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-5 md:gap-4">
+        <Section id="workflow" eyebrow="Workflow" title="Management Workflow">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
             {workflow.map((step, index) => (
-              <div key={step.label} className="flex flex-col items-center text-center">
+              <EmeraldTile key={step.label} className="flex items-center gap-4 sm:flex-col sm:text-center">
                 <NumberBadge value={index + 1} />
-                <div className="mt-3"><EmeraldIcon icon={step.icon} /></div>
-                <p className="mt-3 text-sm font-semibold leading-tight" style={{ color: INK }}>{step.label}</p>
-              </div>
+                <step.icon className="h-6 w-6" />
+                <p className="text-sm font-semibold leading-tight">{step.label}</p>
+              </EmeraldTile>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="reporting"
-          eyebrow="Transparency"
-          title="Reporting & Transparency"
-          text="The reporting structure keeps owners informed without chasing fragmented updates."
-        >
+        <Section id="reporting" eyebrow="Transparency" title="Reporting & Transparency" text="The reporting structure keeps owners informed without chasing fragmented updates.">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {reporting.map((item, index) => (
               <div key={item} className="flex items-center gap-4">
@@ -582,71 +501,68 @@ export default function PropertyManagement() {
               </div>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection id="trust" eyebrow="Governance" title="Trust & Governance">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <Section id="trust" eyebrow="Governance" title="Trust & Governance">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {trustSignals.map((item) => (
-              <div key={item.title} className="text-center">
-                <div className="inline-flex"><EmeraldIcon icon={item.icon} large /></div>
-                <h3 className="mt-4 font-semibold" style={{ color: INK }}>{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: INK_SOFT }}>{item.text}</p>
-              </div>
+              <EmeraldTile key={item.title} className="text-center">
+                <div className="inline-flex"><item.icon className="h-7 w-7" /></div>
+                <h3 className="mt-4 font-semibold">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed">{item.text}</p>
+              </EmeraldTile>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection
-          id="fees"
-          eyebrow="Fees"
-          title="Service Fees & Structure"
-          text="Fees are tailored after asset review, property type, portfolio size, occupancy position, and required service scope are confirmed."
-        >
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <Section id="fees" eyebrow="Fees" title="Service Fees & Structure" text="Fees are tailored after asset review, property type, portfolio size, occupancy position, and required service scope are confirmed.">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {["Performance-aware structure", "Transparent terms", "Portfolio-scaled packages"].map((item, index) => (
-              <div key={item} className="flex flex-col items-center text-center">
+              <EmeraldTile key={item} className="text-center">
                 <NumberBadge value={index + 1} />
-                <p className="mt-4 text-sm font-semibold" style={{ color: INK }}>{item}</p>
-              </div>
+                <p className="mt-4 text-sm font-semibold">{item}</p>
+              </EmeraldTile>
             ))}
           </div>
-        </PearlSection>
+        </Section>
 
-        <PearlSection id="proposal" eyebrow="Proposal" title="Request a Property Management Proposal" text="Use the approved consultation form and our team will route your request to the property management desk.">
+        <Section id="proposal" eyebrow="Proposal" title="Request a Property Management Proposal" text="This form is for property owners who already have an asset and need management, leasing, reporting, tenant care, or maintenance support.">
           <ConsultationRequestForm
-            title=""
+            title="Property Management Proposal"
             subtitle=""
             serviceOptions={managementServices}
             defaultServiceNeeded="Full Property Management"
-            messagePlaceholder="Tell us the property type, area, occupancy status, and what you need managed."
+            messagePlaceholder="Tell us the property type, location, current occupancy, tenant status, maintenance needs, reporting expectations, and preferred start date."
             formSource="property-management-proposal"
+            variant="property-management"
+            showHeader={false}
             className="max-w-none"
           />
-        </PearlSection>
+        </Section>
 
-        <PearlSection id="faq" eyebrow="FAQ" title="Frequently Asked Questions" className="pb-16 md:pb-24">
+        <Section id="faq" eyebrow="FAQ" title="Frequently Asked Questions">
           <Accordion type="single" collapsible className="space-y-3">
             {faqData.map((faq, index) => (
-              <AccordionItem
-                key={faq.q}
-                value={`faq-${index}`}
-                className="overflow-hidden rounded-xl border"
-                style={{ borderColor: PEARL_BORDER, background: "rgba(255,253,250,0.6)" }}
-              >
-                <AccordionTrigger
-                  data-pm-faq-trigger
-                  className="min-h-[64px] px-5 py-4 text-left font-semibold hover:no-underline"
-                  style={{ color: INK, WebkitTextFillColor: INK }}
-                >
-                  {faq.q}
-                </AccordionTrigger>
-                <AccordionContent className="px-5 pb-5 pt-0">
-                  <p className="text-sm leading-relaxed" style={{ color: INK_SOFT }}>{faq.a}</p>
-                </AccordionContent>
+              <AccordionItem key={faq.q} value={`faq-${index}`} className="overflow-hidden rounded-2xl border" style={{ borderColor: "rgba(184,149,85,0.38)", background: "rgba(255,253,248,0.72)" }}>
+                <AccordionTrigger data-pm-faq-trigger className="min-h-[64px] px-5 py-4 text-left font-semibold hover:no-underline">{faq.q}</AccordionTrigger>
+                <AccordionContent className="px-5 pb-5 pt-0"><p className="text-sm leading-relaxed" style={{ color: INK_SOFT }}>{faq.a}</p></AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-        </PearlSection>
+        </Section>
+
+        <section id="ready-to-get-started" className="scroll-mt-28 pb-16 pt-6 md:pb-24 md:pt-8">
+          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+            <div data-pm-emerald className="rounded-3xl border p-7 text-center md:p-10" style={{ background: EMERALD_GRADIENT, borderColor: "rgba(255,255,255,0.22)", color: WHITE }}>
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em]">Ready to Get Started</p>
+              <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-semibold md:text-5xl" style={{ fontFamily: '"Cormorant Garamond", serif' }}>Ready to Structure Your Property Management?</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed md:text-base">Share your asset details and our management desk will confirm the correct service path, reporting structure, and next step.</p>
+              <div className="mt-7 flex justify-center">
+                <HeroButton to="#proposal">Request Management Proposal</HeroButton>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );
