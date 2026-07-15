@@ -671,6 +671,11 @@ const MeetTheTeam: React.FC = () => {
         }}
         isInternalUser={isInternalUser}
       />
+      <MIPreFooterCard
+        title="Ready to work with our team?"
+        subtitle="Speak with a JBJ advisor about your next Dubai property move."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 };
