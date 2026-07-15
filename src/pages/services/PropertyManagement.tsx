@@ -351,7 +351,51 @@ export default function PropertyManagement() {
           padding-top: 0.9rem !important;
           padding-bottom: 0.9rem !important;
         }
+        /* PM form: keep only the outer form container border; strip all inner
+           field borders and unify their background to the gold-champagne tone. */
+        [data-pm-page] [data-jbj-consultation-form] input,
+        [data-pm-page] [data-jbj-consultation-form] textarea,
+        [data-pm-page] [data-jbj-consultation-form] select,
+        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"],
+        [data-pm-page] [data-jbj-consultation-form] [data-field-group],
+        [data-pm-page] [data-jbj-consultation-form] .form-checkbox-row,
+        [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger],
+        [data-pm-page] [data-jbj-consultation-form] [data-light-select-trigger] {
+          border: 0 !important;
+          box-shadow: none !important;
+          outline: none !important;
+          background: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
+          background-color: #F3E4C2 !important;
+        }
+        [data-pm-page] [data-jbj-consultation-form] input:focus,
+        [data-pm-page] [data-jbj-consultation-form] textarea:focus,
+        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus,
+        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus-visible {
+          border: 0 !important;
+          box-shadow: none !important;
+          outline: none !important;
+        }
+        /* FAQ: white text on hover as well as active/open state */
+        [data-pm-page] [data-pm-faq-item]:hover {
+          background: ${EMERALD_GRADIENT} !important;
+          border-color: rgba(255,255,255,0.22) !important;
+        }
+        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger],
+        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] *,
+        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer],
+        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer] * {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] svg,
+        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] path,
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] svg,
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] path {
+          color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+        }
       `}</style>
+
 
       <section
         data-mi-hero
