@@ -11,6 +11,7 @@ import { ytd2026 as ytd2026Data, topAreas2026 as topAreas2026Data, topAreas2025 
 import { isRealEstateArticle } from "@/lib/news/realEstateFilter";
 import { MarketIntelligenceHero } from "@/components/market-intelligence/MarketIntelligenceHero";
 import { MarketIntelligenceTableOfContents } from "@/components/market-intelligence/MarketIntelligenceTableOfContents";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 interface MarketNews {
   id: string;
