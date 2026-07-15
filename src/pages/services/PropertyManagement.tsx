@@ -313,6 +313,8 @@ export default function PropertyManagement() {
         }
         html body #root [data-service-page="property-management"] [data-pm-toc-button],
         html body #root [data-service-page="property-management"] [data-pm-toc-button] *,
+        html body #root [data-service-page="property-management"] [data-pm-emerald],
+        html body #root [data-service-page="property-management"] [data-pm-emerald] *:not(input):not(textarea),
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald],
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] *:not(input):not(textarea) {
           color: ${WHITE} !important;
@@ -320,6 +322,8 @@ export default function PropertyManagement() {
         }
         html body #root [data-service-page="property-management"] [data-pm-toc-button] svg,
         html body #root [data-service-page="property-management"] [data-pm-toc-button] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-emerald] svg,
+        html body #root [data-service-page="property-management"] [data-pm-emerald] svg *,
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg,
         html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg * {
           color: ${WHITE} !important;
