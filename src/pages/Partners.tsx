@@ -421,6 +421,11 @@ const Partners = () => {
           </div>
         </section>
       </main>
+      <MIPreFooterCard
+        title="Ready to partner with JBJ?"
+        subtitle="Tell us about your firm and we'll design a partnership that fits."
+        maxWidthClass="max-w-6xl"
+      />
     </div>
   );
 };
