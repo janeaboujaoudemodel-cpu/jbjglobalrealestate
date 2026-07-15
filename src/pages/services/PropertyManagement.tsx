@@ -354,13 +354,15 @@ export default function PropertyManagement() {
         /* PM form: restore a consistent subtle gold border + champagne fill on
            every individual field, while keeping only the outer form container
            as the primary frame. */
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] input:not([type="checkbox"]):not([type="radio"]),
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] textarea,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] select,
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[role="combobox"],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-phone-code-trigger],
-        html body #root [data-service-page="property-management"] [data-jbj-consultation-form] [data-light-select-trigger] {
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] input:not([type="checkbox"]):not([type="radio"]),
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] textarea,
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] select,
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] button[role="combobox"],
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] button[data-jbj-signup-trigger],
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] button[data-phone-code-trigger][data-emerald-action="true"],
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] button[data-phone-code-trigger].jj-cta-gold-metallic,
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] button[data-phone-code-trigger].jj-emerald-action,
+        html body #root div[data-service-page="property-management"] div[data-jbj-consultation-form] [data-light-select-trigger] {
           border: 1px solid rgba(184,149,85,0.38) !important;
           border-radius: 12px !important;
           background: #F7F2EA !important;
