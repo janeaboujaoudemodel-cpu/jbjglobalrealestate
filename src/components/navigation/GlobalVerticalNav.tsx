@@ -169,12 +169,12 @@ const NAV_ITEMS: NavItem[] = [
   // ── Services ──
   { label: "All Services", href: "/services", icon: Briefcase, megaMenu: 'services', section: "SERVICES" },
   { label: "Property Management", href: "/services/property-management", icon: Key },
-  { label: "Golden Visa", href: "/guides/golden-visa-uae", icon: Award },
-  { label: "Mortgage Advisory", href: "/partners/mortgage", icon: Landmark },
-  { label: "Legal Services", href: "/partners/legal", icon: Gavel },
-  { label: "Visa Services", href: "/partners/visa-services", icon: Globe },
-  { label: "Company Setup", href: "/partners/company-setup", icon: Building },
-  { label: "Valuation", href: "/sell/valuation", icon: DollarSign },
+  { label: "Golden Visa", href: "/services/golden-visa", icon: Award },
+  { label: "Mortgage Advisory", href: "/services/mortgage-advisory", icon: Landmark },
+  { label: "Legal Services", href: "/services/legal-services", icon: Gavel },
+  { label: "Visa Services", href: "/services/visa-services", icon: Globe },
+  { label: "Company Setup", href: "/services/company-setup", icon: Building },
+  { label: "Valuation", href: "/services/valuation", icon: DollarSign },
   { label: "Selling Advisory", href: "/services/selling-advisory", icon: TrendingUp },
   { label: "Short-term Rentals", href: "/services/short-term-rentals", icon: CalendarClock },
   { label: "Concierge", href: "/services/concierge", icon: Handshake },
@@ -194,7 +194,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Complaint Procedures", href: "/services/complaint-procedures", icon: ScrollText },
   { label: "Customer Happiness", href: "/services/customer-happiness-center", icon: SmilePlus },
   { label: "Testimonials", href: "/services/testimonials", icon: Heart },
-  { label: "Referral Partner", href: "/referral-partner", icon: Handshake },
+  { label: "Referral Partner", href: "/services/referral-partner", icon: Handshake },
 
   // ── Broker & Academy ──
   { label: "Broker Portal", href: "/broker/portal", icon: Handshake, section: "BROKER & ACADEMY", megaMenu: 'broker' },
@@ -388,9 +388,11 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
   services: [
     { label: 'All Services', icon: Briefcase, href: '/services' },
     { label: 'Property Management', icon: Key, href: '/services/property-management' },
-    { label: 'Golden Visa', icon: Award, href: '/guides/golden-visa-uae' },
-    { label: 'Mortgage Advisory', icon: Landmark, href: '/partners/mortgage' },
-    { label: 'Property Valuation', icon: DollarSign, href: '/sell/valuation' },
+    { label: 'Golden Visa', icon: Award, href: '/services/golden-visa' },
+    { label: 'Mortgage Advisory', icon: Landmark, href: '/services/mortgage-advisory' },
+    { label: 'Legal Services', icon: Gavel, href: '/services/legal-services' },
+    { label: 'Visa Services', icon: Globe, href: '/services/visa-services' },
+    { label: 'Property Valuation', icon: DollarSign, href: '/services/valuation' },
     { label: 'Selling Advisory', icon: TrendingUp, href: '/services/selling-advisory' },
     { label: 'Short-term Rentals', icon: CalendarClock, href: '/services/short-term-rentals' },
     { label: 'Currency Exchange', icon: HandCoins, href: '/services/currency-exchange' },
@@ -788,7 +790,7 @@ export default function GlobalVerticalNav() {
     // The Insights tree has parent and child routes side-by-side in the same
     // expanded group. Keep parent hubs exact-only so a child like
     // /market-intelligence/areas cannot also light up /market-intelligence.
-    if (hrefPath === "/market-intelligence" || hrefPath === "/guides") return pathname === hrefPath;
+    if (hrefPath === "/market-intelligence" || hrefPath === "/guides" || hrefPath === "/services") return pathname === hrefPath;
 
     if (hrefPath === "/properties") return pathname === "/properties" || pathname.startsWith("/properties/");
     // Prefix matching for toolkit sub-routes (stamp-generator, corporate-suite, etc.)
@@ -1271,7 +1273,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         // sibling links cannot both light up (e.g. /market-intelligence
                         // and /market-intelligence/areas on the Areas route).
                         const path = location.pathname;
-                        const exactOnlyHubs = new Set(["/market-intelligence", "/guides"]);
+                        const exactOnlyHubs = new Set(["/market-intelligence", "/guides", "/services"]);
                         const sectionMatches = items
                           .map(it => hrefPathname(it.href))
                           .filter(h => h && h !== '#' && (path === h || (!exactOnlyHubs.has(h) && path.startsWith(h + '/'))))

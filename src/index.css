@@ -36007,3 +36007,99 @@ html body #root main.jj-main-shell [data-service-page="property-management"] [da
   left: auto !important;
   transform: none !important;
 }
+
+/* FINAL SITEWIDE EMERALD CONTRAST CONTRACT — no black text/icons on emerald. */
+html body #root :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-pm-emerald],
+  [data-pm-toc-button],
+  .jj-surface-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic
+),
+html body #root :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-pm-emerald],
+  [data-pm-toc-button],
+  .jj-surface-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic
+):is(:hover, :focus, :focus-visible, :active, [data-state="open"], [data-state="active"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+}
+
+html body #root :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-pm-emerald],
+  [data-pm-toc-button],
+  .jj-surface-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic
+) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, button, div, small, strong, em, b, label),
+html body #root :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-pm-emerald],
+  [data-pm-toc-button],
+  .jj-surface-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic
+):is(:hover, :focus, :focus-visible, :active, [data-state="open"], [data-state="active"]) :is(*, h1, h2, h3, h4, h5, h6, p, span, a, button, div, small, strong, em, b, label) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+html body #root :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-pm-emerald],
+  [data-pm-toc-button],
+  .jj-surface-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic
+) :is(svg, path, line, polyline, polygon, circle, rect, [class*="lucide"]),
+html body #root :is(
+  [data-surface="emerald"],
+  [data-emerald="true"],
+  [data-pm-emerald],
+  [data-pm-toc-button],
+  .jj-surface-emerald,
+  .jj-emerald-card,
+  .jj-emerald-metallic,
+  .jj-emerald-action,
+  .jj-cta-emerald,
+  .jj-pill-emerald,
+  .jj-pill-emerald-metallic
+) :is(svg, path, line, polyline, polygon, circle, rect, [class*="lucide"]) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
