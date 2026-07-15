@@ -229,11 +229,20 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const needsHeaderSpacing = usesStandalonePortalChrome ? false : shouldAddHeaderSpacing(location.pathname);
 
   useEffect(() => {
+    if (location.pathname === '/services/property-management') {
+      setLayoutGuardTriggered(false);
+      return;
+    }
     if (isBackOfficeRoute || !isServiceRoute) {
       setLayoutGuardTriggered(false);
       return;
     }
     const timer = window.setTimeout(() => {
+      const explicitServiceBody = document.querySelector('[data-service-body]');
+      if (explicitServiceBody instanceof HTMLElement && explicitServiceBody.offsetHeight > 120) {
+        setLayoutGuardTriggered(false);
+        return;
+      }
       const snapshot = getServiceLayoutSnapshot();
       if (hasVisibleServiceBody(snapshot)) {
         setLayoutGuardTriggered(false);
