@@ -234,6 +234,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       return;
     }
     const timer = window.setTimeout(() => {
+      const explicitServiceBody = document.querySelector('[data-service-body]');
+      if (explicitServiceBody instanceof HTMLElement && explicitServiceBody.offsetHeight > 120) {
+        setLayoutGuardTriggered(false);
+        return;
+      }
       const snapshot = getServiceLayoutSnapshot();
       if (hasVisibleServiceBody(snapshot)) {
         setLayoutGuardTriggered(false);
