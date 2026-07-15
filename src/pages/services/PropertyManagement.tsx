@@ -5,189 +5,169 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+import ConsultationRequestForm from "@/components/ConsultationRequestForm";
 import { SEOHead } from "@/components/SEOHead";
+import { scrollToId } from "@/lib/scroll";
 import {
   ArrowRight,
   Award,
   BarChart3,
-  BookOpen,
-  Briefcase,
+  BriefcaseBusiness,
   Building2,
-  Calendar,
+  CalendarClock,
   CheckCircle2,
-  ClipboardList,
+  ClipboardCheck,
   DollarSign,
-  Eye,
   FileText,
-  Globe,
   Headphones,
-  Key,
+  Home,
+  KeyRound,
   Percent,
-  RefreshCw,
-  Scale,
-  Settings,
-  Shield,
-  Star,
+  ReceiptText,
+  RefreshCcw,
+  ShieldCheck,
+  Sparkle,
   Timer,
-  TrendingUp,
-  UserCheck,
-  Users,
+  UsersRound,
   Wrench,
   type LucideIcon,
 } from "lucide-react";
 import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { scrollToId } from "@/lib/scroll";
-
-const scrollTo = (id: string) => scrollToId(id);
 
 const INK = "#1A1A1A";
 const EMERALD = "#064E3B";
-const EMERALD_DARK = "#042c1c";
+const EMERALD_DARK = "#042C1C";
 const BLACK = "#000000";
+const WHITE = "#FFFFFF";
 const CHAMPAGNE = "#F7F2EA";
 const CHAMPAGNE_RAISED = "#FFFDF8";
-const WHITE = "#FFFFFF";
 const EMERALD_GRADIENT = `linear-gradient(135deg, ${EMERALD} 0%, ${EMERALD_DARK} 58%, ${BLACK} 100%)`;
+const HERO_GRADIENT = `radial-gradient(95% 72% at 50% 0%, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0) 58%), linear-gradient(180deg, ${EMERALD} 0%, ${EMERALD_DARK} 50%, ${BLACK} 100%)`;
 
 const tocSections = [
-  { id: "overview", label: "Management Overview" },
-  { id: "stats", label: "Performance Metrics" },
-  { id: "residential", label: "Residential Management" },
-  { id: "commercial", label: "Commercial Management" },
-  { id: "leasing", label: "Leasing & Tenant Placement" },
-  { id: "financial", label: "Financial Management" },
-  { id: "maintenance", label: "Maintenance & Operations" },
-  { id: "tenant-mgmt", label: "Tenant Management" },
-  { id: "renewals", label: "Renewals & Retention" },
-  { id: "compliance", label: "Compliance & Governance" },
-  { id: "workflow", label: "Management Workflow" },
-  { id: "reporting", label: "Reporting & Transparency" },
-  { id: "onboarding", label: "Onboarding Process" },
-  { id: "trust", label: "Trust & Credentials" },
-  { id: "fees", label: "Service Fees" },
-  { id: "faq", label: "Questions" },
+  { id: "overview", label: "Management Overview", icon: Home },
+  { id: "metrics", label: "Performance Metrics", icon: BarChart3 },
+  { id: "services", label: "Service Scope", icon: ClipboardCheck },
+  { id: "leasing", label: "Leasing & Tenant Placement", icon: KeyRound },
+  { id: "finance", label: "Financial Management", icon: ReceiptText },
+  { id: "operations", label: "Maintenance & Operations", icon: Wrench },
+  { id: "workflow", label: "Workflow", icon: RefreshCcw },
+  { id: "reporting", label: "Reporting", icon: FileText },
+  { id: "trust", label: "Trust & Governance", icon: ShieldCheck },
+  { id: "fees", label: "Fees", icon: Percent },
+  { id: "proposal", label: "Proposal Request", icon: CalendarClock },
+  { id: "faq", label: "Questions", icon: Headphones },
 ];
 
-const performanceStats = [
-  { value: "98%", label: "Rent Collection Rate", icon: DollarSign },
-  { value: "<24h", label: "Emergency Response", icon: Timer },
-  { value: "95%", label: "Tenant Retention", icon: Users },
-  { value: "100%", label: "Regulatory Compliance", icon: Shield },
-  { value: "4.9/5", label: "Owner Satisfaction", icon: Star },
-  { value: "500+", label: "Units Managed", icon: Building2 },
+const metrics = [
+  { value: "98%", label: "Rent collection discipline", icon: DollarSign },
+  { value: "<24h", label: "Urgent response target", icon: Timer },
+  { value: "95%", label: "Tenant retention focus", icon: UsersRound },
+  { value: "100%", label: "Documented compliance flow", icon: ShieldCheck },
+  { value: "500+", label: "Managed-unit experience", icon: Building2 },
+  { value: "4.9/5", label: "Owner service standard", icon: Award },
 ];
 
-const serviceModules = [
+const serviceScope = [
   {
-    icon: Key,
+    title: "Residential Management",
+    icon: Home,
+    points: ["Tenant sourcing and screening", "Lease renewals and Ejari coordination", "Move-in and move-out inspections", "Rent collection and owner updates"],
+  },
+  {
+    title: "Commercial Management",
+    icon: BriefcaseBusiness,
+    points: ["Commercial leasing strategy", "Occupier retention planning", "Contract coordination", "Performance and occupancy reporting"],
+  },
+  {
     title: "Leasing & Placement",
-    items: ["Market-rate pricing analysis", "Multi-channel tenant sourcing", "Background & credit screening", "Ejari registration & contract execution"],
+    icon: KeyRound,
+    points: ["Market rent assessment", "Listing preparation", "Qualified tenant shortlisting", "Handover documentation"],
   },
   {
-    icon: Wrench,
-    title: "Maintenance & Operations",
-    items: ["24/7 emergency coordination", "Preventive maintenance scheduling", "Vetted vendor management", "Cost-approved repair protocols"],
+    title: "Tenant Care",
+    icon: UsersRound,
+    points: ["Dedicated communication workflow", "Complaint resolution tracking", "Inspection coordination", "Renewal reminders"],
   },
-  {
-    icon: DollarSign,
-    title: "Financial Reporting",
-    items: ["Monthly income/expense statements", "Rent collection & follow-up", "Service charge monitoring", "Annual tax-ready summaries"],
-  },
-  {
-    icon: Users,
-    title: "Tenant Management",
-    items: ["Move-in/move-out inspections", "Tenant communication management", "Complaint resolution protocols", "Satisfaction surveys & retention"],
-  },
-  {
-    icon: RefreshCw,
-    title: "Renewals & Retention",
-    items: ["Lease expiry tracking & alerts", "Market-rate renewal negotiations", "Retention incentive strategies", "Seamless contract transitions"],
-  },
-  {
-    icon: Scale,
-    title: "Compliance & Governance",
-    items: ["RERA regulatory alignment", "DLD reporting requirements", "Insurance & liability management", "Legal coordination with licensed firms"],
-  },
-];
-
-const leasingSteps = [
-  { title: "Market Assessment", desc: "Area benchmarking and competitive analysis" },
-  { title: "Pricing Strategy", desc: "Data-driven rental rate optimization" },
-  { title: "Professional Photography & Listing", desc: "Multi-platform exposure across portals" },
-  { title: "Tenant Screening", desc: "Background, credit, and reference verification" },
-  { title: "Contract Drafting", desc: "RERA-compliant tenancy agreements" },
-  { title: "Ejari Registration", desc: "Official tenancy contract registration" },
-  { title: "Handover Documentation", desc: "Condition reports and key handover protocol" },
-];
-
-const onboardingSteps = [
-  { step: 1, title: "Asset Review & Valuation", icon: Eye, desc: "Portfolio review, condition check, market position and management scope." },
-  { step: 2, title: "Property Inspection", icon: ClipboardList, desc: "On-site assessment with photo documentation and maintenance priorities." },
-  { step: 3, title: "Management Agreement", icon: FileText, desc: "Clear service levels, approval thresholds, fee structure and reporting cadence." },
-  { step: 4, title: "Documentation Collection", icon: BookOpen, desc: "Title deeds, contracts, service charge records and compliance documents." },
-  { step: 5, title: "Market Strategy Activation", icon: BarChart3, desc: "Pricing, presentation, listing distribution and tenant sourcing plan." },
-  { step: 6, title: "Tenant Placement or Transition", icon: UserCheck, desc: "Screening, contract execution, handover and tenant communication setup." },
-  { step: 7, title: "Reporting Initiation", icon: Calendar, desc: "Monthly activity, finance, maintenance and occupancy reporting begins." },
 ];
 
 const financeItems = [
-  { icon: DollarSign, label: "Rent collection & follow-up", desc: "Automated tracking with escalation protocols." },
-  { icon: Shield, label: "Escrow tracking", desc: "Where applicable per regulatory requirements." },
-  { icon: ClipboardList, label: "Expense management", desc: "Categorized and approved expenditures." },
-  { icon: BarChart3, label: "Service charge monitoring", desc: "Benchmarked against community averages." },
-  { icon: Briefcase, label: "Vendor payments", desc: "Timely processing with full documentation." },
-  { icon: Calendar, label: "Annual income summary", desc: "Tax-ready consolidated reports." },
+  { icon: DollarSign, title: "Rent Collection", text: "Collection tracking, reminders, escalation, and owner confirmation." },
+  { icon: ReceiptText, title: "Expense Control", text: "Approved spending thresholds with invoices and vendor records." },
+  { icon: BarChart3, title: "Monthly Statements", text: "Income, expenses, net position, and maintenance summaries." },
+  { icon: Percent, title: "Service Charge Review", text: "Community service charges monitored against asset performance." },
 ];
 
-const reportingItems = [
-  { icon: BarChart3, title: "Monthly Financial Summary", desc: "Income, expenses, net position and variance analysis." },
-  { icon: Wrench, title: "Maintenance Log", desc: "Issue types, vendor status, cost breakdowns and dates." },
-  { icon: UserCheck, title: "Tenant Updates", desc: "Occupancy, communication, compliance and satisfaction status." },
-  { icon: RefreshCw, title: "Renewal Alerts", desc: "Key dates, renewal recommendations and market comparisons." },
-  { icon: Eye, title: "Occupancy Performance", desc: "Vacancy duration, positioning and utilization rate." },
-  { icon: TrendingUp, title: "Portfolio Review", desc: "Year-over-year performance and strategic outlook." },
+const operationsItems = [
+  { title: "Preventive Maintenance", text: "Scheduled checks for HVAC, plumbing, electrical, fixtures, and common-area responsibilities." },
+  { title: "Emergency Coordination", text: "Urgent vendor dispatch, owner notification, and incident documentation." },
+  { title: "Vendor Governance", text: "Vetted suppliers, transparent quotes, approval thresholds, and completion records." },
+  { title: "Condition Control", text: "Inspection photos, handover reports, and wear-and-tear tracking." },
+];
+
+const workflow = [
+  { label: "Asset Review", icon: Home },
+  { label: "Inspection", icon: ClipboardCheck },
+  { label: "Agreement", icon: FileText },
+  { label: "Activation", icon: Sparkle },
+  { label: "Reporting", icon: BarChart3 },
+];
+
+const reporting = [
+  "Monthly financial statement",
+  "Maintenance log and vendor status",
+  "Tenant communication summary",
+  "Renewal and expiry alerts",
+  "Occupancy and vacancy position",
+  "Portfolio review recommendations",
 ];
 
 const trustSignals = [
-  { icon: Award, title: "RERA Licensed", desc: "Licensed property management operations under Dubai real estate standards." },
-  { icon: Shield, title: "Insured Operations", desc: "Professional coverage and documented vendor procedures." },
-  { icon: Globe, title: "UAE Coverage", desc: "Management support across Dubai, Abu Dhabi and key emirates." },
-  { icon: Headphones, title: "Dedicated Manager", desc: "A single point of contact for every property portfolio." },
+  { icon: ShieldCheck, title: "Compliance First", text: "Dubai property procedures, tenancy documents, and owner approvals are handled through a documented workflow." },
+  { icon: Award, title: "Licensed Standards", text: "Service delivery follows UAE real estate operating standards with clear accountability." },
+  { icon: Headphones, title: "Dedicated Manager", text: "Owners receive one accountable contact for tenant, maintenance, reporting, and renewal updates." },
 ];
 
 const faqData = [
-  { q: "Do you collect rent on my behalf?", a: "Yes. Rent collection, follow-up, deposit coordination and structured owner reporting are included in the financial management workflow." },
-  { q: "Do I lose control of my property decisions?", a: "No. You define approval thresholds. Expenses above your threshold require explicit authorization before work proceeds." },
-  { q: "Can you manage vacant units?", a: "Yes. We coordinate readiness, repairs, professional presentation and multi-channel exposure for vacant units." },
-  { q: "Do you handle maintenance directly?", a: "We coordinate with qualified, vetted vendors. Work is performed by licensed professionals with transparent cost approvals." },
-  { q: "How are urgent issues handled?", a: "Urgent matters trigger a 24/7 escalation protocol with immediate vendor coordination and owner notification." },
-  { q: "Can I see monthly activity reports?", a: "Yes. Owners receive monthly financial, maintenance, occupancy and tenant-status summaries." },
-  { q: "Can I terminate the service?", a: "Offboarding terms are defined in the management agreement with clear exit procedures." },
-  { q: "Is this the same as brokerage?", a: "No. Property management is ongoing operational stewardship, separate from a sales or leasing transaction." },
+  { q: "Do you collect rent on my behalf?", a: "Yes. Rent collection, follow-up, deposit coordination, and owner reporting are part of the financial management workflow." },
+  { q: "Do I lose control of property decisions?", a: "No. You set approval thresholds. Costs above the threshold require owner authorization before work proceeds." },
+  { q: "Can you manage a vacant unit?", a: "Yes. We coordinate readiness, presentation, listing distribution, tenant qualification, and handover." },
+  { q: "Do you handle maintenance directly?", a: "We coordinate licensed and vetted vendors, track completion, and provide transparent cost documentation." },
+  { q: "Will I receive reports?", a: "Yes. Owners receive structured monthly updates covering finance, tenant status, maintenance, and occupancy." },
+  { q: "Is this the same as brokerage?", a: "No. Brokerage is transactional. Property management is ongoing operational stewardship after acquisition or leasing." },
+];
+
+const managementServices = [
+  "Full Property Management",
+  "Residential Property Management",
+  "Commercial Property Management",
+  "Leasing & Tenant Placement",
+  "Maintenance Coordination",
+  "Owner Reporting Setup",
+  "Portfolio Management",
 ];
 
 function Section({ id, children, className = "" }: { id: string; children: ReactNode; className?: string }) {
   return (
-    <section id={id} className={`scroll-mt-28 py-10 md:py-14 ${className}`}>
-      <div data-service-track className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
-        {children}
-      </div>
+    <section id={id} className={`scroll-mt-28 py-8 md:py-11 ${className}`}>
+      <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">{children}</div>
     </section>
   );
 }
 
-function SectionHeading({ children, centered = false, eyebrow }: { children: ReactNode; centered?: boolean; eyebrow?: string }) {
+function SectionHeading({ eyebrow, title, text }: { eyebrow?: string; title: string; text?: string }) {
   return (
-    <div className={`mb-7 ${centered ? "text-center" : ""}`}>
+    <div className="mb-7">
       {eyebrow ? (
-        <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: EMERALD }}>
+        <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: EMERALD }}>
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="text-3xl md:text-4xl font-semibold leading-tight" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>
-        {children}
+      <h2 className="text-3xl font-semibold leading-tight md:text-4xl" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>
+        {title}
       </h2>
+      {text ? <p className="mt-3 max-w-2xl text-base leading-relaxed" style={{ color: "rgba(26,26,26,0.74)" }}>{text}</p> : null}
     </div>
   );
 }
@@ -196,25 +176,27 @@ function ChampagneCard({ children, className = "" }: { children: ReactNode; clas
   return (
     <div
       data-surface="champagne"
-      className={`rounded-2xl border p-6 md:p-7 shadow-[0_14px_38px_-28px_rgba(6,78,59,0.42)] ${className}`}
-      style={{ background: CHAMPAGNE_RAISED, borderColor: "rgba(6,78,59,0.18)", color: INK }}
+      data-allow-ink
+      className={`rounded-2xl border p-6 shadow-[0_18px_46px_-34px_rgba(6,78,59,0.42)] md:p-8 ${className}`}
+      style={{ background: CHAMPAGNE_RAISED, borderColor: "rgba(184,149,85,0.38)", color: INK }}
     >
       {children}
     </div>
   );
 }
 
-function EmeraldIcon({ icon: Icon, size = "md" }: { icon: LucideIcon; size?: "sm" | "md" | "lg" }) {
-  const dimensions = size === "lg" ? "h-14 w-14" : size === "sm" ? "h-9 w-9" : "h-11 w-11";
-  const iconSize = size === "lg" ? "h-7 w-7" : size === "sm" ? "h-4 w-4" : "h-5 w-5";
+function EmeraldIcon({ icon: Icon, large = false }: { icon: LucideIcon; large?: boolean }) {
   return (
-    <span className={`${dimensions} inline-flex shrink-0 items-center justify-center rounded-full`} style={{ background: EMERALD_GRADIENT, color: WHITE }}>
-      <Icon className={iconSize} strokeWidth={2.2} style={{ color: WHITE, stroke: WHITE }} />
+    <span
+      className={`${large ? "h-14 w-14" : "h-11 w-11"} inline-flex shrink-0 items-center justify-center rounded-full`}
+      style={{ background: EMERALD_GRADIENT, color: WHITE }}
+    >
+      <Icon className={large ? "h-7 w-7" : "h-5 w-5"} style={{ color: WHITE, stroke: WHITE }} strokeWidth={2.3} />
     </span>
   );
 }
 
-function NumberBadge({ value }: { value: string | number }) {
+function NumberBadge({ value }: { value: number | string }) {
   return (
     <span
       className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold"
@@ -225,13 +207,13 @@ function NumberBadge({ value }: { value: string | number }) {
   );
 }
 
-function BulletList({ items, icon: Icon = CheckCircle2 }: { items: string[]; icon?: LucideIcon }) {
+function BulletList({ items }: { items: string[] }) {
   return (
     <ul className="space-y-3">
       {items.map((item) => (
-        <li key={item} className="flex items-start gap-3 text-[15px] leading-relaxed" style={{ color: INK }}>
-          <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full" style={{ background: EMERALD }}>
-            <Icon className="h-3.5 w-3.5" style={{ color: WHITE, stroke: WHITE }} />
+        <li key={item} className="flex items-start gap-3 text-sm leading-relaxed" style={{ color: INK }}>
+          <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full" style={{ background: EMERALD_GRADIENT }}>
+            <CheckCircle2 className="h-3.5 w-3.5" style={{ color: WHITE, stroke: WHITE }} />
           </span>
           <span>{item}</span>
         </li>
@@ -240,15 +222,15 @@ function BulletList({ items, icon: Icon = CheckCircle2 }: { items: string[]; ico
   );
 }
 
-function CTAButton({ to, children, variant = "solid" }: { to: string; children: ReactNode; variant?: "solid" | "outline" }) {
+function HeroButton({ to, children, variant = "solid" }: { to: string; children: ReactNode; variant?: "solid" | "outline" }) {
   return (
     <Link
       to={to}
       data-no-contrast-guard
-      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold transition-transform hover:-translate-y-0.5 sm:w-auto"
       style={{
         background: variant === "solid" ? EMERALD_GRADIENT : "rgba(255,255,255,0.08)",
-        borderColor: variant === "solid" ? "rgba(255,255,255,0.26)" : "rgba(255,255,255,0.48)",
+        borderColor: "rgba(255,255,255,0.48)",
         color: WHITE,
         WebkitTextFillColor: WHITE,
       }}
@@ -259,364 +241,330 @@ function CTAButton({ to, children, variant = "solid" }: { to: string; children: 
   );
 }
 
-const PropertyManagement = () => {
+export default function PropertyManagement() {
   return (
-    <div data-brand-emerald-page data-service-page="property-management" data-marketing-page style={{ background: CHAMPAGNE }}>
+    <div data-brand-emerald-page data-service-page="property-management" data-pm-page style={{ background: CHAMPAGNE }}>
       <SEOHead
         title="Property Management Dubai | JBJ Global Real Estate"
         description="Premium property management in Dubai and the UAE with tenant care, maintenance, financial reporting, compliance, and asset stewardship."
         canonicalPath="/services/property-management"
       />
 
+      <style>{`
+        [data-pm-page], [data-pm-page] * { box-sizing: border-box; }
+        [data-pm-page] [data-surface="champagne"],
+        [data-pm-page] [data-surface="champagne"] *:not(svg):not(path),
+        [data-pm-page] [data-allow-ink],
+        [data-pm-page] [data-allow-ink] *:not(svg):not(path) {
+          color: ${INK} !important;
+          -webkit-text-fill-color: ${INK} !important;
+        }
+        [data-pm-page] [data-emerald-surface],
+        [data-pm-page] [data-emerald-surface] *:not(input):not(textarea),
+        [data-pm-page] [data-pm-toc-button],
+        [data-pm-page] [data-pm-toc-button] * {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        [data-pm-page] [data-emerald-surface] svg,
+        [data-pm-page] [data-emerald-surface] path,
+        [data-pm-page] [data-pm-toc-button] svg,
+        [data-pm-page] [data-pm-toc-button] path {
+          color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+        }
+        [data-pm-page] [data-pm-faq-trigger][data-state="open"] {
+          background: ${EMERALD_GRADIENT} !important;
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        [data-pm-page] [data-pm-faq-trigger][data-state="open"] *,
+        [data-pm-page] [data-pm-faq-trigger][data-state="open"] svg,
+        [data-pm-page] [data-pm-faq-trigger][data-state="open"] path {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+        }
+        [data-pm-page] [data-jbj-consultation-form],
+        [data-pm-page] [data-jbj-consultation-form] *:not(svg):not(path) {
+          color: ${INK} !important;
+          -webkit-text-fill-color: ${INK} !important;
+        }
+        [data-pm-page] [data-jbj-consultation-form] .jj-emerald-action,
+        [data-pm-page] [data-jbj-consultation-form] .jj-emerald-action * {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        [data-pm-page] [data-jbj-consultation-form] .jj-emerald-action svg,
+        [data-pm-page] [data-jbj-consultation-form] .jj-emerald-action path {
+          color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+        }
+      `}</style>
+
       <section
         data-brand-hero
-        data-surface="emerald"
-        data-no-contrast-guard
-        className="jj-fullbleed-band relative flex h-[100svh] min-h-[100svh] w-full items-center justify-center overflow-hidden px-0"
+        data-emerald-surface
+        className="relative left-1/2 grid w-screen -translate-x-1/2 place-items-center overflow-hidden px-4 text-center sm:px-6 lg:px-8"
         style={{
-          background:
-            "radial-gradient(110% 72% at 50% 0%, rgba(6,95,70,0.62) 0%, rgba(6,95,70,0) 62%), linear-gradient(180deg, #064E3B 0%, #042c1c 48%, #000000 100%)",
-          borderRadius: 0,
-          color: WHITE,
-          height: "100svh",
           minHeight: "100svh",
+          background: HERO_GRADIENT,
+          color: WHITE,
+          borderRadius: 0,
         }}
       >
-        <div aria-hidden className="absolute inset-0 opacity-[0.16]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.08) 1px, transparent 1px)", backgroundSize: "74px 74px" }} />
-        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center justify-center px-5 py-28 text-center sm:px-8 lg:px-10">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.24)", color: WHITE }}>
-            <Building2 className="h-3.5 w-3.5" style={{ color: WHITE, stroke: WHITE }} />
-            <span style={{ color: WHITE, WebkitTextFillColor: WHITE }}>Property Management</span>
+        <div aria-hidden className="absolute inset-0 opacity-[0.14]" style={{ backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px), linear-gradient(0deg, rgba(255,255,255,0.10) 1px, transparent 1px)", backgroundSize: "76px 76px" }} />
+        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center py-28 md:py-32">
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em]" style={{ borderColor: "rgba(255,255,255,0.34)", background: "rgba(255,255,255,0.08)" }}>
+            <Building2 className="h-4 w-4" />
+            Property Management
           </div>
 
-          <h1 className="max-w-[14ch] text-5xl font-light leading-[1.02] sm:text-6xl md:text-7xl lg:text-8xl" style={{ color: WHITE, WebkitTextFillColor: WHITE, fontFamily: '"Cormorant Garamond", serif' }}>
+          <h1 className="max-w-[13ch] text-5xl font-light leading-[0.98] sm:text-6xl md:text-7xl lg:text-8xl" style={{ fontFamily: '"Cormorant Garamond", serif', color: WHITE, WebkitTextFillColor: WHITE }}>
             Property Management & Asset Stewardship
           </h1>
-
-          <div aria-hidden className="my-8 h-px w-24" style={{ background: "rgba(255,255,255,0.42)" }} />
-
-          <p className="text-lg font-light leading-relaxed sm:text-xl md:text-2xl" style={{ color: WHITE, WebkitTextFillColor: WHITE }}>
-            Structured. Transparent. Performance-Driven.
+          <div aria-hidden className="my-8 h-px w-24" style={{ background: "rgba(255,255,255,0.5)" }} />
+          <p className="max-w-2xl text-lg leading-relaxed sm:text-xl md:text-2xl" style={{ color: "rgba(255,255,255,0.9)", WebkitTextFillColor: "rgba(255,255,255,0.9)" }}>
+            Structured ownership support for leasing, tenant care, maintenance, finance, compliance, and reporting.
           </p>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed md:text-lg" style={{ color: "rgba(255,255,255,0.86)", WebkitTextFillColor: "rgba(255,255,255,0.86)" }}>
-            Comprehensive management solutions designed to protect, optimize, and enhance the value of real estate assets across the UAE.
-          </p>
-
-          <div className="mt-10 flex w-full max-w-xl flex-col gap-3 sm:flex-row sm:justify-center">
-            <CTAButton to="/contact?service=property-management">Request Management Proposal</CTAButton>
-            <CTAButton to="/contact" variant="outline">Schedule Consultation</CTAButton>
+          <div className="mt-9 flex w-full max-w-xl flex-col items-center justify-center gap-3 sm:flex-row">
+            <HeroButton to="#proposal">Request Management Proposal</HeroButton>
+            <HeroButton to="/contact?service=property-management" variant="outline">Speak With a Manager</HeroButton>
           </div>
         </div>
       </section>
 
-      <main data-service-body className="relative" style={{ background: CHAMPAGNE }}>
+      <main data-service-body style={{ background: CHAMPAGNE }}>
         <section className="py-12 md:py-16">
-          <div data-service-track className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
             <ChampagneCard className="p-5 md:p-7">
               <h2 className="mb-6 text-center text-2xl font-semibold md:text-3xl" style={{ color: INK, fontFamily: '"Cormorant Garamond", serif' }}>
                 Table of Contents
               </h2>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {tocSections.map((section, index) => (
-                  <button
-                    key={section.id}
-                    type="button"
-                    data-service-emerald-control
-                    onClick={() => scrollTo(section.id)}
-                    className="flex min-h-12 items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold shadow-[0_10px_24px_-18px_rgba(0,0,0,0.42)] transition-transform hover:-translate-y-0.5"
-                    style={{ background: EMERALD_GRADIENT, color: WHITE, WebkitTextFillColor: WHITE, border: "1px solid rgba(255,255,255,0.18)" }}
-                  >
-                    <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold" style={{ background: "rgba(255,255,255,0.16)", color: WHITE, WebkitTextFillColor: WHITE }}>
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="leading-snug" style={{ color: WHITE, WebkitTextFillColor: WHITE }}>{section.label}</span>
-                  </button>
-                ))}
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {tocSections.map((section, index) => {
+                  const Icon = section.icon;
+                  return (
+                    <button
+                      key={section.id}
+                      type="button"
+                      data-pm-toc-button
+                      onClick={() => scrollToId(section.id)}
+                      className="grid min-h-[74px] grid-cols-[34px_1fr_20px] items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-bold shadow-[0_12px_26px_-20px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5"
+                      style={{ background: EMERALD_GRADIENT, border: "1px solid rgba(255,255,255,0.18)", color: WHITE }}
+                    >
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold" style={{ background: "rgba(255,255,255,0.16)" }}>
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="leading-tight">{section.label}</span>
+                      <Icon className="h-4 w-4" />
+                    </button>
+                  );
+                })}
               </div>
             </ChampagneCard>
           </div>
         </section>
 
         <Section id="overview">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Management Overview</SectionHeading>
-            <p className="mb-8 max-w-2xl text-lg leading-relaxed" style={{ color: INK }}>
-              We provide full-spectrum property management for individual investors, portfolio owners, family offices, overseas investors, and corporate property owners.
-            </p>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <ChampagneCard className="h-full bg-white/70">
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Clients We Serve</h3>
-                <BulletList icon={Users} items={["Individual & portfolio investors", "Family offices & trusts", "Overseas & diaspora investors", "Corporate property owners", "Institutional asset holders"]} />
-              </ChampagneCard>
-              <ChampagneCard className="h-full bg-white/70">
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Designed to Ensure</h3>
-                <BulletList items={["Revenue optimization & yield protection", "Tenant quality control & retention", "Maintenance efficiency & cost control", "Full legal & regulatory compliance", "Risk mitigation & asset preservation"]} />
-              </ChampagneCard>
-            </div>
-          </ChampagneCard>
-        </Section>
-
-        <Section id="stats">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading centered>Performance Metrics</SectionHeading>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {performanceStats.map((stat) => (
-                <ChampagneCard key={stat.label} className="flex h-full min-h-[168px] flex-col items-center justify-center p-5 text-center">
-                  <EmeraldIcon icon={stat.icon} size="lg" />
-                  <p className="mt-4 text-3xl font-bold tracking-tight" style={{ color: EMERALD }}>{stat.value}</p>
-                  <p className="mt-1 text-sm font-semibold" style={{ color: INK }}>{stat.label}</p>
-                </ChampagneCard>
+          <ChampagneCard>
+            <SectionHeading
+              eyebrow="Overview"
+              title="Management Overview"
+              text="A single accountable operating model for owners who want their asset protected, leased correctly, maintained properly, and reported with clarity."
+            />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {[
+                { title: "Clients We Serve", points: ["Individual investors", "Portfolio owners", "Family offices", "Overseas owners", "Corporate landlords"] },
+                { title: "Designed to Protect", points: ["Rental yield", "Tenant quality", "Maintenance standards", "Compliance records", "Asset condition"] },
+              ].map((item) => (
+                <div key={item.title} className="h-full rounded-xl border p-5" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>{item.title}</h3>
+                  <BulletList items={item.points} />
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
-        <Section id="residential">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Residential Management</SectionHeading>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <ChampagneCard>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Services Include</h3>
-                <BulletList items={["Tenant marketing & screening", "Lease preparation & renewals", "Move-in / move-out inspections", "Rent collection & follow-up", "Maintenance coordination", "Service charge monitoring"]} />
-              </ChampagneCard>
-              <ChampagneCard>
-                <div className="flex items-start gap-4">
-                  <EmeraldIcon icon={Shield} />
-                  <p className="text-base leading-relaxed" style={{ color: INK }}>
-                    RERA-compliant procedures, transparent approvals, and documented owner reporting keep residential assets protected without operational guesswork.
-                  </p>
+        <Section id="metrics">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Performance" title="Performance Metrics" text="Operational indicators are tracked to keep ownership decisions clear and measurable." />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {metrics.map((metric) => (
+                <div key={metric.label} className="flex min-h-[166px] flex-col items-center justify-center rounded-xl border p-5 text-center" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <EmeraldIcon icon={metric.icon} large />
+                  <p className="mt-4 text-3xl font-bold" style={{ color: EMERALD, WebkitTextFillColor: EMERALD }}>{metric.value}</p>
+                  <p className="mt-1 text-sm font-semibold" style={{ color: INK }}>{metric.label}</p>
                 </div>
-              </ChampagneCard>
+              ))}
             </div>
           </ChampagneCard>
         </Section>
 
-        <Section id="commercial">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Commercial Management</SectionHeading>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <ChampagneCard>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Services Include</h3>
-                <BulletList items={["Commercial leasing strategy", "Tenant retention planning", "Contract negotiation support", "Property performance analysis", "Maintenance oversight", "Compliance monitoring"]} />
-              </ChampagneCard>
-              <ChampagneCard>
-                <div className="flex items-start gap-4">
-                  <EmeraldIcon icon={Briefcase} />
-                  <p className="text-base leading-relaxed" style={{ color: INK }}>
-                    Financial reporting is aligned with commercial tenancy requirements, operational transparency, and measurable asset performance.
-                  </p>
+        <Section id="services">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Scope" title="Service Scope" text="Residential, commercial, leasing, and tenant-care workstreams are handled in one owner-first system." />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {serviceScope.map((service) => (
+                <div key={service.title} className="min-h-[250px] rounded-xl border p-5" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <EmeraldIcon icon={service.icon} />
+                  <h3 className="mt-4 text-lg font-semibold" style={{ color: INK }}>{service.title}</h3>
+                  <div className="mt-4"><BulletList items={service.points} /></div>
                 </div>
-              </ChampagneCard>
+              ))}
             </div>
           </ChampagneCard>
         </Section>
 
         <Section id="leasing">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Leasing & Tenant Placement</SectionHeading>
-            <div className="space-y-4">
-              {leasingSteps.map((step, index) => (
-                <ChampagneCard key={step.title} className="flex items-start gap-4 p-5">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Placement" title="Leasing & Tenant Placement" text="Every leasing action is structured around market positioning, tenant quality, compliant paperwork, and clean handover records." />
+            <div className="space-y-3">
+              {["Market rent assessment", "Pricing and listing preparation", "Tenant screening", "Contract and Ejari coordination", "Handover and condition report"].map((step, index) => (
+                <div key={step} className="flex items-center gap-4 rounded-xl border p-4" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
                   <NumberBadge value={index + 1} />
-                  <div>
-                    <h3 className="font-semibold" style={{ color: INK }}>{step.title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed" style={{ color: INK }}>{step.desc}</p>
-                  </div>
-                </ChampagneCard>
+                  <p className="font-semibold" style={{ color: INK }}>{step}</p>
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
-        <Section id="financial">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Financial Management</SectionHeading>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Section id="finance">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Finance" title="Financial Management" text="Owners receive disciplined collection tracking, expense visibility, and monthly reporting." />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {financeItems.map((item) => (
-                <ChampagneCard key={item.label} className="min-h-[178px] p-5">
-                  <EmeraldIcon icon={item.icon} />
-                  <h3 className="mt-4 text-base font-semibold" style={{ color: INK }}>{item.label}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: INK }}>{item.desc}</p>
-                </ChampagneCard>
-              ))}
-            </div>
-          </ChampagneCard>
-        </Section>
-
-        <Section id="maintenance">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Maintenance & Operations</SectionHeading>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <ChampagneCard>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Preventive Maintenance</h3>
-                <BulletList items={["Scheduled HVAC, plumbing and electrical inspections", "Annual property condition assessments", "Common area and amenity coordination", "Warranty tracking and claims management"]} />
-              </ChampagneCard>
-              <ChampagneCard>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Reactive & Emergency</h3>
-                <BulletList items={["24/7 emergency response coordination", "Vetted vendor dispatch within SLA targets", "Cost-approved repair protocols", "Incident documentation and follow-up reporting"]} />
-              </ChampagneCard>
-            </div>
-          </ChampagneCard>
-        </Section>
-
-        <Section id="tenant-mgmt">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Tenant Management</SectionHeading>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <ChampagneCard>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Communication & Relations</h3>
-                <BulletList items={["Dedicated tenant communication workflow", "Complaint resolution with SLA tracking", "Move-in orientation and guidelines", "Regular satisfaction surveys"]} />
-              </ChampagneCard>
-              <ChampagneCard>
-                <h3 className="mb-4 text-lg font-semibold" style={{ color: INK }}>Inspections & Compliance</h3>
-                <BulletList items={["Scheduled mid-tenancy inspections", "Move-out condition assessments", "Security deposit reconciliation", "Damage documentation and recovery"]} />
-              </ChampagneCard>
-            </div>
-          </ChampagneCard>
-        </Section>
-
-        <Section id="renewals">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Renewals & Retention Strategy</SectionHeading>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-              {[{ icon: Calendar, title: "Proactive Tracking", desc: "Lease expiry alerts with market-rate comparisons." }, { icon: TrendingUp, title: "Market Negotiation", desc: "Renewal terms based on current market conditions." }, { icon: UserCheck, title: "Retention Programs", desc: "Retention incentives for high-quality tenants." }].map((item) => (
-                <ChampagneCard key={item.title} className="min-h-[190px]">
+                <div key={item.title} className="min-h-[160px] rounded-xl border p-5" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
                   <EmeraldIcon icon={item.icon} />
                   <h3 className="mt-4 font-semibold" style={{ color: INK }}>{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: INK }}>{item.desc}</p>
-                </ChampagneCard>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.74)" }}>{item.text}</p>
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
-        <Section id="compliance">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Compliance & Governance</SectionHeading>
-            <ChampagneCard>
-              <BulletList icon={Scale} items={["Dubai Land Department requirements", "RERA regulations and licensing standards", "Tenancy Law alignment", "UAE Civil Code lease provisions", "Legal coordination through licensed firms when required"]} />
-            </ChampagneCard>
+        <Section id="operations">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Operations" title="Maintenance & Operations" text="Every action has an approval path, visible owner updates, and clean maintenance records." />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {operationsItems.map((item) => (
+                <div key={item.title} className="min-h-[150px] rounded-xl border p-5" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <h3 className="font-semibold" style={{ color: INK }}>{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.74)" }}>{item.text}</p>
+                </div>
+              ))}
+            </div>
           </ChampagneCard>
         </Section>
 
         <Section id="workflow">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading centered>Management Workflow</SectionHeading>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
-              {[{ icon: Eye, label: "Asset Assessment" }, { icon: FileText, label: "Agreement Execution" }, { icon: Key, label: "Tenant Placement" }, { icon: Settings, label: "Ongoing Management" }, { icon: BarChart3, label: "Reporting & Review" }].map((step) => (
-                <ChampagneCard key={step.label} className="flex min-h-[150px] flex-col items-center justify-center p-4 text-center">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Workflow" title="Management Workflow" />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
+              {workflow.map((step, index) => (
+                <div key={step.label} className="flex min-h-[148px] flex-col items-center justify-center rounded-xl border p-4 text-center" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <NumberBadge value={index + 1} />
                   <EmeraldIcon icon={step.icon} />
-                  <p className="mt-3 text-sm font-semibold leading-snug" style={{ color: INK }}>{step.label}</p>
-                </ChampagneCard>
+                  <p className="mt-3 text-sm font-semibold leading-tight" style={{ color: INK }}>{step.label}</p>
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
         <Section id="reporting">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Reporting & Transparency</SectionHeading>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {reportingItems.map((item) => (
-                <ChampagneCard key={item.title} className="min-h-[178px] p-5">
-                  <EmeraldIcon icon={item.icon} />
-                  <h3 className="mt-4 text-base font-semibold" style={{ color: INK }}>{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: INK }}>{item.desc}</p>
-                </ChampagneCard>
-              ))}
-            </div>
-          </ChampagneCard>
-        </Section>
-
-        <Section id="onboarding">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Management Onboarding Process</SectionHeading>
-            <div className="space-y-4">
-              {onboardingSteps.map((step) => (
-                <ChampagneCard key={step.step} className="flex items-start gap-4 p-5">
-                  <NumberBadge value={step.step} />
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-3">
-                      <EmeraldIcon icon={step.icon} size="sm" />
-                      <h3 className="font-semibold" style={{ color: INK }}>{step.title}</h3>
-                    </div>
-                    <p className="mt-2 text-sm leading-relaxed" style={{ color: INK }}>{step.desc}</p>
-                  </div>
-                </ChampagneCard>
+          <ChampagneCard>
+            <SectionHeading eyebrow="Transparency" title="Reporting & Transparency" text="The reporting structure keeps owners informed without chasing fragmented updates." />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {reporting.map((item, index) => (
+                <div key={item} className="flex min-h-[72px] items-center gap-4 rounded-xl border p-4" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <NumberBadge value={index + 1} />
+                  <p className="font-semibold" style={{ color: INK }}>{item}</p>
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
         <Section id="trust">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading centered>Trust & Credentials</SectionHeading>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ChampagneCard>
+            <SectionHeading eyebrow="Governance" title="Trust & Governance" />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {trustSignals.map((item) => (
-                <ChampagneCard key={item.title} className="min-h-[210px] p-5 text-center">
-                  <EmeraldIcon icon={item.icon} size="lg" />
+                <div key={item.title} className="min-h-[210px] rounded-xl border p-5 text-center" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <EmeraldIcon icon={item.icon} large />
                   <h3 className="mt-4 font-semibold" style={{ color: INK }}>{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: INK }}>{item.desc}</p>
-                </ChampagneCard>
+                  <p className="mt-2 text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.74)" }}>{item.text}</p>
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
         <Section id="fees">
-          <ChampagneCard className="p-7 md:p-10">
-            <SectionHeading>Service Fees & Structure</SectionHeading>
-            <p className="mb-6 text-lg leading-relaxed" style={{ color: INK }}>
-              Management fees are structured based on property type, asset size, and scope of service. A tailored proposal is issued following asset evaluation.
-            </p>
+          <ChampagneCard>
+            <SectionHeading eyebrow="Fees" title="Service Fees & Structure" text="Fees are tailored after asset review, property type, portfolio size, occupancy position, and required service scope are confirmed." />
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {[{ icon: Percent, title: "Performance-Based", desc: "Fees aligned to occupancy and collection performance." }, { icon: FileText, title: "Transparent Terms", desc: "No hidden charges or undisclosed markups." }, { icon: Settings, title: "Custom Packages", desc: "Scaled to your portfolio requirements." }].map((item) => (
-                <ChampagneCard key={item.title} className="min-h-[170px] p-5 text-center">
-                  <EmeraldIcon icon={item.icon} />
-                  <p className="mt-3 text-sm font-semibold" style={{ color: INK }}>{item.title}</p>
-                  <p className="mt-2 text-xs leading-relaxed" style={{ color: INK }}>{item.desc}</p>
-                </ChampagneCard>
+              {["Performance-aware structure", "Transparent terms", "Portfolio-scaled packages"].map((item, index) => (
+                <div key={item} className="min-h-[140px] rounded-xl border p-5 text-center" style={{ background: "#FDFBF7", borderColor: "rgba(184,149,85,0.35)" }}>
+                  <NumberBadge value={index + 1} />
+                  <p className="mt-4 text-sm font-semibold" style={{ color: INK }}>{item}</p>
+                </div>
               ))}
             </div>
           </ChampagneCard>
         </Section>
 
-        <Section id="faq">
-          <ChampagneCard className="overflow-hidden p-0">
-            <div className="px-6 py-7 md:px-10 md:py-9">
-              <SectionHeading>Frequently Asked Questions</SectionHeading>
+        <section className="py-10 md:py-14">
+          <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="overflow-hidden rounded-2xl shadow-[0_16px_42px_-26px_rgba(6,78,59,0.46)]">
+              <CombinedContactNewsletter
+                title="Ready to Get Started With Property Management?"
+                subtitle="Tell us about your asset and our property management team will prepare the right operating scope and proposal path."
+              />
             </div>
-            <Accordion type="single" collapsible className="divide-y" style={{ borderColor: "rgba(6,78,59,0.16)" }}>
+          </div>
+        </section>
+
+        <Section id="proposal">
+          <ConsultationRequestForm
+            title="Request a Property Management Proposal"
+            subtitle="Use the approved consultation form and our team will route your request to the property management desk."
+            serviceOptions={managementServices}
+            defaultServiceNeeded="Full Property Management"
+            messagePlaceholder="Tell us the property type, area, occupancy status, and what you need managed."
+            formSource="property-management-proposal"
+            className="max-w-4xl"
+          />
+        </Section>
+
+        <Section id="faq" className="pb-16 md:pb-20">
+          <ChampagneCard className="overflow-hidden p-0">
+            <div className="px-6 py-7 md:px-8">
+              <SectionHeading eyebrow="FAQ" title="Frequently Asked Questions" />
+            </div>
+            <Accordion type="single" collapsible className="space-y-3 px-4 pb-5 md:px-6 md:pb-7">
               {faqData.map((faq, index) => (
-                <AccordionItem key={faq.q} value={`faq-${index}`} className="border-0 px-0">
+                <AccordionItem key={faq.q} value={`faq-${index}`} className="overflow-hidden rounded-xl border" style={{ borderColor: "rgba(184,149,85,0.38)", background: "#FDFBF7" }}>
                   <AccordionTrigger
-                    className="min-h-[64px] px-6 py-4 text-left font-semibold hover:no-underline md:px-10"
+                    data-pm-faq-trigger
+                    className="min-h-[64px] px-5 py-4 text-left font-semibold hover:no-underline"
                     style={{ color: INK, WebkitTextFillColor: INK }}
                   >
                     {faq.q}
                   </AccordionTrigger>
-                  <AccordionContent className="px-6 pb-5 md:px-10">
-                    <p className="text-sm leading-relaxed" style={{ color: INK }}>{faq.a}</p>
+                  <AccordionContent className="px-5 pb-5 pt-0">
+                    <p className="text-sm leading-relaxed" style={{ color: "rgba(26,26,26,0.76)", WebkitTextFillColor: "rgba(26,26,26,0.76)" }}>{faq.a}</p>
                   </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
           </ChampagneCard>
         </Section>
-
-        <section id="consultation" className="scroll-mt-28 py-12 md:py-16">
-          <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
-            <div className="overflow-hidden rounded-2xl shadow-[0_16px_42px_-26px_rgba(6,78,59,0.46)]">
-              <CombinedContactNewsletter
-                title="Ready to Put Your Asset Under Structured Management?"
-                subtitle="Speak with our property management team for a tailored proposal, service scope, and owner reporting plan."
-              />
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );
-};
-
-export default PropertyManagement;
+}
