@@ -48,27 +48,41 @@ const ABOUT_TILE_CLASS =
   "min-h-[172px] px-9 py-6 md:min-h-[186px] md:px-12 md:py-7";
 
 /**
- * AboutMedia — renders a real office photo. Uses a CSS var (--about-media-src)
- * plus a paired `!important` rule in index.css so the insights-hub CSS guard
- * (which blanks `background-image` on any rounded+bordered div) can't hide it.
+ * AboutMedia — renders a real office photo. Uses a ref + inline `!important`
+ * cssText because the insights-hub CSS guard blanks `background-image` on any
+ * rounded+bordered div via `!important`, and inline important beats stylesheet
+ * important.
  */
-const AboutMedia = ({ src, alt }: { src: string; alt: string }) => (
-  <motion.div
-    data-no-section-frame
-    data-allow-bg
-    role="img"
-    aria-label={alt}
-    variants={fadeInUp}
-    className="relative min-h-[320px] overflow-hidden rounded-2xl border md:min-h-[380px] lg:min-h-[440px]"
-    style={{
-      // Consumed by the [data-allow-bg] rule in index.css.
-      ["--about-media-src" as any]: `url(${src})`,
-      borderColor: "rgba(184,149,85,0.46)",
-      boxShadow:
-        "0 22px 52px -34px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14)",
-    }}
-  />
-);
+const AboutMedia = ({ src, alt }: { src: string; alt: string }) => {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    if (!ref.current) return;
+    ref.current.style.setProperty(
+      "background-image",
+      `linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 100%), url(${src})`,
+      "important",
+    );
+    ref.current.style.setProperty("background-size", "cover", "important");
+    ref.current.style.setProperty("background-position", "center", "important");
+    ref.current.style.setProperty("background-repeat", "no-repeat", "important");
+  }, [src]);
+  return (
+    <motion.div
+      ref={ref}
+      data-no-section-frame
+      data-allow-bg
+      role="img"
+      aria-label={alt}
+      variants={fadeInUp}
+      className="relative min-h-[320px] overflow-hidden rounded-2xl border md:min-h-[380px] lg:min-h-[440px]"
+      style={{
+        borderColor: "rgba(184,149,85,0.46)",
+        boxShadow:
+          "0 22px 52px -34px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14)",
+      }}
+    />
+  );
+};
 
 const FounderAboutPortrait = () => {
   const { photoUrl } = useFounderPhoto();
