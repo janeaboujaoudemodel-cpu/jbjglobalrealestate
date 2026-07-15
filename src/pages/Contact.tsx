@@ -25,6 +25,7 @@ import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import SupportTicketBox from "@/components/SupportTicketBox";
 import { IconTile } from "@/components/ui/icon-tile";
 import contactHeroVideoAsset from "@/assets/videos/services-hero.mp4.asset.json";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 const contactHeroVideo = contactHeroVideoAsset.url;
 import VideoBackground from "@/components/VideoBackground";
 
