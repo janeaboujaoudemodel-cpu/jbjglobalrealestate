@@ -301,23 +301,16 @@ export default function PropertyManagement() {
         }
         [data-pm-page] [data-pm-faq-item] {
           background: rgba(255,253,248,0.72);
-          transition: background 200ms ease, border-color 200ms ease;
         }
         [data-pm-page] [data-pm-faq-trigger],
         [data-pm-page] [data-pm-faq-trigger] *:not(svg):not(path) {
           color: ${INK} !important;
           -webkit-text-fill-color: ${INK} !important;
-          transition: color 200ms ease;
         }
-        [data-pm-page] [data-pm-faq-item]:hover,
         [data-pm-page] [data-pm-faq-item][data-state="open"] {
           background: ${EMERALD_GRADIENT} !important;
           border-color: rgba(255,255,255,0.22) !important;
         }
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger],
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] *,
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer],
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer] *,
         [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger],
         [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] *,
         [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer],
@@ -325,35 +318,38 @@ export default function PropertyManagement() {
           color: ${WHITE} !important;
           -webkit-text-fill-color: ${WHITE} !important;
         }
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] svg,
-        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] svg {
+        html body #root [data-service-page="property-management"] [data-pm-toc-button],
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] *,
+        html body #root [data-service-page="property-management"] [data-pm-emerald],
+        html body #root [data-service-page="property-management"] [data-pm-emerald] *:not(input):not(textarea),
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] *:not(input):not(textarea) {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] svg,
+        html body #root [data-service-page="property-management"] [data-pm-toc-button] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-emerald] svg,
+        html body #root [data-service-page="property-management"] [data-pm-emerald] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-emerald] svg * {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
         }
-...
+        [data-pm-page] [data-jbj-consultation-form] {
+          box-shadow: none !important;
+          border-radius: 24px !important;
+        }
+        /* Form field padding — placeholders must not touch borders */
+        [data-pm-page] [data-jbj-consultation-form] input,
+        [data-pm-page] [data-jbj-consultation-form] textarea,
+        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"] {
+          padding-left: 1.15rem !important;
+          padding-right: 1.15rem !important;
+        }
         [data-pm-page] [data-jbj-consultation-form] textarea {
           padding-top: 0.9rem !important;
           padding-bottom: 0.9rem !important;
-        }
-        /* Unify field surfaces to champagne and drop hairline borders */
-        [data-pm-page] [data-jbj-consultation-form] input:not([type="checkbox"]):not([type="radio"]),
-        [data-pm-page] [data-jbj-consultation-form] textarea,
-        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"],
-        [data-pm-page] [data-jbj-consultation-form] [data-radix-select-trigger],
-        [data-pm-page] [data-jbj-consultation-form] .jbj-form-field {
-          background-color: #F7F2EA !important;
-          background-image: none !important;
-          border: 0 !important;
-          box-shadow: none !important;
-          outline: none !important;
-        }
-        [data-pm-page] [data-jbj-consultation-form] input:focus,
-        [data-pm-page] [data-jbj-consultation-form] textarea:focus,
-        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus,
-        [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus-visible {
-          border: 0 !important;
-          box-shadow: none !important;
-          outline: none !important;
         }
       `}</style>
 
