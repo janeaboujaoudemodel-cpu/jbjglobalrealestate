@@ -43,6 +43,31 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 };
 
+const ABOUT_TILE_CLASS = "min-h-[154px] p-6 md:min-h-[170px] md:p-7";
+
+const AboutMedia = ({ src, alt }: { src: string; alt: string }) => (
+  <motion.div
+    data-no-section-frame
+    variants={fadeInUp}
+    className="relative min-h-[320px] overflow-hidden rounded-2xl border md:min-h-[380px] lg:min-h-[430px]"
+    style={{
+      background: EMERALD_GRADIENT,
+      borderColor: "rgba(184,149,85,0.46)",
+      boxShadow: "0 22px 52px -34px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14)",
+    }}
+  >
+    <img
+      src={src}
+      alt={alt}
+      className="absolute inset-0 h-full w-full object-cover"
+      style={{ opacity: 1, visibility: "visible" }}
+      loading="eager"
+      decoding="async"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+  </motion.div>
+);
+
 // Founder portrait honoring the owner-uploaded override.
 // Fixed: removed scale(1.25) that caused the head to bleed out of the frame,
 // and object-position now sits at 25% so the face is properly framed.
@@ -155,28 +180,28 @@ const About = () => {
               verified market data and disciplined execution.
             </motion.p>
             <motion.div
-              className="flex flex-wrap justify-center gap-3"
+              className="grid w-full max-w-[560px] grid-cols-2 gap-3"
               variants={fadeInUp}
             >
               <Link
                 to="/services"
                 data-pm-emerald
                 data-no-contrast-guard
-                className="allow-white group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+                className="allow-white group inline-flex min-h-[52px] min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-3 text-[11px] font-semibold uppercase tracking-[0.04em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-sm"
                 style={{ background: EMERALD_GRADIENT, color: "#FFFFFF", border: "1px solid rgba(184,149,85,0.5)" }}
               >
-                <span>Explore Our Services</span>
-                <ArrowUpRight className="h-4 w-4" />
+                <span className="whitespace-nowrap">Explore Our Services</span>
+                <ArrowUpRight className="hidden h-4 w-4 shrink-0 sm:block" />
               </Link>
               <Link
                 to="/contact"
                 data-pm-emerald
                 data-no-contrast-guard
-                className="allow-white group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
+                className="allow-white group inline-flex min-h-[52px] min-w-0 items-center justify-center gap-2 rounded-xl px-3 py-3 text-[11px] font-semibold uppercase tracking-[0.04em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-sm"
                 style={{ background: EMERALD_GRADIENT, color: "#FFFFFF", border: "1px solid rgba(184,149,85,0.5)" }}
               >
-                <span>Contact Our Team</span>
-                <ArrowUpRight className="h-4 w-4" />
+                <span className="whitespace-nowrap">Contact Our Team</span>
+                <ArrowUpRight className="hidden h-4 w-4 shrink-0 sm:block" />
               </Link>
             </motion.div>
           </motion.div>
@@ -192,7 +217,7 @@ const About = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}
                 variants={staggerContainer}
-                className="grid items-center gap-10 lg:grid-cols-[280px_1fr] lg:gap-14"
+                className="grid items-center gap-8 lg:grid-cols-[280px_1fr] lg:gap-10"
               >
                 <motion.div variants={fadeInUp} className="flex justify-center">
                   <div className="relative">
@@ -250,7 +275,7 @@ const About = () => {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid items-stretch gap-8 lg:grid-cols-2"
+              className="grid items-stretch gap-5 lg:grid-cols-[1.45fr_0.95fr]"
             >
               <motion.div variants={fadeInUp} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {[
@@ -259,23 +284,14 @@ const About = () => {
                   { Icon: Target, label: "Disciplined Transaction Management" },
                   { Icon: Shield, label: "Defined Compliance Boundaries" },
                 ].map(({ Icon, label }) => (
-                  <EmeraldTile key={label}>
+                  <EmeraldTile key={label} className={ABOUT_TILE_CLASS}>
                     <EmeraldIcon icon={Icon} />
                     <p className="mt-3 text-sm font-semibold leading-snug">{label}</p>
                   </EmeraldTile>
                 ))}
               </motion.div>
 
-              <motion.div variants={fadeInUp} className="relative overflow-hidden rounded-2xl">
-                <img
-                  src={luxuryVilla1}
-                  alt="Premium Advisory Services"
-                  className="h-full max-h-[420px] w-full rounded-2xl object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/40 to-transparent" />
-              </motion.div>
+              <AboutMedia src={luxuryVilla1} alt="Premium Advisory Services" />
             </motion.div>
           </BrandPanel>
 
@@ -286,7 +302,7 @@ const About = () => {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-3"
             >
               <FeatureCard
                 icon={Building2}
@@ -317,18 +333,9 @@ const About = () => {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid items-stretch gap-8 lg:grid-cols-2"
+              className="grid items-stretch gap-5 lg:grid-cols-[0.95fr_1.45fr]"
             >
-              <motion.div variants={fadeInUp} className="relative overflow-hidden rounded-2xl">
-                <img
-                  src={luxuryVilla2}
-                  alt="Market Intelligence Analysis"
-                  className="h-full max-h-[420px] w-full rounded-2xl object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 to-transparent" />
-              </motion.div>
+              <AboutMedia src={luxuryVilla2} alt="Market Intelligence Analysis" />
               <motion.div variants={fadeInUp} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {[
                   { Icon: BarChart3, label: "Government Data" },
@@ -336,7 +343,7 @@ const About = () => {
                   { Icon: TrendingUp, label: "Market Cycles" },
                   { Icon: Target, label: "Planning Strategy" },
                 ].map(({ Icon, label }) => (
-                  <EmeraldTile key={label}>
+                  <EmeraldTile key={label} className={ABOUT_TILE_CLASS}>
                     <EmeraldIcon icon={Icon} />
                     <p className="mt-3 text-sm font-semibold leading-snug">{label}</p>
                   </EmeraldTile>
@@ -347,8 +354,8 @@ const About = () => {
 
           {/* ── REGULATORY BOUNDARIES ── ── */}
           <BrandPanel eyebrow="Regulatory Boundaries" title="What we do NOT provide directly">
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-4 text-base leading-relaxed">
+            <div className="space-y-5">
+              <div className="max-w-4xl space-y-3 text-base leading-relaxed">
                 <p>
                   To maintain compliance and protect our clients, it is
                   important to be clear about what we do not provide directly.
@@ -359,14 +366,14 @@ const About = () => {
                   them.
                 </p>
               </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {[
                   { Icon: Scale, label: "Legal advice or legal services" },
                   { Icon: BarChart3, label: "Mortgage or banking services" },
                   { Icon: TrendingUp, label: "Financial or investment advisory" },
                   { Icon: FileCheck, label: "Immigration or visa issuance" },
                 ].map(({ Icon, label }) => (
-                  <EmeraldTile key={label}>
+                  <EmeraldTile key={label} className="min-h-[132px] p-6">
                     <EmeraldIcon icon={Icon} />
                     <p className="mt-3 text-sm font-semibold leading-snug">{label}</p>
                   </EmeraldTile>
@@ -382,7 +389,7 @@ const About = () => {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+              className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2"
             >
               <FeatureCard icon={Shield} title="AI Tools Monitored" description="AI-assisted tools are monitored and logged for transparency and accuracy." />
               <FeatureCard icon={FileCheck} title="Intelligence Reviewed" description="Market intelligence is reviewed before publication to ensure quality." />
@@ -393,8 +400,7 @@ const About = () => {
 
           {/* ── COMMITMENT ── ── */}
           <BrandPanel eyebrow="Our Commitment" title="Real estate is not about speed. It is about precision.">
-            <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
-              <div className="space-y-4 text-base leading-relaxed">
+            <div className="max-w-4xl space-y-4 text-base leading-relaxed">
                 <p>
                   We are committed to clear communication, accurate information,
                   structured processes, and long-term client trust.
@@ -405,14 +411,6 @@ const About = () => {
                   facilitate introductions to independent licensed partners. All
                   engagements are governed by UAE law and applicable regulations.
                 </p>
-              </div>
-              <div
-                data-pm-emerald
-                className="inline-flex h-20 w-20 items-center justify-center justify-self-center rounded-full text-xl font-bold md:justify-self-end"
-                style={{ background: EMERALD_GRADIENT, color: "#FFFFFF" }}
-              >
-                JBJ
-              </div>
             </div>
           </BrandPanel>
 
