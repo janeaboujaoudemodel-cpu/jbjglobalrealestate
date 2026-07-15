@@ -73,6 +73,8 @@ const FeatureCard = ({
 }) => (
   <motion.div
     data-pm-emerald
+    data-surface="emerald"
+    data-no-section-frame
     className="rounded-2xl border p-6 transition-transform duration-300 hover:-translate-y-1"
     style={{
       background: EMERALD_GRADIENT,
