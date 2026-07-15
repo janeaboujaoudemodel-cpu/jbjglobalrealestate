@@ -447,6 +447,11 @@ const Developers = () => {
         {/* DLD Market Intelligence */}
         <DLDMarketWidget />
       </div>
+      <MIPreFooterCard
+        title="Launching a new development?"
+        subtitle="Partner with JBJ to reach qualified investors and brokers across the region."
+        maxWidthClass="max-w-6xl"
+      />
     </>
   );
 };
