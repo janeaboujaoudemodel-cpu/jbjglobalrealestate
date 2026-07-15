@@ -1123,7 +1123,7 @@ export const mortgageAdvisoryConfig = quick({
   metrics: [["20+","Bank partners",Landmark],["96%","Pre-approval success",CheckCircle2],["<25%","Median DBR achieved",Percent],["<21d","Approval-to-transfer",Timer],["100%","Independent advice",ShieldCheck],["4.9/5","Client rating",Award]],
   scope: [
     ["Residential Mortgages", Home, ["First-time buyers","Move-ups","Investment mortgages","Non-resident financing"]],
-    ["Refinance", RefreshLike, ["Rate switching","Equity release","Debt consolidation","Product-fee optimisation"]],
+    ["Refinance", Sparkle, ["Rate switching","Equity release","Debt consolidation","Product-fee optimisation"]],
     ["Commercial Mortgages", BriefcaseBusiness, ["Owner-occupied","Investment property","Portfolio","SPV-held property"]],
     ["Specialist Files", ClipboardList, ["Self-employed","Family office","High DTI","Complex income"]],
   ],
