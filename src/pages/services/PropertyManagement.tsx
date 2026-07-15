@@ -357,18 +357,37 @@ export default function PropertyManagement() {
         [data-pm-page] [data-jbj-consultation-form] textarea,
         [data-pm-page] [data-jbj-consultation-form] select,
         [data-pm-page] [data-jbj-consultation-form] button[role="combobox"],
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
         [data-pm-page] [data-jbj-consultation-form] [data-field-group],
         [data-pm-page] [data-jbj-consultation-form] .form-checkbox-row,
         [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger],
-        [data-pm-page] [data-jbj-consultation-form] [data-light-select-trigger] {
+        [data-pm-page] [data-jbj-consultation-form] [data-light-select-trigger],
+        [data-pm-page] [data-jbj-consultation-form] .jbj-form-field,
+        [data-pm-page] [data-jbj-consultation-form] [data-jbj-field] {
           border: 0 !important;
           box-shadow: none !important;
           outline: none !important;
           background: linear-gradient(135deg,#F7ECD3 0%,#EFE0BC 100%) !important;
           background-color: #F3E4C2 !important;
         }
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger],
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger] *,
+        [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger],
+        [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger] * {
+          color: ${INK} !important;
+          -webkit-text-fill-color: ${INK} !important;
+        }
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger] svg,
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger] svg *,
+        [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger] svg,
+        [data-pm-page] [data-jbj-consultation-form] [data-phone-code-trigger] svg * {
+          color: ${INK} !important;
+          stroke: ${INK} !important;
+        }
         [data-pm-page] [data-jbj-consultation-form] input:focus,
         [data-pm-page] [data-jbj-consultation-form] textarea:focus,
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger]:focus,
+        [data-pm-page] [data-jbj-consultation-form] button[data-jbj-signup-trigger]:focus-visible,
         [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus,
         [data-pm-page] [data-jbj-consultation-form] button[role="combobox"]:focus-visible {
           border: 0 !important;
@@ -391,6 +410,33 @@ export default function PropertyManagement() {
         [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] path,
         [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] svg,
         [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] path {
+          color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+        }
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] {
+          background: ${EMERALD_GRADIENT} !important;
+          border-color: rgba(255,255,255,0.22) !important;
+        }
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-trigger],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-trigger] *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-answer],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover [data-pm-faq-answer] *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer] *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-trigger][data-state="open"],
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-trigger][data-state="open"] * {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+        }
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover svg,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item]:hover svg *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] svg,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-item][data-state="open"] svg *,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-trigger][data-state="open"] svg,
+        html body #root [data-service-page="property-management"] [data-pm-panel] [data-pm-faq-trigger][data-state="open"] svg * {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
         }
