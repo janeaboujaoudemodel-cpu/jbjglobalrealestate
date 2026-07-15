@@ -311,10 +311,34 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
         [data-pm-page] [data-pm-emerald] path,
         [data-pm-page] [data-pm-emerald] line,
         [data-pm-page] [data-pm-emerald] polyline,
+        [data-pm-page] [data-pm-emerald] circle,
+        [data-pm-page] [data-pm-emerald] rect,
         [data-pm-page] [data-pm-toc-button] svg,
-        [data-pm-page] [data-pm-toc-button] path {
+        [data-pm-page] [data-pm-toc-button] path,
+        [data-pm-page] [data-pm-toc-button] line,
+        [data-pm-page] [data-pm-toc-button] polyline,
+        [data-pm-page] [data-pm-toc-button] circle,
+        [data-pm-page] [data-pm-toc-button] rect {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
+        }
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-emerald],
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-emerald] :is(*, h1, h2, h3, h4, h5, h6, p, span, div, small, strong, em, b, label),
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-toc-button],
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-toc-button] :is(*, h1, h2, h3, h4, h5, h6, p, span, div, small, strong, em, b, label) {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+          text-shadow: none !important;
+          opacity: 1 !important;
+        }
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-emerald] :is(svg, path, line, polyline, polygon, circle, rect, [class*="lucide"]),
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-emerald] :is(svg, path, line, polyline, polygon, circle, rect, [class*="lucide"]) *,
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-toc-button] :is(svg, path, line, polyline, polygon, circle, rect, [class*="lucide"]),
+        html body #root [data-pm-page] [data-pm-panel] [data-pm-toc-button] :is(svg, path, line, polyline, polygon, circle, rect, [class*="lucide"]) * {
+          color: ${WHITE} !important;
+          -webkit-text-fill-color: ${WHITE} !important;
+          stroke: ${WHITE} !important;
+          opacity: 1 !important;
         }
         [data-pm-page] [data-pm-faq-item] {
           background: rgba(255,253,248,0.72);
@@ -484,7 +508,7 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
                     >
                       <span
                         className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold tabular-nums tracking-wider"
-                        style={{ background: "rgba(232,207,138,0.16)", color: "#E8CF8A", border: "1px solid rgba(232,207,138,0.35)" }}
+                        style={{ background: "rgba(255,255,255,0.14)", color: WHITE, border: "1px solid rgba(255,255,255,0.32)" }}
                       >
                         {String(index + 1).padStart(2, "0")}
                       </span>
@@ -493,9 +517,9 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
                       </span>
                       <span
                         className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-[rgba(232,207,138,0.22)]"
-                        style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(232,207,138,0.28)" }}
+                        style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.26)" }}
                       >
-                        <Icon className="h-[15px] w-[15px]" style={{ color: "#E8CF8A" }} />
+                        <Icon className="h-[15px] w-[15px]" style={{ color: WHITE, stroke: WHITE }} />
                       </span>
                     </button>
                   );
