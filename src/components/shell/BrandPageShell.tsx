@@ -211,6 +211,8 @@ export function EmeraldTile({
   return (
     <div
       data-pm-emerald
+      data-surface="emerald"
+      data-no-section-frame
       className={`rounded-2xl border p-5 ${className}`}
       style={{
         background: EMERALD_GRADIENT,
