@@ -183,7 +183,7 @@ export const ConsultationRequestForm = ({
       ownershipProfile: "",
       unitCount: "",
       propertyArea: "",
-      managementScope: defaultServiceNeeded,
+      managementScope: isPropertyManagement ? "" : defaultServiceNeeded,
       message: "",
       agreeTerms: false,
     },
