@@ -342,6 +342,7 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
         }
         [data-pm-page] [data-pm-faq-item] {
           background: rgba(255,253,248,0.72);
+          transition: background 200ms ease, border-color 200ms ease;
         }
         [data-pm-page] [data-pm-faq-trigger],
         [data-pm-page] [data-pm-faq-trigger] *:not(svg):not(path) {
@@ -349,20 +350,23 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
           -webkit-text-fill-color: ${INK} !important;
         }
         [data-pm-page] [data-pm-faq-item][data-state="open"],
-        [data-pm-page] [data-pm-faq-item]:hover {
+        [data-pm-page] [data-pm-faq-item]:hover,
+        [data-pm-page] [data-pm-faq-item]:focus-within {
           background: ${EMERALD_GRADIENT} !important;
           border-color: rgba(255,255,255,0.22) !important;
         }
-        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger],
-        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-trigger] *,
-        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer],
-        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer] *,
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger],
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-trigger] *,
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer],
-        [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer] * {
+        html body #root [data-pm-page] [data-pm-faq-item][data-state="open"] *,
+        html body #root [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer],
+        html body #root [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer] *,
+        html body #root [data-pm-page] [data-pm-faq-item]:hover *,
+        html body #root [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer],
+        html body #root [data-pm-page] [data-pm-faq-item]:hover [data-pm-faq-answer] *,
+        html body #root [data-pm-page] [data-pm-faq-item]:focus-within *,
+        html body #root [data-pm-page] [data-pm-faq-item]:focus-within [data-pm-faq-answer] {
           color: ${WHITE} !important;
           -webkit-text-fill-color: ${WHITE} !important;
+          opacity: 1 !important;
+          text-shadow: none !important;
         }
         [data-pm-page] [data-pm-faq-item][data-state="open"] svg,
         [data-pm-page] [data-pm-faq-item][data-state="open"] path,
@@ -370,6 +374,21 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
         [data-pm-page] [data-pm-faq-item]:hover path {
           color: ${WHITE} !important;
           stroke: ${WHITE} !important;
+        }
+        /* Light divider between question and answer in the ACTIVE (open) state. */
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer] {
+          position: relative;
+          margin-top: 8px;
+          padding-top: 14px !important;
+        }
+        [data-pm-page] [data-pm-faq-item][data-state="open"] [data-pm-faq-answer]::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 20%, rgba(255,255,255,0.55) 80%, rgba(255,255,255,0) 100%);
         }
         [data-pm-page] [data-jbj-consultation-form] {
           box-shadow: none !important;
@@ -700,6 +719,7 @@ export function ServicePageTemplate({ config }: { config: ServiceConfig }) {
           primaryText={config.preFooter.primaryText}
           secondaryLink={config.preFooter.secondaryLink}
           secondaryText={config.preFooter.secondaryText}
+          maxWidthClass="max-w-6xl"
         />
       </main>
     </div>
