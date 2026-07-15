@@ -24,6 +24,7 @@ import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigatio
 import { FAQHero } from "@/components/faq/FAQHero";
 import { FAQTableOfContents } from "@/components/faq/FAQTableOfContents";
 import { FAQFloatingSidebar } from "@/components/faq/FAQFloatingSidebar";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -272,36 +273,17 @@ const FAQ = () => {
         </div>
       </section>
 
-      {/* Still Have Questions */}
-      <section className="py-16 bg-[#1A1A1A]">
-        <div className="jj-layer-2">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="jj-card-inner max-w-3xl mx-auto text-center"
-          >
-            <div className="w-14 h-14 jj-icon-box-active rounded-xl mx-auto mb-4">
-              <Shield className="w-7 h-7" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">Still Have Questions?</h2>
-            <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto leading-relaxed">
-              Our team is here to help. Whether you're exploring options or ready to proceed, we’re happy to provide guidance tailored to your situation.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild variant="primary" className="px-6">
-                <Link to="/contact">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Contact Our Team
-                </Link>
-              </Button>
-              <Button asChild variant="secondary" className="px-6">
-                <Link to="/buyer-guide">Read Buyer Guide</Link>
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* CTA — canonical MIPreFooterCard (matches services) */}
+      <MIPreFooterCard
+        title="Still Have Questions?"
+        subtitle="Our team is here to help. Whether you're exploring options or ready to proceed, we're happy to provide guidance tailored to your situation."
+        primaryLink="/contact"
+        primaryText="Contact Our Team"
+        secondaryLink="/buyer-guide"
+        secondaryText="Read Buyer Guide"
+        maxWidthClass="max-w-6xl"
+      />
+
 
       {/* Guide Navigation - Active Champagne Layer */}
       <section className="py-12 bg-[#1A1A1A]">
