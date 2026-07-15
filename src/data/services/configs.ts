@@ -11,7 +11,7 @@ import type { ServiceConfig } from "@/components/services/ServicePageTemplate";
 type ConfigInput = Omit<ServiceConfig, "canonicalPath"> & { slug: string };
 
 function buildConfig(input: ConfigInput): ServiceConfig {
-  return { ...input, canonicalPath: `/services/${input.slug}` };
+  return { ...input, canonicalPath: input.slug === "services" ? "/services" : `/services/${input.slug}` };
 }
 
 // -------------------------------------------------------------------------
@@ -1387,10 +1387,66 @@ export const referralPartnerConfig = quick({
   preFooterSub: "Share your practice — our partner desk will confirm your tier, agreement, and onboarding path.",
 });
 
+export const allServicesConfig = quick({
+  slug: "services",
+  seoTitle: "Real Estate Services Dubai | JBJ Global",
+  seoDescription: "JBJ Global Real Estate services across buying, selling, renting, management, visas, mortgages, legal coordination, valuation, design, fit-out, and referrals.",
+  heroIcon: Briefcase, heroLabel: "All Services", heroTitle: "JBJ Services",
+  heroSubtitle: "One premium service system for buying, selling, renting, ownership, residency, finance, legal coordination, design, fit-out, and partner introductions.",
+  primary: "Request Service Routing", secondary: "Speak With Our Team",
+  overviewText: "A single institutional service desk routes every client request into the correct specialist workflow while keeping style, governance, and communication consistent.",
+  overviewLeft: ["Clients We Serve", ["Buyers","Sellers","Landlords","Tenants","Investors","Families","Referral partners"]],
+  overviewRight: ["Designed to Protect", ["Correct service routing","Premium client experience","Timing","Documentation","Follow-up accountability"]],
+  metricFeature: [Briefcase, "Service Clarity", "Each service line follows a documented intake, scope, delivery, and reporting pathway."],
+  metrics: [["22","Service pathways",Layers],["1","Central intake desk",Headphones],["100%","Routed request tracking",ClipboardCheck],["24h","Response target",Timer],["30+","Client nationalities",Globe2],["4.9/5","Service standard",Award]],
+  scope: [
+    ["Property Advisory", Home, ["Buying advisory","Selling advisory","Rental advisory","Investment advisory"]],
+    ["Ownership Support", Key, ["Property management","Short-term rentals","Snagging","Valuation"]],
+    ["Specialist Coordination", Landmark, ["Mortgage advisory","Legal services","Visa services","Company setup"]],
+    ["Lifestyle & Delivery", Sparkles, ["Concierge","Architecture","Interior design","Fit-out","Design and build"]],
+  ],
+  placementText: "Every request follows a clean service path from initial routing to specialist handover and ongoing updates.",
+  placementSteps: ["Request intake","Service routing","Scope confirmation","Specialist handover","Follow-up"],
+  financeItems: [
+    [DollarSign, "Transparent Scope", "Costs and responsibilities are clarified before work begins."],
+    [FileText, "Written Next Step", "Each routed request receives a documented next action."],
+    [BarChart3, "Priority Matching", "Urgency and complexity determine the correct desk and response path."],
+    [Percent, "Partner Terms", "Where independent providers are involved, terms are confirmed directly and clearly."],
+  ],
+  operationsItems: [
+    ["Central Intake", "One request is routed to the correct service desk instead of fragmented follow-ups."],
+    ["Specialist Ownership", "A named team member or partner owns each service path."],
+    ["Document Discipline", "Requirements, documents, and deadlines are captured early."],
+    ["Client Updates", "Status and next steps remain clear throughout the engagement."],
+  ],
+  workflowSteps: [["Intake", ClipboardCheck],["Route", Compass],["Confirm", FileCheck],["Deliver", Sparkle],["Report", BarChart3]],
+  reportingItems: ["Service routing note","Requirements checklist","Specialist assignment","Timeline estimate","Status updates","Completion follow-up"],
+  trustItems: [
+    [ShieldCheck, "Governed Service System", "Every pathway is structured around scope clarity, compliance, and accountability."],
+    [Award, "Premium Standard", "The same JBJ visual, communication, and delivery standard applies across service lines."],
+    [Headphones, "Single Contact Path", "Clients are not left to chase multiple teams for the next step."],
+  ],
+  feesItems: ["Scope-based service fees","Independent partner fees","Custom portfolio packages"],
+  formTitle: "Service Routing Request",
+  serviceOptions: ["Buying Advisory","Selling Advisory","Rental Advisory","Investment Advisory","Property Management","Golden Visa","Mortgage Advisory","Legal Services","Visa Services","Company Setup","Valuation","Short-Term Rentals","Concierge","Architecture","Interior Design","Fit-Out","Design & Build","Law Firm","Snagging","Currency Exchange","Signature Collection","Referral Partner"],
+  messagePlaceholder: "Tell us which service you need, your timeline, property or family details if relevant, and the result you want from the JBJ team.",
+  faq: [
+    ["Which service should I choose?", "Use the service routing form and we will assign the correct specialist path based on your objective, urgency, and property status."],
+    ["Are all services handled by JBJ directly?", "Core real estate advisory is handled by JBJ. Regulated or specialist services may be coordinated with independent licensed providers."],
+    ["Can I request more than one service?", "Yes. Multi-service requests are routed as one coordinated programme."],
+    ["Will the same premium style apply across pages?", "Yes. Each service page now uses the same approved service template, contrast, CTA style, form treatment, FAQ behavior, and pre-footer layout."],
+    ["How quickly will someone respond?", "The standard response target is within 24 hours, with urgent requests escalated by priority."],
+    ["Can referral partners use this page?", "Yes. Referral partners can either select Referral Partner or open the dedicated referral partner service page."],
+  ],
+  preFooterTitle: "Ready to Route Your Service Request?",
+  preFooterSub: "Share what you need — our team will confirm the right service path, specialist desk, and next step.",
+});
+
 // -------------------------------------------------------------------------
 // Registry
 // -------------------------------------------------------------------------
 export const serviceConfigs = {
+  "services": allServicesConfig,
   "property-management": propertyManagementConfig,
   "architecture": architectureConfig,
   "interior-design": interiorDesignConfig,

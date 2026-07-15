@@ -81,10 +81,12 @@ const guideItems = [
 const serviceItems = [
   { id: "services-all", title: "All Services", href: "/services", icon: Briefcase },
   { id: "services-management", title: "Property Management", href: "/services/property-management", icon: Key },
-  { id: "services-mortgage", title: "Mortgage Advisory", href: "/partners/mortgage", icon: Landmark },
-  { id: "services-legal", title: "Legal Services", href: "/partners/legal", icon: Gavel },
-  { id: "services-visa", title: "Visa Services", href: "/partners/visa-services", icon: Shield },
-  { id: "services-company-setup", title: "Company Setup", href: "/partners/company-setup", icon: Building },
+  { id: "services-golden-visa", title: "Golden Visa", href: "/services/golden-visa", icon: Award },
+  { id: "services-mortgage", title: "Mortgage Advisory", href: "/services/mortgage-advisory", icon: Landmark },
+  { id: "services-legal", title: "Legal Services", href: "/services/legal-services", icon: Gavel },
+  { id: "services-visa", title: "Visa Services", href: "/services/visa-services", icon: Shield },
+  { id: "services-company-setup", title: "Company Setup", href: "/services/company-setup", icon: Building },
+  { id: "services-valuation", title: "Valuation", href: "/services/valuation", icon: FileText },
   { id: "services-selling", title: "Selling Advisory", href: "/services/selling-advisory", icon: TrendingUp },
   { id: "services-concierge", title: "Concierge", href: "/services/concierge", icon: Handshake },
   { id: "services-architecture", title: "Architecture", href: "/services/architecture", icon: Building },
@@ -237,7 +239,7 @@ const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null =>
 export function InsightsPageScope({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
-  if (pathname === "/services/property-management") {
+  if (pathname === "/services" || pathname.startsWith("/services/")) {
     return <>{children}</>;
   }
 
