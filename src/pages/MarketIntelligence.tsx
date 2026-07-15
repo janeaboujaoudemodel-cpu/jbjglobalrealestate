@@ -250,16 +250,20 @@ const MarketIntelligence = () => {
       </section>
 
 
-      {/* Pre-Footer White Section with CTA */}
-      <div id="cta" className="scroll-mt-24">
-        <PreFooterSeparator 
-          title="Ready to Make Informed Decisions?"
-          subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
-          primaryLink="/contact"
-          primaryText="Speak With Our Team"
-          secondaryLink="/ai-home-finder"
-          secondaryText="AI Home Finder"
-        />
+      {/* Pre-Footer CTA — constrained to match Compliance & Transparency card width */}
+      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA] py-12 md:py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl overflow-hidden shadow-sm">
+            <PreFooterSeparator
+              title="Ready to Make Informed Decisions?"
+              subtitle="Speak with our team for personalized guidance based on your investment goals and market conditions."
+              primaryLink="/contact"
+              primaryText="Speak With Our Team"
+              secondaryLink="/ai-home-finder"
+              secondaryText="AI Home Finder"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

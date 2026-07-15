@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FileText, Download, Calendar, Database, Shield, ExternalLink, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -564,16 +565,14 @@ const MarketReportsPage = () => {
         </div>
       </section>
 
-      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
-        <PreFooterSeparator 
-          title="Explore More Market Intelligence"
-          subtitle="Understand our data methodology or browse area-specific insights."
-          primaryLink="/market-intelligence/methodology"
-          primaryText="Our Methodology"
-          secondaryLink="/market-intelligence/areas"
-          secondaryText="Area Intelligence"
-        />
-      </div>
+      <MIPreFooterCard
+        title="Explore More Market Intelligence"
+        subtitle="Understand our data methodology or browse area-specific insights."
+        primaryLink="/market-intelligence/methodology"
+        primaryText="Our Methodology"
+        secondaryLink="/market-intelligence/areas"
+        secondaryText="Area Intelligence"
+      />
     </div>
   );
 };

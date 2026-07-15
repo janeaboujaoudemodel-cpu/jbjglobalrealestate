@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { BarChart3, TrendingUp, TrendingDown, Minus, Database, Shield, Search, Building2, FileText, Landmark, Scale, ExternalLink, Users, Clock } from "lucide-react";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -417,16 +418,14 @@ const MarketOverview = () => {
         </section>
       </div>
 
-      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
-        <PreFooterSeparator 
-          title="Explore More Market Intelligence"
-          subtitle="Dive deeper into area-specific data and detailed market reports."
-          primaryLink="/market-intelligence/areas"
-          primaryText="View Area Intelligence"
-          secondaryLink="/market-intelligence/reports"
-          secondaryText="Browse Reports"
-        />
-      </div>
+      <MIPreFooterCard
+        title="Explore More Market Intelligence"
+        subtitle="Dive deeper into area-specific data and detailed market reports."
+        primaryLink="/market-intelligence/areas"
+        primaryText="View Area Intelligence"
+        secondaryLink="/market-intelligence/reports"
+        secondaryText="Browse Reports"
+      />
     </div>
   );
 };

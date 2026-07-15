@@ -9,6 +9,7 @@
 import { motion } from "framer-motion";
 import { Database, Shield, FileCheck, Clock, AlertTriangle, Scale, Bot, Search } from "lucide-react";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
+import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
 import { SEOHead } from "@/components/SEOHead";
 import { MarketIntelligenceSchema } from "@/components/seo/MarketIntelligenceSchema";
 import { APPROVED_DATA_SOURCES, GOVERNMENT_DISCLOSURES } from "@/config/government-cobranding";
@@ -449,16 +450,14 @@ const Methodology = () => {
         </div>
       </section>
 
-      <div id="cta" className="scroll-mt-24 bg-[#F7F2EA]">
-        <PreFooterSeparator 
-          title="Explore More Market Intelligence"
-          subtitle="Get a high-level overview or dive into area-specific data."
-          primaryLink="/market-intelligence/overview"
-          primaryText="Market Overview"
-          secondaryLink="/market-intelligence/areas"
-          secondaryText="Area Intelligence"
-        />
-      </div>
+      <MIPreFooterCard
+        title="Explore More Market Intelligence"
+        subtitle="Get a high-level overview or dive into area-specific data."
+        primaryLink="/market-intelligence/overview"
+        primaryText="Market Overview"
+        secondaryLink="/market-intelligence/areas"
+        secondaryText="Area Intelligence"
+      />
     </div>
   );
 };
