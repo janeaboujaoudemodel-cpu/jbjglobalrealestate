@@ -205,7 +205,19 @@ const Terms = () => (
         rightLink={{ to: "/cookies", label: "Cookie Policy" }}
       />
     </ContentPageShell>
+
+    {/* Canonical CTA — matches services / MI hub pages */}
+    <MIPreFooterCard
+      title="Need Legal Clarity?"
+      subtitle="Speak with our team for guidance on our terms, disclosures, and how they apply to your engagement."
+      primaryLink="/contact"
+      primaryText="Speak With Our Team"
+      secondaryLink="/faq"
+      secondaryText="Read FAQ"
+      maxWidthClass="max-w-6xl"
+    />
   </>
 );
+
 
 export default Terms;
