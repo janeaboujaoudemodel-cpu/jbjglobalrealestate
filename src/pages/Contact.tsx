@@ -343,7 +343,7 @@ END:VCARD`;
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
 
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_400px] gap-6 lg:gap-8 max-w-6xl mx-auto items-start">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 max-w-7xl mx-auto items-start">
             <div className="min-w-0">
             {isSuccess ? (
               /* Success State */
