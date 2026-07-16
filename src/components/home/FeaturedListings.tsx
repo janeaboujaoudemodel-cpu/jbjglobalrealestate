@@ -22,7 +22,7 @@ const FeaturedListings = () => {
   const allProjects = data?.projects ?? [];
 
   return (
-    <section className="bg-[#FDFBF7] py-10 md:py-14">
+    <section data-handpicked-section className="bg-[#FDFBF7] py-10 md:py-14">
       {/* Full-bleed container — edge to edge, no max-width constraint */}
       <ContentTrack>
         {/* Section Header */}
@@ -34,12 +34,13 @@ const FeaturedListings = () => {
 
         {/* Listings Grid — 3 per row on desktop, edge-to-edge full width.
             Increased gap for premium breathing room. */}
-        <CardGrid columns={3} className="items-stretch auto-rows-fr">
+        <CardGrid columns={3} className="jj-handpicked-grid items-stretch auto-rows-fr">
           {isLoading
             ? [1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className={`bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/55 h-full flex flex-col ${i > 2 ? 'hidden lg:flex' : ''}`}
+                  data-handpicked-card
+                  className={`bg-[#FDFBF7] rounded-2xl overflow-hidden border border-[#B89555]/55 h-full flex-col ${i <= 2 ? 'flex' : i === 3 ? 'hidden sm:flex' : 'hidden lg:flex'}`}
                 >
                   {/* Image — matches ProjectCard aspect-[16/10] */}
                   <Skeleton className="aspect-[16/10] rounded-none shrink-0" />
@@ -59,8 +60,10 @@ const FeaturedListings = () => {
             : allProjects.slice(0, 6).map((project, idx) => (
                 <div
                   key={project.id}
-                  // Phone + tablet: 2 cards total (idx 0..1). Desktop (lg+): all 6.
-                  className={`h-full flex ${idx >= 2 ? 'hidden lg:flex' : ''} [&>*]:w-full [&>*]:h-full`}
+                  // Phone: 2 cards. Tablet + desktop: show the full set with
+                  // tablet showing 3 in one row and desktop showing 6 as 2x3.
+                  data-handpicked-card
+                  className={`h-full ${idx < 2 ? 'flex' : idx === 2 ? 'hidden sm:flex' : 'hidden lg:flex'} [&>*]:w-full [&>*]:h-full`}
                 >
                   <ProjectCard project={project as any} priority={idx < 3} />
                 </div>
