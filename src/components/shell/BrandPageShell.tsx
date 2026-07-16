@@ -47,6 +47,36 @@ export function BrandPageShell({
           background: ${CHAMPAGNE} !important;
           background-image: linear-gradient(180deg, ${CHAMPAGNE} 0%, ${CHAMPAGNE_DEEP} 100%) !important;
         }
+        html body #root [data-pm-page] section[data-brand-panel-section] {
+          width: 100% !important;
+          max-width: none !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          box-sizing: border-box !important;
+        }
+        html body #root [data-pm-page] section[data-brand-panel-section] > [data-brand-panel-inner] {
+          width: 100% !important;
+          max-width: min(72rem, 100%) !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+          box-sizing: border-box !important;
+        }
+        @media (min-width: 640px) {
+          html body #root [data-pm-page] section[data-brand-panel-section] > [data-brand-panel-inner] {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+          }
+        }
+        @media (min-width: 1024px) {
+          html body #root [data-pm-page] section[data-brand-panel-section] > [data-brand-panel-inner] {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+          }
+        }
         [data-pm-page] [data-pm-panel],
         [data-pm-page] [data-pm-panel] *:not(svg):not(path):not(line):not(polyline):not(circle):not(rect):not([data-pm-emerald]):not([data-pm-emerald] *):not([data-pm-toc-button]):not([data-pm-toc-button] *) {
           color: ${INK} !important;
@@ -161,8 +191,8 @@ export function BrandPanel({
   className?: string;
 }) {
   return (
-    <section id={id} className={`scroll-mt-28 py-5 md:py-6 ${className}`}>
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section id={id} data-brand-panel-section className={`scroll-mt-28 py-5 md:py-6 ${className}`}>
+      <div data-brand-panel-inner className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         <div
           data-pm-panel
           data-no-section-frame

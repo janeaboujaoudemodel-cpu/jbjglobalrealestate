@@ -148,6 +148,57 @@ const FAQ = () => {
         canonicalPath="/faq"
         faqItems={allFaqItems}
       />
+      <style>{`
+        html body #root [data-faq-page] #faq-content {
+          width: 100% !important;
+          max-width: none !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          box-sizing: border-box !important;
+        }
+        html body #root [data-faq-page] #faq-content > .divide-y,
+        html body #root [data-faq-page] #faq-content section[id^="category-"] {
+          width: 100% !important;
+          max-width: none !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          box-sizing: border-box !important;
+        }
+        html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 {
+          width: 100% !important;
+          max-width: none !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          box-sizing: border-box !important;
+        }
+        html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 > * {
+          width: 100% !important;
+          max-width: min(72rem, 100%) !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+          box-sizing: border-box !important;
+        }
+        @media (min-width: 640px) {
+          html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 > * {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+          }
+        }
+        @media (min-width: 1024px) {
+          html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 > * {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+          }
+        }
+      `}</style>
       
       {/* Hero with Video/Image Background */}
       <FAQHero
