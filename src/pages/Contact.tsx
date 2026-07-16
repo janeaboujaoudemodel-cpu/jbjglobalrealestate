@@ -383,29 +383,31 @@ END:VCARD`;
                 {/* Scoped emerald input contract — overrides global Input `data-surface="light"` for this form only */}
                 <style>{`
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):not([type="checkbox"]):not([type="radio"]) {
-                    background-color: rgba(255,255,255,0.06) !important;
-                    background-image: none !important;
+                    background: linear-gradient(135deg, #0a5a45 0%, #064E3B 55%, #042c1c 100%) !important;
+                    background-image: linear-gradient(135deg, #0a5a45 0%, #064E3B 55%, #042c1c 100%) !important;
                     color: #ffffff !important;
                     -webkit-text-fill-color: #ffffff !important;
-                    border: 1px solid rgba(184,149,85,0.45) !important;
-                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+                    border: 1px solid rgba(184,149,85,0.55) !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.25) !important;
                   }
                   [data-jbj-contact-emerald] :is(input, textarea)::placeholder {
-                    color: rgba(255,255,255,0.45) !important;
-                    -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+                    color: rgba(255,255,255,0.75) !important;
+                    -webkit-text-fill-color: rgba(255,255,255,0.75) !important;
+                    opacity: 1 !important;
                   }
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):hover,
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus,
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus-visible {
-                    border-color: #B89555 !important;
-                    box-shadow: 0 0 0 2px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-                    background-color: rgba(255,255,255,0.09) !important;
+                    border-color: #C9A66B !important;
+                    box-shadow: 0 0 0 2px rgba(184,149,85,0.28), inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.3) !important;
                   }
                   [data-jbj-contact-emerald] label { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
                   [data-jbj-contact-emerald] [data-radix-select-trigger] > span,
                   [data-jbj-contact-emerald] [role="combobox"] > span {
                     color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
                   }
+                  [data-jbj-contact-emerald] [data-radix-select-trigger] svg,
+                  [data-jbj-contact-emerald] [role="combobox"] svg { color: #ffffff !important; opacity: 0.85; }
                 `}</style>
 
                 <div className="text-center mb-6">
