@@ -343,7 +343,7 @@ END:VCARD`;
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
 
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             {isSuccess ? (
               /* Success State */
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
@@ -374,20 +374,54 @@ END:VCARD`;
               </div>
             ) : (
               /* Form */
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
-                <div className="text-center mb-8">
-                  <IconTile icon={Shield} tone="ink" size="lg" className="mx-auto mb-4" />
+              <div
+                data-surface="emerald"
+                data-emerald-surface="true"
+                data-jbj-contact-emerald
+                className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#000000] border border-[#B89555]/35 rounded-2xl p-5 md:p-7 shadow-[0_18px_46px_rgba(4,44,28,0.45),0_2px_8px_rgba(0,0,0,0.35)]"
+              >
+                {/* Scoped emerald input contract — overrides global Input `data-surface="light"` for this form only */}
+                <style>{`
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):not([type="checkbox"]):not([type="radio"]) {
+                    background-color: rgba(255,255,255,0.06) !important;
+                    background-image: none !important;
+                    color: #ffffff !important;
+                    -webkit-text-fill-color: #ffffff !important;
+                    border: 1px solid rgba(184,149,85,0.45) !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+                  }
+                  [data-jbj-contact-emerald] :is(input, textarea)::placeholder {
+                    color: rgba(255,255,255,0.45) !important;
+                    -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+                  }
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):hover,
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus,
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus-visible {
+                    border-color: #B89555 !important;
+                    box-shadow: 0 0 0 2px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+                    background-color: rgba(255,255,255,0.09) !important;
+                  }
+                  [data-jbj-contact-emerald] label { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+                  [data-jbj-contact-emerald] [data-radix-select-trigger] > span,
+                  [data-jbj-contact-emerald] [role="combobox"] > span {
+                    color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
+                  }
+                `}</style>
 
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
+                <div className="text-center mb-6">
+                  <IconTile icon={Shield} tone="emerald" size="lg" className="mx-auto mb-4" />
+
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                     Request a Consultation
                   </h2>
-                  <p className="text-[#1A1A1A]/70 text-sm">
+                  <p className="text-white/80 text-sm max-w-xl mx-auto">
                     If you would like to speak with our team regarding buying, selling, renting, investment guidance, market intelligence, or partner introductions, request a consultation through this form. Consultations focus on real estate brokerage guidance and structured introductions within our licensed scope.
                   </p>
                 </div>
 
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+
                     {/* Personal Information */}
                     <div className="space-y-4">
                         <FormField
@@ -395,11 +429,11 @@ END:VCARD`;
                         name="fullName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[#1A1A1A] text-sm font-medium">Full Name *</FormLabel>
+                            <FormLabel className="text-white text-sm font-medium">Full Name *</FormLabel>
                             <FormControl>
                                <Input 
                                 {...field} 
-                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg"
+                                className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg"
                                 placeholder="John Doe"
                               />
                             </FormControl>
@@ -414,12 +448,12 @@ END:VCARD`;
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-[#1A1A1A] text-sm font-medium">Email Address *</FormLabel>
+                              <FormLabel className="text-white text-sm font-medium">Email Address *</FormLabel>
                               <FormControl>
                                 <Input 
                                   {...field} 
                                   type="email"
-                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg"
+                                className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg"
                                   placeholder="email@example.com"
                                 />
                               </FormControl>
@@ -441,7 +475,7 @@ END:VCARD`;
                             
                             return (
                               <FormItem>
-                                <FormLabel className="text-[#1A1A1A] text-sm font-semibold">Phone Number *</FormLabel>
+                                <FormLabel className="text-white text-sm font-semibold">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
                                   <FormControl>
                                     <PhoneInput
@@ -474,7 +508,7 @@ END:VCARD`;
                           name="nationality"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Nationality *</FormLabel>
+                              <FormLabel className="text-white/85 text-sm font-medium">Nationality *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -495,7 +529,7 @@ END:VCARD`;
                           name="language"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Preferred Language *</FormLabel>
+                              <FormLabel className="text-white/85 text-sm font-medium">Preferred Language *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -517,11 +551,11 @@ END:VCARD`;
                         name="currentLocation"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Current Location (Country & City) *</FormLabel>
+                            <FormLabel className="text-white/85 text-sm font-medium">Current Location (Country & City) *</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg"
+                                className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg"
                                 placeholder="e.g., Dubai, UAE or London, UK"
                               />
                             </FormControl>
@@ -532,7 +566,7 @@ END:VCARD`;
                     </div>
 
                     {/* Service Selection */}
-                    <div className="h-px bg-[#EFE6D6] my-6" />
+                    <div className="h-px bg-white/10 my-5" />
                     
                     <div className="space-y-4">
                       <FormField
@@ -540,10 +574,10 @@ END:VCARD`;
                         name="serviceNeeded"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Service Needed *</FormLabel>
+                            <FormLabel className="text-white/85 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
-                                <SelectTrigger data-surface="light" className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                <SelectTrigger data-surface="light" className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                    <SelectValue placeholder="Select a service" />
                                 </SelectTrigger>
                               </FormControl>
@@ -566,10 +600,10 @@ END:VCARD`;
                           name="budgetRange"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Budget Range (Optional)</FormLabel>
+                              <FormLabel className="text-white/85 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger data-surface="light" className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                   <SelectTrigger data-surface="light" className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select budget" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -590,10 +624,10 @@ END:VCARD`;
                           name="timeline"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Timeline (Optional)</FormLabel>
+                              <FormLabel className="text-white/85 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
-                                   <SelectTrigger data-surface="light" className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
+                                   <SelectTrigger data-surface="light" className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-[#1A1A1A]">
                                      <SelectValue placeholder="Select timeline" />
                                   </SelectTrigger>
                                 </FormControl>
@@ -616,16 +650,16 @@ END:VCARD`;
                         name="referralCode"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Referral Code (Optional)</FormLabel>
+                            <FormLabel className="text-white/85 text-sm font-medium">Referral Code (Optional)</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
-                                className="h-12 border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] rounded-lg uppercase"
+                                className="h-11 bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 rounded-lg uppercase"
                                 placeholder="e.g., JJ-ABC123"
                                 onChange={(e) => field.onChange(e.target.value.toUpperCase())}
                               />
                             </FormControl>
-                            <p className="text-xs text-[#1A1A1A]/60 mt-1">
+                            <p className="text-xs text-white/60 mt-1">
                               If you were referred by a partner, enter their code here
                             </p>
                             <FormMessage className="text-red-500 text-xs" />
@@ -638,11 +672,11 @@ END:VCARD`;
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-[#1A1A1A]/70 text-sm font-medium">Additional Message (Optional)</FormLabel>
+                            <FormLabel className="text-white/85 text-sm font-medium">Additional Message (Optional)</FormLabel>
                             <FormControl>
                               <Textarea 
                                 {...field} 
-                                className="min-h-[100px] border-2 border-[#B89555]/40 hover:border-[#B89555] focus:border-[#B89555] resize-none rounded-lg"
+                                className="min-h-[96px] bg-white/[0.06] border border-[#B89555]/45 hover:border-[#B89555] focus:border-[#B89555] text-white placeholder:text-white/45 resize-none rounded-lg"
                                 placeholder="Tell us more about your requirements..."
                               />
                             </FormControl>
@@ -653,7 +687,7 @@ END:VCARD`;
                     </div>
 
                     {/* Checkboxes */}
-                    <div className="h-px bg-[#EFE6D6] my-6" />
+                    <div className="h-px bg-white/10 my-5" />
 
                     <div className="space-y-4">
                       <FormField
@@ -665,11 +699,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                                className="border-[#B89555]/70 bg-white/[0.06] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-white/85 text-sm font-normal cursor-pointer">
                                 I confirm the information provided is accurate. *
                               </FormLabel>
                               <FormMessage className="text-red-500 text-xs" />
@@ -687,15 +721,15 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                                className="border-[#B89555]/70 bg-white/[0.06] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-white/85 text-sm font-normal cursor-pointer">
                                 I agree to the{" "}
-                                <Link to="/terms" className="text-[#1A1A1A] hover:underline">Terms of Service</Link>
+                                <Link to="/terms" className="text-white underline decoration-[#B89555]/50 hover:decoration-white">Terms of Service</Link>
                                 {" "}and{" "}
-                                <Link to="/privacy" className="text-[#1A1A1A] hover:underline">Privacy Policy</Link>. *
+                                <Link to="/privacy" className="text-white underline decoration-[#B89555]/50 hover:decoration-white">Privacy Policy</Link>. *
                               </FormLabel>
                               <FormMessage className="text-red-500 text-xs" />
                             </div>
@@ -712,11 +746,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                                className="border-[#B89555]/70 bg-white/[0.06] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-[#1A1A1A]/70 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-white/85 text-sm font-normal cursor-pointer">
                                 I would like to receive updates and market insights. (Optional)
                               </FormLabel>
                             </div>
@@ -793,7 +827,7 @@ END:VCARD`;
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">WhatsApp</p>
-                  <p className="text-[#1A1A1A] text-sm font-medium">+971-5659-11000</p>
+                  <p className="text-white text-sm font-medium">+971-5659-11000</p>
                 </div>
               </a>
 
@@ -806,7 +840,7 @@ END:VCARD`;
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">Call Us</p>
-                  <p className="text-[#1A1A1A] text-sm font-medium">+971-5659-11000</p>
+                  <p className="text-white text-sm font-medium">+971-5659-11000</p>
                 </div>
               </a>
             </div>
