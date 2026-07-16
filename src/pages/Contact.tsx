@@ -828,11 +828,11 @@ END:VCARD`;
           <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto text-center">
             <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
             <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A] text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
               If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
             </p>
             <div className="h-px w-24 bg-[#B89555]/40 mx-auto mb-5" />
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A] text-sm leading-relaxed max-w-2xl mx-auto">
               At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
             </p>
           </div>
