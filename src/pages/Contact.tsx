@@ -383,29 +383,31 @@ END:VCARD`;
                 {/* Scoped emerald input contract — overrides global Input `data-surface="light"` for this form only */}
                 <style>{`
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):not([type="checkbox"]):not([type="radio"]) {
-                    background-color: rgba(255,255,255,0.06) !important;
-                    background-image: none !important;
+                    background: linear-gradient(135deg, #0a5a45 0%, #064E3B 55%, #042c1c 100%) !important;
+                    background-image: linear-gradient(135deg, #0a5a45 0%, #064E3B 55%, #042c1c 100%) !important;
                     color: #ffffff !important;
                     -webkit-text-fill-color: #ffffff !important;
-                    border: 1px solid rgba(184,149,85,0.45) !important;
-                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+                    border: 1px solid rgba(184,149,85,0.55) !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.25) !important;
                   }
                   [data-jbj-contact-emerald] :is(input, textarea)::placeholder {
-                    color: rgba(255,255,255,0.45) !important;
-                    -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+                    color: rgba(255,255,255,0.75) !important;
+                    -webkit-text-fill-color: rgba(255,255,255,0.75) !important;
+                    opacity: 1 !important;
                   }
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):hover,
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus,
                   [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus-visible {
-                    border-color: #B89555 !important;
-                    box-shadow: 0 0 0 2px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.08) !important;
-                    background-color: rgba(255,255,255,0.09) !important;
+                    border-color: #C9A66B !important;
+                    box-shadow: 0 0 0 2px rgba(184,149,85,0.28), inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.3) !important;
                   }
                   [data-jbj-contact-emerald] label { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
                   [data-jbj-contact-emerald] [data-radix-select-trigger] > span,
                   [data-jbj-contact-emerald] [role="combobox"] > span {
                     color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
                   }
+                  [data-jbj-contact-emerald] [data-radix-select-trigger] svg,
+                  [data-jbj-contact-emerald] [role="combobox"] svg { color: #ffffff !important; opacity: 0.85; }
                 `}</style>
 
                 <div className="text-center mb-6">
@@ -805,49 +807,6 @@ END:VCARD`;
       {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
       <SupportTicketBox />
 
-      {/* Direct Contact Section */}
-      <section className="py-8 md:py-10">
-        <div className="container mx-auto px-4">
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
-            <h2 className="text-center text-2xl md:text-3xl font-light tracking-tight text-[#1A1A1A] mb-3">
-              Prefer to reach us directly?
-            </h2>
-            <p className="text-center text-[#1A1A1A]/65 text-sm mb-6 max-w-2xl mx-auto">
-              For general inquiries, consultations or non-technical requests, contact us through the channels below.
-            </p>
-            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <a
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
-              >
-                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
-                  <MessageCircle className="w-5 h-5 text-[#1A1A1A]" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">WhatsApp</p>
-                  <p className="text-white text-sm font-medium">+971-5659-11000</p>
-                </div>
-              </a>
-
-              <a
-                href={getCallUrl()}
-                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
-              >
-                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
-                  <Phone className="w-5 h-5 text-[#1A1A1A]" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">Call Us</p>
-                  <p className="text-white text-sm font-medium">+971-5659-11000</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Important Notice */}
       <section className="py-8 md:py-10">
         <div className="container mx-auto px-4">
@@ -856,7 +815,7 @@ END:VCARD`;
               <IconTile icon={Shield} tone="ink" size="md" />
               <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
             </div>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+            <p className="text-[#1A1A1A] text-sm leading-relaxed">
               JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
             </p>
           </div>
@@ -869,11 +828,11 @@ END:VCARD`;
           <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto text-center">
             <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
             <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A] text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
               If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
             </p>
             <div className="h-px w-24 bg-[#B89555]/40 mx-auto mb-5" />
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed max-w-2xl mx-auto">
+            <p className="text-[#1A1A1A] text-sm leading-relaxed max-w-2xl mx-auto">
               At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
             </p>
           </div>
