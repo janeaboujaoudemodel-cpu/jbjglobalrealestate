@@ -1,7 +1,7 @@
 import { SEOHead } from "@/components/SEOHead";
 import { motion } from "framer-motion";
-import { 
-  HelpCircle, 
+import {
+  HelpCircle,
   Globe,
   Shield,
   TrendingUp,
@@ -9,29 +9,19 @@ import {
   Banknote,
   Users,
   Phone,
-  Search,
-  LucideIcon
+  ArrowRight,
+  LucideIcon,
 } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { ContentPageShell } from "@/components/content-page/ContentPageShell";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { FAQHero } from "@/components/faq/FAQHero";
-import { FAQTableOfContents } from "@/components/faq/FAQTableOfContents";
-import { FAQFloatingSidebar } from "@/components/faq/FAQFloatingSidebar";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
 
 interface FAQCategory {
   id: string;
@@ -39,6 +29,10 @@ interface FAQCategory {
   icon: LucideIcon;
   questions: Array<{ question: string; answer: string }>;
 }
+
+const HEADING_FONT = {
+  fontFamily: '"Cormorant Garamond","Playfair Display",Georgia,serif',
+};
 
 const InvestorFAQ = () => {
   const categories: FAQCategory[] = [
@@ -49,13 +43,15 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "Who is considered an investor in real estate?",
-          answer: "An investor is anyone purchasing property with the objective of capital preservation, rental income, long-term appreciation, or portfolio diversification. This includes first-time investors, experienced portfolio holders, and international buyers."
+          answer:
+            "An investor is anyone purchasing property with the objective of capital preservation, rental income, long-term appreciation, or portfolio diversification. This includes first-time investors, experienced portfolio holders, and international buyers.",
         },
         {
           question: "Is real estate in the UAE suitable for investment?",
-          answer: "The UAE real estate market is supported by strong regulation, transparent ownership laws, and ongoing government-led development initiatives. Investment suitability depends on objectives, timeframe, risk tolerance, and market conditions at the time of purchase."
-        }
-      ]
+          answer:
+            "The UAE real estate market is supported by strong regulation, transparent ownership laws, and ongoing government-led development initiatives. Investment suitability depends on objectives, timeframe, risk tolerance, and market conditions at the time of purchase.",
+        },
+      ],
     },
     {
       id: "returns-guarantees",
@@ -64,9 +60,10 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "Do you guarantee returns or rental income?",
-          answer: "No. There are no guaranteed returns in real estate. Any claim of guaranteed ROI is misleading. We provide analysis based on historical data, market indicators, and official government information, but outcomes are never guaranteed."
-        }
-      ]
+          answer:
+            "No. There are no guaranteed returns in real estate. Any claim of guaranteed ROI is misleading. We provide analysis based on historical data, market indicators, and official government information, but outcomes are never guaranteed.",
+        },
+      ],
     },
     {
       id: "evaluation-process",
@@ -75,13 +72,15 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "How do you evaluate investment opportunities?",
-          answer: "Investment analysis is based on:\n\n• Official government and regulatory data\n• Supply and demand dynamics\n• Location fundamentals\n• Developer credibility and delivery history\n• Entry price relative to comparable assets\n• Rental yield and exit liquidity indicators\n\nOur role is to help investors understand risk and opportunity clearly."
+          answer:
+            "Investment analysis is based on:\n\n• Official government and regulatory data\n• Supply and demand dynamics\n• Location fundamentals\n• Developer credibility and delivery history\n• Entry price relative to comparable assets\n• Rental yield and exit liquidity indicators\n\nOur role is to help investors understand risk and opportunity clearly.",
         },
         {
           question: "Do you push projects that pay higher commissions?",
-          answer: "No. Property recommendations are not driven by commissions or personal relationships. Our approach is to evaluate the full market and align options strictly with the investor's stated goals."
-        }
-      ]
+          answer:
+            "No. Property recommendations are not driven by commissions or personal relationships. Our approach is to evaluate the full market and align options strictly with the investor's stated goals.",
+        },
+      ],
     },
     {
       id: "fees-costs",
@@ -90,13 +89,15 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "Are there fees when buying off-plan as an investor?",
-          answer: "For off-plan purchases, investors do not pay brokerage fees. Developers compensate licensed brokerages directly. All costs related to the property itself (purchase price, registration fees, etc.) are disclosed transparently."
+          answer:
+            "For off-plan purchases, investors do not pay brokerage fees. Developers compensate licensed brokerages directly. All costs related to the property itself (purchase price, registration fees, etc.) are disclosed transparently.",
         },
         {
           question: "What fees apply when buying a ready property?",
-          answer: "When purchasing a ready property, standard brokerage fees apply in accordance with UAE regulations. These are communicated clearly before proceeding with any transaction."
-        }
-      ]
+          answer:
+            "When purchasing a ready property, standard brokerage fees apply in accordance with UAE regulations. These are communicated clearly before proceeding with any transaction.",
+        },
+      ],
     },
     {
       id: "international-investors",
@@ -105,9 +106,10 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "Can non-residents invest in UAE real estate?",
-          answer: "Yes. Non-residents can invest in designated freehold areas across the UAE. Residency is not required to purchase property, though certain investments may qualify buyers for residency programs subject to government criteria."
-        }
-      ]
+          answer:
+            "Yes. Non-residents can invest in designated freehold areas across the UAE. Residency is not required to purchase property, though certain investments may qualify buyers for residency programs subject to government criteria.",
+        },
+      ],
     },
     {
       id: "investment-strategies",
@@ -116,9 +118,10 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "What types of investment strategies do you support?",
-          answer: "We support multiple strategies, including:\n\n• Long-term capital appreciation\n• Rental income generation\n• Off-plan-to-handover strategies\n• Portfolio diversification across locations and asset types\n\nStrategy selection depends on individual objectives and market conditions."
-        }
-      ]
+          answer:
+            "We support multiple strategies, including:\n\n• Long-term capital appreciation\n• Rental income generation\n• Off-plan-to-handover strategies\n• Portfolio diversification across locations and asset types\n\nStrategy selection depends on individual objectives and market conditions.",
+        },
+      ],
     },
     {
       id: "post-purchase",
@@ -127,13 +130,15 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "Do you manage properties after purchase?",
-          answer: "We assist investors by coordinating leasing, resale, or introductions to licensed property management providers when required. All services are clearly defined and optional."
+          answer:
+            "We assist investors by coordinating leasing, resale, or introductions to licensed property management providers when required. All services are clearly defined and optional.",
         },
         {
           question: "How involved are you after the purchase?",
-          answer: "Our support does not end at the transaction. We remain available to assist with leasing, resale strategies, and market updates relevant to your asset, subject to agreed services."
-        }
-      ]
+          answer:
+            "Our support does not end at the transaction. We remain available to assist with leasing, resale strategies, and market updates relevant to your asset, subject to agreed services.",
+        },
+      ],
     },
     {
       id: "decision-getting-started",
@@ -142,188 +147,169 @@ const InvestorFAQ = () => {
       questions: [
         {
           question: "Who makes the final investment decision?",
-          answer: "The final decision always belongs to the investor. Our responsibility is to provide clarity, data, and guidance so decisions are made with full understanding of risks and opportunities."
+          answer:
+            "The final decision always belongs to the investor. Our responsibility is to provide clarity, data, and guidance so decisions are made with full understanding of risks and opportunities.",
         },
         {
           question: "How do I start as an investor with JBJ Global Real Estate?",
-          answer: "You can contact us through the website to outline your objectives. We then provide structured guidance and market insights aligned with your investment goals."
-        }
-      ]
-    }
+          answer:
+            "You can contact us through the website to outline your objectives. We then provide structured guidance and market insights aligned with your investment goals.",
+        },
+      ],
+    },
   ];
 
-  const allFaqItems = categories.flatMap(cat => cat.questions);
+  const allFaqItems = categories.flatMap((cat) => cat.questions);
+  const tocSections = categories.map((c) => ({ id: c.id, title: c.title, icon: c.icon }));
 
   return (
-    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
-      <SEOHead 
+    <>
+      <SEOHead
         title="Investor FAQ | Investment Questions Answered | JBJ Global Real Estate"
         description="Find answers to common investor questions about UAE real estate investment, returns, off-plan properties, rental performance, and working with JBJ Global Real Estate."
         keywords="investor FAQ, UAE real estate investment, Dubai property investment, off-plan investment, rental yield Dubai, property investment questions"
         canonicalPath="/investor-faq"
         faqItems={allFaqItems}
       />
-      
-      {/* Hero */}
-      <FAQHero
-        badge="Investor FAQ"
-        badgeIcon={HelpCircle}
-        title={
-          <>
-            Investor Questions <span className="text-[#1A1A1A]">Answered</span>
-          </>
-        }
-        description="Find clear, factual answers to common questions about investing in UAE real estate."
-        backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80"
-        actions={
-          <>
-            <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
-              onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Search className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] font-semibold">Browse FAQs</span>
-            </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
-              <Link to="/contact">
-                <Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-                <span className="text-[#1A1A1A] font-semibold">Ask Our Team</span>
-              </Link>
-            </Button>
-          </>
-        }
-      />
 
-      <FAQFloatingSidebar 
-        categories={categories}
-        title="Navigator"
-      />
-
-      {/* FAQ Content - Layer 2 Active Champagne Edge-to-Edge */}
-      <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
-          {/* Sticky FAQ Quick Access - Mobile/Tablet Only */}
-          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F7F1E6]/95 via-[#ECE2D2]/95 to-[#D8C7A6]/95 backdrop-blur-sm border-b border-[#B89555]/20 shadow-lg">
-            <div className="w-full">
-              <FAQTableOfContents 
-                categories={categories}
-                title="FAQ Quick Access"
-                sticky={true}
-              />
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="w-full space-y-16 mt-8">
-            {categories.map((category, categoryIndex) => (
-              <motion.div
-                key={categoryIndex}
-                id={`category-${categoryIndex}`}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={staggerContainer}
-                className="scroll-mt-40"
-              >
-                {/* Category Header */}
-                <motion.div 
-                  variants={fadeInUp}
-                  className="flex items-center gap-4 mb-6"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center">
-                    <category.icon className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{category.title}</h2>
-                </motion.div>
-
-                {/* Questions - Layer 3 Locked Champagne Cards */}
-                <motion.div variants={fadeInUp}>
-                  <div className="space-y-4">
-                    {category.questions.map((faq, faqIndex) => (
-                      <Accordion key={faqIndex} type="single" collapsible className="w-full">
-                        <AccordionItem 
-                          value={`${categoryIndex}-${faqIndex}`}
-                          data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl px-6 py-2 data-[state=open]:border-[#B89555]/60 data-[state=open]:shadow-md transition-all"
-                        >
-                          <AccordionTrigger className="text-[#1A1A1A] text-left hover:text-[#1A1A1A] hover:no-underline py-5 text-base font-medium">
-                            {faq.question}
-                          </AccordionTrigger>
-                          <AccordionContent className="text-[#1A1A1A]/70 pb-5 leading-relaxed whitespace-pre-line">
-                            {faq.answer}
-                          </AccordionContent>
-                        </AccordionItem>
-                      </Accordion>
-                    ))}
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Still Have Questions - Layer 2 */}
-      <section className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto"
+      <ContentPageShell
+        hero={{
+          eyebrow: "Investor FAQ",
+          eyebrowIcon: HelpCircle,
+          title: "Investor Questions Answered",
+          subtitle:
+            "Clear, factual answers to the questions serious investors ask before committing capital in the UAE.",
+        }}
+        sections={tocSections}
+        tocTitle="In This FAQ"
+      >
+        {/* Category cards — locked ContentPageShell white-champagne pattern */}
+        {categories.map((category, categoryIndex) => (
+          <section
+            key={category.id}
+            id={category.id}
+            className="scroll-mt-28 mb-10 md:mb-14"
           >
-            {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12 text-center">
-              <div className="w-14 h-14 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-7 h-7 text-[#1A1A1A]" />
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.4 }}
+              className="rounded-2xl border border-[#B89555]/35 bg-white/85 backdrop-blur-sm shadow-[0_10px_40px_-24px_rgba(6,78,59,0.25)] p-6 md:p-10"
+            >
+              {/* Category header */}
+              <div className="flex items-center gap-3 mb-6">
+                <span
+                  data-surface="emerald"
+                  className="w-11 h-11 rounded-xl inline-flex items-center justify-center border border-white/15 flex-shrink-0"
+                  style={{
+                    background:
+                      "linear-gradient(135deg,#064E3B,#042c1c 55%,#010806)",
+                  }}
+                >
+                  <category.icon className="w-5 h-5 text-white" />
+                </span>
+                <h2
+                  className="text-2xl md:text-3xl font-semibold tracking-tight text-[#0d3a2b]"
+                  style={HEADING_FONT}
+                >
+                  {category.title}
+                </h2>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-4">
-                Still Have Questions?
-              </h2>
-              <p className="text-[#1A1A1A]/70 mb-8 max-w-xl mx-auto leading-relaxed">
-                Our team is here to help. Whether you're exploring investment options or ready to proceed, 
-                we're happy to provide guidance tailored to your situation.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button asChild variant="primary" className="px-6">
-                  <Link to="/contact">
-                    <Phone className="w-4 h-4 mr-2" />
-                    Contact Our Team
-                  </Link>
-                </Button>
-                <Button asChild variant="primary" className="px-6">
-                  <Link to="/investor-education">
-                    Read Investor Education Guide
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Guide Navigation - Layer 2 */}
-      <section className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
-        <div className="container mx-auto px-4">
+              {/* Questions */}
+              <div className="space-y-3">
+                {category.questions.map((faq, faqIndex) => (
+                  <Accordion
+                    key={faqIndex}
+                    type="single"
+                    collapsible
+                    className="w-full"
+                  >
+                    <AccordionItem
+                      value={`${categoryIndex}-${faqIndex}`}
+                      className="jj-faq-item rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] px-5 data-[state=open]:bg-[image:var(--jj-emerald-ombre)] data-[state=open]:border-[#0d3a2b]/40 data-[state=open]:shadow-[0_10px_30px_-16px_rgba(6,78,59,0.55)] transition-colors"
+                    >
+                      <AccordionTrigger
+                        className="jj-faq-trigger text-left py-4 text-base font-medium text-[#1A1A1A] hover:no-underline data-[state=open]:text-white"
+                      >
+                        {faq.question}
+                      </AccordionTrigger>
+                      <AccordionContent
+                        className="jj-faq-content pb-5 leading-relaxed whitespace-pre-line text-[#1A1A1A]/80 data-[state=open]:text-white/90"
+                      >
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                ))}
+              </div>
+            </motion.div>
+          </section>
+        ))}
+
+        {/* Still-have-questions — solid emerald CTA card */}
+        <section id="still-have-questions" className="scroll-mt-28 mb-10 md:mb-14">
+          <div
+            data-surface="emerald"
+            className="rounded-2xl border border-white/15 p-8 md:p-12 text-center shadow-[0_18px_46px_-20px_rgba(6,78,59,0.65)]"
+            style={{
+              background:
+                "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#000 100%)",
+            }}
+          >
+            <span
+              className="w-14 h-14 rounded-2xl inline-flex items-center justify-center border border-white/20 mx-auto mb-5 bg-white/8"
+            >
+              <Shield className="w-7 h-7 text-white" />
+            </span>
+            <h2
+              className="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-3"
+              style={HEADING_FONT}
+            >
+              Still Have Questions?
+            </h2>
+            <p className="text-white/85 max-w-xl mx-auto mb-7 leading-relaxed">
+              Whether you're exploring investment options or ready to proceed,
+              our team is here to provide guidance tailored to your situation.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button asChild variant="primary" className="px-6">
+                <Link to="/contact">
+                  <Phone className="w-4 h-4 mr-2" />
+                  Contact Our Team
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="px-6 border-white/40 bg-white/8 text-white hover:bg-white/15"
+              >
+                <Link to="/investor-education">
+                  Read Investor Guide
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Guide nav */}
+        <div className="mb-8">
           <GuideNavigation current="/investor-faq" guides={GUIDE_LINKS} />
         </div>
-      </section>
 
-      {/* Disclaimer - Layer 2 with Layer 3 Card */}
-      <section className="py-8 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-xl p-6">
-              <p className="text-center text-[#1A1A1A]/70 text-sm leading-relaxed">
-                <span className="text-[#1A1A1A] font-medium">Disclaimer:</span> All content is educational 
-                and informational in nature. It does not constitute financial guarantees or investment promises. 
-                Decisions should reflect individual objectives and risk tolerance.
-              </p>
-            </div>
-          </div>
+        {/* Disclaimer */}
+        <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-5 text-center">
+          <p className="text-sm text-[#1A1A1A]/75 leading-relaxed">
+            <span className="text-[#1A1A1A] font-semibold">Disclaimer:</span>{" "}
+            All content is educational and informational in nature. It does not
+            constitute financial guarantees or investment promises. Decisions
+            should reflect individual objectives and risk tolerance.
+          </p>
         </div>
-      </section>
-    </div>
+      </ContentPageShell>
+    </>
   );
 };
 
