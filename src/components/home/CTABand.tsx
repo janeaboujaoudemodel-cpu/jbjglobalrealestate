@@ -12,6 +12,7 @@ const CTABand = () => {
     <CombinedContactNewsletter
       title={t('cta.readyToStart', 'Ready to Get Started?')}
       subtitle={t('cta.readySubtitle', 'Connect with our expert team for personalized guidance.')}
+      fitContainer
     />
   );
 };

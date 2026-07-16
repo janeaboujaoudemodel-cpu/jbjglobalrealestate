@@ -8,14 +8,15 @@ interface MIPreFooterCardProps {
   secondaryLink?: string;
   secondaryText?: string;
   /**
-   * Tailwind max-width class. Defaults to `max-w-6xl` so the CTA card matches
-   * the FAQ/content panels on every route unless a page explicitly opts out.
+   * Tailwind max-width class. Kept for backwards compatibility; the shared
+   * CTA layout lock in CSS now forces the canonical global content track so
+   * these cards match the homepage "Top Areas in Dubai" panel everywhere.
    */
   maxWidthClass?: string;
   innerInset?: boolean;
 }
 
-export default function MIPreFooterCard({ maxWidthClass = "max-w-6xl", innerInset = false, ...props }: MIPreFooterCardProps) {
+export default function MIPreFooterCard({ maxWidthClass = "max-w-none", innerInset = false, ...props }: MIPreFooterCardProps) {
   // Service pages compare this CTA against the full section card, not an inner
   // text rail, so the emerald card itself must occupy the same content width.
   const insetPad = innerInset ? "" : "";
