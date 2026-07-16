@@ -1,11 +1,10 @@
 import { SEOHead } from "@/components/SEOHead";
 import { GuideBookSection } from "@/components/books/GuideBookSection";
 import { investorEducationBook } from "@/data/bookCollections";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { 
-  CheckCircle2, 
-  ArrowDown,
+import {
+  CheckCircle2,
+  ArrowRight,
   Shield,
   TrendingUp,
   Target,
@@ -19,466 +18,388 @@ import {
   HelpCircle,
   Phone,
   Briefcase,
-  Eye
+  Eye,
 } from "lucide-react";
 import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { GuideHero } from "@/components/guides/GuideHero";
-import { GuideTableOfContents } from "@/components/guides/GuideTableOfContents";
-import { GuideCTA } from "@/components/guides/GuideCTA";
+import { ContentPageShell } from "@/components/content-page/ContentPageShell";
 
+/* ---------------- Reusable premium primitives (light champagne surface) ---------------- */
+
+function SectionCard({
+  id,
+  icon: Icon,
+  title,
+  children,
+}: {
+  id: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="scroll-mt-28 mb-10 md:mb-14">
+      <div className="rounded-2xl border border-[#B89555]/35 bg-white/85 backdrop-blur-sm shadow-[0_10px_40px_-24px_rgba(6,78,59,0.25)] p-6 md:p-10">
+        <div className="flex items-center gap-3 mb-5">
+          <span
+            data-surface="emerald"
+            className="w-11 h-11 rounded-xl inline-flex items-center justify-center border border-white/15"
+            style={{ background: "linear-gradient(135deg,#064E3B,#042c1c 55%,#010806)" }}
+          >
+            <Icon className="w-5 h-5 text-white" />
+          </span>
+          <h2
+            className="text-2xl md:text-3xl font-semibold tracking-tight text-[#0d3a2b]"
+            style={{ fontFamily: '"Cormorant Garamond","Playfair Display",Georgia,serif' }}
+          >
+            {title}
+          </h2>
+        </div>
+        <div className="text-[#1A1A1A]/80 leading-relaxed space-y-4 text-[15px] md:text-base">
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-2.5">
+      {items.map((t, i) => (
+        <li key={i} className="flex items-start gap-3">
+          <CheckCircle2 className="w-5 h-5 text-[#064E3B] mt-0.5 flex-shrink-0" />
+          <span className="text-[#1A1A1A]/80">{t}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function NumberedList({ items }: { items: string[] }) {
+  return (
+    <ol className="space-y-3">
+      {items.map((t, i) => (
+        <li
+          key={i}
+          className="flex items-center gap-4 rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] px-4 py-3"
+        >
+          <span
+            data-surface="emerald"
+            className="w-8 h-8 rounded-full inline-flex items-center justify-center text-white text-sm font-semibold border border-white/15"
+            style={{ background: "linear-gradient(135deg,#064E3B,#042c1c 55%,#010806)" }}
+          >
+            {i + 1}
+          </span>
+          <span className="text-[#1A1A1A]/85 font-medium">{t}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function Callout({
+  tone = "neutral",
+  children,
+}: {
+  tone?: "neutral" | "warn";
+  children: React.ReactNode;
+}) {
+  const styles =
+    tone === "warn"
+      ? "border-[#B89555]/40 bg-[#FBF3E3] text-[#5A3A00]"
+      : "border-[#B89555]/25 bg-[#FDFBF7] text-[#1A1A1A]/80";
+  return (
+    <div className={`rounded-xl border ${styles} p-4 text-sm leading-relaxed`}>{children}</div>
+  );
+}
+
+/* ---------------------------------- Page ---------------------------------- */
 
 const InvestorEducation = () => {
-  // Investment Basics - Three Primary Factors
   const investmentFactors = [
     "Market cycle timing",
     "Asset quality and location",
-    "Investor objective"
+    "Investor objective",
   ];
 
-  // Investment Objectives
   const investmentObjectives = [
     {
       title: "Capital Appreciation",
       icon: TrendingUp,
-      description: "Long-term value growth driven by location, infrastructure development, and market fundamentals."
+      description:
+        "Long-term value growth driven by location, infrastructure development, and market fundamentals.",
     },
     {
       title: "Rental Income",
       icon: Banknote,
-      description: "Income-focused strategies based on tenant demand, rental index data, and asset stability."
+      description:
+        "Income-focused strategies based on tenant demand, rental index data, and asset stability.",
     },
     {
       title: "Portfolio Diversification",
       icon: BarChart3,
-      description: "Real estate as a stabilizing asset class within a broader investment portfolio."
+      description:
+        "Real estate as a stabilizing asset class within a broader investment portfolio.",
     },
     {
       title: "Long-term Residency Planning",
       icon: Home,
-      description: "Property acquired for personal use, visa benefits, or future relocation considerations."
-    }
+      description:
+        "Property acquired for personal use, visa benefits, or future relocation considerations.",
+    },
   ];
 
-  // Off-Plan Benefits
   const offPlanBenefits = [
     "Structured payment plans aligned with construction progress",
     "Entry prices typically lower than ready properties",
-    "Capital appreciation potential by handover"
+    "Capital appreciation potential by handover",
   ];
 
-  // Ready Property Benefits
-  const readyBenefits = [
-    "Immediate rental income",
-    "Personal use",
-    "Lower execution risk"
-  ];
+  const readyBenefits = ["Immediate rental income", "Personal use", "Lower execution risk"];
 
-  // Market Analysis Factors
   const marketAnalysisFactors = [
     "Official government data",
     "Market transaction trends",
     "Supply and demand analysis",
-    "Infrastructure and zoning plans"
+    "Infrastructure and zoning plans",
   ];
 
-  // JBJ Role
   const jbjRole = [
     "Market education and comparison",
     "Project and location analysis",
     "Developer due diligence",
     "Transaction coordination",
-    "Post-purchase support through leasing or resale services"
+    "Post-purchase support through leasing or resale services",
   ];
 
-  // TOC Items
   const tocItems = [
-    { id: 'overview', title: 'Overview', icon: Target },
-    { id: 'how-it-works', title: 'How Investment Works', icon: Briefcase },
-    { id: 'types', title: 'Types of Investments', icon: Building },
-    { id: 'objectives', title: 'Investment Objectives', icon: TrendingUp },
-    { id: 'market-analysis', title: 'Market Analysis', icon: Database },
-    { id: 'risk', title: 'Risk Awareness', icon: AlertTriangle },
-    { id: 'jbj-role', title: 'Role of JBJ', icon: Shield },
-    { id: 'long-term', title: 'Long-Term Perspective', icon: Eye },
+    { id: "overview", title: "Overview", icon: Target },
+    { id: "how-it-works", title: "How Investment Works", icon: Briefcase },
+    { id: "types", title: "Types of Investments", icon: Building },
+    { id: "objectives", title: "Investment Objectives", icon: TrendingUp },
+    { id: "market-analysis", title: "Market Analysis", icon: Database },
+    { id: "risk", title: "Risk Awareness", icon: AlertTriangle },
+    { id: "jbj-role", title: "Role of JBJ", icon: Shield },
+    { id: "long-term", title: "Long-Term Perspective", icon: Eye },
   ];
 
   return (
-    <div data-neon-page className="min-h-screen bg-[#FDFBF7]">
-      <SEOHead 
+    <>
+      <SEOHead
         title="Investor Education | Understanding Real Estate Investment in the UAE | JBJ"
         description="Learn how real estate investment works in the UAE. Data-driven education on market cycles, investment types, risk awareness, and informed decision-making."
       />
 
-      {/* Table of Contents - Fixed Right Sidebar */}
-      <GuideTableOfContents 
-        items={tocItems}
-        ctaAction={{
-          label: "Speak With an Advisor",
-          href: "/contact",
-          icon: Phone
+      <ContentPageShell
+        hero={{
+          eyebrow: "Investor Education",
+          eyebrowIcon: Target,
+          title: (
+            <>
+              Understanding Real Estate
+              <br />
+              Investment in the UAE
+            </>
+          ),
+          subtitle:
+            "A regulated, transparent framework — supported by government planning, long-term infrastructure and clear ownership laws. Education first, sales second.",
+          height: "md",
         }}
-      />
+        sections={tocItems}
+        tocTitle="In This Guide"
+      >
+        {/* Book cover + chapter TOC */}
+        <div className="-mx-4 sm:-mx-6 mb-12">
+          <GuideBookSection book={investorEducationBook} />
+        </div>
 
-      {/* Premium Hero */}
-      <GuideHero
-        badge="Investor Education"
-        badgeIcon={Target}
-        title={
-          <>
-            Understanding Real Estate Investment{" "}
-            <span className="text-[#1A1A1A]">in the UAE</span>
-          </>
-        }
-        description="Real estate investment in the UAE operates within a regulated, transparent framework supported by government planning, long-term infrastructure development, and clear ownership laws. At JBJ Global Real Estate, investment education is a core responsibility — not a sales approach."
-        backgroundImage="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=80"
-        actions={
-          <>
-            <button
-              onClick={() => document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' })}
-              data-surface="emerald"
-              className="jj-cta-emerald inline-flex items-center justify-center gap-2 px-7 md:px-9 py-3 md:py-4 text-sm md:text-base font-bold rounded-xl text-white transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_10px_28px_rgba(6,78,59,0.35)]"
-            >
-              <ArrowDown className="w-4 h-4 text-white" />
-              <span className="text-white">Read the Full Guide</span>
-            </button>
-            <Link to="/investor-faq">
-              <button
-                data-surface="emerald"
-                className="jj-cta-emerald inline-flex items-center justify-center gap-2 px-7 md:px-9 py-3 md:py-4 text-sm md:text-base font-bold rounded-xl text-white transition-transform duration-300 hover:-translate-y-0.5 shadow-[0_10px_28px_rgba(6,78,59,0.35)]"
+        <SectionCard id="overview" icon={Target} title="Overview">
+          <p>
+            Real estate investment in the UAE operates within a regulated, transparent framework
+            supported by government planning, long-term infrastructure development, and clear
+            ownership laws.
+          </p>
+          <p>
+            At JBJ Global Real Estate, investment education is a core responsibility — not a
+            sales approach. Our role is to help investors understand how the market works, how
+            opportunities should be evaluated, and how informed decisions are made based on
+            data, not promises.
+          </p>
+        </SectionCard>
+
+        <SectionCard id="how-it-works" icon={Briefcase} title="How Real Estate Investment Works">
+          <p>Real estate investment is based on three primary factors:</p>
+          <NumberedList items={investmentFactors} />
+          <p className="italic text-[#1A1A1A]/70">
+            Every investment decision should begin with clarity around purpose: capital
+            appreciation, rental income, portfolio diversification, or long-term asset holding.
+          </p>
+        </SectionCard>
+
+        <SectionCard id="types" icon={Building} title="Types of Real Estate Investments">
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Clock className="w-5 h-5 text-[#064E3B]" />
+                <h3 className="font-semibold text-[#0d3a2b]">Off-Plan Properties</h3>
+              </div>
+              <p className="text-sm text-[#1A1A1A]/75 mb-3">
+                Purchased directly from a developer before completion. Commonly used for
+                long-term strategies.
+              </p>
+              <BulletList items={offPlanBenefits} />
+            </div>
+            <div className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <Building className="w-5 h-5 text-[#064E3B]" />
+                <h3 className="font-semibold text-[#0d3a2b]">Ready Properties</h3>
+              </div>
+              <p className="text-sm text-[#1A1A1A]/75 mb-3">
+                Completed assets suitable for immediate use or rental.
+              </p>
+              <BulletList items={readyBenefits} />
+            </div>
+          </div>
+          <Callout>
+            <strong>Important:</strong> For off-plan purchases, buyers do not pay agency fees —
+            licensed brokerages are compensated directly by developers. For ready properties,
+            standard Dubai agency fees apply and are disclosed clearly before any transaction.
+          </Callout>
+        </SectionCard>
+
+        <SectionCard id="objectives" icon={TrendingUp} title="Investment Objectives">
+          <p>
+            Every investor enters the market with a different objective. Understanding the
+            objective is essential before selecting a location, property type, or developer.
+          </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            {investmentObjectives.map((o) => (
+              <div
+                key={o.title}
+                className="rounded-xl border border-[#B89555]/30 bg-[#FDFBF7] p-5 hover:border-[#064E3B]/60 transition-colors"
               >
-                <HelpCircle className="w-4 h-4 text-white" />
-                <span className="text-white">View Investor FAQs</span>
-              </button>
-            </Link>
-          </>
-        }
-      />
-
-      {/* 3D Book Cover + Table of Contents */}
-      <GuideBookSection book={investorEducationBook} />
-
-      {/* Main Content with Right Padding for TOC */}
-      <div className="lg:pr-80">
-        {/* Overview Section - Layer 2 */}
-        <section id="overview" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-5xl mx-auto">
-              {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <Target className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-[#1A1A1A]">Overview</span>
-                  </h2>
-                </div>
-                <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
-                  Real estate investment in the UAE operates within a regulated, transparent framework supported by government planning, long-term infrastructure development, and clear ownership laws.
-                </p>
-                <p className="text-[#1A1A1A]/70 leading-relaxed">
-                  At JBJ Global Real Estate, investment education is a core responsibility — not a sales approach. Our role is to help investors understand how the market works, how opportunities should be evaluated, and how informed decisions are made based on data, not promises.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* How Investment Works - Layer 2 */}
-        <section id="how-it-works" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-5xl mx-auto">
-              {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <Briefcase className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-[#1A1A1A]">How</span> Real Estate Investment Works
-                  </h2>
-                </div>
-                <p className="text-[#1A1A1A]/70 mb-6">
-                  Real estate investment is based on three primary factors:
-                </p>
-                <div className="space-y-4 mb-6">
-                  {investmentFactors.map((factor, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 bg-[#FDFBF7]/60 rounded-xl border border-[#B89555]/20">
-                      <div className="w-10 h-10 rounded-full bg-[#EFE6D6]/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-[#1A1A1A] font-bold">{index + 1}</span>
-                      </div>
-                      <span className="text-[#1A1A1A]/70 font-medium">{factor}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[#1A1A1A]/70 text-sm italic">
-                  Every investment decision should begin with clarity around purpose: capital appreciation, rental income, portfolio diversification, or long-term asset holding.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Types of Investments - Layer 2 */}
-        <section id="types" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <Building className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                  <span className="text-[#1A1A1A]">Types</span> of Real Estate Investments
-                </h2>
-              </div>
-
-              <div className="space-y-8">
-                {/* Off-Plan Properties - Layer 3 */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-[#1A1A1A]" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-[#1A1A1A]">Off-Plan Properties</h3>
-                  </div>
-                  <p className="text-[#1A1A1A]/70 mb-6">
-                    Off-plan investments involve purchasing property directly from a developer before completion. These are commonly used for long-term strategies and offer:
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    {offPlanBenefits.map((point, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
-                        <span className="text-[#1A1A1A]/70">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="p-4 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-xl">
-                    <p className="text-[#1A1A1A]/70 text-sm">
-                      <strong>Important:</strong> For off-plan purchases, buyers do not pay any agency fees. Licensed brokerages are compensated directly by developers. Our role is to analyze projects across the market, compare developers, locations, pricing, and timelines, and guide investors toward options aligned with their objectives — without cost to the buyer.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Ready Properties - Layer 3 */}
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center">
-                      <Building className="w-6 h-6 text-[#1A1A1A]" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-[#1A1A1A]">Ready Properties</h3>
-                  </div>
-                  <p className="text-[#1A1A1A]/70 mb-6">
-                    Ready properties are completed assets suitable for immediate use or rental. They are commonly chosen for:
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    {readyBenefits.map((point, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] flex-shrink-0 mt-0.5" />
-                        <span className="text-[#1A1A1A]/70">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="p-4 bg-[#FDFBF7]/60 border border-[#B89555]/20 rounded-xl">
-                    <p className="text-[#1A1A1A]/70 text-sm">
-                      For ready property purchases, standard agency fees apply in accordance with Dubai regulations. These fees are disclosed clearly before any transaction proceeds.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Investment Objectives - Layer 2 */}
-        <section id="objectives" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] mb-4">
-                  <span className="text-[#1A1A1A]">Investment</span> Objectives
-                </h2>
-                <p className="text-[#1A1A1A]/70 max-w-2xl mx-auto">
-                  Every investor enters the market with a different objective. Understanding the objective is essential before selecting a location, property type, or developer.
-                </p>
-              </div>
-
-              {/* Layer 3 Cards Grid */}
-              <div className="grid md:grid-cols-2 gap-6">
-                {investmentObjectives.map((objective, index) => (
-                  <div 
-                    key={index}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 hover:border-[#B89555] hover:shadow-lg hover:shadow-gold/10 transition-all"
+                <div className="flex items-center gap-3 mb-2">
+                  <span
+                    data-surface="emerald"
+                    className="w-9 h-9 rounded-lg inline-flex items-center justify-center border border-white/15"
+                    style={{
+                      background: "linear-gradient(135deg,#064E3B,#042c1c 55%,#010806)",
+                    }}
                   >
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <objective.icon className="w-6 h-6 text-[#1A1A1A]" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-[#1A1A1A]">{objective.title}</h3>
-                    </div>
-                    <p className="text-[#1A1A1A]/70 leading-relaxed">{objective.description}</p>
-                  </div>
-                ))}
+                    <o.icon className="w-4 h-4 text-white" />
+                  </span>
+                  <h3 className="font-semibold text-[#0d3a2b]">{o.title}</h3>
+                </div>
+                <p className="text-sm text-[#1A1A1A]/75 leading-relaxed">{o.description}</p>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+
+        <SectionCard
+          id="market-analysis"
+          icon={Database}
+          title="Market Analysis & Data-Based Evaluation"
+        >
+          <p>At JBJ Global Real Estate, investment guidance is based on:</p>
+          <BulletList items={marketAnalysisFactors} />
+          <p className="italic text-[#1A1A1A]/70">
+            We do not rely on speculative guarantees or promotional claims. All evaluations are
+            grounded in verifiable market information and historical performance.
+          </p>
+        </SectionCard>
+
+        <SectionCard id="risk" icon={AlertTriangle} title="Risk Awareness">
+          <p>
+            No real estate investment is risk-free. Market cycles, supply levels, construction
+            timelines, and economic conditions all affect outcomes.
+          </p>
+          <Callout tone="warn">
+            <strong>There is no such thing as guaranteed returns in real estate.</strong>
+          </Callout>
+          <p>
+            Our responsibility is to explain potential risks clearly, highlight market
+            realities, and support investors in making informed decisions — not to promise
+            outcomes.
+          </p>
+        </SectionCard>
+
+        <SectionCard id="jbj-role" icon={Shield} title="Role of JBJ Global Real Estate">
+          <p>We act as advisors and market guides throughout the investment process:</p>
+          <BulletList items={jbjRole} />
+          <p className="italic text-[#1A1A1A]/70">
+            Investment decisions always remain with the client. Our role is to provide clarity,
+            structure, and protection through experience and data.
+          </p>
+        </SectionCard>
+
+        <SectionCard id="long-term" icon={Eye} title="Long-Term Perspective">
+          <p>
+            Successful real estate investment is built on patience, understanding market
+            cycles, and aligning decisions with realistic expectations. Education is the
+            foundation of sustainable investment outcomes.
+          </p>
+          <p>
+            This guide is designed to give investors the knowledge required to approach the UAE
+            real estate market with confidence and clarity.
+          </p>
+        </SectionCard>
+
+        {/* CTA */}
+        <section className="mt-14 mb-10">
+          <div
+            data-surface="emerald"
+            className="relative overflow-hidden rounded-2xl p-8 md:p-12 text-center border border-white/10"
+            style={{
+              background:
+                "linear-gradient(135deg,#064E3B 0%,#042c1c 55%,#010806 100%)",
+            }}
+          >
+            <div
+              className="absolute inset-0 opacity-30 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(60% 80% at 80% 20%,rgba(184,149,85,0.32),transparent),radial-gradient(50% 60% at 15% 85%,rgba(184,149,85,0.22),transparent)",
+              }}
+            />
+            <div className="relative">
+              <h3
+                className="text-3xl md:text-4xl font-light text-white mb-3"
+                style={{ fontFamily: '"Cormorant Garamond","Playfair Display",Georgia,serif' }}
+              >
+                Ready to Discuss Your Investment Goals?
+              </h3>
+              <p className="text-[#E8CF8A] max-w-2xl mx-auto mb-7">
+                Speak with our team to discuss your objectives, understand market dynamics, and
+                explore opportunities aligned with your strategy.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  to="/contact"
+                  data-cta="advisor"
+                  className="jj-cta-emerald inline-flex items-center gap-2 h-12 px-7 rounded-full text-sm font-semibold text-white border border-[#B89555]/40"
+                >
+                  <Phone className="w-4 h-4" />
+                  Contact an Advisor
+                </Link>
+                <Link
+                  to="/investor-faq"
+                  className="inline-flex items-center gap-2 h-12 px-7 rounded-full text-sm font-semibold text-white border border-white/25 hover:bg-white/5 transition-colors"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  Investor FAQs
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Market Analysis - Layer 2 */}
-        <section id="market-analysis" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-5xl mx-auto">
-              {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <Database className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-[#1A1A1A]">Market Analysis</span> & Data-Based Evaluation
-                  </h2>
-                </div>
-                <p className="text-[#1A1A1A]/70 mb-6">
-                  At JBJ Global Real Estate, investment guidance is based on:
-                </p>
-                <div className="space-y-3 mb-6">
-                  {marketAnalysisFactors.map((factor, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
-                      <span className="text-[#1A1A1A]/70">{factor}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[#1A1A1A]/70 text-sm italic">
-                  We do not rely on speculative guarantees or promotional claims. All evaluations are grounded in verifiable market information and historical performance.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Risk Awareness - Layer 2 */}
-        <section id="risk" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-4xl mx-auto">
-              {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <AlertTriangle className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-[#1A1A1A]">Risk</span> Awareness
-                  </h2>
-                </div>
-                <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
-                  No real estate investment is risk-free. Market cycles, supply levels, construction timelines, and economic conditions all affect outcomes.
-                </p>
-                <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl mb-6">
-                  <p className="text-amber-800 font-semibold text-center">
-                    There is no such thing as guaranteed returns in real estate.
-                  </p>
-                </div>
-                <p className="text-[#1A1A1A]/70">
-                  Our responsibility is to explain potential risks clearly, highlight market realities, and support investors in making informed decisions — not to promise outcomes.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Role of JBJ - Layer 2 */}
-        <section id="jbj-role" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-4xl mx-auto">
-              {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-[#1A1A1A]">Role of</span> JBJ Global Real Estate
-                  </h2>
-                </div>
-                <p className="text-[#1A1A1A]/70 mb-6">
-                  We act as advisors and market guides throughout the investment process:
-                </p>
-                <div className="space-y-3 mb-6">
-                  {jbjRole.map((item, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-[#1A1A1A] mt-0.5 flex-shrink-0" />
-                      <span className="text-[#1A1A1A]/70">{item}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[#1A1A1A]/70 text-sm italic">
-                  Investment decisions always remain with the client. Our role is to provide clarity, structure, and protection through experience and data.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Long-Term Perspective - Layer 2 */}
-        <section id="long-term" className="py-20 scroll-mt-24">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-4xl mx-auto">
-              {/* Layer 3 Card */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 rounded-2xl p-8 md:p-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#B89555]/40 flex items-center justify-center">
-                    <Eye className="w-6 h-6 text-[#1A1A1A]" />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
-                    <span className="text-[#1A1A1A]">Long-Term</span> Perspective
-                  </h2>
-                </div>
-                <p className="text-[#1A1A1A]/70 text-lg leading-relaxed mb-6">
-                  Successful real estate investment is built on patience, understanding market cycles, and aligning decisions with realistic expectations. Education is the foundation of sustainable investment outcomes.
-                </p>
-                <p className="text-[#1A1A1A]/70">
-                  This guide is designed to give investors the knowledge required to approach the UAE real estate market with confidence and clarity.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section - Layer 2 */}
-        <section className="py-16">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12">
-            <div className="max-w-4xl mx-auto">
-              <GuideCTA
-                title="Ready to Discuss Your Investment Goals?"
-                description="Speak with our team to discuss your objectives, understand market dynamics, and explore opportunities aligned with your strategy."
-                icon={Target}
-                primaryAction={{
-                  label: "Contact an Advisor",
-                  href: "/contact",
-                  icon: Phone
-                }}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Guide Navigation - Layer 2 */}
-        <section className="py-12">
-          <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl p-8 md:p-12 mb-8">
-            <div className="container mx-auto px-4">
-              <GuideNavigation current="/investor-education" guides={GUIDE_LINKS} showStartHere />
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
+        <div className="mt-12">
+          <GuideNavigation current="/investor-education" guides={GUIDE_LINKS} showStartHere />
+        </div>
+      </ContentPageShell>
+    </>
   );
 };
 
