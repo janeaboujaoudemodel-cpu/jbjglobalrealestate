@@ -223,7 +223,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             data-mode-trigger="header"
             data-header-control-family="pill"
           className={cn(
-              "jj-header-selector-control jj-header-premium-control allow-white h-11 flex items-center gap-1.5 px-4 py-1.5 rounded-full border-0 transition-none duration-0 hover:brightness-110 whitespace-nowrap shrink-0",
+              "jj-header-selector-control jj-header-premium-control allow-white h-10 flex items-center gap-1.5 px-3.5 py-1 rounded-full border-0 transition-none duration-0 hover:brightness-110 whitespace-nowrap shrink-0",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
               isOpen && "ring-2",
               className

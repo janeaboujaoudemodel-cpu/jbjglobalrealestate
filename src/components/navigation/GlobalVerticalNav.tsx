@@ -582,19 +582,9 @@ export default function GlobalVerticalNav() {
     try {
       const stored = localStorage.getItem('jj_nav_collapsed');
       if (stored === '0') return false;
-      if (stored === '1') {
-        // Retire stale collapsed state from the earlier compact rail pass —
-        // page names must be readable by default.
-        try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
-        return false;
-      }
-      if (stored === null) {
-        // Default: expanded so the page names are readable and the rail feels premium.
-        try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
-        return false;
-      }
-      return true;
-    } catch { return false; }
+      if (stored === '1') return true;
+      return !!session;
+    } catch { return !!session; }
   });
   const [showExpandPulse, setShowExpandPulse] = useState(() => {
     try { return sessionStorage.getItem('jj_sidebar_expand_seen_session') !== '1'; }
@@ -705,9 +695,16 @@ export default function GlobalVerticalNav() {
     setActiveMegaMenu(null);
   }, []);
 
+  useEffect(() => {
+    if (!session) return;
+    setCollapsed(true);
+    try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
+    setActiveMegaMenu(null);
+  }, [session?.user?.id]);
+
   const collapseAfterNavigation = useCallback(() => {
-    setCollapsed(false);
-    try { localStorage.setItem('jj_nav_collapsed', '0'); } catch {}
+    setCollapsed(true);
+    try { localStorage.setItem('jj_nav_collapsed', '1'); } catch {}
     setActiveMegaMenu(null);
     setMobileOpen(false);
   }, []);
@@ -950,11 +947,11 @@ export default function GlobalVerticalNav() {
             onClick={closeMegaMenu}
           />
           <div
-            className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
+              className="fixed z-[10000] flex items-start justify-start pointer-events-none"
+ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-3 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-72px)]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -1045,10 +1042,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         />
         <div
           className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
+style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-264px))] overflow-hidden mt-3 ml-3 rounded-2xl border border-[#B89555]/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-72px)]' : 'max-h-[calc(100vh-112px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
@@ -1096,10 +1093,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
   const renderNavContent = () => (
     <div data-sidebar-emerald className="flex flex-col h-full w-full min-w-0">
-      {/* ━━━ LOGO HEADER (88px) — clean, no collapse control ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center px-2.5 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-3 before:bottom-3 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-3 after:right-3 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
-        <Link to="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity ml-1">
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0"  loading="lazy" decoding="async" />
+      {/* ━━━ LOGO HEADER — compact and aligned with the horizontal utility bar ━━━ */}
+      <div className="h-[56px] shrink-0 flex flex-row items-center px-2 bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative before:content-[''] before:absolute before:top-2 before:bottom-2 before:right-0 before:w-px before:bg-gradient-to-b before:from-transparent before:via-[#B89555] before:to-transparent before:shadow-[1px_0_0_rgba(184,149,85,0.25)] after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-0.5">
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain shrink-0"  loading="lazy" decoding="async" />
           <div className="min-w-0 mt-1">
             <span data-no-contrast-guard className="block text-[11px] font-extrabold tracking-[0.08em] leading-none whitespace-nowrap" style={{ color: "#0A0A0A", WebkitTextFillColor: "#0A0A0A" }}>JBJ GLOBAL REAL ESTATE</span>
           </div>
@@ -1119,14 +1116,14 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 
 
         {/* ── Unified Nav Card — Highlight Hubs + Section Accordion balanced as ONE list ── */}
-        <div className="px-3 pt-8 pb-3 flex flex-col flex-1 min-h-0">
+        <div className="px-3 pt-4 pb-3 flex flex-col flex-1 min-h-0">
           {/* Mode portal pinned above the highlight hubs (above AI Home Finder) */}
           {!collapsed && <SidebarModePortalBlock />}
           {/* Uniform vertical rhythm — one consistent gap between every row
               (highlight hubs AND section accordions) so the sidebar never
               stretches or leaves an uneven gap between AI Home Finder and
               Owner Portal. Do NOT use space-between here. */}
-          <div className="flex flex-col flex-1 min-h-0 gap-4 pt-1">
+          <div className="flex flex-col flex-1 min-h-0 gap-2 pt-1">
 
 
 
@@ -1458,11 +1455,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[72px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
-          {/* Logo header — MUST stay 88px so collapsed sidebar aligns with the horizontal header hairline */}
-          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+          {/* Logo header — compact and aligned with the horizontal header hairline */}
+          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain"  loading="lazy" decoding="async" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain"  loading="lazy" decoding="async" />
             </Link>
           </div>
 
@@ -1486,7 +1483,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             html body .jj-side-tile.is-active svg,
             html body .jj-side-tile.is-active svg * { color: #FFFFFF !important; stroke: #FFFFFF !important; opacity: 1 !important; }
           `}</style>
-          <div className="flex-1 flex flex-col items-center pt-3 pb-3 gap-2 w-full">
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1.5 w-full">
             {highlightItems.map((item, i) => {
               const Icon = item.icon;
               const isActive = isRouteActive(item.href);
@@ -1497,7 +1494,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to={item.href}
                       onClick={collapseAfterNavigation}
                       data-no-contrast-guard
-                    className={`jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                    className={`jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
                       <Icon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
@@ -1531,7 +1528,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         setOpenSection(sectionKey);
                         setActiveMegaMenu(null);
                       }}
-                      className={`jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? 'is-active' : ''}`}
+                       className={`jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center ${isActive ? 'is-active' : ''}`}
                     >
                       <SectionIcon className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </button>
@@ -1546,8 +1543,8 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             <div className="flex-1 min-h-4" />
 
             {/* Bottom pinned */}
-            <div className="flex flex-col items-center gap-1.5 pt-1 pb-1 w-full">
-              <div className="h-px w-7 mb-2 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
+            <div className="flex flex-col items-center gap-1 pt-1 pb-1 w-full">
+              <div className="h-px w-6 mb-1 bg-gradient-to-r from-transparent via-[#B89555] to-transparent" aria-hidden="true" />
 
 
               <Tooltip>
@@ -1556,7 +1553,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/contact"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center"
+                     className="jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center"
                   >
                     <Headphones className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
@@ -1569,7 +1566,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     to="/ticket-hub"
                     onClick={collapseAfterNavigation}
                     data-no-contrast-guard
-                    className="jj-side-tile group w-10 h-10 rounded-xl flex items-center justify-center"
+                     className="jj-side-tile group w-9 h-9 rounded-lg flex items-center justify-center"
                   >
                     <Ticket className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                   </Link>
@@ -1586,7 +1583,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       onClick={() => { supabase.auth.signOut(); }}
                       data-no-contrast-guard
                       data-sidebar-auth-control
-                      className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-10 h-10 rounded-xl flex items-center justify-center"
+                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
                     >
                       <LogOut data-signout-icon data-no-contrast-guard className="w-4 h-4 jj-signout-icon !text-[#DC2626]" color="#DC2626" stroke="#DC2626" strokeWidth={2.15} style={{ color: '#DC2626', stroke: '#DC2626' }} />
                     </button>
@@ -1600,7 +1597,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       to="/auth"
                       data-no-contrast-guard
                       data-sidebar-auth-control
-                      className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-10 h-10 rounded-xl flex items-center justify-center"
+                       className="jbj-sidebar-collapse-control jj-side-tile jj-side-auth-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
                     >
                       <User className="w-4 h-4" strokeWidth={2.15} style={getSidebarIconStyle(true)} />
                     </Link>
@@ -1627,7 +1624,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       } catch {}
                       toggleCollapse();
                     }}
-                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-10 h-10 rounded-xl flex items-center justify-center"
+                    className="jbj-sidebar-collapse-control jj-side-tile is-active group relative w-9 h-9 rounded-lg flex items-center justify-center"
                     aria-label="Expand navigation"
                   >
                     {/* Soft teaching pulse only — no extra visible border */}

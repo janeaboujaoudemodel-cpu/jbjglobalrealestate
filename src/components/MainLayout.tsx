@@ -306,13 +306,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <GlobalContactGating>
         {/*
           Header spacing rules:
-          - needsHeaderSpacing=true  → reserve 88px so non-hero pages clear the fixed header
+          - needsHeaderSpacing=true  → reserve the compact desktop header so non-hero pages clear it
           - needsHeaderSpacing=false → ZERO top padding so fullscreen hero pages sit flush behind
             the header (the hero element itself already reserves internal padding-top for the
             header via .jj-hero-fullscreen). This removes the champagne band that was visible
             between the header and the hero on desktop.
         */}
-        <main data-company-legal-page={isCompanyLegalPage ? "true" : undefined} className={`jj-main-shell w-full max-w-full overflow-x-clip bg-[#F7F2EA] min-h-screen transition-[margin-left,width,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-24 lg:pt-[88px] [body.jj-vertical-nav-collapsed_&]:lg:pt-[48px]" : "pt-0"}`}>
+        <main data-company-legal-page={isCompanyLegalPage ? "true" : undefined} className={`jj-main-shell w-full max-w-full overflow-x-clip bg-[#F7F2EA] min-h-screen transition-[margin-left,width,padding-top] duration-100 ease-out ${usesStandalonePortalChrome ? "jj-main-shell--standalone" : ""} ${needsHeaderSpacing && !isHomePage ? "pt-20 lg:pt-[56px]" : "pt-0"}`}>
           <div data-content-gutter="1" className="w-full max-w-full">
 
 
