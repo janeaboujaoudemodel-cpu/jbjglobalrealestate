@@ -374,20 +374,26 @@ END:VCARD`;
               </div>
             ) : (
               /* Form */
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-6 md:p-10 shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)]">
-                <div className="text-center mb-8">
-                  <IconTile icon={Shield} tone="ink" size="lg" className="mx-auto mb-4" />
+              <div
+                data-surface="emerald"
+                data-emerald-surface="true"
+                data-allow-ink
+                className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#000000] border border-[#B89555]/35 rounded-2xl p-5 md:p-7 shadow-[0_18px_46px_rgba(4,44,28,0.45),0_2px_8px_rgba(0,0,0,0.35)]"
+              >
+                <div className="text-center mb-6">
+                  <IconTile icon={Shield} tone="light" size="lg" className="mx-auto mb-4" />
 
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                     Request a Consultation
                   </h2>
-                  <p className="text-[#1A1A1A]/70 text-sm">
+                  <p className="text-white/80 text-sm max-w-xl mx-auto">
                     If you would like to speak with our team regarding buying, selling, renting, investment guidance, market intelligence, or partner introductions, request a consultation through this form. Consultations focus on real estate brokerage guidance and structured introductions within our licensed scope.
                   </p>
                 </div>
 
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+
                     {/* Personal Information */}
                     <div className="space-y-4">
                         <FormField
