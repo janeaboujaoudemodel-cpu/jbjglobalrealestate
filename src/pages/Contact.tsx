@@ -378,36 +378,46 @@ END:VCARD`;
                 data-surface="emerald"
                 data-emerald-surface="true"
                 data-jbj-contact-emerald
-                className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#000000] border border-[#B89555]/35 rounded-2xl p-5 md:p-7 shadow-[0_18px_46px_rgba(4,44,28,0.45),0_2px_8px_rgba(0,0,0,0.35)]"
+                className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#000000] border border-[#B89555]/35 rounded-2xl p-4 sm:p-5 md:p-6 shadow-[0_18px_46px_rgba(4,44,28,0.45),0_2px_8px_rgba(0,0,0,0.35)]"
               >
                 {/* Scoped emerald input contract — overrides global Input `data-surface="light"` for this form only */}
                 <style>{`
-                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):not([type="checkbox"]):not([type="radio"]) {
-                    background: linear-gradient(135deg, #0a5a45 0%, #064E3B 55%, #042c1c 100%) !important;
-                    background-image: linear-gradient(135deg, #0a5a45 0%, #064E3B 55%, #042c1c 100%) !important;
+                  [data-jbj-contact-emerald] :is(input, textarea, button[aria-haspopup], button[role="combobox"], [role="combobox"], [data-searchable-trigger], [data-phone-code-trigger], [data-radix-select-trigger]):not([type="checkbox"]):not([type="radio"]) {
+                    background-color: #064E3B !important;
+                    background: linear-gradient(135deg, #0b604a 0%, #064E3B 52%, #042c1c 100%) !important;
+                    background-image: linear-gradient(135deg, #0b604a 0%, #064E3B 52%, #042c1c 100%) !important;
+                    background-size: 100% 100% !important;
                     color: #ffffff !important;
                     -webkit-text-fill-color: #ffffff !important;
                     border: 1px solid rgba(184,149,85,0.55) !important;
                     box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.25) !important;
+                    animation: none !important;
                   }
                   [data-jbj-contact-emerald] :is(input, textarea)::placeholder {
-                    color: rgba(255,255,255,0.75) !important;
-                    -webkit-text-fill-color: rgba(255,255,255,0.75) !important;
+                    color: rgba(255,255,255,0.82) !important;
+                    -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
                     opacity: 1 !important;
                   }
-                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):hover,
-                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus,
-                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus-visible {
+                  [data-jbj-contact-emerald] :is(input, textarea, button[aria-haspopup], button[role="combobox"], [role="combobox"], [data-searchable-trigger], [data-phone-code-trigger], [data-radix-select-trigger]):hover,
+                  [data-jbj-contact-emerald] :is(input, textarea, button[aria-haspopup], button[role="combobox"], [role="combobox"], [data-searchable-trigger], [data-phone-code-trigger], [data-radix-select-trigger]):focus,
+                  [data-jbj-contact-emerald] :is(input, textarea, button[aria-haspopup], button[role="combobox"], [role="combobox"], [data-searchable-trigger], [data-phone-code-trigger], [data-radix-select-trigger]):focus-visible {
                     border-color: #C9A66B !important;
                     box-shadow: 0 0 0 2px rgba(184,149,85,0.28), inset 0 1px 0 rgba(255,255,255,0.1), 0 2px 6px rgba(0,0,0,0.3) !important;
                   }
                   [data-jbj-contact-emerald] label { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+                  [data-jbj-contact-emerald] :is(button[aria-haspopup], button[role="combobox"], [role="combobox"], [data-searchable-trigger], [data-phone-code-trigger], [data-radix-select-trigger]) :is(span, svg, [class*="lucide"]),
                   [data-jbj-contact-emerald] [data-radix-select-trigger] > span,
                   [data-jbj-contact-emerald] [role="combobox"] > span {
                     color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
+                    stroke: #ffffff !important;
                   }
                   [data-jbj-contact-emerald] [data-radix-select-trigger] svg,
                   [data-jbj-contact-emerald] [role="combobox"] svg { color: #ffffff !important; opacity: 0.85; }
+                  [data-jbj-contact-emerald] .text-\[\#1A1A1A\],
+                  [data-jbj-contact-emerald] [class*="text-[#1A1A1A]"] {
+                    color: #ffffff !important;
+                    -webkit-text-fill-color: #ffffff !important;
+                  }
                 `}</style>
 
                 <div className="text-center mb-6">
@@ -480,9 +490,10 @@ END:VCARD`;
                                 <FormLabel className="text-white text-sm font-semibold">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
                                   <FormControl>
-                                    <PhoneInput
+                                      <PhoneInput
                                       value={field.value}
                                       onChange={field.onChange}
+                                        variant="dark"
                                     />
                                   </FormControl>
                                   {whatsappUrl && (
@@ -765,33 +776,30 @@ END:VCARD`;
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                      className="jj-cta-dark group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed mt-6"
                       style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)',
-                        border: '2px solid rgba(200,167,102,0.5)',
+                        background: 'linear-gradient(135deg, #064E3B 0%, #042c1c 56%, #000000 100%)',
+                        border: '1px solid rgba(200,167,102,0.58)',
                         boxShadow: `
-                          0 10px 30px rgba(200,167,102,0.4),
-                          0 6px 15px rgba(0,0,0,0.2),
-                          inset 0 2px 4px rgba(255,255,255,0.9),
-                          inset 0 -2px 4px rgba(200,167,102,0.2),
-                          0 0 20px rgba(200,167,102,0.3)
+                          0 16px 34px rgba(0,0,0,0.34),
+                          inset 0 1px 0 rgba(255,255,255,0.12),
+                          0 0 22px rgba(6,78,59,0.36)
                         `,
                       }}
                     >
-                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                      <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
+                      <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 34px rgba(6,78,59,0.58), inset 0 0 20px rgba(255,255,255,0.06)' }} />
                       <span className="relative flex items-center justify-center gap-2">
                         {isSubmitting ? (
                           <>
-                            <Loader2 className="w-5 h-5 text-[#1A1A1A] animate-spin" />
-                            <span className="text-[#1A1A1A]">Submitting...</span>
+                            <Loader2 className="w-5 h-5 text-white animate-spin" />
+                            <span className="text-white">Submitting...</span>
                           </>
                         ) : (
                           <>
-                            <Send className="w-5 h-5 text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors" />
-                            <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Start Your</span>
-                            <span className="text-[#1A1A1A] group-hover:text-[#1A1A1A] transition-colors">Inquiry</span>
+                            <Send className="w-5 h-5 text-white transition-colors" />
+                            <span className="text-white transition-colors">Start Your</span>
+                            <span className="text-white transition-colors">Inquiry</span>
                           </>
                         )}
                       </span>
@@ -804,7 +812,7 @@ END:VCARD`;
         </div>
       </section>
 
-      {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
+      {/* Support Ticket Section */}
       <SupportTicketBox />
 
       {/* Important Notice */}
@@ -847,9 +855,9 @@ END:VCARD`;
             <DialogTitle className="text-[#1A1A1A] text-lg font-semibold">Contact Options</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 pt-2">
-            <Button 
+              <Button 
               onClick={() => handlePhoneAction('call')}
-              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white justify-start gap-3"
+                className="w-full h-12 jj-cta-dark text-white justify-start gap-3"
             >
               <PhoneCall className="w-5 h-5" />
               Call Now
