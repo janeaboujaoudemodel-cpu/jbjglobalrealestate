@@ -377,8 +377,37 @@ END:VCARD`;
               <div
                 data-surface="emerald"
                 data-emerald-surface="true"
+                data-jbj-contact-emerald
                 className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#000000] border border-[#B89555]/35 rounded-2xl p-5 md:p-7 shadow-[0_18px_46px_rgba(4,44,28,0.45),0_2px_8px_rgba(0,0,0,0.35)]"
               >
+                {/* Scoped emerald input contract — overrides global Input `data-surface="light"` for this form only */}
+                <style>{`
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):not([type="checkbox"]):not([type="radio"]) {
+                    background-color: rgba(255,255,255,0.06) !important;
+                    background-image: none !important;
+                    color: #ffffff !important;
+                    -webkit-text-fill-color: #ffffff !important;
+                    border: 1px solid rgba(184,149,85,0.45) !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+                  }
+                  [data-jbj-contact-emerald] :is(input, textarea)::placeholder {
+                    color: rgba(255,255,255,0.45) !important;
+                    -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+                  }
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):hover,
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus,
+                  [data-jbj-contact-emerald] :is(input, textarea, [role="combobox"], [data-radix-select-trigger]):focus-visible {
+                    border-color: #B89555 !important;
+                    box-shadow: 0 0 0 2px rgba(184,149,85,0.18), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+                    background-color: rgba(255,255,255,0.09) !important;
+                  }
+                  [data-jbj-contact-emerald] label { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+                  [data-jbj-contact-emerald] [data-radix-select-trigger] > span,
+                  [data-jbj-contact-emerald] [role="combobox"] > span {
+                    color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
+                  }
+                `}</style>
+
                 <div className="text-center mb-6">
                   <IconTile icon={Shield} tone="emerald" size="lg" className="mx-auto mb-4" />
 
