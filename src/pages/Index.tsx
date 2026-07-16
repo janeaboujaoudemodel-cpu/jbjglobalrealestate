@@ -239,7 +239,7 @@ const Index = () => {
   }, []);
 
   return (
-    <PageShell data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-x-hidden">
+      <PageShell data-home-page className="relative w-full min-h-screen bg-[#F7F2EA] overflow-x-hidden">
 
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
@@ -298,7 +298,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center pt-[max(18vh,160px)] sm:pt-[24vh] md:pt-[32vh] pb-[max(2vh,16px)] space-y-3 sm:space-y-4 md:space-y-5">
+          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center space-y-3 sm:space-y-4 md:space-y-5">
             {/* Eyebrow tagline removed per owner directive — keep hero copy minimal */}
 
             {/* Headline — exact copy from reference photo */}
@@ -492,7 +492,7 @@ const Index = () => {
       </PremiumSectionCard>
 
       {/* READY TO GET STARTED — restored under Top Areas */}
-      <PremiumSectionCard padding="none" width="full" wrapperClassName="cv-auto py-4">
+      <PremiumSectionCard padding="none" width="contained" wrapperClassName="cv-auto py-4">
 
         <LazyVisible minHeight={300}>
           <Suspense fallback={<SectionLoader />}>

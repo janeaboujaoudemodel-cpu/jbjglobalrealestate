@@ -19,6 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const LS_TOKEN_KEY = "crm.broker.session.token";
 const LS_FP_KEY = "crm.broker.device.fp";
 const HEARTBEAT_MS = 90_000;
+const FORCE_SIGNOUT_FAILURES_REQUIRED = 3;
 
 function getDeviceLabel(): string {
   const ua = navigator.userAgent;
@@ -58,6 +59,7 @@ export function useBrokerSessionTracking(enabled: boolean) {
   const { user } = useAuth();
   const startedRef = useRef(false);
   const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const forceSignoutFailuresRef = useRef(0);
 
   useEffect(() => {
     if (!enabled || !user) {
@@ -92,13 +94,21 @@ export function useBrokerSessionTracking(enabled: boolean) {
           return;
         }
 
-        // 403 → blocked / revoked / not a broker → sign out immediately
+        // 403 → blocked / revoked / not a broker. Require repeated evidence
+        // before clearing auth so one stale heartbeat cannot kick the user out.
         if (status === 403 || data?.force_signout || /blocked|revoked|not a broker/i.test(String(errMsg ?? ""))) {
+          forceSignoutFailuresRef.current += 1;
+          if (forceSignoutFailuresRef.current < FORCE_SIGNOUT_FAILURES_REQUIRED) {
+            console.warn("[broker-session-track] delayed sign-out evidence", forceSignoutFailuresRef.current);
+            return;
+          }
           localStorage.removeItem(LS_TOKEN_KEY);
           await supabase.auth.signOut().catch(() => {});
           window.location.href = "/auth";
           return;
         }
+
+        forceSignoutFailuresRef.current = 0;
 
         if (data?.session_token && data.session_token !== existing) {
           localStorage.setItem(LS_TOKEN_KEY, data.session_token);

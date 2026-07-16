@@ -45,7 +45,9 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     <div
       className="w-full overflow-hidden select-none"
       style={{ touchAction: "pan-y" }}
-      onMouseEnter={() => setPaused(true)}
+      onMouseEnter={(event) => {
+        if (!("pointerType" in event.nativeEvent) || event.nativeEvent.pointerType !== "touch") setPaused(true);
+      }}
       onMouseLeave={() => setPaused(false)}
     >
       <div
@@ -424,9 +426,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         }}
       >
         <div className="absolute inset-0 rounded-xl border border-[#064E3B]/35 group-hover:border-[#064E3B]/70 transition-all duration-500 z-20 pointer-events-none" />
-        <div className="absolute -inset-[1px] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10"
+        <div className="absolute -inset-[1px] rounded-xl opacity-0 group-hover:opacity-70 transition-opacity duration-700 pointer-events-none z-10"
           style={{
-            background: "linear-gradient(135deg, transparent 30%, rgba(6,78,59,0.32) 50%, transparent 70%)",
+            background: "linear-gradient(135deg, transparent 34%, rgba(6,78,59,0.14) 50%, transparent 66%)",
             backgroundSize: "200% 200%",
             animation: "shimmer 2s ease-in-out infinite",
           }}
@@ -449,9 +451,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
         {/* Elevated glass reflection effect */}
         <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
           style={{
-            background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(6,78,59,0.16) 100%)",
+            background: "linear-gradient(135deg, rgba(255,255,255,0.025) 0%, transparent 45%, rgba(6,78,59,0.08) 100%)",
             transform: "translateZ(20px)",
           }}
         />

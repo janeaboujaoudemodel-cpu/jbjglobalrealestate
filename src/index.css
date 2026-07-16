@@ -830,6 +830,12 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+[data-jbj-book-strip] {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
 /* ════════════════════════════════════════════════════════════════
    .cta-premium — premium hover lift + glow + 3D for primary CTAs
    ════════════════════════════════════════════════════════════════ */
@@ -15757,10 +15763,15 @@ html body #root .jj-developer-logo-metallic img {
   html body #root .jj-footer-shell,
   html body #root .jj-utility-shell {
     left: var(--jj-shell-sidebar-w) !important;
-    margin-left: var(--jj-shell-sidebar-w) !important;
+    margin-left: 0 !important;
     width: var(--jj-shell-main-w) !important;
     max-width: var(--jj-shell-main-w) !important;
     box-sizing: border-box !important;
+  }
+
+  html body #root main.jj-main-shell:not(.jj-main-shell--standalone),
+  html body #root .jj-footer-shell {
+    position: relative !important;
   }
 
   html body #root main.jj-main-shell:not(.jj-main-shell--standalone),
@@ -18158,6 +18169,31 @@ html body [data-signout-action]:hover :is([data-signout-label], [data-signout-ic
   html body #root .jj-home-hero button.sm\:hidden {
     display: none !important;
   }
+}
+
+html body[data-homepage] #root .jj-home-hero.jj-hero-fullscreen {
+  height: 100svh !important;
+  min-height: 100svh !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+@supports (height: 100dvh) {
+  html body[data-homepage] #root .jj-home-hero.jj-hero-fullscreen {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+  }
+}
+
+html body[data-homepage] #root .jj-home-hero .jj-home-hero-content {
+  min-height: 100% !important;
+  padding-top: clamp(5.25rem, 12vh, 8rem) !important;
+  padding-bottom: clamp(1.25rem, 4vh, 2.5rem) !important;
+}
+
+html body[data-homepage] #root .jj-home-hero .jj-home-hero-stack {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 /* =====================================================================

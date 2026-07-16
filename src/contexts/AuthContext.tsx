@@ -248,11 +248,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let verifyInFlight = false;
     let latestSessionId: string | null = null;
     let bootstrapped = false;
+    let nullSessionRecoveryTimer: number | null = null;
+
+    const clearNullSessionRecoveryTimer = () => {
+      if (nullSessionRecoveryTimer) {
+        window.clearTimeout(nullSessionRecoveryTimer);
+        nullSessionRecoveryTimer = null;
+      }
+    };
 
     const applySession = async (nextSession: Session | null) => {
       if (!mounted) return;
 
       const newSessionId = nextSession?.access_token ?? null;
+
+      if (nextSession) clearNullSessionRecoveryTimer();
 
       // Set session and user immediately
       setSession(nextSession);
@@ -322,6 +332,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!bootstrapped && event === "INITIAL_SESSION" && !nextSession) {
         return;
       }
+      if (!nextSession && event !== "SIGNED_OUT") {
+        clearNullSessionRecoveryTimer();
+        nullSessionRecoveryTimer = window.setTimeout(() => {
+          supabase.auth.getSession()
+            .then(({ data: { session: recoveredSession } }) => {
+              void applySession(recoveredSession);
+            })
+            .catch(() => void applySession(null));
+        }, 900);
+        return;
+      }
       void applySession(nextSession);
     });
 
@@ -339,6 +360,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       mounted = false;
+      clearNullSessionRecoveryTimer();
       subscription.unsubscribe();
     };
   }, [verifyOwner]);
