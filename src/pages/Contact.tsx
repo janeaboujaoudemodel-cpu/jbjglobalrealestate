@@ -807,49 +807,6 @@ END:VCARD`;
       {/* Support Ticket Section - Above "Prefer to Reach Us Directly" */}
       <SupportTicketBox />
 
-      {/* Direct Contact Section */}
-      <section className="py-8 md:py-10">
-        <div className="container mx-auto px-4">
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
-            <h2 className="text-center text-2xl md:text-3xl font-light tracking-tight text-[#1A1A1A] mb-3">
-              Prefer to reach us directly?
-            </h2>
-            <p className="text-center text-[#1A1A1A]/65 text-sm mb-6 max-w-2xl mx-auto">
-              For general inquiries, consultations or non-technical requests, contact us through the channels below.
-            </p>
-            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <a
-                href={getWhatsAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
-              >
-                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
-                  <MessageCircle className="w-5 h-5 text-[#1A1A1A]" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">WhatsApp</p>
-                  <p className="text-white text-sm font-medium">+971-5659-11000</p>
-                </div>
-              </a>
-
-              <a
-                href={getCallUrl()}
-                className="flex items-center gap-4 bg-[#F7F2EA] border border-[#B89555]/40 rounded-xl p-5 transition-all group hover:border-[#B89555] hover:-translate-y-0.5"
-              >
-                <div className="w-11 h-11 bg-[#FDFBF7] border border-[#B89555]/40 rounded-full flex items-center justify-center group-hover:bg-[#EFE6D6] transition-colors">
-                  <Phone className="w-5 h-5 text-[#1A1A1A]" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-[#1A1A1A]/55 font-medium mb-0.5">Call Us</p>
-                  <p className="text-white text-sm font-medium">+971-5659-11000</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Important Notice */}
       <section className="py-8 md:py-10">
         <div className="container mx-auto px-4">
