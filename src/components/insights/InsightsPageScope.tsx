@@ -143,6 +143,7 @@ const PAGES_WITH_OWN_HERO = new Set<string>([
   "/golden-visa-guide",
   "/faq",
   "/services",
+  "/contact",
   "/about",
   "/terms",
   "/privacy",
@@ -239,7 +240,7 @@ const getCategoryShellConfig = (pathname: string): CategoryShellConfig | null =>
 export function InsightsPageScope({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
-  if (pathname === "/services" || pathname.startsWith("/services/")) {
+  if (pathname === "/contact" || pathname === "/services" || pathname.startsWith("/services/")) {
     return <>{children}</>;
   }
 

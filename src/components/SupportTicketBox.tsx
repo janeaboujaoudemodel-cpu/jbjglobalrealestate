@@ -425,14 +425,14 @@ const SupportTicketBox = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {/* Main Card - Full width inside champagne layer, no max-w constraint */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-[#B89555]/40 md:border-2 md:border-[#B89555] shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
+          {/* Main Card */}
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-[#B89555]/40 shadow-[0_8px_30px_rgba(200,167,102,0.22),0_4px_15px_rgba(0,0,0,0.10)] overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#EFE6D6]/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
 
-            <div className="p-8 md:p-12 relative z-10">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="p-5 sm:p-6 md:p-8 relative z-10">
+              <div className="grid grid-cols-1 md:grid-cols-[1.25fr_0.75fr] gap-6 items-center">
                 {/* Left - Info */}
                 <div>
                   <div className="flex items-center gap-3 mb-4">
@@ -447,20 +447,20 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-[#1A1A1A] mb-6 leading-relaxed">
+                  <p className="text-[#1A1A1A] mb-5 leading-relaxed">
                     Experiencing an issue with our services? Create a support ticket and our team will 
                     assist you promptly. You can attach screenshots or screen recordings to help us 
                     understand the problem better.
                   </p>
 
-                  {/* Support Promise — champagne surface for legibility */}
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 rounded-xl p-6 mb-6 relative overflow-hidden">
+                  {/* Support Promise */}
+                  <div className="bg-[#FDFBF7] border border-[#B89555]/35 rounded-xl p-4 mb-5 relative overflow-hidden">
                     <div className="relative z-10">
                       <div className="flex items-center gap-2 mb-3">
                         <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
                         <span className="text-[#1A1A1A] font-semibold">Our Commitment</span>
                       </div>
-                      <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                        <ul className="space-y-2 text-sm text-[#1A1A1A]">
                         <li className="flex items-center gap-2">
                           <span className="text-[#1A1A1A]">✓</span>
                           Response within 24 hours
