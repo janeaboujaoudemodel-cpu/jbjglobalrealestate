@@ -447,7 +447,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-[#1A1A1A]/70 mb-6 leading-relaxed">
+                  <p className="text-[#1A1A1A] mb-6 leading-relaxed">
                     Experiencing an issue with our services? Create a support ticket and our team will 
                     assist you promptly. You can attach screenshots or screen recordings to help us 
                     understand the problem better.
@@ -460,7 +460,7 @@ const SupportTicketBox = () => {
                         <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
                         <span className="text-[#1A1A1A] font-semibold">Our Commitment</span>
                       </div>
-                      <ul className="space-y-2 text-sm text-[#1A1A1A]/80">
+                      <ul className="space-y-2 text-sm text-[#1A1A1A]">
                         <li className="flex items-center gap-2">
                           <span className="text-[#1A1A1A]">✓</span>
                           Response within 24 hours
@@ -481,7 +481,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#1A1A1A]/70">
+                  <p className="text-xs text-[#1A1A1A]">
                     All tickets are reviewed by our support team and forwarded to the relevant department.
                   </p>
                 </div>
