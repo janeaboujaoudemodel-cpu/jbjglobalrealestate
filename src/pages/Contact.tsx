@@ -815,7 +815,7 @@ END:VCARD`;
               <IconTile icon={Shield} tone="ink" size="md" />
               <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
             </div>
-            <p className="text-[#1A1A1A]/70 text-sm leading-relaxed">
+            <p className="text-[#1A1A1A] text-sm leading-relaxed">
               JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
             </p>
           </div>
