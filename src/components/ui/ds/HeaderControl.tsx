@@ -33,9 +33,9 @@ const headerControl = cva(
   {
     variants: {
       shape: {
-        circle: "jj-header-icon-control h-11 w-11 min-w-11 rounded-full p-0 text-base [&_svg]:w-4 [&_svg]:h-4",
-        pill:   "jj-header-selector-control h-11 min-w-[2.75rem] rounded-full px-4 text-[13px] [&_svg]:w-4 [&_svg]:h-4",
-        segment:"h-11 min-w-[2.75rem] rounded-full px-3 text-[12px] [&_svg]:w-[14px] [&_svg]:h-[14px]",
+        circle: "jj-header-icon-control h-10 w-10 min-w-10 rounded-full p-0 text-base [&_svg]:w-4 [&_svg]:h-4",
+        pill:   "jj-header-selector-control h-10 min-w-10 rounded-full px-3.5 text-[12px] [&_svg]:w-4 [&_svg]:h-4",
+        segment:"h-10 min-w-10 rounded-full px-2.5 text-[11px] [&_svg]:w-[14px] [&_svg]:h-[14px]",
       },
       tone: {
         emerald:
@@ -124,7 +124,7 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
       data-jj-utility-pill
       data-header-control-family="segmented"
       className={cn(
-        "allow-white jj-header-premium-control inline-flex items-center h-11 rounded-full overflow-hidden relative shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
+        "allow-white jj-header-premium-control inline-flex items-center h-10 rounded-full overflow-hidden relative shadow-[0_10px_24px_-14px_rgba(6,78,59,0.92)]",
         className,
       )}
       style={{
@@ -146,7 +146,7 @@ export function HeaderSegmented({ value, options, onChange, className }: HeaderS
               data-on-dark
               data-allow-dark-cta
               className={cn(
-                "allow-white jj-sqtoggle relative px-3.5 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
+                "allow-white jj-sqtoggle relative px-3 h-full text-[11px] font-bold tracking-wide transition-all duration-200",
                 isActive && "jj-emerald-metallic"
               )}
               style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}

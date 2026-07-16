@@ -1024,13 +1024,13 @@ All colors MUST be HSL.
     /* Shared shell header height — locks sidebar logo divider and main top header
      * to identical pixel height so the L-frame bottom borders align perfectly.
      * Used by OwnerDashboardShell (and any future dashboard shell). */
-    --shell-header-h: 64px;
+    --shell-header-h: 56px;
 
     /* Default content-area offsets used by BrandedLoader so the JBJ logo
      * centers within the visible content area (below header / right of any
      * sidebar). Shells (OwnerDashboardShell, BrokerPortalLayout) override
      * these via inline style on their root container. */
-    --app-content-top: 88px;
+    --app-content-top: 56px;
     --app-content-left: 0px;
 
     /* ============================================================
@@ -15738,8 +15738,8 @@ html body #root .jj-developer-logo-metallic img {
 @media (min-width: 1024px) {
   body:not(.jj-vertical-nav-active):not(.jj-vertical-nav-collapsed),
   body.jj-vertical-nav-collapsed {
-    --jj-shell-sidebar-w: 72px;
-    --jj-shell-main-w: calc(100vw - 72px);
+    --jj-shell-sidebar-w: 56px;
+    --jj-shell-main-w: calc(100vw - 56px);
     --jj-content-gutter-l: 0px;
     --jj-content-gutter-r: 0px;
     --jj-content-gutter: 0px;
@@ -19294,8 +19294,8 @@ html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
 }
 
 html body #root [data-jj-utility-bar] {
-  min-height: 88px !important;
-  height: 88px !important;
+  min-height: 56px !important;
+  height: 56px !important;
 }
 
 html body #root [data-jj-utility-bar] .jj-avatar-metallic .jj-avatar-spinner {
@@ -34711,7 +34711,7 @@ html body #root [data-insights-page] [data-mi-page] > [data-mi-hero].jj-mi-prada
   min-height: 100svh !important;
   height: 100svh !important;
   margin: 0 !important;
-  padding: 88px clamp(1.25rem, 4vw, 4rem) 0 !important;
+  padding: 56px clamp(1.25rem, 4vw, 4rem) 0 !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
   isolation: isolate !important;
@@ -34727,7 +34727,7 @@ html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero > .relative.z-1
 html body #root main.jj-main-shell [data-mi-page] > [data-mi-hero].jj-mi-prada-hero > .relative.z-10 {
   width: 100% !important;
   max-width: min(64rem, 100%) !important;
-  min-height: calc(100svh - 88px) !important;
+  min-height: calc(100svh - 56px) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   padding-top: clamp(1.5rem, 4vh, 3rem) !important;
@@ -34962,7 +34962,7 @@ html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero {
   min-height: 100svh !important;
   height: 100svh !important;
   margin: 0 !important;
-  padding: 88px clamp(1.25rem, 4vw, 4rem) 0 !important;
+  padding: 56px clamp(1.25rem, 4vw, 4rem) 0 !important;
   background-color: #020504 !important;
   background-image:
     radial-gradient(ellipse at 18% 8%, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.035) 20%, transparent 45%),
@@ -34973,7 +34973,7 @@ html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero {
 
 html body #root [data-mi-page] > [data-mi-hero].jj-mi-prada-hero > .relative.z-10,
 html body #root main.jj-main-shell [data-mi-page] > [data-mi-hero].jj-mi-prada-hero > .relative.z-10 {
-  min-height: calc(100svh - 88px) !important;
+  min-height: calc(100svh - 56px) !important;
   max-width: min(64rem, 100%) !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -35185,7 +35185,7 @@ html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [da
   min-height: 100svh !important;
   height: 100svh !important;
   margin: 0 !important;
-  padding: 88px clamp(1.25rem, 4vw, 4rem) 0 !important;
+  padding: 56px clamp(1.25rem, 4vw, 4rem) 0 !important;
   overflow: hidden !important;
   isolation: isolate !important;
   text-align: center !important;
@@ -35201,7 +35201,7 @@ html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [da
 html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) > .relative.z-10 {
   width: 100% !important;
   max-width: min(64rem, 100%) !important;
-  min-height: calc(100svh - 88px) !important;
+  min-height: calc(100svh - 56px) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   padding-top: clamp(1.5rem, 4vh, 3rem) !important;
@@ -35210,7 +35210,7 @@ html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [da
 }
 
 html body #root [data-insights-page] :is([data-guide-hero], [data-faq-hero], [data-premium-emerald-hero], [data-market-report-hero], [data-brand-hero].jj-services-hero, [data-hero-dark].jj-hero-fullscreen) :is(.jj-mi-hero-title, h1) {
-  max-width: 16ch !important;
+  max-width: 26ch !important;
   margin-left: auto !important;
   margin-right: auto !important;
   color: #FFFFFF !important;
@@ -35321,7 +35321,7 @@ html body #root :is(
   min-height: 100svh !important;
   height: 100svh !important;
   margin: 0 !important;
-  padding: 88px clamp(1.25rem, 4vw, 4rem) 0 !important;
+  padding: 56px clamp(1.25rem, 4vw, 4rem) 0 !important;
   overflow: hidden !important;
   isolation: isolate !important;
   background-color: #020504 !important;
@@ -35353,7 +35353,7 @@ html body #root :is(
 ) > :not(.absolute):not(video) {
   width: 100% !important;
   max-width: min(64rem, 100%) !important;
-  min-height: calc(100svh - 88px) !important;
+  min-height: calc(100svh - 56px) !important;
   margin-left: auto !important;
   margin-right: auto !important;
   padding-top: clamp(1.5rem, 4vh, 3rem) !important;

@@ -35,7 +35,7 @@ export interface MIPageShellProps {
 }
 
 const heroCtaClass =
-  "jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white group inline-flex items-center justify-center gap-2 whitespace-nowrap px-6 py-3 text-sm font-semibold transition-all hover:-translate-y-0.5 md:px-8 md:py-4 md:text-base";
+  "jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white group inline-flex min-h-[52px] items-center justify-center gap-2 whitespace-nowrap rounded-lg px-6 py-3 text-sm font-semibold transition-all hover:-translate-y-0.5 md:px-8 md:text-base";
 
 /**
  * MIPageShell — canonical page shell matching the Market Intelligence design:
@@ -87,7 +87,7 @@ export default function MIPageShell({
         <div className="relative z-10 mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center px-6 text-center">
           <h1
             data-no-contrast-guard
-            className="jj-mi-hero-title mx-auto max-w-[16ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02]"
+            className="jj-mi-hero-title mx-auto max-w-[26ch] text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[1.02]"
           >
             {heroTitle}
           </h1>

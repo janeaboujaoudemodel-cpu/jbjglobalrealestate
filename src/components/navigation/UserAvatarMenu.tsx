@@ -163,7 +163,7 @@ export default function UserAvatarMenu({ onOpenFilters }: Props) {
           data-allow-dark-cta
           data-on-dark
           data-header-control-family="circle"
-          className="jj-header-icon-control jj-header-premium-control allow-white relative h-11 w-11 rounded-full border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-[filter] hover:brightness-110"
+          className="jj-header-icon-control jj-header-premium-control allow-white relative h-10 w-10 rounded-full border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 transition-[filter] hover:brightness-110"
           style={{
             border: 0,
             background: "transparent",

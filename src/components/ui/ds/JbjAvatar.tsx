@@ -7,8 +7,8 @@ export interface JbjAvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const sizeClass = {
-  sm: "h-10 w-10 text-[12px]",
-  md: "h-11 w-11 text-[12px]",
+  sm: "h-9 w-9 text-[11px]",
+  md: "h-10 w-10 text-[12px]",
 };
 
 /**

@@ -129,7 +129,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
             <DollarSign className="w-4 h-4 text-[#1A1A1A] group-hover:text-white group-hover:scale-110 transition-all" />
           </button>
         ) : isFlag ? (
-          <HeaderControl shape="pill" tone="emerald" aria-label="Currency" className="gap-1.5 px-4">
+          <HeaderControl shape="pill" tone="emerald" aria-label="Currency" className="gap-1.5 px-3.5">
             <DollarSign className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <span className="text-[12px] font-semibold tracking-wide" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{currentCurrency.code}</span>
             <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />

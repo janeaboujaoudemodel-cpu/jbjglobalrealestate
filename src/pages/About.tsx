@@ -177,7 +177,7 @@ const About = () => {
               JBJ Global Real Estate
             </motion.span>
             <motion.h1
-              className="mb-5 text-[36px] font-light leading-[1.05] tracking-tight text-white md:text-[52px] lg:text-[62px]"
+              className="mb-5 max-w-[26ch] text-[36px] font-light leading-[1.05] tracking-tight text-white md:text-[52px] lg:text-[62px]"
               style={{ fontFamily: '"Cormorant Garamond", serif' }}
               variants={fadeInUp}
             >
@@ -201,7 +201,7 @@ const About = () => {
                 to="/services"
                 data-pm-emerald
                 data-no-contrast-guard
-                className="allow-white group inline-flex h-[54px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-[13px]"
+                className="allow-white group inline-flex min-h-[52px] flex-1 basis-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-transform hover:-translate-y-0.5 sm:px-6 sm:text-[13px]"
                 style={{ background: EMERALD_GRADIENT, color: "#FFFFFF", border: "1px solid rgba(184,149,85,0.5)" }}
               >
                 <span className="whitespace-nowrap">Explore Our Services</span>
@@ -211,7 +211,7 @@ const About = () => {
                 to="/contact"
                 data-pm-emerald
                 data-no-contrast-guard
-                className="allow-white group inline-flex h-[54px] flex-1 basis-0 items-center justify-center gap-2 rounded-lg px-3 text-[11px] font-semibold uppercase tracking-[0.06em] transition-transform hover:-translate-y-0.5 sm:px-5 sm:text-[13px]"
+                className="allow-white group inline-flex min-h-[52px] flex-1 basis-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-[12px] font-semibold uppercase tracking-[0.06em] transition-transform hover:-translate-y-0.5 sm:px-6 sm:text-[13px]"
                 style={{ background: EMERALD_GRADIENT, color: "#FFFFFF", border: "1px solid rgba(184,149,85,0.5)" }}
               >
                 <span className="whitespace-nowrap">Contact Our Team</span>
