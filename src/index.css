@@ -2444,6 +2444,14 @@ body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed,
   .jj-handpicked-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+@media (min-width: 640px) and (max-width: 1023px) {
+  .jj-handpicked-grid {
+    gap: 14px !important;
+    padding-left: max(10px, env(safe-area-inset-left)) !important;
+    padding-right: max(10px, env(safe-area-inset-right)) !important;
+  }
+}
+
 /* Bands inside the gutter wrapper break out to the inner viewport edges
    (post-sidebar), never beyond. */
 [data-content-gutter="1"] > .jj-band,
