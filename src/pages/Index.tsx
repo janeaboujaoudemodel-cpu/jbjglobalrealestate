@@ -307,7 +307,7 @@ const Index = () => {
               data-no-contrast-guard
               data-on-dark
               data-allow-dark-cta
-              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto allow-white mt-[22vh] sm:mt-[26vh] md:mt-[30vh] lg:mt-[32vh]"
+              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto allow-white"
               style={{
                 fontSize: "clamp(1.85rem, 5vw + 0.5rem, 4.25rem)",
                 letterSpacing: "-0.02em",
