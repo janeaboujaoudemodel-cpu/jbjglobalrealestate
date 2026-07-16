@@ -2851,6 +2851,12 @@ body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed,
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 
+  @media (min-width: 640px) {
+    .jj-handpicked-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+  }
+
   /* --- Card Action Area --- */
   .jj-card-action {
     @apply mt-4 pt-4 border-t border-border/20;
