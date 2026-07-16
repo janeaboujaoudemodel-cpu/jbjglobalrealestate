@@ -8,15 +8,14 @@ interface MIPreFooterCardProps {
   secondaryLink?: string;
   secondaryText?: string;
   /**
-   * Tailwind max-width class. Defaults to `max-w-4xl` for MI/Insights pages;
-   * service pages pass `max-w-6xl` so the CTA card matches the width of the
-   * other content cards above it.
+   * Tailwind max-width class. Defaults to `max-w-6xl` so the CTA card matches
+   * the FAQ/content panels on every route unless a page explicitly opts out.
    */
   maxWidthClass?: string;
   innerInset?: boolean;
 }
 
-export default function MIPreFooterCard({ maxWidthClass = "max-w-4xl", innerInset = false, ...props }: MIPreFooterCardProps) {
+export default function MIPreFooterCard({ maxWidthClass = "max-w-6xl", innerInset = false, ...props }: MIPreFooterCardProps) {
   // Service pages compare this CTA against the full section card, not an inner
   // text rail, so the emerald card itself must occupy the same content width.
   const insetPad = innerInset ? "" : "";
@@ -29,11 +28,11 @@ export default function MIPreFooterCard({ maxWidthClass = "max-w-4xl", innerInse
     <div
       id="cta"
       data-cta-lock
-      className="jj-cta-lock scroll-mt-24 bg-[#F7F2EA] py-12 md:py-16"
+      className="jj-cta-lock scroll-mt-24 bg-[#F7F2EA] py-6 md:py-8"
     >
-      <div className={`${maxWidthClass} mx-auto px-4 sm:px-6 lg:px-8`}>
+      <div data-cta-inner className={`${maxWidthClass} mx-auto w-full px-4 sm:px-6 lg:px-8`}>
         <div className={insetPad}>
-          <div className="rounded-2xl overflow-hidden shadow-sm">
+          <div data-cta-card className="overflow-hidden rounded-3xl shadow-sm">
             <PreFooterSeparator {...props} fitContainer />
           </div>
         </div>
