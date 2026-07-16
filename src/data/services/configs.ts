@@ -214,7 +214,7 @@ function quick(i: QuickInput): ServiceConfig {
       formTitle: i.formTitle, serviceOptions: i.serviceOptions,
       defaultService: i.serviceOptions[0],
       messagePlaceholder: i.messagePlaceholder,
-      formSource: `${i.slug}-proposal`, variant: "property-management" },
+      formSource: `${i.slug}-proposal`, variant: "consultation" },
     faq: i.faq.map(([q, a]) => ({ q, a })),
     preFooter: { title: i.preFooterTitle, subtitle: i.preFooterSub,
       primaryText: i.primary, secondaryLink: "/contact", secondaryText: "Speak With Our Team" },

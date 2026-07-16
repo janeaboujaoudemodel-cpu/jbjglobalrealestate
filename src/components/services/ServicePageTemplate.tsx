@@ -233,14 +233,38 @@ function BulletList({ items }: { items: string[] }) {
 }
 
 function HeroButton({ to, children }: { to: string; children: ReactNode }) {
+  const isHash = to.startsWith("#");
+  const commonClass =
+    "jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex min-h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 sm:w-auto md:px-8 md:py-4 md:text-base";
+  const commonStyle = { background: EMERALD_GRADIENT, border: 0, color: WHITE } as const;
+  if (isHash) {
+    const id = to.slice(1);
+    return (
+      <a
+        href={to}
+        data-pm-emerald
+        data-no-contrast-guard
+        data-on-dark
+        onClick={(e) => {
+          e.preventDefault();
+          scrollToId(id);
+        }}
+        className={commonClass}
+        style={commonStyle}
+      >
+        <span>{children}</span>
+        <ArrowUpRight className="h-4 w-4" />
+      </a>
+    );
+  }
   return (
     <Link
       to={to}
       data-pm-emerald
       data-no-contrast-guard
       data-on-dark
-      className="jj-mi-hero-cta jj-mi-hero-cta-emerald allow-white inline-flex min-h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg px-6 py-3 text-sm font-semibold transition-transform hover:-translate-y-0.5 sm:w-auto md:px-8 md:py-4 md:text-base"
-      style={{ background: EMERALD_GRADIENT, border: 0, color: WHITE }}
+      className={commonClass}
+      style={commonStyle}
     >
       <span>{children}</span>
       <ArrowUpRight className="h-4 w-4" />
