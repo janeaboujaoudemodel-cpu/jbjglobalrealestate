@@ -809,12 +809,17 @@ END:VCARD`;
                 </Form>
               </div>
             )}
+            </div>
+
+            {/* Right column: Need Help / Our Commitment support cards */}
+            <aside className="lg:sticky lg:top-24 min-w-0">
+              <SupportTicketBox />
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* Support Ticket Section */}
-      <SupportTicketBox />
+
 
       {/* Important Notice */}
       <section className="py-8 md:py-10">
