@@ -343,7 +343,7 @@ END:VCARD`;
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
 
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             {isSuccess ? (
               /* Success State */
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
