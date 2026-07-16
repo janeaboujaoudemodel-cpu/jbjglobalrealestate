@@ -32633,10 +32633,10 @@ html body #root .developer-name-gold * {
   text-decoration-color: transparent !important;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
   html body #root .jj-footer-shell {
     left: var(--jj-shell-sidebar-w) !important;
-    margin-left: var(--jj-shell-sidebar-w) !important;
+    margin-left: 0 !important;
     width: var(--jj-shell-main-w) !important;
     max-width: var(--jj-shell-main-w) !important;
   }
