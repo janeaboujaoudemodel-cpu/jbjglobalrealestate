@@ -2440,6 +2440,18 @@ body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed,
   .jj-card-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
+@media (min-width: 640px) {
+  .jj-handpicked-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .jj-handpicked-grid {
+    gap: 14px !important;
+    padding-left: max(10px, env(safe-area-inset-left)) !important;
+    padding-right: max(10px, env(safe-area-inset-right)) !important;
+  }
+}
+
 /* Bands inside the gutter wrapper break out to the inner viewport edges
    (post-sidebar), never beyond. */
 [data-content-gutter="1"] > .jj-band,
@@ -2837,6 +2849,12 @@ body:not([data-homepage]) main :is([data-hero-dark], [data-hero], .jj-fullbleed,
   .jj-card-grid-sm {
     @apply grid gap-4;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  @media (min-width: 640px) {
+    .jj-handpicked-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
   }
 
   /* --- Card Action Area --- */

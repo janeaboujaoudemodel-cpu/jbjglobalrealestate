@@ -320,12 +320,15 @@ export function useHandpickedProjects() {
       const seen = new Set<string>();
       let source: "interest" | "favorites" | "history" | "elite" | "mixed" = "elite";
 
-      // Owner-controlled featured projects run first and may exceed the old six-card limit.
+      // Owner-controlled featured projects run first, but they must not be the
+      // entire homepage section when only one manual slot exists. Keep the
+      // selected Amra/Umbra card, then fill the remaining slots with other
+      // published projects so desktop always renders the requested 2x3 grid.
       try {
         const featured = await tierOwnerFeatured();
         if (featured.length > 0) {
-          dedupePush(out, seen, featured, featured.length);
-          return { projects: out, source: "mixed" as const };
+          dedupePush(out, seen, featured, FALLBACK_TARGET);
+          source = "mixed";
         }
       } catch {}
 
