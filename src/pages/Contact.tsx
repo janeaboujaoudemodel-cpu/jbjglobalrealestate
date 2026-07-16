@@ -381,7 +381,7 @@ END:VCARD`;
                 className="relative overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#000000] border border-[#B89555]/35 rounded-2xl p-5 md:p-7 shadow-[0_18px_46px_rgba(4,44,28,0.45),0_2px_8px_rgba(0,0,0,0.35)]"
               >
                 <div className="text-center mb-6">
-                  <IconTile icon={Shield} tone="light" size="lg" className="mx-auto mb-4" />
+                  <IconTile icon={Shield} tone="emerald" size="lg" className="mx-auto mb-4" />
 
                   <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                     Request a Consultation
