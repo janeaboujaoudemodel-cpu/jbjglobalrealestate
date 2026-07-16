@@ -454,29 +454,19 @@ const SupportTicketBox = () => {
                   </p>
 
                   {/* Support Promise */}
-                  <div className="bg-[#FDFBF7] border border-[#B89555]/35 rounded-xl p-4 mb-5 relative overflow-hidden">
-                    <div className="relative z-10">
+                  <div data-no-contrast-guard data-surface="light" className="bg-[#FDFBF7] border border-[#B89555]/35 rounded-xl p-4 mb-5 relative overflow-hidden" style={{ color: "#1A1A1A" }}>
+                    <div className="relative z-10" style={{ color: "#1A1A1A" }}>
                       <div className="flex items-center gap-2 mb-3">
-                        <AlertCircle className="w-5 h-5 text-[#1A1A1A]" />
-                        <span className="text-[#1A1A1A] font-semibold">Our Commitment</span>
+                        <AlertCircle className="w-5 h-5" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
+                        <span className="font-semibold" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>Our Commitment</span>
                       </div>
-                        <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                        <li className="flex items-center gap-2">
-                          <span className="text-[#1A1A1A]">✓</span>
-                          Response within 24 hours
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-[#1A1A1A]">✓</span>
-                          Unique ticket number for tracking
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-[#1A1A1A]">✓</span>
-                          Email confirmation with updates
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-[#1A1A1A]">✓</span>
-                          Voice note support for convenience
-                        </li>
+                      <ul className="space-y-2 text-sm" style={{ color: "#1A1A1A" }}>
+                        {["Response within 24 hours","Unique ticket number for tracking","Email confirmation with updates","Voice note support for convenience"].map((t) => (
+                          <li key={t} className="flex items-center gap-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+                            <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>✓</span>
+                            <span style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{t}</span>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
