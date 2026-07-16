@@ -298,7 +298,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center space-y-3 sm:space-y-4 md:space-y-5">
+          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center flex flex-col items-center">
             {/* Eyebrow tagline removed per owner directive — keep hero copy minimal */}
 
             {/* Headline — exact copy from reference photo */}
@@ -323,7 +323,7 @@ const Index = () => {
 
 
             {/* Hero global search — long-stretch bar with inline Book + Concierge CTAs */}
-            <motion.div variants={fadeInUp} className="w-full mt-24 sm:mt-32 md:mt-40 lg:mt-52 xl:mt-60">
+            <motion.div variants={fadeInUp} className="w-full mt-28 sm:mt-36 md:mt-44 lg:mt-56 xl:mt-64">
               <HomeHeroSearch onBookConsultation={() => setIsInquiryOpen(true)} />
             </motion.div>
 
