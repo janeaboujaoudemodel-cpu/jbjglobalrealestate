@@ -671,7 +671,7 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                                className="border-[#B89555]/70 bg-white/[0.06] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
@@ -693,7 +693,7 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                                className="border-[#B89555]/70 bg-white/[0.06] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
@@ -718,7 +718,7 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-[#B89555]/30 data-[state=checked]:bg-[#EFE6D6] data-[state=checked]:border-[#B89555] mt-0.5"
+                                className="border-[#B89555]/70 bg-white/[0.06] data-[state=checked]:bg-[#064E3B] data-[state=checked]:border-[#B89555] mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
