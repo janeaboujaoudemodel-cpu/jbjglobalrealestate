@@ -36126,3 +36126,46 @@ html body#body #root [data-insights-page] [data-allow-bg][data-no-section-frame]
   background-repeat: no-repeat !important;
 }
 
+
+/* -------------------------------------------------------------------------
+ * Shared CTA container/layout lock
+ * -------------------------------------------------------------------------
+ * Some routes nest MIPreFooterCard inside prose containers, sidebar shells,
+ * or narrow columns that shrink the CTA below its intended width. This lock
+ * uses the full-bleed technique so the CTA breaks out of any parent width
+ * constraint on every route (service pages and non-service pages alike),
+ * while the inner `maxWidthClass` still governs the actual card width.
+ * ----------------------------------------------------------------------- */
+html body #root [data-cta-lock].jj-cta-lock {
+  /* Break out of any nested max-width / padding wrapper */
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  /* Reset any inherited constraints from parents */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+  position: relative;
+  /* Guard against parents that clip children */
+  float: none !important;
+  clear: both;
+}
+
+/* Keep the inner alignment column intact — parents can't shrink it either. */
+html body #root [data-cta-lock].jj-cta-lock > div {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Safety: if a scroll container clips the breakout, fall back to full width
+ * without the viewport breakout so the CTA still renders at the container
+ * edge instead of being squeezed. */
+@supports not (width: 100vw) {
+  html body #root [data-cta-lock].jj-cta-lock {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
