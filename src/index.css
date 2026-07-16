@@ -36193,8 +36193,32 @@ html body #root [data-cta-lock].jj-cta-lock {
 /* Keep the inner alignment column intact — parents can't shrink it either. */
 html body #root [data-cta-lock].jj-cta-lock > div {
   width: 100%;
+  max-width: var(--jj-global-container-max, 1760px) !important;
   margin-left: auto;
   margin-right: auto;
+  padding-left: var(--jj-global-container-px-mobile, 16px) !important;
+  padding-right: var(--jj-global-container-px-mobile, 16px) !important;
+}
+
+@media (min-width: 768px) {
+  html body #root [data-cta-lock].jj-cta-lock > div {
+    padding-left: var(--jj-global-container-px-tablet, 24px) !important;
+    padding-right: var(--jj-global-container-px-tablet, 24px) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  html body #root [data-cta-lock].jj-cta-lock > div {
+    padding-left: var(--jj-global-container-px-desktop, 32px) !important;
+    padding-right: var(--jj-global-container-px-desktop, 32px) !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  html body #root [data-cta-lock].jj-cta-lock > div {
+    padding-left: var(--jj-global-container-px-xl, 40px) !important;
+    padding-right: var(--jj-global-container-px-xl, 40px) !important;
+  }
 }
 
 html body #root [data-cta-lock].jj-cta-lock [data-cta-card] {
