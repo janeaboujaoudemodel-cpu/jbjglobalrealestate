@@ -1455,9 +1455,9 @@ style={{ left: sidebarWidth, top: '56px', bottom: 0, right: 0 }}
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
-          {/* Logo header — compact and aligned with the horizontal header hairline */}
-          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#F7F2EA] via-[#EFE6D6] to-[#F7F2EA] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
+        <div onWheel={passSidebarBoundaryWheelToPage} className="hidden sm:flex w-[56px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] after:content-[''] after:absolute after:top-0 after:bottom-0 after:right-0 after:w-px after:bg-gradient-to-b after:from-transparent after:via-[#B89555] after:to-transparent after:shadow-[1px_0_0_rgba(184,149,85,0.28)] after:pointer-events-none after:z-10">
+          {/* Logo header — matches horizontal utility bar gradient exactly */}
+          <div className="h-[56px] w-full shrink-0 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#F2EBDC] relative after:content-[''] after:absolute after:left-2 after:right-2 after:bottom-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#B89555] after:to-transparent">
             <Link to="/">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain"  loading="lazy" decoding="async" />
             </Link>
