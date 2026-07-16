@@ -307,7 +307,7 @@ const Index = () => {
               data-no-contrast-guard
               data-on-dark
               data-allow-dark-cta
-              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto allow-white"
+              className="font-display font-semibold tracking-tight leading-[1.05] text-balance w-full mx-auto allow-white mt-[22vh] sm:mt-[26vh] md:mt-[30vh] lg:mt-[32vh]"
               style={{
                 fontSize: "clamp(1.85rem, 5vw + 0.5rem, 4.25rem)",
                 letterSpacing: "-0.02em",
@@ -323,7 +323,7 @@ const Index = () => {
 
 
             {/* Hero global search — long-stretch bar with inline Book + Concierge CTAs */}
-            <motion.div variants={fadeInUp} className="w-full mt-28 sm:mt-36 md:mt-44 lg:mt-56 xl:mt-64">
+            <motion.div variants={fadeInUp} className="w-full mt-16 sm:mt-20 md:mt-24 lg:mt-28 xl:mt-32">
               <HomeHeroSearch onBookConsultation={() => setIsInquiryOpen(true)} />
             </motion.div>
 
