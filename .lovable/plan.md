@@ -1,75 +1,98 @@
-I will fix this in two tracks: authentication stability first, then the shared hero standardization.
+## What's broken (from the message)
 
-## 1. Stop the unexpected logout / auth race
+1. **Contact page** — layout structure is broken, not just colors. Needs a real rebuild, not another CSS override.
+2. **Investor FAQ** — contrast + layout still broken, and a **vertical line runs top-to-bottom on the right side** (the old floating Navigator / TOC is bleeding through as a stripe).
+3. **PublicAccess "gate portal" property strap-line on phone** — not scrolling by finger, not auto-animating.
+4. **Guide books (desktop left side)** — hover-to-move interaction is dead.
+5. **Sweep** — apply the same rebuild pattern to every sibling page still off-standard: sales / seller / buyer / broker / tenant / landlord FAQs, Guides, Insights, News, Account pages (Billing, Passkeys, Profile), Legal (Terms, Privacy, Cookies, Disclaimers, IntellectualProperty, AML/KYC).
 
-I found multiple places that can make the app appear logged out even when the user did not intentionally log out:
+---
 
-- `SiteAccessGate` runs its own direct backend session checks separately from `AuthContext`, so it can redirect before the main auth state finishes restoring.
-- `AuthContext` subscribes to auth events and then calls `getSession()`, which can allow an early empty auth event to briefly set `user = null` before storage restoration finishes.
-- Google login redirects to `/welcome`, which adds an unnecessary extra step and can lose the exact page the user came from.
-- Broker/session tracking can force sign-out on a 403 response; I will keep that only for truly explicit blocked/revoked cases, not transient failures.
+## Fixes
 
-Implementation:
-- Make `AuthContext` perform a deterministic initial restore: wait for stored session first, ignore premature null initial events until bootstrap completes, then listen for later changes.
-- Convert `SiteAccessGate` to rely on `useAuth()` instead of running a second independent session check.
-- Keep the user on protected routes until auth is known; no redirect while auth is still restoring.
-- Preserve the intended route through login using `returnTo`/session storage consistently.
-- Change Google sign-in to use a public same-origin redirect and navigate only after the session is confirmed.
+### 1. Investor FAQ (`src/pages/InvestorFAQ.tsx`)
 
-## 2. Make re-login faster and simpler
+Rebuild on the locked `ContentPageShell` the same way `/investor-education` was rebuilt last turn:
 
-Implementation:
-- Add a remembered-account strip/card on `/auth` that stores recent successful login emails locally on that browser.
-- Tapping a remembered email pre-fills the email field immediately.
-- Keep “Continue with Google” prominent so users who do not know their password can use Google without going through password reset.
-- Add Google `prompt: select_account` so Google shows the account chooser whenever possible.
-- Make clear in the app flow that Google’s external chooser/“continue to jbj.ae” screen is controlled by Google/OAuth branding, while the JBJ-controlled `/auth` card will be fully branded.
+- Solid emerald hero via `PremiumEmeraldHero` (removes the `data-neon-page` container + the champagne wrapper sections that caused the layout to feel "off").
+- Kill the **duplicate TOC**. Today the page renders **both** `<FAQFloatingSidebar>` (fixed right, z-80) **and** `<FAQTableOfContents sticky>` in a mobile-only sticky wrapper. On some breakpoints the desktop-only sidebar's outer wrapper leaves a persistent right-edge line (that's the "vertical blue-like line down the right side"). Use only `GuideTableOfContents` via `ContentPageShell`.
+- White champagne section cards for each category, emerald icon plate, gold hairline, `#0d3a2b` headers, `#1A1A1A` body, WCAG-safe.
+- Accordion open-state: emerald fill, pure white text (already the locked FAQ rule).
+- Bottom CTA card in solid emerald (same primitive used on Investor Education).
 
-## 3. Fix Property Management hero to match Market Intelligence exactly
+### 2. Contact page (`src/pages/Contact.tsx`)
 
-Implementation:
-- Remove the current custom Property Management hero markup.
-- Replace it with the same canonical MI hero component/structure used by Market Intelligence.
-- Remove the bottom gold divider/hairline under the hero.
-- Remove internal decorative lines/patterns/grid overlays from the hero.
-- Match MI CTA buttons: emerald/black gradient, no gold borders around CTAs.
-- Reduce title wrapping with responsive title width/font rules so it does not become a huge four-line title.
+The current file is 900 lines of ad-hoc scoped `<style>` blocks. Rebuild the **structure** into three clean stacked sections inside a single page shell:
 
-## 4. Standardize the hero for the requested page families
+```text
+┌───────────────────────────────────────┐
+│  Emerald hero (video bg, centered)    │  ← already good
+├───────────────────────────────────────┤
+│  4 contact tiles (Location/Phone/     │
+│  Email/Hours) — champagne row         │
+├───────────────────────────────────────┤
+│  2-col on lg:                         │
+│   • Left: emerald consultation form   │
+│     (max-w-xl, compact fields)        │
+│   • Right: "Need Help" support card   │
+│     + "Our Commitment" card           │
+├───────────────────────────────────────┤
+│  MI pre-footer CTA                    │
+└───────────────────────────────────────┘
+```
 
-Scope to standardize using the shared MI hero contract:
-- Guides pages
-- Insights pages
-- Services pages
-- Company pages
-- My Account/account pages that use public shell styling
-- Vehicle/tool pages where this same public/content shell is used
-- Help & Support / FAQ pages
+- Drop the giant inline `<style>` block; move the emerald-input contract into a small scoped CSS class in `index.css` (`.jj-emerald-form`) so the file stops being 900 lines.
+- Form fields shrink to `h-10`, single column on mobile, 2-col on md+.
+- Right column ("Need Help" + "Our Commitment") stays **champagne white** with pure black text — no override needed because they live outside the `.jj-emerald-form` scope.
+- Remove any duplicated "reach us directly" / phone-actions blocks that survived earlier fixes.
 
-Implementation:
-- Update the shared hero primitives instead of manually editing every page one by one:
-  - `PremiumEmeraldHero`
-  - `GuideHero`
-  - `FAQHero`
-  - `MIPageShell`
-- Remove shared hero gold divider/hairline and title-rule line from those components.
-- Remove shared marble/grain/line overlays that create the unwanted hero lines.
-- Align hero typography and CTA styling with the current Market Intelligence hero.
-- Keep the vertical sidebar boundary safe: heroes must start after the left sidebar and never go behind it.
+### 3. PublicAccess strap-line (`src/pages/PublicAccess.tsx`)
 
-## 5. Validation before reporting completion
+The handpicked strap-line uses a horizontal scroll rail that on mobile currently has:
+- `overflow-x-hidden` on an ancestor (kills touch scroll), and
+- an auto-marquee `@keyframes` animation gated behind `md:` (so mobile gets neither auto nor manual scroll).
 
-I will validate with Playwright and screenshots, not just code inspection:
-- Auth restore on refresh while logged in.
-- Protected route refresh does not bounce to `/access` or `/auth` during session restore.
-- `/auth` shows the branded card and remembered account choices.
-- Google button starts the correct Google account chooser flow with account selection requested.
-- Property Management hero screenshot: no gold divider, no lines, no CTA gold border, title wraps correctly.
-- Representative screenshots across:
-  - `/market-intelligence`
-  - `/services/property-management`
-  - `/guides/golden-visa-uae`
-  - `/faq`
-  - `/about` or `/company-profile`
-  - `/my-account` or `/account/passkeys` if authenticated session is available
-- Record geometry checks for sidebar-safe hero boundaries and screenshot paths.
+Fix:
+- Add `overflow-x-auto touch-pan-x` and `[-webkit-overflow-scrolling:touch]` on the rail itself.
+- Move the marquee animation out of the `md:` gate so it runs on mobile too, pausing on touch (`onTouchStart` → pauses; user can then swipe).
+- Ensure no parent has `overflow-x-hidden` blocking the swipe (App.css sets it on `#root` — the rail must be a stacking context that doesn't inherit — use `-mx-4 px-4` bleed so scroll happens inside the rail, not the page).
+
+### 4. Guide books hover (Guides page)
+
+The book strap on Guides uses `BookCarousel.tsx` which was patched for iOS a few turns back. On desktop `hover` isn't translating the covers because the hover class was accidentally scoped to `md:` after the iOS fix. Restore the desktop hover:
+
+- `hover:-translate-y-2 hover:rotate-[-1deg]` on the card (not gated behind a breakpoint).
+- Keep the touch-friendly variant for phones.
+
+### 5. Sibling page sweep
+
+Same pattern (kill duplicate TOCs, use `ContentPageShell` + `GuideTableOfContents`, champagne section cards, emerald open-state) applied to:
+
+- `BuyerFAQ.tsx`, `SellerFAQ.tsx`, `BrokerFAQ.tsx`, `LandlordFAQ.tsx`, `TenantFAQ.tsx`, `FAQ.tsx`
+- Guides: any guide page still not on `ContentPageShell` (audit `src/pages/guides/*` + `BuyerGuide/SellerGuide/RentGuide/LandlordGuide/TenantGuide`)
+- Insights & News landing pages (Insights.tsx, News.tsx) — only fix contrast/TOC-stripe, keep editorial layout.
+- Account pages (AccountBilling, AccountPasskeys, UserProfile) — enforce champagne section cards + emerald open-state; no full rebuild.
+- Legal (Terms, Privacy, Cookies, Disclaimers, IntellectualProperty, AmlKycPolicy) — enforce ContentPageShell if missing.
+
+I'll audit each of these first with a single ripgrep sweep for the two smoking-gun markers (`data-neon-page`, `FAQFloatingSidebar` co-rendered with `FAQTableOfContents`, and `mx-[0.125rem] md:mx-2 ... rounded-2xl` band pattern) and only touch the files that match.
+
+---
+
+## Validation
+
+- Playwright screenshots on desktop (1280×1800) and mobile (390×844) for: `/contact`, `/investor-faq`, `/`, `/investor-education`, one buyer FAQ, one legal page.
+- Manually check that the right-side vertical stripe is gone on `/investor-faq` (screenshot with mouse in center of viewport, no hover on TOC).
+- Manually swipe the PublicAccess strap-line at 390px width and confirm the rail scrolls.
+
+## Technical notes
+
+- `ContentPageShell` already implements the locked hero + floating emerald TOC; do not add a second TOC alongside it (that's what caused the stripe).
+- `.jj-emerald-form` will live in `src/index.css` under an existing PASS block; no new global tokens needed.
+- No backend changes. No design-token changes. No routing changes.
+
+## Out of scope (won't touch)
+
+- Any security findings.
+- Sidebar / global header / footer.
+- Any developer-hub / broker-portal / admin routes.
+- Business logic in `Contact.onSubmit` — form wiring stays byte-identical.

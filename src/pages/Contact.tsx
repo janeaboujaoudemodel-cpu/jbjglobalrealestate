@@ -343,7 +343,8 @@ END:VCARD`;
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-4">
 
-          <div className="max-w-2xl mx-auto">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 max-w-7xl mx-auto items-start">
+            <div className="min-w-0">
             {isSuccess ? (
               /* Success State */
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555] rounded-2xl p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(200,167,102,0.35)]">
@@ -808,12 +809,17 @@ END:VCARD`;
                 </Form>
               </div>
             )}
+            </div>
+
+            {/* Right column: Need Help / Our Commitment support cards */}
+            <aside className="lg:sticky lg:top-24 min-w-0">
+              <SupportTicketBox />
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* Support Ticket Section */}
-      <SupportTicketBox />
+
 
       {/* Important Notice */}
       <section className="py-8 md:py-10">

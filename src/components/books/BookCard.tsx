@@ -35,8 +35,13 @@ export const BookCard = forwardRef<HTMLElement, BookCardProps>(function BookCard
   const inner = (
     <div
       className={cn(
-        "relative mx-auto transition-transform duration-500",
+        "relative mx-auto transition-transform duration-500 ease-out will-change-transform",
         sizeMap[size],
+        // Hover lift + tilt on any pointer that supports hover (desktop, tablet with mouse).
+        // `flat` (used inside drag-scroll carousels) suppresses only the translate to avoid jitter,
+        // but keeps a subtle scale so the book still reacts.
+        !flat && "group-hover:-translate-y-2 group-hover:-rotate-[1.5deg] group-hover:scale-[1.03] group-focus-visible:-translate-y-2",
+        flat && "group-hover:scale-[1.03]",
       )}
     >
       <BookCoverFace book={book} bare compact={compact} />

@@ -725,9 +725,12 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
         onWheel={onWheel}
         data-property-scroller
         className="flex w-full gap-7 overflow-x-auto overflow-y-hidden px-4 pb-7 pt-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
-        // NOTE: do NOT set -webkit-overflow-scrolling: touch here. On iOS it freezes
-        // programmatic scrollLeft repaints and the auto-scroll "walk" stops visibly.
-        style={{ cursor: "grab", touchAction: "pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto", willChange: "scroll-position", transform: "translateZ(0)" }}
+        // touchAction: "pan-x pan-y" lets the user swipe the rail horizontally on
+        // phone/tablet AND still scroll the page vertically. Previous value "pan-y"
+        // blocked horizontal swipe entirely on mobile, freezing the strap-line.
+        // Do NOT set -webkit-overflow-scrolling: touch — on iOS it freezes the
+        // programmatic scrollLeft repaints the auto-marquee relies on.
+        style={{ cursor: "grab", touchAction: "pan-x pan-y", scrollBehavior: "auto", WebkitOverflowScrolling: "auto", willChange: "scroll-position", transform: "translateZ(0)" }}
       >
         {track.map((p: any, idx) => {
           const cover = p.__cover;
