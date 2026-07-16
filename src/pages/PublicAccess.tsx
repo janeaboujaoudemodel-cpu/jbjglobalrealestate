@@ -734,12 +734,26 @@ function PropertyMarquee({ onClick, theme = "light", limit = 8 }: { onClick: () 
           const priceVal = Number(p.starting_price ?? p.price_from ?? p.price ?? 0);
           const price = Number.isFinite(priceVal) && priceVal > 0 ? `AED ${priceVal.toLocaleString()}` : "Price on request";
           const bedroomText = (() => {
-            const min = Number(p.bedrooms_min);
-            const max = Number(p.bedrooms_max);
+            // Only treat a value as bedrooms when the source explicitly provided it.
+            // `Number(null) === 0`, which previously mislabeled every project without
+            // bedroom data as "Studio" — including villas, apartments and penthouses.
+            const rawMin = p.bedrooms_min;
+            const rawMax = p.bedrooms_max;
+            const hasMin = rawMin !== null && rawMin !== undefined && rawMin !== "";
+            const hasMax = rawMax !== null && rawMax !== undefined && rawMax !== "";
+            const min = hasMin ? Number(rawMin) : NaN;
+            const max = hasMax ? Number(rawMax) : NaN;
             if (!Number.isFinite(min) && !Number.isFinite(max)) return null;
+            const hasStudio = Boolean((p as any).has_studio);
             const label = (value: number) => (value <= 0 ? "Studio" : `${value} BR`);
-            if (Number.isFinite(min) && Number.isFinite(max) && min !== max) return `${label(min)} – ${label(max)}`;
-            return label(Number.isFinite(min) ? min : max);
+            if (Number.isFinite(min) && Number.isFinite(max) && min !== max) {
+              return `${label(min)} – ${label(max)}`;
+            }
+            const single = Number.isFinite(min) ? min : max;
+            // A single positive bedroom count with no studio flag should never render
+            // as "Studio" — only render Studio when the source truly indicates it.
+            if (single === 0 && !hasStudio) return null;
+            return label(single);
           })();
           const place = [p.area_name || p.community || p.location, p.emirate].filter(Boolean).join(" · ") || "UAE";
           const statusLabel = isReadyProject(p) ? "Ready" : isOffPlanProject(p) ? "Off-plan" : "Launch";
