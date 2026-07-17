@@ -350,7 +350,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
               return matched?.logo_url ? (
                 <DeveloperLogo src={matched.logo_url} alt={matched.name || dev.name} name={matched.name || dev.name} variant="bare" loading="eager" className="!w-9 !h-9 !min-w-9 !rounded-lg" />
               ) : (
-                <div className="w-9 h-9 rounded-lg bg-[#F7F2EA] border border-white/35 flex items-center justify-center flex-shrink-0">
+                <div className="w-9 h-9 rounded-lg bg-[#064E3B]/10 border border-[#064E3B]/20 flex items-center justify-center flex-shrink-0">
                   <span className="font-bold text-[10px] tracking-[0.08em]" style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>JBJ</span>
                 </div>
               );

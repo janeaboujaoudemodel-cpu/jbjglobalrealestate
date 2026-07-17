@@ -121,8 +121,8 @@ const AreaDetail = () => {
     return (
       <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-10 h-10 text-[#1A1A1A] animate-spin mx-auto mb-4" />
-          <p className="text-white/70">Loading area...</p>
+          <Loader2 className="w-10 h-10 text-white animate-spin mx-auto mb-4" />
+          <p className="text-white/80">Loading area...</p>
         </div>
       </div>
     );
@@ -158,11 +158,11 @@ const AreaDetail = () => {
       className="area-filter-bar shadow-[0_4px_20px_rgba(0,0,0,0.28)]"
       data-surface="dark"
       data-scoped-sticky-nav="area"
-      style={{ background: 'linear-gradient(90deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}
+      style={{ background: 'rgba(4, 44, 28, 0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(184, 149, 85, 0.3)' }}
     >
       <div className="px-3 sm:px-4 md:px-5 py-2.5">
         <div className="flex items-center gap-2.5 flex-wrap">
-          <div className="relative h-10 w-full sm:w-[260px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/18 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+          <div className="relative h-10 w-full sm:w-[260px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/24 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <input
               type="text"
@@ -170,7 +170,7 @@ const AreaDetail = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               data-no-contrast-guard
-              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white/76"
+              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             />
             {searchQuery && (
@@ -212,7 +212,7 @@ const AreaDetail = () => {
                     value={shortcutFilters.priceMin}
                     onChange={(e) => setShortcutFilters({ ...shortcutFilters, priceMin: e.target.value.replace(/[^0-9]/g, '') })}
                     placeholder="0"
-                    className="mt-1 h-10 w-full rounded-lg border border-white/18 bg-white/12 px-3 text-sm outline-none placeholder:text-white/60"
+                    className="mt-1 h-10 w-full rounded-lg border border-white/24 bg-white/12 px-3 text-sm outline-none placeholder:text-white/60"
                     style={filterButtonStyle}
                   />
                 </label>
@@ -223,7 +223,7 @@ const AreaDetail = () => {
                     value={shortcutFilters.priceMax}
                     onChange={(e) => setShortcutFilters({ ...shortcutFilters, priceMax: e.target.value.replace(/[^0-9]/g, '') })}
                     placeholder="Any"
-                    className="mt-1 h-10 w-full rounded-lg border border-white/18 bg-white/12 px-3 text-sm outline-none placeholder:text-white/60"
+                    className="mt-1 h-10 w-full rounded-lg border border-white/24 bg-white/12 px-3 text-sm outline-none placeholder:text-white/60"
                     style={filterButtonStyle}
                   />
                 </label>
@@ -352,7 +352,7 @@ const AreaDetail = () => {
                   >
                     <Link
                       to={`/area/${relatedArea.slug}`}
-                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border border-white/18 hover:border-white/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
+                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border border-white/24 hover:border-white/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
                     >
                       {/* Background photo or champagne fallback */}
                       {relatedArea.image_url ? (
@@ -386,11 +386,11 @@ const AreaDetail = () => {
                       {/* Bottom info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-white text-[9px] font-semibold tracking-wide border border-white/20">
+                          <span className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/75 text-white text-[9px] font-semibold tracking-wide border border-white/20">
                             {relatedArea.property_count} Projects
                           </span>
                         )}
-                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-lg group-hover:text-white transition-colors duration-300">
+                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] group-hover:text-white transition-colors duration-300">
                           {relatedArea.name}
                         </h3>
                       </div>

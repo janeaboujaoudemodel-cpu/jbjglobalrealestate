@@ -340,10 +340,10 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="p-5 pt-10 flex-1 flex flex-col gap-2">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1">
-            <h4 className="text-[#1A1A1A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#064E3B] transition-colors">
+            <h4 className="text-[#0A0A0A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#064E3B] transition-colors">
               {project.name}
             </h4>
-            <div className="flex items-center gap-1.5 text-[#1A1A1A] text-sm font-medium min-h-[1.25rem]">
+            <div className="flex items-center gap-1.5 text-[#0A0A0A] text-sm font-medium min-h-[1.25rem]">
               {project.location && (
                 <>
                   <MapPin className="w-3.5 h-3.5 text-[#064E3B] flex-shrink-0" aria-hidden="true" />
@@ -359,15 +359,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           <div
             data-no-contrast-guard
             style={{ color: '#1A1A1A' }}
-            className="flex items-center gap-2 !text-[#1A1A1A] text-xs font-medium whitespace-nowrap overflow-hidden min-h-[1.25rem]"
+            className="flex items-center gap-2 !text-[#0A0A0A] text-xs font-medium whitespace-nowrap overflow-hidden min-h-[1.25rem]"
           >
             {getUnitTypesText() && (
-              <span className="font-semibold truncate !text-[#1A1A1A]">{getUnitTypesText()}</span>
+              <span className="font-semibold truncate !text-[#0A0A0A]">{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
               <span className="text-[#064E3B] flex-shrink-0" aria-hidden="true">|</span>
             )}
-            {getSizeText() && <span className="truncate !text-[#1A1A1A]">{getSizeText()}</span>}
+            {getSizeText() && <span className="truncate !text-[#0A0A0A]">{getSizeText()}</span>}
           </div>
 
 
@@ -410,7 +410,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Owner-only diagnostic — Updated date hidden from public */}
           {isOwner && (project as any).updated_at && (
             <div className="flex items-center justify-between gap-2 min-h-[24px]">
-              <p className="text-[10px] text-[#1A1A1A]/70 font-medium">
+              <p className="text-[10px] text-[#0A0A0A]/70 font-medium">
                 Updated {formatDistanceToNow(new Date((project as any).updated_at), { addSuffix: true })}
               </p>
             </div>

@@ -19,7 +19,7 @@ const formatMarkerPrice = (price: number | null | undefined) => {
 
 const createEmeraldMarkerIcon = (price: number | null | undefined) => L.divIcon({
   className: "custom-marker",
-  html: `<div class="jj-map-marker-pill">${formatMarkerPrice(price)}</div>`,
+  html: `<div class="jj-map-marker-pill border border-white/40 font-bold shadow-lg">${formatMarkerPrice(price)}</div>`,
   iconSize: [72, 32],
   iconAnchor: [36, 32],
   popupAnchor: [0, -32],
@@ -116,7 +116,7 @@ interface AreaMapSectionProps {
 
 export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionProps) => {
   const { t, language } = useLanguage();
-  const [mapView, setMapView] = useState<MapViewType>("street");
+  const [mapView, setMapView] = useState<MapViewType>("satellite");
   const [mapInteractive, setMapInteractive] = useState(false);
 
   const { data: projects } = useQuery({
