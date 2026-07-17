@@ -173,7 +173,7 @@ const AreaDetail = () => {
       <div className="px-3 sm:px-4 md:px-5 py-2.5">
         <div className="jj-filter-rail flex items-center gap-1.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Search */}
-          <div className="relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/22 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
+          <div className="relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/25 bg-transparent">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <input
               type="text"
