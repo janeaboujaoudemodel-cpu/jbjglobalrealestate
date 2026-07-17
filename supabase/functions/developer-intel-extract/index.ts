@@ -131,41 +131,66 @@ async function callGemini(system: string, user: string): Promise<Record<string, 
   }
 }
 
-const SYSTEM_PROMPT = `You are a senior real-estate research editor writing for a premium Dubai investor publication. From official developer website text, brochures, press pages, contact pages, leadership pages, and portfolio pages, produce strictly factual JSON.
+const SYSTEM_PROMPT = `You are a senior real-estate research editor writing for a premium Dubai investor publication. From official developer website text, brochures, press pages, contact pages, leadership pages, and portfolio pages, extract EVERY factual detail you can find. Do not stop early. Do not skip fields just because they seem minor.
 
 Rules:
-- Do NOT invent facts. If a field cannot be sourced from the material, omit it or set null.
+- Do NOT invent facts. If a value is not clearly in the sources, omit it. But if it IS in the sources, you MUST include it.
 - The description must read like a Financial Times / Monocle magazine profile: 2 short paragraphs, 120-220 words total, third person, no marketing clichés, no exclamation marks.
-- Extract founder, chairman, CEO, parent company/group, founded year, website, email, phone, WhatsApp, LinkedIn, Instagram when explicitly present.
-- Extract projects, communities, areas, emirates, and signature developments exactly as the source names them.
-- Preserve signature projects. If the source mentions Citi Developers and Amra / AMRA, include "Amra" in notable_projects with the source-derived project list.
-- JSON keys must match the destination review fields below. Do not use aliases like bio, ceo, parent_group, website, specialties.
+- Extract EVERYTHING present: founder, co-founders, chairman, CEO, managing director, executives, board members, parent company / holding group, sister companies, founded year, headquarters city + full office address, trade license number, website, all emails, all phone numbers, WhatsApp, Telegram, LinkedIn, Instagram, Facebook, Twitter/X, YouTube, TikTok, all signature and current projects, all communities/areas, all emirates active, number of completed projects, number of upcoming projects, total units delivered, portfolio value, specializations, awards, partnerships, joint ventures, mission/vision statements.
+- Names of projects and people must be spelled EXACTLY as the source has them.
+- Preserve signature projects. If the source mentions Citi Developers and Amra / AMRA, include "Amra".
+- Any additional fact that does not fit the listed keys goes into "extra" as key/value pairs — do not drop information.
 
-Return ONLY minified JSON with this shape:
+Return ONLY minified JSON with this shape (include every key you found; omit ones you did not):
 {
   "description": "...",
   "founded_year": 2002,
   "founder_name": "...",
   "ceo_name": "...",
   "chairman": "...",
+  "managing_director": "...",
+  "executives": ["Name — Role", "..."],
   "parent_company": "...",
+  "headquarters": "Dubai, UAE",
+  "office_address": "Full street address",
+  "license_number": "...",
   "website_url": "https://...",
   "admin_email": "...",
+  "additional_emails": ["..."],
   "office_phone": "...",
+  "additional_phones": ["..."],
   "whatsapp": "...",
+  "whatsapp_group_url": "https://...",
+  "telegram_group_url": "https://...",
   "linkedin_url": "https://...",
   "instagram_url": "https://...",
-  "notable_projects": "Project A, Project B",
+  "facebook_url": "https://...",
+  "twitter_url": "https://...",
+  "youtube_url": "https://...",
+  "tiktok_url": "https://...",
+  "notable_projects": "Project A, Project B, Project C",
+  "communities": ["..."],
   "emirates_active": ["Dubai", "Abu Dhabi"],
-  "specialization": "luxury villas, waterfront",
+  "completed_projects": 12,
+  "offplan_projects": 5,
+  "total_units_delivered": 3400,
+  "portfolio_worth": 5200000000,
+  "specialization": "luxury villas, waterfront, wellness resorts",
+  "awards": ["..."],
+  "partnerships": ["..."],
+  "mission": "...",
+  "vision": "...",
+  "extra": { "any_other_fact": "value" },
   "sources": ["https://..."]
 }`;
 
-const ALLOWED_DRAFT_FIELDS = new Set([
-  "description", "founded_year", "ceo_name",
-  "parent_company", "website_url", "admin_email", "office_phone", "whatsapp",
-  "linkedin_url", "instagram_url", "notable_projects", "emirates_active",
-  "specialization", "custom_fields",
+// Real columns on public.developers we can write directly.
+const DEVELOPER_COLUMNS = new Set([
+  "description", "founded_year", "ceo_name", "parent_company", "website_url",
+  "admin_email", "office_phone", "whatsapp", "linkedin_url", "instagram_url",
+  "notable_projects", "specialization", "headquarters", "office_address",
+  "license_number", "whatsapp_group_url", "telegram_group_url",
+  "completed_projects", "offplan_projects", "total_units_delivered", "portfolio_worth",
 ]);
 
 function present(v: unknown) {
@@ -173,6 +198,7 @@ function present(v: unknown) {
   if (typeof v === "string") return v.trim() !== "";
   if (Array.isArray(v)) return v.length > 0;
   if (typeof v === "number") return Number.isFinite(v);
+  if (typeof v === "object") return Object.keys(v as object).length > 0;
   return true;
 }
 
@@ -182,15 +208,18 @@ function asJoined(v: unknown): string | null {
   return null;
 }
 
-function normalizeExtracted(raw: Record<string, unknown>, sources: Source[]): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
+function normalizeExtracted(raw: Record<string, unknown>, sources: Source[]): {
+  columnUpdates: Record<string, unknown>;
+  customFields: Record<string, unknown>;
+} {
+  const columnUpdates: Record<string, unknown> = {};
   const put = (key: string, val: unknown) => {
     if (!present(val)) return;
-    out[key] = val;
+    if (DEVELOPER_COLUMNS.has(key)) columnUpdates[key] = val;
   };
 
   put("description", raw.description ?? raw.bio);
-  put("founded_year", raw.founded_year);
+  put("founded_year", typeof raw.founded_year === "string" ? parseInt(raw.founded_year, 10) : raw.founded_year);
   put("ceo_name", raw.ceo_name ?? raw.ceo);
   put("parent_company", raw.parent_company ?? raw.parent_group);
   put("website_url", raw.website_url ?? raw.website);
@@ -201,27 +230,41 @@ function normalizeExtracted(raw: Record<string, unknown>, sources: Source[]): Re
   put("instagram_url", raw.instagram_url);
   put("notable_projects", asJoined(raw.notable_projects ?? raw.signature_projects));
   put("specialization", asJoined(raw.specialization ?? raw.specialties));
+  put("headquarters", raw.headquarters);
+  put("office_address", raw.office_address);
+  put("license_number", raw.license_number);
+  put("whatsapp_group_url", raw.whatsapp_group_url);
+  put("telegram_group_url", raw.telegram_group_url);
+  for (const numKey of ["completed_projects", "offplan_projects", "total_units_delivered", "portfolio_worth"]) {
+    const v = raw[numKey];
+    const n = typeof v === "string" ? parseFloat(v.replace(/[^0-9.]/g, "")) : v;
+    if (typeof n === "number" && Number.isFinite(n)) columnUpdates[numKey] = n;
+  }
 
+  // Everything else — including AI's "extra" bucket — goes into custom_fields so nothing is lost.
   const customFields: Record<string, unknown> = {};
-  const putCustom = (key: string, val: unknown) => {
-    if (!present(val)) return;
-    customFields[key] = Array.isArray(val) ? val.map((x) => String(x).trim()).filter(Boolean) : val;
-  };
-  putCustom("founder_name", raw.founder_name ?? raw.founder);
-  putCustom("chairman", raw.chairman);
-  putCustom("emirates_active", raw.emirates_active);
-  putCustom("sources", raw.sources ?? sources.map((s) => s.url));
-  if (Object.keys(customFields).length) put("custom_fields", customFields);
+  const passthrough = [
+    "founder_name", "chairman", "managing_director", "executives",
+    "additional_emails", "additional_phones", "communities", "emirates_active",
+    "facebook_url", "twitter_url", "youtube_url", "tiktok_url",
+    "awards", "partnerships", "mission", "vision",
+  ];
+  for (const k of passthrough) if (present(raw[k])) customFields[k] = raw[k];
+  if (raw.extra && typeof raw.extra === "object") {
+    for (const [k, v] of Object.entries(raw.extra as Record<string, unknown>)) {
+      if (present(v)) customFields[k] = v;
+    }
+  }
+  customFields.sources = raw.sources ?? sources.map((s) => s.url);
+  customFields.last_ai_extraction_at = new Date().toISOString();
 
   const sourceBlob = sources.map((s) => s.text).join("\n");
   if (/\b(citi\s+developers?|citi)\b/i.test(sourceBlob) && /\bamra\b/i.test(sourceBlob)) {
-    const current = asJoined(out.notable_projects) || "";
-    if (!/\bamra\b/i.test(current)) out.notable_projects = current ? `${current}, Amra` : "Amra";
+    const current = asJoined(columnUpdates.notable_projects) || "";
+    if (!/\bamra\b/i.test(current)) columnUpdates.notable_projects = current ? `${current}, Amra` : "Amra";
   }
 
-  return Object.fromEntries(
-    Object.entries(out).filter(([k, v]) => ALLOWED_DRAFT_FIELDS.has(k) && present(v)),
-  );
+  return { columnUpdates, customFields };
 }
 
 Deno.serve(async (req) => {
