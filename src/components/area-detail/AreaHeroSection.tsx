@@ -116,11 +116,12 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               data-allow-dark-cta
               data-no-contrast-guard
               className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-white/60 transition-all duration-200"
+              style={{ color: '#FFFFFF' }}
             >
-              <Building2 className="w-5 h-5 text-white" />
+              <Building2 className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               <div className="text-left">
-                <div className="text-xl font-bold text-white leading-tight">{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
-                <div className="text-white/80 text-xs">Projects</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
+                <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>Projects</div>
               </div>
             </button>
           )}
@@ -132,22 +133,23 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               data-allow-dark-cta
               data-no-contrast-guard
               className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-white/60 transition-all duration-200"
+              style={{ color: '#FFFFFF' }}
             >
-              <Users className="w-5 h-5 text-white" />
+              <Users className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               <div className="text-left">
-                <div className="text-xl font-bold text-white leading-tight">{area.developer_count}</div>
-                <div className="text-white/80 text-xs">Developers</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
+                <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>Developers</div>
               </div>
             </button>
           )}
 
           {/* Avg Price/sqft */}
           {(area.avg_price_sqft ?? 0) > 0 && (
-            <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3">
-              <BarChart3 className="w-5 h-5 text-white" />
+            <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3" style={{ color: '#FFFFFF' }}>
+              <BarChart3 className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               <div>
-                <div className="text-xl font-bold text-white leading-tight">AED {Math.round(area.avg_price_sqft!).toLocaleString()}</div>
-                <div className="text-white/80 text-xs">Avg. Price/sqft</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>AED {Math.round(area.avg_price_sqft!).toLocaleString()}</div>
+                <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>Avg. Price/sqft</div>
               </div>
             </div>
           )}
@@ -155,25 +157,21 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           {/* DLD YTD Transactions */}
           {dldAreaData && (
             <>
-              <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3">
-                <Activity className="w-5 h-5 text-white" />
+              <div data-allow-dark-cta data-no-contrast-guard className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3" style={{ color: '#FFFFFF' }}>
+                <Activity className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <div>
-                  <div className="text-xl font-bold text-white leading-tight">{dldAreaData.transactions.toLocaleString()}</div>
-                  <div className="text-white/80 text-xs">DLD Transactions (YTD)</div>
+                  <div data-no-contrast-guard className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{dldAreaData.transactions.toLocaleString()}</div>
+                  <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>DLD Transactions (YTD)</div>
                 </div>
               </div>
 
-              <div data-allow-dark-cta data-no-contrast-guard className={`allow-white flex items-center gap-2 backdrop-blur-md border rounded-xl px-5 py-3 ${
- isPositive
- ? 'jj-pill-emerald-metallic border-0'
- : 'jj-pill-emerald-metallic border-0'
- }`}>
-                <ArrowUpRight className={`w-5 h-5 text-white transition-transform ${isPositive ? '' : 'rotate-180'}`} />
+              <div data-allow-dark-cta data-no-contrast-guard className="allow-white jj-pill-emerald-metallic flex items-center gap-2 backdrop-blur-md border-0 rounded-xl px-5 py-3" style={{ color: '#FFFFFF' }}>
+                <ArrowUpRight className={`w-5 h-5 transition-transform ${isPositive ? '' : 'rotate-180'}`} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 <div>
-                  <div className="allow-white text-xl font-bold leading-tight text-white">
+                  <div data-no-contrast-guard className="allow-white text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                     {dldAreaData.change}
                   </div>
-                  <div className="text-white/80 text-xs">YoY Growth</div>
+                  <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>YoY Growth</div>
                 </div>
               </div>
             </>
@@ -183,7 +181,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* DLD source note */}
         {dldAreaData && (
-          <motion.p className="mt-3 text-white/70 text-[10px] uppercase tracking-widest" variants={fadeInUp}>
+          <motion.p data-no-contrast-guard className="mt-3 text-[10px] uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.75)' }} variants={fadeInUp}>
             ↑ Live data · Dubai Land Department (DLD) · 2026 YTD
           </motion.p>
         )}
