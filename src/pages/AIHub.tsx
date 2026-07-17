@@ -601,7 +601,7 @@ const AIHub = () => {
                 <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Simple Workflow</span>
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight" style={{ color: "#FFFFFF" }}>
                 How It Works
               </h2>
             </div>
