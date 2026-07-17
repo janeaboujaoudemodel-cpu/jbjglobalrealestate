@@ -98,11 +98,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Stamp Generator", href: "/toolkit/stamp-generator", icon: Stamp },
   { label: "Business Card", href: "/toolkit/corporate-suite/business-card", icon: CreditCard },
   { label: "Logo Maker", href: "/toolkit/corporate-suite/logo-creator", icon: Palette },
-  { label: "CV Builder", href: "/cv-builder", icon: FileSearch },
+  // { label: "CV Builder", ... } — REMOVED per owner directive (broken)
   { label: "Cover Letter", href: "/toolkit/corporate-suite/cover-letter", icon: Pen },
   { label: "Company Profile Builder", href: "/toolkit/corporate-suite/company-profile", icon: Award },
   { label: "Landing Page Builder", href: "/toolkit/corporate-suite/landing-page", icon: Globe },
-  { label: "E-Sign", href: "/e-signature", icon: FileSignature },
+  // { label: "E-Sign", ... } — REMOVED per owner directive (hidden until ready)
   { label: "Scan & Sign", href: "/toolkit/scan-sign", icon: ScanLine },
   { label: "Brand Palette", href: "/brand-palette", icon: Palette },
   { label: "Video Resize Pack", href: "/toolkit/video-resize-pack", icon: Video },
@@ -305,7 +305,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Broker Reports", href: "/jbj-broker-reports", icon: FileText },
   { label: "Broker Admin Assistant", href: "/broker-admin-assistant", icon: Bot },
   { label: "Referral Admin", href: "/referral-admin", icon: Handshake },
-  { label: "E-Signature Suite", href: "/e-signature", icon: FileSignature },
+  // { label: "E-Signature Suite", ... } — REMOVED per owner directive
   { label: "Whiteboard", href: "/whiteboard", icon: PenTool },
   { label: "Mind Map", href: "/mindmap", icon: Brain },
   { label: "Form Builder", href: "/form-builder", icon: ClipboardCheck },
