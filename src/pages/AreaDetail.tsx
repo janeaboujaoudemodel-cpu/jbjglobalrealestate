@@ -325,7 +325,7 @@ const AreaDetail = () => {
                   <MapPin className="w-3.5 h-3.5 text-white" />
                   <span className="text-white">Similar Areas</span>
                 </span>
-                <h2 data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold">
+                <h2 data-no-contrast-guard style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold">
                   Explore More in {area.emirate}
                 </h2>
               </div>
