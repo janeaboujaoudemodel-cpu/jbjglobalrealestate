@@ -3,7 +3,7 @@
  * Full-screen hero, projects grid, developers, map, AI analyzer
  */
 
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
