@@ -316,7 +316,7 @@ const AreaDetail = () => {
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
-        <section id="similar-areas" className="py-16 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+        <section id="similar-areas" data-surface="champagne" className="py-16" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
@@ -325,7 +325,7 @@ const AreaDetail = () => {
                   <MapPin className="w-3.5 h-3.5 text-white" />
                   <span className="text-white">Similar Areas</span>
                 </span>
-                <h2 className="text-white text-2xl md:text-3xl font-bold">
+                <h2 data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold">
                   Explore More in {area.emirate}
                 </h2>
               </div>
@@ -406,11 +406,13 @@ const AreaDetail = () => {
         </section>
       )}
 
-      {/* Final CTA — always last on the page */}
+      {/* Final CTA — always last on the page — champagne background band */}
+      <div data-surface="champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }} className="py-10">
       <CombinedContactNewsletter
         title={`Explore ${area.name} Properties?`}
         subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
       />
+      </div>
       </div>
     </div>
   );
