@@ -370,14 +370,17 @@ label[data-required]::after {
   stroke: #FFFFFF !important;
 }
 
+html body #jbj-extract-intel-btn,
+html body #jbj-extract-intel-btn *,
 html body button.jbj-force-white-button.jbj-force-white-button.jbj-force-white-button,
 html body button.jbj-force-white-button.jbj-force-white-button.jbj-force-white-button *,
 html body .jbj-force-white-button.jbj-force-white-button.jbj-force-white-button,
 html body .jbj-force-white-button.jbj-force-white-button.jbj-force-white-button * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
-  fill: #FFFFFF !important;
 }
+html body #jbj-extract-intel-btn svg,
+html body #jbj-extract-intel-btn svg *,
 html body .jbj-force-white-button.jbj-force-white-button.jbj-force-white-button svg,
 html body .jbj-force-white-button.jbj-force-white-button.jbj-force-white-button svg * {
   color: #FFFFFF !important;
