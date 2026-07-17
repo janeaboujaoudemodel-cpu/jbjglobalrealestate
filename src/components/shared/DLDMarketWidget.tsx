@@ -232,7 +232,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section data-surface="champagne" className="py-10 md:py-14 overflow-hidden bg-[#FDFBF7]">
+    <section data-dld-market-widget data-surface="dark" className="py-10 md:py-14 overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
       <div className="w-full px-4 md:px-8 lg:px-12">
         <div className="max-w-[1600px] mx-auto">
 
@@ -398,19 +398,19 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       <button
                         type="button"
                         onClick={() => setExpandedArea(isExpanded ? null : area.area)}
-                        className="relative w-full flex items-center justify-between px-3 py-2.5 hover:bg-[#EFE6D6]/40 transition-colors"
+                        className="relative w-full flex items-center justify-between gap-3 px-3 py-2.5 hover:bg-white/10 transition-colors"
                       >
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex min-w-0 items-center gap-2.5">
                           <span className="text-[10px] font-extrabold w-6 text-center bg-white/15 border border-white/35 rounded py-1" style={{ color: "#FFFFFF" }}>
                             {i + 1}
                           </span>
-                          <span className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
+                          <span className="truncate text-left text-sm font-semibold" style={{ color: "#FFFFFF" }}>
                             {area.area}
                           </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-xs font-bold" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
-                          <span className="text-xs font-extrabold bg-white/15 border border-white/25 px-2 py-0.5 rounded-full" style={{ color: "#FFFFFF" }}>
+                        <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
+                          <span className="w-16 text-right text-xs font-bold tabular-nums" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
+                          <span className="w-14 text-center text-xs font-extrabold bg-white/15 border border-white/25 px-2 py-0.5 rounded-full" style={{ color: "#FFFFFF" }}>
                             {area.change}
                           </span>
                           {nats.length > 0 &&
