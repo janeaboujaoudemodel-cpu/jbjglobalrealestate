@@ -51,7 +51,11 @@ async function setCursor(iso: string) {
   await admin.from("app_settings").upsert({ key: CURSOR_KEY, value: iso }, { onConflict: "key" });
 }
 
-async function fetchModifiedSince(iso: string | null): Promise<ZohoLead[]> {
+type FetchResult =
+  | { ok: true; leads: ZohoLead[] }
+  | { ok: false; softFail: true; status: number; error: string };
+
+async function fetchModifiedSince(iso: string | null): Promise<FetchResult> {
   const headers = {
     Authorization: `Bearer ${LOVABLE_API_KEY}`,
     "X-Connection-Api-Key": ZOHO_CRM_API_KEY,
@@ -59,14 +63,39 @@ async function fetchModifiedSince(iso: string | null): Promise<ZohoLead[]> {
     ...(iso ? { "If-Modified-Since": iso } : {}),
   };
   const url = `${ZOHO_GATEWAY}/Leads?fields=${encodeURIComponent(FIELDS)}&per_page=200&sort_by=Modified_Time&sort_order=desc`;
-  const res = await fetch(url, { headers });
-  if (res.status === 204 || res.status === 304) return [];
-  if (!res.ok) {
-    const t = await res.text();
-    throw new Error(`Zoho list failed ${res.status}: ${t}`);
+
+  const MAX_ATTEMPTS = 3;
+  let lastStatus = 0;
+  let lastText = "";
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch(url, { headers });
+      if (res.status === 204 || res.status === 304) return { ok: true, leads: [] };
+      if (res.ok) {
+        const j = await res.json();
+        return { ok: true, leads: (j?.data ?? []) as ZohoLead[] };
+      }
+      lastStatus = res.status;
+      lastText = await res.text();
+      // Treat upstream 5xx as retryable soft failures; 4xx is a hard failure.
+      if (res.status < 500) {
+        return { ok: false, softFail: true, status: res.status, error: `Zoho list failed ${res.status}: ${lastText}` };
+      }
+      console.warn(`[zoho-reverse-pull] attempt ${attempt}/${MAX_ATTEMPTS} failed ${res.status}: ${lastText}`);
+    } catch (e) {
+      lastText = String((e as Error).message ?? e);
+      console.warn(`[zoho-reverse-pull] attempt ${attempt}/${MAX_ATTEMPTS} threw: ${lastText}`);
+    }
+    if (attempt < MAX_ATTEMPTS) {
+      await new Promise((r) => setTimeout(r, 500 * attempt));
+    }
   }
-  const j = await res.json();
-  return (j?.data ?? []) as ZohoLead[];
+  return {
+    ok: false,
+    softFail: true,
+    status: lastStatus || 503,
+    error: `Zoho list failed after ${MAX_ATTEMPTS} attempts: ${lastText || "upstream error"}`,
+  };
 }
 
 // jbj_leads.status CHECK: 'new','contacted','qualified','negotiating','converted','lost'
@@ -190,7 +219,28 @@ Deno.serve(async (req) => {
   try {
     const cursor = await getCursor();
     const started = new Date().toISOString();
-    const leads = await fetchModifiedSince(cursor);
+    const fetchResult = await fetchModifiedSince(cursor);
+
+    if (!fetchResult.ok) {
+      // Upstream Zoho/gateway failure — do NOT advance cursor and do NOT
+      // return 500. The next scheduled run will retry from the same cursor.
+      console.warn("zoho-reverse-pull soft-fail:", fetchResult.status, fetchResult.error);
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          soft_fail: true,
+          upstream_status: fetchResult.status,
+          error: fetchResult.error,
+          pulled: 0,
+          synced: 0,
+          cursor_before: cursor,
+          cursor_after: cursor,
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const leads = fetchResult.leads;
 
     const results: Array<Record<string, unknown>> = [];
     const errors: Array<Record<string, unknown>> = [];
