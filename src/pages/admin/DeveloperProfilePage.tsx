@@ -1002,13 +1002,24 @@ export default function DeveloperProfilePage() {
                             ))}
                           </div>
                         )}
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="h-7 text-[10px] uppercase font-bold tracking-tight border-[#B89555]/40 hover:bg-[#EFE6D6]"
-                          asChild
+                        <Button
+                          size="sm"
+                          className="h-7 text-[10px] uppercase font-bold tracking-tight bg-[#064E3B] text-white hover:bg-[#042C1C]"
+                          onClick={async () => {
+                            const t = toast.loading("Sending survey emails…");
+                            try {
+                              const { data, error } = await supabase.functions.invoke("send-briefing-survey", {
+                                body: { briefing_id: b.id },
+                              });
+                              if (error) throw error;
+                              if (!(data as any)?.ok) throw new Error((data as any)?.error || "Failed");
+                              toast.success(`Sent ${(data as any).sent}/${(data as any).total} survey email(s)`, { id: t });
+                            } catch (e: any) {
+                              toast.error(e?.message || "Could not send", { id: t });
+                            }
+                          }}
                         >
-                          <Link to="/owner/developers/briefings">View Hub</Link>
+                          <Send className="w-3 h-3 mr-1" /> Send survey emails
                         </Button>
                       </div>
                     </div>
@@ -1016,6 +1027,7 @@ export default function DeveloperProfilePage() {
                 ))}
               </div>
             )}
+            <RepRatingsSection developerId={developer?.id} />
           </TabsContent>
         </Tabs>
       </div>
