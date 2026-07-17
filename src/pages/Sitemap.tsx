@@ -3,9 +3,9 @@
  * - Emerald hero, no decorative gold divider lines, balanced CTA buttons
  * - Champagne quick-links strip with black text/icons, separates hero from directory
  * - Directory on champagne, emerald cards with white text
- * - Support & Legal reuses the quick-link button style
+ * - Support & Legal appears as a directory card beside Careers
  * - Get in Touch on emerald (sidebar tone), champagne cards with black text
- * - Contained "Ready to Get Started" CTA (no edge-to-edge brown band)
+ * - Canonical pre-footer CTA (no fake/manual closing block)
  * - Floating champagne back-to-top button removed; global emerald button handles it
  * - AI tools filtered via ai_tool_visibility with correct tool_id mapping
  */
@@ -24,27 +24,20 @@ import {
   Home,
   Building2,
   Briefcase,
-  FileText,
   ArrowRight,
   Phone,
-  MessageCircle,
   BookOpen,
   BarChart3,
   GraduationCap,
-  Shield,
   Layers,
   Key,
   Sparkles,
-  MapPin,
-  Heart,
-  Newspaper,
   Headphones,
   Calendar,
   CreditCard,
-  Mail,
 } from "lucide-react";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
-import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import PreFooterSeparator from "@/components/PreFooterSeparator";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
@@ -247,15 +240,19 @@ const hubSections: HubSection[] = [
       { href: "/team", label: "Meet Our Team" },
     ],
   },
-];
-
-const legalLinks = [
-  { href: "/terms", label: "Terms of Service", icon: FileText },
-  { href: "/privacy", label: "Privacy Policy", icon: Shield },
-  { href: "/intellectual-property", label: "Intellectual Property", icon: Shield },
-  { href: "/services/complaint-procedures", label: "Complaint Procedures", icon: FileText },
-  { href: "/services/customer-happiness-center", label: "Customer Happiness Center", icon: Heart },
-  { href: "/cookies", label: "Cookies Policy", icon: FileText },
+  {
+    id: "support-legal",
+    title: "Support & Legal",
+    icon: Headphones,
+    links: [
+      { href: "/terms", label: "Terms of Service" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/intellectual-property", label: "Intellectual Property" },
+      { href: "/services/complaint-procedures", label: "Complaint Procedures" },
+      { href: "/services/customer-happiness-center", label: "Customer Happiness Center" },
+      { href: "/cookies", label: "Cookies Policy" },
+    ],
+  },
 ];
 
 // Map a link href to every plausible ai_tool_visibility.tool_id so hidden
@@ -490,7 +487,7 @@ const Sitemap = () => {
 
         {/* DIRECTORY — champagne background, emerald cards */}
         <section className="py-14 sm:py-20 bg-[#EFE6D6]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -510,7 +507,7 @@ const Sitemap = () => {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6"
             >
               {filteredHubSections.map((hub) => (
                 <HubCard
@@ -524,36 +521,9 @@ const Sitemap = () => {
           </div>
         </section>
 
-        {/* SUPPORT & LEGAL — champagne pills, same structure as quick-links */}
-        <section className="py-12 sm:py-14 bg-gradient-to-b from-[#F5EBD3] via-[#EFE2C4] to-[#E7D6B0] border-y border-[#B89555]/30">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-7"
-            >
-              <h2 className="font-cormorant text-2xl sm:text-3xl font-semibold text-[#0F172A]">
-                Support &amp; Legal
-              </h2>
-            </motion.div>
-
-            <div className="flex flex-wrap justify-center gap-3">
-              {legalLinks.map((link) => (
-                <ChampagnePill
-                  key={link.href}
-                  to={link.href}
-                  label={link.label}
-                  icon={link.icon}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* GET IN TOUCH — emerald sidebar tone, champagne cards, black text */}
         <section className="py-14 sm:py-16 bg-gradient-to-b from-[#064E3B] via-[#053d2e] to-[#042c1c]">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -568,7 +538,7 @@ const Sitemap = () => {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
               {[
                 {
                   to: "/contact?type=support",
@@ -596,21 +566,24 @@ const Sitemap = () => {
                 return (
                   <Link key={card.to} to={card.to} className="block">
                     <motion.div
+                      data-surface="champagne"
+                      data-no-contrast-guard
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.08 }}
-                      className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD3] to-[#E7D6B0] border border-[#B89555]/50 rounded-2xl p-6 text-center hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
+                      className="h-full min-w-0 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD3] to-[#E7D6B0] border border-[#B89555]/50 rounded-2xl p-4 text-center hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
+                      style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
                     >
                       <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-white/70 border border-[#B89555]/50 flex items-center justify-center">
-                        <Icon className="w-7 h-7 text-[#0F172A]" strokeWidth={2} />
+                        <Icon className="w-7 h-7 text-[#1A1A1A]" strokeWidth={2} style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
                       </div>
-                      <h3 className="text-[#0F172A] font-cormorant font-semibold text-xl mb-2">
+                      <h3 className="text-[#1A1A1A] font-cormorant font-semibold text-lg mb-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
                         {card.title}
                       </h3>
-                      <p className="text-[#0F172A]/75 text-sm mb-4">{card.desc}</p>
-                      <span className="inline-flex items-center gap-2 text-[#0F172A] font-semibold text-sm">
-                        {card.cta} <ArrowRight className="w-4 h-4" />
+                      <p className="text-[#1A1A1A] text-xs leading-snug mb-4" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{card.desc}</p>
+                      <span className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
+                        {card.cta} <ArrowRight className="w-4 h-4" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
                       </span>
                     </motion.div>
                   </Link>
@@ -620,54 +593,10 @@ const Sitemap = () => {
           </div>
         </section>
 
-        {/* READY TO GET STARTED — contained CTA, no edge-to-edge brown band */}
-        <section className="py-14 sm:py-16 bg-[#EFE6D6]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="rounded-3xl bg-gradient-to-br from-[#064E3B] via-[#053d2e] to-[#042c1c] border border-[#B89555]/40 shadow-[0_20px_60px_rgba(6,78,59,0.25)] px-6 sm:px-10 py-10 sm:py-12 text-center"
-            >
-              <p className="text-[#E8D5A3] uppercase tracking-[0.28em] text-[11px] mb-3">
-                Get in touch
-              </p>
-              <h2 className="font-cormorant text-3xl sm:text-4xl font-semibold text-white mb-3">
-                Ready to Get Started?
-              </h2>
-              <p className="text-white/75 max-w-xl mx-auto mb-8 text-sm sm:text-base">
-                Connect with our expert team for personalized guidance across sales,
-                leasing, investment, and property services.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
-                <a
-                  href={getWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-full bg-white/10 border border-white/25 text-white text-sm font-medium hover:bg-white/15 transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  WhatsApp
-                </a>
-                <a
-                  href={`tel:${CONTACT_INFO.phoneRaw}`}
-                  className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-full bg-white/10 border border-white/25 text-white text-sm font-medium hover:bg-white/15 transition-colors"
-                >
-                  <Phone className="w-4 h-4" />
-                  Call Us
-                </a>
-                <a
-                  href={`mailto:${CONTACT_INFO.email}`}
-                  className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-full bg-white/10 border border-white/25 text-white text-sm font-medium hover:bg-white/15 transition-colors"
-                >
-                  <Mail className="w-4 h-4" />
-                  Email
-                </a>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <PreFooterSeparator
+          title="Ready to Get Started?"
+          subtitle="Connect with our expert team for personalized guidance across sales, investment, and property services."
+        />
       </div>
     </>
   );
