@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
@@ -18,6 +18,20 @@ const rememberLoginEmail = (rawEmail?: string | null) => {
   } catch {
     try { localStorage.setItem(RECENT_LOGIN_EMAILS_KEY, JSON.stringify([normalized])); } catch { /* ignore */ }
   }
+};
+
+const hasPersistedAuthSession = () => {
+  try {
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith("sb-") || !key.includes("auth-token")) continue;
+      const value = localStorage.getItem(key) || "";
+      if (value.includes("access_token") || value.includes("refresh_token")) return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
 };
 
 /**
@@ -69,6 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
   const [isAuditor, setIsAuditor] = useState(false);
+  const sessionRef = useRef<Session | null>(null);
 
   const verifyOwner = useCallback(async (currentSession: Session | null): Promise<boolean> => {
     if (!currentSession?.access_token) {
@@ -249,6 +264,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let latestSessionId: string | null = null;
     let bootstrapped = false;
     let nullSessionRecoveryTimer: number | null = null;
+    let nullSessionRecoveryAttempts = 0;
 
     const clearNullSessionRecoveryTimer = () => {
       if (nullSessionRecoveryTimer) {
@@ -257,12 +273,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
+    const scheduleSessionRecovery = (delayMs = 900) => {
+      clearNullSessionRecoveryTimer();
+      nullSessionRecoveryTimer = window.setTimeout(() => {
+        supabase.auth.getSession()
+          .then(({ data: { session: recoveredSession } }) => {
+            if (recoveredSession) {
+              nullSessionRecoveryAttempts = 0;
+              void applySession(recoveredSession);
+              return;
+            }
+
+            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 3) {
+              nullSessionRecoveryAttempts += 1;
+              scheduleSessionRecovery(450 * nullSessionRecoveryAttempts);
+              return;
+            }
+
+            void applySession(null);
+          })
+          .catch(() => {
+            if (hasPersistedAuthSession() && nullSessionRecoveryAttempts < 3) {
+              nullSessionRecoveryAttempts += 1;
+              scheduleSessionRecovery(450 * nullSessionRecoveryAttempts);
+              return;
+            }
+            void applySession(null);
+          });
+      }, delayMs);
+    };
+
     const applySession = async (nextSession: Session | null) => {
       if (!mounted) return;
 
       const newSessionId = nextSession?.access_token ?? null;
 
-      if (nextSession) clearNullSessionRecoveryTimer();
+      if (nextSession) {
+        clearNullSessionRecoveryTimer();
+        nullSessionRecoveryAttempts = 0;
+      }
+
+      sessionRef.current = nextSession;
 
       // Set session and user immediately
       setSession(nextSession);
@@ -274,6 +325,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // If no session, we're done loading
       if (!nextSession?.user) {
+        sessionRef.current = null;
         setIsOwner(false);
         setIsAuditor(false);
         setOwnerError(null);
@@ -333,14 +385,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
       if (!nextSession && event !== "SIGNED_OUT") {
-        clearNullSessionRecoveryTimer();
-        nullSessionRecoveryTimer = window.setTimeout(() => {
-          supabase.auth.getSession()
-            .then(({ data: { session: recoveredSession } }) => {
-              void applySession(recoveredSession);
-            })
-            .catch(() => void applySession(null));
-        }, 900);
+        scheduleSessionRecovery();
         return;
       }
       void applySession(nextSession);
@@ -351,10 +396,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .getSession()
       .then(({ data: { session: existingSession } }) => {
         bootstrapped = true;
+        if (!existingSession && hasPersistedAuthSession()) {
+          scheduleSessionRecovery(250);
+          return;
+        }
         return applySession(existingSession);
       })
       .catch(() => {
         bootstrapped = true;
+        if (hasPersistedAuthSession()) {
+          scheduleSessionRecovery(250);
+          return;
+        }
         return applySession(null);
       });
 
@@ -462,6 +515,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setUser(null);
       setSession(null);
+      sessionRef.current = null;
       setIsOwner(false);
       setIsAuditor(false);
       setOwnerError(null);
@@ -477,6 +531,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setUser(null);
       setSession(null);
+      sessionRef.current = null;
       setIsOwner(false);
       setIsAuditor(false);
       setOwnerError(null);
