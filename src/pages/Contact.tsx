@@ -342,7 +342,7 @@ END:VCARD`;
 
       {/* Consultation Form Section */}
       <section>
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 items-start">
+          <div className="max-w-3xl mx-auto w-full min-w-0">
             <div className="min-w-0">
             {isSuccess ? (
               /* Success State */
