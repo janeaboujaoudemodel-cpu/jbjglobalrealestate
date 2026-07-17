@@ -36237,6 +36237,78 @@ html body #root [data-cta-lock].jj-cta-lock [data-cta-card] {
   width: 100%;
 }
 
+/* Area detail repair lock — single sticky emerald filter, no gold on emerald,
+   pure white hero/AI/map controls, and no clipped chips on tablet/mobile. */
+html body #root [data-area-detail-page] [data-area-sticky-filter-shell] {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 60 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-bottom: 0 !important;
+}
+
+html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"],
+html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.16) !important;
+}
+
+html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] {
+  border: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 16px 34px -26px rgba(0,0,0,0.78), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] :is(button, input) {
+  min-height: 40px !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+html body #root [data-area-hero],
+html body #root [data-area-hero] :where(h1,h2,h3,h4,p,span,a,button,div,small,strong,svg,path,line,rect,circle,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-area-ai-section] {
+  background: linear-gradient(180deg, #064E3B 0%, #042C1C 48%, #010806 100%) !important;
+}
+
+html body #root [data-area-ai-section] :where(.bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"]) {
+  background: linear-gradient(135deg, rgba(6,78,59,0.98) 0%, rgba(4,44,28,0.99) 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, rgba(6,78,59,0.98) 0%, rgba(4,44,28,0.99) 58%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.16) !important;
+  box-shadow: 0 24px 58px -34px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+html body #root [data-area-ai-section] :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html body #root [data-area-ai-section] :where(.recharts-cartesian-axis-tick text, .recharts-text, .recharts-label) {
+  fill: #FFFFFF !important;
+}
+
+html body #root [data-area-detail-page] :is(.jj-market-emerald-card, .jj-market-emerald-row) {
+  border-color: rgba(255,255,255,0.16) !important;
+}
+
+html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-layer-button, .jj-map-square-control, .jj-map-enable-chip, .jj-map-marker-pill),
+html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-layer-button, .jj-map-square-control, .jj-map-enable-chip, .jj-map-marker-pill) * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 /* Safety: if a scroll container clips the breakout, fall back to full width
  * without the viewport breakout so the CTA still renders at the container
  * edge instead of being squeezed. */

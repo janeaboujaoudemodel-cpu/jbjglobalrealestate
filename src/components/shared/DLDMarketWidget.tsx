@@ -284,7 +284,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* 6-Metric Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {mainStats.map((stat) => (
-              <div key={stat.label} data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-xl p-5 relative overflow-hidden group transition-all duration-300" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
+              <div key={stat.label} data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-xl p-5 relative overflow-hidden group transition-all duration-300" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full bg-white" />
                   <span className="text-[10px] uppercase tracking-[0.15em] font-bold" style={{ color: "#FFFFFF" }}>{stat.label}</span>
@@ -313,7 +313,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
+                <div data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                   <div className="flex items-center gap-1.5 mb-1">
                     <div className="w-2.5 h-2.5 rounded-full bg-white" />
                     <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF" }}>Off-Plan</span>
@@ -321,7 +321,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   <p className="text-lg font-extrabold" style={{ color: "#FFFFFF" }}>{ytd2026.offPlan.toLocaleString()}</p>
                   <p className="text-[10px] font-medium" style={{ color: "#FFFFFF" }}>{offPlanPct}% of total</p>
                 </div>
-                <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
+                <div data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                   <div className="flex items-center gap-1.5 mb-1">
                     <div className="w-2.5 h-2.5 rounded-full bg-white" />
                     <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF" }}>Secondary</span>
@@ -356,7 +356,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   <p className="text-white text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
                   <p className="text-white/70 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
-                <div data-surface="emerald" className="jj-market-emerald-card border border-[#B89555]/35 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
+                <div data-surface="emerald" className="jj-market-emerald-card border border-white/16 rounded-lg p-3" style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#000000 100%)" }}>
                   <div className="flex items-center gap-1.5 mb-1">
                     <div className="w-2.5 h-2.5 rounded-full bg-white" />
                     <span className="text-[10px] uppercase tracking-wider font-bold" style={{ color: "#FFFFFF" }}>Mortgage</span>
@@ -391,7 +391,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <div
                       key={area.area}
                       data-surface="emerald"
-                      className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-[#B89555]/35"
+                      className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-white/16"
                       style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}
                     >
                       <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
@@ -464,7 +464,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   const maxPct = topNationalities[0]?.percentage || 1;
                   const barWidth = Math.max((nat.percentage / maxPct) * 100, 8);
                   return (
-                    <div key={nat.country} data-surface="emerald" className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-[#B89555]/35" style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}>
+                    <div key={nat.country} data-surface="emerald" className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-white/16" style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}>
                       <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">

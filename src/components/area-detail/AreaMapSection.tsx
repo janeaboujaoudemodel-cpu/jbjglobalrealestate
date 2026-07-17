@@ -73,6 +73,8 @@ function MapViewToggle({
   externalUrl: string;
   t: (key: string) => string;
 }) {
+  const whiteLock = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } as const;
+
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
       <div className="jj-map-layer-switcher">
@@ -82,7 +84,9 @@ function MapViewToggle({
             onClick={() => onViewChange(view)}
             className="jj-map-layer-button"
             data-active={mapView === view ? "true" : "false"}
-            data-surface={mapView === view ? "emerald" : "champagne"}
+            data-surface="emerald"
+            data-no-contrast-guard
+            style={whiteLock}
           >
             {t(`map.${view}`)}
           </button>
@@ -94,9 +98,11 @@ function MapViewToggle({
         rel="noopener noreferrer"
         className="jj-map-square-control"
         data-surface="emerald"
+        data-no-contrast-guard
+        style={whiteLock}
         aria-label={t('map.openInGoogleMaps')}
       >
-        <Maximize className="w-5 h-5" />
+        <Maximize className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </a>
     </div>
   );
@@ -110,7 +116,7 @@ interface AreaMapSectionProps {
 
 export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionProps) => {
   const { t, language } = useLanguage();
-  const [mapView, setMapView] = useState<MapViewType>("satellite");
+  const [mapView, setMapView] = useState<MapViewType>("street");
   const [mapInteractive, setMapInteractive] = useState(false);
 
   const { data: projects } = useQuery({
@@ -166,7 +172,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
               className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
               onClick={() => setMapInteractive(true)}
             >
-              <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium">
+              <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium" data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                 {t('map.clickToEnable')}
               </div>
             </div>
