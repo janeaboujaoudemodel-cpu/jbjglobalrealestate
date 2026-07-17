@@ -46,6 +46,10 @@ export default function GlobalFilterBar() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
+  if (location.pathname.startsWith("/area/")) {
+    return null;
+  }
+
   // Determine if we're on a property listing page (sync filters from URL)
   const isPropertyPage =
     location.pathname === "/properties" ||

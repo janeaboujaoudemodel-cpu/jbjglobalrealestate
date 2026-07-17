@@ -10,7 +10,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Loader2, Search, X, Building2, Info, Sparkles, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { MapPin, ArrowRight, Loader2, Search, X, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
@@ -87,6 +87,7 @@ const AreaDetail = () => {
   // Page-level filter state
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchScope, setSearchScope] = useState<"area" | "emirate" | "community" | "developer" | "project">("project");
   const [advancedOpen, setAdvancedOpen] = useState(false);
 
   // Behavior-aware area recommendations (must be before early returns)
@@ -134,43 +135,35 @@ const AreaDetail = () => {
 
   if (!area) return null;
 
-  const areaStickyTabs = [
-    { id: "developers-section", label: "Developer", icon: Info },
-    { id: "area-projects", label: "Projects", icon: Building2 },
-    { id: "area-map", label: "Location", icon: MapPin },
-    { id: "area-ai", label: "AI Analyzer", icon: Sparkles },
-  ];
-
-  const scrollToAreaSection = (id: string) => {
-    const target = document.getElementById(id);
-    if (!target) return;
-    const top = target.getBoundingClientRect().top + window.scrollY - 132;
-    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    window.scrollTo({ top: Math.max(0, top), behavior: prefersReduced ? "auto" : "smooth" });
-  };
-
   const filterButtonStyle = { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties;
+  const filterScopes = [
+    { id: "area" as const, label: "Area" },
+    { id: "emirate" as const, label: "Emirate" },
+    { id: "community" as const, label: "Community" },
+    { id: "developer" as const, label: "Developer" },
+    { id: "project" as const, label: "Project Name" },
+  ];
 
   // Single custom area filter bar. It deliberately avoids the shared full rail
   // because that rail exposes too many chips for this compact area page header.
   const filterBarBlock = (
     <div
-      className="area-filter-bar shadow-[0_4px_20px_rgba(0,0,0,0.28)]"
+      className="area-filter-bar shadow-[0_18px_42px_rgba(0,0,0,0.36)]"
       data-surface="dark"
       data-scoped-sticky-nav="area"
-      style={{ background: 'rgba(4, 44, 28, 0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(184, 149, 85, 0.3)' }}
+      style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%)', backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(255,255,255,0.12)' }}
     >
-      <div className="px-3 sm:px-4 md:px-5 py-2.5">
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <div className="relative h-10 w-full sm:w-[260px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/24 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+      <div className="px-3 sm:px-4 md:px-5 py-2">
+        <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="relative h-10 w-[250px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <input
               type="text"
-              placeholder="Search projects or developers"
+              placeholder="Type to filter"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               data-no-contrast-guard
-              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white"
+              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white/82"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             />
             {searchQuery && (
@@ -180,16 +173,21 @@ const AreaDetail = () => {
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={() => setAdvancedOpen(true)}
-            data-no-contrast-guard
-            className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/16 bg-white/10 hover:bg-white/16 transition-colors"
-            style={filterButtonStyle}
-          >
-            <SlidersHorizontal className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-            <span>More filters</span>
-          </button>
+          <div className="flex flex-none items-center gap-1.5 rounded-lg border border-white/14 bg-black/16 p-1">
+            {filterScopes.map((scope) => (
+              <button
+                key={scope.id}
+                type="button"
+                onClick={() => setSearchScope(scope.id)}
+                data-active={searchScope === scope.id ? "true" : "false"}
+                data-no-contrast-guard
+                className="allow-white h-8 flex-none rounded-md px-3 text-xs font-extrabold transition-colors data-[active=true]:bg-white/18 hover:bg-white/12"
+                style={filterButtonStyle}
+              >
+                {scope.label}
+              </button>
+            ))}
+          </div>
 
           <Popover>
             <PopoverTrigger asChild>
@@ -239,23 +237,16 @@ const AreaDetail = () => {
             </PopoverContent>
           </Popover>
 
-          <div className="h-7 w-px flex-none bg-white/14" />
-
-          <div className="flex items-center gap-2 flex-wrap min-w-0">
-            {areaStickyTabs.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => scrollToAreaSection(tab.id)}
-                data-no-contrast-guard
-                style={filterButtonStyle}
-                className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold whitespace-nowrap transition-all hover:bg-white/16 border border-white/12 bg-white/6"
-              >
-                <tab.icon className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={() => setAdvancedOpen(true)}
+            data-no-contrast-guard
+            className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/16 bg-white/10 hover:bg-white/16 transition-colors"
+            style={filterButtonStyle}
+          >
+            <SlidersHorizontal className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <span>Filters</span>
+          </button>
         </div>
       </div>
     </div>
@@ -299,7 +290,7 @@ const AreaDetail = () => {
 
       {/* Projects Grid - edge to edge */}
       <div id="area-projects" className="scroll-mt-40">
-        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
+        <AreaProjectsGrid areaName={area.name} areaSlug={area.slug} shortcutFilters={shortcutFilters} searchQuery={searchQuery} searchScope={searchScope} onClearFilters={() => { setSearchQuery(""); setShortcutFilters(defaultShortcutFilters); }} />
       </div>
 
       {/* Developers Bar - connected, no gap */}
@@ -325,7 +316,7 @@ const AreaDetail = () => {
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
-        <section id="similar-areas" className="py-16 bg-[#0A0A0A]">
+        <section id="similar-areas" className="py-16 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
@@ -352,7 +343,7 @@ const AreaDetail = () => {
                   >
                     <Link
                       to={`/area/${relatedArea.slug}`}
-                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden border border-white/24 hover:border-white/40 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
+                      className="group relative block h-[200px] md:h-[220px] rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_18px_42px_rgba(0,0,0,0.48)]"
                     >
                       {/* Background photo or champagne fallback */}
                       {relatedArea.image_url ? (
@@ -386,8 +377,8 @@ const AreaDetail = () => {
                       {/* Bottom info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/75 text-white text-[9px] font-semibold tracking-wide border border-white/20">
-                            {relatedArea.property_count} Projects
+                          <span className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/75 text-white text-[9px] font-semibold tracking-wide">
+                            {relatedArea.property_count} verified projects
                           </span>
                         )}
                         <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] group-hover:text-white transition-colors duration-300">

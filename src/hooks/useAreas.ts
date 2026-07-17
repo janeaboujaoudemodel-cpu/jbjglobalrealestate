@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface Area {
@@ -66,6 +66,8 @@ export function useAreas(options?: {
 }
 
 export function useAreaBySlug(slug: string | undefined) {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ["area", slug],
     queryFn: async () => {
@@ -86,6 +88,13 @@ export function useAreaBySlug(slug: string | undefined) {
       return data as Area | null;
     },
     enabled: !!slug,
+    placeholderData: () => {
+      if (!slug) return undefined;
+      const cachedAreaLists = queryClient
+        .getQueriesData<Area[]>({ queryKey: ["areas"] })
+        .flatMap(([, value]) => value || []);
+      return cachedAreaLists.find((cached) => cached.slug === slug) || undefined;
+    },
     staleTime: 5 * 60 * 1000,
   });
 }
