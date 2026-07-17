@@ -160,7 +160,7 @@ export const NewsletterBrevo = ({
                 <span
                   className="allow-white pointer-events-none absolute left-5 right-3 sm:left-[52px] sm:right-4 top-1/2 -translate-y-1/2 text-[15px] sm:text-[15.5px] font-normal tracking-[-0.005em] whitespace-nowrap overflow-hidden text-ellipsis z-[1]"
                   aria-hidden="true"
-                  style={{ color: 'rgba(255,255,255,0.78)', WebkitTextFillColor: 'rgba(255,255,255,0.78)' }}
+                   style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                 >
                   {animatedPlaceholder}
                   <span className="jj-type-caret" aria-hidden="true">|</span>

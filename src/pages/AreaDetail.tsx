@@ -10,7 +10,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Loader2, Search, X, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { MapPin, ArrowRight, Loader2, Search, X, SlidersHorizontal, ChevronDown, Check } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
@@ -28,6 +28,8 @@ import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { filterPillBase, filterPillActive, pillInactive, filterPopoverSurface, filterPrimaryButton } from "@/components/filters/filterStyles";
+import { Button } from "@/components/ui/button";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -136,6 +138,7 @@ const AreaDetail = () => {
   if (!area) return null;
 
   const filterButtonStyle = { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties;
+  const scopeDropdownText = { color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' } as React.CSSProperties;
   const filterScopes = [
     { id: "area" as const, label: "Area" },
     { id: "emirate" as const, label: "Emirate" },
@@ -144,22 +147,31 @@ const AreaDetail = () => {
     { id: "project" as const, label: "Project Name" },
   ];
 
-  // Single custom area filter bar. It deliberately avoids the shared full rail
-  // because that rail exposes too many chips for this compact area page header.
+  const scopeMenuCopy: Record<typeof filterScopes[number]["id"], string> = {
+    area: "Match the search text against area names.",
+    emirate: "Match the search text against the emirate.",
+    community: "Match the search text against community names.",
+    developer: "Match the search text against developer names.",
+    project: "Match the search text against project names.",
+  };
+
+  // Single custom area filter bar using the Projects-page filter primitives.
+  // Area/Emirate/Community/etc. are independent dropdown buttons, not a connected segmented control.
   const filterBarBlock = (
     <div
       className="area-filter-bar shadow-[0_18px_42px_rgba(0,0,0,0.42)]"
       data-surface="dark"
       data-scoped-sticky-nav="area"
+      data-filter-clean="true"
       style={{
-        background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 42%, #042C1C 78%, #010806 100%)',
+        background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
         backdropFilter: 'blur(16px)',
-        borderTop: '1px solid rgba(184,149,85,0.35)',
-        borderBottom: '1px solid rgba(184,149,85,0.35)',
+        borderTop: '1px solid rgba(255,255,255,0.14)',
+        borderBottom: '1px solid rgba(255,255,255,0.14)',
       }}
     >
       <div className="px-3 sm:px-4 md:px-5 py-2.5">
-        <div className="flex items-center gap-2.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="jj-filter-rail flex items-center gap-1.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Search */}
           <div className="relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/22 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -179,32 +191,39 @@ const AreaDetail = () => {
             )}
           </div>
 
-          {/* Divider */}
-          <span aria-hidden className="hidden sm:block flex-none h-7 w-px" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(184,149,85,0.55) 50%, transparent 100%)' }} />
-
-          {/* Scope chips */}
-          <div className="flex flex-none items-center gap-0.5 rounded-lg border border-white/16 bg-black/22 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
-            {filterScopes.map((scope, idx) => (
-              <React.Fragment key={scope.id}>
-                {idx > 0 && (
-                  <span aria-hidden className="h-5 w-px mx-0.5" style={{ background: 'rgba(184,149,85,0.35)' }} />
-                )}
+          {/* Scope dropdown buttons */}
+          {filterScopes.map((scope) => (
+            <Popover key={scope.id}>
+              <PopoverTrigger asChild>
                 <button
                   type="button"
-                  onClick={() => setSearchScope(scope.id)}
                   data-active={searchScope === scope.id ? "true" : "false"}
                   data-no-contrast-guard
-                  className="allow-white h-8 flex-none rounded-md px-3 text-xs font-extrabold transition-all data-[active=true]:bg-white/22 data-[active=true]:shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] hover:bg-white/14"
+                  className={`${filterPillBase} ${searchScope === scope.id ? filterPillActive : pillInactive("dark")}`}
                   style={filterButtonStyle}
                 >
-                  {scope.label}
+                  <span>{scope.label}</span>
+                  <ChevronDown className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </button>
-              </React.Fragment>
-            ))}
-          </div>
-
-          {/* Divider */}
-          <span aria-hidden className="flex-none h-7 w-px" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(184,149,85,0.55) 50%, transparent 100%)' }} />
+              </PopoverTrigger>
+              <PopoverContent data-filter-dropdown="true" data-no-contrast-guard align="start" sideOffset={8} className={`w-72 p-4 ${filterPopoverSurface}`}>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)' }}>
+                      {searchScope === scope.id ? <Check className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> : <Search className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
+                    </span>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-bold" style={scopeDropdownText}>Search by {scope.label}</h4>
+                      <p className="mt-1 text-xs leading-relaxed" style={{ color: 'rgba(26,26,26,0.72)', WebkitTextFillColor: 'rgba(26,26,26,0.72)' }}>{scopeMenuCopy[scope.id]}</p>
+                    </div>
+                  </div>
+                  <Button type="button" onClick={() => setSearchScope(scope.id)} className={`${filterPrimaryButton} w-full`}>
+                    Use {scope.label}
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          ))}
 
           <Popover>
             <PopoverTrigger asChild>
@@ -253,9 +272,6 @@ const AreaDetail = () => {
               </button>
             </PopoverContent>
           </Popover>
-
-          {/* Divider */}
-          <span aria-hidden className="flex-none h-7 w-px" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(184,149,85,0.55) 50%, transparent 100%)' }} />
 
           <button
             type="button"
@@ -346,7 +362,7 @@ const AreaDetail = () => {
                   <MapPin className="w-3.5 h-3.5 text-white" />
                   <span className="text-white">Similar Areas</span>
                 </span>
-                <h2 data-no-contrast-guard style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold">
+                <h2 data-explore-more-heading data-no-contrast-guard style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold">
                   Explore More in {area.emirate}
                 </h2>
               </div>
@@ -398,11 +414,11 @@ const AreaDetail = () => {
                       {/* Bottom info */}
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         {relatedArea.property_count != null && relatedArea.property_count > 0 && (
-                          <span className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/75 text-white text-[9px] font-semibold tracking-wide">
+                          <span data-no-contrast-guard className="allow-white inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/75 text-white text-[9px] font-semibold tracking-wide" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                             {relatedArea.property_count} verified projects
                           </span>
                         )}
-                        <h3 className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] group-hover:text-white transition-colors duration-300">
+                        <h3 data-no-contrast-guard className="text-white font-bold text-sm md:text-base leading-tight drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] group-hover:text-white transition-colors duration-300" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                           {relatedArea.name}
                         </h3>
                       </div>
@@ -428,7 +444,7 @@ const AreaDetail = () => {
       )}
 
       {/* Final CTA — always last on the page — champagne background band */}
-      <div data-surface="champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }} className="py-10">
+      <div data-area-final-cta data-surface="champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }} className="py-10">
       <CombinedContactNewsletter
         title={`Explore ${area.name} Properties?`}
         subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."

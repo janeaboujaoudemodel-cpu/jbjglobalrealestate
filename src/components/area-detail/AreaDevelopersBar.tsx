@@ -13,14 +13,27 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
   const { data: developers } = useQuery({
     queryKey: ["area-developers", areaName],
     queryFn: async () => {
-      // Get developer names from projects in this area
-      const { data, error } = await supabase
+      // Get developer names from projects in this area, then enrich from the full developers table
+      // so logo_url does not depend on a possibly-missing FK relation on the project row.
+      const [{ data, error }, { data: allDevelopers }] = await Promise.all([
+        supabase
         .from("projects")
         .select("developer_name, developer:developers(id, name, slug, logo_url)")
         .ilike("area_name", `%${areaName}%`)
-        .not("developer_name", "is", null);
+        .not("developer_name", "is", null),
+        supabase
+          .from("developers")
+          .select("name, slug, logo_url")
+          .not("logo_url", "is", null),
+      ]);
       
       if (error) throw error;
+
+      const normalize = (value?: string | null) => (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
+      const logoMap = new Map<string, { name: string; slug?: string; logo_url?: string }>();
+      for (const dev of allDevelopers || []) {
+        if (dev.name) logoMap.set(normalize(dev.name), dev as any);
+      }
 
       // Deduplicate by developer name
       const devMap = new Map<string, { name: string; slug?: string; logo_url?: string }>();
@@ -28,10 +41,13 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
         const dev = (p.developer as any)?.[0] || p.developer;
         const name = dev?.name || p.developer_name;
         if (name && !devMap.has(name)) {
+          const normalizedName = normalize(name);
+          const fallback = logoMap.get(normalizedName)
+            || Array.from(logoMap.entries()).find(([key]) => key.includes(normalizedName) || normalizedName.includes(key))?.[1];
           devMap.set(name, {
-            name,
-            slug: dev?.slug,
-            logo_url: dev?.logo_url,
+            name: fallback?.name || name,
+            slug: dev?.slug || fallback?.slug,
+            logo_url: dev?.logo_url || fallback?.logo_url,
           });
         }
       }
@@ -69,12 +85,12 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
                   to={`/developer/${dev.slug}`}
                   className="flex items-center gap-3 px-4 py-3 bg-white/70 border border-[#064E3B]/15 rounded-xl hover:shadow-lg hover:border-[#064E3B]/40 transition-all"
                 >
-                  <DeveloperLogo src={dev.logo_url} alt={dev.name} name={dev.name} loading="eager" renderFallback className="w-10 h-10" />
+                  <DeveloperLogo src={dev.logo_url} alt={dev.name} name={dev.name} loading="eager" renderFallback className="w-10 h-10 border-[#064E3B]/20" />
                   <span data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-sm font-semibold">{dev.name}</span>
                 </Link>
               ) : (
                 <div className="flex items-center gap-3 px-4 py-3 bg-white/70 border border-[#064E3B]/15 rounded-xl">
-                  <DeveloperLogo src={dev.logo_url} alt={dev.name} name={dev.name} loading="eager" renderFallback className="w-10 h-10" />
+                  <DeveloperLogo src={dev.logo_url} alt={dev.name} name={dev.name} loading="eager" renderFallback className="w-10 h-10 border-[#064E3B]/20" />
                   <span data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-sm font-semibold">{dev.name}</span>
                 </div>
               )}
