@@ -570,6 +570,7 @@ const Sitemap = () => {
                   key={hub.id} 
                   hub={hub} 
                   hideFounderLinks={!isFounderVisible}
+                  hiddenToolIds={hiddenIds}
                 />
               ))}
             </motion.div>
