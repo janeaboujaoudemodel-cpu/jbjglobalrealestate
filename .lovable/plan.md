@@ -1,98 +1,88 @@
-## What's broken (from the message)
 
-1. **Contact page** — layout structure is broken, not just colors. Needs a real rebuild, not another CSS override.
-2. **Investor FAQ** — contrast + layout still broken, and a **vertical line runs top-to-bottom on the right side** (the old floating Navigator / TOC is bleeding through as a stripe).
-3. **PublicAccess "gate portal" property strap-line on phone** — not scrolling by finger, not auto-animating.
-4. **Guide books (desktop left side)** — hover-to-move interaction is dead.
-5. **Sweep** — apply the same rebuild pattern to every sibling page still off-standard: sales / seller / buyer / broker / tenant / landlord FAQs, Guides, Insights, News, Account pages (Billing, Passkeys, Profile), Legal (Terms, Privacy, Cookies, Disclaimers, IntellectualProperty, AML/KYC).
+This is a large, multi-domain rebuild. I'll deliver it in **4 sequential phases** so each layer is validated before the next. Nothing will be marked "done" without Playwright screenshot proof at the end of each phase.
+
+Before I start, one scope question at the bottom — please answer so Phase 1 lands correctly.
 
 ---
 
-## Fixes
+## Phase 1 — Ingestion engine (website + brochure + bulk link)
 
-### 1. Investor FAQ (`src/pages/InvestorFAQ.tsx`)
+New edge function `developer-intel-extract` running on every upload:
 
-Rebuild on the locked `ContentPageShell` the same way `/investor-education` was rebuilt last turn:
+Inputs accepted in one drop zone at the top of the developer page and inside "Add a project":
+- Company profile PDF (already works)
+- **New: Developer website URL field** (right next to the PDF drop zone)
+- **New: Bulk link field** — Google Drive / Dropbox / OneDrive / public URL. Server-side fetch, list children, download each file (PDF/image/doc), OCR + parse.
 
-- Solid emerald hero via `PremiumEmeraldHero` (removes the `data-neon-page` container + the champagne wrapper sections that caused the layout to feel "off").
-- Kill the **duplicate TOC**. Today the page renders **both** `<FAQFloatingSidebar>` (fixed right, z-80) **and** `<FAQTableOfContents sticky>` in a mobile-only sticky wrapper. On some breakpoints the desktop-only sidebar's outer wrapper leaves a persistent right-edge line (that's the "vertical blue-like line down the right side"). Use only `GuideTableOfContents` via `ContentPageShell`.
-- White champagne section cards for each category, emerald icon plate, gold hairline, `#0d3a2b` headers, `#1A1A1A` body, WCAG-safe.
-- Accordion open-state: emerald fill, pure white text (already the locked FAQ rule).
-- Bottom CTA card in solid emerald (same primitive used on Investor Education).
+Extraction (Lovable AI Gateway, Gemini for vision + long context):
+1. **Developer profile fields** — CEO, founded year, HQ, specialization, website, LinkedIn, socials, parent company, portfolio size (# projects, # units, AED GDV). Written back as *verified* only when found in two sources (website + brochure) — otherwise stays flagged.
+2. **Premium bio rewrite** — replaces the current cliché copy. Prompt forces third-person magazine-bio tone: founding story, operating model, notable completed projects, portfolio scale, signature areas. No "trust is the foundation" filler. Regenerable from a button on the page.
+3. **Project extraction** — for each project detected, extract name, location (emirate + area), handover date, unit count, bedrooms, price from, description, amenities, payment plan, and all images/brochures/floor plans. Files that don't belong to any project stay in a developer-level "Unassigned" tray until the owner assigns them.
+4. **Area auto-creation** — for every new (emirate, area) pair we haven't seen, create `/emirate/umm-al-quwain` and `/area/al-rawda` pages via the existing `areas` + `emirates` tables. Project links to both. Area page shows: all projects in area, developers active there, related areas.
 
-### 2. Contact page (`src/pages/Contact.tsx`)
+## Phase 2 — Dedup + project management
 
-The current file is 900 lines of ad-hoc scoped `<style>` blocks. Rebuild the **structure** into three clean stacked sections inside a single page shell:
+Deterministic + LLM-scored dedup on every ingest:
+- Normalized name similarity (Amra ≡ Amra Residences ≡ Amra The First Integrated Wellness Resort when same developer + same emirate + same area).
+- Merge rule: **enrich the richest record, delete the thinner duplicates**. Richest = has cover image + handover + description. All media/files from duplicates merged in.
+- Placeholder flag detection: British/US flag as "logo", missing cover, "TBD" handover, "— units" — auto-flagged as `needs_enrichment`, re-run through the extractor.
+
+Project list on developer page:
+- Row-level **Edit** button opens the full backend edit page (`/owner/projects/:id/edit`) — same form as "Add a project", not a lightweight modal.
+- Bulk actions: delete, duplicate, hide, archive, mark available/sold-with-developer.
+- **Availability control** per project: `available_with_developer` | `sold_with_developer` | `resale_only`. When `sold_with_developer`, listing card shows "Sold with developer — check resale" with a link to matching resale units (query `resale_listings` by project_id).
+
+## Phase 3 — Portal layout rebuild (premium)
+
+Rebuild `DeveloperPortal.tsx` with a single tabbed shell inside `/owner/developers/:slug`:
 
 ```text
-┌───────────────────────────────────────┐
-│  Emerald hero (video bg, centered)    │  ← already good
-├───────────────────────────────────────┤
-│  4 contact tiles (Location/Phone/     │
-│  Email/Hours) — champagne row         │
-├───────────────────────────────────────┤
-│  2-col on lg:                         │
-│   • Left: emerald consultation form   │
-│     (max-w-xl, compact fields)        │
-│   • Right: "Need Help" support card   │
-│     + "Our Commitment" card           │
-├───────────────────────────────────────┤
-│  MI pre-footer CTA                    │
-└───────────────────────────────────────┘
+[ Overview | Projects | Media Hub | Contacts & Reps | Briefings | Files | Activity ]
 ```
 
-- Drop the giant inline `<style>` block; move the emerald-input contract into a small scoped CSS class in `index.css` (`.jj-emerald-form`) so the file stops being 900 lines.
-- Form fields shrink to `h-10`, single column on mobile, 2-col on md+.
-- Right column ("Need Help" + "Our Commitment") stays **champagne white** with pure black text — no override needed because they live outside the `.jj-emerald-form` scope.
-- Remove any duplicated "reach us directly" / phone-actions blocks that survived earlier fixes.
+- **Media & Files removed from top-level nav** as separate developer-wide tabs. Every media/file upload now happens *inside a project*. The developer-level "Media Hub" is only the **bulk ingest engine** (one drop zone + one link field) that routes files down to the correct project automatically.
+- **Sales Reps + Briefings sidebar items removed from `GlobalVerticalNav`** and folded in as tabs of the developer page.
+- Contrast fix on the emerald "Smart brochure extract" card — white text on emerald, layout rebuilt to full-width above the form (kills the broken side-by-side with "Listing preview").
+- Every button, chip, dropdown honors the locked emerald/champagne tokens — no black-on-emerald.
 
-### 3. PublicAccess strap-line (`src/pages/PublicAccess.tsx`)
+## Phase 4 — Contacts, Briefings & Broker Survey
 
-The handpicked strap-line uses a horizontal scroll rail that on mobile currently has:
-- `overflow-x-hidden` on an ancestor (kills touch scroll), and
-- an auto-marquee `@keyframes` animation gated behind `md:` (so mobile gets neither auto nor manual scroll).
+**Contacts & Reps tab:**
+- "Add contact" modal with country-code picker (reuse `LightSearchableSelect` + flag data from signup), position dropdown (Admin, Owner, Sales Manager, Channel Manager, Marketing, Other → free text).
+- Row bulk actions: delete, archive, hide, duplicate, edit.
 
-Fix:
-- Add `overflow-x-auto touch-pan-x` and `[-webkit-overflow-scrolling:touch]` on the rail itself.
-- Move the marquee animation out of the `md:` gate so it runs on mobile too, pausing on touch (`onTouchStart` → pauses; user can then swipe).
-- Ensure no parent has `overflow-x-hidden` blocking the swipe (App.css sets it on `#root` — the rail must be a stacking context that doesn't inherit — use `-mx-4 px-4` bleed so scroll happens inside the rail, not the page).
+**Briefings tab:**
+- "Log a briefing" — date, sales rep from this developer, notes, attendee list.
+- Attendees: search brokers from CRM (Zoho + local `brokers` table). If not found, "Register new broker" inline — full profile form, part-time/full-time toggle, saved to `brokers` and pushed to Zoho.
+- After a briefing is saved, a survey link is emailed to each attendee (Brevo template). Survey scores the sales rep on: knowledge, responsiveness, timing, follow-up, overall. Broker can attach photo proof of self-attended briefing.
+- Ratings roll up per sales rep and show next to their name in Contacts & Reps.
 
-### 4. Guide books hover (Guides page)
-
-The book strap on Guides uses `BookCarousel.tsx` which was patched for iOS a few turns back. On desktop `hover` isn't translating the covers because the hover class was accidentally scoped to `md:` after the iOS fix. Restore the desktop hover:
-
-- `hover:-translate-y-2 hover:rotate-[-1deg]` on the card (not gated behind a breakpoint).
-- Keep the touch-friendly variant for phones.
-
-### 5. Sibling page sweep
-
-Same pattern (kill duplicate TOCs, use `ContentPageShell` + `GuideTableOfContents`, champagne section cards, emerald open-state) applied to:
-
-- `BuyerFAQ.tsx`, `SellerFAQ.tsx`, `BrokerFAQ.tsx`, `LandlordFAQ.tsx`, `TenantFAQ.tsx`, `FAQ.tsx`
-- Guides: any guide page still not on `ContentPageShell` (audit `src/pages/guides/*` + `BuyerGuide/SellerGuide/RentGuide/LandlordGuide/TenantGuide`)
-- Insights & News landing pages (Insights.tsx, News.tsx) — only fix contrast/TOC-stripe, keep editorial layout.
-- Account pages (AccountBilling, AccountPasskeys, UserProfile) — enforce champagne section cards + emerald open-state; no full rebuild.
-- Legal (Terms, Privacy, Cookies, Disclaimers, IntellectualProperty, AmlKycPolicy) — enforce ContentPageShell if missing.
-
-I'll audit each of these first with a single ripgrep sweep for the two smoking-gun markers (`data-neon-page`, `FAQFloatingSidebar` co-rendered with `FAQTableOfContents`, and `mx-[0.125rem] md:mx-2 ... rounded-2xl` band pattern) and only touch the files that match.
+**Activity tab:**
+- Timeline of every ingest, edit, briefing, survey response — the existing `user_journey_events` feed filtered to `entity_type='developer' AND entity_id=:id`.
 
 ---
 
-## Validation
+## Technical section
 
-- Playwright screenshots on desktop (1280×1800) and mobile (390×844) for: `/contact`, `/investor-faq`, `/`, `/investor-education`, one buyer FAQ, one legal page.
-- Manually check that the right-side vertical stripe is gone on `/investor-faq` (screenshot with mouse in center of viewport, no hover on TOC).
-- Manually swipe the PublicAccess strap-line at 390px width and confirm the rail scrolls.
+- New tables: `developer_ingest_batches`, `developer_unassigned_files`, `briefings`, `briefing_attendees`, `briefing_surveys`, `sales_rep_ratings`, `project_availability_state` (enum column on `projects`). All with GRANTs + RLS scoped by developer ownership + admin role.
+- New edge functions: `developer-intel-extract` (website + brochure + bulk link → structured JSON), `dedup-projects`, `send-briefing-survey`, `submit-briefing-survey`.
+- AI model: `google/gemini-3.5-flash` for extraction + rewrite (long context, cheap), `google/gemini-3-pro` fallback for hard PDFs. Bio rewrite pinned to Gemini 3 Pro for quality.
+- Bulk link fetcher: server-side, follows Google Drive folder API (public share) and generic HTML crawl for shared sites. Files streamed into `developer-documents` bucket, `is_public=false` by default.
+- Storage: per-project media lives at `project-media/:project_id/*`. Unassigned files at `developer-unassigned/:developer_id/*`.
+- Removed from `GlobalVerticalNav`: `Sales Reps`, `Briefings` — folded into developer page tabs.
+- Contrast + layout: `SmartExtractCard` rebuilt with `bg-emerald-950 text-white`, full-width, no side card. Placeholder "Listing preview" is repositioned below the form on desktop, not next to it.
 
-## Technical notes
+---
 
-- `ContentPageShell` already implements the locked hero + floating emerald TOC; do not add a second TOC alongside it (that's what caused the stripe).
-- `.jj-emerald-form` will live in `src/index.css` under an existing PASS block; no new global tokens needed.
-- No backend changes. No design-token changes. No routing changes.
+## Deliverable per phase
 
-## Out of scope (won't touch)
+Each phase ends with:
+1. Playwright screenshots at 1440 / 1180 / 390 widths of the developer page for Citi Developers, plus the Add-a-project flow.
+2. Console/network clean.
+3. Short changelog message. No claims without screenshots.
 
-- Any security findings.
-- Sidebar / global header / footer.
-- Any developer-hub / broker-portal / admin routes.
-- Business logic in `Contact.onSubmit` — form wiring stays byte-identical.
+---
+
+## One question before I start Phase 1
+
+**Bulk-link ingest scope:** Google Drive folder links only, or do you also need Dropbox + OneDrive + generic public URLs in the first pass? Drive-only ships in Phase 1; the others add ~1 phase of work each because every provider has its own auth + listing API.
