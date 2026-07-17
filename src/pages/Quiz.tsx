@@ -1051,6 +1051,11 @@ const Quiz = () => {
 
   const handleSubmitForm = async () => {
     if (!isFormValid()) return;
+    if (isLocked) {
+      toast.error("You've already used your free AI Home Finder run. A subscription is required to run it again.");
+      navigate("/pricing");
+      return;
+    }
     // Capture lead before showing results
     await captureLead({
       email: formData.email,
