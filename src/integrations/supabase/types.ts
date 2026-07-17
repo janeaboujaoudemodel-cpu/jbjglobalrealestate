@@ -691,6 +691,30 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_tool_free_uses: {
+        Row: {
+          created_at: string
+          id: string
+          tool_key: string
+          used_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          tool_key: string
+          used_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          tool_key?: string
+          used_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_tool_health_scores: {
         Row: {
           avg_response_ms: number | null

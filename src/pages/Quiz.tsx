@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLeadCapture } from "@/hooks/useLeadCapture";
+import { useQuizUsage } from "@/hooks/useQuizUsage";
+import { useSubscription } from "@/hooks/useSubscription";
 import { 
   ChevronRight, ChevronLeft, Clock, Sparkles, Loader2, CheckCircle2,
   Wand2, ArrowUpRight, Building2, Home, Landmark, TreePine, Gift, Crown, Check, RefreshCcw,
@@ -495,8 +497,12 @@ const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isLeadCaptured, captureLead, checkLead } = useLeadCapture();
-  // Quiz is fully free — no usage tracking or membership needed
-  const markFreeUsed = () => {};
+  // AI Home Finder is free but limited to ONE run per user/device.
+  // A subscription is required for any subsequent run.
+  const { hasUsedFreeQuiz, markFreeUsed: persistFreeUsed } = useQuizUsage();
+  const { hasActiveSubscription } = useSubscription();
+  const isLocked = hasUsedFreeQuiz && !hasActiveSubscription;
+  const markFreeUsed = () => persistFreeUsed();
   
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
@@ -1045,6 +1051,11 @@ const Quiz = () => {
 
   const handleSubmitForm = async () => {
     if (!isFormValid()) return;
+    if (isLocked) {
+      toast.error("You've already used your free AI Home Finder run. A subscription is required to run it again.");
+      navigate("/pricing");
+      return;
+    }
     // Capture lead before showing results
     await captureLead({
       email: formData.email,

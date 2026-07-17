@@ -5,6 +5,8 @@
  */
 
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import VideoBackground from "@/components/VideoBackground";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -321,16 +323,28 @@ const legalLinks = [
   { href: "/cookies", label: "Cookies Policy", icon: FileText },
 ];
 
-const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?: boolean }) => {
+// Extract a candidate tool_id from a sitemap href (matches ai_tool_visibility.tool_id).
+// Handles "/ai-hub#virtual-staging" -> "virtual-staging", "/ai-home-finder" -> "ai-home-finder".
+const hrefToToolId = (href: string): string | null => {
+  if (!href) return null;
+  const hash = href.split("#")[1];
+  if (hash) return hash;
+  const path = href.split("?")[0].replace(/^\/+/, "");
+  if (!path) return null;
+  return path.split("/").pop() || null;
+};
+
+const HubCard = ({ hub, hideFounderLinks, hiddenToolIds }: { hub: HubSection; hideFounderLinks?: boolean; hiddenToolIds: Set<string> }) => {
   const Icon = hub.icon;
-  
-  // Filter out founder-related links if visibility is disabled
-  const filteredLinks = hideFounderLinks 
-    ? hub.links.filter(link => 
-        !link.href.includes('/founder') && 
-        !link.label.toLowerCase().includes('founder')
-      )
-    : hub.links;
+
+  // Filter out founder-related links if visibility is disabled, and any AI tool
+  // whose tool_id is marked non-public in ai_tool_visibility.
+  const filteredLinks = hub.links.filter(link => {
+    if (hideFounderLinks && (link.href.includes('/founder') || link.label.toLowerCase().includes('founder'))) return false;
+    const toolId = hrefToToolId(link.href);
+    if (toolId && hiddenToolIds.has(toolId)) return false;
+    return true;
+  });
   
   return (
     <motion.div 
@@ -371,6 +385,22 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
 const Sitemap = () => {
   const { isFounderVisible } = useFounderVisibility();
   const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // Load hidden AI tools from ai_tool_visibility so the sitemap respects
+  // owner-controlled visibility. Missing rows default to visible.
+  const { data: hiddenToolIds } = useQuery({
+    queryKey: ["sitemap-hidden-ai-tools"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("ai_tool_visibility")
+        .select("tool_id, is_public")
+        .eq("is_public", false);
+      if (error) return new Set<string>();
+      return new Set<string>((data ?? []).map((r: any) => r.tool_id));
+    },
+    staleTime: 60_000,
+  });
+  const hiddenIds = hiddenToolIds ?? new Set<string>();
   const lastUpdated = new Date().toLocaleDateString('en-US', { 
     year: 'numeric', 
     month: 'long', 
@@ -540,6 +570,7 @@ const Sitemap = () => {
                   key={hub.id} 
                   hub={hub} 
                   hideFounderLinks={!isFounderVisible}
+                  hiddenToolIds={hiddenIds}
                 />
               ))}
             </motion.div>

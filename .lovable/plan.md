@@ -1,53 +1,79 @@
-# Fix plan — Developer Portal (4 phases)
 
-Delivered in order. Each phase ends with Playwright screenshot proof before moving on.
+## Scope
 
-## Phase 1 — Portfolio dedupe + missing Allura (FIRST)
+Three linked changes to the public entry experience and the AI tools catalog.
 
-**Problem (from your annotated screenshot):** Citi Developers Portfolio shows duplicates — Amra + Amra Residences, Arya + Arya Residences, Agua + AGUA + Agua Residences — and Allura is missing entirely even though it exists on citideveloper.com.
+---
 
-**What I'll do:**
-1. Merge duplicates by normalized name (lowercase, strip "Residences/Tower/The", collapse whitespace). For each cluster, keep the row with the most fields filled (cover image, handover date, units, description, coordinates) and delete the thin duplicates. Log every merge to `developer_merge_log`.
-2. Add a "Rescan developer website" button on the Portfolio tab that calls Firecrawl on `citideveloper.com` (and the `/projects` / `/portfolio` paths), extracts every project card (name, image, area, status, link), and inserts anything missing — Allura will land here.
-3. Every project card in Portfolio gets: cover image, name, community/emirate, status pill, handover, unit count, and a direct link to the source page. Cards missing an image fetch og:image from the source URL.
-4. Run the dedupe + rescan once on Citi Developers so you can verify.
+### 1. Landing page (the public entry before login)
 
-## Phase 2 — Briefing survey redesign
+**What visitors see on `/` when signed out today:** the hero, plus the top nav with FEATURED · NEW LAUNCH · GUIDES · INVESTORS · DEVELOPERS · BROKERS.
 
-**Problem:** "Add new briefing" currently shows "Register broker survey" — wrong. Owners don't register surveys; surveys are triggered automatically and filled from email.
+**Changes**
+- On the signed-out landing page only, hide the top nav categories. Keep the wordmark, Log in, and Sign up.
+- Add a short line under the hero subheadline: *"This is the private entrance to JBJ Global Real Estate — the site itself unlocks after you log in or create an account."* (final wording tunable, no use of the word "gate")
+- Authenticated users are unaffected — full nav remains for them and on all inner pages.
 
-**What I'll do:**
-1. Remove the "Register broker survey" form entirely.
-2. When a briefing is marked "Completed", the system auto-sends two email templates via Resend:
-   - **To you (owner):** rate the developer's sales rep (stars 1–5 on knowledge, professionalism, follow-up, plus free-text).
-   - **To each attending broker:** rate the briefing (stars on content quality, developer transparency, would-recommend, plus free-text).
-3. Each email contains a signed one-time link → hosted survey page (no login required) → response saves to `developer_rep_ratings` and links back to the sales rep + briefing.
-4. On the sales rep profile: new "Ratings & feedback" section showing every response, with per-row Hide/Show toggle and Delete (owner only).
+### 2. Universal AI-tool subscription lock
 
-## Phase 3 — Profile Rebuild queue overhaul
+Applies to every AI tool **except AI Home Finder**.
 
-**Problem:** "Rebuild 25 broken" cap, no logo scraping, current-vs-proposed shows identical values as "changes", many rows say "no website found".
+Behavior when a non-subscriber opens any locked AI tool:
+- The tool page still loads and shows a **read-only demo/preview**: description, screenshots of a sample run, example inputs and a canned example output, "what this tool does" bullets.
+- Inputs, buttons, and "Run" are disabled with a lock overlay: *"Subscribe to use this tool"* + Subscribe CTA linking to pricing.
+- No AI calls fire. Every AI-tool edge function also re-checks the subscription server-side and returns 402 if missing (client lock is UX only).
 
-**What I'll do:**
-1. Replace "Rebuild 25 broken" with **"Rebuild all"** + a continuous background job (pg_cron every 6h) that re-scrapes every developer whose data is >7 days stale or has missing fields.
-2. Website resolution step: if a developer has no website, search Google (via Firecrawl search) for `"<developer name>" Dubai real estate site` and take the first branded domain — fixes "Palladium Prime Development / no website found".
-3. Scrape logo from `<link rel="icon">`, og:image, `/logo*.svg|png` paths, and Instagram profile picture (via public profile URL). Upload to `developer-logos` storage; only propose if different from current (hash compare).
-4. Fix the diff: compare normalized strings (trim, lowercase, strip punctuation). If normalized values are equal, show "No change" instead of a fake diff row. Binghatti will stop showing identical Current/Proposed.
+Shared implementation:
+- New `<AiToolAccessGate toolKey="..." mode="subscription | one-shot-then-subscription">` wrapper used by all AI tool pages.
+- `useAiToolAccess(toolKey)` hook returns `{ status: 'preview' | 'trial' | 'unlocked', usesLeft, requireSubscription() }`.
+- Server: shared helper `assertAiToolAccess(userId, toolKey)` used by every AI edge function.
 
-## Phase 4 — Excel/CSV upload to fix profiles
+### 3. AI Home Finder — free, one-shot
 
-**What I'll do:**
-1. New "Bulk enrichment" panel on `/owner/developers` accepting `.xlsx` / `.csv`.
-2. Parse headers, fuzzy-match to developer fields (name, website, founder, license, logo URL, areas, phone, projects list).
-3. For each row: match to existing developer by name OR website; show a preview diff table (Current | From file | Action: Fill blank / Overwrite / Skip).
-4. On Apply, write to `developers` + `developer_activity_log`. Failed matches go to a "Needs review" list.
+- Any signed-in user can run it **once**. Guests are prompted to sign in first (no subscription required for the first run).
+- On the second attempt, the tool locks with the same subscribe prompt as the other tools.
+- Usage tracked in a new `ai_tool_free_uses` row (`user_id`, `tool_key='ai_home_finder'`, `used_at`). Server also enforces the 1-use cap; client shows remaining count.
+
+### 4. Sitemap visibility
+
+- Sitemap and `globalSearchIndex` currently list every AI tool regardless of the owner's visibility flag in `ai_tool_visibility`.
+- Change `Sitemap.tsx` and the global search index to filter AI tool entries by `ai_tool_visibility.is_public = true` (owner-controlled). Hidden tools disappear from both.
+- `public/sitemap.xml` is static — regenerate via existing sitemap generator so hidden tools drop out of the XML too.
+
+---
 
 ## Technical notes
 
-- Firecrawl connector: already linked. Use direct-API mode (fc- key).
-- New tables: `developer_rep_ratings` (rep_id, briefing_id, respondent_type, respondent_email, scores jsonb, comment, hidden, created_at). Signed survey links via `crypto.randomUUID()` + expiry column.
-- Cron job: pg_cron calling `rebuild-developer-profiles` edge function.
-- Excel parsing: `xlsx` npm package in a new edge function `bulk-enrich-developers`.
-- All 4 phases proven with Playwright screenshots before I mark them done.
+- Landing detection: `GlobalHeader` reads `location.pathname === '/'` + `!user` to switch to a slim mode. No new route needed.
+- `AiToolAccessGate` reads `useSubscription()` (already present for Stripe). "Active" = `active | trialing | past_due` with a future `current_period_end`.
+- Free-use table:
+  ```sql
+  create table public.ai_tool_free_uses (
+    id uuid primary key default gen_random_uuid(),
+    user_id uuid not null references auth.users(id) on delete cascade,
+    tool_key text not null,
+    used_at timestamptz not null default now(),
+    unique (user_id, tool_key)
+  );
+  ```
+  With GRANTs + RLS (`user_id = auth.uid()` for select/insert; no updates/deletes from client).
+- Every AI edge function gets a 3-line header calling `assertAiToolAccess`; returns 402 with `{ error: 'subscription_required' }` on fail. AI Home Finder function calls the one-shot variant.
 
-**Starting with Phase 1 now on approval.**
+## Rollout order
+
+1. DB migration (`ai_tool_free_uses`) + shared server helper.
+2. Client wrapper `<AiToolAccessGate>` + `useAiToolAccess`.
+3. Wrap all AI tool pages (batched edit).
+4. Landing page trim + copy line.
+5. Sitemap + search-index visibility filter.
+6. Playwright: signed-out landing, signed-in non-subscriber on a locked tool (see demo, cannot run), signed-in non-subscriber on Home Finder (run once, second time locked), hidden-in-admin tool absent from `/sitemap`.
+
+## Out of scope
+
+- Pricing page copy changes.
+- Stripe product/price edits (existing tiers reused).
+- Redesign of individual AI tool pages beyond adding the gate wrapper and demo block.
+
+---
+
+Say **continue** to execute in the rollout order above, or tell me which of the four sections to reorder / drop.
