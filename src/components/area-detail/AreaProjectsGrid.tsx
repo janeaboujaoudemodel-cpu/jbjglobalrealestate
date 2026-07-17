@@ -17,10 +17,11 @@ interface AreaProjectsGridProps {
   areaSlug: string;
   shortcutFilters: ShortcutFilterState;
   searchQuery: string;
+  searchScope: "area" | "emirate" | "community" | "developer" | "project";
   onClearFilters: () => void;
 }
 
-export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQuery, onClearFilters }: AreaProjectsGridProps) => {
+export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQuery, searchScope, onClearFilters }: AreaProjectsGridProps) => {
   const { currency } = useCurrency();
   const { data: projects, isLoading } = useQuery({
     queryKey: ["area-projects-full", areaName],
@@ -55,15 +56,21 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      result = result.filter(p =>
-        p.name?.toLowerCase().includes(q) ||
-        p.developer_name?.toLowerCase().includes(q) ||
-        p.description?.toLowerCase().includes(q)
-      );
+      result = result.filter(p => {
+        const developer = p.developer_name?.toLowerCase() || p.developer?.name?.toLowerCase() || "";
+        const project = p.name?.toLowerCase() || "";
+        const area = p.area_name?.toLowerCase() || "";
+        const location = p.location?.toLowerCase() || "";
+        if (searchScope === "developer") return developer.includes(q);
+        if (searchScope === "project") return project.includes(q);
+        if (searchScope === "area") return area.includes(q);
+        if (searchScope === "emirate") return location.includes(q) || area.includes(q);
+        return location.includes(q) || area.includes(q) || project.includes(q);
+      });
     }
 
     return applyShortcutFilters(result, shortcutFilters);
-  }, [projects, searchQuery, shortcutFilters]);
+  }, [projects, searchQuery, searchScope, shortcutFilters]);
 
   if (isLoading) {
     return (
@@ -131,6 +138,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
               <PearlButton
                 to={`/properties?area=${areaSlug}`}
                 size="lg"
+                className="[&_span]:!text-white [&_svg]:!text-white"
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
                 View All Projects in {areaName}

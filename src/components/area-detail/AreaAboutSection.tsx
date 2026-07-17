@@ -33,7 +33,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
             </h2>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-[#1A1A1A]/70 mb-3">
+          <div className="flex items-center gap-2 text-xs text-[#0A0A0A] mb-3">
             <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]" />
             <span>{area.emirate}, UAE</span>
           </div>
@@ -52,7 +52,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                       .trim()
                   ))}
                   domain="area.description"
-                  className="text-[#1A1A1A]/70 text-sm md:text-base leading-relaxed prose prose-sm max-w-none prose-p:mb-2"
+                  className="text-[#0A0A0A] text-sm md:text-base leading-relaxed prose prose-sm max-w-none prose-p:mb-2"
                 />
                 {!isExpanded && isLongDescription && (
                   <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />
@@ -72,7 +72,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               )}
             </div>
           ) : (
-            <p className="text-[#1A1A1A]/70 text-sm md:text-base leading-relaxed mb-4">
+            <p className="text-[#0A0A0A] text-sm md:text-base leading-relaxed mb-4">
               {area.name} is a premier residential and commercial district located in {area.emirate}.
               Known for its world-class infrastructure and vibrant community, this area offers a diverse
               range of properties from luxury apartments to exclusive villas.
@@ -86,7 +86,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                 <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                 <div>
                   <div className="text-sm font-bold text-[#1A1A1A]">{area.property_count}</div>
-                  <div className="text-[10px] text-[#1A1A1A]/70">Active Projects</div>
+                  <div className="text-[10px] text-[#0A0A0A]">Active Projects</div>
                 </div>
               </div>
             )}
@@ -95,7 +95,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                 <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
                 <div>
                   <div className="text-sm font-bold text-[#1A1A1A]">{area.developer_count}</div>
-                  <div className="text-[10px] text-[#1A1A1A]/70">Developers</div>
+                  <div className="text-[10px] text-[#0A0A0A]">Developers</div>
                 </div>
               </div>
             )}
@@ -103,7 +103,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               <MapPin className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
               <div>
                 <div className="text-sm font-bold text-[#1A1A1A]">{area.emirate}</div>
-                <div className="text-[10px] text-[#1A1A1A]/70">Emirate</div>
+                <div className="text-[10px] text-[#0A0A0A]">Emirate</div>
               </div>
             </div>
           </div>
