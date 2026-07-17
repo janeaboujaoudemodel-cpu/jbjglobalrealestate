@@ -129,8 +129,10 @@ export default function DeveloperProfilePage() {
       if (!developer) return [];
       const { data } = await supabase
         .from("projects")
-        .select("id, name, slug, status, handover_date, total_units, cover_image_url, updated_at, is_published")
+        .select("id, name, slug, status, handover_date, total_units, cover_image_url, updated_at, is_published, area_name, emirate, sale_status, source_url")
         .or(`developer_id.eq.${developer.id},developer_name.eq.${developer.name}`)
+        .is("merged_into_project_id", null)
+        .is("deleted_at", null)
         .order("updated_at", { ascending: false });
       return data || [];
     },
@@ -792,8 +794,11 @@ export default function DeveloperProfilePage() {
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
-                        <div className="text-xs text-[#1A1A1A]/60">
-                          {p.status || "—"} · {p.handover_date || "TBD"} · {p.total_units ?? "—"} units
+                        <div className="text-xs text-[#1A1A1A]/70 truncate">
+                          {[p.area_name, p.emirate].filter(Boolean).join(" · ") || "—"}
+                        </div>
+                        <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">
+                          {(p.sale_status || p.status || "—")} · {p.handover_date || "TBD"} · {p.total_units ?? "—"} units
                         </div>
                       </div>
                       <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />
