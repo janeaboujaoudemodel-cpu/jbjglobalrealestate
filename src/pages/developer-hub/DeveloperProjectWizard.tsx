@@ -1070,8 +1070,9 @@ const DeveloperProjectWizard = () => {
         </Card>
       )}
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-6">
       <Card className="bg-[#F7F2EA] border-[#B89555]/40 p-6 rounded-lg min-w-0">
+
         {step === 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {isOwner && (
