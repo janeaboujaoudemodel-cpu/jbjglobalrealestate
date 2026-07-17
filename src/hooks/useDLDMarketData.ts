@@ -80,6 +80,8 @@ export function useDLDMarketData() {
         lastUpdated: latestUpdated,
       };
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60 * 1000,
+    refetchInterval: 60 * 1000,
+    refetchIntervalInBackground: false,
   });
 }

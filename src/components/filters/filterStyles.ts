@@ -80,7 +80,7 @@ export const filterSecondaryButton = [
 
 // ── CHECKBOX ──────────────────────────────────────────────────────────────
 export const filterCheckBox = "w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors";
-export const filterCheckBoxOn = "jj-pill-emerald-metallic border-0 allow-white";
+export const filterCheckBoxOn = "jj-pill-emerald-metallic border-0 allow-white [&_svg]:!text-white [&_svg]:!stroke-white";
 export const filterCheckBoxOff = "border-[#B89555]/55 bg-white";
 
 // ── SEARCH PILL (on champagne / light rail) ───────────────────────────────
@@ -95,7 +95,7 @@ export const activeChipBase = [
 export const activeChipPrimary = "inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full jj-pill-emerald-metallic text-white text-xs font-semibold allow-white filter-emerald-action";
 export const activeChipDismissDot = "ml-0.5 inline-flex items-center justify-center w-4 h-4 rounded-full bg-white/20 group-hover:bg-white/35 transition-colors";
 
-export const filterDivider = "w-px h-5 bg-[#B89555]/40 flex-shrink-0";
+export const filterDivider = "w-px h-5 bg-white/18 flex-shrink-0";
 
 // ── RESET-ALL PILL ────────────────────────────────────────────────────────
 export const resetAllPill = [
