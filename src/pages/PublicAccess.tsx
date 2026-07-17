@@ -1536,6 +1536,9 @@ export default function PublicAccess() {
             <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed !text-white/85 sm:text-base lg:text-lg">
               A private property ecosystem for Dubai's discerning investors, developers & brokers.
             </p>
+            <p className="mx-auto mt-3 max-w-xl text-[11px] font-semibold uppercase tracking-[0.28em] !text-white/70 sm:text-xs">
+              This is the members-only entrance · Sign in or create an account to access the platform
+            </p>
             <div className="mt-7 flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto">
               <button
                 onClick={openSignup}
