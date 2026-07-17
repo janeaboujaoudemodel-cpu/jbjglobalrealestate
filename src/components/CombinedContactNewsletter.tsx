@@ -90,12 +90,14 @@ const CombinedContactNewsletter = ({
             rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
             data-surface="emerald"
             data-emerald-ok="button"
+            data-no-contrast-guard
             className="jj-emerald-metallic jj-ready-cta-metallic group flex flex-row items-center justify-center gap-2 px-4 py-3 rounded-xl"
+            style={{ color: '#FFFFFF' }}
           >
-            <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2.2} />
+            <card.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2.2} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <div className="min-w-0 text-left">
-              <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5">{card.label}</p>
-              <p className="text-xs sm:text-sm font-semibold">{card.value}</p>
+              <p className="text-[10px] uppercase tracking-wider font-semibold mb-0.5" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.label}</p>
+              <p className="text-xs sm:text-sm font-semibold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{card.value}</p>
             </div>
           </a>
         ))}
