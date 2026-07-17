@@ -309,7 +309,7 @@ const AreaDetail = () => {
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
       {/* Single sticky filter bar — no fixed clone, no duplication, no gold divider. */}
-      <div className="sticky top-0 z-[60] w-full min-w-0" data-area-sticky-filter-shell>
+      <div className="sticky top-[48px] z-[60] w-full min-w-0" data-area-sticky-filter-shell>
         {filterBarBlock}
       </div>
 
