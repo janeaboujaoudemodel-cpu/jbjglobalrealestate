@@ -112,7 +112,7 @@ export default function DeveloperCustomFieldsSection({
       if (error) throw error;
       toast.success("Custom fields saved");
       setDirty(false);
-      qc.invalidateQueries({ queryKey: ["dev-profile"] });
+      qc.invalidateQueries({ predicate: (q) => q.queryKey[0] === "dev-profile" });
       qc.invalidateQueries({ queryKey: ["admin-developer"] });
     } catch (e: any) {
       toast.error(e.message || "Save failed");
