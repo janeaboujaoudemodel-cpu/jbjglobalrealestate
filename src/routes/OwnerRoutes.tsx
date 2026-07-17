@@ -134,6 +134,7 @@ const DeveloperLaunchEvents = lazy(() => import("@/pages/developer-hub/Developer
 const DeveloperLiveEditor = lazy(() => import("@/pages/developer-hub/DeveloperLiveEditor"));
 const DeveloperProjectWizard = lazy(() => import("@/pages/developer-hub/DeveloperProjectWizard"));
 const BriefingsHub = lazy(() => import("@/pages/owner/developers/BriefingsHub"));
+const ProjectDedupePage = lazy(() => import("@/pages/developer-hub-admin/ProjectDedupePage"));
 
 const DeveloperCompanyRegistration = lazy(() => import("@/pages/developer-hub/DeveloperCompanyRegistration"));
 const DeveloperHubAdminPlaceholder = lazy(() => import("@/pages/developer-hub-admin/DeveloperHubAdminPlaceholder"));
@@ -288,6 +289,7 @@ export const OwnerRoutes = () => (
     <Route path="developers/reps/by-emirate" element={<RepByEmirate />} />
     <Route path="developers/reps/:id" element={<RepProfileEditor />} />
     <Route path="developers/projects" element={<DeveloperLiveEditor />} />
+    <Route path="developers/dedup" element={<ProjectDedupePage />} />
     <Route path="developers/new-project" element={<DeveloperProjectWizard />} />
     <Route path="developers/briefings" element={<BriefingsHub />} />
     <Route path="developers/calendar" element={<DeveloperLaunchEvents />} />
