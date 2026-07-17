@@ -495,8 +495,12 @@ const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { isLeadCaptured, captureLead, checkLead } = useLeadCapture();
-  // Quiz is fully free — no usage tracking or membership needed
-  const markFreeUsed = () => {};
+  // AI Home Finder is free but limited to ONE run per user/device.
+  // A subscription is required for any subsequent run.
+  const { hasUsedFreeQuiz, markFreeUsed: persistFreeUsed } = useQuizUsage();
+  const { hasActiveSubscription } = useSubscription();
+  const isLocked = hasUsedFreeQuiz && !hasActiveSubscription;
+  const markFreeUsed = () => persistFreeUsed();
   
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
