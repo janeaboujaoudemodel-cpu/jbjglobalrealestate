@@ -134,8 +134,8 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               style={{
                 color: '#FFFFFF',
                 background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 55%, #042C1C 100%)',
-                border: '1px solid rgba(184,149,85,0.55)',
-                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)',
+                border: '1px solid rgba(255,255,255,0.28)',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.16)',
               }}
             >
               <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
@@ -158,8 +158,8 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               style={{
                 color: '#FFFFFF',
                 background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 55%, #042C1C 100%)',
-                border: '1px solid rgba(184,149,85,0.55)',
-                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)',
+                border: '1px solid rgba(255,255,255,0.28)',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.16)',
               }}
             >
               <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>

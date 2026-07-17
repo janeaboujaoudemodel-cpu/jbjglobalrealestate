@@ -67,7 +67,7 @@ const CombinedContactNewsletter = ({
         >
           Get in touch
         </span>
-        <h2 className="text-xl md:text-2xl font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
+        <h2 data-no-contrast-guard className="text-xl md:text-2xl font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           {title}
         </h2>
         <div className="mx-auto mt-1 mb-2 flex items-center justify-center gap-2">
@@ -75,7 +75,7 @@ const CombinedContactNewsletter = ({
           <span className="h-1.5 w-1.5 rounded-full bg-white/70" />
           <span className="jj-loop-divider h-px w-12" />
         </div>
-        <p className="text-xs md:text-sm max-w-lg mx-auto" style={{ color: "rgba(255,255,255,1)" }}>
+        <p data-no-contrast-guard className="text-xs md:text-sm max-w-lg mx-auto" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           {subtitle}
         </p>
       </div>
@@ -123,10 +123,10 @@ const CombinedContactNewsletter = ({
         >
           Stay in the Loop
         </span>
-        <h3 className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF" }}>
+        <h3 data-no-contrast-guard className="text-base md:text-lg font-bold mb-2 uppercase tracking-[0.14em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           Get the Edge — Listings Before the Market
         </h3>
-        <p className="text-xs md:text-sm mb-4" style={{ color: "rgba(255,255,255,1)" }}>
+        <p data-no-contrast-guard className="text-xs md:text-sm mb-4" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
           New launches, off-market deals, market moves &amp; insider insights — straight to your inbox.
         </p>
         <NewsletterBrevo variant="compact" source="combined_cta" />

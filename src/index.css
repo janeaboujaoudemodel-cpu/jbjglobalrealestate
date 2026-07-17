@@ -36278,7 +36278,7 @@ html body #root [data-area-hero] :where(h1,h2,h3,h4,p,span,a,button,div,small,st
 }
 
 html body #root [data-area-ai-section] {
-  background: linear-gradient(180deg, #064E3B 0%, #042C1C 48%, #010806 100%) !important;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
 }
 
 html body #root [data-area-ai-section] :where(.bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\], [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"]) {
@@ -36288,7 +36288,14 @@ html body #root [data-area-ai-section] :where(.bg-\[\#FDFBF7\], .bg-\[\#F7F2EA\]
   box-shadow: 0 24px 58px -34px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.12) !important;
 }
 
-html body #root [data-area-ai-section] :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon) {
+html body #root [data-area-ai-section] [data-ai-emerald-card] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: 0 24px 58px -34px rgba(0,0,0,0.86), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+html body #root [data-area-ai-section] [data-ai-emerald-card] :where(h1,h2,h3,h4,h5,h6,p,span,div,label,small,strong,em,b,button,a,li,dt,dd,svg,path,circle,rect,line,polyline,polygon) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
@@ -36298,8 +36305,23 @@ html body #root [data-area-ai-section] :where(.recharts-cartesian-axis-tick text
   fill: #FFFFFF !important;
 }
 
+html body #root [data-area-ai-section] [data-ai-rating-card],
+html body #root [data-area-ai-section] [data-ai-rating-card] :where(h1,h2,h3,h4,h5,h6,p,span,div,small,strong,em,b) {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  stroke: currentColor !important;
+}
+
 html body #root [data-area-detail-page] :is(.jj-market-emerald-card, .jj-market-emerald-row) {
   border-color: rgba(255,255,255,0.16) !important;
+}
+
+html body #root [data-area-detail-page] :is(.jj-market-emerald-card, .jj-market-emerald-row),
+html body #root [data-area-detail-page] :is(.jj-market-emerald-card, .jj-market-emerald-row) :where(h1,h2,h3,h4,p,span,div,small,strong,em,b,button,svg,path,circle,rect,line,polyline,polygon) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
 }
 
 html body #root [data-area-detail-page] [data-map-shell] :is(.jj-map-layer-button, .jj-map-square-control, .jj-map-enable-chip, .jj-map-marker-pill),
@@ -36345,9 +36367,15 @@ html body #root [data-area-detail-page] [data-scoped-sticky-nav="area"] input::p
 }
 
 html body #root [data-area-detail-page] [data-dld-market-widget] {
-  background: linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%) !important;
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body #root [data-area-detail-page] [data-dld-market-panel] {
+  background: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  background-image: linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%) !important;
+  border-color: rgba(255,255,255,0.16) !important;
 }
 
 html body #root [data-area-detail-page] [data-dld-market-widget] :is(.bg-\[\#F7F2EA\], .bg-\[\#FDFBF7\]) {
@@ -36383,10 +36411,15 @@ html body #root [data-area-detail-page] #similar-areas a {
   border: 0 !important;
 }
 
-html body #root [data-area-detail-page] #similar-areas :where(h1,h2,h3,h4,p,span,a,svg,path) {
+html body #root [data-area-detail-page] #similar-areas :where(h3,h4,p,span,a,svg,path) {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+}
+
+html body #root [data-area-detail-page] #similar-areas [data-explore-more-heading] {
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
 }
 
 /* Safety: if a scroll container clips the breakout, fall back to full width
@@ -36435,7 +36468,7 @@ html body #root [data-area-detail-page="true"] [data-surface="champagne"] a[href
 }
 html body #root [data-area-detail-page="true"] [data-surface="champagne"] a[href^="/properties?area="] {
   background: linear-gradient(135deg, #064E3B 0%, #042C1C 50%, #021409 100%) !important;
-  border: 1px solid rgba(184,149,85,0.55) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
   box-shadow: 0 8px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.18) !important;
 }
 

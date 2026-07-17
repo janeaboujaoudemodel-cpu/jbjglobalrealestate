@@ -46,11 +46,11 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
   const isPositive = growth >= 0;
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
+    <div data-ai-emerald-card data-surface="emerald" className="rounded-2xl p-6 shadow-sm" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#010806 100%)', border: '1px solid rgba(255,255,255,0.16)' }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-[#064E3B]" />
-          <h3 className="font-bold text-[#0A0A0A] text-lg">Price Per Sqft</h3>
+          <BarChart3 className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+          <h3 data-no-contrast-guard className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Price Per Sqft</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
  isPositive ? 'jj-emerald-soft text-[color:var(--emerald-1)]' : 'bg-red-50 text-red-600'
@@ -63,9 +63,9 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       <div className="h-48 mb-4">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" />
-            <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.18)" />
+            <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#FFFFFF' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 10, fill: '#FFFFFF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}`} />
             <Tooltip
               contentStyle={{ backgroundColor: '#fff', border: '1px solid #064E3B40', borderRadius: '12px', fontSize: '12px' }}
               formatter={(value: number) => [`AED ${value.toLocaleString()}`, 'Price/sqft']}
@@ -80,14 +80,14 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       </div>
 
       <div className="flex items-center gap-3 text-xs text-[#1A1A1A]/70 mb-3">
-        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#064E3B' }} /> Historical</span>
-        <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#064E3B', backgroundColor: '#064E3B30' }} /> Projected</span>
+        <span data-no-contrast-guard className="flex items-center gap-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}><div className="w-3 h-3 rounded bg-white" /> Historical</span>
+        <span data-no-contrast-guard className="flex items-center gap-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}><div className="w-3 h-3 rounded border-2 border-dashed border-white bg-white/20" /> Projected</span>
       </div>
 
       {bullets.length > 0 && (
         <div className="border-t border-[#064E3B]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
+            <p data-no-contrast-guard key={i} className="text-xs leading-relaxed" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{b}</p>
           ))}
         </div>
       )}
@@ -105,11 +105,11 @@ function InvestmentMetricsChart({ text }: { text: string }) {
   const occupancy = metrics.find(m => m.name === 'Occupancy');
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
+    <div data-ai-emerald-card data-surface="emerald" className="rounded-2xl p-6 shadow-sm" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#010806 100%)', border: '1px solid rgba(255,255,255,0.16)' }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-[#064E3B]" />
-          <h3 className="font-bold text-[#0A0A0A] text-lg">Investment Metrics</h3>
+          <Shield className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+          <h3 data-no-contrast-guard className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Investment Metrics</h3>
         </div>
         {occupancy && (
           <div className="allow-white jj-pill-emerald-metallic flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full text-white">
@@ -121,9 +121,9 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       <div className="h-48 mb-4">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={yieldMetrics} margin={{ top: 5, right: 5, left: -20, bottom: 0 }} layout="vertical">
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" horizontal={false} />
-            <XAxis type="number" tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} domain={[0, 'auto']} />
-            <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} width={90} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.18)" horizontal={false} />
+            <XAxis type="number" tick={{ fontSize: 10, fill: '#FFFFFF' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} domain={[0, 'auto']} />
+            <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#FFFFFF' }} axisLine={false} tickLine={false} width={90} />
             <Tooltip
               contentStyle={{ backgroundColor: '#fff', border: '1px solid #064E3B40', borderRadius: '12px', fontSize: '12px' }}
               formatter={(value: number) => [`${value}%`, '']}
@@ -141,7 +141,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
         {yieldMetrics.map((m) => (
           <span key={m.name} className="flex items-center gap-1">
             <div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} />
-            <span className="text-[#1A1A1A]/70">{m.name}</span>
+            <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{m.name}</span>
           </span>
         ))}
       </div>
@@ -149,7 +149,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       {bullets.length > 0 && (
         <div className="border-t border-[#064E3B]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
+            <p data-no-contrast-guard key={i} className="text-xs leading-relaxed" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{b}</p>
           ))}
         </div>
       )}
@@ -240,11 +240,11 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
   const StatusIcon = ratio >= 0.9 ? ArrowUpRight : ratio > 0.7 ? TrendingUp : ArrowDownRight;
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
+    <div data-ai-emerald-card data-surface="emerald" className="rounded-2xl p-6 shadow-sm" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 58%,#010806 100%)', border: '1px solid rgba(255,255,255,0.16)' }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-[#064E3B]" />
-          <h3 className="font-bold text-[#0A0A0A] text-lg">Supply vs Demand</h3>
+          <TrendingUp className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+          <h3 data-no-contrast-guard className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Supply vs Demand</h3>
         </div>
         <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full ${
  ratio > 0.9 ? 'allow-white jj-pill-emerald-metallic text-white' : ratio > 0.7 ? 'allow-white jj-pill-emerald-metallic text-white' : 'allow-white jj-pill-emerald-metallic text-white'
@@ -268,9 +268,9 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
                 <stop offset="95%" stopColor="#059669" stopOpacity={0.05} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" />
-            <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#71717a' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 10, fill: '#71717a' }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v/1000).toFixed(1)}k` : v} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.18)" />
+            <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#FFFFFF' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 10, fill: '#FFFFFF' }} axisLine={false} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${(v/1000).toFixed(1)}k` : v} />
             <Tooltip
               contentStyle={{ backgroundColor: '#fff', border: '1px solid #064E3B40', borderRadius: '12px', fontSize: '12px' }}
               formatter={(value: number, name: string) => [value.toLocaleString() + ' units', name === 'supply' ? 'Supply' : 'Demand']}
@@ -285,11 +285,11 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       <div className="flex items-center gap-4 mb-4 text-xs">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#064E3B' }} />
-          <span className="text-[#1A1A1A]/70">Supply (New Units)</span>
+          <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full jj-surface-emerald" />
-          <span className="text-[#1A1A1A]/70">Demand (Absorption)</span>
+          <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Demand (Absorption)</span>
         </div>
       </div>
 
@@ -297,7 +297,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       {bullets.length > 0 && (
         <div className="border-t border-[#064E3B]/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-[#1A1A1A]/70 text-xs leading-relaxed">{b}</p>
+            <p data-no-contrast-guard key={i} className="text-xs leading-relaxed" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{b}</p>
           ))}
         </div>
       )}
@@ -355,11 +355,11 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
   const totalDevs = stats?.developers?.length || devEntries.length;
 
   return (
-    <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl p-6 shadow-sm">
+    <div data-ai-emerald-card data-surface="emerald" className="rounded-2xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-[#064E3B]" />
-          <h3 className="font-bold text-[#0A0A0A] text-lg">Developer Landscape</h3>
+          <Building2 className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+          <h3 data-no-contrast-guard className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Developer Landscape</h3>
         </div>
         <div className="allow-white jj-pill-emerald-metallic flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full text-white border-0">
           {totalDevs} Developers
@@ -368,32 +368,32 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
 
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#064E3B]/10 hover:border-[#064E3B]/30 transition-colors">
+          <div key={i} data-ai-emerald-card className="flex items-start gap-3 p-3 rounded-xl transition-colors" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
             {(() => {
               const normalizedName = developerAssets.normalize(dev.name);
               const matched = developerAssets.map.get(normalizedName)
                 || Array.from(developerAssets.map.entries()).find(([key]) => key.includes(normalizedName) || normalizedName.includes(key))?.[1];
               return matched?.logo_url ? (
-                <DeveloperLogo src={matched.logo_url} alt={matched.name || dev.name} name={matched.name || dev.name} variant="bare" loading="eager" className="!w-9 !h-9 !min-w-9 !rounded-lg" />
+                <DeveloperLogo src={matched.logo_url} alt={matched.name || dev.name} name={matched.name || dev.name} variant="bare" loading="eager" className="!w-9 !h-9 !min-w-9 !rounded-lg !border-white/25" />
               ) : (
-                <div className="w-9 h-9 rounded-lg bg-[#064E3B]/10 border border-[#064E3B]/20 flex items-center justify-center flex-shrink-0">
-                  <span className="font-bold text-[10px] tracking-[0.08em]" style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>JBJ</span>
+                <div className="w-9 h-9 rounded-lg bg-white/12 border border-white/25 flex items-center justify-center flex-shrink-0">
+                  <Building2 className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                 </div>
               );
             })()}
             <div className="flex-1 min-w-0">
-              <p data-developer-name className="text-[#0A0A0A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p>
+              <p data-developer-name data-no-contrast-guard className="font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{dev.name}</p>
               {dev.projects && (
-                <p className="text-[#1A1A1A]/70 text-xs mt-0.5 truncate">{dev.projects}</p>
+                <p data-no-contrast-guard className="text-xs mt-0.5 truncate" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{dev.projects}</p>
               )}
             </div>
-            <ArrowUpRight className="w-3.5 h-3.5 text-[#064E3B] flex-shrink-0 mt-1" />
+            <ArrowUpRight className="w-3.5 h-3.5 flex-shrink-0 mt-1" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           </div>
         ))}
       </div>
 
       {devEntries.length === 0 && (
-        <div className="text-[#1A1A1A]/70 text-sm leading-relaxed whitespace-pre-line">
+        <div data-no-contrast-guard className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
           {text}
         </div>
       )}
@@ -542,25 +542,25 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
 
         {/* Quick Stats */}
         {hasStats && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
-              <div className="text-[#1A1A1A]/70 text-xs mt-1">Active Projects</div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div data-ai-emerald-card data-surface="emerald" className="rounded-xl p-4 text-center shadow-sm">
+              <div data-no-contrast-guard className="text-2xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{stats.totalProjects}</div>
+              <div data-no-contrast-guard className="text-xs mt-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Active Projects</div>
             </div>
-            <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
-              <div className="text-2xl font-bold text-[#0A0A0A]">{stats.developers.length}</div>
-              <div className="text-[#1A1A1A]/70 text-xs mt-1">Developers</div>
+            <div data-ai-emerald-card data-surface="emerald" className="rounded-xl p-4 text-center shadow-sm">
+              <div data-no-contrast-guard className="text-2xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{stats.developers.length}</div>
+              <div data-no-contrast-guard className="text-xs mt-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Developers</div>
             </div>
             {stats.avgPrice && (
-              <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-[#064E3B]">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                <div className="text-[#1A1A1A]/70 text-xs mt-1">Avg. Starting Price</div>
+              <div data-ai-emerald-card data-surface="emerald" className="rounded-xl p-4 text-center shadow-sm">
+                <div data-no-contrast-guard className="text-2xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                <div data-no-contrast-guard className="text-xs mt-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
-              <div className="bg-[#FDFBF7] border border-[#064E3B]/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-[#064E3B]">AED {stats.pricePerSqft.toLocaleString()}</div>
-                <div className="text-[#1A1A1A]/70 text-xs mt-1">Est. Price/sqft</div>
+              <div data-ai-emerald-card data-surface="emerald" className="rounded-xl p-4 text-center shadow-sm">
+                <div data-no-contrast-guard className="text-2xl font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>AED {stats.pricePerSqft.toLocaleString()}</div>
+                <div data-no-contrast-guard className="text-xs mt-1" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Est. Price/sqft</div>
               </div>
             )}
           </div>
@@ -598,44 +598,44 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Overview Card - Enhanced */}
               {sections?.overview && (
-                <div className="lg:col-span-2 bg-[#FDFBF7] border border-[#064E3B]/20 rounded-2xl shadow-sm overflow-hidden">
+                <div data-ai-emerald-card data-surface="emerald" className="lg:col-span-2 rounded-2xl shadow-sm overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-4">
-                      <div className="w-9 h-9 rounded-xl bg-[#064E3B]/10 border border-[#064E3B]/20 flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-[#064E3B]" />
+                          <div className="w-9 h-9 rounded-xl bg-white/12 border border-white/20 flex items-center justify-center">
+                        <Building2 className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
                       </div>
                       <div>
-                        <h3 className="font-bold text-[#0A0A0A] text-lg">Area Overview</h3>
-                        <span className="text-[#1A1A1A]/70 text-xs">{areaName} Community Profile</span>
+                        <h3 data-no-contrast-guard className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Area Overview</h3>
+                        <span data-no-contrast-guard className="text-xs" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{areaName} Community Profile</span>
                       </div>
                     </div>
-                    <p className="text-[#1A1A1A]/70 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
+                    <p data-no-contrast-guard className="text-sm leading-relaxed mb-5" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{cleanMarkdown(sections.overview)}</p>
                     
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                         <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
                           <Home className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
                           <Landmark className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#0A0A0A]">{stats.developers.length}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
                           <BarChart3 className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#064E3B]">{stats.pricePerSqft.toLocaleString()}</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-[#064E3B]/15 text-center">
+                          <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
                           <TrendingUp className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
                           <div className="text-lg font-bold text-[#064E3B]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
                           <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Avg Price</div>
@@ -646,7 +646,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   
                   {/* Bottom insight bar */}
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
-                    <div className="border-t border-[#064E3B]/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
+                    <div data-ai-emerald-card className="border-t px-6 py-3" style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.16)' }}>
                       <div className="flex items-center gap-4 flex-wrap">
                         <span className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-widest font-semibold">Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
@@ -669,9 +669,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
               {ratingScore !== null && (
                 <div
                   className="rounded-2xl p-6 shadow-[0_18px_40px_rgba(6,78,59,0.18)] flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  data-ai-rating-card
                   style={{
                     background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)',
-                    border: '1px solid rgba(184,149,85,0.55)',
+                    border: '1px solid rgba(6,78,59,0.22)',
                   }}
                 >
                   <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(184,149,85,0.22) 0%, transparent 70%)' }} />
@@ -702,8 +703,8 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold" style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>{ratingScore}</span>
-                      <span className="text-[10px] font-medium" style={{ color: 'rgba(10,10,10,0.55)' }}>/10</span>
+                      <span data-no-contrast-guard className="text-4xl font-bold" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>{ratingScore}</span>
+                      <span data-no-contrast-guard className="text-[10px] font-medium" style={{ color: 'rgba(10,10,10,0.72)', WebkitTextFillColor: 'rgba(10,10,10,0.72)' }}>/10</span>
                     </div>
                   </div>
 
@@ -746,12 +747,12 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             {/* Row 4: Pros & Cons */}
             <div className={isConsVisible ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "grid grid-cols-1 gap-6"}>
               {sections?.pros && (
-                <div className="bg-[#F7F2EA] border border-[#064E3B]/30 rounded-2xl p-6 shadow-sm">
+                <div data-ai-emerald-card data-surface="emerald" className="rounded-2xl p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-3">
-                    <ThumbsUp className="w-5 h-5 text-[#064E3B]" />
-                    <h3 className="font-bold text-[#0A0A0A] text-lg">Pros</h3>
+                    <ThumbsUp className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                    <h3 data-no-contrast-guard className="font-bold text-lg" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Pros</h3>
                   </div>
-                  <div className="text-[#1A1A1A] text-sm leading-relaxed whitespace-pre-line">
+                  <div data-no-contrast-guard className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
                     {cleanMarkdown(sections.pros)}
                   </div>
                 </div>
