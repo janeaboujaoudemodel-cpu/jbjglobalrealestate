@@ -140,7 +140,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
                 size="lg"
                 data-area-view-all-projects="true"
                 className="allow-white [&_span]:!text-white [&_svg]:!text-white"
-                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties}
+                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
                 View All Projects in {areaName}
