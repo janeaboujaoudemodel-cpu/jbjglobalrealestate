@@ -33,9 +33,9 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
             </h2>
           </div>
 
-          <div className="flex items-center gap-2 text-xs text-[#0A0A0A] mb-3">
-            <MapPin className="w-3.5 h-3.5 text-[#1A1A1A]" />
-            <span>{area.emirate}, UAE</span>
+          <div data-area-about-location className="flex items-center gap-2 text-xs mb-3" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+            <MapPin className="w-3.5 h-3.5" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
+            <span style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>{area.emirate}, UAE</span>
           </div>
 
           {area.description ? (
@@ -82,28 +82,28 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
           {/* Quick highlights */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
             {(area.property_count ?? 0) > 0 && (
-              <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#064E3B]/20 shadow-sm">
-                <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
+              <div data-area-about-stat-card className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/55 shadow-sm" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+                <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
                 <div>
-                  <div className="text-sm font-bold text-[#1A1A1A]">{area.property_count}</div>
-                  <div className="text-[10px] text-[#0A0A0A]">Active Projects</div>
+                  <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{area.property_count}</div>
+                  <div className="text-[10px]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Active Projects</div>
                 </div>
               </div>
             )}
             {(area.developer_count ?? 0) > 0 && (
-              <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#064E3B]/20 shadow-sm">
-                <Building2 className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
+              <div data-area-about-stat-card className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/55 shadow-sm" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+                <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
                 <div>
-                  <div className="text-sm font-bold text-[#1A1A1A]">{area.developer_count}</div>
-                  <div className="text-[10px] text-[#0A0A0A]">Developers</div>
+                  <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{area.developer_count}</div>
+                  <div className="text-[10px]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Developers</div>
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#064E3B]/20 shadow-sm">
-              <MapPin className="w-4 h-4 text-[#1A1A1A] flex-shrink-0" />
+            <div data-area-about-stat-card className="flex items-center gap-2 p-2.5 bg-[#FDFBF7] rounded-lg border border-[#B89555]/55 shadow-sm" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+              <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: '#1A1A1A', stroke: '#1A1A1A' }} />
               <div>
-                <div className="text-sm font-bold text-[#1A1A1A]">{area.emirate}</div>
-                <div className="text-[10px] text-[#0A0A0A]">Emirate</div>
+                <div className="text-sm font-bold" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>{area.emirate}</div>
+                <div className="text-[10px]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Emirate</div>
               </div>
             </div>
           </div>

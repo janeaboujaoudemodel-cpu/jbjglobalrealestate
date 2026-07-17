@@ -137,7 +137,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
     >
       {/* LEFT — Price from */}
       <div className="flex flex-col min-w-0">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
+        <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
           Price from
         </span>
         <span
@@ -146,7 +146,6 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
           className={cn(
             "mt-1 font-semibold tabular-nums leading-tight truncate",
             "text-[15px] sm:text-base",
-            hasPrice ? "text-[#1A1A1A]" : "text-[#1A1A1A]/70",
           )}
         >
           {hasPrice ? formatPriceFull(price!) : "On request"}
@@ -155,7 +154,7 @@ export const CardPricePaymentRow: React.FC<CardPricePaymentRowProps> = ({
 
       {hasPlan && breakdown && breakdown.length > 0 && (
       <div className="flex flex-col items-end min-w-0">
-        <span className="text-[10px] uppercase tracking-[0.14em] font-medium text-[#1A1A1A]/65 leading-none">
+        <span data-area-price-label className="text-[10px] uppercase tracking-[0.14em] font-medium leading-none" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
           Payment Plan
         </span>
         <div className="mt-1 flex items-center gap-1.5">
