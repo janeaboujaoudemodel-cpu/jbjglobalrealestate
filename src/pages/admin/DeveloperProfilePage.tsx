@@ -54,6 +54,11 @@ interface Developer {
   review_flags?: string[] | null;
   review_flagged_at?: string | null;
   unverified_snapshot?: Record<string, unknown> | null;
+  custom_fields?: Record<string, unknown> | null;
+  completed_projects?: number | null;
+  offplan_projects?: number | null;
+  total_units_delivered?: number | null;
+  portfolio_worth?: number | null;
 
 }
 
@@ -70,6 +75,17 @@ const preferRicherDeveloper = (rows: Developer[]) => rows.reduce((best, row) => 
   const score = (d: Developer) => (d.logo_url ? 10 : 0) + (d.website_url ? 4 : 0) + (d.description?.length ?? 0) / 300 + (d.last_confirmed_at ? 2 : 0);
   return score(row) > score(best) ? row : best;
 });
+
+const asList = (value: unknown): string[] => {
+  if (Array.isArray(value)) return value.map((v) => String(v).trim()).filter(Boolean);
+  if (typeof value === "string") return value.split(/[,\n]/).map((v) => v.trim()).filter(Boolean);
+  return [];
+};
+
+const formatNumber = (value: number | null | undefined) => {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "—";
+  return new Intl.NumberFormat("en-AE", { notation: value >= 1_000_000 ? "compact" : "standard", maximumFractionDigits: 1 }).format(value);
+};
 
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -175,6 +191,21 @@ export default function DeveloperProfilePage() {
         .from("developer_audit_log" as any)
         .select("*")
         .eq("developer_id", developer.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      return (data as any[]) || [];
+    },
+    enabled: !!developer && canEdit,
+  });
+
+  const { data: developerActivity = [] } = useQuery({
+    queryKey: ["dev-activity", developer?.id, developer?.name],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data } = await supabase
+        .from("developer_activity_log" as any)
+        .select("*")
+        .or(`entity_id.eq.${developer.id},developer_name.eq.${developer.name},entity_name.eq.${developer.name}`)
         .order("created_at", { ascending: false })
         .limit(100);
       return (data as any[]) || [];
@@ -416,6 +447,14 @@ export default function DeveloperProfilePage() {
   }
 
   const confirmed = !!developer.last_confirmed_at;
+  const customFields = (developer.custom_fields && typeof developer.custom_fields === "object" ? developer.custom_fields : {}) as Record<string, unknown>;
+  const sourceLinks = asList(customFields.ai_source_links ?? customFields.sources);
+  const communities = asList(customFields.communities);
+  const emirates = asList(customFields.emirates_active);
+  const extraEntries = Object.entries(customFields).filter(([key, value]) =>
+    !["sources", "ai_source_links", "ai_intel_website_url", "last_ai_extraction_at"].includes(key) &&
+    value !== null && value !== undefined && String(Array.isArray(value) ? value.join(", ") : value).trim() !== "",
+  );
 
   return (
     <div data-backend-portal="developer-profile" className="space-y-6">
@@ -489,16 +528,10 @@ export default function DeveloperProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Owner company-profile PDF uploader (AI extract → review queue) */}
-        {canEdit && (
-          <OwnerCompanyProfileUploader developerId={developer.id} developerName={developer.name} />
-        )}
-
-
         <Tabs defaultValue="overview">
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
+            <TabsTrigger value="projects">Portfolio ({projects.length})</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
             <TabsTrigger value="contacts">Contacts & Reps ({reps.length + salesReps.length})</TabsTrigger>
             <TabsTrigger value="files">Files & Brochures</TabsTrigger>
@@ -508,6 +541,15 @@ export default function DeveloperProfilePage() {
 
           {/* OVERVIEW */}
           <TabsContent value="overview" className="space-y-4">
+            {canEdit && (
+              <OwnerCompanyProfileUploader
+                developerId={developer.id}
+                developerName={developer.name}
+                developerWebsiteUrl={developer.website_url}
+                sourceLinks={sourceLinks}
+              />
+            )}
+
             <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
               <CardHeader>
                 <CardTitle className="text-base text-[#1A1A1A]">Developer information</CardTitle>
@@ -666,8 +708,70 @@ export default function DeveloperProfilePage() {
           </TabsContent>
 
 
-          {/* PROJECTS */}
+          {/* PORTFOLIO */}
           <TabsContent value="projects" className="space-y-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                ["Completed", formatNumber(developer.completed_projects)],
+                ["Off-plan", formatNumber(developer.offplan_projects)],
+                ["Units delivered", formatNumber(developer.total_units_delivered)],
+                ["Portfolio worth", developer.portfolio_worth ? `AED ${formatNumber(developer.portfolio_worth)}` : "—"],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4">
+                  <div className="text-[10px] uppercase tracking-[0.16em] font-semibold text-[#1A1A1A]/55">{label}</div>
+                  <div className="mt-1 text-xl font-black text-[#064E3B]">{value}</div>
+                </div>
+              ))}
+            </div>
+
+            {(developer.website_url || sourceLinks.length > 0 || communities.length > 0 || emirates.length > 0 || extraEntries.length > 0) && (
+              <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
+                <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Extracted developer intelligence</CardTitle></CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-2">
+                  {developer.website_url && (
+                    <div>
+                      <Label className="text-[11px] uppercase tracking-wider text-[#1A1A1A]/60">Official website</Label>
+                      <a href={developer.website_url} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[#064E3B] underline">
+                        <Globe className="w-3.5 h-3.5" /> {developer.website_url.replace(/^https?:\/\//, "")}
+                      </a>
+                    </div>
+                  )}
+                  {sourceLinks.length > 0 && (
+                    <div>
+                      <Label className="text-[11px] uppercase tracking-wider text-[#1A1A1A]/60">Source links</Label>
+                      <div className="mt-1 space-y-1">
+                        {sourceLinks.slice(0, 8).map((link) => (
+                          <a key={link} href={link} target="_blank" rel="noreferrer" className="block truncate text-sm text-[#064E3B] underline">{link}</a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {communities.length > 0 && (
+                    <div>
+                      <Label className="text-[11px] uppercase tracking-wider text-[#1A1A1A]/60">Areas & communities</Label>
+                      <div className="mt-1 flex flex-wrap gap-1.5">{communities.map((v) => <Badge key={v} variant="outline" className="border-[#B89555]/40 text-[#1A1A1A]">{v}</Badge>)}</div>
+                    </div>
+                  )}
+                  {emirates.length > 0 && (
+                    <div>
+                      <Label className="text-[11px] uppercase tracking-wider text-[#1A1A1A]/60">Emirates</Label>
+                      <div className="mt-1 flex flex-wrap gap-1.5">{emirates.map((v) => <Badge key={v} className="jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30">{v}</Badge>)}</div>
+                    </div>
+                  )}
+                  {extraEntries.length > 0 && (
+                    <div className="md:col-span-2 grid gap-2 md:grid-cols-2">
+                      {extraEntries.slice(0, 16).map(([key, value]) => (
+                        <div key={key} className="rounded-md border border-[#B89555]/20 bg-[#F7F2EA] px-3 py-2">
+                          <div className="text-[10px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/50">{key.replace(/_/g, " ")}</div>
+                          <div className="text-sm text-[#1A1A1A] break-words">{Array.isArray(value) ? value.join(", ") : String(value)}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
             {projects.length === 0 ? (
               <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No projects yet.</Card>
             ) : (
@@ -813,15 +917,19 @@ export default function DeveloperProfilePage() {
           </TabsContent>
 
           {/* ACTIVITY */}
-          <TabsContent value="activity">
+          <TabsContent value="activity" className="space-y-4">
+            <div className="flex justify-end gap-2">
+              <Button size="sm" className="jj-surface-emerald text-white" asChild><Link to="/crm/tasks"><Plus className="w-3.5 h-3.5 mr-1" /> Register task</Link></Button>
+              <Button size="sm" variant="outline" className="border-[#B89555]/40" asChild><Link to="/crm/activities">Meeting / event / deal</Link></Button>
+            </div>
             <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
               <CardHeader><CardTitle className="text-base flex items-center gap-2 text-[#1A1A1A]"><History className="w-4 h-4" /> Recent activity</CardTitle></CardHeader>
               <CardContent className="space-y-1.5">
-                {audit.length === 0 && <p className="text-sm text-[#1A1A1A]/60">No activity yet.</p>}
-                {audit.map((a) => (
-                  <div key={a.id} className="text-sm text-[#1A1A1A]/80 flex items-center justify-between border-b border-[#B89555]/15 py-1.5">
+                {[...developerActivity, ...audit].length === 0 && <p className="text-sm text-[#1A1A1A]/60">No activity yet.</p>}
+                {[...developerActivity, ...audit].map((a) => (
+                  <div key={`${a.activity_type || a.action}-${a.id}`} className="text-sm text-[#1A1A1A]/80 flex items-center justify-between border-b border-[#B89555]/15 py-1.5 gap-4">
                     <span>
-                      <strong>{a.action}</strong>{a.field ? ` · ${a.field}` : ""}
+                      <strong>{a.activity_type || a.action}</strong>{a.entity_name || a.field ? ` · ${a.entity_name || a.field}` : ""}
                     </span>
                     <span className="text-xs text-[#1A1A1A]/50">
                       {format(new Date(a.created_at), "MMM d, yyyy HH:mm")}
@@ -834,6 +942,10 @@ export default function DeveloperProfilePage() {
 
           {/* BRIEFINGS */}
           <TabsContent value="briefings" className="space-y-4">
+            <div className="flex justify-end gap-2">
+              <Button size="sm" className="jj-surface-emerald text-white" asChild><Link to="/owner/developers/briefings"><Plus className="w-3.5 h-3.5 mr-1" /> Add new briefing</Link></Button>
+              <Button size="sm" variant="outline" className="border-[#B89555]/40" asChild><Link to="/owner/developers/briefings">Register broker survey</Link></Button>
+            </div>
             {briefings.length === 0 ? (
               <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No briefings found for this developer.</Card>
             ) : (
