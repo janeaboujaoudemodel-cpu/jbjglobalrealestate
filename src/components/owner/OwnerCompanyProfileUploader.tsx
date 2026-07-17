@@ -103,14 +103,16 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       if (error) throw error;
       const dataError = extractionDataError(data);
       if (dataError) throw new Error(dataError);
-      const preview = (data as { preview?: Record<string, unknown> } | null)?.preview ?? {};
-      const keys = Object.keys(preview).filter((k) => preview[k] != null && preview[k] !== "");
+      const result = data as { applied?: boolean; appliedCount?: number; columnUpdates?: Record<string, unknown>; customFields?: Record<string, unknown> } | null;
+      const count = result?.appliedCount ?? 0;
       toast.success(
-        keys.length
-          ? `AI drafted ${keys.length} field${keys.length > 1 ? "s" : ""} — review in Enrichment audit log`
+        count
+          ? `AI applied ${count} field${count > 1 ? "s" : ""} directly to the profile.`
           : "AI ran but found no confirmed facts. Try a different source.",
       );
       qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
+      qc.invalidateQueries({ queryKey: ["admin-developer"] });
+      qc.invalidateQueries({ queryKey: ["developer"] });
     } catch (e) {
       toast.error(await parseFunctionError(e));
     } finally {
