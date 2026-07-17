@@ -406,11 +406,13 @@ const AreaDetail = () => {
         </section>
       )}
 
-      {/* Final CTA — always last on the page */}
+      {/* Final CTA — always last on the page — champagne background band */}
+      <div data-surface="champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }} className="py-10">
       <CombinedContactNewsletter
         title={`Explore ${area.name} Properties?`}
         subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
       />
+      </div>
       </div>
     </div>
   );
