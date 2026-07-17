@@ -172,20 +172,21 @@ const AreaDetail = () => {
 
   const filterBarContent = (
     <>
-      {/* Search Input */}
-      <div className="relative flex-1 min-w-[200px] jj-filter-search-pill jj-emerald-metallic rounded-full overflow-hidden">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white" />
+      {/* Search Input — pill matches Projects page: emerald surface, white icon/text, no gray highlight */}
+      <div className="relative flex-1 min-w-[220px] max-w-[420px] rounded-full overflow-hidden border border-white/25" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
         <input
           type="text"
           placeholder="Search projects or developers..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="allow-white w-full h-10 pl-9 pr-8 rounded-full bg-transparent border-0 text-white text-sm placeholder:text-white focus:outline-none focus:ring-0 transition-colors"
-          style={{ fontSize: '16px' }}
+          data-no-contrast-guard
+          className="allow-white w-full h-10 pl-9 pr-8 rounded-full bg-transparent border-0 text-sm focus:outline-none focus:ring-0 transition-colors placeholder:text-white/70"
+          style={{ fontSize: '14px', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
         />
         {searchQuery && (
-          <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2">
-            <X className="w-4 h-4 text-white hover:text-white" />
+          <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2" aria-label="Clear search">
+            <X className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
           </button>
         )}
       </div>
@@ -207,54 +208,18 @@ const AreaDetail = () => {
     window.scrollTo({ top: Math.max(0, top), behavior: prefersReduced ? "auto" : "smooth" });
   };
 
-  return (
-    <div className="min-h-screen bg-[#FDFBF7] flex" data-surface="champagne">
-      {/* Vertical nav handled globally by MainLayout */}
-      <div className="flex-1 transition-all duration-200">
-      <SEOHead 
-        title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
-        description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
-        keywords={`${area.name} properties, ${area.emirate} real estate`}
-        canonicalPath={`/area/${area.slug}`}
-        breadcrumbItems={[
-          { name: 'Home', path: '/' },
-          { name: 'Areas', path: '/areas' },
-          { name: area.name, path: `/area/${area.slug}` },
-        ]}
-      />
-      <SchemaEntity kind="community" slug={area.slug || slug || ""} pageTitle={`${area.name} — Properties in ${area.emirate}`} />
-
-      {/* Full-Screen Hero with Real Photo */}
-      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
-
-      {/* Sticky section-tab bar on scroll — emerald matching sidebar, offset past 56px vertical nav so it never crosses it */}
-      {isFixed && !bottomReached && (
-        <div data-scoped-sticky-nav="area" data-surface="dark" className="fixed right-0 top-0 z-[60] backdrop-blur-md transition-all duration-300" style={{ left: '56px' }}>
-          <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] border-b border-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.35)]">
-            <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
-              <div className="flex w-max min-w-max items-center gap-1 py-2.5">
-                {areaStickyTabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => scrollToAreaSection(tab.id)}
-                    data-no-contrast-guard
-                    style={{ color: '#FFFFFF' }}
-                    className="allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap shrink-0 min-w-fit transition-all hover:bg-white/10 border border-transparent"
-                  >
-                    <tab.icon className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
-                    <span style={{ color: '#FFFFFF' }}>{tab.label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Single inline filter bar — the only filter on the page */}
-      <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)]" data-surface="dark">
-        <div className="container mx-auto">
+  // Single filter bar block — appears inline under hero and BECOMES FIXED on
+  // scroll (matching the Projects page pattern). Never crosses the 56px
+  // vertical sidebar; disappears once user reaches the final CTA block.
+  const filterBarBlock = (
+    <div
+      className="border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)]"
+      data-surface="dark"
+      data-scoped-sticky-nav="area"
+      style={{ background: 'linear-gradient(90deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}
+    >
+      <div className="px-4 md:px-6 py-3">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <FilterShortcutBar
             variant="dark"
             filters={shortcutFilters}
@@ -264,8 +229,26 @@ const AreaDetail = () => {
             hidePropertyType
             hideTrendingSort
           />
+          {/* Section-jump tabs live inside the same bar so they persist on scroll */}
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide shrink-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+            {areaStickyTabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => scrollToAreaSection(tab.id)}
+                data-no-contrast-guard
+                style={{ color: '#FFFFFF' }}
+                className="allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap shrink-0 transition-all hover:bg-white/10 border border-transparent"
+              >
+                <tab.icon className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{tab.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
+    </div>
+  );
 
       {/* About This Area */}
       <div id="area-about" className="scroll-mt-40">
