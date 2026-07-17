@@ -148,14 +148,20 @@ const AreaDetail = () => {
   // because that rail exposes too many chips for this compact area page header.
   const filterBarBlock = (
     <div
-      className="area-filter-bar shadow-[0_18px_42px_rgba(0,0,0,0.36)]"
+      className="area-filter-bar shadow-[0_18px_42px_rgba(0,0,0,0.42)]"
       data-surface="dark"
       data-scoped-sticky-nav="area"
-      style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 56%, #010806 100%)', backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(255,255,255,0.12)' }}
+      style={{
+        background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 42%, #042C1C 78%, #010806 100%)',
+        backdropFilter: 'blur(16px)',
+        borderTop: '1px solid rgba(184,149,85,0.35)',
+        borderBottom: '1px solid rgba(184,149,85,0.35)',
+      }}
     >
-      <div className="px-3 sm:px-4 md:px-5 py-2">
-        <div className="flex items-center gap-2 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="relative h-10 w-[250px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/20 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+      <div className="px-3 sm:px-4 md:px-5 py-2.5">
+        <div className="flex items-center gap-2.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* Search */}
+          <div className="relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/22 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <input
               type="text"
@@ -163,38 +169,50 @@ const AreaDetail = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               data-no-contrast-guard
-              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white/82"
+              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white/80"
               style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center rounded-full bg-white/12" aria-label="Clear search">
+              <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center rounded-full bg-white/14" aria-label="Clear search">
                 <X className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </button>
             )}
           </div>
 
-          <div className="flex flex-none items-center gap-1.5 rounded-lg border border-white/14 bg-black/16 p-1">
-            {filterScopes.map((scope) => (
-              <button
-                key={scope.id}
-                type="button"
-                onClick={() => setSearchScope(scope.id)}
-                data-active={searchScope === scope.id ? "true" : "false"}
-                data-no-contrast-guard
-                className="allow-white h-8 flex-none rounded-md px-3 text-xs font-extrabold transition-colors data-[active=true]:bg-white/18 hover:bg-white/12"
-                style={filterButtonStyle}
-              >
-                {scope.label}
-              </button>
+          {/* Divider */}
+          <span aria-hidden className="hidden sm:block flex-none h-7 w-px" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(184,149,85,0.55) 50%, transparent 100%)' }} />
+
+          {/* Scope chips */}
+          <div className="flex flex-none items-center gap-0.5 rounded-lg border border-white/16 bg-black/22 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            {filterScopes.map((scope, idx) => (
+              <>
+                {idx > 0 && (
+                  <span key={`${scope.id}-div`} aria-hidden className="h-5 w-px mx-0.5" style={{ background: 'rgba(184,149,85,0.35)' }} />
+                )}
+                <button
+                  key={scope.id}
+                  type="button"
+                  onClick={() => setSearchScope(scope.id)}
+                  data-active={searchScope === scope.id ? "true" : "false"}
+                  data-no-contrast-guard
+                  className="allow-white h-8 flex-none rounded-md px-3 text-xs font-extrabold transition-all data-[active=true]:bg-white/22 data-[active=true]:shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] hover:bg-white/14"
+                  style={filterButtonStyle}
+                >
+                  {scope.label}
+                </button>
+              </>
             ))}
           </div>
+
+          {/* Divider */}
+          <span aria-hidden className="flex-none h-7 w-px" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(184,149,85,0.55) 50%, transparent 100%)' }} />
 
           <Popover>
             <PopoverTrigger asChild>
               <button
                 type="button"
                 data-no-contrast-guard
-                className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/16 bg-white/10 hover:bg-white/16 transition-colors"
+                className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/20 bg-white/10 hover:bg-white/18 transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
                 style={filterButtonStyle}
               >
                 <span>Price</span>
@@ -237,11 +255,14 @@ const AreaDetail = () => {
             </PopoverContent>
           </Popover>
 
+          {/* Divider */}
+          <span aria-hidden className="flex-none h-7 w-px" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(184,149,85,0.55) 50%, transparent 100%)' }} />
+
           <button
             type="button"
             onClick={() => setAdvancedOpen(true)}
             data-no-contrast-guard
-            className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/16 bg-white/10 hover:bg-white/16 transition-colors"
+            className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/20 bg-white/10 hover:bg-white/18 transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
             style={filterButtonStyle}
           >
             <SlidersHorizontal className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -251,6 +272,7 @@ const AreaDetail = () => {
       </div>
     </div>
   );
+
 
   return (
     <div className="min-h-screen w-full min-w-0" data-surface="dark" data-area-detail-page="true" style={{ background: 'linear-gradient(180deg, #064E3B 0%, #042C1C 38%, #010806 100%)' }}>
