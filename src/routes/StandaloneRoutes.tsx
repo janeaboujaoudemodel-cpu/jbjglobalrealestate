@@ -91,6 +91,11 @@ export const StandaloneRoutes = () => (
         {React.createElement(React.lazy(() => import("@/pages/TicketSurvey")))}
       </Suspense>
     } />
+    <Route path="/survey/briefing/:token" element={
+      <Suspense fallback={<PageLoader />}>
+        {React.createElement(React.lazy(() => import("@/pages/BriefingSurvey")))}
+      </Suspense>
+    } />
     <Route path="/survey" element={<Navigate to="/ticket-survey" replace />} />
     <Route path="/external-access" element={<Navigate to="/owner/external-access" replace />} />
     <Route path="/sign/:token" element={
