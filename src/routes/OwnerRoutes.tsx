@@ -289,6 +289,7 @@ export const OwnerRoutes = () => (
     <Route path="developers/reps/by-emirate" element={<RepByEmirate />} />
     <Route path="developers/reps/:id" element={<RepProfileEditor />} />
     <Route path="developers/projects" element={<DeveloperLiveEditor />} />
+    <Route path="developers/dedup" element={<ProjectDedupePage />} />
     <Route path="developers/new-project" element={<DeveloperProjectWizard />} />
     <Route path="developers/briefings" element={<BriefingsHub />} />
     <Route path="developers/calendar" element={<DeveloperLaunchEvents />} />
