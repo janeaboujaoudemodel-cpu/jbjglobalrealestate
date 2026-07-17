@@ -158,8 +158,8 @@ const AreaDetail = () => {
   // Single custom area filter bar using the Projects-page filter primitives.
   // Area/Emirate/Community/etc. are independent dropdown buttons, not a connected segmented control.
   const filterBarBlock = (
-    <div
-      className="area-filter-bar shadow-[0_18px_42px_rgba(0,0,0,0.42)]"
+    <section
+      className="area-filter-bar py-3 md:py-4 shadow-[0_18px_42px_rgba(0,0,0,0.42)]"
       data-surface="dark"
       data-scoped-sticky-nav="area"
       data-filter-clean="true"
@@ -170,11 +170,20 @@ const AreaDetail = () => {
         borderBottom: '1px solid rgba(255,255,255,0.14)',
       }}
     >
-      <div className="px-3 sm:px-4 md:px-5 py-2.5">
+      <div className="container mx-auto px-3 sm:px-4">
+        <div
+          className="rounded-2xl p-3 sm:p-4"
+          data-area-filter-inner="true"
+          style={{
+            border: '1px solid rgba(255,255,255,0.18)',
+            background: 'transparent',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+          }}
+        >
         <div className="jj-filter-rail flex items-center gap-1.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Search */}
           <div
-            className="area-filter-search-shell relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none rounded-lg overflow-hidden"
+            className="area-filter-search-shell relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none overflow-hidden"
             data-area-filter-search="true"
           >
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -185,8 +194,8 @@ const AreaDetail = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               data-no-contrast-guard
               data-area-filter-search-input="true"
-              className="area-filter-search-input allow-white w-full h-full pl-10 pr-9 border-0 text-sm focus:outline-none focus:ring-0"
-              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', caretColor: '#FFFFFF' }}
+              className="area-filter-search-input allow-white w-full h-full pl-10 pr-9 border-0 text-sm font-semibold focus:outline-none focus:ring-0"
+              style={{ background: 'transparent', backgroundColor: 'transparent', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', caretColor: '#FFFFFF' }}
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center rounded-full bg-white/14" aria-label="Clear search">
@@ -289,7 +298,8 @@ const AreaDetail = () => {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </section>
   );
 
 
