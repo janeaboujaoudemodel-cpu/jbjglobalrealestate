@@ -233,7 +233,6 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               alt={developerName}
               variant={developerLogoUrl ? "bare" : "nameplate"}
               name={developerName}
-              loading="lazy"
               loading={priority ? "eager" : "lazy"}
             />
           </Link>
