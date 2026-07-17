@@ -517,7 +517,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signOutOtherSessions,
       }}
     >
-      {children}
+      {loading ? null : children}
     </AuthContext.Provider>
   );
 }
