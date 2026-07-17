@@ -513,11 +513,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const ratingScore = ratingMatch ? parseFloat(ratingMatch[1]) : null;
 
   return (
-    <section ref={sectionRef} data-area-ai-section data-surface="dark" className="py-16 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+    <section ref={sectionRef} data-area-ai-section data-surface="champagne" className="py-16" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-[#064E3B]" />
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
+          <Brain className="w-6 h-6" style={{ color: '#064E3B' }} />
+          <h2 data-no-contrast-guard className="text-2xl md:text-3xl font-bold" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
             JBJ AI Area Intelligence
           </h2>
         </div>
