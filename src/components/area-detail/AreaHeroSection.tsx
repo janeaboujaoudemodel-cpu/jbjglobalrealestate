@@ -29,7 +29,10 @@ const staggerContainer = {
 
 export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
-  const heroImageSrc = optimizeStorageImageUrl(heroImage, 1920, 80) || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
+  const fallbackHeroImage = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
+  const heroImageSrc = area.slug === 'dubai-islands'
+    ? fallbackHeroImage
+    : optimizeStorageImageUrl(heroImage, 1920, 80) || fallbackHeroImage;
 
   const changeNum = dldAreaData ? parseFloat(dldAreaData.change.replace('%', '')) : null;
   const isPositive = changeNum !== null && changeNum >= 0;
