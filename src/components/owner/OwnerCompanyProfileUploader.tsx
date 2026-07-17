@@ -293,9 +293,11 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           </p>
           <button
             type="button"
+            id="jbj-extract-intel-btn"
             onClick={runIntelExtract}
             disabled={runningIntel}
             data-no-contrast-guard
+            data-surface="emerald"
             className="jbj-force-white-button shrink-0 inline-flex items-center gap-1.5 rounded-md border border-[#064E3B] px-3 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               background: "#064E3B",
