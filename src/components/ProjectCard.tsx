@@ -159,6 +159,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   return (
     <div
       data-surface="champagne"
+      data-area-project-card="true"
       role="link"
       tabIndex={0}
       onClick={openProject}
@@ -174,6 +175,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         "shadow-[0_18px_55px_rgba(0,0,0,0.16),0_0_18px_rgba(184,149,85,0.16)] hover:border-[#B89555] " +
         "hover:shadow-[0_26px_75px_rgba(0,0,0,0.20),0_0_26px_rgba(184,149,85,0.28)]"
       }
+      style={{ borderColor: '#B89555' }}
     >
       {/* Top-right project actions — hidden until card hover/focus.
           Row 1: favorite + shortlist. Row 2: badge aligned exactly under shortlist. */}
@@ -340,14 +342,14 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="p-5 pt-10 flex-1 flex flex-col gap-2">
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1">
-            <h4 className="text-[#0A0A0A] text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] group-hover:text-[#064E3B] transition-colors">
+            <h4 data-area-card-text className="text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] transition-colors" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
               {project.name}
             </h4>
-            <div className="flex items-center gap-1.5 text-[#0A0A0A] text-sm font-medium min-h-[1.25rem]">
+            <div data-area-card-location className="flex items-center gap-1.5 text-sm font-medium min-h-[1.25rem]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
               {project.location && (
                 <>
-                  <MapPin className="w-3.5 h-3.5 text-[#064E3B] flex-shrink-0" aria-hidden="true" />
-                  <span className="truncate">{project.location}</span>
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: '#064E3B', stroke: '#064E3B' }} aria-hidden="true" />
+                  <span className="truncate" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>{project.location}</span>
                 </>
               )}
             </div>
@@ -358,16 +360,17 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               the grid. Empty placeholder when no unit/size data. */}
           <div
             data-no-contrast-guard
-            style={{ color: '#1A1A1A' }}
-            className="flex items-center gap-2 !text-[#0A0A0A] text-xs font-medium whitespace-nowrap overflow-hidden min-h-[1.25rem]"
+            data-area-card-meta
+            style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}
+            className="flex items-center gap-2 text-xs font-medium whitespace-nowrap overflow-hidden min-h-[1.25rem]"
           >
             {getUnitTypesText() && (
-              <span className="font-semibold truncate !text-[#0A0A0A]">{getUnitTypesText()}</span>
+              <span className="font-semibold truncate" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>{getUnitTypesText()}</span>
             )}
             {getUnitTypesText() && getSizeText() && (
               <span className="text-[#064E3B] flex-shrink-0" aria-hidden="true">|</span>
             )}
-            {getSizeText() && <span className="truncate !text-[#0A0A0A]">{getSizeText()}</span>}
+            {getSizeText() && <span className="truncate" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>{getSizeText()}</span>}
           </div>
 
 
@@ -391,7 +394,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               every card regardless of content length above. */}
           <div className="mt-auto flex flex-col gap-3 pt-1">
             {/* Thin gold hairline — separates developer/description from bottom row */}
-            <div className="w-full border-t border-[#B89555]/70" />
+            <div className="w-full border-t border-[#B89555]" />
 
             {/* Bottom row — price only. Handover lives beside EOI on the photo. */}
             <CardPricePaymentRow

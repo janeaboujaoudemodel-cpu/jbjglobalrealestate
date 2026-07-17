@@ -19,7 +19,7 @@ const formatMarkerPrice = (price: number | null | undefined) => {
 
 const createEmeraldMarkerIcon = (price: number | null | undefined) => L.divIcon({
   className: "custom-marker",
-  html: `<div class="jj-map-marker-pill border border-white/40 font-bold shadow-lg">${formatMarkerPrice(price)}</div>`,
+  html: `<div class="jj-map-marker-pill border border-white/40 font-bold shadow-lg" style="color:#FFFFFF !important;-webkit-text-fill-color:#FFFFFF !important;background:linear-gradient(135deg,#064E3B 0%,#042C1C 100%) !important;border-color:rgba(255,255,255,0.45) !important;">${formatMarkerPrice(price)}</div>`,
   iconSize: [72, 32],
   iconAnchor: [36, 32],
   popupAnchor: [0, -32],
@@ -172,7 +172,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
               className="absolute inset-0 z-[500] flex items-center justify-center cursor-pointer bg-[#1A1A1A]/5"
               onClick={() => setMapInteractive(true)}
             >
-              <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium" data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+              <div className="jj-map-enable-chip px-4 py-2 rounded-full text-sm font-medium" data-surface="emerald" data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)', border: '1px solid rgba(255,255,255,0.45)' }}>
                 {t('map.clickToEnable')}
               </div>
             </div>

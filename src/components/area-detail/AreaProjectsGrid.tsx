@@ -97,7 +97,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section data-surface="champagne" className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
+    <section id="projects-section" data-surface="champagne" className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div>
         <h2 data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold mb-6">
           Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
@@ -138,7 +138,9 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
               <PearlButton
                 to={`/properties?area=${areaSlug}`}
                 size="lg"
-                className="[&_span]:!text-white [&_svg]:!text-white"
+                data-area-view-all-projects="true"
+                className="allow-white [&_span]:!text-white [&_svg]:!text-white"
+                style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
                 trailingIcon={<ArrowUpRight strokeWidth={2.2} />}
               >
                 View All Projects in {areaName}
