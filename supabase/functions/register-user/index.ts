@@ -45,6 +45,22 @@ Deno.serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
+    // Require a verified email OTP within the last 30 minutes. Zero-tolerance
+    // gate: no account is created unless the email has been proven via OTP.
+    const thirtyMinAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+    const { data: verifiedRow, error: verifyLookupErr } = await admin
+      .from("email_verifications")
+      .select("id, verified_at")
+      .eq("email", email)
+      .not("verified_at", "is", null)
+      .gte("verified_at", thirtyMinAgo)
+      .order("verified_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (verifyLookupErr || !verifiedRow) {
+      return json({ error: "Email not verified. Please verify your email with the OTP code first." }, 403);
+    }
+
     // 1. Create auth user (auto-confirmed for smooth UX)
     const { data: created, error: createErr } = await admin.auth.admin.createUser({
       email,
