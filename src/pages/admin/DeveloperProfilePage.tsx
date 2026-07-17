@@ -16,7 +16,7 @@ import {
   ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
   Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
   CheckCircle2, AlertTriangle, Pencil, Plus, ExternalLink, Languages,
-  ShieldCheck, History, Sparkles, Star, Calendar, Clock
+  ShieldCheck, History, Sparkles, Star, Calendar, Clock, Send, EyeOff, Eye
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -947,9 +947,13 @@ export default function DeveloperProfilePage() {
 
           {/* BRIEFINGS */}
           <TabsContent value="briefings" className="space-y-4">
-            <div className="flex justify-end gap-2">
-              <Button size="sm" className="jj-surface-emerald text-white" asChild><Link to="/owner/developers/briefings"><Plus className="w-3.5 h-3.5 mr-1" /> Add new briefing</Link></Button>
-              <Button size="sm" variant="outline" className="border-[#B89555]/40" asChild><Link to="/owner/developers/briefings">Register broker survey</Link></Button>
+            <div className="flex justify-between items-center gap-2 flex-wrap">
+              <p className="text-xs text-[#1A1A1A]/70">
+                Surveys are sent by email after a briefing — recipients rate the sales rep on a secure link.
+              </p>
+              <Button size="sm" className="jj-surface-emerald text-white" asChild>
+                <Link to="/owner/developers/briefings"><Plus className="w-3.5 h-3.5 mr-1" /> Add new briefing</Link>
+              </Button>
             </div>
             {briefings.length === 0 ? (
               <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No briefings found for this developer.</Card>
@@ -998,13 +1002,24 @@ export default function DeveloperProfilePage() {
                             ))}
                           </div>
                         )}
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="h-7 text-[10px] uppercase font-bold tracking-tight border-[#B89555]/40 hover:bg-[#EFE6D6]"
-                          asChild
+                        <Button
+                          size="sm"
+                          className="h-7 text-[10px] uppercase font-bold tracking-tight bg-[#064E3B] text-white hover:bg-[#042C1C]"
+                          onClick={async () => {
+                            const t = toast.loading("Sending survey emails…");
+                            try {
+                              const { data, error } = await supabase.functions.invoke("send-briefing-survey", {
+                                body: { briefing_id: b.id },
+                              });
+                              if (error) throw error;
+                              if (!(data as any)?.ok) throw new Error((data as any)?.error || "Failed");
+                              toast.success(`Sent ${(data as any).sent}/${(data as any).total} survey email(s)`, { id: t });
+                            } catch (e: any) {
+                              toast.error(e?.message || "Could not send", { id: t });
+                            }
+                          }}
                         >
-                          <Link to="/owner/developers/briefings">View Hub</Link>
+                          <Send className="w-3 h-3 mr-1" /> Send survey emails
                         </Button>
                       </div>
                     </div>
@@ -1012,6 +1027,7 @@ export default function DeveloperProfilePage() {
                 ))}
               </div>
             )}
+            <RepRatingsSection developerId={developer?.id} />
           </TabsContent>
         </Tabs>
       </div>
@@ -1027,6 +1043,74 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </div>
   );
 }
+
+function RepRatingsSection({ developerId }: { developerId?: string }) {
+  const qc = useQueryClient();
+  const { data: ratings = [], refetch } = useQuery({
+    queryKey: ["rep-ratings", developerId],
+    enabled: !!developerId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("briefing_rep_ratings")
+        .select("id, rating, feedback, rater_role, rater_name, rater_email, is_visible, created_at, sales_rep_id, representative_id")
+        .eq("developer_id", developerId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  const toggleVisibility = async (id: string, next: boolean) => {
+    const { error } = await supabase.from("briefing_rep_ratings").update({ is_visible: next }).eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success(next ? "Rating visible" : "Rating hidden");
+    refetch();
+    qc.invalidateQueries({ queryKey: ["rep-ratings", developerId] });
+  };
+  const removeRating = async (id: string) => {
+    if (!confirm("Delete this rating? This cannot be undone.")) return;
+    const { error } = await supabase.from("briefing_rep_ratings").delete().eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success("Rating deleted");
+    refetch();
+  };
+
+  if (!developerId) return null;
+  return (
+    <Card className="border border-[#B89555]/30 bg-[#F7F2EA] mt-4">
+      <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Sales rep ratings ({ratings.length})</CardTitle></CardHeader>
+      <CardContent className="space-y-2">
+        {ratings.length === 0 && <p className="text-sm text-[#1A1A1A]/60">No survey responses yet.</p>}
+        {ratings.map((r: any) => (
+          <div key={r.id} className="flex items-start justify-between gap-3 p-3 rounded-md bg-[#FDFBF7] border border-[#B89555]/20">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <Star key={n} className={`w-3.5 h-3.5 ${n <= r.rating ? "fill-[#064E3B] text-[#064E3B]" : "text-[#B89555]/30"}`} />
+                ))}
+                <span className="text-[10px] uppercase tracking-wider text-[#1A1A1A]/60">{r.rater_role}</span>
+                {!r.is_visible && <span className="text-[10px] uppercase tracking-wider text-red-700">Hidden</span>}
+              </div>
+              <p className="text-xs text-[#1A1A1A]/70 mt-1">
+                {r.rater_name || r.rater_email || "Anonymous"} · {format(new Date(r.created_at), "MMM d, yyyy")}
+              </p>
+              {r.feedback && <p className="text-sm text-[#1A1A1A]/80 mt-1 italic">"{r.feedback}"</p>}
+            </div>
+            <div className="flex items-center gap-1">
+              <Button size="sm" variant="outline" className="h-7 px-2 border-[#B89555]/40" onClick={() => toggleVisibility(r.id, !r.is_visible)}>
+                {r.is_visible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </Button>
+              <Button size="sm" variant="outline" className="h-7 px-2 border-red-300 text-red-700 hover:bg-red-50" onClick={() => removeRating(r.id)}>
+                <Trash2 className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  );
+}
+
 
 function MediaSection({
   kind, label, accept, items, canEdit, onUpload, onDelete,

@@ -2248,6 +2248,96 @@ export type Database = {
         }
         Relationships: []
       }
+      briefing_rep_ratings: {
+        Row: {
+          briefing_id: string
+          created_at: string
+          developer_id: string | null
+          feedback: string | null
+          id: string
+          is_visible: boolean
+          rater_email: string | null
+          rater_name: string | null
+          rater_role: string
+          rater_user_id: string | null
+          rating: number
+          representative_id: string | null
+          sales_rep_id: string | null
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          briefing_id: string
+          created_at?: string
+          developer_id?: string | null
+          feedback?: string | null
+          id?: string
+          is_visible?: boolean
+          rater_email?: string | null
+          rater_name?: string | null
+          rater_role: string
+          rater_user_id?: string | null
+          rating: number
+          representative_id?: string | null
+          sales_rep_id?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          briefing_id?: string
+          created_at?: string
+          developer_id?: string | null
+          feedback?: string | null
+          id?: string
+          is_visible?: boolean
+          rater_email?: string | null
+          rater_name?: string | null
+          rater_role?: string
+          rater_user_id?: string | null
+          rating?: number
+          representative_id?: string | null
+          sales_rep_id?: string | null
+          source?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_rep_ratings_briefing_id_fkey"
+            columns: ["briefing_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_rep_ratings_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_rep_ratings_representative_id_fkey"
+            columns: ["representative_id"]
+            isOneToOne: false
+            referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_rep_ratings_sales_rep_id_fkey"
+            columns: ["sales_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_rep_ratings_sales_rep_id_fkey"
+            columns: ["sales_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       briefing_requests: {
         Row: {
           approved_at: string | null
@@ -2348,6 +2438,77 @@ export type Database = {
           },
           {
             foreignKeyName: "briefing_requests_sales_rep_id_fkey"
+            columns: ["sales_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      briefing_survey_tokens: {
+        Row: {
+          briefing_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          recipient_email: string
+          recipient_name: string | null
+          recipient_role: string
+          representative_id: string | null
+          sales_rep_id: string | null
+          token: string
+          used_at: string | null
+        }
+        Insert: {
+          briefing_id: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          recipient_email: string
+          recipient_name?: string | null
+          recipient_role: string
+          representative_id?: string | null
+          sales_rep_id?: string | null
+          token: string
+          used_at?: string | null
+        }
+        Update: {
+          briefing_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          recipient_email?: string
+          recipient_name?: string | null
+          recipient_role?: string
+          representative_id?: string | null
+          sales_rep_id?: string | null
+          token?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "briefing_survey_tokens_briefing_id_fkey"
+            columns: ["briefing_id"]
+            isOneToOne: false
+            referencedRelation: "briefing_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_survey_tokens_representative_id_fkey"
+            columns: ["representative_id"]
+            isOneToOne: false
+            referencedRelation: "developer_representatives"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_survey_tokens_sales_rep_id_fkey"
+            columns: ["sales_rep_id"]
+            isOneToOne: false
+            referencedRelation: "developer_sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "briefing_survey_tokens_sales_rep_id_fkey"
             columns: ["sales_rep_id"]
             isOneToOne: false
             referencedRelation: "developer_sales_reps_public"
