@@ -316,29 +316,50 @@ Deno.serve(async (req) => {
       .map((s, i) => `--- SOURCE ${i + 1} (${s.label}) ${s.url} ---\n${s.text}`)
       .join("\n\n")
       .slice(0, 90_000);
-    const extracted = normalizeExtracted(await callGemini(SYSTEM_PROMPT, userMsg), sources);
+    const { columnUpdates, customFields } = normalizeExtracted(await callGemini(SYSTEM_PROMPT, userMsg), sources);
+
+    // Merge custom_fields with whatever already exists so nothing is lost.
+    const existingCustom = (developer as Record<string, unknown>).custom_fields;
+    const mergedCustom = {
+      ...(existingCustom && typeof existingCustom === "object" ? existingCustom as Record<string, unknown> : {}),
+      ...customFields,
+    };
+
+    const updatePayload: Record<string, unknown> = {
+      ...columnUpdates,
+      custom_fields: mergedCustom,
+      last_enriched_at: new Date().toISOString(),
+      enrichment_source: "developer-intel-extract",
+    };
+
     const currentSnapshot: Record<string, unknown> = {};
-    for (const key of Object.keys(extracted)) currentSnapshot[key] = (developer as Record<string, unknown>)[key] ?? null;
+    for (const key of Object.keys(columnUpdates)) currentSnapshot[key] = (developer as Record<string, unknown>)[key] ?? null;
 
-    const { data: draft, error: draftErr } = await admin
-      .from("enrichment_review_drafts")
-      .insert({
-        target_type: "developer",
-        target_id: developerId,
-        target_slug: developer.slug,
-        source_file_url: effectiveWebsite || bulkLinks[0] || null,
-        source_file_name: `Sources: ${sources.map((s) => s.label).join(", ")}`,
-        extracted_fields: extracted,
-        current_snapshot: currentSnapshot,
-        ai_model: "google/gemini-3.5-flash",
-        status: "pending",
-      })
-      .select("id")
-      .single();
+    const { error: updErr } = await admin.from("developers").update(updatePayload).eq("id", developerId);
+    if (updErr) return json({ ok: false, error: updErr.message }, 200);
 
-    if (draftErr) return json({ ok: false, error: draftErr.message }, 200);
+    // Log to audit for history — mark applied, no approval needed.
+    await admin.from("enrichment_review_drafts").insert({
+      target_type: "developer",
+      target_id: developerId,
+      target_slug: developer.slug,
+      source_file_url: effectiveWebsite || bulkLinks[0] || null,
+      source_file_name: `Sources: ${sources.map((s) => s.label).join(", ")}`,
+      extracted_fields: { ...columnUpdates, custom_fields: customFields },
+      current_snapshot: currentSnapshot,
+      ai_model: "google/gemini-3.5-flash",
+      status: "applied",
+    });
 
-    return json({ ok: true, draftId: draft?.id, sourcesRead: sources.length, preview: extracted });
+    const appliedCount = Object.keys(columnUpdates).length + Object.keys(customFields).length;
+    return json({
+      ok: true,
+      applied: true,
+      sourcesRead: sources.length,
+      appliedCount,
+      columnUpdates,
+      customFields,
+    });
   } catch (e) {
     return json({ ok: false, status: "unavailable", error: e instanceof Error ? e.message : "unknown extraction error" }, 200);
   }
