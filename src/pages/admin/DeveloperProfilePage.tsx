@@ -129,8 +129,10 @@ export default function DeveloperProfilePage() {
       if (!developer) return [];
       const { data } = await supabase
         .from("projects")
-        .select("id, name, slug, status, handover_date, total_units, cover_image_url, updated_at, is_published")
+        .select("id, name, slug, status, handover_date, total_units, cover_image_url, updated_at, is_published, area_name, emirate, sale_status, source_url")
         .or(`developer_id.eq.${developer.id},developer_name.eq.${developer.name}`)
+        .is("merged_into_project_id", null)
+        .is("deleted_at", null)
         .order("updated_at", { ascending: false });
       return data || [];
     },
