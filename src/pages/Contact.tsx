@@ -809,35 +809,35 @@ END:VCARD`;
               </div>
             )}
             </div>
-
-            {/* Right column: Need Help / Our Commitment support cards */}
-            <aside className="lg:sticky lg:top-24 min-w-0">
-              <SupportTicketBox />
-            </aside>
           </div>
       </section>
 
-      {/* Important Notice + Appointments — balanced 2-col row */}
-      <section className="grid md:grid-cols-2 gap-6 md:gap-8">
-        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] flex flex-col">
-          <div className="flex items-center gap-3 mb-3">
-            <IconTile icon={Shield} tone="ink" size="md" />
-            <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
+      {/* Need Help — below the form, centered */}
+      <section className="max-w-3xl mx-auto w-full min-w-0">
+        <SupportTicketBox />
+      </section>
+
+      {/* Important Notice + Appointments — compact 2-col row */}
+      <section className="max-w-3xl mx-auto w-full grid md:grid-cols-2 gap-4 md:gap-5">
+        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 md:p-5 shadow-[0_2px_12px_rgba(184,149,85,0.08)] flex flex-col">
+          <div className="flex items-center gap-2 mb-2">
+            <IconTile icon={Shield} tone="ink" size="sm" />
+            <h3 className="text-[#1A1A1A] font-semibold text-sm">Important Notice</h3>
           </div>
-          <p className="text-[#1A1A1A] text-sm leading-relaxed">
-            JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
+          <p className="text-[#1A1A1A] text-xs leading-relaxed">
+            JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners.
           </p>
         </div>
 
-        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] flex flex-col text-center items-center">
-          <IconTile icon={Calendar} tone="ink" size="md" className="mb-4" />
-          <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
-          <p className="text-[#1A1A1A] text-sm leading-relaxed mb-5 max-w-md">
+        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-xl p-4 md:p-5 shadow-[0_2px_12px_rgba(184,149,85,0.08)] flex flex-col text-center items-center">
+          <IconTile icon={Calendar} tone="ink" size="sm" className="mb-2" />
+          <h3 className="text-[#1A1A1A] font-semibold text-sm mb-1">Appointments</h3>
+          <p className="text-[#1A1A1A] text-xs leading-relaxed mb-3 max-w-md">
             If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
           </p>
-          <div className="h-px w-24 bg-[#B89555]/40 mb-5" />
-          <p className="text-[#1A1A1A] text-sm leading-relaxed max-w-md">
-            At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
+          <div className="h-px w-16 bg-[#B89555]/40 mb-3" />
+          <p className="text-[#1A1A1A] text-xs leading-relaxed max-w-md">
+            Communication is handled with structure, discretion and accountability.
           </p>
         </div>
       </section>
