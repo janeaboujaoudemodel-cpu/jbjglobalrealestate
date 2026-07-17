@@ -383,6 +383,22 @@ const HubCard = ({ hub, hideFounderLinks, hiddenToolIds }: { hub: HubSection; hi
 const Sitemap = () => {
   const { isFounderVisible } = useFounderVisibility();
   const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // Load hidden AI tools from ai_tool_visibility so the sitemap respects
+  // owner-controlled visibility. Missing rows default to visible.
+  const { data: hiddenToolIds } = useQuery({
+    queryKey: ["sitemap-hidden-ai-tools"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("ai_tool_visibility")
+        .select("tool_id, is_public")
+        .eq("is_public", false);
+      if (error) return new Set<string>();
+      return new Set<string>((data ?? []).map((r: any) => r.tool_id));
+    },
+    staleTime: 60_000,
+  });
+  const hiddenIds = hiddenToolIds ?? new Set<string>();
   const lastUpdated = new Date().toLocaleDateString('en-US', { 
     year: 'numeric', 
     month: 'long', 
