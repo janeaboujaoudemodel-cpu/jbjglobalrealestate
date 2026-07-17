@@ -293,10 +293,14 @@ const ChampagnePill = ({
 }) => (
   <Link
     to={to}
-    className="inline-flex h-11 min-w-[172px] items-center justify-center gap-2 px-5 rounded-full bg-gradient-to-b from-[#FDFBF7] via-[#F2E9D6] to-[#E1CFA6] border border-[#B89555]/60 shadow-[0_1px_0_rgba(255,255,255,0.6)_inset,0_2px_8px_rgba(184,149,85,0.18)] hover:shadow-[0_2px_12px_rgba(184,149,85,0.35)] hover:-translate-y-0.5 transition-all"
+    data-surface="emerald"
+    data-emerald="true"
+    data-no-contrast-guard
+    className="jj-emerald-metallic allow-white inline-flex h-12 w-full sm:w-[210px] items-center justify-center gap-2.5 px-4 rounded-full border border-[#B89555]/40 shadow-[0_6px_18px_-8px_rgba(6,78,59,0.65)] hover:shadow-[0_10px_22px_-8px_rgba(6,78,59,0.85)] hover:-translate-y-0.5 transition-all"
+    style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
   >
-    <Icon className="w-4 h-4 text-[#0F172A]" strokeWidth={2} />
-    <span className="text-[#0F172A] text-sm font-semibold whitespace-nowrap">
+    <Icon className="w-4 h-4 shrink-0 allow-white" strokeWidth={2} style={{ color: "#FFFFFF", stroke: "#FFFFFF", fill: "none" }} />
+    <span className="allow-white text-sm font-semibold whitespace-nowrap" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>
       {label}
     </span>
   </Link>
@@ -530,10 +534,10 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="font-cormorant text-3xl sm:text-4xl font-semibold text-white mb-2">
+              <h2 className="allow-black font-cormorant text-3xl sm:text-4xl font-semibold mb-2" style={{ color: "#0F172A", WebkitTextFillColor: "#0F172A" }}>
                 Get In Touch
               </h2>
-              <p className="text-white/75 text-sm">
+              <p className="allow-black text-sm" style={{ color: "#0F172A", WebkitTextFillColor: "#0F172A" }}>
                 Choose your preferred way to connect with us
               </p>
             </motion.div>
