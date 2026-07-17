@@ -298,7 +298,7 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center flex flex-col items-center">
+          <div className="jj-home-hero-stack w-full max-w-5xl mx-auto text-center flex flex-col items-center mt-[14vh] sm:mt-[16vh] md:mt-[18vh] lg:mt-[20vh] xl:mt-[22vh]">
             {/* Eyebrow tagline removed per owner directive — keep hero copy minimal */}
 
             {/* Headline — exact copy from reference photo */}
