@@ -305,10 +305,8 @@ const AreaDetail = () => {
         <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
       </div>
 
-      <CombinedContactNewsletter
-        title={`Explore ${area.name} Properties?`}
-        subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
-      />
+      {/* Similar Areas moved BEFORE the CTA — CTA is the final block on the page */}
+
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
