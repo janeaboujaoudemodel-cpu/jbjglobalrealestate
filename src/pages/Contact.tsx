@@ -311,9 +311,11 @@ END:VCARD`;
         </div>
       </section>
 
+      {/* Unified content stack — consistent vertical rhythm between sections */}
+      <div className="container mx-auto px-4 py-12 md:py-16 space-y-10 md:space-y-14 max-w-7xl">
+
       {/* Contact Cards - clean champagne band, no black gutter */}
-      <section className="py-8 md:py-10">
-        <div className="container mx-auto px-4">
+      <section>
           <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-5 md:p-6 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#B89555]/20">
               {contactCards.map((card) => (
@@ -335,15 +337,12 @@ END:VCARD`;
               ))}
             </div>
           </div>
-        </div>
       </section>
 
 
       {/* Consultation Form Section */}
-      <section className="py-8 md:py-12">
-        <div className="container mx-auto px-4">
-
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 max-w-7xl mx-auto items-start">
+      <section>
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 items-start">
             <div className="min-w-0">
             {isSuccess ? (
               /* Success State */
