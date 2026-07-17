@@ -4,7 +4,7 @@
  * developer_documents, then invokes ai-developer-profile-extract which
  * writes an entry into enrichment_review_drafts for owner review.
  */
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Upload, Loader2, FileText, Eye, EyeOff, Trash2, Sparkles, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 interface Props {
   developerId: string;
   developerName?: string;
+  developerWebsiteUrl?: string | null;
+  sourceLinks?: unknown;
 }
 
 interface DocRow {
@@ -55,7 +57,13 @@ const extractionDataError = (data: any) => {
   return [data.error, data.detail].filter(Boolean).join(" · ") || "Extraction failed";
 };
 
-export default function OwnerCompanyProfileUploader({ developerId, developerName }: Props) {
+const linksToText = (value: unknown) => {
+  if (Array.isArray(value)) return value.map((v) => String(v).trim()).filter(Boolean).join("\n");
+  if (typeof value === "string") return value.trim();
+  return "";
+};
+
+export default function OwnerCompanyProfileUploader({ developerId, developerName, developerWebsiteUrl, sourceLinks }: Props) {
   const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [drag, setDrag] = useState(false);
@@ -87,10 +95,18 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
   const [lastExtraction, setLastExtraction] = useState<string[] | null>(null);
   const [foundFields, setFoundFields] = useState<Array<{ key: string; label: string; preview: string }> | null>(null);
   const [missingFields, setMissingFields] = useState<Array<{ key: string; label: string }> | null>(null);
-  const [websiteUrl, setWebsiteUrl] = useState("");
-  const [bulkLinksText, setBulkLinksText] = useState("");
+  const initialSourceLinks = useMemo(() => linksToText(sourceLinks), [sourceLinks]);
+  const [websiteUrl, setWebsiteUrl] = useState(developerWebsiteUrl ?? "");
+  const [bulkLinksText, setBulkLinksText] = useState(initialSourceLinks);
+  const [sourceInputsTouched, setSourceInputsTouched] = useState(false);
   const [runningIntel, setRunningIntel] = useState(false);
   const [minimized, setMinimized] = useState(false);
+
+  useEffect(() => {
+    if (sourceInputsTouched) return;
+    setWebsiteUrl(developerWebsiteUrl ?? "");
+    setBulkLinksText(initialSourceLinks);
+  }, [developerId, developerWebsiteUrl, initialSourceLinks, sourceInputsTouched]);
 
   const runIntelExtract = async () => {
     const links = bulkLinksText.split(/[\n,]+/).map((l) => l.trim()).filter(Boolean);
@@ -113,6 +129,7 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
       qc.invalidateQueries({ queryKey: ["admin-developer"] });
       qc.invalidateQueries({ queryKey: ["developer"] });
+      qc.invalidateQueries({ predicate: (q) => q.queryKey[0] === "dev-profile" });
     } catch (e) {
       toast.error(await parseFunctionError(e));
     } finally {
@@ -277,13 +294,13 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           <input
             type="url"
             value={websiteUrl}
-            onChange={(e) => setWebsiteUrl(e.target.value)}
+            onChange={(e) => { setSourceInputsTouched(true); setWebsiteUrl(e.target.value); }}
             placeholder="https://developer-website.com"
             className="w-full rounded-md border border-[#B89555]/40 bg-white px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#064E3B]"
           />
           <textarea
             value={bulkLinksText}
-            onChange={(e) => setBulkLinksText(e.target.value)}
+            onChange={(e) => { setSourceInputsTouched(true); setBulkLinksText(e.target.value); }}
             placeholder="Paste Google Drive links, press pages, brochure URLs — one per line"
             rows={2}
             className="w-full rounded-md border border-[#B89555]/40 bg-white px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#064E3B] resize-none"

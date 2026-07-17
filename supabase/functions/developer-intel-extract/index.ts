@@ -317,6 +317,12 @@ Deno.serve(async (req) => {
       .join("\n\n")
       .slice(0, 90_000);
     const { columnUpdates, customFields } = normalizeExtracted(await callGemini(SYSTEM_PROMPT, userMsg), sources);
+    if (effectiveWebsite) {
+      columnUpdates.website_url = effectiveWebsite;
+      customFields.ai_intel_website_url = effectiveWebsite;
+    }
+    const normalizedBulkLinks = bulkLinks.map((link) => normalizeUrl(link)).filter((link): link is string => !!link);
+    if (normalizedBulkLinks.length) customFields.ai_source_links = normalizedBulkLinks;
 
     // Merge custom_fields with whatever already exists so nothing is lost.
     const existingCustom = (developer as Record<string, unknown>).custom_fields;
