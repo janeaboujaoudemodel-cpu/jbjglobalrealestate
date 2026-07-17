@@ -227,10 +227,10 @@ const AreaDetail = () => {
       {/* Full-Screen Hero with Real Photo */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
-      {/* Sticky section-tab bar on scroll — black text on champagne */}
+      {/* Sticky section-tab bar on scroll — emerald matching sidebar, offset past 56px vertical nav so it never crosses it */}
       {isFixed && !bottomReached && (
-        <div data-scoped-sticky-nav="area" data-surface="champagne" className="fixed left-0 right-0 top-0 z-[9999] backdrop-blur-md transition-all duration-300">
-          <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/30 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+        <div data-scoped-sticky-nav="area" data-surface="dark" className="fixed right-0 top-0 z-[60] backdrop-blur-md transition-all duration-300" style={{ left: '56px' }}>
+          <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] border-b border-white/15 shadow-[0_4px_20px_rgba(0,0,0,0.35)]">
             <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
               <div className="flex w-max min-w-max items-center gap-1 py-2.5">
                 {areaStickyTabs.map((tab) => (
@@ -239,11 +239,11 @@ const AreaDetail = () => {
                     type="button"
                     onClick={() => scrollToAreaSection(tab.id)}
                     data-no-contrast-guard
-                    style={{ color: '#0A0A0A' }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap shrink-0 min-w-fit transition-all hover:bg-[#064E3B]/10 border border-transparent"
+                    style={{ color: '#FFFFFF' }}
+                    className="allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap shrink-0 min-w-fit transition-all hover:bg-white/10 border border-transparent"
                   >
-                    <tab.icon className="w-3.5 h-3.5" style={{ color: '#0A0A0A' }} />
-                    <span style={{ color: '#0A0A0A' }}>{tab.label}</span>
+                    <tab.icon className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
+                    <span style={{ color: '#FFFFFF' }}>{tab.label}</span>
                   </button>
                 ))}
               </div>
@@ -305,10 +305,8 @@ const AreaDetail = () => {
         <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
       </div>
 
-      <CombinedContactNewsletter
-        title={`Explore ${area.name} Properties?`}
-        subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
-      />
+      {/* Similar Areas moved BEFORE the CTA — CTA is the final block on the page */}
+
 
       {/* Similar Areas — new tall photo card style */}
       {relatedAreas.length > 0 && (
@@ -401,6 +399,12 @@ const AreaDetail = () => {
           </div>
         </section>
       )}
+
+      {/* Final CTA — always last on the page */}
+      <CombinedContactNewsletter
+        title={`Explore ${area.name} Properties?`}
+        subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
+      />
       </div>
     </div>
   );
