@@ -72,24 +72,26 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
       >
         {/* Location + badges */}
         <motion.div className="flex items-center justify-center gap-2 mb-3 flex-wrap" variants={fadeInUp}>
-          <MapPin className="w-5 h-5 text-white" />
-          <span className="allow-white text-white text-sm uppercase tracking-wider">{area.emirate}, UAE</span>
+          <MapPin className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+          <span data-no-contrast-guard className="allow-white text-sm uppercase tracking-wider" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.emirate}, UAE</span>
           {area.is_trending && (
-            <span className="allow-white jj-pill-emerald-metallic ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-white text-xs rounded-full">
-              <TrendingUp className="w-3 h-3" />
+            <span data-no-contrast-guard className="allow-white jj-pill-emerald-metallic ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+              <TrendingUp className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               Trending
             </span>
           )}
           {area.is_high_demand && (
-            <span className="allow-white jj-pill-emerald-metallic ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-white text-xs rounded-full">
-              <Flame className="w-3 h-3" />
+            <span data-no-contrast-guard className="allow-white jj-pill-emerald-metallic ml-2 inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>
+              <Flame className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               High Demand
             </span>
           )}
         </motion.div>
-        
-        <motion.h1 
-          className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4 mx-auto text-center"
+
+        <motion.h1
+          data-no-contrast-guard
+          className="allow-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4 mx-auto text-center"
+          style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
           variants={fadeInUp}
         >
           {area.name}
@@ -97,12 +99,11 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         {/* Breadcrumb */}
         <motion.nav className="flex items-center justify-center gap-2 text-sm mb-6" variants={fadeInUp}>
-          <Link to="/" className="text-white/70 hover:text-white transition-colors">Home</Link>
-          <ChevronRight className="w-4 h-4 text-white/60" />
-          <Link to="/areas" className="text-white/70 hover:text-white transition-colors">Areas</Link>
-          <ChevronRight className="w-4 h-4 text-white/60" />
-          <span className="text-white">{area.name}</span>
-
+          <Link to="/" data-no-contrast-guard className="transition-colors" style={{ color: 'rgba(255,255,255,0.75)' }}>Home</Link>
+          <ChevronRight className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.6)', stroke: 'rgba(255,255,255,0.6)' }} />
+          <Link to="/areas" data-no-contrast-guard className="transition-colors" style={{ color: 'rgba(255,255,255,0.75)' }}>Areas</Link>
+          <ChevronRight className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.6)', stroke: 'rgba(255,255,255,0.6)' }} />
+          <span data-no-contrast-guard style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.name}</span>
         </motion.nav>
 
         {/* Stats Bar */}
