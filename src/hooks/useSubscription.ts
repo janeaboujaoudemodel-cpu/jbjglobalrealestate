@@ -29,11 +29,11 @@ export interface UserSubscription {
   stripe_customer_id?: string;
 }
 
-// Free tools that don't require subscription
+// Free tools that don't require subscription.
+// Only AI Home Finder is free — and limited to a single use per account/device
+// (enforced by useQuizUsage). All other AI tools require an active subscription.
 export const FREE_TOOLS = [
   "ai-home-finder",
-  "business-card-scanner", 
-  "crm"
 ];
 
 export function useSubscription() {
