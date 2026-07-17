@@ -399,6 +399,12 @@ const AreaDetail = () => {
           </div>
         </section>
       )}
+
+      {/* Final CTA — always last on the page */}
+      <CombinedContactNewsletter
+        title={`Explore ${area.name} Properties?`}
+        subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
+      />
       </div>
     </div>
   );
