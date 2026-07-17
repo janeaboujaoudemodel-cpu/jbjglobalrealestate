@@ -487,7 +487,7 @@ const Sitemap = () => {
 
         {/* DIRECTORY — champagne background, emerald cards */}
         <section className="py-14 sm:py-20 bg-[#EFE6D6]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -507,7 +507,7 @@ const Sitemap = () => {
               whileInView="visible"
               viewport={{ once: true, margin: "-40px" }}
               variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6"
             >
               {filteredHubSections.map((hub) => (
                 <HubCard
@@ -523,7 +523,7 @@ const Sitemap = () => {
 
         {/* GET IN TOUCH — emerald sidebar tone, champagne cards, black text */}
         <section className="py-14 sm:py-16 bg-gradient-to-b from-[#064E3B] via-[#053d2e] to-[#042c1c]">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -572,7 +572,7 @@ const Sitemap = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.08 }}
-                      className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD3] to-[#E7D6B0] border border-[#B89555]/50 rounded-2xl p-6 text-center hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
+                      className="h-full min-w-0 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD3] to-[#E7D6B0] border border-[#B89555]/50 rounded-2xl p-5 text-center hover:shadow-[0_10px_30px_rgba(0,0,0,0.25)] hover:-translate-y-0.5 transition-all"
                       style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}
                     >
                       <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-white/70 border border-[#B89555]/50 flex items-center justify-center">
@@ -581,7 +581,7 @@ const Sitemap = () => {
                       <h3 className="text-[#1A1A1A] font-cormorant font-semibold text-xl mb-2" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
                         {card.title}
                       </h3>
-                      <p className="text-[#1A1A1A] text-sm mb-4" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{card.desc}</p>
+                      <p className="text-[#1A1A1A] text-sm leading-snug mb-4" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>{card.desc}</p>
                       <span className="inline-flex items-center gap-2 text-[#1A1A1A] font-semibold text-sm" style={{ color: "#1A1A1A", WebkitTextFillColor: "#1A1A1A" }}>
                         {card.cta} <ArrowRight className="w-4 h-4" style={{ color: "#1A1A1A", stroke: "#1A1A1A" }} />
                       </span>
