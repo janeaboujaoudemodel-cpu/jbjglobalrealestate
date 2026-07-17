@@ -173,12 +173,13 @@ Deno.serve(async (req) => {
     const { data: draft, error: draftErr } = await admin
       .from("enrichment_review_drafts")
       .insert({
-        developer_id: developerId,
-        source_type: "multi_source",
-        source_url: websiteUrl || bulkLinks[0] || null,
-        proposed_fields: extracted,
+        target_type: "developer",
+        target_id: developerId,
+        source_file_url: websiteUrl || bulkLinks[0] || null,
+        source_file_name: `Sources: ${sources.map((s) => s.label).join(", ")}`,
+        extracted_fields: extracted,
+        ai_model: "google/gemini-2.5-flash",
         status: "pending",
-        notes: `Sources: ${sources.map((s) => s.label).join(", ")}`,
       })
       .select("id")
       .single();

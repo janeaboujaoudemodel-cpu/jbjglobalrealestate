@@ -93,7 +93,15 @@ function extractJson(v: string): string {
 async function fetchFile(url: string) {
   const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
   if (!r.ok) throw new Error(`File fetch failed (${r.status})`);
+  const contentLength = Number(r.headers.get("content-length") || 0);
+  const MAX_BYTES = 8 * 1024 * 1024; // 8MB to stay under worker memory limits
+  if (contentLength && contentLength > MAX_BYTES) {
+    throw new Error(`File too large (${(contentLength / 1024 / 1024).toFixed(1)}MB). Max 8MB. Please compress or split the PDF.`);
+  }
   const buf = new Uint8Array(await r.arrayBuffer());
+  if (buf.length > MAX_BYTES) {
+    throw new Error(`File too large (${(buf.length / 1024 / 1024).toFixed(1)}MB). Max 8MB.`);
+  }
   return { b64: toBase64(buf), mime: r.headers.get("content-type") || "application/pdf" };
 }
 
