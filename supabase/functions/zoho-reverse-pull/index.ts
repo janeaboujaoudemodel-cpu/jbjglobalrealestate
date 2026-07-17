@@ -219,7 +219,28 @@ Deno.serve(async (req) => {
   try {
     const cursor = await getCursor();
     const started = new Date().toISOString();
-    const leads = await fetchModifiedSince(cursor);
+    const fetchResult = await fetchModifiedSince(cursor);
+
+    if (!fetchResult.ok) {
+      // Upstream Zoho/gateway failure — do NOT advance cursor and do NOT
+      // return 500. The next scheduled run will retry from the same cursor.
+      console.warn("zoho-reverse-pull soft-fail:", fetchResult.status, fetchResult.error);
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          soft_fail: true,
+          upstream_status: fetchResult.status,
+          error: fetchResult.error,
+          pulled: 0,
+          synced: 0,
+          cursor_before: cursor,
+          cursor_after: cursor,
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const leads = fetchResult.leads;
 
     const results: Array<Record<string, unknown>> = [];
     const errors: Array<Record<string, unknown>> = [];
