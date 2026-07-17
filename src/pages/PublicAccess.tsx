@@ -1483,17 +1483,11 @@ export default function PublicAccess() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-0.5 lg:flex shrink-0">
-            {quickLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1A1A1A]/70 transition hover:bg-[#EFE6D6] hover:text-[#064E3B]"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
+          <div className="hidden lg:flex items-center shrink-0">
+            <span className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.28em] text-[#0d3a2b]/70">
+              Members-Only Entrance
+            </span>
+          </div>
 
           <div className="flex items-center gap-2 shrink-0">
             <button
