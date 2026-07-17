@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -16,7 +16,7 @@ import {
   ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
   Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
   CheckCircle2, AlertTriangle, Pencil, Plus, ExternalLink, Languages,
-  ShieldCheck, History, Sparkles
+  ShieldCheck, History, Sparkles, Star, Calendar, Clock
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -136,6 +136,21 @@ export default function DeveloperProfilePage() {
     enabled: !!developer,
   });
 
+  const { data: salesReps = [] } = useQuery({
+    queryKey: ["dev-sales-reps", developer?.id],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data } = await supabase
+        .from("developer_sales_reps")
+        .select("id, full_name, title, position, email, phone_e164, whatsapp_number, languages, nationality, is_active, is_primary, availability_status")
+        .eq("developer_id", developer.id)
+        .order("is_primary", { ascending: false })
+        .order("full_name");
+      return data || [];
+    },
+    enabled: !!developer,
+  });
+
   /* ---------- Media ---------- */
   const { data: media = [] } = useQuery({
     queryKey: ["dev-media", developer?.id],
@@ -167,6 +182,38 @@ export default function DeveloperProfilePage() {
     enabled: !!developer && canEdit,
   });
 
+
+  /* ---------- Briefings ---------- */
+  const { data: briefings = [] } = useQuery({
+    queryKey: ["dev-briefings", developer?.id, developer?.name],
+    queryFn: async () => {
+      if (!developer) return [];
+      const { data, error } = await supabase
+        .from("briefing_requests")
+        .select(`
+          id, 
+          developer_name, 
+          project_name, 
+          briefing_date, 
+          briefing_time, 
+          location_type, 
+          location_address, 
+          notes, 
+          status, 
+          rating, 
+          rating_notes, 
+          sales_rep_id, 
+          sales_rep:developer_sales_reps!briefing_requests_sales_rep_id_fkey(id, full_name, title),
+          representative_id,
+          representative:developer_representatives!briefing_requests_representative_id_fkey(id, full_name, position)
+        `)
+        .eq("developer_name", developer.name)
+        .order("briefing_date", { ascending: false });
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!developer,
+  });
   /* ---------- Edit form state ---------- */
   const [form, setForm] = useState<Partial<Developer>>({});
   useEffect(() => {
@@ -178,31 +225,33 @@ export default function DeveloperProfilePage() {
     return JSON.stringify(form) !== JSON.stringify(developer);
   }, [form, developer]);
 
+  const buildProfilePayload = useCallback(() => ({
+    description: form.description ?? null,
+    website_url: form.website_url ?? null,
+    // Location fields are permanently nulled — JBJ never stores or displays
+    // developer office locations. See mem: constraint/no-developer-location.
+    headquarters: null,
+    office_address: null,
+    google_maps_url: null,
+    founded_year: form.founded_year ?? null,
+    ceo_name: form.ceo_name ?? null,
+    parent_company: form.parent_company ?? null,
+    office_phone: form.office_phone ?? null,
+    whatsapp: form.whatsapp ?? null,
+    whatsapp_group_url: form.whatsapp_group_url ?? null,
+    telegram_group_url: form.telegram_group_url ?? null,
+    admin_email: form.admin_email ?? null,
+    instagram_url: form.instagram_url ?? null,
+    linkedin_url: form.linkedin_url ?? null,
+    notable_projects: form.notable_projects ?? null,
+    specialization: form.specialization ?? null,
+    description_languages: form.description_languages ?? [],
+  }), [form]);
+
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (!developer) return;
-      const payload: any = {
-        description: form.description ?? null,
-        website_url: form.website_url ?? null,
-        // Location fields are permanently nulled — JBJ never stores or displays
-        // developer office locations. See mem: constraint/no-developer-location.
-        headquarters: null,
-        office_address: null,
-        google_maps_url: null,
-        founded_year: form.founded_year ?? null,
-        ceo_name: form.ceo_name ?? null,
-        parent_company: form.parent_company ?? null,
-        office_phone: form.office_phone ?? null,
-        whatsapp: form.whatsapp ?? null,
-        whatsapp_group_url: form.whatsapp_group_url ?? null,
-        telegram_group_url: form.telegram_group_url ?? null,
-        admin_email: form.admin_email ?? null,
-        instagram_url: form.instagram_url ?? null,
-        linkedin_url: form.linkedin_url ?? null,
-        notable_projects: form.notable_projects ?? null,
-        specialization: form.specialization ?? null,
-        description_languages: form.description_languages ?? [],
-      };
+      const payload: any = buildProfilePayload();
 
       const { error } = await supabase.from("developers").update(payload).eq("id", developer.id);
       if (error) throw error;
@@ -221,6 +270,33 @@ export default function DeveloperProfilePage() {
     },
     onError: (e: any) => toast.error(e.message || "Save failed"),
   });
+
+  const autoSaveProfile = useCallback(async () => {
+    if (!developer || !canEdit || !dirty || saveMutation.isPending) return;
+    const payload: any = buildProfilePayload();
+    const { error } = await supabase.from("developers").update(payload).eq("id", developer.id);
+    if (!error) {
+      qc.invalidateQueries({ queryKey: ["dev-profile", slug] });
+      qc.invalidateQueries({ queryKey: ["dev-audit", developer.id] });
+    }
+  }, [developer, canEdit, dirty, saveMutation.isPending, buildProfilePayload, qc, slug]);
+
+  useEffect(() => {
+    if (!dirty || !canEdit) return;
+    const timer = window.setTimeout(() => {
+      autoSaveProfile().catch(() => undefined);
+    }, 1400);
+    const flush = () => {
+      if (document.visibilityState === "hidden") autoSaveProfile().catch(() => undefined);
+    };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", flush);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", flush);
+    };
+  }, [dirty, canEdit, autoSaveProfile]);
 
   /* ---------- Logo upload ---------- */
   const logoInputRef = useRef<HTMLInputElement>(null);
@@ -419,65 +495,14 @@ export default function DeveloperProfilePage() {
         )}
 
 
-        {/* Needs-review flag: unverified fields were removed and are shown here for owner action */}
-        {developer.needs_review && (
-          <Card className="border-2 border-amber-400 bg-amber-50">
-            <CardContent className="py-4 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
-              <div className="flex-1 space-y-2">
-                <p className="text-sm font-semibold text-amber-900">
-                  Needs verification — unverified profile fields were removed automatically.
-                </p>
-                <p className="text-xs text-amber-900/80">
-                  We can't confirm these values came from the developer's official website or a
-                  verified API, so they've been cleared to prevent showing wrong information to
-                  clients. Contact the developer and re-enter the correct values below, then click
-                  <span className="font-semibold"> "Confirm this profile"</span> to clear the flag.
-                </p>
-                {Array.isArray(developer.review_flags) && developer.review_flags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {developer.review_flags.map((f) => (
-                      <Badge key={f} className="bg-amber-200 text-amber-900 border border-amber-400 text-[10px] font-black uppercase tracking-wide">
-                        {f.replace(/_/g, " ")}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-                {developer.unverified_snapshot && Object.keys(developer.unverified_snapshot).length > 0 && (
-                  <details className="pt-2">
-                    <summary className="text-xs font-semibold text-amber-900 cursor-pointer">
-                      View removed values (for reference — do NOT paste unless you verify)
-                    </summary>
-                    <pre className="mt-2 text-[11px] bg-white/70 border border-amber-300 rounded p-2 overflow-auto max-h-48">
-                      {JSON.stringify(developer.unverified_snapshot, null, 2)}
-                    </pre>
-                  </details>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Privacy banner: everything below is owner-only */}
-        <Card className="border border-[#B89555]/30 bg-[#FDFBF7]">
-          <CardContent className="py-3 flex items-start gap-3">
-            <ShieldCheck className="w-4 h-4 text-[#1A1A1A] mt-0.5 shrink-0" />
-            <p className="text-xs text-[#1A1A1A]/80">
-              <span className="font-semibold text-[#1A1A1A]">Internal only.</span> Website, email, phone and social/community links are
-              <span className="font-semibold"> never shown publicly</span>. Developer office locations are
-              <span className="font-semibold"> never stored or displayed anywhere</span>. These contact points exist so JBJ can reach the developer directly — clients must always close through us.
-            </p>
-          </CardContent>
-        </Card>
-
-
         <Tabs defaultValue="overview">
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
-            <TabsTrigger value="contacts">Contacts & Reps ({reps.length})</TabsTrigger>
+            <TabsTrigger value="contacts">Contacts & Reps ({reps.length + salesReps.length})</TabsTrigger>
             <TabsTrigger value="files">Files & Brochures</TabsTrigger>
+            <TabsTrigger value="briefings">Briefings ({briefings.length})</TabsTrigger>
             <TabsTrigger value="activity">Activity</TabsTrigger>
           </TabsList>
 
@@ -719,7 +744,31 @@ export default function DeveloperProfilePage() {
             <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
               <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Registered sales representatives</CardTitle></CardHeader>
               <CardContent className="space-y-2">
-                {reps.length === 0 && <p className="text-sm text-[#1A1A1A]/60">No representatives registered for this developer yet.</p>}
+                {reps.length === 0 && salesReps.length === 0 && <p className="text-sm text-[#1A1A1A]/60">No representatives registered for this developer yet.</p>}
+                {salesReps.map((r: any) => (
+                  <div key={`sales-${r.id}`} className="p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#064E3B] flex items-center justify-center text-white font-medium">
+                      {(r.full_name || "?").charAt(0)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-medium text-[#1A1A1A]">{r.full_name}</span>
+                        {r.is_primary && <Badge className="text-xs bg-[#064E3B] text-white border-[#064E3B]">Primary</Badge>}
+                        <Badge variant="outline" className="text-xs border-[#B89555]/40 text-[#1A1A1A]">Sales Rep</Badge>
+                        <Badge className={`text-xs ${r.is_active ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' : 'bg-amber-50 text-amber-900 border-amber-200'}`}>{r.availability_status || (r.is_active ? "active" : "inactive")}</Badge>
+                      </div>
+                      <div className="text-xs text-[#1A1A1A]/60 flex items-center gap-3 flex-wrap mt-0.5">
+                        {(r.title || r.position) && <span>{r.title || r.position}</span>}
+                        {r.languages?.length > 0 && <span className="flex items-center gap-1"><Languages className="w-3 h-3" />{r.languages.join(", ")}</span>}
+                        {r.nationality && <span>{r.nationality}</span>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {r.phone_e164 && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone_e164}`}><Phone className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                    </div>
+                  </div>
+                ))}
                 {reps.map((r: any) => (
                   <div key={r.id} className="p-3 rounded-lg border border-[#B89555]/20 bg-[#FDFBF7] flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[#EFE6D6] flex items-center justify-center text-[#1A1A1A] font-medium">
@@ -739,7 +788,7 @@ export default function DeveloperProfilePage() {
                     </div>
                     <div className="flex items-center gap-1">
                       {r.phone && <a className="p-2 rounded bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/30" href={`tel:${r.phone}`}><Phone className="w-3.5 h-3.5" /></a>}
-                      {r.email && <a className="p-2 rounded bg-purple-50 text-purple-700" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
+                      {r.email && <a className="p-2 rounded bg-[#EFE6D6] text-[#064E3B] border border-[#B89555]/30" href={`mailto:${r.email}`}><Mail className="w-3.5 h-3.5" /></a>}
                     </div>
                   </div>
                 ))}
@@ -781,6 +830,71 @@ export default function DeveloperProfilePage() {
                 ))}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* BRIEFINGS */}
+          <TabsContent value="briefings" className="space-y-4">
+            {briefings.length === 0 ? (
+              <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No briefings found for this developer.</Card>
+            ) : (
+              <div className="grid gap-3">
+                {briefings.map((b: any) => (
+                  <Card key={b.id} className="bg-[#FDFBF7] border border-[#B89555]/30 p-4 rounded-lg">
+                    <div className="flex items-start justify-between gap-4 flex-wrap">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-semibold text-[#1A1A1A]">{b.project_name}</h3>
+                          <Badge variant="outline" className={`text-[10px] uppercase ${
+                            b.status === 'approved' ? 'jj-emerald-soft text-[color:var(--emerald-1)] border-[color:var(--emerald-1)]/30' : 
+                            b.status === 'rejected' ? 'bg-red-50 text-red-700 border-red-200' : 
+                            'bg-amber-50 text-amber-900 border-amber-200'
+                          }`}>
+                            {b.status}
+                          </Badge>
+                        </div>
+                        <div className="mt-1 text-xs text-[#1A1A1A]/60 flex flex-wrap gap-x-4 gap-y-1">
+                          <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {b.briefing_date}</span>
+                          <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {b.briefing_time?.slice(0, 5)}</span>
+                          {b.location_type && (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" /> 
+                              {b.location_type.replace(/_/g, " ")}
+                              {b.location_address ? ` — ${b.location_address}` : ""}
+                            </span>
+                          )}
+                        </div>
+                        <div className="mt-2 text-xs text-[#1A1A1A]/70 flex flex-wrap gap-3">
+                          {b.sales_rep && (
+                            <span className="font-medium">CRM Rep: {b.sales_rep.full_name}</span>
+                          )}
+                          {b.representative && (
+                            <span className="font-medium">Portal Rep: {b.representative.full_name}</span>
+                          )}
+                        </div>
+                        {b.notes && <p className="mt-2 text-sm text-[#1A1A1A]/80 line-clamp-2 italic">"{b.notes}"</p>}
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        {b.rating && (
+                          <div className="flex items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((n) => (
+                              <Star key={n} className={`w-3.5 h-3.5 ${n <= b.rating ? "fill-[#064E3B] text-[#064E3B]" : "text-[#B89555]/30"}`} />
+                            ))}
+                          </div>
+                        )}
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="h-7 text-[10px] uppercase font-bold tracking-tight border-[#B89555]/40 hover:bg-[#EFE6D6]"
+                          asChild
+                        >
+                          <Link to="/owner/developers/briefings">View Hub</Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>

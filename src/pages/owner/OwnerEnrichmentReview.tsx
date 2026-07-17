@@ -26,6 +26,20 @@ const isEmpty = (v: any) =>
   v === null || v === undefined || v === "" ||
   (Array.isArray(v) && v.length === 0);
 
+const DEVELOPER_NATIVE_FIELDS = new Set([
+  "description", "founded_year", "ceo_name", "parent_company", "website_url",
+  "admin_email", "office_phone", "whatsapp", "whatsapp_group_url",
+  "telegram_group_url", "linkedin_url", "instagram_url", "notable_projects",
+  "specialization", "license_number", "completed_projects", "offplan_projects",
+  "upcoming_units", "total_units_delivered", "portfolio_worth", "custom_fields",
+]);
+
+const formatValue = (v: any) => {
+  if (Array.isArray(v)) return v.join(", ");
+  if (v && typeof v === "object") return JSON.stringify(v, null, 2);
+  return String(v);
+};
+
 export default function OwnerEnrichmentReview() {
   const qc = useQueryClient();
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -50,11 +64,32 @@ export default function OwnerEnrichmentReview() {
       const payload: Record<string, any> = {};
       const applied: string[] = [];
       const skipped: string[] = [];
+      const customMerge: Record<string, any> = {};
       for (const [k, v] of Object.entries(d.extracted_fields || {})) {
         if (isEmpty(v)) continue;
+        if (table === "developers" && !DEVELOPER_NATIVE_FIELDS.has(k)) {
+          const currentCustom = d.current_snapshot?.custom_fields as Record<string, any> | undefined;
+          if (!isEmpty(currentCustom?.[k])) { skipped.push(k); continue; }
+          customMerge[k] = v;
+          applied.push(k);
+          continue;
+        }
+        if (table === "developers" && k === "custom_fields" && v && typeof v === "object" && !Array.isArray(v)) {
+          const currentCustom = (d.current_snapshot?.custom_fields as Record<string, any> | undefined) || {};
+          for (const [customKey, customValue] of Object.entries(v as Record<string, any>)) {
+            if (isEmpty(customValue)) continue;
+            if (!isEmpty(currentCustom?.[customKey])) skipped.push(`custom_fields.${customKey}`);
+            else { customMerge[customKey] = customValue; applied.push(`custom_fields.${customKey}`); }
+          }
+          continue;
+        }
         if (!isEmpty(d.current_snapshot?.[k])) { skipped.push(k); continue; }
         payload[k] = v;
         applied.push(k);
+      }
+
+      if (Object.keys(customMerge).length > 0) {
+        payload.custom_fields = { ...((d.current_snapshot?.custom_fields as Record<string, any>) || {}), ...customMerge };
       }
 
       if (Object.keys(payload).length > 0) {
@@ -104,17 +139,21 @@ export default function OwnerEnrichmentReview() {
         <h1 className="text-2xl font-semibold tracking-tight">Enrichment Review</h1>
       </div>
       <p className="text-sm text-muted-foreground mb-4">
-        AI-extracted fields from uploaded PDFs. Approve to auto-fill <strong>empty</strong> fields only —
+        AI-extracted fields from uploaded PDFs, developer websites and source links. Approve to auto-fill <strong>empty</strong> fields only —
         your existing values are never overwritten.
       </p>
 
       <div className="flex items-center gap-2 mb-4">
         <button onClick={() => setFilter("pending")}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "pending" ? "bg-emerald-900 text-white" : "bg-muted text-foreground"}`}>
+          data-no-contrast-guard
+          style={filter === "pending" ? { backgroundColor: "#064E3B", color: "#FFFFFF" } : undefined}
+          className={`px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "pending" ? "" : "bg-muted text-foreground"}`}>
           Pending ({summary.pending})
         </button>
         <button onClick={() => setFilter("all")}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "all" ? "bg-emerald-900 text-white" : "bg-muted text-foreground"}`}>
+          data-no-contrast-guard
+          style={filter === "all" ? { backgroundColor: "#064E3B", color: "#FFFFFF" } : undefined}
+          className={`px-3 py-1.5 rounded-full text-xs font-semibold ${filter === "all" ? "" : "bg-muted text-foreground"}`}>
           All
         </button>
       </div>
@@ -122,7 +161,7 @@ export default function OwnerEnrichmentReview() {
       {isLoading && <div className="text-sm text-muted-foreground">Loading…</div>}
       {!isLoading && drafts.length === 0 && (
         <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-          No {filter === "pending" ? "pending" : ""} drafts. Upload a company profile PDF on a developer page to generate one.
+          No {filter === "pending" ? "pending intel drafts" : "intel drafts"}. Run Extract intel or upload a company profile PDF on a developer page to generate one.
         </div>
       )}
 
@@ -141,12 +180,13 @@ export default function OwnerEnrichmentReview() {
                       {d.target_type}
                     </span>
                     <span className="text-xs text-muted-foreground">{d.ai_model}</span>
-                    <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded ${
-                      d.status === "pending" ? "bg-amber-100 text-amber-900" :
-                      d.status === "approved" ? "bg-emerald-100 text-emerald-900" :
-                      d.status === "partial" ? "bg-blue-100 text-blue-900" :
-                      "bg-red-100 text-red-900"
-                    }`}>{d.status}</span>
+                    <span
+                      data-no-contrast-guard
+                      className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded"
+                      style={d.status === "pending" || d.status === "approved" || d.status === "partial"
+                        ? { backgroundColor: "#064E3B", color: "#FFFFFF" }
+                        : { backgroundColor: "#FCE8E8", color: "#7F1D1D" }}
+                    >{d.status}</span>
                   </div>
                   <div className="mt-1 text-sm font-semibold flex items-center gap-2">
                     <FileText className="w-4 h-4 text-amber-600" />
@@ -170,7 +210,9 @@ export default function OwnerEnrichmentReview() {
                       <XCircle className="w-3.5 h-3.5" /> Reject
                     </button>
                     <button onClick={() => approve(d)} disabled={busyId === d.id}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-900 text-white hover:bg-emerald-800 disabled:opacity-50">
+                      data-no-contrast-guard
+                      style={{ backgroundColor: "#064E3B", color: "#FFFFFF" }}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold hover:opacity-90 disabled:opacity-50">
                       {busyId === d.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
                       Approve (fill {willFill.length})
                     </button>
@@ -186,11 +228,11 @@ export default function OwnerEnrichmentReview() {
                     <div key={k} className={`rounded border px-3 py-2 ${already ? "bg-muted/40 border-dashed" : "bg-emerald-50/50 border-emerald-200"}`}>
                       <div className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">{k}</div>
                       <div className="text-xs mt-0.5 whitespace-pre-wrap break-words">
-                        {Array.isArray(v) ? v.join(", ") : String(v)}
+                        {formatValue(v)}
                       </div>
                       {already && (
                         <div className="mt-1 text-[10px] text-muted-foreground italic">
-                          Skipped — current: {Array.isArray(d.current_snapshot[k]) ? d.current_snapshot[k].join(", ") : String(d.current_snapshot[k]).slice(0, 80)}
+                          Skipped — current: {formatValue(d.current_snapshot[k]).slice(0, 80)}
                         </div>
                       )}
                     </div>

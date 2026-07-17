@@ -324,7 +324,7 @@ Deno.serve(async (req) => {
       : "(none yet — feel free to propose new fields)";
 
     const aiRes = await callGatewayWithRetry({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3.5-flash",
       messages: [{
         role: "user",
         content: [
@@ -335,6 +335,9 @@ JBJ Global Real Estate is presenting this developer to clients. You are describi
 
 FOUNDERS / LEADERSHIP / CONTACT RULE:
 Extract founder, chairman, CEO, managing director, parent company, phone, email, WhatsApp, LinkedIn, Instagram, group links, founded year, and website ONLY when explicitly stated in the uploaded company profile. If a founder is stated but no CEO is stated, put the founder in "founder_name" and propose a durable custom field {"key":"founder_name","label":"Founder","field_type":"text","value":"..."}; do not invent a CEO. If a field is not stated, return null so the UI can show it under "Missing — please add manually".
+
+SIGNATURE PROJECT RULE:
+Preserve every named project or community from the document. If the profile mentions Citi Developers and Amra / AMRA, include "Amra" in signature_projects exactly; do not drop it from notable projects.
 
 KNOWN_CUSTOM_FIELDS (reuse these exact keys inside "custom_fields" — do NOT propose them as new):
 ${knownList}
@@ -355,7 +358,7 @@ ${SCHEMA}` },
         detail: text.slice(0, 400),
         fallback: transient,
         status: "unavailable",
-      }, 200);
+      }, aiRes.status);
     }
     const data = await aiRes.json();
     const raw = data?.choices?.[0]?.message?.content || "{}";
@@ -445,7 +448,7 @@ ${SCHEMA}` },
       source_file_name: fileName ?? null,
       extracted_fields: extracted,
       current_snapshot: current,
-      ai_model: "google/gemini-2.5-flash",
+      ai_model: "google/gemini-3.5-flash",
       status: updatedFields.length > 0 ? "applied" : "empty",
     }).select("id").maybeSingle();
 
@@ -466,6 +469,14 @@ ${SCHEMA}` },
       missingFields: report.missing,
     });
   } catch (e) {
-    return json({ error: e instanceof Error ? e.message : "unknown" }, 500);
+    const message = e instanceof Error ? e.message : "unknown";
+    return json({
+      ok: false,
+      status: "unavailable",
+      error: message,
+      updatedFields: [],
+      foundFields: [],
+      missingFields: REPORT_FIELDS,
+    }, 200);
   }
 });
