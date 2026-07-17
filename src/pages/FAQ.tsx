@@ -1,43 +1,9 @@
 import { SEOHead } from "@/components/SEOHead";
-import { motion } from "framer-motion";
-import { 
-  HelpCircle, 
-  Home, 
-  Building2, 
-  Banknote, 
-  FileText, 
-  Key, 
-  Globe,
-  Shield,
-  Calculator,
-  Users,
-  Clock,
-  Landmark,
-  Search,
-  Phone,
-  LucideIcon
+import {
+  HelpCircle, Home, Building2, Banknote, Key, Globe, Shield, Users, Phone, LucideIcon,
 } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { GuideNavigation, GUIDE_LINKS } from "@/components/guides/GuideNavigation";
-import { FAQHero } from "@/components/faq/FAQHero";
-import { FAQTableOfContents } from "@/components/faq/FAQTableOfContents";
-import { FAQFloatingSidebar } from "@/components/faq/FAQFloatingSidebar";
-import MIPreFooterCard from "@/components/shell/MIPreFooterCard";
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
+import { FAQPageShell } from "@/components/content-page/FAQPageShell";
 
 interface FAQCategory {
   id: string;
@@ -53,307 +19,117 @@ const FAQ = () => {
       title: "About JBJ Global Real Estate",
       icon: Building2,
       questions: [
-        {
-          question: "Who is JBJ Global Real Estate?",
-          answer: "JBJ Global Real Estate is a licensed real estate brokerage operating in the UAE, specializing in buying, selling, and renting residential and investment properties. We work with local and international clients and operate within UAE real estate regulations."
-        },
-        {
-          question: "Is JBJ Global Real Estate a developer?",
-          answer: "No. JBJ Global Real Estate is an independent brokerage. We do not develop properties. Our role is to analyze the market, compare opportunities, and guide clients objectively across multiple developers, locations, and property types."
-        },
-        {
-          question: "Are you licensed in the UAE?",
-          answer: "Yes. JBJ Global Real Estate is fully licensed to operate in the UAE for real estate brokerage activities, including buying, selling, and renting properties. All transactions are conducted in compliance with local laws and regulations."
-        }
-      ]
+        { question: "Who is JBJ Global Real Estate?", answer: "JBJ Global Real Estate is a licensed real estate brokerage operating in the UAE, specializing in buying, selling, and renting residential and investment properties. We work with local and international clients and operate within UAE real estate regulations." },
+        { question: "Is JBJ Global Real Estate a developer?", answer: "No. JBJ Global Real Estate is an independent brokerage. We do not develop properties. Our role is to analyze the market, compare opportunities, and guide clients objectively across multiple developers, locations, and property types." },
+        { question: "Are you licensed in the UAE?", answer: "Yes. JBJ Global Real Estate is fully licensed to operate in the UAE for real estate brokerage activities, including buying, selling, and renting properties. All transactions are conducted in compliance with local laws and regulations." },
+      ],
     },
     {
       id: "fees-services",
       title: "Fees & Services",
       icon: Banknote,
       questions: [
-        {
-          question: "Do you charge clients for your services?",
-          answer: "This depends on the type of transaction:\n\n• Off-plan purchases: Buyers do not pay agency fees. Brokerages are compensated directly by developers.\n• Ready property purchases or sales: Agency fees apply as per UAE regulations and are disclosed clearly before proceeding.\n• Leasing services: Fees follow Dubai's regulated brokerage commission structure."
-        },
-        {
-          question: "Do you guarantee returns on investment?",
-          answer: "No. There are no guaranteed returns in real estate. Any company claiming guaranteed ROI is misrepresenting market reality. We provide data-driven analysis and guidance, but all investment outcomes depend on market conditions and individual decisions."
-        }
-      ]
+        { question: "Do you charge clients for your services?", answer: "This depends on the type of transaction:\n\n• Off-plan purchases: Buyers do not pay agency fees. Brokerages are compensated directly by developers.\n• Ready property purchases or sales: Agency fees apply as per UAE regulations and are disclosed clearly before proceeding.\n• Leasing services: Fees follow Dubai's regulated brokerage commission structure." },
+        { question: "Do you guarantee returns on investment?", answer: "No. There are no guaranteed returns in real estate. Any company claiming guaranteed ROI is misrepresenting market reality. We provide data-driven analysis and guidance, but all investment outcomes depend on market conditions and individual decisions." },
+      ],
     },
     {
       id: "property-selection",
       title: "Property Selection",
       icon: Home,
       questions: [
-        {
-          question: "How do you select properties to recommend?",
-          answer: "Recommendations are based on:\n\n• Official government and regulatory data\n• Market supply and demand trends\n• Location fundamentals\n• Developer track records\n• Alignment with the client's stated objectives\n\nWe do not promote properties based on commissions or personal interests."
-        }
-      ]
+        { question: "How do you select properties to recommend?", answer: "Recommendations are based on:\n\n• Official government and regulatory data\n• Market supply and demand trends\n• Location fundamentals\n• Developer track records\n• Alignment with the client's stated objectives\n\nWe do not promote properties based on commissions or personal interests." },
+      ],
     },
     {
       id: "international-clients",
       title: "International Clients",
       icon: Globe,
       questions: [
-        {
-          question: "Can international clients buy property through JBJ Global Real Estate?",
-          answer: "Yes. International buyers can purchase property in designated freehold areas across the UAE. We regularly assist overseas clients with remote viewings, documentation coordination, and transaction support."
-        },
-        {
-          question: "Do I need to be physically present in the UAE to buy property?",
-          answer: "Not necessarily. Many transactions are completed remotely using secure documentation processes. Power of Attorney arrangements can be used when physical presence is not possible."
-        }
-      ]
+        { question: "Can international clients buy property through JBJ Global Real Estate?", answer: "Yes. International buyers can purchase property in designated freehold areas across the UAE. We regularly assist overseas clients with remote viewings, documentation coordination, and transaction support." },
+        { question: "Do I need to be physically present in the UAE to buy property?", answer: "Not necessarily. Many transactions are completed remotely using secure documentation processes. Power of Attorney arrangements can be used when physical presence is not possible." },
+      ],
     },
     {
       id: "additional-services",
       title: "Additional Services & Coverage",
       icon: Shield,
       questions: [
-        {
-          question: "Do you provide legal or financial services?",
-          answer: "JBJ Global Real Estate does not provide legal or financial services. When required, we may introduce clients to licensed third-party professionals. Any engagement with third parties is contracted directly between the client and the service provider."
-        },
-        {
-          question: "What areas do you cover?",
-          answer: "We operate across the UAE, with a primary focus on Dubai's established and emerging residential and investment communities. Assistance in other emirates is available upon request."
-        }
-      ]
+        { question: "Do you provide legal or financial services?", answer: "JBJ Global Real Estate does not provide legal or financial services. When required, we may introduce clients to licensed third-party professionals. Any engagement with third parties is contracted directly between the client and the service provider." },
+        { question: "What areas do you cover?", answer: "We operate across the UAE, with a primary focus on Dubai's established and emerging residential and investment communities. Assistance in other emirates is available upon request." },
+      ],
     },
     {
       id: "getting-started",
       title: "Getting Started",
       icon: Phone,
       questions: [
-        {
-          question: "How do I start working with JBJ Global Real Estate?",
-          answer: "You can contact us through the website to discuss your objectives. From there, we provide structured guidance, market insights, and next steps based on your goals."
-        }
-      ]
-    }
+        { question: "How do I start working with JBJ Global Real Estate?", answer: "You can contact us through the website to discuss your objectives. From there, we provide structured guidance, market insights, and next steps based on your goals." },
+      ],
+    },
   ];
 
-  // Flatten all FAQ items for JSON-LD structured data
-  const allFaqItems = categories.flatMap(cat => cat.questions);
+  const allFaqItems = categories.flatMap((cat) => cat.questions);
+
+  const audienceLinks = [
+    { label: "Buyer FAQ", href: "/buyer-faq", icon: Home },
+    { label: "Seller FAQ", href: "/seller-faq", icon: Banknote },
+    { label: "Landlord FAQ", href: "/landlord-faq", icon: Key },
+    { label: "Tenant FAQ", href: "/tenant-faq", icon: Users },
+    { label: "Broker FAQ", href: "/broker-faq", icon: Building2 },
+  ];
 
   return (
-    <div data-faq-page className="min-h-screen bg-[#010806]">
-      <SEOHead 
+    <>
+      <SEOHead
         title="FAQ | Frequently Asked Questions | JBJ Global Real Estate"
         description="Find answers to common questions about buying, selling, and renting property in the UAE. Expert guidance on mortgages, legal requirements, costs, and the property transaction process."
         keywords="UAE property FAQ, Dubai real estate questions, buying property UAE, selling property Dubai, mortgage UAE, property costs Dubai"
         canonicalPath="/faq"
         faqItems={allFaqItems}
       />
-      <style>{`
-        html body #root [data-faq-page] #faq-content {
-          width: 100% !important;
-          max-width: none !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-          box-sizing: border-box !important;
-        }
-        html body #root [data-faq-page] #faq-content > .divide-y,
-        html body #root [data-faq-page] #faq-content section[id^="category-"] {
-          width: 100% !important;
-          max-width: none !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-          box-sizing: border-box !important;
-        }
-        html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 {
-          width: 100% !important;
-          max-width: none !important;
-          margin-left: 0 !important;
-          margin-right: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
-          box-sizing: border-box !important;
-        }
-        html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 > * {
-          width: 100% !important;
-          max-width: min(72rem, 100%) !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-          padding-left: 1rem !important;
-          padding-right: 1rem !important;
-          box-sizing: border-box !important;
-        }
-        @media (min-width: 640px) {
-          html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 > * {
-            padding-left: 1.5rem !important;
-            padding-right: 1.5rem !important;
-          }
-        }
-        @media (min-width: 1024px) {
-          html body #root [data-faq-page] #faq-content section[id^="category-"] > .jj-layer-2 > * {
-            padding-left: 2rem !important;
-            padding-right: 2rem !important;
-          }
-        }
-      `}</style>
-      
-      {/* Hero with Video/Image Background */}
-      <FAQHero
-        badge="Frequently Asked Questions"
-        badgeIcon={HelpCircle}
-        title={
-          <>
-            Your Questions <span className="text-white">Answered</span>
-          </>
-        }
-        description="Find clear answers to the most common questions about buying, selling, and owning property in the UAE."
-        backgroundImage="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=80"
-        actions={
-          <>
-            <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300"
-              onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Search className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-              <span className="text-[#1A1A1A] font-semibold">Browse FAQs</span>
-            </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300 hover:bg-[#1A1A1A] hover:text-white hover:[&_svg]:text-[#B89555] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(184,149,85,0.35)] transition-all duration-300">
-              <Link to="/contact">
-                <Phone className="w-4 h-4 mr-2 text-[#1A1A1A]" />
-                <span className="text-[#1A1A1A] font-semibold">Ask Our Team</span>
-              </Link>
-            </Button>
-          </>
-        }
-      />
-
-      {/* FAQ category hub — links out to specialised FAQ pages */}
-      <section className="bg-[#FDFBF7] py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-semibold text-[#1A1A1A] text-center mb-2">
-            Browse by Audience
-          </h2>
-          <p className="text-center text-[#1A1A1A]/70 mb-8">
-            Pick the FAQ that matches your role for tailored answers.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {[
-              { label: "Buyer FAQ", href: "/buyer-faq", icon: Home },
-              { label: "Seller FAQ", href: "/seller-faq", icon: Banknote },
-              { label: "Landlord FAQ", href: "/landlord-faq", icon: Key },
-              { label: "Tenant FAQ", href: "/tenant-faq", icon: Users },
-              { label: "Broker FAQ", href: "/broker-faq", icon: Building2 },
-            ].map((c) => (
-              <Link
-                key={c.href}
-                to={c.href}
-                className="group flex flex-col items-center gap-2 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-md transition-all"
-              >
-                <c.icon className="w-6 h-6 text-[#1A1A1A]" />
-                <span className="text-sm font-medium text-[#1A1A1A]">{c.label}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      <FAQFloatingSidebar 
+      <FAQPageShell
+        hero={{
+          eyebrow: "Frequently Asked Questions",
+          eyebrowIcon: HelpCircle,
+          title: "Your Questions Answered",
+          subtitle: "Find clear answers to the most common questions about buying, selling, and owning property in the UAE.",
+        }}
         categories={categories}
-        title="Navigator"
-      />
-
-      {/* FAQ Content with Sticky TOC Above */}
-      <section id="faq-content" className="bg-[#1A1A1A] relative">
-        {/* Sticky FAQ Quick Access - Compact & Above Content (Mobile/Tablet Only) */}
-        <div className="lg:hidden sticky top-0 z-50 px-4 py-3 bg-[#1A1A1A]/95 backdrop-blur-sm border-b border-[#B89555]/20 shadow-lg">
-          <FAQTableOfContents categories={categories} title="FAQ Quick Access" sticky={true} />
-        </div>
-
-        {/* Categories - each category gets Layer 2 (active) full-bleed, and questions are Layer 3 */}
-        <div className="divide-y divide-gold/20">
-          {categories.map((category, categoryIndex) => (
-            <section
-              key={categoryIndex}
-              id={`category-${categoryIndex}`}
-              className="py-12 md:py-16 bg-[#1A1A1A] scroll-mt-40"
+        currentPath="/faq"
+        cta={{
+          body: "Whether you're exploring options or ready to proceed, we're happy to provide guidance tailored to your situation.",
+          guideHref: "/buyer-guide",
+          guideLabel: "Read Buyer Guide",
+        }}
+      >
+        <section id="browse-by-audience" className="scroll-mt-28 mb-10 md:mb-14">
+          <div className="rounded-2xl border border-[#B89555]/35 bg-white/85 backdrop-blur-sm shadow-[0_10px_40px_-24px_rgba(6,78,59,0.25)] p-6 md:p-10">
+            <h2
+              className="text-2xl md:text-3xl font-semibold tracking-tight text-[#0d3a2b] text-center mb-2"
+              style={{ fontFamily: '"Cormorant Garamond","Playfair Display",Georgia,serif' }}
             >
-              <div className="jj-layer-2">
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-100px" }}
-                  variants={staggerContainer}
-                >
-                  {/* Category Header (inside Layer 2) */}
-                  <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 jj-icon-box-active rounded-xl">
-                      <category.icon className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">{category.title}</h2>
-                  </motion.div>
-
-                  {/* Questions (Layer 3 cards) */}
-                  <motion.div variants={fadeInUp}>
-                    <div className="space-y-4">
-                      {category.questions.map((faq, faqIndex) => (
-                        <Accordion key={faqIndex} type="single" collapsible className="w-full">
-                          <AccordionItem
-                            value={`${categoryIndex}-${faqIndex}`}
-                            data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                            className="jj-card-inner p-0 overflow-hidden data-[state=open]:border-[#B89555] transition-all"
-                          >
-                            <AccordionTrigger className="px-6 py-5 text-[#1A1A1A] text-left hover:text-[#1A1A1A] hover:no-underline text-base font-medium">
-                              {faq.question}
-                            </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-5 text-[#1A1A1A]/70 leading-relaxed">
-                              {faq.answer}
-                            </AccordionContent>
-                          </AccordionItem>
-                        </Accordion>
-                      ))}
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </div>
-            </section>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA — canonical MIPreFooterCard (matches services) */}
-      <MIPreFooterCard
-        title="Still Have Questions?"
-        subtitle="Our team is here to help. Whether you're exploring options or ready to proceed, we're happy to provide guidance tailored to your situation."
-        primaryLink="/contact"
-        primaryText="Contact Our Team"
-        secondaryLink="/buyer-guide"
-        secondaryText="Read Buyer Guide"
-        maxWidthClass="max-w-6xl"
-      />
-
-
-      {/* Guide Navigation - Active Champagne Layer */}
-      <section className="py-12 bg-[#1A1A1A]">
-        <div className="jj-layer-2">
-          <GuideNavigation current="/faq" guides={GUIDE_LINKS} />
-        </div>
-      </section>
-
-      {/* Disclaimer - Premium champagne background */}
-      <section className="py-10 bg-[#1A1A1A] border-t border-[#B89555]/20">
-        <div className="jj-layer-2">
-          <div className="jj-card-inner max-w-4xl mx-auto">
-            <p className="text-center text-[#1A1A1A]/70 text-sm leading-relaxed">
-              <span className="text-[#1A1A1A] font-semibold">Disclaimer:</span> This FAQ is provided for general informational purposes only. It does not constitute legal, financial, or professional advice. Regulations and requirements may change. Consult qualified professionals for advice specific to your situation.
+              Browse by Audience
+            </h2>
+            <p className="text-center text-[#1A1A1A]/70 mb-6">
+              Pick the FAQ that matches your role for tailored answers.
             </p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {audienceLinks.map((c) => (
+                <Link
+                  key={c.href}
+                  to={c.href}
+                  className="group flex flex-col items-center gap-2 p-4 rounded-xl bg-[#F7F2EA] border border-[#B89555]/30 hover:border-[#B89555]/70 hover:shadow-md transition-all"
+                >
+                  <c.icon className="w-6 h-6 text-[#1A1A1A]" />
+                  <span className="text-sm font-medium text-[#1A1A1A] text-center">{c.label}</span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </FAQPageShell>
+    </>
   );
 };
 
