@@ -29,6 +29,7 @@ const staggerContainer = {
 
 export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
+  const heroImageSrc = optimizeStorageImageUrl(heroImage, 1920, 80) || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
 
   const changeNum = dldAreaData ? parseFloat(dldAreaData.change.replace('%', '')) : null;
   const isPositive = changeNum !== null && changeNum >= 0;
@@ -37,7 +38,17 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
     <section className="relative h-screen w-full min-w-0 flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
       {/* Background Image */}
       <img
-        src={optimizeStorageImageUrl(heroImage, 1920, 80) || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"}
+        aria-hidden="true"
+        src={heroImageSrc}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover scale-[1.42] blur-md"
+        style={{ objectPosition: '12% center', transformOrigin: 'center center' }}
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
+      />
+      <img
+        src={heroImageSrc}
         alt={`${area.name} - Real Estate Area`}
         className="absolute inset-0 w-full h-full object-cover scale-[1.24]"
         style={{ objectPosition: '35% center', transformOrigin: 'center center' }}
