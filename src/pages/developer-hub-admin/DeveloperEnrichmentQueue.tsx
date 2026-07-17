@@ -33,6 +33,22 @@ export default function DeveloperEnrichmentQueue() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [runProgress, setRunProgress] = useState<{ done: number; total: number; failed: number } | null>(null);
+
+  // Count of developers that still need enrichment ("broken"): missing logo OR missing description.
+  const { data: brokenCount } = useQuery({
+    queryKey: ["dev-broken-count"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("developers")
+        .select("id", { count: "exact", head: true })
+        .or("logo_url.is.null,logo_url.eq.,description.is.null")
+        .eq("is_hidden", false);
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 30_000,
+  });
 
   const { data: logs, isLoading } = useQuery({
     queryKey: ["dev-enrichment-logs", search],
@@ -88,31 +104,52 @@ export default function DeveloperEnrichmentQueue() {
   });
 
   const rebuildAllBroken = useMutation({
-    mutationFn: async (limit: number) => {
-      const { data: broken, error: e1 } = await supabase
+    mutationFn: async (opts: { limit?: number | null }) => {
+      // Fetch ALL broken developers (no default cap). Owner can pass a limit for a quick sample run.
+      let query = supabase
         .from("developers")
         .select("id")
         .or("logo_url.is.null,logo_url.eq.,description.is.null")
         .eq("is_hidden", false)
-        .order("rank", { ascending: false, nullsFirst: false })
-        .limit(limit);
+        .order("rank", { ascending: false, nullsFirst: false });
+      if (opts.limit && opts.limit > 0) query = query.limit(opts.limit);
+      const { data: broken, error: e1 } = await query;
       if (e1) throw e1;
       const ids = (broken ?? []).map((d) => d.id);
-      if (!ids.length) return { count: 0 };
+      if (!ids.length) {
+        setRunProgress(null);
+        return { count: 0, failed: 0 };
+      }
       let done = 0;
+      let failed = 0;
+      setRunProgress({ done: 0, total: ids.length, failed: 0 });
+      // Run in batches of 5. Continue on batch failure so one bad developer doesn't halt the whole run.
       for (let i = 0; i < ids.length; i += 5) {
         const slice = ids.slice(i, i + 5);
-        const { error } = await supabase.functions.invoke("developer-site-rebuild", {
-          body: { developer_ids: slice, preview: true },
-        });
-        if (error) throw error;
-        done += slice.length;
+        try {
+          const { error } = await supabase.functions.invoke("developer-site-rebuild", {
+            body: { developer_ids: slice, preview: true },
+          });
+          if (error) throw error;
+          done += slice.length;
+        } catch (e) {
+          console.error("rebuild batch failed", slice, e);
+          failed += slice.length;
+        }
+        setRunProgress({ done: done + failed, total: ids.length, failed });
+        // Refresh the log stream every 4 batches so the queue fills in live.
+        if (i % 20 === 0) qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
       }
-      return { count: done };
+      return { count: done, failed };
     },
     onSuccess: (r) => {
-      toast.success(`Staged ${r.count} developer(s) for review`);
+      if (r.failed) {
+        toast.warning(`Staged ${r.count} developer(s) · ${r.failed} failed`);
+      } else {
+        toast.success(`Staged ${r.count} developer(s) for review`);
+      }
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
+      qc.invalidateQueries({ queryKey: ["dev-broken-count"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -187,19 +224,50 @@ export default function DeveloperEnrichmentQueue() {
               className="h-9 w-64"
             />
             <Button
+              variant="outline"
+              size="sm"
+              disabled={rebuildAllBroken.isPending}
+              onClick={() => rebuildAllBroken.mutate({ limit: 25 })}
+              title="Sample run: process only the 25 highest-ranked broken developers"
+            >
+              <Zap className="size-3 mr-1" />
+              Sample 25
+            </Button>
+            <Button
               variant="gold"
               size="sm"
               disabled={rebuildAllBroken.isPending}
-              onClick={() => rebuildAllBroken.mutate(25)}
+              onClick={() => rebuildAllBroken.mutate({ limit: null })}
+              title="Full run: process every developer with a missing logo or description"
             >
               <Zap className="size-3 mr-1" />
-              {rebuildAllBroken.isPending ? "Running…" : "Rebuild 25 broken"}
+              {rebuildAllBroken.isPending
+                ? `Running ${runProgress?.done ?? 0}/${runProgress?.total ?? "…"}`
+                : `Rebuild ALL${typeof brokenCount === "number" ? ` (${brokenCount})` : ""}`}
             </Button>
             <Button asChild variant="outline" size="sm">
               <a href="/owner/developers">Pick from directory →</a>
             </Button>
           </div>
         </div>
+
+        {runProgress && (
+          <div className="mt-3 pt-3 border-t border-[#B89555]/20">
+            <div className="flex items-center justify-between text-xs text-[#1A1A1A]/80 mb-1.5">
+              <span>
+                Progress: <span className="font-semibold text-[#1A1A1A]">{runProgress.done}</span> / {runProgress.total}
+                {runProgress.failed > 0 && <> · <span className="text-red-600">{runProgress.failed} failed</span></>}
+              </span>
+              <span>{Math.round((runProgress.done / Math.max(runProgress.total, 1)) * 100)}%</span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-[#EFE6D6] overflow-hidden">
+              <div
+                className="h-full bg-[#B89555] transition-all"
+                style={{ width: `${(runProgress.done / Math.max(runProgress.total, 1)) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
 
         {stagedRows.length > 0 && (
           <div className="mt-3 pt-3 border-t border-[#B89555]/20 flex items-center gap-2 flex-wrap">
