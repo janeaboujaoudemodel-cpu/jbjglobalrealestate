@@ -311,9 +311,11 @@ END:VCARD`;
         </div>
       </section>
 
+      {/* Unified content stack — consistent vertical rhythm between sections */}
+      <div className="container mx-auto px-4 py-12 md:py-16 space-y-10 md:space-y-14 max-w-7xl">
+
       {/* Contact Cards - clean champagne band, no black gutter */}
-      <section className="py-8 md:py-10">
-        <div className="container mx-auto px-4">
+      <section>
           <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-5 md:p-6 shadow-[0_2px_12px_rgba(184,149,85,0.08)]">
             <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#B89555]/20">
               {contactCards.map((card) => (
@@ -335,15 +337,12 @@ END:VCARD`;
               ))}
             </div>
           </div>
-        </div>
       </section>
 
 
       {/* Consultation Form Section */}
-      <section className="py-8 md:py-12">
-        <div className="container mx-auto px-4">
-
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 max-w-7xl mx-auto items-start">
+      <section>
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_440px] xl:grid-cols-[minmax(0,1fr)_480px] gap-6 lg:gap-8 items-start">
             <div className="min-w-0">
             {isSuccess ? (
               /* Success State */
@@ -816,42 +815,35 @@ END:VCARD`;
               <SupportTicketBox />
             </aside>
           </div>
-        </div>
       </section>
 
-
-
-      {/* Important Notice */}
-      <section className="py-8 md:py-10">
-        <div className="container mx-auto px-4">
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto">
-            <div className="flex items-center gap-3 mb-3">
-              <IconTile icon={Shield} tone="ink" size="md" />
-              <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
-            </div>
-            <p className="text-[#1A1A1A] text-sm leading-relaxed">
-              JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
-            </p>
+      {/* Important Notice + Appointments — balanced 2-col row */}
+      <section className="grid md:grid-cols-2 gap-6 md:gap-8">
+        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] flex flex-col">
+          <div className="flex items-center gap-3 mb-3">
+            <IconTile icon={Shield} tone="ink" size="md" />
+            <h3 className="text-[#1A1A1A] font-semibold text-lg">Important Notice</h3>
           </div>
+          <p className="text-[#1A1A1A] text-sm leading-relaxed">
+            JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling and renting properties. We do not provide legal, mortgage or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
+          </p>
+        </div>
+
+        <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] flex flex-col text-center items-center">
+          <IconTile icon={Calendar} tone="ink" size="md" className="mb-4" />
+          <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
+          <p className="text-[#1A1A1A] text-sm leading-relaxed mb-5 max-w-md">
+            If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
+          </p>
+          <div className="h-px w-24 bg-[#B89555]/40 mb-5" />
+          <p className="text-[#1A1A1A] text-sm leading-relaxed max-w-md">
+            At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
+          </p>
         </div>
       </section>
 
-      {/* Appointments + Closing - combined to reduce vertical gap */}
-      <section className="py-8 md:py-12">
-        <div className="container mx-auto px-4">
-          <div className="bg-[#FDFBF7] border border-[#B89555]/30 rounded-2xl p-6 md:p-8 shadow-[0_2px_12px_rgba(184,149,85,0.08)] max-w-4xl mx-auto text-center">
-            <IconTile icon={Calendar} tone="ink" size="md" className="mx-auto mb-4" />
-            <h3 className="text-[#1A1A1A] font-semibold text-lg mb-2">Appointments</h3>
-            <p className="text-[#1A1A1A] text-sm leading-relaxed mb-5 max-w-2xl mx-auto">
-              If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
-            </p>
-            <div className="h-px w-24 bg-[#B89555]/40 mx-auto mb-5" />
-            <p className="text-[#1A1A1A] text-sm leading-relaxed max-w-2xl mx-auto">
-              At JBJ Global Real Estate, communication is handled with structure, discretion and accountability. We look forward to assisting you.
-            </p>
-          </div>
-        </div>
-      </section>
+      </div>
+
 
 
       {/* Phone Actions Dialog */}
