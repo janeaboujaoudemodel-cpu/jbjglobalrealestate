@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback, useRef, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
@@ -83,7 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
   const [isAuditor, setIsAuditor] = useState(false);
-  const sessionRef = useRef<Session | null>(null);
 
   const verifyOwner = useCallback(async (currentSession: Session | null): Promise<boolean> => {
     if (!currentSession?.access_token) {
@@ -313,8 +312,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         nullSessionRecoveryAttempts = 0;
       }
 
-      sessionRef.current = nextSession;
-
       // Set session and user immediately
       setSession(nextSession);
       setUser(nextSession?.user ?? null);
@@ -325,7 +322,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // If no session, we're done loading
       if (!nextSession?.user) {
-        sessionRef.current = null;
         setIsOwner(false);
         setIsAuditor(false);
         setOwnerError(null);
@@ -515,7 +511,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setUser(null);
       setSession(null);
-      sessionRef.current = null;
       setIsOwner(false);
       setIsAuditor(false);
       setOwnerError(null);
@@ -531,7 +526,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setUser(null);
       setSession(null);
-      sessionRef.current = null;
       setIsOwner(false);
       setIsAuditor(false);
       setOwnerError(null);
