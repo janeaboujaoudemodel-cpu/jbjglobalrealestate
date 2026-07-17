@@ -35,7 +35,6 @@ import {
   Headphones,
   Calendar,
   CreditCard,
-  Mail,
 } from "lucide-react";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 import PreFooterSeparator from "@/components/PreFooterSeparator";
