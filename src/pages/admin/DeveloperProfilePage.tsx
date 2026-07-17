@@ -794,8 +794,11 @@ export default function DeveloperProfilePage() {
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
-                        <div className="text-xs text-[#1A1A1A]/60">
-                          {p.status || "—"} · {p.handover_date || "TBD"} · {p.total_units ?? "—"} units
+                        <div className="text-xs text-[#1A1A1A]/70 truncate">
+                          {[p.area_name, p.emirate].filter(Boolean).join(" · ") || "—"}
+                        </div>
+                        <div className="text-[11px] text-[#1A1A1A]/60 mt-0.5">
+                          {(p.sale_status || p.status || "—")} · {p.handover_date || "TBD"} · {p.total_units ?? "—"} units
                         </div>
                       </div>
                       <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />
