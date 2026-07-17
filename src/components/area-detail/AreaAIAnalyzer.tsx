@@ -307,15 +307,33 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
 
 // --- Developer Landscape Card ---
 function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
+  // Fetch all developers as fallback so AI-mentioned names still get logos
+  const { data: allDevelopers } = useQuery({
+    queryKey: ["area-ai-all-developers"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developers")
+        .select("name, slug, logo_url")
+        .not("logo_url", "is", null);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30 * 60 * 1000,
+  });
+
   const developerAssets = useMemo(() => {
     const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
     const map = new Map<string, { name: string; slug?: string | null; logo_url?: string | null }>();
+    (allDevelopers || []).forEach((dev: any) => {
+      if (dev?.name) map.set(normalize(dev.name), dev);
+    });
     (stats?.developers || []).forEach((dev: any) => {
       const name = typeof dev === "string" ? dev : dev?.name;
       if (name) map.set(normalize(name), typeof dev === "string" ? { name } : dev);
     });
     return { map, normalize };
-  }, [stats?.developers]);
+  }, [stats?.developers, allDevelopers]);
+
 
   const devEntries = useMemo(() => {
     const statEntries = (stats?.developers || [])
@@ -513,11 +531,11 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const ratingScore = ratingMatch ? parseFloat(ratingMatch[1]) : null;
 
   return (
-    <section ref={sectionRef} data-area-ai-section data-surface="dark" className="py-16 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+    <section ref={sectionRef} data-area-ai-section data-surface="champagne" className="py-16" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <Brain className="w-6 h-6 text-[#064E3B]" />
-          <h2 className="text-2xl md:text-3xl font-bold text-white">
+          <Brain className="w-6 h-6" style={{ color: '#064E3B' }} />
+          <h2 data-no-contrast-guard className="text-2xl md:text-3xl font-bold" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
             JBJ AI Area Intelligence
           </h2>
         </div>
@@ -647,21 +665,27 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                 </div>
               )}
               
-              {/* Rating Card - Premium navy + gold champagne */}
+              {/* Rating Card - Premium champagne + emerald gauge */}
               {ratingScore !== null && (
-                <div className="bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] rounded-2xl p-6 shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden border border-white/18">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-[#064E3B]/20 rounded-full blur-[60px] pointer-events-none" />
-                  
-                  <Star className="w-7 h-7 text-white mb-3 relative z-10" fill="#FFFFFF" />
-                  
+                <div
+                  className="rounded-2xl p-6 shadow-[0_18px_40px_rgba(6,78,59,0.18)] flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 55%, #EFE6D6 100%)',
+                    border: '1px solid rgba(184,149,85,0.55)',
+                  }}
+                >
+                  <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(184,149,85,0.22) 0%, transparent 70%)' }} />
+
+                  <Star className="w-7 h-7 mb-3 relative z-10" style={{ color: '#B89555' }} fill="#B89555" />
+
                   {/* Radial gauge */}
                   <div className="relative w-32 h-32 mb-3">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
                           data={[
-                            { value: ratingScore, fill: '#FFFFFF' },
-                            { value: 10 - ratingScore, fill: 'rgba(255,255,255,0.10)' },
+                            { value: ratingScore, fill: '#064E3B' },
+                            { value: 10 - ratingScore, fill: 'rgba(6,78,59,0.10)' },
                           ]}
                           cx="50%"
                           cy="50%"
@@ -672,28 +696,29 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                           dataKey="value"
                           stroke="none"
                         >
-                          <Cell fill="#FFFFFF" />
-                          <Cell fill="rgba(255,255,255,0.10)" />
+                          <Cell fill="#064E3B" />
+                          <Cell fill="rgba(6,78,59,0.10)" />
                         </Pie>
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-bold text-white">{ratingScore}</span>
-                      <span className="text-white/60 text-[10px] font-medium">/10</span>
+                      <span className="text-4xl font-bold" style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>{ratingScore}</span>
+                      <span className="text-[10px] font-medium" style={{ color: 'rgba(10,10,10,0.55)' }}>/10</span>
                     </div>
                   </div>
-                  
-                  <div className="text-white text-sm font-semibold mb-2 relative z-10">Investment Rating</div>
+
+                  <div className="text-sm font-bold mb-2 relative z-10 uppercase tracking-[0.14em]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-white/75 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-xs leading-relaxed max-w-[200px] relative z-10" style={{ color: 'rgba(10,10,10,0.72)' }}>
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
-                  
+
                   {/* Rating quality label */}
                   <div data-label-emerald-only className="mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider relative z-10 jj-pill-emerald-metallic allow-white text-white border-0">
                     {ratingScore >= 8 ? 'Excellent' : ratingScore >= 6 ? 'Good' : 'Moderate'}
                   </div>
+
                 </div>
               )}
             </div>

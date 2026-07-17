@@ -40,8 +40,8 @@ export const DeveloperLink = React.forwardRef<HTMLSpanElement, DeveloperLinkProp
   };
 
   return (
-    <span ref={ref} className={cn("inline-flex items-baseline gap-1 text-[#1A1A1A] leading-none", className)}>
-      {showPrefix && <span className="text-[#1A1A1A] leading-none align-baseline">by </span>}
+    <span ref={ref} className={cn("inline-flex items-baseline gap-1 leading-none", className)} style={{ color: '#1A1A1A' }}>
+      {showPrefix && <span data-no-contrast-guard className="leading-none align-baseline" style={{ color: '#1A1A1A', WebkitTextFillColor: '#1A1A1A' }}>by </span>}
       <span
         role="link"
         tabIndex={0}

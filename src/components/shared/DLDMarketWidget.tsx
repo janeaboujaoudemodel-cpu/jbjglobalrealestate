@@ -232,7 +232,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section data-dld-market-widget data-surface="dark" className="py-10 md:py-14 overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+    <section data-dld-market-widget data-surface="champagne" className="py-10 md:py-14 overflow-hidden" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="w-full px-4 md:px-8 lg:px-12">
         <div className="max-w-[1600px] mx-auto">
 
@@ -398,30 +398,29 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       <button
                         type="button"
                         onClick={() => setExpandedArea(isExpanded ? null : area.area)}
-                        className="relative w-full flex items-center justify-between gap-3 px-3 py-2.5 hover:bg-white/10 transition-colors"
+                        className="relative w-full grid items-center gap-2 px-3 py-2.5 hover:bg-white/10 transition-colors text-left"
+                        style={{ gridTemplateColumns: '28px minmax(0,1fr) 70px 56px 16px' }}
                       >
-                        <div className="flex min-w-0 items-center gap-2.5">
-                          <span className="text-[10px] font-extrabold w-6 text-center bg-white/15 border border-white/35 rounded py-1" style={{ color: "#FFFFFF" }}>
-                            {i + 1}
-                          </span>
-                          <span className="truncate text-left text-sm font-semibold" style={{ color: "#FFFFFF" }}>
-                            {area.area}
-                          </span>
-                        </div>
-                        <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
-                          <span className="w-16 text-right text-xs font-bold tabular-nums" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
-                          <span className="w-14 text-center text-xs font-extrabold bg-white/15 border border-white/25 px-2 py-0.5 rounded-full" style={{ color: "#FFFFFF" }}>
-                            {area.change}
-                          </span>
+                        <span className="text-[11px] font-extrabold text-center bg-white/15 border border-white/35 rounded py-1" style={{ color: "#FFFFFF" }}>
+                          {i + 1}
+                        </span>
+                        <span className="truncate text-sm font-semibold" style={{ color: "#FFFFFF" }}>
+                          {area.area}
+                        </span>
+                        <span className="text-right text-xs font-bold tabular-nums" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
+                        <span className="text-center text-[11px] font-extrabold bg-white/15 border border-white/25 px-1.5 py-0.5 rounded-full" style={{ color: "#FFFFFF" }}>
+                          {area.change}
+                        </span>
+                        <span className="flex items-center justify-center">
                           {nats.length > 0 &&
                             (isExpanded ? (
                               <ChevronUp className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
                             ) : (
                               <ChevronDown className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
                             ))}
-
-                        </div>
+                        </span>
                       </button>
+
 
                       {isExpanded && nats.length > 0 && (
                         <div className="relative bg-[#FDFBF7] border-t border-[#064E3B]/20 px-3 py-3">
