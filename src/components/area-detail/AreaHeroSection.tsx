@@ -61,15 +61,6 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
       
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-[0.18] mix-blend-soft-light"
-        style={{
-          backgroundImage:
-            'linear-gradient(45deg, rgba(255,255,255,0.12) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.12) 75%, transparent 75%, transparent), linear-gradient(-45deg, rgba(255,255,255,0.06) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.06) 75%, transparent 75%, transparent)',
-          backgroundSize: '18px 18px',
-        }}
-      />
 
       {/* DLD Live Badge — top right */}
       {dldAreaData && (
@@ -114,8 +105,8 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
         <motion.h1
           data-no-contrast-guard
-          className="allow-white text-5xl md:text-7xl lg:text-8xl font-bold mb-5 mx-auto text-center"
-          style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF', textShadow: '0 4px 28px rgba(0,0,0,0.75)' }}
+          className="allow-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4 mx-auto text-center"
+          style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
           variants={fadeInUp}
         >
           {area.name}
@@ -139,22 +130,20 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               onClick={() => scrollToId('projects-section')}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white group inline-flex items-center gap-4 rounded-2xl px-5 py-4 min-w-[188px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
+              className="allow-white group inline-flex items-center gap-3 rounded-xl px-5 py-3 min-w-[168px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 color: '#FFFFFF',
-                background: 'linear-gradient(135deg, rgba(12,15,14,0.78) 0%, rgba(4,14,11,0.72) 58%, rgba(0,0,0,0.66) 100%)',
-                backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 35%, transparent 36%), repeating-linear-gradient(45deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 9px), linear-gradient(135deg, rgba(12,15,14,0.78) 0%, rgba(4,14,11,0.72) 58%, rgba(0,0,0,0.66) 100%)',
-                border: '1px solid rgba(255,255,255,0.24)',
-                boxShadow: '0 18px 46px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)',
-                backdropFilter: 'blur(18px)',
+                background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 55%, #042C1C 100%)',
+                border: '1px solid rgba(255,255,255,0.28)',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.16)',
               }}
             >
-              <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
                 <Building2 className="w-4.5 h-4.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </span>
               <div className="text-left">
-                <div data-no-contrast-guard className="text-2xl font-extrabold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
-                <div data-no-contrast-guard className="text-[11px] uppercase tracking-[0.18em] font-bold" style={{ color: 'rgba(255,255,255,0.88)', WebkitTextFillColor: 'rgba(255,255,255,0.88)' }}>Projects</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
+                <div data-no-contrast-guard className="text-[10px] uppercase tracking-[0.16em] font-semibold" style={{ color: 'rgba(255,255,255,0.82)', WebkitTextFillColor: 'rgba(255,255,255,0.82)' }}>Projects</div>
               </div>
             </button>
           )}
@@ -165,22 +154,20 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               onClick={() => scrollToId('developers-section')}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white group inline-flex items-center gap-4 rounded-2xl px-5 py-4 min-w-[188px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
+              className="allow-white group inline-flex items-center gap-3 rounded-xl px-5 py-3 min-w-[168px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
               style={{
                 color: '#FFFFFF',
-                background: 'linear-gradient(135deg, rgba(12,15,14,0.78) 0%, rgba(4,14,11,0.72) 58%, rgba(0,0,0,0.66) 100%)',
-                backgroundImage: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 35%, transparent 36%), repeating-linear-gradient(45deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 9px), linear-gradient(135deg, rgba(12,15,14,0.78) 0%, rgba(4,14,11,0.72) 58%, rgba(0,0,0,0.66) 100%)',
-                border: '1px solid rgba(255,255,255,0.24)',
-                boxShadow: '0 18px 46px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)',
-                backdropFilter: 'blur(18px)',
+                background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 55%, #042C1C 100%)',
+                border: '1px solid rgba(255,255,255,0.28)',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.16)',
               }}
             >
-              <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
                 <Users className="w-4.5 h-4.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </span>
               <div className="text-left">
-                <div data-no-contrast-guard className="text-2xl font-extrabold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
-                <div data-no-contrast-guard className="text-[11px] uppercase tracking-[0.18em] font-bold" style={{ color: 'rgba(255,255,255,0.88)', WebkitTextFillColor: 'rgba(255,255,255,0.88)' }}>Developers</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
+                <div data-no-contrast-guard className="text-[10px] uppercase tracking-[0.16em] font-semibold" style={{ color: 'rgba(255,255,255,0.82)', WebkitTextFillColor: 'rgba(255,255,255,0.82)' }}>Developers</div>
               </div>
             </button>
           )}

@@ -91,23 +91,6 @@ const AreaDetail = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchScope, setSearchScope] = useState<"area" | "emirate" | "community" | "developer" | "project">("project");
   const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [areaFilterFixed, setAreaFilterFixed] = useState(false);
-
-  useEffect(() => {
-    const syncAreaFilter = () => {
-      const shouldFix = window.scrollY > Math.max(120, window.innerHeight - 72);
-      setAreaFilterFixed(shouldFix);
-      document.body.classList.toggle('filter-bar-fixed', shouldFix);
-    };
-    syncAreaFilter();
-    window.addEventListener('scroll', syncAreaFilter, { passive: true });
-    window.addEventListener('resize', syncAreaFilter);
-    return () => {
-      window.removeEventListener('scroll', syncAreaFilter);
-      window.removeEventListener('resize', syncAreaFilter);
-      document.body.classList.remove('filter-bar-fixed');
-    };
-  }, []);
 
   // Behavior-aware area recommendations (must be before early returns)
   const relatedAreas = useMemo(() => {
@@ -180,7 +163,6 @@ const AreaDetail = () => {
       data-surface="dark"
       data-scoped-sticky-nav="area"
       data-filter-clean="true"
-      data-area-filter-fixed={areaFilterFixed ? "true" : "false"}
       style={{
         background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 58%, #010806 100%)',
         backdropFilter: 'blur(16px)',
@@ -201,13 +183,13 @@ const AreaDetail = () => {
         <div className="jj-filter-rail flex items-center gap-1.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Search */}
           <div
-            className="area-filter-search-shell relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none"
+            className="area-filter-search-shell relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none overflow-hidden"
             data-area-filter-search="true"
           >
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <input
               type="text"
-              placeholder={`${area.name}, developer, project`}
+              placeholder={`Example: ${area.name}, developer, project`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               data-no-contrast-guard
@@ -221,13 +203,6 @@ const AreaDetail = () => {
               </button>
             )}
           </div>
-
-          <div
-            aria-hidden="true"
-            data-area-filter-separator="true"
-            className="h-8 w-px flex-none"
-            style={{ background: 'rgba(255,255,255,0.26)' }}
-          />
 
           {/* Scope dropdown buttons */}
           {filterScopes.map((scope) => (
@@ -348,7 +323,7 @@ const AreaDetail = () => {
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
       {/* Single sticky filter bar — no fixed clone, no duplication, no gold divider. */}
-      <div className="sticky top-[56px] z-[9995] w-full min-w-0" data-area-sticky-filter-shell data-area-filter-fixed={areaFilterFixed ? "true" : "false"}>
+      <div className="sticky top-[56px] z-[9995] w-full min-w-0" data-area-sticky-filter-shell>
         {filterBarBlock}
       </div>
 
@@ -423,13 +398,9 @@ const AreaDetail = () => {
                     >
                       {/* Background photo or champagne fallback */}
                       {relatedArea.image_url ? (
-                        <img
-                          src={relatedArea.image_url}
-                          alt={`${relatedArea.name} area`}
-                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                          loading={index < 2 ? "eager" : "lazy"}
-                          fetchPriority={index < 2 ? "high" : "auto"}
-                          decoding="async"
+                        <div
+                          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                          style={{ backgroundImage: `url(${relatedArea.image_url})` }}
                         />
                       ) : (
                          <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
