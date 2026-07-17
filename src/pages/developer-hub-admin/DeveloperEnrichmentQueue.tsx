@@ -33,6 +33,22 @@ export default function DeveloperEnrichmentQueue() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [runProgress, setRunProgress] = useState<{ done: number; total: number; failed: number } | null>(null);
+
+  // Count of developers that still need enrichment ("broken"): missing logo OR missing description.
+  const { data: brokenCount } = useQuery({
+    queryKey: ["dev-broken-count"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("developers")
+        .select("id", { count: "exact", head: true })
+        .or("logo_url.is.null,logo_url.eq.,description.is.null")
+        .eq("is_hidden", false);
+      if (error) throw error;
+      return count ?? 0;
+    },
+    staleTime: 30_000,
+  });
 
   const { data: logs, isLoading } = useQuery({
     queryKey: ["dev-enrichment-logs", search],
