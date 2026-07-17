@@ -296,7 +296,7 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
             onClick={runIntelExtract}
             disabled={runningIntel}
             data-no-contrast-guard
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-md border border-[#064E3B] px-3 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            className="jbj-force-white-button shrink-0 inline-flex items-center gap-1.5 rounded-md border border-[#064E3B] px-3 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
             style={{
               background: "#064E3B",
               color: "#FFFFFF",
