@@ -1765,19 +1765,15 @@ All colors MUST be HSL.
   .jj-auth-heading p { font-size: 12px !important; line-height: 1.4 !important; }
 }
 
-/* Force the global "Contact Us" edge tag to stick to the RIGHT viewport edge
-   even when `html body .jj-emerald-metallic { position: relative !important }`
-   would otherwise win the cascade. */
-html body button[aria-label="Talk to JBJ support"].jj-emerald-metallic,
+/* The old desktop "Contact Us" right-edge rail is permanently removed.
+   It appeared as a rogue emerald vertical line on desktop/tablet. */
 html body button[aria-label="Talk to JBJ support"],
-html body #root button[aria-label="Talk to JBJ support"] {
-  position: fixed !important;
-  right: 0 !important;
-  left: auto !important;
-  top: 50% !important;
-  writing-mode: vertical-rl !important;
-  text-orientation: mixed !important;
-  white-space: nowrap !important;
+html body #root button[aria-label="Talk to JBJ support"],
+html body [data-support-launcher][data-edge-rail],
+html body [data-chrome="contact-edge-rail"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 
@@ -8381,8 +8377,7 @@ html body [data-chrome="sidebar"] [data-sidebar-subitem] [data-sidebar-subitem-i
   stroke: var(--emerald-ink) !important;
 }
 
-/* Support launcher — emerald glow (not gold) */
-html body [aria-label="Talk to JBJ support"],
+/* Support launcher — emerald glow (not gold). Desktop edge rail stays hidden above. */
 html body [aria-label="Contact us"] {
   border-color: rgba(4,78,59,0.45) !important;
   box-shadow:
@@ -34574,10 +34569,9 @@ html body #root :is([data-project-sticky-nav="true"], [data-scoped-sticky-nav]) 
 
 html body #root button[aria-label="Talk to JBJ support"],
 html body #root button[aria-label="Talk to JBJ support"].jj-emerald-metallic {
-  border-top-left-radius: 10px !important;
-  border-bottom-left-radius: 10px !important;
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 

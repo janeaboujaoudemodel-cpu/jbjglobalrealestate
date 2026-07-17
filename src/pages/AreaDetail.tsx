@@ -251,8 +251,8 @@ const AreaDetail = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex" data-surface="champagne">
-      <div className="flex-1 transition-all duration-200">
+    <div className="min-h-screen w-full min-w-0 bg-[#FDFBF7]" data-surface="champagne">
+      <div className="w-full min-w-0 transition-all duration-200">
       <SEOHead
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
         description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
