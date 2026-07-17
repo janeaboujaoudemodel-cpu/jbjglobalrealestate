@@ -530,10 +530,10 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="font-cormorant text-3xl sm:text-4xl font-semibold text-white mb-2">
+              <h2 className="allow-black font-cormorant text-3xl sm:text-4xl font-semibold mb-2" style={{ color: "#0F172A", WebkitTextFillColor: "#0F172A" }}>
                 Get In Touch
               </h2>
-              <p className="text-white/75 text-sm">
+              <p className="allow-black text-sm" style={{ color: "#0F172A", WebkitTextFillColor: "#0F172A" }}>
                 Choose your preferred way to connect with us
               </p>
             </motion.div>
