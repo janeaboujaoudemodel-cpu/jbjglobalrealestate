@@ -130,13 +130,20 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               onClick={() => scrollToId('projects-section')}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-white/60 transition-all duration-200"
-              style={{ color: '#FFFFFF' }}
+              className="allow-white group inline-flex items-center gap-3 rounded-xl px-5 py-3 min-w-[168px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
+              style={{
+                color: '#FFFFFF',
+                background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 55%, #042C1C 100%)',
+                border: '1px solid rgba(184,149,85,0.55)',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)',
+              }}
             >
-              <Building2 className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
+                <Building2 className="w-4.5 h-4.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </span>
               <div className="text-left">
-                <div data-no-contrast-guard className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
-                <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>Projects</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveProjectCount ?? area.project_count_sale ?? area.property_count}</div>
+                <div data-no-contrast-guard className="text-[10px] uppercase tracking-[0.16em] font-semibold" style={{ color: 'rgba(255,255,255,0.82)', WebkitTextFillColor: 'rgba(255,255,255,0.82)' }}>Projects</div>
               </div>
             </button>
           )}
@@ -147,16 +154,24 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
               onClick={() => scrollToId('developers-section')}
               data-allow-dark-cta
               data-no-contrast-guard
-              className="allow-white flex items-center gap-2 bg-black/40 backdrop-blur-md border border-white/25 rounded-xl px-5 py-3 cursor-pointer hover:bg-black/55 hover:border-white/60 transition-all duration-200"
-              style={{ color: '#FFFFFF' }}
+              className="allow-white group inline-flex items-center gap-3 rounded-xl px-5 py-3 min-w-[168px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5"
+              style={{
+                color: '#FFFFFF',
+                background: 'linear-gradient(135deg, #0A6B4E 0%, #064E3B 55%, #042C1C 100%)',
+                border: '1px solid rgba(184,149,85,0.55)',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)',
+              }}
             >
-              <Users className="w-5 h-5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg" style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}>
+                <Users className="w-4.5 h-4.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </span>
               <div className="text-left">
-                <div data-no-contrast-guard className="text-xl font-bold leading-tight" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
-                <div data-no-contrast-guard className="text-xs" style={{ color: 'rgba(255,255,255,0.85)', WebkitTextFillColor: 'rgba(255,255,255,0.85)' }}>Developers</div>
+                <div data-no-contrast-guard className="text-xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
+                <div data-no-contrast-guard className="text-[10px] uppercase tracking-[0.16em] font-semibold" style={{ color: 'rgba(255,255,255,0.82)', WebkitTextFillColor: 'rgba(255,255,255,0.82)' }}>Developers</div>
               </div>
             </button>
           )}
+
 
           {/* Avg Price/sqft */}
           {(area.avg_price_sqft ?? 0) > 0 && (
