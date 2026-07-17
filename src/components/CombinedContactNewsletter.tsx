@@ -50,7 +50,7 @@ const CombinedContactNewsletter = ({
       data-ink-emerald
       data-surface="emerald"
       data-emerald="true"
-      className={`jj-loop-block relative w-full max-w-none px-4 py-8 sm:px-8 md:py-10 ${fitContainer ? "" : "mx-auto"}`}
+      className={`jj-loop-block relative w-full px-4 py-8 sm:px-8 md:py-10 ${fitContainer ? "max-w-none" : "max-w-6xl mx-auto"}`}
     >
 
 
