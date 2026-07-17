@@ -34,7 +34,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
   const isPositive = changeNum !== null && changeNum >= 0;
 
   return (
-    <section className="relative h-screen flex items-end overflow-hidden">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
       {/* Background Image */}
       <img
         src={optimizeStorageImageUrl(heroImage, 1920, 80) || "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"}
@@ -65,13 +65,13 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
 
       <motion.div 
         data-surface="dark"
-        className="relative z-10 container mx-auto px-4 pb-12"
+        className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center"
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
       >
         {/* Location + badges */}
-        <motion.div className="flex items-center gap-2 mb-3 flex-wrap" variants={fadeInUp}>
+        <motion.div className="flex items-center justify-center gap-2 mb-3 flex-wrap" variants={fadeInUp}>
           <MapPin className="w-5 h-5 text-white" />
           <span className="allow-white text-white text-sm uppercase tracking-wider">{area.emirate}, UAE</span>
           {area.is_trending && (
@@ -89,14 +89,14 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
         </motion.div>
         
         <motion.h1 
-          className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4 max-w-3xl"
+          className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4 mx-auto text-center"
           variants={fadeInUp}
         >
           {area.name}
         </motion.h1>
 
         {/* Breadcrumb */}
-        <motion.nav className="flex items-center gap-2 text-sm mb-6" variants={fadeInUp}>
+        <motion.nav className="flex items-center justify-center gap-2 text-sm mb-6" variants={fadeInUp}>
           <Link to="/" className="text-white/70 hover:text-white transition-colors">Home</Link>
           <ChevronRight className="w-4 h-4 text-white/60" />
           <Link to="/areas" className="text-white/70 hover:text-white transition-colors">Areas</Link>
@@ -106,7 +106,8 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
         </motion.nav>
 
         {/* Stats Bar */}
-        <motion.div className="flex flex-wrap gap-3 md:gap-4" variants={fadeInUp}>
+        <motion.div className="flex flex-wrap justify-center gap-3 md:gap-4" variants={fadeInUp}>
+
           {/* Projects */}
           {(liveProjectCount ?? area.project_count_sale ?? area.property_count ?? 0) > 0 && (
             <button

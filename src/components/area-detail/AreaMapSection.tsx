@@ -149,11 +149,12 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
   const externalMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${areaName}, Dubai, UAE`)}`;
 
   return (
-    <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <section data-surface="champagne" className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div className="flex items-center gap-3 mb-8">
-          <MapIcon className="w-6 h-6 text-[#1A1A1A]" />
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+          <MapIcon className="w-6 h-6" style={{ color: '#0A0A0A' }} />
+          <h2 data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold">
+
             {t('map.mapOf')} {areaName}
           </h2>
         </div>

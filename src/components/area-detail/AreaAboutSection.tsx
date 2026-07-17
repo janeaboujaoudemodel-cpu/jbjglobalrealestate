@@ -23,7 +23,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
   const isLongDescription = (area.description?.length ?? 0) > 400;
 
   return (
-    <section className="py-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+    <section data-surface="champagne" className="py-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center gap-2 mb-3">

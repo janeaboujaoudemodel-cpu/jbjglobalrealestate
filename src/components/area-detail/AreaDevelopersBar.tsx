@@ -43,15 +43,16 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
   if (!developers || developers.length === 0) return null;
 
   return (
-    <section id="developers-section" className="pt-0 pb-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
+    <section data-surface="champagne" id="developers-section" className="pt-0 pb-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="jj-layer-2">
         <div className="flex items-center gap-3 mb-6">
-          <Users className="w-6 h-6 text-[#1A1A1A]" />
-          <h2 className="text-xl md:text-2xl font-bold text-[#0A0A0A]">
+          <Users className="w-6 h-6" style={{ color: '#0A0A0A' }} />
+          <h2 data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-xl md:text-2xl font-bold">
             Developers in {areaName}
           </h2>
-          <span className="text-[#1A1A1A]/70 text-sm">({developers.length})</span>
+          <span data-no-contrast-guard style={{ color: '#0A0A0A', opacity: 0.7 }} className="text-sm">({developers.length})</span>
         </div>
+
 
 
         <div className="flex flex-wrap gap-3">
@@ -66,17 +67,18 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
               {dev.slug ? (
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border-0 rounded-xl hover:shadow-lg transition-all"
+                  className="flex items-center gap-3 px-4 py-3 bg-white/70 border border-[#064E3B]/15 rounded-xl hover:shadow-lg hover:border-[#064E3B]/40 transition-all"
                 >
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-10 h-10" />
-                  <span className="text-sm font-medium text-[#1A1A1A]">{dev.name}</span>
+                  <span data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-sm font-semibold">{dev.name}</span>
                 </Link>
               ) : (
-                <div className="flex items-center gap-3 px-4 py-3 bg-[#FDFBF7] border-0 rounded-xl">
+                <div className="flex items-center gap-3 px-4 py-3 bg-white/70 border border-[#064E3B]/15 rounded-xl">
                   <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-10 h-10" />
-                  <span className="text-sm font-medium text-[#1A1A1A]/70">{dev.name}</span>
+                  <span data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-sm font-semibold">{dev.name}</span>
                 </div>
               )}
+
             </motion.div>
           ))}
         </div>

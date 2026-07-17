@@ -1,79 +1,65 @@
+## Area page (Dubai Islands) — full repair pass
 
-## Scope
+All fixes target `/area/:slug` and any shared components that leak the same issue into other pages. Every change is verified with a Playwright screenshot before we move to Phase 4.
 
-Three linked changes to the public entry experience and the AI tools catalog.
+### 1. Hero — center the title
+- `AreaHeroSection.tsx`: change the content column from left-aligned to centered. Location pill, H1 (`{area.name}`), breadcrumb, and stats bar all center horizontally. H1 stops using `max-w-3xl` left-anchor; wraps in `mx-auto text-center`.
+- Applies to every area page, not just Dubai Islands.
 
----
+### 2. Filter bars — remove duplicates, fix broken search sizing
+- Current state: sticky-on-scroll emerald filter (top) + tabs bar (Developer/Floor Plans/Location/AI Analyzer) + a second inline emerald filter below hero. That's the "duplicated" filter and the "third filter" the user called out.
+- Keep exactly ONE filter: the inline emerald bar directly under the hero (matches Properties page pattern).
+- Remove the sticky-on-scroll duplicate filter and its scroll listener / body-class side effect.
+- Keep the sticky tab bar (Developer / Floor Plans / Location / AI Analyzer) but fix its contrast (§3).
+- Fix the search pill height/width so it matches the other pill controls (h-10, same rounded-full, same font-size, no oversized appearance).
 
-### 1. Landing page (the public entry before login)
+### 3. Sticky tab bar — text becomes black on champagne
+- `AreaDetail.tsx`: the Developer / Floor Plans / Location / AI Analyzer buttons currently render white (global contrast guard override). Force `text-[#1A1A1A]` with `!important`-equivalent scope so they stay black on the champagne band. Icons also black. Hover fills stay subtle emerald tint.
 
-**What visitors see on `/` when signed out today:** the hero, plus the top nav with FEATURED · NEW LAUNCH · GUIDES · INVESTORS · DEVELOPERS · BROKERS.
+### 4. Projects grid — fix all card contrast + slow images
+- `AreaProjectsGrid.tsx`: the "Projects in {area}" H2 currently renders white on champagne. Add `allow-black` and explicit `!text-[#1A1A1A]` so guard cannot invert it.
+- `ProjectCard` (shared): inspect and fix so:
+  - Project name (e.g. "Beach Oasis 2"): black.
+  - Meta row (studio, bedrooms range, sqft): black, not white.
+  - Developer name ("by Azizi Developments"): render in animated gold-champagne text using the existing `.jj-text-gold-animated` token.
+  - Price from + AED number: black.
+- Images: switch cover image + first `project_images[0]` to `loading="eager" fetchPriority="high" decoding="async"` for the first row of the grid (first 3 cards) so above-the-fold cards no longer flash black-then-load.
 
-**Changes**
-- On the signed-out landing page only, hide the top nav categories. Keep the wordmark, Log in, and Sign up.
-- Add a short line under the hero subheadline: *"This is the private entrance to JBJ Global Real Estate — the site itself unlocks after you log in or create an account."* (final wording tunable, no use of the word "gate")
-- Authenticated users are unaffected — full nav remains for them and on all inner pages.
+### 5. Developers bar — all text black on champagne
+- `AreaDevelopersBar.tsx`: force developer name labels + section title + count badge to black (`allow-black text-[#1A1A1A]`). Any pill/chip on champagne uses `bg-white/60 border-[#064E3B]/20`.
 
-### 2. Universal AI-tool subscription lock
+### 6. About Dubai Islands section — contrast fix
+- `AreaAboutSection.tsx`: title, subtitle, description, stat labels, stat values all black on champagne. "About Dubai Islands" heading gets `allow-black text-[#1A1A1A]` and matching black location-pin icon.
 
-Applies to every AI tool **except AI Home Finder**.
+### 7. Map section — title black with icon
+- `AreaMapSection.tsx`: the "Map of {area}" title and its map-pin icon become black on the champagne background. Ensure the actual map (Mapbox / Leaflet layer) renders correctly and points to the area's `latitude/longitude`.
 
-Behavior when a non-subscriber opens any locked AI tool:
-- The tool page still loads and shows a **read-only demo/preview**: description, screenshots of a sample run, example inputs and a canned example output, "what this tool does" bullets.
-- Inputs, buttons, and "Run" are disabled with a lock overlay: *"Subscribe to use this tool"* + Subscribe CTA linking to pricing.
-- No AI calls fire. Every AI-tool edge function also re-checks the subscription server-side and returns 402 if missing (client lock is UX only).
+### 8. DLD Market Intelligence widget — champagne background = black text
+- `DLDMarketWidget.tsx`: currently renders "Dubai Market Intelligence" title, "Download Report", "YTD Market Growth", and every stat card ("YTD Volume", "Transactions", "Off-plan sales", "Secondary sales", "Cash deals", "Mortgage deals") with white text on champagne. Convert all card surfaces to `bg-white/60` with `text-[#1A1A1A]`. Emerald KPI cards keep white text; only cards on the champagne band flip. Applies globally — this widget is also used elsewhere (property map, market intelligence pages).
 
-Shared implementation:
-- New `<AiToolAccessGate toolKey="..." mode="subscription | one-shot-then-subscription">` wrapper used by all AI tool pages.
-- `useAiToolAccess(toolKey)` hook returns `{ status: 'preview' | 'trial' | 'unlocked', usesLeft, requireSubscription() }`.
-- Server: shared helper `assertAiToolAccess(userId, toolKey)` used by every AI edge function.
+### 9. Area AI Analyzer — background match + contrast
+- `AreaAIAnalyzer.tsx`: background currently silver/gray-ish, breaks brand. Convert outer surface to the emerald 3-stop gradient used by the vertical sidebar (`#064E3B → #042C1C → #010806`). Title/subtitle/cards white. "Behind Explore Dubai Island Properties" strip: black background swap out for emerald gradient continuation.
 
-### 3. AI Home Finder — free, one-shot
+### 10. Explore More in {emirate} — kill gold cards
+- `AreaDetail.tsx`: the four Similar Areas photo cards fall back to a champagne gradient when no `image_url` exists. Swap to the emerald gradient fallback (already partially there — verify none remain gold). Ensure fallback JBJ monogram is not gold.
 
-- Any signed-in user can run it **once**. Guests are prompted to sign in first (no subscription required for the first run).
-- On the second attempt, the tool locks with the same subscribe prompt as the other tools.
-- Usage tracked in a new `ai_tool_free_uses` row (`user_id`, `tool_key='ai_home_finder'`, `used_at`). Server also enforces the 1-use cap; client shows remaining count.
+### 11. Visual + technical validation (before saying done)
+- Playwright: navigate to `/area/dubai-islands`, screenshot: hero, sticky bar, projects grid card, developers bar, map, DLD widget, AI analyzer, similar areas. View each screenshot to confirm the fix.
+- Check the same components on `/properties` and `/developers` pages to confirm no regression from shared-component fixes (ProjectCard, DLDMarketWidget).
+- Run typecheck/build.
 
-### 4. Sitemap visibility
+### 12. Then — Phase 4 kickoff
+- After screenshots confirm every item above, start Phase 4 (Excel-based bulk developer profile upload) as previously scoped.
 
-- Sitemap and `globalSearchIndex` currently list every AI tool regardless of the owner's visibility flag in `ai_tool_visibility`.
-- Change `Sitemap.tsx` and the global search index to filter AI tool entries by `ai_tool_visibility.is_public = true` (owner-controlled). Hidden tools disappear from both.
-- `public/sitemap.xml` is static — regenerate via existing sitemap generator so hidden tools drop out of the XML too.
+### Files touched
+- `src/pages/AreaDetail.tsx`
+- `src/components/area-detail/AreaHeroSection.tsx`
+- `src/components/area-detail/AreaProjectsGrid.tsx`
+- `src/components/area-detail/AreaDevelopersBar.tsx`
+- `src/components/area-detail/AreaAboutSection.tsx`
+- `src/components/area-detail/AreaMapSection.tsx`
+- `src/components/area-detail/AreaAIAnalyzer.tsx`
+- `src/components/shared/DLDMarketWidget.tsx`
+- `src/components/ProjectCard.tsx` (shared — verified against other pages)
 
----
-
-## Technical notes
-
-- Landing detection: `GlobalHeader` reads `location.pathname === '/'` + `!user` to switch to a slim mode. No new route needed.
-- `AiToolAccessGate` reads `useSubscription()` (already present for Stripe). "Active" = `active | trialing | past_due` with a future `current_period_end`.
-- Free-use table:
-  ```sql
-  create table public.ai_tool_free_uses (
-    id uuid primary key default gen_random_uuid(),
-    user_id uuid not null references auth.users(id) on delete cascade,
-    tool_key text not null,
-    used_at timestamptz not null default now(),
-    unique (user_id, tool_key)
-  );
-  ```
-  With GRANTs + RLS (`user_id = auth.uid()` for select/insert; no updates/deletes from client).
-- Every AI edge function gets a 3-line header calling `assertAiToolAccess`; returns 402 with `{ error: 'subscription_required' }` on fail. AI Home Finder function calls the one-shot variant.
-
-## Rollout order
-
-1. DB migration (`ai_tool_free_uses`) + shared server helper.
-2. Client wrapper `<AiToolAccessGate>` + `useAiToolAccess`.
-3. Wrap all AI tool pages (batched edit).
-4. Landing page trim + copy line.
-5. Sitemap + search-index visibility filter.
-6. Playwright: signed-out landing, signed-in non-subscriber on a locked tool (see demo, cannot run), signed-in non-subscriber on Home Finder (run once, second time locked), hidden-in-admin tool absent from `/sitemap`.
-
-## Out of scope
-
-- Pricing page copy changes.
-- Stripe product/price edits (existing tiers reused).
-- Redesign of individual AI tool pages beyond adding the gate wrapper and demo block.
-
----
-
-Say **continue** to execute in the rollout order above, or tell me which of the four sections to reorder / drop.
+Approve and I execute all of it in one pass, screenshot-verify each surface, then move directly to Phase 4.
