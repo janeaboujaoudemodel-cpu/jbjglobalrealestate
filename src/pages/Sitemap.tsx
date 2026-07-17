@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { SEOHead } from "@/components/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { useFounderVisibility } from "@/contexts/FounderVisibilityContext";
+import { useUserMode } from "@/hooks/useUserMode";
 import {
   Map,
   Home,
@@ -209,13 +210,10 @@ const hubSections: HubSection[] = [
       { href: "/mortgage-calculator", label: "Mortgage Calculator" },
       { href: "/rental-index", label: "Rental Index" },
       { href: "/interior-design-ai", label: "AI Interior Design" },
-      { href: "/ai-hub#virtual-staging", label: "AI Virtual Staging" },
       { href: "/ai-hub#price-predictor", label: "AI Price Predictor" },
       { href: "/ai-hub#neighborhood-insights", label: "AI Neighborhood Insights" },
       { href: "/ai-hub#property-analyzer", label: "AI Property Analyzer" },
       { href: "/ai-contract-reviewer", label: "AI Contract Reviewer" },
-      { href: "/e-signature", label: "E-Signature" },
-      { href: "/cv-builder", label: "CV & Resume Builder" },
       { href: "/business-card-scanner", label: "Business Card Scanner" },
       { href: "/documents", label: "Documents & Spreadsheets" },
       { href: "/video-meeting", label: "Video Meet" },
@@ -369,6 +367,7 @@ const HubCard = ({
 
 const Sitemap = () => {
   const { isFounderVisible } = useFounderVisibility();
+  const { mode } = useUserMode();
 
   const { data: hiddenToolIds } = useQuery({
     queryKey: ["sitemap-hidden-ai-tools"],
@@ -383,6 +382,22 @@ const Sitemap = () => {
     staleTime: 60_000,
   });
   const hiddenIds = hiddenToolIds ?? new Set<string>();
+
+  // Filter sitemap sections by active user mode so investors don't see
+  // broker/academy/developer surfaces and vice-versa.
+  const filteredHubSections = hubSections.filter((hub) => {
+    if (mode === "investor") {
+      return !["broker-academy", "developer-hub"].includes(hub.id);
+    }
+    if (mode === "broker") {
+      return !["investor-hub", "developer-hub"].includes(hub.id);
+    }
+    if (mode === "developer") {
+      return !["broker-academy", "investor-hub"].includes(hub.id);
+    }
+    return true;
+  });
+
 
   const lastUpdated = new Date().toLocaleDateString("en-US", {
     year: "numeric",
@@ -497,7 +512,7 @@ const Sitemap = () => {
               variants={staggerContainer}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
             >
-              {hubSections.map((hub) => (
+              {filteredHubSections.map((hub) => (
                 <HubCard
                   key={hub.id}
                   hub={hub}

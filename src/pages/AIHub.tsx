@@ -112,13 +112,13 @@ const ALL_TOOLS: ToolDef[] = [
   // Corporate
   { id: "stamp-generator", title: "JBJ Smart Stamp Generator", description: "Generate professional company stamps — bilingual exports.", icon: Award, link: "/toolkit/stamp-generator", category: "corporate" },
   { id: "business-card", title: "JBJ Business Card Designer", description: "Design stunning business cards with 6 premium templates.", icon: CreditCard, link: "/toolkit/corporate-suite/business-card", category: "corporate" },
-  { id: "cv-resume", title: "JBJ CV / Resume Builder", description: "Build a professional CV with AI summary and PDF export.", icon: User, link: "/cv-builder", category: "corporate" },
+  // { id: "cv-resume", ... } REMOVED — hidden per owner directive; template infrastructure not ready
   { id: "cover-letter", title: "JBJ Cover Letter Generator", description: "Generate tailored cover letters with AI. Export as PDF.", icon: FileText, link: "/toolkit/corporate-suite/cover-letter", category: "corporate" },
   { id: "logo-creator", title: "JBJ AI Logo Creator", description: "Generate professional logos with AI. Export PNG & SVG.", icon: Palette, link: "/toolkit/corporate-suite/logo-creator", category: "corporate" },
   { id: "company-profile", title: "JBJ Company Profile Builder", description: "Build a multi-page company profile PDF with AI content.", icon: Briefcase, link: "/toolkit/corporate-suite/company-profile", category: "corporate" },
   // { id: "presentation-tool", ... } REMOVED — broken slide builder retired per owner directive (June 2026)
   { id: "landing-page-builder", title: "JBJ Landing Page Builder", description: "Create a one-page business site with HTML export.", icon: Globe, link: "/toolkit/corporate-suite/landing-page", category: "corporate" },
-  { id: "esign", title: "JBJ E-Sign", description: "Contract signing with multi-signer workflows.", icon: Handshake, link: "/e-signature", category: "corporate" },
+  // { id: "esign", ... } REMOVED — hidden per owner directive until workflow ready
   { id: "scan-sign", title: "JBJ Scan & Sign", description: "Camera scan, handwritten signature & PDF export.", icon: FileSignature, link: "/toolkit/scan-sign", category: "corporate" },
   { id: "spreadsheet-tool", title: "JBJ Spreadsheet", description: "Spreadsheets with formula support and Excel/CSV export.", icon: FileText, link: "/spreadsheet", category: "corporate" },
   { id: "documents-tool", title: "JBJ Documents Editor", description: "Rich text document editor with version history.", icon: FolderOpen, link: "/documents", category: "corporate" },
@@ -135,7 +135,7 @@ const ALL_TOOLS: ToolDef[] = [
   { id: "background-ai", title: "JBJ AI Background Remover", description: "Remove or replace backgrounds from photos instantly.", icon: Wand2, link: "/toolkit/background-ai", category: "design" },
   { id: "beauty-filters", title: "JBJ Beauty Filters", description: "Apply professional beauty enhancements to photos.", icon: Sparkles, link: "/toolkit/beauty-filters", category: "design" },
   { id: "interior-design", title: "JBJ AI Interior Design", description: "Visualize spaces with AI-generated designs.", icon: ImageIcon, link: "/interior-design-ai", category: "design" },
-  { id: "virtual-staging-ai", title: "JBJ AI Virtual Staging", description: "Virtually stage empty properties with AI furniture.", icon: Building2, link: "/virtual-staging-ai", category: "design" },
+  // { id: "virtual-staging-ai", ... } REMOVED — hidden per owner directive; route redirects incorrectly
   { id: "creative-suite", title: "JBJ Creative Suite", description: "Full-featured creative studio for video and presentations.", icon: Sparkles, link: "/studio", category: "design" },
 
   // Marketing
@@ -601,7 +601,7 @@ const AIHub = () => {
                 <Sparkles className="w-3 h-3 allow-white" style={{ color: "#FFFFFF" }} />
                 <span className="allow-white" style={{ color: "#FFFFFF" }}>Simple Workflow</span>
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A1A] tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight" style={{ color: "#FFFFFF" }}>
                 How It Works
               </h2>
             </div>
