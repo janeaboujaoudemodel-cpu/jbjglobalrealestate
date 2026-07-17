@@ -295,10 +295,15 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
             type="button"
             onClick={runIntelExtract}
             disabled={runningIntel}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-[#064E3B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#053426] disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ color: "#FFFFFF" }}
+            data-no-contrast-guard
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-md border border-[#064E3B] px-3 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{
+              background: "#064E3B",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+            }}
           >
-            {runningIntel ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+            {runningIntel ? <Loader2 className="w-3.5 h-3.5 animate-spin text-white" /> : <Sparkles className="w-3.5 h-3.5 text-white" />}
             {runningIntel ? "Reading sources…" : "Extract intel"}
           </button>
         </div>
