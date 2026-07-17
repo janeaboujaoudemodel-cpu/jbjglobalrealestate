@@ -307,15 +307,33 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
 
 // --- Developer Landscape Card ---
 function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
+  // Fetch all developers as fallback so AI-mentioned names still get logos
+  const { data: allDevelopers } = useQuery({
+    queryKey: ["area-ai-all-developers"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("developers")
+        .select("name, slug, logo_url")
+        .not("logo_url", "is", null);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 30 * 60 * 1000,
+  });
+
   const developerAssets = useMemo(() => {
     const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
     const map = new Map<string, { name: string; slug?: string | null; logo_url?: string | null }>();
+    (allDevelopers || []).forEach((dev: any) => {
+      if (dev?.name) map.set(normalize(dev.name), dev);
+    });
     (stats?.developers || []).forEach((dev: any) => {
       const name = typeof dev === "string" ? dev : dev?.name;
       if (name) map.set(normalize(name), typeof dev === "string" ? { name } : dev);
     });
     return { map, normalize };
-  }, [stats?.developers]);
+  }, [stats?.developers, allDevelopers]);
+
 
   const devEntries = useMemo(() => {
     const statEntries = (stats?.developers || [])
