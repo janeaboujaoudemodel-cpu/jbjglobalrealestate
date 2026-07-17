@@ -111,7 +111,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
                   className="h-full"
                 >
                   <div className="h-full [&>div]:h-full [&>div]:flex [&>div]:flex-col">
-                    <ProjectCard project={project} currency={currency as any} />
+                    <ProjectCard project={project} currency={currency as any} priority={i < 6} />
                   </div>
                 </motion.div>
               ))}

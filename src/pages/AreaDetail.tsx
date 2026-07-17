@@ -3,15 +3,14 @@
  * Full-screen hero, projects grid, developers, map, AI analyzer
  */
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
-import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, Loader2, Search, X, Building2, Info, Sparkles } from "lucide-react";
+import { MapPin, ArrowRight, Loader2, Search, X, Building2, Info, Sparkles, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
@@ -26,7 +25,9 @@ import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 // PropertiesVerticalNav removed — handled globally by MainLayout
-import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -86,44 +87,7 @@ const AreaDetail = () => {
   // Page-level filter state
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Sticky filter bar logic
-  const [isFixed, setIsFixed] = useState(false);
-  const [bottomReached, setBottomReached] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
-
-  // Show the sticky replacement filter/tab bar on any scroll — matches the
-  // project-page standard so area pages get the same immediate access to
-  // relevant filters.
-  useEffect(() => {
-    const onScroll = () => setIsFixed(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-   // Bottom sentinel: hide fixed bar when "Ready to Get Started" section enters viewport
-  useEffect(() => {
-    const target = document.getElementById('ready-to-get-started');
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setBottomReached(entry.isIntersecting || entry.boundingClientRect.top < 0),
-      { threshold: 0.1 }
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [area]);
-
-  // Signal GlobalHeader to hide when filter bar is fixed
-  useEffect(() => {
-    if (isFixed && !bottomReached) {
-      document.body.classList.add('filter-bar-fixed');
-    } else {
-      document.body.classList.remove('filter-bar-fixed');
-    }
-    return () => document.body.classList.remove('filter-bar-fixed');
-  }, [isFixed, bottomReached]);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   // Behavior-aware area recommendations (must be before early returns)
   const relatedAreas = useMemo(() => {
@@ -170,32 +134,9 @@ const AreaDetail = () => {
 
   if (!area) return null;
 
-  const filterBarContent = (
-    <>
-      {/* Search Input — pill matches Projects page: emerald surface, white icon/text, no gray highlight */}
-      <div className="relative flex-1 min-w-[220px] max-w-[420px] rounded-full overflow-hidden border border-white/25" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-        <input
-          type="text"
-          placeholder="Search projects or developers..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          data-no-contrast-guard
-          className="allow-white w-full h-10 pl-9 pr-8 rounded-full bg-transparent border-0 text-sm focus:outline-none focus:ring-0 transition-colors placeholder:text-white/70"
-          style={{ fontSize: '14px', color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
-        />
-        {searchQuery && (
-          <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2" aria-label="Clear search">
-            <X className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-          </button>
-        )}
-      </div>
-    </>
-  );
-
   const areaStickyTabs = [
-    { id: "area-about", label: "Developer", icon: Info },
-    { id: "area-projects", label: "Floor Plans", icon: Building2 },
+    { id: "developers-section", label: "Developer", icon: Info },
+    { id: "area-projects", label: "Projects", icon: Building2 },
     { id: "area-map", label: "Location", icon: MapPin },
     { id: "area-ai", label: "AI Analyzer", icon: Sparkles },
   ];
@@ -208,40 +149,110 @@ const AreaDetail = () => {
     window.scrollTo({ top: Math.max(0, top), behavior: prefersReduced ? "auto" : "smooth" });
   };
 
-  // Single filter bar block — appears inline under hero and BECOMES FIXED on
-  // scroll (matching the Projects page pattern). Never crosses the 56px
-  // vertical sidebar; disappears once user reaches the final CTA block.
+  const filterButtonStyle = { color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' } as React.CSSProperties;
+
+  // Single custom area filter bar. It deliberately avoids the shared full rail
+  // because that rail exposes too many chips for this compact area page header.
   const filterBarBlock = (
     <div
-      className="border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)]"
+      className="area-filter-bar shadow-[0_4px_20px_rgba(0,0,0,0.28)]"
       data-surface="dark"
       data-scoped-sticky-nav="area"
       style={{ background: 'linear-gradient(90deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}
     >
-      <div className="px-4 md:px-6 py-3">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-          <FilterShortcutBar
-            variant="dark"
-            filters={shortcutFilters}
-            onFilterChange={setShortcutFilters}
-            priorityFilter="areas"
-            searchSlot={filterBarContent}
-            hidePropertyType
-            hideTrendingSort
-          />
-          {/* Section-jump tabs live inside the same bar so they persist on scroll */}
-          <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide shrink-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+      <div className="px-3 sm:px-4 md:px-5 py-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="relative h-10 w-full sm:w-[260px] lg:w-[320px] flex-none rounded-lg overflow-hidden border border-white/18 bg-white/12 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <input
+              type="text"
+              placeholder="Search projects or developers"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              data-no-contrast-guard
+              className="allow-white w-full h-full pl-10 pr-9 bg-transparent border-0 text-sm focus:outline-none focus:ring-0 placeholder:text-white/76"
+              style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}
+            />
+            {searchQuery && (
+              <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center rounded-full bg-white/12" aria-label="Clear search">
+                <X className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setAdvancedOpen(true)}
+            data-no-contrast-guard
+            className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/16 bg-white/10 hover:bg-white/16 transition-colors"
+            style={filterButtonStyle}
+          >
+            <SlidersHorizontal className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+            <span>More filters</span>
+          </button>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                data-no-contrast-guard
+                className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/16 bg-white/10 hover:bg-white/16 transition-colors"
+                style={filterButtonStyle}
+              >
+                <span>Price</span>
+                <ChevronDown className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent data-no-contrast-guard align="start" sideOffset={8} className="w-80 border border-white/16 p-4 text-white shadow-2xl" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)', color: '#FFFFFF' }}>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="space-y-1 text-xs font-bold uppercase tracking-[0.12em]" style={filterButtonStyle}>
+                  Min
+                  <input
+                    inputMode="numeric"
+                    value={shortcutFilters.priceMin}
+                    onChange={(e) => setShortcutFilters({ ...shortcutFilters, priceMin: e.target.value.replace(/[^0-9]/g, '') })}
+                    placeholder="0"
+                    className="mt-1 h-10 w-full rounded-lg border border-white/18 bg-white/12 px-3 text-sm outline-none placeholder:text-white/60"
+                    style={filterButtonStyle}
+                  />
+                </label>
+                <label className="space-y-1 text-xs font-bold uppercase tracking-[0.12em]" style={filterButtonStyle}>
+                  Max
+                  <input
+                    inputMode="numeric"
+                    value={shortcutFilters.priceMax}
+                    onChange={(e) => setShortcutFilters({ ...shortcutFilters, priceMax: e.target.value.replace(/[^0-9]/g, '') })}
+                    placeholder="Any"
+                    className="mt-1 h-10 w-full rounded-lg border border-white/18 bg-white/12 px-3 text-sm outline-none placeholder:text-white/60"
+                    style={filterButtonStyle}
+                  />
+                </label>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShortcutFilters({ ...shortcutFilters, priceMin: '', priceMax: '' })}
+                className="mt-3 h-9 w-full rounded-lg border border-white/16 bg-white/10 text-xs font-bold"
+                style={filterButtonStyle}
+              >
+                Reset price
+              </button>
+            </PopoverContent>
+          </Popover>
+
+          <div className="h-7 w-px flex-none bg-white/14" />
+
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
             {areaStickyTabs.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => scrollToAreaSection(tab.id)}
                 data-no-contrast-guard
-                style={{ color: '#FFFFFF' }}
-                className="allow-white flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap shrink-0 transition-all hover:bg-white/10 border border-transparent"
+                style={filterButtonStyle}
+                className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold whitespace-nowrap transition-all hover:bg-white/16 border border-white/12 bg-white/6"
               >
-                <tab.icon className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{tab.label}</span>
+                <tab.icon className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                <span>{tab.label}</span>
               </button>
             ))}
           </div>
@@ -251,7 +262,7 @@ const AreaDetail = () => {
   );
 
   return (
-    <div className="min-h-screen w-full min-w-0 bg-[#FDFBF7]" data-surface="champagne">
+    <div className="min-h-screen w-full min-w-0" data-surface="dark" data-area-detail-page="true" style={{ background: 'linear-gradient(180deg, #064E3B 0%, #042C1C 38%, #010806 100%)' }}>
       <div className="w-full min-w-0 transition-all duration-200">
       <SEOHead
         title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
@@ -269,29 +280,22 @@ const AreaDetail = () => {
       {/* Full-Screen Hero */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
-      {/* Inline filter bar (below hero) */}
-      {filterBarBlock}
+      {/* Single sticky filter bar — no fixed clone, no duplication, no gold divider. */}
+      <div className="sticky top-0 z-[60] w-full min-w-0" data-area-sticky-filter-shell>
+        {filterBarBlock}
+      </div>
 
-      {/* Fixed clone of the filter bar on scroll — never crosses 56px sidebar */}
-      {isFixed && !bottomReached && (
-        <div className="fixed right-0 top-0 z-[60] transition-all duration-300" style={{ left: '56px' }}>
-          {filterBarBlock}
-        </div>
-      )}
+      <AdvancedFilterPanel
+        open={advancedOpen}
+        onOpenChange={setAdvancedOpen}
+        filters={shortcutFilters}
+        onFilterChange={setShortcutFilters}
+      />
 
       {/* About This Area */}
       <div id="area-about" className="scroll-mt-40">
         <AreaAboutSection area={area as any} />
       </div>
-
-      <div ref={sentinelRef} className="h-0" />
-
-
-
-
-
-
-
 
       {/* Projects Grid - edge to edge */}
       <div id="area-projects" className="scroll-mt-40">

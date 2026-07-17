@@ -31,20 +31,21 @@ export function MapNavigationControls({ latitude, longitude }: MapNavigationCont
 
   const btnClass = "jj-map-square-control";
   const iconClass = "h-5 w-5";
+  const whiteLock = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } as const;
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      <button type="button" onClick={(e) => run(e, handleZoomIn)} className={btnClass} aria-label="Zoom in" data-surface="emerald">
-        <ZoomIn className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleZoomIn)} className={btnClass} aria-label="Zoom in" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <ZoomIn className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
-      <button type="button" onClick={(e) => run(e, handleZoomOut)} className={btnClass} aria-label="Zoom out" data-surface="emerald">
-        <ZoomOut className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleZoomOut)} className={btnClass} aria-label="Zoom out" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <ZoomOut className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
-      <button type="button" onClick={(e) => run(e, handleRecenter)} className={btnClass} aria-label="Recenter map" data-surface="emerald">
-        <Navigation className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleRecenter)} className={btnClass} aria-label="Recenter map" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <Navigation className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
-      <button type="button" onClick={(e) => run(e, handleOpen3D)} className={btnClass} aria-label="Open 3D view in Google Earth" data-surface="emerald">
-        <Box className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleOpen3D)} className={btnClass} aria-label="Open 3D view in Google Earth" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <Box className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
     </div>
   );
@@ -82,20 +83,21 @@ export function MapNavigationControlsStandalone({
 
   const btnClass = "jj-map-square-control";
   const iconClass = "h-5 w-5";
+  const whiteLock = { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } as const;
 
   return (
     <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-2">
-      <button type="button" onClick={(e) => run(e, handleZoomIn)} className={btnClass} aria-label="Zoom in" data-surface="emerald">
-        <ZoomIn className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleZoomIn)} className={btnClass} aria-label="Zoom in" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <ZoomIn className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
-      <button type="button" onClick={(e) => run(e, handleZoomOut)} className={btnClass} aria-label="Zoom out" data-surface="emerald">
-        <ZoomOut className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleZoomOut)} className={btnClass} aria-label="Zoom out" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <ZoomOut className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
-      <button type="button" onClick={(e) => run(e, handleRecenter)} className={btnClass} aria-label="Recenter map" data-surface="emerald">
-        <Navigation className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleRecenter)} className={btnClass} aria-label="Recenter map" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <Navigation className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
-      <button type="button" onClick={(e) => run(e, handleOpen3D)} className={btnClass} aria-label="Open 3D view in Google Earth" data-surface="emerald">
-        <Box className={iconClass} strokeWidth={2.5} />
+      <button type="button" onClick={(e) => run(e, handleOpen3D)} className={btnClass} aria-label="Open 3D view in Google Earth" data-surface="emerald" data-no-contrast-guard style={whiteLock}>
+        <Box className={iconClass} strokeWidth={2.5} style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
       </button>
     </div>
   );

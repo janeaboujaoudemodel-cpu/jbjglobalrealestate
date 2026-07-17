@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, AreaChart, Area, PieChart, Pie } from "recharts";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 interface AreaAIAnalyzerProps {
   areaName: string;
   emirate: string;
@@ -306,6 +307,16 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
 
 // --- Developer Landscape Card ---
 function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
+  const developerAssets = useMemo(() => {
+    const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
+    const map = new Map<string, { name: string; slug?: string | null; logo_url?: string | null }>();
+    (stats?.developers || []).forEach((dev: any) => {
+      const name = typeof dev === "string" ? dev : dev?.name;
+      if (name) map.set(normalize(name), typeof dev === "string" ? { name } : dev);
+    });
+    return { map, normalize };
+  }, [stats?.developers]);
+
   const devEntries = useMemo(() => {
     const lines = text.split('\n').filter(l => l.trim().startsWith('•'));
     return lines.map(line => {
@@ -334,9 +345,16 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
           <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#064E3B]/10 hover:border-[#064E3B]/30 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-[#064E3B] border border-[#064E3B]/40 flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-xs">{dev.name.charAt(0)}</span>
-            </div>
+            {(() => {
+              const matched = developerAssets.map.get(developerAssets.normalize(dev.name));
+              return matched?.logo_url ? (
+                <DeveloperLogo src={matched.logo_url} alt={matched.name || dev.name} name={matched.name || dev.name} variant="bare" loading="eager" className="!w-9 !h-9 !min-w-9 !rounded-lg" />
+              ) : (
+                <div className="w-9 h-9 rounded-lg bg-[#F7F2EA] border border-white/35 flex items-center justify-center flex-shrink-0">
+                  <span className="font-bold text-[10px] tracking-[0.08em]" style={{ color: '#064E3B', WebkitTextFillColor: '#064E3B' }}>JBJ</span>
+                </div>
+              );
+            })()}
             <div className="flex-1 min-w-0">
               <p data-developer-name className="text-[#0A0A0A] font-semibold text-sm whitespace-normal break-words [overflow-wrap:anywhere] leading-snug overflow-visible">{dev.name}</p>
               {dev.projects && (
@@ -373,14 +391,20 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("projects")
-        .select("price_from, price_to, size_min, size_max, developer_name, construction_status")
+        .select("price_from, price_to, size_min, size_max, developer_name, construction_status, developers(name, slug, logo_url)")
         .ilike("area_name", `%${areaName}%`)
         .or("listing_kind.is.null,listing_kind.neq.leasing");
       if (error) throw error;
 
       const prices = (data || []).filter(p => p.price_from).map(p => Number(p.price_from));
       const sizes = (data || []).filter(p => p.size_min).map(p => Number(p.size_min));
-      const devs = new Set((data || []).filter(p => p.developer_name).map(p => p.developer_name));
+      const devs = new Map<string, { name: string; slug?: string | null; logo_url?: string | null }>();
+      (data || []).forEach((p: any) => {
+        const linked = Array.isArray(p.developers) ? p.developers[0] : p.developers;
+        const name = linked?.name || p.developer_name;
+        if (!name || devs.has(name)) return;
+        devs.set(name, { name, slug: linked?.slug || null, logo_url: linked?.logo_url || null });
+      });
       const statuses = (data || []).reduce((acc: Record<string, number>, p) => {
         const s = p.construction_status || "Unknown";
         acc[s] = (acc[s] || 0) + 1;
@@ -393,7 +417,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
         minPrice: prices.length > 0 ? Math.min(...prices) : null,
         maxPrice: prices.length > 0 ? Math.max(...prices) : null,
         avgSize: sizes.length > 0 ? Math.round(sizes.reduce((a, b) => a + b, 0) / sizes.length) : null,
-        developers: Array.from(devs),
+        developers: Array.from(devs.values()),
         statuses,
         pricePerSqft: prices.length > 0 && sizes.length > 0
           ? Math.round(prices.reduce((a, b) => a + b, 0) / sizes.reduce((a, b) => a + b, 0))

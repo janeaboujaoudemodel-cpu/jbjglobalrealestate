@@ -38,7 +38,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
   const isPositive = changeNum !== null && changeNum >= 0;
 
   return (
-    <section className="relative h-screen w-full min-w-0 flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
+    <section data-area-hero data-surface="dark" className="relative h-screen w-full min-w-0 flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
       {/* Background Image */}
       <img
         aria-hidden="true"
