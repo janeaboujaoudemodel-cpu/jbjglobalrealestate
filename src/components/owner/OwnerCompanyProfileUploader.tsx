@@ -217,7 +217,45 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
         </Link>
       </div>
 
-
+      {/* AI intel from website + bulk links */}
+      <div className="mb-4 rounded-lg border border-[#064E3B]/25 bg-gradient-to-br from-[#F0FDF4] to-[#FDFBF7] p-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Sparkles className="w-3.5 h-3.5 text-[#064E3B]" />
+          <span className="text-[11px] uppercase tracking-[0.18em] font-semibold text-[#064E3B]">
+            AI Intel — website & links
+          </span>
+        </div>
+        <div className="grid gap-2 md:grid-cols-2">
+          <input
+            type="url"
+            value={websiteUrl}
+            onChange={(e) => setWebsiteUrl(e.target.value)}
+            placeholder="https://developer-website.com"
+            className="w-full rounded-md border border-[#B89555]/40 bg-white px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#064E3B]"
+          />
+          <textarea
+            value={bulkLinksText}
+            onChange={(e) => setBulkLinksText(e.target.value)}
+            placeholder="Paste Google Drive links, press pages, brochure URLs — one per line"
+            rows={2}
+            className="w-full rounded-md border border-[#B89555]/40 bg-white px-3 py-2 text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/40 focus:outline-none focus:border-[#064E3B] resize-none"
+          />
+        </div>
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <p className="text-[11px] text-[#1A1A1A]/60">
+            AI reads every source, rewrites the bio in premium magazine style, and drafts CEO / founder / HQ / notable projects for your review.
+          </p>
+          <button
+            type="button"
+            onClick={runIntelExtract}
+            disabled={runningIntel || (!websiteUrl && !bulkLinksText.trim())}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-[#064E3B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#053426] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {runningIntel ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+            {runningIntel ? "Reading sources…" : "Extract intel"}
+          </button>
+        </div>
+      </div>
 
       <label
         onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
