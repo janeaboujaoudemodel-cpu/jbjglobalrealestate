@@ -370,15 +370,20 @@ label[data-required]::after {
   stroke: #FFFFFF !important;
 }
 
-.jbj-force-white-button,
-.jbj-force-white-button * {
+html body .jbj-force-white-button,
+html body .jbj-force-white-button *,
+html body button.jbj-force-white-button,
+html body button.jbj-force-white-button *,
+html body :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"]) .jbj-force-white-button,
+html body :is([data-surface="champagne"], [data-surface="light"], [data-surface="cream"], [data-surface="page"], [data-surface="raised"], [data-surface="gold"], [data-surface="pearl"]) .jbj-force-white-button * {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
-
-.jbj-force-white-button svg {
+html body .jbj-force-white-button svg,
+html body .jbj-force-white-button svg * {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
+  fill: none !important;
 }
 
 .careers-pill-complete,
