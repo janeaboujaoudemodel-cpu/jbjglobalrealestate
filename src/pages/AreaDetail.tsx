@@ -208,7 +208,7 @@ const AreaDetail = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-[#1A1A1A] flex ${isFixed && !bottomReached ? '' : ''}`}>
+    <div className="min-h-screen bg-[#FDFBF7] flex" data-surface="champagne">
       {/* Vertical nav handled globally by MainLayout */}
       <div className="flex-1 transition-all duration-200">
       <SEOHead 
@@ -227,20 +227,23 @@ const AreaDetail = () => {
       {/* Full-Screen Hero with Real Photo */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
+      {/* Sticky section-tab bar on scroll — black text on champagne */}
       {isFixed && !bottomReached && (
-        <div data-scoped-sticky-nav="area" className="jj-utility-shell fixed left-0 right-0 top-0 z-[9999] backdrop-blur-md transition-all duration-300">
-          <div data-filter-clean="true" data-filter-bar-gold="area-detail" className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/20 py-2 px-2">
-            <div className="max-w-full overflow-x-auto overscroll-x-contain scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x pan-y' } as React.CSSProperties}>
-              <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} priorityFilter="areas" searchSlot={filterBarContent} hidePropertyType hideTrendingSort />
-            </div>
-          </div>
-          <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-[#B89555] shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+        <div data-scoped-sticky-nav="area" data-surface="champagne" className="fixed left-0 right-0 top-0 z-[9999] backdrop-blur-md transition-all duration-300">
+          <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-[#B89555]/30 shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
             <div className="jj-content-track overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none', touchAction: 'pan-x' } as React.CSSProperties}>
               <div className="flex w-max min-w-max items-center gap-1 py-2.5">
                 {areaStickyTabs.map((tab) => (
-                  <button key={tab.id} type="button" onClick={() => scrollToAreaSection(tab.id)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap shrink-0 min-w-fit transition-all text-[#1A1A1A]/70 hover:text-[#1A1A1A] hover:bg-[#EFE6D6]/10 border border-transparent">
-                    <tab.icon className="w-3.5 h-3.5" />
-                    <span>{tab.label}</span>
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => scrollToAreaSection(tab.id)}
+                    data-no-contrast-guard
+                    style={{ color: '#0A0A0A' }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold whitespace-nowrap shrink-0 min-w-fit transition-all hover:bg-[#064E3B]/10 border border-transparent"
+                  >
+                    <tab.icon className="w-3.5 h-3.5" style={{ color: '#0A0A0A' }} />
+                    <span style={{ color: '#0A0A0A' }}>{tab.label}</span>
                   </button>
                 ))}
               </div>
@@ -249,18 +252,10 @@ const AreaDetail = () => {
         </div>
       )}
 
-      {/* About This Area */}
-      <div id="area-about" className="scroll-mt-40">
-        <AreaAboutSection area={area as any} />
-      </div>
-
-      {/* Sentinel for IntersectionObserver — sits just above inline bar */}
-      <div ref={sentinelRef} className="h-0" />
-
-      {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)] transition-all duration-300">
+      {/* Single inline filter bar — the only filter on the page */}
+      <div className="bg-gradient-to-r from-[#064E3B] via-[#042C1C] to-[#010806] backdrop-blur-md py-3 px-4 md:px-6 border-b border-white/18 shadow-[0_4px_20px_rgba(0,0,0,0.28)]" data-surface="dark">
         <div className="container mx-auto">
-            <FilterShortcutBar
+          <FilterShortcutBar
             variant="dark"
             filters={shortcutFilters}
             onFilterChange={setShortcutFilters}
@@ -271,6 +266,16 @@ const AreaDetail = () => {
           />
         </div>
       </div>
+
+      {/* About This Area */}
+      <div id="area-about" className="scroll-mt-40">
+        <AreaAboutSection area={area as any} />
+      </div>
+
+      {/* Sentinel for IntersectionObserver */}
+      <div ref={sentinelRef} className="h-0" />
+
+
 
 
 

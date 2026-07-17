@@ -232,7 +232,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section className="py-10 md:py-14 overflow-hidden bg-[#FDFBF7]">
+    <section data-surface="champagne" className="py-10 md:py-14 overflow-hidden bg-[#FDFBF7]">
       <div className="w-full px-4 md:px-8 lg:px-12">
         <div className="max-w-[1600px] mx-auto">
 

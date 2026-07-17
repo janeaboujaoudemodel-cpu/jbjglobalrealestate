@@ -90,11 +90,12 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
+    <section data-surface="champagne" className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div>
-        <h2 className="text-[#1A1A1A] text-2xl md:text-3xl font-bold mb-6">
+        <h2 data-no-contrast-guard style={{ color: '#0A0A0A' }} className="text-2xl md:text-3xl font-bold mb-6">
           Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
         </h2>
+
 
         {/* Grid */}
         <div>
