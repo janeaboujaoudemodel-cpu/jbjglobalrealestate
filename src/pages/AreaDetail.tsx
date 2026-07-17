@@ -250,12 +250,40 @@ const AreaDetail = () => {
     </div>
   );
 
+  return (
+    <div className="min-h-screen bg-[#FDFBF7] flex" data-surface="champagne">
+      <div className="flex-1 transition-all duration-200">
+      <SEOHead
+        title={`${area.name} - Real Estate in ${area.emirate} | JBJ`}
+        description={area.description || `Explore properties in ${area.name}, ${area.emirate}.`}
+        keywords={`${area.name} properties, ${area.emirate} real estate`}
+        canonicalPath={`/area/${area.slug}`}
+        breadcrumbItems={[
+          { name: 'Home', path: '/' },
+          { name: 'Areas', path: '/areas' },
+          { name: area.name, path: `/area/${area.slug}` },
+        ]}
+      />
+      <SchemaEntity kind="community" slug={area.slug || slug || ""} pageTitle={`${area.name} — Properties in ${area.emirate}`} />
+
+      {/* Full-Screen Hero */}
+      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
+
+      {/* Inline filter bar (below hero) */}
+      {filterBarBlock}
+
+      {/* Fixed clone of the filter bar on scroll — never crosses 56px sidebar */}
+      {isFixed && !bottomReached && (
+        <div className="fixed right-0 top-0 z-[60] transition-all duration-300" style={{ left: '56px' }}>
+          {filterBarBlock}
+        </div>
+      )}
+
       {/* About This Area */}
       <div id="area-about" className="scroll-mt-40">
         <AreaAboutSection area={area as any} />
       </div>
 
-      {/* Sentinel for IntersectionObserver */}
       <div ref={sentinelRef} className="h-0" />
 
 
