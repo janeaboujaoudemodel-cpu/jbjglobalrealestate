@@ -5,7 +5,7 @@
  * writes an entry into enrichment_review_drafts for owner review.
  */
 import { useCallback, useState } from "react";
-import { Upload, Loader2, FileText, Eye, EyeOff, Trash2, Sparkles, RefreshCw } from "lucide-react";
+import { Upload, Loader2, FileText, Eye, EyeOff, Trash2, Sparkles, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -27,6 +27,33 @@ interface DocRow {
 }
 
 const BUCKET = "developer-profiles";
+
+const parseFunctionError = async (err: any) => {
+  if (!err) return "Unknown error";
+  if (typeof err === "string") return err;
+  if (err.context && typeof err.context.text === "function") {
+    let body = "";
+    try {
+      body = await err.context.text();
+      const parsed = JSON.parse(body);
+      return parsed.error || parsed.message || parsed.detail || body;
+    } catch {
+      if (body) return body;
+    }
+  }
+  let msg = err.message || "Unknown error";
+  try {
+    const parsed = JSON.parse(msg);
+    return parsed.error || parsed.message || parsed.detail || msg;
+  } catch {
+    return msg;
+  }
+};
+
+const extractionDataError = (data: any) => {
+  if (!data || data.ok !== false) return null;
+  return [data.error, data.detail].filter(Boolean).join(" · ") || "Extraction failed";
+};
 
 export default function OwnerCompanyProfileUploader({ developerId, developerName }: Props) {
   const qc = useQueryClient();
@@ -63,13 +90,10 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [bulkLinksText, setBulkLinksText] = useState("");
   const [runningIntel, setRunningIntel] = useState(false);
+  const [minimized, setMinimized] = useState(false);
 
   const runIntelExtract = async () => {
     const links = bulkLinksText.split(/[\n,]+/).map((l) => l.trim()).filter(Boolean);
-    if (!websiteUrl && links.length === 0) {
-      toast.error("Add a website URL or at least one link");
-      return;
-    }
     setRunningIntel(true);
     try {
       toast.message("Reading website + links with AI…", { duration: 4000 });
@@ -77,6 +101,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
         body: { developerId, websiteUrl: websiteUrl.trim() || undefined, bulkLinks: links },
       });
       if (error) throw error;
+      const dataError = extractionDataError(data);
+      if (dataError) throw new Error(dataError);
       const preview = (data as { preview?: Record<string, unknown> } | null)?.preview ?? {};
       const keys = Object.keys(preview).filter((k) => preview[k] != null && preview[k] !== "");
       toast.success(
@@ -86,7 +112,7 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       );
       qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
     } catch (e) {
-      toast.error((e as Error).message || "Intel extraction failed");
+      toast.error(await parseFunctionError(e));
     } finally {
       setRunningIntel(false);
     }
@@ -129,8 +155,13 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           { body: { developerId, fileUrl, fileName: file.name, documentId: docRow.id } },
         );
         if (aiErr) {
-          toast.error(`AI extraction failed: ${aiErr.message}`);
+          toast.error(`AI extraction failed: ${await parseFunctionError(aiErr)}`);
         } else {
+          const dataError = extractionDataError(aiData);
+          if (dataError) {
+            toast.error(`AI extraction failed: ${dataError}`);
+            continue;
+          }
           const updated: string[] = (aiData as any)?.updatedFields ?? [];
           setLastExtraction(updated);
           setFoundFields((aiData as any)?.foundFields ?? null);
@@ -184,8 +215,10 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
         { body: { developerId, fileUrl, fileName: d.file_name, documentId: d.id } },
       );
       if (aiErr) {
-        toast.error(`AI extraction failed: ${aiErr.message}`);
+        toast.error(`AI extraction failed: ${await parseFunctionError(aiErr)}`);
       } else {
+        const dataError = extractionDataError(aiData);
+        if (dataError) throw new Error(dataError);
         const updated: string[] = (aiData as any)?.updatedFields ?? [];
         setLastExtraction(updated);
         setFoundFields((aiData as any)?.foundFields ?? null);
@@ -195,7 +228,7 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
       }
       refresh();
     } catch (e: any) {
-      toast.error(e.message || "Re-extraction failed");
+      toast.error(await parseFunctionError(e));
     } finally {
       setReExtractingId(null);
     }
@@ -212,10 +245,23 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
             Upload the developer's official PDF. AI reads it and instantly writes the description and profile fields for {developerName || "this developer"}. You can still edit every field manually below.
           </p>
         </div>
-        <Link to="/owner/enrichment-review" className="text-xs font-semibold text-[#064E3B] hover:underline">
-          Audit log →
-        </Link>
+        <div className="flex items-center gap-2 shrink-0">
+          <Link to="/owner/enrichment-review" className="text-xs font-semibold text-[#064E3B] hover:underline">
+            Audit log →
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMinimized((v) => !v)}
+            className="inline-grid h-8 w-8 place-items-center rounded-full border border-[#B89555]/40 bg-white text-[#064E3B] hover:bg-[#F7F2EA]"
+            title={minimized ? "Expand company profiles" : "Minimize company profiles"}
+          >
+            {minimized ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
+
+      {!minimized && (
+        <>
 
       {/* AI intel from website + bulk links */}
       <div className="mb-4 rounded-lg border border-[#064E3B]/25 bg-gradient-to-br from-[#F0FDF4] to-[#FDFBF7] p-3">
@@ -248,10 +294,16 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
           <button
             type="button"
             onClick={runIntelExtract}
-            disabled={runningIntel || (!websiteUrl && !bulkLinksText.trim())}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-[#064E3B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#053426] disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled={runningIntel}
+            data-no-contrast-guard
+            className="jbj-force-white-button shrink-0 inline-flex items-center gap-1.5 rounded-md border border-[#064E3B] px-3 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{
+              background: "#064E3B",
+              color: "#FFFFFF",
+              WebkitTextFillColor: "#FFFFFF",
+            }}
           >
-            {runningIntel ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+            {runningIntel ? <Loader2 className="w-3.5 h-3.5 animate-spin text-white" /> : <Sparkles className="w-3.5 h-3.5 text-white" />}
             {runningIntel ? "Reading sources…" : "Extract intel"}
           </button>
         </div>
@@ -387,6 +439,8 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
             </div>
           ))}
         </div>
+      )}
+        </>
       )}
     </div>
   );

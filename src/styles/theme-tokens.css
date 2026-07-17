@@ -370,6 +370,17 @@ label[data-required]::after {
   stroke: #FFFFFF !important;
 }
 
+.jbj-force-white-button,
+.jbj-force-white-button * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.jbj-force-white-button svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 .careers-pill-complete,
 [data-careers-page] .careers-pill-complete {
   background: linear-gradient(180deg, #F3E8D6 0%, var(--t-careers-complete, #E8D8B8) 100%) !important;
