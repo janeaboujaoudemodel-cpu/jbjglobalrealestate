@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface AreaDevelopersBarProps {
   areaName: string;
@@ -23,7 +24,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
         .not("developer_name", "is", null),
         supabase
           .from("developers")
-          .select("name, slug, logo_url")
+          .select("name, slug, logo_url, website_url")
           .not("logo_url", "is", null),
       ]);
       
@@ -32,7 +33,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
       const normalize = (value?: string | null) => (value || "").toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
       const logoMap = new Map<string, { name: string; slug?: string; logo_url?: string }>();
       for (const dev of allDevelopers || []) {
-        if (dev.name) logoMap.set(normalize(dev.name), dev as any);
+          if (dev.name) logoMap.set(normalize(dev.name), { ...(dev as any), logo_url: getDeveloperLogoUrl(dev as any) });
       }
 
       // Deduplicate by developer name
@@ -47,7 +48,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
           devMap.set(name, {
             name: fallback?.name || name,
             slug: dev?.slug || fallback?.slug,
-            logo_url: dev?.logo_url || fallback?.logo_url,
+            logo_url: getDeveloperLogoUrl(dev as any) || fallback?.logo_url,
           });
         }
       }

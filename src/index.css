@@ -36565,23 +36565,27 @@ html body #root [data-area-detail-page="true"] #area-map .jj-map-square-control 
 }
 
 /* PASS 173 — Area sticky filter search proof lock.
-   Removes the strong white search block/overlay while keeping pure-white
-   example text on the emerald filter rail. Scoped to Area pages only. */
+   Removes the strong white search block/overlay while keeping a subtle dark
+   filter block and pure-white placeholder text. Scoped to Area pages only. */
 html body #root [data-area-detail-page="true"] [data-area-sticky-filter-shell] {
   position: sticky !important;
-  top: 56px !important;
+  top: 88px !important;
   z-index: 9995 !important;
 }
 
 html body #root [data-area-detail-page="true"] [data-area-filter-search="true"],
 html body #root [data-area-detail-page="true"] [data-area-filter-search="true"]:hover,
 html body #root [data-area-detail-page="true"] [data-area-filter-search="true"]:focus-within {
-  background: transparent !important;
-  background-color: transparent !important;
+  background: rgba(255,255,255,0.08) !important;
+  background-color: rgba(255,255,255,0.08) !important;
   background-image: none !important;
-  border: 0 !important;
+  border-color: rgba(255,255,255,0.18) !important;
   outline: 0 !important;
   box-shadow: none !important;
+}
+
+html body #root [data-area-detail-page="true"] [data-area-filter-divider="true"] {
+  background: rgba(255,255,255,0.22) !important;
 }
 
 html body #root [data-area-detail-page="true"] [data-area-filter-inner="true"] {
@@ -36624,4 +36628,11 @@ html body #root [data-area-detail-page="true"] [data-area-filter-search-input="t
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
   opacity: 1 !important;
+}
+
+html body #root [data-area-detail-page="true"] [data-filter-dropdown="true"] .allow-white,
+html body #root [data-area-detail-page="true"] [data-filter-dropdown="true"] .allow-white * {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
 }

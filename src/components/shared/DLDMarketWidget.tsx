@@ -398,20 +398,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       <button
                         type="button"
                         onClick={() => setExpandedArea(isExpanded ? null : area.area)}
-                        className="relative w-full grid items-center gap-2 px-3 py-2.5 hover:bg-white/10 transition-colors text-left min-h-[44px]"
-                        style={{ gridTemplateColumns: '30px minmax(128px,1fr) 84px 64px 20px' }}
+                        className="relative w-full grid items-center gap-3 px-3 py-2.5 hover:bg-white/10 transition-colors text-left min-h-[54px]"
+                        style={{ gridTemplateColumns: '40px minmax(0,1fr) 92px 74px 26px' }}
                       >
-                        <span className="text-[11px] font-extrabold text-center bg-white/15 border border-white/35 rounded py-1" style={{ color: "#FFFFFF" }}>
+                        <span className="inline-flex h-8 w-8 items-center justify-center justify-self-center rounded-lg bg-white/15 border border-white/28 text-xs font-extrabold tabular-nums" style={{ color: "#FFFFFF" }}>
                           {i + 1}
                         </span>
-                        <span className="truncate text-sm font-semibold" style={{ color: "#FFFFFF" }}>
+                        <span className="min-w-0 truncate text-sm font-semibold leading-tight" style={{ color: "#FFFFFF" }}>
                           {area.area}
                         </span>
-                        <span className="text-right text-xs font-bold tabular-nums" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
-                        <span className="text-center text-[11px] font-extrabold bg-white/15 border border-white/25 px-1.5 py-0.5 rounded-full" style={{ color: "#FFFFFF" }}>
+                        <span className="justify-self-end text-right text-xs font-bold tabular-nums" style={{ color: "#FFFFFF" }}>{area.transactions.toLocaleString()}</span>
+                        <span className="inline-flex h-7 min-w-[64px] items-center justify-center justify-self-center rounded-full bg-white/15 border border-white/24 px-2 text-[11px] font-extrabold tabular-nums" style={{ color: "#FFFFFF" }}>
                           {area.change}
                         </span>
-                        <span className="flex items-center justify-center">
+                        <span className="flex h-7 w-7 items-center justify-center justify-self-end rounded-full bg-white/10">
                           {nats.length > 0 &&
                             (isExpanded ? (
                               <ChevronUp className="w-3.5 h-3.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} strokeWidth={2.5} />
@@ -465,12 +465,14 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   return (
                     <div key={nat.country} data-surface="emerald" className="jj-market-emerald-row relative rounded-lg overflow-hidden border border-white/16" style={{ background: "linear-gradient(135deg,#02100A 0%,#010806 58%,#000000 100%)" }}>
                       <div className="absolute inset-y-0 left-0" style={{ width: `${barWidth}%`, background: "linear-gradient(90deg,#064E3B 0%,#042C1C 100%)" }} />
-                      <div className="relative flex items-center justify-between px-3 py-2.5">
-                        <div className="flex items-center gap-2.5">
+                      <div className="relative grid items-center gap-3 px-3 py-2.5 min-h-[54px]" style={{ gridTemplateColumns: '36px minmax(0,1fr) 132px' }}>
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/12">
                           <span className="text-lg leading-none">{nat.flag}</span>
-                          <span className="font-semibold text-sm" style={{ color: "#FFFFFF" }}>{nat.country}</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="min-w-0">
+                          <span className="block truncate font-semibold text-sm" style={{ color: "#FFFFFF" }}>{nat.country}</span>
+                        </div>
+                        <div className="flex items-center justify-end gap-3">
                           <div className="w-24 h-2 bg-[#EFE6D6] rounded-full overflow-hidden">
                             <div className="h-full bg-[#064E3B] rounded-full origin-left" style={{ width: `${nat.percentage * 4}%` }} />
                           </div>

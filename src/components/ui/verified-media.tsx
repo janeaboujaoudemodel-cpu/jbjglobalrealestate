@@ -3,7 +3,7 @@ import { ImageOff } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
-import { getHighResImageUrl, isValidImageUrl } from "@/lib/imageUtils";
+import { getHighResImageUrl, isValidImageUrl, optimizeStorageImageUrl } from "@/lib/imageUtils";
 
 type VerifiedMediaProps = {
   src?: string | null;
@@ -67,9 +67,11 @@ export function VerifiedMedia({
     );
   }
 
+  const optimizedSrc = optimizeStorageImageUrl(getHighResImageUrl(safeSrc, "464x312"), priority ? 928 : 464, priority ? 72 : 68) || safeSrc;
+
   return (
     <SafeImage
-      src={getHighResImageUrl(safeSrc, "464x312")}
+      src={optimizedSrc}
       alt={alt}
       className={cn("w-full h-full", className)}
       loading={priority ? "eager" : "lazy"}

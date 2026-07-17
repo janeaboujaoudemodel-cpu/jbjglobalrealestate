@@ -614,31 +614,31 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
-                         <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
-                          <Home className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#0A0A0A]">{stats.totalProjects}</div>
-                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Projects</div>
+                          <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
+                          <Home className="w-4 h-4 mx-auto mb-1" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          <div data-no-contrast-guard className="text-lg font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{stats.totalProjects}</div>
+                          <div data-no-contrast-guard className="text-[10px] uppercase tracking-wider" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
                           <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
-                          <Landmark className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#0A0A0A]">{stats.developers.length}</div>
-                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Developers</div>
+                          <Landmark className="w-4 h-4 mx-auto mb-1" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          <div data-no-contrast-guard className="text-lg font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{stats.developers.length}</div>
+                          <div data-no-contrast-guard className="text-[10px] uppercase tracking-wider" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
                           <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
-                          <BarChart3 className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#064E3B]">{stats.pricePerSqft.toLocaleString()}</div>
-                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">AED/sqft</div>
+                          <BarChart3 className="w-4 h-4 mx-auto mb-1" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          <div data-no-contrast-guard className="text-lg font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{stats.pricePerSqft.toLocaleString()}</div>
+                          <div data-no-contrast-guard className="text-[10px] uppercase tracking-wider" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
                           <div data-ai-emerald-card className="rounded-xl p-3 text-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.16)' }}>
-                          <TrendingUp className="w-4 h-4 text-[#064E3B] mx-auto mb-1" />
-                          <div className="text-lg font-bold text-[#064E3B]">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                          <div className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-wider">Avg Price</div>
+                          <TrendingUp className="w-4 h-4 mx-auto mb-1" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
+                          <div data-no-contrast-guard className="text-lg font-bold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{(stats.avgPrice / 1000000).toFixed(1)}M</div>
+                          <div data-no-contrast-guard className="text-[10px] uppercase tracking-wider" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Avg Price</div>
                         </div>
                       )}
                     </div>
@@ -648,7 +648,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
                     <div data-ai-emerald-card className="border-t px-6 py-3" style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.16)' }}>
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-[10px] text-[#1A1A1A]/70 uppercase tracking-widest font-semibold">Status Mix</span>
+                        <span data-no-contrast-guard className="text-[10px] uppercase tracking-widest font-semibold" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
@@ -656,7 +656,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
  status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'jj-pill-emerald-metallic' : 
  status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'jj-pill-emerald-metallic' : 'jj-pill-emerald-metallic'
  }`} />
-                            <span className="text-xs text-[#1A1A1A]/70">{status} <span className="font-semibold text-[#1A1A1A]">({count as number})</span></span>
+                            <span data-no-contrast-guard className="text-xs" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{status} <span style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }} className="font-semibold">({count as number})</span></span>
                           </div>
                         ))}
                       </div>

@@ -24,6 +24,7 @@ import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
 import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
@@ -180,16 +181,17 @@ const AreaDetail = () => {
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
           }}
         >
-        <div className="jj-filter-rail flex items-center gap-1.5 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="jj-filter-rail flex items-center gap-2 overflow-x-auto overflow-y-visible whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {/* Search */}
           <div
-            className="area-filter-search-shell relative h-10 w-[240px] sm:w-[280px] lg:w-[320px] flex-none overflow-hidden"
+            className="area-filter-search-shell relative h-10 w-[250px] sm:w-[300px] lg:w-[340px] flex-none overflow-hidden rounded-lg"
             data-area-filter-search="true"
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.18)' }}
           >
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
             <input
               type="text"
-              placeholder={`Example: ${area.name}, developer, project`}
+              placeholder={`${area.name}, developer, project`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               data-no-contrast-guard
@@ -203,6 +205,8 @@ const AreaDetail = () => {
               </button>
             )}
           </div>
+
+          <div aria-hidden="true" data-area-filter-divider className="h-7 w-px flex-none" style={{ background: 'rgba(255,255,255,0.22)' }} />
 
           {/* Scope dropdown buttons */}
           {filterScopes.map((scope) => (
@@ -222,8 +226,8 @@ const AreaDetail = () => {
               <PopoverContent data-filter-dropdown="true" data-no-contrast-guard align="start" sideOffset={8} className={`w-72 p-4 ${filterPopoverSurface}`}>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)' }}>
-                      {searchScope === scope.id ? <Check className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> : <Search className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
+                    <span className="allow-white mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)', color: '#FFFFFF' }}>
+                      {searchScope === scope.id ? <Check className="allow-white w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> : <Search className="allow-white w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
                     </span>
                     <div className="min-w-0">
                       <h4 className="text-sm font-bold" style={scopeDropdownText}>Search by {scope.label}</h4>
@@ -243,7 +247,7 @@ const AreaDetail = () => {
               <button
                 type="button"
                 data-no-contrast-guard
-                className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/20 bg-white/10 hover:bg-white/18 transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+                className={`${filterPillBase} ${pillInactive("dark")}`}
                 style={filterButtonStyle}
               >
                 <span>Price</span>
@@ -290,7 +294,7 @@ const AreaDetail = () => {
             type="button"
             onClick={() => setAdvancedOpen(true)}
             data-no-contrast-guard
-            className="allow-white h-10 flex-none inline-flex items-center justify-center gap-2 rounded-lg px-3.5 text-sm font-bold border border-white/20 bg-white/10 hover:bg-white/18 transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]"
+            className={`${filterPillBase} ${pillInactive("dark")}`}
             style={filterButtonStyle}
           >
             <SlidersHorizontal className="w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
@@ -323,7 +327,7 @@ const AreaDetail = () => {
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
       {/* Single sticky filter bar — no fixed clone, no duplication, no gold divider. */}
-      <div className="sticky top-[56px] z-[9995] w-full min-w-0" data-area-sticky-filter-shell>
+      <div className="sticky top-[88px] z-[9995] w-full min-w-0" data-area-sticky-filter-shell>
         {filterBarBlock}
       </div>
 
@@ -398,13 +402,16 @@ const AreaDetail = () => {
                     >
                       {/* Background photo or champagne fallback */}
                       {relatedArea.image_url ? (
-                        <div
-                          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                          style={{ backgroundImage: `url(${relatedArea.image_url})` }}
+                        <img
+                          src={optimizeStorageImageUrl(relatedArea.image_url, 640, 70) || relatedArea.image_url}
+                          alt={`${relatedArea.name} area`}
+                          loading={index < 4 ? "eager" : "lazy"}
+                          decoding="async"
+                          className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                         />
                       ) : (
                          <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806] flex items-center justify-center">
-                          <span className="text-6xl font-black text-[#1A1A1A] select-none" style={{ opacity: 0.1 }}>JBJ</span>
+                          <MapPin className="w-10 h-10 text-white/70" />
                         </div>
                       )}
 
