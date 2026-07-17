@@ -60,6 +60,37 @@ export default function OwnerCompanyProfileUploader({ developerId, developerName
   const [lastExtraction, setLastExtraction] = useState<string[] | null>(null);
   const [foundFields, setFoundFields] = useState<Array<{ key: string; label: string; preview: string }> | null>(null);
   const [missingFields, setMissingFields] = useState<Array<{ key: string; label: string }> | null>(null);
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [bulkLinksText, setBulkLinksText] = useState("");
+  const [runningIntel, setRunningIntel] = useState(false);
+
+  const runIntelExtract = async () => {
+    const links = bulkLinksText.split(/[\n,]+/).map((l) => l.trim()).filter(Boolean);
+    if (!websiteUrl && links.length === 0) {
+      toast.error("Add a website URL or at least one link");
+      return;
+    }
+    setRunningIntel(true);
+    try {
+      toast.message("Reading website + links with AI…", { duration: 4000 });
+      const { data, error } = await supabase.functions.invoke("developer-intel-extract", {
+        body: { developerId, websiteUrl: websiteUrl.trim() || undefined, bulkLinks: links },
+      });
+      if (error) throw error;
+      const preview = (data as { preview?: Record<string, unknown> } | null)?.preview ?? {};
+      const keys = Object.keys(preview).filter((k) => preview[k] != null && preview[k] !== "");
+      toast.success(
+        keys.length
+          ? `AI drafted ${keys.length} field${keys.length > 1 ? "s" : ""} — review in Enrichment audit log`
+          : "AI ran but found no confirmed facts. Try a different source.",
+      );
+      qc.invalidateQueries({ queryKey: ["enrichment-drafts"] });
+    } catch (e) {
+      toast.error((e as Error).message || "Intel extraction failed");
+    } finally {
+      setRunningIntel(false);
+    }
+  };
 
   const upload = useCallback(async (files: FileList | File[]) => {
     if (!files || (files as FileList).length === 0) return;
