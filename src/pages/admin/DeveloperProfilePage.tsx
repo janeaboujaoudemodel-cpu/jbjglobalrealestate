@@ -947,9 +947,13 @@ export default function DeveloperProfilePage() {
 
           {/* BRIEFINGS */}
           <TabsContent value="briefings" className="space-y-4">
-            <div className="flex justify-end gap-2">
-              <Button size="sm" className="jj-surface-emerald text-white" asChild><Link to="/owner/developers/briefings"><Plus className="w-3.5 h-3.5 mr-1" /> Add new briefing</Link></Button>
-              <Button size="sm" variant="outline" className="border-[#B89555]/40" asChild><Link to="/owner/developers/briefings">Register broker survey</Link></Button>
+            <div className="flex justify-between items-center gap-2 flex-wrap">
+              <p className="text-xs text-[#1A1A1A]/70">
+                Surveys are sent by email after a briefing — recipients rate the sales rep on a secure link.
+              </p>
+              <Button size="sm" className="jj-surface-emerald text-white" asChild>
+                <Link to="/owner/developers/briefings"><Plus className="w-3.5 h-3.5 mr-1" /> Add new briefing</Link>
+              </Button>
             </div>
             {briefings.length === 0 ? (
               <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No briefings found for this developer.</Card>
