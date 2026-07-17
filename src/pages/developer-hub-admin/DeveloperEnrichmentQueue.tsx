@@ -224,19 +224,50 @@ export default function DeveloperEnrichmentQueue() {
               className="h-9 w-64"
             />
             <Button
+              variant="outline"
+              size="sm"
+              disabled={rebuildAllBroken.isPending}
+              onClick={() => rebuildAllBroken.mutate({ limit: 25 })}
+              title="Sample run: process only the 25 highest-ranked broken developers"
+            >
+              <Zap className="size-3 mr-1" />
+              Sample 25
+            </Button>
+            <Button
               variant="gold"
               size="sm"
               disabled={rebuildAllBroken.isPending}
-              onClick={() => rebuildAllBroken.mutate(25)}
+              onClick={() => rebuildAllBroken.mutate({ limit: null })}
+              title="Full run: process every developer with a missing logo or description"
             >
               <Zap className="size-3 mr-1" />
-              {rebuildAllBroken.isPending ? "Running…" : "Rebuild 25 broken"}
+              {rebuildAllBroken.isPending
+                ? `Running ${runProgress?.done ?? 0}/${runProgress?.total ?? "…"}`
+                : `Rebuild ALL${typeof brokenCount === "number" ? ` (${brokenCount})` : ""}`}
             </Button>
             <Button asChild variant="outline" size="sm">
               <a href="/owner/developers">Pick from directory →</a>
             </Button>
           </div>
         </div>
+
+        {runProgress && (
+          <div className="mt-3 pt-3 border-t border-[#B89555]/20">
+            <div className="flex items-center justify-between text-xs text-[#1A1A1A]/80 mb-1.5">
+              <span>
+                Progress: <span className="font-semibold text-[#1A1A1A]">{runProgress.done}</span> / {runProgress.total}
+                {runProgress.failed > 0 && <> · <span className="text-red-600">{runProgress.failed} failed</span></>}
+              </span>
+              <span>{Math.round((runProgress.done / Math.max(runProgress.total, 1)) * 100)}%</span>
+            </div>
+            <div className="h-1.5 w-full rounded-full bg-[#EFE6D6] overflow-hidden">
+              <div
+                className="h-full bg-[#B89555] transition-all"
+                style={{ width: `${(runProgress.done / Math.max(runProgress.total, 1)) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
 
         {stagedRows.length > 0 && (
           <div className="mt-3 pt-3 border-t border-[#B89555]/20 flex items-center gap-2 flex-wrap">
