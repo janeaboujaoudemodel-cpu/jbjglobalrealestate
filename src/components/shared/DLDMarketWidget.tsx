@@ -232,7 +232,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section data-dld-market-widget data-surface="dark" className="py-10 md:py-14 overflow-hidden bg-gradient-to-br from-[#064E3B] via-[#042C1C] to-[#010806]">
+    <section data-dld-market-widget data-surface="champagne" className="py-10 md:py-14 overflow-hidden" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="w-full px-4 md:px-8 lg:px-12">
         <div className="max-w-[1600px] mx-auto">
 
