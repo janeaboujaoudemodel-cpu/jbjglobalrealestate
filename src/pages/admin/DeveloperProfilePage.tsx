@@ -16,7 +16,7 @@ import {
   ArrowLeft, Building2, Globe, MapPin, Phone, Mail, Upload,
   Image as ImageIcon, FileText, Video, Map as MapIcon, Trash2,
   CheckCircle2, AlertTriangle, Pencil, Plus, ExternalLink, Languages,
-  ShieldCheck, History, Sparkles, Star, Calendar, Clock
+  ShieldCheck, History, Sparkles, Star, Calendar, Clock, Send, EyeOff, Eye
 } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
