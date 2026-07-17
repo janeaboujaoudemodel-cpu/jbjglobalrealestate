@@ -1,65 +1,45 @@
-## Area page (Dubai Islands) — full repair pass
+## Area page (Dubai Islands) — Full repair, one task at a time
 
-All fixes target `/area/:slug` and any shared components that leak the same issue into other pages. Every change is verified with a Playwright screenshot before we move to Phase 4.
+Every task is validated with a Playwright screenshot before moving to the next. No batching, no "done" claims without proof. Phase 4 (Excel bulk developer upload) is registered and starts only after all 15 items below are green.
 
-### 1. Hero — center the title
-- `AreaHeroSection.tsx`: change the content column from left-aligned to centered. Location pill, H1 (`{area.name}`), breadcrumb, and stats bar all center horizontally. H1 stops using `max-w-3xl` left-anchor; wraps in `mx-auto text-center`.
-- Applies to every area page, not just Dubai Islands.
+### The single source of truth for backgrounds
+The vertical sidebar emerald (`#064E3B → #042C1C → #010806`) is the ONE background used across the sticky filter bar, all filter dropdowns, and every "dark" area section. The pink-beige champagne is banned as a section background on the Area page except where explicitly kept (project cards themselves).
 
-### 2. Filter bars — remove duplicates, fix broken search sizing
-- Current state: sticky-on-scroll emerald filter (top) + tabs bar (Developer/Floor Plans/Location/AI Analyzer) + a second inline emerald filter below hero. That's the "duplicated" filter and the "third filter" the user called out.
-- Keep exactly ONE filter: the inline emerald bar directly under the hero (matches Properties page pattern).
-- Remove the sticky-on-scroll duplicate filter and its scroll listener / body-class side effect.
-- Keep the sticky tab bar (Developer / Floor Plans / Location / AI Analyzer) but fix its contrast (§3).
-- Fix the search pill height/width so it matches the other pill controls (h-10, same rounded-full, same font-size, no oversized appearance).
+### Task list (executed and screenshot-verified in this order)
 
-### 3. Sticky tab bar — text becomes black on champagne
-- `AreaDetail.tsx`: the Developer / Floor Plans / Location / AI Analyzer buttons currently render white (global contrast guard override). Force `text-[#1A1A1A]` with `!important`-equivalent scope so they stay black on the champagne band. Icons also black. Hover fills stay subtle emerald tint.
+1. **Sticky filter bar** — currently overlays the vertical sidebar and shows broken contrast. Rebuild so it: (a) starts under the header, (b) becomes sticky at correct top offset, (c) never crosses `left: 56px` (sidebar width), (d) uses the emerald 3-stop gradient, (e) never disappears at "JBJ AI Area Intelligence" scroll position.
+2. **Filter bar visual parity with Projects page** — same pill sizes, same emerald surface, same dropdown surface (match the Price dropdown color the user confirmed is correct). Apply identical pattern to Developers page, Areas page (list), Communities page.
+3. **"View All Projects in Dubai Islands" CTA** — pure white text + classic sheen animation.
+4. **Developers in Dubai Islands** — eager-load logos so name and logo appear together, no name-first flash.
+5. **Developer logo fallback** — never render "NPF" style letter fallback. Always show the real `logo_url`; if missing, show a champagne-neutral JBJ monogram, not initials in black.
+6. **Map of Dubai Islands** — force white on: "Click to enable map interaction", emerald price pins (numbers), Satellite/Street/Terrain toggle labels.
+7. **DLD Live Market Data** — the big AED/transactions numbers render white on the emerald cards.
+8. **JBJ AI Area Intelligence** — rebuild surface to premium emerald gradient. Fix: Investment Rating card (currently gray/broken), Price per sqft `%` label + icon → white, Supply vs Demand / Price / Investment Metric cards render immediately (no empty state), "Appreciation" text no longer clipped, everything loads fast (remove artificial delay/skeleton on already-cached data).
+9. **Developer Landscape (inside AI Area Intelligence)** — swap initials tiles for real developer logos; if missing, JBJ monogram.
+10. **Get In Touch card** — text is white, matches the emerald metallic animation used elsewhere.
+11. **Similar Areas / Explore More in Dubai** — (a) reorder so "Explore More in Dubai" sits ABOVE the "Explore Dubai Islands Properties" CTA (that CTA is last), (b) rebuild with champagne-gold metallic vertical-center layout as the premium background, (c) remove all gold borders, (d) area name titles on all 4 cards → pure white.
+12. **Page background** — replace the pink-beige champagne on all non-card Area page sections with the emerald sidebar gradient so the whole page reads premium and cohesive.
+13. **Rogue emerald vertical line** — investigate the stray emerald bar visible on the right in the annotated screenshot. Likely a compressed section/card or a stuck sticky element. Remove it site-wide, verify at multiple viewports (1280, 1024, 768, 390).
+14. **Hero title centering** — reconfirm center alignment holds after all above changes.
+15. **Regression sweep** — Projects, Developers, Areas list, Communities: confirm shared filter/dropdown/card components did not regress.
 
-### 4. Projects grid — fix all card contrast + slow images
-- `AreaProjectsGrid.tsx`: the "Projects in {area}" H2 currently renders white on champagne. Add `allow-black` and explicit `!text-[#1A1A1A]` so guard cannot invert it.
-- `ProjectCard` (shared): inspect and fix so:
-  - Project name (e.g. "Beach Oasis 2"): black.
-  - Meta row (studio, bedrooms range, sqft): black, not white.
-  - Developer name ("by Azizi Developments"): render in animated gold-champagne text using the existing `.jj-text-gold-animated` token.
-  - Price from + AED number: black.
-- Images: switch cover image + first `project_images[0]` to `loading="eager" fetchPriority="high" decoding="async"` for the first row of the grid (first 3 cards) so above-the-fold cards no longer flash black-then-load.
+### Validation protocol
+For each task: make the change → Playwright screenshot at 1280×1800 → view screenshot → only then move on. If a screenshot shows the fix is not visible, iterate on that same task before advancing.
 
-### 5. Developers bar — all text black on champagne
-- `AreaDevelopersBar.tsx`: force developer name labels + section title + count badge to black (`allow-black text-[#1A1A1A]`). Any pill/chip on champagne uses `bg-white/60 border-[#064E3B]/20`.
+### Phase 4 (registered, starts after all 15 land)
+Excel-based bulk developer profile upload — parse an admin-uploaded XLSX, dedupe by name/slug, keep richest fields per row, patch `developers` table, log an audit trail.
 
-### 6. About Dubai Islands section — contrast fix
-- `AreaAboutSection.tsx`: title, subtitle, description, stat labels, stat values all black on champagne. "About Dubai Islands" heading gets `allow-black text-[#1A1A1A]` and matching black location-pin icon.
-
-### 7. Map section — title black with icon
-- `AreaMapSection.tsx`: the "Map of {area}" title and its map-pin icon become black on the champagne background. Ensure the actual map (Mapbox / Leaflet layer) renders correctly and points to the area's `latitude/longitude`.
-
-### 8. DLD Market Intelligence widget — champagne background = black text
-- `DLDMarketWidget.tsx`: currently renders "Dubai Market Intelligence" title, "Download Report", "YTD Market Growth", and every stat card ("YTD Volume", "Transactions", "Off-plan sales", "Secondary sales", "Cash deals", "Mortgage deals") with white text on champagne. Convert all card surfaces to `bg-white/60` with `text-[#1A1A1A]`. Emerald KPI cards keep white text; only cards on the champagne band flip. Applies globally — this widget is also used elsewhere (property map, market intelligence pages).
-
-### 9. Area AI Analyzer — background match + contrast
-- `AreaAIAnalyzer.tsx`: background currently silver/gray-ish, breaks brand. Convert outer surface to the emerald 3-stop gradient used by the vertical sidebar (`#064E3B → #042C1C → #010806`). Title/subtitle/cards white. "Behind Explore Dubai Island Properties" strip: black background swap out for emerald gradient continuation.
-
-### 10. Explore More in {emirate} — kill gold cards
-- `AreaDetail.tsx`: the four Similar Areas photo cards fall back to a champagne gradient when no `image_url` exists. Swap to the emerald gradient fallback (already partially there — verify none remain gold). Ensure fallback JBJ monogram is not gold.
-
-### 11. Visual + technical validation (before saying done)
-- Playwright: navigate to `/area/dubai-islands`, screenshot: hero, sticky bar, projects grid card, developers bar, map, DLD widget, AI analyzer, similar areas. View each screenshot to confirm the fix.
-- Check the same components on `/properties` and `/developers` pages to confirm no regression from shared-component fixes (ProjectCard, DLDMarketWidget).
-- Run typecheck/build.
-
-### 12. Then — Phase 4 kickoff
-- After screenshots confirm every item above, start Phase 4 (Excel-based bulk developer profile upload) as previously scoped.
-
-### Files touched
+### Files expected to change
 - `src/pages/AreaDetail.tsx`
-- `src/components/area-detail/AreaHeroSection.tsx`
+- `src/components/area-detail/AreaHeroSection.tsx` (sticky bar host)
 - `src/components/area-detail/AreaProjectsGrid.tsx`
 - `src/components/area-detail/AreaDevelopersBar.tsx`
-- `src/components/area-detail/AreaAboutSection.tsx`
 - `src/components/area-detail/AreaMapSection.tsx`
 - `src/components/area-detail/AreaAIAnalyzer.tsx`
+- `src/components/area-detail/AreaAboutSection.tsx`
 - `src/components/shared/DLDMarketWidget.tsx`
-- `src/components/ProjectCard.tsx` (shared — verified against other pages)
+- `src/components/ui/DeveloperLogo.tsx` (fallback behavior)
+- Whichever component owns the "Explore More in Dubai" / Similar Areas block
+- Global CSS only if a stray vertical emerald element is coming from a utility rule
 
-Approve and I execute all of it in one pass, screenshot-verify each surface, then move directly to Phase 4.
+Approve and I execute item #1, screenshot, then proceed sequentially.
