@@ -185,12 +185,11 @@ const AreaDetail = () => {
           {/* Scope chips */}
           <div className="flex flex-none items-center gap-0.5 rounded-lg border border-white/16 bg-black/22 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
             {filterScopes.map((scope, idx) => (
-              <>
+              <React.Fragment key={scope.id}>
                 {idx > 0 && (
-                  <span key={`${scope.id}-div`} aria-hidden className="h-5 w-px mx-0.5" style={{ background: 'rgba(184,149,85,0.35)' }} />
+                  <span aria-hidden className="h-5 w-px mx-0.5" style={{ background: 'rgba(184,149,85,0.35)' }} />
                 )}
                 <button
-                  key={scope.id}
                   type="button"
                   onClick={() => setSearchScope(scope.id)}
                   data-active={searchScope === scope.id ? "true" : "false"}
@@ -200,7 +199,7 @@ const AreaDetail = () => {
                 >
                   {scope.label}
                 </button>
-              </>
+              </React.Fragment>
             ))}
           </div>
 
