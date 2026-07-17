@@ -29166,6 +29166,7 @@ export type Database = {
           area_id: string | null
           area_name: string | null
           area_unit: string | null
+          availability_state: Database["public"]["Enums"]["project_availability_state"]
           availability_status: string | null
           availability_visible: boolean | null
           available_units: number | null
@@ -29190,6 +29191,7 @@ export type Database = {
           developer_name: string | null
           down_payment_percent: number | null
           emirate: string | null
+          enrichment_flags: Json
           expected_completion: string | null
           external_id: string | null
           facilities: string[] | null
@@ -29228,6 +29230,7 @@ export type Database = {
           merged_at: string | null
           merged_into_project_id: string | null
           name: string
+          needs_enrichment: boolean
           number_of_stories: number | null
           owner_can_use: boolean | null
           owner_pii_hidden: boolean
@@ -29281,6 +29284,7 @@ export type Database = {
           area_id?: string | null
           area_name?: string | null
           area_unit?: string | null
+          availability_state?: Database["public"]["Enums"]["project_availability_state"]
           availability_status?: string | null
           availability_visible?: boolean | null
           available_units?: number | null
@@ -29305,6 +29309,7 @@ export type Database = {
           developer_name?: string | null
           down_payment_percent?: number | null
           emirate?: string | null
+          enrichment_flags?: Json
           expected_completion?: string | null
           external_id?: string | null
           facilities?: string[] | null
@@ -29343,6 +29348,7 @@ export type Database = {
           merged_at?: string | null
           merged_into_project_id?: string | null
           name: string
+          needs_enrichment?: boolean
           number_of_stories?: number | null
           owner_can_use?: boolean | null
           owner_pii_hidden?: boolean
@@ -29396,6 +29402,7 @@ export type Database = {
           area_id?: string | null
           area_name?: string | null
           area_unit?: string | null
+          availability_state?: Database["public"]["Enums"]["project_availability_state"]
           availability_status?: string | null
           availability_visible?: boolean | null
           available_units?: number | null
@@ -29420,6 +29427,7 @@ export type Database = {
           developer_name?: string | null
           down_payment_percent?: number | null
           emirate?: string | null
+          enrichment_flags?: Json
           expected_completion?: string | null
           external_id?: string | null
           facilities?: string[] | null
@@ -29458,6 +29466,7 @@ export type Database = {
           merged_at?: string | null
           merged_into_project_id?: string | null
           name?: string
+          needs_enrichment?: boolean
           number_of_stories?: number | null
           owner_can_use?: boolean | null
           owner_pii_hidden?: boolean
@@ -42040,6 +42049,10 @@ export type Database = {
         | "login_streak"
         | "first_deal_bonus"
       prediction_confidence: "low" | "medium" | "high" | "very_high"
+      project_availability_state:
+        | "available_with_developer"
+        | "sold_with_developer"
+        | "resale_only"
       redemption_status: "requested" | "approved" | "delivered" | "rejected"
       registration_status:
         | "draft"
@@ -42745,6 +42758,11 @@ export const Constants = {
         "first_deal_bonus",
       ],
       prediction_confidence: ["low", "medium", "high", "very_high"],
+      project_availability_state: [
+        "available_with_developer",
+        "sold_with_developer",
+        "resale_only",
+      ],
       redemption_status: ["requested", "approved", "delivered", "rejected"],
       registration_status: [
         "draft",
