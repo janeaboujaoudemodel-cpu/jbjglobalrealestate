@@ -12,6 +12,7 @@ import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import DeveloperExcelImportDialog from "@/components/owner/DeveloperExcelImportDialog";
+import RegistrationStatusBadge from "@/components/developers-portal/RegistrationStatusBadge";
 
 interface Row {
   id: string;
@@ -34,6 +35,13 @@ interface Row {
   total_project_units: number;
   avg_price_from: number | null;
   coverage: string[];
+  registration_status: string | null;
+  group_status: string | null;
+  is_hidden: boolean | null;
+  drive_enrichment_status: string | null;
+  office_phone: string | null;
+  admin_email: string | null;
+  whatsapp: string | null;
 }
 
 interface ProjectStatRow {
@@ -97,8 +105,7 @@ export default function DeveloperDirectory() {
       const to = from + PAGE_SIZE - 1;
       let q = supabase
         .from("developers")
-        .select("id, name, slug, logo_url, website_url, description, last_enriched_at, ceo_name, founded_year, headquarters, completed_projects, offplan_projects, total_units_delivered, upcoming_units, logo_status", { count: "exact" })
-        .eq("is_hidden", false)
+        .select("id, name, slug, logo_url, website_url, description, last_enriched_at, ceo_name, founded_year, headquarters, completed_projects, offplan_projects, total_units_delivered, upcoming_units, logo_status, registration_status, group_status, is_hidden, drive_enrichment_status, office_phone, admin_email, whatsapp", { count: "exact" })
         .order("name")
         .range(from, to);
       if (search.trim()) q = q.ilike("name", `%${search.trim()}%`);
@@ -251,6 +258,10 @@ export default function DeveloperDirectory() {
     "Website": d.website_url ?? "",
     "Profile Slug": d.slug,
     "Last Enriched Dubai Time": d.last_enriched_at ? new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dubai", dateStyle: "medium", timeStyle: "short" }).format(new Date(d.last_enriched_at)) : "",
+    "Registration Status": d.registration_status ?? "not_registered",
+    "Group Status": d.group_status ?? "pending_group_status",
+    "Hidden / Draft": d.is_hidden ? "Draft" : "Live",
+    "Drive Enrichment": d.drive_enrichment_status ?? "",
   })), [rows]);
 
   const exportFileStem = () => {
@@ -409,6 +420,7 @@ export default function DeveloperDirectory() {
                   <th className="px-4 py-3 font-black">Coverage</th>
                   <th className="px-4 py-3 font-black">Avg. Price</th>
                   <th className="px-4 py-3 font-black">Logo</th>
+                  <th className="px-4 py-3 font-black">Status</th>
                   <th className="px-4 py-3 font-black">Website</th>
                   <th className="px-4 py-3 font-black">Action</th>
                 </tr>
@@ -442,6 +454,13 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
                     <td className="px-4 py-3"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 min-w-[220px]">
+                      <div className="flex flex-wrap gap-1.5">
+                        <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
+                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{(d.group_status || "pending_group_status").replace(/_/g, " ")}</Badge>
+                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0">Draft</Badge>}
+                      </div>
+                    </td>
                     <td className="px-4 py-3 max-w-[170px] truncate">
                       {d.website_url ? <a href={d.website_url} target="_blank" rel="noreferrer" className="text-[#1A1A1A] underline decoration-[#B89555]/50">Website</a> : <span className="text-[#1A1A1A]/45">—</span>}
                     </td>
@@ -484,6 +503,12 @@ export default function DeveloperDirectory() {
                 <div className="min-w-0 flex-1">
                   <p className="font-black text-[#1A1A1A] text-[16px] leading-tight truncate">{d.name}</p>
                   <p className="text-xs text-[#1A1A1A]/60 truncate">{d.slug}</p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
+                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.08em]">{(d.group_status || "pending_group_status").replace(/_/g, " ")}</Badge>
+                    {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 text-[10px] uppercase tracking-[0.08em]">Draft</Badge>}
+                    {d.drive_enrichment_status && <Badge className="bg-[#FDE68A] text-[#1A1A1A] border border-[#B89555]/30 text-[10px] uppercase tracking-[0.08em]">{d.drive_enrichment_status}</Badge>}
+                  </div>
                   {d.website_url && (
                     <a href={d.website_url} target="_blank" rel="noreferrer" className="text-xs text-[#1A1A1A]/70 underline flex items-center gap-1 mt-1">
                       <ExternalLink className="size-3" />
