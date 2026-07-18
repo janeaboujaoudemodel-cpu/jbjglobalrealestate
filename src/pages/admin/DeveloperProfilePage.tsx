@@ -624,11 +624,26 @@ export default function DeveloperProfilePage() {
 
 
                 {canEdit && (
-                  <div className="flex justify-end gap-2 pt-2">
-                    <Button variant="outline" onClick={() => setForm(developer)} disabled={!dirty}>Reset</Button>
-                    <Button onClick={() => saveMutation.mutate()} disabled={!dirty || saveMutation.isPending} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/80">
-                      {saveMutation.isPending ? "Saving…" : "Save changes"}
-                    </Button>
+                  <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#B89555]/20">
+                    <p className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1.5">
+                      <CheckCircle2 className={`w-3.5 h-3.5 ${dirty ? "text-[#B89555]" : "text-emerald-600"}`} />
+                      {saveMutation.isPending
+                        ? "Saving…"
+                        : dirty
+                          ? "Unsaved changes · auto-saves after you stop typing"
+                          : "All changes saved · auto-save on"}
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => setForm(developer)} disabled={!dirty || saveMutation.isPending}>Reset</Button>
+                      <Button
+                        onClick={() => saveMutation.mutate()}
+                        disabled={saveMutation.isPending}
+                        className="bg-[#064E3B] text-white hover:bg-[#064E3B]/90"
+                        style={{ color: "#FFFFFF" }}
+                      >
+                        {saveMutation.isPending ? "Saving…" : dirty ? "Save now" : "Save changes"}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
