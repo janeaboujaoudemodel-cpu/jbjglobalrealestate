@@ -415,11 +415,13 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const { data: stats } = useQuery({
     queryKey: ["area-ai-stats", areaName],
     queryFn: async () => {
+      // MUST match AreaDetail.liveProjectCount filter so counts stay consistent
+      // across hero stats, Area Overview, and Developer Landscape.
       const { data, error } = await supabase
         .from("projects")
         .select("price_from, price_to, size_min, size_max, developer_name, construction_status, developers(name, slug, logo_url)")
-        .ilike("area_name", `%${areaName}%`)
-        .or("listing_kind.is.null,listing_kind.neq.leasing");
+        .eq("is_published", true)
+        .ilike("area_name", areaName);
       if (error) throw error;
 
       const prices = (data || []).filter(p => p.price_from).map(p => Number(p.price_from));
