@@ -368,8 +368,8 @@ export default function DeveloperExcelImportDialog({
                 style={{ color: "#FFFFFF" }}
               >
                 {busy
-                  ? <><Loader2 className="w-4 h-4 mr-1 animate-spin" /> Importing… {progress}%</>
-                  : `Import ${stats?.unique ?? 0} developers`}
+                  ? <><Loader2 className="w-4 h-4 mr-1 animate-spin" /> Saving & enriching… {progress}%</>
+                  : result ? `Re-run on ${stats?.unique ?? 0} developers` : `Save & enrich ${stats?.unique ?? 0} developers`}
               </Button>
             </div>
           </div>
