@@ -576,7 +576,44 @@ export default function DeveloperProfilePage() {
                   <Field label="Website URL">
                     <Input disabled={!canEdit} value={form.website_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, website_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                   </Field>
+                  <Field label="Google Drive folder">
+                    <div className="flex gap-2">
+                      <Input
+                        disabled={!canEdit}
+                        value={form.google_drive_url ?? ""}
+                        onChange={(e) => setForm((f) => ({ ...f, google_drive_url: e.target.value }))}
+                        placeholder="https://drive.google.com/drive/folders/…"
+                        className="bg-[#FDFBF7] border-[#B89555]/30"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        disabled={!canEdit || !form.google_drive_url}
+                        onClick={async () => {
+                          const { data, error } = await supabase.functions.invoke("enrich-developer-from-drive", {
+                            body: { developer_id: developer.id },
+                          });
+                          if (error) { toast.error(error.message); return; }
+                          if ((data as { needs_credential?: boolean })?.needs_credential) {
+                            toast.info("Google Drive credential not configured yet — job queued.");
+                          } else {
+                            toast.success("Drive sync queued.");
+                          }
+                        }}
+                      >
+                        Sync Drive
+                      </Button>
+                    </div>
+                    {developer.drive_enrichment_status && (
+                      <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                        Status: {developer.drive_enrichment_status}
+                        {developer.drive_last_synced_at ? ` · ${new Date(developer.drive_last_synced_at).toLocaleString()}` : ""}
+                      </p>
+                    )}
+                  </Field>
                   {/* Headquarters intentionally removed — never store or display developer office locations. */}
+
 
                   <Field label="Founded year">
                     <Input type="number" disabled={!canEdit} value={form.founded_year ?? ""} onChange={(e) => setForm((f) => ({ ...f, founded_year: e.target.value ? parseInt(e.target.value) : null }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
