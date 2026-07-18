@@ -15182,6 +15182,8 @@ export type Database = {
           drive_enrichment_status: string | null
           drive_last_synced_at: string | null
           enrichment_source: string | null
+          excel_import_marker: string | null
+          excel_imported_at: string | null
           expected_completion_year: number | null
           feature_image_url: string | null
           founded_year: number | null
@@ -15198,6 +15200,7 @@ export type Database = {
           last_confirmed_at: string | null
           last_confirmed_by: string | null
           last_enriched_at: string | null
+          last_excel_import_hash: string | null
           license_number: string | null
           linkedin_url: string | null
           logo_bg_color: string | null
@@ -15254,6 +15257,8 @@ export type Database = {
           drive_enrichment_status?: string | null
           drive_last_synced_at?: string | null
           enrichment_source?: string | null
+          excel_import_marker?: string | null
+          excel_imported_at?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
@@ -15270,6 +15275,7 @@ export type Database = {
           last_confirmed_at?: string | null
           last_confirmed_by?: string | null
           last_enriched_at?: string | null
+          last_excel_import_hash?: string | null
           license_number?: string | null
           linkedin_url?: string | null
           logo_bg_color?: string | null
@@ -15326,6 +15332,8 @@ export type Database = {
           drive_enrichment_status?: string | null
           drive_last_synced_at?: string | null
           enrichment_source?: string | null
+          excel_import_marker?: string | null
+          excel_imported_at?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
@@ -15342,6 +15350,7 @@ export type Database = {
           last_confirmed_at?: string | null
           last_confirmed_by?: string | null
           last_enriched_at?: string | null
+          last_excel_import_hash?: string | null
           license_number?: string | null
           linkedin_url?: string | null
           logo_bg_color?: string | null
@@ -41728,6 +41737,10 @@ export type Database = {
       }
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
       is_verified_staff: { Args: { _user_id: string }; Returns: boolean }
+      jbj_developer_import_key: {
+        Args: { _name: string; _website?: string }
+        Returns: string
+      }
       link_broker_entity_by_email: { Args: never; Returns: string }
       list_my_broker_oauth_apps: {
         Args: never

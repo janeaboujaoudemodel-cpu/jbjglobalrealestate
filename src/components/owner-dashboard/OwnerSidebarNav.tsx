@@ -76,6 +76,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "DEVELOPERS",
     items: [
+      { label: "Broker Portal", icon: Building2, path: "/owner/brokerages" },
       { label: "Developers Portal", icon: Building2, path: "/owner/developers" },
       // Sales Reps + Briefings are now surfaced as tabs inside each developer's page (Developer Portal rebuild).
 

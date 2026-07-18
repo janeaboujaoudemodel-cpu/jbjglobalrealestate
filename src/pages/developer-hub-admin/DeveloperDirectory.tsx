@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus, Upload } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
@@ -62,9 +63,23 @@ interface ProjectStatRow {
 
 const PAGE_SIZE = 60;
 
+const DEVELOPER_REGISTRATION_OPTIONS = [
+  { value: "not_registered", label: "Not registered" },
+  { value: "application_pending", label: "Application pending" },
+  { value: "pending_registration", label: "Pending registration" },
+  { value: "registered", label: "Registered" },
+];
+
+const DEVELOPER_GROUP_OPTIONS = [
+  { value: "pending_group_status", label: "Pending group status" },
+  { value: "has_group", label: "Has group" },
+  { value: "no_group", label: "No group" },
+  { value: "group_not_required", label: "Group not required" },
+];
+
 const normalizeDeveloperKey = (row: Row) => {
-  const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
-  const nameKey = row.name.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim().toLowerCase();
+  const SUFFIX = /\b(developments?|developers?|development|properties|property|realty|real\s*estate|holdings?|holding|group|llc|l\.?l\.?c|fz-?llc|pjsc|psc|inc|co|company|international|investments?|investment|limited|ltd|sole\s+proprietorship|s\.?p\.?c|plc|corp|corporation|establishment|contracting|construction)\b/gi;
+  const nameKey = row.name.replace(SUFFIX, " ").replace(/[^a-z0-9]+/gi, "").trim().toLowerCase();
   const host = (() => {
     if (!row.website_url) return "";
     try {
@@ -236,6 +251,22 @@ export default function DeveloperDirectory() {
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
     },
     onError: (e: Error) => toast.error(e.message),
+  });
+
+  const updateDeveloperStatus = useMutation({
+    mutationFn: async ({ id, patch }: { id: string; patch: Partial<Pick<Row, "registration_status" | "group_status">> }) => {
+      const { error } = await supabase.from("developers").update(patch).eq("id", id);
+      if (error) throw error;
+      return { id, patch };
+    },
+    onMutate: async ({ id, patch }) => {
+      setAccumulated((prev) => prev.map((row) => row.id === id ? { ...row, ...patch } : row));
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["dev-hub-directory"] });
+      toast.success("Developer status updated");
+    },
+    onError: (e: Error) => toast.error(e.message || "Could not update developer status"),
   });
 
   const selectedList = useMemo(() => Array.from(selected), [selected]);
@@ -465,9 +496,19 @@ export default function DeveloperDirectory() {
                       {d.website_url ? <a href={d.website_url} target="_blank" rel="noreferrer" className="text-[#1A1A1A] underline decoration-[#B89555]/50">Website</a> : <span className="text-[#1A1A1A]/45">—</span>}
                     </td>
                     <td className="px-4 py-3">
-                      <Button asChild size="sm" variant="gold">
-                        <Link to={`/owner/developers/${d.slug}`}>Open</Link>
-                      </Button>
+                      <div className="flex flex-col gap-2 min-w-[210px]">
+                        <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                          <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                        </Select>
+                        <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                          <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                        </Select>
+                        <Button asChild size="sm" variant="gold">
+                          <Link to={`/owner/developers/${d.slug}`}>Open</Link>
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -534,6 +575,16 @@ export default function DeveloperDirectory() {
               <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
+              <div className="mt-3 grid gap-2">
+                <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
+                  <SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                </Select>
+                <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
+                  <SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                  <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
               <div className="mt-3 flex gap-2 flex-wrap">
                 <Button asChild size="sm" variant="gold">
                   <Link to={`/owner/developers/${d.slug}`}>

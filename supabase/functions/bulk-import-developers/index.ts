@@ -18,6 +18,12 @@ const IMPORTABLE_FIELDS = [
 const norm = (s: string) => String(s ?? "").trim().toLowerCase().replace(/[_\-]+/g, " ").replace(/\s+/g, " ");
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+const importKey = (name: string) => {
+  const cleaned = norm(name)
+    .replace(/\b(developments?|developers?|development|properties|property|realty|real\s*estate|holdings?|holding|group|llc|l\.?l\.?c|fz\-?llc|pjsc|psc|inc|co|company|international|investments?|investment|limited|ltd|sole\s+proprietorship|s\.?p\.?c|plc|corp|corporation|establishment|contracting|construction)\b/gi, " ")
+    .replace(/[^a-z0-9]+/g, "");
+  return cleaned || slugify(name).replace(/-/g, "") || norm(name).replace(/[^a-z0-9]+/g, "");
+};
 const isAmra = (n: string) => norm(n).includes("amra");
 const isCiti = (n: string) => /\bciti\b/.test(norm(n));
 
@@ -42,6 +48,8 @@ Deno.serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const rows: InRow[] = Array.isArray(body?.rows) ? body.rows : [];
     const autoEnrichDrive = body?.auto_enrich_drive !== false;
+    const dryRun = body?.dry_run === true;
+    const importMarker = String(body?.import_marker ?? `developer_excel_${new Date().toISOString().slice(0, 10)}`).slice(0, 120);
     if (!rows.length) return json({ created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0 });
 
     // Service-role client for writes
@@ -55,7 +63,7 @@ Deno.serve(async (req) => {
       const name = String(r.name ?? "").trim();
       if (!name) continue;
       if (isAmra(name)) { protectedAmra++; continue; }
-      const key = slugify(name) || name.toLowerCase();
+      const key = importKey(name);
       const previous = bySlug.get(key) ?? {};
       const merged: InRow = { ...previous, name };
       for (const [k, vRaw] of Object.entries(r)) {
@@ -69,8 +77,8 @@ Deno.serve(async (req) => {
       bySlug.set(key, merged);
     }
 
-    const uniqueRows = Array.from(bySlug.entries()); // [slug, row]
-    const slugs = uniqueRows.map(([s]) => s);
+    const uniqueRows = Array.from(bySlug.entries()); // [canonical import key, row]
+    const slugs = uniqueRows.map(([, r]) => slugify(String(r.name)) || String(r.name).toLowerCase());
     const names = uniqueRows.map(([, r]) => r.name);
     if (!uniqueRows.length) {
       return json({ created: 0, updated: 0, filled_citi: 0, protected_amra: protectedAmra, skipped: 0, total_unique: 0, drive_jobs: 0 });
@@ -80,16 +88,24 @@ Deno.serve(async (req) => {
 
     const bySlugExist = new Map<string, any>();
     const byNameExist = new Map<string, any>();
+    const byImportKeyExist = new Map<string, any>();
     (existing ?? []).forEach((d: any) => {
       if (d.slug) bySlugExist.set(String(d.slug).toLowerCase(), d);
       if (d.name) byNameExist.set(norm(String(d.name)), d);
+      const key = importKey(String(d.name ?? ""));
+      if (key) {
+        const prev = byImportKeyExist.get(key);
+        // Prefer the live/richer existing row when legacy duplicates already exist.
+        if (!prev || (prev.is_hidden && !d.is_hidden) || scoreDeveloper(d) > scoreDeveloper(prev)) byImportKeyExist.set(key, d);
+      }
     });
 
     let created = 0, updated = 0, filled_citi = 0, skipped = 0, driveJobs = 0;
     const changed: Array<{ name: string; action: string; fields: string[] }> = [];
 
-    for (const [slug, r] of uniqueRows) {
-      const existRow = bySlugExist.get(slug) || byNameExist.get(norm(String(r.name)));
+    for (const [key, r] of uniqueRows) {
+      const slug = slugify(String(r.name)) || String(r.name).toLowerCase();
+      const existRow = byImportKeyExist.get(key) || bySlugExist.get(slug) || byNameExist.get(norm(String(r.name)));
       const excelValues: Record<string, any> = {};
       for (const f of IMPORTABLE_FIELDS) {
         const v = String((r as any)[f] ?? "").trim();
@@ -126,6 +142,11 @@ Deno.serve(async (req) => {
         if (!String(existRow.group_status ?? "").trim()) statusPatch.group_status = "pending_group_status";
         const finalPatch = { ...patch, ...statusPatch };
         if (Object.keys(finalPatch).length === 0) { skipped++; continue; }
+        if (dryRun) {
+          if (citi) filled_citi++; else updated++;
+          changed.push({ name: String(existRow.name || r.name), action: citi ? "would fill blanks" : "would update", fields: Object.keys(finalPatch).filter((f) => f !== "updated_at").slice(0, 12) });
+          continue;
+        }
         const { error } = await svc.from("developers").update({ ...finalPatch, updated_at: new Date().toISOString() }).eq("id", existRow.id);
         if (error) { skipped++; continue; }
         if (citi) filled_citi++; else updated++;
@@ -134,10 +155,18 @@ Deno.serve(async (req) => {
           driveJobs += await queueDriveJob(svc, existRow.id, String((patch.google_drive_url ?? excelValues.google_drive_url) || ""));
         }
       } else {
+        if (dryRun) {
+          created++;
+          changed.push({ name: String(r.name), action: "would create hidden", fields: ["registration_status", "group_status", ...Object.keys(excelValues), ...(Object.keys(customFields).length ? ["custom_fields"] : [])].slice(0, 12) });
+          continue;
+        }
         const { data: inserted, error } = await svc.from("developers").insert({
           name: r.name,
           slug,
           is_hidden: true,
+          excel_import_marker: importMarker,
+          excel_imported_at: new Date().toISOString(),
+          last_excel_import_hash: key,
           registration_status: "not_registered",
           group_status: "pending_group_status",
           ...excelValues,
@@ -152,7 +181,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    return json({ created, updated, filled_citi, protected_amra: protectedAmra, skipped, total_unique: uniqueRows.length, drive_jobs: driveJobs, changed: changed.slice(0, 100) });
+    return json({ dry_run: dryRun, created, updated, filled_citi, protected_amra: protectedAmra, skipped, total_unique: uniqueRows.length, drive_jobs: driveJobs, changed: changed.slice(0, 100) });
   } catch (e) {
     console.error("bulk-import-developers", e);
     return json({ error: String((e as Error).message ?? e) }, 500);
@@ -198,7 +227,7 @@ async function queueDriveJob(svc: any, developerId: string, folderUrl: string) {
   return 1;
 }
 async function loadExistingDevelopers(svc: any, slugs: string[], names: string[]) {
-  const select = ["id","slug","name","registration_status","group_status","custom_fields", ...IMPORTABLE_FIELDS].join(",");
+  const select = ["id","slug","name","is_hidden","registration_status","group_status","custom_fields", ...IMPORTABLE_FIELDS].join(",");
   const byId = new Map<string, any>();
   for (let i = 0; i < slugs.length; i += 100) {
     const chunk = slugs.slice(i, i + 100);
@@ -214,7 +243,23 @@ async function loadExistingDevelopers(svc: any, slugs: string[], names: string[]
     if (error) throw new Error(error.message);
     (data ?? []).forEach((row: any) => byId.set(row.id, row));
   }
+  // Final safety net: load the directory once and match by canonical import key.
+  // This prevents duplicates when Excel names differ only by legal/company suffixes.
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await svc.from("developers").select(select).range(from, from + 999);
+    if (error) throw new Error(error.message);
+    (data ?? []).forEach((row: any) => byId.set(row.id, row));
+    if (!data || data.length < 1000) break;
+  }
   return Array.from(byId.values());
+}
+function scoreDeveloper(d: any) {
+  return (d?.is_hidden ? -1000 : 0)
+    + (d?.logo_url ? 12 : 0)
+    + (d?.website_url ? 8 : 0)
+    + (d?.description ? Math.min(String(d.description).length / 100, 10) : 0)
+    + (d?.admin_email ? 3 : 0)
+    + (d?.office_phone ? 3 : 0);
 }
 function json(o: unknown, status = 200) {
   return new Response(JSON.stringify(o), {
