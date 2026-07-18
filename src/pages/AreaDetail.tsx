@@ -53,20 +53,31 @@ const AreaDetail = () => {
     });
   }, [area]);
 
-  // Live project count from database
-  const { data: liveProjectCount } = useQuery({
-    queryKey: ['area-live-project-count', area?.name],
+  // Live project count + developer count from database (SINGLE SOURCE OF TRUTH
+  // used by hero stats, Area Overview, and Developer Landscape). Filter MUST
+  // match AreaAIAnalyzer stats query.
+  const { data: liveStats } = useQuery({
+    queryKey: ['area-live-stats', area?.name],
     queryFn: async () => {
-      if (!area?.name) return 0;
-      const { count } = await supabase
+      if (!area?.name) return { projectCount: 0, developerCount: 0 };
+      const { data, error } = await supabase
         .from('projects')
-        .select('id', { count: 'exact', head: true })
+        .select('developer_name, developers(name)')
         .eq('is_published', true)
         .ilike('area_name', area.name);
-      return count ?? 0;
+      if (error) throw error;
+      const devs = new Set<string>();
+      (data || []).forEach((p: any) => {
+        const linked = Array.isArray(p.developers) ? p.developers[0] : p.developers;
+        const name = linked?.name || p.developer_name;
+        if (name) devs.add(name.trim().toLowerCase());
+      });
+      return { projectCount: data?.length ?? 0, developerCount: devs.size };
     },
     enabled: !!area?.name,
   });
+  const liveProjectCount = liveStats?.projectCount;
+  const liveDeveloperCount = liveStats?.developerCount;
 
   // Live DLD transaction data for this area from dld_market_data
   const { data: dldAreaData } = useQuery({
