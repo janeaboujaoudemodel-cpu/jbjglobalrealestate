@@ -123,6 +123,7 @@ const OwnerCreativeSuite = lazy(() => import("@/pages/OwnerCreativeSuite"));
 const BrandPaletteHub = lazy(() => import("@/pages/owner/BrandPaletteHub"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const DeveloperDirectory = lazy(() => import("@/pages/developer-hub-admin/DeveloperDirectory"));
+const BrokeragePortal = lazy(() => import("@/pages/owner/BrokeragePortal"));
 const DeveloperEnrichmentQueue = lazy(() => import("@/pages/developer-hub-admin/DeveloperEnrichmentQueue"));
 const MissingLogosQueue = lazy(() => import("@/pages/admin/MissingLogosQueue"));
 const DeveloperProfilePage = lazy(() => import("@/pages/admin/DeveloperProfilePage"));
@@ -281,6 +282,7 @@ export const OwnerRoutes = () => (
     <Route path="enrichment-review" element={<OwnerEnrichmentReview />} />
 
     <Route path="developers" element={<DeveloperDirectory />} />
+    <Route path="brokerages" element={<BrokeragePortal />} />
     <Route path="developers/directory" element={<Navigate to="/owner/developers" replace />} />
     <Route path="developers/add" element={<DeveloperCompanyRegistration />} />
     <Route path="developers/profile-rebuild" element={<DeveloperEnrichmentQueue />} />
