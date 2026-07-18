@@ -85,6 +85,7 @@ export default function DeveloperDirectory() {
   const [accumulated, setAccumulated] = useState<Row[]>([]);
   const [visOpen, setVisOpen] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "excel">("cards");
+  const [importOpen, setImportOpen] = useState(false);
 
   // Reset pagination when filters change
   useEffect(() => { setPage(0); setAccumulated([]); }, [search, onlyBroken]);
