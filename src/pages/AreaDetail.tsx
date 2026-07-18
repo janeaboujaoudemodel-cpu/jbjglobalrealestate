@@ -31,6 +31,7 @@ import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { filterPillBase, filterPillActive, pillInactive, filterPopoverSurface, filterPrimaryButton } from "@/components/filters/filterStyles";
 import { Button } from "@/components/ui/button";
+import { AreaFilterListDropdown } from "@/components/area-detail/AreaFilterListDropdown";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -208,38 +209,16 @@ const AreaDetail = () => {
 
           <div aria-hidden="true" data-area-filter-divider className="h-7 w-px flex-none" style={{ background: 'rgba(255,255,255,0.22)' }} />
 
-          {/* Scope dropdown buttons */}
+          {/* Scope dropdown buttons — real list-based dropdowns */}
           {filterScopes.map((scope) => (
-            <Popover key={scope.id}>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  data-active={searchScope === scope.id ? "true" : "false"}
-                  data-no-contrast-guard
-                  className={`${filterPillBase} ${searchScope === scope.id ? filterPillActive : pillInactive("dark")}`}
-                  style={filterButtonStyle}
-                >
-                  <span>{scope.label}</span>
-                  <ChevronDown className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent data-filter-dropdown="true" data-no-contrast-guard align="start" sideOffset={8} className={`w-72 p-4 ${filterPopoverSurface}`}>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="allow-white mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)', color: '#FFFFFF' }}>
-                      {searchScope === scope.id ? <Check className="allow-white w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> : <Search className="allow-white w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
-                    </span>
-                    <div className="min-w-0">
-                      <h4 className="text-sm font-bold" style={scopeDropdownText}>Search by {scope.label}</h4>
-                      <p className="mt-1 text-xs leading-relaxed" style={{ color: 'rgba(26,26,26,0.72)', WebkitTextFillColor: 'rgba(26,26,26,0.72)' }}>{scopeMenuCopy[scope.id]}</p>
-                    </div>
-                  </div>
-                  <Button type="button" onClick={() => setSearchScope(scope.id)} className={`${filterPrimaryButton} w-full`}>
-                    Use {scope.label}
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <AreaFilterListDropdown
+              key={scope.id}
+              scope={scope.id}
+              label={scope.label}
+              active={searchScope === scope.id}
+              onScope={setSearchScope}
+              onQuery={setSearchQuery}
+            />
           ))}
 
           <Popover>
@@ -326,8 +305,12 @@ const AreaDetail = () => {
       {/* Full-Screen Hero */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
-      {/* Single sticky filter bar — no fixed clone, no duplication, no gold divider. */}
-      <div className="sticky top-[88px] z-[9995] w-full min-w-0" data-area-sticky-filter-shell>
+      {/* Single sticky filter bar — sticks to top-0 on scroll */}
+      <div
+        className="w-full min-w-0"
+        data-area-sticky-filter-shell
+        style={{ position: "sticky", top: 0, zIndex: 9995 }}
+      >
         {filterBarBlock}
       </div>
 
