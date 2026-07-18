@@ -59,7 +59,9 @@ interface Developer {
   offplan_projects?: number | null;
   total_units_delivered?: number | null;
   portfolio_worth?: number | null;
-
+  google_drive_url?: string | null;
+  drive_enrichment_status?: string | null;
+  drive_last_synced_at?: string | null;
 }
 
 const MEDIA_KINDS = [
@@ -261,6 +263,7 @@ export default function DeveloperProfilePage() {
   const buildProfilePayload = useCallback(() => ({
     description: form.description ?? null,
     website_url: form.website_url ?? null,
+    google_drive_url: form.google_drive_url ?? null,
     // Location fields are permanently nulled — JBJ never stores or displays
     // developer office locations. See mem: constraint/no-developer-location.
     headquarters: null,
@@ -573,7 +576,44 @@ export default function DeveloperProfilePage() {
                   <Field label="Website URL">
                     <Input disabled={!canEdit} value={form.website_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, website_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                   </Field>
+                  <Field label="Google Drive folder">
+                    <div className="flex gap-2">
+                      <Input
+                        disabled={!canEdit}
+                        value={form.google_drive_url ?? ""}
+                        onChange={(e) => setForm((f) => ({ ...f, google_drive_url: e.target.value }))}
+                        placeholder="https://drive.google.com/drive/folders/…"
+                        className="bg-[#FDFBF7] border-[#B89555]/30"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        disabled={!canEdit || !form.google_drive_url}
+                        onClick={async () => {
+                          const { data, error } = await supabase.functions.invoke("enrich-developer-from-drive", {
+                            body: { developer_id: developer.id },
+                          });
+                          if (error) { toast.error(error.message); return; }
+                          if ((data as { needs_credential?: boolean })?.needs_credential) {
+                            toast.info("Google Drive credential not configured yet — job queued.");
+                          } else {
+                            toast.success("Drive sync queued.");
+                          }
+                        }}
+                      >
+                        Sync Drive
+                      </Button>
+                    </div>
+                    {developer.drive_enrichment_status && (
+                      <p className="text-[11px] text-[#1A1A1A]/60 mt-1">
+                        Status: {developer.drive_enrichment_status}
+                        {developer.drive_last_synced_at ? ` · ${new Date(developer.drive_last_synced_at).toLocaleString()}` : ""}
+                      </p>
+                    )}
+                  </Field>
                   {/* Headquarters intentionally removed — never store or display developer office locations. */}
+
 
                   <Field label="Founded year">
                     <Input type="number" disabled={!canEdit} value={form.founded_year ?? ""} onChange={(e) => setForm((f) => ({ ...f, founded_year: e.target.value ? parseInt(e.target.value) : null }))} className="bg-[#FDFBF7] border-[#B89555]/30" />

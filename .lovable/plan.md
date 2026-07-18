@@ -1,101 +1,102 @@
-# Developer Excel Import — Rebuild + Drive AI Enrichment
 
-## What's broken today (verified in `DeveloperExcelImportDialog.tsx`)
+# Developer Excel Import — Rebuild + Google Drive AI Enrichment
 
-- Your file's first row is a title ("DEVELOPER'S REGISTRATION MONITORING"), so the parser treats it as the header → every column becomes `__EMPTY`, `__EMPTY_1` … which is why every dropdown is "ignore".
-- Preview is hardcoded to 5 rows.
-- Mapping selects are native `<select>` → get the browser's blue focus/hover ring (violates the no-blue rule) and look broken vertically at your zoom.
-- 1650 rows are processed one-by-one with a per-row `SELECT` → very slow, blocks the UI, and can time out.
-- No drag-and-drop — only a click-to-pick input.
-- Footer shows row count (`Import 1650 rows`) instead of the deduped developer count.
-- No `google_drive_url` field, no Drive AI pipeline.
-- Merge rule is inverted from what you want (current code fills blanks only for everyone).
+## What's broken right now (confirmed from your two screenshots)
 
-## The rules I will implement (Excel-wins with two exceptions)
+- Every mapping row shows `__EMPTY` / "ignore": the parser used row 1 of your file, which is the title "DEVELOPER'S REGISTRATION MONITORING" — not the real header row.
+- Preview is hardcoded to the first 5 rows; you want to scroll all 1,650.
+- The mapping dropdown uses a native `<select>`, so hovering shows a blue OS ring (breaks the site's no‑blue rule).
+- Bottom footer shows `Import 1650 rows`; you want `Import <unique developers>`.
+- No drag‑and‑drop — only the "Choose file" button, and it wraps into a broken vertical stack at your zoom.
+- No `Google Drive` field, no AI pipeline reading those folders.
+- Current merge rule is "fill blanks only for everyone" — the opposite of what you asked for.
 
-Per row, keyed on developer name (normalized/slug):
+## The merge rules I will implement (locked)
+
+Key = normalized slug of the developer name; fallback = case‑insensitive name.
 
 | Developer | Rule |
 | --- | --- |
-| **Amra** | **Never touched.** Row skipped entirely. |
-| **Citi Developers** | **Fill-blanks-only.** Existing non-empty fields kept. |
-| Everyone else — already in DB | **Excel wins.** Non-empty Excel cells overwrite existing fields. Empty Excel cells never wipe existing data. |
-| Everyone else — new | Insert as `is_hidden = true` for owner review, then can be published. |
+| **Amra** | Never touched. Row skipped entirely. |
+| **Citi Developers** | Fill‑blanks‑only. Existing non‑empty fields kept. |
+| Everyone else — already in DB | **Excel wins.** Non‑empty Excel cells overwrite existing fields. **Empty Excel cells never wipe existing data.** |
+| Everyone else — new | Inserted as `is_hidden = true` so you can review before publishing. |
 
-No duplicates: dedupe by normalized slug (fallback: case-insensitive name).
+Zero duplication: dedupe by normalized slug before writing.
 
 ## Rebuilt import dialog
 
-- **Drag-and-drop zone** (drop file anywhere on the dropzone) + click-to-pick. Accepts `.xlsx / .xls / .csv`.
-- **Smart header detection**: scan first ~10 rows; pick the row where the most cells match known aliases (Name, Developer, Website, CEO, Founder, Founded, Description, Phone, Email, LinkedIn, Instagram, Projects, Specialization, Parent, Logo, **Google Drive**). Rows above it are dropped. This is what fixes the "empty empty ignore ignore" screen.
-- **Column mapping** using the shadcn `Select` (champagne + emerald accent, no blue). Two-column responsive grid, larger tap targets.
-- **Preview shows ALL rows**, virtualised (`@tanstack/react-virtual`) so 1650 rows scroll smoothly. Sticky header, monospaced cells, no vertical overflow.
-- **Footer summary** shows the counts you asked for:
+- **Drag & drop the file anywhere on the drop zone** + click‑to‑pick. Accepts `.xlsx`, `.xls`, `.csv`.
+- **Smart header detection**: scans the first ~10 rows and picks the row that best matches known aliases (Name, Developer, Website, CEO, Founder, Founding Date, Description, Phone, Email, LinkedIn, Instagram, Projects, Specialization, Parent, Logo, **Google Drive**). Everything above that row is discarded — this is what fixes the "empty empty ignore ignore" screen.
+- **Column mapping** uses the shadcn `Select` (champagne surface, emerald+white hover, no blue anywhere).
+- **Preview shows ALL rows**, virtualised with `@tanstack/react-virtual` so 1,650 rows scroll smoothly. Sticky header, monospaced cells, no vertical wrapping.
+- **Footer summary card** (the counts you asked for):
   - `1650 rows in file · 612 unique developers · 48 new · 561 will be enriched · 3 protected (Amra / Citi rules)`
-  - Primary button reads `Import 612 developers` (deduped count, never row count).
-- **Progress bar** during import (batched updates every 25 rows) — no more frozen UI.
-- **Buttons re-laid** on their own row on narrow widths so "Choose another file" / "Import …" never clip.
+  - Primary button reads **`Import 612 developers`** — never the row count.
+- **Progress bar** during import (batched every 25 rows) — the UI never freezes.
+- Buttons re‑laid on their own row so "Choose another file" and "Import …" never clip.
 
 ## Import engine (client → edge function)
 
-Move the heavy work off the browser:
+- New edge function `bulk-import-developers` (owner‑only, service role).
+- Client uploads the parsed JSON payload once; the function processes batches of 50 with a single `SELECT` per batch (not per row), applies the rule table, and returns `{ created, updated_excel_wins, filled_only_citi, protected_amra, total_unique }`.
+- Idempotent: re‑uploading the same file with no changes writes nothing.
 
-- New Supabase edge function `bulk-import-developers` (owner-only, service role).
-- Client uploads the parsed JSON payload once; function processes in batches of 50 with a single `SELECT id, slug, name, <fields>` per batch (not per row), applies the rule table above, and returns `{ created, updated_excel_wins, filled_only_citi, protected_amra, skipped, total_unique }`.
-- Idempotent: re-uploading the same file produces zero writes when nothing changed.
-
-## New field: `google_drive_url` + AI pipeline
+## New field: `google_drive_url` + AI enrichment pipeline
 
 Migration:
 
 ```text
-developers.google_drive_url text        -- from Excel column "Google Drive"
-developers.drive_enrichment_status text  -- queued | running | done | failed
-developers.drive_last_synced_at timestamptz
+developers.google_drive_url         text
+developers.drive_enrichment_status  text  -- queued | running | done | failed
+developers.drive_last_synced_at     timestamptz
 ```
 
-New table `developer_drive_jobs` (owner + service-role RLS, GRANTs included) tracks each Drive scan: `developer_id`, `folder_url`, `status`, `discovered_projects`, `discovered_documents`, `error`, timestamps.
+New table `developer_drive_jobs` (RLS: owner + service‑role) tracks each scan:
+`developer_id, folder_url, status, discovered_projects, discovered_documents, error, timestamps`.
 
-Edge function `enrich-developer-from-drive`:
+New edge function `enrich-developer-from-drive`:
 
-1. Lists files in the shared Drive folder (Google Drive API — needs a `GOOGLE_DRIVE_API_KEY` or service-account JSON secret; I'll request it via `add_secret` before this step runs).
-2. For every PDF / DOCX / image: parse with existing `document--parse` style helpers → feed text to Lovable AI Gateway (`google/gemini-2.5-flash`) with a strict JSON schema to extract:
-   - Company profile → enriches developer bio, CEO, founding year, HQ, specialization if still blank (respects Amra/Citi rules).
-   - Project brochures → creates `projects` rows (dedupe by name+developer), attaches area/community, uploads brochure to `project-documents` bucket, links via `project_documents`.
-   - Area / community fact sheets → creates/enriches `areas` and `communities`.
-   - All source files also stored under `developer_documents` so end-users can download them from the developer page (books/brochures section).
-3. Uses the existing project extraction AI (same one that powers "Rebuild from site") — I just point it at Drive-sourced text instead of scraped HTML. Nothing new to build model-side.
-4. Auto-runs on Excel import for every row that has a Drive link; also re-runs on demand from the developer profile ("Sync Google Drive" button).
+1. Lists files in the shared Drive folder (needs one Drive credential — see "One thing I need from you" below).
+2. For each PDF / DOCX / image: parse and feed the text to Lovable AI (`google/gemini-2.5-flash`) with a strict JSON schema to extract:
+   - Company profile → enriches developer bio, CEO, founding year, HQ, specialization (respecting Amra/Citi rules).
+   - Project brochures → creates `projects` rows (dedupe by name + developer), attaches area/community, uploads the brochure to the `project-documents` bucket, links via `project_documents`.
+   - Area / community fact sheets → creates or enriches `areas` and `communities`.
+   - Source files also stored in `developer_documents` so end‑users can download the books/brochures from the developer page.
+3. Reuses the existing project extraction AI you already have (same one that powers "Rebuild from site") — I only point it at Drive‑sourced text instead of scraped HTML. Nothing new model‑side.
+4. Auto‑runs on Excel import for every row that has a Drive link; also re‑runs on demand from the developer profile via a **Sync Google Drive** button.
 
-## Files I will touch
+## Files I will touch (nothing else)
 
-- `src/components/owner/DeveloperExcelImportDialog.tsx` — full rewrite (drag-drop, smart headers, virtualised preview, shadcn Select, deduped counts, progress).
+- `src/components/owner/DeveloperExcelImportDialog.tsx` — full rewrite (drag‑drop, smart headers, virtualised preview, shadcn Select, deduped counts, progress bar).
 - `supabase/functions/bulk-import-developers/index.ts` — new.
 - `supabase/functions/enrich-developer-from-drive/index.ts` — new.
-- Migration: add `google_drive_url`, `drive_enrichment_status`, `drive_last_synced_at` to `developers`; create `developer_drive_jobs` with GRANTs + RLS.
-- `src/pages/admin/DeveloperProfilePage.tsx` — add "Sync Google Drive" button + status pill (small addition, no other behaviour changed).
+- One migration: add the three developer columns; create `developer_drive_jobs` with GRANTs and RLS.
+- `src/pages/admin/DeveloperProfilePage.tsx` — add the "Sync Google Drive" button + status pill (isolated addition).
 - `src/pages/developer-hub-admin/DeveloperDirectory.tsx` — wire the new dialog result toast to show deduped counts.
 
-## Locked constraints (I will not deviate)
+## Locked constraints
 
 - Amra: never touched.
 - Citi Developers: fill blanks only.
-- All other existing developers: Excel-wins, non-empty cells overwrite; empty cells never wipe.
-- Zero duplication (dedupe by slug, fallback name case-insensitive).
-- No blue anywhere in the dialog (shadcn Select on emerald/champagne).
-- Nothing outside the files listed above is modified.
+- All other existing developers: Excel wins on non‑empty cells; empty cells never wipe.
+- Zero duplication (dedupe by slug).
+- No blue anywhere (shadcn Select on champagne + emerald accent).
+- Nothing outside the file list above is modified.
 
-## End-to-end test I will run before saying it's done
+## End‑to‑end test I will run before saying it's done (screenshots + SQL diff in the reply)
 
-1. Playwright: open `/owner/developers`, drag your uploaded Excel into the drop zone, screenshot header detection working (no more `__EMPTY`).
-2. Screenshot the mapping grid — no blue, all fields readable.
-3. Scroll the preview to row 1650 to prove virtualisation.
-4. Click Import, watch progress bar, screenshot the final summary card with the four counters.
-5. Verify with a SQL read: Amra row untouched, Citi only blanks filled, one other developer's fields changed to Excel values, one brand-new developer inserted as `is_hidden=true`.
-6. Trigger `enrich-developer-from-drive` on one row with a Drive link and screenshot the resulting `developer_drive_jobs` row + one new `projects` row.
+1. Playwright: open `/owner/developers`, drag the Excel into the drop zone — screenshot showing real headers (no `__EMPTY`).
+2. Screenshot the mapping grid — no blue, champagne surface, emerald hover.
+3. Scroll preview to row 1,650 to prove virtualisation.
+4. Click Import, watch progress, screenshot final summary with the four counters.
+5. SQL read: Amra row untouched, Citi only blanks filled, one other developer changed to Excel values, one brand‑new developer inserted as `is_hidden = true`.
+6. Trigger `enrich-developer-from-drive` on one row that has a Drive link and screenshot the new `developer_drive_jobs` row + one new `projects` row.
 
-Screenshots and the SQL diff go in the reply — no claim of "fixed" without them.
+## One thing I need from you before step 6
 
-## One thing I need from you before step 5
+To read your Drive folders I need one of:
+- a **Google Drive API key** (works if folders are shared "anyone with the link"), or
+- a **service‑account JSON** (works for private folders you share with the service‑account email).
 
-To read your Drive folders I need either a **Google Drive API key** (works if folders are shared "anyone with the link") or a **service-account JSON** (works for private folders you share with the service-account email). I'll prompt for whichever you prefer with the secret tool the moment we get to the Drive step. Everything else can start immediately.
+I'll prompt for whichever you prefer with the secure secret form the moment we reach the Drive step. Everything else (dialog rebuild, merge rules, dedupe, counts, migration, bulk‑import function) starts immediately and does not need this key.
