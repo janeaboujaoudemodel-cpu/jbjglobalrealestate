@@ -314,7 +314,7 @@ const AreaDetail = () => {
       <SchemaEntity kind="community" slug={area.slug || slug || ""} pageTitle={`${area.name} — Properties in ${area.emirate}`} />
 
       {/* Full-Screen Hero */}
-      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
+      <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} liveDeveloperCount={liveDeveloperCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
       {/* Single sticky filter bar — sticks to top-0 on scroll */}
       <div
