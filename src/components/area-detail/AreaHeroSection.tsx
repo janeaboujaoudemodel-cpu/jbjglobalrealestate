@@ -30,9 +30,7 @@ const staggerContainer = {
 export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
   const fallbackHeroImage = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
-  const heroImageSrc = area.slug === 'dubai-islands'
-    ? fallbackHeroImage
-    : optimizeStorageImageUrl(heroImage, 1920, 80) || fallbackHeroImage;
+  const heroImageSrc = optimizeStorageImageUrl(heroImage, 1920, 80) || fallbackHeroImage;
 
   const changeNum = dldAreaData ? parseFloat(dldAreaData.change.replace('%', '')) : null;
   const isPositive = changeNum !== null && changeNum >= 0;
@@ -45,16 +43,17 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
   };
 
   return (
-    <section data-area-hero data-surface="dark" className="relative h-screen w-full min-w-0 flex items-center justify-center overflow-hidden" style={{ background: 'linear-gradient(135deg, #064E3B 0%, #042C1C 60%, #010806 100%)' }}>
-      {/* Background Image */}
+    <section data-area-hero data-surface="dark" className="relative h-screen w-full min-w-0 flex items-center justify-center overflow-hidden" style={{ background: '#010806' }}>
+      {/* Background Image — full-bleed real area photo */}
       <img
         src={heroImageSrc}
         alt={`${area.name} - Real Estate Area`}
-        className="absolute inset-0 w-full h-full object-contain"
-        style={{ objectPosition: 'center center', transformOrigin: 'center center' }}
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: 'center center' }}
         loading="eager"
         fetchPriority="high"
        decoding="async" />
+
       
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20" />
