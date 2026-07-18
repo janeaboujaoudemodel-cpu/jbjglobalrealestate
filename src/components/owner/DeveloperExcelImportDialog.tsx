@@ -262,7 +262,7 @@ export default function DeveloperExcelImportDialog({
       if (!payload.length) { toast.error("No developer names were found in the database file"); return; }
       const batchSize = 75;
       const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
-      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: payload.length, drive_jobs: 0 };
+      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0 };
       for (let i = 0; i < chunks.length; i++) {
         setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
         const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
@@ -274,6 +274,7 @@ export default function DeveloperExcelImportDialog({
         totals.filled_citi += data?.filled_citi ?? 0;
         totals.protected_amra += data?.protected_amra ?? 0;
         totals.skipped += data?.skipped ?? 0;
+        totals.total_unique += data?.total_unique ?? 0;
         totals.drive_jobs += data?.drive_jobs ?? 0;
       }
       setProgress(100);
