@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -24,6 +24,9 @@ export default function BrokeragePortal() {
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"all" | "jbj" | "list">("all");
   const [listId, setListId] = useState<string>("all");
+  const [visibleLimit, setVisibleLimit] = useState(60);
+
+  useEffect(() => { setVisibleLimit(60); }, [search, view, listId]);
 
   const brokeragesQ = useQuery({ queryKey: ["brokerage-portal-brokerages"], queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,database_source,original_filename,list_id,updated_at").is("deleted_at", null).order("company_name").limit(5000);
@@ -57,6 +60,7 @@ export default function BrokeragePortal() {
   }, [brokeragesQ.data, membersQ.data, search, view, listId]);
 
   const visibleJbj = useMemo(() => (jbjQ.data ?? []).filter((b) => !search || [b.display_name, b.email, b.phone, b.title].some((v) => String(v ?? "").toLowerCase().includes(search.toLowerCase()))), [jbjQ.data, search]);
+  const visibleBrokerageCards = useMemo(() => visibleBrokerages.slice(0, visibleLimit), [visibleBrokerages, visibleLimit]);
 
   const updateBrokerage = useMutation({ mutationFn: async ({ id, patch }: { id: string; patch: Record<string, unknown> }) => {
     const { error } = await supabase.from("crm_brokerages" as any).update(patch as any).eq("id", id); if (error) throw error;
@@ -86,7 +90,8 @@ export default function BrokeragePortal() {
       {view === "list" && <Select value={listId} onValueChange={setListId}><SelectTrigger className="w-72 h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Select database" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40"><SelectItem value="all">All uploaded databases</SelectItem>{(listsQ.data ?? []).map((l) => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent></Select>}
       <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">{view === "jbj" ? visibleJbj.length : visibleBrokerages.length} shown</Badge>
     </Card>
-    {view === "jbj" ? <Card className="bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden"><table className="w-full min-w-[900px] text-sm"><thead className="bg-[#EFE6D6]"><tr className="text-left text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/70"><th className="px-4 py-3">JBJ Broker</th><th className="px-4 py-3">Contact</th><th className="px-4 py-3">Title</th><th className="px-4 py-3">Status</th></tr></thead><tbody>{visibleJbj.map((b) => <tr key={b.id} className="border-t border-[#B89555]/15"><td className="px-4 py-3 font-black text-[#1A1A1A]">{b.display_name || "Unnamed broker"}</td><td className="px-4 py-3 text-[#1A1A1A]">{b.email || b.phone || "—"}</td><td className="px-4 py-3 text-[#1A1A1A]">{b.title || "—"}</td><td className="px-4 py-3"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{b.verification_status || (b.is_active ? "active" : "inactive")}</Badge></td></tr>)}</tbody></table></Card> : <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">{visibleBrokerages.map((b) => <BrokerageCard key={b.id} row={b} onPatch={(patch) => updateBrokerage.mutate({ id: b.id, patch })} />)}</div>}
+    {view === "jbj" ? <Card className="bg-[#FDFBF7] border border-[#B89555]/30 overflow-hidden"><table className="w-full min-w-[900px] text-sm"><thead className="bg-[#EFE6D6]"><tr className="text-left text-[11px] uppercase tracking-[0.12em] text-[#1A1A1A]/70"><th className="px-4 py-3">JBJ Broker</th><th className="px-4 py-3">Contact</th><th className="px-4 py-3">Title</th><th className="px-4 py-3">Status</th></tr></thead><tbody>{visibleJbj.slice(0, visibleLimit).map((b) => <tr key={b.id} className="border-t border-[#B89555]/15"><td className="px-4 py-3 font-black text-[#1A1A1A]">{b.display_name || "Unnamed broker"}</td><td className="px-4 py-3 text-[#1A1A1A]">{b.email || b.phone || "—"}</td><td className="px-4 py-3 text-[#1A1A1A]">{b.title || "—"}</td><td className="px-4 py-3"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{b.verification_status || (b.is_active ? "active" : "inactive")}</Badge></td></tr>)}</tbody></table></Card> : <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">{visibleBrokerageCards.map((b) => <BrokerageCard key={b.id} row={b} onPatch={(patch) => updateBrokerage.mutate({ id: b.id, patch })} />)}</div>}
+    {((view === "jbj" ? visibleJbj.length : visibleBrokerages.length) > visibleLimit) && <div className="flex justify-center py-3"><Button variant="outline" onClick={() => setVisibleLimit((n) => n + 60)}>Load {Math.min(60, (view === "jbj" ? visibleJbj.length : visibleBrokerages.length) - visibleLimit)} more</Button></div>}
   </div>;
 }
 
