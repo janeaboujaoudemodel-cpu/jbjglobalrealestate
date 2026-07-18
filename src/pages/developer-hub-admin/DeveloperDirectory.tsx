@@ -323,12 +323,21 @@ export default function DeveloperDirectory() {
             <Button size="sm" variant="outline" onClick={exportCsv} disabled={!rows.length}>
               <Download className="size-4 mr-1" /> CSV
             </Button>
+            <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
+              <Upload className="size-4 mr-1" /> Import Excel
+            </Button>
             <Button size="sm" variant="gold" onClick={exportExcel} disabled={!rows.length}>
               <FileSpreadsheet className="size-4 mr-1" /> Download Excel
             </Button>
           </div>
         </div>
       </div>
+
+      <DeveloperExcelImportDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        onDone={() => { setPage(0); setAccumulated([]); qc.invalidateQueries({ queryKey: ["dev-hub-directory"] }); }}
+      />
 
       <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <p className="text-sm text-[#1A1A1A]/80">
