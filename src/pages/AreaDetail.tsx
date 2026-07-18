@@ -305,8 +305,12 @@ const AreaDetail = () => {
       {/* Full-Screen Hero */}
       <AreaHeroSection area={area as any} liveProjectCount={liveProjectCount ?? undefined} dldAreaData={dldAreaData ?? undefined} />
 
-      {/* Single sticky filter bar — no fixed clone, no duplication, no gold divider. */}
-      <div className="sticky top-[88px] z-[9995] w-full min-w-0" data-area-sticky-filter-shell>
+      {/* Single sticky filter bar — sticks to top-0 on scroll */}
+      <div
+        className="w-full min-w-0"
+        data-area-sticky-filter-shell
+        style={{ position: "sticky", top: 0, zIndex: 9995 }}
+      >
         {filterBarBlock}
       </div>
 
