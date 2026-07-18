@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus, Upload } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import DeveloperExcelImportDialog from "@/components/owner/DeveloperExcelImportDialog";
 
 interface Row {
   id: string;
