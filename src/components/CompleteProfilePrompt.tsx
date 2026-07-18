@@ -53,8 +53,12 @@ export default function CompleteProfilePrompt() {
   const forceShow =
     new URLSearchParams(location.search).get("completeProfile") === "1";
 
+  // Owners don't have a /register/owner page — they're the platform owner and
+  // are already registered. Only investor/broker/developer have registration flows.
+  const hasRegisterRoute = mode === "investor" || mode === "broker" || mode === "developer";
+
   const shouldQualify =
-    !!user && !isLoading && isRegistered === false; // strict false, not undefined
+    !!user && !isLoading && isRegistered === false && hasRegisterRoute; // strict false, not undefined
 
   const trigger = useCallback(
     (reason: string) => {
@@ -125,7 +129,12 @@ export default function CompleteProfilePrompt() {
   const close = () => setOpen(false);
   const goRegister = () => {
     setOpen(false);
-    navigate(`/register/${mode}`);
+    // Guard: only navigate to a real registration route. Fallback = investor.
+    const target =
+      mode === "broker" || mode === "developer" || mode === "investor"
+        ? mode
+        : "investor";
+    navigate(`/register/${target}`);
   };
 
   return (
@@ -181,7 +190,7 @@ export default function CompleteProfilePrompt() {
                 Complete your profile to earn points
               </h2>
               <p className="mt-2.5 text-sm text-[#1A1A1A]/75 leading-relaxed">
-                {PITCH[mode]}
+                {PITCH[(mode === "broker" || mode === "developer" || mode === "investor") ? mode : "investor"]}
               </p>
 
               <ul className="mt-4 space-y-2">
