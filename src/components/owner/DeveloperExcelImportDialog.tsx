@@ -132,6 +132,49 @@ export default function DeveloperExcelImportDialog({
     setRows([]); setHeaders([]); setMapping({}); setResult(null); setProgress(0);
   };
 
+  const runImportWith = async (
+    activeRows: Row[],
+    activeMapping: Record<string, string | null>,
+  ) => {
+    const nameCol = Object.entries(activeMapping).find(([, f]) => f === "name")?.[0];
+    if (!nameCol) { toast.error("Could not detect a 'Developer name' column"); return; }
+    setBusy(true); setProgress(0);
+    try {
+      const payload = activeRows.map((r) => {
+        const obj: Record<string, string> = {};
+        for (const [h, f] of Object.entries(activeMapping)) {
+          if (!f) continue;
+          const v = String(r[h] ?? "").trim();
+          if (v) obj[f] = v;
+        }
+        return obj;
+      }).filter((o) => o.name);
+
+      const CHUNK = 200;
+      let created = 0, updated = 0, filled_citi = 0, protected_amra = 0, skipped = 0;
+      for (let i = 0; i < payload.length; i += CHUNK) {
+        const chunk = payload.slice(i, i + CHUNK);
+        const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
+          body: { rows: chunk },
+        });
+        if (error) throw error;
+        created += data.created ?? 0;
+        updated += data.updated ?? 0;
+        filled_citi += data.filled_citi ?? 0;
+        protected_amra += data.protected_amra ?? 0;
+        skipped += data.skipped ?? 0;
+        setProgress(Math.min(100, Math.round(((i + chunk.length) / payload.length) * 100)));
+      }
+      setResult({ created, updated, filled_citi, protected_amra, skipped });
+      toast.success(`Saved · +${created} new · ${updated} enriched · ${filled_citi} Citi blanks · ${protected_amra} Amra protected · ${skipped} skipped`);
+      onDone?.();
+    } catch (e: any) {
+      toast.error(e.message || "Import failed");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleFile = useCallback(async (file: File) => {
     try {
       const XLSX = await import("xlsx");
@@ -145,11 +188,16 @@ export default function DeveloperExcelImportDialog({
       setRows(json);
       setResult(null);
       const mapped = Object.values(auto).filter(Boolean).length;
-      toast.success(`Loaded ${json.length} rows · ${mapped}/${hdrs.length} columns auto-mapped`);
+      toast.success(`Loaded ${json.length} rows · ${mapped}/${hdrs.length} columns auto-mapped · saving…`);
+      // AUTO-RUN: as soon as the file is parsed, save & enrich everything.
+      await runImportWith(json, auto);
     } catch (e: any) {
       toast.error(e.message || "Could not read file");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const runImport = () => runImportWith(rows, mapping);
 
   // Deduped developer count preview (skip Amra, skip blank names)
   const stats = useMemo(() => {
@@ -168,48 +216,6 @@ export default function DeveloperExcelImportDialog({
     }
     return { unique: seen.size, amra, citi, rows: rows.length };
   }, [rows, mapping]);
-
-  const runImport = async () => {
-    const nameCol = Object.entries(mapping).find(([, f]) => f === "name")?.[0];
-    if (!nameCol) { toast.error("Map a column to 'Developer name' first"); return; }
-    setBusy(true); setProgress(0);
-    try {
-      // Build minimized payload
-      const payload = rows.map((r) => {
-        const obj: Record<string, string> = {};
-        for (const [h, f] of Object.entries(mapping)) {
-          if (!f) continue;
-          const v = String(r[h] ?? "").trim();
-          if (v) obj[f] = v;
-        }
-        return obj;
-      }).filter((o) => o.name);
-
-      // Chunk client-side to keep function payload small + show progress
-      const CHUNK = 200;
-      let created = 0, updated = 0, filled_citi = 0, protected_amra = 0, skipped = 0;
-      for (let i = 0; i < payload.length; i += CHUNK) {
-        const chunk = payload.slice(i, i + CHUNK);
-        const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
-          body: { rows: chunk },
-        });
-        if (error) throw error;
-        created += data.created ?? 0;
-        updated += data.updated ?? 0;
-        filled_citi += data.filled_citi ?? 0;
-        protected_amra += data.protected_amra ?? 0;
-        skipped += data.skipped ?? 0;
-        setProgress(Math.min(100, Math.round(((i + chunk.length) / payload.length) * 100)));
-      }
-      setResult({ created, updated, filled_citi, protected_amra, skipped });
-      toast.success(`Import complete · +${created} new · ${updated} enriched · ${filled_citi} Citi blanks filled · ${protected_amra} Amra protected · ${skipped} skipped`);
-      onDone?.();
-    } catch (e: any) {
-      toast.error(e.message || "Import failed");
-    } finally {
-      setBusy(false);
-    }
-  };
 
   // Virtualized preview
   const virtualizer = useVirtualizer({
@@ -249,8 +255,8 @@ export default function DeveloperExcelImportDialog({
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
               />
               <Upload className="w-10 h-10 mx-auto text-[#B89555] mb-3" />
-              <p className="text-base font-semibold text-[#1A1A1A]">Drag & drop your .xlsx / .xls / .csv here</p>
-              <p className="text-xs text-[#1A1A1A]/60 mt-1">or click to browse — headers are auto-detected even if the file has a title row on top.</p>
+              <p className="text-base font-semibold text-[#1A1A1A]">Drop your database — extraction & enrichment start automatically</p>
+              <p className="text-xs text-[#1A1A1A]/60 mt-1">Drag & drop or click to browse (.xlsx / .xls / .csv). Every existing developer card is enriched instantly — Amra is protected, Citi fills blanks only.</p>
             </label>
           ) : (
             <div className="space-y-4">
@@ -362,8 +368,8 @@ export default function DeveloperExcelImportDialog({
                 style={{ color: "#FFFFFF" }}
               >
                 {busy
-                  ? <><Loader2 className="w-4 h-4 mr-1 animate-spin" /> Importing… {progress}%</>
-                  : `Import ${stats?.unique ?? 0} developers`}
+                  ? <><Loader2 className="w-4 h-4 mr-1 animate-spin" /> Saving & enriching… {progress}%</>
+                  : result ? `Re-run on ${stats?.unique ?? 0} developers` : `Save & enrich ${stats?.unique ?? 0} developers`}
               </Button>
             </div>
           </div>
