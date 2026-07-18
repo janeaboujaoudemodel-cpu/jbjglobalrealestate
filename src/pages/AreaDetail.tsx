@@ -31,6 +31,7 @@ import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { filterPillBase, filterPillActive, pillInactive, filterPopoverSurface, filterPrimaryButton } from "@/components/filters/filterStyles";
 import { Button } from "@/components/ui/button";
+import { AreaFilterListDropdown } from "@/components/area-detail/AreaFilterListDropdown";
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
