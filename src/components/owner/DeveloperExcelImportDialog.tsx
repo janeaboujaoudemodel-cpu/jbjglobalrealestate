@@ -11,7 +11,7 @@
  */
 import { useCallback, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -260,20 +260,32 @@ export default function DeveloperExcelImportDialog({
       });
       const payload = Array.from(byDeveloper.values()).filter((o) => o.name);
       if (!payload.length) { toast.error("No developer names were found in the database file"); return; }
-      setProgress(25);
-      const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
-        body: { rows: payload, auto_enrich_drive: true },
-      });
-      if (error) throw error;
+      const batchSize = 75;
+      const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
+      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0 };
+      for (let i = 0; i < chunks.length; i++) {
+        setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
+        const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
+          body: { rows: chunks[i], auto_enrich_drive: true },
+        });
+        if (error) throw error;
+        totals.created += data?.created ?? 0;
+        totals.updated += data?.updated ?? 0;
+        totals.filled_citi += data?.filled_citi ?? 0;
+        totals.protected_amra += data?.protected_amra ?? 0;
+        totals.skipped += data?.skipped ?? 0;
+        totals.total_unique += data?.total_unique ?? 0;
+        totals.drive_jobs += data?.drive_jobs ?? 0;
+      }
       setProgress(100);
       const summary = {
-        created: data?.created ?? 0,
-        updated: data?.updated ?? 0,
-        filled_citi: data?.filled_citi ?? 0,
-        protected_amra: data?.protected_amra ?? 0,
-        skipped: data?.skipped ?? 0,
-        total_unique: data?.total_unique ?? payload.length,
-        drive_jobs: data?.drive_jobs ?? 0,
+        created: totals.created,
+        updated: totals.updated,
+        filled_citi: totals.filled_citi,
+        protected_amra: totals.protected_amra,
+        skipped: totals.skipped,
+        total_unique: totals.total_unique,
+        drive_jobs: totals.drive_jobs,
       };
       setResult(summary);
       toast.success(`Saved ${summary.total_unique} developers · +${summary.created} new · ${summary.updated} enriched · ${summary.drive_jobs} Drive scans queued`);
@@ -352,6 +364,9 @@ export default function DeveloperExcelImportDialog({
             <FileSpreadsheet className="w-5 h-5 text-[#B89555]" />
             Import Developers from Excel / CSV
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Upload a developer database to save and enrich developer records in batches.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto px-6 py-4">

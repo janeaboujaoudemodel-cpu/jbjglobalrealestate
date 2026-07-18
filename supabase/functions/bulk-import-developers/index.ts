@@ -186,18 +186,11 @@ async function queueDriveJob(svc: any, developerId: string, folderUrl: string) {
   }).select("id").single();
   if (error) return 0;
   await svc.from("developers").update({ drive_enrichment_status: "queued" }).eq("id", developerId);
-  triggerDriveScan(job?.id);
   return 1;
 }
 async function loadExistingDevelopers(svc: any, slugs: string[], names: string[]) {
   const select = ["id","slug","name","custom_fields", ...IMPORTABLE_FIELDS].join(",");
   const byId = new Map<string, any>();
-  for (let from = 0; from < 10000; from += 1000) {
-    const { data, error } = await svc.from("developers").select(select).range(from, from + 999);
-    if (error) throw new Error(error.message);
-    (data ?? []).forEach((row: any) => byId.set(row.id, row));
-    if (!data || data.length < 1000) break;
-  }
   for (let i = 0; i < slugs.length; i += 100) {
     const chunk = slugs.slice(i, i + 100);
     if (!chunk.length) continue;
@@ -213,18 +206,6 @@ async function loadExistingDevelopers(svc: any, slugs: string[], names: string[]
     (data ?? []).forEach((row: any) => byId.set(row.id, row));
   }
   return Array.from(byId.values());
-}
-function triggerDriveScan(jobId?: string) {
-  if (!jobId) return;
-  const promise = fetch(`${SUPABASE_URL}/functions/v1/enrich-developer-from-drive`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${SERVICE_ROLE}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ job_id: jobId }),
-  }).catch((e) => console.error("drive scan trigger failed", e));
-  (globalThis as any).EdgeRuntime?.waitUntil?.(promise);
 }
 function json(o: unknown, status = 200) {
   return new Response(JSON.stringify(o), {
