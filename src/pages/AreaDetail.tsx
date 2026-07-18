@@ -167,12 +167,18 @@ const AreaDetail = () => {
   }, [allAreas, area, browsingContext]);
 
   if (isLoading) {
+    // Skeleton mirrors the real page structure so the layout never looks blank.
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-10 h-10 text-white animate-spin mx-auto mb-4" />
-          <p className="text-white/80">Loading area...</p>
-        </div>
+      <div
+        className="min-h-screen w-full"
+        data-surface="dark"
+        data-area-detail-page="true"
+        style={{ background: 'linear-gradient(180deg, #064E3B 0%, #042C1C 38%, #010806 100%)' }}
+      >
+        <SectionSkeleton tone="emerald" height={620} />
+        <SectionSkeleton tone="emerald" height={64} />
+        <SectionSkeleton tone="champagne" height={360} />
+        <SectionSkeleton tone="champagne" height={520} />
       </div>
     );
   }
