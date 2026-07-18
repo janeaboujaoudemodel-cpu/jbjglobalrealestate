@@ -166,15 +166,18 @@ export default function DeveloperCustomFieldsSection({
       )}
 
       {canEdit && active.length > 0 && (
-        <div className="flex justify-end pt-1">
+        <div className="flex items-center justify-between pt-1 border-t border-[#B89555]/20">
+          <p className="text-[11px] text-[#1A1A1A]/60">
+            {saving ? "Saving…" : dirty ? "Unsaved changes" : "All extended fields saved"}
+          </p>
           <Button
             onClick={save}
-            disabled={!dirty || saving}
-            className="bg-[#064E3B] text-white hover:bg-[#064E3B]/90 disabled:opacity-50"
+            disabled={saving}
+            className="bg-[#064E3B] text-white hover:bg-[#064E3B]/90"
             style={{ color: "#FFFFFF" }}
           >
             <Save className="w-3.5 h-3.5 mr-1.5" />
-            {saving ? "Saving…" : "Save extended fields"}
+            {saving ? "Saving…" : dirty ? "Save now" : "Save extended fields"}
           </Button>
         </div>
       )}
