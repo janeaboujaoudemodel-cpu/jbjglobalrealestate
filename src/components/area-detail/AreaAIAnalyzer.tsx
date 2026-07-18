@@ -771,10 +771,10 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-[#1A1A1A]/70 text-xs pt-2 flex-wrap">
-              <Brain className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-black text-xs pt-2 flex-wrap">
+              <Brain className="w-4 h-4 text-black" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
-              <Link to="/contact" className="text-[#1A1A1A] hover:underline">Contact our team</Link> for professional guidance.
+              <Link to="/contact" className="text-black underline hover:no-underline">Contact our team</Link> for professional guidance.
             </div>
           </motion.div>
         )}
