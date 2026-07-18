@@ -263,6 +263,7 @@ export default function DeveloperProfilePage() {
   const buildProfilePayload = useCallback(() => ({
     description: form.description ?? null,
     website_url: form.website_url ?? null,
+    google_drive_url: form.google_drive_url ?? null,
     // Location fields are permanently nulled — JBJ never stores or displays
     // developer office locations. See mem: constraint/no-developer-location.
     headquarters: null,
