@@ -199,6 +199,24 @@ export default function DeveloperExcelImportDialog({
 
   const runImport = () => runImportWith(rows, mapping);
 
+  // Deduped developer count preview (skip Amra, skip blank names)
+  const stats = useMemo(() => {
+    const nameCol = Object.entries(mapping).find(([, f]) => f === "name")?.[0];
+    if (!nameCol) return null;
+    const seen = new Set<string>();
+    let amra = 0, citi = 0;
+    for (const r of rows) {
+      const n = String(r[nameCol] ?? "").trim();
+      if (!n) continue;
+      if (isAmra(n)) { amra++; continue; }
+      const key = slugify(n) || n.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      if (isCiti(n)) citi++;
+    }
+    return { unique: seen.size, amra, citi, rows: rows.length };
+  }, [rows, mapping]);
+
   // Virtualized preview
   const virtualizer = useVirtualizer({
     count: rows.length,
