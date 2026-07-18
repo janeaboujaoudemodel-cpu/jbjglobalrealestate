@@ -63,6 +63,12 @@ const HEADER_MAP: Record<string, string[]> = {
 const norm = (s: string) => String(s ?? "").trim().toLowerCase().replace(/[_\-]+/g, " ").replace(/\s+/g, " ");
 const slugify = (s: string) =>
   s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+const importKey = (s: string) => {
+  const cleaned = norm(s)
+    .replace(/\b(developments?|developers?|development|properties|property|realty|real\s*estate|holdings?|holding|group|llc|l\.?l\.?c|fz\-?llc|pjsc|psc|inc|co|company|international|investments?|investment|limited|ltd|sole\s+proprietorship|s\.?p\.?c|plc|corp|corporation|establishment|contracting|construction)\b/gi, " ")
+    .replace(/[^a-z0-9]+/g, "");
+  return cleaned || slugify(s).replace(/-/g, "") || norm(s).replace(/[^a-z0-9]+/g, "");
+};
 
 const excelColumnName = (index: number) => {
   let n = index + 1;
@@ -217,7 +223,10 @@ export default function DeveloperExcelImportDialog({
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{
-    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; drive_jobs?: number; changed?: Array<{ name: string; action: string; fields: string[] }>;
+    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; drive_jobs?: number; dry_run?: boolean; changed?: Array<{ name: string; action: string; fields: string[] }>;
+  } | null>(null);
+  const [previewResult, setPreviewResult] = useState<{
+    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; changed?: Array<{ name: string; action: string; fields: string[] }>;
   } | null>(null);
   const [compareOpen, setCompareOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -226,48 +235,56 @@ export default function DeveloperExcelImportDialog({
   const folderInputRef = useRef<HTMLInputElement>(null);
 
   const reset = () => {
-    setRows([]); setHeaders([]); setMapping({}); setResult(null); setProgress(0);
+    setRows([]); setHeaders([]); setMapping({}); setResult(null); setPreviewResult(null); setProgress(0);
+  };
+
+  const buildPayload = (
+    activeRows: Row[],
+    activeMapping: Record<string, MappingValue>,
+  ) => {
+    const nameCol = Object.entries(activeMapping).find(([, f]) => f === "name")?.[0];
+    if (!nameCol) throw new Error("Could not detect a 'Developer name' column");
+    const byDeveloper = new Map<string, Record<string, string | Record<string, string>>>();
+    activeRows.forEach((r) => {
+      const obj: Record<string, string | Record<string, string>> = {};
+      const customFields: Record<string, string> = {};
+      for (const [h, f] of Object.entries(activeMapping)) {
+        if (!f) continue;
+        const v = String(r[h] ?? "").trim();
+        if (!v) continue;
+        if (f === "__custom__") customFields[h] = v;
+        else obj[f] = v;
+      }
+      if (Object.keys(customFields).length) obj.custom_fields = customFields;
+      if (!obj.name) return;
+      const key = importKey(String(obj.name));
+      const previous = byDeveloper.get(key) ?? {};
+      const previousCustom = (previous.custom_fields as Record<string, string> | undefined) ?? {};
+      byDeveloper.set(key, {
+        ...previous,
+        ...obj,
+        custom_fields: { ...previousCustom, ...(obj.custom_fields as Record<string, string> | undefined ?? {}) },
+      });
+    });
+    const payload = Array.from(byDeveloper.values()).filter((o) => o.name);
+    if (!payload.length) throw new Error("No developer names were found in the database file");
+    return payload;
   };
 
   const runImportWith = async (
     activeRows: Row[],
     activeMapping: Record<string, MappingValue>,
   ) => {
-    const nameCol = Object.entries(activeMapping).find(([, f]) => f === "name")?.[0];
-    if (!nameCol) { toast.error("Could not detect a 'Developer name' column"); return; }
     setBusy(true); setProgress(0);
     try {
-      const byDeveloper = new Map<string, Record<string, string | Record<string, string>>>();
-      activeRows.forEach((r) => {
-        const obj: Record<string, string | Record<string, string>> = {};
-        const customFields: Record<string, string> = {};
-        for (const [h, f] of Object.entries(activeMapping)) {
-          if (!f) continue;
-          const v = String(r[h] ?? "").trim();
-          if (!v) continue;
-          if (f === "__custom__") customFields[h] = v;
-          else obj[f] = v;
-        }
-        if (Object.keys(customFields).length) obj.custom_fields = customFields;
-        if (!obj.name) return;
-        const key = slugify(String(obj.name)) || String(obj.name).toLowerCase();
-        const previous = byDeveloper.get(key) ?? {};
-        const previousCustom = (previous.custom_fields as Record<string, string> | undefined) ?? {};
-        byDeveloper.set(key, {
-          ...previous,
-          ...obj,
-          custom_fields: { ...previousCustom, ...(obj.custom_fields as Record<string, string> | undefined ?? {}) },
-        });
-      });
-      const payload = Array.from(byDeveloper.values()).filter((o) => o.name);
-      if (!payload.length) { toast.error("No developer names were found in the database file"); return; }
+      const payload = buildPayload(activeRows, activeMapping);
       const batchSize = 75;
       const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
       const totals: { created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique: number; drive_jobs: number; changed: Array<{ name: string; action: string; fields: string[] }> } = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0, changed: [] };
       for (let i = 0; i < chunks.length; i++) {
         setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
         const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
-          body: { rows: chunks[i], auto_enrich_drive: true },
+          body: { rows: chunks[i], auto_enrich_drive: true, import_marker: `developer_excel_${new Date().toISOString().slice(0, 10)}` },
         });
         if (error) throw error;
         totals.created += data?.created ?? 0;
@@ -300,6 +317,38 @@ export default function DeveloperExcelImportDialog({
     }
   };
 
+  const runPreview = async () => {
+    setBusy(true); setProgress(0);
+    try {
+      const payload = buildPayload(rows, mapping);
+      const batchSize = 75;
+      const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
+      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, changed: [] as Array<{ name: string; action: string; fields: string[] }> };
+      for (let i = 0; i < chunks.length; i++) {
+        setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
+        const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
+          body: { rows: chunks[i], dry_run: true, auto_enrich_drive: false },
+        });
+        if (error) throw error;
+        totals.created += data?.created ?? 0;
+        totals.updated += data?.updated ?? 0;
+        totals.filled_citi += data?.filled_citi ?? 0;
+        totals.protected_amra += data?.protected_amra ?? 0;
+        totals.skipped += data?.skipped ?? 0;
+        totals.total_unique += data?.total_unique ?? 0;
+        totals.changed.push(...(Array.isArray(data?.changed) ? data.changed : []));
+      }
+      setProgress(100);
+      setPreviewResult(totals);
+      setCompareOpen(true);
+      toast.success(`Impact preview ready: ${totals.updated} updates · ${totals.created} new hidden drafts`);
+    } catch (e: any) {
+      toast.error(e.message || "Could not preview import impact");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handleFile = useCallback(async (file: File) => {
     try {
       const XLSX = await import("xlsx");
@@ -311,6 +360,7 @@ export default function DeveloperExcelImportDialog({
       setMapping(auto);
       setRows(json);
       setResult(null);
+      setPreviewResult(null);
       setCompareOpen(false);
       const mapped = Object.values(auto).filter((v) => v && v !== "__custom__").length;
       const captured = Object.values(auto).filter(Boolean).length;
@@ -342,7 +392,7 @@ export default function DeveloperExcelImportDialog({
       const n = String(r[nameCol] ?? "").trim();
       if (!n) continue;
       if (isAmra(n)) { amra++; continue; }
-      const key = slugify(n) || n.toLowerCase();
+      const key = importKey(n);
       if (seen.has(key)) continue;
       seen.add(key);
       if (isCiti(n)) citi++;
@@ -449,8 +499,8 @@ export default function DeveloperExcelImportDialog({
                       <p className="font-black text-[#1A1A1A]">Before / after checkpoint</p>
                       <p className="text-[#1A1A1A]/70">Before: uploaded file loaded only, backend unchanged. After: appears here only after Save & Enrich completes.</p>
                     </div>
-                    <Button type="button" size="sm" variant="outline" className="border-[#B89555]/50" onClick={() => setCompareOpen((v) => !v)}>
-                      <GitCompareArrows className="w-3.5 h-3.5 mr-1" /> {compareOpen ? "Hide compare" : "Compare impact"}
+                    <Button type="button" size="sm" variant="outline" disabled={busy} className="border-[#B89555]/50" onClick={previewResult ? () => setCompareOpen((v) => !v) : runPreview}>
+                      <GitCompareArrows className="w-3.5 h-3.5 mr-1" /> {previewResult ? (compareOpen ? "Hide compare" : "Show compare") : "Compare impact"}
                     </Button>
                   </div>
                   {compareOpen && (
@@ -461,15 +511,17 @@ export default function DeveloperExcelImportDialog({
                       </div>
                       <div className="rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 p-3">
                         <p className="font-bold">After save</p>
-                        {result ? (
+                        {previewResult ? (
+                          <p>{previewResult.created} will be new hidden drafts · {previewResult.updated} existing developers will be improved · {previewResult.filled_citi} Citi blanks will be filled · 0 records saved yet.</p>
+                        ) : result ? (
                           <p>{result.created} new · {result.updated} updated · {result.filled_citi} Citi blanks filled · {result.drive_jobs ?? 0} Drive scans queued.</p>
                         ) : (
-                          <p>Pending — click Save & Enrich to write changes.</p>
+                          <p>Pending — click Compare impact to preview, then Save & Enrich to write changes.</p>
                         )}
                       </div>
-                      {result?.changed?.length ? (
+                      {(previewResult?.changed?.length || result?.changed?.length) ? (
                         <div className="md:col-span-2 max-h-40 overflow-auto rounded-lg border border-[#B89555]/25 bg-white">
-                          {result.changed.slice(0, 30).map((row, idx) => (
+                          {(previewResult?.changed ?? result?.changed ?? []).slice(0, 30).map((row, idx) => (
                             <div key={`${row.name}-${idx}`} className="flex items-center justify-between gap-3 border-b border-[#B89555]/10 px-3 py-2">
                               <span className="font-semibold truncate">{row.name}</span>
                               <span className="text-[#1A1A1A]/70 shrink-0">{row.action} · {row.fields.slice(0, 5).join(", ") || "status"}</span>
