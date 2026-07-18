@@ -129,7 +129,12 @@ export default function CompleteProfilePrompt() {
   const close = () => setOpen(false);
   const goRegister = () => {
     setOpen(false);
-    navigate(`/register/${mode}`);
+    // Guard: only navigate to a real registration route. Fallback = investor.
+    const target =
+      mode === "broker" || mode === "developer" || mode === "investor"
+        ? mode
+        : "investor";
+    navigate(`/register/${target}`);
   };
 
   return (
