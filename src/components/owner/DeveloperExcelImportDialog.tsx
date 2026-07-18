@@ -132,52 +132,17 @@ export default function DeveloperExcelImportDialog({
     setRows([]); setHeaders([]); setMapping({}); setResult(null); setProgress(0);
   };
 
-  const handleFile = useCallback(async (file: File) => {
-    try {
-      const XLSX = await import("xlsx");
-      const buf = await file.arrayBuffer();
-      const { headers: hdrs, rows: json } = parseSheet(buf, XLSX);
-      if (!json.length) { toast.error("Sheet appears empty"); return; }
-      const auto: Record<string, string | null> = {};
-      for (const h of hdrs) auto[h] = detectColumn(h);
-      setHeaders(hdrs);
-      setMapping(auto);
-      setRows(json);
-      setResult(null);
-      const mapped = Object.values(auto).filter(Boolean).length;
-      toast.success(`Loaded ${json.length} rows · ${mapped}/${hdrs.length} columns auto-mapped`);
-    } catch (e: any) {
-      toast.error(e.message || "Could not read file");
-    }
-  }, []);
-
-  // Deduped developer count preview (skip Amra, skip blank names)
-  const stats = useMemo(() => {
-    const nameCol = Object.entries(mapping).find(([, f]) => f === "name")?.[0];
-    if (!nameCol) return null;
-    const seen = new Set<string>();
-    let amra = 0, citi = 0;
-    for (const r of rows) {
-      const n = String(r[nameCol] ?? "").trim();
-      if (!n) continue;
-      if (isAmra(n)) { amra++; continue; }
-      const key = slugify(n) || n.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      if (isCiti(n)) citi++;
-    }
-    return { unique: seen.size, amra, citi, rows: rows.length };
-  }, [rows, mapping]);
-
-  const runImport = async () => {
-    const nameCol = Object.entries(mapping).find(([, f]) => f === "name")?.[0];
-    if (!nameCol) { toast.error("Map a column to 'Developer name' first"); return; }
+  const runImportWith = async (
+    activeRows: Row[],
+    activeMapping: Record<string, string | null>,
+  ) => {
+    const nameCol = Object.entries(activeMapping).find(([, f]) => f === "name")?.[0];
+    if (!nameCol) { toast.error("Could not detect a 'Developer name' column"); return; }
     setBusy(true); setProgress(0);
     try {
-      // Build minimized payload
-      const payload = rows.map((r) => {
+      const payload = activeRows.map((r) => {
         const obj: Record<string, string> = {};
-        for (const [h, f] of Object.entries(mapping)) {
+        for (const [h, f] of Object.entries(activeMapping)) {
           if (!f) continue;
           const v = String(r[h] ?? "").trim();
           if (v) obj[f] = v;
@@ -185,7 +150,6 @@ export default function DeveloperExcelImportDialog({
         return obj;
       }).filter((o) => o.name);
 
-      // Chunk client-side to keep function payload small + show progress
       const CHUNK = 200;
       let created = 0, updated = 0, filled_citi = 0, protected_amra = 0, skipped = 0;
       for (let i = 0; i < payload.length; i += CHUNK) {
@@ -202,7 +166,7 @@ export default function DeveloperExcelImportDialog({
         setProgress(Math.min(100, Math.round(((i + chunk.length) / payload.length) * 100)));
       }
       setResult({ created, updated, filled_citi, protected_amra, skipped });
-      toast.success(`Import complete · +${created} new · ${updated} enriched · ${filled_citi} Citi blanks filled · ${protected_amra} Amra protected · ${skipped} skipped`);
+      toast.success(`Saved · +${created} new · ${updated} enriched · ${filled_citi} Citi blanks · ${protected_amra} Amra protected · ${skipped} skipped`);
       onDone?.();
     } catch (e: any) {
       toast.error(e.message || "Import failed");
@@ -210,6 +174,30 @@ export default function DeveloperExcelImportDialog({
       setBusy(false);
     }
   };
+
+  const handleFile = useCallback(async (file: File) => {
+    try {
+      const XLSX = await import("xlsx");
+      const buf = await file.arrayBuffer();
+      const { headers: hdrs, rows: json } = parseSheet(buf, XLSX);
+      if (!json.length) { toast.error("Sheet appears empty"); return; }
+      const auto: Record<string, string | null> = {};
+      for (const h of hdrs) auto[h] = detectColumn(h);
+      setHeaders(hdrs);
+      setMapping(auto);
+      setRows(json);
+      setResult(null);
+      const mapped = Object.values(auto).filter(Boolean).length;
+      toast.success(`Loaded ${json.length} rows · ${mapped}/${hdrs.length} columns auto-mapped · saving…`);
+      // AUTO-RUN: as soon as the file is parsed, save & enrich everything.
+      await runImportWith(json, auto);
+    } catch (e: any) {
+      toast.error(e.message || "Could not read file");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const runImport = () => runImportWith(rows, mapping);
 
   // Virtualized preview
   const virtualizer = useVirtualizer({
