@@ -3,7 +3,7 @@
  * Full-screen hero, projects grid, developers, map, AI analyzer
  */
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useParams, Link, Navigate } from "react-router-dom";
@@ -15,15 +15,17 @@ import { MapPin, ArrowRight, Loader2, Search, X, SlidersHorizontal, ChevronDown,
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
 import { useAreaBySlug, useAreas } from "@/hooks/useAreas";
+// Above-the-fold: eagerly imported so hero + about + projects paint immediately.
 import { AreaHeroSection } from "@/components/area-detail/AreaHeroSection";
 import { AreaAboutSection } from "@/components/area-detail/AreaAboutSection";
 import { AreaProjectsGrid } from "@/components/area-detail/AreaProjectsGrid";
 import { AreaDevelopersBar } from "@/components/area-detail/AreaDevelopersBar";
-import { AreaMapSection } from "@/components/area-detail/AreaMapSection";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
-import { AreaAIAnalyzer } from "@/components/area-detail/AreaAIAnalyzer";
-import DLDMarketWidget from "@/components/shared/DLDMarketWidget";
-import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+// Below-the-fold heavy chunks: split so the initial route bundle stays small.
+const AreaMapSection = lazy(() => import("@/components/area-detail/AreaMapSection").then(m => ({ default: m.AreaMapSection })));
+const AreaAIAnalyzer = lazy(() => import("@/components/area-detail/AreaAIAnalyzer").then(m => ({ default: m.AreaAIAnalyzer })));
+const DLDMarketWidget = lazy(() => import("@/components/shared/DLDMarketWidget"));
+const CombinedContactNewsletter = lazy(() => import("@/components/CombinedContactNewsletter"));
 import { optimizeStorageImageUrl } from "@/lib/imageUtils";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
@@ -32,6 +34,37 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { filterPillBase, filterPillActive, pillInactive, filterPopoverSurface, filterPrimaryButton } from "@/components/filters/filterStyles";
 import { Button } from "@/components/ui/button";
 import { AreaFilterListDropdown } from "@/components/area-detail/AreaFilterListDropdown";
+
+// Lightweight skeletons that match the emerald / champagne surfaces so the
+// page never renders an empty background while a chunk is fetching.
+const SectionSkeleton = ({ tone = "emerald", height = 320 }: { tone?: "emerald" | "champagne"; height?: number }) => (
+  <div
+    aria-hidden="true"
+    className="w-full animate-pulse"
+    style={{
+      height,
+      background:
+        tone === "emerald"
+          ? "linear-gradient(135deg,#064E3B 0%,#042C1C 55%,#010806 100%)"
+          : "linear-gradient(135deg,#FDFBF7 0%,#F7F2EA 50%,#EFE6D6 100%)",
+    }}
+  >
+    <div className="container mx-auto px-4 py-10 flex flex-col gap-3">
+      <div
+        className="h-6 w-40 rounded-full"
+        style={{ background: tone === "emerald" ? "rgba(255,255,255,0.12)" : "rgba(10,10,10,0.08)" }}
+      />
+      <div
+        className="h-3 w-3/4 rounded"
+        style={{ background: tone === "emerald" ? "rgba(255,255,255,0.10)" : "rgba(10,10,10,0.06)" }}
+      />
+      <div
+        className="h-3 w-2/3 rounded"
+        style={{ background: tone === "emerald" ? "rgba(255,255,255,0.08)" : "rgba(10,10,10,0.05)" }}
+      />
+    </div>
+  </div>
+);
 
 const AreaDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -134,12 +167,18 @@ const AreaDetail = () => {
   }, [allAreas, area, browsingContext]);
 
   if (isLoading) {
+    // Skeleton mirrors the real page structure so the layout never looks blank.
     return (
-      <div className="min-h-screen bg-[#1A1A1A] flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-10 h-10 text-white animate-spin mx-auto mb-4" />
-          <p className="text-white/80">Loading area...</p>
-        </div>
+      <div
+        className="min-h-screen w-full"
+        data-surface="dark"
+        data-area-detail-page="true"
+        style={{ background: 'linear-gradient(180deg, #064E3B 0%, #042C1C 38%, #010806 100%)' }}
+      >
+        <SectionSkeleton tone="emerald" height={620} />
+        <SectionSkeleton tone="emerald" height={64} />
+        <SectionSkeleton tone="champagne" height={360} />
+        <SectionSkeleton tone="champagne" height={520} />
       </div>
     );
   }
@@ -345,19 +384,25 @@ const AreaDetail = () => {
       {/* Developers Bar - connected, no gap */}
       <AreaDevelopersBar areaName={area.name} />
 
-      {/* Interactive Map */}
+      {/* Interactive Map (lazy) */}
       <MapErrorBoundary>
         <div id="area-map" className="scroll-mt-40">
-          <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+          <Suspense fallback={<SectionSkeleton tone="champagne" height={480} />}>
+            <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+          </Suspense>
         </div>
       </MapErrorBoundary>
 
-      {/* DLD Market Intelligence */}
-      <DLDMarketWidget highlightArea={area.name} />
+      {/* DLD Market Intelligence (lazy) */}
+      <Suspense fallback={<SectionSkeleton tone="champagne" height={420} />}>
+        <DLDMarketWidget highlightArea={area.name} />
+      </Suspense>
 
-      {/* AI Area Intelligence */}
+      {/* AI Area Intelligence (lazy) */}
       <div id="area-ai" className="scroll-mt-40">
-        <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
+        <Suspense fallback={<SectionSkeleton tone="champagne" height={520} />}>
+          <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
+        </Suspense>
       </div>
 
       {/* Similar Areas moved BEFORE the CTA — CTA is the final block on the page */}
@@ -460,10 +505,12 @@ const AreaDetail = () => {
 
       {/* Final CTA — always last on the page — champagne background band */}
       <div data-area-final-cta data-surface="champagne" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }} className="py-10">
-      <CombinedContactNewsletter
-        title={`Explore ${area.name} Properties?`}
-        subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
-      />
+      <Suspense fallback={<SectionSkeleton tone="champagne" height={280} />}>
+        <CombinedContactNewsletter
+          title={`Explore ${area.name} Properties?`}
+          subtitle="Connect with our team for verified listings, area guidance, and a shortlist matched to your goals."
+        />
+      </Suspense>
       </div>
       </div>
     </div>
