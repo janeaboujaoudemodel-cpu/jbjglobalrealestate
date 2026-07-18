@@ -153,7 +153,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, liveDeveloperCount, dl
                 <Users className="w-4.5 h-4.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </span>
               <div className="text-left">
-                <div data-no-contrast-guard className="text-2xl md:text-3xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
+                <div data-no-contrast-guard className="text-2xl md:text-3xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveDeveloperCount ?? area.developer_count}</div>
                 <div data-no-contrast-guard className="text-[11px] uppercase tracking-[0.18em] font-semibold" style={{ color: 'rgba(255,255,255,0.88)', WebkitTextFillColor: 'rgba(255,255,255,0.88)' }}>Developers</div>
               </div>
             </button>
