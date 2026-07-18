@@ -8647,6 +8647,27 @@ export type Database = {
           },
         ]
       }
+      crm_chat_channel_participants: {
+        Row: {
+          added_by: string | null
+          channel_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          added_by?: string | null
+          channel_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          added_by?: string | null
+          channel_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       crm_chat_messages: {
         Row: {
           channel_id: string
