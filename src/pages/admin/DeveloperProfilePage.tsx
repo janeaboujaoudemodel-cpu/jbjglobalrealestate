@@ -59,7 +59,9 @@ interface Developer {
   offplan_projects?: number | null;
   total_units_delivered?: number | null;
   portfolio_worth?: number | null;
-
+  google_drive_url?: string | null;
+  drive_enrichment_status?: string | null;
+  drive_last_synced_at?: string | null;
 }
 
 const MEDIA_KINDS = [
