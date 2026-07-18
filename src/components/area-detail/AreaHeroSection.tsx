@@ -14,6 +14,11 @@ interface DLDAreaData {
 interface AreaHeroSectionProps {
   area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
   liveProjectCount?: number;
+  liveDeveloperCount?: number;
+  dldAreaData?: { area: string; transactions: number; change: string } | null;
+}
+
+export const AreaHeroSection = ({ area, liveProjectCount, liveDeveloperCount, dldAreaData }: AreaHeroSectionProps) => {
   dldAreaData?: DLDAreaData;
 }
 
