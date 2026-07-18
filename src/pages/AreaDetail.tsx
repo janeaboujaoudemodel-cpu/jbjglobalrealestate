@@ -209,38 +209,16 @@ const AreaDetail = () => {
 
           <div aria-hidden="true" data-area-filter-divider className="h-7 w-px flex-none" style={{ background: 'rgba(255,255,255,0.22)' }} />
 
-          {/* Scope dropdown buttons */}
+          {/* Scope dropdown buttons — real list-based dropdowns */}
           {filterScopes.map((scope) => (
-            <Popover key={scope.id}>
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  data-active={searchScope === scope.id ? "true" : "false"}
-                  data-no-contrast-guard
-                  className={`${filterPillBase} ${searchScope === scope.id ? filterPillActive : pillInactive("dark")}`}
-                  style={filterButtonStyle}
-                >
-                  <span>{scope.label}</span>
-                  <ChevronDown className="w-3 h-3" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent data-filter-dropdown="true" data-no-contrast-guard align="start" sideOffset={8} className={`w-72 p-4 ${filterPopoverSurface}`}>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="allow-white mt-0.5 inline-flex h-8 w-8 items-center justify-center rounded-lg" style={{ background: 'linear-gradient(135deg,#064E3B 0%,#042C1C 100%)', color: '#FFFFFF' }}>
-                      {searchScope === scope.id ? <Check className="allow-white w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} /> : <Search className="allow-white w-4 h-4" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />}
-                    </span>
-                    <div className="min-w-0">
-                      <h4 className="text-sm font-bold" style={scopeDropdownText}>Search by {scope.label}</h4>
-                      <p className="mt-1 text-xs leading-relaxed" style={{ color: 'rgba(26,26,26,0.72)', WebkitTextFillColor: 'rgba(26,26,26,0.72)' }}>{scopeMenuCopy[scope.id]}</p>
-                    </div>
-                  </div>
-                  <Button type="button" onClick={() => setSearchScope(scope.id)} className={`${filterPrimaryButton} w-full`}>
-                    Use {scope.label}
-                  </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+            <AreaFilterListDropdown
+              key={scope.id}
+              scope={scope.id}
+              label={scope.label}
+              active={searchScope === scope.id}
+              onScope={setSearchScope}
+              onQuery={setSearchQuery}
+            />
           ))}
 
           <Popover>
