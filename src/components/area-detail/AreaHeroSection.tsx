@@ -14,7 +14,8 @@ interface DLDAreaData {
 interface AreaHeroSectionProps {
   area: Area & { developer_count?: number; project_count_sale?: number; avg_price_sqft?: number; hero_image_url?: string; is_high_demand?: boolean };
   liveProjectCount?: number;
-  dldAreaData?: DLDAreaData;
+  liveDeveloperCount?: number;
+  dldAreaData?: { area: string; transactions: number; change: string } | null;
 }
 
 const fadeInUp = {
@@ -27,7 +28,7 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHeroSectionProps) => {
+export const AreaHeroSection = ({ area, liveProjectCount, liveDeveloperCount, dldAreaData }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
   const fallbackHeroImage = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
   const heroImageSrc = optimizeStorageImageUrl(heroImage, 1920, 80) || fallbackHeroImage;
@@ -140,7 +141,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
           )}
 
           {/* Developers */}
-          {(area.developer_count ?? 0) > 0 && (
+          {((liveDeveloperCount ?? area.developer_count) ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('developers-section')}
               data-allow-dark-cta
@@ -152,7 +153,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
                 <Users className="w-4.5 h-4.5" style={{ color: '#FFFFFF', stroke: '#FFFFFF' }} />
               </span>
               <div className="text-left">
-                <div data-no-contrast-guard className="text-2xl md:text-3xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{area.developer_count}</div>
+                <div data-no-contrast-guard className="text-2xl md:text-3xl font-bold leading-tight tabular-nums" style={{ color: '#FFFFFF', WebkitTextFillColor: '#FFFFFF' }}>{liveDeveloperCount ?? area.developer_count}</div>
                 <div data-no-contrast-guard className="text-[11px] uppercase tracking-[0.18em] font-semibold" style={{ color: 'rgba(255,255,255,0.88)', WebkitTextFillColor: 'rgba(255,255,255,0.88)' }}>Developers</div>
               </div>
             </button>
