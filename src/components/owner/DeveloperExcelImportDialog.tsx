@@ -143,7 +143,7 @@ export default function DeveloperExcelImportDialog({
             if (!(existing as any)[k]) fill[k] = v;
           }
           if (Object.keys(fill).length === 0) { skipped++; continue; }
-          const { error } = await supabase.from("developers").update(fill).eq("id", (existing as any).id);
+          const { error } = await supabase.from("developers").update(fill as any).eq("id", (existing as any).id);
           if (error) { skipped++; continue; }
           updated++;
         } else {
