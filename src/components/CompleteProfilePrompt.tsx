@@ -53,8 +53,12 @@ export default function CompleteProfilePrompt() {
   const forceShow =
     new URLSearchParams(location.search).get("completeProfile") === "1";
 
+  // Owners don't have a /register/owner page — they're the platform owner and
+  // are already registered. Only investor/broker/developer have registration flows.
+  const hasRegisterRoute = mode === "investor" || mode === "broker" || mode === "developer";
+
   const shouldQualify =
-    !!user && !isLoading && isRegistered === false; // strict false, not undefined
+    !!user && !isLoading && isRegistered === false && hasRegisterRoute; // strict false, not undefined
 
   const trigger = useCallback(
     (reason: string) => {
