@@ -773,10 +773,12 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-black text-xs pt-2 flex-wrap">
-              <Brain className="w-4 h-4 text-black" />
-              JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
-              <Link to="/contact" className="text-black underline hover:no-underline">Contact our team</Link> for professional guidance.
+            <div data-no-contrast-guard className="flex items-center gap-2 text-xs pt-2 flex-wrap" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+              <Brain data-no-contrast-guard className="w-4 h-4" style={{ color: '#0A0A0A', stroke: '#0A0A0A' }} />
+              <span data-no-contrast-guard style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
+                JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
+                <Link to="/contact" data-no-contrast-guard className="underline hover:no-underline" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>Contact our team</Link> for professional guidance.
+              </span>
             </div>
           </motion.div>
         )}
