@@ -190,7 +190,7 @@ export default function CompleteProfilePrompt() {
                 Complete your profile to earn points
               </h2>
               <p className="mt-2.5 text-sm text-[#1A1A1A]/75 leading-relaxed">
-                {PITCH[mode]}
+                {PITCH[(mode === "broker" || mode === "developer" || mode === "investor") ? mode : "investor"]}
               </p>
 
               <ul className="mt-4 space-y-2">
