@@ -105,6 +105,7 @@ Deno.serve(async (req) => {
           dld_office_number: row.dld_office_number || null,
           registration_status: "not_registered",
           group_status: "pending_group_status",
+          list_id: mergeToMain ? null : list.id,
           attended_briefing: false,
           briefing_count: 0,
           entry_source: "import",
