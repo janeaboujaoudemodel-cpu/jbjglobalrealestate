@@ -147,12 +147,12 @@ export default function DeveloperExcelImportDialog({
           if (error) { skipped++; continue; }
           updated++;
         } else {
-          const { error } = await supabase.from("developers").insert({
+          const { error } = await supabase.from("developers").insert(({
             name,
             slug,
             is_hidden: true, // owner reviews before publishing
             ...payload,
-          } as any);
+          }) as any);
           if (error) { skipped++; continue; }
           created++;
         }
