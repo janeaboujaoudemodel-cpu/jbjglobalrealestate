@@ -86,6 +86,7 @@ Deno.serve(async (req) => {
     });
 
     let created = 0, updated = 0, filled_citi = 0, skipped = 0, driveJobs = 0;
+    const changed: Array<{ name: string; action: string; fields: string[] }> = [];
 
     for (const [slug, r] of uniqueRows) {
       const existRow = bySlugExist.get(slug) || byNameExist.get(norm(String(r.name)));
@@ -120,10 +121,15 @@ Deno.serve(async (req) => {
           const mergedCustom = citi ? fillBlankCustomFields(existingCustom, customFields) : { ...existingCustom, ...customFields };
           if (JSON.stringify(existingCustom) !== JSON.stringify(mergedCustom)) patch.custom_fields = mergedCustom;
         }
-        if (Object.keys(patch).length === 0) { skipped++; continue; }
-        const { error } = await svc.from("developers").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", existRow.id);
+        const statusPatch: Record<string, any> = {};
+        if (!String(existRow.registration_status ?? "").trim()) statusPatch.registration_status = "not_registered";
+        if (!String(existRow.group_status ?? "").trim()) statusPatch.group_status = "pending_group_status";
+        const finalPatch = { ...patch, ...statusPatch };
+        if (Object.keys(finalPatch).length === 0) { skipped++; continue; }
+        const { error } = await svc.from("developers").update({ ...finalPatch, updated_at: new Date().toISOString() }).eq("id", existRow.id);
         if (error) { skipped++; continue; }
         if (citi) filled_citi++; else updated++;
+        changed.push({ name: String(existRow.name || r.name), action: citi ? "filled blanks" : "updated", fields: Object.keys(finalPatch).filter((f) => f !== "updated_at").slice(0, 12) });
         if (autoEnrichDrive && (patch.google_drive_url || excelValues.google_drive_url)) {
           driveJobs += await queueDriveJob(svc, existRow.id, String((patch.google_drive_url ?? excelValues.google_drive_url) || ""));
         }
@@ -132,18 +138,21 @@ Deno.serve(async (req) => {
           name: r.name,
           slug,
           is_hidden: true,
+          registration_status: "not_registered",
+          group_status: "pending_group_status",
           ...excelValues,
           ...(Object.keys(customFields).length ? { custom_fields: customFields } : {}),
         } as any).select("id").single();
         if (error) { skipped++; continue; }
         created++;
+        changed.push({ name: String(r.name), action: "created hidden", fields: ["registration_status", "group_status", ...Object.keys(excelValues), ...(Object.keys(customFields).length ? ["custom_fields"] : [])].slice(0, 12) });
         if (autoEnrichDrive && excelValues.google_drive_url && inserted?.id) {
           driveJobs += await queueDriveJob(svc, inserted.id, String(excelValues.google_drive_url));
         }
       }
     }
 
-    return json({ created, updated, filled_citi, protected_amra: protectedAmra, skipped, total_unique: uniqueRows.length, drive_jobs: driveJobs });
+    return json({ created, updated, filled_citi, protected_amra: protectedAmra, skipped, total_unique: uniqueRows.length, drive_jobs: driveJobs, changed: changed.slice(0, 100) });
   } catch (e) {
     console.error("bulk-import-developers", e);
     return json({ error: String((e as Error).message ?? e) }, 500);
@@ -189,7 +198,7 @@ async function queueDriveJob(svc: any, developerId: string, folderUrl: string) {
   return 1;
 }
 async function loadExistingDevelopers(svc: any, slugs: string[], names: string[]) {
-  const select = ["id","slug","name","custom_fields", ...IMPORTABLE_FIELDS].join(",");
+  const select = ["id","slug","name","registration_status","group_status","custom_fields", ...IMPORTABLE_FIELDS].join(",");
   const byId = new Map<string, any>();
   for (let i = 0; i < slugs.length; i += 100) {
     const chunk = slugs.slice(i, i + 100);

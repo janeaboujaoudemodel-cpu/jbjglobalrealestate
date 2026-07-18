@@ -7737,6 +7737,61 @@ export type Database = {
           },
         ]
       }
+      crm_brokerage_list_members: {
+        Row: {
+          brokerage_id: string
+          created_at: string
+          id: string
+          imported_at: string
+          list_id: string
+          merge_to_main: boolean
+          owner_user_id: string
+          source_filename: string | null
+        }
+        Insert: {
+          brokerage_id: string
+          created_at?: string
+          id?: string
+          imported_at?: string
+          list_id: string
+          merge_to_main?: boolean
+          owner_user_id: string
+          source_filename?: string | null
+        }
+        Update: {
+          brokerage_id?: string
+          created_at?: string
+          id?: string
+          imported_at?: string
+          list_id?: string
+          merge_to_main?: boolean
+          owner_user_id?: string
+          source_filename?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_list_members_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_list_members_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "v_brokerage_attendance_counts"
+            referencedColumns: ["brokerage_id"]
+          },
+          {
+            foreignKeyName: "crm_brokerage_list_members_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_brokerage_notes: {
         Row: {
           author_id: string
@@ -7871,6 +7926,7 @@ export type Database = {
           google_reviews_count: number | null
           google_reviews_score: number | null
           google_reviews_url: string | null
+          group_status: string | null
           health_score: number | null
           id: string
           import_batch_id: string | null
@@ -7995,6 +8051,7 @@ export type Database = {
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
+          group_status?: string | null
           health_score?: number | null
           id?: string
           import_batch_id?: string | null
@@ -8119,6 +8176,7 @@ export type Database = {
           google_reviews_count?: number | null
           google_reviews_score?: number | null
           google_reviews_url?: string | null
+          group_status?: string | null
           health_score?: number | null
           id?: string
           import_batch_id?: string | null
@@ -15129,6 +15187,7 @@ export type Database = {
           founded_year: number | null
           google_drive_url: string | null
           google_maps_url: string | null
+          group_status: string | null
           has_active_rep: boolean
           headquarters: string | null
           id: string
@@ -15200,6 +15259,7 @@ export type Database = {
           founded_year?: number | null
           google_drive_url?: string | null
           google_maps_url?: string | null
+          group_status?: string | null
           has_active_rep?: boolean
           headquarters?: string | null
           id?: string
@@ -15271,6 +15331,7 @@ export type Database = {
           founded_year?: number | null
           google_drive_url?: string | null
           google_maps_url?: string | null
+          group_status?: string | null
           has_active_rep?: boolean
           headquarters?: string | null
           id?: string

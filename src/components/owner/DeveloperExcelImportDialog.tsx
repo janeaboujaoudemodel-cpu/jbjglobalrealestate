@@ -17,7 +17,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { Upload, FileSpreadsheet, CheckCircle2, AlertCircle, Loader2, FolderOpen, Database, ShieldCheck } from "lucide-react";
+import { Upload, FileSpreadsheet, CheckCircle2, AlertCircle, Loader2, FolderOpen, Database, ShieldCheck, GitCompareArrows } from "lucide-react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { toast } from "sonner";
 
@@ -217,8 +217,9 @@ export default function DeveloperExcelImportDialog({
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{
-    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; drive_jobs?: number;
+    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; drive_jobs?: number; changed?: Array<{ name: string; action: string; fields: string[] }>;
   } | null>(null);
+  const [compareOpen, setCompareOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -262,7 +263,7 @@ export default function DeveloperExcelImportDialog({
       if (!payload.length) { toast.error("No developer names were found in the database file"); return; }
       const batchSize = 75;
       const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
-      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0 };
+      const totals: { created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique: number; drive_jobs: number; changed: Array<{ name: string; action: string; fields: string[] }> } = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0, changed: [] };
       for (let i = 0; i < chunks.length; i++) {
         setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
         const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
@@ -276,6 +277,7 @@ export default function DeveloperExcelImportDialog({
         totals.skipped += data?.skipped ?? 0;
         totals.total_unique += data?.total_unique ?? 0;
         totals.drive_jobs += data?.drive_jobs ?? 0;
+        totals.changed.push(...(Array.isArray(data?.changed) ? data.changed : []));
       }
       setProgress(100);
       const summary = {
@@ -286,6 +288,7 @@ export default function DeveloperExcelImportDialog({
         skipped: totals.skipped,
         total_unique: totals.total_unique,
         drive_jobs: totals.drive_jobs,
+        changed: totals.changed,
       };
       setResult(summary);
       toast.success(`Saved ${summary.total_unique} developers · +${summary.created} new · ${summary.updated} enriched · ${summary.drive_jobs} Drive scans queued`);
@@ -308,11 +311,10 @@ export default function DeveloperExcelImportDialog({
       setMapping(auto);
       setRows(json);
       setResult(null);
+      setCompareOpen(false);
       const mapped = Object.values(auto).filter((v) => v && v !== "__custom__").length;
       const captured = Object.values(auto).filter(Boolean).length;
-      toast.success(`Loaded ${json.length} rows · ${mapped} mapped fields · ${captured} columns captured · saving now…`);
-      // AUTO-RUN: as soon as the file is parsed, save & enrich everything.
-      await runImportWith(json, auto);
+      toast.success(`Loaded ${json.length} rows · ${mapped} mapped fields · ${captured} columns captured. Review first, then click Save & Enrich.`);
     } catch (e: any) {
       toast.error(e.message || "Could not read file");
     }
@@ -403,7 +405,7 @@ export default function DeveloperExcelImportDialog({
                 <FolderOpen className="h-7 w-7" />
               </div>
               <p className="text-base font-semibold text-[#1A1A1A]">Drop the full developer database here</p>
-              <p className="mt-1 text-xs text-[#1A1A1A]/70">Excel / CSV starts saving immediately. The backend imports by unique developer count, never by row count.</p>
+              <p className="mt-1 text-xs text-[#1A1A1A]/70">Excel / CSV is reviewed first. Nothing saves until you click Save & Enrich.</p>
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
                 <Button
                   type="button"
@@ -437,6 +439,46 @@ export default function DeveloperExcelImportDialog({
                   <Stat label="Unique developers" value={stats.unique} />
                   <Stat label="Amra rows protected" value={stats.amra} />
                   <Stat label="Citi rows (fill blanks)" value={stats.citi} />
+                </div>
+              )}
+
+              {stats && (
+                <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-3 text-xs text-[#1A1A1A] flex flex-col gap-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <p className="font-black text-[#1A1A1A]">Before / after checkpoint</p>
+                      <p className="text-[#1A1A1A]/70">Before: uploaded file loaded only, backend unchanged. After: appears here only after Save & Enrich completes.</p>
+                    </div>
+                    <Button type="button" size="sm" variant="outline" className="border-[#B89555]/50" onClick={() => setCompareOpen((v) => !v)}>
+                      <GitCompareArrows className="w-3.5 h-3.5 mr-1" /> {compareOpen ? "Hide compare" : "Compare impact"}
+                    </Button>
+                  </div>
+                  {compareOpen && (
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 p-3">
+                        <p className="font-bold">Before save</p>
+                        <p>{stats.unique.toLocaleString()} unique developers detected · {headers.length.toLocaleString()} columns captured · 0 records changed.</p>
+                      </div>
+                      <div className="rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 p-3">
+                        <p className="font-bold">After save</p>
+                        {result ? (
+                          <p>{result.created} new · {result.updated} updated · {result.filled_citi} Citi blanks filled · {result.drive_jobs ?? 0} Drive scans queued.</p>
+                        ) : (
+                          <p>Pending — click Save & Enrich to write changes.</p>
+                        )}
+                      </div>
+                      {result?.changed?.length ? (
+                        <div className="md:col-span-2 max-h-40 overflow-auto rounded-lg border border-[#B89555]/25 bg-white">
+                          {result.changed.slice(0, 30).map((row, idx) => (
+                            <div key={`${row.name}-${idx}`} className="flex items-center justify-between gap-3 border-b border-[#B89555]/10 px-3 py-2">
+                              <span className="font-semibold truncate">{row.name}</span>
+                              <span className="text-[#1A1A1A]/70 shrink-0">{row.action} · {row.fields.slice(0, 5).join(", ") || "status"}</span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
               )}
 

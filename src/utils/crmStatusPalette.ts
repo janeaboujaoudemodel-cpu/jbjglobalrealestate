@@ -48,6 +48,9 @@ const TONE_BY_KEY: Record<string, CrmStatusTone> = {
   pending_documents: "amber",
   documents_pending_review: "amber",
   pending_application: "amber",
+  application_pending: "amber",
+  pending_registration: "amber",
+  pending_group_status: "amber",
   in_review: "amber",
   under_review: "amber",
   follow_up: "amber",
@@ -124,6 +127,7 @@ export const AGENCY_STATUS_OPTIONS: { value: string; label: string; tone: CrmSta
 // Stored in crm_brokerages.registration_status.
 export const BROKERAGE_REGISTRATION_STATUS_OPTIONS: { value: string; label: string; tone: CrmStatusTone }[] = [
   { value: "not_registered",           label: "Not registered",          tone: "champagne" },
+  { value: "application_pending",      label: "Application pending",     tone: "amber"     },
   { value: "pending_registration",     label: "Pending registration",    tone: "amber"     },
   { value: "pending_documents",        label: "Waiting for documents",   tone: "amber"     },
   { value: "documents_pending_review", label: "Docs under review",       tone: "amber"     },
