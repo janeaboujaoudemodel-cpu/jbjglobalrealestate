@@ -18,10 +18,6 @@ interface AreaHeroSectionProps {
   dldAreaData?: { area: string; transactions: number; change: string } | null;
 }
 
-export const AreaHeroSection = ({ area, liveProjectCount, liveDeveloperCount, dldAreaData }: AreaHeroSectionProps) => {
-  dldAreaData?: DLDAreaData;
-}
-
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
@@ -32,7 +28,7 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
 };
 
-export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHeroSectionProps) => {
+export const AreaHeroSection = ({ area, liveProjectCount, liveDeveloperCount, dldAreaData }: AreaHeroSectionProps) => {
   const heroImage = area.hero_image_url || area.image_url;
   const fallbackHeroImage = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80";
   const heroImageSrc = optimizeStorageImageUrl(heroImage, 1920, 80) || fallbackHeroImage;
