@@ -141,7 +141,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, liveDeveloperCount, dl
           )}
 
           {/* Developers */}
-          {(area.developer_count ?? 0) > 0 && (
+          {((liveDeveloperCount ?? area.developer_count) ?? 0) > 0 && (
             <button
               onClick={() => scrollToId('developers-section')}
               data-allow-dark-cta
