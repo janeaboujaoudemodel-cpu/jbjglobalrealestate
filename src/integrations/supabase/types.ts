@@ -13292,6 +13292,50 @@ export type Database = {
           },
         ]
       }
+      developer_drive_jobs: {
+        Row: {
+          created_at: string
+          developer_id: string
+          discovered_documents: number
+          discovered_projects: number
+          error: string | null
+          folder_url: string
+          id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          discovered_documents?: number
+          discovered_projects?: number
+          error?: string | null
+          folder_url: string
+          id?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          discovered_documents?: number
+          discovered_projects?: number
+          error?: string | null
+          folder_url?: string
+          id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_drive_jobs_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_enrichment_log: {
         Row: {
           after_jsonb: Json
@@ -15077,10 +15121,13 @@ export type Database = {
           custom_fields: Json
           description: string | null
           description_languages: string[] | null
+          drive_enrichment_status: string | null
+          drive_last_synced_at: string | null
           enrichment_source: string | null
           expected_completion_year: number | null
           feature_image_url: string | null
           founded_year: number | null
+          google_drive_url: string | null
           google_maps_url: string | null
           has_active_rep: boolean
           headquarters: string | null
@@ -15145,10 +15192,13 @@ export type Database = {
           custom_fields?: Json
           description?: string | null
           description_languages?: string[] | null
+          drive_enrichment_status?: string | null
+          drive_last_synced_at?: string | null
           enrichment_source?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
+          google_drive_url?: string | null
           google_maps_url?: string | null
           has_active_rep?: boolean
           headquarters?: string | null
@@ -15213,10 +15263,13 @@ export type Database = {
           custom_fields?: Json
           description?: string | null
           description_languages?: string[] | null
+          drive_enrichment_status?: string | null
+          drive_last_synced_at?: string | null
           enrichment_source?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           founded_year?: number | null
+          google_drive_url?: string | null
           google_maps_url?: string | null
           has_active_rep?: boolean
           headquarters?: string | null
