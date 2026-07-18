@@ -384,19 +384,25 @@ const AreaDetail = () => {
       {/* Developers Bar - connected, no gap */}
       <AreaDevelopersBar areaName={area.name} />
 
-      {/* Interactive Map */}
+      {/* Interactive Map (lazy) */}
       <MapErrorBoundary>
         <div id="area-map" className="scroll-mt-40">
-          <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+          <Suspense fallback={<SectionSkeleton tone="champagne" height={480} />}>
+            <AreaMapSection areaName={area.name} areaLat={area.latitude} areaLng={area.longitude} />
+          </Suspense>
         </div>
       </MapErrorBoundary>
 
-      {/* DLD Market Intelligence */}
-      <DLDMarketWidget highlightArea={area.name} />
+      {/* DLD Market Intelligence (lazy) */}
+      <Suspense fallback={<SectionSkeleton tone="champagne" height={420} />}>
+        <DLDMarketWidget highlightArea={area.name} />
+      </Suspense>
 
-      {/* AI Area Intelligence */}
+      {/* AI Area Intelligence (lazy) */}
       <div id="area-ai" className="scroll-mt-40">
-        <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
+        <Suspense fallback={<SectionSkeleton tone="champagne" height={520} />}>
+          <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
+        </Suspense>
       </div>
 
       {/* Similar Areas moved BEFORE the CTA — CTA is the final block on the page */}
