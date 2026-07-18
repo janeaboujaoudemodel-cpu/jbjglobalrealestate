@@ -255,8 +255,8 @@ export default function DeveloperExcelImportDialog({
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
               />
               <Upload className="w-10 h-10 mx-auto text-[#B89555] mb-3" />
-              <p className="text-base font-semibold text-[#1A1A1A]">Drag & drop your .xlsx / .xls / .csv here</p>
-              <p className="text-xs text-[#1A1A1A]/60 mt-1">or click to browse — headers are auto-detected even if the file has a title row on top.</p>
+              <p className="text-base font-semibold text-[#1A1A1A]">Drop your database — extraction & enrichment start automatically</p>
+              <p className="text-xs text-[#1A1A1A]/60 mt-1">Drag & drop or click to browse (.xlsx / .xls / .csv). Every existing developer card is enriched instantly — Amra is protected, Citi fills blanks only.</p>
             </label>
           ) : (
             <div className="space-y-4">
