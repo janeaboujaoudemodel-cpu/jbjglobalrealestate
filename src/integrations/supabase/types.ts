@@ -15326,6 +15326,7 @@ export type Database = {
           enrichment_source: string | null
           excel_import_marker: string | null
           excel_imported_at: string | null
+          excel_order: number | null
           expected_completion_year: number | null
           feature_image_url: string | null
           focus_project_id: string | null
@@ -15404,6 +15405,7 @@ export type Database = {
           enrichment_source?: string | null
           excel_import_marker?: string | null
           excel_imported_at?: string | null
+          excel_order?: number | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           focus_project_id?: string | null
@@ -15482,6 +15484,7 @@ export type Database = {
           enrichment_source?: string | null
           excel_import_marker?: string | null
           excel_imported_at?: string | null
+          excel_order?: number | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
           focus_project_id?: string | null
