@@ -27,9 +27,11 @@ export default function BrokeragePortal() {
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"all" | "jbj" | "list">("all");
   const [listId, setListId] = useState<string>("all");
+  const [specialty, setSpecialty] = useState<"all" | "secondary" | "off_plan" | "both">("all");
   const [visibleLimit, setVisibleLimit] = useState(60);
 
-  useEffect(() => { setVisibleLimit(60); }, [search, view, listId]);
+  useEffect(() => { setVisibleLimit(60); }, [search, view, listId, specialty]);
+
 
   const brokeragesQ = useQuery({ queryKey: ["brokerage-portal-brokerages"], queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,database_source,original_filename,list_id,logo_url,source,source_detail,specialty_focus,assigned_to,updated_at").is("deleted_at", null).order("company_name").limit(5000);
@@ -70,10 +72,12 @@ export default function BrokeragePortal() {
     return rows.filter((r) => {
       if (view === "all" && r.list_id && !mergedIds.has(r.id)) return false;
       if (view === "list" && listId !== "all" && !listIds.has(r.id)) return false;
+      if (specialty !== "all" && (r.specialty_focus || "both") !== specialty) return false;
       if (!q) return true;
       return [r.company_name, r.email, r.phone, r.emirate, r.database_source].some((v) => String(v ?? "").toLowerCase().includes(q));
     });
-  }, [brokeragesQ.data, membersQ.data, search, view, listId]);
+  }, [brokeragesQ.data, membersQ.data, search, view, listId, specialty]);
+
 
   const visibleJbj = useMemo(() => (jbjQ.data ?? []).filter((b) => !search || [b.full_name, b.email_lower, b.personal_email, b.company_email, b.phone_e164, b.personal_phone, b.company_phone, b.current_company, b.position_title, b.role_title].some((v) => String(v ?? "").toLowerCase().includes(search.toLowerCase()))), [jbjQ.data, search]);
   const visibleBrokerageCards = useMemo(() => visibleBrokerages.slice(0, visibleLimit), [visibleBrokerages, visibleLimit]);
@@ -144,6 +148,12 @@ export default function BrokeragePortal() {
       <Button size="sm" variant={view === "jbj" ? "gold" : "outline"} onClick={() => setView("jbj")}><Users className="size-4 mr-1" /> Individual brokers</Button>
       <Button size="sm" variant={view === "list" ? "gold" : "outline"} onClick={() => setView("list")}><FileSpreadsheet className="size-4 mr-1" /> Uploaded database</Button>
       {view === "list" && <Select value={listId} onValueChange={setListId}><SelectTrigger className="w-72 h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Select database" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40"><SelectItem value="all">All uploaded databases</SelectItem>{(listsQ.data ?? []).map((l) => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent></Select>}
+      {view !== "jbj" && <div className="flex items-center gap-1 ml-1">
+        <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
+        {([["all","All"],["secondary","Secondary"],["off_plan","Off-plan"],["both","Both"]] as const).map(([v,label]) => (
+          <Button key={v} size="sm" variant={specialty === v ? "gold" : "outline"} onClick={() => setSpecialty(v as any)} className="h-8 px-3">{label}</Button>
+        ))}
+      </div>}
       <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">
         {(view === "jbj" ? visibleJbj.length : visibleBrokerages.length).toLocaleString()} of {((view === "jbj" ? statsQ.data?.brokers : statsQ.data?.agencies) ?? 0).toLocaleString()} shown
       </Badge>
