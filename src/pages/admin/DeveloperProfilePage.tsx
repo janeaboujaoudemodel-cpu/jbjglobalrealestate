@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import OwnerCompanyProfileUploader from "@/components/owner/OwnerCompanyProfileUploader";
+import DeveloperBeforeAfterPanel from "@/components/owner/DeveloperBeforeAfterPanel";
 import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFieldsSection";
 
 interface Developer {
@@ -554,6 +555,12 @@ export default function DeveloperProfilePage() {
                 developerName={developer.name}
                 developerWebsiteUrl={developer.website_url}
                 sourceLinks={sourceLinks}
+              />
+            )}
+            {canEdit && (
+              <DeveloperBeforeAfterPanel
+                developerId={developer.id}
+                developerName={developer.name}
               />
             )}
 
