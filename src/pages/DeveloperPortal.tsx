@@ -26,6 +26,7 @@ import {
   Rocket, Search, EyeOff, Settings, MapPin, Lock, ShieldCheck, ShieldOff, ToggleLeft, ToggleRight,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
+import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 import { DeveloperSelectDropdown } from "@/components/developer-portal/DeveloperSelectDropdown";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
@@ -1004,6 +1005,10 @@ const DeveloperPortal = () => {
                 </CardContent>
               </Card>
             ) : null}
+
+          <div className="mb-6">
+            <BrandedEmailsLauncherCard variant="developer" />
+          </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto pb-1">
