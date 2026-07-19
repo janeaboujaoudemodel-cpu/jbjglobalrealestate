@@ -92,6 +92,52 @@ const formatNumber = (value: number | null | undefined) => {
   return new Intl.NumberFormat("en-AE", { notation: value >= 1_000_000 ? "compact" : "standard", maximumFractionDigits: 1 }).format(value);
 };
 
+const CONTACT_POSITION_OPTIONS = ["Owner", "Founder", "CEO", "Admin", "Sales", "Broker Relations", "Business Development", "Marketing", "Finance", "Legal", "Other"];
+
+type DeveloperContact = {
+  id: string;
+  position: string;
+  name: string;
+  email: string;
+  phone: string;
+  whatsapp: string;
+  notes: string;
+};
+
+const emptyDeveloperContact = (): DeveloperContact => ({
+  id: crypto.randomUUID(),
+  position: "",
+  name: "",
+  email: "",
+  phone: "",
+  whatsapp: "",
+  notes: "",
+});
+
+const normalizeDeveloperContacts = (source: Partial<Developer>): DeveloperContact[] => {
+  const custom = source.custom_fields && typeof source.custom_fields === "object" ? source.custom_fields : {};
+  const raw = Array.isArray(custom.developer_contacts) ? custom.developer_contacts : [];
+  const contacts = raw
+    .map((item: any) => ({
+      id: String(item?.id || crypto.randomUUID()),
+      position: String(item?.position || item?.role || ""),
+      name: String(item?.name || item?.full_name || ""),
+      email: String(item?.email || ""),
+      phone: String(item?.phone || ""),
+      whatsapp: String(item?.whatsapp || ""),
+      notes: String(item?.notes || ""),
+    }))
+    .filter((item) => item.position || item.name || item.email || item.phone || item.whatsapp || item.notes);
+
+  if (contacts.length) return contacts;
+  const legacy = emptyDeveloperContact();
+  legacy.position = source.admin_position || "";
+  legacy.email = source.admin_email || "";
+  legacy.phone = source.office_phone || "";
+  legacy.whatsapp = source.whatsapp || "";
+  return legacy.position || legacy.email || legacy.phone || legacy.whatsapp ? [legacy] : [];
+};
+
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -284,6 +330,7 @@ export default function DeveloperProfilePage() {
     notable_projects: form.notable_projects ?? null,
     specialization: form.specialization ?? null,
     description_languages: form.description_languages ?? [],
+    custom_fields: form.custom_fields && typeof form.custom_fields === "object" ? form.custom_fields : {},
   }), [form]);
 
   const saveMutation = useMutation({
@@ -455,6 +502,26 @@ export default function DeveloperProfilePage() {
 
   const confirmed = !!developer.last_confirmed_at;
   const customFields = (developer.custom_fields && typeof developer.custom_fields === "object" ? developer.custom_fields : {}) as Record<string, unknown>;
+  const developerContacts = normalizeDeveloperContacts(form);
+  const saveDeveloperContacts = (contacts: DeveloperContact[]) => {
+    const cleaned = contacts.filter((item) => item.position || item.name || item.email || item.phone || item.whatsapp || item.notes);
+    const primary = cleaned[0] || null;
+    setForm((f) => ({
+      ...f,
+      admin_position: primary?.position || null,
+      admin_email: primary?.email || null,
+      office_phone: primary?.phone || null,
+      whatsapp: primary?.whatsapp || null,
+      custom_fields: {
+        ...(f.custom_fields && typeof f.custom_fields === "object" ? f.custom_fields : {}),
+        developer_contacts: cleaned,
+      },
+    }));
+  };
+  const updateDeveloperContact = (id: string, patch: Partial<DeveloperContact>) => {
+    const next = developerContacts.map((item) => (item.id === id ? { ...item, ...patch } : item));
+    saveDeveloperContacts(next);
+  };
   const sourceLinks = asList(customFields.ai_source_links ?? customFields.sources);
   const communities = asList(customFields.communities);
   const emirates = asList(customFields.emirates_active);
@@ -638,22 +705,6 @@ export default function DeveloperProfilePage() {
                   <Field label="Instagram">
                     <Input disabled={!canEdit} value={form.instagram_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, instagram_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                   </Field>
-                  <Field label="Office phone">
-                    <Input disabled={!canEdit} value={form.office_phone ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_phone: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="+971 …" />
-                  </Field>
-                  <Field label="WhatsApp (direct)">
-                    <Input disabled={!canEdit} value={form.whatsapp ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="+971 …" />
-                  </Field>
-                  <Field label="Admin contact (position + email)">
-                    <div className="flex gap-2">
-                      <Input disabled={!canEdit} value={form.admin_position ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_position: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" placeholder="Business Development Manager" />
-                      <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" placeholder="contact@developer.ae" />
-                    </div>
-                  </Field>
-                  <Field label="Office address (owner-only, hidden from public)">
-                    <Textarea rows={3} disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
-                  </Field>
-
                   <Field label="WhatsApp Group invite">
                     <Input disabled={!canEdit} value={form.whatsapp_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://chat.whatsapp.com/…" />
                   </Field>
@@ -892,25 +943,59 @@ export default function DeveloperProfilePage() {
           {/* CONTACTS */}
           <TabsContent value="contacts" className="space-y-4">
             <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
-              <CardHeader><CardTitle className="text-base text-[#1A1A1A]">Developer contact</CardTitle></CardHeader>
-              <CardContent className="grid grid-cols-2 gap-4">
-                <Field label="Office phone">
-                  <Input disabled={!canEdit} value={form.office_phone ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_phone: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
-                </Field>
-                <Field label="WhatsApp">
-                  <Input disabled={!canEdit} value={form.whatsapp ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
-                </Field>
-                <Field label="Position + email">
-                  <div className="flex gap-2">
-                    <Input disabled={!canEdit} value={form.admin_position ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_position: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" placeholder="Business Development Manager" />
-                    <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" />
+              <CardHeader>
+                <div className="flex items-center justify-between gap-3">
+                  <CardTitle className="text-base text-[#1A1A1A]">Developer contacts</CardTitle>
+                  {canEdit && (
+                    <Button type="button" size="sm" variant="outline" onClick={() => saveDeveloperContacts([...developerContacts, emptyDeveloperContact()])}>
+                      <Plus className="w-3.5 h-3.5 mr-1" /> Add new
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <datalist id="developer-contact-position-options">
+                  {CONTACT_POSITION_OPTIONS.map((option) => <option key={option} value={option} />)}
+                </datalist>
+                {developerContacts.length === 0 && (
+                  <div className="rounded-lg border border-dashed border-[#B89555]/45 bg-[#FDFBF7] p-5 text-sm text-[#1A1A1A]/65">
+                    No contact people saved yet.
                   </div>
-                </Field>
-                {/* Google Maps URL & Office address intentionally removed —
-                    never store or display developer physical locations. */}
-
+                )}
+                {developerContacts.map((contact, index) => (
+                  <div key={contact.id} className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-xs font-black uppercase tracking-[0.16em] text-[#064E3B]">Contact {index + 1}</div>
+                      {canEdit && (
+                        <Button type="button" size="sm" variant="outline" onClick={() => saveDeveloperContacts(developerContacts.filter((item) => item.id !== contact.id))}>
+                          <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove
+                        </Button>
+                      )}
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                      <Field label="Position">
+                        <Input list="developer-contact-position-options" disabled={!canEdit} value={contact.position} onChange={(e) => updateDeveloperContact(contact.id, { position: e.target.value })} className="bg-white border-[#B89555]/30" placeholder="Select or type position" />
+                      </Field>
+                      <Field label="Name">
+                        <Input disabled={!canEdit} value={contact.name} onChange={(e) => updateDeveloperContact(contact.id, { name: e.target.value })} className="bg-white border-[#B89555]/30" placeholder="Contact person" />
+                      </Field>
+                      <Field label="Email">
+                        <Input disabled={!canEdit} value={contact.email} onChange={(e) => updateDeveloperContact(contact.id, { email: e.target.value })} className="bg-white border-[#B89555]/30" placeholder="name@developer.ae" />
+                      </Field>
+                      <Field label="Phone number">
+                        <Input disabled={!canEdit} value={contact.phone} onChange={(e) => updateDeveloperContact(contact.id, { phone: e.target.value })} className="bg-white border-[#B89555]/30" placeholder="+971 …" />
+                      </Field>
+                      <Field label="WhatsApp number">
+                        <Input disabled={!canEdit} value={contact.whatsapp} onChange={(e) => updateDeveloperContact(contact.id, { whatsapp: e.target.value })} className="bg-white border-[#B89555]/30" placeholder="+971 …" />
+                      </Field>
+                      <Field label="Notes">
+                        <Input disabled={!canEdit} value={contact.notes} onChange={(e) => updateDeveloperContact(contact.id, { notes: e.target.value })} className="bg-white border-[#B89555]/30" placeholder="Preferred contact window" />
+                      </Field>
+                    </div>
+                  </div>
+                ))}
                 {canEdit && dirty && (
-                  <div className="col-span-2 flex justify-end">
+                  <div className="flex justify-end">
                     <Button onClick={() => saveMutation.mutate()} className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 hover:bg-[#EFE6D6]/80">Save</Button>
                   </div>
                 )}
