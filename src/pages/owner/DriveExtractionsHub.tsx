@@ -66,24 +66,13 @@ export default function DriveExtractionsHub() {
         .limit(500),
       supabase
         .from("projects")
-        .select("id,name,slug,created_at,developer_id,community_id,area_id,developers(name,slug,logo_url),communities(name,slug),areas(name,slug),project_documents(count)")
-        .eq("data_source", "drive-enrichment" as any)
+        .select("id,name,slug,created_at,developer_id,community_id,area_id,developers!inner(name,slug,logo_url,google_drive_url),communities(name,slug),areas(name,slug),project_documents(count)")
+        .not("developers.google_drive_url", "is", null)
         .order("created_at", { ascending: false })
         .limit(500),
     ]);
     setJobs((j as any) ?? []);
-    // Fallback: if no rows tagged drive-enrichment, use projects for developers with drive URLs.
-    if (!p || p.length === 0) {
-      const { data: fallback } = await supabase
-        .from("projects")
-        .select("id,name,slug,created_at,developer_id,community_id,area_id,developers!inner(name,slug,logo_url,google_drive_url),communities(name,slug),areas(name,slug),project_documents(count)")
-        .not("developers.google_drive_url", "is", null)
-        .order("created_at", { ascending: false })
-        .limit(500);
-      setProjects((fallback as any) ?? []);
-    } else {
-      setProjects(p as any);
-    }
+    setProjects((p as any) ?? []);
     setLoading(false);
   };
 
