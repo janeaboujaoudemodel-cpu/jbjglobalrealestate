@@ -9,11 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus, Upload } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus, Upload, ChevronDown, MoreHorizontal, ClipboardList, Handshake, PhoneCall, StickyNote, Video, ListChecks } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import DeveloperExcelImportDialog from "@/components/owner/DeveloperExcelImportDialog";
 import RegistrationStatusBadge from "@/components/developers-portal/RegistrationStatusBadge";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 interface Row {
   id: string;
@@ -96,6 +97,38 @@ const preferRicherDeveloperRow = (a: Row, b: Row) => {
   const bScore = (b.logo_url ? 10 : 0) + (b.website_url ? 4 : 0) + (b.description?.length ?? 0) / 300;
   return bScore > aScore ? b : a;
 };
+
+/**
+ * Per-developer activity menu — replaces the top-level scattered buttons.
+ * Every entry point (task, deal, briefing, meeting, call, note) lives inside the card
+ * so the developer context is always attached.
+ */
+function DeveloperActivityMenu({ slug, name }: { slug: string; name: string }) {
+  const navigate = useNavigate();
+  const q = encodeURIComponent(name);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 border-[#B89555]/50 text-[#1A1A1A]">
+          <MoreHorizontal className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
+        <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Log activity — {name}</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=tasks&new=1&developer=${q}`)}><ListChecks className="size-4 mr-2" /> Add task</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=notes&new=1&developer=${q}`)}><StickyNote className="size-4 mr-2" /> Add note</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=deals&new=1&developer=${q}`)}><Handshake className="size-4 mr-2" /> Register deal</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/developers/briefings?developer=${q}&new=1`)}><ClipboardList className="size-4 mr-2" /> Register briefing</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=calendar&new=1&developer=${q}`)}><CalendarDays className="size-4 mr-2" /> Register meeting</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=calls&new=1&developer=${q}`)}><PhoneCall className="size-4 mr-2" /> Log call</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate(`/owner/meeting-hub?developer=${q}`)}><Video className="size-4 mr-2" /> Open meeting hub</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+
 
 export default function DeveloperDirectory() {
   const qc = useQueryClient();
@@ -335,7 +368,7 @@ export default function DeveloperDirectory() {
   return (
     <div className="space-y-5 max-w-full overflow-hidden">
       <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+        <div className="flex flex-col gap-4">
           <div className="flex items-start gap-4 min-w-0">
             <span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center shadow-[0_16px_34px_-20px_rgba(6,78,59,0.9)]">
               <Building2 className="size-5 text-white" />
@@ -346,37 +379,49 @@ export default function DeveloperDirectory() {
               <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">Owner-only command center for developers, projects, briefing requests, launch events, profile updates, sales reps, logo governance and Excel exports.</p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/add")}>
-              <UserPlus className="size-4 mr-1" /> Add Developer
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/new-project")}>
-              <Plus className="size-4 mr-1" /> Add Project
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/briefings")}>
-              <CalendarDays className="size-4 mr-1" /> Apply Briefing
-            </Button>
-            <Button size="sm" variant={viewMode === "cards" ? "gold" : "outline"} onClick={() => setViewMode("cards")}>
-              <LayoutGrid className="size-4 mr-1" /> Cards
-            </Button>
-            <Button size="sm" variant={viewMode === "excel" ? "gold" : "outline"} onClick={() => setViewMode("excel")}>
-              <Table2 className="size-4 mr-1" /> Excel View
-            </Button>
-            <Button size="sm" variant="outline" onClick={exportCsv} disabled={!rows.length}>
-              <Download className="size-4 mr-1" /> CSV
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
-              <Upload className="size-4 mr-1" /> Import Excel
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/import-review")}>
-              <FileSpreadsheet className="size-4 mr-1" /> Import review
-            </Button>
-            <Button size="sm" variant="gold" onClick={exportExcel} disabled={!rows.length}>
-              <FileSpreadsheet className="size-4 mr-1" /> Download Excel
-            </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Single "New" dropdown consolidates all create actions */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="gold" className="whitespace-nowrap">
+                  <Plus className="size-4 mr-1" /> New <ChevronDown className="size-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
+                <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Create</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/add")}><UserPlus className="size-4 mr-2" /> Add Developer</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/new-project")}><Plus className="size-4 mr-2" /> Add Project</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/briefings")}><CalendarDays className="size-4 mr-2" /> Apply Briefing</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* View toggle — Cards / Excel */}
+            <div className="inline-flex rounded-md border border-[#B89555]/40 overflow-hidden">
+              <button type="button" onClick={() => setViewMode("cards")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 ${viewMode === "cards" ? "bg-[#064E3B] text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><LayoutGrid className="size-3.5" /> Cards</button>
+              <button type="button" onClick={() => setViewMode("excel")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 border-l border-[#B89555]/40 ${viewMode === "excel" ? "bg-[#064E3B] text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><Table2 className="size-3.5" /> Excel</button>
+            </div>
+
+            {/* Data menu — imports & exports */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline" className="whitespace-nowrap">
+                  <FileSpreadsheet className="size-4 mr-1" /> Data <ChevronDown className="size-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
+                <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Import</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => setImportOpen(true)}><Upload className="size-4 mr-2" /> Import Excel</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/import-review")}><FileSpreadsheet className="size-4 mr-2" /> Import review</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Export</DropdownMenuLabel>
+                <DropdownMenuItem onClick={exportCsv} disabled={!rows.length}><Download className="size-4 mr-2" /> Download CSV</DropdownMenuItem>
+                <DropdownMenuItem onClick={exportExcel} disabled={!rows.length}><FileSpreadsheet className="size-4 mr-2" /> Download Excel</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
+
 
       <DeveloperExcelImportDialog
         open={importOpen}
@@ -487,41 +532,42 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
-                    <td className="px-4 py-3 min-w-[240px]">
-                      <div className="flex flex-col gap-1.5">
+                    <td className="px-4 py-3 whitespace-nowrap min-w-[110px]"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap inline-block">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 min-w-[260px] whitespace-nowrap">
+                      <div className="flex flex-row items-center gap-1.5 flex-nowrap">
                         <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
-                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs min-w-[110px]"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
                         <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
-                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs min-w-[130px]"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
-                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 w-fit">Draft</Badge>}
+                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 w-fit whitespace-nowrap">Draft</Badge>}
                       </div>
                     </td>
-                    <td className="px-4 py-3 max-w-[220px]">
+                    <td className="px-4 py-3 max-w-[220px] whitespace-nowrap">
                       {d.website_url ? (
                         <a
                           href={d.website_url.startsWith("http") ? d.website_url : `https://${d.website_url}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[#1A1A1A] underline decoration-[#B89555]/60 break-all text-xs"
+                          className="text-[#1A1A1A] underline decoration-[#B89555]/60 text-xs whitespace-nowrap overflow-hidden text-ellipsis inline-block max-w-[200px] align-middle"
                           title={d.website_url}
                         >
                           {d.website_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                         </a>
                       ) : <span className="text-[#1A1A1A]/45">—</span>}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-2 min-w-[140px]">
-                        <Button asChild size="sm" variant="gold">
+                    <td className="px-4 py-3 whitespace-nowrap min-w-[190px]">
+                      <div className="flex flex-row items-center gap-1.5 flex-nowrap">
+                        <Button asChild size="sm" variant="gold" className="whitespace-nowrap h-8 px-3">
                           <Link to={`/owner/developers/${d.slug}`}>Open</Link>
                         </Button>
-                        <Button asChild size="sm" variant="outline" className="border-[#B89555]/50 text-[#1A1A1A]">
+                        <Button asChild size="sm" variant="outline" className="whitespace-nowrap h-8 px-3 border-[#B89555]/50 text-[#1A1A1A]">
                           <Link to={`/owner/developers/${d.slug}?edit=1`}>Edit</Link>
                         </Button>
+                        <DeveloperActivityMenu slug={d.slug} name={d.name} />
                       </div>
                     </td>
                   </tr>
@@ -601,7 +647,7 @@ export default function DeveloperDirectory() {
                   <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div className="mt-3 flex gap-2 flex-wrap">
+              <div className="mt-3 flex gap-2 flex-wrap items-center">
                 <Button asChild size="sm" variant="gold">
                   <Link to={`/owner/developers/${d.slug}`}>
                     <ExternalLink className="size-3 mr-1" /> Open profile
@@ -613,8 +659,9 @@ export default function DeveloperDirectory() {
                   onClick={() => rebuild.mutate([d.id])}
                   disabled={rebuild.isPending}
                 >
-                  <Sparkles className="size-3 mr-1" /> Rebuild from site
+                  <Sparkles className="size-3 mr-1" /> Rebuild
                 </Button>
+                <DeveloperActivityMenu slug={d.slug} name={d.name} />
               </div>
             </Card>
           );

@@ -1,0 +1,1 @@
+UPDATE public.developers SET registration_status = 'registered' WHERE lower(name) LIKE 'citi%develop%';
