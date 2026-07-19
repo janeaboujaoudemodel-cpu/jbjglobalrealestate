@@ -152,7 +152,13 @@ export default function DeveloperCustomFieldsSection({
   const renderedFields = useMemo(() => {
     const byKey = new Map(active.map((def) => [def.key, def]));
     const inferred = Object.entries(values)
-      .filter(([key, value]) => !byKey.has(key) && fieldToText(value))
+      .filter(([key, value]) => {
+        if (byKey.has(key)) return false;
+        if (SUPPRESSED_INFERRED_KEYS.has(key)) return false;
+        // *_projects_areas render via the structured Projects Footprint card
+        if (PROJECTS_AREAS_KEY_REGEX.test(key)) return false;
+        return !!fieldToText(value);
+      })
       .map(([key, value], index): FieldDef => {
         const text = fieldToText(value);
         const isUrl = /^https?:\/\//i.test(text);
