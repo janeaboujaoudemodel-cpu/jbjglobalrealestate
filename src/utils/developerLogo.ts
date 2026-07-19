@@ -25,6 +25,7 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/[0-9]{8,}\.(jpg|jpeg|png|webp)(\?|$)/i,
   /logo-white-1/i,
   /logodix\.com/i,
+  /api\.reelly\.io\/vault\/.*(?:photo_|_n_|instagram|jpg|jpeg)/i,
   /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
   /\/projects\/\d+\/images\//i, // project photo paths
   /snapedit/i,
