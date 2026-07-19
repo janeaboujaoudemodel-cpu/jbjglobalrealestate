@@ -50,6 +50,32 @@ function normalizeDeveloper(developer: unknown): Record<string, unknown> | null 
   return dev as Record<string, unknown>;
 }
 
+const OFFICIAL_LOGO_MIRRORS: Array<{ match: RegExp; logo: string }> = [
+  { match: /makdevelopers\.com\/wp-content\/uploads\/.+mak-developers-logo/i, logo: "/developer-logos/mak-developers.svg" },
+  { match: /mashriqelite\.com\/frontend\/images\/logo\.png/i, logo: "/developer-logos/mashriq-elite.png" },
+  { match: /oneuae\.com\/.+OneDevLogo/i, logo: "/developer-logos/one-development.svg" },
+  { match: /binghattiweb\.imgix\.net\/logo\.svg/i, logo: "/developer-logos/binghatti.svg" },
+];
+
+const OFFICIAL_LOGOS_BY_NAME: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
+  { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
+  { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
+  { match: /\bbinghatti\b/i, logo: "/developer-logos/binghatti.svg" },
+];
+
+function getOfficialLogoMirror(url: unknown, name: unknown): string | null {
+  if (typeof url === "string") {
+    const byUrl = OFFICIAL_LOGO_MIRRORS.find((entry) => entry.match.test(url));
+    if (byUrl) return byUrl.logo;
+  }
+  if (typeof name === "string" && name.trim()) {
+    const byName = OFFICIAL_LOGOS_BY_NAME.find((entry) => entry.match.test(name));
+    if (byName) return byName.logo;
+  }
+  return null;
+}
+
 /**
  * Safely extract the canonical developer logo URL.
  * Returns `null` if no valid, allowed logo exists (UI must render the approved
@@ -59,6 +85,8 @@ export function getDeveloperLogoUrl(developer: unknown): string | null {
   const dev = normalizeDeveloper(developer);
   if (!dev) return null;
   const url = dev.logo_url;
+  const mirrored = getOfficialLogoMirror(url, dev.name);
+  if (mirrored) return mirrored;
   return isAllowedLogoUrl(url) ? url : null;
 }
 
@@ -77,7 +105,10 @@ const KNOWN_DEVELOPER_WEBSITES: Array<{ match: RegExp; website: string }> = [
 ];
 
 const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
-  { match: /\bma+a?k\b|maakdream/i, logo: "https://makdevelopers.com/wp-content/uploads/2025/08/mak-developers-logo.svg" },
+  { match: /\bma+a?k\b|maakdream/i, logo: "/developer-logos/mak-developers.svg" },
+  { match: /mashriq\s+elite/i, logo: "/developer-logos/mashriq-elite.png" },
+  { match: /\bone\s+development\b/i, logo: "/developer-logos/one-development.svg" },
+  { match: /\bbinghatti\b/i, logo: "/developer-logos/binghatti.svg" },
 ];
 
 export function getKnownDeveloperWebsiteUrl(name: unknown): string | null {

@@ -496,8 +496,8 @@ const Properties = () => {
       shortcutFilters.handoverTo.quarter !== defaultShortcutFilters.handoverTo.quarter
     );
   }, [shortcutFilters]);
-  // Pagination — 12 per page with numeric page controls
-  const PAGE_SIZE = 12;
+  // Pagination — show a deeper first page so off-plan inventory is visibly populated.
+  const PAGE_SIZE = 60;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(finalProjects.length / PAGE_SIZE));
   useEffect(() => { setCurrentPage(1); }, [finalProjects.length]);
