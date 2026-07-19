@@ -23,6 +23,7 @@ const DISMISS_TTL_MS = 24 * 60 * 60 * 1000; // 24h
 const SUPPRESS_PATTERNS: RegExp[] = [
   /^\/owner\/crm(\/|$|\?)/i,
   /^\/owner\/documents(\/|$|\?)/i,
+  /^\/owner\/developers(\/|$|\?)/i,
   /^\/owner\/inbox(\/|$|\?)/i,
   /^\/owner\/listing-admin(\/|$|\?)/i,
   /^\/owner\/team-chat(\/|$|\?)/i,
