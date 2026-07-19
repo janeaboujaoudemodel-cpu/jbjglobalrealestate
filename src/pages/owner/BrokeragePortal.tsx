@@ -175,6 +175,13 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
             <Badge variant="outline" className="border-[#064E3B]/40 text-[#064E3B] bg-white gap-1"><Database className="size-3" /> {row.database_source || row.original_filename || row.source}</Badge>
           )}
         </div>
+        <div className="mt-2 flex flex-wrap items-center gap-1">
+          <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
+          {(["secondary", "off_plan", "both"] as const).map((s) => {
+            const active = (row.specialty_focus || "both") === s;
+            return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: s })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
+          })}
+        </div>
       </div>
     </div>
     <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-[#1A1A1A]"><div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Email</p><Input value={row.email || ""} onChange={(e) => onPatch({ email: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="agency@email.com" /></div><div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2"><p className="font-black uppercase text-[10px] text-[#1A1A1A]/55">Phone</p><Input value={row.phone || ""} onChange={(e) => onPatch({ phone: e.target.value })} className="mt-1 h-8 bg-white border-[#B89555]/25" placeholder="+971 …" /></div></div>
