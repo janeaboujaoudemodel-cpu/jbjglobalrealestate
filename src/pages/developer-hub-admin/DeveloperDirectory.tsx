@@ -368,6 +368,9 @@ export default function DeveloperDirectory() {
             <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
               <Upload className="size-4 mr-1" /> Import Excel
             </Button>
+            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/import-review")}>
+              <FileSpreadsheet className="size-4 mr-1" /> Import review
+            </Button>
             <Button size="sm" variant="gold" onClick={exportExcel} disabled={!rows.length}>
               <FileSpreadsheet className="size-4 mr-1" /> Download Excel
             </Button>
