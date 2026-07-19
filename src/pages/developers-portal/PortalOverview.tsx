@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Building2, Users, ShieldCheck, MapPin, Sparkles, ImageOff, FolderKanban, Inbox } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
 import { usePortalRole } from "@/hooks/usePortalRole";
+import { BrandedEmailsLauncherCard } from "@/components/crm/BrandedEmailsLauncherCard";
 
 interface Kpi { label: string; value: string | number; to: string; icon: any }
 
@@ -94,6 +95,10 @@ export default function PortalOverview() {
           </Link>
         ))}
       </div>
+
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,0.75fr)]">
+        <BrandedEmailsLauncherCard />
+      </section>
     </div>
   );
 }
