@@ -99,6 +99,9 @@ function parseSheet(buf: ArrayBuffer, XLSX: any) {
   return { headers, rows, inferred };
 }
 
+type Specialty = "secondary" | "off_plan" | "both";
+type ActionKey = "separate" | "merge" | "assign_me";
+
 export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone }: { open: boolean; onOpenChange: (v: boolean) => void; onDone?: () => void }) {
   const [rows, setRows] = useState<Row[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
@@ -107,11 +110,14 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
   const [progress, setProgress] = useState(0);
   const [listName, setListName] = useState("");
   const [filename, setFilename] = useState("");
-  const [merge, setMerge] = useState(false);
+  const [sourceLabel, setSourceLabel] = useState("");
+  const [specialty, setSpecialty] = useState<Specialty>("both");
+  const [actions, setActions] = useState<Record<ActionKey, boolean>>({ separate: true, merge: false, assign_me: true });
   const [result, setResult] = useState<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const reset = () => { setRows([]); setHeaders([]); setMapping({}); setProgress(0); setResult(null); setMerge(false); setFilename(""); setListName(""); };
+  const merge = actions.merge;
+  const reset = () => { setRows([]); setHeaders([]); setMapping({}); setProgress(0); setResult(null); setActions({ separate: true, merge: false, assign_me: true }); setFilename(""); setListName(""); setSourceLabel(""); setSpecialty("both"); };
   const stats = useMemo(() => {
     const nameCol = Object.entries(mapping).find(([, f]) => f === "company_name")?.[0];
     if (!nameCol) return null;
@@ -124,7 +130,9 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
     const parsed = parseSheet(await file.arrayBuffer(), XLSX);
     if (!parsed.rows.length) { toast.error("Sheet appears empty"); return; }
     setFilename(file.name);
-    setListName(file.name.replace(/\.(xlsx|xls|csv)$/i, ""));
+    const base = file.name.replace(/\.(xlsx|xls|csv)$/i, "");
+    setListName(base);
+    setSourceLabel((prev) => prev || base);
     setHeaders(parsed.headers);
     setRows(parsed.rows);
     setMapping(parsed.inferred);
@@ -146,12 +154,16 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
           if (f === "__custom__") custom[h] = v; else obj[f] = v;
         }
         if (Object.keys(custom).length) obj.custom_fields = custom;
+        obj.specialty_focus = specialty;
         return obj;
       }).filter((r) => r.company_name);
-      const { data, error } = await supabase.functions.invoke("bulk-import-brokerages", { body: { rows: mappedRows, list_name: listName, source_filename: filename, merge_to_main: merge } });
+      const { data, error } = await supabase.functions.invoke("bulk-import-brokerages", {
+        body: { rows: mappedRows, list_name: listName, source_filename: filename, source_label: sourceLabel || listName, merge_to_main: merge, assign_to_me: actions.assign_me, specialty_focus: specialty },
+      });
       if (error) throw error;
       setProgress(100); setResult(data); onDone?.();
-      toast.success(`Saved ${data?.total_unique ?? 0} brokerages · ${merge ? "merged + separate" : "separate database only"}`);
+      const bits = [actions.separate ? "separate database" : null, merge ? "merged into full list" : null, actions.assign_me ? "assigned to you" : null].filter(Boolean).join(" · ");
+      toast.success(`Saved ${data?.total_unique ?? 0} brokerages · ${bits}`);
     } catch (e: any) { toast.error(e.message || "Brokerage import failed"); }
     finally { setBusy(false); }
   };
