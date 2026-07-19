@@ -33,7 +33,9 @@ Deno.serve(async (req) => {
 
     const mergeToMain = body.merge_to_main === true;
     const assignToMe = body.assign_to_me === true;
-    const specialtyFocus = ["secondary", "off_plan", "both"].includes(String(body.specialty_focus)) ? String(body.specialty_focus) : "both";
+    const rawSpec = String(body.specialty_focus || "");
+    const specMap: Record<string, string> = { secondary: "secondary_first", off_plan: "offplan_first", both: "equal", secondary_first: "secondary_first", offplan_first: "offplan_first", equal: "equal" };
+    const specialtyFocus = specMap[rawSpec] || "equal";
     const sourceFilename = norm(body.source_filename) || "brokerage-upload.xlsx";
     const sourceLabel = norm(body.source_label) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "");
     const listName = norm(body.list_name) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "") || `Brokerage database ${new Date().toISOString().slice(0, 10)}`;
