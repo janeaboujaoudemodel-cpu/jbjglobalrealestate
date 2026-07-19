@@ -9,11 +9,52 @@ import type { UnifiedProject } from "@/types/unifiedProject";
 const hasPublicPhoto = (p: UnifiedProject) =>
   !!(p.cover_image_url || p.images?.some((img) => !!img.image_url));
 
+const GENERIC_DUPLICATE_WORDS = new Set([
+  "the",
+  "in",
+  "by",
+  "at",
+  "residence",
+  "residences",
+  "residential",
+  "resort",
+  "resorts",
+  "tower",
+  "towers",
+  "apartments",
+  "apartment",
+  "first",
+  "integrative",
+  "wellness",
+]);
+
+const normalizeProjectIdentity = (project: UnifiedProject) => {
+  const raw = `${project.name || project.slug || ""}`.toLowerCase();
+  const compact = raw.replace(/[^a-z0-9]+/g, "");
+  if (/^(in)?amra(residences?|thefirstintegrativewellnessresort)?$/.test(compact)) {
+    return "amra";
+  }
+  const tokens = raw
+    .replace(/&/g, " and ")
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .filter((token) => !GENERIC_DUPLICATE_WORDS.has(token));
+  return tokens.length ? tokens.join("") : compact;
+};
+
+const getPublicDedupeKey = (project: UnifiedProject) => {
+  const identity = normalizeProjectIdentity(project);
+  const developer = `${project.developer?.slug || project.developer_name || project.developer_id || ""}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+  return identity === "amra" ? "project:amra" : `${developer || "unknown"}:${identity}`;
+};
+
 const dedupePublicProjects = (projects: UnifiedProject[]) => {
   const seen = new Set<string>();
   return projects.filter((project) => {
     if (!hasPublicPhoto(project)) return false;
-    const key = `${project.slug || project.name}`.trim().toLowerCase();
+    const key = getPublicDedupeKey(project);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -350,7 +391,7 @@ export function useProjectsPaginated(
           .from("projects")
           .select(`
             *,
-            developer:developers(id, name, slug, logo_url),
+            developer:developers!projects_developer_id_fkey(id, name, slug, logo_url),
             community:communities(id, name, slug)
           `)
           .or("is_published.is.null,is_published.eq.false")
@@ -370,7 +411,7 @@ export function useProjectsPaginated(
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug, logo_url),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
@@ -422,7 +463,7 @@ export function useProjects() {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug, logo_url),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -465,7 +506,7 @@ export function useProjectsListing() {
         total_units, available_units, down_payment_percent,
         roi_estimate, rental_yield_estimate, latitude, longitude,
           deleted_at,
-        developer:developers(id, name, slug, logo_url),
+        developer:developers!projects_developer_id_fkey(id, name, slug, logo_url),
         community:communities(id, name, slug),
         images:project_images(image_url, display_order)
       `;
@@ -549,7 +590,7 @@ export function useProjectsByCommunity(communitySlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug, logo_url),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url),
           community:communities!inner(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -575,7 +616,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers!inner(id, name, slug, logo_url),
+          developer:developers!projects_developer_id_fkey!inner(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -602,7 +643,7 @@ export function useProject(projectSlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, notable_projects, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
+          developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, founded_year, completed_projects, offplan_projects, upcoming_units, total_units_delivered, description, headquarters, ceo_name, website_url, specialization, notable_projects, parent_company, license_number, linkedin_url, instagram_url, portfolio_worth),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order, display_title, cover_image_url, is_visible, allow_download, file_size, storage_path)
