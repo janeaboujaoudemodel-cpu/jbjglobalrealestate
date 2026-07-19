@@ -29,7 +29,7 @@ const SELECT = `
   reelly_id, construction_status, sale_status,
   area_name, cover_image_url, is_published,
   developer_name, latitude, longitude,
-  developer:developers(id, name, slug, logo_url, has_active_rep),
+  developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, has_active_rep),
   community:communities(id, name, slug),
   images:project_images(id, image_url, alt_text, display_order)
 `;
