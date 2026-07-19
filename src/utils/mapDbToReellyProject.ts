@@ -29,6 +29,6 @@ export function mapDbProjectToReellyProject(p: any): ReellyProject {
     thumbnail: p.cover_image_url,
     gallery: [],
     images: [],
-    developer: devName ? { name: devName, slug: devSlug, logo_url: p.developer?.logo_url || null, logo_bg_color: p.developer?.logo_bg_color || null } : undefined,
+    developer: devName ? { name: devName, slug: devSlug, logo_url: p.developer?.logo_url || null, website_url: p.developer?.website_url || p.developer_website_url || null, logo_bg_color: p.developer?.logo_bg_color || null } : undefined,
   } as ReellyProject;
 }

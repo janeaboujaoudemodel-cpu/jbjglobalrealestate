@@ -36,6 +36,10 @@ export interface UnifiedProject {
     id: string;
     name: string;
     slug: string;
+    logo_url?: string | null;
+    website_url?: string | null;
+    website?: string | null;
+    has_active_rep?: boolean | null;
   } | null;
   
   // Location (Reelly structure)

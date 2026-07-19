@@ -608,6 +608,7 @@ const DeveloperDetail = () => {
             src={developer.logo_url}
             alt={`${developer.name} logo`}
             name={developer.name}
+            websiteUrl={(developer as any).website_url || (developer as any).website}
             variant="bare"
             renderFallback
             loading="eager"

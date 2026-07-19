@@ -6,7 +6,7 @@ import { DeveloperLink } from "@/components/ui/developer-link";
 import { useMemo } from "react";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
-import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getDeveloperLogoUrl, getDeveloperWebsiteUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { HandoverPill } from "@/components/ui/HandoverPill";
 import { stripHtmlTags } from "@/utils/contentSanitizer";
@@ -170,6 +170,7 @@ export default function RecommendedProjects({
             const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
             const saleStatus = (project as any).sale_status || "On Sale";
             const devLogo = getDeveloperLogoUrl(project.developer);
+            const devWebsite = getDeveloperWebsiteUrl(project.developer);
             const description = (project as any).description;
 
             // Location fallback
@@ -208,6 +209,7 @@ export default function RecommendedProjects({
                       src={devLogo}
                       alt={project.developer?.name || "Developer"}
                       name={project.developer?.name}
+                      websiteUrl={devWebsite}
                       variant="bare"
                       renderFallback
                       loading="eager"
