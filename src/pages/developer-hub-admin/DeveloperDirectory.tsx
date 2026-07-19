@@ -547,7 +547,7 @@ export default function DeveloperDirectory() {
                   <p className="text-xs text-[#1A1A1A]/60 truncate">{d.slug}</p>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
-                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.08em]">{(d.group_status || "pending_group_status").replace(/_/g, " ")}</Badge>
+                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.08em]">{groupLabel}</Badge>
                     {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 text-[10px] uppercase tracking-[0.08em]">Draft</Badge>}
                     {d.drive_enrichment_status && <Badge className="bg-[#FDE68A] text-[#1A1A1A] border border-[#B89555]/30 text-[10px] uppercase tracking-[0.08em]">{d.drive_enrichment_status}</Badge>}
                   </div>
