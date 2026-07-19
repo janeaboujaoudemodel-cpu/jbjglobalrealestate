@@ -12862,6 +12862,27 @@ export type Database = {
           },
         ]
       }
+      dev_excel_staging_2027: {
+        Row: {
+          canonical_key: string
+          created_at: string
+          id: number
+          payload: Json
+        }
+        Insert: {
+          canonical_key: string
+          created_at?: string
+          id?: number
+          payload: Json
+        }
+        Update: {
+          canonical_key?: string
+          created_at?: string
+          id?: number
+          payload?: Json
+        }
+        Relationships: []
+      }
       developer_action_items: {
         Row: {
           confidence: number | null
@@ -40849,6 +40870,7 @@ export type Database = {
         Returns: string
       }
       anonymize_old_form_submissions: { Args: never; Returns: number }
+      apply_dev_excel_import_2027: { Args: never; Returns: Json }
       assign_database_rows_to_me: { Args: { row_ids: string[] }; Returns: Json }
       auto_assign_lead_to_available_broker: {
         Args: { p_lead_id: string }
@@ -41737,6 +41759,7 @@ export type Database = {
       }
       is_valid_image_url: { Args: { u: string }; Returns: boolean }
       is_verified_staff: { Args: { _user_id: string }; Returns: boolean }
+      jbj_dev_canon: { Args: { name: string }; Returns: string }
       jbj_developer_import_key: {
         Args: { _name: string; _website?: string }
         Returns: string
