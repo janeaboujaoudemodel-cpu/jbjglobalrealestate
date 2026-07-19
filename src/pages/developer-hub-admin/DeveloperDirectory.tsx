@@ -647,7 +647,7 @@ export default function DeveloperDirectory() {
                   <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div className="mt-3 flex gap-2 flex-wrap">
+              <div className="mt-3 flex gap-2 flex-wrap items-center">
                 <Button asChild size="sm" variant="gold">
                   <Link to={`/owner/developers/${d.slug}`}>
                     <ExternalLink className="size-3 mr-1" /> Open profile
@@ -659,8 +659,9 @@ export default function DeveloperDirectory() {
                   onClick={() => rebuild.mutate([d.id])}
                   disabled={rebuild.isPending}
                 >
-                  <Sparkles className="size-3 mr-1" /> Rebuild from site
+                  <Sparkles className="size-3 mr-1" /> Rebuild
                 </Button>
+                <DeveloperActivityMenu slug={d.slug} name={d.name} />
               </div>
             </Card>
           );
