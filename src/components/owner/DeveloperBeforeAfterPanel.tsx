@@ -149,7 +149,7 @@ export default function DeveloperBeforeAfterPanel({
     }
     setSaving(rowId);
     try {
-      const { error: upErr } = await supabase.from("developers").update(patch).eq("id", developerId);
+      const { error: upErr } = await supabase.from("developers").update(patch as never).eq("id", developerId);
       if (upErr) throw upErr;
 
       // If this approval covers every remaining diff on the row, mark it committed.
