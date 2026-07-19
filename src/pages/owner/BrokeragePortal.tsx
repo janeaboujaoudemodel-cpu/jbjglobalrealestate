@@ -32,7 +32,7 @@ export default function BrokeragePortal() {
   useEffect(() => { setVisibleLimit(60); }, [search, view, listId]);
 
   const brokeragesQ = useQuery({ queryKey: ["brokerage-portal-brokerages"], queryFn: async () => {
-    const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,database_source,original_filename,list_id,logo_url,source,source_detail,updated_at").is("deleted_at", null).order("company_name").limit(5000);
+    const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,database_source,original_filename,list_id,logo_url,source,source_detail,specialty_focus,assigned_to,updated_at").is("deleted_at", null).order("company_name").limit(5000);
     if (error) throw error; return (data ?? []) as any[];
   }});
   const listsQ = useQuery({ queryKey: ["brokerage-portal-lists"], queryFn: async () => {
@@ -174,6 +174,13 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
           {(row.database_source || row.original_filename || row.source) && (
             <Badge variant="outline" className="border-[#064E3B]/40 text-[#064E3B] bg-white gap-1"><Database className="size-3" /> {row.database_source || row.original_filename || row.source}</Badge>
           )}
+        </div>
+        <div className="mt-2 flex flex-wrap items-center gap-1">
+          <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
+          {(["secondary", "off_plan", "both"] as const).map((s) => {
+            const active = (row.specialty_focus || "both") === s;
+            return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: s })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
+          })}
         </div>
       </div>
     </div>

@@ -32,7 +32,10 @@ Deno.serve(async (req) => {
     if (!rows.length) return json({ created: 0, updated: 0, skipped: 0, total_unique: 0, list_id: null, changed: [] });
 
     const mergeToMain = body.merge_to_main === true;
+    const assignToMe = body.assign_to_me === true;
+    const specialtyFocus = ["secondary", "off_plan", "both"].includes(String(body.specialty_focus)) ? String(body.specialty_focus) : "both";
     const sourceFilename = norm(body.source_filename) || "brokerage-upload.xlsx";
+    const sourceLabel = norm(body.source_label) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "");
     const listName = norm(body.list_name) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "") || `Brokerage database ${new Date().toISOString().slice(0, 10)}`;
     const svc = createClient(SUPABASE_URL, SERVICE_ROLE);
 
@@ -41,7 +44,7 @@ Deno.serve(async (req) => {
       kind: "brokerages",
       name: await uniqueListName(svc, auth.userId, listName),
       source_filename: sourceFilename,
-      description: mergeToMain ? "Uploaded brokerage database · also merged into full portal" : "Uploaded brokerage database · separate list only",
+      description: `${mergeToMain ? "Merged into full portal · " : "Separate list only · "}source: ${sourceLabel} · specialty: ${specialtyFocus}${assignToMe ? " · assigned to uploader" : ""}`,
     }).select("id,name").single();
     if (listErr) throw listErr;
 
@@ -81,6 +84,9 @@ Deno.serve(async (req) => {
         }
         if (!norm(match.registration_status)) patch.registration_status = "not_registered";
         if (!norm(match.group_status)) patch.group_status = "pending_group_status";
+        if (!norm(match.specialty_focus)) patch.specialty_focus = specialtyFocus;
+        if (assignToMe && !match.assigned_to) patch.assigned_to = auth.userId;
+        if (sourceLabel && !norm(match.source)) patch.source = sourceLabel;
         patch.source_history = appendSourceHistory(match.source_history, sourceFilename, raw, mergeToMain);
         if (Object.keys(patch).length) {
           const { error } = await svc.from("crm_brokerages").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", match.id);
@@ -105,12 +111,14 @@ Deno.serve(async (req) => {
           dld_office_number: row.dld_office_number || null,
           registration_status: "not_registered",
           group_status: "pending_group_status",
+          specialty_focus: specialtyFocus as any,
+          assigned_to: assignToMe ? auth.userId : null,
           list_id: mergeToMain ? null : list.id,
           attended_briefing: false,
           briefing_count: 0,
           entry_source: "import",
-          source: "import",
-          source_detail: sourceFilename,
+          source: sourceLabel || "import",
+          source_detail: sourceLabel,
           original_filename: sourceFilename,
           database_source: list.name,
           upload_source: sourceFilename,
