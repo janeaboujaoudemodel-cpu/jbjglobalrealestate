@@ -98,6 +98,38 @@ const preferRicherDeveloperRow = (a: Row, b: Row) => {
   return bScore > aScore ? b : a;
 };
 
+/**
+ * Per-developer activity menu — replaces the top-level scattered buttons.
+ * Every entry point (task, deal, briefing, meeting, call, note) lives inside the card
+ * so the developer context is always attached.
+ */
+function DeveloperActivityMenu({ slug, name }: { slug: string; name: string }) {
+  const navigate = useNavigate();
+  const q = encodeURIComponent(name);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 border-[#B89555]/50 text-[#1A1A1A]">
+          <MoreHorizontal className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
+        <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Log activity — {name}</DropdownMenuLabel>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=tasks&new=1&developer=${q}`)}><ListChecks className="size-4 mr-2" /> Add task</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=notes&new=1&developer=${q}`)}><StickyNote className="size-4 mr-2" /> Add note</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=deals&new=1&developer=${q}`)}><Handshake className="size-4 mr-2" /> Register deal</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/developers/briefings?developer=${q}&new=1`)}><ClipboardList className="size-4 mr-2" /> Register briefing</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=calendar&new=1&developer=${q}`)}><CalendarDays className="size-4 mr-2" /> Register meeting</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=calls&new=1&developer=${q}`)}><PhoneCall className="size-4 mr-2" /> Log call</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => navigate(`/owner/meeting-hub?developer=${q}`)}><Video className="size-4 mr-2" /> Open meeting hub</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+
+
 export default function DeveloperDirectory() {
   const qc = useQueryClient();
   const navigate = useNavigate();
