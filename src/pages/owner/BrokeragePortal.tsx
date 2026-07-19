@@ -166,11 +166,11 @@ export default function BrokeragePortal() {
 }
 
 function AutomationsStrip() {
-  const [busy, setBusy] = useState<"gmail" | "dld" | null>(null);
+  const [busy, setBusy] = useState<"gmail" | "dld" | "all" | null>(null);
   const dldQ = useQuery({
     queryKey: ["automations-dld-last"],
     queryFn: async () => {
-      const { data } = await supabase.from("dld_daily_sync_runs" as any).select("started_at,finished_at,status,rows_added").order("started_at", { ascending: false }).limit(1);
+      const { data } = await supabase.from("dld_daily_sync_runs" as any).select("run_started_at,run_finished_at,status,agencies_inserted,brokers_inserted").order("run_started_at", { ascending: false }).limit(1);
       return (data?.[0] as any) ?? null;
     },
   });
@@ -191,15 +191,22 @@ function AutomationsStrip() {
       inboxQ.refetch();
     } catch (e: any) { toast.error(e?.message || "Inbox sync failed"); } finally { setBusy(null); }
   };
-  const runDld = async () => {
-    setBusy("dld");
+  const runDld = async (mode: "dld" | "all") => {
+    setBusy(mode);
     try {
-      const { error } = await supabase.functions.invoke("dld-daily-ingest", { body: {} });
-      if (error) throw error;
-      toast.success("DLD daily snapshot pulled");
+      // Always pull the DLD market snapshot
+      const snap = await supabase.functions.invoke("dld-daily-ingest", { body: {} });
+      if (snap.error) throw snap.error;
+      // And pull the broker + brokerage register (individual brokers + agencies)
+      const reg = await supabase.functions.invoke("dld-broker-sync", { body: {} });
+      if (reg.error) throw reg.error;
+      const r = (reg.data as any) || {};
+      toast.success(`DLD sync complete — ${r.agencies_inserted ?? 0} agencies · ${r.brokers_inserted ?? 0} brokers${r.error ? ` (partial: ${r.error})` : ""}`);
       dldQ.refetch();
     } catch (e: any) { toast.error(e?.message || "DLD sync failed"); } finally { setBusy(null); }
   };
+  const last = dldQ.data as any;
+  const lastCount = last ? `${last.agencies_inserted ?? 0} agencies · ${last.brokers_inserted ?? 0} brokers` : "";
   return (
     <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-3">
       <div className="flex items-center justify-between gap-3">
@@ -211,10 +218,13 @@ function AutomationsStrip() {
       </div>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync <span className="ml-2 text-[#064E3B]/70">Auto · daily 03:00 UTC</span></p>
-          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last run: <span className="font-black text-[#1A1A1A]">{fmt(dldQ.data?.started_at)}</span>{dldQ.data?.rows_added ? ` · ${dldQ.data.rows_added} rows` : ""}</p>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync — brokers + brokerages <span className="ml-2 text-[#064E3B]/70">Auto · daily 03:00 UTC</span></p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last run: <span className="font-black text-[#1A1A1A]">{fmt(last?.run_started_at)}</span>{lastCount ? ` · ${lastCount}` : ""}</p>
         </div>
-        <Button size="sm" variant="gold" disabled={busy === "dld"} onClick={runDld}>{busy === "dld" ? "Running…" : "Run now"}</Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" disabled={busy === "dld"} onClick={() => runDld("dld")}>{busy === "dld" ? "Running…" : "Run now"}</Button>
+          <Button size="sm" variant="gold" disabled={busy === "all"} onClick={() => runDld("all")}>{busy === "all" ? "Running…" : "Sync all (brokers + brokerages)"}</Button>
+        </div>
       </div>
     </Card>
   );
