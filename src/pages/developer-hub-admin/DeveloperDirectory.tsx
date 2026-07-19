@@ -487,29 +487,40 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
-                    <td className="px-4 py-3"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
-                    <td className="px-4 py-3 min-w-[220px]">
-                      <div className="flex flex-wrap gap-1.5">
-                        <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
-                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.find((o) => o.value === (d.group_status || "pending_group_status"))?.label ?? "Group not created"}</Badge>
-                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0">Draft</Badge>}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 max-w-[170px] truncate">
-                      {d.website_url ? <a href={d.website_url} target="_blank" rel="noreferrer" className="text-[#1A1A1A] underline decoration-[#B89555]/50">Website</a> : <span className="text-[#1A1A1A]/45">—</span>}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-2 min-w-[210px]">
+                    <td className="px-4 py-3 whitespace-nowrap"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 min-w-[240px]">
+                      <div className="flex flex-col gap-1.5">
                         <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
-                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
                         <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
-                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
+                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 w-fit">Draft</Badge>}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 max-w-[220px]">
+                      {d.website_url ? (
+                        <a
+                          href={d.website_url.startsWith("http") ? d.website_url : `https://${d.website_url}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#1A1A1A] underline decoration-[#B89555]/60 break-all text-xs"
+                          title={d.website_url}
+                        >
+                          {d.website_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                        </a>
+                      ) : <span className="text-[#1A1A1A]/45">—</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col gap-2 min-w-[140px]">
                         <Button asChild size="sm" variant="gold">
                           <Link to={`/owner/developers/${d.slug}`}>Open</Link>
+                        </Button>
+                        <Button asChild size="sm" variant="outline" className="border-[#B89555]/50 text-[#1A1A1A]">
+                          <Link to={`/owner/developers/${d.slug}?edit=1`}>Edit</Link>
                         </Button>
                       </div>
                     </td>
