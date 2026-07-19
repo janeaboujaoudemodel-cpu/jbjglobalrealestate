@@ -94,14 +94,23 @@ function nameMatchesUrlOrHost(name: string, url: string): boolean {
   return false;
 }
 
+async function fetchWithTimeout(url: string, init: RequestInit, ms: number): Promise<Response> {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: ctl.signal });
+  } finally {
+    clearTimeout(t);
+  }
+}
+
 async function firecrawlSearch(apiKey: string, query: string): Promise<Array<{ url: string; title?: string }>> {
-  const res = await fetch(`${FIRECRAWL_V2}/search`, {
+  const res = await fetchWithTimeout(`${FIRECRAWL_V2}/search`, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({ query, limit: 6 }),
-  });
-  if (!res.ok) {
-    console.warn(`[firecrawl search] ${res.status}: ${await res.text().catch(() => "")}`);
+  }, 15000).catch(() => null);
+  if (!res || !res.ok) {
     return [];
   }
   const j = await res.json().catch(() => ({}));
@@ -113,13 +122,12 @@ async function firecrawlSearch(apiKey: string, query: string): Promise<Array<{ u
 }
 
 async function firecrawlBranding(apiKey: string, url: string): Promise<{ logo?: string; favicon?: string; images?: any } | null> {
-  const res = await fetch(`${FIRECRAWL_V2}/scrape`, {
+  const res = await fetchWithTimeout(`${FIRECRAWL_V2}/scrape`, {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({ url, formats: ["branding"], onlyMainContent: false }),
-  });
-  if (!res.ok) {
-    console.warn(`[firecrawl branding ${url}] ${res.status}`);
+  }, 20000).catch(() => null);
+  if (!res || !res.ok) {
     return null;
   }
   const j = await res.json().catch(() => ({}));
