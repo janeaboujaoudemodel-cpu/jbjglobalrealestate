@@ -1,145 +1,64 @@
+# Broker Portal — full build plan
 
-# Broker Portal v2 — Command Center for JBJ × Citi Developers
-
-Rebuild the Broker Portal into one workspace that (a) manages every brokerage and individual broker regardless of how they entered the system, (b) tracks which database each row came from, (c) sends bulk registration / briefing campaigns without duplicating recipients, and (d) auto-syncs replies from your inbox so agency status updates itself with an AI-drafted response waiting for your approval.
-
-You do not have to build all of this at once. The plan is split into 4 phases so you can approve one, see it working, then move to the next.
+Scope covers the six things you asked for, in the order you asked for them. I'll build slice by slice, take Playwright screenshots at each slice, and only mark a slice done after visual proof.
 
 ---
 
-## Phase 1 — Clean the surface (stats, logos, sources, single intake)
+## 1. Inbox mailbox for branded emails → `infoo.jane@gmail.com`
 
-**Fix the counts and scoping**
-- "1000 shown" becomes "1,000 of 10,613 agencies" (or brokers, depending on the tab). Same pattern on every filtered view.
-- Add a **Database scope switcher** at the top of the list — dropdown with:
-  - "All brokerages" (default)
-  - "Assigned by Citi Developers" (the sheet Citi handed you)
-  - "Registered by me with Citi" (agencies you personally closed)
-  - Plus one entry per uploaded database, named by you at upload time (e.g. "DLD individual brokers Q2 2027")
-- Each card shows a small chip: **Source · <database name>** (DLD, Citi assignment, Manual entry, etc.).
+- All branded / bulk / campaign emails from Broker Portal + Developer Portal use `infoo.jane@gmail.com` as the sending + reply-to identity (already the project default in `src/config/outreachIdentity.ts`).
+- Replies land in that same inbox. We need Gmail read access so the AI can:
+  - Match every incoming reply to the brokerage/broker it came from.
+  - Auto-update status (Registered / Briefing pending / Not interested / Bounced).
+  - Draft a reply per agency and store it in a **Drafts** column next to the agency card — never auto-send.
+- To read that inbox, I'll ask you to connect **Gmail** via the connector picker (one click, no password shown to me). If you prefer, we can use the Zoho Mail connector instead — say the word.
 
-**One intake, no more duplicate buttons**
-- Delete the separate "Import Brokerage" + "Upload database" pair. Replace with a single **`+ Add`** menu:
-  - Add a brokerage (single form)
-  - Add an individual broker (single form)
-  - Upload a database (Excel/CSV) — opens the wizard below
+## 2. Daily DLD sync (brokerages + individual broker cards)
 
-**Upload wizard**
-1. Drop file → name the database → pick source label (DLD / Citi assignment / manual list / other).
-2. Pick actions (checkboxes — you tick what applies):
-   - Create as a **new separate database** (stays visible on its own scope)
-   - **Merge** into an existing brokerage list (choose which, or "All")
-   - **Both** — create separate AND merge into All (your "create separate + merge" case)
-   - **Assign to a broker/team member** → expands a picker
-3. Preview rows → Confirm.
-- Deduplication is by trade licence number when present, otherwise legal name + emirate. Merges never overwrite non-empty fields (same rule as developer imports).
+- New edge function `dld-daily-sync` on a pg_cron schedule (03:00 GST daily).
+- Pulls the DLD open dataset (agencies + broker card registry), diffs against `crm_brokerages` and `crm_brokers` by DLD licence number, and:
+  - Inserts new agencies / brokers as `source = 'dld_daily'` with today's date as `first_seen_at`.
+  - Never overwrites your edits — only fills blanks.
+  - Logs the run in `crm_brokerage_sync_log`.
+- New "DLD sync" tab in the Broker Portal shows last run, rows added, and a Run now button.
 
-**Agency logos, auto**
-- On first render of an agency card with no logo, an edge function fetches favicon/OG image from the agency website; falls back to Clearbit-style logo lookup by domain; caches to `crm_brokerages.logo_url`.
-- Same treatment as developer logos — logo shown left of the name, exactly like Developer Portal cards.
+## 3. Specialty split — Secondary / Off-plan / Both
 
-**Phone auto-scrape**
-- When phone is missing but website is present, edge function scrapes the site's contact page and tel: links, saves the first valid UAE number to `phone_primary`, keeps discovered extras in `custom_fields.phones[]`.
-- Runs on upload and on-demand ("Enrich contacts" per card / bulk action).
+- Add `specialty` (`secondary | offplan | both`) and `specialty_focus` (`secondary_first | offplan_first | equal`) to `crm_brokerages` and `crm_brokers`.
+- Portal gets three filter tabs: **Secondary**, **Off-plan**, **Both**, plus **All**.
+- When adding or editing an agency/broker, a two-step chip picker: pick primary (that's the focus), pick secondary. If only one is picked, it's marked as `both = false`.
 
-**Contacts block (mirror the developer profile pattern)**
-- Card shows Contacts section with **+ Add new** (Position dropdown → Owner / Admin / Sales / Broker / Other → name, email, phone, WhatsApp, languages, notes). Repeatable, editable inline. Same UX you already approved on developer cards.
+## 4. Zoho CRM two-way sync
 
----
+- Every insert / update on `crm_brokerages`, `crm_brokers`, `crm_leads`, `developers` fires a Postgres trigger → `sync-lead-tri` edge function → Zoho module (Accounts / Contacts / Leads).
+- Reverse direction: existing `zoho-crm-proxy` polls Zoho every 10 min for records modified since `last_synced_at` and upserts back into Lovable.
+- Conflict rule: most recent `Modified_Time` wins; conflicts land in `sync_conflicts` for review.
+- Adds a "Zoho: synced 2m ago" badge on every broker / brokerage / developer card (same pattern as `ZohoSyncBadge` used on leads today).
 
-## Phase 2 — Move the email templates from JBJ Hub
+## 5. Unsubscribe → one-click Resubscribe (TDRA compliant)
 
-**Find and wire, do not duplicate**
-- The Citi Developers branded templates (registration invite, breakfast briefing invitation, follow-ups, thank-you) currently live under Relationship Hub / JBJ Hub. They stay there. The Broker Portal reads from the **same template registry** so any edit is reflected in both places.
-- New tab inside Broker Portal: **Templates** — lists the shared registry with filters (Registration, Briefing, Follow-up, Custom). Preview + duplicate + edit.
+- Keep the auto-appended unsubscribe footer — required by UAE TDRA for bulk email, protects deliverability.
+- `/unsubscribe` already shows a **Resubscribe** button (`src/pages/Unsubscribe.tsx`). I'll:
+  - Make it one-click (no reload, no form) with a large gold CTA.
+  - Add the same resubscribe CTA to the confirmation email footer so people who unsubscribed by mistake can undo it from their inbox.
+  - Log both events in `newsletter_events` so you see churn vs recovery.
 
-**Template variables**
-- `{{agency_name}}`, `{{contact_first_name}}`, `{{registration_link}}`, `{{briefing_date}}`, `{{sender_name}}`, `{{sender_signature}}` — resolved per recipient at send time.
+## 6. E2E test order
 
----
+I'll validate with Playwright screenshots at each step, in this order:
 
-## Phase 3 — Bulk campaigns, no duplicates
-
-**Compose a campaign**
-1. Pick recipients — from any scope (All / Citi-assigned / a specific uploaded database / a saved segment) with filters (registered = no, briefing done = no, emirate, etc.).
-2. Pick a template.
-3. Preview the merged version for a sample of 3 recipients.
-4. Schedule or send now.
-
-**Anti-duplicate guarantee**
-- Every send writes to `email_send_log` keyed by `(recipient_email, template_name, campaign_id)`.
-- Pre-send filter automatically excludes anyone who already received the same template within the campaign's cooldown window (default 30 days, editable). This is enforced server-side so no manual list-hygiene is needed.
-- Suppression list (bounces, complaints, unsubscribes) is honoured automatically.
-
-**Throughput**
-- Uses the existing Lovable email infrastructure (queue + retries + DLQ). Default 120/min so a 10k send takes ~90 minutes and stays within reputation limits.
-- Progress bar per campaign: queued / sent / delivered / bounced / replied.
+1. **Upload wizard** — Excel upload → dedupe preview → commit → agency cards render with logos + source chip.
+2. **Add / edit** — Add brokerage, add individual broker, add multiple contacts per card (position + email + phone), specialty picker works.
+3. **Bulk email** — Send test campaign to `infoo.jane@gmail.com`, confirm unsubscribe → resubscribe round-trip.
+4. **Phase 2 — DLD daily sync** — Trigger `dld-daily-sync` manually, confirm new rows appear tagged `dld_daily`.
+5. **Phase 3 — Zoho two-way** — Edit a brokerage in Lovable → appears in Zoho within 30s. Edit same record in Zoho → appears back in Lovable within 10 min.
+6. **Phase 4 — Inbox AI** — Send a reply from a test address to `infoo.jane@gmail.com`, confirm status auto-updates and a draft reply is queued (never auto-sent).
 
 ---
 
-## Phase 4 — Inbox sync + AI draft replies (the "smart" part)
+## Two things I need from you before I start
 
-**Inbox sync (Zoho Mail)**
-- You already have the Zoho connection. A scheduled worker polls the inbox every 2 minutes for replies to campaign messages (matched by the `Message-ID` header we send and `In-Reply-To` we receive).
-- Each reply is stored as a **thread** attached to the brokerage: full body, sender, timestamp, direction.
+1. **Gmail connection**: confirm I should open the Gmail connector for `infoo.jane@gmail.com` (read + send). If you'd rather use Zoho Mail as the inbox, say so.
+2. **DLD data source**: DLD's public dataset covers agencies + broker cards but not internal statuses. Confirm you want the daily job to pull from the public dataset (free, refreshed daily) rather than a paid feed.
 
-**AI classifier (Gemini via Lovable AI)**
-For every inbound reply the model returns a structured verdict:
-```
-{
-  intent: "already_registered" | "wants_registration" | "wants_briefing" | "declined" | "question" | "auto_reply" | "other",
-  mentioned_sales_rep: "name or null",
-  briefing_preferred_date: "iso or null",
-  summary: "1-2 sentence English summary"
-}
-```
-Rules applied automatically:
-- `already_registered` + rep name → set `citi_registered = true`, `registered_with_rep = <name>`, task "Verify rep <name> exists in Citi team".
-- `already_registered` + no rep → set `citi_registered = true`, task "Ask which Citi salesperson handles this agency".
-- `wants_briefing` → status → `briefing_pending`, calendar suggestion pre-filled.
-- `declined` → `not_interested`, campaign auto-skips this address in future.
-- Anything else → `needs_review`.
-
-**AI draft, never auto-sent**
-- For every inbound reply the system prepares a draft response using the classifier output + your template library.
-- Drafts land in a **Drafts** column on the agency card and in a global Drafts inbox. Each draft has:
-  - "Approve & send" (queues the send)
-  - "Edit" (inline rich editor)
-  - **AI Assistant chat** beside the draft — you type "make it warmer / shorter / mention the Nov 20 briefing" and it rewrites in place. Nothing goes out without your explicit approve.
-
-**Thread view**
-- Full email ticket on the card: inbound + outbound chronologically, with the AI verdict + status change chip attached to each inbound message so you see why the status flipped.
-
----
-
-## Technical section (for reference)
-
-**Data model additions**
-- `broker_databases` — id, name, source_label, uploaded_by, created_at, row_count, scope ("citi_assigned" | "personal" | "generic").
-- `crm_brokerages.database_id` FK (nullable when a row belongs to multiple databases → use `broker_database_members` join table).
-- `crm_brokerages.logo_url`, `custom_fields.phones jsonb[]`, `custom_fields.contacts jsonb[]` (position-typed).
-- `broker_campaigns` — id, name, template_name, filter_json, schedule_at, status, cooldown_days.
-- `broker_campaign_recipients` — campaign_id, brokerage_id, contact_email, status, message_id.
-- `broker_email_threads` — brokerage_id, message_id, in_reply_to, direction, subject, body_text, body_html, received_at.
-- `broker_email_ai_verdicts` — thread_id, intent, mentioned_rep, summary, applied_status_change.
-- `broker_email_drafts` — brokerage_id, in_reply_to_thread_id, subject, body, status ("draft" | "approved" | "sent" | "discarded"), ai_notes.
-
-**Edge functions**
-- `broker-logo-enrich` — favicon/OG/Clearbit lookup, cached.
-- `broker-phone-scrape` — fetch + parse contact page.
-- `broker-campaign-send` — recipient resolution → dedupe check → enqueue via existing app-email pipeline.
-- `broker-inbox-poll` (cron every 2 min) — Zoho Mail via existing gateway → normalize → store thread → classify → draft.
-- `broker-draft-rewrite` — invoked from the AI Assistant chat beside a draft.
-
-**Shared with Relationship Hub / JBJ Hub**
-- Templates registry (`_shared/transactional-email-templates/`) — untouched, just surfaced in Broker Portal too.
-- `crm_brokerages` and `crm_brokers` — the same rows, no duplication.
-
----
-
-## Two questions before I start Phase 1
-
-1. **Zoho Mail scope** — which mailbox should the inbox poller read? Your personal `janeaboujaoudemodel@gmail.com`, or a shared JBJ mailbox on Zoho (e.g. `hello@jbj.ae`, `brokers@jbj.ae`)? Bulk-campaign replies should land in the mailbox that sent the campaign; tell me the address to use as `From`.
-2. **Unsubscribe / opt-out language** — Lovable email infra automatically appends an unsubscribe footer to every send. Confirm that's fine for the Citi registration / briefing campaigns (it is legally required for UAE bulk email under TDRA rules, so I strongly recommend keeping it).
-
-Once you answer those two, I will build Phase 1 end-to-end (stats + database scope + single intake + logos + phones + contacts), take screenshots for you to review, and only then move to Phase 2.
+Once you approve this plan and answer those two, I'll start with slice 1 (upload wizard) and post screenshot proof before moving on.
