@@ -976,26 +976,26 @@ export default function DeveloperProfilePage() {
               </Card>
             )}
 
-            {projects.length === 0 ? (
+            {portfolioItems.length === 0 ? (
               <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No projects yet.</Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {projects.map((p) => (
-                  <Link
-                    key={p.id}
-                    to={`/projects/${p.slug}`}
-                    className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition"
-                  >
+                {portfolioItems.map((p: any) => {
+                  const label = projectMarketingLabel(p);
+                  const content = (
                     <div className="flex items-center gap-3">
                       {p.cover_image_url ? (
-                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover"  loading="lazy" decoding="async" />
+                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover" loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-14 h-14 rounded bg-[#EFE6D6] flex items-center justify-center">
                           <Building2 className="w-6 h-6 text-[#1A1A1A]/60" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
+                          {label && <Badge className="jj-emerald-metallic text-white border border-white/20 text-[10px] whitespace-nowrap">{label}</Badge>}
+                        </div>
                         <div className="text-xs text-[#1A1A1A]/70 truncate">
                           {[p.area_name, p.emirate].filter(Boolean).join(" · ") || "—"}
                         </div>
@@ -1003,10 +1003,19 @@ export default function DeveloperProfilePage() {
                           {(p.sale_status || p.status || "—")} · {p.handover_date || "TBD"} · {p.total_units ?? "—"} units
                         </div>
                       </div>
-                      <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />
+                      {!p.isPendingImport && <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />}
                     </div>
-                  </Link>
-                ))}
+                  );
+                  return p.isPendingImport ? (
+                    <div key={p.id} className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+                      {content}
+                    </div>
+                  ) : (
+                    <Link key={p.id} to={`/projects/${p.slug}`} className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors">
+                      {content}
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </TabsContent>
