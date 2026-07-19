@@ -34,16 +34,14 @@ export function DeveloperLogo({
   className,
   loading = "lazy",
   onError,
-  renderFallback = false,
   name,
-  websiteUrl,
   variant = "tile",
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
-  const valid = !override.forceNameplate && isValidDeveloperLogoUrl(src) && !error;
+  const valid = isValidDeveloperLogoUrl(src) && !error;
 
   const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact") => (
     <div className={containerClass} data-keep-gold={dataKeepGold} data-developer-logo="database">

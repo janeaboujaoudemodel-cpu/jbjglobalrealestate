@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Building2, Users, ShieldCheck, MapPin, Sparkles, ImageOff, FolderKanban, Inbox } from "lucide-react";
 import { IconTile } from "@/components/ui/icon-tile";
 import { usePortalRole } from "@/hooks/usePortalRole";
-import { BrandedEmailsLauncherCard } from "@/components/crm/BrandedEmailsLauncherCard";
+import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 
 interface Kpi { label: string; value: string | number; to: string; icon: any }
 
