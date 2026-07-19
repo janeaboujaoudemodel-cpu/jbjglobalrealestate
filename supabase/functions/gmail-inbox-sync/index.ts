@@ -55,8 +55,47 @@ function decodeBody(payload: any): string {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const auth = await requireOwnerAuth(req, corsHeaders);
-  if (auth.response) return auth.response;
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
+
+  // Cron / service bypass: automatic 5-minute sync runs without a user JWT.
+  // Accepts either the shared cron secret header or the service-role bearer.
+  const cronSecret = Deno.env.get("CRON_SHARED_SECRET") ?? "";
+  const providedCron = req.headers.get("x-cron-secret") ?? "";
+  const bearer = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const isCron = (cronSecret && providedCron && cronSecret === providedCron) ||
+    (bearer && serviceKey && bearer === serviceKey);
+
+  let userId = "";
+  let ownerEmail = "";
+
+  if (isCron) {
+    // Resolve the configured owner (fallback to the primary owner email)
+    const PRIMARY_OWNER_EMAIL = "janeaboujaoudenails@gmail.com";
+    const { data: appSet } = await supabase
+      .from("app_settings")
+      .select("value")
+      .eq("key", "owner_email")
+      .maybeSingle();
+    ownerEmail = ((appSet?.value as any) ?? PRIMARY_OWNER_EMAIL) as string;
+    const { data: authUsers } = await (supabase as any).auth.admin.listUsers({ page: 1, perPage: 200 });
+    const owner = (authUsers?.users ?? []).find((u: any) => (u.email ?? "").toLowerCase() === ownerEmail.toLowerCase())
+      ?? (authUsers?.users ?? []).find((u: any) => (u.email ?? "").toLowerCase() === PRIMARY_OWNER_EMAIL.toLowerCase());
+    if (!owner?.id) {
+      return new Response(JSON.stringify({ error: "Owner user not found for cron sync" }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    userId = owner.id;
+  } else {
+    const auth = await requireOwnerAuth(req, corsHeaders);
+    if (auth.response) return auth.response;
+    userId = auth.userId;
+    ownerEmail = auth.email;
+  }
 
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   const GMAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
@@ -66,13 +105,6 @@ Deno.serve(async (req) => {
       { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
-
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  );
-
-  const userId = auth.userId;
 
   // Determine since cursor
   const { data: settings } = await supabase
