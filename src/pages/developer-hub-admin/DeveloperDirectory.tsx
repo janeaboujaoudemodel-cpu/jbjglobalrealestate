@@ -379,7 +379,7 @@ export default function DeveloperDirectory() {
               <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">Owner-only command center for developers, projects, briefing requests, launch events, profile updates, sales reps, logo governance and Excel exports.</p>
             </div>
           </div>
-          <div className="flex flex-nowrap items-center gap-2 whitespace-nowrap">
+          <div className="flex flex-wrap items-center gap-2">
             {/* Single "New" dropdown consolidates all create actions */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
