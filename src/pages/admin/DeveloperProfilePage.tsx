@@ -556,6 +556,12 @@ export default function DeveloperProfilePage() {
                 sourceLinks={sourceLinks}
               />
             )}
+            {canEdit && (
+              <DeveloperBeforeAfterPanel
+                developerId={developer.id}
+                developerName={developer.name}
+              />
+            )}
 
             <Card className="border border-[#B89555]/30 bg-[#F7F2EA]">
               <CardHeader>
