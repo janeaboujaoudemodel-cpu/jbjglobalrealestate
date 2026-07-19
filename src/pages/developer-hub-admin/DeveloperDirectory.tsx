@@ -71,8 +71,8 @@ const DEVELOPER_REGISTRATION_OPTIONS = [
 ];
 
 const DEVELOPER_GROUP_OPTIONS = [
-  { value: "pending_group_status", label: "Pending group status" },
-  { value: "has_group", label: "Has group" },
+  { value: "pending_group_status", label: "Group not created" },
+  { value: "has_group", label: "Group active" },
   { value: "no_group", label: "No group" },
   { value: "group_not_required", label: "Group not required" },
 ];
