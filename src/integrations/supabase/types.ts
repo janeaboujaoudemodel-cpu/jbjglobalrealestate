@@ -15191,6 +15191,7 @@ export type Database = {
       developers: {
         Row: {
           admin_email: string | null
+          admin_position: string | null
           approved_at: string | null
           approved_by: string | null
           ceo_name: string | null
@@ -15266,6 +15267,7 @@ export type Database = {
         }
         Insert: {
           admin_email?: string | null
+          admin_position?: string | null
           approved_at?: string | null
           approved_by?: string | null
           ceo_name?: string | null
@@ -15341,6 +15343,7 @@ export type Database = {
         }
         Update: {
           admin_email?: string | null
+          admin_position?: string | null
           approved_at?: string | null
           approved_by?: string | null
           ceo_name?: string | null
