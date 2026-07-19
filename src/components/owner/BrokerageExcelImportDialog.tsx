@@ -154,11 +154,13 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
           if (f === "__custom__") custom[h] = v; else obj[f] = v;
         }
         if (Object.keys(custom).length) obj.custom_fields = custom;
-        obj.specialty_focus = specialty;
+        const dbSpecialty = ({ secondary: "secondary_first", off_plan: "offplan_first", both: "equal" } as const)[specialty];
+        obj.specialty_focus = dbSpecialty;
         return obj;
       }).filter((r) => r.company_name);
+      const dbSpecialty = ({ secondary: "secondary_first", off_plan: "offplan_first", both: "equal" } as const)[specialty];
       const { data, error } = await supabase.functions.invoke("bulk-import-brokerages", {
-        body: { rows: mappedRows, list_name: listName, source_filename: filename, source_label: sourceLabel || listName, merge_to_main: merge, assign_to_me: actions.assign_me, specialty_focus: specialty },
+        body: { rows: mappedRows, list_name: listName, source_filename: filename, source_label: sourceLabel || listName, merge_to_main: merge, assign_to_me: actions.assign_me, specialty_focus: dbSpecialty },
       });
       if (error) throw error;
       setProgress(100); setResult(data); onDone?.();
