@@ -27,9 +27,11 @@ export default function BrokeragePortal() {
   const [search, setSearch] = useState("");
   const [view, setView] = useState<"all" | "jbj" | "list">("all");
   const [listId, setListId] = useState<string>("all");
+  const [specialty, setSpecialty] = useState<"all" | "secondary" | "off_plan" | "both">("all");
   const [visibleLimit, setVisibleLimit] = useState(60);
 
-  useEffect(() => { setVisibleLimit(60); }, [search, view, listId]);
+  useEffect(() => { setVisibleLimit(60); }, [search, view, listId, specialty]);
+
 
   const brokeragesQ = useQuery({ queryKey: ["brokerage-portal-brokerages"], queryFn: async () => {
     const { data, error } = await supabase.from("crm_brokerages" as any).select("id,company_name,website,phone,email,emirate,country,office_location,office_address,registration_status,group_status,attended_briefing,briefing_count,database_source,original_filename,list_id,logo_url,source,source_detail,specialty_focus,assigned_to,updated_at").is("deleted_at", null).order("company_name").limit(5000);
