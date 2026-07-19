@@ -151,7 +151,7 @@ Deno.serve(async (req) => {
         channel_type: "email_gmail",
         assistant_type: "company",
         display_name: "Gmail (contact@jbj.ae forwarder)",
-        identifier: auth.email,
+        identifier: ownerEmail,
         is_active: true,
         sync_status: "active",
       })
