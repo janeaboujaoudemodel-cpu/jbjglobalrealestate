@@ -35,6 +35,12 @@ const OVERRIDES: Record<string, DeveloperLogoOverride> = {
   magdevelopment: { invert: true },
   magdevelopments: { invert: true },
   maggroup: { invert: true },
+  // Official SVGs are white wordmarks; invert to ink so they are visible on
+  // the champagne/white logo plate without introducing any fallback icon.
+  binghatti: { invert: true },
+  binghattidevelopments: { invert: true },
+  onedevelopment: { invert: true },
+  one: { invert: true },
   // Kingdom By MAG — branded as a white "Kingdom" wordmark on a dark grey
   // square plate. The grey plate clashes with our white logo plate, so we
   // skip the bitmap and render a clean ink wordmark instead.
