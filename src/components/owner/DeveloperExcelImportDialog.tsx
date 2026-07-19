@@ -4,9 +4,8 @@
  * Rules (locked, per approved plan):
  *   • Amra                → NEVER touched (row skipped entirely).
  *   • Citi Developers     → fill-blanks-only.
- *   • Every other row     → Excel WINS: non-empty Excel cells overwrite existing
- *                           fields; empty cells never wipe existing data.
- *   • New developers      → inserted with is_hidden = true.
+ *   • Every matched row   → Excel fills missing fields only; empty cells never wipe existing data.
+ *   • Unmatched rows      → skipped. No new developer rows are created from Excel.
  *   • Dedupe by slug (fallback: case-insensitive name). Zero duplication.
  */
 import { useCallback, useMemo, useRef, useState } from "react";
@@ -223,10 +222,10 @@ export default function DeveloperExcelImportDialog({
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<{
-    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; drive_jobs?: number; dry_run?: boolean; changed?: Array<{ name: string; action: string; fields: string[] }>;
+    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; unmatched?: number; total_unique?: number; drive_jobs?: number; dry_run?: boolean; changed?: Array<{ name: string; action: string; fields: string[] }>;
   } | null>(null);
   const [previewResult, setPreviewResult] = useState<{
-    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique?: number; changed?: Array<{ name: string; action: string; fields: string[] }>;
+    created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; unmatched?: number; total_unique?: number; changed?: Array<{ name: string; action: string; fields: string[] }>;
   } | null>(null);
   const [compareOpen, setCompareOpen] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -280,7 +279,7 @@ export default function DeveloperExcelImportDialog({
       const payload = buildPayload(activeRows, activeMapping);
       const batchSize = 75;
       const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
-      const totals: { created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; total_unique: number; drive_jobs: number; changed: Array<{ name: string; action: string; fields: string[] }> } = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, drive_jobs: 0, changed: [] };
+      const totals: { created: number; updated: number; filled_citi: number; protected_amra: number; skipped: number; unmatched: number; total_unique: number; drive_jobs: number; changed: Array<{ name: string; action: string; fields: string[] }> } = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, unmatched: 0, total_unique: 0, drive_jobs: 0, changed: [] };
       for (let i = 0; i < chunks.length; i++) {
         setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
         const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
@@ -292,6 +291,7 @@ export default function DeveloperExcelImportDialog({
         totals.filled_citi += data?.filled_citi ?? 0;
         totals.protected_amra += data?.protected_amra ?? 0;
         totals.skipped += data?.skipped ?? 0;
+        totals.unmatched += data?.unmatched ?? 0;
         totals.total_unique += data?.total_unique ?? 0;
         totals.drive_jobs += data?.drive_jobs ?? 0;
         totals.changed.push(...(Array.isArray(data?.changed) ? data.changed : []));
@@ -303,12 +303,13 @@ export default function DeveloperExcelImportDialog({
         filled_citi: totals.filled_citi,
         protected_amra: totals.protected_amra,
         skipped: totals.skipped,
+        unmatched: totals.unmatched,
         total_unique: totals.total_unique,
         drive_jobs: totals.drive_jobs,
         changed: totals.changed,
       };
       setResult(summary);
-      toast.success(`Saved ${summary.total_unique} developers · +${summary.created} new · ${summary.updated} enriched · ${summary.drive_jobs} Drive scans queued`);
+      toast.success(`Updated ${summary.updated + summary.filled_citi} existing developers · ${summary.unmatched} unmatched skipped · 0 new records created`);
       onDone?.();
     } catch (e: any) {
       toast.error(e.message || "Import failed");
@@ -323,7 +324,7 @@ export default function DeveloperExcelImportDialog({
       const payload = buildPayload(rows, mapping);
       const batchSize = 75;
       const chunks = Array.from({ length: Math.ceil(payload.length / batchSize) }, (_, i) => payload.slice(i * batchSize, (i + 1) * batchSize));
-      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, total_unique: 0, changed: [] as Array<{ name: string; action: string; fields: string[] }> };
+      const totals = { created: 0, updated: 0, filled_citi: 0, protected_amra: 0, skipped: 0, unmatched: 0, total_unique: 0, changed: [] as Array<{ name: string; action: string; fields: string[] }> };
       for (let i = 0; i < chunks.length; i++) {
         setProgress(Math.max(5, Math.round((i / chunks.length) * 95)));
         const { data, error } = await supabase.functions.invoke("bulk-import-developers", {
@@ -335,13 +336,14 @@ export default function DeveloperExcelImportDialog({
         totals.filled_citi += data?.filled_citi ?? 0;
         totals.protected_amra += data?.protected_amra ?? 0;
         totals.skipped += data?.skipped ?? 0;
+        totals.unmatched += data?.unmatched ?? 0;
         totals.total_unique += data?.total_unique ?? 0;
         totals.changed.push(...(Array.isArray(data?.changed) ? data.changed : []));
       }
       setProgress(100);
       setPreviewResult(totals);
       setCompareOpen(true);
-      toast.success(`Impact preview ready: ${totals.updated} updates · ${totals.created} new hidden drafts`);
+      toast.success(`Impact preview ready: ${totals.updated + totals.filled_citi} existing updates · ${totals.unmatched} unmatched skipped · 0 new records`);
     } catch (e: any) {
       toast.error(e.message || "Could not preview import impact");
     } finally {
@@ -512,9 +514,9 @@ export default function DeveloperExcelImportDialog({
                       <div className="rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 p-3">
                         <p className="font-bold">After save</p>
                         {previewResult ? (
-                          <p>{previewResult.created} will be new hidden drafts · {previewResult.updated} existing developers will be improved · {previewResult.filled_citi} Citi blanks will be filled · 0 records saved yet.</p>
+                      <p>0 new developers will be created · {previewResult.updated} existing developers will be improved · {previewResult.filled_citi} Citi blanks will be filled · {previewResult.unmatched ?? 0} unmatched Excel rows will be skipped · 0 records saved yet.</p>
                         ) : result ? (
-                          <p>{result.created} new · {result.updated} updated · {result.filled_citi} Citi blanks filled · {result.drive_jobs ?? 0} Drive scans queued.</p>
+                          <p>0 new developers created · {result.updated} updated · {result.filled_citi} Citi blanks filled · {result.unmatched ?? 0} unmatched skipped · {result.drive_jobs ?? 0} Drive scans queued.</p>
                         ) : (
                           <p>Pending — click Compare impact to preview, then Save & Enrich to write changes.</p>
                         )}
@@ -608,7 +610,7 @@ export default function DeveloperExcelImportDialog({
                 <div className="rounded-lg bg-[#064E3B] text-white p-3 text-xs flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
                   <span>
-                    <b>{result.total_unique ?? 0}</b> unique developers processed · <b>{result.created}</b> new (hidden for review) · <b>{result.updated}</b> enriched (Excel wins) · <b>{result.filled_citi}</b> Citi blanks filled · <b>{result.protected_amra}</b> Amra rows protected · <b>{result.drive_jobs ?? 0}</b> Drive scans queued · <b>{result.skipped}</b> skipped.
+                    <b>{result.total_unique ?? 0}</b> unique developers processed · <b>0</b> new records created · <b>{result.updated}</b> existing developers enriched · <b>{result.filled_citi}</b> Citi blanks filled · <b>{result.unmatched ?? 0}</b> unmatched skipped · <b>{result.protected_amra}</b> Amra rows protected · <b>{result.drive_jobs ?? 0}</b> Drive scans queued.
                   </span>
                 </div>
               )}
@@ -620,7 +622,7 @@ export default function DeveloperExcelImportDialog({
           <div className="shrink-0 border-t border-[#B89555]/20 px-6 py-3 bg-[#FDFBF7] flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <p className="text-[11px] text-[#1A1A1A]/60 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" />
-              Amra never touched · Citi fills blanks only · Everyone else: Excel overwrites non-empty cells only.
+               Amra never touched · Citi fills blanks only · matched existing developers are enriched only · unmatched Excel rows are skipped.
             </p>
             <div className="flex gap-2 flex-wrap">
               <Button variant="outline" onClick={reset} disabled={busy} className="border-[#B89555]/50">

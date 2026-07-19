@@ -1,4 +1,4 @@
-// Bulk developer import — Excel-wins with Amra/Citi exceptions.
+// Bulk developer import — update-only enrichment with Amra/Citi exceptions.
 // Owner/admin only. Uses service role to bypass field-protection triggers where safe.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
       }
     });
 
-    let created = 0, updated = 0, filled_citi = 0, skipped = 0, driveJobs = 0;
+    let created = 0, updated = 0, filled_citi = 0, skipped = 0, unmatched = 0, driveJobs = 0;
     const changed: Array<{ name: string; action: string; fields: string[] }> = [];
 
     for (const [key, r] of uniqueRows) {
@@ -128,13 +128,14 @@ Deno.serve(async (req) => {
             const cur = (existRow as any)[k];
             if (cur === null || cur === undefined || cur === "" ) patch[k] = v;
           } else {
-            // Excel wins on non-empty cells
-            if ((existRow as any)[k] !== v) patch[k] = v;
+            // Fill blanks only: Excel enriches missing fields but never overwrites curated website data.
+            const cur = (existRow as any)[k];
+            if (cur === null || cur === undefined || cur === "") patch[k] = v;
           }
         }
         if (Object.keys(customFields).length) {
           const existingCustom = normalizeCustomFields(existRow.custom_fields);
-          const mergedCustom = citi ? fillBlankCustomFields(existingCustom, customFields) : { ...existingCustom, ...customFields };
+          const mergedCustom = fillBlankCustomFields(existingCustom, customFields);
           if (JSON.stringify(existingCustom) !== JSON.stringify(mergedCustom)) patch.custom_fields = mergedCustom;
         }
         const statusPatch: Record<string, any> = {};
@@ -155,33 +156,16 @@ Deno.serve(async (req) => {
           driveJobs += await queueDriveJob(svc, existRow.id, String((patch.google_drive_url ?? excelValues.google_drive_url) || ""));
         }
       } else {
+        unmatched++;
         if (dryRun) {
-          created++;
-          changed.push({ name: String(r.name), action: "would create hidden", fields: ["registration_status", "group_status", ...Object.keys(excelValues), ...(Object.keys(customFields).length ? ["custom_fields"] : [])].slice(0, 12) });
-          continue;
+          changed.push({ name: String(r.name), action: "unmatched — kept out", fields: ["no existing developer matched"] });
         }
-        const { data: inserted, error } = await svc.from("developers").insert({
-          name: r.name,
-          slug,
-          is_hidden: true,
-          excel_import_marker: importMarker,
-          excel_imported_at: new Date().toISOString(),
-          last_excel_import_hash: key,
-          registration_status: "not_registered",
-          group_status: "pending_group_status",
-          ...excelValues,
-          ...(Object.keys(customFields).length ? { custom_fields: customFields } : {}),
-        } as any).select("id").single();
-        if (error) { skipped++; continue; }
-        created++;
-        changed.push({ name: String(r.name), action: "created hidden", fields: ["registration_status", "group_status", ...Object.keys(excelValues), ...(Object.keys(customFields).length ? ["custom_fields"] : [])].slice(0, 12) });
-        if (autoEnrichDrive && excelValues.google_drive_url && inserted?.id) {
-          driveJobs += await queueDriveJob(svc, inserted.id, String(excelValues.google_drive_url));
-        }
+        skipped++;
+        continue;
       }
     }
 
-    return json({ dry_run: dryRun, created, updated, filled_citi, protected_amra: protectedAmra, skipped, total_unique: uniqueRows.length, drive_jobs: driveJobs, changed: changed.slice(0, 100) });
+    return json({ dry_run: dryRun, created, updated, filled_citi, protected_amra: protectedAmra, skipped, unmatched, total_unique: uniqueRows.length, drive_jobs: driveJobs, changed: changed.slice(0, 100) });
   } catch (e) {
     console.error("bulk-import-developers", e);
     return json({ error: String((e as Error).message ?? e) }, 500);
