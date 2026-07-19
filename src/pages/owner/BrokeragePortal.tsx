@@ -111,7 +111,22 @@ export default function BrokeragePortal() {
     <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
         <div className="flex items-start gap-4 min-w-0"><span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center"><Building2 className="size-5 text-white" /></span><div><p className="text-[11px] uppercase tracking-[0.24em] font-black text-[#B89555]">Owner Backend · Brokers</p><h1 className="text-2xl md:text-3xl font-black text-[#1A1A1A] tracking-tight">Broker Portal</h1><p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">Owner-only command center for JBJ brokers, external brokerage agencies, uploaded management databases, registration status, group status, briefings and exports.</p></div></div>
-        <div className="flex flex-wrap gap-2"><Button size="sm" variant="outline" onClick={() => setImportOpen(true)}><Upload className="size-4 mr-1" /> Import Brokerage</Button><Button size="sm" variant="gold" onClick={exportRows}><Download className="size-4 mr-1" /> Download</Button></div>
+        <div className="flex flex-wrap gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="gold" className="gap-1"><Plus className="size-4" /> Add <ChevronDown className="size-3.5 opacity-70" /></Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[240px]">
+              <DropdownMenuLabel className="text-[10px] uppercase tracking-[0.16em] font-black text-[#B89555]">Add to Broker Portal</DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-[#B89555]/20" />
+              <DropdownMenuItem onSelect={() => { toast.info("Use Import → Single-row template to add one brokerage. Upload database supports single rows too."); setImportOpen(true); }} className="gap-2 text-[#1A1A1A]"><Building2 className="size-4 text-[#064E3B]" /> Add a brokerage</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => toast.info("Individual broker intake coming next turn — for now, upload a single-row Excel via 'Upload a database'.")} className="gap-2 text-[#1A1A1A]"><UserRound className="size-4 text-[#064E3B]" /> Add an individual broker</DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-[#B89555]/20" />
+              <DropdownMenuItem onSelect={() => setImportOpen(true)} className="gap-2 text-[#1A1A1A]"><Database className="size-4 text-[#064E3B]" /> Upload a database (Excel / CSV)</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button size="sm" variant="outline" onClick={exportRows}><Download className="size-4 mr-1" /> Download</Button>
+        </div>
       </div>
     </div>
     <BrokerageExcelImportDialog open={importOpen} onOpenChange={setImportOpen} onDone={() => { qc.invalidateQueries({ queryKey: ["brokerage-portal-brokerages"] }); qc.invalidateQueries({ queryKey: ["brokerage-portal-lists"] }); qc.invalidateQueries({ queryKey: ["brokerage-portal-members"] }); }} />
