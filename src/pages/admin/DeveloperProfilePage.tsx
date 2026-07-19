@@ -40,6 +40,7 @@ interface Developer {
   whatsapp_group_url: string | null;
   telegram_group_url: string | null;
   admin_email: string | null;
+  admin_position: string | null;
   office_address: string | null;
   google_maps_url: string | null;
   instagram_url: string | null;
