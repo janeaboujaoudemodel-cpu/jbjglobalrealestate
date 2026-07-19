@@ -204,14 +204,14 @@ function AutomationsStrip() {
     <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com</p>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com <span className="ml-2 text-[#064E3B]/70">Auto · every 5 min</span></p>
           <p className="text-xs text-[#1A1A1A]/70 mt-1">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
         </div>
         <Button size="sm" variant="gold" disabled={busy === "gmail"} onClick={runGmail}>{busy === "gmail" ? "Syncing…" : "Sync now"}</Button>
       </div>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync</p>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync <span className="ml-2 text-[#064E3B]/70">Auto · daily 03:00 UTC</span></p>
           <p className="text-xs text-[#1A1A1A]/70 mt-1">Last run: <span className="font-black text-[#1A1A1A]">{fmt(dldQ.data?.started_at)}</span>{dldQ.data?.rows_added ? ` · ${dldQ.data.rows_added} rows` : ""}</p>
         </div>
         <Button size="sm" variant="gold" disabled={busy === "dld"} onClick={runDld}>{busy === "dld" ? "Running…" : "Run now"}</Button>
