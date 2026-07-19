@@ -258,8 +258,8 @@ function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDelet
           <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
           {(["secondary", "off_plan", "both"] as const).map((s) => {
             const dbVal = ({ secondary: "secondary_first", off_plan: "offplan_first", both: "equal" } as const)[s];
-            const active = (row.specialty_focus || "equal") === dbVal;
-            return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: dbVal })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
+            const active = row.specialty_focus === dbVal;
+            return <button key={s} type="button" onClick={() => onPatch({ specialty_focus: active ? null : dbVal })} className={`px-2 py-0.5 rounded-md text-[10px] font-black border transition ${active ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#EFE6D6]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Both" : "Secondary"}</button>;
           })}
         </div>
       </div>
