@@ -59,6 +59,38 @@ const isDirectWithDeveloper = (p: any) => p?.developer?.has_active_rep === true;
 // even from direct-with-developer brands. Off-plan only on /.
 const isHomepagePromotable = (p: any) => !isCompletedReady(p) && !isSoldOut(p);
 
+const HOMEPAGE_DUPLICATE_WORDS = new Set([
+  "the",
+  "in",
+  "by",
+  "at",
+  "residence",
+  "residences",
+  "resort",
+  "resorts",
+  "first",
+  "integrative",
+  "wellness",
+]);
+
+const homepageDedupeKey = (p: Project) => {
+  const raw = `${p.name || p.slug || ""}`.toLowerCase();
+  const compact = raw.replace(/[^a-z0-9]+/g, "");
+  if (/^(in)?amra(residences?|thefirstintegrativewellnessresort)?$/.test(compact)) {
+    return "project:amra";
+  }
+  const identity = raw
+    .replace(/&/g, " and ")
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .filter((token) => !HOMEPAGE_DUPLICATE_WORDS.has(token))
+    .join("") || compact;
+  const developer = `${p.developer?.slug || p.developer_name || p.developer_id || ""}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+  return `${developer || "unknown"}:${identity}`;
+};
+
 
 const ELITE_DEVELOPERS = [
   "Emaar",
@@ -131,10 +163,12 @@ function dedupePush(out: Project[], seen: Set<string>, candidates: Project[], ta
   });
   for (const p of sorted) {
     if (out.length >= target) return;
-    if (!p?.id || seen.has(p.id)) continue;
+    if (!p?.id) continue;
+    const key = homepageDedupeKey(p);
+    if (seen.has(key)) continue;
     // Require an image to keep the grid visually uniform
     if (!p.cover_image_url && !(p.images && p.images.length > 0)) continue;
-    seen.add(p.id);
+    seen.add(key);
     out.push(p);
   }
 }
@@ -369,8 +403,10 @@ export function useHandpickedProjects() {
           const published = await tierPublishedFallback();
           for (const p of published) {
             if (out.length >= FALLBACK_TARGET) break;
-            if (!p?.id || seen.has(p.id)) continue;
-            seen.add(p.id);
+            if (!p?.id) continue;
+            const key = homepageDedupeKey(p);
+            if (seen.has(key)) continue;
+            seen.add(key);
             out.push(p);
           }
         } catch {}
