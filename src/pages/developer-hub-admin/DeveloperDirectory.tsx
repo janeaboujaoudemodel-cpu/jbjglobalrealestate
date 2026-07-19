@@ -573,9 +573,10 @@ export default function DeveloperDirectory() {
                   <p className="text-[#1A1A1A] font-black">{(d.total_units_delivered ?? 0).toLocaleString()}</p>
                 </div>
               </div>
-              <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed">
+              <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed min-h-[2.6em]">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
+              <div className="flex-1" />
               <div className="mt-3 grid gap-2">
                 <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
                   <SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
