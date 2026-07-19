@@ -716,6 +716,16 @@ export default function DeveloperProfilePage() {
                   <Textarea rows={3} disabled={!canEdit} value={form.notable_projects ?? ""} onChange={(e) => setForm((f) => ({ ...f, notable_projects: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                 </Field>
 
+                <DeveloperFocusProjectCard
+                  developerId={developer.id}
+                  canEdit={canEdit}
+                  projects={projects as any}
+                  currentFocusProjectId={(developer as any).focus_project_id}
+                  currentFocusProjectLabel={(developer as any).focus_project_label}
+                />
+
+                <DeveloperProjectsFootprint customFields={(developer as any).custom_fields} />
+
                 <DeveloperCustomFieldsSection
                   developerId={developer.id}
                   canEdit={canEdit}
