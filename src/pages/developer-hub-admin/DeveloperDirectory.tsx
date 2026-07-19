@@ -153,7 +153,8 @@ export default function DeveloperDirectory() {
       const to = from + PAGE_SIZE - 1;
       let q = supabase
         .from("developers")
-        .select("id, name, slug, logo_url, website_url, description, last_enriched_at, ceo_name, founded_year, headquarters, completed_projects, offplan_projects, total_units_delivered, upcoming_units, logo_status, registration_status, group_status, is_hidden, drive_enrichment_status, office_phone, admin_email, whatsapp", { count: "exact" })
+        .select("id, name, slug, logo_url, website_url, description, last_enriched_at, ceo_name, founded_year, headquarters, completed_projects, offplan_projects, total_units_delivered, upcoming_units, logo_status, registration_status, group_status, is_hidden, drive_enrichment_status, office_phone, admin_email, whatsapp, excel_order", { count: "exact" })
+        .order("excel_order", { ascending: true, nullsFirst: false })
         .order("name")
         .range(from, to);
       if (search.trim()) q = q.ilike("name", `%${search.trim()}%`);
