@@ -53,6 +53,7 @@ const OwnerPublicGateEditor = lazy(() => import("@/pages/owner/OwnerPublicGateEd
 const JbjHub = lazy(() => import("@/pages/owner/JbjHub"));
 const OwnerEnrichmentReview = lazy(() => import("@/pages/owner/OwnerEnrichmentReview"));
 const DriveExtractionsHub = lazy(() => import("@/pages/owner/DriveExtractionsHub"));
+const DeveloperImportReview = lazy(() => import("@/pages/owner/DeveloperImportReview"));
 
 const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagement"));
 const Documents = lazy(() => import("@/pages/Documents"));
