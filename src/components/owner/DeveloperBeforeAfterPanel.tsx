@@ -193,9 +193,14 @@ export default function DeveloperBeforeAfterPanel({
                       <Badge className="bg-[#064E3B] text-white border-0 uppercase text-[10px]">
                         {item.kind === "excel" ? "Excel import" : "AI enrichment"}
                       </Badge>
-                      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 uppercase text-[10px]">
+                      <Badge className={`border-0 uppercase text-[10px] ${item.failed ? "bg-red-700 text-white" : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"}`}>
                         {item.status}
                       </Badge>
+                      {item.dupCount && item.dupCount > 1 && (
+                        <Badge className="bg-[#1A1A1A] text-white border-0 uppercase text-[10px]">
+                          ×{item.dupCount} attempts
+                        </Badge>
+                      )}
                       {item.source && (
                         <a href={item.source} target="_blank" rel="noreferrer" className="text-[11px] text-[#064E3B] underline truncate max-w-[280px]">
                           {item.source}
@@ -211,7 +216,11 @@ export default function DeveloperBeforeAfterPanel({
                       {item.reason}
                     </div>
                   )}
-                  {keys.length === 0 ? (
+                  {item.failed ? (
+                    <p className="px-3 py-3 text-xs text-[#1A1A1A]/70">
+                      No diff — this attempt produced no new data. Nothing was written to the developer record.
+                    </p>
+                  ) : keys.length === 0 ? (
                     <p className="px-3 py-3 text-xs text-[#1A1A1A]/60">No field changes captured.</p>
                   ) : (
                     <table className="w-full text-xs">
