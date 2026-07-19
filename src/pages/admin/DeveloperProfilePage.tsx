@@ -140,6 +140,22 @@ const normalizeDeveloperContacts = (source: Partial<Developer>): DeveloperContac
   return legacy.position || legacy.email || legacy.phone || legacy.whatsapp ? [legacy] : [];
 };
 
+const normalizeProjectName = (value: unknown) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+const readExpectedProjectCount = (developer?: Developer | null) => {
+  const custom = developer?.custom_fields && typeof developer.custom_fields === "object" ? developer.custom_fields : {};
+  for (const key of ["projects_uae", "projects_in_uae", "uae_projects", "project_count", "total_projects"]) {
+    const raw = (custom as Record<string, unknown>)[key];
+    const value = typeof raw === "number" ? raw : Number(String(raw ?? "").replace(/[^0-9.]/g, ""));
+    if (Number.isFinite(value) && value > 0) return Math.floor(value);
+  }
+  return 0;
+};
+
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
