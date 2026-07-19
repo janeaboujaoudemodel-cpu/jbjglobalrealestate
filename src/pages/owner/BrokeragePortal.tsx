@@ -142,6 +142,8 @@ export default function BrokeragePortal() {
         ["Updated brokers", statsQ.data?.updated],
       ].map(([label, value]) => <Card key={label as string} className="p-4 bg-[#F7F2EA] border border-[#B89555]/30"><p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#1A1A1A]/55">{label}</p><p className="mt-1 text-2xl font-black text-[#064E3B]">{typeof value === "number" ? value.toLocaleString() : "—"}</p></Card>)}
     </div>
+    <AutomationsStrip />
+
     <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
       <Input placeholder="Search brokerage, broker, email…" value={search} onChange={(e) => setSearch(e.target.value)} className="h-9 w-80 bg-[#FDFBF7] text-[#1A1A1A]" />
       <Button size="sm" variant={view === "all" ? "gold" : "outline"} onClick={() => setView("all")}><Building2 className="size-4 mr-1" /> All brokerages</Button>
