@@ -71,8 +71,8 @@ const DEVELOPER_REGISTRATION_OPTIONS = [
 ];
 
 const DEVELOPER_GROUP_OPTIONS = [
-  { value: "pending_group_status", label: "Pending group status" },
-  { value: "has_group", label: "Has group" },
+  { value: "pending_group_status", label: "Group not created" },
+  { value: "has_group", label: "Group active" },
   { value: "no_group", label: "No group" },
   { value: "group_not_required", label: "Group not required" },
 ];
@@ -488,7 +488,7 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 min-w-[220px]">
                       <div className="flex flex-wrap gap-1.5">
                         <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
-                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{(d.group_status || "pending_group_status").replace(/_/g, " ")}</Badge>
+                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.find((o) => o.value === (d.group_status || "pending_group_status"))?.label ?? "Group not created"}</Badge>
                         {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0">Draft</Badge>}
                       </div>
                     </td>
@@ -517,13 +517,14 @@ export default function DeveloperDirectory() {
           </div>
         </Card>
       ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch">
         {rows.map((d) => {
           const isSel = selected.has(d.id);
+          const groupLabel = DEVELOPER_GROUP_OPTIONS.find((o) => o.value === (d.group_status || "pending_group_status"))?.label ?? "Group not created";
           return (
             <Card
               key={d.id}
-              className={`p-5 bg-[#F7F2EA] border rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
+              className={`p-5 bg-[#F7F2EA] border rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] flex flex-col h-full ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
             >
               <div className="flex items-start gap-3">
                 <Checkbox
@@ -546,7 +547,7 @@ export default function DeveloperDirectory() {
                   <p className="text-xs text-[#1A1A1A]/60 truncate">{d.slug}</p>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
-                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.08em]">{(d.group_status || "pending_group_status").replace(/_/g, " ")}</Badge>
+                    <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 text-[10px] uppercase tracking-[0.08em]">{groupLabel}</Badge>
                     {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 text-[10px] uppercase tracking-[0.08em]">Draft</Badge>}
                     {d.drive_enrichment_status && <Badge className="bg-[#FDE68A] text-[#1A1A1A] border border-[#B89555]/30 text-[10px] uppercase tracking-[0.08em]">{d.drive_enrichment_status}</Badge>}
                   </div>
@@ -572,9 +573,10 @@ export default function DeveloperDirectory() {
                   <p className="text-[#1A1A1A] font-black">{(d.total_units_delivered ?? 0).toLocaleString()}</p>
                 </div>
               </div>
-              <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed">
+              <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed min-h-[2.6em]">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
+              <div className="flex-1" />
               <div className="mt-3 grid gap-2">
                 <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
                   <SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
