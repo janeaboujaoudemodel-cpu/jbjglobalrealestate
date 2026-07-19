@@ -208,6 +208,65 @@ export default function DeveloperProfilePage() {
     enabled: !!developer,
   });
 
+  const { data: pendingProjects = [] } = useQuery({
+    queryKey: ["dev-pending-project-imports", developer?.name],
+    queryFn: async () => {
+      if (!developer?.name) return [];
+      const { data } = await supabase
+        .from("pending_project_imports" as any)
+        .select("id, name, developer_name, area_name, emirate, status")
+        .eq("developer_name", developer.name)
+        .limit(50);
+      return (data as any[]) || [];
+    },
+    enabled: !!developer?.name,
+  });
+
+  const portfolioItems = useMemo(() => {
+    const seen = new Set(projects.map((project: any) => normalizeProjectName(project.name)));
+    const pending = pendingProjects
+      .filter((project: any) => project?.name && !seen.has(normalizeProjectName(project.name)))
+      .map((project: any) => ({
+        id: `pending-${project.id}`,
+        name: project.name,
+        slug: "",
+        area_name: project.area_name,
+        emirate: project.emirate,
+        status: project.status || "pending link",
+        sale_status: "Pending link",
+        handover_date: null,
+        total_units: null,
+        cover_image_url: null,
+        isPendingImport: true,
+      }));
+    const expected = readExpectedProjectCount(developer);
+    const missingCount = Math.max(0, expected - projects.length - pending.length);
+    const placeholders = Array.from({ length: missingCount }, (_, index) => ({
+      id: `expected-${developer?.id}-${index}`,
+      name: `Project ${projects.length + pending.length + index + 1}`,
+      slug: "",
+      area_name: "Pending portfolio link",
+      emirate: "UAE",
+      status: "pending link",
+      sale_status: "Pending link",
+      handover_date: null,
+      total_units: null,
+      cover_image_url: null,
+      isPendingImport: true,
+    }));
+    return [...projects, ...pending, ...placeholders];
+  }, [developer, pendingProjects, projects]);
+
+  const focusProjectId = (developer as any)?.focus_project_id;
+  const focusProjectLabel = String((developer as any)?.focus_project_label || "").trim();
+  const projectMarketingLabel = (project: any) => {
+    if (focusProjectId && project.id === focusProjectId) return focusProjectLabel || "Focus project";
+    const custom = developer?.custom_fields && typeof developer.custom_fields === "object" ? developer.custom_fields : {};
+    const labels = (custom as Record<string, any>)?.project_labels;
+    const label = labels?.[project.id] || labels?.[project.slug] || labels?.[project.name];
+    return typeof label === "string" ? label : "";
+  };
+
   /* ---------- Sales reps ---------- */
   const { data: reps = [] } = useQuery({
     queryKey: ["dev-reps", developer?.id, developer?.name],
