@@ -38,6 +38,58 @@ import {
   Save,
 } from "lucide-react";
 import { fieldToText, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
+import { PROJECTS_AREAS_KEY_REGEX } from "@/utils/developerProjectsFootprint";
+
+/**
+ * Keys that must NEVER appear in the auto-inferred Extended Fields grid.
+ * These are either:
+ *   - contact data — belongs in the Contacts & Reps tab as structured contact
+ *     rows (position dropdown + name/email/phone/whatsapp/notes/languages),
+ *     not as free-form "ADMIN POSITION: Head of Sales" text fields.
+ *   - system/import metadata — internal only.
+ *   - already rendered elsewhere on the profile.
+ */
+const SUPPRESSED_INFERRED_KEYS = new Set<string>([
+  // Contact — rendered in Contacts & Reps tab
+  "admin_position",
+  "admin_email",
+  "admin_phone",
+  "admin_name",
+  "admin_full_name",
+  "admin_whatsapp",
+  "admin_contact",
+  "position",
+  "contact_position",
+  "contact_name",
+  "contact_email",
+  "contact_phone",
+  "office_phone",
+  "office_email",
+  "whatsapp",
+  "whatsapp_number",
+  "phone",
+  "email",
+  // Location — rendered on the main profile card and the Contacts tab
+  "office_address",
+  "headquarters",
+  "google_maps_url",
+  // Owner-only URLs already rendered as first-class fields
+  "website_url",
+  "google_drive_url",
+  "instagram_url",
+  "linkedin_url",
+  "facebook_url",
+  "whatsapp_group_url",
+  "telegram_group_url",
+  // Import/system metadata
+  "excel_row",
+  "excel_serial",
+  "excel_status",
+  "source_url",
+  "source",
+  "imported_at",
+  "imported_from",
+]);
 
 type FieldType = "text" | "longtext" | "number" | "url" | "list" | "date";
 
@@ -100,7 +152,13 @@ export default function DeveloperCustomFieldsSection({
   const renderedFields = useMemo(() => {
     const byKey = new Map(active.map((def) => [def.key, def]));
     const inferred = Object.entries(values)
-      .filter(([key, value]) => !byKey.has(key) && fieldToText(value))
+      .filter(([key, value]) => {
+        if (byKey.has(key)) return false;
+        if (SUPPRESSED_INFERRED_KEYS.has(key)) return false;
+        // *_projects_areas render via the structured Projects Footprint card
+        if (PROJECTS_AREAS_KEY_REGEX.test(key)) return false;
+        return !!fieldToText(value);
+      })
       .map(([key, value], index): FieldDef => {
         const text = fieldToText(value);
         const isUrl = /^https?:\/\//i.test(text);

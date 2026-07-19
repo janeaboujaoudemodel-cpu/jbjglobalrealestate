@@ -24,6 +24,8 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import OwnerCompanyProfileUploader from "@/components/owner/OwnerCompanyProfileUploader";
 import DeveloperBeforeAfterPanel from "@/components/owner/DeveloperBeforeAfterPanel";
 import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFieldsSection";
+import DeveloperFocusProjectCard from "@/components/owner/DeveloperFocusProjectCard";
+import DeveloperProjectsFootprint from "@/components/owner/DeveloperProjectsFootprint";
 import { fieldToText, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 interface Developer {
@@ -715,6 +717,16 @@ export default function DeveloperProfilePage() {
                 <Field label="Notable projects (free text)">
                   <Textarea rows={3} disabled={!canEdit} value={form.notable_projects ?? ""} onChange={(e) => setForm((f) => ({ ...f, notable_projects: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                 </Field>
+
+                <DeveloperFocusProjectCard
+                  developerId={developer.id}
+                  canEdit={canEdit}
+                  projects={projects as any}
+                  currentFocusProjectId={(developer as any).focus_project_id}
+                  currentFocusProjectLabel={(developer as any).focus_project_label}
+                />
+
+                <DeveloperProjectsFootprint customFields={(developer as any).custom_fields} />
 
                 <DeveloperCustomFieldsSection
                   developerId={developer.id}

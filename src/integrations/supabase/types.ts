@@ -15280,6 +15280,8 @@ export type Database = {
           excel_imported_at: string | null
           expected_completion_year: number | null
           feature_image_url: string | null
+          focus_project_id: string | null
+          focus_project_label: string | null
           founded_year: number | null
           google_drive_url: string | null
           google_maps_url: string | null
@@ -15356,6 +15358,8 @@ export type Database = {
           excel_imported_at?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
+          focus_project_id?: string | null
+          focus_project_label?: string | null
           founded_year?: number | null
           google_drive_url?: string | null
           google_maps_url?: string | null
@@ -15432,6 +15436,8 @@ export type Database = {
           excel_imported_at?: string | null
           expected_completion_year?: number | null
           feature_image_url?: string | null
+          focus_project_id?: string | null
+          focus_project_label?: string | null
           founded_year?: number | null
           google_drive_url?: string | null
           google_maps_url?: string | null
@@ -15489,7 +15495,22 @@ export type Database = {
           whatsapp?: string | null
           whatsapp_group_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "developers_focus_project_id_fkey"
+            columns: ["focus_project_id"]
+            isOneToOne: false
+            referencedRelation: "project_duplicate_groups"
+            referencedColumns: ["keeper_id"]
+          },
+          {
+            foreignKeyName: "developers_focus_project_id_fkey"
+            columns: ["focus_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       discount_code_usages: {
         Row: {
