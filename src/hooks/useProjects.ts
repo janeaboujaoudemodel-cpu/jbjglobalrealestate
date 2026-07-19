@@ -9,11 +9,52 @@ import type { UnifiedProject } from "@/types/unifiedProject";
 const hasPublicPhoto = (p: UnifiedProject) =>
   !!(p.cover_image_url || p.images?.some((img) => !!img.image_url));
 
+const GENERIC_DUPLICATE_WORDS = new Set([
+  "the",
+  "in",
+  "by",
+  "at",
+  "residence",
+  "residences",
+  "residential",
+  "resort",
+  "resorts",
+  "tower",
+  "towers",
+  "apartments",
+  "apartment",
+  "first",
+  "integrative",
+  "wellness",
+]);
+
+const normalizeProjectIdentity = (project: UnifiedProject) => {
+  const raw = `${project.name || project.slug || ""}`.toLowerCase();
+  const compact = raw.replace(/[^a-z0-9]+/g, "");
+  if (/^(in)?amra(residences?|thefirstintegrativewellnessresort)?$/.test(compact)) {
+    return "amra";
+  }
+  const tokens = raw
+    .replace(/&/g, " and ")
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .filter((token) => !GENERIC_DUPLICATE_WORDS.has(token));
+  return tokens.length ? tokens.join("") : compact;
+};
+
+const getPublicDedupeKey = (project: UnifiedProject) => {
+  const identity = normalizeProjectIdentity(project);
+  const developer = `${project.developer?.slug || project.developer_name || project.developer_id || ""}`
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+  return identity === "amra" ? "project:amra" : `${developer || "unknown"}:${identity}`;
+};
+
 const dedupePublicProjects = (projects: UnifiedProject[]) => {
   const seen = new Set<string>();
   return projects.filter((project) => {
     if (!hasPublicPhoto(project)) return false;
-    const key = `${project.slug || project.name}`.trim().toLowerCase();
+    const key = getPublicDedupeKey(project);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
