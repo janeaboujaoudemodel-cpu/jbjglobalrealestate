@@ -23,19 +23,25 @@ const GENERIC_DUPLICATE_WORDS = new Set([
   "towers",
   "apartments",
   "apartment",
+  "apartments",
+  "villa",
+  "villas",
   "first",
   "integrative",
   "wellness",
+  "dubai",
+  "uae",
+  "phase",
+  "edition",
+  "collection",
 ]);
 
 const normalizeProjectIdentity = (project: UnifiedProject) => {
   const raw = `${project.name || project.slug || ""}`.toLowerCase();
   const compact = raw.replace(/[^a-z0-9]+/g, "");
-  if (/^(in)?amra(residences?|thefirstintegrativewellnessresort)?$/.test(compact)) {
-    return "amra";
-  }
   const tokens = raw
     .replace(/&/g, " and ")
+    .replace(/\b(residences?|residential|resorts?|towers?|apartments?|villas?|phase|edition|collection)\b/g, " ")
     .split(/[^a-z0-9]+/)
     .filter(Boolean)
     .filter((token) => !GENERIC_DUPLICATE_WORDS.has(token));
@@ -47,7 +53,7 @@ const getPublicDedupeKey = (project: UnifiedProject) => {
   const developer = `${project.developer?.slug || project.developer_name || project.developer_id || ""}`
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "");
-  return identity === "amra" ? "project:amra" : `${developer || "unknown"}:${identity}`;
+  return `${developer || "unknown"}:${identity}`;
 };
 
 const dedupePublicProjects = (projects: UnifiedProject[]) => {

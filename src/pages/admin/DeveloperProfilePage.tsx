@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -159,8 +159,11 @@ const readExpectedProjectCount = (developer?: Developer | null) => {
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, isOwner } = useAuth();
   const qc = useQueryClient();
+  const requestedTab = searchParams.get("tab") || "overview";
+  const activeTab = ["overview", "projects", "media", "contacts", "files", "briefings", "activity"].includes(requestedTab) ? requestedTab : "overview";
 
   /* ---------- Load developer ---------- */
   const { data: developer, isLoading } = useQuery({
@@ -676,7 +679,11 @@ export default function DeveloperProfilePage() {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="overview">
+        <Tabs value={activeTab} onValueChange={(value) => setSearchParams((prev) => {
+          const next = new URLSearchParams(prev);
+          value === "overview" ? next.delete("tab") : next.set("tab", value);
+          return next;
+        }, { replace: true })}>
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="projects">Portfolio ({portfolioItems.length})</TabsTrigger>

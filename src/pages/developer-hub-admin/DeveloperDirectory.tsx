@@ -78,6 +78,8 @@ const DEVELOPER_GROUP_OPTIONS = [
   { value: "group_not_required", label: "Group not required" },
 ];
 
+const developerPortfolioPath = (slug: string) => `/owner/developers/${slug}?tab=projects`;
+
 const normalizeDeveloperKey = (row: Row) => {
   const SUFFIX = /\b(developments?|developers?|development|properties|property|realty|real\s*estate|holdings?|holding|group|llc|l\.?l\.?c|fz-?llc|pjsc|psc|inc|co|company|international|investments?|investment|limited|ltd|sole\s+proprietorship|s\.?p\.?c|plc|corp|corporation|establishment|contracting|construction)\b/gi;
   const nameKey = row.name.replace(SUFFIX, " ").replace(/[^a-z0-9]+/gi, "").trim().toLowerCase();
@@ -531,8 +533,16 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.founded_year ?? "—"}</td>
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[170px] truncate">{d.ceo_name ?? "—"}</td>
                     <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.total_units_delivered ?? 0).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">
+                      <Link to={developerPortfolioPath(d.slug)} className="inline-flex rounded-md px-2 py-1 -mx-2 -my-1 underline decoration-[#B89555]/50 hover:bg-[#EFE6D6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]">
+                        {(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3 text-[#1A1A1A] font-bold">
+                      <Link to={developerPortfolioPath(d.slug)} className="inline-flex rounded-md px-2 py-1 -mx-2 -my-1 underline decoration-[#B89555]/50 hover:bg-[#EFE6D6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]">
+                        {(d.project_count || d.completed_projects || 0).toLocaleString()}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
                     <td className="px-4 py-3 whitespace-nowrap min-w-[120px]"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap inline-flex min-w-[72px] justify-center">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
@@ -623,32 +633,38 @@ export default function DeveloperDirectory() {
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-3 gap-2">
-                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                <Link to={developerPortfolioPath(d.slug)} className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2 transition hover:bg-[#EFE6D6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">For Sale</p>
                   <p className="text-[#1A1A1A] font-black">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</p>
-                </div>
-                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                </Link>
+                <Link to={developerPortfolioPath(d.slug)} className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2 transition hover:bg-[#EFE6D6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Projects</p>
                   <p className="text-[#1A1A1A] font-black">{(d.project_count || d.completed_projects || 0).toLocaleString()}</p>
-                </div>
-                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                </Link>
+                <Link to={developerPortfolioPath(d.slug)} className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2 transition hover:bg-[#EFE6D6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064E3B]">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Units</p>
                   <p className="text-[#1A1A1A] font-black">{(d.total_units_delivered ?? 0).toLocaleString()}</p>
-                </div>
+                </Link>
               </div>
               <p className="text-sm text-[#1A1A1A]/75 mt-3 line-clamp-2 leading-relaxed min-h-[2.6em]">
                 {d.description ?? <span className="italic text-[#1A1A1A]/40">No description</span>}
               </p>
               <div className="flex-1" />
-              <div className="mt-3 grid gap-2">
-                <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
-                  <SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="mb-1 text-[10px] uppercase tracking-[0.12em] font-black text-[#1A1A1A]/55">Registration</p>
+                  <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
+                  <SelectTrigger className="h-9 bg-white text-[#1A1A1A] w-full"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
-                </Select>
-                <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
-                  <SelectTrigger className="h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue /></SelectTrigger>
+                  </Select>
+                </div>
+                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                  <p className="mb-1 text-[10px] uppercase tracking-[0.12em] font-black text-[#1A1A1A]/55">Developer group</p>
+                  <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
+                  <SelectTrigger className="h-9 bg-white text-[#1A1A1A] w-full"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
-                </Select>
+                  </Select>
+                </div>
               </div>
               <div className="mt-3 flex gap-2 flex-wrap items-center">
                 <Button asChild size="sm" variant="gold">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
+import { Building2 } from "lucide-react";
 
 interface DeveloperLogoProps {
   src?: string | null;
@@ -43,9 +44,20 @@ export function DeveloperLogo({
   const override = getDeveloperLogoOverride(name ?? alt);
   const valid = isValidDeveloperLogoUrl(src) && !error;
 
-  // Shared label renderer — when a logo is missing, keep the identical
-  // champagne container but scale/wrap the actual developer wordmark so it
-  // fits inside the plate without cropping in every dropdown/list.
+  // Missing-logo renderer — locked fallback is the Building2 icon only.
+  // No initials, no generated monograms, no project photos as substitute logos.
+  const renderMissingLogo = (containerClass: string, scale: "compact" | "card" = "compact") => (
+    <div
+      className={cn(containerClass, scale === "compact" && "min-w-10")}
+      aria-label={`${(name || alt || "Developer").trim()} logo missing`}
+      title={`${(name || alt || "Developer").trim()} logo missing`}
+      data-developer-logo-fallback="building"
+    >
+      <Building2 className={cn(scale === "card" ? "h-12 w-12" : "h-6 w-6", "text-[#064E3B]")} strokeWidth={1.8} />
+    </div>
+  );
+
+  // Legacy label renderer kept only for explicitly curated nameplate usage.
   const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]", scale: "compact" | "card" = "compact") => {
     const raw = (name || alt || "Developer").trim();
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
@@ -95,17 +107,16 @@ export function DeveloperLogo({
     );
   };
 
-  // ── Nameplate variant — always renders the wordmark ──
-  if (variant === "nameplate" || (variant === "bare" && override.forceNameplate)) {
+  // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
+  if (variant === "nameplate") {
+    if (!valid) return renderMissingLogo(cn(UNIFIED_PLATE, className));
     return renderNameLabel(cn(UNIFIED_PLATE, className));
   }
 
   if (variant === "bare") {
     if (!valid) {
       if (!renderFallback && !(name || alt)) return null;
-        // Always keep the identical square container and fit the dev name inside.
-      if (name || alt) return renderNameLabel(cn(UNIFIED_PLATE, className));
-      return renderNameLabel(cn(UNIFIED_PLATE, className));
+      return renderMissingLogo(cn(UNIFIED_PLATE, className));
     }
     return (
       <div
@@ -144,10 +155,7 @@ export function DeveloperLogo({
     );
 
     if (!valid) {
-      if (name || alt) {
-        return renderNameLabel(cardContainer, "text-[#1A1A1A]", "card");
-      }
-      return renderNameLabel(cardContainer, "text-[#1A1A1A]");
+      return renderMissingLogo(cardContainer, "card");
     }
     return (
       <div className={cardContainer}>
@@ -175,8 +183,7 @@ export function DeveloperLogo({
 
   if (!valid) {
     if (!renderFallback && !(name || alt)) return null;
-    if (name || alt) return renderNameLabel(tileContainer);
-    return renderNameLabel(tileContainer);
+    return renderMissingLogo(tileContainer);
   }
 
   return (
