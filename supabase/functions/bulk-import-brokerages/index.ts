@@ -32,7 +32,10 @@ Deno.serve(async (req) => {
     if (!rows.length) return json({ created: 0, updated: 0, skipped: 0, total_unique: 0, list_id: null, changed: [] });
 
     const mergeToMain = body.merge_to_main === true;
+    const assignToMe = body.assign_to_me === true;
+    const specialtyFocus = ["secondary", "off_plan", "both"].includes(String(body.specialty_focus)) ? String(body.specialty_focus) : "both";
     const sourceFilename = norm(body.source_filename) || "brokerage-upload.xlsx";
+    const sourceLabel = norm(body.source_label) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "");
     const listName = norm(body.list_name) || sourceFilename.replace(/\.(xlsx|xls|csv)$/i, "") || `Brokerage database ${new Date().toISOString().slice(0, 10)}`;
     const svc = createClient(SUPABASE_URL, SERVICE_ROLE);
 
@@ -41,7 +44,7 @@ Deno.serve(async (req) => {
       kind: "brokerages",
       name: await uniqueListName(svc, auth.userId, listName),
       source_filename: sourceFilename,
-      description: mergeToMain ? "Uploaded brokerage database · also merged into full portal" : "Uploaded brokerage database · separate list only",
+      description: `${mergeToMain ? "Merged into full portal · " : "Separate list only · "}source: ${sourceLabel} · specialty: ${specialtyFocus}${assignToMe ? " · assigned to uploader" : ""}`,
     }).select("id,name").single();
     if (listErr) throw listErr;
 
