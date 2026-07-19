@@ -144,6 +144,21 @@ export interface Developer {
   offplan_projects: number | null;
   portfolio_worth: number | null;
   headquarters: string | null;
+  website_url?: string | null;
+  ceo_name?: string | null;
+  instagram_url?: string | null;
+  linkedin_url?: string | null;
+  office_phone?: string | null;
+  admin_email?: string | null;
+  office_address?: string | null;
+  google_drive_url?: string | null;
+  custom_fields?: Json | null;
+  public_fields?: Json | null;
+  total_units_delivered?: number | null;
+  upcoming_units?: number | null;
+  notable_projects?: string | null;
+  parent_company?: string | null;
+  specialization?: string | null;
 }
 
 export interface TrendingArea {
@@ -566,7 +581,6 @@ export function useProjectsByDeveloper(developerSlug: string) {
           documents:project_documents(id, document_type, file_url, file_name, display_order)
         `)
         .eq("developer.slug", developerSlug)
-        .eq("is_published", true)
         .or("listing_kind.is.null,listing_kind.neq.leasing")
         .is("deleted_at", null)
         .order("created_at", { ascending: false });

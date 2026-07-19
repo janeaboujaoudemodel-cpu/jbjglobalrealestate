@@ -37,6 +37,7 @@ import {
   Sparkles,
   Save,
 } from "lucide-react";
+import { fieldToText, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 type FieldType = "text" | "longtext" | "number" | "url" | "list" | "date";
 
@@ -96,6 +97,27 @@ export default function DeveloperCustomFieldsSection({
   });
 
   const active = useMemo(() => defs.filter((d) => d.is_active), [defs]);
+  const renderedFields = useMemo(() => {
+    const byKey = new Map(active.map((def) => [def.key, def]));
+    const inferred = Object.entries(values)
+      .filter(([key, value]) => !byKey.has(key) && fieldToText(value))
+      .map(([key, value], index): FieldDef => {
+        const text = fieldToText(value);
+        const isUrl = /^https?:\/\//i.test(text);
+        const isNumber = typeof value === "number" || (/^-?\d+(\.\d+)?$/.test(text) && text.length < 12);
+        return {
+          id: `excel-${key}`,
+          key,
+          label: humanizeDeveloperFieldKey(key),
+          field_type: isUrl ? "url" : isNumber ? "number" : text.length > 120 || text.includes("\n") ? "longtext" : "text",
+          description: "Imported from the Excel database",
+          sort_order: 10_000 + index,
+          is_active: true,
+          source: "manual",
+        };
+      });
+    return [...active, ...inferred];
+  }, [active, values]);
 
   const setVal = (key: string, v: unknown) => {
     setValues((prev) => ({ ...prev, [key]: v }));
@@ -145,17 +167,16 @@ export default function DeveloperCustomFieldsSection({
 
       {isLoading ? (
         <p className="text-xs text-[#1A1A1A]/50">Loading fields…</p>
-      ) : active.length === 0 ? (
+      ) : renderedFields.length === 0 ? (
         <p className="text-xs text-[#1A1A1A]/50 italic">
-          No extended fields yet — the AI will add them automatically when it
-          finds new information in an uploaded company profile, or you can add
-          one manually from Manage fields.
+          No extended fields yet — imported Excel fields and AI-extracted fields
+          will appear here automatically when available.
         </p>
       ) : (
         <div className="grid md:grid-cols-2 gap-3">
-          {active.map((f) => (
+          {renderedFields.map((f) => (
             <FieldEditor
-              key={f.id}
+              key={f.key}
               def={f}
               value={values[f.key]}
               disabled={!canEdit}
@@ -165,7 +186,7 @@ export default function DeveloperCustomFieldsSection({
         </div>
       )}
 
-      {canEdit && active.length > 0 && (
+      {canEdit && renderedFields.length > 0 && (
         <div className="flex items-center justify-between pt-1 border-t border-[#B89555]/20">
           <p className="text-[11px] text-[#1A1A1A]/60">
             {saving ? "Saving…" : dirty ? "Unsaved changes" : "All extended fields saved"}

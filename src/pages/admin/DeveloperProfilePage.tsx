@@ -24,6 +24,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import OwnerCompanyProfileUploader from "@/components/owner/OwnerCompanyProfileUploader";
 import DeveloperBeforeAfterPanel from "@/components/owner/DeveloperBeforeAfterPanel";
 import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFieldsSection";
+import { fieldToText, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 interface Developer {
   id: string;
@@ -266,10 +267,8 @@ export default function DeveloperProfilePage() {
     description: form.description ?? null,
     website_url: form.website_url ?? null,
     google_drive_url: form.google_drive_url ?? null,
-    // Location fields are permanently nulled — JBJ never stores or displays
-    // developer office locations. See mem: constraint/no-developer-location.
     headquarters: null,
-    office_address: null,
+    office_address: form.office_address ?? null,
     google_maps_url: null,
     founded_year: form.founded_year ?? null,
     ceo_name: form.ceo_name ?? null,
@@ -459,10 +458,7 @@ export default function DeveloperProfilePage() {
   const sourceLinks = asList(customFields.ai_source_links ?? customFields.sources);
   const communities = asList(customFields.communities);
   const emirates = asList(customFields.emirates_active);
-  const extraEntries = Object.entries(customFields).filter(([key, value]) =>
-    !["sources", "ai_source_links", "ai_intel_website_url", "last_ai_extraction_at"].includes(key) &&
-    value !== null && value !== undefined && String(Array.isArray(value) ? value.join(", ") : value).trim() !== "",
-  );
+  const extraEntries = getVisibleExcelEntries(customFields, ["sources", "ai_source_links", "ai_intel_website_url", "last_ai_extraction_at"]);
 
   return (
     <div data-backend-portal="developer-profile" className="space-y-6">
@@ -654,8 +650,9 @@ export default function DeveloperProfilePage() {
                       <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" placeholder="contact@developer.ae" />
                     </div>
                   </Field>
-                  {/* Office address & Google Maps link intentionally removed —
-                      never store or display developer physical locations. */}
+                  <Field label="Office address (owner-only, hidden from public)">
+                    <Textarea rows={3} disabled={!canEdit} value={form.office_address ?? ""} onChange={(e) => setForm((f) => ({ ...f, office_address: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                  </Field>
 
                   <Field label="WhatsApp Group invite">
                     <Input disabled={!canEdit} value={form.whatsapp_group_url ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp_group_url: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" placeholder="https://chat.whatsapp.com/…" />
@@ -831,8 +828,8 @@ export default function DeveloperProfilePage() {
                     <div className="md:col-span-2 grid gap-2 md:grid-cols-2">
                       {extraEntries.slice(0, 16).map(([key, value]) => (
                         <div key={key} className="rounded-md border border-[#B89555]/20 bg-[#F7F2EA] px-3 py-2">
-                          <div className="text-[10px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/50">{key.replace(/_/g, " ")}</div>
-                          <div className="text-sm text-[#1A1A1A] break-words">{Array.isArray(value) ? value.join(", ") : String(value)}</div>
+                          <div className="text-[10px] uppercase tracking-[0.12em] font-semibold text-[#1A1A1A]/50">{humanizeDeveloperFieldKey(key)}</div>
+                          <div className="text-sm text-[#1A1A1A] break-words">{fieldToText(value)}</div>
                         </div>
                       ))}
                     </div>
