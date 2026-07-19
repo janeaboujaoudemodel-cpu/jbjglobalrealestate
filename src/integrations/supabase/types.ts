@@ -7907,6 +7907,9 @@ export type Database = {
           deal_count_cached: number
           deleted_at: string | null
           directory_rank: number | null
+          dld_first_seen_at: string | null
+          dld_last_synced_at: string | null
+          dld_license_number: string | null
           dld_office_number: string | null
           dnc_reason: string | null
           do_not_contact: boolean
@@ -7982,6 +7985,10 @@ export type Database = {
           source: Database["public"]["Enums"]["outreach_source"]
           source_detail: string | null
           source_history: Json
+          specialty: Database["public"]["Enums"]["broker_specialty"] | null
+          specialty_focus:
+            | Database["public"]["Enums"]["broker_specialty_focus"]
+            | null
           star_rating: number | null
           status: Database["public"]["Enums"]["crm_brokerage_status"]
           tags: string[] | null
@@ -8032,6 +8039,9 @@ export type Database = {
           deal_count_cached?: number
           deleted_at?: string | null
           directory_rank?: number | null
+          dld_first_seen_at?: string | null
+          dld_last_synced_at?: string | null
+          dld_license_number?: string | null
           dld_office_number?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
@@ -8107,6 +8117,10 @@ export type Database = {
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
           source_history?: Json
+          specialty?: Database["public"]["Enums"]["broker_specialty"] | null
+          specialty_focus?:
+            | Database["public"]["Enums"]["broker_specialty_focus"]
+            | null
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
@@ -8157,6 +8171,9 @@ export type Database = {
           deal_count_cached?: number
           deleted_at?: string | null
           directory_rank?: number | null
+          dld_first_seen_at?: string | null
+          dld_last_synced_at?: string | null
+          dld_license_number?: string | null
           dld_office_number?: string | null
           dnc_reason?: string | null
           do_not_contact?: boolean
@@ -8232,6 +8249,10 @@ export type Database = {
           source?: Database["public"]["Enums"]["outreach_source"]
           source_detail?: string | null
           source_history?: Json
+          specialty?: Database["public"]["Enums"]["broker_specialty"] | null
+          specialty_focus?:
+            | Database["public"]["Enums"]["broker_specialty_focus"]
+            | null
           star_rating?: number | null
           status?: Database["public"]["Enums"]["crm_brokerage_status"]
           tags?: string[] | null
@@ -8283,6 +8304,9 @@ export type Database = {
           database_source: string | null
           date_of_birth: string | null
           department: string | null
+          dld_card_number: string | null
+          dld_first_seen_at: string | null
+          dld_last_synced_at: string | null
           driving_license: string | null
           email_lower: string | null
           emirate: string | null
@@ -8340,6 +8364,12 @@ export type Database = {
           seniority: string | null
           source_history: Json
           specialty: string[]
+          specialty_choice:
+            | Database["public"]["Enums"]["broker_specialty"]
+            | null
+          specialty_focus:
+            | Database["public"]["Enums"]["broker_specialty_focus"]
+            | null
           tagline: string | null
           updated_at: string | null
           upload_source: string | null
@@ -8377,6 +8407,9 @@ export type Database = {
           database_source?: string | null
           date_of_birth?: string | null
           department?: string | null
+          dld_card_number?: string | null
+          dld_first_seen_at?: string | null
+          dld_last_synced_at?: string | null
           driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
@@ -8434,6 +8467,12 @@ export type Database = {
           seniority?: string | null
           source_history?: Json
           specialty?: string[]
+          specialty_choice?:
+            | Database["public"]["Enums"]["broker_specialty"]
+            | null
+          specialty_focus?:
+            | Database["public"]["Enums"]["broker_specialty_focus"]
+            | null
           tagline?: string | null
           updated_at?: string | null
           upload_source?: string | null
@@ -8471,6 +8510,9 @@ export type Database = {
           database_source?: string | null
           date_of_birth?: string | null
           department?: string | null
+          dld_card_number?: string | null
+          dld_first_seen_at?: string | null
+          dld_last_synced_at?: string | null
           driving_license?: string | null
           email_lower?: string | null
           emirate?: string | null
@@ -8528,6 +8570,12 @@ export type Database = {
           seniority?: string | null
           source_history?: Json
           specialty?: string[]
+          specialty_choice?:
+            | Database["public"]["Enums"]["broker_specialty"]
+            | null
+          specialty_focus?:
+            | Database["public"]["Enums"]["broker_specialty_focus"]
+            | null
           tagline?: string | null
           updated_at?: string | null
           upload_source?: string | null
@@ -15675,6 +15723,48 @@ export type Database = {
           total_transactions?: number
           total_volume_aed?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      dld_daily_sync_runs: {
+        Row: {
+          agencies_inserted: number
+          agencies_updated: number
+          brokers_inserted: number
+          brokers_updated: number
+          created_at: string
+          error_message: string | null
+          id: string
+          raw_summary: Json
+          run_finished_at: string | null
+          run_started_at: string
+          status: string
+        }
+        Insert: {
+          agencies_inserted?: number
+          agencies_updated?: number
+          brokers_inserted?: number
+          brokers_updated?: number
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          raw_summary?: Json
+          run_finished_at?: string | null
+          run_started_at?: string
+          status?: string
+        }
+        Update: {
+          agencies_inserted?: number
+          agencies_updated?: number
+          brokers_inserted?: number
+          brokers_updated?: number
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          raw_summary?: Json
+          run_finished_at?: string | null
+          run_started_at?: string
+          status?: string
         }
         Relationships: []
       }
@@ -42186,6 +42276,8 @@ export type Database = {
         | "waiting_client"
         | "closed"
         | "escalated"
+      broker_specialty: "secondary" | "offplan" | "both"
+      broker_specialty_focus: "secondary_first" | "offplan_first" | "equal"
       broker_task_status: "pending" | "in_progress" | "completed" | "overdue"
       broker_task_type:
         | "developer_visit"
@@ -42866,6 +42958,8 @@ export const Constants = {
         "closed",
         "escalated",
       ],
+      broker_specialty: ["secondary", "offplan", "both"],
+      broker_specialty_focus: ["secondary_first", "offplan_first", "equal"],
       broker_task_status: ["pending", "in_progress", "completed", "overdue"],
       broker_task_type: [
         "developer_visit",
