@@ -278,6 +278,7 @@ export default function DeveloperProfilePage() {
     whatsapp_group_url: form.whatsapp_group_url ?? null,
     telegram_group_url: form.telegram_group_url ?? null,
     admin_email: form.admin_email ?? null,
+    admin_position: form.admin_position ?? null,
     instagram_url: form.instagram_url ?? null,
     linkedin_url: form.linkedin_url ?? null,
     notable_projects: form.notable_projects ?? null,
