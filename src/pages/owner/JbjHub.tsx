@@ -73,13 +73,13 @@ export default function JbjHub() {
                   onClick={() => setTab(t.key)}
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition",
+                    "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black transition border",
                     isActive
-                      ? "bg-white text-emerald-900 shadow"
-                      : "bg-white/10 text-white/80 hover:bg-white/20"
+                      ? "bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555] shadow-[0_0_0_2px_rgba(184,149,85,0.22),0_10px_24px_rgba(0,0,0,0.28)]"
+                      : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white"
                   )}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className={cn("w-4 h-4", isActive ? "text-[#1A1A1A]" : "text-white")} />
                   {t.label}
                 </button>
               );

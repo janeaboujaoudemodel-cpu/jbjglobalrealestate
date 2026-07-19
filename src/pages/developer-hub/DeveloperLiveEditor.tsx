@@ -44,8 +44,13 @@ interface Project {
   handover_date: string | null;
   is_published: boolean | null;
   cover_image_url: string | null;
+  card_image_url?: string | null;
+  gallery_start_image_url?: string | null;
+  images?: { image_url: string | null; display_order?: number | null }[];
   description?: string | null;
   source?: string | null;
+  import_source?: string | null;
+  created_source?: string | null;
   data_quality_flags: unknown;
   is_manually_verified?: boolean | null;
   merged_into_project_id?: string | null;
@@ -68,8 +73,9 @@ interface ResaleProject {
 
 const OFFPLAN_FILTER = "and(listing_kind.is.null,listing_kind.neq.resale,listing_kind.neq.leasing)";
 
-const humanizeSource = (s: string | null | undefined): string => {
+const humanizeSource = (s: string | null | undefined, p?: Project): string => {
   if (!s) return "Unknown source";
+  
   const map: Record<string, string> = {
     manual: "Manual entry",
     "paa-envelope": "PAA envelope",
@@ -77,7 +83,30 @@ const humanizeSource = (s: string | null | undefined): string => {
     reelly: "Reelly feed",
     brochure: "Brochure upload",
     developer_portal: "Developer portal",
+    developer_drive_ai: "AI Import",
+    google_drive: "Google Drive",
+    legacy_import: "Legacy import",
   };
+
+  // Special logic: only Citi/Amra user-entered projects show "Manual entry" if they are manual.
+  // Others showing 'manual' but having an import_source or created_source should show that instead.
+  if (s === "manual" && p) {
+    const devName = (p.developer_name || p.developer?.name || "").toLowerCase();
+    const isCitiAmra = devName.includes("citi") || devName.includes("amra");
+    
+    if (!isCitiAmra) {
+      if (p.created_source && p.created_source !== "manual") {
+        return map[p.created_source] || p.created_source.replace(/[-_]/g, " ");
+      }
+      if (p.import_source) {
+        return `Imported (${p.import_source.replace(/[-_]/g, " ")})`;
+      }
+      // If it's not Citi/Amra and was originally 'manual' but we have no other source info,
+      // it might be an old import or unknown.
+      return "Imported/Unknown";
+    }
+  }
+
   return map[s] || s.replace(/[-_]/g, " ");
 };
 
@@ -158,7 +187,7 @@ const DeveloperLiveEditor = () => {
       const asc = sortOrder === "oldest" || sortOrder === "name-asc";
       let query = supabase
         .from("projects")
-        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, description, source, data_quality_flags, is_manually_verified, merged_into_project_id, created_at, updated_at")
+        .select("id, name, slug, developer_id, developer_name, developer:developers(name), location, emirate, construction_status, status, status_label, is_offplan, listing_kind, price_from, handover_date, is_published, cover_image_url, card_image_url, gallery_start_image_url, images:project_images(image_url, display_order), description, source, import_source, created_source, data_quality_flags, is_manually_verified, merged_into_project_id, created_at, updated_at")
         .or("listing_kind.is.null,listing_kind.eq.offplan")
         .order(sortCol, { ascending: asc, nullsFirst: false })
         .limit(pageSize);
@@ -399,7 +428,7 @@ const DeveloperLiveEditor = () => {
           </Badge>
           {(counts?.duplicates ?? 0) > 0 && (
             <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 gap-1">
-              <CopyIcon className="w-3 h-3" />
+              
               {counts?.duplicates?.toLocaleString()} duplicate{counts?.duplicates === 1 ? "" : "s"} merged
             </Badge>
           )}
@@ -550,6 +579,7 @@ const DeveloperLiveEditor = () => {
               ? (p.data_quality_flags as string[])
               : [];
             const currentEdit = edits[p.id] || {};
+            const firstImage = [p.cover_image_url, p.card_image_url, p.gallery_start_image_url, ...(p.images ?? []).sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0)).map((img) => img.image_url)].find(Boolean) || null;
             return (
               <Card key={p.id}
                 className={`p-4 rounded-lg border transition-colors ${
@@ -562,8 +592,8 @@ const DeveloperLiveEditor = () => {
                     <Checkbox checked={isSelected} onCheckedChange={() => toggleSelect(p.id)} aria-label={`Select ${p.name}`} />
                   </div>
                   <div className="w-20 h-20 rounded bg-[#EFE6D6] border border-[#B89555]/40 flex-shrink-0 overflow-hidden">
-                    {p.cover_image_url ? (
-                      <img src={p.cover_image_url} alt={p.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                    {firstImage ? (
+                      <img src={firstImage} alt={p.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className="w-full h-full grid place-items-center text-[10px] text-[#1A1A1A]/40">No cover</div>
                     )}
@@ -582,8 +612,13 @@ const DeveloperLiveEditor = () => {
                       ) : (
                         <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200">Unpublished</Badge>
                       )}
+                      {p.status_label && (
+                        <Badge variant="outline" className="bg-[#FDFBF7] text-[#1A1A1A] border-[#B89555]/40 text-[10px]">
+                          {p.status_label}
+                        </Badge>
+                      )}
                       <Badge variant="outline" className="bg-[#FDFBF7] text-[#1A1A1A]/80 border-[#B89555]/40 text-[10px]">
-                        Source: {humanizeSource(p.source)}
+                        Source: {humanizeSource(p.source, p)}
                       </Badge>
                       {flags.length > 0 && (
                         <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
@@ -593,7 +628,7 @@ const DeveloperLiveEditor = () => {
                       )}
                       {(dupMap?.[p.id] ?? 0) > 0 && (
                         <Badge variant="outline" className="bg-amber-50 text-amber-800 border-amber-200 gap-1">
-                          <CopyIcon className="w-3 h-3" />
+                          
                           {dupMap![p.id]} duplicate{dupMap![p.id] === 1 ? "" : "s"} merged
                         </Badge>
                       )}

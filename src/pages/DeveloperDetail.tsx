@@ -8,7 +8,7 @@ import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Globe, Briefcase, Info, ExternalLink, UserRound } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Briefcase, Info, UserRound } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -25,7 +25,7 @@ import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
-import { buildDeveloperSocialLinks, buildPublicDeveloperFacts, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey, normalizePublicUrl, publicUrlLabel } from "@/utils/developerExcelFields";
+import { buildPublicDeveloperFacts, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -375,7 +375,6 @@ const DeveloperDetail = () => {
     filters.facilities.length > 0 ||
     filters.premiumOnly;
 
-  const socialLinks = useMemo(() => buildDeveloperSocialLinks(developer), [developer]);
   const publicFacts = useMemo(() => buildPublicDeveloperFacts(developer, projects?.length || 0), [developer, projects?.length]);
   const safeDeveloperDescription = developer
     ? (developer.description ? getSafeDeveloperDescription(developer) : buildPublicDeveloperNarrative(developer, projects?.length || 0))
@@ -430,12 +429,48 @@ const DeveloperDetail = () => {
     "google_drive_url",
     "drive_url",
     "google_drive",
+    "drive_folder",
+    "drive_link",
+    "source",
+    "sources",
+    "ai_source_links",
+    "ai_intel_website_url",
+    "last_ai_extraction_at",
     "office_address",
     "headquarters",
     "office_location",
     "phone",
     "office_phone",
-  ]).filter(([key]) => !["facebook_url", "projects_uae", "projects_outside_uae", "global_presence"].includes(key));
+    "mobile",
+    "whatsapp",
+    "whatsapp_group_url",
+    "telegram_group_url",
+    "email",
+    "admin_email",
+    "admin_position",
+    "contact",
+    "contacts",
+    "contact_name",
+    "contact_email",
+    "contact_phone",
+    "primary_contact",
+    "secondary_contact",
+    "website",
+    "website_url",
+    "registration_link",
+    "facebook_url",
+    "instagram_url",
+    "linkedin_url",
+    "social_media",
+    "google_maps_url",
+    "map_url",
+  ]).filter(([key, value]) => {
+    const normalizedKey = key.toLowerCase();
+    const text = fieldToText(value);
+    const isSensitiveKey = /(contact|email|phone|mobile|whatsapp|telegram|address|location|office|drive|map|website|social|instagram|facebook|linkedin|url|link)/i.test(normalizedKey);
+    const isExternalUrl = /^https?:\/\//i.test(text) || /^[\w.-]+\.[a-z]{2,}/i.test(text);
+    return !isSensitiveKey && !isExternalUrl && !["projects_uae", "projects_outside_uae", "global_presence"].includes(key);
+  });
   const excelUaeProjects = getNumberLike(developerCustomFields.projects_uae);
   const excelOutsideProjects = getNumberLike(developerCustomFields.projects_outside_uae);
   const activeProjectCount = Math.max(projects?.length || 0, Number(developer.offplan_projects || 0), excelUaeProjects);
@@ -613,25 +648,6 @@ const DeveloperDetail = () => {
               </div>
             )}
 
-            {socialLinks.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {socialLinks.map((link) => (
-                  <a
-                    key={link.kind}
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-3 py-2 text-sm font-semibold text-[#1A1A1A] transition-colors hover:bg-[#EFE6D6]"
-                  >
-                    <Globe className="h-4 w-4 text-[#064E3B]" />
-                    <span>{link.label}</span>
-                    <span className="max-w-[210px] truncate text-[#1A1A1A]/65">{publicUrlLabel(link.value)}</span>
-                    <ExternalLink className="h-3.5 w-3.5 text-[#064E3B]" />
-                  </a>
-                ))}
-              </div>
-            )}
-
             {/* Stats — icons + labels + values all on the same baseline
                 across every card (identical structure = perfect alignment). */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 items-stretch">
@@ -681,20 +697,12 @@ const DeveloperDetail = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {publicExcelDetails.map(([key, value]) => {
                     const text = fieldToText(value);
-                    const isUrl = /^https?:\/\//i.test(text) || /^[\w.-]+\.[a-z]{2,}/i.test(text);
                     return (
                       <div key={key} className="rounded-lg border border-[#B89555]/25 bg-white/65 px-3 py-2">
                         <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#1A1A1A]/70">
                           {humanizeDeveloperFieldKey(key)}
                         </div>
-                        {isUrl ? (
-                          <a href={normalizePublicUrl(text)} target="_blank" rel="noreferrer" className="mt-1 inline-flex max-w-full items-center gap-1 text-sm font-semibold text-[#064E3B] hover:underline">
-                            <span className="truncate">{publicUrlLabel(text)}</span>
-                            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
-                          </a>
-                        ) : (
-                          <div className="mt-1 whitespace-pre-line text-sm font-semibold text-[#1A1A1A] break-words">{text}</div>
-                        )}
+                        <div className="mt-1 whitespace-pre-line text-sm font-semibold text-[#1A1A1A] break-words">{text}</div>
                       </div>
                     );
                   })}

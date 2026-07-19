@@ -60,15 +60,9 @@ export const publicUrlLabel = (value: string) => {
 };
 
 export const buildDeveloperSocialLinks = (developer: AnyDeveloper | null | undefined) => {
-  if (!developer) return [];
-  const custom = getDeveloperCustomFields(developer);
-  const links = [
-    { label: "Website", value: developer.website_url, href: normalizePublicUrl(developer.website_url), kind: "website" },
-    { label: "Instagram", value: developer.instagram_url, href: normalizePublicUrl(developer.instagram_url, "instagram"), kind: "instagram" },
-    { label: "Facebook", value: fieldToText(custom.facebook_url), href: normalizePublicUrl(fieldToText(custom.facebook_url)), kind: "facebook" },
-    { label: "LinkedIn", value: developer.linkedin_url, href: normalizePublicUrl(developer.linkedin_url), kind: "linkedin" },
-  ];
-  return links.filter((link) => link.href && link.value);
+  // Public developer pages must never expose direct developer contact routes.
+  // Website and social links stay owner-only to prevent clients bypassing JBJ.
+  return [];
 };
 
 export const buildPublicDeveloperFacts = (developer: AnyDeveloper | null | undefined, projectCount = 0) => {
