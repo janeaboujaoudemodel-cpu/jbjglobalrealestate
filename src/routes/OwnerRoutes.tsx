@@ -285,6 +285,7 @@ export const OwnerRoutes = () => (
     <Route path="drive-extractions" element={<DriveExtractionsHub />} />
 
     <Route path="developers" element={<DeveloperDirectory />} />
+    <Route path="developers/import-review" element={<DeveloperImportReview />} />
     <Route path="brokerages" element={<BrokeragePortal />} />
     <Route path="developers/directory" element={<Navigate to="/owner/developers" replace />} />
     <Route path="developers/add" element={<DeveloperCompanyRegistration />} />
