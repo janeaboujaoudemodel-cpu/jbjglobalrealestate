@@ -72,7 +72,7 @@ export default function BrokeragePortal() {
     return rows.filter((r) => {
       if (view === "all" && r.list_id && !mergedIds.has(r.id)) return false;
       if (view === "list" && listId !== "all" && !listIds.has(r.id)) return false;
-      if (specialty !== "all" && (r.specialty_focus || "both") !== specialty) return false;
+      if (specialty !== "all") { const uiSpec = ({ secondary_first: "secondary", offplan_first: "off_plan", equal: "both" } as any)[r.specialty_focus] || "both"; if (uiSpec !== specialty) return false; }
       if (!q) return true;
       return [r.company_name, r.email, r.phone, r.emirate, r.database_source].some((v) => String(v ?? "").toLowerCase().includes(q));
     });
