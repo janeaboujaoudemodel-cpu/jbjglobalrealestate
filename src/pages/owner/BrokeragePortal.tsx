@@ -148,6 +148,12 @@ export default function BrokeragePortal() {
       <Button size="sm" variant={view === "jbj" ? "gold" : "outline"} onClick={() => setView("jbj")}><Users className="size-4 mr-1" /> Individual brokers</Button>
       <Button size="sm" variant={view === "list" ? "gold" : "outline"} onClick={() => setView("list")}><FileSpreadsheet className="size-4 mr-1" /> Uploaded database</Button>
       {view === "list" && <Select value={listId} onValueChange={setListId}><SelectTrigger className="w-72 h-9 bg-[#FDFBF7] text-[#1A1A1A]"><SelectValue placeholder="Select database" /></SelectTrigger><SelectContent className="bg-[#FDFBF7] border-[#B89555]/40"><SelectItem value="all">All uploaded databases</SelectItem>{(listsQ.data ?? []).map((l) => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent></Select>}
+      {view !== "jbj" && <div className="flex items-center gap-1 ml-1">
+        <span className="text-[10px] uppercase tracking-[0.14em] font-black text-[#1A1A1A]/60 mr-1">Specialty</span>
+        {([["all","All"],["secondary","Secondary"],["off_plan","Off-plan"],["both","Both"]] as const).map(([v,label]) => (
+          <Button key={v} size="sm" variant={specialty === v ? "gold" : "outline"} onClick={() => setSpecialty(v as any)} className="h-8 px-3">{label}</Button>
+        ))}
+      </div>}
       <Badge variant="outline" className="border-[#B89555]/40 text-[#1A1A1A] ml-auto">
         {(view === "jbj" ? visibleJbj.length : visibleBrokerages.length).toLocaleString()} of {((view === "jbj" ? statsQ.data?.brokers : statsQ.data?.agencies) ?? 0).toLocaleString()} shown
       </Badge>
