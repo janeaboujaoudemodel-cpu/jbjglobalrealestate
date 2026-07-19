@@ -140,6 +140,22 @@ const normalizeDeveloperContacts = (source: Partial<Developer>): DeveloperContac
   return legacy.position || legacy.email || legacy.phone || legacy.whatsapp ? [legacy] : [];
 };
 
+const normalizeProjectName = (value: unknown) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+const readExpectedProjectCount = (developer?: Developer | null) => {
+  const custom = developer?.custom_fields && typeof developer.custom_fields === "object" ? developer.custom_fields : {};
+  for (const key of ["projects_uae", "projects_in_uae", "uae_projects", "project_count", "total_projects"]) {
+    const raw = (custom as Record<string, unknown>)[key];
+    const value = typeof raw === "number" ? raw : Number(String(raw ?? "").replace(/[^0-9.]/g, ""));
+    if (Number.isFinite(value) && value > 0) return Math.floor(value);
+  }
+  return 0;
+};
+
 export default function DeveloperProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -191,6 +207,65 @@ export default function DeveloperProfilePage() {
     },
     enabled: !!developer,
   });
+
+  const { data: pendingProjects = [] } = useQuery({
+    queryKey: ["dev-pending-project-imports", developer?.name],
+    queryFn: async () => {
+      if (!developer?.name) return [];
+      const { data } = await supabase
+        .from("pending_project_imports" as any)
+        .select("id, name, developer_name, area_name, emirate, status")
+        .eq("developer_name", developer.name)
+        .limit(50);
+      return (data as any[]) || [];
+    },
+    enabled: !!developer?.name,
+  });
+
+  const portfolioItems = useMemo(() => {
+    const seen = new Set(projects.map((project: any) => normalizeProjectName(project.name)));
+    const pending = pendingProjects
+      .filter((project: any) => project?.name && !seen.has(normalizeProjectName(project.name)))
+      .map((project: any) => ({
+        id: `pending-${project.id}`,
+        name: project.name,
+        slug: "",
+        area_name: project.area_name,
+        emirate: project.emirate,
+        status: project.status || "pending link",
+        sale_status: "Pending link",
+        handover_date: null,
+        total_units: null,
+        cover_image_url: null,
+        isPendingImport: true,
+      }));
+    const expected = readExpectedProjectCount(developer);
+    const missingCount = Math.max(0, expected - projects.length - pending.length);
+    const placeholders = Array.from({ length: missingCount }, (_, index) => ({
+      id: `expected-${developer?.id}-${index}`,
+      name: `Project ${projects.length + pending.length + index + 1}`,
+      slug: "",
+      area_name: "Pending portfolio link",
+      emirate: "UAE",
+      status: "pending link",
+      sale_status: "Pending link",
+      handover_date: null,
+      total_units: null,
+      cover_image_url: null,
+      isPendingImport: true,
+    }));
+    return [...projects, ...pending, ...placeholders];
+  }, [developer, pendingProjects, projects]);
+
+  const focusProjectId = (developer as any)?.focus_project_id;
+  const focusProjectLabel = String((developer as any)?.focus_project_label || "").trim();
+  const projectMarketingLabel = (project: any) => {
+    if (focusProjectId && project.id === focusProjectId) return focusProjectLabel || "Focus project";
+    const custom = developer?.custom_fields && typeof developer.custom_fields === "object" ? developer.custom_fields : {};
+    const labels = (custom as Record<string, any>)?.project_labels;
+    const label = labels?.[project.id] || labels?.[project.slug] || labels?.[project.name];
+    return typeof label === "string" ? label : "";
+  };
 
   /* ---------- Sales reps ---------- */
   const { data: reps = [] } = useQuery({
@@ -592,7 +667,7 @@ export default function DeveloperProfilePage() {
                     </a>
                   </span>
                 )}
-                <span className="font-semibold">{projects.length} projects · {reps.length} sales reps</span>
+                <span className="font-semibold">{portfolioItems.length} projects · {reps.length} sales reps</span>
               </div>
 
             </div>
@@ -604,7 +679,7 @@ export default function DeveloperProfilePage() {
         <Tabs defaultValue="overview">
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="projects">Portfolio ({projects.length})</TabsTrigger>
+            <TabsTrigger value="projects">Portfolio ({portfolioItems.length})</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
             <TabsTrigger value="contacts">Contacts & Reps ({reps.length + salesReps.length})</TabsTrigger>
             <TabsTrigger value="files">Files & Brochures</TabsTrigger>
@@ -721,7 +796,7 @@ export default function DeveloperProfilePage() {
                 <DeveloperFocusProjectCard
                   developerId={developer.id}
                   canEdit={canEdit}
-                  projects={projects as any}
+                  projects={portfolioItems as any}
                   currentFocusProjectId={(developer as any).focus_project_id}
                   currentFocusProjectLabel={(developer as any).focus_project_label}
                 />
@@ -901,26 +976,26 @@ export default function DeveloperProfilePage() {
               </Card>
             )}
 
-            {projects.length === 0 ? (
+            {portfolioItems.length === 0 ? (
               <Card className="border border-[#B89555]/30 bg-[#F7F2EA] p-6 text-center text-[#1A1A1A]/70">No projects yet.</Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {projects.map((p) => (
-                  <Link
-                    key={p.id}
-                    to={`/projects/${p.slug}`}
-                    className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition"
-                  >
+                {portfolioItems.map((p: any) => {
+                  const label = projectMarketingLabel(p);
+                  const content = (
                     <div className="flex items-center gap-3">
                       {p.cover_image_url ? (
-                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover"  loading="lazy" decoding="async" />
+                        <img src={p.cover_image_url} alt="" className="w-14 h-14 rounded object-cover" loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-14 h-14 rounded bg-[#EFE6D6] flex items-center justify-center">
                           <Building2 className="w-6 h-6 text-[#1A1A1A]/60" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="font-medium text-[#1A1A1A] truncate">{p.name}</div>
+                          {label && <Badge className="jj-emerald-metallic text-white border border-white/20 text-[10px] whitespace-nowrap">{label}</Badge>}
+                        </div>
                         <div className="text-xs text-[#1A1A1A]/70 truncate">
                           {[p.area_name, p.emirate].filter(Boolean).join(" · ") || "—"}
                         </div>
@@ -928,10 +1003,19 @@ export default function DeveloperProfilePage() {
                           {(p.sale_status || p.status || "—")} · {p.handover_date || "TBD"} · {p.total_units ?? "—"} units
                         </div>
                       </div>
-                      <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />
+                      {!p.isPendingImport && <ExternalLink className="w-4 h-4 text-[#1A1A1A]/50" />}
                     </div>
-                  </Link>
-                ))}
+                  );
+                  return p.isPendingImport ? (
+                    <div key={p.id} className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA]">
+                      {content}
+                    </div>
+                  ) : (
+                    <Link key={p.id} to={`/projects/${p.slug}`} className="block p-4 rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] hover:bg-[#EFE6D6] transition-colors">
+                      {content}
+                    </Link>
+                  );
+                })}
               </div>
             )}
           </TabsContent>

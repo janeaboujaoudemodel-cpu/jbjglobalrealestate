@@ -109,7 +109,7 @@ function DeveloperActivityMenu({ slug, name }: { slug: string; name: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 border-[#B89555]/50 text-[#1A1A1A]">
+        <Button size="sm" variant="outline" className="whitespace-nowrap h-8 px-2.5 rounded-md border-[#B89555]/50 text-[#1A1A1A]">
           <MoreHorizontal className="size-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -366,11 +366,11 @@ export default function DeveloperDirectory() {
   };
 
   return (
-    <div className="space-y-5 max-w-full overflow-hidden">
-      <div className="rounded-[28px] border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
+    <div data-developer-directory className="space-y-5 max-w-full overflow-hidden">
+      <div className="rounded-lg border border-[#B89555]/35 bg-[linear-gradient(135deg,#FDFBF7_0%,#F7F2EA_55%,#EFE6D6_100%)] p-5 md:p-6 shadow-[0_24px_60px_-42px_rgba(26,26,26,0.45)]">
         <div className="flex flex-col gap-4">
           <div className="flex items-start gap-4 min-w-0">
-            <span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-2xl jj-emerald-metallic flex items-center justify-center shadow-[0_16px_34px_-20px_rgba(6,78,59,0.9)]">
+            <span data-surface="emerald" className="allow-white shrink-0 size-12 rounded-md jj-emerald-metallic flex items-center justify-center shadow-[0_16px_34px_-20px_rgba(6,78,59,0.9)]">
               <Building2 className="size-5 text-white" />
             </span>
             <div className="min-w-0">
@@ -397,8 +397,8 @@ export default function DeveloperDirectory() {
 
             {/* View toggle — Cards / Excel */}
             <div className="inline-flex rounded-md border border-[#B89555]/40 overflow-hidden">
-              <button type="button" onClick={() => setViewMode("cards")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 ${viewMode === "cards" ? "bg-[#064E3B] text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><LayoutGrid className="size-3.5" /> Cards</button>
-              <button type="button" onClick={() => setViewMode("excel")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 border-l border-[#B89555]/40 ${viewMode === "excel" ? "bg-[#064E3B] text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><Table2 className="size-3.5" /> Excel</button>
+              <button type="button" data-surface={viewMode === "cards" ? "emerald" : "champagne"} onClick={() => setViewMode("cards")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 ${viewMode === "cards" ? "jj-emerald-metallic text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><LayoutGrid className="size-3.5" /> Cards</button>
+              <button type="button" data-surface={viewMode === "excel" ? "emerald" : "champagne"} onClick={() => setViewMode("excel")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 border-l border-[#B89555]/40 ${viewMode === "excel" ? "jj-emerald-metallic text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><Table2 className="size-3.5" /> Excel</button>
             </div>
 
             {/* Data menu — imports & exports */}
@@ -446,6 +446,8 @@ export default function DeveloperDirectory() {
           variant={onlyBroken ? "gold" : "outline"}
           size="sm"
           onClick={() => setOnlyBroken((v) => !v)}
+          className={onlyBroken ? "jj-emerald-metallic text-white" : undefined}
+          data-surface={onlyBroken ? "emerald" : undefined}
         >
           {onlyBroken ? "Showing broken only" : "Show broken only"}
         </Button>
@@ -532,7 +534,7 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap min-w-[110px]"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap inline-block">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 whitespace-nowrap min-w-[120px]"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap inline-flex min-w-[72px] justify-center">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
                     <td className="px-4 py-3 min-w-[260px] whitespace-nowrap">
                       <div className="flex flex-row items-center gap-1.5 flex-nowrap">
                         <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
@@ -584,7 +586,7 @@ export default function DeveloperDirectory() {
           return (
             <Card
               key={d.id}
-              className={`p-5 bg-[#F7F2EA] border rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] flex flex-col h-full ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
+              className={`p-5 bg-[#F7F2EA] border rounded-lg shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] flex flex-col h-full ${isSel ? "border-[#064E3B] ring-1 ring-[#064E3B]" : "border-[#B89555]/30"}`}
             >
               <div className="flex items-start gap-3">
                 <Checkbox
@@ -599,7 +601,7 @@ export default function DeveloperDirectory() {
                   name={d.name}
                   variant="tile"
                   renderFallback
-                  className="size-16 rounded-xl border-[#B89555]/40 bg-[#FDFBF7] shadow-[0_10px_24px_-18px_rgba(26,26,26,0.55)]"
+                  className="size-16 rounded-md border-[#B89555]/40 bg-[#FDFBF7] shadow-[0_10px_24px_-18px_rgba(26,26,26,0.55)]"
                   onError={() => setBrokenImgs((s) => new Set(s).add(d.id))}
                 />
                 <div className="min-w-0 flex-1">
@@ -620,15 +622,15 @@ export default function DeveloperDirectory() {
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-3 gap-2">
-                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">For Sale</p>
                   <p className="text-[#1A1A1A] font-black">{(d.projects_for_sale || d.offplan_projects || 0).toLocaleString()}</p>
                 </div>
-                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Projects</p>
                   <p className="text-[#1A1A1A] font-black">{(d.project_count || d.completed_projects || 0).toLocaleString()}</p>
                 </div>
-                <div className="rounded-xl border border-[#B89555]/25 bg-[#FDFBF7] p-2">
+                <div className="rounded-md border border-[#B89555]/25 bg-[#FDFBF7] p-2">
                   <p className="text-[10px] uppercase tracking-wide text-[#1A1A1A]/55 font-black">Units</p>
                   <p className="text-[#1A1A1A] font-black">{(d.total_units_delivered ?? 0).toLocaleString()}</p>
                 </div>
