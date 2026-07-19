@@ -165,6 +165,63 @@ export default function BrokeragePortal() {
   </div>;
 }
 
+function AutomationsStrip() {
+  const [busy, setBusy] = useState<"gmail" | "dld" | null>(null);
+  const dldQ = useQuery({
+    queryKey: ["automations-dld-last"],
+    queryFn: async () => {
+      const { data } = await supabase.from("dld_daily_sync_runs" as any).select("started_at,finished_at,status,rows_added").order("started_at", { ascending: false }).limit(1);
+      return (data?.[0] as any) ?? null;
+    },
+  });
+  const inboxQ = useQuery({
+    queryKey: ["automations-inbox-last"],
+    queryFn: async () => {
+      const { data } = await supabase.from("owner_comm_messages" as any).select("created_at").order("created_at", { ascending: false }).limit(1);
+      return (data?.[0] as any) ?? null;
+    },
+  });
+  const fmt = (v?: string | null) => (v ? new Date(v).toLocaleString() : "Never");
+  const runGmail = async () => {
+    setBusy("gmail");
+    try {
+      const { error } = await supabase.functions.invoke("gmail-inbox-sync", { body: {} });
+      if (error) throw error;
+      toast.success("Inbox synced from infoo.jane@gmail.com");
+      inboxQ.refetch();
+    } catch (e: any) { toast.error(e?.message || "Inbox sync failed"); } finally { setBusy(null); }
+  };
+  const runDld = async () => {
+    setBusy("dld");
+    try {
+      const { error } = await supabase.functions.invoke("dld-daily-ingest", { body: {} });
+      if (error) throw error;
+      toast.success("DLD daily snapshot pulled");
+      dldQ.refetch();
+    } catch (e: any) { toast.error(e?.message || "DLD sync failed"); } finally { setBusy(null); }
+  };
+  return (
+    <Card className="p-4 bg-[#FDFBF7] border border-[#B89555]/30 grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">Gmail inbox · infoo.jane@gmail.com</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last message ingested: <span className="font-black text-[#1A1A1A]">{fmt(inboxQ.data?.created_at)}</span></p>
+        </div>
+        <Button size="sm" variant="gold" disabled={busy === "gmail"} onClick={runGmail}>{busy === "gmail" ? "Syncing…" : "Sync now"}</Button>
+      </div>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.16em] font-black text-[#064E3B]">DLD daily sync</p>
+          <p className="text-xs text-[#1A1A1A]/70 mt-1">Last run: <span className="font-black text-[#1A1A1A]">{fmt(dldQ.data?.started_at)}</span>{dldQ.data?.rows_added ? ` · ${dldQ.data.rows_added} rows` : ""}</p>
+        </div>
+        <Button size="sm" variant="gold" disabled={busy === "dld"} onClick={runDld}>{busy === "dld" ? "Running…" : "Run now"}</Button>
+      </div>
+    </Card>
+  );
+}
+
+
+
 function BrokerageCard({ row, agents, onPatch, onAddAgent, onPatchAgent, onDeleteAgent }: { row: any; agents: any[]; onPatch: (patch: Record<string, unknown>) => void; onAddAgent: () => void; onPatchAgent: (id: string, patch: Record<string, unknown>) => void; onDeleteAgent: (id: string) => void }) {
   const reg = row.registration_status || "not_registered";
   const group = row.group_status || "pending_group_status";
