@@ -667,7 +667,7 @@ export default function DeveloperProfilePage() {
                     </a>
                   </span>
                 )}
-                <span className="font-semibold">{projects.length} projects · {reps.length} sales reps</span>
+                <span className="font-semibold">{portfolioItems.length} projects · {reps.length} sales reps</span>
               </div>
 
             </div>
@@ -679,7 +679,7 @@ export default function DeveloperProfilePage() {
         <Tabs defaultValue="overview">
           <TabsList className="bg-[#F7F2EA] border border-[#B89555]/30">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="projects">Portfolio ({projects.length})</TabsTrigger>
+            <TabsTrigger value="projects">Portfolio ({portfolioItems.length})</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
             <TabsTrigger value="contacts">Contacts & Reps ({reps.length + salesReps.length})</TabsTrigger>
             <TabsTrigger value="files">Files & Brochures</TabsTrigger>
@@ -796,7 +796,7 @@ export default function DeveloperProfilePage() {
                 <DeveloperFocusProjectCard
                   developerId={developer.id}
                   canEdit={canEdit}
-                  projects={projects as any}
+                  projects={portfolioItems as any}
                   currentFocusProjectId={(developer as any).focus_project_id}
                   currentFocusProjectLabel={(developer as any).focus_project_label}
                 />
