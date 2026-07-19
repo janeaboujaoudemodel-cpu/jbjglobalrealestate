@@ -72,10 +72,12 @@ export default function BrokeragePortal() {
     return rows.filter((r) => {
       if (view === "all" && r.list_id && !mergedIds.has(r.id)) return false;
       if (view === "list" && listId !== "all" && !listIds.has(r.id)) return false;
+      if (specialty !== "all" && (r.specialty_focus || "both") !== specialty) return false;
       if (!q) return true;
       return [r.company_name, r.email, r.phone, r.emirate, r.database_source].some((v) => String(v ?? "").toLowerCase().includes(q));
     });
-  }, [brokeragesQ.data, membersQ.data, search, view, listId]);
+  }, [brokeragesQ.data, membersQ.data, search, view, listId, specialty]);
+
 
   const visibleJbj = useMemo(() => (jbjQ.data ?? []).filter((b) => !search || [b.full_name, b.email_lower, b.personal_email, b.company_email, b.phone_e164, b.personal_phone, b.company_phone, b.current_company, b.position_title, b.role_title].some((v) => String(v ?? "").toLowerCase().includes(search.toLowerCase()))), [jbjQ.data, search]);
   const visibleBrokerageCards = useMemo(() => visibleBrokerages.slice(0, visibleLimit), [visibleBrokerages, visibleLimit]);
