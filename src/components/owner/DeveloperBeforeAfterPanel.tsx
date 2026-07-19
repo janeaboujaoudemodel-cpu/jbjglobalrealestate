@@ -89,6 +89,8 @@ export default function DeveloperBeforeAfterPanel({
       when: string;
       source?: string | null;
       reason?: string | null;
+      failed?: boolean;
+      dupCount?: number;
     }[] = [];
     for (const r of excelRows) {
       items.push({
@@ -102,18 +104,39 @@ export default function DeveloperBeforeAfterPanel({
       });
     }
     for (const r of enrichmentLogs) {
+      const after = (r.after_jsonb as Record<string, unknown>) ?? {};
+      const failed = r.status === "failed" || Object.keys(after).length === 0;
       items.push({
         key: `e-${r.id}`,
         kind: "enrichment",
         before: (r.before_jsonb as Record<string, unknown>) ?? {},
-        after: (r.after_jsonb as Record<string, unknown>) ?? {},
+        after,
         status: r.status ?? "unknown",
         when: r.created_at,
         source: r.source_url,
         reason: r.error,
+        failed,
       });
     }
-    return items.sort((a, b) => (a.when < b.when ? 1 : -1));
+    // Collapse repeated failed enrichments (same reason) into a single row with a count
+    const sorted = items.sort((a, b) => (a.when < b.when ? 1 : -1));
+    const collapsed: typeof items = [];
+    for (const it of sorted) {
+      const dup = collapsed.find(
+        (p) =>
+          p.kind === "enrichment" &&
+          it.kind === "enrichment" &&
+          p.failed &&
+          it.failed &&
+          (p.reason ?? "") === (it.reason ?? ""),
+      );
+      if (dup) {
+        dup.dupCount = (dup.dupCount ?? 1) + 1;
+        continue;
+      }
+      collapsed.push({ ...it });
+    }
+    return collapsed;
   }, [excelRows, enrichmentLogs]);
 
   const loading = loadingLogs || loadingExcel;
@@ -170,9 +193,14 @@ export default function DeveloperBeforeAfterPanel({
                       <Badge className="bg-[#064E3B] text-white border-0 uppercase text-[10px]">
                         {item.kind === "excel" ? "Excel import" : "AI enrichment"}
                       </Badge>
-                      <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 uppercase text-[10px]">
+                      <Badge className={`border-0 uppercase text-[10px] ${item.failed ? "bg-red-700 text-white" : "bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40"}`}>
                         {item.status}
                       </Badge>
+                      {item.dupCount && item.dupCount > 1 && (
+                        <Badge className="bg-[#1A1A1A] text-white border-0 uppercase text-[10px]">
+                          ×{item.dupCount} attempts
+                        </Badge>
+                      )}
                       {item.source && (
                         <a href={item.source} target="_blank" rel="noreferrer" className="text-[11px] text-[#064E3B] underline truncate max-w-[280px]">
                           {item.source}
@@ -188,7 +216,11 @@ export default function DeveloperBeforeAfterPanel({
                       {item.reason}
                     </div>
                   )}
-                  {keys.length === 0 ? (
+                  {item.failed ? (
+                    <p className="px-3 py-3 text-xs text-[#1A1A1A]/70">
+                      No diff — this attempt produced no new data. Nothing was written to the developer record.
+                    </p>
+                  ) : keys.length === 0 ? (
                     <p className="px-3 py-3 text-xs text-[#1A1A1A]/60">No field changes captured.</p>
                   ) : (
                     <table className="w-full text-xs">
