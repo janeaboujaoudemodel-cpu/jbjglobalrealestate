@@ -66,21 +66,31 @@ const HOMEPAGE_DUPLICATE_WORDS = new Set([
   "at",
   "residence",
   "residences",
+  "residential",
+  "tower",
+  "towers",
+  "apartments",
+  "apartment",
+  "villa",
+  "villas",
   "resort",
   "resorts",
   "first",
   "integrative",
   "wellness",
+  "dubai",
+  "uae",
+  "phase",
+  "edition",
+  "collection",
 ]);
 
 const homepageDedupeKey = (p: Project) => {
   const raw = `${p.name || p.slug || ""}`.toLowerCase();
   const compact = raw.replace(/[^a-z0-9]+/g, "");
-  if (/^(in)?amra(residences?|thefirstintegrativewellnessresort)?$/.test(compact)) {
-    return "project:amra";
-  }
   const identity = raw
     .replace(/&/g, " and ")
+    .replace(/\b(residences?|residential|resorts?|towers?|apartments?|villas?|phase|edition|collection)\b/g, " ")
     .split(/[^a-z0-9]+/)
     .filter(Boolean)
     .filter((token) => !HOMEPAGE_DUPLICATE_WORDS.has(token))

@@ -30,8 +30,7 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /snapedit/i,
   /_n_[a-f0-9]{16,}\.(jpg|jpeg|png|webp)/i, // Instagram post mirrors
   /_feature_[a-f0-9]{6,}\.(jpg|jpeg|png|webp)/i, // mis-tagged project feature images
-  /\/x\/16x16\//i, // favicon-size CDN paths
-  /\/x\/[0-9]{2,3}x[0-9]{2,3}\//i, // tiny thumbnail CDN paths (project covers, not logos)
+  /\/x\/16x16\//i, // favicon-size CDN paths only; larger CDN logo plates are valid developer logos
   /habtoor_polo/i,
   /tilal_/i,
 ];
