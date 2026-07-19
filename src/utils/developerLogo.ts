@@ -25,11 +25,9 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/[0-9]{8,}\.(jpg|jpeg|png|webp)(\?|$)/i,
   /logo-white-1/i,
   /logodix\.com/i,
-  /api\.reelly\.io\/vault\/.*(?:photo_|_n_|instagram|jpg|jpeg)/i,
   /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
   /\/projects\/\d+\/images\//i, // project photo paths
   /snapedit/i,
-  /_n_[a-f0-9]{16,}\.(jpg|jpeg|png|webp)/i, // Instagram post mirrors
   /_feature_[a-f0-9]{6,}\.(jpg|jpeg|png|webp)/i, // mis-tagged project feature images
   /\/x\/16x16\//i, // favicon-size CDN paths only; larger CDN logo plates are valid developer logos
   /habtoor_polo/i,
