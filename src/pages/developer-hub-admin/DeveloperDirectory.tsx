@@ -347,37 +347,46 @@ export default function DeveloperDirectory() {
               <p className="text-sm text-[#1A1A1A]/70 mt-1 max-w-3xl">Owner-only command center for developers, projects, briefing requests, launch events, profile updates, sales reps, logo governance and Excel exports.</p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/add")}>
-              <UserPlus className="size-4 mr-1" /> Add Developer
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/new-project")}>
-              <Plus className="size-4 mr-1" /> Add Project
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/briefings")}>
-              <CalendarDays className="size-4 mr-1" /> Apply Briefing
-            </Button>
-            <Button size="sm" variant={viewMode === "cards" ? "gold" : "outline"} onClick={() => setViewMode("cards")}>
-              <LayoutGrid className="size-4 mr-1" /> Cards
-            </Button>
-            <Button size="sm" variant={viewMode === "excel" ? "gold" : "outline"} onClick={() => setViewMode("excel")}>
-              <Table2 className="size-4 mr-1" /> Excel View
-            </Button>
-            <Button size="sm" variant="outline" onClick={exportCsv} disabled={!rows.length}>
-              <Download className="size-4 mr-1" /> CSV
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => setImportOpen(true)}>
-              <Upload className="size-4 mr-1" /> Import Excel
-            </Button>
-            <Button size="sm" variant="outline" onClick={() => navigate("/owner/developers/import-review")}>
-              <FileSpreadsheet className="size-4 mr-1" /> Import review
-            </Button>
-            <Button size="sm" variant="gold" onClick={exportExcel} disabled={!rows.length}>
-              <FileSpreadsheet className="size-4 mr-1" /> Download Excel
-            </Button>
+          <div className="flex flex-nowrap items-center gap-2 whitespace-nowrap">
+            {/* Single "New" dropdown consolidates all create actions */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="gold" className="whitespace-nowrap">
+                  <Plus className="size-4 mr-1" /> New <ChevronDown className="size-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
+                <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Create</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/add")}><UserPlus className="size-4 mr-2" /> Add Developer</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/new-project")}><Plus className="size-4 mr-2" /> Add Project</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/briefings")}><CalendarDays className="size-4 mr-2" /> Apply Briefing</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* View toggle — Cards / Excel */}
+            <div className="inline-flex rounded-md border border-[#B89555]/40 overflow-hidden">
+              <button type="button" onClick={() => setViewMode("cards")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 ${viewMode === "cards" ? "bg-[#064E3B] text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><LayoutGrid className="size-3.5" /> Cards</button>
+              <button type="button" onClick={() => setViewMode("excel")} className={`px-3 h-9 text-xs whitespace-nowrap flex items-center gap-1 border-l border-[#B89555]/40 ${viewMode === "excel" ? "bg-[#064E3B] text-white" : "bg-[#FDFBF7] text-[#1A1A1A]"}`}><Table2 className="size-3.5" /> Excel</button>
+            </div>
+
+            {/* Data menu — imports & exports */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline" className="whitespace-nowrap">
+                  <FileSpreadsheet className="size-4 mr-1" /> Data <ChevronDown className="size-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
+                <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Import</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => setImportOpen(true)}><Upload className="size-4 mr-2" /> Import Excel</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/developers/import-review")}><FileSpreadsheet className="size-4 mr-2" /> Import review</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Export</DropdownMenuLabel>
+                <DropdownMenuItem onClick={exportCsv} disabled={!rows.length}><Download className="size-4 mr-2" /> Download CSV</DropdownMenuItem>
+                <DropdownMenuItem onClick={exportExcel} disabled={!rows.length}><FileSpreadsheet className="size-4 mr-2" /> Download Excel</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        </div>
-      </div>
 
       <DeveloperExcelImportDialog
         open={importOpen}
