@@ -9,11 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus, Upload } from "lucide-react";
+import { Sparkles, ExternalLink, Zap, CheckSquare, Square, ShieldCheck, Download, FileSpreadsheet, LayoutGrid, Table2, Building2, Plus, CalendarDays, UserPlus, Upload, ChevronDown, MoreHorizontal, ClipboardList, Handshake, PhoneCall, StickyNote, Video, ListChecks } from "lucide-react";
 import { DeveloperVisibilitySheet } from "./DeveloperVisibilitySheet";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import DeveloperExcelImportDialog from "@/components/owner/DeveloperExcelImportDialog";
 import RegistrationStatusBadge from "@/components/developers-portal/RegistrationStatusBadge";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 interface Row {
   id: string;
