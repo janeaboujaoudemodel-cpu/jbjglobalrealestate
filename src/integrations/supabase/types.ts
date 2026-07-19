@@ -12862,6 +12862,78 @@ export type Database = {
           },
         ]
       }
+      dev_excel_import_review: {
+        Row: {
+          after_data: Json
+          batch_id: string
+          before_data: Json
+          bucket: string
+          canonical_key: string
+          changed_fields: string[]
+          committed_at: string | null
+          committed_developer_id: string | null
+          created_at: string
+          decision: string
+          developer_name: string
+          id: string
+          matched_developer_id: string | null
+          reason: string | null
+          row_number: number
+          updated_at: string
+        }
+        Insert: {
+          after_data?: Json
+          batch_id: string
+          before_data?: Json
+          bucket: string
+          canonical_key: string
+          changed_fields?: string[]
+          committed_at?: string | null
+          committed_developer_id?: string | null
+          created_at?: string
+          decision?: string
+          developer_name: string
+          id?: string
+          matched_developer_id?: string | null
+          reason?: string | null
+          row_number: number
+          updated_at?: string
+        }
+        Update: {
+          after_data?: Json
+          batch_id?: string
+          before_data?: Json
+          bucket?: string
+          canonical_key?: string
+          changed_fields?: string[]
+          committed_at?: string | null
+          committed_developer_id?: string | null
+          created_at?: string
+          decision?: string
+          developer_name?: string
+          id?: string
+          matched_developer_id?: string | null
+          reason?: string | null
+          row_number?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dev_excel_import_review_committed_developer_id_fkey"
+            columns: ["committed_developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dev_excel_import_review_matched_developer_id_fkey"
+            columns: ["matched_developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dev_excel_staging_2027: {
         Row: {
           canonical_key: string
@@ -41039,6 +41111,10 @@ export type Database = {
       cleanup_old_health_logs: { Args: never; Returns: undefined }
       cleanup_rate_limit_records: { Args: never; Returns: number }
       cleanup_temp_video_files: { Args: never; Returns: undefined }
+      commit_dev_excel_import_v2: {
+        Args: { p_batch: string; p_review_ids: string[] }
+        Returns: Json
+      }
       complete_module: {
         Args: { _book_id: string; _module_id: string }
         Returns: {
@@ -41876,6 +41952,7 @@ export type Database = {
         Args: { _rep_id: string; _uid: string }
         Returns: boolean
       }
+      preview_dev_excel_import_v2: { Args: never; Returns: Json }
       project_has_photo: { Args: { _project_id: string }; Returns: boolean }
       project_is_ready_to_publish: {
         Args: { _project_id: string }

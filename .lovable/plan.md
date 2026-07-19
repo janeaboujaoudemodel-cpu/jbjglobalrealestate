@@ -1,102 +1,98 @@
+## What went wrong last time
 
-# Developer Excel Import — Rebuild + Google Drive AI Enrichment
+The previous import ran in "enrich existing only" mode:
 
-## What's broken right now (confirmed from your two screenshots)
+- Excel had **1,380 rows**
+- Only **363** matched existing developers and got enriched
+- The other **~1,017 rows were silently skipped** — that is why "One Development" is enriched (it existed) but hundreds of others from the sheet are missing entirely
+- `is_hidden` filter also hides some cards even when they exist
 
-- Every mapping row shows `__EMPTY` / "ignore": the parser used row 1 of your file, which is the title "DEVELOPER'S REGISTRATION MONITORING" — not the real header row.
-- Preview is hardcoded to the first 5 rows; you want to scroll all 1,650.
-- The mapping dropdown uses a native `<select>`, so hovering shows a blue OS ring (breaks the site's no‑blue rule).
-- Bottom footer shows `Import 1650 rows`; you want `Import <unique developers>`.
-- No drag‑and‑drop — only the "Choose file" button, and it wraps into a broken vertical stack at your zoom.
-- No `Google Drive` field, no AI pipeline reading those folders.
-- Current merge rule is "fill blanks only for everyone" — the opposite of what you asked for.
+You explicitly asked for the opposite: new profiles for missing developers, enrichment for existing ones, no duplicates, and a per-row before/after report you can download.
 
-## The merge rules I will implement (locked)
+## The plan
 
-Key = normalized slug of the developer name; fallback = case‑insensitive name.
+### 1. Full staging refresh from the uploaded Excel
 
-| Developer | Rule |
-| --- | --- |
-| **Amra** | Never touched. Row skipped entirely. |
-| **Citi Developers** | Fill‑blanks‑only. Existing non‑empty fields kept. |
-| Everyone else — already in DB | **Excel wins.** Non‑empty Excel cells overwrite existing fields. **Empty Excel cells never wipe existing data.** |
-| Everyone else — new | Inserted as `is_hidden = true` so you can review before publishing. |
+- Reload `Agency_Registration_-_Developers_2027-3.xlsx` (1,650 rows) into `dev_excel_staging_2027`.
+- Normalize every row through `jbj_dev_canon()` (strips "developers/development/realty/estates/holding/LLC/group" etc.) to compute a canonical key per row.
+- Deduplicate **inside the sheet itself** first (some names appear more than once) — keep the row with the most non-empty fields.
 
-Zero duplication: dedupe by normalized slug before writing.
+### 2. Classification with a locked matching rule
 
-## Rebuilt import dialog
+Every Excel row lands in exactly one bucket:
 
-- **Drag & drop the file anywhere on the drop zone** + click‑to‑pick. Accepts `.xlsx`, `.xls`, `.csv`.
-- **Smart header detection**: scans the first ~10 rows and picks the row that best matches known aliases (Name, Developer, Website, CEO, Founder, Founding Date, Description, Phone, Email, LinkedIn, Instagram, Projects, Specialization, Parent, Logo, **Google Drive**). Everything above that row is discarded — this is what fixes the "empty empty ignore ignore" screen.
-- **Column mapping** uses the shadcn `Select` (champagne surface, emerald+white hover, no blue anywhere).
-- **Preview shows ALL rows**, virtualised with `@tanstack/react-virtual` so 1,650 rows scroll smoothly. Sticky header, monospaced cells, no vertical wrapping.
-- **Footer summary card** (the counts you asked for):
-  - `1650 rows in file · 612 unique developers · 48 new · 561 will be enriched · 3 protected (Amra / Citi rules)`
-  - Primary button reads **`Import 612 developers`** — never the row count.
-- **Progress bar** during import (batched every 25 rows) — the UI never freezes.
-- Buttons re‑laid on their own row so "Choose another file" and "Import …" never clip.
+| Bucket | Rule |
+|---|---|
+| **Enrich** | Canonical key matches an existing developer → fill blanks only, never overwrite |
+| **Protected** | Al Hamra (Amra) — skip entirely, keep manual data |
+| **New** | No canonical match anywhere → create a fresh developer profile |
+| **In-sheet duplicate** | Merged into the surviving row before insert |
+| **Rejected** | Empty/garbage name row → excluded with reason |
 
-## Import engine (client → edge function)
+Registration status and group status are ignored on both paths (per your standing rule).
 
-- New edge function `bulk-import-developers` (owner‑only, service role).
-- Client uploads the parsed JSON payload once; the function processes batches of 50 with a single `SELECT` per batch (not per row), applies the rule table, and returns `{ created, updated_excel_wins, filled_only_citi, protected_amra, total_unique }`.
-- Idempotent: re‑uploading the same file with no changes writes nothing.
+### 3. Preview-before-write (mandatory approval step)
 
-## New field: `google_drive_url` + AI enrichment pipeline
+Nothing is written to `developers` until you approve. A new owner screen at `/owner/developers/import-review` shows every Excel row with:
 
-Migration:
+- Bucket badge (Enrich / New / Protected / Duplicate / Rejected)
+- Side-by-side **Before → After** for each field (name, founder, founded year, projects UAE, projects outside UAE, global presence, RM/CP, email, phone, address, socials, website, Google Drive, WhatsApp)
+- Changed fields highlighted in gold; unchanged in muted
+- Per-row checkbox + bulk "Approve all Enrich", "Approve all New", "Approve selection"
+- Row-level "Skip" to exclude anything that looks wrong
 
-```text
-developers.google_drive_url         text
-developers.drive_enrichment_status  text  -- queued | running | done | failed
-developers.drive_last_synced_at     timestamptz
-```
+Only approved rows are committed.
 
-New table `developer_drive_jobs` (RLS: owner + service‑role) tracks each scan:
-`developer_id, folder_url, status, discovered_projects, discovered_documents, error, timestamps`.
+### 4. Write phase (idempotent, no duplicates)
 
-New edge function `enrich-developer-from-drive`:
+- **Enrich rows**: `UPDATE` existing developer, `COALESCE`-style — only fills where the current column is NULL or empty string. Sets `excel_import_marker='2027_enriched_v2'` and stores the pre-image in `custom_fields.excel_before` so the diff is auditable.
+- **New rows**: `INSERT` with `is_hidden=true` initially (draft), so no unreviewed profile leaks to the public site. Slug generated from canonical name with collision suffixing. Stores `custom_fields.excel_source_row` for traceability.
+- All writes wrapped in a single transaction per batch of 100 rows.
 
-1. Lists files in the shared Drive folder (needs one Drive credential — see "One thing I need from you" below).
-2. For each PDF / DOCX / image: parse and feed the text to Lovable AI (`google/gemini-2.5-flash`) with a strict JSON schema to extract:
-   - Company profile → enriches developer bio, CEO, founding year, HQ, specialization (respecting Amra/Citi rules).
-   - Project brochures → creates `projects` rows (dedupe by name + developer), attaches area/community, uploads the brochure to the `project-documents` bucket, links via `project_documents`.
-   - Area / community fact sheets → creates or enriches `areas` and `communities`.
-   - Source files also stored in `developer_documents` so end‑users can download the books/brochures from the developer page.
-3. Reuses the existing project extraction AI you already have (same one that powers "Rebuild from site") — I only point it at Drive‑sourced text instead of scraped HTML. Nothing new model‑side.
-4. Auto‑runs on Excel import for every row that has a Drive link; also re‑runs on demand from the developer profile via a **Sync Google Drive** button.
+### 5. Google Drive extraction for every affected developer
 
-## Files I will touch (nothing else)
+After profiles are written, for every row that had a `google_drive_url` we queue `enrich-developer-from-drive`:
 
-- `src/components/owner/DeveloperExcelImportDialog.tsx` — full rewrite (drag‑drop, smart headers, virtualised preview, shadcn Select, deduped counts, progress bar).
-- `supabase/functions/bulk-import-developers/index.ts` — new.
-- `supabase/functions/enrich-developer-from-drive/index.ts` — new.
-- One migration: add the three developer columns; create `developer_drive_jobs` with GRANTs and RLS.
-- `src/pages/admin/DeveloperProfilePage.tsx` — add the "Sync Google Drive" button + status pill (isolated addition).
-- `src/pages/developer-hub-admin/DeveloperDirectory.tsx` — wire the new dialog result toast to show deduped counts.
+- Pulls logo, brochures, fact sheets, project images
+- Creates project rows (deduped by name inside that developer)
+- Extracts area/community names from filenames and PDF text and links them
+- Result is visible in the existing `/owner/drive-extractions` hub
 
-## Locked constraints
+### 6. Downloadable before/after report
 
-- Amra: never touched.
-- Citi Developers: fill blanks only.
-- All other existing developers: Excel wins on non‑empty cells; empty cells never wipe.
-- Zero duplication (dedupe by slug).
-- No blue anywhere (shadcn Select on champagne + emerald accent).
-- Nothing outside the file list above is modified.
+Two artefacts generated at the end of the run and offered as downloads from the Import Review page:
 
-## End‑to‑end test I will run before saying it's done (screenshots + SQL diff in the reply)
+- **Excel workbook** (`developer-import-report-YYYYMMDD.xlsx`) with tabs:
+  - `Summary` — counts by bucket
+  - `New developers` — every new profile with all fields + link to `/developer/{slug}` preview
+  - `Enriched developers` — one row per developer, columns paired `field_before` / `field_after`, changed cells highlighted yellow
+  - `Skipped` — protected, duplicates, rejected, with reason
+- **A4 PDF report** — same content, one page per developer, printable, with logo thumbnail and clickable "View live profile" link. Landscape for the diff pages so before/after fit side by side.
 
-1. Playwright: open `/owner/developers`, drag the Excel into the drop zone — screenshot showing real headers (no `__EMPTY`).
-2. Screenshot the mapping grid — no blue, champagne surface, emerald hover.
-3. Scroll preview to row 1,650 to prove virtualisation.
-4. Click Import, watch progress, screenshot final summary with the four counters.
-5. SQL read: Amra row untouched, Citi only blanks filled, one other developer changed to Excel values, one brand‑new developer inserted as `is_hidden = true`.
-6. Trigger `enrich-developer-from-drive` on one row that has a Drive link and screenshot the new `developer_drive_jobs` row + one new `projects` row.
+Both files land in `owner-reports` storage bucket and are one-click downloadable from the review screen.
 
-## One thing I need from you before step 6
+### 7. Visibility fix for the "One Development" symptom
 
-To read your Drive folders I need one of:
-- a **Google Drive API key** (works if folders are shared "anyone with the link"), or
-- a **service‑account JSON** (works for private folders you share with the service‑account email).
+Directory search currently does exact-substring on `name` only, so a typo ("developement") returns 0. Separately we'll:
 
-I'll prompt for whichever you prefer with the secure secret form the moment we reach the Drive step. Everything else (dialog rebuild, merge rules, dedupe, counts, migration, bulk‑import function) starts immediately and does not need this key.
+- Extend the filter to also match `slug` and a `search_tokens` array (canonical + common misspellings)
+- Show hidden drafts in the owner directory with a "Draft" badge so you can see everything
+
+### Technical section
+
+- SQL: rewrite `apply_dev_excel_import_2027()` into two functions — `preview_dev_excel_import_2027()` returning JSON diffs, and `commit_dev_excel_import_2027(approved_ids uuid[])` doing the writes.
+- New table `dev_excel_import_review` (row_hash, canonical_key, bucket, matched_developer_id, before jsonb, after jsonb, decision, decided_at, decided_by).
+- Report generation via a new edge function `generate-developer-import-report` using `exceljs` + `pdf-lib`, writing to a new private `owner-reports` bucket with signed URLs.
+- Frontend: new page `src/pages/owner/DeveloperImportReview.tsx` + route in `OwnerRoutes.tsx`, wired from the existing `DeveloperExcelImportDialog`.
+- Drive extraction reuses the existing `enrich-developer-from-drive` and `enrich-all-drives` functions — only the queueing call is added.
+
+### Deliverable checklist
+
+- [ ] All 1,650 Excel rows visible and classified in the review screen
+- [ ] Zero duplicates: canonical key uniqueness enforced across sheet + DB
+- [ ] Before/after visible per row in the UI
+- [ ] Excel + A4 PDF report downloadable
+- [ ] Drive folders scanned for every affected developer
+- [ ] Al Hamra untouched
+- [ ] Registration / group status fields untouched
+- [ ] Hidden drafts findable from the owner directory

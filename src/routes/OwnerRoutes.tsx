@@ -53,6 +53,7 @@ const OwnerPublicGateEditor = lazy(() => import("@/pages/owner/OwnerPublicGateEd
 const JbjHub = lazy(() => import("@/pages/owner/JbjHub"));
 const OwnerEnrichmentReview = lazy(() => import("@/pages/owner/OwnerEnrichmentReview"));
 const DriveExtractionsHub = lazy(() => import("@/pages/owner/DriveExtractionsHub"));
+const DeveloperImportReview = lazy(() => import("@/pages/owner/DeveloperImportReview"));
 
 const PropertyManagement = lazy(() => import("@/pages/services/PropertyManagement"));
 const Documents = lazy(() => import("@/pages/Documents"));
@@ -284,6 +285,7 @@ export const OwnerRoutes = () => (
     <Route path="drive-extractions" element={<DriveExtractionsHub />} />
 
     <Route path="developers" element={<DeveloperDirectory />} />
+    <Route path="developers/import-review" element={<DeveloperImportReview />} />
     <Route path="brokerages" element={<BrokeragePortal />} />
     <Route path="developers/directory" element={<Navigate to="/owner/developers" replace />} />
     <Route path="developers/add" element={<DeveloperCompanyRegistration />} />
