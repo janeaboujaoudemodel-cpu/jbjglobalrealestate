@@ -84,6 +84,9 @@ Deno.serve(async (req) => {
         }
         if (!norm(match.registration_status)) patch.registration_status = "not_registered";
         if (!norm(match.group_status)) patch.group_status = "pending_group_status";
+        if (!norm(match.specialty_focus)) patch.specialty_focus = specialtyFocus;
+        if (assignToMe && !match.assigned_to) patch.assigned_to = auth.userId;
+        if (sourceLabel && !norm(match.source)) patch.source = sourceLabel;
         patch.source_history = appendSourceHistory(match.source_history, sourceFilename, raw, mergeToMain);
         if (Object.keys(patch).length) {
           const { error } = await svc.from("crm_brokerages").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", match.id);
