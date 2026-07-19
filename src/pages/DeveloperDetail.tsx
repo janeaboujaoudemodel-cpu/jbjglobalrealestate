@@ -8,7 +8,7 @@ import ProjectCard from "@/components/ProjectCard";
 import EmiratesTabs from "@/components/EmiratesTabs";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Globe, Briefcase, Info } from "lucide-react";
+import { ChevronLeft, Building2, MapPin, Calendar, TrendingUp, MapIcon, ChevronDown, ChevronUp, BarChart3, Trophy, Globe, Briefcase, Info, ExternalLink, UserRound } from "lucide-react";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
@@ -25,6 +25,7 @@ import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
+import { buildDeveloperSocialLinks, buildPublicDeveloperFacts, buildPublicDeveloperNarrative, getDeveloperCustomFields, publicUrlLabel } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -52,6 +53,15 @@ const isEmaarDeveloper = (name?: string | null, slug?: string | null) => {
 };
 
 const fmtNumber = (value?: number | null) => Number(value || 0).toLocaleString("en-US");
+
+const getNumberLike = (value: unknown) => {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string") {
+    const parsed = Number(value.replace(/,/g, "").trim());
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+};
 
 const fmtAED = (value: number) => {
   if (!value) return "—";
@@ -365,7 +375,11 @@ const DeveloperDetail = () => {
     filters.facilities.length > 0 ||
     filters.premiumOnly;
 
-  const safeDeveloperDescription = developer ? getSafeDeveloperDescription(developer) : "";
+  const socialLinks = useMemo(() => buildDeveloperSocialLinks(developer), [developer]);
+  const publicFacts = useMemo(() => buildPublicDeveloperFacts(developer, projects?.length || 0), [developer, projects?.length]);
+  const safeDeveloperDescription = developer
+    ? (developer.description ? getSafeDeveloperDescription(developer) : buildPublicDeveloperNarrative(developer, projects?.length || 0))
+    : "";
 
   const projectMetricsByDeveloperId = useMemo(() => {
     const metrics = new Map<string, DeveloperProjectMetric>();
@@ -411,7 +425,10 @@ const DeveloperDetail = () => {
     );
   }
 
-  const activeProjectCount = Math.max(projects?.length || 0, Number(developer.offplan_projects || 0));
+  const developerCustomFields = getDeveloperCustomFields(developer);
+  const excelUaeProjects = getNumberLike(developerCustomFields.projects_uae);
+  const excelOutsideProjects = getNumberLike(developerCustomFields.projects_outside_uae);
+  const activeProjectCount = Math.max(projects?.length || 0, Number(developer.offplan_projects || 0), excelUaeProjects);
   const publishedUnits = (projects || []).reduce((sum, p) => sum + Number(p.total_units || 0), 0);
 
   const stats = [
@@ -422,16 +439,15 @@ const DeveloperDetail = () => {
     },
     {
       icon: Building2,
-      label: "Published Units",
-      value: publishedUnits
-        ? `${publishedUnits.toLocaleString()}+`
-        : null,
+      label: "UAE Projects",
+      value: activeProjectCount ? `${activeProjectCount.toLocaleString()}+` : null,
     },
     {
       icon: TrendingUp,
-      label: "Active Projects",
-      value: activeProjectCount ?? null,
+      label: "International",
+      value: excelOutsideProjects ? `${excelOutsideProjects.toLocaleString()}+` : null,
     },
+    ...(developer.ceo_name ? [{ icon: UserRound, label: "Leadership", value: developer.ceo_name }] : []),
     // Headquarters intentionally removed — never display developer office locations.
 
   ].filter(s => s.value !== null);
@@ -587,6 +603,25 @@ const DeveloperDetail = () => {
               </div>
             )}
 
+            {socialLinks.length > 0 && (
+              <div className="mt-5 flex flex-wrap gap-2">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.kind}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-[#B89555]/45 bg-[#FDFBF7] px-3 py-2 text-sm font-semibold text-[#1A1A1A] transition-colors hover:bg-[#EFE6D6]"
+                  >
+                    <Globe className="h-4 w-4 text-[#064E3B]" />
+                    <span>{link.label}</span>
+                    <span className="max-w-[210px] truncate text-[#1A1A1A]/65">{publicUrlLabel(link.value)}</span>
+                    <ExternalLink className="h-3.5 w-3.5 text-[#064E3B]" />
+                  </a>
+                ))}
+              </div>
+            )}
+
             {/* Stats — icons + labels + values all on the same baseline
                 across every card (identical structure = perfect alignment). */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 items-stretch">
@@ -616,6 +651,17 @@ const DeveloperDetail = () => {
                 </div>
               ))}
             </div>
+
+            {publicFacts.length > 0 && (
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl">
+                {publicFacts.map((fact) => (
+                  <div key={fact.label} className="rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] px-4 py-3">
+                    <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#064E3B]">{fact.label}</div>
+                    <div className="mt-1 text-sm font-semibold text-[#1A1A1A] break-words">{fact.value}</div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Company Profile card — Download (if uploaded) / Request otherwise */}
             <div className="mt-5 max-w-md">
