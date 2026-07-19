@@ -189,13 +189,34 @@ export default function BrokerageExcelImportDialog({ open, onOpenChange, onDone 
               <div className="rounded-xl bg-gradient-to-br from-[#064E3B] to-[#042c1c] text-white p-4 grid grid-cols-2 md:grid-cols-4 gap-3">
                 <Stat label="Rows" value={stats?.rows ?? 0} /><Stat label="Unique agencies" value={stats?.unique ?? 0} /><Stat label="Columns" value={stats?.columns ?? 0} /><Stat label="Mode" value={merge ? "Merge + separate" : "Separate only"} />
               </div>
-              <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 grid gap-3 md:grid-cols-[1fr_auto] items-center">
+              <div className="rounded-lg border border-[#B89555]/30 bg-[#F7F2EA] p-4 grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-xs font-black text-[#1A1A1A]">Database name</label>
-                  <Input value={listName} onChange={(e) => setListName(e.target.value)} className="bg-[#FDFBF7] text-[#1A1A1A]" />
-                  <label className="flex items-center gap-2 text-sm text-[#1A1A1A]"><Checkbox checked={merge} onCheckedChange={(v) => setMerge(v === true)} /> New database + merge into full brokerage list</label>
+                  <Input value={listName} onChange={(e) => setListName(e.target.value)} className="bg-[#FDFBF7] text-[#1A1A1A]" placeholder="e.g. DLD off-plan brokerages · Jul 2026" />
+                  <label className="text-xs font-black text-[#1A1A1A] mt-2 block">Source label</label>
+                  <Input value={sourceLabel} onChange={(e) => setSourceLabel(e.target.value)} className="bg-[#FDFBF7] text-[#1A1A1A]" placeholder="e.g. DLD, City Developers assignment, LinkedIn scrape" />
+                  <p className="text-[10px] text-[#1A1A1A]/60">Shows on every card as the "Source" chip so you can trace where the brokerage came from.</p>
                 </div>
-                <div className="rounded-lg bg-[#FDFBF7] border border-[#B89555]/25 p-3 text-xs text-[#1A1A1A] max-w-xs"><GitCompareArrows className="w-4 h-4 text-[#064E3B] mb-1" />{merge ? "After save: rows appear in this database and the total brokerage list." : "After save: rows stay visible inside this database only."}</div>
+                <div className="space-y-3">
+                  <div>
+                    <label className="text-xs font-black text-[#1A1A1A] mb-1 block">What to do with this database</label>
+                    <div className="space-y-1.5">
+                      <label className="flex items-center gap-2 text-sm text-[#1A1A1A]"><Checkbox checked={actions.separate} onCheckedChange={(v) => setActions((a) => ({ ...a, separate: v === true || !a.merge }))} /> Save as a separate database</label>
+                      <label className="flex items-center gap-2 text-sm text-[#1A1A1A]"><Checkbox checked={actions.merge} onCheckedChange={(v) => setActions((a) => ({ ...a, merge: v === true }))} /> Also merge into the full brokerage list</label>
+                      <label className="flex items-center gap-2 text-sm text-[#1A1A1A]"><Checkbox checked={actions.assign_me} onCheckedChange={(v) => setActions((a) => ({ ...a, assign_me: v === true }))} /> Assign this list to me for follow-up</label>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-black text-[#1A1A1A] mb-1 block">Specialty focus</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {(["secondary", "off_plan", "both"] as Specialty[]).map((s) => (
+                        <button key={s} type="button" onClick={() => setSpecialty(s)} className={`px-3 py-1.5 rounded-md text-xs font-semibold border transition ${specialty === s ? "bg-[#064E3B] text-white border-[#064E3B]" : "bg-white text-[#1A1A1A] border-[#B89555]/40 hover:bg-[#F7F2EA]"}`}>{s === "off_plan" ? "Off-plan" : s === "both" ? "Secondary + Off-plan" : "Secondary"}</button>
+                      ))}
+                    </div>
+                    <p className="text-[10px] text-[#1A1A1A]/60 mt-1">Applied to every brokerage in this database as the default specialty. Individual cards can override.</p>
+                  </div>
+                  <div className="rounded-md bg-[#FDFBF7] border border-[#B89555]/25 p-2 text-[11px] text-[#1A1A1A] flex items-start gap-2"><GitCompareArrows className="w-3.5 h-3.5 text-[#064E3B] mt-0.5" /><span>{merge ? "Rows will appear in this database AND the total brokerage list." : "Rows stay inside this database only until you merge later."}</span></div>
+                </div>
               </div>
               <div className="rounded-lg border border-[#B89555]/30 bg-white p-4">
                 <p className="text-xs font-semibold text-[#1A1A1A] mb-3">Column mapping</p>
