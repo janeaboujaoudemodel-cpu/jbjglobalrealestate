@@ -896,8 +896,11 @@ export default function DeveloperProfilePage() {
                 <Field label="WhatsApp">
                   <Input disabled={!canEdit} value={form.whatsapp ?? ""} onChange={(e) => setForm((f) => ({ ...f, whatsapp: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
                 </Field>
-                <Field label="Email">
-                  <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30" />
+                <Field label="Position + email">
+                  <div className="flex gap-2">
+                    <Input disabled={!canEdit} value={form.admin_position ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_position: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" placeholder="Business Development Manager" />
+                    <Input disabled={!canEdit} value={form.admin_email ?? ""} onChange={(e) => setForm((f) => ({ ...f, admin_email: e.target.value }))} className="bg-[#FDFBF7] border-[#B89555]/30 w-1/2" />
+                  </div>
                 </Field>
                 {/* Google Maps URL & Office address intentionally removed —
                     never store or display developer physical locations. */}
