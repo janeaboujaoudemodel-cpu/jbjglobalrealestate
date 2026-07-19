@@ -24,6 +24,8 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import OwnerCompanyProfileUploader from "@/components/owner/OwnerCompanyProfileUploader";
 import DeveloperBeforeAfterPanel from "@/components/owner/DeveloperBeforeAfterPanel";
 import DeveloperCustomFieldsSection from "@/components/owner/DeveloperCustomFieldsSection";
+import DeveloperFocusProjectCard from "@/components/owner/DeveloperFocusProjectCard";
+import DeveloperProjectsFootprint from "@/components/owner/DeveloperProjectsFootprint";
 import { fieldToText, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 interface Developer {
