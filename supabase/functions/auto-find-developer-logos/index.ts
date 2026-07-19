@@ -297,7 +297,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json().catch(() => ({}));
-    const batch_size: number = Math.min(Math.max(Number(body?.batch_size) || 10, 1), 25);
+    const batch_size: number = Math.min(Math.max(Number(body?.batch_size) || 5, 1), 25);
     const explicit_ids: string[] = Array.isArray(body?.developer_ids) ? body.developer_ids : [];
 
     let q = supabase
@@ -313,42 +313,29 @@ Deno.serve(async (req) => {
     const { data: devs, error } = await q;
     if (error) throw error;
     if (!devs?.length) {
-      return new Response(JSON.stringify({ success: true, processed: 0, approved: 0, unavailable: 0, results: [] }), {
+      return new Response(JSON.stringify({ success: true, queued: 0, processed: 0 }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const results: Array<{ id: string; name: string; status: string; reason?: string; url?: string }> = [];
-    let approved = 0;
-    let unavailable = 0;
-
-    for (const d of devs as DevRow[]) {
-      try {
-        const r = await processDeveloper(supabase, FIRECRAWL_API_KEY, d);
-        results.push(r);
-        if (r.status === "approved") approved++;
-        else if (r.status === "unavailable") unavailable++;
-      } catch (e: any) {
-        console.error(`[process ${d.name}]`, e?.message);
-        results.push({ id: d.id, name: d.name, status: "error", reason: e?.message });
+    // Process in background so we don't hit the 150s request idle timeout.
+    const task = (async () => {
+      for (const d of devs as DevRow[]) {
+        try {
+          await processDeveloper(supabase, FIRECRAWL_API_KEY, d);
+        } catch (e: any) {
+          console.error(`[process ${d.name}]`, e?.message);
+        }
       }
+    })();
+    // @ts-ignore EdgeRuntime is available in Supabase edge runtime
+    if (typeof EdgeRuntime !== "undefined" && EdgeRuntime?.waitUntil) {
+      // @ts-ignore
+      EdgeRuntime.waitUntil(task);
     }
 
-    const { count: still_missing } = await supabase
-      .from("developers")
-      .select("id", { count: "exact", head: true })
-      .eq("logo_status", "missing");
-
     return new Response(
-      JSON.stringify({
-        success: true,
-        processed: devs.length,
-        approved,
-        unavailable,
-        with_candidates: approved,
-        still_missing: still_missing ?? 0,
-        results,
-      }),
+      JSON.stringify({ success: true, queued: devs.length, background: true }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e: any) {
