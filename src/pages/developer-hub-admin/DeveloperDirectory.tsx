@@ -500,41 +500,42 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 text-[#1A1A1A] font-bold">{(d.project_count || d.completed_projects || 0).toLocaleString()}</td>
                     <td className="px-4 py-3 text-[#1A1A1A] max-w-[180px] truncate">{d.coverage?.length ? d.coverage.slice(0, 4).join(", ") : (d.headquarters ?? "Dubai / UAE")}</td>
                     <td className="px-4 py-3 text-[#1A1A1A]">{d.avg_price_from ? `AED ${d.avg_price_from.toLocaleString()}` : "—"}</td>
-                    <td className="px-4 py-3 whitespace-nowrap"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
-                    <td className="px-4 py-3 min-w-[240px]">
-                      <div className="flex flex-col gap-1.5">
+                    <td className="px-4 py-3 whitespace-nowrap min-w-[110px]"><Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40 whitespace-nowrap inline-block">{d.logo_url ? "Ready" : (d.logo_status ?? "Missing")}</Badge></td>
+                    <td className="px-4 py-3 min-w-[260px] whitespace-nowrap">
+                      <div className="flex flex-row items-center gap-1.5 flex-nowrap">
                         <Select value={d.registration_status || "not_registered"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { registration_status: value } })}>
-                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs min-w-[110px]"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_REGISTRATION_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
                         <Select value={d.group_status || "pending_group_status"} onValueChange={(value) => updateDeveloperStatus.mutate({ id: d.id, patch: { group_status: value } })}>
-                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-8 bg-[#FDFBF7] text-[#1A1A1A] text-xs min-w-[130px]"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-[#FDFBF7] border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                         </Select>
-                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 w-fit">Draft</Badge>}
+                        {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0 w-fit whitespace-nowrap">Draft</Badge>}
                       </div>
                     </td>
-                    <td className="px-4 py-3 max-w-[220px]">
+                    <td className="px-4 py-3 max-w-[220px] whitespace-nowrap">
                       {d.website_url ? (
                         <a
                           href={d.website_url.startsWith("http") ? d.website_url : `https://${d.website_url}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[#1A1A1A] underline decoration-[#B89555]/60 break-all text-xs"
+                          className="text-[#1A1A1A] underline decoration-[#B89555]/60 text-xs whitespace-nowrap overflow-hidden text-ellipsis inline-block max-w-[200px] align-middle"
                           title={d.website_url}
                         >
                           {d.website_url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
                         </a>
                       ) : <span className="text-[#1A1A1A]/45">—</span>}
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col gap-2 min-w-[140px]">
-                        <Button asChild size="sm" variant="gold">
+                    <td className="px-4 py-3 whitespace-nowrap min-w-[190px]">
+                      <div className="flex flex-row items-center gap-1.5 flex-nowrap">
+                        <Button asChild size="sm" variant="gold" className="whitespace-nowrap h-8 px-3">
                           <Link to={`/owner/developers/${d.slug}`}>Open</Link>
                         </Button>
-                        <Button asChild size="sm" variant="outline" className="border-[#B89555]/50 text-[#1A1A1A]">
+                        <Button asChild size="sm" variant="outline" className="whitespace-nowrap h-8 px-3 border-[#B89555]/50 text-[#1A1A1A]">
                           <Link to={`/owner/developers/${d.slug}?edit=1`}>Edit</Link>
                         </Button>
+                        <DeveloperActivityMenu slug={d.slug} name={d.name} />
                       </div>
                     </td>
                   </tr>
