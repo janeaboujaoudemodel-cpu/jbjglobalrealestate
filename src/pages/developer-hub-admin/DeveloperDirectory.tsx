@@ -15,6 +15,7 @@ import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import DeveloperExcelImportDialog from "@/components/owner/DeveloperExcelImportDialog";
 import RegistrationStatusBadge from "@/components/developers-portal/RegistrationStatusBadge";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import BrandedEmailsLauncherCard from "@/components/crm/BrandedEmailsLauncherCard";
 
 interface Row {
   id: string;
@@ -437,6 +438,8 @@ export default function DeveloperDirectory() {
           <span className="font-semibold text-[#1A1A1A]">Developers Portal</span> = the live owner-side developer control surface. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/owner/developers/profile-rebuild" className="underline">Profile Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
+
+      <BrandedEmailsLauncherCard variant="developer" />
 
       <Card className="p-5 bg-[#F7F2EA] border border-[#B89555]/30 flex items-center gap-3 flex-wrap shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <Input
