@@ -281,6 +281,7 @@ export const OwnerRoutes = () => (
     <Route path="areas" element={<OwnerAreasAdmin />} />
     <Route path="jbj-hub" element={<JbjHub />} />
     <Route path="enrichment-review" element={<OwnerEnrichmentReview />} />
+    <Route path="drive-extractions" element={<DriveExtractionsHub />} />
 
     <Route path="developers" element={<DeveloperDirectory />} />
     <Route path="brokerages" element={<BrokeragePortal />} />
