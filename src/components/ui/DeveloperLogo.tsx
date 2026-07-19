@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getWebsiteLogoFallbackUrl, isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 import { getDeveloperLogoOverride } from "@/utils/developerLogoOverrides";
-import { Building2 } from "lucide-react";
 
 interface DeveloperLogoProps {
   src?: string | null;
@@ -12,19 +11,20 @@ interface DeveloperLogoProps {
   onError?: () => void;
   renderFallback?: boolean;
   name?: string | null;
+  websiteUrl?: string | null;
   variant?: "tile" | "bare" | "card" | "nameplate";
   "data-keep-gold"?: boolean | string;
 }
 
-// Unified emerald-bordered plate. Padding is 0 so wordmarks & monograms
-// render at MAX zoom without cropping (object-contain enforced). White
+// Unified emerald-bordered plate. Padding is deliberate so wordmarks never
+// touch/crop against the frame (object-contain enforced). White
 // backgrounds baked into raster logos are visually knocked out with
 // mix-blend-mode: multiply against the plate's white surface, so PNG/JPG
 // logos look transparent without any server-side background removal.
 const UNIFIED_PLATE =
   "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden " +
   "rounded-lg bg-white border border-[#B89555]/80 " +
-  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-0";
+  "shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5";
 
 
 
@@ -36,28 +36,20 @@ export function DeveloperLogo({
   onError,
   renderFallback = false,
   name,
+  websiteUrl,
   variant = "tile",
   "data-keep-gold": dataKeepGold,
 }: DeveloperLogoProps) {
   const [error, setError] = useState(false);
+  const [fallbackError, setFallbackError] = useState(false);
 
   const override = getDeveloperLogoOverride(name ?? alt);
   const valid = isValidDeveloperLogoUrl(src) && !error;
+  const websiteFallbackUrl = getWebsiteLogoFallbackUrl(websiteUrl);
+  const hasWebsiteFallback = Boolean(websiteFallbackUrl && !fallbackError);
 
-  // Missing-logo renderer — locked fallback is the Building2 icon only.
-  // No initials, no generated monograms, no project photos as substitute logos.
-  const renderMissingLogo = (containerClass: string, scale: "compact" | "card" = "compact") => (
-    <div
-      className={cn(containerClass, scale === "compact" && "min-w-10")}
-      aria-label={`${(name || alt || "Developer").trim()} logo missing`}
-      title={`${(name || alt || "Developer").trim()} logo missing`}
-      data-developer-logo-fallback="building"
-    >
-      <Building2 className={cn(scale === "card" ? "h-12 w-12" : "h-6 w-6", "text-[#064E3B]")} strokeWidth={1.8} />
-    </div>
-  );
-
-  // Legacy label renderer kept only for explicitly curated nameplate usage.
+  // Text mark renderer used only when no real website/database logo exists.
+  // It keeps the slot filled and branded without using building icons or photos.
   const renderNameLabel = (containerClass: string, textTone = "text-[#1A1A1A]", scale: "compact" | "card" = "compact") => {
     const raw = (name || alt || "Developer").trim();
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
@@ -107,6 +99,39 @@ export function DeveloperLogo({
     );
   };
 
+  const renderImage = (url: string, containerClass: string, scale: "compact" | "card" = "compact", isFallback = false) => (
+    <div className={containerClass} data-keep-gold={dataKeepGold} data-developer-logo={isFallback ? "website" : "database"}>
+      <img
+        src={url}
+        alt={alt}
+        loading={loading}
+        data-no-fallback
+        onError={() => {
+          if (isFallback) setFallbackError(true);
+          else setError(true);
+          onError?.();
+        }}
+        className={cn(
+          "block w-full h-full object-contain",
+          scale === "compact" ? "rounded-sm" : "rounded-md",
+          "[mix-blend-mode:multiply]",
+        )}
+        style={{
+          filter: override.invert
+            ? "invert(1) brightness(1)"
+            : "contrast(1.08) saturate(1.1)",
+        }}
+      />
+    </div>
+  );
+
+  const renderMissingLogo = (containerClass: string, scale: "compact" | "card" = "compact") => {
+    if (hasWebsiteFallback && websiteFallbackUrl) {
+      return renderImage(websiteFallbackUrl, containerClass, scale, true);
+    }
+    return renderNameLabel(containerClass, "text-[#1A1A1A]", scale);
+  };
+
   // ── Nameplate variant — if no valid logo exists, show the approved icon fallback ──
   if (variant === "nameplate") {
     if (!valid) return renderMissingLogo(cn(UNIFIED_PLATE, className));
@@ -118,66 +143,29 @@ export function DeveloperLogo({
       if (!renderFallback && !(name || alt)) return null;
       return renderMissingLogo(cn(UNIFIED_PLATE, className));
     }
-    return (
-      <div
-        className={cn(
-          "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-0",
-          className,
-        )}
-        data-keep-gold={dataKeepGold}
-      >
-        <img
-          src={src as string}
-          alt={alt}
-          loading={loading}
-          onError={() => {
-            setError(true);
-            onError?.();
-          }}
-          className="block w-full h-full object-contain [mix-blend-mode:multiply]"
-          style={{
-            filter: override.invert
-              ? "invert(1) brightness(1)"
-              : "contrast(1.15) saturate(1.2)",
-          }}
-
-        />
-      </div>
-    );
+    return renderImage(src as string, cn(
+      "h-12 w-12 sm:h-14 sm:w-14 aspect-square inline-flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-[0_3px_10px_rgba(0,0,0,0.16)] p-1.5",
+      className,
+    ));
   }
 
 
   // ── Card variant — Reelly-style hero plate (developer directory) ──
   if (variant === "card") {
     const cardContainer = cn(
-      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-1 overflow-hidden",
+      "w-full h-full rounded-2xl inline-flex items-center justify-center bg-white border border-[#B89555]/70 p-3 overflow-hidden",
       className,
     );
 
     if (!valid) {
       return renderMissingLogo(cardContainer, "card");
     }
-    return (
-      <div className={cardContainer}>
-        <img
-          src={src as string}
-          alt={alt}
-          loading={loading}
-          onError={() => {
-            setError(true);
-            onError?.();
-          }}
-          className="block w-full h-full object-contain [mix-blend-mode:multiply]"
-          style={{ filter: "contrast(1.15) saturate(1.2)" }}
-
-        />
-      </div>
-    );
+    return renderImage(src as string, cardContainer, "card");
   }
 
   // ── Default tile variant (developer directory, dev-detail, area chips) ──
   const tileContainer = cn(
-    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white p-0 shadow-sm border border-[#B89555]/70 overflow-hidden",
+    "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white p-1.5 shadow-sm border border-[#B89555]/70 overflow-hidden",
     className,
   );
 
@@ -186,20 +174,5 @@ export function DeveloperLogo({
     return renderMissingLogo(tileContainer);
   }
 
-  return (
-    <div className={tileContainer} data-keep-gold={dataKeepGold}>
-      <img
-        src={src as string}
-        alt={alt}
-        loading={loading}
-        onError={() => {
-          setError(true);
-          onError?.();
-        }}
-        className="block w-full h-full object-contain rounded-sm [mix-blend-mode:multiply]"
-        style={{ filter: "contrast(1.15) saturate(1.2)" }}
-
-      />
-    </div>
-  );
+  return renderImage(src as string, tileContainer);
 }

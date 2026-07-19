@@ -9,7 +9,7 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
-import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { getDeveloperLogoUrl, getDeveloperWebsiteUrl, getKnownDeveloperLogoUrl, getKnownDeveloperWebsiteUrl } from "@/utils/developerLogo";
 import { normalizeProvidentImageUrl } from "@/lib/imageUtils";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { deriveHandover } from "@/utils/handoverDerivation";
@@ -86,7 +86,8 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const rawDeveloperName = project.developer?.name || project.developer_name || null;
   const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;
   const developerSlug = project.developer?.slug || null;
-  const developerLogoUrl = getDeveloperLogoUrl(project.developer as any);
+  const developerLogoUrl = getDeveloperLogoUrl(project.developer as any) || getKnownDeveloperLogoUrl(developerName);
+  const developerWebsiteUrl = getDeveloperWebsiteUrl(project.developer as any) || getKnownDeveloperWebsiteUrl(developerName);
   const developerHref = developerName
     ? developerSlug
       ? `/developer/${developerSlug}`
@@ -235,6 +236,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
               alt={developerName}
               variant={developerLogoUrl ? "bare" : "nameplate"}
               name={developerName}
+              websiteUrl={developerWebsiteUrl}
               loading={priority ? "eager" : "lazy"}
             />
           </Link>

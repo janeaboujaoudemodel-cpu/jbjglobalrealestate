@@ -6,8 +6,8 @@
  *   2. `feature_image_url`, `cover_image_url`, project photos, screenshots,
  *      WhatsApp / convert.io files, or any other photo may NEVER be used
  *      as a developer logo — not even as a fallback.
- *   3. The only approved "no logo" fallback is the `Building2` icon,
- *      rendered by the `DeveloperLogo` component. No initials, no monograms.
+ *   3. Missing database logos should be resolved from the developer website
+ *      where available; UI must never render a building icon or empty logo box.
  *   4. `logo_url_processed` is an internal background-removed mirror; it is
  *      no longer preferred over the canonical `logo_url`. Canonical wins.
  *
@@ -53,13 +53,56 @@ function normalizeDeveloper(developer: unknown): Record<string, unknown> | null 
 /**
  * Safely extract the canonical developer logo URL.
  * Returns `null` if no valid, allowed logo exists (UI must render the approved
- * `Building2` icon fallback — never a substitute photo).
+ * a website-derived logo/fav icon or a text mark — never a substitute project photo).
  */
 export function getDeveloperLogoUrl(developer: unknown): string | null {
   const dev = normalizeDeveloper(developer);
   if (!dev) return null;
   const url = dev.logo_url;
   return isAllowedLogoUrl(url) ? url : null;
+}
+
+export function getDeveloperWebsiteUrl(developer: unknown): string | null {
+  const dev = normalizeDeveloper(developer);
+  if (!dev) return null;
+  const website = dev.website_url ?? dev.website;
+  if (typeof website !== "string") return null;
+  const trimmed = website.trim();
+  if (!trimmed) return null;
+  return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+}
+
+const KNOWN_DEVELOPER_WEBSITES: Array<{ match: RegExp; website: string }> = [
+  { match: /\bma+a?k\b|maakdream/i, website: "https://makdevelopers.com/" },
+];
+
+const KNOWN_DEVELOPER_LOGOS: Array<{ match: RegExp; logo: string }> = [
+  { match: /\bma+a?k\b|maakdream/i, logo: "https://makdevelopers.com/wp-content/uploads/2025/08/mak-developers-logo.svg" },
+];
+
+export function getKnownDeveloperWebsiteUrl(name: unknown): string | null {
+  if (typeof name !== "string" || !name.trim()) return null;
+  const hit = KNOWN_DEVELOPER_WEBSITES.find((entry) => entry.match.test(name));
+  return hit?.website ?? null;
+}
+
+export function getKnownDeveloperLogoUrl(name: unknown): string | null {
+  if (typeof name !== "string" || !name.trim()) return null;
+  const hit = KNOWN_DEVELOPER_LOGOS.find((entry) => entry.match.test(name));
+  return hit?.logo ?? null;
+}
+
+export function getWebsiteLogoFallbackUrl(websiteUrl: unknown): string | null {
+  if (typeof websiteUrl !== "string" || !websiteUrl.trim()) return null;
+  try {
+    const input = websiteUrl.trim();
+    const url = new URL(/^https?:\/\//i.test(input) ? input : `https://${input}`);
+    const host = url.hostname.replace(/^www\./i, "");
+    if (!host || !host.includes(".")) return null;
+    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=256`;
+  } catch {
+    return null;
+  }
 }
 
 export function getDeveloperLogoBgColor(developer: unknown): string | null {

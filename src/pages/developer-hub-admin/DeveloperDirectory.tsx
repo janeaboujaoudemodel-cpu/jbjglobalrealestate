@@ -519,6 +519,7 @@ export default function DeveloperDirectory() {
                           src={!brokenImgs.has(d.id) ? d.logo_url : null}
                           alt={`${d.name} logo`}
                           name={d.name}
+                          websiteUrl={d.website_url}
                           variant="tile"
                           renderFallback
                           className="size-10 rounded-xl border-[#B89555]/40 bg-[#FDFBF7]"
@@ -610,6 +611,7 @@ export default function DeveloperDirectory() {
                   src={!brokenImgs.has(d.id) ? d.logo_url : null}
                   alt={`${d.name} logo`}
                   name={d.name}
+                  websiteUrl={d.website_url}
                   variant="tile"
                   renderFallback
                   className="size-16 rounded-md border-[#B89555]/40 bg-[#FDFBF7] shadow-[0_10px_24px_-18px_rgba(26,26,26,0.55)]"
