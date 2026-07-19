@@ -517,13 +517,14 @@ export default function DeveloperDirectory() {
           </div>
         </Card>
       ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 items-stretch">
         {rows.map((d) => {
           const isSel = selected.has(d.id);
+          const groupLabel = DEVELOPER_GROUP_OPTIONS.find((o) => o.value === (d.group_status || "pending_group_status"))?.label ?? "Group not created";
           return (
             <Card
               key={d.id}
-              className={`p-5 bg-[#F7F2EA] border rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
+              className={`p-5 bg-[#F7F2EA] border rounded-2xl shadow-[0_18px_42px_-34px_rgba(26,26,26,0.42)] flex flex-col h-full ${isSel ? "border-[#B89555] ring-1 ring-[#B89555]" : "border-[#B89555]/30"}`}
             >
               <div className="flex items-start gap-3">
                 <Checkbox
