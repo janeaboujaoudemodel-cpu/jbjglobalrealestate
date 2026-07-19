@@ -25,7 +25,7 @@ import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
-import { buildDeveloperSocialLinks, buildPublicDeveloperFacts, buildPublicDeveloperNarrative, getDeveloperCustomFields, publicUrlLabel } from "@/utils/developerExcelFields";
+import { buildDeveloperSocialLinks, buildPublicDeveloperFacts, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey, normalizePublicUrl, publicUrlLabel } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -426,6 +426,16 @@ const DeveloperDetail = () => {
   }
 
   const developerCustomFields = getDeveloperCustomFields(developer);
+  const publicExcelDetails = getVisibleExcelEntries(developerCustomFields, [
+    "google_drive_url",
+    "drive_url",
+    "google_drive",
+    "office_address",
+    "headquarters",
+    "office_location",
+    "phone",
+    "office_phone",
+  ]).filter(([key]) => !["facebook_url", "projects_uae", "projects_outside_uae", "global_presence"].includes(key));
   const excelUaeProjects = getNumberLike(developerCustomFields.projects_uae);
   const excelOutsideProjects = getNumberLike(developerCustomFields.projects_outside_uae);
   const activeProjectCount = Math.max(projects?.length || 0, Number(developer.offplan_projects || 0), excelUaeProjects);
@@ -660,6 +670,35 @@ const DeveloperDetail = () => {
                     <div className="mt-1 text-sm font-semibold text-[#1A1A1A] break-words">{fact.value}</div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {publicExcelDetails.length > 0 && (
+              <div className="mt-5 max-w-5xl rounded-xl border border-[#B89555]/35 bg-[#FDFBF7] p-4">
+                <div className="mb-3 text-[10px] uppercase tracking-[0.18em] font-bold text-[#064E3B]">
+                  Excel database details
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {publicExcelDetails.map(([key, value]) => {
+                    const text = fieldToText(value);
+                    const isUrl = /^https?:\/\//i.test(text) || /^[\w.-]+\.[a-z]{2,}/i.test(text);
+                    return (
+                      <div key={key} className="rounded-lg border border-[#B89555]/25 bg-white/65 px-3 py-2">
+                        <div className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#1A1A1A]/70">
+                          {humanizeDeveloperFieldKey(key)}
+                        </div>
+                        {isUrl ? (
+                          <a href={normalizePublicUrl(text)} target="_blank" rel="noreferrer" className="mt-1 inline-flex max-w-full items-center gap-1 text-sm font-semibold text-[#064E3B] hover:underline">
+                            <span className="truncate">{publicUrlLabel(text)}</span>
+                            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                          </a>
+                        ) : (
+                          <div className="mt-1 whitespace-pre-line text-sm font-semibold text-[#1A1A1A] break-words">{text}</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             )}
 
