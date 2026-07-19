@@ -488,7 +488,7 @@ export default function DeveloperDirectory() {
                     <td className="px-4 py-3 min-w-[220px]">
                       <div className="flex flex-wrap gap-1.5">
                         <RegistrationStatusBadge status={d.registration_status || "not_registered"} />
-                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{(d.group_status || "pending_group_status").replace(/_/g, " ")}</Badge>
+                        <Badge className="bg-[#EFE6D6] text-[#1A1A1A] border border-[#B89555]/40">{DEVELOPER_GROUP_OPTIONS.find((o) => o.value === (d.group_status || "pending_group_status"))?.label ?? "Group not created"}</Badge>
                         {d.is_hidden && <Badge className="bg-[#1A1A1A] text-white border-0">Draft</Badge>}
                       </div>
                     </td>
