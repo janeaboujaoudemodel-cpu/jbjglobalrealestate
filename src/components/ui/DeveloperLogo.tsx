@@ -51,10 +51,15 @@ export function DeveloperLogo({
     const SUFFIX = /\b(developments?|developers?|properties|property|realty|real\s*estate|holdings?|holding|group|llc|fz-?llc|pjsc|psc|inc|co|company|international|investments?)\b/gi;
     const cleaned = raw.replace(SUFFIX, "").replace(/\s{2,}/g, " ").trim() || raw;
     const displayName = cleaned.toUpperCase();
-    const displayText = displayName
+    const initials = displayName
       .split(/\s+/)
-      .map((part) => part.length > 8 ? part.replace(/(.{4})(?=.)/g, "$1\u200B") : part)
-      .join(" ");
+      .filter(Boolean)
+      .slice(0, 3)
+      .map((part) => part.charAt(0))
+      .join("") || displayName.slice(0, 2) || "DEV";
+    const displayText = scale === "compact"
+      ? initials
+      : displayName.split(/\s+/).slice(0, 3).join(" ");
     const compactLength = displayName.replace(/\s+/g, "").length;
     const sizeClass = scale === "card"
       ? compactLength <= 6 ? "text-4xl"
@@ -70,14 +75,15 @@ export function DeveloperLogo({
         : "text-[5px]";
     return (
       <div
-        className={cn(containerClass, "[container-type:size]")}
+        className={cn(containerClass, "[container-type:size]", scale === "compact" && "min-w-10")}
         aria-label={raw}
         title={raw}
         data-developer-nameplate
       >
         <span
           className={cn(
-            "block w-full max-w-full max-h-full overflow-hidden font-bold tracking-[-0.02em] leading-[0.86] text-center uppercase whitespace-normal break-words [overflow-wrap:anywhere] [word-break:break-word] [hyphens:auto] [text-wrap:balance]",
+            "block w-full max-w-full max-h-full overflow-hidden font-bold leading-none text-center uppercase [writing-mode:horizontal-tb] [text-orientation:mixed] [word-break:normal] [overflow-wrap:normal] [hyphens:none]",
+            scale === "compact" ? "whitespace-nowrap tracking-[0]" : "whitespace-normal [text-wrap:balance] tracking-[0]",
             textTone,
             sizeClass,
           )}
