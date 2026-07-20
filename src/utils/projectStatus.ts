@@ -2,16 +2,14 @@ import { formatDisplayDate } from "@/utils/formatDate";
 
 /**
  * Single source of truth for project status display.
- * `handover_date` drives everything:
- *   - past date  → "Ready"
- *   - future date → formatted date string (e.g. "Q4 2026" if exact day unknown, else "Dec 2026")
- *   - missing → falls back to status_label / availability_status when public-friendly
+ * Public-safe project status display. Never infer "Ready" from a past date;
+ * that is a legal completion claim and must be explicit in verified source data.
  */
 
 const PUBLIC_STATUSES = new Set([
   "available","selling","limited","few left","sold out","launching",
-  "coming soon","new","ready","under construction","off-plan","off plan",
-  "handover soon","completed","delivered",
+  "coming soon","new","under construction","off-plan","off plan",
+  "handover soon",
 ]);
 
 export function isPublicStatus(s?: string | null): boolean {
@@ -20,9 +18,9 @@ export function isPublicStatus(s?: string | null): boolean {
 }
 
 export interface ProjectStatusResult {
-  /** What to render in the card/pill (e.g. "Ready" or "Dec 2026"). */
+  /** What to render in the card/pill (e.g. "Dec 2026"). */
   label: string;
-  /** True when the project is delivered/ready (past handover). */
+  /** True only when explicit source data says delivered/ready. */
   isReady: boolean;
   /** Raw date when in the future, else null. */
   date: string | null;
@@ -38,9 +36,6 @@ export function getProjectStatus(p: {
   if (raw) {
     const d = new Date(raw);
     if (!isNaN(d.getTime())) {
-      if (d.getTime() <= Date.now()) {
-        return { label: "Ready", isReady: true, date: null };
-      }
       return { label: formatDisplayDate(raw) || raw, isReady: false, date: raw };
     }
   }
@@ -51,10 +46,10 @@ export function getProjectStatus(p: {
       const v = String(c).trim();
       return {
         label: v.charAt(0).toUpperCase() + v.slice(1),
-        isReady: v.toLowerCase().includes("ready") || v.toLowerCase().includes("complet") || v.toLowerCase().includes("delivered"),
+        isReady: false,
         date: null,
       };
     }
   }
-  return { label: "TBA", isReady: false, date: null };
+  return { label: "Coming soon", isReady: false, date: null };
 }

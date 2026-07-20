@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 import { formatDisplayDate } from "@/utils/formatDate";
 
 interface HandoverPillProps {
-  /** Raw handover date string (e.g. "Q4 2026", "2027-06", or "Ready"). */
+  /** Raw handover date string (e.g. "Q4 2026", "2027-06", or explicit "Ready"). */
   value?: string | null;
   className?: string;
-  /** When true, renders nothing instead of falling back to "Ready". */
+  /** Kept for compatibility; empty values never render a fake status. */
   hideIfEmpty?: boolean;
 }
 
@@ -14,15 +14,15 @@ interface HandoverPillProps {
  * Site-wide handover label. Mirrors the "Starting price" chrome
  * (`.price-pill-premium`) — translucent champagne glass, 1.5px solid gold
  * hairline, ink text, 8px radius. Never filled metallic, never orange.
- * Per memory: never display the word "Handover" — only the date or "Ready".
+ * Per legal-risk rule: never infer or default to "Ready".
  */
 export function HandoverPill({ value, className, hideIfEmpty }: HandoverPillProps) {
   const display = React.useMemo(() => {
-    if (!value) return hideIfEmpty ? null : "Ready";
+    if (!value) return null;
     const lower = String(value).toLowerCase();
     if (lower.includes("ready")) return "Ready";
     const formatted = formatDisplayDate(value);
-    return formatted || "Ready";
+    return formatted || String(value).trim() || null;
   }, [value, hideIfEmpty]);
 
   if (!display) return null;

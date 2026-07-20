@@ -19,7 +19,6 @@ import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { SEOHead } from "@/components/SEOHead";
 import { SchemaEntity } from "@/components/SchemaEntity";
 import BrokerRequestAccessButton from "@/components/developers-portal/BrokerRequestAccessButton";
-import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan.jpg";
 
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
@@ -39,11 +38,6 @@ const MapLoadingFallback = () => (
     </div>
   </div>
 );
-
-const isAmmarDeveloper = (name?: string | null, slug?: string | null) => {
-  const text = `${name || ""} ${slug || ""}`.toLowerCase();
-  return /\bammar\b|\bamar\b/.test(text);
-};
 
 // Emaar's flagship Dubai Creek Harbour masterplan render — used as a premium
 // hero cover when no curated feature image is set upstream.
@@ -499,9 +493,7 @@ const DeveloperDetail = () => {
 
   const heroImageUrl = isEmaarDeveloper(developer.name, developer.slug)
     ? emaarCreekHarbourMasterplan
-    : isAmmarDeveloper(developer.name, developer.slug)
-      ? ammarCreekHarbourMasterplan
-      : developer.feature_image_url;
+    : developer.feature_image_url;
 
 
   const competitorDevelopers = (allDevelopers || [])

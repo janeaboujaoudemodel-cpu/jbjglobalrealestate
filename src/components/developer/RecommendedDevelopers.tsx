@@ -7,7 +7,6 @@ import { useDevelopers } from "@/hooks/useProjects";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getHighResImageUrl } from "@/lib/imageUtils";
 import { supabase } from "@/integrations/supabase/client";
-import ammarCreekHarbourMasterplan from "@/assets/ammar-creek-harbour-masterplan.jpg";
 
 interface RecommendedDevelopersProps {
   currentDeveloperSlug: string;
@@ -143,7 +142,7 @@ export default function RecommendedDevelopers({
                 (projectCover && !looksLikeLogoUrl(projectCover) && projectCover) ||
                 (dev.feature_image_url && !looksLikeLogoUrl(dev.feature_image_url) && dev.feature_image_url) ||
                 null;
-              const cardImage = rawImage ? getHighResImageUrl(rawImage) : ammarCreekHarbourMasterplan;
+              const cardImage = rawImage ? getHighResImageUrl(rawImage) : null;
               return (
               <motion.div
                 key={dev.slug}
@@ -158,19 +157,21 @@ export default function RecommendedDevelopers({
                   to={`/developer/${dev.slug}`}
                   className="group flex flex-col h-full rounded-xl border border-[#B89555]/60 hover:border-[#B89555] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-150 hover:shadow-[0_8px_30px_rgba(184,149,85,0.28)]"
                 >
-                  {/* Photo only — no logo/nameplate in the visual card area */}
+                  {/* Photo only when a real project cover exists — never a guessed fallback image. */}
                   <div className="h-32 relative overflow-hidden bg-[#F7F2EA]">
-                    <img
-                      src={cardImage}
-                      alt={`${dev.name} featured development`}
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                      decoding="async"
-                      onError={(e) => {
-                        const img = e.currentTarget;
-                        if (img.src !== ammarCreekHarbourMasterplan) img.src = ammarCreekHarbourMasterplan;
-                      }}
-                    />
+                    {cardImage ? (
+                      <img
+                        src={cardImage}
+                        alt={`${dev.name} featured development`}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center px-4 text-center">
+                        <span className="font-serif text-xl font-bold text-[#064E3B] leading-tight">{dev.name}</span>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                   </div>
 
