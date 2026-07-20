@@ -167,10 +167,10 @@ export default function DriveExtractionsHub() {
 
 function Stat({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
   return (
-    <div className="rounded-lg border border-white/20 bg-white/10 backdrop-blur px-4 py-3" style={{ color: "#FFFFFF" }}>
-      <div className="text-[11px] uppercase tracking-wider" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.85 }}>{label}</div>
-      <div className="text-2xl font-semibold mt-1" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>{value}</div>
-      {sub && <div className="text-[11px] mt-0.5" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.8 }}>{sub}</div>}
+    <div data-no-contrast-guard className="allow-white rounded-lg border border-white/20 bg-white/10 backdrop-blur px-4 py-3 text-white">
+      <div data-no-contrast-guard className="allow-white text-[11px] uppercase tracking-wider text-white/85">{label}</div>
+      <div data-no-contrast-guard className="allow-white text-2xl font-semibold mt-1 text-white">{value}</div>
+      {sub && <div data-no-contrast-guard className="allow-white text-[11px] mt-0.5 text-white/80">{sub}</div>}
     </div>
   );
 }
