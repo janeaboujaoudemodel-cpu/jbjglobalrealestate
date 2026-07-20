@@ -132,7 +132,8 @@ export default function DriveExtractionsHub() {
         </div>
       </header>
 
-      <main className="max-w-[1400px] mx-auto px-6 py-8">
+      <main className="max-w-[1400px] mx-auto px-6 py-8 space-y-6">
+        <DriveDropPanel />
         {loading ? (
           <div className="space-y-3">
             {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-16 w-full" />)}
@@ -143,9 +144,11 @@ export default function DriveExtractionsHub() {
             {active === "projects"    && <ProjectsView projects={projects} />}
             {active === "communities" && <GroupedView mode="community" projects={projects} />}
             {active === "areas"       && <GroupedView mode="area" projects={projects} />}
+            {active === "emirates"    && <EmiratesView />}
           </>
         )}
       </main>
+
     </div>
   );
 }
