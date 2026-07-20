@@ -12,14 +12,19 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { Sparkles, Users, Database, Send, RefreshCw } from "lucide-react";
+import { Sparkles, Users, Database, Send, RefreshCw, Phone, Star } from "lucide-react";
+import CallDetailSheet from "@/components/broker-crm/CallDetailSheet";
 
 type Broker = { user_id: string; display_name: string | null; current_tier: string | null };
 import LeadCallButton from "@/components/crm/LeadCallButton";
 type LeadRow = { id: string; full_name: string | null; source: string | null; preferred_location: string | null; created_at: string; phone_e164?: string | null; phone_normalized?: string | null; email_normalized?: string | null };
+type CallRow = { id: string; lead_id: string | null; phone_number: string | null; duration_seconds: number | null; call_status: string | null; ai_summary: string | null; ai_score: number | null; ai_processed_at: string | null; created_at: string; user_id: string; lead_name?: string | null; broker_name?: string | null };
 
 export default function DataHub() {
-  const [tab, setTab] = useState<"pool" | "distribution" | "databases">("distribution");
+  const [tab, setTab] = useState<"pool" | "distribution" | "databases" | "calls">("distribution");
+  const [calls, setCalls] = useState<CallRow[]>([]);
+  const [openCallId, setOpenCallId] = useState<string | null>(null);
+  const [openCallLead, setOpenCallLead] = useState<string | null>(null);
   const [brokers, setBrokers] = useState<Broker[]>([]);
   const [pool, setPool] = useState<LeadRow[]>([]);
   const [poolCount, setPoolCount] = useState<number>(0);
