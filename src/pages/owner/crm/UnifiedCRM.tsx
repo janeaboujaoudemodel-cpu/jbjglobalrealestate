@@ -242,7 +242,12 @@ export default function UnifiedCRM() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const entity: Entity = (params.get("entity") as Entity) || "leads";
+  const entityParam = params.get("entity") || "leads";
+  // Redirect legacy/moved entities to their dedicated portals.
+  if (PORTAL_REDIRECTS[entityParam]) {
+    return <Navigate to={PORTAL_REDIRECTS[entityParam]} replace />;
+  }
+  const entity: Entity = (ENTITIES.some(e => e.id === entityParam) ? entityParam : "leads") as Entity;
   const validViews = VIEWS[entity] || [];
   const defaultView = validViews[0]?.id || "overview";
   const viewParam = params.get("view") || defaultView;
