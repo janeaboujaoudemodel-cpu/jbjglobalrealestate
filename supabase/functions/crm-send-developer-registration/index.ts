@@ -3,7 +3,7 @@
  *
  * Loads the locked HTML template from `crm_email_templates` (variant) and
  * sends it via the owner's connected Gmail account so replies thread back
- * to Jane's inbox where crm-email-sync can pick them up.
+ * to the configured JBJ inbox where crm-email-sync can pick them up.
  *
  * Owner-only.
  */
@@ -45,16 +45,24 @@ const base64UrlEncode = (str: string) => {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 };
 
+const encodeMimeHeader = (value: string) => {
+  if (/^[\x00-\x7F]*$/.test(value)) return value;
+  const bytes = new TextEncoder().encode(value);
+  let bin = "";
+  bytes.forEach((b) => { bin += String.fromCharCode(b); });
+  return `=?UTF-8?B?${btoa(bin)}?=`;
+};
+
 const buildRawMime = (opts: { from: string; to: string; cc: string[]; subject: string; html: string; replyTo: string; }) => {
   const headers = [
     `From: ${opts.from}`,
     `To: ${opts.to}`,
     opts.cc.length ? `Cc: ${opts.cc.join(", ")}` : "",
     `Reply-To: ${opts.replyTo}`,
-    `Subject: ${opts.subject}`,
+    `Subject: ${encodeMimeHeader(opts.subject)}`,
     "MIME-Version: 1.0",
     'Content-Type: text/html; charset="UTF-8"',
-    "Content-Transfer-Encoding: 7bit",
+    "Content-Transfer-Encoding: 8bit",
   ].filter(Boolean).join("\r\n");
   return base64UrlEncode(headers + "\r\n\r\n" + opts.html);
 };
@@ -128,7 +136,7 @@ serve(async (req: Request) => {
       throw new Error("Gmail connector not configured");
     }
 
-    const fromName = settings.from_name || "JBJ Global Real Estate";
+    const fromName = "Amelia — JBJ Global Real Estate";
     const replyTo = (body.fromEmailOverride || settings.reply_to_email || "contact@jbj.ae").trim();
     const activeCcArr = Array.isArray(settings.active_cc_emails) ? settings.active_cc_emails.filter(Boolean) : [];
     const legacyCc = (settings.cc_email || "").trim();
@@ -138,7 +146,7 @@ serve(async (req: Request) => {
     const ccEmail = ccList[0] || "";
     const cc = !isTest ? ccList : [];
 
-    const html = renderTemplate(template.html, {
+    let html = renderTemplate(template.html, {
       developer_name: dev.developer_name,
       drive_url: settings.drive_doc_pack_url,
       reply_to: replyTo.toUpperCase(),
@@ -146,7 +154,15 @@ serve(async (req: Request) => {
       reply_to_lower: replyTo,
       cc_email: ccEmail,
       from_name: fromName,
+      sender_name: "Amelia",
+      sender_title: "Head of Business Development",
+      sender_phone: "+971 54 716 7107",
+      sender_phone_tel: "tel:+971547167107",
     });
+    html = html
+      .replace(/Jane Bou Jaoude/gi, "Amelia")
+      .replace(/Founder\s*&\s*CEO/gi, "Head of Business Development")
+      .replace(/\+971\s?\d{1,2}\s?\d{3}\s?\d{4}/g, "+971 54 716 7107");
     const baseSubject = isTest && body.subjectOverride && body.subjectOverride.trim()
       ? body.subjectOverride.trim()
       : template.subject;

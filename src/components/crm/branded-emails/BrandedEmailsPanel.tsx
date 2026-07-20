@@ -29,11 +29,10 @@ type Recipient = {
 };
 
 type Template = {
-  id: string;
-  owner_id?: string | null;
+  variant: "developer_registration" | "developer_confirm_registered" | "brokerage_partnership_intro" | "brokerage_breakfast_invite";
   name: string;
   subject: string;
-  body_html: string;
+  html: string;
   category: string | null;
 };
 
@@ -51,31 +50,36 @@ type Props = {
   kind: BrandedAudienceKind;
 };
 
-// Allow-list of template names per audience kind. Anything else is hidden.
-const DEVELOPER_ALLOWED = [
-  "Developer · Registration",
-  "Developer · Registration Follow-up",
+const TEMPLATE_META: Record<Template["variant"], { name: string; category: string }> = {
+  developer_registration: { name: "Developer · Registration", category: "Developer" },
+  developer_confirm_registered: { name: "Developer · Registration Follow-up", category: "Developer" },
+  brokerage_partnership_intro: { name: "Brokerage · Registration", category: "Brokerage" },
+  brokerage_breakfast_invite: { name: "Brokerage · Breakfast Briefing", category: "Brokerage" },
+};
+
+const DEVELOPER_VARIANTS: Template["variant"][] = [
+  "developer_registration",
+  "developer_confirm_registered",
 ];
-const BROKERAGE_ALLOWED = [
-  "Brokerage · Breakfast Briefing",
-  "Brokerage · Registration",
-  "Brokerage · Registration Follow-up",
+const BROKERAGE_VARIANTS: Template["variant"][] = [
+  "brokerage_partnership_intro",
+  "brokerage_breakfast_invite",
 ];
 
 async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   if (kind === "developers") {
     const { data } = await (supabase as any)
-      .from("developers")
-      .select("id, name, slug, logo_url, admin_email, registration_status")
-      .order("name")
+      .from("crm_developer_registry")
+      .select("id, developer_name, developer_email, logo_url, status, country, website, source")
+      .order("developer_name")
       .limit(2000);
     const mapped = (data ?? []).map((r: any) => ({
       id: String(r.id),
-      name: r.name || r.slug || "Developer",
-      email: r.admin_email || null,
-      meta: r.slug || null,
+      name: r.developer_name || "Developer",
+      email: r.developer_email || null,
+      meta: r.country || r.website || r.source || null,
       logoUrl: r.logo_url || null,
-      registrationStatus: r.registration_status || "not_registered",
+      registrationStatus: r.status || "not_started",
     }));
     const deduped = new Map<string, Recipient>();
     for (const r of mapped) {
@@ -102,48 +106,38 @@ async function loadRecipients(kind: BrandedAudienceKind): Promise<Recipient[]> {
   }));
 }
 
-function normalizeTemplateKey(template: Template) {
-  return `${template.category || "Template"}::${template.name}`.trim().toLowerCase();
-}
-
-function normalizeSubjectKey(template: Template) {
-  return `${template.category || "Template"}::${template.subject}`.trim().toLowerCase().replace(/\s+/g, " ");
-}
-
 function isDeveloperRegistrationCampaign(kind: BrandedAudienceKind, template: Template | null | undefined) {
-  return kind === "developers" && template?.name === "Developer · Registration";
+  return kind === "developers" && template?.variant === "developer_registration";
 }
 
 async function loadTemplates(kind: BrandedAudienceKind): Promise<Template[]> {
-  const category = kind === "developers" ? "Developer" : "Brokerage";
-  const allowed = kind === "developers" ? DEVELOPER_ALLOWED : BROKERAGE_ALLOWED;
+  const allowed = kind === "developers" ? DEVELOPER_VARIANTS : BROKERAGE_VARIANTS;
 
-  const selectFields = "id, owner_id, name, subject, body_html, category, updated_at";
-  const { data } = await (supabase as any)
-    .from("branded_email_templates")
-    .select(selectFields)
-    .eq("category", category)
-    .in("name", allowed)
-    .order("updated_at", { ascending: false })
-    .limit(120);
+  const { data, error } = await (supabase as any)
+    .from("crm_email_templates")
+    .select("variant, subject, html, updated_at")
+    .in("variant", allowed)
+    .order("updated_at", { ascending: false });
 
-  const source = (data ?? []) as Template[];
+  if (error) throw error;
+  const byVariant = new Map<string, any>();
+  for (const row of data ?? []) {
+    if (!byVariant.has(row.variant)) byVariant.set(row.variant, row);
+  }
 
-  // Dedupe by (category, name) and then subject — same template exists per owner_id in DB.
-  const seenNames = new Set<string>();
-  const seenSubjects = new Set<string>();
-  const dedup = source.filter((template) => {
-    const nameKey = normalizeTemplateKey(template);
-    const subjectKey = normalizeSubjectKey(template);
-    if (seenNames.has(nameKey) || seenSubjects.has(subjectKey)) return false;
-    seenNames.add(nameKey);
-    seenSubjects.add(subjectKey);
-    return true;
-  });
-
-  // Return in the exact allow-list order so Briefing / Registration lead.
   return allowed
-    .map((n) => dedup.find((t) => t.name === n))
+    .map((variant) => {
+      const row = byVariant.get(variant);
+      if (!row) return null;
+      const meta = TEMPLATE_META[variant];
+      return {
+        variant,
+        name: meta.name,
+        subject: row.subject,
+        html: row.html,
+        category: meta.category,
+      } satisfies Template;
+    })
     .filter((t): t is Template => Boolean(t));
 }
 
@@ -160,7 +154,11 @@ function personalizeTemplate(html: string, sampleName = "Developer Team") {
   return html
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
+      .replace(/\{\{salutation\}\}/g, sampleName)
+      .replace(/\{\{contact_first_name\}\}/g, "Team")
+      .replace(/\{\{contact_full_name\}\}/g, sampleName)
     .replace(/\{\{registration_package_link\}\}/g, REGISTRATION_PACKAGE_LINK)
+      .replace(/\{\{drive_url\}\}/g, REGISTRATION_PACKAGE_LINK)
     .replace(/Jane Bou Jaoude/gi, SENDER.name)
     .replace(/Founder\s*&\s*CEO/gi, SENDER.title)
     .replace(/contact@jbj\.ae/gi, SENDER.email)
@@ -172,6 +170,7 @@ function personalizeSubject(subject: string, sampleName = "Developer Team") {
   return subject
     .replace(/\{\{developer_name\}\}/g, sampleName)
     .replace(/\{\{brokerage_name\}\}/g, sampleName)
+      .replace(/\{\{project_name\}\}/g, "Citi Developer")
     .replace(/jbj\.ae/gi, "JBJ.AE")
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
@@ -193,11 +192,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   const [audienceSearch, setAudienceSearch] = useState("");
   const [testEmail, setTestEmail] = useState("infoo.jane@gmail.com");
   const [sending, setSending] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
     let cancelled = false;
     setLoading(true);
+    setLoadError(null);
     setSelectedTemplateId(null);
     setAudienceSearch("");
     Promise.all([loadRecipients(kind), loadTemplates(kind)])
@@ -205,12 +206,21 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         if (cancelled) return;
         setRecipients(r);
         setTemplates(t);
-        setSelectedTemplateId(t[0]?.id ?? null);
+        setSelectedTemplateId(t[0]?.variant ?? null);
         const firstTemplate = t[0] ?? null;
         const defaultAudience = isDeveloperRegistrationCampaign(kind, firstTemplate)
           ? r.filter((x) => x.registrationStatus !== "registered")
           : r;
         setSelectedIds(new Set(defaultAudience.map((x) => x.id)));
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        const message = e?.message || "Could not load templates and audience.";
+        setLoadError(message);
+        toast.error(message);
+        setRecipients([]);
+        setTemplates([]);
+        setSelectedIds(new Set());
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -221,7 +231,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
   }, [open, kind]);
 
   const selectedTemplate = useMemo(
-    () => templates.find((t) => t.id === selectedTemplateId) || null,
+    () => templates.find((t) => t.variant === selectedTemplateId) || null,
     [templates, selectedTemplateId]
   );
 
@@ -270,20 +280,14 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     }
     setSending(true);
     try {
-      const bodyText = stripHtml(personalizeTemplate(selectedTemplate.body_html, "Test Developer"));
-      const { error } = await (supabase as any).functions.invoke("send-owner-email", {
-        body: {
-          to: testEmail.trim(),
-            subject: `[TEST · ${kind}] ${personalizeSubject(selectedTemplate.subject, "Test Developer")}`,
-          body: bodyText,
-          senderName: SENDER.name,
-          senderTitle: SENDER.title,
-          senderEmail: SENDER.email,
-          account: "company",
-          useResend: true,
-        },
-      });
+      const sampleName = kind === "developers" ? "Test Developer" : "Test Brokerage";
+      const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
+      const body = kind === "developers"
+        ? { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testDeveloperName: sampleName, subjectOverride: `[TEST] ${personalizeSubject(selectedTemplate.subject, sampleName)}` }
+        : { variant: selectedTemplate.variant, testRecipient: testEmail.trim(), testBrokerageName: sampleName, subjectOverride: `[TEST] ${personalizeSubject(selectedTemplate.subject, sampleName)}` };
+      const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
       if (error) throw error;
+      if (data?.error) throw new Error(data.message || data.error);
       toast.success(`Test sent to ${testEmail} — template "${selectedTemplate.name}"`);
     } catch (e: any) {
       toast.error(`Test send failed: ${e?.message || "unknown error"}`);
@@ -309,20 +313,13 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
     setSending(true);
     try {
       for (const r of selectedRecipients.slice(0, 50)) {
-        const bodyText = stripHtml(personalizeTemplate(selectedTemplate.body_html, r.name));
-        const { error } = await (supabase as any).functions.invoke("send-owner-email", {
-          body: {
-            to: r.email,
-            subject: personalizeSubject(selectedTemplate.subject, r.name),
-            body: bodyText,
-            senderName: SENDER.name,
-            senderTitle: SENDER.title,
-            senderEmail: SENDER.email,
-            account: "company",
-            useResend: true,
-          },
-        });
+        const functionName = kind === "developers" ? "crm-send-developer-registration" : "crm-send-brokerage-outreach";
+        const body = kind === "developers"
+          ? { developerId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true }
+          : { brokerageId: r.id, variant: selectedTemplate.variant, overrideEmail: r.email, silent: true };
+        const { error, data } = await (supabase as any).functions.invoke(functionName, { body });
         if (error) throw error;
+        if (data?.error) throw new Error(data.message || data.error);
       }
       toast.success(`Queued ${selectedRecipients.length} ${kind} for "${selectedTemplate.name}".`);
     } catch (e: any) {
@@ -374,12 +371,12 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {templates.map((t) => {
-                  const active = t.id === selectedTemplateId;
+                    const active = t.variant === selectedTemplateId;
                   return (
                     <button
-                      key={t.id}
+                      key={t.variant}
                       type="button"
-                      onClick={() => setSelectedTemplateId(t.id)}
+                      onClick={() => setSelectedTemplateId(t.variant)}
                       className={`text-left p-4 rounded-lg border transition ${
                         active
                           ? "border-[#064E3B] bg-[#064E3B]/5 ring-2 ring-[#064E3B]/30"
@@ -431,7 +428,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 Clear
               </button>
               <div className="relative flex-1 min-w-[220px]">
-                <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#4B5D55]" />
+                    <Search className="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#064E3B]" />
                 <Input
                   type="text"
                   value={audienceSearch}
@@ -446,7 +443,11 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
             </div>
 
             <div className="border border-emerald-900/15 rounded-lg overflow-hidden bg-white">
-              {loading ? (
+            {loadError ? (
+              <div className="p-8 text-center text-[#7A1F1F] border border-dashed border-red-900/20 rounded-lg bg-red-50">
+                {loadError}
+              </div>
+            ) : loading ? (
                 <div className="p-6 flex items-center gap-2 text-sm text-[#4B5D55]"><Loader2 className="size-4 animate-spin" /> Loading…</div>
               ) : (
                 <ScrollArea className="h-[300px]">
@@ -467,7 +468,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                                 alt={`${r.name} logo`}
                                 name={r.name}
                                 variant="tile"
-                                renderFallback
+                                renderFallback={false}
                                 className="!size-8 !rounded-md !border-emerald-900/15 !bg-white !p-1"
                               />
                             ) : (
@@ -508,7 +509,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <div className="px-4 py-3 border-b border-emerald-900/10 bg-[#F8FAF9]">
                   <p className="text-[11px] text-[#4B5D55] uppercase tracking-wider">Subject</p>
                   <p className="font-bold text-[#0F1A16]">
-                    {personalizeSubject(selectedTemplate.subject, recipients.find((r) => selectedIds.has(r.id))?.name)}
+                    {personalizeSubject(selectedTemplate.subject, recipients.find((r) => selectedIds.has(r.id))?.name || (kind === "developers" ? "Developer Team" : "Brokerage Team"))}
                   </p>
                   <p className="text-[11px] text-[#4B5D55] mt-1">
                     Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
@@ -517,7 +518,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
                 <ScrollArea className="h-[320px]">
                   <div
                     className="p-6 prose prose-sm max-w-none text-[#0F1A16]"
-                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.body_html, recipients.find((r) => selectedIds.has(r.id))?.name) }}
+                    dangerouslySetInnerHTML={{ __html: personalizeTemplate(selectedTemplate.html, recipients.find((r) => selectedIds.has(r.id))?.name || (kind === "developers" ? "Developer Team" : "Brokerage Team")) }}
                   />
                 </ScrollArea>
               </div>

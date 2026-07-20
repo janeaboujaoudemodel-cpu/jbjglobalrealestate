@@ -192,7 +192,7 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-listing-admin": "/owner/listing-admin",
   "owner-inbox": "/owner/inbox",
   "owner-team-chat": "/owner/team-chat",
-  "owner-relationships": "/owner/crm/relationship-hub",
+  "owner-relationships": "/owner/crm/jbj/owner-relationships",
   "owner-founder-assistant": "/owner/founder-assistant",
   "owner-recommendations": "/owner/recommendations",
   "owner-ai-home-finder": "/owner/applications/ai-home-finder",
