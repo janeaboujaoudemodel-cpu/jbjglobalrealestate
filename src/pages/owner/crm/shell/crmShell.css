@@ -4352,3 +4352,61 @@ textarea.jc-form__input { height: auto; min-height: 72px; resize: vertical; padd
   -webkit-text-fill-color: #FFFFFF !important;
   border-color: rgba(6,78,59,0.72) !important;
 }
+
+/* PASS 157 — header-contained command overlay final ink exception.
+   The overlay is rendered as a child of .jc-header, so it needs higher
+   specificity than the chrome-wide white-ink lock above. */
+.jc-app .jc-header .jc-search-overlay .jc-search-overlay__panel :is(
+  .jc-search-overlay__chip:not(:hover),
+  .jc-search-overlay__row:not(:hover),
+  .jc-search-overlay__bar,
+  .jc-search-overlay__bar input,
+  .jc-search-overlay__close,
+  .jc-search-overlay__kbd,
+  .jc-search-overlay__footer kbd
+),
+.jc-app .jc-header .jc-search-overlay .jc-search-overlay__panel :is(
+  .jc-search-overlay__chip:not(:hover),
+  .jc-search-overlay__row:not(:hover),
+  .jc-search-overlay__bar,
+  .jc-search-overlay__footer kbd
+) :is(span, div, strong, b, small, kbd) {
+  color: #0F1A16 !important;
+  -webkit-text-fill-color: #0F1A16 !important;
+}
+.jc-app .jc-header .jc-search-overlay .jc-search-overlay__panel :is(
+  .jc-search-overlay__chip:not(:hover),
+  .jc-search-overlay__row:not(:hover),
+  .jc-search-overlay__bar,
+  .jc-search-overlay__close,
+  .jc-search-overlay__kbd
+) :is(svg, path, circle, rect, line, polyline, polygon, ellipse) {
+  color: #064E3B !important;
+  stroke: #064E3B !important;
+  -webkit-text-fill-color: #064E3B !important;
+  filter: none !important;
+}
+.jc-app .jc-header .jc-search-overlay .jc-search-overlay__panel :is(
+  .jc-search-overlay__section-title,
+  .jc-search-overlay__empty,
+  .jc-search-overlay__row-sub,
+  .jc-search-overlay__footer,
+  .jc-search-overlay__footer span
+) {
+  color: #43524C !important;
+  -webkit-text-fill-color: #43524C !important;
+}
+.jc-app .jc-header .jc-search-overlay .jc-search-overlay__bar input::placeholder {
+  color: #6B7A74 !important;
+  -webkit-text-fill-color: #6B7A74 !important;
+}
+.jc-app .jc-header .jc-search-overlay .jc-search-overlay__panel :is(
+  .jc-search-overlay__chip:hover,
+  .jc-search-overlay__row:hover,
+  .jc-search-overlay__chip:hover *,
+  .jc-search-overlay__row:hover *
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
