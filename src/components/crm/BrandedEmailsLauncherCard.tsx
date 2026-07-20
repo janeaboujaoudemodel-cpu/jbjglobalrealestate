@@ -8,7 +8,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, Sparkles, Send, Users } from "lucide-react";
+import { Mail } from "lucide-react";
 import BrandedEmailsPanel, { type BrandedAudienceKind } from "./branded-emails/BrandedEmailsPanel";
 
 type Variant = "owner" | "broker" | "developer";
@@ -18,28 +18,24 @@ const COPY: Record<Variant, {
   title: string;
   blurb: string;
   kind: BrandedAudienceKind;
-  primaryLabel: string;
 }> = {
   owner: {
     eyebrow: "Owner Backend · Campaigns",
     title: "Branded Emails",
-    blurb: "Compose, curate audience and send JBJ-branded campaigns to developers or brokerages — templates, select-all with search-based include / exclude, live preview and test send, all in place.",
+    blurb: "Compose, curate audience and send JBJ-branded campaigns to developers or brokerages — in place.",
     kind: "developers",
-    primaryLabel: "Open campaigns",
   },
   broker: {
     eyebrow: "Broker Portal · Outreach",
     title: "Branded Emails",
-    blurb: "Reach brokerages with JBJ-branded templates. Select all, search to include or exclude, preview, and send a test — no redirects.",
+    blurb: "Reach brokerages with JBJ-branded templates. Preview, test, then live — no redirects.",
     kind: "brokerages",
-    primaryLabel: "Open campaigns",
   },
   developer: {
     eyebrow: "Developer Portal · Campaigns",
     title: "Branded Emails",
-    blurb: "Reach developers with launch, briefing, and follow-up templates. Select all, search to include or exclude, preview, test then live — no redirects.",
+    blurb: "Reach developers with registration and follow-up templates. Preview, test, then live — no redirects.",
     kind: "developers",
-    primaryLabel: "Open campaigns",
   },
 };
 
@@ -67,12 +63,6 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
             <p className="text-[10px] uppercase tracking-[0.22em] font-black text-[#064E3B]">{c.eyebrow}</p>
             <h3 className="text-xl md:text-2xl font-black text-[#0F1A16] tracking-tight">{c.title}</h3>
             <p className="text-sm text-[#4B5D55] mt-1 max-w-2xl">{c.blurb}</p>
-            <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-[#4B5D55]">
-              <span className="inline-flex items-center gap-1"><Sparkles className="size-3.5 text-[#064E3B]" /> AI drafts</span>
-              <span className="inline-flex items-center gap-1"><Mail className="size-3.5 text-[#064E3B]" /> From contact@jbj.ae</span>
-              <span className="inline-flex items-center gap-1"><Send className="size-3.5 text-[#064E3B]" /> Test → Live locked</span>
-              <span className="inline-flex items-center gap-1"><Users className="size-3.5 text-[#064E3B]" /> Select all · include · exclude</span>
-            </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 shrink-0">
             {variant === "owner" && (
@@ -92,7 +82,7 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
               className="bg-[#064E3B] hover:bg-[#053528] !text-white"
               onClick={() => openWith(c.kind)}
             >
-              <Mail className="size-4 mr-1 !text-white" /> {c.primaryLabel}
+              <Mail className="size-4 mr-1 !text-white" /> Send email
             </Button>
           </div>
         </div>

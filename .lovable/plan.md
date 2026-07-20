@@ -1,92 +1,90 @@
-# Hub contrast + sidebar search + in-place Branded Emails
 
-Four fixes, all inside the JBJ Hub shell. No touching Zoho-mirrored pages.
+Scoped strictly to the JBJ Hub (`/owner/crm/jbj/*`). No changes to the legacy owner backend, the Relationships Hub composer, or any front-end site pages.
 
-## 1. Contrast on header + search overlay
+## 1. Launcher card (Developer / Broker / Owner portals)
 
-**Header (`CrmHeader.tsx` + `crmShell.css`)**
-- Force the header action icons (Plus, Wand, Bell, Calendar, Store, Settings, Grip, avatar) to solid white on emerald — no faded opacity, stroke 2.25, size 20.
-- Plus button becomes a filled emerald→gold metallic tile with a solid white `+` (currently faded).
-- `⌘K` badge in the search pill: emerald chip with white text.
+File: `src/components/crm/BrandedEmailsLauncherCard.tsx`
 
-**Search overlay (`CrmSearchOverlay.tsx` + css)**
-- Input text color: pure `#0F1F17` on white, placeholder `Search leads, developers, projects, brokers, areas…` in `#4B5D55`.
-- Search glass icon: emerald `#064E3B`, not faded.
-- "Jump to module" chips: white bg, emerald border, emerald icon + emerald text (currently reads as faded/invisible emerald-on-emerald).
-- Loading/empty states: emerald text on white.
-- Result row hover: soft emerald tint, title black, subtitle `#4B5D55`.
+- Remove the four mini-status chips ("AI drafts", "From contact@jbj.ae", "Test → Live locked", "Select all · include · exclude") from the launcher card. These belong inside the panel, not on the surface.
+- Keep only: eyebrow, title, one-line blurb, and the CTA button. Rename primary CTA "Open campaigns" → "Send email" (per user).
+- Fix "Registered" mislabel origin: the launcher stops rendering status; the developer card status logic is a separate concern (out of scope of this branded-emails task — user's demand about the developer card "Registered" labels will be flagged as a follow-up in section 6).
 
-## 2. Search bar at the top of the vertical sidebar
+## 2. Branded Emails panel — merge redundant controls, restore Relationship-Hub feature parity
 
-Add a persistent search field as the first row of `CrmSidebar.tsx`, directly under the "Hub" workspace switcher:
-- Full-width emerald-tinted input with a white search icon, placeholder `Search Hub…`.
-- Click / focus / typing / `⌘K` all open the same `CrmSearchOverlay` (single source of truth — no duplicate search logic).
-- In collapsed sidebar state, it shrinks to a single search-icon button that still opens the overlay.
-- Keep the header `⌘K` search pill (user said "either move it, either keep it but fix contrast") — both entry points feed the same overlay.
+File: `src/components/crm/branded-emails/BrandedEmailsPanel.tsx` + `src/index.css` (PASS 175 block).
 
-## 3. Fix the emerald "Group not created" pill under Open profile
+Layout & tabs
+- 4 tabs stay: Template · Audience · Preview · Send. Fix contrast:
+  - Active tab pill: emerald bg, pure white text AND white icon (`svg *`). Inactive: dark ink on ivory. Locked with `!` utility on the trigger and a `[data-state=active] svg { color:#fff !important }` rule.
+  - "Select all (630)" active pill and "Custom (n)" pill: white text always; hover keeps emerald, not champagne/mint.
 
-On the Developer Portal directory cards, the emerald `GROUP NOT CREATED` chip currently renders with black text on emerald (unreadable). Lock it to white text on emerald in `DeveloperDirectory.tsx` via the emerald-surface white-text contrast guard already used elsewhere.
+Template tab
+- Deduplicate templates already handled by `normalizeTemplateKey`; add a second dedupe by `subject` to remove residual duplicates.
+- Category rules:
+  - Developer variant: only show templates in categories `Developer Registration`, `Developer Registration Follow-up`. Hide "Briefing follow-up" for developers.
+  - Brokerage variant: show `Brokerage Breakfast Briefing`, `Brokerage Registration`, `Brokerage Registration Follow-up` (Briefing is priority/default selection).
+- Seed / rename templates in the DB accordingly (migration in section 5).
 
-## 4. Branded Emails — in-place, restructured, scalable
+Audience tab (restore Relationship-Hub UX)
+- Show the full paginated recipient list (developers or brokerages) with:
+  - Logo/avatar (developer `logo_url` via `DeveloperLogo`, brokerage initial fallback)
+  - Name, meta (slug/emirate), email hint
+  - Checkbox per row (tick/untick)
+  - Sticky top bar: Select all / Clear / search input filtering the visible list live
+  - Right rail shows count of selected + chip strip of first N with X to remove.
+- Preserve include/exclude semantics: audience is a Set of included IDs; "Select all" fills the Set with all recipients; typing filters the visible list, not the Set.
 
-**Kill the redirect.** Rewrite `BrandedEmailsLauncherCard.tsx` so it no longer links to `/owner/crm/relationship-hub`. Replace it with a full in-place `<BrandedEmailsPanel>` that opens as a large right-side sheet (same shell as CRM record drawers) — everything stays inside `/owner/crm/jbj/owner-developers` (or the brokerage equivalent).
+Preview tab
+- Preview reflects the **currently selected template** — bug today: it always shows Partnership Introduction because a fallback constant is used. Fix by binding the preview iframe/html to `selectedTemplate.body_html` with variables substituted.
 
-**Fix the vertical text bug.** The card currently forces "Branded Emails" into a narrow flex column; rebuild the header as a single-row hero (icon · title · eyebrow) with `min-w-0` and no `md:flex-col`, and drop the champagne gradient in favor of the Hub emerald/white surface so it matches the rest of the shell.
+Send tab — remove duplication
+- Delete the standalone "Audience quick controls" block (Select all / Custom + search) that duplicates the Audience tab.
+- Keep one compact recap row: Template · Audience count · From address. Inline mini-preview thumbnail on the right (small `iframe` scaled) so the user sees the template within the Send tab — not a separate section.
+- Inputs:
+  - "Send test to <email>" — text color forced black on white (`!text-[#0F1A16] !bg-white`), placeholder gray. Hover on the field must stay white/emerald outline, never mint/champagne.
+  - Single primary action: "Send live to N recipients" (only one, not two). Include/Exclude dropdown attached to a small "Adjust audience" split control that opens the Audience tab in place.
+- Remove the "Send live to 630 developers" second/duplicate button.
 
-**New panel structure (shared by developer + brokerage variants):**
+## 3. Hub Home (`/owner/crm/jbj`) polish
 
-```text
-┌─ Branded Emails ──────────────────────────────┐
-│ Template picker  |  Audience  |  Preview  |  Send │
-├───────────────────────────────────────────────┤
-│ 1. Template                                        │
-│    Registered / Not Registered / Launch / Briefing │
-│    (thumbnails, from existing template library)    │
-├───────────────────────────────────────────────┤
-│ 2. Audience                                        │
-│    ● Select all  ● Registered only  ● Custom       │
-│    [ 🔍 Search developer / brokerage to include ]  │
-│    [ 🔍 Search to exclude ]                        │
-│    ┌ Included (▣ 612) ──── Excluded (▢ 4) ┐       │
-│    │ chips, removable, virtualized list    │       │
-│    └─────────────────────────────────────┘        │
-├───────────────────────────────────────────────┤
-│ 3. Preview  (rendered email w/ real signature)     │
-│ 4. Send test → Send live  (locked flow)            │
-└───────────────────────────────────────────────┘
-```
+Files: `src/pages/owner/crm/HomeOverview.tsx` (or equivalent Home content), `src/pages/owner/crm/shell/crmShell.css`.
 
-- Includes: default all developers/brokerages, "Select all", search-add, chip-remove.
-- Excludes: search-driven exclusion list; excluded rows greyed in the include list.
-- Counts update live: `Sending to N of Total`.
-- Reuses the existing template library + campaign send edge function that Relationships Hub already wires — no duplicate infra, just a new panel UI on top.
-- Developer variant queries `developers`; brokerage variant queries `crm_brokerages`. Same panel, one prop.
+- "Distribute now" button: replace gold/yellow with emerald metallic + white ink (matches brand). Same call-to-action, new palette.
+- "+" square button next to "All Open Tasks" (and any sibling plus buttons in Hub Home cards): make it a balanced square (`h-9 w-9`), emerald bg, white plus icon on both idle and hover states. Audit all Hub `Plus`-icon buttons and apply the same primitive.
 
-**Where the panel mounts:**
-- Developer Portal card → in-place sheet inside `/owner/crm/jbj/owner-developers`.
-- Brokerage Portal card → in-place sheet inside `/owner/crm/jbj/owner-brokerage`.
-- Owner backend card variants → same panel, same shell.
+## 4. Routing — no more legacy backend redirects
 
-## 5. E2E validation (Playwright, screenshot proof)
+- Audit `src/routes/OwnerRoutes.tsx` and any redirect from `/owner` to old champagne surface. When an owner refreshes any Hub page, they must land on `/owner/crm/jbj/...`. Any `Navigate` sending owners to `/owner` root (legacy) is repointed to `/owner/crm/jbj`.
+- Remove the "Preview last saved version" flash routing to the old backend if it still targets legacy paths.
 
-For every change above, capture screenshots at 1280×1800:
-1. Header at rest — all icons solid white, `+` filled tile.
-2. Search overlay open with query "citi" — chips readable, results grouped, loading state visible.
-3. Sidebar search field visible (expanded + collapsed states).
-4. Developer Portal card with `GROUP NOT CREATED` chip — white text on emerald.
-5. Branded Emails panel:
-   - Panel opens in place (URL still `/owner/crm/jbj/owner-developers`).
-   - Select-all → 616 included.
-   - Search-exclude "citi" → Citi Developers moves to Excluded, count becomes 615.
-   - Preview tab renders template.
-   - Send-test button visible + wired.
-6. Repeat the panel flow for the Brokerage variant.
+## 5. Database migration (branded email templates)
 
-All screenshots saved to `/tmp/browser/hub-fixes/` and reviewed before I claim done.
+Single migration:
+- Insert / upsert (idempotent by name+category) the correct developer / brokerage templates:
+  - `Developer · Registration`
+  - `Developer · Registration Follow-up`
+  - `Brokerage · Breakfast Briefing`
+  - `Brokerage · Registration`
+  - `Brokerage · Registration Follow-up`
+- Soft-delete or unpublish stale "Briefing follow-up" / "Partnership Introduction" duplicates under the Developer category.
+
+## 6. Explicitly deferred (called out to user, NOT changed in this plan)
+
+- Developer card `Registered / Group not created` badge accuracy — needs a separate audit of `developers.registration_status` to identify the true handful (Shobha, MR, HRE, etc.) that are actually registered and clear the rest. I'll surface a separate plan for that so this task doesn't sprawl.
+
+## 7. Validation (mandatory before claiming done)
+
+Playwright, headless Chromium at 1280×1800:
+1. Load `/owner/crm/jbj/owner-developers`, screenshot launcher card — chips gone, single CTA.
+2. Click "Send email" → panel opens.
+3. Cycle Template / Audience / Preview / Send — screenshot each. Verify: active-tab icons & text white; no duplicate audience controls in Send; template preview matches selected template; send-test input text is black-on-white.
+4. In Audience tab: verify full list with logos + checkboxes, search filters live.
+5. Load `/owner/crm/jbj` — screenshot Home: Distribute-now is emerald not gold, `+` next to All Open Tasks is square with white icon.
+6. Refresh `/owner/crm/jbj/owner-developers` — verify no redirect to legacy `/owner`.
+
+Attach all screenshots to the closing message; do not claim complete without them.
 
 ## Technical notes
-
-- Files touched: `src/pages/owner/crm/shell/CrmHeader.tsx`, `CrmSidebar.tsx`, `CrmSearchOverlay.tsx`, `crmShell.css`, `src/components/crm/BrandedEmailsLauncherCard.tsx`, new `src/components/crm/branded-emails/BrandedEmailsPanel.tsx` (+ audience picker + template picker subcomponents), `src/pages/developer-hub-admin/DeveloperDirectory.tsx` for the pill fix.
-- No schema changes. Uses existing `branded_email_templates`, `email_send_log`, `email_send_quota` tables and the existing send edge function.
-- No changes to Zoho-mirrored CRM pages (Leads/Deals/Contacts/Accounts/Tasks/Meetings/etc).
+- All contrast locks land in `src/index.css` `PASS 175 — Branded Emails` and a new small `PASS 176 — Hub Home Buttons`.
+- No touching of `_shared/transactional-email-templates/` (those are outbound react-email templates, unrelated).
+- No changes to legacy Relationships Hub composer — it already routes to the same `BrandedEmailsPanel` via the launcher.
