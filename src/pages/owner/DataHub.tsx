@@ -250,8 +250,65 @@ export default function DataHub() {
               ))}
             </div>
           </TabsContent>
+
+          <TabsContent value="calls" className="mt-6">
+            <Card className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-semibold">Recent calls ({calls.length})</h3>
+                <Button variant="outline" size="sm" onClick={refresh}><RefreshCw className="h-4 w-4 mr-2" />Refresh</Button>
+              </div>
+              {loading ? (
+                <Skeleton className="h-40 w-full" />
+              ) : calls.length === 0 ? (
+                <p className="text-sm text-neutral-600 py-8 text-center">No calls logged yet. Use the Call button on any lead to record and AI-analyze.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-neutral-50 text-left">
+                      <tr>
+                        <th className="p-2">Lead</th>
+                        <th className="p-2">Broker</th>
+                        <th className="p-2">Duration</th>
+                        <th className="p-2">AI score</th>
+                        <th className="p-2">Summary</th>
+                        <th className="p-2">When</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {calls.map((c) => (
+                        <tr
+                          key={c.id}
+                          className="border-t hover:bg-neutral-50 cursor-pointer"
+                          onClick={() => { setOpenCallId(c.id); setOpenCallLead(c.lead_name ?? null); }}
+                        >
+                          <td className="p-2">{c.lead_name ?? c.phone_number ?? "—"}</td>
+                          <td className="p-2 text-neutral-600">{c.broker_name ?? "—"}</td>
+                          <td className="p-2 text-neutral-600">{c.duration_seconds ? `${Math.floor(c.duration_seconds / 60)}m ${(c.duration_seconds % 60).toString().padStart(2, "0")}s` : "—"}</td>
+                          <td className="p-2">
+                            {typeof c.ai_score === "number" ? (
+                              <span className="inline-flex items-center gap-1 text-[#064E3B] font-medium"><Star className="h-3 w-3" />{c.ai_score}</span>
+                            ) : (
+                              <span className="text-neutral-400">—</span>
+                            )}
+                          </td>
+                          <td className="p-2 text-neutral-700 max-w-md truncate">{c.ai_summary ?? (c.ai_processed_at ? "—" : "Pending AI…")}</td>
+                          <td className="p-2 text-neutral-500 whitespace-nowrap">{new Date(c.created_at).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
+      <CallDetailSheet
+        callId={openCallId}
+        leadName={openCallLead}
+        open={!!openCallId}
+        onOpenChange={(v) => { if (!v) { setOpenCallId(null); setOpenCallLead(null); } }}
+      />
     </div>
   );
 }
