@@ -52,6 +52,16 @@ function resolveAppAssetUrl(src?: string): string | undefined {
   return resolved;
 }
 
+function shouldUseInitialsFallback(alt?: unknown): boolean {
+  const value = typeof alt === "string" ? alt.toLowerCase() : "";
+  // Project/property media must never degrade into fake code tiles like AR2,
+  // AR3, BR1, etc. Those codes came from photo alt text, not real media.
+  if (/\b(image|photo|picture|thumbnail|gallery|cover|render|view|project)\b/.test(value)) {
+    return false;
+  }
+  return true;
+}
+
 export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
   ({ fallbackSrc, onError, loggerComponent, loggerContext, fetchPriority: explicitFetchPriority, ...props }, ref) => {
     const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
@@ -65,6 +75,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
       ? ({ fetchpriority: fetchPriority } as any)
       : {};
 
+    const canUseInitialsFallback = shouldUseInitialsFallback(props.alt);
     const champagneFor = (img: HTMLImageElement) =>
       buildChampagneInitialsDataUri({
         alt: typeof props.alt === "string" ? props.alt : "",
@@ -87,7 +98,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
             logImageFailure({ src: img.src, component, reason: "zero-dimensions", context: baseContext });
             if (resolvedFallback && img.src !== resolvedFallback) {
               img.src = resolvedFallback;
-            } else if (img.getAttribute("data-img-recovered") !== "initials" && !img.hasAttribute("data-no-fallback")) {
+            } else if (canUseInitialsFallback && img.getAttribute("data-img-recovered") !== "initials" && !img.hasAttribute("data-no-fallback")) {
               img.setAttribute("data-img-recovered", "initials");
               img.src = champagneFor(img);
             }
@@ -99,7 +110,7 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
           const img = e.currentTarget;
           if (resolvedFallback && img.src !== resolvedFallback) {
             img.src = resolvedFallback;
-          } else if (img.getAttribute("data-img-recovered") !== "initials" && !img.hasAttribute("data-no-fallback")) {
+          } else if (canUseInitialsFallback && img.getAttribute("data-img-recovered") !== "initials" && !img.hasAttribute("data-no-fallback")) {
             img.setAttribute("data-img-recovered", "initials");
             img.src = champagneFor(img);
           }
