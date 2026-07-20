@@ -64,26 +64,37 @@ export default function BrandedEmailsLauncherCard({ variant = "owner" }: { varia
             <h3 className="text-xl md:text-2xl font-black text-[#0F1A16] tracking-tight">{c.title}</h3>
             <p className="text-sm text-[#4B5D55] mt-1 max-w-2xl">{c.blurb}</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+          <div data-branded-launcher-actions="true" className="flex flex-col sm:flex-row gap-2 shrink-0">
             {variant === "owner" && (
-              <Button
+              <button
                 type="button"
-                size="sm"
-                variant="outline"
-                className="border-[#064E3B]/40 text-[#064E3B] hover:bg-[#064E3B]/10"
                 onClick={() => openWith("brokerages")}
+                style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  padding: "8px 14px", borderRadius: 6, fontSize: 13, fontWeight: 700,
+                  background: "#FFFFFF", color: "#0F1A16",
+                  border: "1px solid rgba(6,78,59,0.4)",
+                  transform: "none", transition: "background 120ms ease",
+                  cursor: "pointer", whiteSpace: "nowrap",
+                }}
               >
                 Brokerages
-              </Button>
+              </button>
             )}
-            <Button
+            <button
               type="button"
-              size="sm"
-              className="bg-[#064E3B] hover:bg-[#053528] !text-white"
               onClick={() => openWith(c.kind)}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 6, justifyContent: "center",
+                padding: "8px 14px", borderRadius: 6, fontSize: 13, fontWeight: 700,
+                background: "#064E3B", color: "#FFFFFF",
+                border: "1px solid #064E3B",
+                transform: "none", transition: "background 120ms ease",
+                cursor: "pointer", whiteSpace: "nowrap",
+              }}
             >
-              <Mail className="size-4 mr-1 !text-white" /> Send email
-            </Button>
+              <Mail className="size-4" style={{ color: "#FFFFFF" }} /> Send email
+            </button>
           </div>
         </div>
       </Card>
