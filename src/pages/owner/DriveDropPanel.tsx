@@ -58,8 +58,8 @@ export default function DriveDropPanel() {
         },
       });
       if (error) throw error;
-      toast.success(`Analyzed — ${data?.summary?.matched ?? 0} matched · ${data?.summary?.new ?? 0} new`);
-      setEntityNames(""); setNotes("");
+      toast.success(`Analyzed — ${data?.summary?.matched ?? 0} matched · ${data?.summary?.new ?? 0} new · link saved`);
+      // NEVER clear the URL — the link stays in the input and in Recent submissions.
       load();
       if (data?.submission_id) setOpenId(data.submission_id);
     } catch (e: any) {

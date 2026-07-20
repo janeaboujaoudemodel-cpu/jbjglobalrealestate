@@ -187,7 +187,12 @@ function statusPill(status: string) {
 }
 
 function DevelopersView({ jobs }: { jobs: Job[] }) {
-  if (!jobs.length) return <Empty text="No Drive scans yet. Run enrichment from a developer profile or the Site Rebuild queue." />;
+  if (!jobs.length) return (
+    <div className="rounded-xl border border-dashed border-[#B89555]/40 bg-white/60 p-8 text-center text-sm text-[#1A1A1A]/70">
+      Drop a Drive folder above and it will appear here once processed. You can also attach a Drive
+      folder directly on any developer or project card — the link is saved permanently on the record.
+    </div>
+  );
   return (
     <div className="rounded-xl border border-[#B89555]/30 bg-white overflow-hidden">
       <table className="w-full text-sm">

@@ -24,6 +24,7 @@ import emaarCreekHarbourMasterplan from "@/assets/emaar-creek-harbour-masterplan
 import { getSafeDeveloperDescription } from "@/utils/developerContent";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import CompanyProfileCard from "@/components/developer/CompanyProfileCard";
+import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 import { buildPublicDeveloperFacts, buildPublicDeveloperNarrative, fieldToText, getDeveloperCustomFields, getVisibleExcelEntries, humanizeDeveloperFieldKey } from "@/utils/developerExcelFields";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
@@ -723,6 +724,12 @@ const DeveloperDetail = () => {
               <BrokerRequestAccessButton
                 developerId={developer.id}
                 developerName={developer.name}
+              />
+              <DriveLinkAttach
+                entityType="developer"
+                entityId={developer.id}
+                entityName={developer.name}
+                currentUrl={(developer as any).google_drive_url}
               />
             </div>
           </div>

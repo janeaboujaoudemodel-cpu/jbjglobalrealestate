@@ -29780,6 +29780,7 @@ export type Database = {
           developer_id: string | null
           developer_name: string | null
           down_payment_percent: number | null
+          drive_last_synced_at: string | null
           emirate: string | null
           enrichment_flags: Json
           expected_completion: string | null
@@ -29790,6 +29791,7 @@ export type Database = {
           floors: number | null
           furnished_status: string | null
           gallery_start_image_url: string | null
+          google_drive_url: string | null
           handover_date: string | null
           highlights: Json | null
           id: string
@@ -29898,6 +29900,7 @@ export type Database = {
           developer_id?: string | null
           developer_name?: string | null
           down_payment_percent?: number | null
+          drive_last_synced_at?: string | null
           emirate?: string | null
           enrichment_flags?: Json
           expected_completion?: string | null
@@ -29908,6 +29911,7 @@ export type Database = {
           floors?: number | null
           furnished_status?: string | null
           gallery_start_image_url?: string | null
+          google_drive_url?: string | null
           handover_date?: string | null
           highlights?: Json | null
           id?: string
@@ -30016,6 +30020,7 @@ export type Database = {
           developer_id?: string | null
           developer_name?: string | null
           down_payment_percent?: number | null
+          drive_last_synced_at?: string | null
           emirate?: string | null
           enrichment_flags?: Json
           expected_completion?: string | null
@@ -30026,6 +30031,7 @@ export type Database = {
           floors?: number | null
           furnished_status?: string | null
           gallery_start_image_url?: string | null
+          google_drive_url?: string | null
           handover_date?: string | null
           highlights?: Json | null
           id?: string

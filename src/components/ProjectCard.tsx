@@ -18,6 +18,7 @@ import { deriveHandover } from "@/utils/handoverDerivation";
 import { CardBadge, resolveSaleStatusLabel } from "@/components/ui/card-badge";
 import { useUserRole } from "@/hooks/useUserRole";
 import OwnerCardEditMenu from "@/components/cards/OwnerCardEditMenu";
+import DriveLinkAttach from "@/components/owner/DriveLinkAttach";
 import { CardPricePaymentRow } from "@/components/ui/card-price-payment-row";
 import { formatBedroomRange } from "@/utils/formatBedroomRange";
 
@@ -257,13 +258,20 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
       {/* Owner edit affordance — tucked under the actions stack so it never
           overlays the shortlist button. Owners only. */}
-      <div className="absolute top-3 right-3 z-30" data-no-contrast-guard>
+      <div className="absolute top-3 right-3 z-30 flex flex-col items-end gap-2" data-no-contrast-guard>
         <OwnerCardEditMenu
           projectId={project.id}
           slug={project.slug}
           saleStatus={project.status_label}
           showSaleStatus={(project as any).show_sale_status}
           className="mt-[110px]"
+        />
+        <DriveLinkAttach
+          entityType="project"
+          entityId={project.id}
+          entityName={project.name}
+          currentUrl={(project as any).google_drive_url}
+          compact
         />
       </div>
 
