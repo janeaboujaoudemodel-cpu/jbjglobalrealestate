@@ -67,6 +67,36 @@ const dedupePublicProjects = (projects: UnifiedProject[]) => {
   });
 };
 
+const hasText = (value: unknown) => typeof value === "string" && value.trim().length > 0;
+
+const projectCardQualityScore = (project: UnifiedProject) => {
+  let score = 0;
+  if (hasPublicPhoto(project)) score += 20;
+  if (project.developer?.logo_url) score += 18;
+  if (project.developer?.id || project.developer_id) score += 10;
+  if (typeof project.price_from === "number" && project.price_from > 0) score += 16;
+  if (hasText(project.description) || hasText(project.short_description)) score += 14;
+  if (hasText(project.handover_date) || hasText(project.expected_completion)) score += 10;
+  if (hasText(project.payment_plan) || project.payment_breakdown) score += 8;
+  if (project.is_featured) score += 6;
+  if (project.is_premium) score += 4;
+  return score;
+};
+
+const sortPublicProjectsForListing = (projects: UnifiedProject[]) =>
+  [...projects].sort((a, b) => {
+    const qa = projectCardQualityScore(a);
+    const qb = projectCardQualityScore(b);
+    if (qa !== qb) return qb - qa;
+    const fa = a.is_featured ? 1 : 0;
+    const fb = b.is_featured ? 1 : 0;
+    if (fa !== fb) return fb - fa;
+    const pa = a.is_premium ? 1 : 0;
+    const pb = b.is_premium ? 1 : 0;
+    if (pa !== pb) return pb - pa;
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
 // Legacy Project interface - keeping for backwards compatibility during transition
 export interface LegacyProject {
   id: string;
@@ -494,6 +524,7 @@ export function useProjects() {
  *            the full dataset shortly after.
  */
 export function useProjectsListing() {
+  const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["projects-listing"],
     staleTime: 10 * 60 * 1000,
@@ -502,7 +533,7 @@ export function useProjectsListing() {
       const LISTING_COLUMNS = `
         id, name, slug, description, location, price_from, price_to,
         bedrooms_min, bedrooms_max, size_min, size_max,
-        handover_date, payment_plan, amenities, status,
+        handover_date, expected_completion, payment_plan, payment_breakdown, amenities, status,
         is_featured, is_premium, is_sold_out,
         property_type_label, status_label, emirate,
         created_at, updated_at,
@@ -512,14 +543,37 @@ export function useProjectsListing() {
         total_units, available_units, down_payment_percent,
         roi_estimate, rental_yield_estimate, latitude, longitude,
           deleted_at,
-        developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url),
-        community:communities(id, name, slug),
-        images:project_images(image_url, display_order)
+        developer_id,
+        developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url, logo_bg_color),
+        community:communities(id, name, slug)
       `;
 
-      // Paginated fetch — Supabase caps at 1000 rows per request.
-      // Page through ALL published projects with a cover image so the
-      // listings count never silently shrinks as the catalog grows.
+      const baseQuery = () =>
+        supabase
+          .from("projects")
+          .select(LISTING_COLUMNS)
+          .eq("is_published", true)
+          .or("listing_kind.is.null,listing_kind.neq.leasing")
+          .is("deleted_at", null);
+
+      // Fast first paint: render complete publishable cards first, then hydrate
+      // the full catalogue in the background. This prevents the grid from
+      // opening blank while 1,600+ rows are fetched serially.
+      const { data: firstRows, error: firstError } = await baseQuery()
+        .not("price_from", "is", null)
+        .not("description", "is", null)
+        .order("is_featured", { ascending: false })
+        .order("is_premium", { ascending: false })
+        .order("updated_at", { ascending: false })
+        .limit(240);
+
+      if (firstError) throw firstError;
+
+      const firstResult = sortPublicProjectsForListing(
+        dedupePublicProjects(((firstRows ?? []) as unknown as UnifiedProject[]).map((row) => ({ ...row, images: [] }))),
+      );
+
+      void (async () => {
       const PAGE_SIZE = 1000;
       const MAX_PAGES = 10; // hard ceiling = 10,000 rows safety net
       const all: unknown[] = [];
@@ -527,22 +581,25 @@ export function useProjectsListing() {
       for (let page = 0; page < MAX_PAGES; page++) {
         const from = page * PAGE_SIZE;
         const to = from + PAGE_SIZE - 1;
-        const { data, error } = await supabase
-          .from("projects")
-          .select(LISTING_COLUMNS)
-          .eq("is_published", true)
-          .or("listing_kind.is.null,listing_kind.neq.leasing")
-          .is("deleted_at", null)
+        const { data, error } = await baseQuery()
           .order("created_at", { ascending: false })
           .range(from, to);
 
-        if (error) throw error;
+        if (error) return;
         const rows = data ?? [];
         all.push(...rows);
         if (rows.length < PAGE_SIZE) break;
       }
 
-      return dedupePublicProjects(all as unknown as UnifiedProject[]);
+        const fullResult = sortPublicProjectsForListing(
+          dedupePublicProjects((all as unknown as UnifiedProject[]).map((row) => ({ ...row, images: [] }))),
+        );
+        if (fullResult.length >= firstResult.length) {
+          queryClient.setQueryData(["projects-listing"], fullResult);
+        }
+      })();
+
+      return firstResult;
 
     },
   });

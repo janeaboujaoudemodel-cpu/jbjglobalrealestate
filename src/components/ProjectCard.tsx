@@ -51,6 +51,19 @@ const isPropertyTypeOnlyLabel = (value?: string | null) => {
   return PROPERTY_TYPE_ONLY_LABELS.has(value.trim().toLowerCase());
 };
 
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const cleanCardProjectName = (name: string, developerName?: string | null) => {
+  const genericClean = name.replace(/^in\s+(?=[a-z0-9])/i, "").trim();
+  if (!developerName) return genericClean || name;
+  const developer = developerName.trim();
+  if (!developer) return genericClean || name;
+  // Some imported rows were prefixed as "In Binghatti ...". Keep the real
+  // project name on cards without mutating unrelated titles.
+  const brokenPrefix = new RegExp(`^in\\s+(?=${escapeRegExp(developer)}\\b)`, "i");
+  return name.replace(brokenPrefix, "").replace(/^in\s+(?=[a-z0-9])/i, "").trim() || name;
+};
+
 const getCardPhaseLabel = (project: Project & { is_sold_out?: boolean | null }): string | null => {
   const source = [project.status_label, (project as any).sale_status, (project as any).status]
     .filter(Boolean)
@@ -85,6 +98,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
   const primaryImageUrl = rawPrimary ? normalizeProvidentImageUrl(rawPrimary, priority ? "928x624" : "464x312") : null;
   const rawDeveloperName = project.developer?.name || project.developer_name || null;
   const developerName = isPropertyTypeOnlyLabel(rawDeveloperName) ? null : rawDeveloperName;
+  const displayProjectName = cleanCardProjectName(project.name, developerName);
   const developerSlug = project.developer?.slug || null;
   const developerLogoUrl = getDeveloperLogoUrl(project.developer as any) || getKnownDeveloperLogoUrl(developerName);
   const developerWebsiteUrl = getDeveloperWebsiteUrl(project.developer as any) || getKnownDeveloperWebsiteUrl(developerName);
@@ -122,15 +136,18 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   // Truncate description for card preview - strip HTML + competitor refs
   const getTruncatedDescription = () => {
-    if (!project.description) return null;
-    let clean = sanitizeForDisplay(project.description)
+    const source = project.description || (project as any).short_description || null;
+    if (!source) return null;
+    let clean = sanitizeForDisplay(source)
       .replace(/#{1,6}\s*/g, '')
       .replace(/\*{1,3}/g, '')
       .replace(/project\s*general\s*facts/gi, '')
+      .replace(/project\s*overview/gi, '')
+      .replace(/^[\s:—–-]+/, '')
       .trim();
     const maxLength = 80;
     if (clean.length <= maxLength) return clean;
-    return clean.substring(0, maxLength).trim();
+    return `${clean.substring(0, maxLength).trim()}…`;
   };
 
   // Determine if we should show status label (from source data)
@@ -148,6 +165,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   const statusLabel = getStatusLabel();
   const saleStatusLabel = getSaleStatusLabel(project.status_label);
+  const truncatedDescription = getTruncatedDescription();
   const badgePosition = 'top-3 left-3';
   const projectHref = `/project/${project.slug}`;
   const openProject = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -345,7 +363,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Header block — title (always 2 lines) + location (always 1 line) */}
           <div className="flex flex-col gap-1">
             <h4 data-area-card-text className="text-lg font-bold break-words leading-tight line-clamp-2 min-h-[2.75rem] transition-colors" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
-              {project.name}
+              {displayProjectName}
             </h4>
             <div data-area-card-location className="flex items-center gap-1.5 text-sm font-medium min-h-[1.25rem]" style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}>
               {project.location && (
@@ -390,7 +408,13 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
             )}
           </div>
 
-          {/* Description intentionally removed from card — shown only on project detail page */}
+          <p
+            data-area-card-description
+            className="min-h-[2.625rem] text-sm leading-snug line-clamp-2"
+            style={{ color: '#0A0A0A', WebkitTextFillColor: '#0A0A0A' }}
+          >
+            {truncatedDescription || ""}
+          </p>
 
           {/* Bottom group — pinned to card bottom so price rows align across
               every card regardless of content length above. */}

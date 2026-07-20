@@ -56,12 +56,14 @@ export function SortBySelect({
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger
+        data-no-contrast-guard
         className={`${width} ${h} px-3 ${frame} ${borderless ? "text-white" : "text-[#1A1A1A]"} text-sm transition-colors ${chevronOff} ${className}`}
+        style={borderless ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}
         aria-label="Sort by"
       >
-        <ArrowUpDown className={`w-4 h-4 mr-1.5 ${borderless ? "text-white" : "text-[#064E3B]"} flex-shrink-0`} />
+        <ArrowUpDown className={`w-4 h-4 mr-1.5 ${borderless ? "text-white" : "text-[#064E3B]"} flex-shrink-0`} style={borderless ? { color: "#FFFFFF", stroke: "#FFFFFF" } : undefined} />
         {iconOnly ? (
-          <span className={`font-semibold text-[13px] ${borderless ? "text-white" : "text-[#1A1A1A]"}`}>Sort by</span>
+          <span className={`font-semibold text-[13px] ${borderless ? "text-white" : "text-[#1A1A1A]"}`} style={borderless ? { color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" } : undefined}>Sort by</span>
         ) : (
           <span className="truncate text-left flex-1">
             {hideLabel ? (
