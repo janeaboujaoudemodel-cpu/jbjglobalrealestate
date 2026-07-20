@@ -168,6 +168,14 @@ function personalizeTemplate(html: string, sampleName = "Developer Team") {
     .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
 }
 
+function personalizeSubject(subject: string, sampleName = "Developer Team") {
+  return subject
+    .replace(/\{\{developer_name\}\}/g, sampleName)
+    .replace(/\{\{brokerage_name\}\}/g, sampleName)
+    .replace(/jbj\.ae/gi, "JBJ.AE")
+    .replace(/JBJ Global Real Estate/g, "JBJ GLOBAL REAL ESTATE");
+}
+
 function initialsOf(name: string) {
   return name
     .split(/\s+/)
@@ -266,7 +274,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
       const { error } = await (supabase as any).functions.invoke("send-owner-email", {
         body: {
           to: testEmail.trim(),
-          subject: `[TEST · ${kind}] ${selectedTemplate.subject}`,
+            subject: `[TEST · ${kind}] ${personalizeSubject(selectedTemplate.subject, "Test Developer")}`,
           body: bodyText,
           senderName: SENDER.name,
           senderTitle: SENDER.title,
@@ -305,7 +313,7 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
         const { error } = await (supabase as any).functions.invoke("send-owner-email", {
           body: {
             to: r.email,
-            subject: selectedTemplate.subject.replace(/\{\{developer_name\}\}/g, r.name).replace(/\{\{brokerage_name\}\}/g, r.name),
+            subject: personalizeSubject(selectedTemplate.subject, r.name),
             body: bodyText,
             senderName: SENDER.name,
             senderTitle: SENDER.title,
@@ -499,7 +507,9 @@ export default function BrandedEmailsPanel({ open, onOpenChange, kind }: Props) 
               <div className="border border-emerald-900/15 rounded-lg bg-white overflow-hidden">
                 <div className="px-4 py-3 border-b border-emerald-900/10 bg-[#F8FAF9]">
                   <p className="text-[11px] text-[#4B5D55] uppercase tracking-wider">Subject</p>
-                  <p className="font-bold text-[#0F1A16]">{selectedTemplate.subject}</p>
+                  <p className="font-bold text-[#0F1A16]">
+                    {personalizeSubject(selectedTemplate.subject, recipients.find((r) => selectedIds.has(r.id))?.name)}
+                  </p>
                   <p className="text-[11px] text-[#4B5D55] mt-1">
                     Template: <span className="text-[#064E3B] font-semibold">{selectedTemplate.name}</span>
                   </p>
