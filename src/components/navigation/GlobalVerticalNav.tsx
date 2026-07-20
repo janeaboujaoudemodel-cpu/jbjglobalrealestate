@@ -275,6 +275,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
   { label: "Admin Panel", href: "/admin", icon: Lock },
   { label: "Admin CRM", href: "/admin/crm", icon: Users },
+  { label: "Relationships Hub", href: "/crm/relationship-hub", icon: Handshake },
   { label: "Admin Inquiries", href: "/admin/inquiries", icon: MailOpen },
   { label: "Admin Chat", href: "/admin/chat-conversations", icon: MessagesSquare },
   { label: "Admin Onboarding", href: "/admin/onboarding", icon: UserPlus },
