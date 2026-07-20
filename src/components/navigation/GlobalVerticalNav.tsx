@@ -282,6 +282,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Admin Roles", href: "/admin/roles", icon: Shield },
   { label: "Admin Intelligence", href: "/admin/intelligence", icon: Brain },
   { label: "Developers Portal", href: "/owner/developers", icon: Building },
+  { label: "Data Hub", href: "/owner/data-hub", icon: Database },
   { label: "Marketing Hub", href: "/admin/marketing-hub", icon: Megaphone },
   { label: "Media Ingestion", href: "/admin/media-ingestion", icon: Inbox },
   { label: "Admin Training Guide", href: "/admin/training-guide", icon: BookOpen },
