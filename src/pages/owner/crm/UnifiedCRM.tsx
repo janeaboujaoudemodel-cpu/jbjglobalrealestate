@@ -10,7 +10,7 @@
  * Legacy params (?section, ?sub) are migrated on mount.
  */
 import { Component, lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCRMSectionCounts, type CRMCounts } from "@/hooks/useCRMSectionCounts";
 import { useCRMLiveSync } from "@/hooks/useCRMLiveSync";
