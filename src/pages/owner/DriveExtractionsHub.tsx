@@ -94,58 +94,69 @@ export default function DriveExtractionsHub() {
   }, [jobs, projects]);
 
   return (
-    <div className="min-h-screen w-full text-[#1A1A1A] -mx-4 sm:-mx-6 lg:-mx-8 -mt-4 sm:-mt-6 lg:-mt-8">
-
-      <header
-        data-surface="emerald"
-        data-on-dark="true"
-        data-hero-dark="true"
-        data-no-contrast-guard
-        className="w-full border-b border-white/15 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)]"
-      >
-        <div className="w-full px-6 lg:px-10 py-8">
-          <p data-no-contrast-guard className="allow-white text-xs uppercase tracking-[0.2em] text-white/85">Owner console</p>
-          <h1 data-no-contrast-guard className="allow-white text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
-          <p data-no-contrast-guard className="allow-white mt-2 text-sm max-w-2xl text-white/90">
-            Everything AI pulled from developer Google Drive folders — grouped by developer, project, community and area.
-          </p>
-
-          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <Stat label="Developers scanned" value={totals.jobs} sub={`${totals.okJobs} completed`} />
-            <Stat label="Documents pulled" value={totals.docs} />
-            <Stat label="Projects discovered" value={totals.projs} />
-            <Stat label="Communities · Areas" value={`${totals.communities} · ${totals.areas}`} />
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center gap-2">
-            {TABS.map(t => {
-              const Icon = t.icon;
-              const isActive = t.key === active;
-              return (
-                <button
-                  key={t.key}
-                  data-no-contrast-guard
-                  onClick={() => setActive(t.key)}
-                  className="allow-white inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition border text-white"
-                  style={{
-                    background: isActive ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.08)",
-                    borderColor: isActive ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.18)",
-                    fontWeight: isActive ? 600 : 500,
-                  }}
-                >
-                  <Icon className="w-4 h-4 text-white" />
-                  <span className="allow-white text-white">{t.label}</span>
-                </button>
-              );
-            })}
-            <Button size="sm" onClick={load} data-no-contrast-guard className="allow-white ml-auto bg-white/10 hover:bg-white/20 border border-white/25 text-white">
-              <RefreshCw className="w-4 h-4 mr-1.5 text-white" /> Refresh
-            </Button>
+    <div className="owner-hub-page" data-hub-page="true">
+      <header className="owner-hub-page__header">
+        <div className="owner-hub-page__header-left">
+          <span className="owner-hub-page__icon" aria-hidden="true">
+            <Inbox size={22} strokeWidth={2} />
+          </span>
+          <div style={{ minWidth: 0 }}>
+            <p className="owner-hub-page__eyebrow">Owner console</p>
+            <h1 className="owner-hub-page__title">Drive Extractions</h1>
+            <p className="owner-hub-page__subtitle">
+              Everything AI pulled from developer Google Drive folders — grouped by developer, project, community and area.
+            </p>
           </div>
         </div>
+        <Button size="sm" onClick={load} className="rounded-md bg-[#064E3B] text-white hover:bg-[#053a2c] border border-[#064E3B]">
+          <RefreshCw className="w-4 h-4 mr-1.5" /> Refresh
+        </Button>
       </header>
 
-      <main className="w-full px-6 lg:px-10 py-8 space-y-6 bg-[#FDFBF7]">
+      <div className="owner-hub-page__insights">
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Developers scanned</p>
+          <div className="owner-hub-page__insight-value">{totals.jobs}</div>
+          <p className="owner-hub-page__insight-delta">{totals.okJobs} completed</p>
+        </div>
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Documents pulled</p>
+          <div className="owner-hub-page__insight-value">{totals.docs}</div>
+        </div>
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Projects discovered</p>
+          <div className="owner-hub-page__insight-value">{totals.projs}</div>
+        </div>
+        <div className="owner-hub-page__insight">
+          <p className="owner-hub-page__insight-label">Communities · Areas</p>
+          <div className="owner-hub-page__insight-value">{totals.communities} · {totals.areas}</div>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        {TABS.map(t => {
+          const Icon = t.icon;
+          const isActive = t.key === active;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setActive(t.key)}
+              className="inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm transition border"
+              style={{
+                background: isActive ? "#064E3B" : "#FFFFFF",
+                borderColor: isActive ? "#064E3B" : "rgba(6,78,59,0.20)",
+                color: isActive ? "#FFFFFF" : "#111827",
+                fontWeight: isActive ? 600 : 500,
+              }}
+            >
+              <Icon className="w-4 h-4" />
+              <span>{t.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-6 space-y-6">
         <DriveDropPanel />
         {loading ? (
           <div className="space-y-3">
@@ -160,8 +171,7 @@ export default function DriveExtractionsHub() {
             {active === "emirates"    && <EmiratesView />}
           </>
         )}
-      </main>
-
+      </div>
     </div>
   );
 }
