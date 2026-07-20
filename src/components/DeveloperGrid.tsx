@@ -188,10 +188,10 @@ const DeveloperGrid = () => {
                       </div>
                     )}
 
-                    {/* Handover Badge — uses site-wide .handover-orange pill */}
+                    {/* Handover Badge — show stored date only, never infer legal completion status. */}
                     {project.handover_date && (
                       <span className="absolute top-3 left-3 handover-orange">
-                        {project.handover_date.toLowerCase().includes("ready") ? "Ready" : project.handover_date}
+                        {project.handover_date.toLowerCase().includes("ready") ? "Completion verified on request" : project.handover_date}
                       </span>
                     )}
                   </div>
