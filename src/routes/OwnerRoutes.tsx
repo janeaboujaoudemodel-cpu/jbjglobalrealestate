@@ -198,6 +198,9 @@ export const OwnerRoutes = () => (
     <Route path="owner-data-hub" element={<DataHub />} />
     <Route path="owner-brokerages" element={<BrokeragePortal />} />
     <Route path="owner-developers" element={<DeveloperDirectory />} />
+    <Route path="owner-developers/add" element={<DeveloperCompanyRegistration />} />
+    <Route path="owner-developers/:slug" element={<DeveloperProfilePage />} />
+    <Route path="owner-developer-projects/new" element={<DeveloperProjectWizard />} />
     <Route path="owner-developer-projects" element={<DeveloperLiveEditor />} />
     <Route path="owner-developer-calendar" element={<DeveloperLaunchEvents />} />
     <Route path="owner-developer-access" element={<AccessRequestQueue />} />
@@ -236,7 +239,7 @@ export const OwnerRoutes = () => (
     <Route path="owner-users" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerUsers")))}</Suspense>} />
     <Route path="owner-crm-directory" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/OwnerCRMDirectory")))}</Suspense>} />
     <Route path="owner-research-users" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/components/admin/ResearchUsersPanel")))}</Suspense>} />
-    <Route path="owner-broker-preview" element={<BrokeragePortal />} />
+    <Route path="owner-broker-preview" element={<Navigate to="/owner/crm/jbj/owner-brokerages" replace />} />
     <Route path="owner-external-access" element={<ExternalAccessManagement />} />
     <Route path="owner-audit" element={<OwnerAuditPage />} />
     <Route path="owner-integrations" element={<OwnerIntegrationsPage />} />
@@ -351,7 +354,7 @@ export const OwnerRoutes = () => (
     <Route path="developers" element={<DeveloperDirectory />} />
     <Route path="developers/import-review" element={<DeveloperImportReview />} />
     <Route path="brokerages" element={<BrokeragePortal />} />
-    <Route path="developers/directory" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="developers/directory" element={<Navigate to="/owner/crm/jbj/owner-developers" replace />} />
     <Route path="developers/add" element={<DeveloperCompanyRegistration />} />
     <Route path="developers/profile-rebuild" element={<DeveloperEnrichmentQueue />} />
     <Route path="developers/missing-logos" element={<MissingLogosQueue />} />
@@ -367,7 +370,7 @@ export const OwnerRoutes = () => (
     <Route path="developers/calendar" element={<DeveloperLaunchEvents />} />
     <Route path="developers/access-requests" element={<AccessRequestQueue />} />
     <Route path="developers/:slug" element={<DeveloperProfilePage />} />
-    <Route path="developers/*" element={<Navigate to="/owner/developers" replace />} />
+    <Route path="developers/*" element={<Navigate to="/owner/crm/jbj/owner-developers" replace />} />
     <Route path="uae-registry" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryOverview")))}</Suspense>} />
     <Route path="uae-registry/developers" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryListPage").then(m => ({ default: () => <m.default type="developer" /> }))))}</Suspense>} />
     <Route path="uae-registry/developers/:id" element={<Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/owner/uae-registry/UAERegistryDetailPage").then(m => ({ default: () => <m.default type="developer" /> }))))}</Suspense>} />

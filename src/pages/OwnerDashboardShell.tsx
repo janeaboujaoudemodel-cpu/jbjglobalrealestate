@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Navigate, useLocation, useNavigate, Outlet } from "react-router-dom";
 import { 
   PanelLeftClose,
   PanelLeftOpen,
@@ -22,6 +22,7 @@ import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 
 const OwnerDashboardShell = () => {
   const navigate = useNavigate();
+  const { pathname, search } = useLocation();
   const { user, signOut } = useAuth();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [frontSidebarCollapsed, setFrontSidebarCollapsed] = useState(() => {
@@ -64,6 +65,30 @@ const OwnerDashboardShell = () => {
     }
   };
 
+  const normalizedPath = pathname.replace(/\/+$/, "") || "/owner";
+  const legacyHubRedirects: Record<string, string> = {
+    "/owner": "/owner/crm/jbj/home",
+    "/owner/data-hub": "/owner/crm/jbj/owner-data-hub",
+    "/owner/brokerages": "/owner/crm/jbj/owner-brokerages",
+    "/owner/developers": "/owner/crm/jbj/owner-developers",
+    "/owner/developers/profile-rebuild": "/owner/crm/jbj/owner-developer-profiles",
+    "/owner/developers/missing-logos": "/owner/crm/jbj/owner-missing-logos",
+    "/owner/developers/projects": "/owner/crm/jbj/owner-developer-projects",
+    "/owner/developers/calendar": "/owner/crm/jbj/owner-developer-calendar",
+    "/owner/developers/access-requests": "/owner/crm/jbj/owner-developer-access",
+    "/owner/drive-extractions": "/owner/crm/jbj/owner-drive-extractions",
+    "/owner/properties/featured": "/owner/crm/jbj/owner-featured-projects",
+    "/owner/map": "/owner/crm/jbj/owner-property-map",
+  };
+  const developerProfileMatch = normalizedPath.match(/^\/owner\/developers\/([^/]+)$/);
+  const legacyTarget = developerProfileMatch
+    ? `/owner/crm/jbj/owner-developers/${developerProfileMatch[1]}`
+    : legacyHubRedirects[normalizedPath];
+
+  if (legacyTarget) {
+    return <Navigate to={`${legacyTarget}${search}`} replace />;
+  }
+
   const SidebarContent = ({ collapsed = false }: { collapsed?: boolean }) => (
     <>
       {/* Logo Area — height locked to --shell-header-h so sidebar divider aligns with main top-header bottom border */}
@@ -73,7 +98,7 @@ const OwnerDashboardShell = () => {
       >
         <button
           type="button"
-          onClick={() => { navigate("/owner"); setMobileOpen(false); }}
+          onClick={() => { navigate("/owner/crm/jbj/home"); setMobileOpen(false); }}
           className={cn(
             "flex items-center min-w-0 w-full",
             collapsed ? "justify-center" : "justify-start gap-2.5"

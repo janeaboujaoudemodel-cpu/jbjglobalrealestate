@@ -73,13 +73,14 @@ const DEVELOPER_REGISTRATION_OPTIONS = [
 ];
 
 const DEVELOPER_GROUP_OPTIONS = [
-  { value: "pending_group_status", label: "Group not created" },
+  { value: "pending_group_status", label: "Pending" },
   { value: "has_group", label: "Group active" },
   { value: "no_group", label: "No group" },
   { value: "group_not_required", label: "Group not required" },
 ];
 
-const developerPortfolioPath = (slug: string) => `/owner/developers/${slug}?tab=projects`;
+const developerProfilePath = (slug: string) => `/owner/crm/jbj/owner-developers/${slug}`;
+const developerPortfolioPath = (slug: string) => `${developerProfilePath(slug)}?tab=projects`;
 
 const normalizeDeveloperKey = (row: Row) => {
   const SUFFIX = /\b(developments?|developers?|development|properties|property|realty|real\s*estate|holdings?|holding|group|llc|l\.?l\.?c|fz-?llc|pjsc|psc|inc|co|company|international|investments?|investment|limited|ltd|sole\s+proprietorship|s\.?p\.?c|plc|corp|corporation|establishment|contracting|construction)\b/gi;
@@ -118,14 +119,14 @@ function DeveloperActivityMenu({ slug, name }: { slug: string; name: string }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
         <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Log activity — {name}</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=tasks&new=1&developer=${q}`)}><ListChecks className="size-4 mr-2" /> Add task</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=notes&new=1&developer=${q}`)}><StickyNote className="size-4 mr-2" /> Add note</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=deals&new=1&developer=${q}`)}><Handshake className="size-4 mr-2" /> Register deal</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate(`/owner/developers/briefings?developer=${q}&new=1`)}><ClipboardList className="size-4 mr-2" /> Register briefing</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=calendar&new=1&developer=${q}`)}><CalendarDays className="size-4 mr-2" /> Register meeting</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => navigate(`/owner/crm?tab=calls&new=1&developer=${q}`)}><PhoneCall className="size-4 mr-2" /> Log call</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/tasks/new?developer=${q}`)}><ListChecks className="size-4 mr-2" /> Add task</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/notes/new?developer=${q}`)}><StickyNote className="size-4 mr-2" /> Add note</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/deals/new?developer=${q}`)}><Handshake className="size-4 mr-2" /> Register deal</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/owner-developer-profiles?developer=${q}&new=1`)}><ClipboardList className="size-4 mr-2" /> Register briefing</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/meetings/new?developer=${q}`)}><CalendarDays className="size-4 mr-2" /> Register meeting</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/calls/new?developer=${q}`)}><PhoneCall className="size-4 mr-2" /> Log call</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate(`/owner/meeting-hub?developer=${q}`)}><Video className="size-4 mr-2" /> Open meeting hub</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate(`/owner/crm/jbj/owner-meeting-hub?developer=${q}`)}><Video className="size-4 mr-2" /> Open meeting hub</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -282,7 +283,7 @@ export default function DeveloperDirectory() {
     },
     onSuccess: (r) => {
       toast.success(`Staged ${r.count} for review`, {
-        action: { label: "Open queue", onClick: () => navigate("/owner/developers/profile-rebuild") },
+        action: { label: "Open queue", onClick: () => navigate("/owner/crm/jbj/owner-developer-profiles") },
       });
       clearSelection();
       qc.invalidateQueries({ queryKey: ["dev-enrichment-logs"] });
@@ -387,15 +388,15 @@ export default function DeveloperDirectory() {
             {/* Single "New" dropdown consolidates all create actions */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="gold" className="whitespace-nowrap">
+                <Button size="sm" className="whitespace-nowrap bg-[#064E3B] hover:bg-[#053528] !text-white">
                   <Plus className="size-4 mr-1" /> New <ChevronDown className="size-3 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
                 <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Create</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => navigate("/owner/developers/add")}><UserPlus className="size-4 mr-2" /> Add Developer</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/owner/developers/new-project")}><Plus className="size-4 mr-2" /> Add Project</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/owner/developers/briefings")}><CalendarDays className="size-4 mr-2" /> Apply Briefing</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/crm/jbj/owner-developers/add")}><UserPlus className="size-4 mr-2" /> Add Developer</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/crm/jbj/owner-developer-projects/new")}><Plus className="size-4 mr-2" /> Add Project</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/crm/jbj/owner-developer-profiles")}><CalendarDays className="size-4 mr-2" /> Apply Briefing</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -415,7 +416,7 @@ export default function DeveloperDirectory() {
               <DropdownMenuContent align="end" className="bg-[#FDFBF7] border-[#B89555]/40 min-w-[220px]">
                 <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Import</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => setImportOpen(true)}><Upload className="size-4 mr-2" /> Import Excel</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/owner/developers/import-review")}><FileSpreadsheet className="size-4 mr-2" /> Import review</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/owner/crm/jbj/owner-developer-profiles") }><FileSpreadsheet className="size-4 mr-2" /> Import review</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel className="text-[#1A1A1A]/60 text-[10px] uppercase tracking-[0.14em]">Export</DropdownMenuLabel>
                 <DropdownMenuItem onClick={exportCsv} disabled={!rows.length}><Download className="size-4 mr-2" /> Download CSV</DropdownMenuItem>
@@ -435,7 +436,7 @@ export default function DeveloperDirectory() {
 
       <Card className="p-5 bg-[#FDFBF7] border border-[#B89555]/30 shadow-[0_18px_45px_-34px_rgba(26,26,26,0.35)]">
         <p className="text-sm text-[#1A1A1A]/80">
-          <span className="font-semibold text-[#1A1A1A]">Developers Portal</span> = the live owner-side developer control surface. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <a href="/owner/developers/profile-rebuild" className="underline">Profile Rebuild</a> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
+          <span className="font-semibold text-[#1A1A1A]">Developers Portal</span> = the live owner-side developer control surface. Click <span className="font-semibold">Open profile</span> for full details (projects, media, sales reps, activity), or <span className="font-semibold">Rebuild from site</span> to scrape their website — every scrape stages in <Link to="/owner/crm/jbj/owner-developer-profiles" className="underline">Profile Rebuild</Link> for your approval before going live. Use <span className="font-semibold">Visibility access</span> to publish or hide contact fields in bulk.
         </p>
       </Card>
 
@@ -474,7 +475,7 @@ export default function DeveloperDirectory() {
             </Badge>
             <Button
               size="sm"
-              variant="gold"
+              className="bg-[#064E3B] hover:bg-[#053528] !text-white"
               disabled={rebuild.isPending}
               onClick={() => rebuild.mutate(selectedList.slice(0, 25))}
             >
@@ -578,11 +579,11 @@ export default function DeveloperDirectory() {
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap min-w-[190px]">
                       <div className="flex flex-row items-center gap-1.5 flex-nowrap">
-                        <Button asChild size="sm" variant="gold" className="whitespace-nowrap h-8 px-3">
-                          <Link to={`/owner/developers/${d.slug}`}>Open</Link>
+                        <Button asChild size="sm" className="whitespace-nowrap h-8 px-3 bg-[#064E3B] hover:bg-[#053528] !text-white">
+                          <Link to={developerProfilePath(d.slug)}>Open</Link>
                         </Button>
                         <Button asChild size="sm" variant="outline" className="whitespace-nowrap h-8 px-3 border-[#B89555]/50 text-[#1A1A1A]">
-                          <Link to={`/owner/developers/${d.slug}?edit=1`}>Edit</Link>
+                          <Link to={`${developerProfilePath(d.slug)}?edit=1`}>Edit</Link>
                         </Button>
                         <DeveloperActivityMenu slug={d.slug} name={d.name} />
                       </div>
@@ -672,8 +673,8 @@ export default function DeveloperDirectory() {
                 </div>
               </div>
               <div className="mt-3 flex gap-2 flex-wrap items-center">
-                <Button asChild size="sm" variant="gold">
-                  <Link to={`/owner/developers/${d.slug}`}>
+                <Button asChild size="sm" className="bg-[#064E3B] hover:bg-[#053528] !text-white">
+                  <Link to={developerProfilePath(d.slug)}>
                     <ExternalLink className="size-3 mr-1" /> Open profile
                   </Link>
                 </Button>

@@ -218,7 +218,6 @@ export const OWNER_HUB_LEGACY_PATHS: Record<string, string> = {
   "owner-users": "/owner/users",
   "owner-crm-directory": "/owner/crm-directory",
   "owner-research-users": "/owner/research-users",
-  "owner-broker-preview": "/broker/portal?preview=1",
   "owner-external-access": "/owner/external-access",
   "owner-audit": "/owner/audit",
   "owner-integrations": "/owner/integrations",
