@@ -11,11 +11,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Building2, FolderKanban, MapPin, Layers, FileText, ExternalLink, RefreshCw } from "lucide-react";
+import { Building2, FolderKanban, MapPin, Layers, FileText, ExternalLink, RefreshCw, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import DriveDropPanel from "./DriveDropPanel";
 
-type Tab = "developers" | "projects" | "communities" | "areas";
+type Tab = "developers" | "projects" | "communities" | "areas" | "emirates";
+
 
 interface Job {
   id: string;
