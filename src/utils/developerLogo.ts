@@ -24,7 +24,6 @@ const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
   /\/images?\.(png|jpe?g|webp)(\?|$)/i,
   /logo-white-1/i,
   /logodix\.com/i,
-  /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
   /\/projects\/\d+\/images\//i, // project photo paths
   /snapedit/i,
   /google\.com\/s2\/favicons/i, // generic favicon/globe/phone icons are not developer logos
