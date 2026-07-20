@@ -1,39 +1,33 @@
-## What is actually broken
+## Fixes for `/owner/drive-extractions`
 
-- The public catalogue is showing **17 properties** because the backend publish gate currently allows only records that already pass every required field check. This protected the public site from blank cards, but it also exposed how many rows still need enrichment before they can be safely public again.
-- `Al Hamra Village` has a real database photo in `card_image_url`, but the card still tries the older `cover_image_url` path in some places and can render the wrong/broken image first.
-- `Burj Azizi` is linked to an `Azizi Development` row that has a logo URL, but the UI also has an override that can force Azizi into a text nameplate, causing the visible `AD` plate instead of the real logo.
-- Many unpublished rows already have partial data, but they must not be bulk-published again unless they have real photos, real descriptions, price, handover, payment plan, size/unit data, and a valid developer logo.
+### 1. Full edge-to-edge emerald background
+In `DriveExtractionsHub.tsx` the outer wrapper `bg-[#FDFBF7]` and the header's `max-w-[1400px]` container create the "card inside cream page" look.
+- Remove the cream wrapper background so the emerald hero spans the full viewport width (no side gutters).
+- Keep inner content aligned via a max-width container but let the emerald gradient bleed edge-to-edge (`w-full` on the header, container only for inner content).
+- Tighten padding inside `DriveDropPanel` card and align it to the same emerald-on-white rhythm.
 
-## Plan
+### 2. False "Paste a Google Drive folder link" toast
+`DriveDropPanel.submit()` shows that toast only when `url.trim()` is empty. In the screenshot the URL is already in Recent submissions but the input was cleared after last submit — the toast the user sees ("Paste a Google Drive folder link") in the bottom-right of screenshot 2 is a **passive placeholder-styled hint pill**, not an error. Fix: remove that persistent floating hint bubble (rendered outside the panel; likely a sonner-style toast lingering) and only surface it as inline validation next to the input.
 
-1. **Fix card image priority so real verified photos always win**
-   - Update `ProjectCard` image resolution so `card_image_url` / `gallery_start_image_url` win before older cover URLs.
-   - Keep fact sheets, flags, favicons, logos, icons, and placeholders blocked from property-photo slots.
-   - Add a hard verified media override for `Al Hamra Village` and any currently published card where the stored cover is known to be weaker than the verified card photo.
+Also: if a Recent Submission row is clicked, pre-fill the input from `s.folder_url` so "Analyze & Match" can be re-run without re-typing.
 
-2. **Fix Azizi and developer logo rendering**
-   - Remove the forced text-nameplate behavior for Azizi when a valid `developers.logo_url` exists.
-   - Keep the ban on fake globe/favicons and property photos as logos.
-   - Keep nameplates only as a last-resort “logo pending” marker for owner/backend review, not as a replacement for available real logos.
+### 3. "Developer" label rendering as black text on emerald
+The `Emaar Properties` row uses an emerald pill (`.inline-flex … bg-emerald…`) but the type label ("developer") inherits the Contrast Guard's black-text rule because the pill has no `data-no-contrast-guard` / `allow-white`. Add `data-no-contrast-guard` + `text-white` on the type badge (`row.type`) so it renders white on emerald.
 
-3. **Restore catalogue quantity safely, not by bypassing quality**
-   - Query draft rows in batches and classify them by exact blocker: missing photo, missing logo, missing price, missing handover, missing payment plan, missing size/unit data, or bad placeholder media.
-   - Republish only rows that pass the quality gate already or can be repaired from existing trusted project data (`project_images`, `pending_project_imports`, and developer logo records).
-   - Keep incomplete rows as drafts for owner approval/enrichment instead of showing blank or fake public cards.
+### 4. "Ammar" fallback still appearing
+The Emaar Properties row shows an "AR"-style nameplate. Root cause: `DeveloperLogo` fallback path is still triggered when `logo_url` is null in the row `s.summary` snapshot. Fix by:
+- Not rendering the letter-nameplate for drive submissions where the developer isn't actually resolved (show a neutral folder icon instead).
+- The Emaar entry specifically: ensure the AI-classified candidate does NOT reuse the last-loaded developer's logo/name badge — pass `name={row.name}` explicitly instead of a stale prop.
 
-4. **Add owner-visible diagnostics instead of guessing**
-   - Add a backend/owner-facing “publish blockers” view or card state that shows exactly why a draft project is not public.
-   - This lets you see whether a project needs photo, logo, price, payment plan, handover, or size before approving it.
+### 5. Drive folder link "blocked" / doesn't open
+Screenshot 3 shows `drive.google.com` refusing to connect — the app is trying to **embed** Drive in an iframe (via preview/window frame), which Google blocks with `X-Frame-Options`. Fix:
+- Never iframe `drive.google.com`. Replace any embed with a plain `<a target="_blank" rel="noreferrer">` "Open in Google Drive" button.
+- Audit `DriveDropPanel` and Recent submissions row for any preview iframe; convert to link-only.
+- If we want in-app preview later, that requires the Google Drive **App User Connector** (per-user OAuth) — call it out but do not add now.
 
-5. **Validate visually before claiming it is fixed**
-   - Use Playwright screenshots for `/properties` after the changes.
-   - Verify the first visible cards show: real project photo, real developer logo, description, price, handover/status, payment plan, and white text on emerald controls.
-   - Specifically screenshot `Al Hamra Village` and `Burj Azizi` if visible, or filter/search them and capture those cards.
+### Files touched
+- `src/pages/owner/DriveExtractionsHub.tsx` — full-bleed layout, container refactor.
+- `src/pages/owner/DriveDropPanel.tsx` — type badge white on emerald, click-to-refill URL, remove stale toast, safe link-only Drive open, neutral fallback icon.
 
-## Technical notes
-
-- I will not delete project records.
-- I will not bulk-publish incomplete rows.
-- I will not use fake logo sources, globe favicons, phone-brand icons, flags, fact sheets, or project photos as developer logos.
-- Any database schema/policy change will be done through a migration; data checks can be read directly first.
+### Validation
+Playwright screenshot of `/owner/drive-extractions` proving: emerald hero edge-to-edge, no cream gutter; Recent Submission `developer` badge white on emerald; no "AR" nameplate; no floating "Paste a Google Drive folder link" hint; clicking the Drive icon opens Drive in a new tab (not blocked iframe).
