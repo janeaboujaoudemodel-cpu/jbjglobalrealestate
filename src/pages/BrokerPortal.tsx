@@ -281,6 +281,11 @@ export default function BrokerPortal() {
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
         {/* Tabbed Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Branded Emails is always visible on the Broker Portal — not gated by dashboard tab */}
+          <div className="mb-6">
+            <BrandedEmailsLauncherCard variant="broker" />
+          </div>
+
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="flex flex-wrap gap-1.5 bg-transparent p-0 mb-6 h-auto">
               <TabsTrigger value="dashboard" className={TAB_STYLE}><LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden md:block" /> Dashboard</TabsTrigger>
@@ -295,9 +300,6 @@ export default function BrokerPortal() {
             {/* ── DASHBOARD ── */}
             <TabsContent value="dashboard">
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
-                <div className="mb-6">
-                  <BrandedEmailsLauncherCard variant="broker" />
-                </div>
                 <h2 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Quick Access
                 </h2>
