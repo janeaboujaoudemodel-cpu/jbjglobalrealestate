@@ -6,7 +6,6 @@ import { Route, Navigate, useParams } from "react-router-dom";
 import OwnerGuard from "@/components/OwnerGuard";
 import ListingAdminGuard from "@/components/ListingAdminGuard";
 import PageLoader from "@/components/PageLoader";
-import { OWNER_HUB_LEGACY_PATHS } from "@/pages/owner/crm/shell/modules";
 
 // All owner pages lazy-loaded — owner area is heavy and must NOT bloat the public/home initial chunk.
 const OwnerDashboardShell = lazy(() => import("@/pages/OwnerDashboardShell"));
@@ -159,12 +158,6 @@ const LegacyOwnerEnvelopeDetail = () => {
   return <Navigate to={`/owner/documents/forms/${id}`} replace />;
 };
 
-const OwnerHubLegacyFallback = () => {
-  const { section = "" } = useParams();
-  const legacyPath = OWNER_HUB_LEGACY_PATHS[section];
-  return <Navigate to={legacyPath || "/owner/crm/jbj/home"} replace />;
-};
-
 export const OwnerRoutes = () => (
   <>
   {/* JBJ CRM — standalone shell, MUST be declared BEFORE the /owner shell route
@@ -252,7 +245,6 @@ export const OwnerRoutes = () => (
     <Route path="owner-security" element={<SecurityConsole />} />
     <Route path="owner-executive-assistant" element={<ExecutiveAssistant />} />
     <Route path=":section" element={<CrmModulePage />} />
-    <Route path="owner-*:section" element={<OwnerHubLegacyFallback />} />
     <Route path=":section/new" element={<CrmCreatePage />} />
     <Route path=":section/:id" element={<CrmRecordPage />} />
   </Route>
