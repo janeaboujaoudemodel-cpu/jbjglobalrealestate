@@ -50,7 +50,9 @@ const TABS: { key: Tab; label: string; icon: typeof Building2 }[] = [
   { key: "projects",    label: "Projects",     icon: FolderKanban },
   { key: "communities", label: "Communities",  icon: Layers },
   { key: "areas",       label: "Areas",        icon: MapPin },
+  { key: "emirates",    label: "Emirates",     icon: Globe2 },
 ];
+
 
 export default function DriveExtractionsHub() {
   const [active, setActive] = useState<Tab>("developers");
