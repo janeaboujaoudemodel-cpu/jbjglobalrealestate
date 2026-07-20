@@ -95,11 +95,16 @@ export default function DriveExtractionsHub() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-[#1A1A1A]">
-      <header className="border-b border-[#B89555]/50 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)] text-white">
-        <div className="max-w-[1400px] mx-auto px-6 py-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-[#D4AF6A]">Owner console</p>
-          <h1 className="text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
-          <p className="mt-2 text-sm text-white max-w-2xl">
+      <header
+        data-surface="emerald"
+        data-on-dark="true"
+        className="border-b border-white/15 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)]"
+        style={{ color: "#FFFFFF" }}
+      >
+        <div className="max-w-[1400px] mx-auto px-6 py-8" style={{ color: "#FFFFFF" }}>
+          <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.85 }}>Owner console</p>
+          <h1 className="text-3xl font-semibold tracking-tight mt-1" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Drive Extractions</h1>
+          <p className="mt-2 text-sm max-w-2xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.9 }}>
             Everything AI pulled from developer Google Drive folders — grouped by developer, project, community and area.
           </p>
 
@@ -118,17 +123,21 @@ export default function DriveExtractionsHub() {
                 <button
                   key={t.key}
                   onClick={() => setActive(t.key)}
-                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition ${
-                    isActive ? "bg-[#D4AF6A] text-white shadow" : "bg-white/10 text-white hover:bg-white/20"
-                  }`}
-                  style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}
+                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition border"
+                  style={{
+                    background: isActive ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.08)",
+                    borderColor: isActive ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.18)",
+                    color: "#FFFFFF",
+                    WebkitTextFillColor: "#FFFFFF",
+                    fontWeight: isActive ? 600 : 500,
+                  }}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4" style={{ color: "#FFFFFF" }} />
                   {t.label}
                 </button>
               );
             })}
-            <Button size="sm" variant="secondary" onClick={load} className="ml-auto bg-white/10 hover:bg-white/20 text-white border border-white/20">
+            <Button size="sm" onClick={load} className="ml-auto bg-white/10 hover:bg-white/20 border border-white/25" style={{ color: "#FFFFFF" }}>
               <RefreshCw className="w-4 h-4 mr-1.5" /> Refresh
             </Button>
           </div>
