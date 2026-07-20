@@ -1,19 +1,22 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, MoreHorizontal, PanelLeft, Search } from "lucide-react";
+import { ChevronDown, MoreHorizontal, PanelLeft, Search, Crown } from "lucide-react";
 
 import {
   CRM_DEFAULT_SECTION,
+  CRM_OWNER_BACKEND,
   CRM_PRIMARY_NAV,
   CRM_TEAMSPACE_BOTTOM,
   CRM_TEAMSPACE_FOLDERS,
   CRM_TEAMSPACE_TOP,
   crmSectionPath,
 } from "./modules";
+import { useOwnerVerification } from "@/hooks/useOwnerVerification";
 
 export default function CrmSidebar() {
   const { pathname } = useLocation();
   const segment = pathname.replace(/\/+$/, "").split("/").pop();
   const active = !segment || segment === "jbj" ? CRM_DEFAULT_SECTION : segment;
+  const { isOwner } = useOwnerVerification();
 
   const renderModule = (m: typeof CRM_PRIMARY_NAV[number], child = false) => {
     const Icon = m.icon;
@@ -26,6 +29,22 @@ export default function CrmSidebar() {
         className={child ? "jc-team-item jc-team-item--child" : "jc-side-link"}
       >
         <Icon size={child ? 19 : 21} strokeWidth={1.9} style={m.color ? { color: m.color } : undefined} />
+        <span>{m.label}</span>
+      </NavLink>
+    );
+  };
+
+  const renderExternal = (m: typeof CRM_OWNER_BACKEND[number]) => {
+    const Icon = m.icon;
+    const isActive = pathname === m.href || pathname.startsWith(m.href + "/");
+    return (
+      <NavLink
+        key={m.slug}
+        to={m.href}
+        data-active={isActive}
+        className="jc-team-item jc-team-item--child"
+      >
+        <Icon size={19} strokeWidth={1.9} />
         <span>{m.label}</span>
       </NavLink>
     );
@@ -76,6 +95,22 @@ export default function CrmSidebar() {
           {CRM_TEAMSPACE_BOTTOM.map((m) => renderModule(m, true))}
         </nav>
       </section>
+
+      {isOwner && (
+        <section className="jc-teamspace" aria-label="Owner Backend" style={{ borderTop: "1px solid rgba(255,255,255,0.08)", marginTop: 4 }}>
+          <div className="jc-teamspace__title">
+            <span className="jc-teamspace__badge" style={{ background: "linear-gradient(180deg,#D4AF37,#8a6a1f)", color: "#000" }}>
+              <Crown size={12} />
+            </span>
+            <span>Owner Backend</span>
+            <ChevronDown size={17} />
+          </div>
+          <nav className="jc-team-nav" aria-label="Owner backend modules">
+            {CRM_OWNER_BACKEND.map(renderExternal)}
+          </nav>
+        </section>
+      )}
     </aside>
   );
 }
+
