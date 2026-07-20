@@ -98,13 +98,14 @@ export default function DriveExtractionsHub() {
       <header
         data-surface="emerald"
         data-on-dark="true"
+        data-hero-dark="true"
+        data-no-contrast-guard
         className="border-b border-white/15 bg-[linear-gradient(135deg,#064E3B_0%,#042c1c_48%,#000000_100%)]"
-        style={{ color: "#FFFFFF" }}
       >
-        <div className="max-w-[1400px] mx-auto px-6 py-8" style={{ color: "#FFFFFF" }}>
-          <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.85 }}>Owner console</p>
-          <h1 className="text-3xl font-semibold tracking-tight mt-1" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF" }}>Drive Extractions</h1>
-          <p className="mt-2 text-sm max-w-2xl" style={{ color: "#FFFFFF", WebkitTextFillColor: "#FFFFFF", opacity: 0.9 }}>
+        <div className="max-w-[1400px] mx-auto px-6 py-8">
+          <p data-no-contrast-guard className="allow-white text-xs uppercase tracking-[0.2em] text-white/85">Owner console</p>
+          <h1 data-no-contrast-guard className="allow-white text-3xl font-semibold tracking-tight mt-1 text-white">Drive Extractions</h1>
+          <p data-no-contrast-guard className="allow-white mt-2 text-sm max-w-2xl text-white/90">
             Everything AI pulled from developer Google Drive folders — grouped by developer, project, community and area.
           </p>
 
@@ -122,23 +123,22 @@ export default function DriveExtractionsHub() {
               return (
                 <button
                   key={t.key}
+                  data-no-contrast-guard
                   onClick={() => setActive(t.key)}
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition border"
+                  className="allow-white inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition border text-white"
                   style={{
                     background: isActive ? "rgba(255,255,255,0.22)" : "rgba(255,255,255,0.08)",
                     borderColor: isActive ? "rgba(255,255,255,0.55)" : "rgba(255,255,255,0.18)",
-                    color: "#FFFFFF",
-                    WebkitTextFillColor: "#FFFFFF",
                     fontWeight: isActive ? 600 : 500,
                   }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: "#FFFFFF" }} />
-                  {t.label}
+                  <Icon className="w-4 h-4 text-white" />
+                  <span className="allow-white text-white">{t.label}</span>
                 </button>
               );
             })}
-            <Button size="sm" onClick={load} className="ml-auto bg-white/10 hover:bg-white/20 border border-white/25" style={{ color: "#FFFFFF" }}>
-              <RefreshCw className="w-4 h-4 mr-1.5" /> Refresh
+            <Button size="sm" onClick={load} data-no-contrast-guard className="allow-white ml-auto bg-white/10 hover:bg-white/20 border border-white/25 text-white">
+              <RefreshCw className="w-4 h-4 mr-1.5 text-white" /> Refresh
             </Button>
           </div>
         </div>
