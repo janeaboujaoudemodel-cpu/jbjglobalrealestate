@@ -1,84 +1,60 @@
-## Plan: Merge owner backend into the CRM-style JBJ Hub
+# Owner Backend cleanup inside JBJ Hub
 
-### Goal
-Make the owner experience a single **JBJ Hub** shell, not a separate champagne/gold owner backend. Broker-facing CRM can remain **JBJ CRM**, but owner-facing navigation/header should read **JBJ Hub** and keep the emerald/white CRM layout.
+Scope is **only** pages routed under `/owner/crm/jbj/owner-*` (the ones we imported from the legacy JBJ backend). The Zoho-mirrored CRM pages (`home`, `feeds`, `calls`, `deals`, `salesinbox` Zoho core, etc.) are **not touched**.
 
-### What I confirmed
-- The current CRM shell is mounted at `/owner/crm/jbj` and uses `CrmShell`, `CrmSidebar`, and emerald/white `crmShell.css`.
-- Owner Backend sidebar items currently link to `/owner`, `/owner/data-hub`, `/owner/developers`, etc., which exits the CRM shell and opens the older champagne owner backend layout.
-- The older owner backend sidebar has many routes that are missing from the CRM Owner Backend list: Owner Panel, Overview, JBJ Hub, Document Studio, Projects, Calendar, Access Requests, Developer Profiles, Missing Logos, Properties, Property Map, Listings Admin, Inbox, Team Chat, Founder Assistant, Recommendations, AI Home Finder Leads, Royal Tools, Workflow Automation, Meeting Hub, AI Meeting Summarizer, Locations, Data Gaps, AI Enrichment Review, Brand Assets, Studio, Founder/Podcast Control, Podcast Studio, Voice Agent, Kanban, Careers, Admin pages, and System pages.
+## 1. Kill the gold/champagne skin on owner-backend pages
 
-### Implementation
-1. **Rename owner shell identity**
-   - In `CrmSidebar`, change owner-facing brand text from “CRM” to **“Hub”** when the signed-in user is owner.
-   - Update owner-only section labels from “Owner Backend” to **“JBJ Hub”** or equivalent owner hub wording.
-   - Keep broker/non-owner labels as JBJ CRM where applicable.
+Currently `crmShell.css` overrides champagne backgrounds only on a few utility classes and many owner pages still ship hardcoded `#FDFBF7 / #F7F2EA / #EFE6D6 / #B89555` gradients (e.g. `OwnerCreativeSuite`, featured-projects hero card, sales-inbox folder chips).
 
-2. **Stop owner backend links from leaving the CRM shell**
-   - Replace `CRM_OWNER_BACKEND` absolute `/owner/...` links with CRM-shell routes like:
-     - `/owner/crm/jbj/owner-data-hub`
-     - `/owner/crm/jbj/owner-developers`
-     - `/owner/crm/jbj/owner-settings`
-   - Keep “Return to Site”, “Sign Out”, and “Collapse” as footer actions inside the same scrollable CRM sidebar style.
+- In `crmShell.css`, extend the `.jc-app [data-hub-page]` scope so every emerald owner page force-resets:
+  - Champagne page/hero gradients → white canvas `#FFFFFF`
+  - Gold hairlines (`border-[#B89555]/…`, `#EFE6D6`) → emerald hairline `rgba(6,78,59,0.12)`
+  - Gold text (`text-[#8A7356]`, `text-[#B89555]`) → ink `#1A1A1A` or emerald `#064E3B`
+  - Gold icon tiles/badges → emerald `#064E3B` tile with white icon
+- Add a `<div data-hub-page>` wrapper via a lightweight `OwnerHubPage` layout so we only affect owner backend routes, never Zoho-mirrored ones.
+- Keep the JBJ metallic-gold CTA primitive (`.jj-cta-gold-metallic`) **untouched** on public marketing pages — the override is gated behind `.jc-app [data-hub-page]` only.
 
-3. **Add every missing owner backend item into the CRM sidebar**
-   - Mirror the existing owner backend sections from `OwnerSidebarNav` into CRM shell groups:
-     - Core
-     - Developers
-     - Properties
-     - Communication
-     - AI & Tools
-     - Creative
-     - People & HR
-     - Admin
-     - System
-   - Preserve scrollable vertical behavior.
-   - Do not copy the old champagne/gold visual styling.
+## 2. Fix the sidebar Handshake / Owner Backend vertical bug
 
-4. **Render owner pages inside the CRM shell**
-   - Add nested CRM-shell routes for owner hub pages under `/owner/crm/jbj/...`.
-   - Reuse the existing page components, but wrap them in a CRM-compatible owner page adapter so they display inside `jc-content` without mounting `OwnerDashboardShell`.
-   - This avoids the previous backend sidebar/header and keeps the emerald/white CRM frame.
+In the screenshot, the "Owner Backend" folder header and Handshake icon stack vertically because the folder label wraps under the collapsed rail width and long labels break.
 
-5. **Normalize owner page visuals inside JBJ Hub**
-   - Add a scoped CRM-owner style layer so imported owner pages use white/emerald cards, tabs, borders, buttons, and readable black-on-white text.
-   - Remove champagne/gold surface dominance only within the JBJ Hub shell.
-   - Keep emerald active states, white text on emerald, and no blue interactive states.
+- `crmShell.css` `.jc-folder__label`: enforce `flex-direction: row`, `min-width: 0`, `flex-wrap: nowrap`, ellipsis on `span`, and fixed `24px` icon slot.
+- `.jc-owner-hub .jc-teamspace__title`: same row lock + `white-space: nowrap`.
+- Verify Handshake, Sparkles, Palette, ShieldAlert renders inline with their labels at both expanded and collapsed sidebar states.
 
-6. **Footer controls in CRM sidebar**
-   - Add the last sidebar actions exactly as requested:
-     - Return to Site
-     - Sign Out
-     - Collapse
-   - Keep them part of the scrollable vertical sidebar area, not fixed to the viewport bottom like the previous backend.
+## 3. Rebuild the imported owner pages page-by-page
 
-7. **Route fallbacks to prevent empty/404 views**
-   - For owner hub slugs without an exact component yet, route to the closest existing owner page or a meaningful CRM-shell page instead of leaving an empty module page.
-   - Add safe fallback redirect from unknown owner-hub slugs to `/owner/crm/jbj/owner-overview`.
+For every page under `CRM_OWNER_HUB_SECTIONS`, apply the same Zoho-matched chrome:
 
-8. **Visual E2E validation**
-   - Use Playwright screenshots to verify:
-     - `/owner/crm/jbj` shows owner-facing **JBJ Hub** branding.
-     - Clicking Data Hub stays under `/owner/crm/jbj/...` and keeps the emerald/white CRM shell.
-     - Clicking Developers Portal stays under the CRM shell.
-     - Clicking Settings stays under the CRM shell.
-     - Sidebar remains scrollable and includes Return to Site, Sign Out, Collapse.
-     - No champagne/gold backend shell appears during these flows.
+- **Page header card**: flat white surface, thin emerald hairline `1px solid rgba(6,78,59,0.10)`, `border-radius: 8px` (NOT full-rounded), 24px inner padding, emerald eyebrow label + ink title + ink subtitle. Removes the current "rounded pill" hero seen on Featured Projects.
+- **Section cards** (`.jc-owner-card`): white bg, `8px` radius, emerald hairline, `24px` padding, `12px` gap between sections. No touching the viewport edge — add `24px` container padding.
+- **Device tabs (Mobile / Tablet / Desktop) on Featured Projects**: pill group with a single container radius, tabs stay inside container, active = emerald fill with white text (matches Zoho segmented control).
+- **Insights strip** at the top of every rebuilt owner page: 3-tile row (KPIs relevant to the page — e.g. Featured Projects → "Live slots · Auto refreshes · Manual entries"; SalesInbox → "Unread · Waiting · Snoozed"; Data Hub → "Unassigned · Assigned today · Stale >72h"). Tiles use emerald label + big ink number + tiny delta.
+- **CTA row alignment**: primary action = emerald fill white text; secondary = white with emerald hairline; never gold on backend.
 
-### Technical notes
-- Main files to update:
-  - `src/pages/owner/crm/shell/modules.ts`
-  - `src/pages/owner/crm/shell/CrmSidebar.tsx`
-  - `src/pages/owner/crm/shell/CrmHeader.tsx`
-  - `src/pages/owner/crm/shell/CrmShell.tsx`
-  - `src/routes/OwnerRoutes.tsx`
-  - `src/pages/owner/crm/shell/crmShell.css`
-- Existing old backend shell `OwnerDashboardShell` should remain for legacy direct `/owner/...` routes, but owner navigation from the new JBJ Hub should no longer send users there.
+Pages to rebuild in this pass (all `owner-*` slugs from `CRM_OWNER_HUB_SECTIONS`):
+Core (Owner Panel, Overview, JBJ Hub, Document Studio, CRM Database, JBJ CRM, Data Hub), Developers (Broker Portal, Developers Portal, Projects, Calendar, Access Requests, Profiles, Missing Logos, Drive Extractions), Properties (Properties, Featured Projects, Property Map, Listings Admin), Communication (Messages/Inbox, Team Chat, Relationships Hub), AI & Tools (all 11 entries), Creative (Brand Assets, Studio, Founder & Podcast, Podcast Studio, Voice Agent, Kanban, Marketing Hub, News, Books), People & HR (Careers Portal), Admin (Analytics, Users, CRM Directory, Research Users, Preview Broker Portal), System (External Access, Audit, Integrations, Safety, Settings, Security Console, Executive Assistant).
 
-### Acceptance criteria
-- Owner sees **JBJ Hub**, not JBJ CRM, in the owner CRM shell.
-- Owner Backend is not a duplicate list of outbound links; it becomes real in-shell JBJ Hub navigation.
-- Every old owner backend sidebar item is represented in the new CRM-style sidebar.
-- Owner hub pages open inside the emerald/white CRM layout.
-- No empty owner pages, no unexpected redirects to the champagne backend, and no 404s in tested owner hub flows.
-- Final response includes screenshot proof from Playwright validation.
+Each page keeps its existing business logic — this is a **chrome/layout rebuild only**, wrapping the existing component in `<OwnerHubPage title subtitle insights={[...]}>` and neutralizing hardcoded champagne classes.
+
+## 4. Validation gate
+
+For every rebuilt page:
+1. Playwright shot at 1280×1800 desktop viewport of `/owner/crm/jbj/{slug}`.
+2. Assert: no `#B89555`, `#FDFBF7`, `#F7F2EA`, `#EFE6D6`, `text-[#8A7356]`, `bg-champagne` in the rendered DOM computed styles.
+3. Assert: page header has emerald hairline + `8px` radius, not the current pill.
+4. Assert: sidebar Handshake row renders on a single line at both expanded and collapsed states.
+5. Attach screenshots inline for the top 6 pages (Featured Projects, Data Hub, Developers Portal, Broker Portal, Properties, Overview).
+
+## What we will NOT touch
+
+- Zoho-mirrored CRM pages: `home`, `feeds`, `workqueue`, `leads`, `contacts`, `accounts`, `deals`, `forecasts`, `campaigns`, `tasks`, `meetings`, `calls`, `documents` (CRM one), plus the mirrored SalesInbox core layout that ships with Zoho parity. If SalesInbox is required as an owner-only rebuild instead of Zoho-mirrored, confirm before touching.
+- Any public marketing page or `.jj-cta-gold-metallic` gold primitive outside `[data-hub-page]`.
+- Any business logic / data queries on the owner pages.
+
+## Technical notes
+
+- New file: `src/pages/owner/crm/shell/OwnerHubPage.tsx` — layout wrapper providing `data-hub-page`, header card, insights strip, content slot.
+- Edit: `src/pages/owner/crm/shell/crmShell.css` — new `.jc-app [data-hub-page]` reset block, `.jc-owner-card`, `.jc-owner-header`, `.jc-owner-insights`, plus `.jc-folder__label` / `.jc-owner-hub__title` row locks.
+- Edit each `owner-*` page component to wrap its root in `<OwnerHubPage …>` and drop the local champagne gradient container. Zoho-mirrored components are opened only to confirm they are **not** wrapped.
+- No DB / edge function / RLS changes.
