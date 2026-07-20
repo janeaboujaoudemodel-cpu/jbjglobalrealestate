@@ -2665,6 +2665,44 @@ export type Database = {
           },
         ]
       }
+      broker_activity_log: {
+        Row: {
+          activity_data: Json
+          activity_type: string
+          assignment_id: string | null
+          broker_user_id: string
+          created_at: string
+          id: string
+          lead_id: string | null
+        }
+        Insert: {
+          activity_data?: Json
+          activity_type: string
+          assignment_id?: string | null
+          broker_user_id: string
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+        }
+        Update: {
+          activity_data?: Json
+          activity_type?: string
+          assignment_id?: string | null
+          broker_user_id?: string
+          created_at?: string
+          id?: string
+          lead_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_activity_log_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "crm_lead_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_activity_stats: {
         Row: {
           calls_made: number | null
@@ -10086,28 +10124,58 @@ export type Database = {
       }
       crm_lead_assignments: {
         Row: {
+          ai_reasoning: string | null
+          ai_score: number | null
           assigned_at: string
           assigned_by_user_id: string | null
           assigned_to_user_id: string
+          created_at: string
+          distribution_batch_id: string | null
           id: string
           lead_id: string
+          notes: string | null
+          returned_at: string | null
+          returned_reason: string | null
+          show_contact_details: boolean
+          status: string
           unassigned_at: string | null
+          updated_at: string
         }
         Insert: {
+          ai_reasoning?: string | null
+          ai_score?: number | null
           assigned_at?: string
           assigned_by_user_id?: string | null
           assigned_to_user_id: string
+          created_at?: string
+          distribution_batch_id?: string | null
           id?: string
           lead_id: string
+          notes?: string | null
+          returned_at?: string | null
+          returned_reason?: string | null
+          show_contact_details?: boolean
+          status?: string
           unassigned_at?: string | null
+          updated_at?: string
         }
         Update: {
+          ai_reasoning?: string | null
+          ai_score?: number | null
           assigned_at?: string
           assigned_by_user_id?: string | null
           assigned_to_user_id?: string
+          created_at?: string
+          distribution_batch_id?: string | null
           id?: string
           lead_id?: string
+          notes?: string | null
+          returned_at?: string | null
+          returned_reason?: string | null
+          show_contact_details?: boolean
+          status?: string
           unassigned_at?: string | null
+          updated_at?: string
         }
         Relationships: [
           {

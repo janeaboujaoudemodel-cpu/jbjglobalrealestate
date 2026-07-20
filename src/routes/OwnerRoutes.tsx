@@ -53,6 +53,7 @@ const OwnerPublicGateEditor = lazy(() => import("@/pages/owner/OwnerPublicGateEd
 const JbjHub = lazy(() => import("@/pages/owner/JbjHub"));
 const OwnerEnrichmentReview = lazy(() => import("@/pages/owner/OwnerEnrichmentReview"));
 const DriveExtractionsHub = lazy(() => import("@/pages/owner/DriveExtractionsHub"));
+const DataHub = lazy(() => import("@/pages/owner/DataHub"));
 const OwnerProjectPhotoApproval = lazy(() => import("@/pages/owner/OwnerProjectPhotoApproval"));
 const DeveloperImportReview = lazy(() => import("@/pages/owner/DeveloperImportReview"));
 
@@ -194,6 +195,7 @@ export const OwnerRoutes = () => (
   }>
 
     <Route index element={<OwnerDashboardOverview />} />
+    <Route path="data-hub" element={<DataHub />} />
     <Route path="public-gate" element={<OwnerPublicGateEditor />} />
     <Route path="inbox" element={<OwnerInbox />} />
 
