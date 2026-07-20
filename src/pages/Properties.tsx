@@ -1365,6 +1365,7 @@ const Properties = () => {
                         project={project}
                         currency={filters.currency}
                         sizeUnit={filters.sizeUnit}
+                        priority={index < 6}
                       />,
                     ];
                     if (featuredAd) {

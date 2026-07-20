@@ -4870,18 +4870,20 @@ a[class*="bg-red-"]:hover {
    - Compacts the popup on phones so it does not consume half the screen.
    ===================================================================== */
 [data-chrome="cookie-banner"] {
-  padding-left: max(0.75rem, env(safe-area-inset-left)) !important;
-  padding-right: max(0.75rem, env(safe-area-inset-right)) !important;
-  transition: padding-left 180ms ease;
+  width: min(26rem, calc(100vw - 1.5rem)) !important;
+  max-width: calc(100vw - 1.5rem) !important;
+  right: max(0.75rem, env(safe-area-inset-right)) !important;
+  left: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  transition: right 180ms ease;
 }
 @media (min-width: 640px) {
   body.jj-vertical-nav-collapsed [data-chrome="cookie-banner"] {
-    padding-left: calc(48px + 1rem) !important;
-    padding-right: 1rem !important;
+    right: 1rem !important;
   }
   body.jj-vertical-nav-active [data-chrome="cookie-banner"] {
-    padding-left: calc(280px + 1.25rem) !important;
-    padding-right: 1.25rem !important;
+    right: 1.25rem !important;
   }
 }
 /* Mobile: compact popup — never wider than ~360px, sit above safe area, tighter padding */

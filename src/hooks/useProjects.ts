@@ -545,8 +545,7 @@ export function useProjectsListing() {
           deleted_at,
         developer_id,
         developer:developers!projects_developer_id_fkey(id, name, slug, logo_url, website_url, logo_bg_color),
-        community:communities(id, name, slug),
-        images:project_images(image_url, display_order)
+        community:communities(id, name, slug)
       `;
 
       const baseQuery = () =>
@@ -571,7 +570,7 @@ export function useProjectsListing() {
       if (firstError) throw firstError;
 
       const firstResult = sortPublicProjectsForListing(
-        dedupePublicProjects((firstRows ?? []) as unknown as UnifiedProject[]),
+        dedupePublicProjects(((firstRows ?? []) as unknown as UnifiedProject[]).map((row) => ({ ...row, images: [] }))),
       );
 
       void (async () => {
@@ -593,7 +592,7 @@ export function useProjectsListing() {
       }
 
         const fullResult = sortPublicProjectsForListing(
-          dedupePublicProjects(all as unknown as UnifiedProject[]),
+          dedupePublicProjects((all as unknown as UnifiedProject[]).map((row) => ({ ...row, images: [] }))),
         );
         if (fullResult.length >= firstResult.length) {
           queryClient.setQueryData(["projects-listing"], fullResult);

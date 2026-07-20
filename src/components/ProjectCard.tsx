@@ -54,13 +54,14 @@ const isPropertyTypeOnlyLabel = (value?: string | null) => {
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const cleanCardProjectName = (name: string, developerName?: string | null) => {
-  if (!developerName) return name;
+  const genericClean = name.replace(/^in\s+(?=[a-z0-9])/i, "").trim();
+  if (!developerName) return genericClean || name;
   const developer = developerName.trim();
-  if (!developer) return name;
+  if (!developer) return genericClean || name;
   // Some imported rows were prefixed as "In Binghatti ...". Keep the real
   // project name on cards without mutating unrelated titles.
   const brokenPrefix = new RegExp(`^in\\s+(?=${escapeRegExp(developer)}\\b)`, "i");
-  return name.replace(brokenPrefix, "").trim() || name;
+  return name.replace(brokenPrefix, "").replace(/^in\s+(?=[a-z0-9])/i, "").trim() || name;
 };
 
 const getCardPhaseLabel = (project: Project & { is_sold_out?: boolean | null }): string | null => {
