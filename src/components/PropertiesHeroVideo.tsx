@@ -16,27 +16,19 @@ const POSTER = "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1
 
 const PropertiesHeroVideo = ({ children }: PropertiesHeroVideoProps) => {
   return (
-    <section data-hero-dark data-surface="dark" className="jj-hero-fullscreen jj-hero-compact relative flex items-end justify-start overflow-hidden pb-16 md:pb-20 px-4 md:px-8 lg:px-12">
-      {/* Video background with poster fallback — vivid saturation boost */}
-      <div className="absolute inset-0" style={{ filter: 'saturate(1.45) contrast(1.08) brightness(1.05)' }}>
+    <section
+      data-hero-dark
+      data-surface="dark"
+      className="relative flex min-h-[280px] sm:min-h-[340px] items-end justify-start overflow-hidden px-4 pb-10 pt-24 md:px-8 lg:px-12"
+      style={{ background: "linear-gradient(135deg,#064E3B 0%,#042C1C 52%,#010806 100%)" }}
+    >
+      {/* Video background with poster fallback — compact so listings are visible immediately */}
+      <div className="absolute inset-0 opacity-80" style={{ filter: 'saturate(1.25) contrast(1.05) brightness(0.85)' }}>
         <VideoBackground src={propertiesHeroVideo} poster={POSTER} />
       </div>
 
-      {/* Light gradient overlay — keeps text legibility WITHOUT killing color */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/55" />
-
-      {/* Warm gold glow boosts vibrance */}
-      <div
-        className="absolute inset-0 pointer-events-none mix-blend-soft-light"
-        style={{
-          background:
-            'radial-gradient(ellipse at 50% 40%, rgba(255,196,90,0.35) 0%, rgba(0,0,0,0) 65%)',
-        }}
-      />
-
-      {/* Floating gold accent orbs — brighter */}
-      <div className="absolute top-1/4 left-10 w-64 h-64 bg-[#FFD27A]/20 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#B89555]/25 rounded-full blur-[120px] pointer-events-none" />
+      {/* Emerald overlay — no generic placeholders or decorative orbs */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-[#042C1C]/35 to-black/70" />
 
       {/* Children (hero content) */}
       {children}
